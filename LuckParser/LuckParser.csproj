@@ -32,8 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.4\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,14 +51,46 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\Controller1.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\ParseEnums\Activation.cs" />
+    <Compile Include="Models\ParseEnums\BuffRemove.cs" />
+    <Compile Include="Models\ParseEnums\IFF.cs" />
+    <Compile Include="Models\ParseEnums\Result.cs" />
+    <Compile Include="Models\ParseEnums\StateChange.cs" />
+    <Compile Include="Models\ParseModels\AbstractBoon.cs" />
+    <Compile Include="Models\ParseModels\Agent.cs" />
+    <Compile Include="Models\ParseModels\AgentData.cs" />
+    <Compile Include="Models\ParseModels\AgentItem.cs" />
+    <Compile Include="Models\ParseModels\Boon.cs" />
+    <Compile Include="Models\ParseModels\BoonFactory.cs" />
+    <Compile Include="Models\ParseModels\BoonLog.cs" />
+    <Compile Include="Models\ParseModels\BoonMap.cs" />
+    <Compile Include="Models\ParseModels\BoonsGraphModel.cs" />
+    <Compile Include="Models\ParseModels\BossData.cs" />
+    <Compile Include="Models\ParseModels\CastLog.cs" />
+    <Compile Include="Models\ParseModels\CombatData.cs" />
+    <Compile Include="Models\ParseModels\CombatItem.cs" />
+    <Compile Include="Models\ParseModels\DamageLog.cs" />
+    <Compile Include="Models\ParseModels\Duration.cs" />
+    <Compile Include="Models\ParseModels\GW2APISpec.cs" />
+    <Compile Include="Models\ParseModels\Intensity.cs" />
+    <Compile Include="Models\ParseModels\LogData.cs" />
+    <Compile Include="Models\ParseModels\Player.cs" />
+    <Compile Include="Models\ParseModels\SkillData.cs" />
+    <Compile Include="Models\ParseModels\SkillItem.cs" />
+    <Compile Include="Models\ParseModels\Statistics.cs" />
+    <Compile Include="Models\ParseModels\Utility.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -62,6 +100,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -74,6 +113,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scripts\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
