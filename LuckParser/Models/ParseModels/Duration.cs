@@ -18,6 +18,19 @@ namespace LuckParser.Models.ParseModels
     public override int getStackValue()
         {
             // return boon_stack.stream().mapToInt(Integer::intValue).sum();
+            //check for overflow
+            int total = boon_stack[0];
+            for (int i =0;i<boon_stack.Count-1;i++) {
+                if (total > 0 && boon_stack[i + 1] > int.MaxValue - total)
+                {
+                    //Overflow
+                    return int.MaxValue;
+                }
+                else {
+                    //ok
+                    total += boon_stack[i + 1];
+                }
+            }
             return boon_stack.Sum();
         }
 

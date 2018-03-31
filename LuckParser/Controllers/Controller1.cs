@@ -8,6 +8,7 @@ using LuckParser.Models.ParseModels;
 using LuckParser.Models.ParseEnums;
 using System.Drawing;
 using System.Net;
+using HtmlAgilityPack;
 
 namespace LuckParser.Controllers
 {
@@ -449,11 +450,11 @@ namespace LuckParser.Controllers
                    
                 }
                 //set boss dead
-                //if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 4)//change dead
-                //{
-                //    log_data.setBossKill(true);
-                //    break;
-                //}
+                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 4)//change dead
+                {
+                    log_data.setBossKill(true);
+                   
+                }
             }
            
             // Dealing with second half of Xera | ((22611300 * 0.5) + (25560600 *
@@ -573,23 +574,27 @@ namespace LuckParser.Controllers
                 + totalboss_dps.ToString() + "|" + totalboss_damage.ToString() + "|" + totalbossphys_dps.ToString() + "|" + totalbossphys_damage.ToString() + "|" + totalbosscondi_dps.ToString() + "|" + totalbosscondi_damage.ToString();
         }
         public bool getBossKilled() {
-          
-            BossData b_data = getBossData();
-            CombatData c_data = getCombatData();
-            int totaldmg = 0;
-            
-            foreach (Player p in p_list) {
-                totaldmg += p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Sum(x => x.getDamage());
-            }
-            int healthremaining = b_data.getHealth() - totaldmg;
-            if (healthremaining > 0)
+            if (log_data.getBosskill() == false)
             {
-                log_data.setBossKill(false);
-                return false;
-            }
-            else if (healthremaining <= 0) {
-                log_data.setBossKill(true);
-                return true;
+                BossData b_data = getBossData();
+                CombatData c_data = getCombatData();
+                int totaldmg = 0;
+
+                foreach (Player p in p_list)
+                {
+                    totaldmg += p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Sum(x => x.getDamage());
+                }
+                int healthremaining = b_data.getHealth() - totaldmg;
+                if (healthremaining > 0)
+                {
+                    log_data.setBossKill(false);
+                    return false;
+                }
+                else if (healthremaining <= 0)
+                {
+                    log_data.setBossKill(true);
+                    return true;
+                }
             }
             return false;
         }
@@ -604,13 +609,13 @@ namespace LuckParser.Controllers
             int instid = p.getInstid();
 
             // Rates
-            double power_loop_count = 0.0;
-            double critical_rate = 0.0;
-            double scholar_rate = 0.0;
-            double moving_rate = 0.0;
-            double flanking_rate = 0.0;
+            int power_loop_count = 0;
+            int critical_rate = 0;
+            int scholar_rate = 0;
+            int moving_rate = 0;
+            int flanking_rate = 0;
             //glancerate
-            double glance_rate = 0.0;
+            int glance_rate = 0;
             //missed
             int missed = 0;
             //interupted
@@ -695,9 +700,9 @@ namespace LuckParser.Controllers
                 died = dead[0].X - b_data.getFirstAware();
             }
 
-            statsArray = new string[] { power_loop_count.ToString("0.00"), critical_rate.ToString("0.00"), scholar_rate.ToString("0.00"), moving_rate.ToString("0.00"),
-                flanking_rate.ToString("0.00"), swap.ToString(),down.ToString(),dodge.ToString(),ress.ToString(),died.ToString("0.00"),
-            glance_rate.ToString("0.00"),missed.ToString(),interupts.ToString(),invulned.ToString(),(time_wasted/1000f).ToString(),wasted.ToString(),avgBoons.ToString(),(time_saved/1000f).ToString(),saved.ToString()
+            statsArray = new string[] { power_loop_count.ToString(), critical_rate.ToString(), scholar_rate.ToString(), moving_rate.ToString(),
+                flanking_rate.ToString(), swap.ToString(),down.ToString(),dodge.ToString(),ress.ToString(),died.ToString("0.00"),
+            glance_rate.ToString(),missed.ToString(),interupts.ToString(),invulned.ToString(),(time_wasted/1000f).ToString(),wasted.ToString(),avgBoons.ToString(),(time_saved/1000f).ToString(),saved.ToString()
             };
             return statsArray;
         }
@@ -981,59 +986,31 @@ namespace LuckParser.Controllers
         {
             BossData b_data = getBossData();
             double fight_duration = (b_data.getLastAware() - b_data.getFirstAware()) / 1000.0;
-            //// Players
-            //List<AgentItem> playerAgentList = getAgentData().getPlayerAgentList();
-            //if (p_list.Count == 0)
-            //{
-            //    foreach (AgentItem playerAgent in playerAgentList)
-            //    {
-            //        p_list.Add(new Player(playerAgent));
-            //    }
-            //}
-            //// Sort
-
-            //p_list = p_list.OrderBy(a => Int32.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>Int32.Parse(a.getGroup()) - Int32.Parse(b.getGroup()));
-
-            //foreach (Player player in p_list) {
-            //    TempData["Debug"] += "<br/>" + player.getCharacter() +" "+ player.getAccount() + " "+player.getGroup().ToString();
-            //}
+            TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
+            String durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
             string bossname = FilterStringChars(getBossData().getName());
+           
             string HTML_CONTENT = "";
-            string HTML_Head = "<!DOCTYPE html><html lang=\"en\"><head> " +
+            string HTML_Head = "<!DOCTYPE html>\r<html lang=\"en\"><head> " +
                 "<meta charset=\"utf-8\">" +
-            //"<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css \" integrity=\"sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u\" crossorigin=\"anonymous\">" +
-            // "<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css \" integrity=\"sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp\" crossorigin=\"anonymous\">" +
             "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
             "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.css \"  crossorigin=\"anonymous\">" +
-
-
             "<link href=\"https://fonts.googleapis.com/css?family=Open+Sans \" rel=\"stylesheet\">" +
             "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css \">" +
            //JQuery
-           // "<script src=\"https://code.jquery.com/jquery-3.1.1.min.js \" integrity=\"sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=\" crossorigin=\"anonymous\"></script>" +
            "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js \"></script> " +
            //popper
            "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js \"></script>" +
             //js
-            //"<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js \" integrity=\"sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa\" crossorigin=\"anonymous\"></script>" +
-
             "<script src=\"https://cdn.plot.ly/plotly-latest.min.js \"></script>" +
-
-
               "<script src=\"https://code.jquery.com/jquery-1.12.4.js \"></script>" +
               "<script src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js \"></script>" +
-            //"<script src=\"https://cdn.datatables.net/v/bs/dt-1.10.13/datatables.min.js \"></script>" +
             "<script src=\"https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js \"></script>" +
              "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js \"></script>" +
-            "<style>" +//body { font-family: 'Open Sans', sans-serif;color: #444;}"+
+            "<style>" +
             "td, th {text-align: center; white-space: nowrap;}" +
             "table.dataTable  td {color: black;}" +
-            
-            "</style>" +
-                    "<script>$.extend( $.fn.dataTable.defaults, {searching: false, ordering: true,paging: false,dom:\"t\"} );</script>" +
-                    // " <script type=\"text/javascript\">$(function(){$('[data-toggle=\"tooltip\"]').tooltip();html: true});</script > " +
-                    "<style>" +
-                    ".sorting_disabled {padding: 5px !important;}" +
+             ".sorting_disabled {padding: 5px !important;}" +
                     "table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc " +
                     "{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}" +
                     "table.dataTable thead.sorting_asc{color: green;}" +
@@ -1044,7 +1021,8 @@ namespace LuckParser.Controllers
                     ".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}" +
                     ".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}" +
                     "div.dataTables_wrapper { width: 1100px; margin: 0 auto; }" +
-                    "</style>" +
+            "</style>" +
+                    "<script>$.extend( $.fn.dataTable.defaults, {searching: false, ordering: true,paging: false,dom:\"t\"} );</script>" +
                  "</head>";
             int groupCount = 0;
             foreach (Player play in p_list)
@@ -1101,12 +1079,8 @@ namespace LuckParser.Controllers
             string HTML_dps = " <script> $(function () { $('#dps_table').DataTable({ \"order\": [[4, \"desc\"]]});});</script>" +
        " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dps_table\">" +
            " <thead> <tr> <th>Sub</th><th></th><th>Name</th><th>Account</th> <th>Boss DPS</th><th>Power</th><th>Condi</th><th>All DPS</th><th>Power</th><th>Condi</th>" +
-           //"<th>Inc Dmg</th>"+
-           //"<th><img src="+ViewData["Crit"]+" alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\">" + 
-           //  "</th><th><img src=" + ViewData["Scholar"] + " alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\">" +
-           // "</th><th><img src=" + ViewData["SwS"] + " alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\">" +
            "</th><th><img src=" +GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time dead\" height=\"18\" width=\"18\">" + "</th>" +
+           "</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
                " </tr> </thead><tbody>";
             foreach (Player player in p_list)
             {
@@ -1125,15 +1099,19 @@ namespace LuckParser.Controllers
                 HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[3] + " dmg \">" + dmg[2] + "</span>" + "</td>";
                 HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[5] + " dmg \">" + dmg[4] + "</span>" + "</td>";
 
-                //string dmgTaken = getDamagetaken(player);
-                //HTML_dps += "<td>" + dmgTaken+ "</td>";
+                
+               
                 string[] stats = getFinalStats(player);
-                //HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[1]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>";
-                //  HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[2] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[2]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>";
-                // HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[3]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>";
-                HTML_dps += "<td>" + stats[6] + "</td>";
+               HTML_dps += "<td>" + stats[6] + "</td>";
                 TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));
-                HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>";
+                if (timedead > TimeSpan.Zero)
+                {
+                    HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>";
+                }
+                else {
+                    HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> 0</span>" + " </td>";
+
+                }
                 HTML_dps += "</tr>";
             }
 
@@ -1179,7 +1157,16 @@ namespace LuckParser.Controllers
                 HTML_dmgstats += "<td>" + stats[5] + "</td>";//w swaps
                 HTML_dmgstats += "<td>" + stats[6] + "</td>";//downs
                 TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));//dead
-                HTML_dmgstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>";
+                if (timedead > TimeSpan.Zero)
+                {
+                    HTML_dmgstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>";
+                }
+                else
+                {
+                    HTML_dmgstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </span>" + " </td>";
+
+                }
+               
                 HTML_dmgstats += "</tr>";
             }
             HTML_dmgstats += "</tbody></table>";
@@ -1194,7 +1181,7 @@ namespace LuckParser.Controllers
            "</th><th>Evaded" +
            "</th><th>Dodges" +
            "</th><th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time dead\" height=\"18\" width=\"18\">" + "</th>" +
+           "</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
                " </tr> </thead><tbody>";
             foreach (Player player in p_list)
             {
@@ -1205,18 +1192,21 @@ namespace LuckParser.Controllers
 
                 string[] stats = getFinalDefenses(player);
                 HTML_defstats += "<td>" + stats[0] + "</td>";//dmg taken
-                //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " Blocks \">" + stats[2] + "dmg</span>" + "</td>";//Blocks
-                //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " Invulns \">" + stats[4] + "dmg</span>" + "</td>";//invulns
-                //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
                 HTML_defstats += "<td>" + stats[1] + "</td>";//Blocks
                 HTML_defstats += "<td>" + stats[3] + "</td>";//invulns
                 HTML_defstats += "<td>" + stats[6] + "</td>";//evades
-
-
                 HTML_defstats += "<td>" + stats[5] + "</td>";//dodges
                 HTML_defstats += "<td>" + stats[8] + "</td>";//downs
                 TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));//dead
-                HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>";
+                if (timedead > TimeSpan.Zero)
+                {
+                    HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>";
+                }
+                else
+                {
+                    HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </span>" + " </td>";
+
+                }
                 HTML_defstats += "</tr>";
             }
             HTML_defstats += "</tbody></table>";
@@ -1237,7 +1227,7 @@ namespace LuckParser.Controllers
                 HTML_supstats += "<td>" + player.getCharacter().ToString() + "</td>";
 
                 string[] stats = getFinalSupport(player);
-                HTML_supstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " seconds \">" + stats[2] + "</span>" + "</td>";//condicleanse                                                                                                                                                                   //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
+                HTML_supstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " seconds \">" + stats[2] + " condis</span>" + "</td>";//condicleanse                                                                                                                                                                   //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
                 HTML_supstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " seconds \">" + stats[0] + "</span>" + "</td>";//res
                 HTML_supstats += "</tr>";
             }
@@ -1290,7 +1280,7 @@ namespace LuckParser.Controllers
                 Html_dpsGraph += "],";
                 Html_dpsGraph += " mode: 'lines'," +
                     " line: {shape: 'spline',color:'"+GetLink("Color-"+p.getProf())+"'}," +
-          // " yaxis: 'y3'," +
+         
 
            " name: '"+p.getCharacter()+" DPS'" +
         "}" +
@@ -1325,7 +1315,7 @@ namespace LuckParser.Controllers
                 Html_dpsGraph += " mode: 'lines'," +
                      " line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
                     "visible:'legendonly'," +
-         //  " yaxis: 'y3'," +
+         
 
            " name: '"+p.getCharacter()+"TDPS'" + "},";
            }
@@ -1398,9 +1388,6 @@ namespace LuckParser.Controllers
                 "hoverinfo: 'text'," +
        " name: 'Boss health'";
             Html_dpsGraph += "}";
-
-            //cuts off extra comma
-            //Html_dpsGraph = Html_dpsGraph.Substring(0, Html_dpsGraph.Length - 1);
             Html_dpsGraph += "];" +
 "var layout = {" +
 
@@ -1422,9 +1409,6 @@ namespace LuckParser.Controllers
             //Generate Boon table------------------------------------------------------------------------------------------------
             string Html_boons = " <script> $(function () { $('#boons_table').DataTable({ \"order\": [[3, \"desc\"]], " +
         "\"scrollX\": true," +
-            //  "\"scrollCollapse\": true,"+
-            //  "\"fixedColumns\":{"+
-            //      "\"leftColumns\": 1}"+
             " });});</script>" +
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boons_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>";
@@ -1452,12 +1436,8 @@ namespace LuckParser.Controllers
 
             //Generate BoonGenSelf table
             string Html_boonGenSelf = " <script> $(document).ready(function () { $('#boongenself_table').DataTable({ " +
-            //      "\"sScrollX\": \"110%\"," +
-            //   "\"bScrollCollapse\": true" +
             "\"scrollX\": true" +
-            // "\"scrollCollapse\": true," +
-            // "\"fixedColumns\":{" +
-            //      "\"leftColumns\": 1}" +
+
             "});});</script>" +
             " <table class=\"display nowrap compact\" cellspacing=\"0\" width=\"100%\" id=\"boongenself_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>";
@@ -1492,9 +1472,6 @@ namespace LuckParser.Controllers
             //Generate BoonGenGroup table
             string Html_boonGenGroup = " <script> $(function () { $('#boongengroup_table').DataTable({ \"order\": [[3, \"desc\"]], " +
         "\"scrollX\": true," +
-            // "\"scrollCollapse\": true," +
-            //   "\"fixedColumns\":{" +
-            //      "\"leftColumns\": 1}" +
             "});});</script>" +
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongengroup_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>";
@@ -1532,9 +1509,6 @@ namespace LuckParser.Controllers
             //Generate BoonGenOGroup table
             string Html_boonGenOGroup = " <script> $(function () { $('#boongenogroup_table').DataTable({ \"order\": [[3, \"desc\"]], " +
         "\"scrollX\": true," +
-            //  "\"scrollCollapse\": true," +
-            //  "\"fixedColumns\":{" +
-            //     "\"leftColumns\": 1}" +
             "});});</script>" +
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongenogroup_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>";
@@ -1572,9 +1546,6 @@ namespace LuckParser.Controllers
             //Generate BoonGenSquad table
             string Html_boonGenSquad = " <script> $(function () { $('#boongensquad_table').DataTable({ \"order\": [[5, \"desc\"]], " +
         "\"scrollX\": true," +
-            //"\"scrollCollapse\": true," +
-            // "\"fixedColumns\":{" +
-            //    "\"leftColumns\": 1}" +
             "});});</script>" +
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongensquad_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>";
@@ -1631,7 +1602,6 @@ namespace LuckParser.Controllers
                         "y: ['1']," +
                         "x: ['" + cl.getActDur() / 1000f + "']," +
                         "base:'" + cl.getTime() / 1000f + "'," +
-                        //" text:['Auto', 'Firestorm', 'lavafont', 'water', 'geyser']," +
                         "name: '" + cl.getID() + "'," +//get name should be handled by api
                         "orientation:'h'," +
                         "mode: 'markers'," +
@@ -1639,8 +1609,8 @@ namespace LuckParser.Controllers
                         "width:'1'," +
                         "hoverinfo: 'name'," +
                         "hoverlabel:{namelength:'-1'},"+
-                        " marker: {";// +
-                                //"hoverinfo: 'x+name',";
+                        " marker: {";
+                               
                     if (cl.endActivation().getID() == 3) {
                         Html_playertabs += "color: 'rgb(40,40,220)',";
                     } else if (cl.endActivation().getID() == 4) {
@@ -1648,7 +1618,7 @@ namespace LuckParser.Controllers
                     } else if (cl.endActivation().getID() == 5) {
                         Html_playertabs += "color: 'rgb(40,220,40)',";
                     }
-                    //"color: 'rgb(140,220,130)',"+
+                   
                     Html_playertabs += " width: 5," +
                      "line:" +
                       "{";
@@ -1660,7 +1630,7 @@ namespace LuckParser.Controllers
                     {
                         Html_playertabs += "color: 'rgb(220,40,220)',";
                     }
-                    // "color: 'rbg(8,48,107)',"+
+                    
                     Html_playertabs += "width: 1.5" +
                             "}"+
                         "}," +
@@ -1820,7 +1790,7 @@ namespace LuckParser.Controllers
             }
 
 
-            int blah = 0;
+           
             string HTML_Body = "<body><div class=\"container\"><p>ARC:" + getLogData().getBuildVersion().ToString() + " | Bossid " + getBossData().getID().ToString() + "</p>";
                
             if (log_data.getBosskill()) {
@@ -1830,8 +1800,8 @@ namespace LuckParser.Controllers
             }
 
             
-                HTML_Body += " | Duration " + fight_duration + " </p> " +
-                 "<p> Time Start:"+log_data.getLogStart() + " | Time End " + log_data.getLogEnd() + " </p> " +
+                HTML_Body += " | Duration " + durationString + " </p> " +
+                 "<p> Time Start: "+log_data.getLogStart() + " | Time End: " + log_data.getLogEnd() + " </p> " +
                     //top 
                     "<div class=\"row\">" +
                         //Boss deets
@@ -1847,11 +1817,7 @@ namespace LuckParser.Controllers
                              //"<div class=\"progress\" style=\"width: 100 %; height: 20px; \"><div class=\"progress-bar-striped \" role=\"progressbar\" style=\"width:100%; display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"><p style=\"text-align:center; color: #FFF;\">" + 0 + " Armour(" + getBossData().getTough().ToString() + " Toughness)</p></div></div>" +
                            "</div>" + "</blockquote></div></div> " +
                         "</div>" +
-                        //VS
-
-                        //"<div class=\"col-md-1\">" +
-                        //    "<center style=\"position:absolute; top:50%; height:10em; margin-top:-5em\"><h3>VS</h3></center>" +
-                        //"</div>" +
+                       
                         //Raid Party
                         "<div class=\"col-md-7\">" +
                         HTML_compTable +
@@ -1871,7 +1837,7 @@ namespace LuckParser.Controllers
                                 "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#healStats\">Heal Stats</a>" +
 
                             "</div>" +
-                        //"<a class=\"nav-link active\" data-toggle=\"tab\" href=\"#dpsStats\">DPS Stats</a>" +
+                       
                         "</li>" +
                         "<li class=\"nav-item\">" +
                             "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#dmgGraph\">Damage Graph</a>" +

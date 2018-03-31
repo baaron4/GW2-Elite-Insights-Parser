@@ -235,48 +235,67 @@ namespace LuckParser.Models.ParseModels
         private void setDamageLogs(BossData bossData, List<CombatItem> combatList,AgentData agentData)
         {
             int time_start = bossData.getFirstAware();
+            bool combatStart = false;
+            bool combatEnd = false;
             foreach (CombatItem c in combatList)
             {
-                if (instid == c.getSrcInstid() || instid == c.getSrcMasterInstid())//selecting player or minion as caster
+                if (combatStart == false)
                 {
-                    LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
-                    int time = c.getTime() - time_start;
-                    foreach (AgentItem item in agentData.getNPCAgentList())
-                    {//selecting all
-                        if (item.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FOE")
-                        {
-                            if (state.getID() == 0)
+                    if (bossData.getInstid() == c.getSrcInstid() && c.isStateChange().getID() == 1)
+                    {//Make sure combat ahs started
+                        combatStart = true;
+                    }
+                }
+                if (combatEnd == false)
+                {
+                    if (bossData.getInstid() == c.getSrcInstid() && c.isStateChange().getID() == 2)
+                    {//Make sure combat ahs started
+                        combatEnd = true;
+                    }
+                }
+                if (combatStart && !combatEnd )
+                {
+                    if (instid == c.getSrcInstid() || instid == c.getSrcMasterInstid())//selecting player or minion as caster
+                    {
+                        LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
+                        int time = c.getTime() - time_start;
+                        foreach (AgentItem item in agentData.getNPCAgentList())
+                        {//selecting all
+                            if (item.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FOE")
                             {
-                                if (c.isBuff() == 1 && c.getBuffDmg() != 0)
+                                if (state.getID() == 0)
                                 {
-                                    
-                                    damage_logs.Add(new DamageLog(time, c.getBuffDmg(), c.getSkillID(), c.isBuff(),
-                                            c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(),c.isActivation()));
-                                }
-                                else if (c.isBuff() == 0 && c.getValue() != 0)
-                                {
-                                    damage_logs.Add(new DamageLog(time, c.getValue(), c.getSkillID(), c.isBuff(),
-                                            c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(),c.isActivation()));
+                                    if (c.isBuff() == 1 && c.getBuffDmg() != 0)
+                                    {
+
+                                        damage_logs.Add(new DamageLog(time, c.getBuffDmg(), c.getSkillID(), c.isBuff(),
+                                                c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
+                                    }
+                                    else if (c.isBuff() == 0 && c.getValue() != 0)
+                                    {
+                                        damage_logs.Add(new DamageLog(time, c.getValue(), c.getSkillID(), c.isBuff(),
+                                                c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
+                                    }
                                 }
                             }
                         }
+                        //if (bossData.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FOE")//selecting boss
+                        //{
+                        //    if (state.getEnum() == "NORMAL")
+                        //    {
+                        //        if (c.isBuff() == 1 && c.getBuffDmg() != 0)
+                        //        {
+                        //            damage_logs.Add(new DamageLog(time, c.getBuffDmg(), c.getSkillID(), c.isBuff(),
+                        //                    c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking()));
+                        //        }
+                        //        else if (c.isBuff() == 0 && c.getValue() != 0)
+                        //        {
+                        //            damage_logs.Add(new DamageLog(time, c.getValue(), c.getSkillID(), c.isBuff(),
+                        //                    c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking()));
+                        //        }
+                        //    }
+                        //}
                     }
-                    //if (bossData.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FOE")//selecting boss
-                    //{
-                    //    if (state.getEnum() == "NORMAL")
-                    //    {
-                    //        if (c.isBuff() == 1 && c.getBuffDmg() != 0)
-                    //        {
-                    //            damage_logs.Add(new DamageLog(time, c.getBuffDmg(), c.getSkillID(), c.isBuff(),
-                    //                    c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking()));
-                    //        }
-                    //        else if (c.isBuff() == 0 && c.getValue() != 0)
-                    //        {
-                    //            damage_logs.Add(new DamageLog(time, c.getValue(), c.getSkillID(), c.isBuff(),
-                    //                    c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking()));
-                    //        }
-                    //    }
-                    //}
                 }
             }
         }
