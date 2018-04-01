@@ -1642,10 +1642,10 @@ namespace LuckParser.Controllers
                         parseBoonsList.AddRange(getMainBoons());
 
                     }
-                    else if (settingArray[4]|| settingArray[5]) {//Important Class specefic boons
+                     if (settingArray[4]|| settingArray[5]) {//Important Class specefic boons
                         parseBoonsList.AddRange(getImportantPorfBoons());
                     }
-                    else if (settingArray[5]) {//All class specefic boons
+                     if (settingArray[5]) {//All class specefic boons
                         parseBoonsList.AddRange(getAllProfBoons());
                        
                     } 
