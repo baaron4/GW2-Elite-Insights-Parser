@@ -39,6 +39,7 @@
             this.Status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.settingsbtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -141,12 +142,23 @@
             this.label3.TabIndex = 14;
             this.label3.Text = "Current Parse:";
             // 
+            // settingsbtn
+            // 
+            this.settingsbtn.Location = new System.Drawing.Point(16, 331);
+            this.settingsbtn.Name = "settingsbtn";
+            this.settingsbtn.Size = new System.Drawing.Size(75, 23);
+            this.settingsbtn.TabIndex = 15;
+            this.settingsbtn.Text = "Settings";
+            this.settingsbtn.UseVisualStyleBackColor = true;
+            this.settingsbtn.Click += new System.EventHandler(this.settingsbtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.ClientSize = new System.Drawing.Size(696, 375);
+            this.Controls.Add(this.settingsbtn);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -158,6 +170,7 @@
             this.Name = "Form1";
             this.Text = "GW2 Raid Log Parser";
             this.TransparencyKey = System.Drawing.Color.OrangeRed;
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -175,6 +188,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ColumnHeader Location;
+        private System.Windows.Forms.Button settingsbtn;
     }
 }
 

@@ -8,8 +8,7 @@ using LuckParser.Models.ParseModels;
 using LuckParser.Models.ParseEnums;
 using System.Drawing;
 using System.Net;
-using HtmlAgilityPack;
-
+//recomend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {
     public class Controller1
@@ -30,6 +29,7 @@ namespace LuckParser.Controllers
 
 
         // Private Methods
+        //for pulling from binary
         private Stream origstream = null;
         private MemoryStream stream = new MemoryStream();
         private void safeSkip(long bytes_to_skip)
@@ -58,7 +58,6 @@ namespace LuckParser.Controllers
 
             return;
         }
-
         private int getbyte()
         {
             byte byt = Convert.ToByte(stream.ReadByte());
@@ -77,7 +76,6 @@ namespace LuckParser.Controllers
             // return Short.toUnsignedInt(ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getShort());
             return BitConverter.ToUInt16(bytes, 0);
         }
-
         private int getInt()
         {
             byte[] bytes = new byte[4];
@@ -89,7 +87,6 @@ namespace LuckParser.Controllers
             //return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getInt();
             return BitConverter.ToInt32(bytes, 0);
         }
-
         private long getLong()
         {
             byte[] bytes = new byte[8];
@@ -102,7 +99,6 @@ namespace LuckParser.Controllers
             // return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getLong();
             return BitConverter.ToInt64(bytes, 0);
         }
-
         private String getString(int length)
         {
             byte[] bytes = new byte[length];
@@ -132,6 +128,8 @@ namespace LuckParser.Controllers
             }
             return filtered;
         }
+
+        //Main data storage after binary parse
         private LogData log_data;
         private BossData boss_data;
         private AgentData agent_data = new AgentData();
@@ -159,18 +157,15 @@ namespace LuckParser.Controllers
         {
             return combat_data;
         }
-
+        public List<Player> p_list = new List<Player>();
+        //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
         public bool ParseLog(string evtc)
         {
-
-           
-         
+            //used to stream from a database, probably could use better stream now
             WebClient client = new WebClient();
             origstream = client.OpenRead(evtc);
             origstream.CopyTo(stream);
             stream.Position = 0;
-
-           
 
             parseBossData();
             parseAgentData();
@@ -180,12 +175,10 @@ namespace LuckParser.Controllers
 
             origstream.Close();
             stream.Close();
-           
-
-            ////CreateHTML(); is now runnable, run in dummysave
+            ////CreateHTML(); is now runnable dont run here
             return (true);
         }
-
+        //sub Parse methods
         private void parseBossData()
         {
             // 12 bytes: arc build version
@@ -205,7 +198,6 @@ namespace LuckParser.Controllers
             // TempData["Debug"] = build_version +" "+ instid.ToString() ;
             this.boss_data = new BossData(instid);
         }
-
         private void parseAgentData()
         {
             // 4 bytes: player count
@@ -261,7 +253,6 @@ namespace LuckParser.Controllers
                 }
             }
         }
-
         private void parseSkillData()
         {
             // 4 bytes: player count
@@ -281,7 +272,6 @@ namespace LuckParser.Controllers
                 skill_data.addItem(new SkillItem(skill_id, nameTrim));
             }
         }
-
         private void parseCombatList()
         {
             // 64 bytes: each combat
@@ -365,7 +355,6 @@ namespace LuckParser.Controllers
                         is_ninety, is_fifty, is_moving, is_statechange, is_flanking));
             }
         }
-
         private void fillMissingData()
         {
             // Set Agent instid, first_aware and last_aware
@@ -496,7 +485,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        // Final DPS
+        //Statistics--------------------------------------------------------------------------------------------------------------------------------------------------------
         public String getFinalDPS(Player p)
         {
             BossData b_data = getBossData();
@@ -598,7 +587,6 @@ namespace LuckParser.Controllers
             }
             return false;
         }
-        //Stats
         public String[] getFinalStats(Player p)
         {
             BossData b_data = getBossData();
@@ -760,7 +748,7 @@ namespace LuckParser.Controllers
             down.ToString(),died.ToString("0.00")};
             return statsArray;
         }
-
+        //(currently not correct)
         string[] getFinalSupport(Player p)
         {
             BossData b_data = getBossData();
@@ -783,8 +771,6 @@ namespace LuckParser.Controllers
             String[] statsArray = new string[] { resurrects.ToString(), restime.ToString(), condiCleanse.ToString(), condiCleansetime.ToString() };
             return statsArray;
         }
-        //boons
-
         public string[] getfinalboons(Player p, List<int> trgetPlayers)
         {
             BossData b_data = getBossData();
@@ -845,6 +831,9 @@ namespace LuckParser.Controllers
             //table.addrow(utility.concatstringarray(new string[] { p.getcharacter(), p.getprof() }, rates));
             return rates;
         }
+
+        //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
+        //Methods that make it easier to create Javascript graphs
         public List<BoonsGraphModel> getBoonGraph(Player p) {
             List<BoonsGraphModel> uptime = new List<BoonsGraphModel>();
             BossData b_data = getBossData();
@@ -979,10 +968,7 @@ namespace LuckParser.Controllers
             }
             return totaldmgList;
         }
-        //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        //Call in upload process after ParseLog() is called
-        public List<Player> p_list = new List<Player>();
-        public string CreateHTML(int id)
+        public string CreateHTML(bool[] settingArray)
         {
             BossData b_data = getBossData();
             double fight_duration = (b_data.getLastAware() - b_data.getFirstAware()) / 1000.0;
@@ -1279,45 +1265,47 @@ namespace LuckParser.Controllers
                 Html_dpsGraph = Html_dpsGraph.Substring(0, Html_dpsGraph.Length - 1);
                 Html_dpsGraph += "],";
                 Html_dpsGraph += " mode: 'lines'," +
-                    " line: {shape: 'spline',color:'"+GetLink("Color-"+p.getProf())+"'}," +
-         
+                    " line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
 
-           " name: '"+p.getCharacter()+" DPS'" +
-        "}" +
-        ",{";
-                //Adding dps axis
-                List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
-                Html_dpsGraph += "y: [";
-                foreach (int[] dp in playertotaldpsgraphdata)
-                {
-                    Html_dpsGraph += "'" + dp[1] + "',";
-                }
-                //cuts off extra comma
-                if (playertotaldpsgraphdata.Count == 0)
-                {
-                    Html_dpsGraph += "'0',";
-                }
-                Html_dpsGraph = Html_dpsGraph.Substring(0, Html_dpsGraph.Length - 1);
-                Html_dpsGraph += "],";
-                //add time axis
-                Html_dpsGraph += "x: [";
-                foreach (int[] dp in playertotaldpsgraphdata)
-                {
-                    Html_dpsGraph += "'" + dp[0] + "',";
-                }
-                if (playertotaldpsgraphdata.Count == 0)
-                {
-                    Html_dpsGraph += "'0',";
-                }
-                //cuts off extra comma
-                Html_dpsGraph = Html_dpsGraph.Substring(0, Html_dpsGraph.Length - 1);
-                Html_dpsGraph += "],";
-                Html_dpsGraph += " mode: 'lines'," +
-                     " line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
-                    "visible:'legendonly'," +
-         
 
-           " name: '"+p.getCharacter()+"TDPS'" + "},";
+           " name: '" + p.getCharacter() + " DPS'" +
+        "},";
+                if (settingArray[0]) {//Turns display on or off
+                    Html_dpsGraph += "{";
+                    //Adding dps axis
+                    List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
+                    Html_dpsGraph += "y: [";
+                    foreach (int[] dp in playertotaldpsgraphdata)
+                    {
+                        Html_dpsGraph += "'" + dp[1] + "',";
+                    }
+                    //cuts off extra comma
+                    if (playertotaldpsgraphdata.Count == 0)
+                    {
+                        Html_dpsGraph += "'0',";
+                    }
+                    Html_dpsGraph = Html_dpsGraph.Substring(0, Html_dpsGraph.Length - 1);
+                    Html_dpsGraph += "],";
+                    //add time axis
+                    Html_dpsGraph += "x: [";
+                    foreach (int[] dp in playertotaldpsgraphdata)
+                    {
+                        Html_dpsGraph += "'" + dp[0] + "',";
+                    }
+                    if (playertotaldpsgraphdata.Count == 0)
+                    {
+                        Html_dpsGraph += "'0',";
+                    }
+                    //cuts off extra comma
+                    Html_dpsGraph = Html_dpsGraph.Substring(0, Html_dpsGraph.Length - 1);
+                    Html_dpsGraph += "],";
+                    Html_dpsGraph += " mode: 'lines'," +
+                         " line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
+                        "visible:'legendonly'," +
+
+
+               " name: '" + p.getCharacter() + "TDPS'" + "},";
+                }
            }
             //All Player dps
             Html_dpsGraph += "{";
@@ -1597,155 +1585,189 @@ namespace LuckParser.Controllers
                 List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
                 SkillData s_data = getSkillData();
                 Html_playertabs += "var data = [";
-                foreach (CastLog cl in casting) {
-                    Html_playertabs += "{" +
-                        "y: ['1']," +
-                        "x: ['" + cl.getActDur() / 1000f + "']," +
-                        "base:'" + cl.getTime() / 1000f + "'," +
-                        "name: '" + cl.getID() + "'," +//get name should be handled by api
-                        "orientation:'h'," +
-                        "mode: 'markers'," +
-                        "type: 'bar'," +
-                        "width:'1'," +
-                        "hoverinfo: 'name'," +
-                        "hoverlabel:{namelength:'-1'},"+
-                        " marker: {";
-                               
-                    if (cl.endActivation().getID() == 3) {
-                        Html_playertabs += "color: 'rgb(40,40,220)',";
-                    } else if (cl.endActivation().getID() == 4) {
-                        Html_playertabs += "color: 'rgb(220,40,40)',";
-                    } else if (cl.endActivation().getID() == 5) {
-                        Html_playertabs += "color: 'rgb(40,220,40)',";
-                    }
-                   
-                    Html_playertabs += " width: 5," +
-                     "line:" +
-                      "{";
-                    if (cl.startActivation().getID() == 1)
+                if (settingArray[7])//Display rotation
+                {
+                    foreach (CastLog cl in casting)
                     {
-                        Html_playertabs += "color: 'rgb(20,20,20)',";
-                    }
-                    else if (cl.startActivation().getID() == 2)
-                    {
-                        Html_playertabs += "color: 'rgb(220,40,220)',";
-                    }
-                    
-                    Html_playertabs += "width: 1.5" +
-                            "}"+
-                        "}," +
-                        "showlegend: false" +
-                    " },";
+                        Html_playertabs += "{" +
+                            "y: ['1']," +
+                            "x: ['" + cl.getActDur() / 1000f + "']," +
+                            "base:'" + cl.getTime() / 1000f + "'," +
+                            "name: '" + cl.getID() + "'," +//get name should be handled by api
+                            "orientation:'h'," +
+                            "mode: 'markers'," +
+                            "type: 'bar'," +
+                            "width:'1'," +
+                            "hoverinfo: 'name'," +
+                            "hoverlabel:{namelength:'-1'}," +
+                            " marker: {";
 
+                        if (cl.endActivation().getID() == 3)
+                        {
+                            Html_playertabs += "color: 'rgb(40,40,220)',";
+                        }
+                        else if (cl.endActivation().getID() == 4)
+                        {
+                            Html_playertabs += "color: 'rgb(220,40,40)',";
+                        }
+                        else if (cl.endActivation().getID() == 5)
+                        {
+                            Html_playertabs += "color: 'rgb(40,220,40)',";
+                        }
+
+                        Html_playertabs += " width: 5," +
+                         "line:" +
+                          "{";
+                        if (cl.startActivation().getID() == 1)
+                        {
+                            Html_playertabs += "color: 'rgb(20,20,20)',";
+                        }
+                        else if (cl.startActivation().getID() == 2)
+                        {
+                            Html_playertabs += "color: 'rgb(220,40,220)',";
+                        }
+
+                        Html_playertabs += "width: 1.5" +
+                                "}" +
+                            "}," +
+                            "showlegend: false" +
+                        " },";
+
+                    }
                 }
 
-                Html_playertabs += "{";
-               List <BoonsGraphModel> boonGraphData = getBoonGraph(p);
-                boonGraphData.Reverse();
-                foreach (BoonsGraphModel bgm in boonGraphData) {
-                    Html_playertabs +=
-                        "y: [";
-                    foreach (Point pnt in bgm.getBoonChart()) {
-                        Html_playertabs += "'" + pnt.Y + "',";
+                if (settingArray[3] || settingArray[4]|| settingArray[5]) {
+                    List<string> parseBoonsList = new List<string>();
+                    if (settingArray[3]) {//Main boons
+                        parseBoonsList.AddRange(getMainBoons());
+
                     }
-                    if (bgm.getBoonChart().Count == 0) {
+                    else if (settingArray[4]|| settingArray[5]) {//Important Class specefic boons
+                        parseBoonsList.AddRange(getImportantPorfBoons());
+                    }
+                    else if (settingArray[5]) {//All class specefic boons
+                        parseBoonsList.AddRange(getAllProfBoons());
+                       
+                    } 
+                    List<BoonsGraphModel> boonGraphData = getBoonGraph(p);
+                    boonGraphData.Reverse();
+                    foreach (BoonsGraphModel bgm in boonGraphData) {
+                        if (parseBoonsList.Contains(bgm.getBoonName()))
+                        {
+                            Html_playertabs += "{";
+                            Html_playertabs +=
+                                "y: [";
+                            foreach (Point pnt in bgm.getBoonChart())
+                            {
+                                Html_playertabs += "'" + pnt.Y + "',";
+                            }
+                            if (bgm.getBoonChart().Count == 0)
+                            {
+                                Html_playertabs += "'0',";
+                            }
+                            //cuts off extra comma
+                            Html_playertabs = Html_playertabs.Substring(0, Html_playertabs.Length - 1);
+
+                            Html_playertabs += "]," +
+                            "x: [";
+                            foreach (Point pnt in bgm.getBoonChart())
+                            {
+                                Html_playertabs += "'" + pnt.X + "',";
+                            }
+                            if (bgm.getBoonChart().Count == 0)
+                            {
+                                Html_playertabs += "'0',";
+                            }
+                            //cuts off extra comma
+                            Html_playertabs = Html_playertabs.Substring(0, Html_playertabs.Length - 1);
+
+                            Html_playertabs += "]," +
+                                " yaxis: 'y2'," +
+                                " type: 'scatter',";
+                            if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness") { }
+                            else
+                            {
+                                Html_playertabs += " visible: 'legendonly',";
+                            }
+                            Html_playertabs += " line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},";
+                            Html_playertabs += " fill: 'tozeroy'," +
+                                 " name: '" + bgm.getBoonName() + "'" +
+                                 " },";
+                        }
+
+                    }
+                }
+                if (settingArray[2]) {//show boss dps plot
+                    //Adding dps axis
+                    List<int[]> playerbossdpsgraphdata = getBossDPSGraph(p);
+                    Html_playertabs += "{";
+                    Html_playertabs += "y: [";
+                    foreach (int[] dp in playerbossdpsgraphdata) {
+                        Html_playertabs += "'" + dp[1] + "',";
+                    }
+                    if (playerbossdpsgraphdata.Count == 0) {
                         Html_playertabs += "'0',";
                     }
                     //cuts off extra comma
                     Html_playertabs = Html_playertabs.Substring(0, Html_playertabs.Length - 1);
-                   
-                    Html_playertabs += "]," +
-                    "x: [";
-                    foreach (Point pnt in bgm.getBoonChart())
+                    Html_playertabs += "],";
+                    //add time axis
+                    Html_playertabs += "x: [";
+                    foreach (int[] dp in playerbossdpsgraphdata)
                     {
-                        Html_playertabs += "'" + pnt.X + "',";
+                        Html_playertabs += "'" + dp[0] + "',";
                     }
-                    if (bgm.getBoonChart().Count == 0)
+                    if (playerbossdpsgraphdata.Count == 0)
                     {
                         Html_playertabs += "'0',";
                     }
                     //cuts off extra comma
                     Html_playertabs = Html_playertabs.Substring(0, Html_playertabs.Length - 1);
+                    Html_playertabs += "],";
+                    Html_playertabs += " mode: 'lines'," +
+                        " line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
 
-                    Html_playertabs += "]," +
-                        " yaxis: 'y2'," +
-                        " type: 'scatter',";
-                    if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness") { } else {
-                        Html_playertabs += " visible: 'legendonly',";
+               " yaxis: 'y3'," +
+
+               " name: 'Boss DPS'" +
+            "}," ;
+                 }
+                if (settingArray[1]) {//show total dps plot
+                    Html_playertabs += "{";
+                    //Adding dps axis
+                    List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
+                    Html_playertabs += "y: [";
+                    foreach (int[] dp in playertotaldpsgraphdata)
+                    {
+                        Html_playertabs += "'" + dp[1] + "',";
                     }
-                    Html_playertabs += " line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},";
-                   Html_playertabs +=  " fill: 'tozeroy'," +
-                        " name: '"+bgm.getBoonName()+"'" +
-                        " }," +
-                    " {";
-                }
-           
-                //Adding dps axis
-                List<int[]> playerbossdpsgraphdata = getBossDPSGraph(p);
-                Html_playertabs += "y: [";
-                foreach (int[] dp in playerbossdpsgraphdata) {
-                    Html_playertabs += "'"+dp[1]+"',";
-                }
-                if (playerbossdpsgraphdata.Count == 0) {
-                    Html_playertabs += "'0',";
-                }
-                //cuts off extra comma
-                Html_playertabs = Html_playertabs.Substring(0, Html_playertabs.Length - 1);
-                Html_playertabs += "],";
-                //add time axis
-                Html_playertabs += "x: [";
-                foreach (int[] dp in playerbossdpsgraphdata)
-                {
-                    Html_playertabs += "'" + dp[0] + "',";
-                }
-                if (playerbossdpsgraphdata.Count == 0)
-                {
-                    Html_playertabs += "'0',";
-                }
-                //cuts off extra comma
-                Html_playertabs = Html_playertabs.Substring(0, Html_playertabs.Length - 1);
-                Html_playertabs += "],";
-                Html_playertabs += " mode: 'lines'," +
-                    " line: {shape: 'spline',color:'"+GetLink("Color-"+p.getProf())+"'}," +
+                    if (playertotaldpsgraphdata.Count == 0)
+                    {
+                        Html_playertabs += "'0',";
+                    }
+                    //cuts off extra comma
+                    Html_playertabs = Html_playertabs.Substring(0, Html_playertabs.Length - 1);
+                    Html_playertabs += "],";
+                    //add time axis
+                    Html_playertabs += "x: [";
+                    foreach (int[] dp in playertotaldpsgraphdata)
+                    {
+                        Html_playertabs += "'" + dp[0] + "',";
+                    }
+                    if (playertotaldpsgraphdata.Count == 0)
+                    {
+                        Html_playertabs += "'0',";
+                    }
+                    //cuts off extra comma
+                    Html_playertabs = Html_playertabs.Substring(0, Html_playertabs.Length - 1);
+                    Html_playertabs += "],";
+                    Html_playertabs += " mode: 'lines'," +
+                        " line: {shape: 'spline',color:'rgb(0,250,0)'}," +
+               " yaxis: 'y3'," +
 
-           " yaxis: 'y3'," +
-
-           " name: 'Boss DPS'" +
-        "}" +
-        ",{";
-                //Adding dps axis
-                List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
-                Html_playertabs += "y: [";
-                foreach (int[] dp in playertotaldpsgraphdata)
-                {
-                    Html_playertabs += "'" + dp[1] + "',";
-                }
-                if (playertotaldpsgraphdata.Count == 0)
-                {
-                    Html_playertabs += "'0',";
-                }
-                //cuts off extra comma
-                Html_playertabs = Html_playertabs.Substring(0, Html_playertabs.Length - 1);
-                Html_playertabs += "],";
-                //add time axis
-                Html_playertabs += "x: [";
-                foreach (int[] dp in playertotaldpsgraphdata)
-                {
-                    Html_playertabs += "'" + dp[0] + "',";
-                }
-                if (playertotaldpsgraphdata.Count == 0)
-                {
-                    Html_playertabs += "'0',";
-                }
-                //cuts off extra comma
-                Html_playertabs = Html_playertabs.Substring(0, Html_playertabs.Length - 1);
-                Html_playertabs += "],";
-                Html_playertabs += " mode: 'lines'," +
-                    " line: {shape: 'spline',color:'rgb(0,250,0)'}," +
-           " yaxis: 'y3'," +
-
-           " name: 'Total DPS'" +"}"+
-    "];" +
+               " name: 'Total DPS'" + "}";
+               }
+                Html_playertabs += "];" +
     "var layout = {"+
 
         "yaxis: {"+
@@ -1918,6 +1940,7 @@ namespace LuckParser.Controllers
 
             return HTML_CONTENT;
         }
+        //Easy reference to links/color codes
         public string GetLink(string name)
         {
             switch (name)
@@ -1927,7 +1950,7 @@ namespace LuckParser.Controllers
                 case "Gorseval the Multifarious-icon":
                     return "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
                 case "Sabetha the Saboteur-icon":
-                    return "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.pn";
+                    return "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
                 case "Slothasor-icon":
                     return "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
                 case "Matthias Gabrel-icon":
@@ -2113,6 +2136,143 @@ namespace LuckParser.Controllers
                 default:
                     return "";
             }
+
+        }
+        //This whole way of doing it is gonna change too ineffecient
+        public List<string> getMainBoons() {
+            List<string> parseBoonsList = new List<string>();
+            parseBoonsList.Add("Might");//740
+            parseBoonsList.Add("Fury");
+            parseBoonsList.Add("Quickness");
+            parseBoonsList.Add("Alacrity");
+            parseBoonsList.Add("Protection");//717
+            parseBoonsList.Add("Regeneration");//718
+            parseBoonsList.Add("Vigor");
+            parseBoonsList.Add("Stability");
+            parseBoonsList.Add("Swiftness");//719
+            parseBoonsList.Add("Retaliation");
+            parseBoonsList.Add("Resistance");
+
+            return parseBoonsList;
+        }
+
+        public List<string> getImportantPorfBoons() {
+            List<string> parseBoonsList = new List<string>();
+
+            parseBoonsList.Add("Spotter");
+            parseBoonsList.Add("Spirit of Frost");
+            parseBoonsList.Add("Sun Spirit");
+            parseBoonsList.Add("Stone Spirit");
+            parseBoonsList.Add("Empower Allies");
+            parseBoonsList.Add("Banner of Strength");
+            parseBoonsList.Add("Banner of Discipline");
+
+            return parseBoonsList;
+        }
+
+        public List<string> getAllProfBoons() {
+            List<string> parseBoonsList = new List<string>();
+
+            parseBoonsList.Add("Stealth");
+            parseBoonsList.Add("Superspeed");//5974
+            parseBoonsList.Add("Invulnerability");
+            //Auras
+            parseBoonsList.Add("Chaos Armor");
+            parseBoonsList.Add("Fire Shield");//5677
+            parseBoonsList.Add("Frost Aura");//5579
+            parseBoonsList.Add("Light Aura");
+            parseBoonsList.Add("Magnetic Aura");//5684
+            parseBoonsList.Add("Shocking Aura");//5577
+            //Signets
+            parseBoonsList.Add("Signet of Resolve");
+            parseBoonsList.Add("Bane Signet");
+            parseBoonsList.Add("Signet of Judgment");
+            parseBoonsList.Add("Signet of Mercy");
+            parseBoonsList.Add("Signet of Wrath");
+            parseBoonsList.Add("Signet of Courage");
+            parseBoonsList.Add("Healing Signet");
+            parseBoonsList.Add("Dolyak Signet");
+            parseBoonsList.Add("Signet of Fury");
+            parseBoonsList.Add("Signet of Might");
+            parseBoonsList.Add("Signet of Stamina");
+            parseBoonsList.Add("Signet of Rage");
+            parseBoonsList.Add("Signet of Renewal");
+            parseBoonsList.Add("Signet of Stone");
+            parseBoonsList.Add("Signet of the Hunt");
+            parseBoonsList.Add("Signet of the Wild");
+            parseBoonsList.Add("Signet of Malice");
+            parseBoonsList.Add("Assassin's Signet");
+            parseBoonsList.Add("Infiltrator's Signet");
+            parseBoonsList.Add("Signet of Agility");
+            parseBoonsList.Add("Signet of Shadows");
+            parseBoonsList.Add("Signet of Restoration");//739
+            parseBoonsList.Add("Signet of Air");//5590
+            parseBoonsList.Add("Signet of Earth");//5592
+            parseBoonsList.Add("Signet of Fire");//5544
+            parseBoonsList.Add("Signet of Water");//5591
+            parseBoonsList.Add("Signet of the Ether");
+            parseBoonsList.Add("Signet of Domination");
+            parseBoonsList.Add("Signet of Illusions");
+            parseBoonsList.Add("Signet of Inspiration");
+            parseBoonsList.Add("Signet of Midnight");
+            parseBoonsList.Add("Signet of Humility");
+            parseBoonsList.Add("Signet of Vampirism");
+            parseBoonsList.Add("Plague Signet");
+            parseBoonsList.Add("Signet of Spite");
+            parseBoonsList.Add("Signet of the Locust");
+            parseBoonsList.Add("Signet of Undeath");
+            //Transforms
+            parseBoonsList.Add("Rampage");
+            parseBoonsList.Add("Elixir S");
+            parseBoonsList.Add("Elixir X");
+            parseBoonsList.Add("Tornado");//5534
+            parseBoonsList.Add("Whirlpool");
+            parseBoonsList.Add("Lich Form");
+            parseBoonsList.Add("Become the Bear");
+            parseBoonsList.Add("Become the Raven");
+            parseBoonsList.Add("Become the Snow Leopard");
+            parseBoonsList.Add("Become the Wolf");
+            parseBoonsList.Add("Avatar of Melandru");//12368
+            //Not really but basically transforms
+           
+            parseBoonsList.Add("Death Shroud");
+            parseBoonsList.Add("Reaper's Shroud");
+            parseBoonsList.Add("Celestial Avatar");
+            parseBoonsList.Add("Reaper of Grenth");//12366
+            //Profession specefic effects
+            //ele
+                //attunments
+            parseBoonsList.Add("Fire Attunement");//5585
+            parseBoonsList.Add("Water Attunement");
+            parseBoonsList.Add("Air Attunement");//5575
+            parseBoonsList.Add("Earth Attunement");//5580
+                 //forms
+            parseBoonsList.Add("Mist Form");//5543
+            parseBoonsList.Add("Ride the Lightning");//5588
+            parseBoonsList.Add("Vapor Form");
+                //conjures
+            parseBoonsList.Add("Conjure Earth Attributes");//15788
+            parseBoonsList.Add("Conjure Flame Attributes");//15789
+            parseBoonsList.Add("Conjure Frost Attributes");//15790
+            parseBoonsList.Add("Conjure Lightning Attributes");//15791
+            parseBoonsList.Add("Conjure Fire Attributes");//15792
+                //Extras
+            parseBoonsList.Add("Arcane Power");//5582
+            parseBoonsList.Add("Arcane Shield");//5640
+            parseBoonsList.Add("Renewal of Fire");//5764
+            parseBoonsList.Add("Glyph of Elemental Power");//5739 5741 5740 5742
+            parseBoonsList.Add("Rebound");//31337
+            parseBoonsList.Add("Rock Barrier");//34633 750
+            parseBoonsList.Add("Magnetic Wave");//15794
+            parseBoonsList.Add("Obsidian Flesh");//5667
+                //Traits
+            parseBoonsList.Add("Harmonious Conduit");//31353
+            parseBoonsList.Add("bleh");
+            parseBoonsList.Add("bleh");
+            parseBoonsList.Add("bleh");
+            parseBoonsList.Add("bleh");
+            parseBoonsList.Add("bleh");
+            return parseBoonsList;
 
         }
     }

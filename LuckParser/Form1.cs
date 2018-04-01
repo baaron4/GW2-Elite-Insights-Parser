@@ -11,17 +11,24 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LuckParser.Controllers;
 
+
 namespace LuckParser
 {
     public partial class Form1 : Form
     {
         
         BackgroundWorker m_oWorker;
+        private SettingsForm setFrm;
+        public bool[] settingArray = { true, true, true, true, true, false, true, true };
+
         List<string> paths = new List<string>();// Environment.CurrentDirectory + "/" + "parsedhtml.html";
         Controller1 controller = new Controller1();
         public Form1()
         {
             InitializeComponent();
+            
+            btnCancel.Enabled = false;
+            btnStartAsyncOperation.Enabled = false;
             m_oWorker = new BackgroundWorker();
 
             // Create a background worker thread that ReportsProgress &
@@ -34,6 +41,8 @@ namespace LuckParser
                     (m_oWorker_RunWorkerCompleted);
             m_oWorker.WorkerReportsProgress = true;
             m_oWorker.WorkerSupportsCancellation = true;
+
+            
         }
        
         // On completed do the appropriate task
@@ -101,14 +110,15 @@ namespace LuckParser
                 if (appendix == "evtc")
                 {
                     //Process evtc here
-                    reportObject = new string[] { i.ToString(), "Processing..." };
+                    reportObject = new string[] { i.ToString(), "Reading Binary..." };
                     m_oWorker.ReportProgress(40, reportObject);
                     control.ParseLog(path);
 
                     //return html string
-                    reportObject = new string[] { i.ToString(), "Building HTML..." };
+                    reportObject = new string[] { i.ToString(), "Writing HTML..." };
                     m_oWorker.ReportProgress(60, reportObject);
-                    string htmlContent = control.CreateHTML(0);
+                   
+                    string htmlContent = control.CreateHTML(settingArray);
 
                     //Creating File
                     reportObject = new string[] { i.ToString(), "Createing File..." };
@@ -135,6 +145,7 @@ namespace LuckParser
                     e.Cancel = true;
                      reportObject = new string[] { i.ToString(), "Cancel" };
                     m_oWorker.ReportProgress(0,reportObject);
+                    btnStartAsyncOperation.Enabled = false;
                     return;
                 }
             }
@@ -142,6 +153,7 @@ namespace LuckParser
             //Report 100% completion on operation completed
            string[] rO = new string[] {0.ToString(), "Finish" };
             m_oWorker.ReportProgress(100, rO);
+            btnStartAsyncOperation.Enabled = false;
         }
        
         private void btnStartAsyncOperation_Click(object sender, EventArgs e)
@@ -172,6 +184,7 @@ namespace LuckParser
 
         private void listView1_DragDrop(object sender, DragEventArgs e)
         {
+            btnStartAsyncOperation.Enabled = true;
             //Get files as list
             string[] filesArray = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             List<string> files = new List<string>();
@@ -183,6 +196,7 @@ namespace LuckParser
             if (paths == null)
             {
                 paths = files;
+                
             }
             else
             {
@@ -220,7 +234,16 @@ namespace LuckParser
             e.Graphics.FillRectangle(Brushes.Yellow, e.Bounds);
             e.DrawText();
         }
+       
+        private void settingsbtn_Click(object sender, EventArgs e)
+        {
+            setFrm = new SettingsForm(settingArray,this);
+            setFrm.Show();
+        }
 
-        
+        private void Form1_Load(object sender, EventArgs e)
+        {
+          
+        }
     }
 }
