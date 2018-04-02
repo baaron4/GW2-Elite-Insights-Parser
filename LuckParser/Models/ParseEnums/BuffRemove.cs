@@ -37,7 +37,7 @@ namespace LuckParser.Models.ParseEnums
                 case 2:
                     return "SINGLE";
                 case 3:
-               
+                    return "MANUAL";
 
                 default:
                     return "UNKNOWN";
