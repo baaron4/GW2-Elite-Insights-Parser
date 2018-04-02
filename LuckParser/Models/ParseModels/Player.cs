@@ -368,11 +368,17 @@ namespace LuckParser.Models.ParseModels
         {
 
             // Initialize Boon Map with every Boon
-            foreach (Boon boon in Boon.getList())
+            foreach (Boon boon in Boon.getMainList())
             {
                 BoonMap map = new BoonMap(boon.getName(), new List<BoonLog>());
                 boon_map.Add(map);
                // boon_map.put(boon.getName(), new ArrayList<BoonLog>());
+            }
+            foreach (Boon boon in Boon.getAllProfList())
+            {
+                BoonMap map = new BoonMap(boon.getName(), new List<BoonLog>());
+                boon_map.Add(map);
+                // boon_map.put(boon.getName(), new ArrayList<BoonLog>());
             }
 
             // Fill in Boon Map
@@ -413,7 +419,7 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-
+            int test = 0;
         }
         public List<CastLog> getCastLogs( BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {

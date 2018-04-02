@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
             double[] doubles = {(boonDur -os)/(fight_duration*players), boonDur/(fight_duration*players) };
             return  doubles ;
         }
-        public static List<Point> getBoonIntervalsList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data)
+        public static List<Point> getBoonIntervalsList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data)//Needs boonremoval added
         {
             // Initialise variables
             int t_prev = 0;

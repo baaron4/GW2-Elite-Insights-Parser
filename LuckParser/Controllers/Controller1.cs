@@ -794,39 +794,46 @@ namespace LuckParser.Controllers
                 // Boon boon = Boon.getEnum(boon_list[i].ToString());
                 Boon boon = boon_list[i];
                 AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                List<BoonLog> logs = boon_logs.FirstOrDefault(x => x.getName() == boon.getName()).getBoonLog();//Maybe wrong pretty sure it ok tho
-                string rate = "0";
-                if (logs.Count() > 0)
+                BoonMap bm = boon_logs.FirstOrDefault(x => x.getName().Contains(boon.getName()) );
+                if (bm != null)
                 {
-
-                    if (trgetPlayers.Count() == 0)
+                    List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
+                    string rate = "0";
+                    if (logs.Count() > 0)
                     {
-                        if (boon.getType().Equals("duration"))
-                        {
 
-                            rate = String.Format("{0:0}", Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data));
-                        }
-                        else if (boon.getType().Equals("intensity"))
+                        if (trgetPlayers.Count() == 0)
                         {
-                            rate = String.Format("{0:0.0}", Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)));
-                        }
-                    }
-                    else
-                    {
-                        if (boon.getType().Equals("duration"))
-                        {
-                            double[] array = Statistics.getBoonUptime(boon_object, logs, b_data, trgetPlayers.Count());
-                            rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + String.Format("{0:0} %", array[1] * 100) + "with overstack \">" + String.Format("{0:0}%", array[0] * 100) + "</span>";
-                        }
-                        else if (boon.getType().Equals("intensity"))
-                        {
-                            double[] array = Statistics.getBoonUptime(boon_object, logs, b_data, trgetPlayers.Count());
-                            rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + String.Format("{0:0.0}", array[1]) + "with overstack \">" + String.Format("{0:0.0}", array[0]) + "</span>";
-                        }
-                    }
+                            if (boon.getType().Equals("duration"))
+                            {
 
+                                rate = String.Format("{0:0}", Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data));
+                            }
+                            else if (boon.getType().Equals("intensity"))
+                            {
+                                rate = String.Format("{0:0.0}", Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)));
+                            }
+                        }
+                        else
+                        {
+                            if (boon.getType().Equals("duration"))
+                            {
+                                double[] array = Statistics.getBoonUptime(boon_object, logs, b_data, trgetPlayers.Count());
+                                rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + String.Format("{0:0} %", array[1] * 100) + "with overstack \">" + String.Format("{0:0}%", array[0] * 100) + "</span>";
+                            }
+                            else if (boon.getType().Equals("intensity"))
+                            {
+                                double[] array = Statistics.getBoonUptime(boon_object, logs, b_data, trgetPlayers.Count());
+                                rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + String.Format("{0:0.0}", array[1]) + "with overstack \">" + String.Format("{0:0.0}", array[0]) + "</span>";
+                            }
+                        }
+
+                    }
+                    rates[i] = rate;
                 }
-                rates[i] = rate;
+                else {
+                    rates[i] = "0";
+                }
             }
             //table.addrow(utility.concatstringarray(new string[] { p.getcharacter(), p.getprof() }, rates));
             return rates;
@@ -834,66 +841,91 @@ namespace LuckParser.Controllers
 
         //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
         //Methods that make it easier to create Javascript graphs
-        public List<BoonsGraphModel> getBoonGraph(Player p) {
+        public List<BoonsGraphModel> getBoonGraph(Player p ,bool[] settingArray) {
             List<BoonsGraphModel> uptime = new List<BoonsGraphModel>();
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
             List<BoonMap> boon_logs = p.getBoonMap(b_data, s_data, c_data.getCombatList());
-            List<Boon> boon_list = Boon.getList();
-            int n = boon_list.Count();//# of diff boons
+            List<Boon> boon_list = new List<Boon>();
+            if (settingArray[3] || settingArray[4] || settingArray[5])
+            {
+                if (settingArray[3])
+                {//Main boons
+                    boon_list.AddRange(Boon.getMainList());
+
+                }
+                if (settingArray[4] || settingArray[5])
+                {//Important Class specefic boons
+                    boon_list.AddRange(Boon.getSharableProfList());
+                }
+                if (settingArray[5])
+                {//All class specefic boons
+                    boon_list.AddRange(Boon.getAllProfList());
+
+                }
+            }
+                int n = boon_list.Count();//# of diff boons
 
             for (int i = 0; i < n; i++)//foreach boon
             {
                 Boon boon = boon_list[i];
                 AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                List<BoonLog> logs = boon_logs.FirstOrDefault(x => x.getName() == boon.getName()).getBoonLog();//Maybe wrong pretty sure it ok tho
-
-                List<Point> pointlist = new List<Point>();
-                if (logs.Count() > 0)
+                BoonMap bm = boon_logs.FirstOrDefault(x => x.getName().Contains(boon.getName()));
+                if (bm != null)
                 {
-                    if (boon.getType().Equals("duration"))
-                    {
-                        int fight_duration = (int)((b_data.getLastAware() - b_data.getFirstAware()) / 1000.0);
-                        List<Point> pointswierds = Statistics.getBoonIntervalsList(boon_object, logs, b_data);
-                        int pwindex = 0;
-                        int enddur = 0;
-                        for (int cur_time = 0;cur_time<fight_duration;cur_time++) {
-                            if (cur_time == (int)(pointswierds[pwindex].X / 1000f))
-                            {
-                                pointlist.Add(new Point((int)(pointswierds[pwindex].X / 1000f), 1));
-                                enddur = (int)(pointswierds[pwindex].Y/1000f);
-                                if(pwindex < pointswierds.Count()-1) {pwindex++; }
-                                
-                            }
-                            else if (cur_time < enddur)
-                            {
-                                pointlist.Add(new Point(cur_time, 1));
-                            }
-                            else {
-                                pointlist.Add(new Point(cur_time, 0));
-                            }
-                        }
-                        
-                    }
-                    else if (boon.getType().Equals("intensity"))
-                    {
-                        List<int> stackslist = Statistics.getBoonStacksList(boon_object, logs, b_data);
-                        int time = 0;
-                        int timeGraphed = 0;
-                        foreach(int stack in stackslist) {
-                            if (Math.Floor(time / 1000f) > timeGraphed) {
-                                timeGraphed = (int)Math.Floor(time / 1000f);
-                                pointlist.Add(new Point(time/1000, stack));
-                            }
-                            time++;
-                        }
-                      
-                    }
-                    BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(),pointlist);
-                    uptime.Add(bgm);
-                }
+                    List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
 
+                    List<Point> pointlist = new List<Point>();
+                    if (logs.Count() > 0)
+                    {
+                        if (boon.getType().Equals("duration"))
+                        {
+                            int fight_duration = (int)((b_data.getLastAware() - b_data.getFirstAware()) / 1000.0);
+                            List<Point> pointswierds = Statistics.getBoonIntervalsList(boon_object, logs, b_data);
+                            int pwindex = 0;
+                            int enddur = 0;
+                            for (int cur_time = 0; cur_time < fight_duration; cur_time++)
+                            {
+                                if (cur_time == (int)(pointswierds[pwindex].X / 1000f))
+                                {
+                                    pointlist.Add(new Point((int)(pointswierds[pwindex].X / 1000f), 1));
+                                    enddur = (int)(pointswierds[pwindex].Y / 1000f);
+                                    if (pwindex < pointswierds.Count() - 1) { pwindex++; }
+
+                                }
+                                else if (cur_time < enddur)
+                                {
+                                    pointlist.Add(new Point(cur_time, 1));
+                                }
+                                else
+                                {
+                                    pointlist.Add(new Point(cur_time, 0));
+                                }
+                            }
+
+                        }
+                        else if (boon.getType().Equals("intensity"))
+                        {
+                            List<int> stackslist = Statistics.getBoonStacksList(boon_object, logs, b_data);
+                            int time = 0;
+                            int timeGraphed = 0;
+                            foreach (int stack in stackslist)
+                            {
+                                if (Math.Floor(time / 1000f) > timeGraphed)
+                                {
+                                    timeGraphed = (int)Math.Floor(time / 1000f);
+                                    pointlist.Add(new Point(time / 1000, stack));
+                                }
+                                time++;
+                            }
+
+                        }
+                        BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(), pointlist);
+                        uptime.Add(bgm);
+                    }
+                }
+                
             }
             return uptime;
         }
@@ -977,7 +1009,7 @@ namespace LuckParser.Controllers
             string bossname = FilterStringChars(getBossData().getName());
            
             string HTML_CONTENT = "";
-            string HTML_Head = "<!DOCTYPE html>\r<html lang=\"en\"><head> " +
+            string HTML_Head = "<!DOCTYPE html><html lang=\"en\"><head> " +
                 "<meta charset=\"utf-8\">" +
             "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
             "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.css \"  crossorigin=\"anonymous\">" +
@@ -1593,7 +1625,7 @@ namespace LuckParser.Controllers
                             "y: ['1']," +
                             "x: ['" + cl.getActDur() / 1000f + "']," +
                             "base:'" + cl.getTime() / 1000f + "'," +
-                            "name: '" + cl.getID() + "'," +//get name should be handled by api
+                            "name: \"" + cl.getID() + "\"," +//get name should be handled by api
                             "orientation:'h'," +
                             "mode: 'markers'," +
                             "type: 'bar'," +
@@ -1637,22 +1669,22 @@ namespace LuckParser.Controllers
                 }
 
                 if (settingArray[3] || settingArray[4]|| settingArray[5]) {
-                    List<string> parseBoonsList = new List<string>();
+                    List<Boon> parseBoonsList = new List<Boon>();
                     if (settingArray[3]) {//Main boons
-                        parseBoonsList.AddRange(getMainBoons());
+                        parseBoonsList.AddRange(Boon.getMainList());
 
                     }
                      if (settingArray[4]|| settingArray[5]) {//Important Class specefic boons
-                        parseBoonsList.AddRange(getImportantPorfBoons());
+                        parseBoonsList.AddRange(Boon.getSharableProfList());
                     }
                      if (settingArray[5]) {//All class specefic boons
-                        parseBoonsList.AddRange(getAllProfBoons());
+                        parseBoonsList.AddRange(Boon.getAllProfList());
                        
                     } 
-                    List<BoonsGraphModel> boonGraphData = getBoonGraph(p);
+                    List<BoonsGraphModel> boonGraphData = getBoonGraph(p,settingArray);
                     boonGraphData.Reverse();
                     foreach (BoonsGraphModel bgm in boonGraphData) {
-                        if (parseBoonsList.Contains(bgm.getBoonName()))
+                        if (parseBoonsList.FirstOrDefault(x =>x.getName()==bgm.getBoonName() ) != null)
                         {
                             Html_playertabs += "{";
                             Html_playertabs +=
@@ -1691,7 +1723,7 @@ namespace LuckParser.Controllers
                             }
                             Html_playertabs += " line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},";
                             Html_playertabs += " fill: 'tozeroy'," +
-                                 " name: '" + bgm.getBoonName() + "'" +
+                                 " name: \"" + bgm.getBoonName() + "\"" +
                                  " },";
                         }
 
@@ -2138,142 +2170,9 @@ namespace LuckParser.Controllers
             }
 
         }
-        //This whole way of doing it is gonna change too ineffecient
-        public List<string> getMainBoons() {
-            List<string> parseBoonsList = new List<string>();
-            parseBoonsList.Add("Might");//740
-            parseBoonsList.Add("Fury");
-            parseBoonsList.Add("Quickness");
-            parseBoonsList.Add("Alacrity");
-            parseBoonsList.Add("Protection");//717
-            parseBoonsList.Add("Regeneration");//718
-            parseBoonsList.Add("Vigor");
-            parseBoonsList.Add("Stability");
-            parseBoonsList.Add("Swiftness");//719
-            parseBoonsList.Add("Retaliation");
-            parseBoonsList.Add("Resistance");
+       
 
-            return parseBoonsList;
-        }
-
-        public List<string> getImportantPorfBoons() {
-            List<string> parseBoonsList = new List<string>();
-
-            parseBoonsList.Add("Spotter");
-            parseBoonsList.Add("Spirit of Frost");
-            parseBoonsList.Add("Sun Spirit");
-            parseBoonsList.Add("Stone Spirit");
-            parseBoonsList.Add("Empower Allies");
-            parseBoonsList.Add("Banner of Strength");
-            parseBoonsList.Add("Banner of Discipline");
-
-            return parseBoonsList;
-        }
-
-        public List<string> getAllProfBoons() {
-            List<string> parseBoonsList = new List<string>();
-
-            parseBoonsList.Add("Stealth");
-            parseBoonsList.Add("Superspeed");//5974
-            parseBoonsList.Add("Invulnerability");
-            //Auras
-            parseBoonsList.Add("Chaos Armor");
-            parseBoonsList.Add("Fire Shield");//5677
-            parseBoonsList.Add("Frost Aura");//5579
-            parseBoonsList.Add("Light Aura");
-            parseBoonsList.Add("Magnetic Aura");//5684
-            parseBoonsList.Add("Shocking Aura");//5577
-            //Signets
-            parseBoonsList.Add("Signet of Resolve");
-            parseBoonsList.Add("Bane Signet");
-            parseBoonsList.Add("Signet of Judgment");
-            parseBoonsList.Add("Signet of Mercy");
-            parseBoonsList.Add("Signet of Wrath");
-            parseBoonsList.Add("Signet of Courage");
-            parseBoonsList.Add("Healing Signet");
-            parseBoonsList.Add("Dolyak Signet");
-            parseBoonsList.Add("Signet of Fury");
-            parseBoonsList.Add("Signet of Might");
-            parseBoonsList.Add("Signet of Stamina");
-            parseBoonsList.Add("Signet of Rage");
-            parseBoonsList.Add("Signet of Renewal");
-            parseBoonsList.Add("Signet of Stone");
-            parseBoonsList.Add("Signet of the Hunt");
-            parseBoonsList.Add("Signet of the Wild");
-            parseBoonsList.Add("Signet of Malice");
-            parseBoonsList.Add("Assassin's Signet");
-            parseBoonsList.Add("Infiltrator's Signet");
-            parseBoonsList.Add("Signet of Agility");
-            parseBoonsList.Add("Signet of Shadows");
-            parseBoonsList.Add("Signet of Restoration");//739
-            parseBoonsList.Add("Signet of Air");//5590
-            parseBoonsList.Add("Signet of Earth");//5592
-            parseBoonsList.Add("Signet of Fire");//5544
-            parseBoonsList.Add("Signet of Water");//5591
-            parseBoonsList.Add("Signet of the Ether");
-            parseBoonsList.Add("Signet of Domination");
-            parseBoonsList.Add("Signet of Illusions");
-            parseBoonsList.Add("Signet of Inspiration");
-            parseBoonsList.Add("Signet of Midnight");
-            parseBoonsList.Add("Signet of Humility");
-            parseBoonsList.Add("Signet of Vampirism");
-            parseBoonsList.Add("Plague Signet");
-            parseBoonsList.Add("Signet of Spite");
-            parseBoonsList.Add("Signet of the Locust");
-            parseBoonsList.Add("Signet of Undeath");
-            //Transforms
-            parseBoonsList.Add("Rampage");
-            parseBoonsList.Add("Elixir S");
-            parseBoonsList.Add("Elixir X");
-            parseBoonsList.Add("Tornado");//5534
-            parseBoonsList.Add("Whirlpool");
-            parseBoonsList.Add("Lich Form");
-            parseBoonsList.Add("Become the Bear");
-            parseBoonsList.Add("Become the Raven");
-            parseBoonsList.Add("Become the Snow Leopard");
-            parseBoonsList.Add("Become the Wolf");
-            parseBoonsList.Add("Avatar of Melandru");//12368
-            //Not really but basically transforms
-           
-            parseBoonsList.Add("Death Shroud");
-            parseBoonsList.Add("Reaper's Shroud");
-            parseBoonsList.Add("Celestial Avatar");
-            parseBoonsList.Add("Reaper of Grenth");//12366
-            //Profession specefic effects
-            //ele
-                //attunments
-            parseBoonsList.Add("Fire Attunement");//5585
-            parseBoonsList.Add("Water Attunement");
-            parseBoonsList.Add("Air Attunement");//5575
-            parseBoonsList.Add("Earth Attunement");//5580
-                 //forms
-            parseBoonsList.Add("Mist Form");//5543
-            parseBoonsList.Add("Ride the Lightning");//5588
-            parseBoonsList.Add("Vapor Form");
-                //conjures
-            parseBoonsList.Add("Conjure Earth Attributes");//15788
-            parseBoonsList.Add("Conjure Flame Attributes");//15789
-            parseBoonsList.Add("Conjure Frost Attributes");//15790
-            parseBoonsList.Add("Conjure Lightning Attributes");//15791
-            parseBoonsList.Add("Conjure Fire Attributes");//15792
-                //Extras
-            parseBoonsList.Add("Arcane Power");//5582
-            parseBoonsList.Add("Arcane Shield");//5640
-            parseBoonsList.Add("Renewal of Fire");//5764
-            parseBoonsList.Add("Glyph of Elemental Power");//5739 5741 5740 5742
-            parseBoonsList.Add("Rebound");//31337
-            parseBoonsList.Add("Rock Barrier");//34633 750
-            parseBoonsList.Add("Magnetic Wave");//15794
-            parseBoonsList.Add("Obsidian Flesh");//5667
-                //Traits
-            parseBoonsList.Add("Harmonious Conduit");//31353
-            parseBoonsList.Add("bleh");
-            parseBoonsList.Add("bleh");
-            parseBoonsList.Add("bleh");
-            parseBoonsList.Add("bleh");
-            parseBoonsList.Add("bleh");
-            return parseBoonsList;
-
-        }
+       
+        
     }
 }
