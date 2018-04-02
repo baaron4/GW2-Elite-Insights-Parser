@@ -933,15 +933,17 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             List<int[]> bossdmgList = new List<int[]>();
-           // List<DamageLog> damage_logs_all = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
+           // bossdmgList.Add(new int[] {1, 0 });
+            // List<DamageLog> damage_logs_all = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
             List<DamageLog> damage_logs_boss = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData());
             int totaldmg = 0;
             int timeGraphed = 0;
             foreach (DamageLog log in damage_logs_boss) {
                 totaldmg += log.getDamage();
                 int time = log.getTime();
-                if (time > 1000 )
+                if (time > 1000)
                 {
+
                     //to reduce processing time only graph 1 point per sec
                     if (Math.Floor(time / 1000f) > timeGraphed)
                     {
@@ -950,16 +952,26 @@ namespace LuckParser.Controllers
                             timeGraphed = (int)Math.Floor(time / 1000f);
                             bossdmgList.Add(new int[] { time / 1000, (int)(totaldmg / (float)(time / 1000f)) });
                         }
-                        else {
+                        else
+                        {
                             int gap = (int)Math.Floor(time / 1000f) - timeGraphed;
-                            for (int itr = 0; itr < gap-1; itr++) {
+                            for (int itr = 0; itr < gap - 1; itr++)
+                            {
                                 timeGraphed++;
-                                bossdmgList.Add(new int[] {timeGraphed , (int)(totaldmg / (float)timeGraphed ) });
+                                if (bossdmgList.Count > 0)
+                                {
+                                    bossdmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
+                                }
+                                else {//hasnt hit boss yet gap
+                                    bossdmgList.Add(new int[] { timeGraphed, 0 });
+                                }
+                               
                             }
                         }
-                       
+
                     }
                 }
+                
             }
             return bossdmgList;
         }
@@ -968,7 +980,8 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             List<int[]> totaldmgList = new List<int[]>();
-             List<DamageLog> damage_logs_all = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
+           // totaldmgList.Add(new int[] { 1, 0 });
+            List<DamageLog> damage_logs_all = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
             //List<DamageLog> damage_logs_boss = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData());
             int totaldmg = 0;
             int timeGraphed = 0;
@@ -978,6 +991,7 @@ namespace LuckParser.Controllers
                 int time = log.getTime();
                 if (time > 1000)
                 {
+                    
                     // to reduce processing time only graph 1 point per sec
                     if (Math.Floor(time / 1000f) > timeGraphed)
                     {
@@ -992,7 +1006,15 @@ namespace LuckParser.Controllers
                             for (int itr = 0; itr < gap - 1; itr++)
                             {
                                 timeGraphed++;
-                                totaldmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
+                               // totaldmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
+                                if (totaldmgList.Count > 0)
+                                {
+                                    totaldmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
+                                }
+                                else
+                                {//hasnt hit boss yet gap
+                                    totaldmgList.Add(new int[] { timeGraphed, 0 });
+                                }
                             }
                         }
                     }

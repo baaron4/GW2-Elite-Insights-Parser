@@ -241,15 +241,16 @@ namespace LuckParser.Models.ParseModels
             {
                 if (combatStart == false)
                 {
-                    if (bossData.getInstid() == c.getSrcInstid() && c.isStateChange().getID() == 1)
-                    {//Make sure combat ahs started
+                    if (bossData.getInstid() == c.getSrcInstid() &&  c.isStateChange().getID() == 1)
+                    {//Make sure combat has started
+
                         combatStart = true;
                     }
                 }
-                if (combatEnd == false)
+                if (combatEnd == false && combatStart == true)
                 {
                     if (bossData.getInstid() == c.getSrcInstid() && c.isStateChange().getID() == 2)
-                    {//Make sure combat ahs started
+                    {//Make sure combat had ended
                         combatEnd = true;
                     }
                 }
