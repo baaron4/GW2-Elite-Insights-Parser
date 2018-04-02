@@ -408,7 +408,7 @@ namespace LuckParser.Controllers
                     boss_data.setLastAware(NPC.getLastAware());
                 }
             }
-
+            List<int[]> bossHealthOverTime = new List<int[]>();
             // Grab values threw combat data
             foreach (CombatItem c in combat_list)
             {
@@ -419,10 +419,10 @@ namespace LuckParser.Controllers
                 }
                  if (c.isStateChange().getID() == 13 && log_data.getPOV() == "N/A")//Point of View
                 {
-                    int pov_instid = c.getSrcInstid();
+                    long pov_agent = c.getSrcAgent();
                     foreach (AgentItem p in player_list)
                     {
-                        if (pov_instid == p.getInstid())
+                        if (pov_agent == p.getAgent())
                         {
                             log_data.setPOV(p.getName());
                         }
@@ -444,8 +444,14 @@ namespace LuckParser.Controllers
                     log_data.setBossKill(true);
                    
                 }
+                //set health update
+                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 8)
+                {
+                    bossHealthOverTime.Add(new int[] { c.getTime()-boss_data.getFirstAware(),(int)c.getDstAgent()});
+
+                }
             }
-           
+            boss_data.setHealthOverTime(bossHealthOverTime);
             // Dealing with second half of Xera | ((22611300 * 0.5) + (25560600 *
             // 0.5)
             int xera_2_instid = 0;
@@ -955,10 +961,15 @@ namespace LuckParser.Controllers
                         else
                         {
                             int gap = (int)Math.Floor(time / 1000f) - timeGraphed;
+                            bool startOfFight = true;
+                            if (bossdmgList.Count > 0){
+                                startOfFight = false;
+                            }
+
                             for (int itr = 0; itr < gap - 1; itr++)
                             {
                                 timeGraphed++;
-                                if (bossdmgList.Count > 0)
+                                if (!startOfFight)
                                 {
                                     bossdmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
                                 }
@@ -1003,11 +1014,16 @@ namespace LuckParser.Controllers
                         else
                         {
                             int gap = (int)Math.Floor(time / 1000f) - timeGraphed;
+                            bool startOfFight = true;
+                            if (totaldmgList.Count > 0)
+                            {
+                                startOfFight = false;
+                            }
                             for (int itr = 0; itr < gap - 1; itr++)
                             {
                                 timeGraphed++;
                                // totaldmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
-                                if (totaldmgList.Count > 0)
+                                if (!startOfFight)
                                 {
                                     totaldmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
                                 }
@@ -1387,40 +1403,42 @@ namespace LuckParser.Controllers
                   "visible:'legendonly'," +
        " name: 'All Player Dps'";
             Html_dpsGraph += "},";
+
+
             //Boss Health
             Html_dpsGraph += "{";
             //Adding dps axis
 
             Html_dpsGraph += "y: [";
-            int bossDmgDone = 0;
+           
             float scaler = boss_data.getHealth() / maxDPS;
-            foreach (int[] dp in totalDpsAllPlayers)
+            foreach (int[] dp in boss_data.getHealthOverTime())
             {
-                bossDmgDone = (dp[1] * dp[0]);
                 
-                Html_dpsGraph += "'" + (boss_data.getHealth()- bossDmgDone)/scaler + "',";
+                
+                Html_dpsGraph += "'" +( dp[1]/10000f)*maxDPS + "',";
             }
             //cuts off extra comma
             Html_dpsGraph = Html_dpsGraph.Substring(0, Html_dpsGraph.Length - 1);
             Html_dpsGraph += "],";
             //text axis is boss hp in %
             Html_dpsGraph += "text: [";
-            int bossDmgDone2 = 0;
+            
             float scaler2 = boss_data.getHealth() / 100;
-            foreach (int[] dp in totalDpsAllPlayers)
+            foreach (int[] dp in boss_data.getHealthOverTime())
             {
-                bossDmgDone2 = (dp[1] * dp[0]);
+               
 
-                Html_dpsGraph += "'" + (boss_data.getHealth() - bossDmgDone2) / scaler2 + "% HP',";
+                Html_dpsGraph += "'" + dp[1]/100f + "% HP',";
             }
             //cuts off extra comma
             Html_dpsGraph = Html_dpsGraph.Substring(0, Html_dpsGraph.Length - 1);
             Html_dpsGraph += "],";
             //add time axis
             Html_dpsGraph += "x: [";
-            foreach (int[] dp in totalDpsAllPlayers)
+            foreach (int[] dp in boss_data.getHealthOverTime())
             {
-                Html_dpsGraph += "'" + dp[0] + "',";
+                Html_dpsGraph += "'" + (float)(dp[0]/1000f) + "',";
             }
             //cuts off extra comma
             Html_dpsGraph = Html_dpsGraph.Substring(0, Html_dpsGraph.Length - 1);
@@ -1738,6 +1756,7 @@ namespace LuckParser.Controllers
                             Html_playertabs += "]," +
                                 " yaxis: 'y2'," +
                                 " type: 'scatter',";
+                              //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
                             if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness") { }
                             else
                             {
@@ -1782,8 +1801,8 @@ namespace LuckParser.Controllers
                         " line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
 
                " yaxis: 'y3'," +
-
-               " name: 'Boss DPS'" +
+              // "legendgroup: 'Damage',"+
+                    " name: 'Boss DPS'" +
             "}," ;
                  }
                 if (settingArray[1]) {//show total dps plot
@@ -1818,7 +1837,7 @@ namespace LuckParser.Controllers
                     Html_playertabs += " mode: 'lines'," +
                         " line: {shape: 'spline',color:'rgb(0,250,0)'}," +
                " yaxis: 'y3'," +
-
+                // "legendgroup: 'Damage'," +
                " name: 'Total DPS'" + "}";
                }
                 Html_playertabs += "];" +

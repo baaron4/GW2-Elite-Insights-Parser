@@ -16,7 +16,7 @@ namespace LuckParser.Models.ParseModels
         private String name = "UNKNOWN";
         private int health = -1;
         private int toughness = -1;
-
+        private List<int[]> healthOverTime = new List<int[]>();
         // Constructors
         public BossData(int id)
         {
@@ -126,6 +126,9 @@ namespace LuckParser.Models.ParseModels
             return toughness;
         }
 
+        public List<int[]> getHealthOverTime() {
+            return healthOverTime;
+        }
         // Setters
         public void setAgent(long agent)
         {
@@ -159,6 +162,9 @@ namespace LuckParser.Models.ParseModels
         public void setTough(int tough)
         {
             this.toughness = tough;
+        }
+        public void setHealthOverTime(List<int[]> hot) {
+            this.healthOverTime = hot;
         }
     }
 }

@@ -280,22 +280,6 @@ namespace LuckParser.Models.ParseModels
                                 }
                             }
                         }
-                        //if (bossData.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FOE")//selecting boss
-                        //{
-                        //    if (state.getEnum() == "NORMAL")
-                        //    {
-                        //        if (c.isBuff() == 1 && c.getBuffDmg() != 0)
-                        //        {
-                        //            damage_logs.Add(new DamageLog(time, c.getBuffDmg(), c.getSkillID(), c.isBuff(),
-                        //                    c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking()));
-                        //        }
-                        //        else if (c.isBuff() == 0 && c.getValue() != 0)
-                        //        {
-                        //            damage_logs.Add(new DamageLog(time, c.getValue(), c.getSkillID(), c.isBuff(),
-                        //                    c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking()));
-                        //        }
-                        //    }
-                        //}
                     }
                 }
             }
