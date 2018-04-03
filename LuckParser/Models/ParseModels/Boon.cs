@@ -104,6 +104,25 @@ namespace LuckParser.Models.ParseModels
             }
             return null;
         }
+
+        public static List<int> getCondiList() {
+            List<int> condiList = new List<int>();
+            condiList.Add(736);//Bleeding
+            condiList.Add(737);//Burning
+            condiList.Add(861);//Confusion
+            condiList.Add(723);//Poisin
+            condiList.Add(19426);//Torment
+            condiList.Add(720);//Blind
+            condiList.Add(722);//Chilled
+            condiList.Add(721);//Cripplied
+            condiList.Add(791);//Fear
+            condiList.Add(727);//Immob
+            condiList.Add(26766);//Slow
+            condiList.Add(27705);//Taunt
+            condiList.Add(742);//Weakness
+            condiList.Add(738);//Vuln
+            return condiList;
+        }
         public static List<Boon> getList(){
             List<Boon> boonList = new List<Boon>();
             boonList.Add(new Boon("Might","main","intensity",25));

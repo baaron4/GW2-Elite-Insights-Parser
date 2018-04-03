@@ -61,6 +61,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\ParseModels\GW2APISkill.cs" />
     <Compile Include="Models\ParseEnums\Activation.cs" />
     <Compile Include="Models\ParseEnums\BuffRemove.cs" />
     <Compile Include="Models\ParseEnums\IFF.cs" />

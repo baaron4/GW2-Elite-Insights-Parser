@@ -8,6 +8,7 @@ using LuckParser.Models.ParseModels;
 using LuckParser.Models.ParseEnums;
 using System.Drawing;
 using System.Net;
+using LuckParser.Models;
 //recomend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {
@@ -269,7 +270,9 @@ namespace LuckParser.Controllers
                 String nameTrim = name.Replace("/0", "");
                 //Save
                 //TempData["Debug"] += "<br/>" + skill_id + " " + name;
-                skill_data.addItem(new SkillItem(skill_id, nameTrim));
+                SkillItem skill = new SkillItem(skill_id, nameTrim);
+                skill.SetGW2APISkill();
+                skill_data.addItem(skill);
             }
         }
         private void parseCombatList()
@@ -1656,21 +1659,44 @@ namespace LuckParser.Controllers
                 CombatData c_data = getCombatData();
                 List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
                 SkillData s_data = getSkillData();
+                List<SkillItem> s_list = s_data.getSkillList();
                 Html_playertabs += "var data = [";
                 if (settingArray[7])//Display rotation
                 {
                     foreach (CastLog cl in casting)
                     {
+                        string skillName = "";
+                        GW2APISkill skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
+                       
+                        if (skill == null)
+                        {
+                            skillName = s_data.getName(cl.getID());
+                        }
+                        else {
+                            skillName = skill.name;
+                        }
                         Html_playertabs += "{" +
                             "y: ['1']," +
                             "x: ['" + cl.getActDur() / 1000f + "']," +
                             "base:'" + cl.getTime() / 1000f + "'," +
-                            "name: \"" + cl.getID() + "\"," +//get name should be handled by api
+                            "name: \"" + skillName + "\"," +//get name should be handled by api
                             "orientation:'h'," +
                             "mode: 'markers'," +
-                            "type: 'bar'," +
-                            "width:'1'," +
-                            "hoverinfo: 'name'," +
+                            "type: 'bar',";
+                        if (skill != null) {
+                            if (skill.slot == "Weapon_1") {
+                                Html_playertabs += "width:'0.5',";
+                            }
+                            else
+                            {
+                                Html_playertabs += "width:'1',";
+                            }
+
+                        } else {
+                            Html_playertabs += "width:'1',";
+                        }
+                       
+                            Html_playertabs += "hoverinfo: 'name'," +
                             "hoverlabel:{namelength:'-1'}," +
                             " marker: {";
 
@@ -1841,39 +1867,75 @@ namespace LuckParser.Controllers
                " name: 'Total DPS'" + "}";
                }
                 Html_playertabs += "];" +
-    "var layout = {"+
+    "var layout = {" +
 
-        "yaxis: {"+
-            "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false,"+
-            "range: [0, 2]"+
-        "},"+
-           
-        "legend: { traceorder: 'reversed' },"+
-        "hovermode: 'compare',"+
-        "yaxis2: { title: 'Boons', domain: [0.11, 0.50], fixedrange: true },"+
-        "yaxis3: { title: 'DPS', domain: [0.51, 1] },"+
-        "images: ["+
-            "{"+
-                "source: 'https://render.guildwars2.com/file/660B4E695A6026F9D70CA6B0D7565774805C6B0E/103255.png',"+
-                "xref: 'x',"+
-                "yref: 'y',"+
-                "x: 1,"+
-                "y: 0,"+
-                "sizex: 0.8,"+
-                "sizey: 0.8,"+
-                "xanchor: 'left',"+
-                "yanchor: 'bottom'"+
-            "},{"+
-                    "source: 'https://render.guildwars2.com/file/66441BE066120A2590B5AF031D56E221189ADC68/103158.png',"+
-                "xref: 'x',"+
-                "yref: 'y',"+
-                "x: 2,"+
-                "y: 0,"+
-                "sizex: 0.8,"+
-                "sizey: 0.8,"+
-                "xanchor: 'left',"+
-                "yanchor: 'bottom'"+
-            "}],"+
+        "yaxis: {" +
+            "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
+            "range: [0, 2]" +
+        "}," +
+
+        "legend: { traceorder: 'reversed' }," +
+        "hovermode: 'compare'," +
+        "yaxis2: { title: 'Boons', domain: [0.11, 0.50], fixedrange: true }," +
+        "yaxis3: { title: 'DPS', domain: [0.51, 1] }," +
+        "images: [";
+                if (settingArray[7])//Display rotation
+                {
+                    foreach (CastLog cl in casting)
+                    {
+                        string skillIcon = "";
+                        GW2APISkill skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
+                       
+                        if (skill != null)
+                        {
+                            if (skill.slot != "Weapon_1")
+                            {
+                                skillIcon = skill.icon;
+                                Html_playertabs += "{" +
+                                          "source: '" + skillIcon + "'," +
+                                          "xref: 'x'," +
+                                          "yref: 'y'," +
+                                          "x: " + cl.getTime() / 1000f + "," +
+                                          "y: 0," +
+                                          "sizex: 0.8," +
+                                          "sizey: 0.8," +
+                                          "xanchor: 'left'," +
+                                          "yanchor: 'bottom'" +
+                                      "},";
+                            }
+                        }
+                       
+                    }
+                    if (casting.Count > 0) {
+                        //cuts off extra comma
+                        Html_playertabs = Html_playertabs.Substring(0, Html_playertabs.Length - 1);
+                    }
+
+                }
+
+
+            //            Html_playertabs += "{" +
+            //    "source: 'https://render.guildwars2.com/file/660B4E695A6026F9D70CA6B0D7565774805C6B0E/103255.png',"+
+            //    "xref: 'x',"+
+            //    "yref: 'y',"+
+            //    "x: 1,"+
+            //    "y: 0,"+
+            //    "sizex: 0.8,"+
+            //    "sizey: 0.8,"+
+            //    "xanchor: 'left',"+
+            //    "yanchor: 'bottom'"+
+            //"},"+"{"+
+            //        "source: 'https://render.guildwars2.com/file/66441BE066120A2590B5AF031D56E221189ADC68/103158.png',"+
+            //    "xref: 'x',"+
+            //    "yref: 'y',"+
+            //    "x: 2,"+
+            //    "y: 0,"+
+            //    "sizex: 0.8,"+
+            //    "sizey: 0.8,"+
+            //    "xanchor: 'left',"+
+            //    "yanchor: 'bottom'"+
+            //"}"
+            Html_playertabs += "]," +
      
         "font: { color: '#ffffff' },"+
         "paper_bgcolor: 'rgba(0,0,0,0)',"+

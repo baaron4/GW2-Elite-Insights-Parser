@@ -187,23 +187,15 @@ namespace LuckParser.Models.ParseModels
             int[] cleanse = { 0, 0 };
             foreach (CombatItem c in combatList)
             {
-                if (instid == c.getDstInstid() /*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
+                if (instid == c.getSrcInstid() && c.getIFF().getEnum() == "FRIEND" && c.isBuffremove().getID() == 3/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
                 {
-                    LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
                     int time = c.getTime() - time_start;
-                    foreach (AgentItem item in agentData.getNPCAgentList())
-                    {//selecting all
-                        if (item.getInstid() == c.getSrcInstid() && c.getIFF().getEnum() == "FRIEND")
-                        {
-                            if (state.getID() == 0 && time >0)
-                            {
-                                if (c.isBuffremove().getID() > 0 ) {
-                                    cleanse[0]++;
-                                    cleanse[1] += c.getValue();
-                                }
-                            }
-                        }
+                    if (time > 0) {
+                        if (Boon.getCondiList().Contains(c.getSkillID()) ) { }
+                        cleanse[0]++;
+                        cleanse[1] += c.getValue();
                     }
+                   
 
                 }
             }
@@ -213,22 +205,29 @@ namespace LuckParser.Models.ParseModels
         {
             int time_start = bossData.getFirstAware();
             int[] reses = { 0, 0 };
-            foreach (CombatItem c in combatList)
-            {
-                if (instid == c.getDstInstid()/* || instid == c.getSrcMasterInstid()*/)//selecting player most likyl wrong
+            foreach (DamageLog log in damage_logs) {
+                if (log.getID() == 1066)
                 {
-                    LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
-                    int time = c.getTime() - time_start;
-                       if (state.getID() == 0 && time > 0)
-                            {
-                                if (c.getSkillID() == 1066)
-                                {
-                                    reses[0]++;
-                                    reses[1] += c.getValue();
-                                }
-                            }
+                    reses[0]++;
+                    reses[1] += log.getDamage();
                 }
             }
+            //foreach (CombatItem c in combatList)
+            //{
+            //    if (instid == c.getDstInstid()/* || instid == c.getSrcMasterInstid()*/)//selecting player most likyl wrong
+            //    {
+            //        LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
+            //        int time = c.getTime() - time_start;
+            //           if (state.getID() == 0 && time > 0)
+            //                {
+            //                    if (c.getSkillID() == 1066)
+            //                    {
+            //                        reses[0]++;
+            //                        reses[1] += c.getValue();
+            //                    }
+            //                }
+            //    }
+            //}
             return reses;
         }
         // Private Methods
