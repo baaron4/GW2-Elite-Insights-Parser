@@ -350,14 +350,16 @@ namespace LuckParser.Controllers
                 // 1 byte: is_flanking
                 int is_flanking = stream.ReadByte();
 
-                // 3 bytes: garbage
-                safeSkip(3);
+                // 1 byte: is_flanking
+                int is_shields = stream.ReadByte();
+                // 2 bytes: garbage
+                safeSkip(2);
 
                 //save
                 // Add combat
                 combat_data.addItem(new CombatItem(time, src_agent, dst_agent, value, buff_dmg, overstack_value, skill_id,
                         src_instid, dst_instid, src_master_instid, iff, buff, result, is_activation, is_buffremoved,
-                        is_ninety, is_fifty, is_moving, is_statechange, is_flanking));
+                        is_ninety, is_fifty, is_moving, is_statechange, is_flanking,is_shields));
             }
         }
         private void fillMissingData()
@@ -728,7 +730,7 @@ namespace LuckParser.Controllers
             int dodge = c_data.getSkillCount(instid, 65001);//dodge = 65001
             int evades = 0;
             //int dmgevaded = 0;
-
+            int dmgBarriar = 0;
             foreach (DamageLog log in damage_logs.Where(x => x.getResult().getEnum() == "BLOCK"))
             {
                 blocked++;
@@ -744,7 +746,11 @@ namespace LuckParser.Controllers
                 evades++;
                 // dmgevaded += log.getDamage();
             }
+            foreach (DamageLog log in damage_logs.Where(x => x.isShields() == 1))
+            {
 
+                dmgBarriar += log.getDamage();
+            }
             int down = c_data.getStates(instid, "CHANGE_DOWN").Count();
             // R.I.P
             List<Point> dead = c_data.getStates(instid, "CHANGE_DEAD");
@@ -756,7 +762,7 @@ namespace LuckParser.Controllers
             String[] statsArray = new string[] { damagetaken.ToString(),
                 blocked.ToString(),"0"/*dmgblocked.ToString()*/,invulned.ToString(),"0"/*dmginvulned.ToString()*/,
                 dodge.ToString(),evades.ToString(),"0"/*dmgevaded.ToString()*/,
-            down.ToString(),died.ToString("0.00")};
+            down.ToString(),died.ToString("0.00"),dmgBarriar.ToString()};
             return statsArray;
         }
         //(currently not correct)
@@ -779,7 +785,7 @@ namespace LuckParser.Controllers
             condiCleansetime = cleanseArray[1];
 
 
-            String[] statsArray = new string[] { resurrects.ToString(), restime.ToString(), condiCleanse.ToString(), condiCleansetime.ToString() };
+            String[] statsArray = new string[] { resurrects.ToString(), (restime/1000f).ToString(), condiCleanse.ToString(), (condiCleansetime/1000f).ToString() };
             return statsArray;
         }
         public string[] getfinalboons(Player p, List<int> trgetPlayers)
@@ -1237,6 +1243,7 @@ namespace LuckParser.Controllers
        " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"defstats_table\">" +
            " <thead><tr><th>Sub</th><th></th><th>Name</th>" +
            "<th>Dmg Taken" +
+           "</th><th>Dmg Barrier" +
            "</th><th>Blocked" +
            "</th><th>Invulned" +
            "</th><th>Evaded" +
@@ -1253,6 +1260,7 @@ namespace LuckParser.Controllers
 
                 string[] stats = getFinalDefenses(player);
                 HTML_defstats += "<td>" + stats[0] + "</td>";//dmg taken
+                HTML_defstats += "<td>" + stats[10] + "</td>";//dmgbarriar
                 HTML_defstats += "<td>" + stats[1] + "</td>";//Blocks
                 HTML_defstats += "<td>" + stats[3] + "</td>";//invulns
                 HTML_defstats += "<td>" + stats[6] + "</td>";//evades
@@ -1472,8 +1480,8 @@ namespace LuckParser.Controllers
         "Plotly.newPlot('DPSGraph', data, layout);" +
 "</script> ";
             //Generate Boon table------------------------------------------------------------------------------------------------
-            string Html_boons = " <script> $(function () { $('#boons_table').DataTable({ \"order\": [[3, \"desc\"]], " +
-        "\"scrollX\": true," +
+            string Html_boons = " <script> $(function () { $('#boons_table').DataTable({ \"order\": [[3, \"desc\"]] " +
+       // "\"scrollX\": true," +
             " });});</script>" +
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boons_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>";
@@ -1500,8 +1508,8 @@ namespace LuckParser.Controllers
             Html_boons += "</tbody></table>";
 
             //Generate BoonGenSelf table
-            string Html_boonGenSelf = " <script> $(document).ready(function () { $('#boongenself_table').DataTable({ " +
-            "\"scrollX\": true" +
+            string Html_boonGenSelf = " <script> $(document).ready(function () { $('#boongenself_table').DataTable({ \"order\": [[3, \"desc\"]]" +
+          //  "\"scrollX\": true" +
 
             "});});</script>" +
             " <table class=\"display nowrap compact\" cellspacing=\"0\" width=\"100%\" id=\"boongenself_table\">" +
@@ -1535,8 +1543,8 @@ namespace LuckParser.Controllers
 
 
             //Generate BoonGenGroup table
-            string Html_boonGenGroup = " <script> $(function () { $('#boongengroup_table').DataTable({ \"order\": [[3, \"desc\"]], " +
-        "\"scrollX\": true," +
+            string Html_boonGenGroup = " <script> $(function () { $('#boongengroup_table').DataTable({ \"order\": [[3, \"desc\"]] " +
+      //  "\"scrollX\": true," +
             "});});</script>" +
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongengroup_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>";
@@ -1572,8 +1580,8 @@ namespace LuckParser.Controllers
             Html_boonGenGroup += "</tbody></table>";
 
             //Generate BoonGenOGroup table
-            string Html_boonGenOGroup = " <script> $(function () { $('#boongenogroup_table').DataTable({ \"order\": [[3, \"desc\"]], " +
-        "\"scrollX\": true," +
+            string Html_boonGenOGroup = " <script> $(function () { $('#boongenogroup_table').DataTable({ \"order\": [[3, \"desc\"]] " +
+       // "\"scrollX\": true," +
             "});});</script>" +
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongenogroup_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>";
@@ -1609,8 +1617,8 @@ namespace LuckParser.Controllers
             Html_boonGenOGroup += "</tbody></table>";
 
             //Generate BoonGenSquad table
-            string Html_boonGenSquad = " <script> $(function () { $('#boongensquad_table').DataTable({ \"order\": [[5, \"desc\"]], " +
-        "\"scrollX\": true," +
+            string Html_boonGenSquad = " <script> $(function () { $('#boongensquad_table').DataTable({ \"order\": [[3, \"desc\"]] " +
+       // "\"scrollX\": true," +
             "});});</script>" +
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongensquad_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>";
@@ -1680,6 +1688,9 @@ namespace LuckParser.Controllers
                         float dur = 0.0f;
                         if (skillName == "Dodge") {
                             dur = 0.5f;
+                        } else if (cl.getID() == -2) {//wepswap
+                            skillName = "Weapon Swap";
+                            dur = 0.1f;
                         } else if (skillName == "Resurrect") {
                             dur = cl.getActDur() / 1000f;
                         } else if (skillName == "Bandage") {
@@ -1689,10 +1700,10 @@ namespace LuckParser.Controllers
                             dur = cl.getActDur() / 1000f;
                         }
                         Html_playertabs += "{" +
-                            "y: ['1']," +
+                            "y: ['1.5']," +
                             "x: ['" + dur + "']," +
                             "base:'" + cl.getTime() / 1000f + "'," +
-                            "name: \"" + skillName + "\"," +//get name should be handled by api
+                            "name: \"" + skillName +" "+ cl.getTime() / 1000f +"s\"," +//get name should be handled by api
                             "orientation:'h'," +
                             "mode: 'markers'," +
                             "type: 'bar',";
@@ -1919,6 +1930,7 @@ namespace LuckParser.Controllers
                         }
                         else {
                             string skillName = "";
+
                             if (cl.getID() == -2)
                             { //wepswap
                                 skillName = "Weapon Swap";
@@ -1931,7 +1943,7 @@ namespace LuckParser.Controllers
 
                             if (skillName == "Dodge")
                             {
-                                skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
+                               // skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
                             }
                             else if (skillName == "Resurrect")
                             {

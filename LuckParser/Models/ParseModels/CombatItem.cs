@@ -30,7 +30,7 @@ namespace LuckParser.Models.ParseModels
         private int is_moving;
         private StateChange is_statechange;
         private int is_flanking;
-
+        private int is_shields;
         // Constructor
         public CombatItem(int time, long src_agent, long dst_agent, int value, int buff_dmg, int overstack_value,
                 int skill_id, int src_instid, int dst_instid, int src_master_instid, IFF iff, int buff, Result result,
@@ -58,7 +58,33 @@ namespace LuckParser.Models.ParseModels
            this.is_statechange = is_statechange;
             this.is_flanking = is_flanking;
         }
-
+        public CombatItem(int time, long src_agent, long dst_agent, int value, int buff_dmg, int overstack_value,
+               int skill_id, int src_instid, int dst_instid, int src_master_instid, IFF iff, int buff, Result result,
+               Activation is_activation, BuffRemove is_buffremove, int is_ninety, int is_fifty, int is_moving,
+               StateChange is_statechange, int is_flanking,int is_shields)
+        {
+            this.time = time;
+            this.src_agent = src_agent;
+            this.dst_agent = dst_agent;
+            this.value = value;
+            this.buff_dmg = buff_dmg;
+            this.overstack_value = overstack_value;
+            this.skill_id = skill_id;
+            this.src_instid = src_instid;
+            this.dst_instid = dst_instid;
+            this.src_master_instid = src_master_instid;
+            this.iff = iff;
+            this.is_buff = buff;
+            this.result = result;
+            this.is_activation = is_activation;
+            this.is_buffremove = is_buffremove;
+            this.is_ninety = is_ninety;
+            this.is_fifty = is_fifty;
+            this.is_moving = is_moving;
+            this.is_statechange = is_statechange;
+            this.is_flanking = is_flanking;
+            this.is_shields = is_shields;
+        }
         // Public Methods
         public String[] toStringArray()
         {
@@ -83,6 +109,7 @@ namespace LuckParser.Models.ParseModels
             array[17] = is_moving.ToString();
            array[18] = is_statechange.getEnum();
             array[19] = is_flanking.ToString();
+            array[20] = is_shields.ToString();
             return array;
         }
 
@@ -186,7 +213,9 @@ namespace LuckParser.Models.ParseModels
         {
             return is_statechange;
         }
-
+        public int isShields() {
+            return is_shields;
+        }
         // Setters
         public void setSrcAgent(long src_agent)
         {

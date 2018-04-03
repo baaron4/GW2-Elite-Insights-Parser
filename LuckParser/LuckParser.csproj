@@ -130,6 +130,7 @@
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Dodge_Instructor.png" />
     <Content Include="Content\SkillList.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

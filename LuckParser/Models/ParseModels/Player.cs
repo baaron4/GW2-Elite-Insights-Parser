@@ -187,13 +187,15 @@ namespace LuckParser.Models.ParseModels
             int[] cleanse = { 0, 0 };
             foreach (CombatItem c in combatList)
             {
-                if (instid == c.getSrcInstid() && c.getIFF().getEnum() == "FRIEND" && c.isBuffremove().getID() == 3/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
+                if (instid == c.getSrcInstid() && c.getIFF().getEnum() == "FRIEND" && c.isBuffremove().getID() == 1/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
                 {
                     int time = c.getTime() - time_start;
                     if (time > 0) {
-                        if (Boon.getCondiList().Contains(c.getSkillID()) ) { }
-                        cleanse[0]++;
-                        cleanse[1] += c.getValue();
+                        if (Boon.getCondiList().Contains(c.getSkillID()) ) {
+                            cleanse[0]++;
+                            cleanse[1] += c.getValue();
+                        }
+                       
                     }
                    
 
@@ -205,11 +207,11 @@ namespace LuckParser.Models.ParseModels
         {
             int time_start = bossData.getFirstAware();
             int[] reses = { 0, 0 };
-            foreach (DamageLog log in damage_logs) {
+            foreach (CastLog log in cast_logs) {
                 if (log.getID() == 1066)
                 {
                     reses[0]++;
-                    reses[1] += log.getDamage();
+                    reses[1] += log.getActDur();
                 }
             }
             //foreach (CombatItem c in combatList)
@@ -334,13 +336,13 @@ namespace LuckParser.Models.ParseModels
                                 {
                                     damagetaken.Add(c.getValue());
                                     damageTaken_logs.Add(new DamageLog(time, c.getValue(), c.getSkillID(), c.isBuff(),
-                                           c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
+                                           c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation(),c.isShields()));
                                 }
                                 else if (c.isBuff() == 0  && c.getValue() == 0)
                                 {
                                   
                                     damageTaken_logs.Add(new DamageLog(time, c.getBuffDmg(), c.getSkillID(), c.isBuff(),
-                                           c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
+                                           c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation(),c.isShields()));
                                 }
                             }
                         }

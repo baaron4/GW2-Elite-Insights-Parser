@@ -43,6 +43,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
                 {
+                    if(c.isActivation().getID() == 1 || c.isActivation().getID() == 2)
                     count++;
                 }
             }

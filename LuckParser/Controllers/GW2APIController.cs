@@ -132,10 +132,10 @@ namespace LuckParser.Controllers
 
         public  GW2APISkill GetSkill(int id) {
             GW2APISkill skill = GetSkillList().Items.FirstOrDefault(x => x.id == id);
-            if (skill == null) {
-                string path = "/v2/skills/" + id;
-                skill = GetGW2APISKill(path);
-            }
+            //if (skill == null) {
+            //    string path = "/v2/skills/" + id;
+            //    skill = GetGW2APISKill(path);
+            //}
             return skill;
         }
         
