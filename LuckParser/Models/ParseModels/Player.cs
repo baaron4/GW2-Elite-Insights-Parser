@@ -552,9 +552,9 @@ namespace LuckParser.Models.ParseModels
                                         cast_logs.Add(curCastLog);
                                         curCastLog = null;
                                     }
-                                   
+
                                 }
-                               
+
                             }
 
 
@@ -562,6 +562,9 @@ namespace LuckParser.Models.ParseModels
 
 
                     }
+                } else if (state.getID() == 11) {//Weapon swap
+                    int time = c.getTime() - time_start;
+                    curCastLog = new CastLog(time, -2, (int)c.getDstAgent(), c.isActivation());
                 }
             }
            

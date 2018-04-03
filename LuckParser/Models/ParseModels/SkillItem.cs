@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -29,37 +30,21 @@ namespace LuckParser.Models.ParseModels
             return array;
         }
         //setter
-        public void SetGW2APISkill()
+        public void SetGW2APISkill(GW2APIController apiController)
         {
             if (apiSkill == null)
             {
-                //Connecting to API everytime would be bad so
+                GW2APISkill skillAPI = apiController.GetSkill(ID);
 
-                HttpClient APIClient = null;
-
-                if (APIClient == null)
-                {
-                    APIClient = new HttpClient();
-                    APIClient.BaseAddress = new Uri("https://api.guildwars2.com");
-                    APIClient.DefaultRequestHeaders.Accept.Clear();
-                    APIClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                if (skillAPI != null) {
+                    this.apiSkill = skillAPI;
+                    this.name = skillAPI.name;
                 }
-
-                //System.Threading.Thread.Sleep(100);
-                GW2APISkill skill = null;
-                HttpResponseMessage response = APIClient.GetAsync("/v2/skills/" + ID).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    skill = response.Content.ReadAsAsync<GW2APISkill>().Result;
-                    this.apiSkill = skill;
-                    this.name = skill.name;
-                }
+                
             }
             
         }
         // Getters
-
-
         public int getID()
         {
             return ID;
@@ -71,9 +56,6 @@ namespace LuckParser.Models.ParseModels
         }
 
         public GW2APISkill GetGW2APISkill() {
-            if (apiSkill == null) {
-                SetGW2APISkill();
-            }
             return apiSkill;
         }
     }

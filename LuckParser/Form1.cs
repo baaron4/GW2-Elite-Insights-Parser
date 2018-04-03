@@ -19,7 +19,7 @@ namespace LuckParser
         
         BackgroundWorker m_oWorker;
         private SettingsForm setFrm;
-        public bool[] settingArray = { true, true, true, true, true, false, true, true };
+        //public bool[] settingArray = { true, true, true, true, true, false, true, true };
 
         List<string> paths = new List<string>();// Environment.CurrentDirectory + "/" + "parsedhtml.html";
         Controller1 controller = new Controller1();
@@ -118,7 +118,7 @@ namespace LuckParser
                     reportObject = new string[] { i.ToString(), "Writing HTML..." };
                     m_oWorker.ReportProgress(60, reportObject);
                    
-                    string htmlContent = control.CreateHTML(settingArray);
+                    string htmlContent = control.CreateHTML(/*settingArray*/);
 
                     //Creating File
                     reportObject = new string[] { i.ToString(), "Createing File..." };
@@ -237,7 +237,7 @@ namespace LuckParser
        
         private void settingsbtn_Click(object sender, EventArgs e)
         {
-            setFrm = new SettingsForm(settingArray,this);
+            setFrm = new SettingsForm(/*settingArray,this*/);
             setFrm.Show();
         }
 

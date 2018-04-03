@@ -256,6 +256,7 @@ namespace LuckParser.Controllers
         }
         private void parseSkillData()
         {
+            GW2APIController apiController = new GW2APIController();
             // 4 bytes: player count
             int skill_count = getInt();
             //TempData["Debug"] += "Skill Count:" + skill_count.ToString();
@@ -271,7 +272,8 @@ namespace LuckParser.Controllers
                 //Save
                 //TempData["Debug"] += "<br/>" + skill_id + " " + name;
                 SkillItem skill = new SkillItem(skill_id, nameTrim);
-                skill.SetGW2APISkill();
+               
+                skill.SetGW2APISkill(apiController);
                 skill_data.addItem(skill);
             }
         }
@@ -850,25 +852,25 @@ namespace LuckParser.Controllers
 
         //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
         //Methods that make it easier to create Javascript graphs
-        public List<BoonsGraphModel> getBoonGraph(Player p ,bool[] settingArray) {
+        public List<BoonsGraphModel> getBoonGraph(Player p ) {
             List<BoonsGraphModel> uptime = new List<BoonsGraphModel>();
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
             List<BoonMap> boon_logs = p.getBoonMap(b_data, s_data, c_data.getCombatList());
             List<Boon> boon_list = new List<Boon>();
-            if (settingArray[3] || settingArray[4] || settingArray[5])
+            if (Properties.Settings.Default.PlayerBoonsUniversal || Properties.Settings.Default.PlayerBoonsImpProf || Properties.Settings.Default.PlayerBoonsAllProf)
             {
-                if (settingArray[3])
+                if (Properties.Settings.Default.PlayerBoonsUniversal)
                 {//Main boons
                     boon_list.AddRange(Boon.getMainList());
 
                 }
-                if (settingArray[4] || settingArray[5])
+                if (Properties.Settings.Default.PlayerBoonsImpProf || Properties.Settings.Default.PlayerBoonsAllProf)
                 {//Important Class specefic boons
                     boon_list.AddRange(Boon.getSharableProfList());
                 }
-                if (settingArray[5])
+                if (Properties.Settings.Default.PlayerBoonsAllProf)
                 {//All class specefic boons
                     boon_list.AddRange(Boon.getAllProfList());
 
@@ -1041,7 +1043,7 @@ namespace LuckParser.Controllers
             }
             return totaldmgList;
         }
-        public string CreateHTML(bool[] settingArray)
+        public string CreateHTML(/*bool[] settingArray*/)
         {
             BossData b_data = getBossData();
             double fight_duration = (b_data.getLastAware() - b_data.getFirstAware()) / 1000.0;
@@ -1343,7 +1345,7 @@ namespace LuckParser.Controllers
 
            " name: '" + p.getCharacter() + " DPS'" +
         "},";
-                if (settingArray[0]) {//Turns display on or off
+                if (Properties.Settings.Default.DPSGraphTotals) {//Turns display on or off
                     Html_dpsGraph += "{";
                     //Adding dps axis
                     List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
@@ -1661,7 +1663,7 @@ namespace LuckParser.Controllers
                 SkillData s_data = getSkillData();
                 List<SkillItem> s_list = s_data.getSkillList();
                 Html_playertabs += "var data = [";
-                if (settingArray[7])//Display rotation
+                if (Properties.Settings.Default.PlayerRot)//Display rotation
                 {
                     foreach (CastLog cl in casting)
                     {
@@ -1675,9 +1677,20 @@ namespace LuckParser.Controllers
                         else {
                             skillName = skill.name;
                         }
+                        float dur = 0.0f;
+                        if (skillName == "Dodge") {
+                            dur = 0.5f;
+                        } else if (skillName == "Resurrect") {
+                            dur = cl.getActDur() / 1000f;
+                        } else if (skillName == "Bandage") {
+                            dur = cl.getActDur() / 1000f;
+                        }
+                        else {
+                            dur = cl.getActDur() / 1000f;
+                        }
                         Html_playertabs += "{" +
                             "y: ['1']," +
-                            "x: ['" + cl.getActDur() / 1000f + "']," +
+                            "x: ['" + dur + "']," +
                             "base:'" + cl.getTime() / 1000f + "'," +
                             "name: \"" + skillName + "\"," +//get name should be handled by api
                             "orientation:'h'," +
@@ -1734,20 +1747,20 @@ namespace LuckParser.Controllers
                     }
                 }
 
-                if (settingArray[3] || settingArray[4]|| settingArray[5]) {
+                if (Properties.Settings.Default.PlayerBoonsUniversal || Properties.Settings.Default.PlayerBoonsImpProf || Properties.Settings.Default.PlayerBoonsAllProf) {
                     List<Boon> parseBoonsList = new List<Boon>();
-                    if (settingArray[3]) {//Main boons
+                    if (Properties.Settings.Default.PlayerBoonsUniversal) {//Main boons
                         parseBoonsList.AddRange(Boon.getMainList());
 
                     }
-                     if (settingArray[4]|| settingArray[5]) {//Important Class specefic boons
+                     if (Properties.Settings.Default.PlayerBoonsImpProf || Properties.Settings.Default.PlayerBoonsAllProf) {//Important Class specefic boons
                         parseBoonsList.AddRange(Boon.getSharableProfList());
                     }
-                     if (settingArray[5]) {//All class specefic boons
+                     if (Properties.Settings.Default.PlayerBoonsAllProf) {//All class specefic boons
                         parseBoonsList.AddRange(Boon.getAllProfList());
                        
                     } 
-                    List<BoonsGraphModel> boonGraphData = getBoonGraph(p,settingArray);
+                    List<BoonsGraphModel> boonGraphData = getBoonGraph(p);
                     boonGraphData.Reverse();
                     foreach (BoonsGraphModel bgm in boonGraphData) {
                         if (parseBoonsList.FirstOrDefault(x =>x.getName()==bgm.getBoonName() ) != null)
@@ -1796,7 +1809,7 @@ namespace LuckParser.Controllers
 
                     }
                 }
-                if (settingArray[2]) {//show boss dps plot
+                if (Properties.Settings.Default.PlayerGraphBoss) {//show boss dps plot
                     //Adding dps axis
                     List<int[]> playerbossdpsgraphdata = getBossDPSGraph(p);
                     Html_playertabs += "{";
@@ -1831,7 +1844,7 @@ namespace LuckParser.Controllers
                     " name: 'Boss DPS'" +
             "}," ;
                  }
-                if (settingArray[1]) {//show total dps plot
+                if (Properties.Settings.Default.PlayerGraphTotals) {//show total dps plot
                     Html_playertabs += "{";
                     //Adding dps axis
                     List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
@@ -1879,14 +1892,14 @@ namespace LuckParser.Controllers
         "yaxis2: { title: 'Boons', domain: [0.11, 0.50], fixedrange: true }," +
         "yaxis3: { title: 'DPS', domain: [0.51, 1] }," +
         "images: [";
-                if (settingArray[7])//Display rotation
+                if (Properties.Settings.Default.PlayerRotIcons)//Display rotation
                 {
                     foreach (CastLog cl in casting)
                     {
                         string skillIcon = "";
                         GW2APISkill skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
-                       
-                        if (skill != null)
+
+                        if (skill != null && cl.getID() != -2)
                         {
                             if (skill.slot != "Weapon_1")
                             {
@@ -1897,14 +1910,51 @@ namespace LuckParser.Controllers
                                           "yref: 'y'," +
                                           "x: " + cl.getTime() / 1000f + "," +
                                           "y: 0," +
-                                          "sizex: 0.8," +
-                                          "sizey: 0.8," +
+                                          "sizex: 1.1," +
+                                          "sizey: 1.1," +
                                           "xanchor: 'left'," +
                                           "yanchor: 'bottom'" +
                                       "},";
                             }
                         }
-                       
+                        else {
+                            string skillName = "";
+                            if (cl.getID() == -2)
+                            { //wepswap
+                                skillName = "Weapon Swap";
+                                skillIcon = "https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png";
+                            }
+                            else {
+                                skillName = skill_data.getName(cl.getID());
+                            }
+                             
+
+                            if (skillName == "Dodge")
+                            {
+                                skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
+                            }
+                            else if (skillName == "Resurrect")
+                            {
+                                skillIcon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
+                            }
+                            else if (skillName == "Bandage")
+                            {
+                                skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
+                            }
+                            Html_playertabs += "{" +
+                                          "source: '" + skillIcon + "'," +
+                                          "xref: 'x'," +
+                                          "yref: 'y'," +
+                                          "x: " + cl.getTime() / 1000f + "," +
+                                          "y: 0," +
+                                          "sizex: 1.1," +
+                                          "sizey: 1.1," +
+                                          "xanchor: 'left'," +
+                                          "yanchor: 'bottom'" +
+                                      "},";
+                        }
+
+
                     }
                     if (casting.Count > 0) {
                         //cuts off extra comma

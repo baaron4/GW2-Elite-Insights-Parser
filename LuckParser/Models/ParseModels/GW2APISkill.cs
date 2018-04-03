@@ -19,16 +19,16 @@ namespace LuckParser.Models
         public string slot { get; set; }
 
 
-        public string attunment { get; set; }
-        public string cost { get; set; }
-        public string duel_wield { get; set; }
-        public int flip_skill { get; set; }
-        public int inititiative { get; set; }
-        public int next_chain { get; set; }
-        public int prev_chain { get; set; }
+       // public string attunment { get; set; }
+        //public string cost { get; set; }
+       // public string duel_wield { get; set; }
+       // public int flip_skill { get; set; }
+       // public int inititiative { get; set; }
+       // public int next_chain { get; set; }
+       // public int prev_chain { get; set; }
 
 
-        public int toolbelt_skill { get; set; }
+        //public int toolbelt_skill { get; set; }
 
         public GW2APISkill() { }
     }
