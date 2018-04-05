@@ -185,20 +185,25 @@ namespace LuckParser.Models.ParseModels
         public int[] getCleanses(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
             int time_start = bossData.getFirstAware();
             int[] cleanse = { 0, 0 };
-            foreach (CombatItem c in combatList)
+            foreach (CombatItem c in combatList.Where(x=>x.isStateChange().getID() == 0))
             {
-                if (instid == c.getSrcInstid() && c.getIFF().getEnum() == "FRIEND" && c.isBuffremove().getID() == 1/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
+                if (c.isActivation().getID() == 0)
                 {
-                    int time = c.getTime() - time_start;
-                    if (time > 0) {
-                        if (Boon.getCondiList().Contains(c.getSkillID()) ) {
-                            cleanse[0]++;
-                            cleanse[1] += c.getValue();
-                        }
-                       
-                    }
-                   
+                    if (instid == c.getSrcInstid() && c.getIFF().getEnum() == "FRIEND" && c.isBuffremove().getID() == 1/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
+                    {
+                        int time = c.getTime() - time_start;
+                        if (time > 0)
+                        {
+                            if (Boon.getCondiList().Contains(c.getSkillID()))
+                            {
+                                cleanse[0]++;
+                                cleanse[1] += c.getBuffDmg();
+                            }
 
+                        }
+
+
+                    }
                 }
             }
             return cleanse;
@@ -265,7 +270,7 @@ namespace LuckParser.Models.ParseModels
                         {//selecting all
                             if (item.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FOE")
                             {
-                                if (state.getID() == 0)
+                                if (state.getID() == 0 && c.isBuffremove().getID() == 0)
                                 {
                                     if (c.isBuff() == 1 && c.getBuffDmg() != 0)
                                     {
@@ -275,6 +280,10 @@ namespace LuckParser.Models.ParseModels
                                     }
                                     else if (c.isBuff() == 0 && c.getValue() != 0)
                                     {
+                                        damage_logs.Add(new DamageLog(time, c.getValue(), c.getSkillID(), c.isBuff(),
+                                                c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
+                                    } else if (c.getResult().getID() == 5 || c.getResult().getID() == 6 || c.getResult().getID() == 7) {//Hits that where blinded, invulned, interupts
+
                                         damage_logs.Add(new DamageLog(time, c.getValue(), c.getSkillID(), c.isBuff(),
                                                 c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
                                     }
@@ -297,10 +306,12 @@ namespace LuckParser.Models.ParseModels
                     int time = c.getTime() - time_start;
                     if (bossData.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FOE")//selecting boss
                     {
-                        if (state.getEnum() == "NORMAL")
+                        if (state.getEnum() == "NORMAL" && c.isBuffremove().getID() == 0)
                         {
+                            
                             if (c.isBuff() == 1 && c.getBuffDmg() != 0)
                             {
+                               
                                 filterDLog.Add(new DamageLog(time, c.getBuffDmg(), c.getSkillID(), c.isBuff(),
                                         c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
                             }
@@ -375,6 +386,7 @@ namespace LuckParser.Models.ParseModels
                 if (instid == c.getDstInstid())
                 {
                     String skill_name = skillData.getName(c.getSkillID());
+                   
                     if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove().getID() == 0)
                     {
                         int count = 0;
@@ -565,8 +577,16 @@ namespace LuckParser.Models.ParseModels
 
                     }
                 } else if (state.getID() == 11) {//Weapon swap
-                    int time = c.getTime() - time_start;
-                    curCastLog = new CastLog(time, -2, (int)c.getDstAgent(), c.isActivation());
+                    if (instid == c.getSrcInstid())//selecting player as caster
+                    {
+                        if ((int)c.getDstAgent() == 4 || (int)c.getDstAgent() == 5)
+                        {
+                            int time = c.getTime() - time_start;
+                            curCastLog = new CastLog(time, -2, (int)c.getDstAgent(), c.isActivation());
+                            cast_logs.Add(curCastLog);
+                            curCastLog = null;
+                        }
+                    }
                 }
             }
            

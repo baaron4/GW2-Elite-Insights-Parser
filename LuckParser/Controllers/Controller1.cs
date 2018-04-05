@@ -670,17 +670,20 @@ namespace LuckParser.Controllers
                 }
             }
             foreach (CastLog cl in cast_logs) {
-                if ( cl.endActivation().getID() == 4)
+                if (cl.endActivation() != null)
                 {
-                    wasted++;
-                    time_wasted += cl.getActDur();
-                }
-                if (cl.endActivation().getID() == 3)
-                {
-                    saved++;
-                    if (cl.getActDur() < cl.getExpDur())
+                    if (cl.endActivation().getID() == 4)
                     {
-                        time_saved += cl.getExpDur() - cl.getActDur();
+                        wasted++;
+                        time_wasted += cl.getActDur();
+                    }
+                    if (cl.endActivation().getID() == 3)
+                    {
+                        saved++;
+                        if (cl.getActDur() < cl.getExpDur())
+                        {
+                            time_saved += cl.getExpDur() - cl.getActDur();
+                        }
                     }
                 }
             }
@@ -726,7 +729,7 @@ namespace LuckParser.Controllers
             int blocked = 0;
             //int dmgblocked = 0;
             int invulned = 0;
-            //int dmginvulned = 0;
+            int dmginvulned = 0;
             int dodge = c_data.getSkillCount(instid, 65001);//dodge = 65001
             int evades = 0;
             //int dmgevaded = 0;
@@ -739,7 +742,7 @@ namespace LuckParser.Controllers
             foreach (DamageLog log in damage_logs.Where(x => x.getResult().getEnum() == "ABSORB"))
             {
                 invulned++;
-                //dmginvulned += log.getDamage();
+                dmginvulned += log.getDamage();
             }
             foreach (DamageLog log in damage_logs.Where(x => x.getResult().getEnum() == "EVADE"))
             {
@@ -760,7 +763,7 @@ namespace LuckParser.Controllers
                 died = dead[0].X - b_data.getFirstAware();
             }
             String[] statsArray = new string[] { damagetaken.ToString(),
-                blocked.ToString(),"0"/*dmgblocked.ToString()*/,invulned.ToString(),"0"/*dmginvulned.ToString()*/,
+                blocked.ToString(),"0"/*dmgblocked.ToString()*/,invulned.ToString(),dmginvulned.ToString(),
                 dodge.ToString(),evades.ToString(),"0"/*dmgevaded.ToString()*/,
             down.ToString(),died.ToString("0.00"),dmgBarriar.ToString()};
             return statsArray;
@@ -954,16 +957,20 @@ namespace LuckParser.Controllers
             // List<DamageLog> damage_logs_all = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
             List<DamageLog> damage_logs_boss = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData());
             int totaldmg = 0;
+            
             int timeGraphed = 0;
             foreach (DamageLog log in damage_logs_boss) {
+               
                 totaldmg += log.getDamage();
+                
                 int time = log.getTime();
                 if (time > 1000)
                 {
-
+                  
                     //to reduce processing time only graph 1 point per sec
                     if (Math.Floor(time / 1000f) > timeGraphed)
                     {
+                        
                         if ((Math.Floor(time / 1000f) - timeGraphed) < 2)
                         {
                             timeGraphed = (int)Math.Floor(time / 1000f);
@@ -992,6 +999,8 @@ namespace LuckParser.Controllers
                         }
 
                     }
+                   
+                    
                 }
                 
             }
@@ -1075,6 +1084,7 @@ namespace LuckParser.Controllers
             "<script src=\"https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js \"></script>" +
              "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js \"></script>" +
             "<style>" +
+            "table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}"+
             "td, th {text-align: center; white-space: nowrap;}" +
             "table.dataTable  td {color: black;}" +
              ".sorting_disabled {padding: 5px !important;}" +
@@ -1149,6 +1159,8 @@ namespace LuckParser.Controllers
            "</th><th><img src=" +GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
            "</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
                " </tr> </thead><tbody>";
+            List<string[]> footerList = new List<string[]>();
+           
             foreach (Player player in p_list)
             {
                 HTML_dps += "<tr>";
@@ -1180,9 +1192,44 @@ namespace LuckParser.Controllers
 
                 }
                 HTML_dps += "</tr>";
+
+                //gather data for footer
+                footerList.Add(new string[] { player.getGroup().ToString(), dmg[0], dmg[1] , dmg[2] , dmg[3] , dmg[4] , dmg[5] , dmg[6] , dmg[7] , dmg[8] , dmg[9] , dmg[10] , dmg[11]  });
             }
 
-            HTML_dps += "</tbody></table>";
+            HTML_dps += "</tbody><tfoot>";
+            foreach (string groupNum in footerList.Select(x => x[0]).Distinct()) {
+                List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
+                HTML_dps += "<tr>";
+                HTML_dps += "<td></td>";
+                HTML_dps += "<td></td>";
+                HTML_dps += "<td>Group "+groupNum+"</td>";
+                HTML_dps += "<td></td>";
+                HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c=>Int32.Parse(c[8])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[7])) + "</span>" + "</td>";
+                HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[10])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[9])) + "</span>" + "</td>";
+                HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[12])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[11])) + "</span>" + "</td>";
+                HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[2])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[1])) + "</span>" + "</td>";
+                HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[4])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[3])) + "</span>" + "</td>";
+                HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[6])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[5])) + "</span>" + "</td>";
+                HTML_dps += "<td></td>";
+                HTML_dps += "<td></td>";
+                HTML_dps += "</tr>";
+            }
+            HTML_dps += "<tr>";
+            HTML_dps += "<td></td>";
+            HTML_dps += "<td></td>";
+            HTML_dps += "<td>Total</td>";
+            HTML_dps += "<td></td>";
+            HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[8])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[7])) + "</span>" + "</td>";
+            HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[10])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[9])) + "</span>" + "</td>";
+            HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[12])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[11])) + "</span>" + "</td>";
+            HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[2])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[1])) + "</span>" + "</td>";
+            HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[4])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[3])) + "</span>" + "</td>";
+            HTML_dps += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[6])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[5])) + "</span>" + "</td>";
+            HTML_dps += "<td></td>";
+            HTML_dps += "<td></td>";
+            HTML_dps += "</tr>";
+            HTML_dps += "</tfoot></table>";
 
             //generate dmgstats table
             string HTML_dmgstats = " <script> $(function () { $('#dmgstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>" +
@@ -1203,6 +1250,7 @@ namespace LuckParser.Controllers
            "</th><th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
            "</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
                " </tr> </thead><tbody>";
+            footerList = new List<string[]>();
             foreach (Player player in p_list)
             {
                 HTML_dmgstats += "<tr>";
@@ -1235,8 +1283,52 @@ namespace LuckParser.Controllers
                 }
                
                 HTML_dmgstats += "</tr>";
+                //gather data for footer
+                footerList.Add(new string[] { player.getGroup().ToString(),stats[0], stats[1], stats[2], stats[3], stats[4], stats[10], stats[11], stats[12], stats[13], stats[5],stats[6] });
             }
-            HTML_dmgstats += "</tbody></table>";
+            HTML_dmgstats += "</tbody><tfoot>";
+            foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
+            {
+                List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
+                HTML_dmgstats += "<tr>";
+                HTML_dmgstats += "<td></td>";
+                HTML_dmgstats += "<td></td>";
+                HTML_dmgstats += "<td>Group " + groupNum + "</td>";
+                
+                HTML_dmgstats += "<td>"  + (int)(100*groupList.Sum(c => Double.Parse(c[2])/Double.Parse(c[1]))/groupList.Count) + "%</td>";
+                HTML_dmgstats += "<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / groupList.Count) + "%</td>";
+                HTML_dmgstats += "<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / groupList.Count) + "%</td>";
+                HTML_dmgstats += "<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / groupList.Count) + "%</td>";
+                HTML_dmgstats += "<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / groupList.Count) + "%</td>";
+                HTML_dmgstats += "<td>" + groupList.Sum(c => Int32.Parse(c[7])) + "</td>";
+                HTML_dmgstats += "<td>" + groupList.Sum(c => Int32.Parse(c[8])) + "</td>";
+                HTML_dmgstats += "<td>" + groupList.Sum(c => Int32.Parse(c[9])) + "</td>";
+                HTML_dmgstats += "<td></td>";
+                HTML_dmgstats += "<td></td>";
+                HTML_dmgstats += "<td>" + groupList.Sum(c => Int32.Parse(c[10]))  + "</td>";
+                HTML_dmgstats += "<td>" + groupList.Sum(c => Int32.Parse(c[11])) + "</td>";
+                HTML_dmgstats += "<td></td>";
+                HTML_dmgstats += "</tr>";
+            }
+            HTML_dmgstats += "<tr>";
+            HTML_dmgstats += "<td></td>";
+            HTML_dmgstats += "<td></td>";
+            HTML_dmgstats += "<td>Total</td>";
+            HTML_dmgstats += "<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / footerList.Count) + "%</td>";
+            HTML_dmgstats += "<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / footerList.Count) + "%</td>";
+            HTML_dmgstats += "<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / footerList.Count) + "%</td>";
+            HTML_dmgstats += "<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / footerList.Count) + "%</td>";
+            HTML_dmgstats += "<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / footerList.Count) + "%</td>";
+            HTML_dmgstats += "<td>" + footerList.Sum(c => Int32.Parse(c[7])) + "</td>";
+            HTML_dmgstats += "<td>" + footerList.Sum(c => Int32.Parse(c[8])) + "</td>";
+            HTML_dmgstats += "<td>" + footerList.Sum(c => Int32.Parse(c[9])) + "</td>";
+            HTML_dmgstats += "<td></td>";
+            HTML_dmgstats += "<td></td>";
+            HTML_dmgstats += "<td>" + footerList.Sum(c => Int32.Parse(c[10])) + "</td>";
+            HTML_dmgstats += "<td>" + footerList.Sum(c => Int32.Parse(c[11])) + "</td>";
+            HTML_dmgstats += "<td></td>";
+            HTML_dmgstats += "</tr>";
+            HTML_dmgstats += "</tfoot></table>";
 
             //generate Tankstats table
             string HTML_defstats = " <script> $(function () { $('#defstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>" +
@@ -1251,6 +1343,7 @@ namespace LuckParser.Controllers
            "</th><th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
            "</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
                " </tr> </thead><tbody>";
+            footerList = new List<string[]>();
             foreach (Player player in p_list)
             {
                 HTML_defstats += "<tr>";
@@ -1261,7 +1354,7 @@ namespace LuckParser.Controllers
                 string[] stats = getFinalDefenses(player);
                 HTML_defstats += "<td>" + stats[0] + "</td>";//dmg taken
                 HTML_defstats += "<td>" + stats[10] + "</td>";//dmgbarriar
-                HTML_defstats += "<td>" + stats[1] + "</td>";//Blocks
+                HTML_defstats += "<td>"+ "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[4] + "Damage \">" + stats[1] + "</span>"+ "</td>";//Blocks  
                 HTML_defstats += "<td>" + stats[3] + "</td>";//invulns
                 HTML_defstats += "<td>" + stats[6] + "</td>";//evades
                 HTML_defstats += "<td>" + stats[5] + "</td>";//dodges
@@ -1277,9 +1370,41 @@ namespace LuckParser.Controllers
 
                 }
                 HTML_defstats += "</tr>";
+                //gather data for footer
+                footerList.Add(new string[] { player.getGroup().ToString(), stats[0], stats[10], stats[1], stats[3], stats[6], stats[5], stats[8] });
             }
-            HTML_defstats += "</tbody></table>";
-
+            HTML_defstats += "</tbody><tfoot>";
+            foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
+            {
+                List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
+                HTML_defstats += "<tr>";
+                HTML_defstats += "<td></td>";
+                HTML_defstats += "<td></td>";
+                HTML_defstats += "<td>Group " + groupNum + "</td>";
+                HTML_defstats += "<td>" + groupList.Sum(c => Int32.Parse(c[1])) + "</td>";
+                HTML_defstats += "<td>" + groupList.Sum(c => Int32.Parse(c[2])) + "</td>";
+                HTML_defstats += "<td>" + groupList.Sum(c => Int32.Parse(c[3])) + "</td>";
+                HTML_defstats += "<td>" + groupList.Sum(c => Int32.Parse(c[4])) + "</td>";
+                HTML_defstats += "<td>" + groupList.Sum(c => Int32.Parse(c[5])) + "</td>";
+                HTML_defstats += "<td>" + groupList.Sum(c => Int32.Parse(c[6])) + "</td>";
+                HTML_defstats += "<td>" + groupList.Sum(c => Int32.Parse(c[7])) + "</td>";
+                HTML_defstats += "<td></td>";
+                HTML_defstats += "</tr>";
+            }
+            HTML_defstats += "<tr>";
+            HTML_defstats += "<td></td>";
+            HTML_defstats += "<td></td>";
+            HTML_defstats += "<td>Total</td>";
+            HTML_defstats += "<td>" + footerList.Sum(c => Int32.Parse(c[1])) + "</td>";
+            HTML_defstats += "<td>" + footerList.Sum(c => Int32.Parse(c[2])) + "</td>";
+            HTML_defstats += "<td>" + footerList.Sum(c => Int32.Parse(c[3])) + "</td>";
+            HTML_defstats += "<td>" + footerList.Sum(c => Int32.Parse(c[4])) + "</td>";
+            HTML_defstats += "<td>" + footerList.Sum(c => Int32.Parse(c[5])) + "</td>";
+            HTML_defstats += "<td>" + footerList.Sum(c => Int32.Parse(c[6])) + "</td>";
+            HTML_defstats += "<td>" + footerList.Sum(c => Int32.Parse(c[7])) + "</td>";
+            HTML_defstats += "<td></td>";
+            HTML_defstats += "</tr>";
+            HTML_defstats += "</tfoot></table>";
             //generate suppstats table
             string HTML_supstats = " <script> $(function () { $('#supstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>" +
        " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"supstats_table\">" +
@@ -1288,6 +1413,7 @@ namespace LuckParser.Controllers
            "</th><th>Resurrects" +
            "</th>" +
                " </tr> </thead><tbody>";
+            footerList = new List<string[]>();
             foreach (Player player in p_list)
             {
                 HTML_supstats += "<tr>";
@@ -1299,8 +1425,30 @@ namespace LuckParser.Controllers
                 HTML_supstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " seconds \">" + stats[2] + " condis</span>" + "</td>";//condicleanse                                                                                                                                                                   //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
                 HTML_supstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " seconds \">" + stats[0] + "</span>" + "</td>";//res
                 HTML_supstats += "</tr>";
+                //gather data for footer
+                footerList.Add(new string[] { player.getGroup().ToString(), stats[3], stats[2], stats[1], stats[0] });
             }
-            HTML_supstats += "</tbody></table>";
+            HTML_supstats += "</tbody><tfoot>";
+            foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
+            {
+                List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
+                HTML_supstats += "<tr>";
+                HTML_supstats += "<td></td>";
+                HTML_supstats += "<td></td>";
+                HTML_supstats += "<td>Group " + groupNum + "</td>";
+                HTML_supstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + groupList.Sum(c => Int32.Parse(c[2])).ToString() + " condis</span>" + "</td>";
+                HTML_supstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + groupList.Sum(c => Int32.Parse(c[4])) + "</span>" + "</td>";
+                HTML_supstats += "</tr>";
+            }
+            HTML_supstats += "<tr>";
+            HTML_supstats += "<td></td>";
+            HTML_supstats += "<td></td>";
+            HTML_supstats += "<td>Total</td>";
+            HTML_supstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + footerList.Sum(c => Int32.Parse(c[2])).ToString() + " condis</span>" +  "</td>";
+            HTML_supstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + footerList.Sum(c => Int32.Parse(c[4])).ToString() + "</span>" + "</td>";
+            HTML_supstats += "</tr>";
+            HTML_supstats += "</tfoot></table>";
+
             //Generate DPS graph
             string Html_dpsGraph=  
             "<div id=\"DPSGraph\" style=\"height: 600px;width:1200px; display:inline-block \"></div>" +
@@ -1312,7 +1460,7 @@ namespace LuckParser.Controllers
             foreach (Player p in p_list) {
                 //Adding dps axis
                 List<int[]> playerbossdpsgraphdata = getBossDPSGraph(p);
-                if (totalDpsAllPlayers.Count == 0)
+                 if (totalDpsAllPlayers.Count == 0)
                 {
                     totalDpsAllPlayers = playerbossdpsgraphdata;
                 }
@@ -1485,6 +1633,8 @@ namespace LuckParser.Controllers
             " });});</script>" +
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boons_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>";
+            
+            List<List<string>> footList =  new List<List<string>>();
             foreach (Boon boon in Boon.getList())
             {
                 Html_boons += "<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>";
@@ -1498,14 +1648,56 @@ namespace LuckParser.Controllers
                 Html_boons += "<td>" + player.getCharacter().ToString() + "</td>";
                 string[] boonArray = getfinalboons(player, new List<int>());
                 int count = 0;
+                List<string> boonArrayToList = new List<string>();
+                boonArrayToList.Add(player.getGroup());
                 foreach (Boon boon in Boon.getList())
                 {
                     Html_boons += "<td>" + boonArray[count] + "</td>";
+                    boonArrayToList.Add(boonArray[count]);
                     count++;
+                    
+                }
+                Html_boons += "</tr>";
+                //gather data for footer
+                footList.Add(boonArrayToList);
+            }
+            Html_boons += "</tbody><tfoot>";
+            foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
+            {
+               List< List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
+                Html_boons += "<tr>";
+                Html_boons += "<td></td>";
+                Html_boons += "<td></td>";
+                Html_boons += "<td>Group " + groupNum + "</td>";
+                for (int i = 1;i<groupList[0].Count;i++){// string boonStr in groupList) {
+                    if (i == 1)
+                    {//might
+                        Html_boons += "<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count,2) + "</td>";
+                    }
+                    else {
+                        Html_boons += "<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>";
+                    }
+                    
                 }
                 Html_boons += "</tr>";
             }
-            Html_boons += "</tbody></table>";
+            Html_boons += "<tr>";
+            Html_boons += "<td></td>";
+            Html_boons += "<td></td>";
+            Html_boons += "<td>Averages</td>";
+            for (int i = 1; i < footList[0].Count; i++)
+            {// string boonStr in groupList) {
+                if (i == 1)
+                {//might
+                    Html_boons += "<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>";
+                }
+                else
+                {
+                    Html_boons += "<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>";
+                }
+            }
+            Html_boons += "</tr>";
+            Html_boons += "</tfoot></table>";
 
             //Generate BoonGenSelf table
             string Html_boonGenSelf = " <script> $(document).ready(function () { $('#boongenself_table').DataTable({ \"order\": [[3, \"desc\"]]" +
@@ -1514,6 +1706,7 @@ namespace LuckParser.Controllers
             "});});</script>" +
             " <table class=\"display nowrap compact\" cellspacing=\"0\" width=\"100%\" id=\"boongenself_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>";
+             footList = new List<List<string>>();
             foreach (Boon boon in Boon.getList())
             {
                 Html_boonGenSelf += "<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>";
@@ -1532,22 +1725,65 @@ namespace LuckParser.Controllers
                 string[] boonArray = getfinalboons(player, playerID);
 
                 int count = 0;
+                List<string> boonArrayToList = new List<string>();
                 foreach (Boon boon in Boon.getList())
                 {
                     Html_boonGenSelf += "<td>" + boonArray[count] + "</td>";
+                    boonArrayToList.Add(boonArray[count]);
                     count++;
                 }
                 Html_boonGenSelf += "</tr>";
+                //gather data for footer
+                footList.Add(boonArrayToList);
             }
+            //Html_boonGenSelf += "</tbody><tfoot>";
+            //foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
+            //{
+            //    List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
+            //    Html_boonGenSelf += "<tr>";
+            //    Html_boonGenSelf += "<td></td>";
+            //    Html_boonGenSelf += "<td></td>";
+            //    Html_boonGenSelf += "<td>Group " + groupNum + "</td>";
+            //    for (int i = 1; i < groupList[0].Count - 1; i++)
+            //    {// string boonStr in groupList) {
+            //        if (i == 1)
+            //        {//might
+            //            Html_boonGenSelf += "<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 2) + "</td>";
+            //        }
+            //        else
+            //        {
+            //            Html_boonGenSelf += "<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>";
+            //        }
+
+            //    }
+            //    Html_boonGenSelf += "</tr>";
+            //}
+            //Html_boonGenSelf += "<tr>";
+            //Html_boonGenSelf += "<td></td>";
+            //Html_boonGenSelf += "<td></td>";
+            //Html_boonGenSelf += "<td>Averages</td>";
+            //for (int i = 1; i < footList[0].Count; i++)
+            //{// string boonStr in groupList) {
+            //    if (i == 1)
+            //    {//might
+            //        Html_boonGenSelf += "<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>";
+            //    }
+            //    else
+            //    {
+            //        Html_boonGenSelf += "<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>";
+            //    }
+            //}
+            //Html_boonGenSelf += "</tr>";
+            //Html_boonGenSelf += "</tfoot></table>";
+
             Html_boonGenSelf += "</tbody></table>";
-
-
             //Generate BoonGenGroup table
             string Html_boonGenGroup = " <script> $(function () { $('#boongengroup_table').DataTable({ \"order\": [[3, \"desc\"]] " +
       //  "\"scrollX\": true," +
             "});});</script>" +
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongengroup_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>";
+            footList = new List<List<string>>();
             foreach (Boon boon in Boon.getList())
             {
                 Html_boonGenGroup += "<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>";
@@ -1570,21 +1806,65 @@ namespace LuckParser.Controllers
                 string[] boonArray = getfinalboons(player, playerIDS);
                 playerIDS = new List<int>();
                 int count = 0;
+                List<string> boonArrayToList = new List<string>();
                 foreach (Boon boon in Boon.getList())
                 {
                     Html_boonGenGroup += "<td>" + boonArray[count] + "</td>";
+                    boonArrayToList.Add(boonArray[count]);
                     count++;
                 }
                 Html_boonGenGroup += "</tr>";
+                //gather data for footer
+                footList.Add(boonArrayToList);
             }
-            Html_boonGenGroup += "</tbody></table>";
+            //Html_boonGenGroup += "</tbody><tfoot>";
+            //foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
+            //{
+            //    List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
+            //    Html_boonGenGroup += "<tr>";
+            //    Html_boonGenGroup += "<td></td>";
+            //    Html_boonGenGroup += "<td></td>";
+            //    Html_boonGenGroup += "<td>Group " + groupNum + "</td>";
+            //    for (int i = 1; i < groupList[0].Count - 1; i++)
+            //    {// string boonStr in groupList) {
+            //        if (i == 1)
+            //        {//might
+            //            Html_boonGenGroup += "<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 2) + "</td>";
+            //        }
+            //        else
+            //        {
+            //            Html_boonGenGroup += "<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>";
+            //        }
 
+            //    }
+            //    Html_boonGenGroup += "</tr>";
+            //}
+            //Html_boonGenGroup += "<tr>";
+            //Html_boonGenGroup += "<td></td>";
+            //Html_boonGenGroup += "<td></td>";
+            //Html_boonGenGroup += "<td>Averages</td>";
+            //for (int i = 1; i < footList[0].Count; i++)
+            //{// string boonStr in groupList) {
+            //    if (i == 1)
+            //    {//might
+            //        Html_boonGenGroup += "<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>";
+            //    }
+            //    else
+            //    {
+            //        Html_boonGenGroup += "<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>";
+            //    }
+            //}
+            //Html_boonGenGroup += "</tr>";
+            //Html_boonGenGroup += "</tfoot></table>";
+
+            Html_boonGenGroup += "</tbody></table>";
             //Generate BoonGenOGroup table
             string Html_boonGenOGroup = " <script> $(function () { $('#boongenogroup_table').DataTable({ \"order\": [[3, \"desc\"]] " +
        // "\"scrollX\": true," +
             "});});</script>" +
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongenogroup_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>";
+            footList = new List<List<string>>();
             foreach (Boon boon in Boon.getList())
             {
                 Html_boonGenOGroup += "<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>";
@@ -1607,15 +1887,58 @@ namespace LuckParser.Controllers
                 string[] boonArray = getfinalboons(player, playerIDS);
                 playerIDS = new List<int>();
                 int count = 0;
+                List<string> boonArrayToList = new List<string>();
                 foreach (Boon boon in Boon.getList())
                 {
                     Html_boonGenOGroup += "<td>" + boonArray[count] + "</td>";
+                    boonArrayToList.Add(boonArray[count]);
                     count++;
                 }
                 Html_boonGenOGroup += "</tr>";
+                //gather data for footer
+                footList.Add(boonArrayToList);
             }
-            Html_boonGenOGroup += "</tbody></table>";
+            //Html_boonGenOGroup += "</tbody><tfoot>";
+            //foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
+            //{
+            //    List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
+            //    Html_boonGenOGroup += "<tr>";
+            //    Html_boonGenOGroup += "<td></td>";
+            //    Html_boonGenOGroup += "<td></td>";
+            //    Html_boonGenOGroup += "<td>Group " + groupNum + "</td>";
+            //    for (int i = 1; i < groupList[0].Count - 1; i++)
+            //    {// string boonStr in groupList) {
+            //        if (i == 1)
+            //        {//might
+            //            Html_boonGenOGroup += "<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 2) + "</td>";
+            //        }
+            //        else
+            //        {
+            //            Html_boonGenOGroup += "<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>";
+            //        }
 
+            //    }
+            //    Html_boonGenOGroup += "</tr>";
+            //}
+            //Html_boonGenOGroup += "<tr>";
+            //Html_boonGenOGroup += "<td></td>";
+            //Html_boonGenOGroup += "<td></td>";
+            //Html_boonGenOGroup += "<td>Averages</td>";
+            //for (int i = 1; i < footList[0].Count; i++)
+            //{// string boonStr in groupList) {
+            //    if (i == 1)
+            //    {//might
+            //        Html_boonGenOGroup += "<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>";
+            //    }
+            //    else
+            //    {
+            //        Html_boonGenOGroup += "<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>";
+            //    }
+            //}
+            //Html_boonGenOGroup += "</tr>";
+            //Html_boonGenOGroup += "</tfoot></table>";
+
+            Html_boonGenOGroup += "</tbody></table>";
             //Generate BoonGenSquad table
             string Html_boonGenSquad = " <script> $(function () { $('#boongensquad_table').DataTable({ \"order\": [[3, \"desc\"]] " +
        // "\"scrollX\": true," +
@@ -1627,7 +1950,7 @@ namespace LuckParser.Controllers
                 Html_boonGenSquad += "<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>";
             }
             Html_boonGenSquad += " </tr> </thead><tbody>";
-
+            footList = new List<List<string>>();
             playerIDS = new List<int>();
             foreach (Player p in p_list)
             {
@@ -1644,15 +1967,58 @@ namespace LuckParser.Controllers
                 string[] boonArray = getfinalboons(player, playerIDS);
 
                 int count = 0;
+                List<string> boonArrayToList = new List<string>();
                 foreach (Boon boon in Boon.getList())
                 {
                     Html_boonGenSquad += "<td>" + boonArray[count] + "</td>";
+                    boonArrayToList.Add(boonArray[count]);
                     count++;
                 }
                 Html_boonGenSquad += "</tr>";
+                //gather data for footer
+                footList.Add(boonArrayToList);
             }
-            Html_boonGenSquad += "</tbody></table>";
+            //Html_boonGenSquad += "</tbody><tfoot>";
+            //foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
+            //{
+            //    List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
+            //    Html_boonGenSquad += "<tr>";
+            //    Html_boonGenSquad += "<td></td>";
+            //    Html_boonGenSquad += "<td></td>";
+            //    Html_boonGenSquad += "<td>Group " + groupNum + "</td>";
+            //    for (int i = 1; i < groupList[0].Count - 1; i++)
+            //    {// string boonStr in groupList) {
+            //        if (i == 1)
+            //        {//might
+            //            Html_boonGenSquad += "<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 2) + "</td>";
+            //        }
+            //        else
+            //        {
+            //            Html_boonGenSquad += "<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>";
+            //        }
 
+            //    }
+            //    Html_boonGenSquad += "</tr>";
+            //}
+            //Html_boonGenSquad += "<tr>";
+            //Html_boonGenSquad += "<td></td>";
+            //Html_boonGenSquad += "<td></td>";
+            //Html_boonGenSquad += "<td>Averages</td>";
+            //for (int i = 1; i < footList[0].Count; i++)
+            //{// string boonStr in groupList) {
+            //    if (i == 1)
+            //    {//might
+            //        Html_boonGenSquad += "<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>";
+            //    }
+            //    else
+            //    {
+            //        Html_boonGenSquad += "<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>";
+            //    }
+            //}
+            //Html_boonGenSquad += "</tr>";
+            //Html_boonGenSquad += "</tfoot></table>";
+
+            Html_boonGenSquad += "</tbody></table>";
             //generate Player list Graphs
             string Html_playerDropdown = "";
             string Html_playertabs = "";
@@ -1676,7 +2042,11 @@ namespace LuckParser.Controllers
                     foreach (CastLog cl in casting)
                     {
                         string skillName = "";
-                        GW2APISkill skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
+                        GW2APISkill skill = null;
+                        if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null) {
+                            skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
+                        }
+                       
                        
                         if (skill == null)
                         {
@@ -1723,32 +2093,42 @@ namespace LuckParser.Controllers
                             Html_playertabs += "hoverinfo: 'name'," +
                             "hoverlabel:{namelength:'-1'}," +
                             " marker: {";
-
-                        if (cl.endActivation().getID() == 3)
+                        if (cl.endActivation() != null)
                         {
-                            Html_playertabs += "color: 'rgb(40,40,220)',";
+                            if (cl.endActivation().getID() == 3)
+                            {
+                                Html_playertabs += "color: 'rgb(40,40,220)',";
+                            }
+                            else if (cl.endActivation().getID() == 4)
+                            {
+                                Html_playertabs += "color: 'rgb(220,40,40)',";
+                            }
+                            else if (cl.endActivation().getID() == 5)
+                            {
+                                Html_playertabs += "color: 'rgb(40,220,40)',";
+                            }
+                            else
+                            {
+                                Html_playertabs += "color: 'rgb(220,220,0)',";
+                            }
                         }
-                        else if (cl.endActivation().getID() == 4)
-                        {
-                            Html_playertabs += "color: 'rgb(220,40,40)',";
+                        else {
+                            Html_playertabs += "color: 'rgb(220,220,0)',";
                         }
-                        else if (cl.endActivation().getID() == 5)
-                        {
-                            Html_playertabs += "color: 'rgb(40,220,40)',";
-                        }
-
                         Html_playertabs += " width: 5," +
                          "line:" +
                           "{";
-                        if (cl.startActivation().getID() == 1)
+                        if (cl.startActivation() != null)
                         {
-                            Html_playertabs += "color: 'rgb(20,20,20)',";
+                            if (cl.startActivation().getID() == 1)
+                            {
+                                Html_playertabs += "color: 'rgb(20,20,20)',";
+                            }
+                            else if (cl.startActivation().getID() == 2)
+                            {
+                                Html_playertabs += "color: 'rgb(220,40,220)',";
+                            }
                         }
-                        else if (cl.startActivation().getID() == 2)
-                        {
-                            Html_playertabs += "color: 'rgb(220,40,220)',";
-                        }
-
                         Html_playertabs += "width: 1.5" +
                                 "}" +
                             "}," +
@@ -1908,7 +2288,11 @@ namespace LuckParser.Controllers
                     foreach (CastLog cl in casting)
                     {
                         string skillIcon = "";
-                        GW2APISkill skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
+                        GW2APISkill skill = null;
+                        if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null) {
+                            skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
+                        }
+                       
 
                         if (skill != null && cl.getID() != -2)
                         {
