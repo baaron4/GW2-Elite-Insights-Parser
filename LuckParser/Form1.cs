@@ -20,7 +20,7 @@ namespace LuckParser
         BackgroundWorker m_oWorker;
         private SettingsForm setFrm;
         //public bool[] settingArray = { true, true, true, true, true, false, true, true };
-
+        bool completedOp = false;
         List<string> paths = new List<string>();// Environment.CurrentDirectory + "/" + "parsedhtml.html";
         Controller1 controller = new Controller1();
         public Form1()
@@ -77,11 +77,16 @@ namespace LuckParser
             if (progstr[1] == "Cancel")
             {
                 paths = null;
-                listView1.Items.Clear();
+                //listView1.Items.Clear();
+                completedOp = true;
+                btnClear.Enabled = true;
                 lblStatus.Text = "Canceled Parseing";
             } else if(progstr[1] == "Finish") {
                 paths = null;
-                listView1.Items.Clear();
+                //listView1.Items.Clear();
+                completedOp = true;
+                btnClear.Enabled = true;
+                btnStartAsyncOperation.Enabled = false;
                 lblStatus.Text = "Finished Parseing";
             }
             else {
@@ -94,6 +99,16 @@ namespace LuckParser
         /// i.e. Database operations,Reporting
         void m_oWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+
+            bool[] settingsSnap = new bool[] {Properties.Settings.Default.DPSGraphTotals,
+                Properties.Settings.Default.PlayerGraphTotals,
+                Properties.Settings.Default.PlayerGraphBoss,
+                Properties.Settings.Default.PlayerBoonsUniversal,
+                Properties.Settings.Default.PlayerBoonsImpProf,
+                Properties.Settings.Default.PlayerBoonsAllProf,
+                Properties.Settings.Default.PlayerRot,
+                Properties.Settings.Default.PlayerRotIcons
+            };
             for (int i = 0; i < listView1.Items.Count ; i++)
             {
                 string[] reportObject = { i.ToString(), "Working..." };
@@ -114,19 +129,23 @@ namespace LuckParser
                     m_oWorker.ReportProgress(40, reportObject);
                     control.ParseLog(path);
 
-                    //return html string
-                    reportObject = new string[] { i.ToString(), "Writing HTML..." };
-                    m_oWorker.ReportProgress(60, reportObject);
                    
-                    string htmlContent = control.CreateHTML(/*settingArray*/);
 
                     //Creating File
                     reportObject = new string[] { i.ToString(), "Createing File..." };
-                    m_oWorker.ReportProgress(80, reportObject);
+                    m_oWorker.ReportProgress(60, reportObject);
                     FileStream fcreate = File.Open(path.Substring(0, path.Length - file.Length) + fileName + "_AB.html", FileMode.Create);
+
+                    //return html string
+                    reportObject = new string[] { i.ToString(), "Writing HTML..." };
+                    m_oWorker.ReportProgress(80, reportObject);
+
+                    
                     using (StreamWriter sw = new StreamWriter(fcreate))
                     {
-                        sw.Write(htmlContent);
+                        // string htmlContent = control.CreateHTML(/*settingArray*/);
+                        // sw.Write(htmlContent);
+                        control.CreateHTML(sw,settingsSnap);
                         sw.Close();
                     }
 
@@ -166,6 +185,7 @@ namespace LuckParser
             {
                 btnStartAsyncOperation.Enabled = false;
                 btnCancel.Enabled = true;
+                btnClear.Enabled = false;
 
                 m_oWorker.RunWorkerAsync();
             }
@@ -185,6 +205,10 @@ namespace LuckParser
         private void listView1_DragDrop(object sender, DragEventArgs e)
         {
             btnStartAsyncOperation.Enabled = true;
+            if (completedOp) {
+                listView1.Items.Clear();
+                completedOp = false;
+            }
             //Get files as list
             string[] filesArray = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             List<string> files = new List<string>();
@@ -244,6 +268,14 @@ namespace LuckParser
         private void Form1_Load(object sender, EventArgs e)
         {
           
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            btnCancel.Enabled = false;
+            btnStartAsyncOperation.Enabled = false;
+            paths = null;
+            listView1.Items.Clear();
         }
     }
 }

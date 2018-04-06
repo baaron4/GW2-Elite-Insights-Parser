@@ -40,6 +40,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.settingsbtn = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -60,7 +61,7 @@
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(458, 341);
+            this.lblStatus.Location = new System.Drawing.Point(415, 343);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(35, 13);
             this.lblStatus.TabIndex = 8;
@@ -75,9 +76,9 @@
             // 
             // btnStartAsyncOperation
             // 
-            this.btnStartAsyncOperation.Location = new System.Drawing.Point(605, 333);
+            this.btnStartAsyncOperation.Location = new System.Drawing.Point(525, 307);
             this.btnStartAsyncOperation.Name = "btnStartAsyncOperation";
-            this.btnStartAsyncOperation.Size = new System.Drawing.Size(75, 23);
+            this.btnStartAsyncOperation.Size = new System.Drawing.Size(154, 23);
             this.btnStartAsyncOperation.TabIndex = 10;
             this.btnStartAsyncOperation.Text = "Parse";
             this.btnStartAsyncOperation.UseVisualStyleBackColor = true;
@@ -116,13 +117,13 @@
             // Location
             // 
             this.Location.Text = "Location";
-            this.Location.Width = 543;
+            this.Location.Width = 534;
             // 
             // Status
             // 
             this.Status.Text = "Status";
             this.Status.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.Status.Width = 75;
+            this.Status.Width = 113;
             // 
             // label2
             // 
@@ -152,12 +153,23 @@
             this.settingsbtn.UseVisualStyleBackColor = true;
             this.settingsbtn.Click += new System.EventHandler(this.settingsbtn_Click);
             // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(604, 333);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(75, 23);
+            this.btnClear.TabIndex = 16;
+            this.btnClear.Text = "Clear";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.ClientSize = new System.Drawing.Size(696, 375);
+            this.Controls.Add(this.btnClear);
             this.Controls.Add(this.settingsbtn);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.label3);
@@ -189,6 +201,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ColumnHeader Location;
         private System.Windows.Forms.Button settingsbtn;
+        private System.Windows.Forms.Button btnClear;
     }
 }
 

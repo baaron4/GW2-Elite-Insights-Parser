@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -87,7 +88,7 @@ namespace LuckParser
             checkBox6.Checked = Properties.Settings.Default.PlayerBoonsAllProf;
             checkBox8.Checked = Properties.Settings.Default.PlayerRot;
             checkBox7.Checked = Properties.Settings.Default.PlayerRotIcons;
-
+            checkOutputLoc.Checked =Properties.Settings.Default.SaveAtOut;
             //checkBox1.Checked = settingArray[0];
             //checkBox2.Checked = settingArray[1];
             //checkBox3.Checked = settingArray[2];
@@ -96,6 +97,28 @@ namespace LuckParser
             //checkBox6.Checked = settingArray[5];
             //checkBox8.Checked = settingArray[6];
             //checkBox7.Checked = settingArray[7];
+        }
+
+        private void checkOutputLoc_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveAtOut = checkOutputLoc.Checked;
+        }
+
+        private void btnFolderSelect_Click(object sender, EventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    //string[] files = Directory.GetFiles(fbd.SelectedPath);
+
+                    // System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
+                    outFolderTextBox.Text = fbd.SelectedPath;
+                    Properties.Settings.Default.OutLocation = fbd.SelectedPath;
+                }
+            }
         }
     }
 }

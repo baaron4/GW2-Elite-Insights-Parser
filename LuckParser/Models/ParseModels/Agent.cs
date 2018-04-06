@@ -82,8 +82,7 @@ namespace LuckParser.Models.ParseModels
                         return "Necromancer";
                     case 9:
                         return "Revenant";
-                    default:
-                        return "UNKNOWN";
+                    
 
                 }
 
@@ -113,40 +112,93 @@ namespace LuckParser.Models.ParseModels
                             return "Reaper";
                         case 18:
                             return "Herald";
-                        default:
-                            return "UNKNOWN";
+                        
 
                     }
 
                 }
             }
             else if (Convert.ToInt32(build.Substring(4, 8)) >= 20170914) {
-                //Connecting to API everytime would be bad so
-
-                HttpClient APIClient = null;
-                   
-                if (APIClient == null)
+                if (is_elite == 1)
                 {
-                    APIClient = new HttpClient();
-                    APIClient.BaseAddress = new Uri("https://api.guildwars2.com");
-                    APIClient.DefaultRequestHeaders.Accept.Clear();
-                    APIClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                }
-
-                //System.Threading.Thread.Sleep(100);
-                GW2APISpec spec = null;
-                HttpResponseMessage response = APIClient.GetAsync("/v2/specializations/" + is_elite).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    spec = response.Content.ReadAsAsync<GW2APISpec>().Result;
-                    if (spec.elite)
+                    switch (prof + 9)
                     {
-                        return spec.name;
+                        case 10:
+                            return "Dragonhunter";
+                        case 11:
+                            return "Berserker";
+                        case 12:
+                            return "Scrapper";
+                        case 13:
+                            return "Druid";
+                        case 14:
+                            return "Daredevil";
+                        case 15:
+                            return "Tempest";
+                        case 16:
+                            return "Chronomancer";
+                        case 17:
+                            return "Reaper";
+                        case 18:
+                            return "Herald";
+
+
                     }
-                    else {
-                        return spec.profession;
-                    }               
+
+                }else
+                if (is_elite > 1)
+                {
+                    switch (is_elite)
+                    {
+                        case 55:
+                            return "Soulbeast";
+                        case 56:
+                            return "Weaver";
+                        case 57:
+                            return "Holosmith";
+                        case 58:
+                            return "Deadeye";
+                        case 59:
+                            return "Mirage";
+                        case 60:
+                            return "Scourge";
+                        case 61:
+                            return "Spellbreaker";
+                        case 62:
+                            return "Firebrand";
+                        case 63:
+                            return "Renegade";
+                       
+                           
+
+                    }
+                    //Connecting to API everytime would be bad so
+                    HttpClient APIClient = null;
+                    if (APIClient == null)
+                    {
+                        APIClient = new HttpClient();
+                        APIClient.BaseAddress = new Uri("https://api.guildwars2.com");
+                        APIClient.DefaultRequestHeaders.Accept.Clear();
+                        APIClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    }
+
+                    //System.Threading.Thread.Sleep(100);
+                    GW2APISpec spec = null;
+                    HttpResponseMessage response = APIClient.GetAsync("/v2/specializations/" + is_elite).Result;
+                    if (response.IsSuccessStatusCode)
+                    {
+                        spec = response.Content.ReadAsAsync<GW2APISpec>().Result;
+                        if (spec.elite)
+                        {
+                            return spec.name;
+                        }
+                        else
+                        {
+                            return spec.profession;
+                        }
+                    }
                 }
+               
                 
             }
      

@@ -118,5 +118,29 @@ namespace LuckParser.Properties {
                 this["PlayerRotIcons"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SaveAtOut {
+            get {
+                return ((bool)(this["SaveAtOut"]));
+            }
+            set {
+                this["SaveAtOut"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OutLocation {
+            get {
+                return ((string)(this["OutLocation"]));
+            }
+            set {
+                this["OutLocation"] = value;
+            }
+        }
     }
 }
