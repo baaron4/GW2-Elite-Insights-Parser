@@ -19,6 +19,7 @@ namespace LuckParser.Models.ParseModels
         private int is_flanking;
         private Activation is_activation;
         private int is_shields;
+        private int src_agent;
 
         // Constructor
         public DamageLog(int time, int damage, int skill_id, int buff, Result result, int is_ninety, int is_moving,
@@ -33,6 +34,20 @@ namespace LuckParser.Models.ParseModels
             this.is_moving = is_moving;
             this.is_flanking = is_flanking;
             this.is_activation = is_activation;
+        }
+        public DamageLog(int time, int srcagent, int damage, int skill_id, int buff, Result result, int is_ninety, int is_moving,
+               int is_flanking, Activation is_activation)
+        {
+            this.time = time;
+            this.damage = damage;
+            this.skill_id = skill_id;
+            this.buff = buff;
+            this.result = result;
+            this.is_ninety = is_ninety;
+            this.is_moving = is_moving;
+            this.is_flanking = is_flanking;
+            this.is_activation = is_activation;
+            this.src_agent = srcagent;
         }
         public DamageLog(int time, int damage, int skill_id, int buff, Result result, int is_ninety, int is_moving,
                int is_flanking, Activation is_activation,int is_shields)
@@ -94,6 +109,10 @@ namespace LuckParser.Models.ParseModels
         }
         public int isShields() {
             return is_shields;
+        }
+        public int getSrcAgent()
+        {
+            return src_agent;
         }
     }
 }

@@ -123,6 +123,42 @@ namespace LuckParser.Models.ParseModels
             condiList.Add(738);//Vuln
             return condiList;
         }
+        public static string getCondiName(int id) {
+            switch (id) {
+                case 736:
+                    return "Bleeding";
+                case 737:
+                    return "Burning";
+                case 861:
+                    return "Confusion";
+                case 723:
+                    return "Poison";
+                case 19426:
+                    return "Torment";
+                case 720:
+                    return "Blind";
+                case 722:
+                    return "Chill";
+                case 721:
+                    return "Cripplied";
+                case 791:
+                    return "Fear";
+                case 727:
+                    return "Immobalize";
+                case 26766:
+                    return "Slow";
+                case 27705:
+                    return "Taunt";
+                case 742:
+                    return "Weakness";
+                case 738:
+                    return "Vulnerability";
+                case 873:
+                    return "Retaliation";
+                default:
+                    return "UNKNOWN";
+            }
+        }
         public static List<Boon> getList(){
             List<Boon> boonList = new List<Boon>();
             boonList.Add(new Boon("Might","main","intensity",25));

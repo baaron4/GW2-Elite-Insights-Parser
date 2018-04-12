@@ -22,6 +22,7 @@ namespace LuckParser.Models.ParseModels
         private List<int> damagetaken = new List<int>();
         private List<BoonMap> boon_map = new List<BoonMap>();
         private List<CastLog> cast_logs = new List<CastLog>();
+        private List<int> minionIDList;
 
         // Constructors
         public Player(AgentItem agent)
@@ -237,6 +238,17 @@ namespace LuckParser.Models.ParseModels
             //}
             return reses;
         }
+       public List<int> getMinionList(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
+            if (minionIDList == null) {
+                minionIDList = combatList.Where(x => x.getSrcMasterInstid() == instid &&(( x.getValue() != 0 &&x.isBuff() ==0)||(x.isBuff() == 1 && x.getBuffDmg() != 0))).Select(x => (int)x.getSrcInstid()).Distinct().ToList();
+                int test = 0;
+            }
+            return minionIDList;
+        }
+        public List<DamageLog> getMinionDamageLogs(int srcagent,BossData bossData, List<CombatItem> combatList, AgentData agentData) {
+            List<DamageLog> dls = getDamageLogs(0,bossData, combatList,agentData).Where(x => x.getSrcAgent() == srcagent).ToList();
+            return dls;
+        }
         // Private Methods
         private void setDamageLogs(BossData bossData, List<CombatItem> combatList,AgentData agentData)
         {
@@ -260,38 +272,43 @@ namespace LuckParser.Models.ParseModels
                         combatEnd = true;
                     }
                 }
-                if (combatStart && !combatEnd )
-                {
+               
                     if (instid == c.getSrcInstid() || instid == c.getSrcMasterInstid())//selecting player or minion as caster
                     {
                         LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
                         int time = c.getTime() - time_start;
                         foreach (AgentItem item in agentData.getNPCAgentList())
                         {//selecting all
-                            if (item.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FOE")
+                            if (item.getInstid() == c.getDstInstid() )
                             {
-                                if (state.getID() == 0 && c.isBuffremove().getID() == 0)
+                                if (c.getIFF().getEnum() == "FOE")
                                 {
-                                    if (c.isBuff() == 1 && c.getBuffDmg() != 0)
+                                    if (state.getID() == 0 && c.isBuffremove().getID() == 0)
                                     {
+                                    
+                                        if (c.isBuff() == 1 && c.getBuffDmg() != 0)//condi
+                                        {
 
-                                        damage_logs.Add(new DamageLog(time, c.getBuffDmg(), c.getSkillID(), c.isBuff(),
-                                                c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
-                                    }
-                                    else if (c.isBuff() == 0 && c.getValue() != 0)
-                                    {
-                                        damage_logs.Add(new DamageLog(time, c.getValue(), c.getSkillID(), c.isBuff(),
-                                                c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
-                                    } else if (c.getResult().getID() == 5 || c.getResult().getID() == 6 || c.getResult().getID() == 7) {//Hits that where blinded, invulned, interupts
+                                            damage_logs.Add(new DamageLog(time,(int)c.getSrcAgent(), c.getBuffDmg(), c.getSkillID(), c.isBuff(),
+                                                    c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
+                                        }
+                                        else if (c.isBuff() == 0 && c.getValue() != 0)//power
+                                        {
+                                            damage_logs.Add(new DamageLog(time, (int)c.getSrcAgent(), c.getValue(), c.getSkillID(), c.isBuff(),
+                                                    c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
+                                        }
+                                        else if (c.getResult().getID() == 5 || c.getResult().getID() == 6 || c.getResult().getID() == 7)
+                                        {//Hits that where blinded, invulned, interupts
 
-                                        damage_logs.Add(new DamageLog(time, c.getValue(), c.getSkillID(), c.isBuff(),
-                                                c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
+                                            damage_logs.Add(new DamageLog(time, (int)c.getSrcAgent(), c.getValue(), c.getSkillID(), c.isBuff(),
+                                                    c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
+                
             }
         }
         private void setFilteredLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData,int instidFilter)
@@ -306,9 +323,10 @@ namespace LuckParser.Models.ParseModels
                     int time = c.getTime() - time_start;
                     if (bossData.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FOE")//selecting boss
                     {
+                        
                         if (state.getEnum() == "NORMAL" && c.isBuffremove().getID() == 0)
                         {
-                            
+                           
                             if (c.isBuff() == 1 && c.getBuffDmg() != 0)
                             {
                                
@@ -317,6 +335,10 @@ namespace LuckParser.Models.ParseModels
                             }
                             else if (c.isBuff() == 0 && c.getValue() != 0)
                             {
+                                if (time > 300000)
+                                {
+                                    int fuck = 0;
+                                }
                                 filterDLog.Add(new DamageLog(time, c.getValue(), c.getSkillID(), c.isBuff(),
                                         c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
                             }
@@ -456,6 +478,12 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (skill_name.Contains(bm.getName()))
                             {
+                                
+                                if (bm.getName().Contains("Fury"))
+                                {
+                                    int stop = 0;
+                                }
+
                                 //make sure log is within fight time
                                 int time = c.getTime() - time_start;
                                 if (time < fight_duration)
@@ -495,6 +523,11 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (skill_name.Contains(bm.getName()))
                             {
+
+                                if (bm.getName().Contains("Fury"))
+                                {
+                                    int stop = 0;
+                                }
                                 //make sure log is within fight time
                                 int time = c.getTime() - time_start;
                                 if (time < fight_duration)
@@ -528,7 +561,7 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-            int test = 0;
+            
         }
         public List<CastLog> getCastLogs( BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
@@ -591,6 +624,6 @@ namespace LuckParser.Models.ParseModels
             }
            
         }
-
+       
     }
 }

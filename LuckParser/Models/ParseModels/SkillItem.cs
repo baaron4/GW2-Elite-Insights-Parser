@@ -52,6 +52,9 @@ namespace LuckParser.Models.ParseModels
 
         public String getName()
         {
+            if (ID == 1066) {
+                return "Resurrect";
+            }
             return name;
         }
 

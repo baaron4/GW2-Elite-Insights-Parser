@@ -253,6 +253,7 @@ namespace LuckParser.Controllers
                     agent_data.addItem(a, new AgentItem(agent, name, prof.ToString(), toughness, healing, condition), this.log_data.getBuildVersion());
                 }
             }
+          
         }
         private void parseSkillData()
         {
@@ -393,7 +394,7 @@ namespace LuckParser.Controllers
                         }
                         a.setLastAware(c.getTime());
                     }
-                 
+
                 }
             }
 
@@ -416,86 +417,126 @@ namespace LuckParser.Controllers
                 }
             }
             List<int[]> bossHealthOverTime = new List<int[]>();
+
             // Grab values threw combat data
             foreach (CombatItem c in combat_list)
             {
-                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() ==12)//max health update
+                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 12)//max health update
                 {
                     boss_data.setHealth((int)c.getDstAgent());
-                   
+
                 }
-                 if (c.isStateChange().getID() == 13 && log_data.getPOV() == "N/A")//Point of View
-                {
-                    long pov_agent = c.getSrcAgent();
-                    foreach (AgentItem p in player_list)
+                    if (c.isStateChange().getID() == 13 && log_data.getPOV() == "N/A")//Point of View
                     {
-                        if (pov_agent == p.getAgent())
+                        long pov_agent = c.getSrcAgent();
+                        foreach (AgentItem p in player_list)
                         {
-                            log_data.setPOV(p.getName());
+                            if (pov_agent == p.getAgent())
+                            {
+                                log_data.setPOV(p.getName());
+                            }
                         }
+
                     }
+                    else if (c.isStateChange().getID() == 9)//Log start
+                    {
+                        log_data.setLogStart(c.getValue());
+                    }
+                    else if (c.isStateChange().getID() == 10)//log end
+                    {
+                        log_data.setLogEnd(c.getValue());
 
-                }
-                else if (c.isStateChange().getID() == 9)//Log start
-                {
-                    log_data.setLogStart(c.getValue());
-                }
-                else if (c.isStateChange().getID() == 10)//log end
-                {
-                    log_data.setLogEnd(c.getValue());
-                   
-                }
-                //set boss dead
-                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 4)//change dead
-                {
-                    log_data.setBossKill(true);
-                   
-                }
-                //set health update
-                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 8)
-                {
-                    bossHealthOverTime.Add(new int[] { c.getTime()-boss_data.getFirstAware(),(int)c.getDstAgent()});
+                    }
+                    //set boss dead
+                    if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 4)//change dead
+                    {
+                        log_data.setBossKill(true);
 
+                    }
+                    //set health update
+                    if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 8)
+                    {
+                        bossHealthOverTime.Add(new int[] { c.getTime() - boss_data.getFirstAware(), (int)c.getDstAgent() });
+                    }
+                
+
+            }
+
+           
+            // Dealing with second half of Xera | ((22611300 * 0.5) + (25560600 * 0.5)
+           
+            if(boss_data.getID() == 16246) {
+                int xera_2_instid = 0;
+                foreach (AgentItem NPC in NPC_list)
+                {
+                    if (NPC.getProf().Contains("16286"))
+                    {
+                        bossHealthOverTime = new List<int[]>();//reset boss health over time
+                        xera_2_instid = NPC.getInstid();
+                        boss_data.setHealth(24085950);
+                        boss_data.setLastAware(NPC.getLastAware());
+                        foreach (CombatItem c in combat_list)
+                        {
+                            if (c.getSrcInstid() == xera_2_instid)
+                            {
+                                c.setSrcInstid(boss_data.getInstid());
+                            }
+                            if (c.getDstInstid() == xera_2_instid)
+                            {
+                                c.setDstInstid(boss_data.getInstid());
+                            }
+                            //set health update
+                            if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 8)
+                            {
+                                bossHealthOverTime.Add(new int[] { c.getTime() - boss_data.getFirstAware(), (int)c.getDstAgent() });
+                            }
+                        }
+                        break;
+                    }
                 }
             }
-            boss_data.setHealthOverTime(bossHealthOverTime);
-            // Dealing with second half of Xera | ((22611300 * 0.5) + (25560600 *
-            // 0.5)
-            int xera_2_instid = 0;
-            foreach (AgentItem NPC in NPC_list)
+            //Dealing with Deimos split
+            if (boss_data.getID() == 17154)
             {
-                if (NPC.getProf().Contains("16286"))
+                int deimos_2_instid = 0;
+                foreach (AgentItem NPC in NPC_list)
                 {
-                    xera_2_instid = NPC.getInstid();
-                    boss_data.setHealth(24085950);
-                    boss_data.setLastAware(NPC.getLastAware());
-                    foreach (CombatItem c in combat_list)
+                    if (NPC.getProf().Contains("57069"))
                     {
-                        if (c.getSrcInstid() == xera_2_instid)
+                        deimos_2_instid = NPC.getInstid();
+                        boss_data.setLastAware(NPC.getLastAware());
+                        //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos_2_instid ).ToList().Sum(x);
+                        int stop = 0;
+                        foreach (CombatItem c in combat_list)
                         {
-                            c.setSrcInstid(boss_data.getInstid());
+                            if (c.getSrcInstid() == deimos_2_instid)
+                            {
+                                c.setSrcInstid(boss_data.getInstid());
+                                
+                            }
+                            if (c.getDstInstid() == deimos_2_instid)
+                            {
+                                c.setDstInstid(boss_data.getInstid());
+                            }
+                           
                         }
-                        if (c.getDstInstid() == xera_2_instid)
-                        {
-                            c.setDstInstid(boss_data.getInstid());
-                        }
-                    }
-                    break;
-                }
-                // Players
-                List<AgentItem> playerAgentList = getAgentData().getPlayerAgentList();
-                if (p_list.Count == 0)
-                {
-                    foreach (AgentItem playerAgent in playerAgentList)
-                    {
-                        p_list.Add(new Player(playerAgent));
+                        break;
                     }
                 }
-                // Sort
-
-                p_list = p_list.OrderBy(a => Int32.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>Int32.Parse(a.getGroup()) - Int32.Parse(b.getGroup()))
-                getBossKilled();
             }
+            boss_data.setHealthOverTime(bossHealthOverTime);//after xera in case of change
+            // Players
+            List<AgentItem> playerAgentList = getAgentData().getPlayerAgentList();
+            if (p_list.Count == 0)
+            {
+                foreach (AgentItem playerAgent in playerAgentList)
+                {
+                    p_list.Add(new Player(playerAgent));
+                }
+            }
+            // Sort
+            p_list = p_list.OrderBy(a => Int32.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>Int32.Parse(a.getGroup()) - Int32.Parse(b.getGroup()))
+            getBossKilled();
         }
 
         //Statistics--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -576,6 +617,23 @@ namespace LuckParser.Controllers
                 + totalboss_dps.ToString() + "|" + totalboss_damage.ToString() + "|" + totalbossphys_dps.ToString() + "|" + totalbossphys_damage.ToString() + "|" + totalbosscondi_dps.ToString() + "|" + totalbosscondi_damage.ToString();
         }
         public bool getBossKilled() {
+            //if deimos
+            if (boss_data.getID() == 17154) {
+                BossData b_data = getBossData();
+                CombatData c_data = getCombatData();
+                int totaldmg = 0;
+                
+                int[] lasttick = boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1];
+                if (lasttick[1] < 1100) {
+                    foreach (Player p in p_list)
+                    {
+                        totaldmg += p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Where(x=>x.getTime() -boss_data.getFirstAware() > lasttick[0]).ToList().Sum(x => x.getDamage());
+                    }
+                    int stop = 0;
+                }
+                
+            }
+
             if (log_data.getBosskill() == false)
             {
                 BossData b_data = getBossData();
@@ -2056,18 +2114,50 @@ namespace LuckParser.Controllers
            
             foreach (Player p in p_list)
             {
-
-                string charname = p.getCharacter();
-               sw.WriteLine( "<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">" +
-                    "<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>" +
-
-                        "<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>" +
-   "<script>");
                 CombatData c_data = getCombatData();
                 BossData b_data = getBossData();
                 List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
                 SkillData s_data = getSkillData();
                 List<SkillItem> s_list = s_data.getSkillList();
+                AgentData a_data = getAgentData();
+                string charname = p.getCharacter();
+                sw.WriteLine("<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">" +
+                     "<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
+
+                sw.Write("<ul class=\"nav nav-tabs\"><li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + p.getInstid() + "\">" + p.getCharacter() + "</a></li>");
+                //foreach pet loop here
+                List<int> minionIDlist = p.getMinionList(b_data, c_data.getCombatList(), a_data);
+                List<AgentItem> minionAgentList = new List<AgentItem>();
+                foreach (int petid in minionIDlist) {
+                    AgentItem agent = a_data.getNPCAgentList().FirstOrDefault(x => x.getInstid() == petid);
+                    if ( agent!= null)
+                    {
+                        if (minionAgentList.Count > 0)
+                        {
+                            
+                            if (minionAgentList.FirstOrDefault(x => x.getName() == agent.getName()) == null)
+                            {
+                                minionAgentList.Add(agent);
+                            }
+                        }
+                        else
+                        {
+                            minionAgentList.Add(agent);
+                        }
+                     }
+                    int i = 0;
+                }
+                foreach (AgentItem mobAgent in minionAgentList ) {
+                    
+                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid()+"_"+mobAgent.getInstid() + "\">"+mobAgent.getName()+"</a></li>");
+
+                }
+                //inc dmg
+                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#incDmg" + p.getInstid() + "\">Damage Taken</a></li></ul>");
+
+                sw.Write("<div id=\"myTabContent\" class=\"tab-content\"><div class=\"tab-pane fade show active\" id=\"home" + p.getInstid() + "\">");
+                sw.WriteLine( "<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>" +"<script>");
+                
                 sw.WriteLine("var data = [");
                 if (SnapSettings[6])//Display rotation
                 {
@@ -2263,6 +2353,7 @@ namespace LuckParser.Controllers
 
                     }
                 }
+                int maxDPS = 0;
                 if (SnapSettings[2])
                 {//show boss dps plot
                     //Adding dps axis
@@ -2272,6 +2363,9 @@ namespace LuckParser.Controllers
                     int pbdgCount = 0;
                     foreach (int[] dp in playerbossdpsgraphdata)
                     {
+                        if (maxDPS < dp[1]) {
+                            maxDPS = dp[1];
+                        }
                         if (pbdgCount == playerbossdpsgraphdata.Count - 1) {
                             sw.Write("'" + dp[1] + "'");
                         } else {
@@ -2362,6 +2456,7 @@ namespace LuckParser.Controllers
                // "legendgroup: 'Damage'," +
                " name: 'Total DPS'" + "}");
                 }
+
                 sw.WriteLine("];" +
     "var layout = {" +
 
@@ -2463,10 +2558,359 @@ namespace LuckParser.Controllers
             "plot_bgcolor: 'rgba(0,0,0,0)'" +
         "};" +
                 "Plotly.newPlot('Graph" + p.getInstid() + "', data, layout);" +
-    "</script> " +
-                            "</div>");
+    "</script> ");
+                CreateDMGDistTable(sw, p);
+                sw.WriteLine("</div>");
+                foreach (AgentItem mobAgent in minionAgentList)
+                {
+                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid()+"_"+mobAgent.getInstid() + "\">");
+                    CreateDMGDistTable(sw,p,mobAgent);
+                    sw.Write("</div>");
+                }
+                sw.Write("<div class=\"tab-pane fade \" id=\"incDmg" + p.getInstid() + "\">");
+
+                CreateDMGTakenDistTable(sw, p);
+                sw.WriteLine("</div></div></div>");
+                
             }
 
+        }
+        public void CreateDMGDistTable(StreamWriter sw,Player p) {
+
+            CombatData c_data = getCombatData();
+            BossData b_data = getBossData();
+            List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
+            List<DamageLog> damageLogs = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
+            SkillData s_data = getSkillData();
+            List<SkillItem> s_list = s_data.getSkillList();
+            int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
+            sw.WriteLine(" <script> $(function () { $('#dist_table_"+p.getInstid()+ "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>"+
+                " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_"+p.getInstid()+"\">" +
+           " <thead> <tr> <th>Skill</th><th>Casts</th><th>Damage</th><th>Percent</th><th>Hits</th> <th>Min</th><th>Avg</th><th>Max</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
+           "<th>Wasted</th><th>Saved</th> </tr> </thead><tbody>");
+            foreach (int id in casting.Select(x=>x.getID()).Distinct()) {//foreach casted skill
+                SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
+                List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
+                int casts = clList.Count();
+                double timeswasted = 0;
+                int countwasted = 0;
+                double timessaved = 0;
+                int countsaved = 0;
+                foreach (CastLog cl in clList) {
+                    if (cl.getExpDur() < cl.getActDur())
+                    {
+                        countsaved++;
+                        timessaved += ((double)(cl.getExpDur() - cl.getActDur()) / 1000f);
+                    }
+                    else if (cl.getExpDur() > cl.getActDur()) {
+                        countwasted++;
+                        timeswasted += ((double)( cl.getActDur()) / 1000f);
+                    }
+                }
+
+                int totaldamage = 0;
+                int mindamage = 0;
+                int avgdamage = 0;
+                int hits = 0;
+                int maxdamage = 0;
+                int crit = 0;
+                int flank = 0;
+                int glance = 0;
+                foreach (DamageLog dl in damageLogs.Where(x=>x.getID() == id)) {
+                    int curdmg = dl.getDamage();
+                    totaldamage += curdmg;
+                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                    if (0 == maxdamage|| curdmg > maxdamage) { maxdamage = curdmg; }
+                    hits++;
+                    int result = dl.getResult().getID();
+                    if (result == 1) { crit++; } else if (result == 2) { glance++; }
+                    if (dl.isFlanking() == 1) { flank++; }
+                }
+                avgdamage = (int)((double)totaldamage / (double)hits);
+
+                if (skill != null) {
+                    if (totaldamage != 0 && skill.GetGW2APISkill() != null)
+                    {
+                        sw.WriteLine("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
+                            "<td>" + casts + "</td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
+                             "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                              "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" + "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
+                               "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved,2) + "s</td></tr>");
+                    }
+                    else if (totaldamage != 0) {
+                        sw.WriteLine("<tr><td align=\"left\">" + skill.getName() + "</td>" +
+                            "<td>" + casts + "</td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
+                             "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                              "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" + "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
+                               "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
+                    } else if (skill.GetGW2APISkill() != null)
+                    {
+                        sw.WriteLine("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
+                           "<td>" + casts + "</td>" + "<td></td>" + "<td></td>" +
+                            "<td>"  + "</td>" + "<td>"  + "</td>" + "<td>"  + "</td>" + "<td>"  + "</td>" +
+                             "<td></td>" + "<td></td>" +
+                              "<td></td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
+                    }
+                    else {
+                        sw.WriteLine("<tr><td align=\"left\">" + skill.getName() + "</td>" +
+                          "<td>" + casts + "</td>" + "<td></td>" + "<td></td>" +
+                           "<td>"  + "</td>" + "<td>"  + "</td>" + "<td>"  + "</td>" + "<td>"  + "</td>" +
+                            "<td></td>" + "<td></td>" +
+                             "<td></td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
+                    }
+                }
+                
+            }
+            foreach (int condiID in damageLogs.Where(x=>x.isCondi() == 1).Select(x=>x.getID()).Distinct()) {
+                string condiName = Boon.getCondiName(condiID);
+                int totaldamage = 0;
+                int mindamage = 0;
+                int avgdamage = 0;
+                int hits = 0;
+                int maxdamage = 0;
+
+                foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                {
+                    int curdmg = dl.getDamage();
+                    totaldamage += curdmg;
+                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                    hits++;
+                    int result = dl.getResult().getID();
+                   
+                }
+                avgdamage = (int)((double)totaldamage / (double)hits);
+
+             
+                    if (totaldamage != 0)
+                    {
+                        sw.WriteLine("<tr><td align=\"left\"><img src=" +GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
+                            "<td></td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
+                             "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                              "<td></td>" + "<td></td>" +
+                               "<td></td>" + "<td></td>" + "<td></td></tr>");
+                    }
+            }
+            sw.WriteLine("</tbody></table>");
+        }
+        public void CreateDMGDistTable(StreamWriter sw, Player p,AgentItem agent)
+        {
+
+            CombatData c_data = getCombatData();
+            BossData b_data = getBossData();
+           // List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
+           
+            List<DamageLog> damageLogs = p.getMinionDamageLogs((int)agent.getAgent(), b_data, c_data.getCombatList(), getAgentData());
+            SkillData s_data = getSkillData();
+            List<SkillItem> s_list = s_data.getSkillList();
+            int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
+
+           
+            sw.WriteLine(" <script> $(function () { $('#dist_table_" + p.getInstid()+"_"+agent.getInstid() + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>" +
+                " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + p.getInstid() +"_"+agent.getInstid()+ "\">" +
+           " <thead> <tr> <th>Skill</th>><th>Damage</th><th>Percent</th><th>Hits</th> <th>Min</th><th>Avg</th><th>Max</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
+           "</tr> </thead><tbody>");
+            foreach (int id in damageLogs.Select(x => x.getID()).Distinct())
+            {//foreach casted skill
+                SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
+                int totaldamage = 0;
+                int mindamage = 0;
+                int avgdamage = 0;
+                int hits = 0;
+                int maxdamage = 0;
+                int crit = 0;
+                int flank = 0;
+                int glance = 0;
+                foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
+                {
+                    int curdmg = dl.getDamage();
+                    totaldamage += curdmg;
+                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                    hits++;
+                    int result = dl.getResult().getID();
+                    if (result == 1) { crit++; } else if (result == 2) { glance++; }
+                    if (dl.isFlanking() == 1) { flank++; }
+                }
+                avgdamage = (int)((double)totaldamage / (double)hits);
+
+                if (skill != null)
+                {
+                    if (totaldamage != 0 && skill.GetGW2APISkill() != null)
+                    {
+                        sw.WriteLine("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
+                              "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
+                             "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                              "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" + "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
+                               "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" + "</tr>");
+                    }
+                    else if (totaldamage != 0)
+                    {
+                        sw.WriteLine("<tr><td align=\"left\">" + skill.getName() + "</td>" +
+                             "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
+                             "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                              "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" + "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
+                               "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" + "</tr>");
+                    }
+                    else if (skill.GetGW2APISkill() != null)
+                    {
+                        sw.WriteLine("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
+                           "</td>"  + "<td></td>" +
+                            "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
+                             "<td></td>" + "<td></td>" +
+                              "<td></td>" + "</tr>");
+                    }
+                    else
+                    {
+                        sw.WriteLine("<tr><td align=\"left\">" + skill.getName() + "</td>" +
+                           "<td></td>" + 
+                           "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
+                            "<td></td>" + "<td></td>" +
+                             "<td></td>" + "</tr>");
+                    }
+                }
+
+            }
+            foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
+            {
+                string condiName = Boon.getCondiName(condiID);
+                int totaldamage = 0;
+                int mindamage = 0;
+                int avgdamage = 0;
+                int hits = 0;
+                int maxdamage = 0;
+
+                foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                {
+                    int curdmg = dl.getDamage();
+                    totaldamage += curdmg;
+                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                    hits++;
+                    int result = dl.getResult().getID();
+
+                }
+                avgdamage = (int)((double)totaldamage / (double)hits);
+
+
+                if (totaldamage != 0)
+                {
+                    sw.WriteLine("<tr><td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
+                        "<td></td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
+                         "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                          "<td></td>" + "<td></td>" +
+                           "<td></td>" + "<td></td>" + "<td></td></tr>");
+                }
+            }
+            sw.WriteLine("</tbody></table>");
+        }
+        public void CreateDMGTakenDistTable(StreamWriter sw, Player p)
+        {
+
+            CombatData c_data = getCombatData();
+            BossData b_data = getBossData();
+            List<DamageLog> damageLogs = p.getDamageTakenLogs( b_data, c_data.getCombatList(), getAgentData());
+            SkillData s_data = getSkillData();
+            List<SkillItem> s_list = s_data.getSkillList();
+            int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
+            sw.WriteLine(" <script> $(function () { $('#distTaken_table_" + p.getInstid() + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>" +
+                " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"distTaken_table_" + p.getInstid() + "\">" +
+           " <thead> <tr> <th>Skill</th><th>Damage</th><th>Percent</th><th>Hits</th> <th>Min</th><th>Avg</th><th>Max</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
+           " </tr> </thead><tbody>");
+            foreach (int id in damageLogs.Select(x => x.getID()).Distinct())
+            {//foreach casted skill
+                SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
+               
+                int totaldamage = 0;
+                int mindamage = 0;
+                int avgdamage = 0;
+                int hits = 0;
+                int maxdamage = 0;
+                int crit = 0;
+                int flank = 0;
+                int glance = 0;
+                foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
+                {
+                    int curdmg = dl.getDamage();
+                    totaldamage += curdmg;
+                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                    if (curdmg != 0) { hits++; };
+                    int result = dl.getResult().getID();
+                    if (result == 1) { crit++; } else if (result == 2) { glance++; }
+                    if (dl.isFlanking() == 1) { flank++; }
+                }
+                avgdamage = (int)((double)totaldamage / (double)hits);
+
+                if (skill != null)
+                {
+                    if (totaldamage != 0 && skill.GetGW2APISkill() != null)
+                    {
+                        sw.WriteLine("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
+                              "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
+                             "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                              "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" + "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
+                               "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" +"</tr>");
+                    }
+                    else if (totaldamage != 0)
+                    {
+                        sw.WriteLine("<tr><td align=\"left\">" + skill.getName() + "</td>" +
+                             "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
+                             "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                              "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" + "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
+                               "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" + "</tr>");
+                    }
+                    else if (skill.GetGW2APISkill() != null)
+                    {
+                        sw.WriteLine("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
+                            "<td></td>" + "<td></td>" +
+                            "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
+                             "<td></td>" + "<td></td>" +
+                              "<td></td>" + "</tr>");
+                    }
+                    else
+                    {
+                        sw.WriteLine("<tr><td align=\"left\">" + skill.getName() + "</td>" +
+                           "<td></td>" + "<td></td>" +
+                           "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
+                            "<td></td>" + "<td></td>" +
+                             "<td></td>" + "</tr>");
+                    }
+                }
+
+            }
+            foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
+            {
+                string condiName = Boon.getCondiName(condiID);
+                int totaldamage = 0;
+                int mindamage = 0;
+                int avgdamage = 0;
+                int hits = 0;
+                int maxdamage = 0;
+
+                foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                {
+                    int curdmg = dl.getDamage();
+                    totaldamage += curdmg;
+                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                    hits++;
+                    int result = dl.getResult().getID();
+
+                }
+                avgdamage = (int)((double)totaldamage / (double)hits);
+
+
+                if (totaldamage != 0)
+                {
+                    sw.WriteLine("<tr><td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
+                        "<td></td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
+                         "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                          "<td></td>" + "<td></td>" +
+                           "<td></td>" + "<td></td>" + "<td></td></tr>");
+                }
+            }
+            sw.WriteLine("</tbody></table>");
         }
         public void CreateHTML(StreamWriter sw,bool[] settingsSnap)
         {
@@ -2509,6 +2953,7 @@ namespace LuckParser.Controllers
                      ".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}" +
                      ".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}" +
                      "div.dataTables_wrapper { width: 1100px; margin: 0 auto; }" +
+                     "th.dt-left, td.dt-left { text-align: left; }" +
              "</style>" +
                      "<script>$.extend( $.fn.dataTable.defaults, {searching: false, ordering: true,paging: false,dom:\"t\"} );</script>" +
                   "</head>");
@@ -2797,6 +3242,35 @@ namespace LuckParser.Controllers
                 case "Swap":
                     return "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
 
+
+                case "Bleeding":
+                    return "https://wiki.guildwars2.com/images/thumb/3/33/Bleeding.png/20px-Bleeding.png";
+                case "Burning":
+                    return "https://wiki.guildwars2.com/images/thumb/4/45/Burning.png/20px-Burning.png";
+                case "Confusion":
+                    return "https://wiki.guildwars2.com/images/thumb/e/e6/Confusion.png/20px-Confusion.png";
+                case "Poison":
+                    return "https://wiki.guildwars2.com/images/thumb/0/05/Poison.png/20px-Poison.png";
+                case "Torment":
+                    return "https://wiki.guildwars2.com/images/thumb/0/08/Torment.png/20px-Torment.png";
+                case "Blind":
+                    return "https://wiki.guildwars2.com/images/thumb/3/33/Blinded.png/20px-Blinded.png";
+                case "Chill":
+                    return "https://wiki.guildwars2.com/images/thumb/a/a6/Chilled.png/20px-Chilled.png";
+                case "Cripplied":
+                    return "https://wiki.guildwars2.com/images/thumb/f/fb/Crippled.png/20px-Crippled.png";
+                case "Fear":
+                    return "https://wiki.guildwars2.com/images/thumb/e/e6/Fear.png/20px-Fear.png";
+                case "Immobalize":
+                    return "https://wiki.guildwars2.com/images/thumb/3/32/Immobile.png/20px-Immobile.png";
+                case "Slow":
+                    return "https://wiki.guildwars2.com/images/thumb/f/fb/Slow_40px.png/20px-Slow_40px.png";
+                case "Taunt":
+                    return "https://wiki.guildwars2.com/images/thumb/c/cc/Taunt.png/20px-Taunt.png";
+                case "Weakness":
+                    return "https://wiki.guildwars2.com/images/thumb/f/f9/Weakness.png/20px-Weakness.png";
+                case "Vulnerability":
+                    return "https://wiki.guildwars2.com/images/thumb/a/af/Vulnerability.png/20px-Vulnerability.png";
                 case "743": return "https://wiki.guildwars2.com/images/e/e5/Aegis.png";
                 case "Fury": return "https://wiki.guildwars2.com/images/4/46/Fury.png";
                 case "Might": return "https://wiki.guildwars2.com/images/7/7c/Might.png";

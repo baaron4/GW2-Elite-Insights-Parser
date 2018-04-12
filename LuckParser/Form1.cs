@@ -129,12 +129,22 @@ namespace LuckParser
                     m_oWorker.ReportProgress(40, reportObject);
                     control.ParseLog(path);
 
-                   
+
 
                     //Creating File
+                    //save location
+                    string location = "";
+                    if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
+                    {
+                        location = path.Substring(0, path.Length - file.Length);
+                    }
+                    else {
+                        location = Properties.Settings.Default.OutLocation;
+                    }
+
                     reportObject = new string[] { i.ToString(), "Createing File..." };
                     m_oWorker.ReportProgress(60, reportObject);
-                    FileStream fcreate = File.Open(path.Substring(0, path.Length - file.Length) + fileName + "_AB.html", FileMode.Create);
+                    FileStream fcreate = File.Open(location + fileName + "_Report.html", FileMode.Create);
 
                     //return html string
                     reportObject = new string[] { i.ToString(), "Writing HTML..." };

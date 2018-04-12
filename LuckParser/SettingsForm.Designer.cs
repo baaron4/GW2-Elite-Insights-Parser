@@ -223,6 +223,7 @@
             this.outFolderTextBox.Name = "outFolderTextBox";
             this.outFolderTextBox.Size = new System.Drawing.Size(162, 20);
             this.outFolderTextBox.TabIndex = 15;
+            this.outFolderTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // btnFolderSelect
             // 
