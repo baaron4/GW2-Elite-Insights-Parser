@@ -2357,6 +2357,7 @@ namespace LuckParser.Controllers
                         {
                             dur = cl.getActDur() / 1000f;
                         }
+                        skillName =skillName.Replace("\"", "");
                         sw.WriteLine("{" +
                             "y: ['1.5']," +
                             "x: ['" + dur + "']," +
