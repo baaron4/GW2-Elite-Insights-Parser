@@ -3459,6 +3459,33 @@ sw.WriteLine("</ul>");
                     return "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
                 case "Dhuum-icon":
                     return "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
+                case "Vale Guardian-ext":
+                    return "vg";
+                case "Gorseval the Multifarious-ext":
+                    return "gors";
+                case "Sabetha the Saboteur-ext":
+                    return "sab";
+                case "Slothasor-ext":
+                    return "sloth";
+                case "Matthias Gabrel-ext":
+                    return "matt";
+                case "Keep Construct-ext":
+                    return "kc";
+                case "Xera-ext":
+                    return "xera";
+                case "Cairn the Indomitable-ext":
+                    return "cairn";
+                case "Mursaat Overseer-ext":
+                    return "mo";
+                case "Samarog-ext":
+                    return "sam";
+                case "Deimos-ext":
+                    return "dei";
+                case "Soulless Horror-ext":
+                    return "sh";
+                case "Dhuum-ext":
+                    return "dhuum";
+
                 case "Warrior":
                     return "https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png";
                 case "Berserker":

@@ -142,10 +142,14 @@ namespace LuckParser
                     else {
                         location = Properties.Settings.Default.OutLocation;
                     }
-
+                    string boss = control.getBossData().getName();
+                    string result = "fail";
+                    if (control.getLogData().getBosskill()) {
+                        result = "kill";
+                    }
                     reportObject = new string[] { i.ToString(), "Createing File..." };
                     m_oWorker.ReportProgress(60, reportObject);
-                    FileStream fcreate = File.Open(location + fileName + "_Report.html", FileMode.Create);
+                    FileStream fcreate = File.Open(location + fileName +"_"+control.GetLink(boss+"-ext")+"_"+result+".html", FileMode.Create);
 
                     //return html string
                     reportObject = new string[] { i.ToString(), "Writing HTML..." };
