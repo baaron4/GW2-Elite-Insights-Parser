@@ -47,6 +47,7 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.btnFolderSelect = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
+            this.checkBox9 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -244,11 +245,23 @@
             this.label7.TabIndex = 17;
             this.label7.Text = "Or save at:";
             // 
+            // checkBox9
+            // 
+            this.checkBox9.AutoSize = true;
+            this.checkBox9.Location = new System.Drawing.Point(301, 55);
+            this.checkBox9.Name = "checkBox9";
+            this.checkBox9.Size = new System.Drawing.Size(103, 17);
+            this.checkBox9.TabIndex = 18;
+            this.checkBox9.Text = "Show Event List";
+            this.checkBox9.UseVisualStyleBackColor = true;
+            this.checkBox9.CheckedChanged += new System.EventHandler(this.checkBox9_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(307, 452);
+            this.ClientSize = new System.Drawing.Size(550, 452);
+            this.Controls.Add(this.checkBox9);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.btnFolderSelect);
             this.Controls.Add(this.outFolderTextBox);
@@ -297,5 +310,6 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button btnFolderSelect;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckBox checkBox9;
     }
 }

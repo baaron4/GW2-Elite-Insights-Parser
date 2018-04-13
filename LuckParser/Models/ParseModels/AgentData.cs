@@ -56,6 +56,8 @@ namespace LuckParser.Models.ParseModels
         {
             return all_agents_list;
         }
-
+        public AgentItem GetAgent(long agent) {
+            return all_agents_list.FirstOrDefault(x => x.getAgent() == agent);
+        }
     }
 }

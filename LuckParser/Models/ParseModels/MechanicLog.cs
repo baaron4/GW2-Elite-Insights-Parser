@@ -11,14 +11,18 @@ namespace LuckParser.Models.ParseModels
         // Fields
         private int time;
         private int skill_id;
+        private string name;
         private int damage;
         private Player player;
+        private string plotlyShape;
 
-        public MechanicLog(int time, int skill_id, int damage, Player p) {
+        public MechanicLog(int time, int skill_id,string name, int damage, Player p,string plotlyShape) {
             this.time = time;
             this.skill_id = skill_id;
+            this.name = name;
             this.damage = damage;
             this.player = p;
+            this.plotlyShape = plotlyShape;
         }
         //getters
         public int GetTime() {
@@ -28,6 +32,9 @@ namespace LuckParser.Models.ParseModels
         {
             return skill_id;
         }
+        public string GetName() {
+            return name;
+        }
         public int GetDamage()
         {
             return damage;
@@ -35,6 +42,9 @@ namespace LuckParser.Models.ParseModels
         public Player GetPlayer()
         {
             return player;
+        }
+        public string GetPlotly() {
+            return plotlyShape;
         }
     }
 }

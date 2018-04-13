@@ -107,7 +107,8 @@ namespace LuckParser
                 Properties.Settings.Default.PlayerBoonsImpProf,
                 Properties.Settings.Default.PlayerBoonsAllProf,
                 Properties.Settings.Default.PlayerRot,
-                Properties.Settings.Default.PlayerRotIcons
+                Properties.Settings.Default.PlayerRotIcons,
+                Properties.Settings.Default.EventList
             };
             for (int i = 0; i < listView1.Items.Count ; i++)
             {

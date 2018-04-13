@@ -136,6 +136,7 @@ namespace LuckParser.Controllers
         private AgentData agent_data = new AgentData();
         private SkillData skill_data = new SkillData();
         private CombatData combat_data = new CombatData();
+        private MechanicData mech_data = new MechanicData();
 
         // Public Methods
         public LogData getLogData()
@@ -157,6 +158,9 @@ namespace LuckParser.Controllers
         public CombatData getCombatData()
         {
             return combat_data;
+        }
+        public MechanicData getMechData() {
+            return mech_data;
         }
         public List<Player> p_list = new List<Player>();
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
@@ -524,6 +528,7 @@ namespace LuckParser.Controllers
                     }
                 }
             }
+            
             boss_data.setHealthOverTime(bossHealthOverTime);//after xera in case of change
             // Players
             List<AgentItem> playerAgentList = getAgentData().getPlayerAgentList();
@@ -537,6 +542,7 @@ namespace LuckParser.Controllers
             // Sort
             p_list = p_list.OrderBy(a => Int32.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>Int32.Parse(a.getGroup()) - Int32.Parse(b.getGroup()))
             getBossKilled();
+            setMechData();
         }
 
         //Statistics--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -619,21 +625,29 @@ namespace LuckParser.Controllers
         public bool getBossKilled() {
             //if deimos
             if (boss_data.getID() == 17154) {
-                BossData b_data = getBossData();
-                CombatData c_data = getCombatData();
-                int totaldmg = 0;
+                //BossData b_data = getBossData();
+                //CombatData c_data = getCombatData();
+                //int totaldmg = 0;
                 
-                int[] lasttick = boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1];
-                if (lasttick[1] < 1100) {
-                    foreach (Player p in p_list)
-                    {
-                        totaldmg += p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Where(x=>x.getTime() -boss_data.getFirstAware() > lasttick[0]).ToList().Sum(x => x.getDamage());
-                    }
-                    int stop = 0;
-                }
+                //int[] lasttick = boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1];
+                //if (lasttick[1] < 1100) {
+                //    foreach (Player p in p_list)
+                //    {
+                //        totaldmg += p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Where(x=>x.getTime() -boss_data.getFirstAware() > lasttick[0]).ToList().Sum(x => x.getDamage());
+                //    }
+                //    int stop = 0;
+                //}
                 
             }
-
+            //fix kill for Horrer
+            if (boss_data.getID() == 19767)
+            {
+                if (boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1][1] < 200)
+                {
+                    log_data.setBossKill(true);
+                    return true;
+                }
+            }
             if (log_data.getBosskill() == false)
             {
                 BossData b_data = getBossData();
@@ -773,17 +787,17 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             int instid = p.getInstid();
-            int damagetaken = p.getDamagetaken(b_data, c_data.getCombatList(), getAgentData()).Sum();
+            int damagetaken = p.getDamagetaken(b_data, c_data.getCombatList(), getAgentData(),getMechData()).Sum();
             return damagetaken.ToString();
         }
         string[] getFinalDefenses(Player p)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
-            List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData());
+            List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(),getMechData());
             int instid = p.getInstid();
 
-            int damagetaken = p.getDamagetaken(b_data, c_data.getCombatList(), getAgentData()).Sum();
+            int damagetaken = p.getDamagetaken(b_data, c_data.getCombatList(), getAgentData(),getMechData()).Sum();
             int blocked = 0;
             //int dmgblocked = 0;
             int invulned = 0;
@@ -916,7 +930,51 @@ namespace LuckParser.Controllers
             //table.addrow(utility.concatstringarray(new string[] { p.getcharacter(), p.getprof() }, rates));
             return rates;
         }
+        public void setMechData() {
+            List<MechanicLog> mList = new List<MechanicLog>();
+            foreach (Player p in p_list)
+            {
+                List<DamageLog> dls = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data, mech_data);
+                //damage taken 
+                foreach (DamageLog dLog in dls)
+                {
+                    string name = skill_data.getName(dLog.getID());
+                    foreach (string mech in getMechData().GetMechanicNameList())
+                    {
+                        if (name.Contains(mech))
+                        {
+                            mech_data.AddItem(new MechanicLog((int)(dLog.getTime()/1000f), dLog.getID(), mech, dLog.getDamage(), p,mech_data.GetPLoltyShape(mech)));
+                            break;
+                        }
+                    }
+                }
+                //
+                foreach (CombatItem c in combat_data.getCombatList().Where(x=>x.isBuffremove().getID() == 0 &&x.isStateChange().getID() == 0))
+                {
+                    if (p.getInstid() == c.getDstInstid())
+                    {
+                       
 
+                        if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove().getID() == 0)
+                        {
+                            String name = skill_data.getName(c.getSkillID());
+                            foreach (string mech in getMechData().GetMechanicNameList())
+                            {
+                                if (name.Contains(mech))
+                                {
+                                    mech_data.AddItem(new MechanicLog((int)((c.getTime() - boss_data.getFirstAware())/1000f), c.getSkillID(), mech, c.getValue(), p, mech_data.GetPLoltyShape(mech)));
+                                    break;
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            int stop = 0;
+            
+        }
         //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
         //Methods that make it easier to create Javascript graphs
         public List<BoonsGraphModel> getBoonGraph(Player p ) {
@@ -1008,60 +1066,72 @@ namespace LuckParser.Controllers
             return uptime;
         }
         public List<int[]> getBossDPSGraph(Player p) {
-            BossData b_data = getBossData();
-            CombatData c_data = getCombatData();
             List<int[]> bossdmgList = new List<int[]>();
-           // bossdmgList.Add(new int[] {1, 0 });
-            // List<DamageLog> damage_logs_all = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
-            List<DamageLog> damage_logs_boss = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData());
-            int totaldmg = 0;
-            
-            int timeGraphed = 0;
-            foreach (DamageLog log in damage_logs_boss) {
-               
-                totaldmg += log.getDamage();
-                
-                int time = log.getTime();
-                if (time > 1000)
+            if (p.getBossDPSGraph().Count == 0)
+            {
+                BossData b_data = getBossData();
+                CombatData c_data = getCombatData();
+
+                // bossdmgList.Add(new int[] {1, 0 });
+                // List<DamageLog> damage_logs_all = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
+                List<DamageLog> damage_logs_boss = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData());
+                int totaldmg = 0;
+
+                int timeGraphed = 0;
+                foreach (DamageLog log in damage_logs_boss)
                 {
-                  
-                    //to reduce processing time only graph 1 point per sec
-                    if (Math.Floor(time / 1000f) > timeGraphed)
+
+                    totaldmg += log.getDamage();
+
+                    int time = log.getTime();
+                    if (time > 1000)
                     {
-                        
-                        if ((Math.Floor(time / 1000f) - timeGraphed) < 2)
+
+                        //to reduce processing time only graph 1 point per sec
+                        if (Math.Floor(time / 1000f) > timeGraphed)
                         {
-                            timeGraphed = (int)Math.Floor(time / 1000f);
-                            bossdmgList.Add(new int[] { time / 1000, (int)(totaldmg / (float)(time / 1000f)) });
-                        }
-                        else
-                        {
-                            int gap = (int)Math.Floor(time / 1000f) - timeGraphed;
-                            bool startOfFight = true;
-                            if (bossdmgList.Count > 0){
-                                startOfFight = false;
+
+                            if ((Math.Floor(time / 1000f) - timeGraphed) < 2)
+                            {
+                                timeGraphed = (int)Math.Floor(time / 1000f);
+                                bossdmgList.Add(new int[] { time / 1000, (int)(totaldmg / (float)(time / 1000f)) });
+                            }
+                            else
+                            {
+                                int gap = (int)Math.Floor(time / 1000f) - timeGraphed;
+                                bool startOfFight = true;
+                                if (bossdmgList.Count > 0)
+                                {
+                                    startOfFight = false;
+                                }
+
+                                for (int itr = 0; itr < gap - 1; itr++)
+                                {
+                                    timeGraphed++;
+                                    if (!startOfFight)
+                                    {
+                                        bossdmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
+                                    }
+                                    else
+                                    {//hasnt hit boss yet gap
+                                        bossdmgList.Add(new int[] { timeGraphed, 0 });
+                                    }
+
+                                }
                             }
 
-                            for (int itr = 0; itr < gap - 1; itr++)
-                            {
-                                timeGraphed++;
-                                if (!startOfFight)
-                                {
-                                    bossdmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
-                                }
-                                else {//hasnt hit boss yet gap
-                                    bossdmgList.Add(new int[] { timeGraphed, 0 });
-                                }
-                               
-                            }
                         }
+
 
                     }
-                   
-                    
+
                 }
-                
+                p.setBossDPSGraph(bossdmgList);
             }
+            else {
+                bossdmgList = p.getBossDPSGraph();
+            }
+            
             return bossdmgList;
         }
         public List<int[]> getTotalDPSGraph(Player p)
@@ -1488,10 +1558,16 @@ namespace LuckParser.Controllers
             foreach (Player p in p_list)
             {
                 //Adding dps axis
-                List<int[]> playerbossdpsgraphdata = getBossDPSGraph(p);
+                List<int[]> playerbossdpsgraphdata = new List<int[]>(getBossDPSGraph(p));
                 if (totalDpsAllPlayers.Count == 0)
                 {
-                    totalDpsAllPlayers = playerbossdpsgraphdata;
+                    //totalDpsAllPlayers = new List<int[]>(playerbossdpsgraphdata);
+                    foreach (int[] point in playerbossdpsgraphdata)
+                    {
+                        int time = point[0];
+                        int dmg = point[1];
+                        totalDpsAllPlayers.Add(new int[] { time,dmg});
+                    }
                 }
 
                 sw.WriteLine("{y: [");
@@ -1626,7 +1702,87 @@ namespace LuckParser.Controllers
                    "visible:'legendonly'," +
         " name: 'All Player Dps'");
             sw.WriteLine("},");
+            List<string> presMech = mech_data.GetMDataLogs().Select(x => x.GetName()).Distinct().ToList();
+            foreach (string mech in presMech)
+            {
+                List<MechanicLog> filterdList = mech_data.GetMDataLogs().Where(x => x.GetName() == mech).ToList();
+                sw.WriteLine("{");
+                sw.WriteLine("y: [");
 
+               int  mechcount = 0;
+                foreach (MechanicLog ml in filterdList)
+                {
+                    int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => x[0] == ml.GetTime());
+                    if (mechcount == filterdList.Count - 1)
+                    {
+                        if (check != null)
+                        {
+                            sw.Write("'" + check[1] + "'");
+                        }
+                        else {
+                            sw.Write("'" +10000 + "'");
+                        }
+                      
+                    }
+                    else
+                    {
+                        if (check != null)
+                        {
+                            sw.Write("'" + check[1] + "',");
+                        }
+                        else
+                        {
+                            sw.Write("'" + 10000 + "',");
+                        }
+                    }
+
+                    mechcount++;
+                }
+                sw.WriteLine("],");
+                //add time axis
+                sw.WriteLine("x: [");
+                tdalpcount = 0;
+                mechcount = 0;
+                foreach (MechanicLog ml in filterdList)
+                {
+                    if (mechcount == filterdList.Count - 1)
+                    {
+                        sw.Write("'"+ml.GetTime()+"'");
+                    }
+                    else
+                    {
+                        sw.Write("'"+ml.GetTime()+"',");
+                    }
+
+                    mechcount++;
+                }
+
+                sw.WriteLine("],");
+                sw.WriteLine(" mode: 'markers'," +
+                     "visible:'legendonly'," +
+                    "type:'scatter'," +
+                    "marker:{"+mech_data.GetPLoltyShape(mech)+"},"+
+                    "text:[");
+                foreach (MechanicLog ml in filterdList)
+                {
+                    if (mechcount == filterdList.Count - 1)
+                    {
+                        sw.Write("'" + ml.GetPlayer().getCharacter() + "'");
+                    }
+                    else
+                    {
+                        sw.Write("'" + ml.GetPlayer().getCharacter() + "',");
+                    }
+
+                    mechcount++;
+                }
+
+                sw.WriteLine("]," +
+                      
+            " name: '"+mech+"'");
+                sw.WriteLine("},");
+            }
+           
             //Boss Health
             sw.WriteLine("{");
             //Adding dps axis
@@ -2809,7 +2965,7 @@ namespace LuckParser.Controllers
 
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
-            List<DamageLog> damageLogs = p.getDamageTakenLogs( b_data, c_data.getCombatList(), getAgentData());
+            List<DamageLog> damageLogs = p.getDamageTakenLogs( b_data, c_data.getCombatList(), getAgentData(),getMechData());
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
@@ -2912,6 +3068,138 @@ namespace LuckParser.Controllers
             }
             sw.WriteLine("</tbody></table>");
         }
+        public void CreateMechanicTable(StreamWriter sw) {
+            sw.Write(" <script> $(function () { $('#mech_table').DataTable({ \"order\": [[2, \"desc\"]]});});</script>" +
+      " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"mech_table\">" +
+          " <thead> <tr><th>Player</th> ");
+            List<string> presMech = mech_data.GetMDataLogs().Select(x => x.GetName()).Distinct().ToList();
+            foreach (string mech in presMech) {
+                sw.WriteLine("<th>"+mech+"</th>");
+            }
+            sw.WriteLine("</tr></thead><tbody>");
+            foreach (Player p in p_list) {
+
+                sw.WriteLine("<tr><td>" + p.getCharacter() + "</td>");
+                foreach (string mech in presMech) {
+                    sw.WriteLine("<td>" + mech_data.GetMDataLogs().Where(x=>x.GetName() == mech && x.GetPlayer() == p).Count() + "</td>");
+                }
+                sw.WriteLine(" </tr>");
+            }
+            sw.WriteLine(" </tbody></table>");
+            //  "<th>Sub</th><th></th><th>Name</th><th>Account</th> <th>Boss DPS</th><th>Power</th><th>Condi</th><th>All DPS</th><th>Power</th><th>Condi</th>" +
+            //"</th><th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
+            //"</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
+            //    " </tr> </thead><tbody>");
+        }
+        public void CreateEventList(StreamWriter sw) {
+            sw.WriteLine("<ul class=\"list-group\">");
+            foreach (CombatItem c in combat_data.getCombatList()) {
+                if (c.isStateChange().getID() > 0) {
+                    AgentItem agent = agent_data.GetAgent(c.getSrcAgent());
+                    if (agent != null)
+                    {
+                        switch (c.isStateChange().getID())
+                        {
+
+                            case 1:
+                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                               agent.getName() + " entered combat in" + c.getDstAgent() + "subgroup" +
+                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                              "</li>");
+                                break;
+                            case 2:
+                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                               agent.getName() + " exited combat" +
+                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                              "</li>");
+                                break;
+                            case 3:
+                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                               agent.getName() + " is now alive" +
+                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                              "</li>");
+                                break;
+                            case 4:
+                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                               agent.getName() + " is now dead" +
+                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                              "</li>");
+                                break;
+                            case 5:
+                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                               agent.getName() + " is now downed" +
+                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                              "</li>");
+                                break;
+                            case 6:
+                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                               agent.getName() + " is now in logging range of POV player" +
+                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                              "</li>");
+                                break;
+                            case 7:
+                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                               agent.getName() + " is now out of range of logging player" +
+                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                              "</li>");
+                                break;
+                            case 8:
+                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                               agent.getName() + " is at "+c.getDstAgent()/100 +"% health"+
+                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                              "</li>");
+                                break;
+                            case 9:
+                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                               " LOG START" +
+                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                              "</li>");
+                                break;
+                            case 10:
+                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                              "LOG END" +
+                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                              "</li>");
+                                break;
+                            case 11:
+                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                               agent.getName() + " weapon swapped to " +c.getDstAgent() + "(0/1 water, 4/5 land)" +
+                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                              "</li>");
+                                break;
+                            case 12:
+                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                               agent.getName() + " max health changed to  " + c.getDstAgent() + 
+                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                              "</li>");
+                                break;
+                            case 13:
+                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                               agent.getName() + " is recording log " +
+                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                              "</li>");
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+            }
+  //< li class="list-group-item d-flex justify-content-between align-items-center">
+  //  Cras justo odio
+  //  <span class="badge badge-primary badge-pill">14</span>
+  //</li>
+  //<li class="list-group-item d-flex justify-content-between align-items-center">
+  //  Dapibus ac facilisis in
+  //  <span class="badge badge-primary badge-pill">2</span>
+  //</li>
+  //<li class="list-group-item d-flex justify-content-between align-items-center">
+  //  Morbi leo risus
+  //  <span class="badge badge-primary badge-pill">1</span>
+  //</li>
+sw.WriteLine("</ul>");
+        }
         public void CreateHTML(StreamWriter sw,bool[] settingsSnap)
         {
             SnapSettings = settingsSnap;
@@ -2967,31 +3255,48 @@ namespace LuckParser.Controllers
                     "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</a>";
             }
 
-            sw.WriteLine( "<body><div class=\"container\"><p>ARC:" + getLogData().getBuildVersion().ToString() + " | Bossid " + getBossData().getID().ToString() + "</p>");
-               
-            if (log_data.getBosskill()) {
-                sw.WriteLine("<p class='text text-success'> Result: Success");
-            } else {
-                sw.WriteLine("<p class='text text-warning'> Result: Fail");
+            sw.WriteLine( "<body><div class=\"container\">");
+
+
+            sw.Write("<p> Time Start: " + log_data.getLogStart() + " | Time End: " + log_data.getLogEnd() + " </p> " +
+               //top 
+               "<div class=\"row\">" +
+                   //Boss deets
+                   "<div class=\"col-md-4 \"><div class=\"card border-danger\">" +
+                   "<h3 class=\"card-header\">" + bossname + "</h3>" +
+
+                    "<div class=\"card-body\"><blockquote class=\"card-blockquote\">" +
+                     "<div class=\"row\">" +
+                    "<div class=\"col-md-6 \">" +
+                       "<center><img src=\"" + GetLink(bossname + "-icon") + " \"alt=\"" + bossname + "-icon" + "\" style=\"height: 100px; width: 100 %; display: block; \" ></center>" +
+                      "</div>" + "<div class=\"col-md-6 \">");
+            if (log_data.getBosskill())
+            {
+                sw.WriteLine("<div class=\"progress\" style=\"width: 100 %; height: 20px;\"><div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:100%; ;display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"><p style=\"text-align:center; color: #FFF;\">" + getBossData().getHealth().ToString() + " Health</p></div></div>");
+            }
+            else {
+                double finalPercent = boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1][1] * 0.01;
+                sw.WriteLine("<div class=\"progress\" style=\"width: 100 %; height: 20px;\"><div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:"+finalPercent+"%; ;display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"><p style=\"text-align:center; color: #FFF;\">" + getBossData().getHealth().ToString() + " Health</p></div></div>");
+
+            }
+            //"<div class=\"progress\" style=\"width: 100 %; height: 20px; \"><div class=\"progress-bar-striped \" role=\"progressbar\" style=\"width:100%; display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"><p style=\"text-align:center; color: #FFF;\">" + 0 + " Armour(" + getBossData().getTough().ToString() + " Toughness)</p></div></div>" +
+            if (log_data.getBosskill())
+            {
+                sw.WriteLine("<p class='text text-success'> Result: Success</p>");
+            }
+            else if (boss_data.getID() == 17154)//Deimos is fucked
+            {
+                sw.WriteLine("<p class='text'> Result: N/A</p>");
+            }
+            else
+            {
+                sw.WriteLine("<p class='text text-warning'> Result: Fail</p>");
             }
 
 
-           sw.Write(" | Duration " + durationString + " </p> " +
-             "<p> Time Start: " + log_data.getLogStart() + " | Time End: " + log_data.getLogEnd() + " </p> " +
-                //top 
-                "<div class=\"row\">" +
-                    //Boss deets
-                    "<div class=\"col-md-4 \"><div class=\"card border-danger\">" +
-                    "<h3 class=\"card-header\">" + bossname + "</h3>" +
+            sw.Write("<p>Duration " + durationString + " </p> ");
 
-                     "<div class=\"card-body\"><blockquote class=\"card-blockquote\">" +
-                      "<div class=\"row\">" +
-                     "<div class=\"col-md-6 \">" +
-                        "<center><img src=\"" + GetLink(bossname + "-icon") + " \"alt=\"" + bossname + "-icon" + "\" style=\"height: 100px; width: 100 %; display: block; \" ></center>" +
-                       "</div>" + "<div class=\"col-md-6 \">" +
-                        "<div class=\"progress\" style=\"width: 100 %; height: 20px;\"><div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:100%; ;display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"><p style=\"text-align:center; color: #FFF;\">" + getBossData().getHealth().ToString() + " Health</p></div></div>" +
-                       //"<div class=\"progress\" style=\"width: 100 %; height: 20px; \"><div class=\"progress-bar-striped \" role=\"progressbar\" style=\"width:100%; display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"><p style=\"text-align:center; color: #FFF;\">" + 0 + " Armour(" + getBossData().getTough().ToString() + " Toughness)</p></div></div>" +
-                       "</div>" + "</blockquote></div></div> " +
+           sw.WriteLine( "</div>" + "</blockquote></div></div> " +
                     "</div>" +
 
                     //Raid Party
@@ -3032,15 +3337,23 @@ namespace LuckParser.Controllers
                  "</div>" +
 
              "</li>" +
+            "<li class=\"nav-item\">" +
+                 "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#mechTable\">Mechanics</a>" +
+             "</li>" +
               "<li class=\"nav-item dropdown\">" +
              "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Player</a>" +
-                  "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">"+
-                  //Foreach player loop here
+                  "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
+                 //Foreach player loop here
                  Html_playerDropdown +
                  "</div>" +
 
-             "</li>" +
-         "</ul>" +
+             "</li>");
+            if (settingsSnap[8]) {
+                sw.WriteLine("<li class=\"nav-item\">" +
+                 "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#eventList\">Event List</a>" +
+             "</li>");
+            }
+        sw.Write( "</ul>" +
          "<div id=\"myTabContent\" class=\"tab-content\">" +
               "<div class=\"tab-pane fade show active\" id=\"dpsStats\">");
             //table
@@ -3090,11 +3403,27 @@ namespace LuckParser.Controllers
             //  Html_boonGenSquad
             CreateBoonGenSquadTable(sw);
                          sw.WriteLine("</div>");
+            //mechanics
+            sw.WriteLine("<div class=\"tab-pane fade\" id=\"mechTable\">" +
+                         "<p>Mechanics</p>");
+            CreateMechanicTable(sw);
+            sw.WriteLine("</div>");
+
+            //event list
+            if (settingsSnap[8])
+            {
+                sw.WriteLine("<div class=\"tab-pane fade\" id=\"eventList\">" +
+                          "<p>List of all events.</p>");
+                CreateEventList(sw);
+                sw.WriteLine("</div>");
+            }
             //Html_playertabs
             CreatePlayerTab(sw);
-                   sw.WriteLine("</div></div>");
-                            
-           sw.WriteLine( "</body> <script> $(document).ready(function(){$('[data-toggle=\"tooltip\"]').tooltip(); });</script >");
+            sw.WriteLine("</div>");
+
+            sw.WriteLine("<p> ARC:" + getLogData().getBuildVersion().ToString() + " | Bossid " + getBossData().getID().ToString() + " </p> ");
+            sw.WriteLine("</div>");
+            sw.WriteLine( "</body> <script> $(document).ready(function(){$('[data-toggle=\"tooltip\"]').tooltip(); });</script >");
             //end
             sw.WriteLine("</html>");
             return;

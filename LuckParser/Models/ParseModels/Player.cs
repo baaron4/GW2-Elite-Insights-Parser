@@ -23,6 +23,7 @@ namespace LuckParser.Models.ParseModels
         private List<BoonMap> boon_map = new List<BoonMap>();
         private List<CastLog> cast_logs = new List<CastLog>();
         private List<int> minionIDList;
+        private List<int[]> bossdpsGraph = new List<int[]>();
 
         // Constructors
         public Player(AgentItem agent)
@@ -97,19 +98,19 @@ namespace LuckParser.Models.ParseModels
                 return damage_logsFiltered;
             }
         }
-        public List<int> getDamagetaken( BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        public List<int> getDamagetaken( BossData bossData, List<CombatItem> combatList, AgentData agentData,MechanicData m_data)
         {
             if (damagetaken.Count == 0)
             {
-                setDamagetaken(bossData, combatList, agentData);
+                setDamagetaken(bossData, combatList, agentData,m_data);
             }
             return damagetaken;
         }
-        public List<DamageLog> getDamageTakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        public List<DamageLog> getDamageTakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData,MechanicData m_data)
         {
             if (damagetaken.Count == 0)
             {
-                setDamagetaken(bossData, combatList, agentData);
+                setDamagetaken(bossData, combatList, agentData,m_data);
             }
             return damageTaken_logs;
         }
@@ -249,6 +250,10 @@ namespace LuckParser.Models.ParseModels
             List<DamageLog> dls = getDamageLogs(0,bossData, combatList,agentData).Where(x => x.getSrcAgent() == srcagent).ToList();
             return dls;
         }
+        public List<int[]> getBossDPSGraph() {
+            return new List<int[]>(bossdpsGraph);
+        }
+
         // Private Methods
         private void setDamageLogs(BossData bossData, List<CombatItem> combatList,AgentData agentData)
         {
@@ -348,8 +353,10 @@ namespace LuckParser.Models.ParseModels
             }
             damage_logsFiltered = filterDLog;
         }
-        public void setDamagetaken(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
+        public void setDamagetaken(BossData bossData, List<CombatItem> combatList, AgentData agentData,MechanicData m_data) {
             int time_start = bossData.getFirstAware();
+            
+           
             foreach (CombatItem c in combatList) {
                 if (instid == c.getDstInstid()) {//selecting player as target
                     LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
@@ -370,6 +377,7 @@ namespace LuckParser.Models.ParseModels
                                     damagetaken.Add(c.getValue());
                                     damageTaken_logs.Add(new DamageLog(time, c.getValue(), c.getSkillID(), c.isBuff(),
                                            c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation(),c.isShields()));
+                                  
                                 }
                                 else if (c.isBuff() == 0  && c.getValue() == 0)
                                 {
@@ -624,6 +632,8 @@ namespace LuckParser.Models.ParseModels
             }
            
         }
-       
+        public void setBossDPSGraph(List<int[]> list) {
+           bossdpsGraph = new List<int[]>(list);
+        }
     }
 }
