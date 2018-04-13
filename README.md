@@ -1,1 +1,3 @@
-"# GW2-Elite-Insights-Parser" 
+# GW2-Elite-Insights-Parser
+## Set Up:
+
