@@ -119,6 +119,10 @@ namespace LuckParser
                 int pos = path.LastIndexOf("/") + 1;
                 string file = path.Substring(pos, path.Length - pos);
                 int pos1 = file.LastIndexOf(".") + 1;
+                 if(path.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase)){
+                    pos1 = pos1 - 5;
+                }
+                  
                 string appendix = file.Substring(pos1, file.Length - pos1);
                 string fileName = file.Substring(0, pos1 - 1);
 

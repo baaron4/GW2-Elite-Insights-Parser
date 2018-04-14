@@ -14,7 +14,7 @@ namespace LuckParser
         [STAThread]
         static void Main()
         {
-            
+            Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
