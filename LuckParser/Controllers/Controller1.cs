@@ -3331,7 +3331,7 @@ sw.WriteLine("</ul>");
 
 
                      "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsUptime\">Boon Uptime</a>" +
-                     "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenSelf\">Boon Geration(Self)</a>" +
+                     "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenSelf\">Boon Generation(Self)</a>" +
                      "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenGroup\">Boon Generation(Group)</a>" +
                      "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenOGroup\">Boon Generation(Off Group)</a>" +
                      "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenSquad\">Boon Generation(Squad)</a>" +
