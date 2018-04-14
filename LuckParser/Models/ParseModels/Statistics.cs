@@ -21,6 +21,7 @@ namespace LuckParser.Models.ParseModels
                 os = os + bl.getOverstack();
             }
             double[] doubles = {(boonDur -os)/(fight_duration*players), boonDur/(fight_duration*players) };
+            
             return  doubles ;
         }
         public static List<Point> getBoonIntervalsList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data)//Needs boonremoval added
@@ -36,8 +37,12 @@ namespace LuckParser.Models.ParseModels
                 t_curr = log.getTime();
                 boon.update(t_curr - t_prev);
                 boon.add(log.getValue());
-                boon_intervals.Add(new Point(t_curr, t_curr + boon.getStackValue()));
-                t_prev = t_curr;
+                int duration = t_curr + boon.getStackValue();//this may overload
+                if (duration < 0) {
+                    duration = Int32.MaxValue;
+                }
+               
+                boon_intervals.Add(new Point(t_curr, duration));
             }
 
             // Merge intervals
@@ -64,7 +69,11 @@ namespace LuckParser.Models.ParseModels
             {
                 average_duration = average_duration + (p.Y - p.X);
             }
-            return String.Format("{0:0}%", 100*(average_duration / (b_data.getLastAware() - b_data.getFirstAware())));
+            double number= 100 * (average_duration / (b_data.getLastAware() - b_data.getFirstAware()));
+            if (number > 100) {
+                int stop = 0;
+            }
+            return String.Format("{0:0}%",number);
         }
 
         public static String[] getBoonDuration(List<Point> boon_intervals, List<Point> fight_intervals)

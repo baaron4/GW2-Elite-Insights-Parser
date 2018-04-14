@@ -99,8 +99,16 @@ namespace LuckParser
         /// i.e. Database operations,Reporting
         void m_oWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            //globalization
+            System.Globalization.CultureInfo before = System.Threading.Thread.CurrentThread.CurrentCulture;
+            try
 
-            bool[] settingsSnap = new bool[] {Properties.Settings.Default.DPSGraphTotals,
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture =
+                    new System.Globalization.CultureInfo("en-US");
+                // Proceed with specific code
+
+                bool[] settingsSnap = new bool[] {Properties.Settings.Default.DPSGraphTotals,
                 Properties.Settings.Default.PlayerGraphTotals,
                 Properties.Settings.Default.PlayerGraphBoss,
                 Properties.Settings.Default.PlayerBoonsUniversal,
@@ -110,99 +118,108 @@ namespace LuckParser
                 Properties.Settings.Default.PlayerRotIcons,
                 Properties.Settings.Default.EventList
             };
-            for (int i = 0; i < listView1.Items.Count ; i++)
-            {
-                string[] reportObject = { i.ToString(), "Working..." };
-                m_oWorker.ReportProgress(20,reportObject);
-
-                string path = paths[i];
-                if (path.Contains("\\")) {
-                    path = path.Replace("\\", "/");
-                }
-                int pos = path.LastIndexOf("/") + 1;
-                //if (pos == 0) {
-                //     pos = path.LastIndexOf('\\') + 1;
-                //}
-                string file = path.Substring(pos, path.Length - pos);
-                int pos1 = file.LastIndexOf(".") + 1;
-                 if(path.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase)){
-                    pos1 = pos1 - 5;
-                }
-                  
-                string appendix = file.Substring(pos1, file.Length - pos1);
-                string fileName = file.Substring(0, pos1 - 1);
-
-                Controller1 control = new Controller1();
-                if (path.EndsWith(".evtc", StringComparison.OrdinalIgnoreCase) ||
-                    path.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
+                for (int i = 0; i < listView1.Items.Count; i++)
                 {
-                    //Process evtc here
-                    reportObject = new string[] { i.ToString(), "Reading Binary..." };
-                    m_oWorker.ReportProgress(40, reportObject);
-                    control.ParseLog(path);
+                    string[] reportObject = { i.ToString(), "Working..." };
+                    m_oWorker.ReportProgress(20, reportObject);
 
-
-                    //Creating File
-                    //save location
-                    string location = "";
-                    if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
+                    string path = paths[i];
+                    if (path.Contains("\\"))
                     {
-                        location = path.Substring(0, path.Length - file.Length);
-                       
+                        path = path.Replace("\\", "/");
                     }
-                    else {
-                        location = Properties.Settings.Default.OutLocation + "/";
-                    }
-                    if (location.Contains("\\"))
+                    int pos = path.LastIndexOf("/") + 1;
+                    //if (pos == 0) {
+                    //     pos = path.LastIndexOf('\\') + 1;
+                    //}
+                    string file = path.Substring(pos, path.Length - pos);
+                    int pos1 = file.LastIndexOf(".") + 1;
+                    if (path.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
                     {
-                        location = location.Replace("\\", "/");
+                        pos1 = pos1 - 5;
                     }
-                    string boss = control.getBossData().getName();
-                    string result = "fail";
-                    if (control.getLogData().getBosskill()) {
-                        result = "kill";
-                    }
-                    reportObject = new string[] { i.ToString(), "Createing File..." };
-                    m_oWorker.ReportProgress(60, reportObject);
-                    FileStream fcreate = File.Open(location + fileName +"_"+control.GetLink(boss+"-ext")+"_"+result+".html", FileMode.Create);
 
-                    //return html string
-                    reportObject = new string[] { i.ToString(), "Writing HTML..." };
-                    m_oWorker.ReportProgress(80, reportObject);
+                    string appendix = file.Substring(pos1, file.Length - pos1);
+                    string fileName = file.Substring(0, pos1 - 1);
 
-                    
-                    using (StreamWriter sw = new StreamWriter(fcreate))
+                    Controller1 control = new Controller1();
+                    if (path.EndsWith(".evtc", StringComparison.OrdinalIgnoreCase) ||
+                        path.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
                     {
-                        // string htmlContent = control.CreateHTML(/*settingArray*/);
-                        // sw.Write(htmlContent);
-                        control.CreateHTML(sw,settingsSnap);
-                        sw.Close();
-                    }
+                        //Process evtc here
+                        reportObject = new string[] { i.ToString(), "Reading Binary..." };
+                        m_oWorker.ReportProgress(40, reportObject);
+                        control.ParseLog(path);
 
-                    // MessageBox.Show(path + " generated");
-                    reportObject = new string[] { i.ToString(), "HTML Generated" };
-                    m_oWorker.ReportProgress(100, reportObject);
+
+                        //Creating File
+                        //save location
+                        string location = "";
+                        if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
+                        {
+                            location = path.Substring(0, path.Length - file.Length);
+
+                        }
+                        else
+                        {
+                            location = Properties.Settings.Default.OutLocation + "/";
+                        }
+                        if (location.Contains("\\"))
+                        {
+                            location = location.Replace("\\", "/");
+                        }
+                        string boss = control.getBossData().getName();
+                        string result = "fail";
+                        if (control.getLogData().getBosskill())
+                        {
+                            result = "kill";
+                        }
+                        reportObject = new string[] { i.ToString(), "Createing File..." };
+                        m_oWorker.ReportProgress(60, reportObject);
+                        FileStream fcreate = File.Open(location + fileName + "_" + control.GetLink(boss + "-ext") + "_" + result + ".html", FileMode.Create);
+
+                        //return html string
+                        reportObject = new string[] { i.ToString(), "Writing HTML..." };
+                        m_oWorker.ReportProgress(80, reportObject);
+
+
+                        using (StreamWriter sw = new StreamWriter(fcreate))
+                        {
+                            // string htmlContent = control.CreateHTML(/*settingArray*/);
+                            // sw.Write(htmlContent);
+                            control.CreateHTML(sw, settingsSnap);
+                            sw.Close();
+                        }
+
+                        // MessageBox.Show(path + " generated");
+                        reportObject = new string[] { i.ToString(), "HTML Generated" };
+                        m_oWorker.ReportProgress(100, reportObject);
+                    }
+                    else
+                    {
+                        reportObject = new string[] { i.ToString(), "Not EVTC" };
+                        m_oWorker.ReportProgress(100, reportObject);
+                    }
+                    if (m_oWorker.CancellationPending)
+                    {
+                        // Set the e.Cancel flag so that the WorkerCompleted event
+                        // knows that the process was cancelled.
+                        e.Cancel = true;
+                        reportObject = new string[] { i.ToString(), "Cancel" };
+                        m_oWorker.ReportProgress(0, reportObject);
+                        btnStartAsyncOperation.Enabled = false;
+                        return;
+                    }
                 }
-                else {
-                    reportObject = new string[] { i.ToString(), "Not EVTC" };
-                    m_oWorker.ReportProgress(100, reportObject);
-                }
-                if (m_oWorker.CancellationPending)
-                {
-                    // Set the e.Cancel flag so that the WorkerCompleted event
-                    // knows that the process was cancelled.
-                    e.Cancel = true;
-                     reportObject = new string[] { i.ToString(), "Cancel" };
-                    m_oWorker.ReportProgress(0,reportObject);
-                    btnStartAsyncOperation.Enabled = false;
-                    return;
-                }
+
+                //Report 100% completion on operation completed
+                string[] rO = new string[] { 0.ToString(), "Finish" };
+                m_oWorker.ReportProgress(100, rO);
+                btnStartAsyncOperation.Enabled = false;
             }
-
-            //Report 100% completion on operation completed
-           string[] rO = new string[] {0.ToString(), "Finish" };
-            m_oWorker.ReportProgress(100, rO);
-            btnStartAsyncOperation.Enabled = false;
+            finally {
+                System.Threading.Thread.CurrentThread.CurrentUICulture = before;
+            }
         }
        
         private void btnStartAsyncOperation_Click(object sender, EventArgs e)
