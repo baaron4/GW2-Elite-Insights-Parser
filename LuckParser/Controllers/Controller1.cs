@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Net;
 using LuckParser.Models;
 using System.IO.Compression;
+using System.Windows.Forms;
 //recomend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {
@@ -2669,7 +2670,7 @@ namespace LuckParser.Controllers
                                           "source: '" + skillIcon + "'," +
                                           "xref: 'x'," +
                                           "yref: 'y'," +
-                                          "x: " + cl.getTime() / 1000f + "," +
+                                          "x: " + (cl.getTime() / 1000f) + "," +
                                           "y: 0," +
                                           "sizex: 1.1," +
                                           "sizey: 1.1," +
@@ -3223,6 +3224,7 @@ sw.WriteLine("</ul>");
         }
         public void CreateHTML(StreamWriter sw,bool[] settingsSnap)
         {
+            
             SnapSettings = settingsSnap;
             BossData b_data = getBossData();
             double fight_duration = (b_data.getLastAware() - b_data.getFirstAware()) / 1000.0;
