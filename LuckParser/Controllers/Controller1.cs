@@ -9,6 +9,7 @@ using LuckParser.Models.ParseEnums;
 using System.Drawing;
 using System.Net;
 using LuckParser.Models;
+using System.IO.Compression;
 //recomend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {
@@ -31,7 +32,6 @@ namespace LuckParser.Controllers
 
         // Private Methods
         //for pulling from binary
-        private Stream origstream = null;
         private MemoryStream stream = new MemoryStream();
         private void safeSkip(long bytes_to_skip)
         {
@@ -163,26 +163,46 @@ namespace LuckParser.Controllers
             return mech_data;
         }
         public List<Player> p_list = new List<Player>();
+
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
         public bool ParseLog(string evtc)
         {
             //used to stream from a database, probably could use better stream now
-            WebClient client = new WebClient();
-            origstream = client.OpenRead(evtc);
-            origstream.CopyTo(stream);
-            stream.Position = 0;
+            using(var client = new WebClient())
+            using(var origstream = client.OpenRead(evtc))
+            {
+                if(evtc.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+                {
+                    using(var arch = new ZipArchive(origstream, ZipArchiveMode.Read))
+                    {
+                        if(arch.Entries.Count != 1)
+                        {
+                            return false;
+                        }
+                        using(var data = arch.Entries[0].Open())
+                        {
+                            data.CopyTo(stream);
+                        }
+                    }
+                }
+                else
+                {
+                    origstream.CopyTo(stream);
+                }
+                stream.Position = 0;
 
-            parseBossData();
-            parseAgentData();
-            parseSkillData();
-            parseCombatList();
-            fillMissingData();
+                parseBossData();
+                parseAgentData();
+                parseSkillData();
+                parseCombatList();
+                fillMissingData();
 
-            origstream.Close();
-            stream.Close();
+                stream.Close();
+            }
             ////CreateHTML(); is now runnable dont run here
             return (true);
         }
+
         //sub Parse methods
         private void parseBossData()
         {
@@ -3276,7 +3296,11 @@ sw.WriteLine("</ul>");
                 sw.WriteLine("<div class=\"progress\" style=\"width: 100 %; height: 20px;\"><div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:100%; ;display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"><p style=\"text-align:center; color: #FFF;\">" + getBossData().getHealth().ToString() + " Health</p></div></div>");
             }
             else {
-                double finalPercent = boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1][1] * 0.01;
+                double finalPercent = 100;
+                if (boss_data.getHealthOverTime().Count > 0) {
+                     finalPercent = boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1][1] * 0.01;
+                }
+               
                 sw.WriteLine("<div class=\"progress\" style=\"width: 100 %; height: 20px;\"><div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:"+finalPercent+"%; ;display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"><p style=\"text-align:center; color: #FFF;\">" + getBossData().getHealth().ToString() + " Health</p></div></div>");
 
             }
