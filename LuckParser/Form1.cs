@@ -116,7 +116,13 @@ namespace LuckParser
                 m_oWorker.ReportProgress(20,reportObject);
 
                 string path = paths[i];
+                if (path.Contains("\\")) {
+                    path = path.Replace("\\", "/");
+                }
                 int pos = path.LastIndexOf("/") + 1;
+                //if (pos == 0) {
+                //     pos = path.LastIndexOf('\\') + 1;
+                //}
                 string file = path.Substring(pos, path.Length - pos);
                 int pos1 = file.LastIndexOf(".") + 1;
                  if(path.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase)){
@@ -142,9 +148,14 @@ namespace LuckParser
                     if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
                     {
                         location = path.Substring(0, path.Length - file.Length);
+                       
                     }
                     else {
-                        location = Properties.Settings.Default.OutLocation;
+                        location = Properties.Settings.Default.OutLocation + "/";
+                    }
+                    if (location.Contains("\\"))
+                    {
+                        location = location.Replace("\\", "/");
                     }
                     string boss = control.getBossData().getName();
                     string result = "fail";

@@ -223,13 +223,14 @@
             this.outFolderTextBox.Enabled = false;
             this.outFolderTextBox.Location = new System.Drawing.Point(27, 408);
             this.outFolderTextBox.Name = "outFolderTextBox";
-            this.outFolderTextBox.Size = new System.Drawing.Size(162, 20);
+            this.outFolderTextBox.Size = new System.Drawing.Size(412, 20);
             this.outFolderTextBox.TabIndex = 15;
             this.outFolderTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.outFolderTextBox.TextChanged += new System.EventHandler(this.outFolderTextBox_TextChanged);
             // 
             // btnFolderSelect
             // 
-            this.btnFolderSelect.Location = new System.Drawing.Point(195, 406);
+            this.btnFolderSelect.Location = new System.Drawing.Point(464, 405);
             this.btnFolderSelect.Name = "btnFolderSelect";
             this.btnFolderSelect.Size = new System.Drawing.Size(45, 23);
             this.btnFolderSelect.TabIndex = 16;
@@ -249,7 +250,7 @@
             // checkBox9
             // 
             this.checkBox9.AutoSize = true;
-            this.checkBox9.Location = new System.Drawing.Point(301, 55);
+            this.checkBox9.Location = new System.Drawing.Point(30, 334);
             this.checkBox9.Name = "checkBox9";
             this.checkBox9.Size = new System.Drawing.Size(103, 17);
             this.checkBox9.TabIndex = 18;

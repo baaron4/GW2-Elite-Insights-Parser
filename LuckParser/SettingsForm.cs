@@ -90,6 +90,7 @@ namespace LuckParser
             checkBox7.Checked = Properties.Settings.Default.PlayerRotIcons;
             checkOutputLoc.Checked =Properties.Settings.Default.SaveAtOut;
             checkBox9.Checked = Properties.Settings.Default.EventList ;
+            outFolderTextBox.Text = Properties.Settings.Default.OutLocation;
 
             //checkBox1.Checked = settingArray[0];
             //checkBox2.Checked = settingArray[1];
@@ -126,6 +127,11 @@ namespace LuckParser
         private void checkBox9_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.EventList = checkBox9.Checked;
+        }
+
+        private void outFolderTextBox_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
