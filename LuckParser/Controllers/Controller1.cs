@@ -3296,7 +3296,11 @@ sw.WriteLine("</ul>");
                 sw.WriteLine("<div class=\"progress\" style=\"width: 100 %; height: 20px;\"><div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:100%; ;display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"><p style=\"text-align:center; color: #FFF;\">" + getBossData().getHealth().ToString() + " Health</p></div></div>");
             }
             else {
-                double finalPercent = boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1][1] * 0.01;
+                double finalPercent = 100;
+                if (boss_data.getHealthOverTime().Count > 0) {
+                     finalPercent = boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1][1] * 0.01;
+                }
+               
                 sw.WriteLine("<div class=\"progress\" style=\"width: 100 %; height: 20px;\"><div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:"+finalPercent+"%; ;display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"><p style=\"text-align:center; color: #FFF;\">" + getBossData().getHealth().ToString() + " Health</p></div></div>");
 
             }
