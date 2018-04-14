@@ -123,13 +123,13 @@ namespace LuckParser
                 string fileName = file.Substring(0, pos1 - 1);
 
                 Controller1 control = new Controller1();
-                if (appendix == "evtc")
+                if (path.EndsWith(".evtc", StringComparison.OrdinalIgnoreCase) ||
+                    path.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
                 {
                     //Process evtc here
                     reportObject = new string[] { i.ToString(), "Reading Binary..." };
                     m_oWorker.ReportProgress(40, reportObject);
                     control.ParseLog(path);
-
 
 
                     //Creating File
