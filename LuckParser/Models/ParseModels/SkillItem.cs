@@ -17,6 +17,7 @@ namespace LuckParser.Models.ParseModels
         // Constructor
         public SkillItem(int ID, String name)
         {
+            name = name.Replace("\0", "");
             this.ID = ID;
             this.name = name;
         }

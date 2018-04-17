@@ -93,7 +93,7 @@ namespace LuckParser.Models.ParseModels
             mlist.Add("Corporal Punishment");//Jade Scout
             mlist.Add("Claim");//claim buff
             mlist.Add("Dispel");//claim buff
-            mlist.Add("Protect");//protect buff
+            //mlist.Add("Protect");//protect buff
             //sam
           //  mlist.Add("");//merge aoe
             mlist.Add("Effigy Pulse");//spear

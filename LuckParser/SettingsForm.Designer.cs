@@ -49,6 +49,8 @@
             this.btnFolderSelect = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.checkBox9 = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.checkBossSummary = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -201,7 +203,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(27, 354);
+            this.label6.Location = new System.Drawing.Point(24, 499);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(42, 13);
             this.label6.TabIndex = 13;
@@ -210,7 +212,7 @@
             // checkOutputLoc
             // 
             this.checkOutputLoc.AutoSize = true;
-            this.checkOutputLoc.Location = new System.Drawing.Point(30, 371);
+            this.checkOutputLoc.Location = new System.Drawing.Point(27, 515);
             this.checkOutputLoc.Name = "checkOutputLoc";
             this.checkOutputLoc.Size = new System.Drawing.Size(192, 17);
             this.checkOutputLoc.TabIndex = 14;
@@ -221,7 +223,7 @@
             // outFolderTextBox
             // 
             this.outFolderTextBox.Enabled = false;
-            this.outFolderTextBox.Location = new System.Drawing.Point(27, 408);
+            this.outFolderTextBox.Location = new System.Drawing.Point(24, 552);
             this.outFolderTextBox.Name = "outFolderTextBox";
             this.outFolderTextBox.Size = new System.Drawing.Size(412, 20);
             this.outFolderTextBox.TabIndex = 15;
@@ -230,7 +232,7 @@
             // 
             // btnFolderSelect
             // 
-            this.btnFolderSelect.Location = new System.Drawing.Point(464, 405);
+            this.btnFolderSelect.Location = new System.Drawing.Point(461, 549);
             this.btnFolderSelect.Name = "btnFolderSelect";
             this.btnFolderSelect.Size = new System.Drawing.Size(45, 23);
             this.btnFolderSelect.TabIndex = 16;
@@ -241,7 +243,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(103, 389);
+            this.label7.Location = new System.Drawing.Point(100, 533);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(59, 13);
             this.label7.TabIndex = 17;
@@ -250,19 +252,43 @@
             // checkBox9
             // 
             this.checkBox9.AutoSize = true;
-            this.checkBox9.Location = new System.Drawing.Point(30, 334);
+            this.checkBox9.Location = new System.Drawing.Point(27, 479);
             this.checkBox9.Name = "checkBox9";
-            this.checkBox9.Size = new System.Drawing.Size(103, 17);
+            this.checkBox9.Size = new System.Drawing.Size(174, 17);
             this.checkBox9.TabIndex = 18;
-            this.checkBox9.Text = "Show Event List";
+            this.checkBox9.Text = "Show Event List(for debugging)";
             this.checkBox9.UseVisualStyleBackColor = true;
             this.checkBox9.CheckedChanged += new System.EventHandler(this.checkBox9_CheckedChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(24, 326);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(30, 13);
+            this.label8.TabIndex = 19;
+            this.label8.Text = "Boss";
+            // 
+            // checkBossSummary
+            // 
+            this.checkBossSummary.AutoSize = true;
+            this.checkBossSummary.Checked = true;
+            this.checkBossSummary.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBossSummary.Location = new System.Drawing.Point(43, 351);
+            this.checkBossSummary.Name = "checkBossSummary";
+            this.checkBossSummary.Size = new System.Drawing.Size(125, 17);
+            this.checkBossSummary.TabIndex = 20;
+            this.checkBossSummary.Text = "Show Boss Summary";
+            this.checkBossSummary.UseVisualStyleBackColor = true;
+            this.checkBossSummary.CheckedChanged += new System.EventHandler(this.checkBossSummary_CheckedChanged);
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(550, 452);
+            this.ClientSize = new System.Drawing.Size(548, 597);
+            this.Controls.Add(this.checkBossSummary);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.checkBox9);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.btnFolderSelect);
@@ -314,5 +340,7 @@
         private System.Windows.Forms.Button btnFolderSelect;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.CheckBox checkBox9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox checkBossSummary;
     }
 }

@@ -122,7 +122,14 @@ namespace LuckParser.Models.ParseModels
             }
             return boon_map;
         }
-
+        public List<BoonMap> getRawBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList)
+        {
+            if (boon_map.Count == 0)
+            {
+                setRawBoonMap(bossData, skillData, combatList);
+            }
+            return boon_map;
+        }
         public List<BoonMap> getboonGen(BossData bossData, SkillData skillData, List<CombatItem> combatList, AgentData agentData,List<int> trgtPID)
         {
             List<BoonMap> boonGen = new List<BoonMap>();
@@ -250,6 +257,21 @@ namespace LuckParser.Models.ParseModels
             List<DamageLog> dls = getDamageLogs(0,bossData, combatList,agentData).Where(x => x.getSrcAgent() == srcagent).ToList();
             return dls;
         }
+        public List<DamageLog> getJustPlayerDamageLogs( BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        {
+            List<int> minionList = getMinionList(bossData, combatList, agentData);
+            List<DamageLog> dls = new List<DamageLog>();
+            foreach (DamageLog dl in getDamageLogs(0, bossData, combatList, agentData)) {
+                if (minionIDList.Contains(dl.getInstidt()))
+                {
+                    continue;
+                }
+                else {
+                    dls.Add(dl);
+                }
+            }
+            return dls;
+        }
         public List<int[]> getBossDPSGraph() {
             return new List<int[]>(bossdpsGraph);
         }
@@ -294,18 +316,18 @@ namespace LuckParser.Models.ParseModels
                                         if (c.isBuff() == 1 && c.getBuffDmg() != 0)//condi
                                         {
 
-                                            damage_logs.Add(new DamageLog(time,(int)c.getSrcAgent(), c.getBuffDmg(), c.getSkillID(), c.isBuff(),
+                                            damage_logs.Add(new DamageLog(time,(int)c.getSrcAgent(),c.getSrcInstid(), c.getBuffDmg(), c.getSkillID(), c.isBuff(),
                                                     c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
                                         }
                                         else if (c.isBuff() == 0 && c.getValue() != 0)//power
                                         {
-                                            damage_logs.Add(new DamageLog(time, (int)c.getSrcAgent(), c.getValue(), c.getSkillID(), c.isBuff(),
+                                            damage_logs.Add(new DamageLog(time, (int)c.getSrcAgent(), c.getSrcInstid(), c.getValue(), c.getSkillID(), c.isBuff(),
                                                     c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
                                         }
                                         else if (c.getResult().getID() == 5 || c.getResult().getID() == 6 || c.getResult().getID() == 7)
                                         {//Hits that where blinded, invulned, interupts
 
-                                            damage_logs.Add(new DamageLog(time, (int)c.getSrcAgent(), c.getValue(), c.getSkillID(), c.isBuff(),
+                                            damage_logs.Add(new DamageLog(time, (int)c.getSrcAgent(), c.getSrcInstid(), c.getValue(), c.getSkillID(), c.isBuff(),
                                                     c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
                                         }
                                     }
@@ -442,7 +464,8 @@ namespace LuckParser.Models.ParseModels
                             count++;
 
                         }
-                    }else
+                    }
+                    else
                     if (c.isBuffremove().getID() == 1 && c.getValue() > 0)//All
                     {
                         //finding correct boonmap
@@ -457,14 +480,16 @@ namespace LuckParser.Models.ParseModels
                                 {
                                     List<BoonLog> loglist = bm.getBoonLog();
 
-                                    for (int cnt = loglist.Count()-1; cnt >= 0; cnt--) {
+                                    for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
+                                    {
                                         BoonLog curBL = loglist[cnt];
-                                        if (curBL.getTime() + curBL.getValue() > time) {
+                                        if (curBL.getTime() + curBL.getValue() > time)
+                                        {
                                             int subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                            loglist[cnt] = new BoonLog(curBL.getTime(),curBL.getValue()- subtract,curBL.getOverstack()+subtract);
+                                            loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract, curBL.getOverstack() + subtract);
                                         }
                                     }
-                                   // loglist.Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
+                                    // loglist.Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
                                     bm.setBoonLog(loglist);
                                     boon_map[count] = bm;
                                 }
@@ -486,7 +511,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (skill_name.Contains(bm.getName()))
                             {
-                                
+
                                 if (bm.getName().Contains("Fury"))
                                 {
                                     int stop = 0;
@@ -497,17 +522,16 @@ namespace LuckParser.Models.ParseModels
                                 if (time < fight_duration)
                                 {
                                     List<BoonLog> loglist = bm.getBoonLog();
+                                    int cnt = loglist.Count() - 1;
 
-                                    for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
+                                    BoonLog curBL = loglist[cnt];
+                                    if (curBL.getTime() + curBL.getValue() > time)
                                     {
-                                        BoonLog curBL = loglist[cnt];
-                                        if (curBL.getTime() + curBL.getValue() > time)
-                                        {
-                                            int subtract = (curBL.getTime() + curBL.getValue()) -time;
-                                            loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract, curBL.getOverstack() + subtract);
-                                            break;
-                                        }
+                                        int subtract = (curBL.getTime() + curBL.getValue()) - time;
+                                        loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract, curBL.getOverstack() + subtract);
+                                        break;
                                     }
+
                                     // loglist.Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
                                     bm.setBoonLog(loglist);
                                     boon_map[count] = bm;
@@ -570,6 +594,191 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             
+        }
+        public void setRawBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList)
+        {
+
+            // Initialize Boon Map with every Boon
+            foreach (Boon boon in Boon.getMainList())
+            {
+                BoonMap map = new BoonMap(boon.getName(), new List<BoonLog>());
+                boon_map.Add(map);
+            }
+            foreach (Boon boon in Boon.getAllProfList())
+            {
+                BoonMap map = new BoonMap(boon.getName(), new List<BoonLog>());
+                boon_map.Add(map);
+            }
+            foreach (Boon boon in Boon.getCondiBoonList())
+            {
+                BoonMap map = new BoonMap(boon.getName(), new List<BoonLog>());
+                boon_map.Add(map);
+            }
+
+            // Fill in Boon Map
+            int time_start = bossData.getFirstAware();
+            int fight_duration = bossData.getLastAware() - time_start;
+            foreach (CombatItem c in combatList)
+            {
+                if (instid == c.getDstInstid())
+                {
+                    String skill_name = skillData.getName(c.getSkillID());
+
+                    if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove().getID() == 0)
+                    {
+                        int count = 0;
+                        foreach (BoonMap bm in boon_map.ToList())
+                        {
+                            if (skill_name.Contains(bm.getName()))
+                            {
+                                int time = c.getTime() - time_start;
+                                if (time < fight_duration)
+                                {
+                                    List<BoonLog> loglist = bm.getBoonLog();
+                                    loglist.Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
+                                    bm.setBoonLog(loglist);
+
+                                    boon_map[count] = bm;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+
+                            }
+                            count++;
+
+                        }
+                    }
+                    else
+                    if (c.isBuffremove().getID() == 1 && c.getValue() > 0)//All
+                    {
+                        //finding correct boonmap
+                        int count = 0;
+                        foreach (BoonMap bm in boon_map.ToList())
+                        {
+                            if (skill_name.Contains(bm.getName()))
+                            {
+                                //make sure log is within fight time
+                                int time = c.getTime() - time_start;
+                                if (time < fight_duration)
+                                {
+                                    List<BoonLog> loglist = bm.getBoonLog();
+
+                                    for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
+                                    {
+                                        BoonLog curBL = loglist[cnt];
+                                        if (curBL.getTime() + curBL.getValue() > time)
+                                        {
+                                            int subtract = (curBL.getTime() + curBL.getValue()) - time;
+                                            loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract, curBL.getOverstack() + subtract);
+                                        }
+                                    }
+                                    // loglist.Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
+                                    bm.setBoonLog(loglist);
+                                    boon_map[count] = bm;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+
+                            }
+                            count++;
+
+                        }
+                    }
+                    else if (c.isBuffremove().getID() == 2 && c.getValue() > 0)//Single
+                    {
+                        //finding correct boonmap
+                        int count = 0;
+                        foreach (BoonMap bm in boon_map.ToList())
+                        {
+                            if (skill_name.Contains(bm.getName()))
+                            {
+
+                                if (bm.getName().Contains("Fury"))
+                                {
+                                    int stop = 0;
+                                }
+
+                                //make sure log is within fight time
+                                int time = c.getTime() - time_start;
+                                if (time < fight_duration)
+                                {
+                                    List<BoonLog> loglist = bm.getBoonLog();
+                                    int cnt = loglist.Count() - 1;
+
+                                    BoonLog curBL = loglist[cnt];
+                                    if (curBL.getTime() + curBL.getValue() > time)
+                                    {
+                                        int subtract = (curBL.getTime() + curBL.getValue()) - time;
+                                        loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract, curBL.getOverstack() + subtract);
+                                        break;
+                                    }
+
+                                    // loglist.Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
+                                    bm.setBoonLog(loglist);
+                                    boon_map[count] = bm;
+                                    break;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+
+                            }
+                            count++;
+
+                        }
+                    }
+                    else if (c.isBuffremove().getID() == 3 && c.getValue() > 0)//Manuel
+                    {
+                        //finding correct boonmap
+                        int count = 0;
+                        foreach (BoonMap bm in boon_map.ToList())
+                        {
+                            if (skill_name.Contains(bm.getName()))
+                            {
+
+                                if (bm.getName().Contains("Fury"))
+                                {
+                                    int stop = 0;
+                                }
+                                //make sure log is within fight time
+                                int time = c.getTime() - time_start;
+                                if (time < fight_duration)
+                                {
+                                    List<BoonLog> loglist = bm.getBoonLog();
+
+                                    for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
+                                    {
+                                        BoonLog curBL = loglist[cnt];
+                                        if (curBL.getTime() + curBL.getValue() > time)
+                                        {
+                                            int subtract = (curBL.getTime() + curBL.getValue()) - time;
+                                            loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract, curBL.getOverstack() + subtract);
+                                            break;
+                                        }
+                                    }
+                                    // loglist.Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
+                                    bm.setBoonLog(loglist);
+                                    boon_map[count] = bm;
+                                    break;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+
+                            }
+                            count++;
+
+                        }
+                    }
+                }
+            }
+
         }
         public List<CastLog> getCastLogs( BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {

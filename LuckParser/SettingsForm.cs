@@ -91,15 +91,8 @@ namespace LuckParser
             checkOutputLoc.Checked =Properties.Settings.Default.SaveAtOut;
             checkBox9.Checked = Properties.Settings.Default.EventList ;
             outFolderTextBox.Text = Properties.Settings.Default.OutLocation;
+            checkBossSummary.Checked = Properties.Settings.Default.BossSummary;
 
-            //checkBox1.Checked = settingArray[0];
-            //checkBox2.Checked = settingArray[1];
-            //checkBox3.Checked = settingArray[2];
-            //checkBox4.Checked = settingArray[3];
-            //checkBox5.Checked = settingArray[4];
-            //checkBox6.Checked = settingArray[5];
-            //checkBox8.Checked = settingArray[6];
-            //checkBox7.Checked = settingArray[7];
         }
 
         private void checkOutputLoc_CheckedChanged(object sender, EventArgs e)
@@ -132,6 +125,11 @@ namespace LuckParser
         private void outFolderTextBox_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void checkBossSummary_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.BossSummary = checkBossSummary.Checked;
         }
     }
 }

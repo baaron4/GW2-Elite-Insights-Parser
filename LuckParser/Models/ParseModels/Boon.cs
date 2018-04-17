@@ -8,70 +8,11 @@ namespace LuckParser.Models.ParseModels
     public class Boon
     {
         // Boon
-        //MIGHT("Might", "MGHT", "intensity", 25),
-
-        //QUICKNESS("Quickness", "QCKN", "duration", 5),
-
-        //FURY("Fury", "FURY", "duration", 9),
-
-        //PROTECTION("Protection", "PROT", "duration", 5),
-
-        //// Mesmer (also Ventari Revenant o.o)
-        //ALACRITY("Alacrity", "ALAC", "duration", 9),
-
-        //// Ranger
-        //SPOTTER("Spotter", "SPOT", "duration", 1),
-
-        //SPIRIT_OF_FROST("Spirit of Frost", "FRST", "duration", 1),
-
-        //SUN_SPIRIT("Sun Spirit", "SUNS", "duration", 1),
-
-        //STONE_SPIRIT("Stone Spirit", "STNE", "duration", 1),
-
-        //STORM_SPIRIT("Storm Spirit", "STRM", "duration", 1),
-
-        //GLYPH_OF_EMPOWERMENT("Glyph of Empowerment", "GOFE", "duration", 1),
-
-        //GRACE_OF_THE_LAND("Grace of the Land", "GOTL", "intensity", 5),
-
-        //// Warrior
-        //EMPOWER_ALLIES("Empower Allies", "EALL", "duration", 1),
-
-        //BANNER_OF_STRENGTH("Banner of Strength", "STRB", "duration", 1),
-
-        //BANNER_OF_DISCIPLINE("Banner of Discipline", "DISC", "duration", 1),
-
-        //BANNER_OF_TACTICS("Banner of Tactics", "TACT", "duration", 1),
-
-        //BANNER_OF_DEFENCE("Banner of Defence", "DEFN", "duration", 1),
-
-        //// Revenant
-        //ASSASSINS_PRESENCE("Assassin's Presence", "ASNP", "duration", 1),
-
-        //NATURALISTIC_RESONANCE("Naturalistic Resonance", "NATR", "duration", 1),
-
-        //// Engineer
-        //PINPOINT_PRECISION("Pinpoint Distribution", "PIND", "duration", 1),
-
-        //// Elementalist
-        //SOOTHING_MIST("Soothing Mist", "MIST", "duration", 1),
-
-        //// Necro
-        //VAMPIRIC_PRESENCE("Vampiric Presence", "VAMP", "duration", 1),
-
-        //// Thief
-        //LEAD_ATTACKS("Lead Attacks", "LEAD", "intensity", 15),
-
-        //LOTUS_TRAINING("Lotus Training", "LOTS", "duration", 1),
-
-        //BOUNDING_DODGER("Bounding Dodger", "BDOG", "duration", 1),
-
-        //// Equipment
-        //MASTERFUL_CONCENTRATION("Masterful Concentration", "CONC", "duration", 1);
-        // THORNS_RUNE("Thorns", "THRN", "intensity", 5);
+        
 
         // Fields
         private String name;
+        private int id;
         private String plotlyGroup;
         private String type;
         private int capacity;
@@ -84,8 +25,19 @@ namespace LuckParser.Models.ParseModels
             this.type = type;
             this.capacity = capacity;
         }
-
+        private Boon(String name, int id, String group, String type, int capacity)
+        {
+            this.name = name;
+            this.id = id;
+            this.plotlyGroup = group;
+            this.type = type;
+            this.capacity = capacity;
+        }
         // Public Methods
+        public void setID(int id)
+        {
+            this.id = id;
+        }
         public static Boon getEnum(String name)
         {
             foreach (Boon b in getList())
@@ -136,15 +88,15 @@ namespace LuckParser.Models.ParseModels
                 case 19426:
                     return "Torment";
                 case 720:
-                    return "Blind";
+                    return "Blinded";
                 case 722:
-                    return "Chill";
+                    return "Chilled";
                 case 721:
-                    return "Cripplied";
+                    return "Crippled";
                 case 791:
                     return "Fear";
                 case 727:
-                    return "Immobalize";
+                    return "Immobile";
                 case 26766:
                     return "Slow";
                 case 27705:
@@ -153,57 +105,81 @@ namespace LuckParser.Models.ParseModels
                     return "Weakness";
                 case 738:
                     return "Vulnerability";
-                case 873:
-                    return "Retaliation";
+                //case 873:
+                 //   return "Retaliation";
                 default:
                     return "UNKNOWN";
             }
         }
+        public static List<Boon> getCondiBoonList() {
+            List<Boon> boonList = new List<Boon>();
+            boonList.Add(new Boon("Bleeding", 736, "main", "intensity", 1500));
+            boonList.Add(new Boon("Burning", 737, "main", "intensity", 1500));
+            boonList.Add(new Boon("Confusion", 861, "main", "intensity", 1500));
+            boonList.Add(new Boon("Poison", 723, "main", "intensity", 1500));
+            boonList.Add(new Boon("Torment", 19426, "main", "intensity", 1500));
+            boonList.Add(new Boon("Blinded", 737, "main", "duration", 9));
+            boonList.Add(new Boon("Chilled", 722, "main", "duration", 5));
+            boonList.Add(new Boon("Crippled", 721, "main", "duration", 9));
+            boonList.Add(new Boon("Fear", 791, "main", "duration", 9));
+            boonList.Add(new Boon("Immobile", 727, "main", "duration", 3));
+            boonList.Add(new Boon("Slow", 26766, "main", "duration", 9));
+            boonList.Add(new Boon("Weakness", 737, "main", "duration", 5));
+            boonList.Add(new Boon("Vulnerability", 738, "main", "intensity", 25));
+            return boonList;
+        }
         public static List<Boon> getList(){
             List<Boon> boonList = new List<Boon>();
-            boonList.Add(new Boon("Might","main","intensity",25));
-            boonList.Add(new Boon("Fury", "main", "duration", 9));//or 3m and 30s
-            boonList.Add(new Boon("Quickness", "main", "duration", 5));
+            boonList.Add(new Boon("Might", 740, "main", "intensity", 25));
+            boonList.Add(new Boon("Fury", 725, "main", "duration", 9));//or 3m and 30s
+            boonList.Add(new Boon("Quickness", 1187, "main", "duration", 5));
             boonList.Add(new Boon("Alacrity", "main", "duration", 9));
 
-            boonList.Add(new Boon("Protection", "main", "duration", 5));
-            boonList.Add(new Boon("Regeneration", "main", "duration", 5));
-            boonList.Add(new Boon("Vigor", "main", "duration", 5));
-            boonList.Add(new Boon("743", "main", "duration", 9));
-            boonList.Add(new Boon("Stability", "main", "duration", 9));
-            boonList.Add(new Boon("Swiftness", "main", "duration", 9));
-            boonList.Add(new Boon("Retaliation", "main", "duration", 9));
+            boonList.Add(new Boon("Protection", 717, "main", "duration", 5));
+            boonList.Add(new Boon("Regeneration", 718, "main", "duration", 5));
+            boonList.Add(new Boon("Vigor", 726, "main", "duration", 5));
+            boonList.Add(new Boon("Aegis", 743, "main", "duration", 5));
+            boonList.Add(new Boon("Stability", 1122, "main", "intensity", 25));
+            boonList.Add(new Boon("Swiftness", 719, "main", "duration", 9));
+            boonList.Add(new Boon("Retaliation", 873, "main", "duration", 5));
             boonList.Add(new Boon("Resistance", "main", "duration", 5));
-           
+
             boonList.Add(new Boon("Spotter", "ranger", "duration", 1));
             boonList.Add(new Boon("Spirit of Frost", "ranger", "duration", 1));
             boonList.Add(new Boon("Sun Spirit", "ranger", "duration", 1));
             boonList.Add(new Boon("Stone Spirit", "ranger", "duration", 1));
-           
-           
-        
+                   
             boonList.Add(new Boon("Empower Allies", "warrior", "duration", 1));
             boonList.Add(new Boon("Banner of Strength", "warrior", "duration", 1));
             boonList.Add(new Boon("Banner of Discipline", "warrior", "duration", 1));
-            
+
+            boonList.Add(new Boon("Soothing Mist", "ele", "duration", 1));
+
+            boonList.Add(new Boon("Pinpoint Distribution", "engie", "duration", 1));
+
+            boonList.Add(new Boon("Vampiric Aura", "necro", "duration", 1));
+
+            boonList.Add(new Boon("Assassin's Presence", "rev", "duration", 1));
+
+            boonList.Add(new Boon("Battle Presence", "guard", "duration", 1));
             return boonList;
         }
 
         public static List<Boon> getMainList()
         {
             List<Boon> boonList = new List<Boon>();
-            boonList.Add(new Boon("Might", "main", "intensity", 25));
-            boonList.Add(new Boon("Fury", "main", "duration", 9));//or 3m and 30s
-            boonList.Add(new Boon("Quickness", "main", "duration", 5));
+            boonList.Add(new Boon("Might",740, "main", "intensity", 25));
+            boonList.Add(new Boon("Fury",725, "main", "duration", 9));//or 3m and 30s
+            boonList.Add(new Boon("Quickness",1187, "main", "duration", 5));
             boonList.Add(new Boon("Alacrity", "main", "duration", 9));
 
-            boonList.Add(new Boon("Protection", "main", "duration", 5));
-            boonList.Add(new Boon("Regeneration", "main", "duration", 5));
-            boonList.Add(new Boon("Vigor", "main", "duration", 5));
-            boonList.Add(new Boon("743", "main", "duration", 9));
-            boonList.Add(new Boon("Stability", "main", "duration", 9));
-            boonList.Add(new Boon("Swiftness", "main", "duration", 9));
-            boonList.Add(new Boon("Retaliation", "main", "duration", 9));
+            boonList.Add(new Boon("Protection",717, "main", "duration", 5));
+            boonList.Add(new Boon("Regeneration",718, "main", "duration", 5));
+            boonList.Add(new Boon("Vigor",726, "main", "duration", 5));
+            boonList.Add(new Boon("Aegis",743, "main", "duration", 9));
+            boonList.Add(new Boon("Stability",1122, "main", "duration", 9));
+            boonList.Add(new Boon("Swiftness",719, "main", "duration", 9));
+            boonList.Add(new Boon("Retaliation",873, "main", "duration", 9));
             boonList.Add(new Boon("Resistance", "main", "duration", 5));
 
             return boonList;
@@ -571,7 +547,10 @@ namespace LuckParser.Models.ParseModels
         {
             return this.name;
         }
-
+        public int getID()
+        {
+            return this.id;
+        }
         public String getPloltyGroup()
         {
             return this.plotlyGroup;

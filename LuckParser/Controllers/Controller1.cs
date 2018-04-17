@@ -294,9 +294,22 @@ namespace LuckParser.Controllers
 
                 // 64 bytes: name
                 String name = getString(64);
-                String nameTrim = name.Replace("/0", "");
+                String nameTrim = name.Replace("\0", "");
+                int n;
+                bool isNumeric = int.TryParse(nameTrim, out n);//check to see if name was id
+                if (n == skill_id && skill_id != 0)
+                {
+                    //was it a known boon?
+                    foreach (Boon b in Boon.getMainList())
+                    {
+                        if (skill_id == b.getID())
+                        {
+                            nameTrim = b.getName();
+                        }
+                    }
+                }
                 //Save
-                //TempData["Debug"] += "<br/>" + skill_id + " " + name;
+
                 SkillItem skill = new SkillItem(skill_id, nameTrim);
                
                 skill.SetGW2APISkill(apiController);
@@ -824,6 +837,7 @@ namespace LuckParser.Controllers
             int invulned = 0;
             int dmginvulned = 0;
             int dodge = c_data.getSkillCount(instid, 65001);//dodge = 65001
+            dodge += c_data.getSkillCount(instid, 40408);//mirage cloak add
             int evades = 0;
             //int dmgevaded = 0;
             int dmgBarriar = 0;
@@ -920,11 +934,11 @@ namespace LuckParser.Controllers
                             if (boon.getType().Equals("duration"))
                             {
 
-                                rate = String.Format("{0:0}", Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data));
+                                rate = String.Format("{0:0}", Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data));//these 2 are problamatic
                             }
                             else if (boon.getType().Equals("intensity"))
                             {
-                                rate = String.Format("{0:0.0}", Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)));
+                                rate = String.Format("{0:0.0}", Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)));//issues
                             }
                         }
                         else
@@ -945,6 +959,51 @@ namespace LuckParser.Controllers
                     rates[i] = rate;
                 }
                 else {
+                    rates[i] = "0";
+                }
+            }
+            //table.addrow(utility.concatstringarray(new string[] { p.getcharacter(), p.getprof() }, rates));
+            return rates;
+        }
+        public string[] getfinalcondis(Player p)
+        {
+            BossData b_data = getBossData();
+            CombatData c_data = getCombatData();
+            SkillData s_data = getSkillData();
+            List<BoonMap> boon_logs = new List<BoonMap>();
+           
+                boon_logs = p.getRawBoonMap(b_data, s_data, c_data.getCombatList());
+          
+
+            List<Boon> boon_list = Boon.getCondiBoonList();
+            int n = boon_list.Count();//# of diff boons
+            string[] rates = new string[n];
+            for (int i = 0; i < n; i++)
+            {
+                // Boon boon = Boon.getEnum(boon_list[i].ToString());
+                Boon boon = boon_list[i];
+                AbstractBoon boon_object = BoonFactory.makeBoon(boon);
+                BoonMap bm = boon_logs.FirstOrDefault(x => x.getName().Contains(boon.getName()));
+                if (bm != null)
+                {
+                    List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
+                    string rate = "0";
+                    if (logs.Count() > 0)
+                    {
+                        if (boon.getType().Equals("duration"))
+                        {
+
+                            rate = String.Format("{0:0}", Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data));//these 2 are problamatic
+                        }
+                        else if (boon.getType().Equals("intensity"))
+                        {
+                            rate = String.Format("{0:0.0}", Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)));//issues
+                        }
+                    }
+                    rates[i] = rate;
+                }
+                else
+                {
                     rates[i] = "0";
                 }
             }
@@ -1207,6 +1266,87 @@ namespace LuckParser.Controllers
             }
             return totaldmgList;
         }
+        public List<BoonsGraphModel> getBossBoonGraph(Player p)
+        {
+            List<BoonsGraphModel> uptime = new List<BoonsGraphModel>();
+            BossData b_data = getBossData();
+            CombatData c_data = getCombatData();
+            SkillData s_data = getSkillData();
+            List<BoonMap> boon_logs = p.getRawBoonMap(b_data, s_data, c_data.getCombatList());
+            List<Boon> boon_list = new List<Boon>();
+            //condis
+            boon_list.AddRange(Boon.getCondiBoonList());
+            //Main boons
+            boon_list.AddRange(Boon.getMainList());
+            //All class specefic boons
+            boon_list.AddRange(Boon.getAllProfList());
+
+                
+            
+            int n = boon_list.Count();//# of diff boons
+
+            for (int i = 0; i < n; i++)//foreach boon
+            {
+                Boon boon = boon_list[i];
+                AbstractBoon boon_object = BoonFactory.makeBoon(boon);
+                BoonMap bm = boon_logs.FirstOrDefault(x => x.getName().Contains(boon.getName()));
+                if (bm != null)
+                {
+                    List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
+
+                    List<Point> pointlist = new List<Point>();
+                    if (logs.Count() > 0)
+                    {
+                        if (boon.getType().Equals("duration"))
+                        {
+                            int fight_duration = (int)((b_data.getLastAware() - b_data.getFirstAware()) / 1000.0);
+                            List<Point> pointswierds = Statistics.getBoonIntervalsList(boon_object, logs, b_data);
+                            int pwindex = 0;
+                            int enddur = 0;
+                            for (int cur_time = 0; cur_time < fight_duration; cur_time++)
+                            {
+                                if (cur_time == (int)(pointswierds[pwindex].X / 1000f))
+                                {
+                                    pointlist.Add(new Point((int)(pointswierds[pwindex].X / 1000f), 1));
+                                    enddur = (int)(pointswierds[pwindex].Y / 1000f);
+                                    if (pwindex < pointswierds.Count() - 1) { pwindex++; }
+
+                                }
+                                else if (cur_time < enddur)
+                                {
+                                    pointlist.Add(new Point(cur_time, 1));
+                                }
+                                else
+                                {
+                                    pointlist.Add(new Point(cur_time, 0));
+                                }
+                            }
+
+                        }
+                        else if (boon.getType().Equals("intensity"))
+                        {
+                            List<int> stackslist = Statistics.getBoonStacksList(boon_object, logs, b_data);
+                            int time = 0;
+                            int timeGraphed = 0;
+                            foreach (int stack in stackslist)
+                            {
+                                if (Math.Floor(time / 1000f) > timeGraphed)
+                                {
+                                    timeGraphed = (int)Math.Floor(time / 1000f);
+                                    pointlist.Add(new Point(time / 1000, stack));
+                                }
+                                time++;
+                            }
+
+                        }
+                        BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(), pointlist);
+                        uptime.Add(bgm);
+                    }
+                }
+
+            }
+            return uptime;
+        }
 
         bool[] SnapSettings;
         public void CreateCompTable(StreamWriter sw) {
@@ -1353,11 +1493,11 @@ namespace LuckParser.Controllers
            "</th><th><img src=" + GetLink("SwS") + " alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\">" +
            "</th><th><img src=" + GetLink("Flank") + " alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\">" +
            "</th><th><img src=" + GetLink("Glance") + " alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Miss") + " alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\">" +
+           "</th><th><img src=" + GetLink("Blinded") + " alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\">" +
            "</th><th><img src=" + GetLink("Interupts") + " alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\">" +
            "</th><th><img src=" + GetLink("Invuln") + " alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Wasted") + " alt=\"Wasted\" title=\"Time wasted interupting skill casts\" height=\"18\" width=\"18\">" +
-            "</th><th><img src=" + GetLink("Saved") + " alt=\"Saved\" title=\"Time saved interupting skill casts\" height=\"18\" width=\"18\">" +
+           "</th><th><img src=" + GetLink("Wasted") + " alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\">" +
+            "</th><th><img src=" + GetLink("Saved") + " alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\">" +
 
            "</th><th><img src=" + GetLink("Swap") + " alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\">" +
            "</th><th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
@@ -1380,8 +1520,8 @@ namespace LuckParser.Controllers
                 sw.WriteLine("<td>" + stats[11] + "</td>");//misses
                 sw.WriteLine("<td>" + stats[12] + "</td>");//interupts
                 sw.WriteLine("<td>" + stats[13] + "</td>");//dmg invulned
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[15] + "cancels \">" + stats[14] + "</span>" + " s</td>");//time wasted
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[18] + "cancels \">" + stats[17] + "</span>" + " s</td>");//timesaved
+                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[15] + "cancels \">" + stats[14] + "</span>" + "</td>");//time wasted
+                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[18] + "cancels \">" + stats[17] + "</span>" + "</td>");//timesaved
                 sw.WriteLine("<td>" + stats[5] + "</td>");//w swaps
                 sw.WriteLine("<td>" + stats[6] + "</td>");//downs
                 TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));//dead
@@ -1454,7 +1594,7 @@ namespace LuckParser.Controllers
            "</th><th>Blocked" +
            "</th><th>Invulned" +
            "</th><th>Evaded" +
-           "</th><th>Dodges" +
+           "</th><th>" +"<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Dodges or Mirage Cloak \">Dodges</span>"+
            "</th><th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
            "</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
                " </tr> </thead><tbody>");
@@ -1539,7 +1679,7 @@ namespace LuckParser.Controllers
                 sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
 
                 string[] stats = getFinalSupport(player);
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " seconds \">" + stats[2] + " condis</span>" + "</td>");//condicleanse                                                                                                                                                                   //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
+                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " seconds \">" + stats[2] + "</span>" + "</td>");//condicleanse                                                                                                                                                                   //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
                 sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " seconds \">" + stats[0] + "</span>" + "</td>");//res
                 sw.WriteLine("</tr>");
                 //gather data for footer
@@ -2383,7 +2523,7 @@ namespace LuckParser.Controllers
                             "y: ['1.5']," +
                             "x: ['" + dur + "']," +
                             "base:'" + cl.getTime() / 1000f + "'," +
-                            "name: \"" + skillName + " " + cl.getTime() / 1000f + "s\"," +//get name should be handled by api
+                            "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
                             "orientation:'h'," +
                             "mode: 'markers'," +
                             "type: 'bar',");
@@ -2444,7 +2584,7 @@ namespace LuckParser.Controllers
                                 sw.WriteLine("color: 'rgb(220,40,220)',");
                             }
                         }
-                        sw.WriteLine("width: 1.5" +
+                        sw.WriteLine("width: 1" +
                                 "}" +
                             "}," +
                             "showlegend: false" +
@@ -2758,7 +2898,8 @@ namespace LuckParser.Controllers
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
-            List<DamageLog> damageLogs = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
+           
+            List<DamageLog> damageLogs = p.getJustPlayerDamageLogs( b_data, c_data.getCombatList(), getAgentData());
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
@@ -2839,7 +2980,9 @@ namespace LuckParser.Controllers
                 }
                 
             }
-            foreach (int condiID in damageLogs.Where(x=>x.isCondi() == 1).Select(x=>x.getID()).Distinct()) {
+           
+
+            foreach (int condiID in damageLogs.Where(x=>x.isCondi() == 1).Select(x=>x.getID()).Distinct()) {//condis
                 string condiName = Boon.getCondiName(condiID);
                 int totaldamage = 0;
                 int mindamage = 0;
@@ -2862,12 +3005,97 @@ namespace LuckParser.Controllers
              
                     if (totaldamage != 0)
                     {
-                        sw.WriteLine("<tr><td align=\"left\"><img src=" +GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
+                        sw.WriteLine("<tr class=\"condi\"><td align=\"left\"><img src=" +GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
                             "<td></td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
                              "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
                               "<td></td>" + "<td></td>" +
                                "<td></td>" + "<td></td>" + "<td></td></tr>");
                     }
+            }
+            List<int> remainIDs = damageLogs.Where(x => x.isCondi() == 0).Select(x => x.getID()).Distinct().ToList();
+            foreach (int exist in casting.Select(x => x.getID()).Distinct()) {
+                remainIDs.Remove(exist);
+            }
+            remainIDs.Remove(873);//remove retail since itll duplicate
+            foreach (int id in remainIDs)//Foreach instant cast skill
+            {
+                SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
+                List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
+                int casts = clList.Count();
+                double timeswasted = 0;
+                int countwasted = 0;
+                double timessaved = 0;
+                int countsaved = 0;
+                foreach (CastLog cl in clList)
+                {
+                    if (cl.getExpDur() < cl.getActDur())
+                    {
+                        countsaved++;
+                        timessaved += ((double)(cl.getExpDur() - cl.getActDur()) / 1000f);
+                    }
+                    else if (cl.getExpDur() > cl.getActDur())
+                    {
+                        countwasted++;
+                        timeswasted += ((double)(cl.getActDur()) / 1000f);
+                    }
+                }
+
+                int totaldamage = 0;
+                int mindamage = 0;
+                int avgdamage = 0;
+                int hits = 0;
+                int maxdamage = 0;
+                int crit = 0;
+                int flank = 0;
+                int glance = 0;
+                foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
+                {
+                    int curdmg = dl.getDamage();
+                    totaldamage += curdmg;
+                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                    hits++;
+                    int result = dl.getResult().getID();
+                    if (result == 1) { crit++; } else if (result == 2) { glance++; }
+                    if (dl.isFlanking() == 1) { flank++; }
+                }
+                avgdamage = (int)((double)totaldamage / (double)hits);
+
+                if (skill != null)
+                {
+                    if (totaldamage != 0 && skill.GetGW2APISkill() != null)
+                    {
+                        sw.WriteLine("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
+                            "<td>" + casts + "</td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
+                             "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                              "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" + "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
+                               "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
+                    }
+                    else if (totaldamage != 0)
+                    {
+                        sw.WriteLine("<tr><td align=\"left\">" + skill.getName() + "</td>" +
+                            "<td>" + casts + "</td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
+                             "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                              "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" + "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
+                               "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
+                    }
+                    else if (skill.GetGW2APISkill() != null)
+                    {
+                        sw.WriteLine("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
+                           "<td>" + casts + "</td>" + "<td></td>" + "<td></td>" +
+                            "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
+                             "<td></td>" + "<td></td>" +
+                              "<td></td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
+                    }
+                    else {
+                        sw.WriteLine("<tr><td align=\"left\">" + skill.getName() + "</td>" +
+                          "<td>" + casts + "</td>" + "<td></td>" + "<td></td>" +
+                           "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
+                            "<td></td>" + "<td></td>" +
+                             "<td></td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
+                    }
+                }
+
             }
             sw.WriteLine("</tbody></table>");
         }
@@ -2949,6 +3177,7 @@ namespace LuckParser.Controllers
                 }
 
             }
+            //CONDIS
             foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
             {
                 string condiName = Boon.getCondiName(condiID);
@@ -2973,13 +3202,14 @@ namespace LuckParser.Controllers
 
                 if (totaldamage != 0)
                 {
-                    sw.WriteLine("<tr><td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
-                        "<td></td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
+                    sw.WriteLine("<tr class=\"condi\"><td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
+                        "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
                          "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
                           "<td></td>" + "<td></td>" +
                            "<td></td>" + "<td></td>" + "<td></td></tr>");
                 }
             }
+
             sw.WriteLine("</tbody></table>");
         }
         public void CreateDMGTakenDistTable(StreamWriter sw, Player p)
@@ -3222,6 +3452,464 @@ namespace LuckParser.Controllers
   //</li>
 sw.WriteLine("</ul>");
         }
+        public void CreateCondiUptimeTable(StreamWriter sw,Player player)//Note player is just boss
+        {
+            //Generate Boon table------------------------------------------------------------------------------------------------
+            sw.WriteLine(" <script> $(function () { $('#condi_table').DataTable({ \"order\": [[3, \"desc\"]] " +
+            // "\"scrollX\": true," +
+            " });});</script>" +
+            " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"condi_table\">" +
+                " <thead> <tr> <th>Name</th>");
+
+           
+            foreach (Boon boon in Boon.getCondiBoonList())
+            {
+                sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+            }
+            sw.WriteLine(" </tr> </thead><tbody>");
+            
+                sw.WriteLine("<tr>");
+                
+                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
+                string[] boonArray = getfinalcondis(player);
+                int count = 0;
+                List<string> boonArrayToList = new List<string>();
+                boonArrayToList.Add(player.getGroup());
+                foreach (Boon boon in Boon.getCondiBoonList())
+                {
+                    sw.WriteLine("<td>" + boonArray[count] + "</td>");
+                    boonArrayToList.Add(boonArray[count]);
+                    count++;
+
+                }
+                sw.WriteLine("</tr>");
+               
+            
+            sw.WriteLine("</tbody>");
+            sw.WriteLine("</table>");
+        }
+        public void CreateBossSummary(StreamWriter sw)
+        {
+            //generate Player list Graphs
+            AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
+            Player p = new Player(bossAgent);
+
+            
+                CombatData c_data = getCombatData();
+                BossData b_data = getBossData();
+                List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
+                SkillData s_data = getSkillData();
+                List<SkillItem> s_list = s_data.getSkillList();
+                AgentData a_data = getAgentData();
+                string charname = p.getCharacter();
+                sw.WriteLine(//"<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">" +
+                     "<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getCharacter().ToString()+"-icon") + " \" alt=\"" + p.getCharacter().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
+
+                sw.Write("<ul class=\"nav nav-tabs\"><li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + p.getInstid() + "\">" + p.getCharacter() + "</a></li>");
+                //foreach pet loop here
+                List<int> minionIDlist = p.getMinionList(b_data, c_data.getCombatList(), a_data);
+                List<AgentItem> minionAgentList = new List<AgentItem>();
+                foreach (int petid in minionIDlist)
+                {
+                    AgentItem agent = a_data.getNPCAgentList().FirstOrDefault(x => x.getInstid() == petid);
+                    if (agent != null)
+                    {
+                        if (minionAgentList.Count > 0)
+                        {
+
+                            if (minionAgentList.FirstOrDefault(x => x.getName() == agent.getName()) == null)
+                            {
+                                minionAgentList.Add(agent);
+                            }
+                        }
+                        else
+                        {
+                            minionAgentList.Add(agent);
+                        }
+                    }
+                    int i = 0;
+                }
+                foreach (AgentItem mobAgent in minionAgentList)
+                {
+
+                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">" + mobAgent.getName() + "</a></li>");
+
+                }
+                //condi stats tab
+               // sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#condiUptime" + p.getInstid() + "\">Condition Uptime</a></li></ul>");
+
+                sw.Write("<div id=\"myTabContent\" class=\"tab-content\"><div class=\"tab-pane fade show active\" id=\"home" + p.getInstid() + "\">");
+            CreateCondiUptimeTable(sw, p);
+            sw.WriteLine("<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>" + "<script>");
+
+                sw.WriteLine("var data = [");
+                if (SnapSettings[6])//Display rotation
+                {
+                    foreach (CastLog cl in casting)
+                    {
+                        string skillName = "";
+                        GW2APISkill skill = null;
+                        if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
+                        {
+                            skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
+                        }
+
+
+                        if (skill == null)
+                        {
+                            skillName = s_data.getName(cl.getID());
+                        }
+                        else
+                        {
+                            skillName = skill.name;
+                        }
+                        float dur = 0.0f;
+                        if (skillName == "Dodge")
+                        {
+                            dur = 0.5f;
+                        }
+                        else if (cl.getID() == -2)
+                        {//wepswap
+                            skillName = "Weapon Swap";
+                            dur = 0.1f;
+                        }
+                        else if (skillName == "Resurrect")
+                        {
+                            dur = cl.getActDur() / 1000f;
+                        }
+                        else if (skillName == "Bandage")
+                        {
+                            dur = cl.getActDur() / 1000f;
+                        }
+                        else
+                        {
+                            dur = cl.getActDur() / 1000f;
+                        }
+                        skillName = skillName.Replace("\"", "");
+                        sw.WriteLine("{" +
+                            "y: ['1.5']," +
+                            "x: ['" + dur + "']," +
+                            "base:'" + cl.getTime() / 1000f + "'," +
+                            "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
+                            "orientation:'h'," +
+                            "mode: 'markers'," +
+                            "type: 'bar',");
+                        if (skill != null)
+                        {
+                            if (skill.slot == "Weapon_1")
+                            {
+                                sw.WriteLine("width:'0.5',");
+                            }
+                            else
+                            {
+                                sw.WriteLine("width:'1',");
+                            }
+
+                        }
+                        else
+                        {
+                            sw.WriteLine("width:'1',");
+                        }
+
+                        sw.WriteLine("hoverinfo: 'name'," +
+                        "hoverlabel:{namelength:'-1'}," +
+                        " marker: {");
+                        if (cl.endActivation() != null)
+                        {
+                            if (cl.endActivation().getID() == 3)
+                            {
+                                sw.WriteLine("color: 'rgb(40,40,220)',");
+                            }
+                            else if (cl.endActivation().getID() == 4)
+                            {
+                                sw.WriteLine("color: 'rgb(220,40,40)',");
+                            }
+                            else if (cl.endActivation().getID() == 5)
+                            {
+                                sw.WriteLine("color: 'rgb(40,220,40)',");
+                            }
+                            else
+                            {
+                                sw.WriteLine("color: 'rgb(220,220,0)',");
+                            }
+                        }
+                        else
+                        {
+                            sw.WriteLine("color: 'rgb(220,220,0)',");
+                        }
+                        sw.WriteLine(" width: 5," +
+                         "line:" +
+                          "{");
+                        if (cl.startActivation() != null)
+                        {
+                            if (cl.startActivation().getID() == 1)
+                            {
+                                sw.WriteLine("color: 'rgb(20,20,20)',");
+                            }
+                            else if (cl.startActivation().getID() == 2)
+                            {
+                                sw.WriteLine("color: 'rgb(220,40,220)',");
+                            }
+                        }
+                        sw.WriteLine("width: 1" +
+                                "}" +
+                            "}," +
+                            "showlegend: false" +
+                        " },");
+
+                    }
+                }
+
+               
+                    List<Boon> parseBoonsList = new List<Boon>();
+            //Condis
+            parseBoonsList.AddRange(Boon.getCondiBoonList());
+            //Main boons
+            parseBoonsList.AddRange(Boon.getMainList());
+            //All class specefic boons
+            parseBoonsList.AddRange(Boon.getAllProfList());
+           
+                    
+                    List<BoonsGraphModel> boonGraphData = getBossBoonGraph(p);
+                    boonGraphData.Reverse();
+                    foreach (BoonsGraphModel bgm in boonGraphData)
+                    {
+                        if (parseBoonsList.FirstOrDefault(x => x.getName() == bgm.getBoonName()) != null)
+                        {
+                            sw.WriteLine("{");
+                            sw.WriteLine("y: [");
+                            List<Point> bChart = bgm.getBoonChart();
+                            int bChartCount = 0;
+                            foreach (Point pnt in bChart)
+                            {
+                                if (bChartCount == bChart.Count - 1)
+                                {
+                                    sw.Write("'" + pnt.Y + "'");
+                                }
+                                else
+                                {
+                                    sw.Write("'" + pnt.Y + "',");
+                                }
+                                bChartCount++;
+                            }
+                            if (bgm.getBoonChart().Count == 0)
+                            {
+                                sw.Write("'0'");
+                            }
+
+
+                            sw.WriteLine("]," +
+                             "x: [");
+                            bChartCount = 0;
+                            foreach (Point pnt in bChart)
+                            {
+                                if (bChartCount == bChart.Count - 1)
+                                {
+                                    sw.Write("'" + pnt.X + "'");
+                                }
+                                else
+                                {
+                                    sw.Write("'" + pnt.X + "',");
+                                }
+                                bChartCount++;
+                            }
+                            if (bgm.getBoonChart().Count == 0)
+                            {
+                                sw.Write("'0'");
+                            }
+                            sw.WriteLine("]," +
+                                 " yaxis: 'y2'," +
+                                 " type: 'scatter',");
+                            //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
+                            if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness") { }
+                            else
+                            {
+                                sw.WriteLine(" visible: 'legendonly',");
+                            }
+                            sw.WriteLine(" line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
+                            sw.WriteLine(" fill: 'tozeroy'," +
+                                 " name: \"" + bgm.getBoonName() + "\"" +
+                                 " },");
+                        }
+
+                    }
+                
+                int maxDPS = 0;
+                
+                if (SnapSettings[1])
+                {//show total dps plot
+                    sw.WriteLine("{");
+                    //Adding dps axis
+                    List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
+                    sw.WriteLine("y: [");
+                    int ptdgCount = 0;
+                    foreach (int[] dp in playertotaldpsgraphdata)
+                    {
+                        if (ptdgCount == playertotaldpsgraphdata.Count - 1)
+                        {
+                            sw.Write("'" + dp[1] + "'");
+                        }
+                        else
+                        {
+                            sw.Write("'" + dp[1] + "',");
+                        }
+
+                        ptdgCount++;
+                    }
+                    if (playertotaldpsgraphdata.Count == 0)
+                    {
+                        sw.Write("'0'");
+                    }
+
+                    sw.WriteLine("],");
+                    //add time axis
+                    sw.WriteLine("x: [");
+                    ptdgCount = 0;
+                    foreach (int[] dp in playertotaldpsgraphdata)
+                    {
+                        if (ptdgCount == playertotaldpsgraphdata.Count - 1)
+                        {
+                            sw.Write("'" + dp[0] + "'");
+                        }
+                        else
+                        {
+                            sw.Write("'" + dp[0] + "',");
+                        }
+                        ptdgCount++;
+                    }
+                    if (playertotaldpsgraphdata.Count == 0)
+                    {
+                        sw.Write("'0'");
+                    }
+
+                    sw.WriteLine("],");
+                    sw.WriteLine(" mode: 'lines'," +
+                        " line: {shape: 'spline',color:'rgb(0,250,0)'}," +
+               " yaxis: 'y3'," +
+               // "legendgroup: 'Damage'," +
+               " name: 'Total DPS'" + "}");
+                }
+
+                sw.WriteLine("];" +
+    "var layout = {" +
+
+        "yaxis: {" +
+            "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
+            "range: [0, 2]" +
+        "}," +
+
+        "legend: { traceorder: 'reversed' }," +
+        "hovermode: 'compare'," +
+        "yaxis2: { title: 'Condis/Boons', domain: [0.11, 0.50], fixedrange: true }," +
+        "yaxis3: { title: 'DPS', domain: [0.51, 1] }," +
+        "images: [");
+                if (SnapSettings[7])//Display rotation
+                {
+                    int castCount = 0;
+                    foreach (CastLog cl in casting)
+                    {
+                        string skillIcon = "";
+                        GW2APISkill skill = null;
+                        if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
+                        {
+                            skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
+                        }
+
+
+                        if (skill != null && cl.getID() != -2)
+                        {
+                            if (skill.slot != "Weapon_1")
+                            {
+                                skillIcon = skill.icon;
+                                sw.WriteLine("{" +
+                                          "source: '" + skillIcon + "'," +
+                                          "xref: 'x'," +
+                                          "yref: 'y'," +
+                                          "x: " + (cl.getTime() / 1000f) + "," +
+                                          "y: 0," +
+                                          "sizex: 1.1," +
+                                          "sizey: 1.1," +
+                                          "xanchor: 'left'," +
+                                          "yanchor: 'bottom'" +
+                                      "}");
+                            }
+                        }
+                        else
+                        {
+                            string skillName = "";
+
+                            if (cl.getID() == -2)
+                            { //wepswap
+                                skillName = "Weapon Swap";
+                                // skillIcon = "https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png";
+                            }
+                            else
+                            {
+                                skillName = skill_data.getName(cl.getID());
+                            }
+
+
+                            if (skillName == "Dodge")
+                            {
+                                // skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
+                            }
+                            else if (skillName == "Resurrect")
+                            {
+                                //skillIcon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
+                            }
+                            else if (skillName == "Bandage")
+                            {
+                                // skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
+                            }
+                            sw.WriteLine("{" +
+                                          "source: '" + skillIcon + "'," +
+                                          "xref: 'x'," +
+                                          "yref: 'y'," +
+                                          "x: " + cl.getTime() / 1000f + "," +
+                                          "y: 0," +
+                                          "sizex: 1.1," +
+                                          "sizey: 1.1," +
+                                          "xanchor: 'left'," +
+                                          "yanchor: 'bottom'" +
+                                      "}");
+                        }
+
+                        if (castCount == casting.Count - 1)
+                        {
+                        }
+                        else
+                        {
+                            sw.Write(",");
+                        }
+                    }
+
+
+                }
+                sw.WriteLine("]," +
+
+            "font: { color: '#ffffff' }," +
+            "paper_bgcolor: 'rgba(0,0,0,0)'," +
+            "plot_bgcolor: 'rgba(0,0,0,0)'" +
+        "};" +
+                "Plotly.newPlot('Graph" + p.getInstid() + "', data, layout);" +
+    "</script> ");
+                CreateDMGDistTable(sw, p);
+                sw.WriteLine("</div>");
+                foreach (AgentItem mobAgent in minionAgentList)
+                {
+                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">");
+                    CreateDMGDistTable(sw, p, mobAgent);
+                    sw.Write("</div>");
+                }
+               // sw.Write("<div class=\"tab-pane fade \" id=\"condiUptime" + p.getInstid() + "\">");
+           // CreateCondiUptimeTable(sw,p);
+            //CreateDMGTakenDistTable(sw, p);
+            //sw.WriteLine("</div>");
+            sw.WriteLine("</div>");
+
+
+
+        }
         public void CreateHTML(StreamWriter sw,bool[] settingsSnap)
         {
             
@@ -3265,6 +3953,7 @@ sw.WriteLine("</ul>");
                      ".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}" +
                      "div.dataTables_wrapper { width: 1100px; margin: 0 auto; }" +
                      "th.dt-left, td.dt-left { text-align: left; }" +
+                     "table.dataTable.display tbody tr.condi {background-color: #ff6666;}"+
              "</style>" +
                      "<script>$.extend( $.fn.dataTable.defaults, {searching: false, ordering: true,paging: false,dom:\"t\"} );</script>" +
                   "</head>");
@@ -3375,6 +4064,12 @@ sw.WriteLine("</ul>");
                  "</div>" +
 
              "</li>");
+            if (settingsSnap[9])
+            {
+                sw.WriteLine("<li class=\"nav-item\">" +
+                 "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#bossSummary\">Boss</a>" +
+             "</li>");
+            }
             if (settingsSnap[8]) {
                 sw.WriteLine("<li class=\"nav-item\">" +
                  "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#eventList\">Event List</a>" +
@@ -3435,7 +4130,13 @@ sw.WriteLine("</ul>");
                          "<p>Mechanics</p>");
             CreateMechanicTable(sw);
             sw.WriteLine("</div>");
-
+            //boss summary
+            if (settingsSnap[9])
+            {
+                sw.WriteLine("<div class=\"tab-pane fade\" id=\"bossSummary\">" );
+                CreateBossSummary(sw);
+                sw.WriteLine("</div>");
+            }
             //event list
             if (settingsSnap[8])
             {
@@ -3613,7 +4314,7 @@ sw.WriteLine("</ul>");
                 case "Glance":
                     return "https://wiki.guildwars2.com/images/f/f9/Weakness.png";
                 case "Miss":
-                    return "https://wiki.guildwars2.com/images/6/68/Blind.png";
+                    return "https://wiki.guildwars2.com/images/3/33/Blinded.png";
                 case "Interupts":
                     return "https://wiki.guildwars2.com/images/thumb/7/79/Daze.png/20px-Daze.png";
                 case "Invuln":
@@ -3636,15 +4337,15 @@ sw.WriteLine("</ul>");
                     return "https://wiki.guildwars2.com/images/thumb/0/05/Poison.png/20px-Poison.png";
                 case "Torment":
                     return "https://wiki.guildwars2.com/images/thumb/0/08/Torment.png/20px-Torment.png";
-                case "Blind":
+                case "Blinded":
                     return "https://wiki.guildwars2.com/images/thumb/3/33/Blinded.png/20px-Blinded.png";
-                case "Chill":
+                case "Chilled":
                     return "https://wiki.guildwars2.com/images/thumb/a/a6/Chilled.png/20px-Chilled.png";
-                case "Cripplied":
+                case "Crippled":
                     return "https://wiki.guildwars2.com/images/thumb/f/fb/Crippled.png/20px-Crippled.png";
                 case "Fear":
                     return "https://wiki.guildwars2.com/images/thumb/e/e6/Fear.png/20px-Fear.png";
-                case "Immobalize":
+                case "Immobile":
                     return "https://wiki.guildwars2.com/images/thumb/3/32/Immobile.png/20px-Immobile.png";
                 case "Slow":
                     return "https://wiki.guildwars2.com/images/thumb/f/fb/Slow_40px.png/20px-Slow_40px.png";
@@ -3654,7 +4355,7 @@ sw.WriteLine("</ul>");
                     return "https://wiki.guildwars2.com/images/thumb/f/f9/Weakness.png/20px-Weakness.png";
                 case "Vulnerability":
                     return "https://wiki.guildwars2.com/images/thumb/a/af/Vulnerability.png/20px-Vulnerability.png";
-                case "743": return "https://wiki.guildwars2.com/images/e/e5/Aegis.png";
+                case "Aegis": return "https://wiki.guildwars2.com/images/e/e5/Aegis.png";
                 case "Fury": return "https://wiki.guildwars2.com/images/4/46/Fury.png";
                 case "Might": return "https://wiki.guildwars2.com/images/7/7c/Might.png";
                 case "Protection": return "https://wiki.guildwars2.com/images/6/6c/Protection.png";
@@ -3677,8 +4378,13 @@ sw.WriteLine("</ul>");
                 case "Stone Spirit": return "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png";
                 case "Storm Spirit": return "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png";
                 case "Empower Allies": return "https://wiki.guildwars2.com/images/thumb/4/4c/Empower_Allies.png/20px-Empower_Allies.png";
+                case "Soothing Mist": return "https://wiki.guildwars2.com/images/f/f7/Soothing_Mist.png";
+                case "Pinpoint Distribution": return "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png";
+                case "Vampiric Aura": return "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png";
+                case "Assassin's Presence": return "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png";
+                case "Battle Presence": return "https://wiki.guildwars2.com/images/2/27/Battle_Presence.png";
 
-                case "Color-743": return "rgb(,,)";
+                case "Color-Aegis": return "rgb(102,255,255)";
                 case "Color-Fury": return "rgb(255,153,0)";
                 case "Color-Might": return "rgb(153,0,0)";
                 case "Color-Protection": return "rgb(102,255,255)";

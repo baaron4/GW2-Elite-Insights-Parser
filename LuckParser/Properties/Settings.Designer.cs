@@ -154,5 +154,17 @@ namespace LuckParser.Properties {
                 this["EventList"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool BossSummary {
+            get {
+                return ((bool)(this["BossSummary"]));
+            }
+            set {
+                this["BossSummary"] = value;
+            }
+        }
     }
 }

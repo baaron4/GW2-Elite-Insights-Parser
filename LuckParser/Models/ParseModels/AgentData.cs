@@ -59,5 +59,9 @@ namespace LuckParser.Models.ParseModels
         public AgentItem GetAgent(long agent) {
             return all_agents_list.FirstOrDefault(x => x.getAgent() == agent);
         }
+        public AgentItem GetAgentWInst(int instid)
+        {
+            return all_agents_list.FirstOrDefault(x => x.getInstid() == instid);
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
             
             return  doubles ;
         }
-        public static List<Point> getBoonIntervalsList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data)//Needs boonremoval added
+        public static List<Point> getBoonIntervalsList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data)
         {
             // Initialise variables
             int t_prev = 0;
@@ -41,7 +41,7 @@ namespace LuckParser.Models.ParseModels
                 if (duration < 0) {
                     duration = Int32.MaxValue;
                 }
-               
+                t_prev = t_curr;
                 boon_intervals.Add(new Point(t_curr, duration));
             }
 
