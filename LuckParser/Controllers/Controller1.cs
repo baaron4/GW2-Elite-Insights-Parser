@@ -1019,12 +1019,14 @@ namespace LuckParser.Controllers
                 foreach (DamageLog dLog in dls)
                 {
                     string name = skill_data.getName(dLog.getID());
-                    foreach (string mech in getMechData().GetMechanicNameList())
-                    {
-                        if (name.Contains(mech))
+                    if (dLog.getResult().getID() < 3 ) {
+                        foreach (string mech in getMechData().GetMechanicNameList())
                         {
-                            mech_data.AddItem(new MechanicLog((int)(dLog.getTime()/1000f), dLog.getID(), mech, dLog.getDamage(), p,mech_data.GetPLoltyShape(mech)));
-                            break;
+                            if (name.Contains(mech))
+                            {
+                                mech_data.AddItem(new MechanicLog((int)(dLog.getTime() / 1000f), dLog.getID(), mech, dLog.getDamage(), p, mech_data.GetPLoltyShape(mech)));
+                                break;
+                            }
                         }
                     }
                 }
@@ -1035,7 +1037,7 @@ namespace LuckParser.Controllers
                     {
                        
 
-                        if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove().getID() == 0)
+                        if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove().getID() == 0 && c.getResult().getID() < 3)
                         {
                             String name = skill_data.getName(c.getSkillID());
                             foreach (string mech in getMechData().GetMechanicNameList())
@@ -4275,7 +4277,7 @@ sw.WriteLine("</ul>");
                 case"Color-Berserker": return "rgb(255,209,102)";
                 case"Color-Spellbreaker": return "rgb(255,209,102)";
                 case"Color-Guardian": return "rgb(114,193,217)";
-                case"Color-DragonHunter": return "rgb(114,193,217)";
+                case"Color-Dragonhunter": return "rgb(114,193,217)";
                 case"Color-Firebrand": return "rgb(114,193,217)";
                 case"Color-Revenant": return "rgb(209,110,90)";
                 case"Color-Herald": return "rgb(209,110,90)";

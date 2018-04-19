@@ -105,8 +105,8 @@ namespace LuckParser.Models.ParseModels
                     return "Weakness";
                 case 738:
                     return "Vulnerability";
-                //case 873:
-                 //   return "Retaliation";
+                case 873:
+                    return "Retaliation";
                 default:
                     return "UNKNOWN";
             }
@@ -161,7 +161,7 @@ namespace LuckParser.Models.ParseModels
 
             boonList.Add(new Boon("Assassin's Presence", "rev", "duration", 1));
 
-            boonList.Add(new Boon("Battle Presence", "guard", "duration", 1));
+            boonList.Add(new Boon("Virtue of Resolve", "warrior", "duration", 1));//Virtue of Resolve (ID:17046)
             return boonList;
         }
 
@@ -305,6 +305,7 @@ namespace LuckParser.Models.ParseModels
             boonList.Add(new Boon("Always Angry", "warrior", "duration", 1));
             boonList.Add(new Boon("Full Counter", "warrior", "duration", 1));
             boonList.Add(new Boon("Attacker's Insight", "warrior", "intensity", 5));
+            boonList.Add(new Boon("Virtue of Resolve","warrior","duration",1));//Virtue of Resolve (ID:17046)
 
             //guardian
             //skills
