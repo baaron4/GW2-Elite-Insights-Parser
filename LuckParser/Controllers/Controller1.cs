@@ -1012,8 +1012,19 @@ namespace LuckParser.Controllers
         }
         public void setMechData() {
             List<MechanicLog> mList = new List<MechanicLog>();
+            CombatData c_data = getCombatData();
             foreach (Player p in p_list)
             {
+
+                List<Point> down = c_data.getStates(p.getInstid(), "CHANGE_DOWN");
+                foreach (Point pnt in down) {
+                    mech_data.AddItem(new MechanicLog((int)((pnt.X -boss_data.getFirstAware())/ 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
+                }
+                List<Point> dead = c_data.getStates(p.getInstid(), "CHANGE_DEAD");
+                foreach (Point pnt in dead)
+                {
+                    mech_data.AddItem(new MechanicLog((int)((pnt.X - boss_data.getFirstAware() )/ 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
+                }
                 List<DamageLog> dls = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data, mech_data);
                 //damage taken 
                 foreach (DamageLog dLog in dls)
@@ -1921,10 +1932,16 @@ namespace LuckParser.Controllers
                 }
 
                 sw.WriteLine("],");
-                sw.WriteLine(" mode: 'markers'," +
-                     "visible:'legendonly'," +
-                    "type:'scatter'," +
-                    "marker:{"+mech_data.GetPLoltyShape(mech)+"},"+
+                sw.WriteLine(" mode: 'markers',");
+                if (mech == "DEAD" || mech == "DOWN")
+                {
+                    //sw.WriteLine("visible:'legendonly',");
+                }
+                else {
+                    sw.WriteLine("visible:'legendonly',");
+                }
+                sw.WriteLine( "type:'scatter'," +
+                    "marker:{"+mech_data.GetPLoltyShape(mech)+ "size: 15" + "},"+
                     "text:[");
                 foreach (MechanicLog ml in filterdList)
                 {

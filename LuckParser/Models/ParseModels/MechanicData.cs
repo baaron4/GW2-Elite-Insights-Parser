@@ -23,12 +23,22 @@ namespace LuckParser.Models.ParseModels
         }
         public string GetPLoltyShape(string mechName) {
             switch (mechName) {
+                case "DOWN":
+                    return "symbol:'cross',color:'rgb(255,0,0)',";
+                case "DEAD":
+                    return "symbol:'x',color:'rgb(190,190,190)',";
                 case "Magic Pulse":
-                    return "symbol:'circle',color:'rgb(255,0,0)'";
+                    return "symbol:'circle',color:'rgb(255,0,0)',";
                 case "Unstable Magic Spike":
-                    return "symbol:'circle',color:'rgb(0,0,255)'";
+                    return "symbol:'circle',color:'rgb(0,0,255)',";
                 case "Distributed Magic":
-                    return "symbol:'circle',color:'rgb(0,128,0)'";
+                    return "symbol:'circle',color:'rgb(0,128,0)',";
+                case "Pylon Attunement: Red":
+                    return "symbol:'square',color:'rgb(255,0,0)',";
+                case "Pylon Attunement: Blue":
+                    return "symbol:'square',color:'rgb(0,0,255)',";
+                case "Pylon Attunement: Green":
+                    return "symbol:'square',color:'rgb(0,128,0)',";
                 default:
                     return "";
             }
