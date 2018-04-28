@@ -3450,38 +3450,48 @@ namespace LuckParser.Controllers
             sw.WriteLine("</tbody></table>");
         }
         public void CreateMechanicTable(StreamWriter sw) {
-            sw.Write(" <script> $(function () { $('#mech_table').DataTable({ \"order\": [[2, \"desc\"]]});});</script>" +
-      " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"mech_table\">" +
-          " <thead> <tr><th>Player</th> ");
             List<Mechanic> presMech = new List<Mechanic>();//mech_data.GetMechList().Where(x=>mech_data.GetMDataLogs().Contains())//mech_data.GetMDataLogs().Select(x => x.GetName()).Distinct().ToList();
-            foreach (Mechanic item in mech_data.GetMechList(boss_data.getID())) {
-                if (mech_data.GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill()) != null) {
+            foreach (Mechanic item in mech_data.GetMechList(boss_data.getID()))
+            {
+                if (mech_data.GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill()) != null)
+                {
                     presMech.Add(item);
                 }
             }
+            if (presMech.Count() > 0)
+            {
+                sw.Write(" <script> $(function () { $('#mech_table').DataTable({ \"order\": [[2, \"desc\"]]});});</script>" +
+          " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"mech_table\">" +
+              " <thead> <tr><th>Player</th> ");
 
-            foreach (String mechalt in presMech.Select(x=>x.GetAltName()).Distinct().ToList()) {
-                sw.WriteLine("<th>"+mechalt+"</th>");
-            }
-            sw.WriteLine("</tr></thead><tbody>");
-            foreach (Player p in p_list) {
 
-                sw.WriteLine("<tr><td>" + p.getCharacter() + "</td>");
-                foreach (String mechalt in presMech.Select(x => x.GetAltName()).Distinct().ToList()) {
-                    int count = 0;
-                    foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => mechalt == x.GetAltName())) {
-                        count += mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).Count();
-                    }
-
-                    sw.WriteLine("<td>" + count + "</td>");
+                foreach (String mechalt in presMech.Select(x => x.GetAltName()).Distinct().ToList())
+                {
+                    sw.WriteLine("<th>" + mechalt + "</th>");
                 }
-                sw.WriteLine(" </tr>");
+                sw.WriteLine("</tr></thead><tbody>");
+                foreach (Player p in p_list)
+                {
+
+                    sw.WriteLine("<tr><td>" + p.getCharacter() + "</td>");
+                    foreach (String mechalt in presMech.Select(x => x.GetAltName()).Distinct().ToList())
+                    {
+                        int count = 0;
+                        foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => mechalt == x.GetAltName()))
+                        {
+                            count += mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).Count();
+                        }
+
+                        sw.WriteLine("<td>" + count + "</td>");
+                    }
+                    sw.WriteLine(" </tr>");
+                }
+                sw.WriteLine(" </tbody></table>");
+                //  "<th>Sub</th><th></th><th>Name</th><th>Account</th> <th>Boss DPS</th><th>Power</th><th>Condi</th><th>All DPS</th><th>Power</th><th>Condi</th>" +
+                //"</th><th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
+                //"</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
+                //    " </tr> </thead><tbody>");
             }
-            sw.WriteLine(" </tbody></table>");
-            //  "<th>Sub</th><th></th><th>Name</th><th>Account</th> <th>Boss DPS</th><th>Power</th><th>Condi</th><th>All DPS</th><th>Power</th><th>Condi</th>" +
-            //"</th><th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
-            //"</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
-            //    " </tr> </thead><tbody>");
         }
         public void CreateEventList(StreamWriter sw) {
             sw.WriteLine("<ul class=\"list-group\">");
