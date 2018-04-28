@@ -161,7 +161,7 @@ namespace LuckParser.Models.ParseModels
 
             boonList.Add(new Boon("Assassin's Presence", "rev", "duration", 1));
 
-            boonList.Add(new Boon("Virtue of Resolve", "warrior", "duration", 1));//Virtue of Resolve (ID:17046)
+            boonList.Add(new Boon("Virtue of Resolve", 17046, "warrior", "duration", 1));//Virtue of Resolve (ID:17046)
             return boonList;
         }
 

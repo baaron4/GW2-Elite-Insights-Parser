@@ -1011,7 +1011,7 @@ namespace LuckParser.Controllers
             return rates;
         }
         public void setMechData() {
-            List<MechanicLog> mList = new List<MechanicLog>();
+            List<int> mIDList = new List<int>();
             CombatData c_data = getCombatData();
             foreach (Player p in p_list)
             {
@@ -1031,31 +1031,29 @@ namespace LuckParser.Controllers
                 {
                     string name = skill_data.getName(dLog.getID());
                     if (dLog.getResult().getID() < 3 ) {
-                        foreach (string mech in getMechData().GetMechanicNameList())
+                        foreach (Mechanic mech in getMechData().GetMechList(boss_data.getID()).Where(x=>x.GetMechType() == 3))
                         {
-                            if (name.Contains(mech))
+                            if (dLog.getID() == mech.GetSkill())
                             {
-                                mech_data.AddItem(new MechanicLog((int)(dLog.getTime() / 1000f), dLog.getID(), mech, dLog.getDamage(), p, mech_data.GetPLoltyShape(mech)));
+                                mech_data.AddItem(new MechanicLog((int)(dLog.getTime() / 1000f), dLog.getID(), mech.GetName(), dLog.getDamage(), p, mech.GetPlotly()));
                                 break;
                             }
                         }
                     }
                 }
-                //
+                //Gainign Buff mech
                 foreach (CombatItem c in combat_data.getCombatList().Where(x=>x.isBuffremove().getID() == 0 &&x.isStateChange().getID() == 0))
                 {
                     if (p.getInstid() == c.getDstInstid())
                     {
-                       
-
                         if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove().getID() == 0 && c.getResult().getID() < 3)
                         {
                             String name = skill_data.getName(c.getSkillID());
-                            foreach (string mech in getMechData().GetMechanicNameList())
+                            foreach (Mechanic mech in getMechData().GetMechList(boss_data.getID()).Where(x => x.GetMechType() == 0))
                             {
-                                if (name.Contains(mech))
+                                if (c.getSkillID() == mech.GetSkill())
                                 {
-                                    mech_data.AddItem(new MechanicLog((int)((c.getTime() - boss_data.getFirstAware())/1000f), c.getSkillID(), mech, c.getValue(), p, mech_data.GetPLoltyShape(mech)));
+                                    mech_data.AddItem(new MechanicLog((int)((c.getTime() - boss_data.getFirstAware())/1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
                                     break;
                                 }
                             }
@@ -1876,10 +1874,17 @@ namespace LuckParser.Controllers
                    "visible:'legendonly'," +
         " name: 'All Player Dps'");
             sw.WriteLine("},");
-            List<string> presMech = mech_data.GetMDataLogs().Select(x => x.GetName()).Distinct().ToList();
-            foreach (string mech in presMech)
+            List<Mechanic> presMech = mech_data.GetMechList(boss_data.getID());
+            List<string> distMech = presMech.Select(x => x.GetAltName()).Distinct().ToList();
+            foreach (string mechAltString in distMech)
             {
-                List<MechanicLog> filterdList = mech_data.GetMDataLogs().Where(x => x.GetName() == mech).ToList();
+                List<Mechanic> mechs = presMech.Where(x => x.GetAltName() == mechAltString).ToList();
+                List<MechanicLog> filterdList = new List<MechanicLog>();
+                foreach (Mechanic me in mechs) {
+                    filterdList.AddRange(mech_data.GetMDataLogs().Where(x => x.GetSkill() == me.GetSkill()).ToList());
+                }
+                Mechanic mech = mechs[0];
+                //List<MechanicLog> filterdList = mech_data.GetMDataLogs().Where(x => x.GetName() == mech.GetName()).ToList();
                 sw.WriteLine("{");
                 sw.WriteLine("y: [");
 
@@ -1933,7 +1938,7 @@ namespace LuckParser.Controllers
 
                 sw.WriteLine("],");
                 sw.WriteLine(" mode: 'markers',");
-                if (mech == "DEAD" || mech == "DOWN")
+                if (mech.GetName() == "DEAD" || mech.GetName() == "DOWN")
                 {
                     //sw.WriteLine("visible:'legendonly',");
                 }
@@ -1941,7 +1946,7 @@ namespace LuckParser.Controllers
                     sw.WriteLine("visible:'legendonly',");
                 }
                 sw.WriteLine( "type:'scatter'," +
-                    "marker:{"+mech_data.GetPLoltyShape(mech)+ "size: 15" + "},"+
+                    "marker:{"+mech.GetPlotly()+ "size: 15" + "},"+
                     "text:[");
                 foreach (MechanicLog ml in filterdList)
                 {
@@ -1959,68 +1964,173 @@ namespace LuckParser.Controllers
 
                 sw.WriteLine("]," +
                       
-            " name: '"+mech+"'");
+            " name: '"+mech.GetAltName()+"'");
                 sw.WriteLine("},");
             }
-           
-            //Boss Health
-            sw.WriteLine("{");
-            //Adding dps axis
-            sw.WriteLine("y: [");
+            //Downs and deaths
+            
 
-            float scaler = boss_data.getHealth() / maxDPS;
-            int hotCount = 0;
-            List<int[]> BossHOT = boss_data.getHealthOverTime();
-            foreach (int[] dp in BossHOT)
+            int mcount = 0;
+            
+            List<String> DnDStringList = new List<string>();
+            DnDStringList.Add("DOWN");
+            DnDStringList.Add("DEAD");
+            foreach (string state in DnDStringList)
             {
-                if (hotCount == BossHOT.Count - 1) {
-                    sw.Write("'" + (dp[1] / 10000f) * maxDPS + "'");
-                } else {
-                    sw.Write("'" + (dp[1] / 10000f) * maxDPS + "',");
-                }
-                hotCount++;
-             
-            }
-           
-            sw.WriteLine( "],");
-            //text axis is boss hp in %
-           sw.WriteLine( "text: [");
-
-            float scaler2 = boss_data.getHealth() / 100;
-            hotCount = 0;
-            foreach (int[] dp in BossHOT)
-            {
-                if (hotCount == BossHOT.Count - 1) {
-                    sw.Write("'" + dp[1] / 100f + "% HP'");
-                } else
+                List<MechanicLog> DnDList = mech_data.GetMDataLogs().Where(x => x.GetName() == state ).ToList();
+                sw.WriteLine("{");
+                sw.WriteLine("y: [");
+                foreach (MechanicLog ml in DnDList)
                 {
-                   sw.Write( "'" + dp[1] / 100f + "% HP',");
+                    int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => x[0] == ml.GetTime());
+                    if (mcount == DnDList.Count - 1)
+                    {
+                        if (check != null)
+                        {
+                            sw.Write("'" + check[1] + "'");
+                        }
+                        else
+                        {
+                            sw.Write("'" + 10000 + "'");
+                        }
+
+                    }
+                    else
+                    {
+                        if (check != null)
+                        {
+                            sw.Write("'" + check[1] + "',");
+                        }
+                        else
+                        {
+                            sw.Write("'" + 10000 + "',");
+                        }
+                    }
+
+                    mcount++;
                 }
-                hotCount++;
-               
+                sw.WriteLine("],");
+                //add time axis
+                sw.WriteLine("x: [");
+                tdalpcount = 0;
+                mcount = 0;
+                foreach (MechanicLog ml in DnDList)
+                {
+                    if (mcount == DnDList.Count - 1)
+                    {
+                        sw.Write("'" + ml.GetTime() + "'");
+                    }
+                    else
+                    {
+                        sw.Write("'" + ml.GetTime() + "',");
+                    }
+
+                    mcount++;
+                }
+
+                sw.WriteLine("],");
+                sw.WriteLine(" mode: 'markers',");
+                if (state == "DEAD" || state == "DOWN")
+                {
+                    //sw.WriteLine("visible:'legendonly',");
+                }
+                else
+                {
+                    sw.WriteLine("visible:'legendonly',");
+                }
+                sw.WriteLine("type:'scatter'," +
+                    "marker:{" + getMechData().GetPLoltyShape(state) + "size: 15" + "}," +
+                    "text:[");
+                foreach (MechanicLog ml in DnDList)
+                {
+                    if (mcount == DnDList.Count - 1)
+                    {
+                        sw.Write("'" + ml.GetPlayer().getCharacter() + "'");
+                    }
+                    else
+                    {
+                        sw.Write("'" + ml.GetPlayer().getCharacter() + "',");
+                    }
+
+                    mcount++;
+                }
+
+                sw.WriteLine("]," +
+
+            " name: '" + state + "'");
+                sw.WriteLine("},");
             }
-          
-            sw.WriteLine( "],");
-            //add time axis
-            sw.WriteLine("x: [");
-            hotCount = 0;
-            foreach (int[] dp in BossHOT)
+            if (maxDPS > 0)
             {
-                if (hotCount == BossHOT.Count - 1) {
-                    sw.Write("'" + (float)(dp[0] / 1000f) + "'");
-                } else {
-                    sw.Write("'" + (float)(dp[0] / 1000f) + "',");
+                //sw.WriteLine(",");
+                //Boss Health
+                sw.WriteLine("{");
+                //Adding dps axis
+                sw.WriteLine("y: [");
+
+                float scaler = boss_data.getHealth() / maxDPS;
+                int hotCount = 0;
+                List<int[]> BossHOT = boss_data.getHealthOverTime();
+                foreach (int[] dp in BossHOT)
+                {
+                    if (hotCount == BossHOT.Count - 1)
+                    {
+                        sw.Write("'" + (dp[1] / 10000f) * maxDPS + "'");
+                    }
+                    else {
+                        sw.Write("'" + (dp[1] / 10000f) * maxDPS + "',");
+                    }
+                    hotCount++;
+
                 }
-                
-                hotCount++;
+
+                sw.WriteLine("],");
+                //text axis is boss hp in %
+                sw.WriteLine("text: [");
+
+                float scaler2 = boss_data.getHealth() / 100;
+                hotCount = 0;
+                foreach (int[] dp in BossHOT)
+                {
+                    if (hotCount == BossHOT.Count - 1)
+                    {
+                        sw.Write("'" + dp[1] / 100f + "% HP'");
+                    }
+                    else
+                    {
+                        sw.Write("'" + dp[1] / 100f + "% HP',");
+                    }
+                    hotCount++;
+
+                }
+
+                sw.WriteLine("],");
+                //add time axis
+                sw.WriteLine("x: [");
+                hotCount = 0;
+                foreach (int[] dp in BossHOT)
+                {
+                    if (hotCount == BossHOT.Count - 1)
+                    {
+                        sw.Write("'" + (float)(dp[0] / 1000f) + "'");
+                    }
+                    else {
+                        sw.Write("'" + (float)(dp[0] / 1000f) + "',");
+                    }
+
+                    hotCount++;
+                }
+
+                sw.WriteLine("],");
+                sw.WriteLine(" mode: 'lines'," +
+                    " line: {shape: 'spline', dash: 'dashdot'}," +
+                    "hoverinfo: 'text'," +
+           " name: 'Boss health'");
+                sw.WriteLine("}");
             }
-           
-            sw.WriteLine("],");
-            sw.WriteLine(" mode: 'lines'," +
-                " line: {shape: 'spline', dash: 'dashdot'}," +
-                "hoverinfo: 'text'," +
-       " name: 'Boss health'");
-            sw.WriteLine("}");
+            else{
+                sw.WriteLine("{}");
+            }
             sw.WriteLine("];" +
 "var layout = {" +
 
@@ -3343,16 +3453,27 @@ namespace LuckParser.Controllers
             sw.Write(" <script> $(function () { $('#mech_table').DataTable({ \"order\": [[2, \"desc\"]]});});</script>" +
       " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"mech_table\">" +
           " <thead> <tr><th>Player</th> ");
-            List<string> presMech = mech_data.GetMDataLogs().Select(x => x.GetName()).Distinct().ToList();
-            foreach (string mech in presMech) {
-                sw.WriteLine("<th>"+mech+"</th>");
+            List<Mechanic> presMech = new List<Mechanic>();//mech_data.GetMechList().Where(x=>mech_data.GetMDataLogs().Contains())//mech_data.GetMDataLogs().Select(x => x.GetName()).Distinct().ToList();
+            foreach (Mechanic item in mech_data.GetMechList(boss_data.getID())) {
+                if (mech_data.GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill()) != null) {
+                    presMech.Add(item);
+                }
+            }
+
+            foreach (String mechalt in presMech.Select(x=>x.GetAltName()).Distinct().ToList()) {
+                sw.WriteLine("<th>"+mechalt+"</th>");
             }
             sw.WriteLine("</tr></thead><tbody>");
             foreach (Player p in p_list) {
 
                 sw.WriteLine("<tr><td>" + p.getCharacter() + "</td>");
-                foreach (string mech in presMech) {
-                    sw.WriteLine("<td>" + mech_data.GetMDataLogs().Where(x=>x.GetName() == mech && x.GetPlayer() == p).Count() + "</td>");
+                foreach (String mechalt in presMech.Select(x => x.GetAltName()).Distinct().ToList()) {
+                    int count = 0;
+                    foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => mechalt == x.GetAltName())) {
+                        count += mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).Count();
+                    }
+
+                    sw.WriteLine("<td>" + count + "</td>");
                 }
                 sw.WriteLine(" </tr>");
             }
@@ -3470,6 +3591,16 @@ namespace LuckParser.Controllers
   //  <span class="badge badge-primary badge-pill">1</span>
   //</li>
 sw.WriteLine("</ul>");
+        }
+        public void CreateSkillList(StreamWriter sw) {
+            sw.WriteLine("<ul class=\"list-group\">");
+            SkillData s_data = getSkillData();
+            foreach (SkillItem skill in s_data.getSkillList()) {
+                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                              skill.getID()  + " : " + skill.getName() + "subgroup" +
+                                             // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                             "</li>");
+            }
         }
         public void CreateCondiUptimeTable(StreamWriter sw,Player player)//Note player is just boss
         {
@@ -4161,7 +4292,8 @@ sw.WriteLine("</ul>");
             {
                 sw.WriteLine("<div class=\"tab-pane fade\" id=\"eventList\">" +
                           "<p>List of all events.</p>");
-                CreateEventList(sw);
+                // CreateEventList(sw);
+                CreateSkillList(sw);
                 sw.WriteLine("</div>");
             }
             //Html_playertabs
