@@ -15,6 +15,7 @@
 
 NOTE: .evtc files are currently located within "C:\Users\<USERNAME>\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs"
 ## Usage
+![program](https://user-images.githubusercontent.com/30677999/38950127-284f2d10-430a-11e8-937b-67a325a2a296.PNG)
 
 1. Drag and drop 1 or multiple .evtc files into program
 
@@ -24,5 +25,5 @@ NOTE: .evtc files are currently located within "C:\Users\<USERNAME>\Documents\Gu
 
 4.When done the .html will be located in the same location as the evtc as "samename_boss_result.html"
 
-
+![htmldisplay](https://user-images.githubusercontent.com/30677999/38950250-816c559e-430a-11e8-8159-1cf073a5fa44.PNG)
 
