@@ -133,7 +133,7 @@ namespace LuckParser.Models.ParseModels
             boonList.Add(new Boon("Might", 740, "main", "intensity", 25));
             boonList.Add(new Boon("Fury", 725, "main", "duration", 9));//or 3m and 30s
             boonList.Add(new Boon("Quickness", 1187, "main", "duration", 5));
-            boonList.Add(new Boon("Alacrity", "main", "duration", 9));
+            boonList.Add(new Boon("Alacrity", 30328 , "main", "duration", 9));
 
             boonList.Add(new Boon("Protection", 717, "main", "duration", 5));
             boonList.Add(new Boon("Regeneration", 718, "main", "duration", 5));
@@ -142,16 +142,16 @@ namespace LuckParser.Models.ParseModels
             boonList.Add(new Boon("Stability", 1122, "main", "intensity", 25));
             boonList.Add(new Boon("Swiftness", 719, "main", "duration", 9));
             boonList.Add(new Boon("Retaliation", 873, "main", "duration", 5));
-            boonList.Add(new Boon("Resistance", "main", "duration", 5));
+            boonList.Add(new Boon("Resistance", 26980 , "main", "duration", 5));
 
-            boonList.Add(new Boon("Spotter", "ranger", "duration", 1));
-            boonList.Add(new Boon("Spirit of Frost", "ranger", "duration", 1));
-            boonList.Add(new Boon("Sun Spirit", "ranger", "duration", 1));
-            boonList.Add(new Boon("Stone Spirit", "ranger", "duration", 1));
+            boonList.Add(new Boon("Spotter", 14055 , "ranger", "duration", 1));
+            boonList.Add(new Boon("Spirit of Frost", 12544 , "ranger", "duration", 1));
+            boonList.Add(new Boon("Sun Spirit", 12540, "ranger", "duration", 1));
+            boonList.Add(new Boon("Stone Spirit", 12547, "ranger", "duration", 1));
                    
-            boonList.Add(new Boon("Empower Allies", "warrior", "duration", 1));
-            boonList.Add(new Boon("Banner of Strength", "warrior", "duration", 1));
-            boonList.Add(new Boon("Banner of Discipline", "warrior", "duration", 1));
+            boonList.Add(new Boon("Empower Allies", 14222 , "warrior", "duration", 1));
+            boonList.Add(new Boon("Banner of Strength", 14417 , "warrior", "duration", 1));
+            boonList.Add(new Boon("Banner of Discipline", 14449 , "warrior", "duration", 1));
 
             boonList.Add(new Boon("Soothing Mist", "ele", "duration", 1));
 
@@ -161,7 +161,7 @@ namespace LuckParser.Models.ParseModels
 
             boonList.Add(new Boon("Assassin's Presence", "rev", "duration", 1));
 
-            boonList.Add(new Boon("Virtue of Resolve", 17046, "warrior", "duration", 1));//Virtue of Resolve (ID:17046)
+            boonList.Add(new Boon("Battle Presence", 17046, "warrior", "duration", 1));//Virtue of Resolve (ID:17046)
             return boonList;
         }
 
@@ -171,7 +171,7 @@ namespace LuckParser.Models.ParseModels
             boonList.Add(new Boon("Might",740, "main", "intensity", 25));
             boonList.Add(new Boon("Fury",725, "main", "duration", 9));//or 3m and 30s
             boonList.Add(new Boon("Quickness",1187, "main", "duration", 5));
-            boonList.Add(new Boon("Alacrity", "main", "duration", 9));
+            boonList.Add(new Boon("Alacrity", 30328, "main", "duration", 9));
 
             boonList.Add(new Boon("Protection",717, "main", "duration", 5));
             boonList.Add(new Boon("Regeneration",718, "main", "duration", 5));
@@ -180,20 +180,21 @@ namespace LuckParser.Models.ParseModels
             boonList.Add(new Boon("Stability",1122, "main", "duration", 9));
             boonList.Add(new Boon("Swiftness",719, "main", "duration", 9));
             boonList.Add(new Boon("Retaliation",873, "main", "duration", 9));
-            boonList.Add(new Boon("Resistance", "main", "duration", 5));
+            boonList.Add(new Boon("Resistance", 26980, "main", "duration", 5));
 
             return boonList;
         }
         public static List<Boon> getSharableProfList()
         {
             List<Boon> boonList = new List<Boon>();
-            boonList.Add(new Boon("Spotter","ranger","duration",1));
-            boonList.Add(new Boon("Spirit of Frost", "ranger", "duration", 1));
-            boonList.Add(new Boon("Sun Spirit", "ranger", "duration", 1));
-            boonList.Add(new Boon("Stone Spirit", "ranger", "duration", 1));
-            boonList.Add(new Boon("Empower Allies", "warrior", "duration", 1));
-            boonList.Add(new Boon("Banner of Strength", "warrior", "duration", 1));
-            boonList.Add(new Boon("Banner of Discipline", "warrior", "duration", 1));
+            boonList.Add(new Boon("Spotter", 14055, "ranger", "duration",1));
+            boonList.Add(new Boon("Spirit of Frost", 12544, "ranger", "duration", 1));
+            boonList.Add(new Boon("Sun Spirit", 12540, "ranger", "duration", 1));
+            boonList.Add(new Boon("Stone Spirit", 12547, "ranger", "duration", 1));
+            boonList.Add(new Boon("Empower Allies", 14222, "warrior", "duration", 1));
+            boonList.Add(new Boon("Banner of Strength", 14417, "warrior", "duration", 1));
+            boonList.Add(new Boon("Banner of Discipline", 14449, "warrior", "duration", 1));
+            boonList.Add(new Boon("Battle Presence", 17046, "warrior", "duration", 1));//Virtue of Resolve (ID:17046)
             boonList.Add(new Boon("Assassin's Presence", "rev", "duration", 1));
             boonList.Add(new Boon("Naturalistic Resonance", "rev", "duration", 1));
             boonList.Add(new Boon("Pinpoint Distribution", "engie", "duration", 1));
@@ -205,39 +206,39 @@ namespace LuckParser.Models.ParseModels
         public static List<Boon> getAllProfList()
         {
             List<Boon> boonList = new List<Boon>();
-            boonList.Add(new Boon("Stealth", "regular", "duration", 1));//13017
-            boonList.Add(new Boon("Revealed", "regular", "duration", 1));//13017
-            boonList.Add(new Boon("Superspeed", "regular", "duration", 1));//5974
-            boonList.Add(new Boon("Invulnerability", "regular", "duration", 1));
+            boonList.Add(new Boon("Stealth", 13017, "regular", "duration", 1));//13017
+            boonList.Add(new Boon("Revealed", 13017, "regular", "duration", 1));//13017
+            boonList.Add(new Boon("Superspeed", 5974, "regular", "duration", 1));//5974
+            boonList.Add(new Boon("Invulnerability", 801 , "regular", "duration", 1));
             boonList.Add(new Boon("Unblockable", "regular", "duration", 1));
             //Auras
-            boonList.Add(new Boon("Chaos Armor", "aura", "duration", 1));
-            boonList.Add(new Boon("Fire Shield", "aura", "duration", 1));//5677
-            boonList.Add(new Boon("Frost Aura", "aura", "duration", 1));//5579
-            boonList.Add(new Boon("Light Aura", "aura", "duration", 1));
-            boonList.Add(new Boon("Magnetic Aura", "aura", "duration", 1));//5684
-            boonList.Add(new Boon("Shocking Aura", "aura", "duration", 1));//5577
+            boonList.Add(new Boon("Chaos Armor", 10332 , "aura", "duration", 1));
+            boonList.Add(new Boon("Fire Shield", 5677, "aura", "duration", 1));//5677
+            boonList.Add(new Boon("Frost Aura", 5579, "aura", "duration", 1));//5579
+            boonList.Add(new Boon("Light Aura", 25518 , "aura", "duration", 1));
+            boonList.Add(new Boon("Magnetic Aura", 5684, "aura", "duration", 1));//5684
+            boonList.Add(new Boon("Shocking Aura", 5577,"aura", "duration", 1));//5577
 
             //Race sepecfic
-            boonList.Add(new Boon("Take Root", "race", "duration", 1));
+            boonList.Add(new Boon("Take Root",12459, "race", "duration", 1));
             boonList.Add(new Boon("Become the Bear", "race", "duration", 1));
             boonList.Add(new Boon("Become the Raven", "race", "duration", 1));
             boonList.Add(new Boon("Become the Snow Leopard", "race", "duration", 1));
             boonList.Add(new Boon("Become the Wolf", "race", "duration", 1));
-            boonList.Add(new Boon("Avatar of Melandru", "race", "duration", 1));//12368
+            boonList.Add(new Boon("Avatar of Melandru", 12368, "race", "duration", 1));//12368
             boonList.Add(new Boon("Power Suit", "race", "duration", 1));
-            boonList.Add(new Boon("Reaper of Grenth", "race", "duration", 1));//12366
+            boonList.Add(new Boon("Reaper of Grenth", 12366, "race", "duration", 1));//12366
             boonList.Add(new Boon("Charrooka", "race", "duration", 1));
 
             //Profession specefic effects
             //revenant
             //skills
-            boonList.Add(new Boon("Crystal Hibernation", "rev", "duration", 1));
-            boonList.Add(new Boon("Vengeful Hammers", "rev", "duration", 1));
-            boonList.Add(new Boon("Rite of the Great Dwarf", "rev", "duration", 1));
-            boonList.Add(new Boon("Embrace the Darkness", "rev", "duration", 1));
-            boonList.Add(new Boon("Enchanted Daggers", "rev", "intensity", 6));
-            boonList.Add(new Boon("Impossible Odds", "rev", "duration", 1));
+            boonList.Add(new Boon("Crystal Hibernation",28262, "rev", "duration", 1));
+            boonList.Add(new Boon("Vengeful Hammers",27273, "rev", "duration", 1));
+            boonList.Add(new Boon("Rite of the Great Dwarf",26596, "rev", "duration", 1));
+            boonList.Add(new Boon("Embrace the Darkness",28001, "rev", "duration", 1));
+            boonList.Add(new Boon("Enchanted Daggers", 28557,"rev", "intensity", 6));
+            boonList.Add(new Boon("Impossible Odds",27581, "rev", "duration", 1));
             //signets
             boonList.Add(new Boon("Facet of Light", "rev", "duration", 1));
             boonList.Add(new Boon("Infuse Light", "rev", "duration", 1));
@@ -261,7 +262,7 @@ namespace LuckParser.Models.ParseModels
             //traits
             boonList.Add(new Boon("Vicious Lacerations", "rev", "intensity", 5));
             boonList.Add(new Boon("Assassin's Presence", "rev", "duration", 1));
-            boonList.Add(new Boon("Expose Defenses", "rev", "duration", 1));
+            boonList.Add(new Boon("Expose Defenses",48894, "rev", "duration", 1));
             boonList.Add(new Boon("Invoking Harmony", "rev", "duration", 1));
             boonList.Add(new Boon("Selfless Amplification", "rev", "duration", 1));
             boonList.Add(new Boon("Hardening Persistence", "rev", "intensity", 8));
@@ -523,25 +524,7 @@ namespace LuckParser.Models.ParseModels
     
             return boonList;
         }
-        //public static String[] getArray()
-        //{
-        //    List<String> boonList = new List<String>();
-        //    foreach (Boon b in values())
-        //    {
-        //        boonList.add(b.getAbrv());
-        //    }
-        //    return boonList.toArray(new String[boonList.size()]);
-        //}
-
-        //public static List<String> getList()
-        //{
-        //    List<String> boonList = new ArrayList<String>();
-        //    for (Boon b : values())
-        //    {
-        //        boonList.add(b.getName());
-        //    }
-        //    return boonList;
-        //}
+       
 
         // Getters
         public String getName()

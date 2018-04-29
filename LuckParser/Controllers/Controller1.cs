@@ -799,7 +799,7 @@ namespace LuckParser.Controllers
             // Counts
             int swap = c_data.getStates(instid, "WEAPON_SWAP").Count();
             int down = c_data.getStates(instid, "CHANGE_DOWN").Count();
-            int dodge = c_data.getSkillCount(instid, 65001);//dodge = 65001
+            int dodge = c_data.getSkillCount(instid, 65001) + c_data.getBuffCount(instid, 40408);//dodge = 65001 mirage cloak =40408
             int ress = c_data.getSkillCount(instid, 1066); //Res = 1066
 
             // R.I.P
@@ -837,7 +837,7 @@ namespace LuckParser.Controllers
             int invulned = 0;
             int dmginvulned = 0;
             int dodge = c_data.getSkillCount(instid, 65001);//dodge = 65001
-            dodge += c_data.getSkillCount(instid, 40408);//mirage cloak add
+            dodge += c_data.getBuffCount(instid, 40408);//mirage cloak add
             int evades = 0;
             //int dmgevaded = 0;
             int dmgBarriar = 0;
@@ -3481,7 +3481,7 @@ namespace LuckParser.Controllers
 
                 foreach (String mechalt in presMech.Select(x => x.GetAltName()).Distinct().ToList())
                 {
-                    sw.WriteLine("<th>" + mechalt + "</th>");
+                    sw.WriteLine("<th>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + presMech.First(x=>x.GetAltName() == mechalt).GetName() + "\">" + mechalt + "</span>"  + "</th>");
                 }
                 sw.WriteLine("</tr></thead><tbody>");
                 foreach (Player p in p_list)

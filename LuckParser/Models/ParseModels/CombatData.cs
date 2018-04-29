@@ -49,7 +49,19 @@ namespace LuckParser.Models.ParseModels
             }
             return count;
         }
-
+        public int getBuffCount(int src_instid, int skill_id)
+        {
+            int count = 0;
+            foreach (CombatItem c in combat_list)
+            {
+                if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
+                {
+                    if (c.isBuff() == 1 && c.isBuffremove().getID() == 0 )
+                        count++;
+                }
+            }
+            return count;
+        }
         // Getters
         public List<CombatItem> getCombatList()
         {

@@ -177,19 +177,19 @@ namespace LuckParser.Models.ParseModels
                 globalMechList.Add(new Mechanic(47414, "Necrosis", 0, 19767, "symbol:'square',color:'rgb(0,150,0)',", "Necrosis Debuff"));
 
                 //dhuum
-                globalMechList.Add(new Mechanic(48172, "Hateful Ephemera", 0, 19450, "symbol:'square',color:'rgb(0,150,0)',", "Golem"));//Buff or dmg?
-                globalMechList.Add(new Mechanic(47646, "Arcing Affliction", 3, 19450, "symbol:'hexagon',color:'rgb(250,0,0)',", "Arcing Affliction DMG"));//Buff or dmg?
-                globalMechList.Add(new Mechanic(48121, "Arcing Affliction", 0, 19450, "symbol:'circle',color:'rgb(250,0,0)',", "Arcing Affliction"));//Buff or dmg?
+                globalMechList.Add(new Mechanic(48172, "Hateful Ephemera", 3, 19450, "symbol:'square',color:'rgb(0,150,0)',", "Golem"));//Buff or dmg?
+                globalMechList.Add(new Mechanic(47646, "Arcing Affliction", 0, 19450, "symbol:'hexagon',color:'rgb(250,0,0)',", "Arcing Affliction DMG"));//Buff or dmg?
+                globalMechList.Add(new Mechanic(48121, "Arcing Affliction", 3, 19450, "symbol:'circle',color:'rgb(250,0,0)',", "Arcing Affliction"));//Buff or dmg?
                 globalMechList.Add(new Mechanic(47476, "Residual Affliction", 0, 19450, "symbol:'square',color:'rgb(0,0,250)',", "Bomb CD"));
                 globalMechList.Add(new Mechanic(47335, "Soul Shackle", 0, 19450, "symbol:'diamond',color:'rgb(0,0,250)',", "Shackle"));//4 calls probably this one
 
                 globalMechList.Add(new Mechanic(48752, "Cull", 3, 19450, "symbol:'diamond',color:'rgb(0,150,0)',", "Crack"));
-                globalMechList.Add(new Mechanic(48760, "Putrid Bomb", 3, 19450, "symbol:'circle',color:'rgb(0,150,0)',", "Mark"));
-                globalMechList.Add(new Mechanic(48398, "Cataclysmic Cycle", 3, 19450, "symbol:'circle',color:'rgb(250,0,0)',", "Cone Aoe"));
+                globalMechList.Add(new Mechanic(48760, "Putrid Bomb", 3, 19450, "symbol:'circle',color:'rgb(0,75,0)',", "Mark"));
+                globalMechList.Add(new Mechanic(48398, "Cataclysmic Cycle", 3, 19450, "symbol:'triangle',color:'rgb(250,0,0)',", "Cone Aoe"));
                 globalMechList.Add(new Mechanic(48176, "Death Mark", 3, 19450, "symbol:'circle',color:'rgb(250,140,0)',", "Dip Aoe"));
-                globalMechList.Add(new Mechanic(48210, "Greater Death Mark", 3, 19450, "symbol:'circle',color:'rgb(250,140,0)',", "Big Dip Aoe"));
-                globalMechList.Add(new Mechanic(48281, "Mortal Coil", 0, 19450, "symbol:'circle',color:'rgb(0,150,0)',", "Green Orbs"));
-                globalMechList.Add(new Mechanic(46950, "Fractured Spirit", 0, 19450, "symbol:'square',color:'rgb(0,150,0)',", "Orbs CD"));
+                globalMechList.Add(new Mechanic(48210, "Greater Death Mark", 3, 19450, "symbol:'circle-open',color:'rgb(250,140,0)',", "Suck Dmg"));
+              //  globalMechList.Add(new Mechanic(48281, "Mortal Coil", 0, 19450, "symbol:'circle',color:'rgb(0,150,0)',", "Green Orbs"));
+                globalMechList.Add(new Mechanic(46950, "Fractured Spirit", 0, 19450, "symbol:'square',color:'rgb(0,150,0)',", "Green Orbs CD"));
 
                 
             }
