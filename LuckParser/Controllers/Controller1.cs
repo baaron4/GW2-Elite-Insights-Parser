@@ -1027,15 +1027,29 @@ namespace LuckParser.Controllers
                 }
                 List<DamageLog> dls = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data, mech_data);
                 //damage taken 
+                MechanicLog prevMech = null;
                 foreach (DamageLog dLog in dls)
                 {
                     string name = skill_data.getName(dLog.getID());
                     if (dLog.getResult().getID() < 3 ) {
+
                         foreach (Mechanic mech in getMechData().GetMechList(boss_data.getID()).Where(x=>x.GetMechType() == 3))
                         {
+                            //Prevent multi hit attacks form multi registering
+                            if (prevMech != null)
+                            {
+                                if (dLog.getID() == prevMech.GetSkill() && mech.GetName() == prevMech.GetName() && (int)(dLog.getTime() / 1000f) == prevMech.GetTime())
+                                {
+                                    break;
+                                }
+                            }
                             if (dLog.getID() == mech.GetSkill())
                             {
-                                mech_data.AddItem(new MechanicLog((int)(dLog.getTime() / 1000f), dLog.getID(), mech.GetName(), dLog.getDamage(), p, mech.GetPlotly()));
+                                
+                                
+                                 prevMech = new MechanicLog((int)(dLog.getTime() / 1000f), dLog.getID(), mech.GetName(), dLog.getDamage(), p, mech.GetPlotly());
+                                
+                                mech_data.AddItem(prevMech);
                                 break;
                             }
                         }
@@ -3479,6 +3493,7 @@ namespace LuckParser.Controllers
                         int count = 0;
                         foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => mechalt == x.GetAltName()))
                         {
+                            List<MechanicLog> test = mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).ToList();
                             count += mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).Count();
                         }
 
