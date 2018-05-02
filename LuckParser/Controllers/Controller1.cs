@@ -929,28 +929,30 @@ namespace LuckParser.Controllers
                     if (logs.Count() > 0)
                     {
 
-                        if (trgetPlayers.Count() == 0)
+                        if (trgetPlayers.Count() == 0)//personal uptime
                         {
                             if (boon.getType().Equals("duration"))
                             {
 
-                                rate = String.Format("{0:0}", Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data));//these 2 are problamatic
+                                rate = String.Format("{0:0}", Statistics.getBoonGenUptime(boon_object, logs, b_data,1)[0]);
+                                //rate = String.Format("{0:0}", Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data));//these 2 are problamatic
                             }
                             else if (boon.getType().Equals("intensity"))
                             {
-                                rate = String.Format("{0:0.0}", Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)));//issues
+                                rate = String.Format("{0:0}", Statistics.getBoonGenUptime(boon_object, logs, b_data, 1)[0]);
+                                //rate = String.Format("{0:0.0}", Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)));//issues
                             }
                         }
-                        else
+                        else//generation
                         {
                             if (boon.getType().Equals("duration"))
                             {
-                                double[] array = Statistics.getBoonUptime(boon_object, logs, b_data, trgetPlayers.Count());
+                                double[] array = Statistics.getBoonGenUptime(boon_object, logs, b_data, trgetPlayers.Count());
                                 rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + String.Format("{0:0} %", array[1] * 100) + "with overstack \">" + String.Format("{0:0}%", array[0] * 100) + "</span>";
                             }
                             else if (boon.getType().Equals("intensity"))
                             {
-                                double[] array = Statistics.getBoonUptime(boon_object, logs, b_data, trgetPlayers.Count());
+                                double[] array = Statistics.getBoonGenUptime(boon_object, logs, b_data, trgetPlayers.Count());
                                 rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + String.Format("{0:0.0}", array[1]) + "with overstack \">" + String.Format("{0:0.0}", array[0]) + "</span>";
                             }
                         }
@@ -2585,6 +2587,11 @@ namespace LuckParser.Controllers
                      "<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
 
                 sw.Write("<ul class=\"nav nav-tabs\"><li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + p.getInstid() + "\">" + p.getCharacter() + "</a></li>");
+                if (SnapSettings[10]) {
+                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#SimpleRot" + p.getInstid() + "\">Simple Rotation</a></li>");
+
+                }
+
                 //foreach pet loop here
                 List<int> minionIDlist = p.getMinionList(b_data, c_data.getCombatList(), a_data);
                 List<AgentItem> minionAgentList = new List<AgentItem>();
@@ -3028,11 +3035,89 @@ namespace LuckParser.Controllers
                     CreateDMGDistTable(sw,p,mobAgent);
                     sw.Write("</div>");
                 }
+                if (SnapSettings[10])
+                {
+                    sw.Write("<div class=\"tab-pane fade \" id=\"SimpleRot" + p.getInstid()  + "\">");
+                    CreateSimpleRotationTab(sw, p);
+                    sw.Write("</div>");
+                }
                 sw.Write("<div class=\"tab-pane fade \" id=\"incDmg" + p.getInstid() + "\">");
 
                 CreateDMGTakenDistTable(sw, p);
                 sw.WriteLine("</div></div></div>");
                 
+            }
+
+        }
+        public void CreateSimpleRotationTab(StreamWriter sw,Player p) {
+            if (SnapSettings[6])//Display rotation
+            {
+                SkillData s_data = getSkillData();
+                List<SkillItem> s_list = s_data.getSkillList();
+                CombatData c_data = getCombatData();
+                BossData b_data = getBossData();
+                List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
+                foreach (CastLog cl in casting)
+                {
+                    GW2APISkill apiskill = null;
+                    SkillItem skill = s_list.FirstOrDefault(x => x.getID() == cl.getID());
+                    if (skill != null)
+                    {
+                        apiskill = skill.GetGW2APISkill();
+                    }
+
+
+                    if (apiskill != null)
+                    {
+                        if (apiskill.slot != "Weapon_1") { 
+                        sw.WriteLine("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                        }
+                    }
+                    else
+                    {
+                        string skillName = "";
+                        string skillLink = "";
+
+                        if (cl.getID() == -2)
+                        {//wepswap
+                            skillName = "Weapon Swap";
+                            skillLink = GetLink("Swap");
+                            sw.WriteLine("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                            sw.WriteLine("<br>");
+                            continue;
+                        }
+                        else if (cl.getID() == 1066)
+                        {
+                            skillName = "Resurrect";
+                            skillLink = GetLink("Downs");
+                            sw.WriteLine("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+
+                        }
+                        else
+                        if (cl.getID() == 1175)
+                        {
+                            skillName = "Bandage";
+                            skillLink = GetLink("Bandage");
+                            sw.WriteLine("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+
+                        }
+                        else
+                        if (cl.getID() == 65001)
+                        {
+                            skillName = "Dodge";
+                            skillLink = GetLink("Dodge");
+                            sw.WriteLine("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+
+                        }
+                        else if(skill != null){
+                            
+                            sw.WriteLine("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + GetLink("Blank") + "\" data-toggle=\"tooltip\" title= \"" + skill.getName() + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+
+                        }
+
+                    }
+
+                }
             }
 
         }
@@ -4129,6 +4214,8 @@ sw.WriteLine("</ul>");
                      "div.dataTables_wrapper { width: 1100px; margin: 0 auto; }" +
                      "th.dt-left, td.dt-left { text-align: left; }" +
                      "table.dataTable.display tbody tr.condi {background-color: #ff6666;}"+
+                     ".rot-skill{width: 24px;height: 24px;display: inline - block;}"+
+                     ".rot-crop{width : 20px;height: 20px; display: inline-block}"+
              "</style>" +
                      "<script>$.extend( $.fn.dataTable.defaults, {searching: false, ordering: true,paging: false,dom:\"t\"} );</script>" +
                   "</head>");
@@ -4501,7 +4588,12 @@ sw.WriteLine("</ul>");
                     return "https://wiki.guildwars2.com/images/e/eb/Ready.png";
                 case "Swap":
                     return "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
-
+                case "Blank":
+                    return "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png";
+                case "Dodge":
+                    return "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
+                case "Bandage":
+                    return "https://render.guildwars2.com/file/D2D7D11874060D68760BFD519CFC77B6DF14981F/102928.png";
 
                 case "Bleeding":
                     return "https://wiki.guildwars2.com/images/thumb/3/33/Bleeding.png/20px-Bleeding.png";

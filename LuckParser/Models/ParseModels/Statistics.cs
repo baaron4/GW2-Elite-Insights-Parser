@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
     public class Statistics
     {
 
-        public static double[] getBoonUptime(AbstractBoon boon, List<BoonLog> boon_logs, BossData b_data,int players) {
+        public static double[] getBoonGenUptime(AbstractBoon boon, List<BoonLog> boon_logs, BossData b_data,int players) {
             double fight_duration = b_data.getLastAware() - b_data.getFirstAware();
             double boonDur = 0.00;
             double os = 0.00;

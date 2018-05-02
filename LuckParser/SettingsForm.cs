@@ -131,5 +131,10 @@ namespace LuckParser
         {
             Properties.Settings.Default.BossSummary = checkBossSummary.Checked;
         }
+
+        private void SimpleRotCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SimpleRotation = SimpleRotCheck.Checked;
+        }
     }
 }

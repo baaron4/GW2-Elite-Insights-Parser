@@ -51,6 +51,7 @@
             this.checkBox9 = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.checkBossSummary = new System.Windows.Forms.CheckBox();
+            this.SimpleRotCheck = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -263,7 +264,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(24, 326);
+            this.label8.Location = new System.Drawing.Point(24, 364);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(30, 13);
             this.label8.TabIndex = 19;
@@ -274,7 +275,7 @@
             this.checkBossSummary.AutoSize = true;
             this.checkBossSummary.Checked = true;
             this.checkBossSummary.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBossSummary.Location = new System.Drawing.Point(43, 351);
+            this.checkBossSummary.Location = new System.Drawing.Point(43, 389);
             this.checkBossSummary.Name = "checkBossSummary";
             this.checkBossSummary.Size = new System.Drawing.Size(125, 17);
             this.checkBossSummary.TabIndex = 20;
@@ -282,11 +283,25 @@
             this.checkBossSummary.UseVisualStyleBackColor = true;
             this.checkBossSummary.CheckedChanged += new System.EventHandler(this.checkBossSummary_CheckedChanged);
             // 
+            // SimpleRotCheck
+            // 
+            this.SimpleRotCheck.AutoSize = true;
+            this.SimpleRotCheck.Checked = true;
+            this.SimpleRotCheck.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.SimpleRotCheck.Location = new System.Drawing.Point(43, 318);
+            this.SimpleRotCheck.Name = "SimpleRotCheck";
+            this.SimpleRotCheck.Size = new System.Drawing.Size(152, 17);
+            this.SimpleRotCheck.TabIndex = 21;
+            this.SimpleRotCheck.Text = "Show Simple Rotation Tab";
+            this.SimpleRotCheck.UseVisualStyleBackColor = true;
+            this.SimpleRotCheck.CheckedChanged += new System.EventHandler(this.SimpleRotCheck_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(548, 597);
+            this.Controls.Add(this.SimpleRotCheck);
             this.Controls.Add(this.checkBossSummary);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.checkBox9);
@@ -342,5 +357,6 @@
         private System.Windows.Forms.CheckBox checkBox9;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.CheckBox checkBossSummary;
+        private System.Windows.Forms.CheckBox SimpleRotCheck;
     }
 }

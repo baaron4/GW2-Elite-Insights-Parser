@@ -166,5 +166,17 @@ namespace LuckParser.Properties {
                 this["BossSummary"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SimpleRotation {
+            get {
+                return ((bool)(this["SimpleRotation"]));
+            }
+            set {
+                this["SimpleRotation"] = value;
+            }
+        }
     }
 }

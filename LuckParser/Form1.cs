@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using LuckParser.Controllers;
 
 
+
 namespace LuckParser
 {
     public partial class Form1 : Form
@@ -62,6 +63,8 @@ namespace LuckParser
             {
                 // Everything completed normally.
                 lblStatus.Text = "Task Completed";
+                // Flash window until it recieves focus
+                FlashWindow.Flash(this);
             }
 
             //Change the status of the buttons on the UI accordingly
@@ -117,7 +120,8 @@ namespace LuckParser
                 Properties.Settings.Default.PlayerRot,
                 Properties.Settings.Default.PlayerRotIcons,
                 Properties.Settings.Default.EventList,
-                Properties.Settings.Default.BossSummary
+                Properties.Settings.Default.BossSummary,
+                Properties.Settings.Default.SimpleRotation
             };
                 for (int i = 0; i < listView1.Items.Count; i++)
                 {

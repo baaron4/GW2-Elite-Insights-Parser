@@ -9,12 +9,14 @@ namespace LuckParser.Models.ParseModels
     {
         // Fields
         private String name;
+        private int boonID;
         private List<BoonLog> b_log;
         
         // Constructors
-        public BoonMap(String name, List<BoonLog> b_log)
+        public BoonMap(String name,int boonID, List<BoonLog> b_log)
         {
             this.name = name;
+            this.boonID = boonID;
             this.b_log = b_log;
         }
 
@@ -25,6 +27,9 @@ namespace LuckParser.Models.ParseModels
         public String getName()
         {
             return name;
+        }
+        public int getID() {
+            return boonID;
         }
 
         public List<BoonLog> getBoonLog()

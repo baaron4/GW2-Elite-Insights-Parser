@@ -148,7 +148,9 @@ namespace LuckParser.Models.ParseModels
             boonList.Add(new Boon("Spirit of Frost", 12544 , "ranger", "duration", 1));
             boonList.Add(new Boon("Sun Spirit", 12540, "ranger", "duration", 1));
             boonList.Add(new Boon("Stone Spirit", 12547, "ranger", "duration", 1));
-                   
+            boonList.Add(new Boon("Storm Spirit", "ranger", "duration", 1));
+            boonList.Add(new Boon("Glyph of Empowerment", "ranger", "duration", 1));
+
             boonList.Add(new Boon("Empower Allies", 14222 , "warrior", "duration", 1));
             boonList.Add(new Boon("Banner of Strength", 14417 , "warrior", "duration", 1));
             boonList.Add(new Boon("Banner of Discipline", 14449 , "warrior", "duration", 1));
@@ -191,6 +193,8 @@ namespace LuckParser.Models.ParseModels
             boonList.Add(new Boon("Spirit of Frost", 12544, "ranger", "duration", 1));
             boonList.Add(new Boon("Sun Spirit", 12540, "ranger", "duration", 1));
             boonList.Add(new Boon("Stone Spirit", 12547, "ranger", "duration", 1));
+            boonList.Add(new Boon("Storm Spirit", "ranger", "duration", 1));
+            boonList.Add(new Boon("Glyph of Empowerment", "ranger", "duration", 1));
             boonList.Add(new Boon("Empower Allies", 14222, "warrior", "duration", 1));
             boonList.Add(new Boon("Banner of Strength", 14417, "warrior", "duration", 1));
             boonList.Add(new Boon("Banner of Discipline", 14449, "warrior", "duration", 1));
