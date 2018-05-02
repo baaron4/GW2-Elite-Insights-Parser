@@ -3133,7 +3133,7 @@ namespace LuckParser.Controllers
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
             sw.WriteLine(" <script> $(function () { $('#dist_table_"+p.getInstid()+ "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>"+
                 " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_"+p.getInstid()+"\">" +
-           " <thead> <tr> <th>Skill</th><th>Casts</th><th>Damage</th><th>Percent</th><th>Hits</th> <th>Min</th><th>Avg</th><th>Max</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
+           " <thead> <tr> <th>Skill</th><th></th><th>Damage</th> <th>Min</th><th>Avg</th><th>Max</th><th>Casts</th><th>Hits</th><th>Hits per Cast</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
            "<th>Wasted</th><th>Saved</th> </tr> </thead><tbody>");
             foreach (int id in casting.Select(x=>x.getID()).Distinct()) {//foreach casted skill
                 SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
@@ -3163,6 +3163,7 @@ namespace LuckParser.Controllers
                 int crit = 0;
                 int flank = 0;
                 int glance = 0;
+                double hpcast = 0;
                 foreach (DamageLog dl in damageLogs.Where(x=>x.getID() == id)) {
                     int curdmg = dl.getDamage();
                     totaldamage += curdmg;
@@ -3174,35 +3175,38 @@ namespace LuckParser.Controllers
                     if (dl.isFlanking() == 1) { flank++; }
                 }
                 avgdamage = (int)((double)totaldamage / (double)hits);
+                if (casts > 0) { hpcast = Math.Round((double)hits / (double)casts, 2); }
 
                 if (skill != null) {
                     if (totaldamage != 0 && skill.GetGW2APISkill() != null)
                     {
                         sw.WriteLine("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
-                            "<td>" + casts + "</td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                             "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                             "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" + "<td>" + totaldamage + "</td>" + 
+                            "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                             "<td>" + casts + "</td>" + "<td>" + hits + "</td>" + "<td>" + hpcast + "</td>" +
                               "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" + "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
                                "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved,2) + "s</td></tr>");
                     }
                     else if (totaldamage != 0) {
                         sw.WriteLine("<tr><td align=\"left\">" + skill.getName() + "</td>" +
-                            "<td>" + casts + "</td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                             "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                           "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" + "<td>" + totaldamage + "</td>" + 
+                             "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                              "<td>" + casts + "</td>" + "<td>" + hits + "</td>" + "<td>" + hpcast + "</td>" +
                               "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" + "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
                                "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
                     } else if (skill.GetGW2APISkill() != null)
                     {
                         sw.WriteLine("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
-                           "<td>" + casts + "</td>" + "<td></td>" + "<td></td>" +
+                            "<td></td>" + "<td></td>" +
                             "<td>"  + "</td>" + "<td>"  + "</td>" + "<td>"  + "</td>" + "<td>"  + "</td>" +
-                             "<td></td>" + "<td></td>" +
+                            "<td>" + casts + "</td>" + "<td></td>" + "<td></td>" + "<td></td>" +
                               "<td></td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
                     }
                     else {
                         sw.WriteLine("<tr><td align=\"left\">" + skill.getName() + "</td>" +
-                          "<td>" + casts + "</td>" + "<td></td>" + "<td></td>" +
+                          "<td></td>" + "<td></td>" +
                            "<td>"  + "</td>" + "<td>"  + "</td>" + "<td>"  + "</td>" + "<td>"  + "</td>" +
-                            "<td></td>" + "<td></td>" +
+                             "<td>" + casts + "</td>" + "<td></td>" + "<td></td>" + "<td></td>" +
                              "<td></td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
                     }
                 }
@@ -3234,9 +3238,9 @@ namespace LuckParser.Controllers
                     if (totaldamage != 0)
                     {
                         sw.WriteLine("<tr class=\"condi\"><td align=\"left\"><img src=" +GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
-                            "<td></td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                             "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
-                              "<td></td>" + "<td></td>" +
+                            "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" + "<td>" + totaldamage + "</td>" +
+                            "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                                "<td></td>" + "<td>" + hits + "</td>" + "<td></td>" + "<td></td>" + "<td></td>" +
                                "<td></td>" + "<td></td>" + "<td></td></tr>");
                     }
             }
@@ -3276,6 +3280,7 @@ namespace LuckParser.Controllers
                 int crit = 0;
                 int flank = 0;
                 int glance = 0;
+                double hpcast = 0;
                 foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
                 {
                     int curdmg = dl.getDamage();
@@ -3288,37 +3293,41 @@ namespace LuckParser.Controllers
                     if (dl.isFlanking() == 1) { flank++; }
                 }
                 avgdamage = (int)((double)totaldamage / (double)hits);
-
+                if (casts > 0) { hpcast = Math.Round((double)hits / (double)casts,2); }
                 if (skill != null)
                 {
                     if (totaldamage != 0 && skill.GetGW2APISkill() != null)
                     {
                         sw.WriteLine("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
-                            "<td>" + casts + "</td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                             "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                            "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" + "<td>" + totaldamage + "</td>" +
+                            "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                             "<td>" + casts + "</td>" + "<td>" + hits + "</td>" + "<td>"  + hpcast + "</td>" +
                               "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" + "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
                                "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
                     }
                     else if (totaldamage != 0)
                     {
                         sw.WriteLine("<tr><td align=\"left\">" + skill.getName() + "</td>" +
-                            "<td>" + casts + "</td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                             "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                            "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" + "<td>" + totaldamage + "</td>" + 
+                             "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
+                               "<td>" + casts + "</td>" + "<td>" + hits + "</td>" + "<td>"   + "</td>" +
                               "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" + "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
                                "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
                     }
                     else if (skill.GetGW2APISkill() != null)
                     {
                         sw.WriteLine("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
-                           "<td>" + casts + "</td>" + "<td></td>" + "<td></td>" +
-                            "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
+                          "<td></td>" + "<td></td>" +
+                          "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
+                            "<td>" + casts + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
                              "<td></td>" + "<td></td>" +
                               "<td></td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
                     }
                     else {
                         sw.WriteLine("<tr><td align=\"left\">" + skill.getName() + "</td>" +
-                          "<td>" + casts + "</td>" + "<td></td>" + "<td></td>" +
-                           "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
+                          "<td></td>" + "<td></td>" +
+                            "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
+                            "<td>" + casts + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
                             "<td></td>" + "<td></td>" +
                              "<td></td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
                     }
