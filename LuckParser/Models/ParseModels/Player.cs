@@ -146,7 +146,7 @@ namespace LuckParser.Models.ParseModels
 
             foreach (CombatItem c in combatList)
             {
-
+                
                 LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
                 int time = c.getTime() - time_start;
                 if (instid == c.getSrcInstid() && state.getEnum() == "NORMAL" && time > 0 && time < fight_duration/*|| instid == c.getSrcMasterInstid()*/)//selecting player or minion as caster
@@ -162,12 +162,13 @@ namespace LuckParser.Models.ParseModels
                                     everywhere++;
                                         if (c.isBuffremove().getID() == 0 && c.isBuff() > 0 && c.getBuffDmg() == 0 && c.getValue() > 0) {//Buff application
                                             huh++;
-                                            String skill_name = skillData.getName(c.getSkillID());
+                                            //String skill_name = skillData.getName(c.getSkillID());
                                             int count = 0;
                                            
                                             foreach (BoonMap bm in boonGen.ToList())
                                             {
-                                                if (skill_name.Contains(bm.getName()))
+                                                //if (skill_name.Contains(bm.getName()))
+                                                if (bm.getID() == c.getSkillID())
                                                 {
                                                         List<BoonLog> loglist = bm.getBoonLog();
                                                         loglist.Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
@@ -417,15 +418,9 @@ namespace LuckParser.Models.ParseModels
         {
 
             // Initialize Boon Map with every Boon
-            foreach (Boon boon in Boon.getMainList())
+            foreach (Boon boon in Boon.getList())
             {
-                BoonMap map = new BoonMap(boon.getName(), boon.getID(),new List<BoonLog>());
-                boon_map.Add(map);
-               // boon_map.put(boon.getName(), new ArrayList<BoonLog>());
-            }
-            foreach (Boon boon in Boon.getAllProfList())
-            {
-                BoonMap map = new BoonMap(boon.getName(),boon.getID(), new List<BoonLog>());
+                BoonMap map = new BoonMap(boon.getName(), boon.getID(), new List<BoonLog>());
                 boon_map.Add(map);
                 // boon_map.put(boon.getName(), new ArrayList<BoonLog>());
             }
@@ -437,7 +432,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (instid == c.getDstInstid())
                 {
-                    //String skill_name = skillData.getName(c.getSkillID());
+                    String skill_name = skillData.getName(c.getSkillID());
                    
                     if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove().getID() == 0)
                     {
