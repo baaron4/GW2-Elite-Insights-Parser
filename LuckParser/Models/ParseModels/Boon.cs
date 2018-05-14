@@ -149,10 +149,12 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Retaliation", 873, "main", "duration", 5),
                 new Boon("Resistance", 26980, "main", "duration", 5),
                 // ranger
+                // The generation and the uptime does not use the same id for spirits
                 new Boon("Spotter", 14055, "ranger", "duration", 1),
-                new Boon("Frost Spirit", 12544, "ranger", "duration", 1),
-                new Boon("Sun Spirit", 12540, "ranger", "duration", 1),
-                new Boon("Stone Spirit", 12547, "ranger", "duration", 1),
+                new Boon("Water Spirit", 50386, "ranger", "duration", 1),
+                new Boon("Frost Spirit", 50421, "ranger", "duration", 1),
+                new Boon("Sun Spirit", 50413, "ranger", "duration", 1),
+                new Boon("Stone Spirit", 50415, "ranger", "duration", 1),
                 new Boon("Storm Spirit", 12549, "ranger", "duration", 1),
                 new Boon("Glyph of Empowerment", 31803, "ranger", "duration", 1),
                 // warrior
@@ -160,15 +162,15 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Banner of Strength", 14417, "warrior", "duration", 1),
                 new Boon("Banner of Discipline", 14449, "warrior", "duration", 1),
                 // el
-                new Boon("Soothing Mist", 5587, "ele", "duration", 1),
+                //new Boon("Soothing Mist", 5587, "ele", "duration", 1),
                 // engie
                 new Boon("Pinpoint Distribution", 38333, "engie", "duration", 1),
                 // necro
-                new Boon("Vampiric Aura", 30285, "necro", "duration", 1),
+                //new Boon("Vampiric Aura", 30285, "necro", "duration", 1),
                 // rev
                 new Boon("Assassin's Presence", 26854, "rev", "duration", 1),
                 // guard
-                new Boon("Battle Presence", 17046, "guard", "duration", 1)//Virtue of Resolve (ID:17046)
+                //new Boon("Battle Presence", 17046, "guard", "duration", 1)//Virtue of Resolve (ID:17046)
             };
             return boonList;
         }
@@ -199,9 +201,11 @@ namespace LuckParser.Models.ParseModels
             List<Boon> boonList = new List<Boon>
             {
                 new Boon("Spotter", 14055, "ranger", "duration", 1),
-                new Boon("Frost Spirit", 12544, "ranger", "duration", 1),
-                new Boon("Sun Spirit", 12540, "ranger", "duration", 1),
-                new Boon("Stone Spirit", 12547, "ranger", "duration", 1),
+                // The generation and the uptime does not use the same id for spirits
+                new Boon("Water Spirit", 50386, "ranger", "duration", 1),
+                new Boon("Frost Spirit", 50421, "ranger", "duration", 1),
+                new Boon("Sun Spirit", 50413, "ranger", "duration", 1),
+                new Boon("Stone Spirit", 50415, "ranger", "duration", 1),
                 new Boon("Storm Spirit", 12549, "ranger", "duration", 1),
                 new Boon("Glyph of Empowerment", 31803, "ranger", "duration", 1),
                 new Boon("Empower Allies", 14222, "warrior", "duration", 1),
@@ -389,9 +393,12 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Signet of the Wild", "ranger", "duration", 1),
                 //Summons
                 //Need reloook
-                new Boon("Frost Spirit", 12544, "ranger", "duration", 1),
-                new Boon("Sun Spirit", 12540, "ranger", "duration", 1),
-                new Boon("Stone Spirit", 12547, "ranger", "duration", 1),
+                // The generation and the uptime does not use the same id for spirits
+                // It works on pre 8 may logs, something must have changed with arc dps?
+                new Boon("Water Spirit", 50386, "ranger", "duration", 1),
+                new Boon("Frost Spirit", 50421, "ranger", "duration", 1),
+                new Boon("Sun Spirit", 50413, "ranger", "duration", 1),
+                new Boon("Stone Spirit", 50415, "ranger", "duration", 1),
                 new Boon("Storm Spirit", 12549, "ranger", "duration", 1),
                 //skills
                 new Boon("Attack of Opportunity", "ranger", "duration", 1),
