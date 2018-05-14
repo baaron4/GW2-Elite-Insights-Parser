@@ -934,13 +934,13 @@ namespace LuckParser.Controllers
                             if (boon.getType().Equals("duration"))
                             {
 
-                                rate = String.Format("{0:0}", Statistics.getBoonGenUptime(boon_object, logs, b_data,1)[0]);
-                                //rate = String.Format("{0:0}", Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data));//these 2 are problamatic
+                                //rate = String.Format("{0:0}", Statistics.getBoonGenUptime(boon_object, logs, b_data,1)[0]); // REGRESSION
+                                rate = String.Format("{0:0}", Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data));//these 2 are problamatic
                             }
                             else if (boon.getType().Equals("intensity"))
                             {
-                                rate = String.Format("{0:0}", Statistics.getBoonGenUptime(boon_object, logs, b_data, 1)[0]);
-                                //rate = String.Format("{0:0.0}", Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)));//issues
+                                //rate = String.Format("{0:0}", Statistics.getBoonGenUptime(boon_object, logs, b_data, 1)[0]); // REGRESSION
+                                rate = String.Format("{0:0.0}", Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)));//issues
                             }
                         }
                         else//generation
@@ -2212,8 +2212,8 @@ namespace LuckParser.Controllers
                 sw.WriteLine("<td>Group " + groupNum + "</td>");
                 for (int i = 1; i < groupList[0].Count; i++)
                 {// string boonStr in groupList) {
-                    if (i == 1)
-                    {//might
+                    if (i == 1 || i == 9) // might and stab
+                    {
                         sw.WriteLine("<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 2) + "</td>");
                     }
                     else
@@ -2230,8 +2230,8 @@ namespace LuckParser.Controllers
             sw.WriteLine("<td>Averages</td>");
             for (int i = 1; i < footList[0].Count; i++)
             {// string boonStr in groupList) {
-                if (i == 1)
-                {//might
+                if (i == 1 || i == 9) // might and stab
+                {
                     sw.WriteLine("<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>");
                 }
                 else
@@ -4648,7 +4648,7 @@ sw.WriteLine("</ul>");
                 case "Glyph of Empowerment": return "https://wiki.guildwars2.com/images/thumb/f/f0/Glyph_of_Empowerment.png/33px-Glyph_of_Empowerment.png";
                 case "Grace of the Land": return "https://wiki.guildwars2.com/images/thumb/4/45/Grace_of_the_Land.png/25px-Grace_of_the_Land.png";
                 case "Sun Spirit": return "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png";
-                case "Spirit of Frost": return "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png";
+                case "Frost Spirit": return "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png";
                 case "Banner of Strength": return "https://wiki.guildwars2.com/images/thumb/e/e1/Banner_of_Strength.png/33px-Banner_of_Strength.png";
                 case "Banner of Discipline": return "https://wiki.guildwars2.com/images/thumb/5/5f/Banner_of_Discipline.png/33px-Banner_of_Discipline.png";
                 case "Spotter": return "https://wiki.guildwars2.com/images/b/b0/Spotter.png";

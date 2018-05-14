@@ -58,21 +58,23 @@ namespace LuckParser.Models.ParseModels
         }
 
         public static List<int> getCondiList() {
-            List<int> condiList = new List<int>();
-            condiList.Add(736);//Bleeding
-            condiList.Add(737);//Burning
-            condiList.Add(861);//Confusion
-            condiList.Add(723);//Poisin
-            condiList.Add(19426);//Torment
-            condiList.Add(720);//Blind
-            condiList.Add(722);//Chilled
-            condiList.Add(721);//Cripplied
-            condiList.Add(791);//Fear
-            condiList.Add(727);//Immob
-            condiList.Add(26766);//Slow
-            condiList.Add(27705);//Taunt
-            condiList.Add(742);//Weakness
-            condiList.Add(738);//Vuln
+            List<int> condiList = new List<int>
+            {
+                736,//Bleeding
+                737,//Burning
+                861,//Confusion
+                723,//Poisin
+                19426,//Torment
+                720,//Blind
+                722,//Chilled
+                721,//Cripplied
+                791,//Fear
+                727,//Immob
+                26766,//Slow
+                27705,//Taunt
+                742,//Weakness
+                738//Vuln
+            };
             return condiList;
         }
         public static string getCondiName(int id) {
@@ -112,420 +114,430 @@ namespace LuckParser.Models.ParseModels
             }
         }
         public static List<Boon> getCondiBoonList() {
-            List<Boon> boonList = new List<Boon>();
-            boonList.Add(new Boon("Bleeding", 736, "main", "intensity", 1500));
-            boonList.Add(new Boon("Burning", 737, "main", "intensity", 1500));
-            boonList.Add(new Boon("Confusion", 861, "main", "intensity", 1500));
-            boonList.Add(new Boon("Poison", 723, "main", "intensity", 1500));
-            boonList.Add(new Boon("Torment", 19426, "main", "intensity", 1500));
-            boonList.Add(new Boon("Blinded", 737, "main", "duration", 9));
-            boonList.Add(new Boon("Chilled", 722, "main", "duration", 5));
-            boonList.Add(new Boon("Crippled", 721, "main", "duration", 9));
-            boonList.Add(new Boon("Fear", 791, "main", "duration", 9));
-            boonList.Add(new Boon("Immobile", 727, "main", "duration", 3));
-            boonList.Add(new Boon("Slow", 26766, "main", "duration", 9));
-            boonList.Add(new Boon("Weakness", 737, "main", "duration", 5));
-            boonList.Add(new Boon("Vulnerability", 738, "main", "intensity", 25));
+            List<Boon> boonList = new List<Boon>
+            {
+                new Boon("Bleeding", 736, "main", "intensity", 1500),
+                new Boon("Burning", 737, "main", "intensity", 1500),
+                new Boon("Confusion", 861, "main", "intensity", 1500),
+                new Boon("Poison", 723, "main", "intensity", 1500),
+                new Boon("Torment", 19426, "main", "intensity", 1500),
+                new Boon("Blinded", 737, "main", "duration", 9),
+                new Boon("Chilled", 722, "main", "duration", 5),
+                new Boon("Crippled", 721, "main", "duration", 9),
+                new Boon("Fear", 791, "main", "duration", 9),
+                new Boon("Immobile", 727, "main", "duration", 3),
+                new Boon("Slow", 26766, "main", "duration", 9),
+                new Boon("Weakness", 737, "main", "duration", 5),
+                new Boon("Vulnerability", 738, "main", "intensity", 25)
+            };
             return boonList;
         }
         public static List<Boon> getList(){
-            List<Boon> boonList = new List<Boon>();
-            boonList.Add(new Boon("Might", 740, "main", "intensity", 25));
-            boonList.Add(new Boon("Fury", 725, "main", "duration", 9));//or 3m and 30s
-            boonList.Add(new Boon("Quickness", 1187, "main", "duration", 5));
-            boonList.Add(new Boon("Alacrity", 30328 , "main", "duration", 9));
+            List<Boon> boonList = new List<Boon>
+            {
+                new Boon("Might", 740, "main", "intensity", 25),
+                new Boon("Fury", 725, "main", "duration", 9),//or 3m and 30s
+                new Boon("Quickness", 1187, "main", "duration", 5),
+                new Boon("Alacrity", 30328, "main", "duration", 9),
 
-            boonList.Add(new Boon("Protection", 717, "main", "duration", 5));
-            boonList.Add(new Boon("Regeneration", 718, "main", "duration", 5));
-            boonList.Add(new Boon("Vigor", 726, "main", "duration", 5));
-            boonList.Add(new Boon("Aegis", 743, "main", "duration", 5));
-            boonList.Add(new Boon("Stability", 1122, "main", "intensity", 25));
-            boonList.Add(new Boon("Swiftness", 719, "main", "duration", 9));
-            boonList.Add(new Boon("Retaliation", 873, "main", "duration", 5));
-            boonList.Add(new Boon("Resistance", 26980 , "main", "duration", 5));
-
-            boonList.Add(new Boon("Spotter", 14055 , "ranger", "duration", 1));
-            boonList.Add(new Boon("Spirit of Frost", 12544 , "ranger", "duration", 1));
-            boonList.Add(new Boon("Sun Spirit", 12540, "ranger", "duration", 1));
-            boonList.Add(new Boon("Stone Spirit", 12547, "ranger", "duration", 1));
-            boonList.Add(new Boon("Storm Spirit", "ranger", "duration", 1));
-            boonList.Add(new Boon("Glyph of Empowerment", "ranger", "duration", 1));
-
-            boonList.Add(new Boon("Empower Allies", 14222 , "warrior", "duration", 1));
-            boonList.Add(new Boon("Banner of Strength", 14417 , "warrior", "duration", 1));
-            boonList.Add(new Boon("Banner of Discipline", 14449 , "warrior", "duration", 1));
-
-            boonList.Add(new Boon("Soothing Mist", "ele", "duration", 1));
-
-            boonList.Add(new Boon("Pinpoint Distribution", "engie", "duration", 1));
-
-            boonList.Add(new Boon("Vampiric Aura", "necro", "duration", 1));
-
-            boonList.Add(new Boon("Assassin's Presence", "rev", "duration", 1));
-
-            boonList.Add(new Boon("Battle Presence", 17046, "warrior", "duration", 1));//Virtue of Resolve (ID:17046)
+                new Boon("Protection", 717, "main", "duration", 5),
+                new Boon("Regeneration", 718, "main", "duration", 5),
+                new Boon("Vigor", 726, "main", "duration", 5),
+                new Boon("Aegis", 743, "main", "duration", 5),
+                new Boon("Stability", 1122, "main", "intensity", 25),
+                new Boon("Swiftness", 719, "main", "duration", 9),
+                new Boon("Retaliation", 873, "main", "duration", 5),
+                new Boon("Resistance", 26980, "main", "duration", 5),
+                // ranger
+                new Boon("Spotter", 14055, "ranger", "duration", 1),
+                new Boon("Frost Spirit", 12544, "ranger", "duration", 1),
+                new Boon("Sun Spirit", 12540, "ranger", "duration", 1),
+                new Boon("Stone Spirit", 12547, "ranger", "duration", 1),
+                new Boon("Storm Spirit", 12549, "ranger", "duration", 1),
+                new Boon("Glyph of Empowerment", 31803, "ranger", "duration", 1),
+                // warrior
+                new Boon("Empower Allies", 14222, "warrior", "duration", 1),
+                new Boon("Banner of Strength", 14417, "warrior", "duration", 1),
+                new Boon("Banner of Discipline", 14449, "warrior", "duration", 1),
+                // el
+                new Boon("Soothing Mist", 5587, "ele", "duration", 1),
+                // engie
+                new Boon("Pinpoint Distribution", 38333, "engie", "duration", 1),
+                // necro
+                new Boon("Vampiric Aura", 30285, "necro", "duration", 1),
+                // rev
+                new Boon("Assassin's Presence", 26854, "rev", "duration", 1),
+                // guard
+                new Boon("Battle Presence", 17046, "guard", "duration", 1)//Virtue of Resolve (ID:17046)
+            };
             return boonList;
         }
 
         public static List<Boon> getMainList()
         {
-            List<Boon> boonList = new List<Boon>();
-            boonList.Add(new Boon("Might",740, "main", "intensity", 25));
-            boonList.Add(new Boon("Fury",725, "main", "duration", 9));//or 3m and 30s
-            boonList.Add(new Boon("Quickness",1187, "main", "duration", 5));
-            boonList.Add(new Boon("Alacrity", 30328, "main", "duration", 9));
+            List<Boon> boonList = new List<Boon>
+            {
+                new Boon("Might", 740, "main", "intensity", 25),
+                new Boon("Fury", 725, "main", "duration", 9),//or 3m and 30s
+                new Boon("Quickness", 1187, "main", "duration", 5),
+                new Boon("Alacrity", 30328, "main", "duration", 9),
 
-            boonList.Add(new Boon("Protection",717, "main", "duration", 5));
-            boonList.Add(new Boon("Regeneration",718, "main", "duration", 5));
-            boonList.Add(new Boon("Vigor",726, "main", "duration", 5));
-            boonList.Add(new Boon("Aegis",743, "main", "duration", 9));
-            boonList.Add(new Boon("Stability",1122, "main", "duration", 9));
-            boonList.Add(new Boon("Swiftness",719, "main", "duration", 9));
-            boonList.Add(new Boon("Retaliation",873, "main", "duration", 9));
-            boonList.Add(new Boon("Resistance", 26980, "main", "duration", 5));
+                new Boon("Protection", 717, "main", "duration", 5),
+                new Boon("Regeneration", 718, "main", "duration", 5),
+                new Boon("Vigor", 726, "main", "duration", 5),
+                new Boon("Aegis", 743, "main", "duration", 9),
+                new Boon("Stability", 1122, "main", "duration", 9),
+                new Boon("Swiftness", 719, "main", "duration", 9),
+                new Boon("Retaliation", 873, "main", "duration", 9),
+                new Boon("Resistance", 26980, "main", "duration", 5)
+            };
 
             return boonList;
         }
         public static List<Boon> getSharableProfList()
         {
-            List<Boon> boonList = new List<Boon>();
-            boonList.Add(new Boon("Spotter", 14055, "ranger", "duration",1));
-            boonList.Add(new Boon("Spirit of Frost", 12544, "ranger", "duration", 1));
-            boonList.Add(new Boon("Sun Spirit", 12540, "ranger", "duration", 1));
-            boonList.Add(new Boon("Stone Spirit", 12547, "ranger", "duration", 1));
-            boonList.Add(new Boon("Storm Spirit", "ranger", "duration", 1));
-            boonList.Add(new Boon("Glyph of Empowerment", "ranger", "duration", 1));
-            boonList.Add(new Boon("Empower Allies", 14222, "warrior", "duration", 1));
-            boonList.Add(new Boon("Banner of Strength", 14417, "warrior", "duration", 1));
-            boonList.Add(new Boon("Banner of Discipline", 14449, "warrior", "duration", 1));
-            boonList.Add(new Boon("Battle Presence", 17046, "warrior", "duration", 1));//Virtue of Resolve (ID:17046)
-            boonList.Add(new Boon("Assassin's Presence", "rev", "duration", 1));
-            boonList.Add(new Boon("Naturalistic Resonance", "rev", "duration", 1));
-            boonList.Add(new Boon("Pinpoint Distribution", "engie", "duration", 1));
-            boonList.Add(new Boon("Increased Condition Damage", "engie", "duration", 1));
-            boonList.Add(new Boon("Soothing Mist", "ele", "duration", 1));
-            boonList.Add(new Boon("Vampiric Aura", "necro", "duration", 1));
+            List<Boon> boonList = new List<Boon>
+            {
+                new Boon("Spotter", 14055, "ranger", "duration", 1),
+                new Boon("Frost Spirit", 12544, "ranger", "duration", 1),
+                new Boon("Sun Spirit", 12540, "ranger", "duration", 1),
+                new Boon("Stone Spirit", 12547, "ranger", "duration", 1),
+                new Boon("Storm Spirit", 12549, "ranger", "duration", 1),
+                new Boon("Glyph of Empowerment", 31803, "ranger", "duration", 1),
+                new Boon("Empower Allies", 14222, "warrior", "duration", 1),
+                new Boon("Banner of Strength", 14417, "warrior", "duration", 1),
+                new Boon("Banner of Discipline", 14449, "warrior", "duration", 1),
+                new Boon("Battle Presence", 17046, "guard", "duration", 1),//Virtue of Resolve (ID:17046)
+                new Boon("Assassin's Presence", 26854, "rev", "duration", 1),
+                new Boon("Naturalistic Resonance", 29379, "rev", "duration", 1),
+                new Boon("Pinpoint Distribution", 38333, "engie", "duration", 1),
+                new Boon("Increased Condition Damage", "engie", "duration", 1), // What is this?
+                new Boon("Soothing Mist", 5587, "ele", "duration", 1),
+                new Boon("Vampiric Aura", 30285, "necro", "duration", 1)
+            };
             return boonList;
         }
         public static List<Boon> getAllProfList()
         {
-            List<Boon> boonList = new List<Boon>();
-            boonList.Add(new Boon("Stealth", 13017, "regular", "duration", 1));//13017
-            boonList.Add(new Boon("Revealed", 13017, "regular", "duration", 1));//13017
-            boonList.Add(new Boon("Superspeed", 5974, "regular", "duration", 1));//5974
-            boonList.Add(new Boon("Invulnerability", 801 , "regular", "duration", 1));
-            boonList.Add(new Boon("Unblockable", "regular", "duration", 1));
-            //Auras
-            boonList.Add(new Boon("Chaos Armor", 10332 , "aura", "duration", 1));
-            boonList.Add(new Boon("Fire Shield", 5677, "aura", "duration", 1));//5677
-            boonList.Add(new Boon("Frost Aura", 5579, "aura", "duration", 1));//5579
-            boonList.Add(new Boon("Light Aura", 25518 , "aura", "duration", 1));
-            boonList.Add(new Boon("Magnetic Aura", 5684, "aura", "duration", 1));//5684
-            boonList.Add(new Boon("Shocking Aura", 5577,"aura", "duration", 1));//5577
+            List<Boon> boonList = new List<Boon>
+            {
+                new Boon("Stealth", 13017, "regular", "duration", 1),//13017
+                new Boon("Revealed", 890, "regular", "duration", 1),//890
+                new Boon("Superspeed", 5974, "regular", "duration", 1),//5974
+                new Boon("Invulnerability", 801, "regular", "duration", 1),
+                new Boon("Unblockable", "regular", "duration", 1),
+                //Auras
+                new Boon("Chaos Armor", 10332, "aura", "duration", 1),
+                new Boon("Fire Shield", 5677, "aura", "duration", 1),//5677
+                new Boon("Frost Aura", 5579, "aura", "duration", 1),//5579
+                new Boon("Light Aura", 25518, "aura", "duration", 1),
+                new Boon("Magnetic Aura", 5684, "aura", "duration", 1),//5684
+                new Boon("Shocking Aura", 5577, "aura", "duration", 1),//5577
 
-            //Race sepecfic
-            boonList.Add(new Boon("Take Root",12459, "race", "duration", 1));
-            boonList.Add(new Boon("Become the Bear", "race", "duration", 1));
-            boonList.Add(new Boon("Become the Raven", "race", "duration", 1));
-            boonList.Add(new Boon("Become the Snow Leopard", "race", "duration", 1));
-            boonList.Add(new Boon("Become the Wolf", "race", "duration", 1));
-            boonList.Add(new Boon("Avatar of Melandru", 12368, "race", "duration", 1));//12368
-            boonList.Add(new Boon("Power Suit", "race", "duration", 1));
-            boonList.Add(new Boon("Reaper of Grenth", 12366, "race", "duration", 1));//12366
-            boonList.Add(new Boon("Charrooka", "race", "duration", 1));
+                //Race sepecfic
+                new Boon("Take Root", 12459, "race", "duration", 1),
+                new Boon("Become the Bear", "race", "duration", 1),
+                new Boon("Become the Raven", "race", "duration", 1),
+                new Boon("Become the Snow Leopard", "race", "duration", 1),
+                new Boon("Become the Wolf", "race", "duration", 1),
+                new Boon("Avatar of Melandru", 12368, "race", "duration", 1),//12368
+                new Boon("Power Suit", "race", "duration", 1),
+                new Boon("Reaper of Grenth", 12366, "race", "duration", 1),//12366
+                new Boon("Charrooka", "race", "duration", 1),
 
-            //Profession specefic effects
-            //revenant
-            //skills
-            boonList.Add(new Boon("Crystal Hibernation",28262, "rev", "duration", 1));
-            boonList.Add(new Boon("Vengeful Hammers",27273, "rev", "duration", 1));
-            boonList.Add(new Boon("Rite of the Great Dwarf",26596, "rev", "duration", 1));
-            boonList.Add(new Boon("Embrace the Darkness",28001, "rev", "duration", 1));
-            boonList.Add(new Boon("Enchanted Daggers", 28557,"rev", "intensity", 6));
-            boonList.Add(new Boon("Impossible Odds",27581, "rev", "duration", 1));
-            //signets
-            boonList.Add(new Boon("Facet of Light", "rev", "duration", 1));
-            boonList.Add(new Boon("Infuse Light", "rev", "duration", 1));
-            boonList.Add(new Boon("Facet of Darkness", "rev", "duration", 1));
-            boonList.Add(new Boon("Facet of Elements", "rev", "duration", 1));
-            boonList.Add(new Boon("Facet of Strength", "rev", "duration", 1));
-            boonList.Add(new Boon("Facet of Chaos", "rev", "duration", 1));
-            boonList.Add(new Boon("Facet of Nature", "rev", "duration", 1));
-            boonList.Add(new Boon("Naturalistic Resonance", "rev", "duration", 1));
-            //attunments
-            boonList.Add(new Boon("Legendary Centaur Stance", "rev", "duration", 1));
-            boonList.Add(new Boon("Legendary Dragon Stance", "rev", "duration", 1));
-            boonList.Add(new Boon("Legendary Dwarf Stance", "rev", "duration", 1));
-            boonList.Add(new Boon("Legendary Demon Stance", "rev", "duration", 1));
-            boonList.Add(new Boon("Legendary Assassin Stance", "rev", "duration", 1));
-            boonList.Add(new Boon("Legendary Renegade Stance", "rev", "duration", 1));
-            //summons
-            boonList.Add(new Boon("Breakrazor's Bastion", "rev", "duration", 1));
-            boonList.Add(new Boon("Razorclaw's Rage", "rev", "duration", 1));
-            boonList.Add(new Boon("Soulcleave's Summit", "rev", "duration", 1));
-            //traits
-            boonList.Add(new Boon("Vicious Lacerations", "rev", "intensity", 5));
-            boonList.Add(new Boon("Assassin's Presence", "rev", "duration", 1));
-            boonList.Add(new Boon("Expose Defenses",48894, "rev", "duration", 1));
-            boonList.Add(new Boon("Invoking Harmony", "rev", "duration", 1));
-            boonList.Add(new Boon("Selfless Amplification", "rev", "duration", 1));
-            boonList.Add(new Boon("Hardening Persistence", "rev", "intensity", 8));
-            boonList.Add(new Boon("Soothing Bastion", "rev", "duration", 1));
-            boonList.Add(new Boon("Kalla's Fervor", "rev", "duration", 5));
+                //Profession specefic effects
+                //revenant
+                //skills
+                new Boon("Crystal Hibernation", 28262, "rev", "duration", 1),
+                new Boon("Vengeful Hammers", 27273, "rev", "duration", 1),
+                new Boon("Rite of the Great Dwarf", 26596, "rev", "duration", 1),
+                new Boon("Embrace the Darkness", 28001, "rev", "duration", 1),
+                new Boon("Enchanted Daggers", 28557, "rev", "intensity", 6),
+                new Boon("Impossible Odds", 27581, "rev", "duration", 1),
+                //signets
+                new Boon("Facet of Light", "rev", "duration", 1),
+                new Boon("Infuse Light", "rev", "duration", 1),
+                new Boon("Facet of Darkness", "rev", "duration", 1),
+                new Boon("Facet of Elements", "rev", "duration", 1),
+                new Boon("Facet of Strength", "rev", "duration", 1),
+                new Boon("Facet of Chaos", "rev", "duration", 1),
+                new Boon("Facet of Nature", "rev", "duration", 1),
+                new Boon("Naturalistic Resonance", 29379, "rev", "duration", 1),
+                //attunments
+                new Boon("Legendary Centaur Stance", "rev", "duration", 1),
+                new Boon("Legendary Dragon Stance", "rev", "duration", 1),
+                new Boon("Legendary Dwarf Stance", "rev", "duration", 1),
+                new Boon("Legendary Demon Stance", "rev", "duration", 1),
+                new Boon("Legendary Assassin Stance", "rev", "duration", 1),
+                new Boon("Legendary Renegade Stance", "rev", "duration", 1),
+                //summons
+                new Boon("Breakrazor's Bastion", "rev", "duration", 1),
+                new Boon("Razorclaw's Rage", "rev", "duration", 1),
+                new Boon("Soulcleave's Summit", "rev", "duration", 1),
+                //traits
+                new Boon("Vicious Lacerations", "rev", "intensity", 5),
+                new Boon("Assassin's Presence", 26854, "rev", "duration", 1),
+                new Boon("Expose Defenses", 48894, "rev", "duration", 1),
+                new Boon("Invoking Harmony", "rev", "duration", 1),
+                new Boon("Selfless Amplification", "rev", "duration", 1),
+                new Boon("Hardening Persistence", "rev", "intensity", 8),
+                new Boon("Soothing Bastion", "rev", "duration", 1),
+                new Boon("Kalla's Fervor", "rev", "duration", 5),
 
-            //warrior
-            //skills
-            boonList.Add(new Boon("Riposte", "warrior", "duration", 1));
-            boonList.Add(new Boon("Counterattack", "warrior", "duration", 1));
-            boonList.Add(new Boon("Flames of War", "warrior", "duration", 1));
-            boonList.Add(new Boon("Blood Reckoning", "warrior", "duration", 1));
-            boonList.Add(new Boon("Rock Guard", "warrior", "duration", 1));
-            boonList.Add(new Boon("Sight beyond Sight", "warrior", "duration", 1));
+                //warrior
+                //skills
+                new Boon("Riposte", "warrior", "duration", 1),
+                new Boon("Counterattack", "warrior", "duration", 1),
+                new Boon("Flames of War", 31708, "warrior", "duration", 1),
+                new Boon("Blood Reckoning", 29466 , "warrior", "duration", 1),
+                new Boon("Rock Guard", 34256 , "warrior", "duration", 1),
+                new Boon("Sight beyond Sight", "warrior", "duration", 1),
+                //signets
+                new Boon("Healing Signet", "warrior", "duration", 1),
+                new Boon("Dolyak Signet", "warrior", "duration", 1),
+                new Boon("Signet of Fury", "warrior", "duration", 1),
+                new Boon("Signet of Might", "warrior", "duration", 1),
+                new Boon("Signet of Stamina", "warrior", "duration", 1),
+                new Boon("Signet of Rage", "warrior", "duration", 1),
+                new Boon("Signet of Ferocity", "warrior", "duration", 1),
+                //summons
+                new Boon("Banner of Strength", 14417, "warrior", "duration", 1),
+                new Boon("Banner of Discipline", 14449, "warrior", "duration", 1),
+                new Boon("Banner of Tactics", "warrior", "duration", 1),
+                new Boon("Banner of Defense", "warrior", "duration", 1),
+                //stancces
+                new Boon("Shield Stance", "warrior", "duration", 1),
+                new Boon("Berserker's Stance", "warrior", "duration", 1),
+                new Boon("Enduring Pain", "warrior", "duration", 1),
+                new Boon("Balanced Stance", "warrior", "duration", 1),
+                new Boon("Defiant Stance", "warrior", "duration", 1),
+                //traits
+                new Boon("Empower Allies", 14222, "warrior", "duration", 1),
+                new Boon("Peak Performance", "warrior", "duration", 1),
+                new Boon("Furious Surge", 30204, "warrior", "intensity", 25),
+                new Boon("Health Gain per Adrenaline bar Spent", "warrior", "intensity", 3),
+                new Boon("Rousing Resilience", "warrior", "duration", 1),
+                new Boon("Always Angry", "warrior", "duration", 1),
+                new Boon("Full Counter", "warrior", "duration", 1),
+                new Boon("Attacker's Insight", "warrior", "intensity", 5),
+                new Boon("Virtue of Resolve", "warrior", "duration", 1),//Virtue of Resolve (ID:17046)
 
-            //signets
-            boonList.Add(new Boon("Healing Signet", "warrior", "duration", 1));
-            boonList.Add(new Boon("Dolyak Signet", "warrior", "duration", 1));
-            boonList.Add(new Boon("Signet of Fury", "warrior", "duration", 1));
-            boonList.Add(new Boon("Signet of Might", "warrior", "duration", 1));
-            boonList.Add(new Boon("Signet of Stamina", "warrior", "duration", 1));
-            boonList.Add(new Boon("Signet of Rage", "warrior", "duration", 1));
-            boonList.Add(new Boon("Signet of Ferocity", "warrior", "duration", 1));
-            //summons
-            boonList.Add(new Boon("Banner of Strength", "warrior", "duration", 1));
-            boonList.Add(new Boon("Banner of Discipline", "warrior", "duration", 1));
-            boonList.Add(new Boon("Banner of Tactics", "warrior", "duration", 1));
-            boonList.Add(new Boon("Banner of Defense", "warrior", "duration", 1));
-            //stancces
-            boonList.Add(new Boon("Shield Stance", "warrior", "duration", 1));
-            boonList.Add(new Boon("Berserker's Stance", "warrior", "duration", 1));
-            boonList.Add(new Boon("Enduring Pain", "warrior", "duration", 1));
-            boonList.Add(new Boon("Balanced Stance", "warrior", "duration", 1));
-            boonList.Add(new Boon("Defiant Stance", "warrior", "duration", 1));
-            //traits
-            boonList.Add(new Boon("Empower Allies", "warrior", "duration", 1));
-            boonList.Add(new Boon("Peak Performance", "warrior", "duration", 1));
-            boonList.Add(new Boon("Furious Surge", "warrior", "intensity", 25));
-            boonList.Add(new Boon("Health Gain per Adrenaline bar Spent", "warrior", "intensity", 3));
-            boonList.Add(new Boon("Rousing Resilience", "warrior", "duration", 1));
-            boonList.Add(new Boon("Always Angry", "warrior", "duration", 1));
-            boonList.Add(new Boon("Full Counter", "warrior", "duration", 1));
-            boonList.Add(new Boon("Attacker's Insight", "warrior", "intensity", 5));
-            boonList.Add(new Boon("Virtue of Resolve","warrior","duration",1));//Virtue of Resolve (ID:17046)
+                //guardian
+                //skills
+                new Boon("Zealot's Flame", 9103, "guard", "duration", 1),
+                new Boon("Purging Flames", "guard", "duration", 1),
+                new Boon("Litany of Wrath", "guard", "duration", 1),
+                new Boon("Renewed Focus", "guard", "duration", 1),
+                //signets
+                new Boon("Signet of Resolve", "guard", "duration", 1),
+                new Boon("Bane Signet", "guard", "duration", 1),
+                new Boon("Signet of Judgment", "guard", "duration", 1),
+                new Boon("Signet of Mercy", "guard", "duration", 1),
+                new Boon("Signet of Wrath", "guard", "duration", 1),
+                new Boon("Signet of Courage", "guard", "duration", 1),
+                //traits
+                new Boon("Virtue of Justice", 9114, "guard", "duration", 1),
+                new Boon("Spears of Justice", 29632, "guard", "duration", 1),
+                new Boon("Virtue of Courage", 9113, "guard", "duration", 1),
+                new Boon("Shield of Courage", 29523, "guard", "duration", 1),
+                new Boon("Virtue of Resolve", 9119, "guard", "duration", 1),
+                new Boon("Wings of Resolve", 30308, "guard", "duration", 1),
+                new Boon("Strength in Numbers", "guard", "duration", 1),
+                new Boon("Invigorated Bulwark", "guard", "intensity", 5),
+                new Boon("Battle Presence", 17046, "guard", "duration", 1),//Virtue of Resolve (ID:17046)
+                new Boon("Force of Will", "guard", "duration", 1),//not sure if intensity
+                new Boon("Tome of Justice", "guard", "duration", 1),
+                new Boon("Tome of Courage", "guard", "duration", 1),
+                new Boon("Tome of Resolve", "guard", "duration", 1),
+                new Boon("Ashes of the Just", "guard", "intensity", 25),
+                new Boon("Eternal Oasis", "guard", "duration", 1),
+                new Boon("Unbroken Lines", "guard", "duration", 1),
+                new Boon("Quickfire", "guard", "duration", 1),
 
-            //guardian
-            //skills
-            boonList.Add(new Boon("Zealot's Flame", "guard", "duration", 1));
-            boonList.Add(new Boon("Purging Flames", "guard", "duration", 1));
-            boonList.Add(new Boon("Litany of Wrath", "guard", "duration", 1));
-            boonList.Add(new Boon("Renewed Focus", "guard", "duration", 1));
-            //signets
-            boonList.Add(new Boon("Signet of Resolve", "guard", "duration", 1));
-            boonList.Add(new Boon("Bane Signet", "guard", "duration", 1));
-            boonList.Add(new Boon("Signet of Judgment", "guard", "duration", 1));
-            boonList.Add(new Boon("Signet of Mercy", "guard", "duration", 1));
-            boonList.Add(new Boon("Signet of Wrath", "guard", "duration", 1));
-            boonList.Add(new Boon("Signet of Courage", "guard", "duration", 1));
-            //traits
-            boonList.Add(new Boon("Virute of Justice", "guard", "duration", 1));
-            boonList.Add(new Boon("Justice", "guard", "duration", 1));
-            boonList.Add(new Boon("Virute of Courage", "guard", "duration", 1));
-            boonList.Add(new Boon("Shield of Courage", "guard", "duration", 1));
-            boonList.Add(new Boon("Virute of Resolve", "guard", "duration", 1));
-            boonList.Add(new Boon("Strength in Numbers", "guard", "duration", 1));
-            boonList.Add(new Boon("Invigorated Bulwark", "guard", "intensity", 5));
-            boonList.Add(new Boon("Force of Will", "guard", "duration", 1));//not sure if intensity
-            boonList.Add(new Boon("Tome of Justice", "guard", "duration", 1));
-            boonList.Add(new Boon("Tome of Courage", "guard", "duration", 1));
-            boonList.Add(new Boon("Tome of Resolve", "guard", "duration", 1));
-            boonList.Add(new Boon("Ashes of the Just", "guard", "intensity", 25));
-            boonList.Add(new Boon("Eternal Oasis", "guard", "duration", 1));
-            boonList.Add(new Boon("Unbroken Lines", "guard", "duration", 1));
-            boonList.Add(new Boon("Quickfire", "guard", "duration", 1));
+                //Engie
+                //skills
+                new Boon("Static Shield", "engie", "duration", 1),
+                new Boon("Absorb", "engie", "duration", 1),
+                new Boon("A.E.D.", "engie", "duration", 1),
+                new Boon("Elixir S", "engie", "duration", 1),
+                new Boon("Elixir X", "engie", "duration", 1),
+                new Boon("Utility Goggles", "engie", "duration", 1),
+                new Boon("Slick Shoes", "engie", "duration", 1),
+                new Boon("Watchful Eye", "engie", "duration", 1),
+                new Boon("Cooling Vapor", "engie", "duration", 1),
+                new Boon("Photon Wall Deployed", "engie", "duration", 1),
+                new Boon("Spectrum Shield", "engie", "duration", 1),
+                new Boon("Gear Shield", "engie", "duration", 1),
+                //Transforms
+                new Boon("Rampage", "engie", "duration", 1),
+                new Boon("Photon Forge", "engie", "duration", 1),
+                //Traits
+                new Boon("Laser's Edge", "engie", "duration", 1),
+                new Boon("Afterburner", "engie", "intensity", 5),
+                new Boon("Iron Blooded", "engie", "intensity", 25),
+                new Boon("Streamlined Kits", "engie", "duration", 1),
+                new Boon("Kinetic Charge", "engie", "intensity", 5),
+                new Boon("Pinpoint Distribution", 38333, "engie", "duration", 1),
+                new Boon("Increased Condition Damage", "engie", "duration", 1),
 
-            //Engie
-            //skills
-            boonList.Add(new Boon("Static Shield", "engie", "duration", 1));
-            boonList.Add(new Boon("Absorb", "engie", "duration", 1));
-            boonList.Add(new Boon("A.E.D.", "engie", "duration", 1));
-            boonList.Add(new Boon("Elixir S", "engie", "duration", 1));
-            boonList.Add(new Boon("Elixir X", "engie", "duration", 1));
-            boonList.Add(new Boon("Utility Goggles", "engie", "duration", 1));
-            boonList.Add(new Boon("Slick Shoes", "engie", "duration", 1));
-            boonList.Add(new Boon("Watchful Eye", "engie", "duration", 1));
-            boonList.Add(new Boon("Cooling Vapor", "engie", "duration", 1));
-            boonList.Add(new Boon("Photon Wall Deployed", "engie", "duration", 1));
-            boonList.Add(new Boon("Spectrum Shield", "engie", "duration", 1));
-            boonList.Add(new Boon("Gear Shield", "engie", "duration", 1));
-            //Transforms
-            boonList.Add(new Boon("Rampage", "engie", "duration", 1));
-            boonList.Add(new Boon("Photon Forge", "engie", "duration", 1));
-            //Traits
-            boonList.Add(new Boon("Laser's Edge", "engie", "duration", 1));
-            boonList.Add(new Boon("Afterburner", "engie", "intensity", 5));
-            boonList.Add(new Boon("Iron Blooded", "engie", "intensity", 25));
-            boonList.Add(new Boon("Streamlined Kits", "engie", "duration", 1));
-            boonList.Add(new Boon("Kinetic Charge", "engie", "intensity", 5));
-            boonList.Add(new Boon("Pinpoint Distribution", "engie", "duration", 1));
-            boonList.Add(new Boon("Increased Condition Damage", "engie", "duration", 1));
+                //Ranger
+                new Boon("Celestial Avatar", 31508, "ranger", "duration", 1),
+                //signets
+                new Boon("Signet of Renewal", "ranger", "duration", 1),
+                new Boon("Signet of Stone", "ranger", "duration", 1),
+                new Boon("Signet of the Hunt", "ranger", "duration", 1),
+                new Boon("Signet of the Wild", "ranger", "duration", 1),
+                //Summons
+                //Need reloook
+                new Boon("Frost Spirit", 12544, "ranger", "duration", 1),
+                new Boon("Sun Spirit", 12540, "ranger", "duration", 1),
+                new Boon("Stone Spirit", 12547, "ranger", "duration", 1),
+                new Boon("Storm Spirit", 12549, "ranger", "duration", 1),
+                //skills
+                new Boon("Attack of Opportunity", "ranger", "duration", 1),
+                new Boon("Call of the Wild", "ranger", "duration", 1),
+                new Boon("Strength of the pack!", "ranger", "duration", 1),
+                new Boon("Sick 'Em!", "ranger", "duration", 1),
+                new Boon("Sharpening Stones", "ranger", "intenstiy", 10),
+                new Boon("Ancestral Grace", 31584, "ranger", "duration", 1),
+                new Boon("Glyph of Empowerment", 31803, "ranger", "duration", 1),
+                new Boon("Dolyak Stance", "ranger", "duration", 1),
+                new Boon("Griffon Stance", "ranger", "duration", 1),
+                new Boon("Moa Stance", "ranger", "duration", 1),
+                new Boon("Vulture Stance", "ranger", "duration", 1),
+                new Boon("Bear Stance", "ranger", "duration", 1),
+                new Boon("One Wolf Pack", "ranger", "duration", 1),
+                new Boon("Sharpen Spines", "ranger", "intensity", 5),
+                //traits
+                new Boon("Spotter", 14055, "ranger", "duration", 1),
+                new Boon("Opening Strike", "ranger", "duration", 1),
+                new Boon("Quick Draw", "ranger", "duration", 1),
+                new Boon("On Dodge", "ranger", "duration", 1),
+                new Boon("Natural Healing", 30449, "ranger", "duration", 1),
+                new Boon("Natural Mender", "ranger", "duration", 1),
+                new Boon("Lingering Light", "ranger", "duration", 1),
+                new Boon("Deadly", "ranger", "duration", 1),
+                new Boon("Ferocious", "ranger", "duration", 1),
+                new Boon("Supportive", "ranger", "duration", 1),
+                new Boon("Versatile", "ranger", "duration", 1),
+                new Boon("Stout", "ranger", "duration", 1),
+                new Boon("Unstoppable Union", "ranger", "duration", 1),
+                new Boon("Twice as Vicious", "ranger", "duration", 1),
 
-            //Ranger
-            boonList.Add(new Boon("Celestial Avatar", "ranger", "duration", 1));
-            //signets
-            boonList.Add(new Boon("Signet of Renewal", "ranger", "duration", 1));
-            boonList.Add(new Boon("Signet of Stone", "ranger", "duration", 1));
-            boonList.Add(new Boon("Signet of the Hunt", "ranger", "duration", 1));
-            boonList.Add(new Boon("Signet of the Wild", "ranger", "duration", 1));
-            //Summons
-            //Need reloook
-            boonList.Add(new Boon("Spirit of Frost", "ranger", "duration", 1));
-            boonList.Add(new Boon("Sun Spirit", "ranger", "duration", 1));
-            boonList.Add(new Boon("Stone Spirit", "ranger", "duration", 1));
-            boonList.Add(new Boon("Storm Spirit", "ranger", "duration", 1));
-            //skills
-            boonList.Add(new Boon("Attack of Opportunity", "ranger", "duration", 1));
-            boonList.Add(new Boon("Call of the Wild", "ranger", "duration", 1));
-            boonList.Add(new Boon("Strength of the pack!", "ranger", "duration", 1));
-            boonList.Add(new Boon("Sick 'Em!", "ranger", "duration", 1));
-            boonList.Add(new Boon("Sharpening Stones", "ranger", "intenstiy", 10));
-            boonList.Add(new Boon("Ancestral Grace", "ranger", "duration", 1));
-            boonList.Add(new Boon("Glyph of Empowerment", "ranger", "duration", 1));
-            boonList.Add(new Boon("Dolyak Stance", "ranger", "duration", 1));
-            boonList.Add(new Boon("Griffon Stance", "ranger", "duration", 1));
-            boonList.Add(new Boon("Moa Stance", "ranger", "duration", 1));
-            boonList.Add(new Boon("Vulture Stance", "ranger", "duration", 1));
-            boonList.Add(new Boon("Bear Stance", "ranger", "duration", 1));
-            boonList.Add(new Boon("One Wolf Pack", "ranger", "duration", 1));
-            boonList.Add(new Boon("Sharpen Spines", "ranger", "intensity", 5));
-            //traits
-            boonList.Add(new Boon("Spotter", "ranger", "duration", 1));
-            boonList.Add(new Boon("Opening Strike", "ranger", "duration", 1));
-            boonList.Add(new Boon("Quick Draw", "ranger", "duration", 1));
-            boonList.Add(new Boon("On Dodge", "ranger", "duration", 1));
-            boonList.Add(new Boon("Natural Mender", "ranger", "duration", 1));
-            boonList.Add(new Boon("Lingering Light", "ranger", "duration", 1));
-            boonList.Add(new Boon("Deadly", "ranger", "duration", 1));
-            boonList.Add(new Boon("Ferocious", "ranger", "duration", 1));
-            boonList.Add(new Boon("Supportive", "ranger", "duration", 1));
-            boonList.Add(new Boon("Versatile", "ranger", "duration", 1));
-            boonList.Add(new Boon("Stout", "ranger", "duration", 1));
-            boonList.Add(new Boon("Unstoppable Union", "ranger", "duration", 1));
-            boonList.Add(new Boon("Twice as Vicious", "ranger", "duration", 1));
+                //thief
+                new Boon("Deadeyes's Gaze", "thief", "duration", 1),
+                //signets
+                new Boon("Signet of Malice", "thief", "duration", 1),
+                new Boon("Assassin's Signet", "thief", "duration", 1),//13047 44597
+                new Boon("Infiltrator's Signet", "thief", "duration", 1),//13063
+                new Boon("Signet of Agility", "thief", "duration", 1),//13061
+                new Boon("Signet of Shadows", "thief", "duration", 1),//13059
+                //venoms
+                new Boon("Ice Drake Venom", "thief", "intensity", 4),//13095
+                new Boon("Devourer Venom", 13094, "thief", "intensity", 2),//
+                new Boon("Skale Venom", 13036, "thief", "intensity", 4),//13054
+                new Boon("Spider Venom", "thief", "intensity", 6),//
+                new Boon("Basilisk Venom", 13133, "thief", "intensity", 6),//
+                //Physical
+                new Boon("Palm Strike", "thief", "duration", 1),//
+                new Boon("Pulmonary Impact", "thief", "intensity", 2),//
+                new Boon("Infiltration", "thief", "duration", 1),//
+                //Transforms
+                new Boon("Dagger Storm", "thief", "duration", 1),//
+                new Boon("Kneeling", "thief", "duration", 1),//
+                //traits
+                new Boon("Maleficent Seven", "thief", "duration", 1),
+                new Boon("Hidden Killer", "thief", "duration", 1),//
+                new Boon("Lead Attacks", "thief", "intensity", 15),//
+                new Boon("Instant Reflexes", "thief", "duration", 1),//
+                new Boon("Lotus Training", 32200, "thief", "duration", 1),//
+                new Boon("Unhindered Combatant", 32931, "thief", "duration", 1),//
+                new Boon("Bounding Dodger", 33162, "thief", "duration", 1),//
 
-            //thief
-            boonList.Add(new Boon("Deadeyes's Gaze", "thief", "duration", 1));
-            //signets
-            boonList.Add(new Boon("Signet of Malice", "thief", "duration", 1));
-            boonList.Add(new Boon("Assassin's Signet", "thief", "duration", 1));//13047 44597
-            boonList.Add(new Boon("Infiltrator's Signet", "thief", "duration", 1));//13063
-            boonList.Add(new Boon("Signet of Agility", "thief", "duration", 1));//13061
-            boonList.Add(new Boon("Signet of Shadows", "thief", "duration", 1));//13059
-            //poisins
-            boonList.Add(new Boon("Ice Drake Venom", "thief", "intensity", 4));//13095
-            boonList.Add(new Boon("Devourer Venom", "thief", "intensity", 2));//
-            boonList.Add(new Boon("Skale Venom", "thief", "intensity", 4));//13054
-            boonList.Add(new Boon("Spider Venom", "thief", "intensity", 6));//
-            boonList.Add(new Boon("Basilisk Venom", "thief", "intensity", 6));//
-                                                                             //Physical
-            boonList.Add(new Boon("Palm Strike", "thief", "duration", 1));//
-            boonList.Add(new Boon("Pulmonary Impact", "thief", "intensity", 2));//
+                //mesmer 
+                new Boon("Distortion", "mes", "duration", 1),
+                //signets
+                new Boon("Signet of the Ether", 21751, "mes", "duration", 1),
+                new Boon("Signet of Domination", "mes", "duration", 1),
+                new Boon("Signet of Illusions", "mes", "duration", 1),
+                new Boon("Signet of Inspiration", "mes", "duration", 1),
+                new Boon("Signet of Midnight", "mes", "duration", 1),
+                new Boon("Signet of Humility", "mes", "duration", 1),
+                //skills
+                new Boon("Blur", 10335 , "mes", "duration", 1),
+                new Boon("Mirror", "mes", "duration", 1),
+                new Boon("Echo", "mes", "duration", 1),
+                new Boon("Illusion of Life", "mes", "duration", 1),
+                new Boon("Time Echo", "mes", "duration", 1),
+                //traits
+                new Boon("Fencer's Finesse", 30426 , "mes", "intensity", 10),
+                new Boon("Illusionary Defense", "mes", "intensity", 5),
+                new Boon("Compunding Power", "mes", "intensity", 5),
+                new Boon("Phantasmal Force", 44691 , "mes", "intensity", 25),
+                new Boon("Mirage Cloak", "mes", "duration", 1),
 
-            boonList.Add(new Boon("Infiltration", "thief", "duration", 1));//
-            //Transforms
-            boonList.Add(new Boon("Dagger Storm", "thief", "duration", 1));//
-            boonList.Add(new Boon("Kneeling", "thief", "duration", 1));//
-            //traits
-            boonList.Add(new Boon("Maleficent Seven", "thief", "duration", 1));
-            boonList.Add(new Boon("Hidden Killer", "thief", "duration", 1));//
-            boonList.Add(new Boon("Lead Attacks", "thief", "intensity", 15));//
-            boonList.Add(new Boon("Instant Reflexes", "thief", "duration", 1));//
-            boonList.Add(new Boon("Lotus Training", "thief", "duration", 1));//
-            boonList.Add(new Boon("Unhindered Combatant", "thief", "duration", 1));//
-            boonList.Add(new Boon("Bounding Dodger", "thief", "duration", 1));//
+                //Necro
+                //forms
+                new Boon("Lich Form", "necro", "duration", 1),
+                new Boon("Death Shroud", 790, "necro", "duration", 1),
+                new Boon("Reaper's Shroud", 29446, "necro", "duration", 1),
+                //Signets
+                new Boon("Signet of Vampirism", "necro", "duration", 1),
+                new Boon("Plague Signet", "necro", "duration", 1),
+                new Boon("Signet of Spite", "necro", "duration", 1),
+                new Boon("Signet of the Locust", "necro", "duration", 1),
+                new Boon("Signet of Undeath", "necro", "duration", 1),
+                //skills
+                new Boon("Spectral Walk", "necro", "duration", 1),
+                new Boon("Infusing Terror", 30129, "necro", "duration", 1),
+                //traits
+                new Boon("Corrupter's Defense", "necro", "intenstiy", 10),
+                new Boon("Vampiric Aura", 30285, "necro", "duration", 1),
+                new Boon("Last Rites", "necro", "duration", 1),
+                new Boon("Sadistic Searing", "necro", "duration", 1),
 
-            //mesmer 
-            boonList.Add(new Boon("Distortion", "mes", "duration", 1));
-            //signets
-            boonList.Add(new Boon("Signet of the Ether", "mes", "duration", 1));
-            boonList.Add(new Boon("Signet of Domination", "mes", "duration", 1));
-            boonList.Add(new Boon("Signet of Illusions", "mes", "duration", 1));
-            boonList.Add(new Boon("Signet of Inspiration", "mes", "duration", 1));
-            boonList.Add(new Boon("Signet of Midnight", "mes", "duration", 1));
-            boonList.Add(new Boon("Signet of Humility", "mes", "duration", 1));
-            //skills
-            boonList.Add(new Boon("Blur", "mes", "duration", 1));
-            boonList.Add(new Boon("Mirror", "mes", "duration", 1));
-            boonList.Add(new Boon("Echo", "mes", "duration", 1));
-            boonList.Add(new Boon("Illusion of Life", "mes", "duration", 1));
-            boonList.Add(new Boon("Time Echo", "mes", "duration", 1));
-            //traits
-            boonList.Add(new Boon("Fencer's Finesse", "mes", "intensity", 10));
-            boonList.Add(new Boon("Illusionary Defense", "mes", "intensity", 5));
-            boonList.Add(new Boon("Compunding Power", "mes", "intensity", 5));
-            boonList.Add(new Boon("Phantasmal Force", "mes", "intensity", 25));
-            boonList.Add(new Boon("Mirage Cloak", "mes", "duration", 1));
+                //ele
+                //signets
+                new Boon("Signet of Restoration", "ele", "duration", 1),//739
+                new Boon("Signet of Air", "ele", "duration", 1),//5590
+                new Boon("Signet of Earth", "ele", "duration", 1),//5592
+                new Boon("Signet of Fire", "ele", "duration", 1),//5544
+                new Boon("Signet of Water", "ele", "duration", 1),//5591
+                                                                  //attunments
+                new Boon("Fire Attunement", 5585, "ele", "duration", 1),//5585
+                new Boon("Water Attunement", 5586, "ele", "duration", 1),
+                new Boon("Air Attunement", 5575, "ele", "duration", 1),//5575
+                new Boon("Earth Attunement", 5580, "ele", "duration", 1),//5580
+                                                                   //forms
+                new Boon("Mist Form", "ele", "duration", 1),//5543
+                new Boon("Ride the Lightning", "ele", "duration", 1),//5588
+                new Boon("Vapor Form", "ele", "duration", 1),
+                new Boon("Tornado", "ele", "duration", 1),//5534
+                new Boon("Whirlpool", "ele", "duration", 1),
+                //conjures
+                new Boon("Conjure Earth Shield", 15788, "ele", "duration", 1),//15788
+                new Boon("Conjure Flame Axe", 15789, "ele", "duration", 1),//15789
+                new Boon("Conjure Frost Bow", 15790, "ele", "duration", 1),//15790
+                new Boon("Conjure Lightning Hammer", 15791, "ele", "duration", 1),//15791
+                new Boon("Conjure Fiery Greatsword", 15792, "ele", "duration", 1),//15792
+                //Extras
+                new Boon("Arcane Power", "ele", "duration", 1),//5582
+                new Boon("Arcane Shield", "ele", "duration", 1),//5640
+                new Boon("Renewal of Fire", "ele", "duration", 1),//5764
+                new Boon("Glyph of Elemental Power", "ele", "duration", 1),//5739 5741 5740 5742
+                new Boon("Rebound", "ele", "duration", 1),//31337
+                new Boon("Rock Barrier", "ele", "duration", 1),//34633 750
+                new Boon("Magnetic Wave", "ele", "duration", 1),//15794
+                new Boon("Obsidian Flesh", "ele", "duration", 1),//5667
+                //Traits
+                new Boon("Harmonious Conduit", "ele", "duration", 1),//31353
+                new Boon("Fresh Air", "ele", "duration", 1),//31353
+                new Boon("Soothing Mist", 5587, "ele", "duration", 1),
+                new Boon("Lesser Arcane Shield", "ele", "duration", 1),
+                new Boon("Weaver's Prowess", "ele", "duration", 1),
+                new Boon("Elements of Rage", "ele", "duration", 1),
+            };
 
-            //Necro
-            //forms
-            boonList.Add(new Boon("Lich Form", "mes", "duration", 1));
-            boonList.Add(new Boon("Death Shroud", "mes", "duration", 1));
-            boonList.Add(new Boon("Reaper's Shroud", "mes", "duration", 1));
-            //Signets
-            boonList.Add(new Boon("Signet of Vampirism", "mes", "duration", 1));
-            boonList.Add(new Boon("Plague Signet", "mes", "duration", 1));
-            boonList.Add(new Boon("Signet of Spite", "mes", "duration", 1));
-            boonList.Add(new Boon("Signet of the Locust", "mes", "duration", 1));
-            boonList.Add(new Boon("Signet of Undeath", "mes", "duration", 1));
-            //skills
-            boonList.Add(new Boon("Spectral Walk", "mes", "duration", 1));
-            //traits
-            boonList.Add(new Boon("Corrupter's Defense", "mes", "intenstiy", 10));
-            boonList.Add(new Boon("Vampiric Aura", "mes", "duration", 1));
-            boonList.Add(new Boon("Last Rites", "mes", "duration", 1));
-            boonList.Add(new Boon("Sadistic Searing", "mes", "duration", 1));
-
-            
-            //ele
-            //signets
-            boonList.Add(new Boon("Signet of Restoration", "ele", "duration", 1));//739
-            boonList.Add(new Boon("Signet of Air", "ele", "duration", 1));//5590
-            boonList.Add(new Boon("Signet of Earth", "ele", "duration", 1));//5592
-            boonList.Add(new Boon("Signet of Fire", "ele", "duration", 1));//5544
-            boonList.Add(new Boon("Signet of Water", "ele", "duration", 1));//5591
-            //attunments
-            boonList.Add(new Boon("Fire Attunement", "ele", "duration", 1));//5585
-            boonList.Add(new Boon("Water Attunement", "ele", "duration", 1));
-            boonList.Add(new Boon("Air Attunement", "ele", "duration", 1));//5575
-            boonList.Add(new Boon("Earth Attunement", "ele", "duration", 1));//5580
-            //forms
-            boonList.Add(new Boon("Mist Form", "ele", "duration", 1));//5543
-            boonList.Add(new Boon("Ride the Lightning", "ele", "duration", 1));//5588
-            boonList.Add(new Boon("Vapor Form", "ele", "duration", 1));
-            boonList.Add(new Boon("Tornado", "ele", "duration", 1));//5534
-            boonList.Add(new Boon("Whirlpool", "ele", "duration", 1));
-            //conjures
-            boonList.Add(new Boon("Conjure Earth Attributes", "ele", "duration", 1));//15788
-            boonList.Add(new Boon("Conjure Flame Attributes", "ele", "duration", 1));//15789
-            boonList.Add(new Boon("Conjure Frost Attributes", "ele", "duration", 1));//15790
-            boonList.Add(new Boon("Conjure Lightning Attributes", "ele", "duration", 1));//15791
-            boonList.Add(new Boon("Conjure Fire Attributes", "ele", "duration", 1));//15792
-                                                    //Extras
-            boonList.Add(new Boon("Arcane Power", "ele", "duration", 1));//5582
-            boonList.Add(new Boon("Arcane Shield", "ele", "duration", 1));//5640
-            boonList.Add(new Boon("Renewal of Fire", "ele", "duration", 1));//5764
-            boonList.Add(new Boon("Glyph of Elemental Power", "ele", "duration", 1));//5739 5741 5740 5742
-            boonList.Add(new Boon("Rebound", "ele", "duration", 1));//31337
-            boonList.Add(new Boon("Rock Barrier", "ele", "duration", 1));//34633 750
-            boonList.Add(new Boon("Magnetic Wave", "ele", "duration", 1));//15794
-            boonList.Add(new Boon("Obsidian Flesh", "ele", "duration", 1));//5667
-            //Traits
-            boonList.Add(new Boon("Harmonious Conduit", "ele", "duration", 1));//31353
-            boonList.Add(new Boon("Fresh Air", "ele", "duration", 1));//31353
-            boonList.Add(new Boon("Soothing Mist", "ele", "duration", 1));
-            boonList.Add(new Boon("Lesser Arcane Shield", "ele", "duration", 1));
-            boonList.Add(new Boon("Weaver's Prowess", "ele", "duration", 1));
-            boonList.Add(new Boon("Elements of Rage", "ele", "duration", 1));
-            boonList.Add(new Boon("bleh", "ele", "duration", 1));
-    
             return boonList;
         }
        
