@@ -1378,16 +1378,22 @@ namespace LuckParser.Controllers
         bool[] SnapSettings;
         public void CreateCompTable(StreamWriter sw) {
             int groupCount = 0;
+            int firstGroup = 11;
             foreach (Player play in p_list)
             {
-                if (Int32.Parse(play.getGroup()) > groupCount)
+                int playerGroup = Int32.Parse(play.getGroup());
+                if (playerGroup > groupCount)
                 {
-                    groupCount = Int32.Parse(play.getGroup());
+                    groupCount = playerGroup;
+                }
+                if (playerGroup < firstGroup)
+                {
+                    firstGroup = playerGroup;
                 }
             }
             //generate comp table
            sw.WriteLine("<table class=\table\" style=\"width:auto;position:absolute; top:50%; height:10em; margin-top:-5em\"><tbody>");
-            for (int n = 0; n <= groupCount; n++)//NEEDS FIXING FOR WHEN NO PLAYERS IN GROUP 1
+            for (int n = firstGroup; n <= groupCount; n++)
             {
                 sw.WriteLine("<tr>");
                 List<Player> sortedList = p_list.Where(x => Int32.Parse(x.getGroup()) == n).ToList();
@@ -3853,19 +3859,19 @@ namespace LuckParser.Controllers
                 }
 
             }
-  //< li class="list-group-item d-flex justify-content-between align-items-center">
-  //  Cras justo odio
-  //  <span class="badge badge-primary badge-pill">14</span>
-  //</li>
-  //<li class="list-group-item d-flex justify-content-between align-items-center">
-  //  Dapibus ac facilisis in
-  //  <span class="badge badge-primary badge-pill">2</span>
-  //</li>
-  //<li class="list-group-item d-flex justify-content-between align-items-center">
-  //  Morbi leo risus
-  //  <span class="badge badge-primary badge-pill">1</span>
-  //</li>
-sw.WriteLine("</ul>");
+              //< li class="list-group-item d-flex justify-content-between align-items-center">
+              //  Cras justo odio
+              //  <span class="badge badge-primary badge-pill">14</span>
+              //</li>
+              //<li class="list-group-item d-flex justify-content-between align-items-center">
+              //  Dapibus ac facilisis in
+              //  <span class="badge badge-primary badge-pill">2</span>
+              //</li>
+              //<li class="list-group-item d-flex justify-content-between align-items-center">
+              //  Morbi leo risus
+              //  <span class="badge badge-primary badge-pill">1</span>
+              //</li>
+            sw.WriteLine("</ul>");
         }
         public void CreateSkillList(StreamWriter sw) {
             sw.WriteLine("<ul class=\"list-group\">");
