@@ -11,13 +11,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LuckParser.Controllers;
 
-
+public delegate void Logger(int i, string msg, int prog);
+public delegate void Cancellation(int i, DoWorkEventArgs e);
 
 namespace LuckParser
 {
     public partial class Form1 : Form
     {
-        
+
         BackgroundWorker m_oWorker;
         private SettingsForm setFrm;
         //public bool[] settingArray = { true, true, true, true, true, false, true, true };
@@ -27,7 +28,7 @@ namespace LuckParser
         public Form1()
         {
             InitializeComponent();
-            
+
             btnCancel.Enabled = false;
             btnStartAsyncOperation.Enabled = false;
             m_oWorker = new BackgroundWorker();
@@ -43,11 +44,18 @@ namespace LuckParser
             m_oWorker.WorkerReportsProgress = true;
             m_oWorker.WorkerSupportsCancellation = true;
 
-            
+
         }
-       
+
+        public Form1(string[] args)
+        {
+            InitializeComponent();
+            listView1_AddItems(args);
+            m_DoWork(log_Console, null, null);
+        }
+
         // On completed do the appropriate task
-        
+
         void m_oWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Cancelled)
@@ -84,7 +92,9 @@ namespace LuckParser
                 completedOp = true;
                 btnClear.Enabled = true;
                 lblStatus.Text = "Canceled Parseing";
-            } else if(progstr[1] == "Finish") {
+            }
+            else if (progstr[1] == "Finish")
+            {
                 paths = null;
                 //listView1.Items.Clear();
                 completedOp = true;
@@ -92,15 +102,41 @@ namespace LuckParser
                 btnStartAsyncOperation.Enabled = false;
                 lblStatus.Text = "Finished Parseing";
             }
-            else {
+            else
+            {
                 lblStatus.Text = "Parseing...";
                 listView1.Items[Int32.Parse(progstr[0])].SubItems[1].Text = progstr[1];
             }
         }
 
+        private void log_Console(int i, string msg, int prog)
+        {
+            Console.WriteLine(msg);
+        }
+
+        private void log_Worker(int i, string msg, int prog)
+        {
+            string[] reportObject = { i.ToString(), msg };
+            m_oWorker.ReportProgress(prog, reportObject);
+        }
+
+        private void cancel_Worker(int i, DoWorkEventArgs e)
+        {
+            if (m_oWorker.CancellationPending)
+            {
+                // Set the e.Cancel flag so that the WorkerCompleted event
+                // knows that the process was cancelled.
+                e.Cancel = true;
+                string[] reportObject = new string[] { i.ToString(), "Cancel" };
+                m_oWorker.ReportProgress(0, reportObject);
+                btnStartAsyncOperation.Enabled = false;
+                return;
+            }
+        }
+
         /// Time consuming operations go here </br>
         /// i.e. Database operations,Reporting
-        void m_oWorker_DoWork(object sender, DoWorkEventArgs e)
+        void m_DoWork(Logger logger, Cancellation cancel, DoWorkEventArgs e)
         {
             //globalization
             System.Globalization.CultureInfo before = System.Threading.Thread.CurrentThread.CurrentCulture;
@@ -111,27 +147,32 @@ namespace LuckParser
                     new System.Globalization.CultureInfo("en-US");
                 // Proceed with specific code
 
-                bool[] settingsSnap = new bool[] {Properties.Settings.Default.DPSGraphTotals,
-                Properties.Settings.Default.PlayerGraphTotals,
-                Properties.Settings.Default.PlayerGraphBoss,
-                Properties.Settings.Default.PlayerBoonsUniversal,
-                Properties.Settings.Default.PlayerBoonsImpProf,
-                Properties.Settings.Default.PlayerBoonsAllProf,
-                Properties.Settings.Default.PlayerRot,
-                Properties.Settings.Default.PlayerRotIcons,
-                Properties.Settings.Default.EventList,
-                Properties.Settings.Default.BossSummary,
-                Properties.Settings.Default.SimpleRotation
-            };
+                bool[] settingsSnap = new bool[] {
+                    Properties.Settings.Default.DPSGraphTotals,
+                    Properties.Settings.Default.PlayerGraphTotals,
+                    Properties.Settings.Default.PlayerGraphBoss,
+                    Properties.Settings.Default.PlayerBoonsUniversal,
+                    Properties.Settings.Default.PlayerBoonsImpProf,
+                    Properties.Settings.Default.PlayerBoonsAllProf,
+                    Properties.Settings.Default.PlayerRot,
+                    Properties.Settings.Default.PlayerRotIcons,
+                    Properties.Settings.Default.EventList,
+                    Properties.Settings.Default.BossSummary,
+                    Properties.Settings.Default.SimpleRotation
+                };
                 for (int i = 0; i < listView1.Items.Count; i++)
                 {
-                    string[] reportObject = { i.ToString(), "Working..." };
-                    m_oWorker.ReportProgress(20, reportObject);
+                    
 
                     string path = paths[i];
                     if (path.Contains("\\"))
                     {
                         path = path.Replace("\\", "/");
+                    }
+                    if (!File.Exists(path))
+                    {
+                        logger(i, "File does not exist", 100);
+                        continue;
                     }
                     int pos = path.LastIndexOf("/") + 1;
                     //if (pos == 0) {
@@ -147,13 +188,13 @@ namespace LuckParser
                     string appendix = file.Substring(pos1, file.Length - pos1);
                     string fileName = file.Substring(0, pos1 - 1);
 
+                    logger(i, "Working...", 20);
                     Controller1 control = new Controller1();
                     if (path.EndsWith(".evtc", StringComparison.OrdinalIgnoreCase) ||
                         path.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
                     {
                         //Process evtc here
-                        reportObject = new string[] { i.ToString(), "Reading Binary..." };
-                        m_oWorker.ReportProgress(40, reportObject);
+                        logger(i, "Reading Binary...", 40);
                         control.ParseLog(path);
 
 
@@ -179,13 +220,11 @@ namespace LuckParser
                         {
                             result = "kill";
                         }
-                        reportObject = new string[] { i.ToString(), "Createing File..." };
-                        m_oWorker.ReportProgress(60, reportObject);
+                        logger(i, "Creating File...", 60);
                         FileStream fcreate = File.Open(location + fileName + "_" + control.GetLink(boss + "-ext") + "_" + result + ".html", FileMode.Create);
 
                         //return html string
-                        reportObject = new string[] { i.ToString(), "Writing HTML..." };
-                        m_oWorker.ReportProgress(80, reportObject);
+                        logger(i, "Writing HTML...", 80);
 
 
                         using (StreamWriter sw = new StreamWriter(fcreate))
@@ -196,37 +235,34 @@ namespace LuckParser
                             sw.Close();
                         }
 
-                        // MessageBox.Show(path + " generated");
-                        reportObject = new string[] { i.ToString(), "HTML Generated" };
-                        m_oWorker.ReportProgress(100, reportObject);
+                        logger(i, "HTML Generated!", 100);
                     }
                     else
                     {
-                        reportObject = new string[] { i.ToString(), "Not EVTC" };
-                        m_oWorker.ReportProgress(100, reportObject);
+                        logger(i, "Not EVTC...", 100);
                     }
-                    if (m_oWorker.CancellationPending)
+                    if (cancel != null)
                     {
-                        // Set the e.Cancel flag so that the WorkerCompleted event
-                        // knows that the process was cancelled.
-                        e.Cancel = true;
-                        reportObject = new string[] { i.ToString(), "Cancel" };
-                        m_oWorker.ReportProgress(0, reportObject);
-                        btnStartAsyncOperation.Enabled = false;
-                        return;
+                        cancel(i, e);
                     }
                 }
 
                 //Report 100% completion on operation completed
-                string[] rO = new string[] { 0.ToString(), "Finish" };
-                m_oWorker.ReportProgress(100, rO);
+                logger(0, "Finish", 100);
                 btnStartAsyncOperation.Enabled = false;
             }
-            finally {
+            finally
+            {
                 System.Threading.Thread.CurrentThread.CurrentUICulture = before;
             }
         }
-       
+        
+        /// Worker job
+        void m_oWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            m_DoWork(log_Worker, cancel_Worker, e);
+        }
+
         private void btnStartAsyncOperation_Click(object sender, EventArgs e)
         {
             //Change the status of the buttons on the UI accordingly
@@ -254,15 +290,8 @@ namespace LuckParser
             }
         }
 
-        private void listView1_DragDrop(object sender, DragEventArgs e)
+        private void listView1_AddItems(string[] filesArray)
         {
-            btnStartAsyncOperation.Enabled = true;
-            if (completedOp) {
-                listView1.Items.Clear();
-                completedOp = false;
-            }
-            //Get files as list
-            string[] filesArray = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             List<string> files = new List<string>();
             foreach (string file in filesArray)
             {
@@ -272,7 +301,7 @@ namespace LuckParser
             if (paths == null)
             {
                 paths = files;
-                
+
             }
             else
             {
@@ -292,12 +321,25 @@ namespace LuckParser
             //Show in listbox
             foreach (string file in files)
             {
-              
+
                 ListViewItem item = new ListViewItem(file);
                 item.SubItems.Add(" ");
                 listView1.Items.Add(item);
 
             }
+        }
+
+        private void listView1_DragDrop(object sender, DragEventArgs e)
+        {
+            btnStartAsyncOperation.Enabled = true;
+            if (completedOp)
+            {
+                listView1.Items.Clear();
+                completedOp = false;
+            }
+            //Get files as list
+            string[] filesArray = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            listView1_AddItems(filesArray);
         }
 
         private void listView1_DragEnter(object sender, DragEventArgs e)
@@ -310,7 +352,7 @@ namespace LuckParser
             e.Graphics.FillRectangle(Brushes.Yellow, e.Bounds);
             e.DrawText();
         }
-       
+
         private void settingsbtn_Click(object sender, EventArgs e)
         {
             setFrm = new SettingsForm(/*settingArray,this*/);
@@ -319,7 +361,7 @@ namespace LuckParser
 
         private void Form1_Load(object sender, EventArgs e)
         {
-          
+
         }
 
         private void btnClear_Click(object sender, EventArgs e)
