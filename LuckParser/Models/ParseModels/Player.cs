@@ -623,14 +623,14 @@ namespace LuckParser.Models.ParseModels
             {
                 if (instid == c.getDstInstid())
                 {
-                    String skill_name = skillData.getName(c.getSkillID());
+                  //  String skill_name = skillData.getName(c.getSkillID());
 
                     if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove().getID() == 0)
                     {
                         int count = 0;
                         foreach (BoonMap bm in boon_map.ToList())
                         {
-                            if (skill_name.Contains(bm.getName()))
+                            if (bm.getID() == c.getSkillID())
                             {
                                 int time = c.getTime() - time_start;
                                 if (time < fight_duration)
@@ -658,7 +658,7 @@ namespace LuckParser.Models.ParseModels
                         int count = 0;
                         foreach (BoonMap bm in boon_map.ToList())
                         {
-                            if (skill_name.Contains(bm.getName()))
+                            if (bm.getID() == c.getSkillID())
                             {
                                 //make sure log is within fight time
                                 int time = c.getTime() - time_start;
@@ -695,7 +695,7 @@ namespace LuckParser.Models.ParseModels
                         int count = 0;
                         foreach (BoonMap bm in boon_map.ToList())
                         {
-                            if (skill_name.Contains(bm.getName()))
+                            if (bm.getID() == c.getSkillID())
                             {
 
                                 if (bm.getName().Contains("Fury"))
@@ -739,7 +739,7 @@ namespace LuckParser.Models.ParseModels
                         int count = 0;
                         foreach (BoonMap bm in boon_map.ToList())
                         {
-                            if (skill_name.Contains(bm.getName()))
+                            if (bm.getID() == c.getSkillID())
                             {
 
                                 if (bm.getName().Contains("Fury"))
