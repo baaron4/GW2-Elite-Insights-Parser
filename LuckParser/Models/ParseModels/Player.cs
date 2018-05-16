@@ -203,7 +203,7 @@ namespace LuckParser.Models.ParseModels
                         int time = c.getTime() - time_start;
                         if (time > 0)
                         {
-                            if (Boon.getCondiList().Contains(c.getSkillID()))
+                            if (Boon.getCondiBoonList().Exists(x=>x.getID() == c.getSkillID()))
                             {
                                 cleanse[0]++;
                                 cleanse[1] += c.getBuffDmg();

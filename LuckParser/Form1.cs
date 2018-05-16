@@ -371,5 +371,10 @@ namespace LuckParser
             paths = null;
             listView1.Items.Clear();
         }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

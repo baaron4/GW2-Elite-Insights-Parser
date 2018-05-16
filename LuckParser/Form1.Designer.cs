@@ -62,7 +62,7 @@
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(415, 343);
+            this.lblStatus.Location = new System.Drawing.Point(246, 343);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(35, 13);
             this.lblStatus.TabIndex = 8;
@@ -70,7 +70,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(415, 304);
+            this.progressBar1.Location = new System.Drawing.Point(249, 317);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(104, 13);
             this.progressBar1.TabIndex = 9;
@@ -129,7 +129,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(327, 343);
+            this.label2.Location = new System.Drawing.Point(158, 343);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(82, 13);
             this.label2.TabIndex = 13;
@@ -138,11 +138,12 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(335, 304);
+            this.label3.Location = new System.Drawing.Point(158, 317);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(74, 13);
             this.label3.TabIndex = 14;
             this.label3.Text = "Current Parse:";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // settingsbtn
             // 

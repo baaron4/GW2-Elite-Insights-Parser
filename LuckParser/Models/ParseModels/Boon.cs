@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
     public class Boon
     {
         // Boon
-        
+       
 
         // Fields
         private String name;
@@ -57,61 +57,9 @@ namespace LuckParser.Models.ParseModels
             return null;
         }
 
-        public static List<int> getCondiList() {
-            List<int> condiList = new List<int>();
-            condiList.Add(736);//Bleeding
-            condiList.Add(737);//Burning
-            condiList.Add(861);//Confusion
-            condiList.Add(723);//Poisin
-            condiList.Add(19426);//Torment
-            condiList.Add(720);//Blind
-            condiList.Add(722);//Chilled
-            condiList.Add(721);//Cripplied
-            condiList.Add(791);//Fear
-            condiList.Add(727);//Immob
-            condiList.Add(26766);//Slow
-            condiList.Add(27705);//Taunt
-            condiList.Add(742);//Weakness
-            condiList.Add(738);//Vuln
-            return condiList;
-        }
-        public static string getCondiName(int id) {
-            switch (id) {
-                case 736:
-                    return "Bleeding";
-                case 737:
-                    return "Burning";
-                case 861:
-                    return "Confusion";
-                case 723:
-                    return "Poison";
-                case 19426:
-                    return "Torment";
-                case 720:
-                    return "Blinded";
-                case 722:
-                    return "Chilled";
-                case 721:
-                    return "Crippled";
-                case 791:
-                    return "Fear";
-                case 727:
-                    return "Immobile";
-                case 26766:
-                    return "Slow";
-                case 27705:
-                    return "Taunt";
-                case 742:
-                    return "Weakness";
-                case 738:
-                    return "Vulnerability";
-                case 873:
-                    return "Retaliation";
-                default:
-                    return "UNKNOWN";
-            }
-        }
+       
         public static List<Boon> getCondiBoonList() {
+            
             List<Boon> boonList = new List<Boon>();
             boonList.Add(new Boon("Bleeding", 736, "main", "intensity", 1500));
             boonList.Add(new Boon("Burning", 737, "main", "intensity", 1500));
@@ -126,6 +74,7 @@ namespace LuckParser.Models.ParseModels
             boonList.Add(new Boon("Slow", 26766, "main", "duration", 9));
             boonList.Add(new Boon("Weakness", 737, "main", "duration", 5));
             boonList.Add(new Boon("Vulnerability", 738, "main", "intensity", 25));
+            boonList.Add(new Boon("Retaliation", 873, "main", "duration", 9));
             return boonList;
         }
         public static List<Boon> getList(){
@@ -149,6 +98,12 @@ namespace LuckParser.Models.ParseModels
             boonList.Add(new Boon("Sun Spirit", 12540, "ranger", "duration", 1));
             boonList.Add(new Boon("Stone Spirit", 12547, "ranger", "duration", 1));
             boonList.Add(new Boon("Storm Spirit",50381, "ranger", "duration", 1));
+            //Reworked
+            boonList.Add(new Boon("Spirit of Frost", 50421, "ranger", "duration", 1));
+            boonList.Add(new Boon("Sun Spirit", 50413, "ranger", "duration", 1));
+            boonList.Add(new Boon("Stone Spirit", 50415, "ranger", "duration", 1));
+            boonList.Add(new Boon("Storm Spirit", 50381, "ranger", "duration", 1));
+
             boonList.Add(new Boon("Glyph of Empowerment",31803, "ranger", "duration", 1));
 
             boonList.Add(new Boon("Empower Allies", 14222 , "warrior", "duration", 1));
@@ -195,6 +150,12 @@ namespace LuckParser.Models.ParseModels
             boonList.Add(new Boon("Sun Spirit", 12540, "ranger", "duration", 1));
             boonList.Add(new Boon("Stone Spirit", 12547, "ranger", "duration", 1));
             boonList.Add(new Boon("Storm Spirit", 50381, "ranger", "duration", 1));
+            //Reworked
+            boonList.Add(new Boon("Spirit of Frost", 50421, "ranger", "duration", 1));
+            boonList.Add(new Boon("Sun Spirit", 50413, "ranger", "duration", 1));
+            boonList.Add(new Boon("Stone Spirit", 50415, "ranger", "duration", 1));
+            boonList.Add(new Boon("Storm Spirit", 50381, "ranger", "duration", 1));
+
             boonList.Add(new Boon("Glyph of Empowerment", 31803, "ranger", "duration", 1));
             boonList.Add(new Boon("Empower Allies", 14222, "warrior", "duration", 1));
             boonList.Add(new Boon("Banner of Strength", 14417, "warrior", "duration", 1));
