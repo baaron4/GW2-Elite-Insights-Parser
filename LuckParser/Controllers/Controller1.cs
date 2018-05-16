@@ -3424,7 +3424,7 @@ namespace LuckParser.Controllers
                         sw.WriteLine("<tr><td align=\"left\">" + skill.getName() + "</td>" +
                            "<td></td>" + 
                            "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
-                            "<td></td>" + "<td></td>" +
+                            "<td></td>" + "<td></td>" + "<td></td>" +
                              "<td></td>" + "</tr>");
                     }
                 }
@@ -3797,7 +3797,7 @@ sw.WriteLine("</ul>");
                 AgentData a_data = getAgentData();
                 string charname = p.getCharacter();
                 sw.WriteLine(//"<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">" +
-                     "<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getCharacter().ToString()+"-icon") + " \" alt=\"" + p.getCharacter().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
+                     "<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(b_data.getID()+"-icon") + " \" alt=\"" + p.getCharacter().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
 
                 sw.Write("<ul class=\"nav nav-tabs\"><li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + p.getInstid() + "\">" + p.getCharacter() + "</a></li>");
                 //foreach pet loop here
@@ -4212,7 +4212,7 @@ sw.WriteLine("</ul>");
             double fight_duration = (b_data.getLastAware() - b_data.getFirstAware()) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
             String durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
-            string bossname = FilterStringChars(getBossData().getName());
+            string bossname = FilterStringChars(b_data.getName());
             setPresentBoons();
            
             sw.Write("<!DOCTYPE html><html lang=\"en\"><head> " +
@@ -4276,7 +4276,7 @@ sw.WriteLine("</ul>");
                     "<div class=\"card-body\"><blockquote class=\"card-blockquote\">" +
                      "<div class=\"row\">" +
                     "<div class=\"col-md-6 \">" +
-                       "<center><img src=\"" + GetLink(bossname + "-icon") + " \"alt=\"" + bossname + "-icon" + "\" style=\"height: 100px; width: 100 %; display: block; \" ></center>" +
+                       "<center><img src=\"" + GetLink(b_data.getID() + "-icon") + " \"alt=\"" + bossname + "-icon" + "\" style=\"height: 100px; width: 100 %; display: block; \" ></center>" +
                       "</div>" + "<div class=\"col-md-6 \">");
             if (log_data.getBosskill())
             {
@@ -4509,6 +4509,59 @@ sw.WriteLine("</ul>");
                 case "Soulless Horror-ext":
                     return "sh";
                 case "Dhuum-ext":
+                    return "dhuum";
+                    //ID version for multilingual
+                case "15438-icon":
+                    return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
+                case "15429-icon":
+                    return "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
+                case "15375-icon":
+                    return "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
+                case "16123-icon":
+                    return "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
+                case "16115-icon":
+                    return "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
+                case "16235-icon":
+                    return "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
+                case "16246-icon":
+                    return "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
+                case "17194-icon":
+                    return "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
+                case "17172-icon":
+                    return "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
+                case "17188-icon":
+                    return "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
+                case "17154-icon":
+                    return "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
+                case "19767-icon":
+                    return "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
+                case "19450-icon":
+                    return "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
+                case "15438-ext":
+                    return "vg";
+                case "15429-ext":
+                    return "gors";
+                case "15375-ext":
+                    return "sab";
+                case "16123-ext":
+                    return "sloth";
+                case "16115-ext":
+                    return "matt";
+                case "16235-ext":
+                    return "kc";
+                case "16246-ext":
+                    return "xera";
+                case "17194-ext":
+                    return "cairn";
+                case "17172-ext":
+                    return "mo";
+                case "17188-ext":
+                    return "sam";
+                case "17154-ext":
+                    return "dei";
+                case "19767-ext":
+                    return "sh";
+                case "19450-ext":
                     return "dhuum";
 
                 case "Warrior":

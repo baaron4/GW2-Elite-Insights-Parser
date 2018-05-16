@@ -214,14 +214,14 @@ namespace LuckParser
                         {
                             location = location.Replace("\\", "/");
                         }
-                        string boss = control.getBossData().getName();
+                        string bossid = control.getBossData().getID().ToString();
                         string result = "fail";
                         if (control.getLogData().getBosskill())
                         {
                             result = "kill";
                         }
                         logger(i, "Creating File...", 60);
-                        FileStream fcreate = File.Open(location + fileName + "_" + control.GetLink(boss + "-ext") + "_" + result + ".html", FileMode.Create);
+                        FileStream fcreate = File.Open(location + fileName + "_" + control.GetLink(bossid + "-ext") + "_" + result + ".html", FileMode.Create);
 
                         //return html string
                         logger(i, "Writing HTML...", 80);
