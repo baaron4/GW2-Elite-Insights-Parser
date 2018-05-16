@@ -934,12 +934,12 @@ namespace LuckParser.Controllers
                             if (boon.getType().Equals("duration"))
                             {
 
-                                //rate = String.Format("{0:0}", Statistics.getBoonGenUptime(boon_object, logs, b_data,1)[0]); // REGRESSION
+                               // rate = String.Format("{0:0.00}", Statistics.getBoonUptime(boon_object, logs, b_data,1)[0]);
                                 rate = String.Format("{0:0}", Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data));//these 2 are problamatic
                             }
                             else if (boon.getType().Equals("intensity"))
                             {
-                                //rate = String.Format("{0:0}", Statistics.getBoonGenUptime(boon_object, logs, b_data, 1)[0]); // REGRESSION
+                               // rate = String.Format("{0:0.00}", Statistics.getBoonUptime(boon_object, logs, b_data, 1)[0]);
                                 rate = String.Format("{0:0.0}", Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)));//issues
                             }
                         }
@@ -947,12 +947,12 @@ namespace LuckParser.Controllers
                         {
                             if (boon.getType().Equals("duration"))
                             {
-                                double[] array = Statistics.getBoonGenUptime(boon_object, logs, b_data, trgetPlayers.Count());
+                                double[] array = Statistics.getBoonUptime(boon_object, logs, b_data, trgetPlayers.Count());
                                 rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + String.Format("{0:0} %", array[1] * 100) + "with overstack \">" + String.Format("{0:0}%", array[0] * 100) + "</span>";
                             }
                             else if (boon.getType().Equals("intensity"))
                             {
-                                double[] array = Statistics.getBoonGenUptime(boon_object, logs, b_data, trgetPlayers.Count());
+                                double[] array = Statistics.getBoonUptime(boon_object, logs, b_data, trgetPlayers.Count());
                                 rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + String.Format("{0:0.0}", array[1]) + "with overstack \">" + String.Format("{0:0.0}", array[0]) + "</span>";
                             }
                         }
@@ -3878,7 +3878,7 @@ namespace LuckParser.Controllers
             SkillData s_data = getSkillData();
             foreach (SkillItem skill in s_data.getSkillList()) {
                 sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                              skill.getID()  + " : " + skill.getName() + "subgroup" +
+                                              skill.getID()  + " : " + skill.getName()  +
                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                              "</li>");
             }
