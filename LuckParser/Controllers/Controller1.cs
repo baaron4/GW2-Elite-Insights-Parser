@@ -898,7 +898,7 @@ namespace LuckParser.Controllers
             String[] statsArray = new string[] { resurrects.ToString(), (restime/1000f).ToString(), condiCleanse.ToString(), (condiCleansetime/1000f).ToString() };
             return statsArray;
         }
-        public string[] getfinalboons(Player p, List<int> trgetPlayers)
+        public Dictionary<int, string> getfinalboons(Player p, List<int> trgetPlayers)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
@@ -915,7 +915,7 @@ namespace LuckParser.Controllers
 
             List<Boon> boon_list = Boon.getList();
             int n = boon_list.Count();//# of diff boons
-            string[] rates = new string[n];
+            Dictionary<int,string> rates = new Dictionary<int, string>();
             for (int i = 0; i < n; i++)
             {
                 // Boon boon = Boon.getEnum(boon_list[i].ToString());
@@ -958,10 +958,10 @@ namespace LuckParser.Controllers
                         }
 
                     }
-                    rates[i] = rate;
+                    rates[boon.getID()] = rate;
                 }
                 else {
-                    rates[i] = "0";
+                    rates[boon.getID()] = "0";
                 }
             }
             //table.addrow(utility.concatstringarray(new string[] { p.getcharacter(), p.getprof() }, rates));
@@ -2175,14 +2175,14 @@ namespace LuckParser.Controllers
         public void CreateBoonsUptimeTable(StreamWriter sw)
         {
             //Generate Boon table------------------------------------------------------------------------------------------------
-            sw.WriteLine( " <script> $(function () { $('#boons_table').DataTable({ \"order\": [[3, \"desc\"]] " +
+            sw.WriteLine( " <script> $(function () { $('#boons_table').DataTable({ \"order\": [[0, \"asc\"]] " +
             // "\"scrollX\": true," +
             " });});</script>" +
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boons_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
 
             List<List<string>> footList = new List<List<string>>();
-            foreach (Boon boon in Boon.getList())
+            foreach (Boon boon in Boon.getMainList())
             {
                 sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
@@ -2191,18 +2191,15 @@ namespace LuckParser.Controllers
             {
                 sw.WriteLine("<tr>");
                 sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
                 sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
-                string[] boonArray = getfinalboons(player, new List<int>());
-                int count = 0;
+                Dictionary<int, string> boonArray = getfinalboons(player, new List<int>());
                 List<string> boonArrayToList = new List<string>();
                 boonArrayToList.Add(player.getGroup());
-                foreach (Boon boon in Boon.getList())
+                foreach (Boon boon in Boon.getMainList())
                 {
-                    sw.WriteLine("<td>" + boonArray[count] + "</td>");
-                    boonArrayToList.Add(boonArray[count]);
-                    count++;
-
+                    sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
+                    boonArrayToList.Add(boonArray[boon.getID()]);
                 }
                 sw.WriteLine("</tr>");
                 //gather data for footer
@@ -2248,16 +2245,134 @@ namespace LuckParser.Controllers
             sw.WriteLine("</tr>");
             sw.WriteLine("</tfoot></table>");
         }
+        public void CreateOffensiveBuffsUptimeTable(StreamWriter sw)
+        {
+            //Generate Boon table------------------------------------------------------------------------------------------------
+            sw.WriteLine(" <script> $(function () { $('#offensive_table').DataTable({ \"order\": [[0, \"asc\"]] " +
+            // "\"scrollX\": true," +
+            " });});</script>" +
+            " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"offensive_table\">" +
+                " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
+
+            List<List<string>> footList = new List<List<string>>();
+            foreach (Boon boon in Boon.getOffensiveList())
+            {
+                sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+            }
+            sw.WriteLine(" </tr> </thead><tbody>");
+            foreach (Player player in p_list)
+            {
+                sw.WriteLine("<tr>");
+                sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
+                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
+                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
+                Dictionary<int, string> boonArray = getfinalboons(player, new List<int>());
+                List<string> boonArrayToList = new List<string>();
+                boonArrayToList.Add(player.getGroup());
+                foreach (Boon boon in Boon.getOffensiveList())
+                {
+                    sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
+                    boonArrayToList.Add(boonArray[boon.getID()]);
+
+                }
+                sw.WriteLine("</tr>");
+                //gather data for footer
+                footList.Add(boonArrayToList);
+            }
+            sw.WriteLine("</tbody><tfoot>");
+            foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
+            {
+                List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
+                sw.WriteLine("<tr>");
+                sw.WriteLine("<td></td>");
+                sw.WriteLine("<td></td>");
+                sw.WriteLine("<td>Group " + groupNum + "</td>");
+                for (int i = 1; i < groupList[0].Count; i++)
+                {// string boonStr in groupList) {
+                    sw.WriteLine("<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>");
+                }
+                sw.WriteLine("</tr>");
+            }
+            sw.WriteLine("<tr>");
+            sw.WriteLine("<td></td>");
+            sw.WriteLine("<td></td>");
+            sw.WriteLine("<td>Averages</td>");
+            for (int i = 1; i < footList[0].Count; i++)
+            {// string boonStr in groupList) {
+               sw.WriteLine("<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>");
+            }
+            sw.WriteLine("</tr>");
+            sw.WriteLine("</tfoot></table>");
+        }
+        public void CreateDefensiveBuffsUptimeTable(StreamWriter sw)
+        {
+            //Generate Boon table------------------------------------------------------------------------------------------------
+            sw.WriteLine(" <script> $(function () { $('#defensive_table').DataTable({ \"order\": [[0, \"asc\"]] " +
+            // "\"scrollX\": true," +
+            " });});</script>" +
+            " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"defensive_table\">" +
+                " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
+
+            List<List<string>> footList = new List<List<string>>();
+            foreach (Boon boon in Boon.getDefensiveList())
+            {
+                sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+            }
+            sw.WriteLine(" </tr> </thead><tbody>");
+            foreach (Player player in p_list)
+            {
+                sw.WriteLine("<tr>");
+                sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
+                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
+                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
+                Dictionary<int, string> boonArray = getfinalboons(player, new List<int>());
+                List<string> boonArrayToList = new List<string>();
+                boonArrayToList.Add(player.getGroup());
+                foreach (Boon boon in Boon.getDefensiveList())
+                {
+                    sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
+                    boonArrayToList.Add(boonArray[boon.getID()]);
+
+                }
+                sw.WriteLine("</tr>");
+                //gather data for footer
+                footList.Add(boonArrayToList);
+            }
+            sw.WriteLine("</tbody><tfoot>");
+            foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
+            {
+                List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
+                sw.WriteLine("<tr>");
+                sw.WriteLine("<td></td>");
+                sw.WriteLine("<td></td>");
+                sw.WriteLine("<td>Group " + groupNum + "</td>");
+                for (int i = 1; i < groupList[0].Count; i++)
+                {// string boonStr in groupList) {
+                   sw.WriteLine("<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>");
+                }
+                sw.WriteLine("</tr>");
+            }
+            sw.WriteLine("<tr>");
+            sw.WriteLine("<td></td>");
+            sw.WriteLine("<td></td>");
+            sw.WriteLine("<td>Averages</td>");
+            for (int i = 1; i < footList[0].Count; i++)
+            {// string boonStr in groupList) {
+                sw.WriteLine("<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>");
+            }
+            sw.WriteLine("</tr>");
+            sw.WriteLine("</tfoot></table>");
+        }
         public void CreateBoonGenSelfTable(StreamWriter sw)
         { //Generate BoonGenSelf table
-           sw.WriteLine( " <script> $(document).ready(function () { $('#boongenself_table').DataTable({ \"order\": [[3, \"desc\"]]" +
+           sw.WriteLine( " <script> $(document).ready(function () { $('#boongenself_table').DataTable({ \"order\": [[0, \"asc\"]]" +
             //  "\"scrollX\": true" +
 
             "});});</script>" +
             " <table class=\"display nowrap compact\" cellspacing=\"0\" width=\"100%\" id=\"boongenself_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
             List<List<string>> footList = new List<List<string>>();
-            foreach (Boon boon in Boon.getList())
+            foreach (Boon boon in Boon.getMainList())
             {
                 sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
@@ -2267,20 +2382,17 @@ namespace LuckParser.Controllers
             {
                 sw.WriteLine("<tr>");
                 sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
                 sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
 
                 List<int> playerID = new List<int>();
                 playerID.Add(player.getInstid());
-                string[] boonArray = getfinalboons(player, playerID);
-
-                int count = 0;
+                Dictionary<int, string> boonArray = getfinalboons(player, playerID);
                 List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in Boon.getList())
+                foreach (Boon boon in Boon.getMainList())
                 {
-                    sw.WriteLine("<td>" + boonArray[count] + "</td>");
-                    boonArrayToList.Add(boonArray[count]);
-                    count++;
+                    sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
+                    boonArrayToList.Add(boonArray[boon.getID()]);
                 }
                 sw.WriteLine("</tr>");
                 //gather data for footer
@@ -2330,13 +2442,13 @@ namespace LuckParser.Controllers
         }
         public void CreateBoonGenGroupTable(StreamWriter sw)
         { //Generate BoonGenGroup table
-           sw.WriteLine( " <script> $(function () { $('#boongengroup_table').DataTable({ \"order\": [[3, \"desc\"]] " +
+           sw.WriteLine( " <script> $(function () { $('#boongengroup_table').DataTable({ \"order\": [[0, \"asc\"]] " +
             //  "\"scrollX\": true," +
             "});});</script>" +
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongengroup_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
             List<List<string>> footList = new List<List<string>>();
-            foreach (Boon boon in Boon.getList())
+            foreach (Boon boon in Boon.getMainList())
             {
                 sw.WriteLine( "<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
@@ -2347,7 +2459,7 @@ namespace LuckParser.Controllers
             {
                 sw.WriteLine("<tr>");
                 sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
                 sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
 
                 foreach (Player p in p_list)
@@ -2355,15 +2467,13 @@ namespace LuckParser.Controllers
                     if (p.getGroup() == player.getGroup())
                         playerIDS.Add(p.getInstid());
                 }
-                string[] boonArray = getfinalboons(player, playerIDS);
+                Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
                 playerIDS = new List<int>();
-                int count = 0;
                 List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in Boon.getList())
+                foreach (Boon boon in Boon.getMainList())
                 {
-                    sw.WriteLine("<td>" + boonArray[count] + "</td>");
-                    boonArrayToList.Add(boonArray[count]);
-                    count++;
+                    sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
+                    boonArrayToList.Add(boonArray[boon.getID()]);
                 }
                 sw.WriteLine("</tr>");
                 //gather data for footer
@@ -2413,13 +2523,13 @@ namespace LuckParser.Controllers
         }
         public void CreateBoonGenOGroupTable(StreamWriter sw)
         {  //Generate BoonGenOGroup table
-            sw.WriteLine(" <script> $(function () { $('#boongenogroup_table').DataTable({ \"order\": [[3, \"desc\"]] " +
+            sw.WriteLine(" <script> $(function () { $('#boongenogroup_table').DataTable({ \"order\": [[0, \"asc\"]] " +
               // "\"scrollX\": true," +
               "});});</script>" +
               " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongenogroup_table\">" +
                   " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
             List<List<string>>  footList = new List<List<string>>();
-            foreach (Boon boon in Boon.getList())
+            foreach (Boon boon in Boon.getMainList())
             {
                 sw.WriteLine( "<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
@@ -2430,7 +2540,7 @@ namespace LuckParser.Controllers
             {
                 sw.WriteLine("<tr>");
                 sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
                 sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
 
                 foreach (Player p in p_list)
@@ -2438,15 +2548,13 @@ namespace LuckParser.Controllers
                     if (p.getGroup() != player.getGroup())
                         playerIDS.Add(p.getInstid());
                 }
-                string[] boonArray = getfinalboons(player, playerIDS);
+                Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
                 playerIDS = new List<int>();
-                int count = 0;
                 List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in Boon.getList())
+                foreach (Boon boon in Boon.getMainList())
                 {
-                    sw.WriteLine("<td>" + boonArray[count] + "</td>");
-                    boonArrayToList.Add(boonArray[count]);
-                    count++;
+                    sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
+                    boonArrayToList.Add(boonArray[boon.getID()]);
                 }
                 sw.WriteLine("</tr>");
                 //gather data for footer
@@ -2496,12 +2604,12 @@ namespace LuckParser.Controllers
         }
         public void CreateBoonGenSquadTable(StreamWriter sw) {
             //Generate BoonGenSquad table
-            sw.WriteLine(" <script> $(function () { $('#boongensquad_table').DataTable({ \"order\": [[3, \"desc\"]] " +
+            sw.WriteLine(" <script> $(function () { $('#boongensquad_table').DataTable({ \"order\": [[0, \"asc\"]] " +
              // "\"scrollX\": true," +
              "});});</script>" +
              " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongensquad_table\">" +
                  " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
-            foreach (Boon boon in Boon.getList())
+            foreach (Boon boon in Boon.getMainList())
             {
                 sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
@@ -2516,19 +2624,16 @@ namespace LuckParser.Controllers
             {
                 sw.WriteLine("<tr>");
                 sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
                 sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
 
 
-                string[] boonArray = getfinalboons(player, playerIDS);
-
-                int count = 0;
+                Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
                 List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in Boon.getList())
+                foreach (Boon boon in Boon.getMainList())
                 {
-                    sw.WriteLine("<td>" + boonArray[count] + "</td>");
-                    boonArrayToList.Add(boonArray[count]);
-                    count++;
+                    sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
+                    boonArrayToList.Add(boonArray[boon.getID()]);
                 }
                 sw.WriteLine("</tr>");
                 //gather data for footer
@@ -4479,6 +4584,8 @@ namespace LuckParser.Controllers
 
 
                      "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsUptime\">Boon Uptime</a>" +
+                     "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveUptime\">Off.Buffs Uptime</a>" +
+                     "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveUptime\">Def.Buffs Uptime</a>" +
                      "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenSelf\">Boon Generation(Self)</a>" +
                      "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenGroup\">Boon Generation(Group)</a>" +
                      "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenOGroup\">Boon Generation(Off Group)</a>" +
@@ -4531,16 +4638,25 @@ namespace LuckParser.Controllers
             //DMG Graph
             //Html_dpsGraph
             CreateDPSGraph(sw);
-                         sw.WriteLine("</div>" +
-                         "<div class=\"tab-pane fade\" id=\"boonsUptime\">" +
-                         "<p> Boon Uptime</p>");
             //Boon Stats
             // Html_boons
+            sw.WriteLine("</div>" +
+                         "<div class=\"tab-pane fade\" id=\"boonsUptime\">" +
+                         "<p> Boon Uptime</p>");
             CreateBoonsUptimeTable(sw);
-                         sw.WriteLine("</div>" +
+            sw.WriteLine("</div>" +
+            "<div class=\"tab-pane fade\" id=\"offensiveUptime\">" +
+            "<p> Offensive Buffs Uptime</p>");
+            CreateOffensiveBuffsUptimeTable(sw);
+            sw.WriteLine("</div>" +
+            "<div class=\"tab-pane fade\" id=\"defensiveUptime\">" +
+            "<p> Defensive Buffs Uptime</p>");
+            CreateDefensiveBuffsUptimeTable(sw);
+            //Html_boonGenSelf
+            sw.WriteLine("</div>" +
                          "<div class=\"tab-pane fade\" id=\"boonsGenSelf\">" +
                           "<p> Boons generated by a character for themselves</p>");
-            //Html_boonGenSelf
+            
             CreateBoonGenSelfTable(sw);
                          sw.WriteLine("</div>" +
                           "<div class=\"tab-pane fade\" id=\"boonsGenGroup\">" +
@@ -4825,6 +4941,38 @@ namespace LuckParser.Controllers
                 case "Vampiric Aura": return "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png";
                 case "Assassin's Presence": return "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png";
                 case "Battle Presence": return "https://wiki.guildwars2.com/images/2/27/Battle_Presence.png";
+                case "Razorclaw's Rage": return "https://wiki.guildwars2.com/images/7/73/Razorclaw%27s_Rage.png";
+                case "Soulcleave's Summit": return "https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png";
+                case "Ashes of the Just": return "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png";
+                case "Vulture Stance": return "https://wiki.guildwars2.com/images/8/8f/Vulture_Stance.png";
+                case "One Wolf Pack": return "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png";
+                case "Skale Venom": return "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png";
+                case "Spider Venom": return "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png";
+                case "Basilisk Venom": return "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png";
+                case "Conjure Flame Axe": return "https://wiki.guildwars2.com/images/a/a1/Conjure_Flame_Axe.png";
+                case "Conjure Frost Bow": return "https://wiki.guildwars2.com/images/c/c3/Conjure_Frost_Bow.png";
+                case "Conjure Lightning Hammer": return "https://wiki.guildwars2.com/images/1/1f/Conjure_Lightning_Hammer.png";
+                case "Conjure Fiery Greatsword": return "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png";
+                case "Arcane Power": return "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png";
+                case "Rite of the Great Dwarf": return "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png";
+                case "Infuse Light": return "https://wiki.guildwars2.com/images/6/60/Infuse_Light.png";
+                case "Naturalistic Resonance": return "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png";
+                case "Breakrazor's Bastion": return "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png";
+                case "Purging Flames": return "https://wiki.guildwars2.com/images/2/28/Purging_Flames.png";
+                case "Eternal Oasis": return "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png";
+                case "Unbroken Lines": return "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png";
+                case "Strength in Numbers": return "https://wiki.guildwars2.com/images/7/7b/Strength_in_Numbers.png";
+                case "Dolyak Stance": return "https://wiki.guildwars2.com/images/7/71/Dolyak_Stance.png";
+                case "Griffon Stance": return "https://wiki.guildwars2.com/images/9/98/Griffon_Stance.png";
+                case "Moa Stance": return "https://wiki.guildwars2.com/images/6/66/Moa_Stance.png";
+                case "Bear Stance": return "https://wiki.guildwars2.com/images/f/f0/Bear_Stance.png";
+                case "Ice Drake Venom": return "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png";
+                case "Skelk Venom": return "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png";
+                case "Devourer Venom": return "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png";
+                case "Last Rites": return "https://wiki.guildwars2.com/images/1/1a/Last_Rites_%28effect%29.png";
+                case "Conjure Earth Shield": return "https://wiki.guildwars2.com/images/7/7a/Conjure_Earth_Shield.png";
+                case "Rebound": return "https://wiki.guildwars2.com/images/0/03/%22Rebound%21%22.png";
+
 
                 case "Color-Aegis": return "rgb(102,255,255)";
                 case "Color-Fury": return "rgb(255,153,0)";
