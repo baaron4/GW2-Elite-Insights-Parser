@@ -235,7 +235,7 @@ namespace LuckParser
                             sw.Close();
                         }
 
-                        logger(i, "HTML Generated...", 100);
+                        logger(i, "HTML Generated!", 100);
                     }
                     else
                     {
