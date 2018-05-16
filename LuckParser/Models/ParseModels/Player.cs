@@ -162,13 +162,13 @@ namespace LuckParser.Models.ParseModels
                                     everywhere++;
                                         if (c.isBuffremove().getID() == 0 && c.isBuff() > 0 && c.getBuffDmg() == 0 && c.getValue() > 0) {//Buff application
                                             huh++;
-                                            String skill_name = skillData.getName(c.getSkillID());
+                                           // String skill_name = skillData.getName(c.getSkillID());
                                             int count = 0;
                                            
                                             foreach (BoonMap bm in boonGen.ToList())
                                             {
-                                                if (skill_name.Contains(bm.getName()))
-                                                {
+                                            if (bm.getID() == c.getSkillID())
+                                            {
                                                         List<BoonLog> loglist = bm.getBoonLog();
                                                         loglist.Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
                                                         bm.setBoonLog(loglist);
