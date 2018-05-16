@@ -3367,7 +3367,7 @@ namespace LuckParser.Controllers
            
             sw.WriteLine(" <script> $(function () { $('#dist_table_" + p.getInstid()+"_"+agent.getInstid() + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>" +
                 " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + p.getInstid() +"_"+agent.getInstid()+ "\">" +
-           " <thead> <tr> <th>Skill</th>><th>Damage</th><th>Percent</th><th>Hits</th> <th>Min</th><th>Avg</th><th>Max</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
+           " <thead> <tr> <th>Skill</th><th>Damage</th><th>Percent</th><th>Hits</th> <th>Min</th><th>Avg</th><th>Max</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
            "</tr> </thead><tbody>");
             foreach (int id in damageLogs.Select(x => x.getID()).Distinct())
             {//foreach casted skill
