@@ -138,6 +138,7 @@ namespace LuckParser.Controllers
         private SkillData skill_data = new SkillData();
         private CombatData combat_data = new CombatData();
         private MechanicData mech_data = new MechanicData();
+        public List<Player> p_list = new List<Player>();
 
         // Public Methods
         public LogData getLogData()
@@ -163,7 +164,7 @@ namespace LuckParser.Controllers
         public MechanicData getMechData() {
             return mech_data;
         }
-        public List<Player> p_list = new List<Player>();
+       
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
         public bool ParseLog(string evtc)
@@ -728,6 +729,9 @@ namespace LuckParser.Controllers
             int power_loop_count = 0;
             int critical_rate = 0;
             int scholar_rate = 0;
+            int scholar_dmg = 0;
+            int totaldamage = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Sum(x => x.getDamage());
+
             int moving_rate = 0;
             int flanking_rate = 0;
             //glancerate
@@ -756,8 +760,12 @@ namespace LuckParser.Controllers
                     {
                         critical_rate++;
                     }
-                    // critical_rate += (log.getResult().equals(Result.CRIT)) ? 1 : 0;
-                    scholar_rate += log.isNinety();
+                    if (log.isNinety()>0) {
+                        scholar_rate++;
+                        
+                        scholar_dmg += (int)(log.getDamage() / 11.0); //regular+10% damage
+                    }
+                    //scholar_rate += log.isNinety();
                     moving_rate += log.isMoving();
                     flanking_rate += log.isFlanking();
                     if (log.getResult().getEnum() == "GLANCE")
@@ -821,7 +829,8 @@ namespace LuckParser.Controllers
 
             statsArray = new string[] { power_loop_count.ToString(), critical_rate.ToString(), scholar_rate.ToString(), moving_rate.ToString(),
                 flanking_rate.ToString(), swap.ToString(),down.ToString(),dodge.ToString(),ress.ToString(),died.ToString("0.00"),
-            glance_rate.ToString(),missed.ToString(),interupts.ToString(),invulned.ToString(),(time_wasted/1000f).ToString(),wasted.ToString(),avgBoons.ToString(),(time_saved/1000f).ToString(),saved.ToString()
+            glance_rate.ToString(),missed.ToString(),interupts.ToString(),invulned.ToString(),(time_wasted/1000f).ToString(),wasted.ToString(),avgBoons.ToString(),(time_saved/1000f).ToString(),saved.ToString(),
+            scholar_dmg.ToString(),totaldamage.ToString()
             };
             return statsArray;
         }
@@ -1550,7 +1559,7 @@ namespace LuckParser.Controllers
 
                 string[] stats = getFinalStats(player);
                 sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[1]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//crit
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[2] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[2]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//scholar
+                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[2] + " out of " + stats[0] + " hits <br> Pure Scholar Damage: "+stats[19]+"<br> Effective Damage Increase: "+ (int)(Double.Parse(stats[19]) / Double.Parse(stats[20]) * 100) + "% \">" + (int)(Double.Parse(stats[2]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//scholar
                 sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[3]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//sws
                 sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[4] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[4]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//flank
                 sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[10] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[10]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//glance
