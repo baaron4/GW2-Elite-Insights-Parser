@@ -39,28 +39,6 @@ namespace LuckParser.Models.ParseModels
             this.priority = priority;
         }
         // Public Methods
-        public void setID(int id)
-        {
-            this.id = id;
-        }
-        public static Boon getEnum(String name)
-        {
-            foreach (Boon b in getList())
-            {
-                if (b.getName() == name)
-                {
-                    return b;
-                }
-            }
-            foreach (Boon b in getAllProfList())
-            {
-                if (b.getName() == name)
-                {
-                    return b;
-                }
-            }
-            return null;
-        }
 
         private static List<Boon> allBoons = new List<Boon>
             {
@@ -91,7 +69,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Slow", 26766, BoonSource.Mixed, "duration", 9, BoonEnum.Condition),
                 new Boon("Weakness", 737, BoonSource.Mixed, "duration", 5, BoonEnum.Condition),
                 new Boon("Vulnerability", 738, BoonSource.Mixed, "intensity", 25, BoonEnum.Condition),
-                new Boon("Retaliation Condi", 873, BoonSource.Mixed, "duration", 9, BoonEnum.Condition),
+                new Boon("Retaliation", 873, BoonSource.Mixed, "duration", 9, BoonEnum.Condition),
                 // Generic
                 new Boon("Stealth", 13017, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Revealed", 890, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
@@ -426,7 +404,7 @@ namespace LuckParser.Models.ParseModels
             return allBoons.Where(x => x.priority == BoonEnum.DefensiveBuff).ToList();
         }
 
-        public static List<Boon> getMainList()
+        public static List<Boon> getBoonList()
         {
             return allBoons.Where(x => x.priority == BoonEnum.Boon).ToList();
         }
@@ -438,7 +416,11 @@ namespace LuckParser.Models.ParseModels
         {
             return allBoons.Where(x => x.priority != BoonEnum.Condition).ToList();
         }
-       
+        public static List<Boon> getRestList()
+        {
+            return allBoons.Where(x => x.priority == BoonEnum.NonShareableBuff).ToList();
+        }
+
 
         // Getters
         public String getName()
