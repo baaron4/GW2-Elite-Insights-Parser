@@ -18,6 +18,7 @@ namespace LuckParser
             {
                 // Use the application through console 
                 Form1 myConsoleParser = new Form1(args);
+                
                 return 0;
             }
             Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");

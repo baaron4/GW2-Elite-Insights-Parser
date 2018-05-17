@@ -138,6 +138,7 @@ namespace LuckParser.Controllers
         private SkillData skill_data = new SkillData();
         private CombatData combat_data = new CombatData();
         private MechanicData mech_data = new MechanicData();
+        public List<Player> p_list = new List<Player>();
 
         // Public Methods
         public LogData getLogData()
@@ -163,7 +164,7 @@ namespace LuckParser.Controllers
         public MechanicData getMechData() {
             return mech_data;
         }
-        public List<Player> p_list = new List<Player>();
+       
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
         public bool ParseLog(string evtc)
@@ -580,6 +581,15 @@ namespace LuckParser.Controllers
         }
 
         //Statistics--------------------------------------------------------------------------------------------------------------------------------------------------------
+        public List<Boon> present_boons =  new List<Boon>();//Used only for Boon tables
+        public void setPresentBoons() {
+            List<SkillItem> s_list = getSkillData().getSkillList();
+            foreach (Boon boon in Boon.getList()) {
+                if (s_list.Exists(x => x.getID() == boon.getID())) {
+                    present_boons.Add(boon);
+                }
+            }
+        }
         public String getFinalDPS(Player p)
         {
             BossData b_data = getBossData();
@@ -719,6 +729,9 @@ namespace LuckParser.Controllers
             int power_loop_count = 0;
             int critical_rate = 0;
             int scholar_rate = 0;
+            int scholar_dmg = 0;
+            int totaldamage = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Sum(x => x.getDamage());
+
             int moving_rate = 0;
             int flanking_rate = 0;
             //glancerate
@@ -747,8 +760,12 @@ namespace LuckParser.Controllers
                     {
                         critical_rate++;
                     }
-                    // critical_rate += (log.getResult().equals(Result.CRIT)) ? 1 : 0;
-                    scholar_rate += log.isNinety();
+                    if (log.isNinety()>0) {
+                        scholar_rate++;
+                        
+                        scholar_dmg += (int)(log.getDamage() / 11.0); //regular+10% damage
+                    }
+                    //scholar_rate += log.isNinety();
                     moving_rate += log.isMoving();
                     flanking_rate += log.isFlanking();
                     if (log.getResult().getEnum() == "GLANCE")
@@ -812,7 +829,8 @@ namespace LuckParser.Controllers
 
             statsArray = new string[] { power_loop_count.ToString(), critical_rate.ToString(), scholar_rate.ToString(), moving_rate.ToString(),
                 flanking_rate.ToString(), swap.ToString(),down.ToString(),dodge.ToString(),ress.ToString(),died.ToString("0.00"),
-            glance_rate.ToString(),missed.ToString(),interupts.ToString(),invulned.ToString(),(time_wasted/1000f).ToString(),wasted.ToString(),avgBoons.ToString(),(time_saved/1000f).ToString(),saved.ToString()
+            glance_rate.ToString(),missed.ToString(),interupts.ToString(),invulned.ToString(),(time_wasted/1000f).ToString(),wasted.ToString(),avgBoons.ToString(),(time_saved/1000f).ToString(),saved.ToString(),
+            scholar_dmg.ToString(),totaldamage.ToString()
             };
             return statsArray;
         }
@@ -913,7 +931,7 @@ namespace LuckParser.Controllers
                 boon_logs = p.getboonGen(b_data, s_data, c_data.getCombatList(), agent_data, trgetPlayers);
             }
 
-            List<Boon> boon_list = Boon.getList();
+            List<Boon> boon_list = present_boons;
             int n = boon_list.Count();//# of diff boons
             Dictionary<int,string> rates = new Dictionary<int, string>();
             for (int i = 0; i < n; i++)
@@ -921,7 +939,7 @@ namespace LuckParser.Controllers
                 // Boon boon = Boon.getEnum(boon_list[i].ToString());
                 Boon boon = boon_list[i];
                 AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                BoonMap bm = boon_logs.FirstOrDefault(x => x.getName().Contains(boon.getName()) );
+                BoonMap bm = boon_logs.FirstOrDefault(x=>x.getID() == boon.getID());//boon_logs.FirstOrDefault(x => x.getName().Contains(boon.getName()) );
                 if (bm != null)
                 {
                     List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
@@ -1546,7 +1564,7 @@ namespace LuckParser.Controllers
 
                 string[] stats = getFinalStats(player);
                 sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[1]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//crit
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[2] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[2]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//scholar
+                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[2] + " out of " + stats[0] + " hits <br> Pure Scholar Damage: "+stats[19]+"<br> Effective Damage Increase: "+ (int)(Double.Parse(stats[19]) / Double.Parse(stats[20]) * 100) + "% \">" + (int)(Double.Parse(stats[2]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//scholar
                 sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[3]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//sws
                 sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[4] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[4]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//flank
                 sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[10] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[10]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//glance
@@ -2182,7 +2200,7 @@ namespace LuckParser.Controllers
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
 
             List<List<string>> footList = new List<List<string>>();
-            foreach (Boon boon in Boon.getMainList())
+            foreach (Boon boon in present_boons)
             {
                 sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
@@ -2196,7 +2214,7 @@ namespace LuckParser.Controllers
                 Dictionary<int, string> boonArray = getfinalboons(player, new List<int>());
                 List<string> boonArrayToList = new List<string>();
                 boonArrayToList.Add(player.getGroup());
-                foreach (Boon boon in Boon.getMainList())
+                foreach (Boon boon in present_boons)
                 {
                     sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
                     boonArrayToList.Add(boonArray[boon.getID()]);
@@ -2372,7 +2390,7 @@ namespace LuckParser.Controllers
             " <table class=\"display nowrap compact\" cellspacing=\"0\" width=\"100%\" id=\"boongenself_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
             List<List<string>> footList = new List<List<string>>();
-            foreach (Boon boon in Boon.getMainList())
+            foreach (Boon boon in present_boons)
             {
                 sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
@@ -2389,7 +2407,7 @@ namespace LuckParser.Controllers
                 playerID.Add(player.getInstid());
                 Dictionary<int, string> boonArray = getfinalboons(player, playerID);
                 List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in Boon.getMainList())
+                foreach (Boon boon in present_boons)
                 {
                     sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
                     boonArrayToList.Add(boonArray[boon.getID()]);
@@ -2448,7 +2466,7 @@ namespace LuckParser.Controllers
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongengroup_table\">" +
                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
             List<List<string>> footList = new List<List<string>>();
-            foreach (Boon boon in Boon.getMainList())
+            foreach (Boon boon in present_boons)
             {
                 sw.WriteLine( "<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
@@ -2470,7 +2488,7 @@ namespace LuckParser.Controllers
                 Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
                 playerIDS = new List<int>();
                 List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in Boon.getMainList())
+                foreach (Boon boon in present_boons)
                 {
                     sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
                     boonArrayToList.Add(boonArray[boon.getID()]);
@@ -2529,7 +2547,7 @@ namespace LuckParser.Controllers
               " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongenogroup_table\">" +
                   " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
             List<List<string>>  footList = new List<List<string>>();
-            foreach (Boon boon in Boon.getMainList())
+            foreach (Boon boon in present_boons)
             {
                 sw.WriteLine( "<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
@@ -2551,7 +2569,7 @@ namespace LuckParser.Controllers
                 Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
                 playerIDS = new List<int>();
                 List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in Boon.getMainList())
+                foreach (Boon boon in present_boons)
                 {
                     sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
                     boonArrayToList.Add(boonArray[boon.getID()]);
@@ -2609,7 +2627,7 @@ namespace LuckParser.Controllers
              "});});</script>" +
              " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongensquad_table\">" +
                  " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
-            foreach (Boon boon in Boon.getMainList())
+            foreach (Boon boon in present_boons)
             {
                 sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
@@ -2630,7 +2648,7 @@ namespace LuckParser.Controllers
 
                 Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
                 List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in Boon.getMainList())
+                foreach (Boon boon in present_boons)
                 {
                     sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
                     boonArrayToList.Add(boonArray[boon.getID()]);
@@ -3385,29 +3403,34 @@ namespace LuckParser.Controllers
                 }
                 
             }
-           
+            List<Boon> condiList = Boon.getCondiBoonList();
 
             foreach (int condiID in damageLogs.Where(x=>x.isCondi() == 1).Select(x=>x.getID()).Distinct()) {//condis
-                string condiName = Boon.getCondiName(condiID);
-                int totaldamage = 0;
-                int mindamage = 0;
-                int avgdamage = 0;
-                int hits = 0;
-                int maxdamage = 0;
-
-                foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                Boon condiItem = condiList.FirstOrDefault(x => x.getID() == condiID);//Boon.getCondiName(condiID);
+                string condiName = "UNKOWN";
+                if (condiItem != null)
                 {
-                    int curdmg = dl.getDamage();
-                    totaldamage += curdmg;
-                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                    hits++;
-                    int result = dl.getResult().getID();
-                   
+                    condiName = condiItem.getName();
                 }
-                avgdamage = (int)((double)totaldamage / (double)hits);
+                int totaldamage = 0;
+                    int mindamage = 0;
+                    int avgdamage = 0;
+                    int hits = 0;
+                    int maxdamage = 0;
 
-             
+                    foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                    {
+                        int curdmg = dl.getDamage();
+                        totaldamage += curdmg;
+                        if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                        if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                        hits++;
+                        int result = dl.getResult().getID();
+
+                    }
+                    avgdamage = (int)((double)totaldamage / (double)hits);
+
+
                     if (totaldamage != 0)
                     {
                         sw.WriteLine("<tr class=\"condi\">"+
@@ -3427,6 +3450,7 @@ namespace LuckParser.Controllers
                             "<td></td>" +
                             "</tr>");
                     }
+                
             }
             List<int> remainIDs = damageLogs.Where(x => x.isCondi() == 0).Select(x => x.getID()).Distinct().ToList();
             foreach (int exist in casting.Select(x => x.getID()).Distinct()) {
@@ -3555,7 +3579,7 @@ namespace LuckParser.Controllers
            
             sw.WriteLine(" <script> $(function () { $('#dist_table_" + p.getInstid()+"_"+agent.getInstid() + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>" +
                 " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + p.getInstid() +"_"+agent.getInstid()+ "\">" +
-           " <thead> <tr> <th>Skill</th>><th>Damage</th><th>Percent</th><th>Hits</th> <th>Min</th><th>Avg</th><th>Max</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
+           " <thead> <tr> <th>Skill</th><th>Damage</th><th>Percent</th><th>Hits</th> <th>Min</th><th>Avg</th><th>Max</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
            "</tr> </thead><tbody>");
             foreach (int id in damageLogs.Where(x => x.isCondi() != 1).Select(x => x.getID()).Distinct() )
             {//foreach casted skill
@@ -3647,45 +3671,48 @@ namespace LuckParser.Controllers
 
             }
             //CONDIS
+            List<Boon> condiList = Boon.getCondiBoonList();
             foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
             {
-                string condiName = Boon.getCondiName(condiID);
-                int totaldamage = 0;
-                int mindamage = 0;
-                int avgdamage = 0;
-                int hits = 0;
-                int maxdamage = 0;
-
-                foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                Boon condiItem = condiList.FirstOrDefault(x=>x.getID() == condiID);//Boon.getCondiName(condiID);
+                string condiName = "UNKOWN";
+                if (condiItem != null)
                 {
-                    int curdmg = dl.getDamage();
-                    totaldamage += curdmg;
-                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                    hits++;
-                    int result = dl.getResult().getID();
-
+                   condiName= condiItem.getName();
                 }
-                avgdamage = (int)((double)totaldamage / (double)hits);
+               
+                    int totaldamage = 0;
+                    int mindamage = 0;
+                    int avgdamage = 0;
+                    int hits = 0;
+                    int maxdamage = 0;
 
-
-                if (totaldamage != 0)
-                {
-                    sw.WriteLine("<tr class=\"condi\">" + 
-                        "<td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
-                        "<td>" + totaldamage + "</td>" +
-                        "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                        "<td>" + hits + "</td>" +
-                        "<td>" + mindamage + "</td>" +
-                        "<td>" + avgdamage + "</td>" +
-                        "<td>" + maxdamage + "</td>" +
-                        "<td></td>" +
-                        "<td></td>" +
-                        "<td></td>" +
-                        "</tr>");
-                }
+                    foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                    {
+                        int curdmg = dl.getDamage();
+                        totaldamage += curdmg;
+                        if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                        if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                        hits++;
+                        int result = dl.getResult().getID();
+                    }
+                    avgdamage = (int)((double)totaldamage / (double)hits);
+                    if (totaldamage != 0)
+                    {
+                        sw.WriteLine("<tr class=\"condi\">" + 
+                            "<td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
+                            "<td>" + totaldamage + "</td>" +
+                            "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
+                            "<td>" + hits + "</td>" +
+                            "<td>" + mindamage + "</td>" +
+                            "<td>" + avgdamage + "</td>" +
+                            "<td>" + maxdamage + "</td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "<td></td>" +
+                            "</tr>");
+                    }
             }
-
             sw.WriteLine("</tbody></table>");
         }
         public void CreateDMGTakenDistTable(StreamWriter sw, Player p)
@@ -3791,9 +3818,10 @@ namespace LuckParser.Controllers
                 }
 
             }
+            List<Boon> condiList = Boon.getCondiBoonList();
             foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
             {
-                string condiName = Boon.getCondiName(condiID);
+                string condiName = condiList.FirstOrDefault(x=>x.getID() == condiID).getName();// Boon.getCondiName(condiID);
                 int totaldamage = 0;
                 int mindamage = 0;
                 int avgdamage = 0;
@@ -4030,7 +4058,6 @@ namespace LuckParser.Controllers
             AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
             Player p = new Player(bossAgent);
 
-
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
@@ -4039,7 +4066,7 @@ namespace LuckParser.Controllers
             AgentData a_data = getAgentData();
             string charname = p.getCharacter();
             sw.WriteLine(//"<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">" +
-                 "<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getCharacter().ToString() + "-icon") + " \" alt=\"" + p.getCharacter().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
+                 "<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(b_data.getID()+"-icon") + " \" alt=\"" + p.getCharacter().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
 
             sw.Write("<ul class=\"nav nav-tabs\"><li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + p.getInstid() + "\">" + p.getCharacter() + "</a></li>");
             //foreach pet loop here
@@ -4454,8 +4481,8 @@ namespace LuckParser.Controllers
             double fight_duration = (b_data.getLastAware() - b_data.getFirstAware()) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
             String durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
-            string bossname = FilterStringChars(getBossData().getName());
-           
+            string bossname = FilterStringChars(b_data.getName());
+            setPresentBoons();
            
             sw.Write("<!DOCTYPE html><html lang=\"en\"><head> " +
                  "<meta charset=\"utf-8\">" +
@@ -4518,7 +4545,7 @@ namespace LuckParser.Controllers
                     "<div class=\"card-body\"><blockquote class=\"card-blockquote\">" +
                      "<div class=\"row\">" +
                     "<div class=\"col-md-6 \">" +
-                       "<center><img src=\"" + GetLink(bossname + "-icon") + " \"alt=\"" + bossname + "-icon" + "\" style=\"height: 100px; width: 100 %; display: block; \" ></center>" +
+                       "<center><img src=\"" + GetLink(b_data.getID() + "-icon") + " \"alt=\"" + bossname + "-icon" + "\" style=\"height: 100px; width: 100 %; display: block; \" ></center>" +
                       "</div>" + "<div class=\"col-md-6 \">");
             if (log_data.getBosskill())
             {
@@ -4762,6 +4789,59 @@ namespace LuckParser.Controllers
                 case "Soulless Horror-ext":
                     return "sh";
                 case "Dhuum-ext":
+                    return "dhuum";
+                    //ID version for multilingual
+                case "15438-icon":
+                    return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
+                case "15429-icon":
+                    return "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
+                case "15375-icon":
+                    return "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
+                case "16123-icon":
+                    return "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
+                case "16115-icon":
+                    return "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
+                case "16235-icon":
+                    return "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
+                case "16246-icon":
+                    return "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
+                case "17194-icon":
+                    return "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
+                case "17172-icon":
+                    return "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
+                case "17188-icon":
+                    return "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
+                case "17154-icon":
+                    return "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
+                case "19767-icon":
+                    return "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
+                case "19450-icon":
+                    return "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
+                case "15438-ext":
+                    return "vg";
+                case "15429-ext":
+                    return "gors";
+                case "15375-ext":
+                    return "sab";
+                case "16123-ext":
+                    return "sloth";
+                case "16115-ext":
+                    return "matt";
+                case "16235-ext":
+                    return "kc";
+                case "16246-ext":
+                    return "xera";
+                case "17194-ext":
+                    return "cairn";
+                case "17172-ext":
+                    return "mo";
+                case "17188-ext":
+                    return "sam";
+                case "17154-ext":
+                    return "dei";
+                case "19767-ext":
+                    return "sh";
+                case "19450-ext":
                     return "dhuum";
 
                 case "Warrior":

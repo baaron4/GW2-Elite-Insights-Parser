@@ -62,63 +62,6 @@ namespace LuckParser.Models.ParseModels
             return null;
         }
 
-        public static List<int> getCondiList() {
-            List<int> condiList = new List<int>
-            {
-                736,//Bleeding
-                737,//Burning
-                861,//Confusion
-                723,//Poisin
-                19426,//Torment
-                720,//Blind
-                722,//Chilled
-                721,//Cripplied
-                791,//Fear
-                727,//Immob
-                26766,//Slow
-                27705,//Taunt
-                742,//Weakness
-                738//Vuln
-            };
-            return condiList;
-        }
-        public static string getCondiName(int id) {
-            switch (id) {
-                case 736:
-                    return "Bleeding";
-                case 737:
-                    return "Burning";
-                case 861:
-                    return "Confusion";
-                case 723:
-                    return "Poison";
-                case 19426:
-                    return "Torment";
-                case 720:
-                    return "Blinded";
-                case 722:
-                    return "Chilled";
-                case 721:
-                    return "Crippled";
-                case 791:
-                    return "Fear";
-                case 727:
-                    return "Immobile";
-                case 26766:
-                    return "Slow";
-                case 27705:
-                    return "Taunt";
-                case 742:
-                    return "Weakness";
-                case 738:
-                    return "Vulnerability";
-                case 873:
-                    return "Retaliation";
-                default:
-                    return "UNKNOWN";
-            }
-        }
-
         private static List<Boon> allBoons = new List<Boon>
             {
                 //Base boons
@@ -148,6 +91,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Slow", 26766, BoonSource.Mixed, "duration", 9, BoonEnum.Condition),
                 new Boon("Weakness", 737, BoonSource.Mixed, "duration", 5, BoonEnum.Condition),
                 new Boon("Vulnerability", 738, BoonSource.Mixed, "intensity", 25, BoonEnum.Condition),
+                new Boon("Retaliation Condi", 873, BoonSource.Mixed, "duration", 9, BoonEnum.Condition),
                 // Generic
                 new Boon("Stealth", 13017, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Revealed", 890, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
