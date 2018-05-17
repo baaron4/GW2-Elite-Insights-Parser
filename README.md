@@ -27,6 +27,18 @@ NOTE: .evtc files are currently located within "C:\Users\<USERNAME>\Documents\Gu
 
 ![htmldisplay](https://user-images.githubusercontent.com/30677999/38950250-816c559e-430a-11e8-8159-1cf073a5fa44.PNG)
 
+## Auto Parseing
+
+https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/24df62abfec74446a07816524a98b9d97d87d966/LuckParser/Program.cs#L15-L22
+
+![how to](https://user-images.githubusercontent.com/30677999/40148954-6ec9215a-5936-11e8-94ad-d2520e7c4539.PNG)
+
+If you would like to have your logs parsed automatically pass the file location of each evtc file as a string. 
+
+Settings can be configured in the GuildWars2EliteInsights.exe.config file. 
+
+Note it may take some time for each file to parse and they will not be ready to open the moment they are created.
+
 ## Contributing 
 
 This is an open source project so yes if you can code anything youd like to add feel free to make a pull request!
