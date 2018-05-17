@@ -301,7 +301,7 @@ namespace LuckParser.Controllers
                 if (n == skill_id && skill_id != 0)
                 {
                     //was it a known boon?
-                    foreach (Boon b in Boon.getMainList())
+                    foreach (Boon b in Boon.getBoonList())
                     {
                         if (skill_id == b.getID())
                         {
@@ -545,7 +545,7 @@ namespace LuckParser.Controllers
                         deimos_2_instid = NPC.getInstid();
                         boss_data.setLastAware(NPC.getLastAware());
                         //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos_2_instid ).ToList().Sum(x);
-                        int stop = 0;
+                        //int stop = 0;
                         foreach (CombatItem c in combat_list)
                         {
                             if (c.getSrcInstid() == deimos_2_instid)
@@ -582,11 +582,29 @@ namespace LuckParser.Controllers
 
         //Statistics--------------------------------------------------------------------------------------------------------------------------------------------------------
         public List<Boon> present_boons =  new List<Boon>();//Used only for Boon tables
+        public List<Boon> present_offbuffs = new List<Boon>();//Used only for Off Buff tables
+        public List<Boon> present_defbuffs = new List<Boon>();//Used only for Def Buff tables
         public void setPresentBoons() {
             List<SkillItem> s_list = getSkillData().getSkillList();
-            foreach (Boon boon in Boon.getList()) {
-                if (s_list.Exists(x => x.getID() == boon.getID())) {
+            foreach (Boon boon in Boon.getBoonList())
+            {
+                if (s_list.Exists(x => x.getID() == boon.getID()))
+                {
                     present_boons.Add(boon);
+                }
+            }
+            foreach (Boon boon in Boon.getOffensiveList())
+            {
+                if (s_list.Exists(x => x.getID() == boon.getID()))
+                {
+                    present_offbuffs.Add(boon);
+                }
+            }
+            foreach (Boon boon in Boon.getDefensiveList())
+            {
+                if (s_list.Exists(x => x.getID() == boon.getID()))
+                {
+                    present_defbuffs.Add(boon);
                 }
             }
         }
@@ -931,7 +949,7 @@ namespace LuckParser.Controllers
                 boon_logs = p.getboonGen(b_data, s_data, c_data.getCombatList(), agent_data, trgetPlayers);
             }
 
-            List<Boon> boon_list = present_boons;
+            List<Boon> boon_list = Boon.getAllProfList();
             int n = boon_list.Count();//# of diff boons
             Dictionary<int,string> rates = new Dictionary<int, string>();
             for (int i = 0; i < n; i++)
@@ -1097,7 +1115,7 @@ namespace LuckParser.Controllers
                 }
             }
 
-            int stop = 0;
+            //int stop = 0;
             
         }
         //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1113,7 +1131,7 @@ namespace LuckParser.Controllers
             {
                 if (SnapSettings[3])
                 {//Main boons
-                    boon_list.AddRange(Boon.getMainList());
+                    boon_list.AddRange(Boon.getBoonList());
 
                 }
                 if (SnapSettings[4] || SnapSettings[5])
@@ -1122,7 +1140,7 @@ namespace LuckParser.Controllers
                 }
                 if (SnapSettings[5])
                 {//All class specefic boons
-                    boon_list.AddRange(Boon.getAllProfList());
+                    boon_list.AddRange(Boon.getRestList());
 
                 }
             }
@@ -1322,12 +1340,12 @@ namespace LuckParser.Controllers
             //condis
             boon_list.AddRange(Boon.getCondiBoonList());
             //Main boons
-            boon_list.AddRange(Boon.getMainList());
-            //All class specefic boons
-            boon_list.AddRange(Boon.getAllProfList());
+            boon_list.AddRange(Boon.getBoonList());
+            //Shareable buffs
+            boon_list.AddRange(Boon.getSharableProfList());
 
-                
-            
+
+
             int n = boon_list.Count();//# of diff boons
 
             for (int i = 0; i < n; i++)//foreach boon
@@ -1410,10 +1428,10 @@ namespace LuckParser.Controllers
                 }
             }
             //generate comp table
-           sw.WriteLine("<table class=\table\" style=\"width:auto;position:absolute; top:50%; height:10em; margin-top:-5em\"><tbody>");
+           sw.Write("<table class=\"table\" style=\"width:auto;position:absolute; top:50%; height:10em; margin-top:-5em\"><tbody>");
             for (int n = firstGroup; n <= groupCount; n++)
             {
-                sw.WriteLine("<tr>");
+                sw.Write("<tr>");
                 List<Player> sortedList = p_list.Where(x => Int32.Parse(x.getGroup()) == n).ToList();
                 if (sortedList.Count > 0)
                 {
@@ -1442,97 +1460,97 @@ namespace LuckParser.Controllers
                         {
                             build += "<img src=\"https://wiki.guildwars2.com/images/1/12/Toughness.png\" alt=\"Toughness\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Toughness-" + gPlay.getToughness() + "\">";//"<span class=\"badge badge-secondary\">Tough("+ gPlay.getToughness() + ")</span>";
                         }
-                        sw.WriteLine("<td style=\"width: 150px; border:1px solid #EE5F5B;\">" +
+                        sw.Write("<td style=\"width: 150px; border:1px solid #EE5F5B;\">" +
                              "<img src=\"" + GetLink(gPlay.getProf().ToString()) + " \" alt=\"" + gPlay.getProf().ToString() + "\" height=\"18\" width=\"18\" >" +
                              build +
                             "<br/>" + charName + "</td>");
                     }
                 }
-                sw.WriteLine("</tr>");
+                sw.Write("</tr>");
             }
-            sw.WriteLine("</tbody></table>");
+            sw.Write("</tbody></table>");
         }
         public void CreateDPSTable(StreamWriter sw,double fight_duration) {
             //generate dps table
            sw.Write( " <script> $(function () { $('#dps_table').DataTable({ \"order\": [[4, \"desc\"]]});});</script>" +
        " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dps_table\">" +
            " <thead> <tr> <th>Sub</th><th></th><th>Name</th><th>Account</th> <th>Boss DPS</th><th>Power</th><th>Condi</th><th>All DPS</th><th>Power</th><th>Condi</th>" +
-           "</th><th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
+           "<th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>" +
+           "<th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
                " </tr> </thead><tbody>");
             List<string[]> footerList = new List<string[]>();
 
             foreach (Player player in p_list)
             {
-               sw.WriteLine("<tr>");
-                sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
-                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
-                sw.WriteLine("<td>" + player.getAccount().TrimStart(':') + "</td>");
+                sw.Write("<tr>");
+                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
+                sw.Write("<td>" + player.getAccount().TrimStart(':') + "</td>");
                 string[] dmg = getFinalDPS(player).Split('|');
                 //Boss dps
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[7] + " dmg \">" + dmg[6] + "</span>" + "</td>");
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[9] + " dmg \">" + dmg[8] + "</span>" + "</td>");
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[11] + " dmg \">" + dmg[10] + "</span>" + "</td>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[7] + " dmg \">" + dmg[6] + "</span>" + "</td>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[9] + " dmg \">" + dmg[8] + "</span>" + "</td>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[11] + " dmg \">" + dmg[10] + "</span>" + "</td>");
                 //All DPS
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[1] + " dmg \">" + dmg[0] + "</span>" + "</td>");
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[3] + " dmg \">" + dmg[2] + "</span>" + "</td>");
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[5] + " dmg \">" + dmg[4] + "</span>" + "</td>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[1] + " dmg \">" + dmg[0] + "</span>" + "</td>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[3] + " dmg \">" + dmg[2] + "</span>" + "</td>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[5] + " dmg \">" + dmg[4] + "</span>" + "</td>");
 
 
 
                 string[] stats = getFinalStats(player);
-                sw.WriteLine("<td>" + stats[6] + "</td>");
+                sw.Write("<td>" + stats[6] + "</td>");
                 TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));
                 if (timedead > TimeSpan.Zero)
                 {
-                    sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
                 }
                 else
                 {
-                    sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> 0</span>" + " </td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> 0</span>" + " </td>");
 
                 }
-                sw.WriteLine("</tr>");
+                sw.Write("</tr>");
 
                 //gather data for footer
                 footerList.Add(new string[] { player.getGroup().ToString(), dmg[0], dmg[1], dmg[2], dmg[3], dmg[4], dmg[5], dmg[6], dmg[7], dmg[8], dmg[9], dmg[10], dmg[11] });
             }
 
-            sw.WriteLine("</tbody><tfoot>");
+            sw.Write("</tbody><tfoot>");
             foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
             {
                 List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
-                sw.WriteLine("<tr>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td>Group " + groupNum + "</td>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[8])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[7])) + "</span>" + "</td>");
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[10])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[9])) + "</span>" + "</td>");
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[12])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[11])) + "</span>" + "</td>");
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[2])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[1])) + "</span>" + "</td>");
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[4])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[3])) + "</span>" + "</td>");
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[6])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[5])) + "</span>" + "</td>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("</tr>");
+                sw.Write("<tr>");
+                sw.Write("<td></td>");
+                sw.Write("<td></td>");
+                sw.Write("<td>Group " + groupNum + "</td>");
+                sw.Write("<td></td>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[8])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[7])) + "</span>" + "</td>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[10])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[9])) + "</span>" + "</td>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[12])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[11])) + "</span>" + "</td>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[2])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[1])) + "</span>" + "</td>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[4])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[3])) + "</span>" + "</td>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[6])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[5])) + "</span>" + "</td>");
+                sw.Write("<td></td>");
+                sw.Write("<td></td>");
+                sw.Write("</tr>");
             }
-            sw.WriteLine("<tr>");
-            sw.WriteLine( "<td></td>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td>Total</td>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[8])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[7])) + "</span>" + "</td>");
-            sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[10])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[9])) + "</span>" + "</td>");
-            sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[12])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[11])) + "</span>" + "</td>");
-            sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[2])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[1])) + "</span>" + "</td>");
-            sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[4])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[3])) + "</span>" + "</td>");
-            sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[6])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[5])) + "</span>" + "</td>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("</tr>");
-            sw.WriteLine("</tfoot></table>");
+            sw.Write("<tr>");
+            sw.Write( "<td></td>");
+            sw.Write("<td></td>");
+            sw.Write("<td>Total</td>");
+            sw.Write("<td></td>");
+            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[8])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[7])) + "</span>" + "</td>");
+            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[10])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[9])) + "</span>" + "</td>");
+            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[12])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[11])) + "</span>" + "</td>");
+            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[2])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[1])) + "</span>" + "</td>");
+            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[4])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[3])) + "</span>" + "</td>");
+            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[6])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[5])) + "</span>" + "</td>");
+            sw.Write("<td></td>");
+            sw.Write("<td></td>");
+            sw.Write("</tr>");
+            sw.Write("</tfoot></table>");
         }
         public void CreateDMGStatsTable(StreamWriter sw,double fight_duration) {
             //generate dmgstats table
@@ -1557,82 +1575,82 @@ namespace LuckParser.Controllers
            List<string[]> footerList = new List<string[]>();
             foreach (Player player in p_list)
             {
-              sw.WriteLine("<tr>");
-                sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
-                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
+              sw.Write("<tr>");
+                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
                 string[] stats = getFinalStats(player);
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[1]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//crit
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[2] + " out of " + stats[0] + " hits <br> Pure Scholar Damage: "+stats[19]+"<br> Effective Damage Increase: "+ (int)(Double.Parse(stats[19]) / Double.Parse(stats[20]) * 100) + "% \">" + (int)(Double.Parse(stats[2]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//scholar
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[3]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//sws
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[4] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[4]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//flank
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[10] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[10]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//glance
-                sw.WriteLine("<td>" + stats[11] + "</td>");//misses
-                sw.WriteLine("<td>" + stats[12] + "</td>");//interupts
-                sw.WriteLine("<td>" + stats[13] + "</td>");//dmg invulned
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[15] + "cancels \">" + stats[14] + "</span>" + "</td>");//time wasted
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[18] + "cancels \">" + stats[17] + "</span>" + "</td>");//timesaved
-                sw.WriteLine("<td>" + stats[5] + "</td>");//w swaps
-                sw.WriteLine("<td>" + stats[6] + "</td>");//downs
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[1]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//crit
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[2] + " out of " + stats[0] + " hits <br> Pure Scholar Damage: "+stats[19]+"<br> Effective Damage Increase: "+ (int)(Double.Parse(stats[19]) / Double.Parse(stats[20]) * 100) + "% \">" + (int)(Double.Parse(stats[2]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//scholar
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[3]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//sws
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[4] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[4]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//flank
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[10] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[10]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//glance
+                sw.Write("<td>" + stats[11] + "</td>");//misses
+                sw.Write("<td>" + stats[12] + "</td>");//interupts
+                sw.Write("<td>" + stats[13] + "</td>");//dmg invulned
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[15] + "cancels \">" + stats[14] + "</span>" + "</td>");//time wasted
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[18] + "cancels \">" + stats[17] + "</span>" + "</td>");//timesaved
+                sw.Write("<td>" + stats[5] + "</td>");//w swaps
+                sw.Write("<td>" + stats[6] + "</td>");//downs
                 TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));//dead
                 if (timedead > TimeSpan.Zero)
                 {
-                    sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
                 }
                 else
                 {
-                    sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </span>" + " </td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </span>" + " </td>");
 
                 }
 
-                sw.WriteLine("</tr>");
+                sw.Write("</tr>");
                 //gather data for footer
                 footerList.Add(new string[] { player.getGroup().ToString(), stats[0], stats[1], stats[2], stats[3], stats[4], stats[10], stats[11], stats[12], stats[13], stats[5], stats[6] });
             }
-            sw.WriteLine("</tbody><tfoot>");
+            sw.Write("</tbody><tfoot>");
             foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
             {
                 List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
-                sw.WriteLine("<tr>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td>Group " + groupNum + "</td>");
+                sw.Write("<tr>");
+                sw.Write("<td></td>");
+                sw.Write("<td></td>");
+                sw.Write("<td>Group " + groupNum + "</td>");
 
-                sw.WriteLine("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                sw.WriteLine("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                sw.WriteLine("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                sw.WriteLine("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                sw.WriteLine("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                sw.WriteLine("<td>" + groupList.Sum(c => Int32.Parse(c[7])) + "</td>");
-                sw.WriteLine("<td>" + groupList.Sum(c => Int32.Parse(c[8])) + "</td>");
-                sw.WriteLine("<td>" + groupList.Sum(c => Int32.Parse(c[9])) + "</td>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td>" + groupList.Sum(c => Int32.Parse(c[10])) + "</td>");
-                sw.WriteLine("<td>" + groupList.Sum(c => Int32.Parse(c[11])) + "</td>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("</tr>");
+                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[7])) + "</td>");
+                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[8])) + "</td>");
+                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[9])) + "</td>");
+                sw.Write("<td></td>");
+                sw.Write("<td></td>");
+                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[10])) + "</td>");
+                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[11])) + "</td>");
+                sw.Write("<td></td>");
+                sw.Write("</tr>");
             }
-            sw.WriteLine("<tr>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td>Total</td>");
-            sw.WriteLine("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-            sw.WriteLine("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-            sw.WriteLine("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-            sw.WriteLine("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-            sw.WriteLine("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-            sw.WriteLine("<td>" + footerList.Sum(c => Int32.Parse(c[7])) + "</td>");
-            sw.WriteLine("<td>" + footerList.Sum(c => Int32.Parse(c[8])) + "</td>");
-            sw.WriteLine("<td>" + footerList.Sum(c => Int32.Parse(c[9])) + "</td>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td>" + footerList.Sum(c => Int32.Parse(c[10])) + "</td>");
-            sw.WriteLine("<td>" + footerList.Sum(c => Int32.Parse(c[11])) + "</td>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("</tr>");
-            sw.WriteLine("</tfoot></table>");
+            sw.Write("<tr>");
+            sw.Write("<td></td>");
+            sw.Write("<td></td>");
+            sw.Write("<td>Total</td>");
+            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[7])) + "</td>");
+            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[8])) + "</td>");
+            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[9])) + "</td>");
+            sw.Write("<td></td>");
+            sw.Write("<td></td>");
+            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[10])) + "</td>");
+            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[11])) + "</td>");
+            sw.Write("<td></td>");
+            sw.Write("</tr>");
+            sw.Write("</tfoot></table>");
 
         }
         public void CreateDefTable(StreamWriter sw, double fight_duration) {
@@ -1652,65 +1670,65 @@ namespace LuckParser.Controllers
             List<string[]>  footerList = new List<string[]>();
             foreach (Player player in p_list)
             {
-               sw.WriteLine( "<tr>");
-                sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
-                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
+               sw.Write( "<tr>");
+                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
                 string[] stats = getFinalDefenses(player);
-                sw.WriteLine("<td>" + stats[0] + "</td>");//dmg taken
-                sw.WriteLine("<td>" + stats[10] + "</td>");//dmgbarriar
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[4] + "Damage \">" + stats[1] + "</span>" + "</td>");//Blocks  
-                sw.WriteLine("<td>" + stats[3] + "</td>");//invulns
-                sw.WriteLine("<td>" + stats[6] + "</td>");// evades
-                sw.WriteLine("<td>" + stats[5] + "</td>");//dodges
-                sw.WriteLine("<td>" + stats[8] + "</td>");//downs
+                sw.Write("<td>" + stats[0] + "</td>");//dmg taken
+                sw.Write("<td>" + stats[10] + "</td>");//dmgbarriar
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[4] + "Damage \">" + stats[1] + "</span>" + "</td>");//Blocks  
+                sw.Write("<td>" + stats[3] + "</td>");//invulns
+                sw.Write("<td>" + stats[6] + "</td>");// evades
+                sw.Write("<td>" + stats[5] + "</td>");//dodges
+                sw.Write("<td>" + stats[8] + "</td>");//downs
                 TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));//dead
                 if (timedead > TimeSpan.Zero)
                 {
-                    sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
                 }
                 else
                 {
-                    sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </span>" + " </td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </span>" + " </td>");
 
                 }
-                sw.WriteLine("</tr>");
+                sw.Write("</tr>");
                 //gather data for footer
                 footerList.Add(new string[] { player.getGroup().ToString(), stats[0], stats[10], stats[1], stats[3], stats[6], stats[5], stats[8] });
             }
-            sw.WriteLine("</tbody><tfoot>");
+            sw.Write("</tbody><tfoot>");
             foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
             {
                 List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
-                sw.WriteLine("<tr>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td>Group " + groupNum + "</td>");
-                sw.WriteLine("<td>" + groupList.Sum(c => Int32.Parse(c[1])) + "</td>");
-                sw.WriteLine("<td>" + groupList.Sum(c => Int32.Parse(c[2])) + "</td>");
-                sw.WriteLine("<td>" + groupList.Sum(c => Int32.Parse(c[3])) + "</td>");
-                sw.WriteLine("<td>" + groupList.Sum(c => Int32.Parse(c[4])) + "</td>");
-                sw.WriteLine("<td>" + groupList.Sum(c => Int32.Parse(c[5])) + "</td>");
-                sw.WriteLine("<td>" + groupList.Sum(c => Int32.Parse(c[6])) + "</td>");
-                sw.WriteLine("<td>" + groupList.Sum(c => Int32.Parse(c[7])) + "</td>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("</tr>");
+                sw.Write("<tr>");
+                sw.Write("<td></td>");
+                sw.Write("<td></td>");
+                sw.Write("<td>Group " + groupNum + "</td>");
+                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[1])) + "</td>");
+                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[2])) + "</td>");
+                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[3])) + "</td>");
+                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[4])) + "</td>");
+                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[5])) + "</td>");
+                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[6])) + "</td>");
+                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[7])) + "</td>");
+                sw.Write("<td></td>");
+                sw.Write("</tr>");
             }
-            sw.WriteLine("<tr>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td>Total</td>");
-            sw.WriteLine("<td>" + footerList.Sum(c => Int32.Parse(c[1])) + "</td>");
-            sw.WriteLine("<td>" + footerList.Sum(c => Int32.Parse(c[2])) + "</td>");
-            sw.WriteLine("<td>" + footerList.Sum(c => Int32.Parse(c[3])) + "</td>");
-            sw.WriteLine("<td>" + footerList.Sum(c => Int32.Parse(c[4])) + "</td>");
-            sw.WriteLine("<td>" + footerList.Sum(c => Int32.Parse(c[5])) + "</td>");
-            sw.WriteLine("<td>" + footerList.Sum(c => Int32.Parse(c[6])) + "</td>");
-            sw.WriteLine("<td>" + footerList.Sum(c => Int32.Parse(c[7])) + "</td>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("</tr>");
-            sw.WriteLine("</tfoot></table>");
+            sw.Write("<tr>");
+            sw.Write("<td></td>");
+            sw.Write("<td></td>");
+            sw.Write("<td>Total</td>");
+            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[1])) + "</td>");
+            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[2])) + "</td>");
+            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[3])) + "</td>");
+            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[4])) + "</td>");
+            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[5])) + "</td>");
+            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[6])) + "</td>");
+            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[7])) + "</td>");
+            sw.Write("<td></td>");
+            sw.Write("</tr>");
+            sw.Write("</tfoot></table>");
         }
         public void CreateSupTable(StreamWriter sw, double fight_duration) {
             //generate suppstats table
@@ -1724,38 +1742,38 @@ namespace LuckParser.Controllers
             List<string[]>  footerList = new List<string[]>();
             foreach (Player player in p_list)
             {
-                sw.WriteLine( "<tr>");
-                sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
-                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
+                sw.Write( "<tr>");
+                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
                 string[] stats = getFinalSupport(player);
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " seconds \">" + stats[2] + "</span>" + "</td>");//condicleanse                                                                                                                                                                   //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " seconds \">" + stats[0] + "</span>" + "</td>");//res
-                sw.WriteLine("</tr>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " seconds \">" + stats[2] + "</span>" + "</td>");//condicleanse                                                                                                                                                                   //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " seconds \">" + stats[0] + "</span>" + "</td>");//res
+                sw.Write("</tr>");
                 //gather data for footer
                 footerList.Add(new string[] { player.getGroup().ToString(), stats[3], stats[2], stats[1], stats[0] });
             }
-            sw.WriteLine("</tbody><tfoot>");
+            sw.Write("</tbody><tfoot>");
             foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
             {
                 List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
-                sw.WriteLine("<tr>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td>Group " + groupNum + "</td>");
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + groupList.Sum(c => Int32.Parse(c[2])).ToString() + " condis</span>" + "</td>");
-                sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + groupList.Sum(c => Int32.Parse(c[4])) + "</span>" + "</td>");
-                sw.WriteLine("</tr>");
+                sw.Write("<tr>");
+                sw.Write("<td></td>");
+                sw.Write("<td></td>");
+                sw.Write("<td>Group " + groupNum + "</td>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + groupList.Sum(c => Int32.Parse(c[2])).ToString() + " condis</span>" + "</td>");
+                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + groupList.Sum(c => Int32.Parse(c[4])) + "</span>" + "</td>");
+                sw.Write("</tr>");
             }
-            sw.WriteLine("<tr>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td>Total</td>");
-            sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + footerList.Sum(c => Int32.Parse(c[2])).ToString() + " condis</span>" + "</td>");
-            sw.WriteLine("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + footerList.Sum(c => Int32.Parse(c[4])).ToString() + "</span>" + "</td>");
-            sw.WriteLine("</tr>");
-            sw.WriteLine("</tfoot></table>");
+            sw.Write("<tr>");
+            sw.Write("<td></td>");
+            sw.Write("<td></td>");
+            sw.Write("<td>Total</td>");
+            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + footerList.Sum(c => Int32.Parse(c[2])).ToString() + " condis</span>" + "</td>");
+            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + footerList.Sum(c => Int32.Parse(c[4])).ToString() + "</span>" + "</td>");
+            sw.Write("</tr>");
+            sw.Write("</tfoot></table>");
         }
         public void CreateDPSGraph(StreamWriter sw) {
 
@@ -1764,7 +1782,7 @@ namespace LuckParser.Controllers
             "<div id=\"DPSGraph\" style=\"height: 600px;width:1200px; display:inline-block \"></div>" +
  "<script>");
 
-           sw.WriteLine( "var data = [");
+           sw.Write( "var data = [");
             int maxDPS = 0;
             List<int[]> totalDpsAllPlayers = new List<int[]>();
             foreach (Player p in p_list)
@@ -1782,7 +1800,7 @@ namespace LuckParser.Controllers
                     }
                 }
 
-                sw.WriteLine("{y: [");
+                sw.Write("{y: [");
                 int pbdgdCount = 0;
                 foreach (int[] dp in playerbossdpsgraphdata)
                 {
@@ -1805,9 +1823,9 @@ namespace LuckParser.Controllers
                    sw.Write("'0'");
                 }
                 
-                sw.WriteLine( "],");
+                sw.Write( "],");
                 //add time axis
-                sw.WriteLine("x: [");
+                sw.Write("x: [");
                 pbdgdCount = 0;
                 foreach (int[] dp in playerbossdpsgraphdata)
                 {
@@ -1823,8 +1841,8 @@ namespace LuckParser.Controllers
                    sw.Write( "'0'");
                 }
                
-               sw.WriteLine( "],");
-                sw.WriteLine(" mode: 'lines'," +
+               sw.Write( "],");
+                sw.Write(" mode: 'lines'," +
                     " line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
            " name: '" + p.getCharacter() + " DPS'" +
         "},");
@@ -1851,9 +1869,9 @@ namespace LuckParser.Controllers
                       sw.Write("'0'");
                     }
                    
-                    sw.WriteLine( "],");
+                    sw.Write( "],");
                     //add time axis
-                    sw.WriteLine("x: [");
+                    sw.Write("x: [");
                     pbdgdCount = 0;
                     foreach (int[] dp in playertotaldpsgraphdata)
                     {
@@ -1870,7 +1888,7 @@ namespace LuckParser.Controllers
                       sw.Write( "'0'");
                     }
                    
-                   sw.WriteLine( "],");
+                   sw.Write( "],");
                     sw.Write( " mode: 'lines'," +
                          " line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
                         "visible:'legendonly'," +
@@ -1878,10 +1896,10 @@ namespace LuckParser.Controllers
                 }
             }
             //All Player dps
-           sw.WriteLine( "{");
+           sw.Write( "{");
             //Adding dps axis
 
-            sw.WriteLine("y: [");
+            sw.Write("y: [");
             int tdalpcount = 0;
             foreach (int[] dp in totalDpsAllPlayers)
             {
@@ -1893,9 +1911,9 @@ namespace LuckParser.Controllers
                 tdalpcount++;
             }
            
-           sw.WriteLine( "],");
+           sw.Write( "],");
             //add time axis
-           sw.WriteLine( "x: [");
+           sw.Write( "x: [");
             tdalpcount = 0;
             foreach (int[] dp in totalDpsAllPlayers)
             {
@@ -1908,12 +1926,12 @@ namespace LuckParser.Controllers
                 tdalpcount++;
             }
           
-            sw.WriteLine( "],");
-            sw.WriteLine(" mode: 'lines'," +
+            sw.Write( "],");
+            sw.Write(" mode: 'lines'," +
                  " line: {shape: 'spline'}," +
                    "visible:'legendonly'," +
         " name: 'All Player Dps'");
-            sw.WriteLine("},");
+            sw.Write("},");
             List<Mechanic> presMech = mech_data.GetMechList(boss_data.getID());
             List<string> distMech = presMech.Select(x => x.GetAltName()).Distinct().ToList();
             foreach (string mechAltString in distMech)
@@ -1925,8 +1943,8 @@ namespace LuckParser.Controllers
                 }
                 Mechanic mech = mechs[0];
                 //List<MechanicLog> filterdList = mech_data.GetMDataLogs().Where(x => x.GetName() == mech.GetName()).ToList();
-                sw.WriteLine("{");
-                sw.WriteLine("y: [");
+                sw.Write("{");
+                sw.Write("y: [");
 
                int  mechcount = 0;
                 foreach (MechanicLog ml in filterdList)
@@ -1957,9 +1975,9 @@ namespace LuckParser.Controllers
 
                     mechcount++;
                 }
-                sw.WriteLine("],");
+                sw.Write("],");
                 //add time axis
-                sw.WriteLine("x: [");
+                sw.Write("x: [");
                 tdalpcount = 0;
                 mechcount = 0;
                 foreach (MechanicLog ml in filterdList)
@@ -1976,16 +1994,16 @@ namespace LuckParser.Controllers
                     mechcount++;
                 }
 
-                sw.WriteLine("],");
-                sw.WriteLine(" mode: 'markers',");
+                sw.Write("],");
+                sw.Write(" mode: 'markers',");
                 if (mech.GetName() == "DEAD" || mech.GetName() == "DOWN")
                 {
-                    //sw.WriteLine("visible:'legendonly',");
+                    //sw.Write("visible:'legendonly',");
                 }
                 else {
-                    sw.WriteLine("visible:'legendonly',");
+                    sw.Write("visible:'legendonly',");
                 }
-                sw.WriteLine( "type:'scatter'," +
+                sw.Write( "type:'scatter'," +
                     "marker:{"+mech.GetPlotly()+ "size: 15" + "},"+
                     "text:[");
                 foreach (MechanicLog ml in filterdList)
@@ -2002,10 +2020,10 @@ namespace LuckParser.Controllers
                     mechcount++;
                 }
 
-                sw.WriteLine("]," +
+                sw.Write("]," +
                       
             " name: '"+mech.GetAltName()+"'");
-                sw.WriteLine("},");
+                sw.Write("},");
             }
             //Downs and deaths
             
@@ -2018,8 +2036,8 @@ namespace LuckParser.Controllers
             foreach (string state in DnDStringList)
             {
                 List<MechanicLog> DnDList = mech_data.GetMDataLogs().Where(x => x.GetName() == state ).ToList();
-                sw.WriteLine("{");
-                sw.WriteLine("y: [");
+                sw.Write("{");
+                sw.Write("y: [");
                 foreach (MechanicLog ml in DnDList)
                 {
                     int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => x[0] == ml.GetTime());
@@ -2049,9 +2067,9 @@ namespace LuckParser.Controllers
 
                     mcount++;
                 }
-                sw.WriteLine("],");
+                sw.Write("],");
                 //add time axis
-                sw.WriteLine("x: [");
+                sw.Write("x: [");
                 tdalpcount = 0;
                 mcount = 0;
                 foreach (MechanicLog ml in DnDList)
@@ -2068,17 +2086,17 @@ namespace LuckParser.Controllers
                     mcount++;
                 }
 
-                sw.WriteLine("],");
-                sw.WriteLine(" mode: 'markers',");
+                sw.Write("],");
+                sw.Write(" mode: 'markers',");
                 if (state == "DEAD" || state == "DOWN")
                 {
-                    //sw.WriteLine("visible:'legendonly',");
+                    //sw.Write("visible:'legendonly',");
                 }
                 else
                 {
-                    sw.WriteLine("visible:'legendonly',");
+                    sw.Write("visible:'legendonly',");
                 }
-                sw.WriteLine("type:'scatter'," +
+                sw.Write("type:'scatter'," +
                     "marker:{" + getMechData().GetPLoltyShape(state) + "size: 15" + "}," +
                     "text:[");
                 foreach (MechanicLog ml in DnDList)
@@ -2095,18 +2113,18 @@ namespace LuckParser.Controllers
                     mcount++;
                 }
 
-                sw.WriteLine("]," +
+                sw.Write("]," +
 
             " name: '" + state + "'");
-                sw.WriteLine("},");
+                sw.Write("},");
             }
             if (maxDPS > 0)
             {
-                //sw.WriteLine(",");
+                //sw.Write(",");
                 //Boss Health
-                sw.WriteLine("{");
+                sw.Write("{");
                 //Adding dps axis
-                sw.WriteLine("y: [");
+                sw.Write("y: [");
 
                 float scaler = boss_data.getHealth() / maxDPS;
                 int hotCount = 0;
@@ -2124,9 +2142,9 @@ namespace LuckParser.Controllers
 
                 }
 
-                sw.WriteLine("],");
+                sw.Write("],");
                 //text axis is boss hp in %
-                sw.WriteLine("text: [");
+                sw.Write("text: [");
 
                 float scaler2 = boss_data.getHealth() / 100;
                 hotCount = 0;
@@ -2144,9 +2162,9 @@ namespace LuckParser.Controllers
 
                 }
 
-                sw.WriteLine("],");
+                sw.Write("],");
                 //add time axis
-                sw.WriteLine("x: [");
+                sw.Write("x: [");
                 hotCount = 0;
                 foreach (int[] dp in BossHOT)
                 {
@@ -2161,17 +2179,17 @@ namespace LuckParser.Controllers
                     hotCount++;
                 }
 
-                sw.WriteLine("],");
-                sw.WriteLine(" mode: 'lines'," +
+                sw.Write("],");
+                sw.Write(" mode: 'lines'," +
                     " line: {shape: 'spline', dash: 'dashdot'}," +
                     "hoverinfo: 'text'," +
            " name: 'Boss health'");
-                sw.WriteLine("}");
+                sw.Write("}");
             }
             else{
-                sw.WriteLine("{}");
+                sw.Write("{}");
             }
-            sw.WriteLine("];" +
+            sw.Write("];" +
 "var layout = {" +
 
 
@@ -2190,295 +2208,158 @@ namespace LuckParser.Controllers
         "Plotly.newPlot('DPSGraph', data, layout);" +
 "</script> ");
         }
-        public void CreateBoonsUptimeTable(StreamWriter sw)
+        private void CreateUptimeTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
         {
             //Generate Boon table------------------------------------------------------------------------------------------------
-            sw.WriteLine( " <script> $(function () { $('#boons_table').DataTable({ \"order\": [[0, \"asc\"]] " +
+            sw.Write(" <script> $(function () { $('#"+ table_id + "').DataTable({ \"order\": [[0, \"asc\"]] " +
             // "\"scrollX\": true," +
             " });});</script>" +
-            " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boons_table\">" +
-                " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
+            " <table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" id=\"" + table_id + "\">" +
+                " <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
 
             List<List<string>> footList = new List<List<string>>();
-            foreach (Boon boon in present_boons)
+            foreach (Boon boon in list_to_use)
             {
-                sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
-            sw.WriteLine(" </tr> </thead><tbody>");
+            sw.Write(" </tr> </thead><tbody>");
+            HashSet<int> intensityBoon = new HashSet<int>();
             foreach (Player player in p_list)
             {
-                sw.WriteLine("<tr>");
-                sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
+                sw.Write("<tr>");
+                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
                 Dictionary<int, string> boonArray = getfinalboons(player, new List<int>());
                 List<string> boonArrayToList = new List<string>();
                 boonArrayToList.Add(player.getGroup());
-                foreach (Boon boon in present_boons)
+                int count = 0;
+                foreach (Boon boon in list_to_use)
                 {
-                    sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
-                    boonArrayToList.Add(boonArray[boon.getID()]);
-                }
-                sw.WriteLine("</tr>");
-                //gather data for footer
-                footList.Add(boonArrayToList);
-            }
-            sw.WriteLine("</tbody><tfoot>");
-            foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
-            {
-                List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
-                sw.WriteLine("<tr>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td>Group " + groupNum + "</td>");
-                for (int i = 1; i < groupList[0].Count; i++)
-                {// string boonStr in groupList) {
-                    if (i == 1 || i == 9) // might and stab
+                    if (boon.getType() == "intensity")
                     {
-                        sw.WriteLine("<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 2) + "</td>");
+                        intensityBoon.Add(count);
+                    }
+                    if (boonArray.ContainsKey(boon.getID()))
+                    {
+                        sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
+                        boonArrayToList.Add(boonArray[boon.getID()]);
                     }
                     else
                     {
-                        sw.WriteLine("<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>");
+                        sw.Write("<td>" + 0 + "</td>");
+                        boonArrayToList.Add("0");
+                    }
+                    count++;
+                }
+                sw.Write("</tr>");
+                //gather data for footer
+                footList.Add(boonArrayToList);
+            }
+            sw.Write("</tbody><tfoot>");
+            foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
+            {
+                List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
+                sw.Write("<tr>");
+                sw.Write("<td></td>");
+                sw.Write("<td></td>");
+                sw.Write("<td>Group " + groupNum + "</td>");
+                for (int i = 1; i < groupList[0].Count; i++)
+                {
+                    if (intensityBoon.Contains(i-1))
+                    {
+                        sw.Write("<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 2) + "</td>");
+                    }
+                    else
+                    {
+                        sw.Write("<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>");
                     }
 
                 }
-                sw.WriteLine("</tr>");
+                sw.Write("</tr>");
             }
-            sw.WriteLine("<tr>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td>Averages</td>");
+            sw.Write("<tr>");
+            sw.Write("<td></td>");
+            sw.Write("<td></td>");
+            sw.Write("<td>Averages</td>");
             for (int i = 1; i < footList[0].Count; i++)
-            {// string boonStr in groupList) {
-                if (i == 1 || i == 9) // might and stab
+            {
+                if (intensityBoon.Contains(i-1))
                 {
-                    sw.WriteLine("<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>");
+                    sw.Write("<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>");
                 }
                 else
                 {
-                    sw.WriteLine("<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>");
+                    sw.Write("<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>");
                 }
             }
-            sw.WriteLine("</tr>");
-            sw.WriteLine("</tfoot></table>");
+            sw.Write("</tr>");
+            sw.Write("</tfoot></table>");
         }
-        public void CreateOffensiveBuffsUptimeTable(StreamWriter sw)
-        {
-            //Generate Boon table------------------------------------------------------------------------------------------------
-            sw.WriteLine(" <script> $(function () { $('#offensive_table').DataTable({ \"order\": [[0, \"asc\"]] " +
-            // "\"scrollX\": true," +
-            " });});</script>" +
-            " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"offensive_table\">" +
-                " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
-
-            List<List<string>> footList = new List<List<string>>();
-            foreach (Boon boon in Boon.getOffensiveList())
-            {
-                sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
-            }
-            sw.WriteLine(" </tr> </thead><tbody>");
-            foreach (Player player in p_list)
-            {
-                sw.WriteLine("<tr>");
-                sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
-                Dictionary<int, string> boonArray = getfinalboons(player, new List<int>());
-                List<string> boonArrayToList = new List<string>();
-                boonArrayToList.Add(player.getGroup());
-                foreach (Boon boon in Boon.getOffensiveList())
-                {
-                    sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
-                    boonArrayToList.Add(boonArray[boon.getID()]);
-
-                }
-                sw.WriteLine("</tr>");
-                //gather data for footer
-                footList.Add(boonArrayToList);
-            }
-            sw.WriteLine("</tbody><tfoot>");
-            foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
-            {
-                List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
-                sw.WriteLine("<tr>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td>Group " + groupNum + "</td>");
-                for (int i = 1; i < groupList[0].Count; i++)
-                {// string boonStr in groupList) {
-                    sw.WriteLine("<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>");
-                }
-                sw.WriteLine("</tr>");
-            }
-            sw.WriteLine("<tr>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td>Averages</td>");
-            for (int i = 1; i < footList[0].Count; i++)
-            {// string boonStr in groupList) {
-               sw.WriteLine("<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>");
-            }
-            sw.WriteLine("</tr>");
-            sw.WriteLine("</tfoot></table>");
-        }
-        public void CreateDefensiveBuffsUptimeTable(StreamWriter sw)
-        {
-            //Generate Boon table------------------------------------------------------------------------------------------------
-            sw.WriteLine(" <script> $(function () { $('#defensive_table').DataTable({ \"order\": [[0, \"asc\"]] " +
-            // "\"scrollX\": true," +
-            " });});</script>" +
-            " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"defensive_table\">" +
-                " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
-
-            List<List<string>> footList = new List<List<string>>();
-            foreach (Boon boon in Boon.getDefensiveList())
-            {
-                sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
-            }
-            sw.WriteLine(" </tr> </thead><tbody>");
-            foreach (Player player in p_list)
-            {
-                sw.WriteLine("<tr>");
-                sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
-                Dictionary<int, string> boonArray = getfinalboons(player, new List<int>());
-                List<string> boonArrayToList = new List<string>();
-                boonArrayToList.Add(player.getGroup());
-                foreach (Boon boon in Boon.getDefensiveList())
-                {
-                    sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
-                    boonArrayToList.Add(boonArray[boon.getID()]);
-
-                }
-                sw.WriteLine("</tr>");
-                //gather data for footer
-                footList.Add(boonArrayToList);
-            }
-            sw.WriteLine("</tbody><tfoot>");
-            foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
-            {
-                List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
-                sw.WriteLine("<tr>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td></td>");
-                sw.WriteLine("<td>Group " + groupNum + "</td>");
-                for (int i = 1; i < groupList[0].Count; i++)
-                {// string boonStr in groupList) {
-                   sw.WriteLine("<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>");
-                }
-                sw.WriteLine("</tr>");
-            }
-            sw.WriteLine("<tr>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td></td>");
-            sw.WriteLine("<td>Averages</td>");
-            for (int i = 1; i < footList[0].Count; i++)
-            {// string boonStr in groupList) {
-                sw.WriteLine("<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>");
-            }
-            sw.WriteLine("</tr>");
-            sw.WriteLine("</tfoot></table>");
-        }
-        public void CreateBoonGenSelfTable(StreamWriter sw)
+        private void CreateGenSelfTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
         { //Generate BoonGenSelf table
-           sw.WriteLine( " <script> $(document).ready(function () { $('#boongenself_table').DataTable({ \"order\": [[0, \"asc\"]]" +
-            //  "\"scrollX\": true" +
+            sw.Write(" <script> $(document).ready(function () { $('#"+ table_id + "').DataTable({ \"order\": [[0, \"asc\"]]" +
+             //  "\"scrollX\": true" +
 
-            "});});</script>" +
-            " <table class=\"display nowrap compact\" cellspacing=\"0\" width=\"100%\" id=\"boongenself_table\">" +
-                " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
-            List<List<string>> footList = new List<List<string>>();
-            foreach (Boon boon in present_boons)
+             "});});</script>" +
+             " <table class=\"display nowrap compact\" cellspacing=\"0\" width=\"100%\" id=\""+ table_id+"\">" +
+                 " <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
+            foreach (Boon boon in list_to_use)
             {
-                sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
-            sw.WriteLine(" </tr> </thead><tbody>");
+            sw.Write(" </tr> </thead><tbody>");
 
             foreach (Player player in p_list)
             {
-                sw.WriteLine("<tr>");
-                sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
+                sw.Write("<tr>");
+                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
+                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
                 List<int> playerID = new List<int>();
                 playerID.Add(player.getInstid());
                 Dictionary<int, string> boonArray = getfinalboons(player, playerID);
                 List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in present_boons)
+                foreach (Boon boon in list_to_use)
                 {
-                    sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
-                    boonArrayToList.Add(boonArray[boon.getID()]);
+                    if (boonArray.ContainsKey(boon.getID()))
+                    {
+                        sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
+                        boonArrayToList.Add(boonArray[boon.getID()]);
+                    }
+                    else
+                    {
+                        sw.Write("<td>" + 0 + "</td>");
+                        boonArrayToList.Add("0");
+                    }
                 }
-                sw.WriteLine("</tr>");
-                //gather data for footer
-                footList.Add(boonArrayToList);
+                sw.Write("</tr>");
             }
-            //Html_boonGenSelf += "</tbody><tfoot>";
-            //foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
-            //{
-            //    List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
-            //    Html_boonGenSelf += "<tr>";
-            //    Html_boonGenSelf += "<td></td>";
-            //    Html_boonGenSelf += "<td></td>";
-            //    Html_boonGenSelf += "<td>Group " + groupNum + "</td>";
-            //    for (int i = 1; i < groupList[0].Count - 1; i++)
-            //    {// string boonStr in groupList) {
-            //        if (i == 1)
-            //        {//might
-            //            Html_boonGenSelf += "<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 2) + "</td>";
-            //        }
-            //        else
-            //        {
-            //            Html_boonGenSelf += "<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>";
-            //        }
 
-            //    }
-            //    Html_boonGenSelf += "</tr>";
-            //}
-            //Html_boonGenSelf += "<tr>";
-            //Html_boonGenSelf += "<td></td>";
-            //Html_boonGenSelf += "<td></td>";
-            //Html_boonGenSelf += "<td>Averages</td>";
-            //for (int i = 1; i < footList[0].Count; i++)
-            //{// string boonStr in groupList) {
-            //    if (i == 1)
-            //    {//might
-            //        Html_boonGenSelf += "<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>";
-            //    }
-            //    else
-            //    {
-            //        Html_boonGenSelf += "<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>";
-            //    }
-            //}
-            //Html_boonGenSelf += "</tr>";
-            //Html_boonGenSelf += "</tfoot></table>";
-
-            sw.WriteLine( "</tbody></table>");
+            sw.Write("</tbody></table>");
         }
-        public void CreateBoonGenGroupTable(StreamWriter sw)
+        private void CreateGenGroupTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
         { //Generate BoonGenGroup table
-           sw.WriteLine( " <script> $(function () { $('#boongengroup_table').DataTable({ \"order\": [[0, \"asc\"]] " +
+           sw.Write( " <script> $(function () { $('#"+ table_id + "').DataTable({ \"order\": [[0, \"asc\"]] " +
             //  "\"scrollX\": true," +
             "});});</script>" +
-            " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongengroup_table\">" +
-                " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
+            " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\""+ table_id+"\">" +
+                " <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
             List<List<string>> footList = new List<List<string>>();
-            foreach (Boon boon in present_boons)
+            foreach (Boon boon in list_to_use)
             {
-                sw.WriteLine( "<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
-            sw.WriteLine(" </tr> </thead><tbody>");
+            sw.Write(" </tr> </thead><tbody>");
             List<int> playerIDS = new List<int>();
 
             foreach (Player player in p_list)
             {
-                sw.WriteLine("<tr>");
-                sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
+                sw.Write("<tr>");
+                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
+                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
                 foreach (Player p in p_list)
                 {
@@ -2488,78 +2369,47 @@ namespace LuckParser.Controllers
                 Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
                 playerIDS = new List<int>();
                 List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in present_boons)
+                foreach (Boon boon in list_to_use)
                 {
-                    sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
-                    boonArrayToList.Add(boonArray[boon.getID()]);
+                    if (boonArray.ContainsKey(boon.getID()))
+                    {
+                        sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
+                        boonArrayToList.Add(boonArray[boon.getID()]);
+                    }
+                    else
+                    {
+                        sw.Write("<td>" + 0 + "</td>");
+                        boonArrayToList.Add("0");
+                    }
                 }
-                sw.WriteLine("</tr>");
+                sw.Write("</tr>");
                 //gather data for footer
                 footList.Add(boonArrayToList);
             }
-            //Html_boonGenGroup += "</tbody><tfoot>";
-            //foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
-            //{
-            //    List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
-            //    Html_boonGenGroup += "<tr>";
-            //    Html_boonGenGroup += "<td></td>";
-            //    Html_boonGenGroup += "<td></td>";
-            //    Html_boonGenGroup += "<td>Group " + groupNum + "</td>";
-            //    for (int i = 1; i < groupList[0].Count - 1; i++)
-            //    {// string boonStr in groupList) {
-            //        if (i == 1)
-            //        {//might
-            //            Html_boonGenGroup += "<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 2) + "</td>";
-            //        }
-            //        else
-            //        {
-            //            Html_boonGenGroup += "<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>";
-            //        }
 
-            //    }
-            //    Html_boonGenGroup += "</tr>";
-            //}
-            //Html_boonGenGroup += "<tr>";
-            //Html_boonGenGroup += "<td></td>";
-            //Html_boonGenGroup += "<td></td>";
-            //Html_boonGenGroup += "<td>Averages</td>";
-            //for (int i = 1; i < footList[0].Count; i++)
-            //{// string boonStr in groupList) {
-            //    if (i == 1)
-            //    {//might
-            //        Html_boonGenGroup += "<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>";
-            //    }
-            //    else
-            //    {
-            //        Html_boonGenGroup += "<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>";
-            //    }
-            //}
-            //Html_boonGenGroup += "</tr>";
-            //Html_boonGenGroup += "</tfoot></table>";
-
-            sw.WriteLine("</tbody></table>");
+            sw.Write("</tbody></table>");
         }
-        public void CreateBoonGenOGroupTable(StreamWriter sw)
+        private void CreateGenOGroupTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
         {  //Generate BoonGenOGroup table
-            sw.WriteLine(" <script> $(function () { $('#boongenogroup_table').DataTable({ \"order\": [[0, \"asc\"]] " +
+            sw.Write(" <script> $(function () { $('#"+ table_id+"').DataTable({ \"order\": [[0, \"asc\"]] " +
               // "\"scrollX\": true," +
               "});});</script>" +
-              " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongenogroup_table\">" +
-                  " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
+              " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\""+ table_id+"\">" +
+                  " <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
             List<List<string>>  footList = new List<List<string>>();
-            foreach (Boon boon in present_boons)
+            foreach (Boon boon in list_to_use)
             {
-                sw.WriteLine( "<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
-            sw.WriteLine(" </tr> </thead><tbody>");
+            sw.Write(" </tr> </thead><tbody>");
             List<int> playerIDS = new List<int>();
 
             foreach (Player player in p_list)
             {
-                sw.WriteLine("<tr>");
-                sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
+                sw.Write("<tr>");
+                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
+                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
                 foreach (Player p in p_list)
                 {
@@ -2569,69 +2419,38 @@ namespace LuckParser.Controllers
                 Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
                 playerIDS = new List<int>();
                 List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in present_boons)
+                foreach (Boon boon in list_to_use)
                 {
-                    sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
-                    boonArrayToList.Add(boonArray[boon.getID()]);
+                    if (boonArray.ContainsKey(boon.getID()))
+                    {
+                        sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
+                        boonArrayToList.Add(boonArray[boon.getID()]);
+                    }
+                    else
+                    {
+                        sw.Write("<td>" + 0 + "</td>");
+                        boonArrayToList.Add("0");
+                    }
                 }
-                sw.WriteLine("</tr>");
+                sw.Write("</tr>");
                 //gather data for footer
                 footList.Add(boonArrayToList);
             }
-            //Html_boonGenOGroup += "</tbody><tfoot>";
-            //foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
-            //{
-            //    List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
-            //    Html_boonGenOGroup += "<tr>";
-            //    Html_boonGenOGroup += "<td></td>";
-            //    Html_boonGenOGroup += "<td></td>";
-            //    Html_boonGenOGroup += "<td>Group " + groupNum + "</td>";
-            //    for (int i = 1; i < groupList[0].Count - 1; i++)
-            //    {// string boonStr in groupList) {
-            //        if (i == 1)
-            //        {//might
-            //            Html_boonGenOGroup += "<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 2) + "</td>";
-            //        }
-            //        else
-            //        {
-            //            Html_boonGenOGroup += "<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>";
-            //        }
 
-            //    }
-            //    Html_boonGenOGroup += "</tr>";
-            //}
-            //Html_boonGenOGroup += "<tr>";
-            //Html_boonGenOGroup += "<td></td>";
-            //Html_boonGenOGroup += "<td></td>";
-            //Html_boonGenOGroup += "<td>Averages</td>";
-            //for (int i = 1; i < footList[0].Count; i++)
-            //{// string boonStr in groupList) {
-            //    if (i == 1)
-            //    {//might
-            //        Html_boonGenOGroup += "<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>";
-            //    }
-            //    else
-            //    {
-            //        Html_boonGenOGroup += "<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>";
-            //    }
-            //}
-            //Html_boonGenOGroup += "</tr>";
-            //Html_boonGenOGroup += "</tfoot></table>";
-
-            sw.WriteLine("</tbody></table>");
+            sw.Write("</tbody></table>");
         }
-        public void CreateBoonGenSquadTable(StreamWriter sw) {
+        public void CreateGenSquadTable(StreamWriter sw, List<Boon> list_to_use, string table_id) {
             //Generate BoonGenSquad table
-            sw.WriteLine(" <script> $(function () { $('#boongensquad_table').DataTable({ \"order\": [[0, \"asc\"]] " +
+            sw.Write(" <script> $(function () { $('#"+ table_id+"').DataTable({ \"order\": [[0, \"asc\"]] " +
              // "\"scrollX\": true," +
              "});});</script>" +
-             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boongensquad_table\">" +
-                 " <thead> <tr> <th>Sub</th><th></th><th>Name</th>");
-            foreach (Boon boon in present_boons)
+             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\""+ table_id+"\">" +
+                 " <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
+            foreach (Boon boon in list_to_use)
             {
-                sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
-            sw.WriteLine(" </tr> </thead><tbody>");
+            sw.Write(" </tr> </thead><tbody>");
             List<List<string>> footList = new List<List<string>>();
             List<int>  playerIDS = new List<int>();
             foreach (Player p in p_list)
@@ -2640,64 +2459,33 @@ namespace LuckParser.Controllers
             }
             foreach (Player player in p_list)
             {
-                sw.WriteLine("<tr>");
-                sw.WriteLine("<td>" + player.getGroup().ToString() + "</td>");
-                sw.WriteLine("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
+                sw.Write("<tr>");
+                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
+                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
 
                 Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
                 List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in present_boons)
+                foreach (Boon boon in list_to_use)
                 {
-                    sw.WriteLine("<td>" + boonArray[boon.getID()] + "</td>");
-                    boonArrayToList.Add(boonArray[boon.getID()]);
+                    if (boonArray.ContainsKey(boon.getID()))
+                    {
+                        sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
+                        boonArrayToList.Add(boonArray[boon.getID()]);
+                    }
+                    else
+                    {
+                        sw.Write("<td>" + 0 + "</td>");
+                        boonArrayToList.Add("0");
+                    }
                 }
-                sw.WriteLine("</tr>");
+                sw.Write("</tr>");
                 //gather data for footer
                 footList.Add(boonArrayToList);
             }
-            //Html_boonGenSquad += "</tbody><tfoot>";
-            //foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
-            //{
-            //    List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
-            //    Html_boonGenSquad += "<tr>";
-            //    Html_boonGenSquad += "<td></td>";
-            //    Html_boonGenSquad += "<td></td>";
-            //    Html_boonGenSquad += "<td>Group " + groupNum + "</td>";
-            //    for (int i = 1; i < groupList[0].Count - 1; i++)
-            //    {// string boonStr in groupList) {
-            //        if (i == 1)
-            //        {//might
-            //            Html_boonGenSquad += "<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 2) + "</td>";
-            //        }
-            //        else
-            //        {
-            //            Html_boonGenSquad += "<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>";
-            //        }
 
-            //    }
-            //    Html_boonGenSquad += "</tr>";
-            //}
-            //Html_boonGenSquad += "<tr>";
-            //Html_boonGenSquad += "<td></td>";
-            //Html_boonGenSquad += "<td></td>";
-            //Html_boonGenSquad += "<td>Averages</td>";
-            //for (int i = 1; i < footList[0].Count; i++)
-            //{// string boonStr in groupList) {
-            //    if (i == 1)
-            //    {//might
-            //        Html_boonGenSquad += "<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>";
-            //    }
-            //    else
-            //    {
-            //        Html_boonGenSquad += "<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>";
-            //    }
-            //}
-            //Html_boonGenSquad += "</tr>";
-            //Html_boonGenSquad += "</tfoot></table>";
-
-            sw.WriteLine("</tbody></table>");
+            sw.Write("</tbody></table>");
         }
         public void CreatePlayerTab(StreamWriter sw)
         {
@@ -2713,7 +2501,7 @@ namespace LuckParser.Controllers
                 List<SkillItem> s_list = s_data.getSkillList();
                 AgentData a_data = getAgentData();
                 string charname = p.getCharacter();
-                sw.WriteLine("<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">" +
+                sw.Write("<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">" +
                      "<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
 
                 sw.Write("<ul class=\"nav nav-tabs\"><li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + p.getInstid() + "\">" + p.getCharacter() + "</a></li>");
@@ -2744,7 +2532,7 @@ namespace LuckParser.Controllers
                             minionAgentList.Add(agent);
                         }
                     }
-                    int i = 0;
+                    //int i = 0;
                 }
                 foreach (AgentItem mobAgent in minionAgentList)
                 {
@@ -2756,9 +2544,9 @@ namespace LuckParser.Controllers
                 sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#incDmg" + p.getInstid() + "\">Damage Taken</a></li></ul>");
 
                 sw.Write("<div id=\"myTabContent\" class=\"tab-content\"><div class=\"tab-pane fade show active\" id=\"home" + p.getInstid() + "\">");
-                sw.WriteLine("<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>" + "<script>");
+                sw.Write("<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>" + "<script>");
 
-                sw.WriteLine("var data = [");
+                sw.Write("var data = [");
                 if (SnapSettings[6])//Display rotation
                 {
                     foreach (CastLog cl in casting)
@@ -2802,7 +2590,7 @@ namespace LuckParser.Controllers
                             dur = cl.getActDur() / 1000f;
                         }
                         skillName = skillName.Replace("\"", "");
-                        sw.WriteLine("{" +
+                        sw.Write("{" +
                             "y: ['1.5']," +
                             "x: ['" + dur + "']," +
                             "base:'" + cl.getTime() / 1000f + "'," +
@@ -2814,60 +2602,60 @@ namespace LuckParser.Controllers
                         {
                             if (skill.slot == "Weapon_1")
                             {
-                                sw.WriteLine("width:'0.5',");
+                                sw.Write("width:'0.5',");
                             }
                             else
                             {
-                                sw.WriteLine("width:'1',");
+                                sw.Write("width:'1',");
                             }
 
                         }
                         else
                         {
-                            sw.WriteLine("width:'1',");
+                            sw.Write("width:'1',");
                         }
 
-                        sw.WriteLine("hoverinfo: 'name'," +
+                        sw.Write("hoverinfo: 'name'," +
                         "hoverlabel:{namelength:'-1'}," +
                         " marker: {");
                         if (cl.endActivation() != null)
                         {
                             if (cl.endActivation().getID() == 3)
                             {
-                                sw.WriteLine("color: 'rgb(40,40,220)',");
+                                sw.Write("color: 'rgb(40,40,220)',");
                             }
                             else if (cl.endActivation().getID() == 4)
                             {
-                                sw.WriteLine("color: 'rgb(220,40,40)',");
+                                sw.Write("color: 'rgb(220,40,40)',");
                             }
                             else if (cl.endActivation().getID() == 5)
                             {
-                                sw.WriteLine("color: 'rgb(40,220,40)',");
+                                sw.Write("color: 'rgb(40,220,40)',");
                             }
                             else
                             {
-                                sw.WriteLine("color: 'rgb(220,220,0)',");
+                                sw.Write("color: 'rgb(220,220,0)',");
                             }
                         }
                         else
                         {
-                            sw.WriteLine("color: 'rgb(220,220,0)',");
+                            sw.Write("color: 'rgb(220,220,0)',");
                         }
-                        sw.WriteLine(" width: 5," +
+                        sw.Write(" width: 5," +
                          "line:" +
                           "{");
                         if (cl.startActivation() != null)
                         {
                             if (cl.startActivation().getID() == 1)
                             {
-                                sw.WriteLine("color: 'rgb(20,20,20)',");
+                                sw.Write("color: 'rgb(20,20,20)',");
                             }
                             else if (cl.startActivation().getID() == 2)
                             {
-                                sw.WriteLine("color: 'rgb(220,40,220)',");
+                                sw.Write("color: 'rgb(220,40,220)',");
                             }
                         }
-                        sw.WriteLine("width: 1" +
+                        sw.Write("width: 1" +
                                 "}" +
                             "}," +
                             "showlegend: false" +
@@ -2881,7 +2669,7 @@ namespace LuckParser.Controllers
                     List<Boon> parseBoonsList = new List<Boon>();
                     if (SnapSettings[3])
                     {//Main boons
-                        parseBoonsList.AddRange(Boon.getMainList());
+                        parseBoonsList.AddRange(Boon.getBoonList());
 
                     }
                     if (SnapSettings[4] || SnapSettings[5])
@@ -2890,7 +2678,7 @@ namespace LuckParser.Controllers
                     }
                     if (SnapSettings[5])
                     {//All class specefic boons
-                        parseBoonsList.AddRange(Boon.getAllProfList());
+                        parseBoonsList.AddRange(Boon.getRestList());
 
                     }
                     List<BoonsGraphModel> boonGraphData = getBoonGraph(p);
@@ -2899,8 +2687,8 @@ namespace LuckParser.Controllers
                     {
                         if (parseBoonsList.FirstOrDefault(x => x.getName() == bgm.getBoonName()) != null)
                         {
-                            sw.WriteLine("{");
-                            sw.WriteLine("y: [");
+                            sw.Write("{");
+                            sw.Write("y: [");
                             List<Point> bChart = bgm.getBoonChart();
                             int bChartCount = 0;
                             foreach (Point pnt in bChart)
@@ -2921,7 +2709,7 @@ namespace LuckParser.Controllers
                             }
 
 
-                            sw.WriteLine("]," +
+                            sw.Write("]," +
                              "x: [");
                             bChartCount = 0;
                             foreach (Point pnt in bChart)
@@ -2940,17 +2728,17 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("'0'");
                             }
-                            sw.WriteLine("]," +
+                            sw.Write("]," +
                                  " yaxis: 'y2'," +
                                  " type: 'scatter',");
                             //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
                             if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness") { }
                             else
                             {
-                                sw.WriteLine(" visible: 'legendonly',");
+                                sw.Write(" visible: 'legendonly',");
                             }
-                            sw.WriteLine(" line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
-                            sw.WriteLine(" fill: 'tozeroy'," +
+                            sw.Write(" line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
+                            sw.Write(" fill: 'tozeroy'," +
                                  " name: \"" + bgm.getBoonName() + "\"" +
                                  " },");
                         }
@@ -2962,8 +2750,8 @@ namespace LuckParser.Controllers
                 {//show boss dps plot
                     //Adding dps axis
                     List<int[]> playerbossdpsgraphdata = getBossDPSGraph(p);
-                    sw.WriteLine("{");
-                    sw.WriteLine("y: [");
+                    sw.Write("{");
+                    sw.Write("y: [");
                     int pbdgCount = 0;
                     foreach (int[] dp in playerbossdpsgraphdata)
                     {
@@ -2986,9 +2774,9 @@ namespace LuckParser.Controllers
                         sw.Write("'0'");
                     }
 
-                    sw.WriteLine("],");
+                    sw.Write("],");
                     //add time axis
-                    sw.WriteLine("x: [");
+                    sw.Write("x: [");
                     pbdgCount = 0;
                     foreach (int[] dp in playerbossdpsgraphdata)
                     {
@@ -3008,8 +2796,8 @@ namespace LuckParser.Controllers
                         sw.Write("'0'");
                     }
 
-                    sw.WriteLine("],");
-                    sw.WriteLine(" mode: 'lines'," +
+                    sw.Write("],");
+                    sw.Write(" mode: 'lines'," +
                         " line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
 
                        " yaxis: 'y3'," +
@@ -3020,10 +2808,10 @@ namespace LuckParser.Controllers
                 }
                 if (SnapSettings[1])
                 {//show total dps plot
-                    sw.WriteLine("{");
+                    sw.Write("{");
                     //Adding dps axis
                     List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
-                    sw.WriteLine("y: [");
+                    sw.Write("y: [");
                     int ptdgCount = 0;
                     foreach (int[] dp in playertotaldpsgraphdata)
                     {
@@ -3043,9 +2831,9 @@ namespace LuckParser.Controllers
                         sw.Write("'0'");
                     }
 
-                    sw.WriteLine("],");
+                    sw.Write("],");
                     //add time axis
-                    sw.WriteLine("x: [");
+                    sw.Write("x: [");
                     ptdgCount = 0;
                     foreach (int[] dp in playertotaldpsgraphdata)
                     {
@@ -3064,15 +2852,15 @@ namespace LuckParser.Controllers
                         sw.Write("'0'");
                     }
 
-                    sw.WriteLine("],");
-                    sw.WriteLine(" mode: 'lines'," +
+                    sw.Write("],");
+                    sw.Write(" mode: 'lines'," +
                        " line: {shape: 'spline',color:'rgb(0,250,0)'}," +
                        " yaxis: 'y3'," +
                        // "legendgroup: 'Damage'," +
                        " name: 'Total DPS'" + "}");
                     }
 
-                sw.WriteLine("];" +
+                sw.Write("];" +
                     "var layout = {" +
 
                     "yaxis: {" +
@@ -3104,7 +2892,7 @@ namespace LuckParser.Controllers
                             if (skill.slot != "Weapon_1")
                             {
                                 skillIcon = skill.icon;
-                                sw.WriteLine("{" +
+                                sw.Write("{" +
                                           "source: '" + skillIcon + "'," +
                                           "xref: 'x'," +
                                           "yref: 'y'," +
@@ -3144,7 +2932,7 @@ namespace LuckParser.Controllers
                             {
                                 // skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
                             }
-                            sw.WriteLine("{" +
+                            sw.Write("{" +
                                           "source: '" + skillIcon + "'," +
                                           "xref: 'x'," +
                                           "yref: 'y'," +
@@ -3168,7 +2956,7 @@ namespace LuckParser.Controllers
 
 
                 }
-                sw.WriteLine("]," +
+                sw.Write("]," +
 
                         "font: { color: '#ffffff' }," +
                         "paper_bgcolor: 'rgba(0,0,0,0)'," +
@@ -3178,7 +2966,7 @@ namespace LuckParser.Controllers
                 "</script> "
                 );
                 CreateDMGDistTable(sw, p);
-                sw.WriteLine("</div>");
+                sw.Write("</div>");
                 foreach (AgentItem mobAgent in minionAgentList)
                 {
                     sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">");
@@ -3194,7 +2982,7 @@ namespace LuckParser.Controllers
                 sw.Write("<div class=\"tab-pane fade \" id=\"incDmg" + p.getInstid() + "\">");
 
                 CreateDMGTakenDistTable(sw, p);
-                sw.WriteLine("</div></div></div>");
+                sw.Write("</div></div></div>");
 
             }
 
@@ -3220,7 +3008,7 @@ namespace LuckParser.Controllers
                     if (apiskill != null)
                     {
                         if (apiskill.slot != "Weapon_1") { 
-                        sw.WriteLine("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                        sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
                         }
                     }
                     else
@@ -3232,15 +3020,15 @@ namespace LuckParser.Controllers
                         {//wepswap
                             skillName = "Weapon Swap";
                             skillLink = GetLink("Swap");
-                            sw.WriteLine("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
-                            sw.WriteLine("<br>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                            sw.Write("<br>");
                             continue;
                         }
                         else if (cl.getID() == 1066)
                         {
                             skillName = "Resurrect";
                             skillLink = GetLink("Downs");
-                            sw.WriteLine("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
 
                         }
                         else
@@ -3248,7 +3036,7 @@ namespace LuckParser.Controllers
                         {
                             skillName = "Bandage";
                             skillLink = GetLink("Bandage");
-                            sw.WriteLine("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
 
                         }
                         else
@@ -3256,12 +3044,12 @@ namespace LuckParser.Controllers
                         {
                             skillName = "Dodge";
                             skillLink = GetLink("Dodge");
-                            sw.WriteLine("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
 
                         }
                         else if(skill != null){
                             
-                            sw.WriteLine("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + GetLink("Blank") + "\" data-toggle=\"tooltip\" title= \"" + skill.getName() + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + GetLink("Blank") + "\" data-toggle=\"tooltip\" title= \"" + skill.getName() + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
 
                         }
 
@@ -3281,7 +3069,7 @@ namespace LuckParser.Controllers
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
-            sw.WriteLine(" <script> $(function () { $('#dist_table_"+p.getInstid()+ "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>"+
+            sw.Write(" <script> $(function () { $('#dist_table_"+p.getInstid()+ "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>"+
                " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_"+p.getInstid()+"\">" +
                " <thead> <tr> <th>Skill</th><th></th><th>Damage</th> <th>Min</th><th>Avg</th><th>Max</th><th>Casts</th><th>Hits</th><th>Hits per Cast</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
                "<th>Wasted</th><th>Saved</th> </tr> </thead><tbody>");
@@ -3330,7 +3118,7 @@ namespace LuckParser.Controllers
                 if (skill != null) {
                     if (totaldamage != 0 && skill.GetGW2APISkill() != null)
                     {
-                        sw.WriteLine("<tr>"+
+                        sw.Write("<tr>"+
                             "<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
                             "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" + "<td>" + totaldamage + "</td>" + 
                             "<td>" + mindamage + "</td>" + 
@@ -3347,7 +3135,7 @@ namespace LuckParser.Controllers
                             "</tr>");
                     }
                     else if (totaldamage != 0) {
-                        sw.WriteLine("<tr>"+
+                        sw.Write("<tr>"+
                             "<td align=\"left\">" + skill.getName() + "</td>" +
                             "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
                             "<td>" + totaldamage + "</td>" + 
@@ -3365,7 +3153,7 @@ namespace LuckParser.Controllers
                             "</tr>");
                     } else if (skill.GetGW2APISkill() != null)
                     {
-                        sw.WriteLine("<tr>"+
+                        sw.Write("<tr>"+
                             "<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
                             "<td></td>" +
                             "<td></td>" +
@@ -3383,7 +3171,7 @@ namespace LuckParser.Controllers
                             "</tr>");
                     }
                     else {
-                        sw.WriteLine("<tr>"+
+                        sw.Write("<tr>"+
                             "<td align=\"left\">" + skill.getName() + "</td>" +
                             "<td></td>" +
                             "<td></td>" +
@@ -3433,7 +3221,7 @@ namespace LuckParser.Controllers
 
                     if (totaldamage != 0)
                     {
-                        sw.WriteLine("<tr class=\"condi\">"+
+                        sw.Write("<tr class=\"condi\">"+
                             "<td align=\"left\"><img src=" +GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
                             "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
                             "<td>" + totaldamage + "</td>" +
@@ -3506,7 +3294,7 @@ namespace LuckParser.Controllers
                 {
                     if (totaldamage != 0 && skill.GetGW2APISkill() != null)
                     {
-                        sw.WriteLine("<tr>"+
+                        sw.Write("<tr>"+
                             "<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
                             "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
                             "<td>" + totaldamage + "</td>" +
@@ -3525,7 +3313,7 @@ namespace LuckParser.Controllers
                     }
                     else if (totaldamage != 0)
                     {
-                        sw.WriteLine("<tr>"+
+                        sw.Write("<tr>"+
                             "<td align=\"left\">" + skill.getName() + "</td>" +
                             "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
                             "<td>" + totaldamage + "</td>" + 
@@ -3544,7 +3332,7 @@ namespace LuckParser.Controllers
                     }
                     else if (skill.GetGW2APISkill() != null)
                     {
-                        sw.WriteLine("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
+                        sw.Write("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
                           "<td></td>" + "<td></td>" +
                           "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
                             "<td>" + casts + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
@@ -3552,7 +3340,7 @@ namespace LuckParser.Controllers
                               "<td></td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
                     }
                     else {
-                        sw.WriteLine("<tr><td align=\"left\">" + skill.getName() + "</td>" +
+                        sw.Write("<tr><td align=\"left\">" + skill.getName() + "</td>" +
                           "<td></td>" + "<td></td>" +
                             "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
                             "<td>" + casts + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
@@ -3562,7 +3350,7 @@ namespace LuckParser.Controllers
                 }
 
             }
-            sw.WriteLine("</tbody></table>");
+            sw.Write("</tbody></table>");
         }
         public void CreateDMGDistTable(StreamWriter sw, Player p,AgentItem agent)
         {
@@ -3577,7 +3365,7 @@ namespace LuckParser.Controllers
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
 
            
-            sw.WriteLine(" <script> $(function () { $('#dist_table_" + p.getInstid()+"_"+agent.getInstid() + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>" +
+            sw.Write(" <script> $(function () { $('#dist_table_" + p.getInstid()+"_"+agent.getInstid() + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>" +
                 " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + p.getInstid() +"_"+agent.getInstid()+ "\">" +
            " <thead> <tr> <th>Skill</th><th>Damage</th><th>Percent</th><th>Hits</th> <th>Min</th><th>Avg</th><th>Max</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
            "</tr> </thead><tbody>");
@@ -3609,7 +3397,7 @@ namespace LuckParser.Controllers
                 {
                     if (totaldamage != 0 && skill.GetGW2APISkill() != null)
                     {
-                        sw.WriteLine("<tr>" +
+                        sw.Write("<tr>" +
                             "<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
                             "<td>" + totaldamage + "</td>" +
                             "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
@@ -3624,7 +3412,7 @@ namespace LuckParser.Controllers
                     }
                     else if (totaldamage != 0)
                     {
-                        sw.WriteLine("<tr>" +
+                        sw.Write("<tr>" +
                             "<td align=\"left\">" + skill.getName() + "</td>" +
                             "<td>" + totaldamage + "</td>" +
                             "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
@@ -3639,7 +3427,7 @@ namespace LuckParser.Controllers
                     }
                     else if (skill.GetGW2APISkill() != null)
                     {
-                        sw.WriteLine("<tr>" + 
+                        sw.Write("<tr>" + 
                             "<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
                             "<td></td>" + 
                             "<td></td>" +
@@ -3654,7 +3442,7 @@ namespace LuckParser.Controllers
                     }
                     else
                     {
-                        sw.WriteLine("<tr>" +
+                        sw.Write("<tr>" +
                             "<td align=\"left\">" + skill.getName() + "</td>" +
                             "<td></td>" + 
                             "<td></td>" +
@@ -3699,7 +3487,7 @@ namespace LuckParser.Controllers
                     avgdamage = (int)((double)totaldamage / (double)hits);
                     if (totaldamage != 0)
                     {
-                        sw.WriteLine("<tr class=\"condi\">" + 
+                        sw.Write("<tr class=\"condi\">" + 
                             "<td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
                             "<td>" + totaldamage + "</td>" +
                             "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
@@ -3713,7 +3501,7 @@ namespace LuckParser.Controllers
                             "</tr>");
                     }
             }
-            sw.WriteLine("</tbody></table>");
+            sw.Write("</tbody></table>");
         }
         public void CreateDMGTakenDistTable(StreamWriter sw, Player p)
         {
@@ -3724,7 +3512,7 @@ namespace LuckParser.Controllers
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
-            sw.WriteLine(" <script> $(function () { $('#distTaken_table_" + p.getInstid() + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>" +
+            sw.Write(" <script> $(function () { $('#distTaken_table_" + p.getInstid() + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>" +
                 " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"distTaken_table_" + p.getInstid() + "\">" +
            " <thead> <tr> <th>Skill</th><th>Damage</th><th>Percent</th><th>Hits</th> <th>Min</th><th>Avg</th><th>Max</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
            " </tr> </thead><tbody>");
@@ -3757,7 +3545,7 @@ namespace LuckParser.Controllers
                 {
                     if (totaldamage != 0 && skill.GetGW2APISkill() != null)
                     {
-                        sw.WriteLine("<tr>"+
+                        sw.Write("<tr>"+
                             "<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
                             "<td>" + totaldamage + "</td>" +
                             "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
@@ -3772,7 +3560,7 @@ namespace LuckParser.Controllers
                     }
                     else if (totaldamage != 0)
                     {
-                        sw.WriteLine("<tr>"+
+                        sw.Write("<tr>"+
                             "<td align=\"left\">" + skill.getName() + "</td>" +
                             "<td>" + totaldamage + "</td>" +
                             "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
@@ -3787,7 +3575,7 @@ namespace LuckParser.Controllers
                     }
                     else if (skill.GetGW2APISkill() != null)
                     {
-                        sw.WriteLine("<tr>"+
+                        sw.Write("<tr>"+
                             "<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
                             "<td></td>" +
                             "<td></td>" +
@@ -3802,7 +3590,7 @@ namespace LuckParser.Controllers
                     }
                     else
                     {
-                        sw.WriteLine("<tr>"+
+                        sw.Write("<tr>"+
                             "<td align=\"left\">" + skill.getName() + "</td>" +
                             "<td></td>" +
                             "<td></td>" +
@@ -3843,14 +3631,14 @@ namespace LuckParser.Controllers
 
                 if (totaldamage != 0)
                 {
-                    sw.WriteLine("<tr><td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
+                    sw.Write("<tr><td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
                         "<td></td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
                          "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
                           "<td></td>" + "<td></td>" +
                            "<td></td>" + "<td></td>" + "<td></td></tr>");
                 }
             }
-            sw.WriteLine("</tbody></table>");
+            sw.Write("</tbody></table>");
         }
         public void CreateMechanicTable(StreamWriter sw) {
             List<Mechanic> presMech = new List<Mechanic>();//mech_data.GetMechList().Where(x=>mech_data.GetMDataLogs().Contains())//mech_data.GetMDataLogs().Select(x => x.GetName()).Distinct().ToList();
@@ -3870,13 +3658,13 @@ namespace LuckParser.Controllers
 
                 foreach (String mechalt in presMech.Select(x => x.GetAltName()).Distinct().ToList())
                 {
-                    sw.WriteLine("<th>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + presMech.First(x=>x.GetAltName() == mechalt).GetName() + "\">" + mechalt + "</span>"  + "</th>");
+                    sw.Write("<th>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + presMech.First(x=>x.GetAltName() == mechalt).GetName() + "\">" + mechalt + "</span>"  + "</th>");
                 }
-                sw.WriteLine("</tr></thead><tbody>");
+                sw.Write("</tr></thead><tbody>");
                 foreach (Player p in p_list)
                 {
 
-                    sw.WriteLine("<tr><td>" + p.getCharacter() + "</td>");
+                    sw.Write("<tr><td>" + p.getCharacter() + "</td>");
                     foreach (String mechalt in presMech.Select(x => x.GetAltName()).Distinct().ToList())
                     {
                         int count = 0;
@@ -3886,11 +3674,11 @@ namespace LuckParser.Controllers
                             count += mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).Count();
                         }
 
-                        sw.WriteLine("<td>" + count + "</td>");
+                        sw.Write("<td>" + count + "</td>");
                     }
-                    sw.WriteLine(" </tr>");
+                    sw.Write(" </tr>");
                 }
-                sw.WriteLine(" </tbody></table>");
+                sw.Write(" </tbody></table>");
                 //  "<th>Sub</th><th></th><th>Name</th><th>Account</th> <th>Boss DPS</th><th>Power</th><th>Condi</th><th>All DPS</th><th>Power</th><th>Condi</th>" +
                 //"</th><th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
                 //"</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
@@ -3898,7 +3686,7 @@ namespace LuckParser.Controllers
             }
         }
         public void CreateEventList(StreamWriter sw) {
-            sw.WriteLine("<ul class=\"list-group\">");
+            sw.Write("<ul class=\"list-group\">");
             foreach (CombatItem c in combat_data.getCombatList()) {
                 if (c.isStateChange().getID() > 0) {
                     AgentItem agent = agent_data.GetAgent(c.getSrcAgent());
@@ -3908,79 +3696,79 @@ namespace LuckParser.Controllers
                         {
 
                             case 1:
-                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                agent.getName() + " entered combat in" + c.getDstAgent() + "subgroup" +
                                               // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                               "</li>");
                                 break;
                             case 2:
-                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                agent.getName() + " exited combat" +
                                               // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                               "</li>");
                                 break;
                             case 3:
-                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                agent.getName() + " is now alive" +
                                               // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                               "</li>");
                                 break;
                             case 4:
-                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                agent.getName() + " is now dead" +
                                               // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                               "</li>");
                                 break;
                             case 5:
-                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                agent.getName() + " is now downed" +
                                               // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                               "</li>");
                                 break;
                             case 6:
-                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                agent.getName() + " is now in logging range of POV player" +
                                               // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                               "</li>");
                                 break;
                             case 7:
-                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                agent.getName() + " is now out of range of logging player" +
                                               // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                               "</li>");
                                 break;
                             case 8:
-                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                agent.getName() + " is at "+c.getDstAgent()/100 +"% health"+
                                               // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                               "</li>");
                                 break;
                             case 9:
-                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                " LOG START" +
                                               // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                               "</li>");
                                 break;
                             case 10:
-                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                               "LOG END" +
                                               // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                               "</li>");
                                 break;
                             case 11:
-                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                agent.getName() + " weapon swapped to " +c.getDstAgent() + "(0/1 water, 4/5 land)" +
                                               // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                               "</li>");
                                 break;
                             case 12:
-                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                agent.getName() + " max health changed to  " + c.getDstAgent() + 
                                               // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                               "</li>");
                                 break;
                             case 13:
-                                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                agent.getName() + " is recording log " +
                                               // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                               "</li>");
@@ -4004,13 +3792,13 @@ namespace LuckParser.Controllers
               //  Morbi leo risus
               //  <span class="badge badge-primary badge-pill">1</span>
               //</li>
-            sw.WriteLine("</ul>");
+            sw.Write("</ul>");
         }
         public void CreateSkillList(StreamWriter sw) {
-            sw.WriteLine("<ul class=\"list-group\">");
+            sw.Write("<ul class=\"list-group\">");
             SkillData s_data = getSkillData();
             foreach (SkillItem skill in s_data.getSkillList()) {
-                sw.WriteLine("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                               skill.getID()  + " : " + skill.getName()  +
                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                              "</li>");
@@ -4019,7 +3807,7 @@ namespace LuckParser.Controllers
         public void CreateCondiUptimeTable(StreamWriter sw,Player player)//Note player is just boss
         {
             //Generate Boon table------------------------------------------------------------------------------------------------
-            sw.WriteLine(" <script> $(function () { $('#condi_table').DataTable({ \"order\": [[3, \"desc\"]] " +
+            sw.Write(" <script> $(function () { $('#condi_table').DataTable({ \"order\": [[3, \"desc\"]] " +
             // "\"scrollX\": true," +
             " });});</script>" +
             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"condi_table\">" +
@@ -4028,29 +3816,29 @@ namespace LuckParser.Controllers
            
             foreach (Boon boon in Boon.getCondiBoonList())
             {
-                sw.WriteLine("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                sw.Write("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
             }
-            sw.WriteLine(" </tr> </thead><tbody>");
+            sw.Write(" </tr> </thead><tbody>");
             
-                sw.WriteLine("<tr>");
+                sw.Write("<tr>");
                 
-                sw.WriteLine("<td>" + player.getCharacter().ToString() + "</td>");
+                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
                 string[] boonArray = getfinalcondis(player);
                 int count = 0;
                 List<string> boonArrayToList = new List<string>();
                 boonArrayToList.Add(player.getGroup());
                 foreach (Boon boon in Boon.getCondiBoonList())
                 {
-                    sw.WriteLine("<td>" + boonArray[count] + "</td>");
+                    sw.Write("<td>" + boonArray[count] + "</td>");
                     boonArrayToList.Add(boonArray[count]);
                     count++;
 
                 }
-                sw.WriteLine("</tr>");
+                sw.Write("</tr>");
                
             
-            sw.WriteLine("</tbody>");
-            sw.WriteLine("</table>");
+            sw.Write("</tbody>");
+            sw.Write("</table>");
         }
         public void CreateBossSummary(StreamWriter sw)
         {
@@ -4065,7 +3853,7 @@ namespace LuckParser.Controllers
             List<SkillItem> s_list = s_data.getSkillList();
             AgentData a_data = getAgentData();
             string charname = p.getCharacter();
-            sw.WriteLine(//"<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">" +
+            sw.Write(//"<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">" +
                  "<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(b_data.getID()+"-icon") + " \" alt=\"" + p.getCharacter().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
 
             sw.Write("<ul class=\"nav nav-tabs\"><li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + p.getInstid() + "\">" + p.getCharacter() + "</a></li>");
@@ -4090,7 +3878,7 @@ namespace LuckParser.Controllers
                         minionAgentList.Add(agent);
                     }
                 }
-                int i = 0;
+                //int i = 0;
             }
             foreach (AgentItem mobAgent in minionAgentList)
             {
@@ -4103,9 +3891,9 @@ namespace LuckParser.Controllers
 
             sw.Write("<div id=\"myTabContent\" class=\"tab-content\"><div class=\"tab-pane fade show active\" id=\"home" + p.getInstid() + "\">");
             CreateCondiUptimeTable(sw, p);
-            sw.WriteLine("<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>" + "<script>");
+            sw.Write("<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>" + "<script>");
 
-            sw.WriteLine("var data = [");
+            sw.Write("var data = [");
             if (SnapSettings[6])//Display rotation
             {
                 foreach (CastLog cl in casting)
@@ -4149,7 +3937,7 @@ namespace LuckParser.Controllers
                         dur = cl.getActDur() / 1000f;
                     }
                     skillName = skillName.Replace("\"", "");
-                    sw.WriteLine("{" +
+                    sw.Write("{" +
                         "y: ['1.5']," +
                         "x: ['" + dur + "']," +
                         "base:'" + cl.getTime() / 1000f + "'," +
@@ -4161,60 +3949,60 @@ namespace LuckParser.Controllers
                     {
                         if (skill.slot == "Weapon_1")
                         {
-                            sw.WriteLine("width:'0.5',");
+                            sw.Write("width:'0.5',");
                         }
                         else
                         {
-                            sw.WriteLine("width:'1',");
+                            sw.Write("width:'1',");
                         }
 
                     }
                     else
                     {
-                        sw.WriteLine("width:'1',");
+                        sw.Write("width:'1',");
                     }
 
-                    sw.WriteLine("hoverinfo: 'name'," +
+                    sw.Write("hoverinfo: 'name'," +
                     "hoverlabel:{namelength:'-1'}," +
                     " marker: {");
                     if (cl.endActivation() != null)
                     {
                         if (cl.endActivation().getID() == 3)
                         {
-                            sw.WriteLine("color: 'rgb(40,40,220)',");
+                            sw.Write("color: 'rgb(40,40,220)',");
                         }
                         else if (cl.endActivation().getID() == 4)
                         {
-                            sw.WriteLine("color: 'rgb(220,40,40)',");
+                            sw.Write("color: 'rgb(220,40,40)',");
                         }
                         else if (cl.endActivation().getID() == 5)
                         {
-                            sw.WriteLine("color: 'rgb(40,220,40)',");
+                            sw.Write("color: 'rgb(40,220,40)',");
                         }
                         else
                         {
-                            sw.WriteLine("color: 'rgb(220,220,0)',");
+                            sw.Write("color: 'rgb(220,220,0)',");
                         }
                     }
                     else
                     {
-                        sw.WriteLine("color: 'rgb(220,220,0)',");
+                        sw.Write("color: 'rgb(220,220,0)',");
                     }
-                    sw.WriteLine(" width: 5," +
+                    sw.Write(" width: 5," +
                      "line:" +
                       "{");
                     if (cl.startActivation() != null)
                     {
                         if (cl.startActivation().getID() == 1)
                         {
-                            sw.WriteLine("color: 'rgb(20,20,20)',");
+                            sw.Write("color: 'rgb(20,20,20)',");
                         }
                         else if (cl.startActivation().getID() == 2)
                         {
-                            sw.WriteLine("color: 'rgb(220,40,220)',");
+                            sw.Write("color: 'rgb(220,40,220)',");
                         }
                     }
-                    sw.WriteLine("width: 1" +
+                    sw.Write("width: 1" +
                             "}" +
                         "}," +
                         "showlegend: false" +
@@ -4227,9 +4015,7 @@ namespace LuckParser.Controllers
             List<Boon> parseBoonsList = new List<Boon>();
             //Condis
             parseBoonsList.AddRange(Boon.getCondiBoonList());
-            //Main boons
-            parseBoonsList.AddRange(Boon.getMainList());
-            //All class specefic boons
+            //Every boon and buffs
             parseBoonsList.AddRange(Boon.getAllProfList());
 
 
@@ -4239,8 +4025,8 @@ namespace LuckParser.Controllers
             {
                 if (parseBoonsList.FirstOrDefault(x => x.getName() == bgm.getBoonName()) != null)
                 {
-                    sw.WriteLine("{");
-                    sw.WriteLine("y: [");
+                    sw.Write("{");
+                    sw.Write("y: [");
                     List<Point> bChart = bgm.getBoonChart();
                     int bChartCount = 0;
                     foreach (Point pnt in bChart)
@@ -4261,7 +4047,7 @@ namespace LuckParser.Controllers
                     }
 
 
-                    sw.WriteLine("]," +
+                    sw.Write("]," +
                      "x: [");
                     bChartCount = 0;
                     foreach (Point pnt in bChart)
@@ -4280,31 +4066,31 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("'0'");
                     }
-                    sw.WriteLine("]," +
+                    sw.Write("]," +
                          " yaxis: 'y2'," +
                          " type: 'scatter',");
                     //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
                     if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness") { }
                     else
                     {
-                        sw.WriteLine(" visible: 'legendonly',");
+                        sw.Write(" visible: 'legendonly',");
                     }
-                    sw.WriteLine(" line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
-                    sw.WriteLine(" fill: 'tozeroy'," +
+                    sw.Write(" line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
+                    sw.Write(" fill: 'tozeroy'," +
                          " name: \"" + bgm.getBoonName() + "\"" +
                          " },");
                 }
 
             }
 
-            int maxDPS = 0;
+            //int maxDPS = 0;
 
             if (SnapSettings[1])
             {//show total dps plot
-                sw.WriteLine("{");
+                sw.Write("{");
                 //Adding dps axis
                 List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
-                sw.WriteLine("y: [");
+                sw.Write("y: [");
                 int ptdgCount = 0;
                 foreach (int[] dp in playertotaldpsgraphdata)
                 {
@@ -4324,9 +4110,9 @@ namespace LuckParser.Controllers
                     sw.Write("'0'");
                 }
 
-                sw.WriteLine("],");
+                sw.Write("],");
                 //add time axis
-                sw.WriteLine("x: [");
+                sw.Write("x: [");
                 ptdgCount = 0;
                 foreach (int[] dp in playertotaldpsgraphdata)
                 {
@@ -4345,15 +4131,15 @@ namespace LuckParser.Controllers
                     sw.Write("'0'");
                 }
 
-                sw.WriteLine("],");
-                sw.WriteLine(" mode: 'lines'," +
+                sw.Write("],");
+                sw.Write(" mode: 'lines'," +
                             " line: {shape: 'spline',color:'rgb(0,250,0)'}," +
                    " yaxis: 'y3'," +
                    // "legendgroup: 'Damage'," +
                    " name: 'Total DPS'" + "}");
             }
 
-            sw.WriteLine("];" +
+            sw.Write("];" +
             "var layout = {" +
 
                 "yaxis: {" +
@@ -4384,7 +4170,7 @@ namespace LuckParser.Controllers
                         if (skill.slot != "Weapon_1")
                         {
                             skillIcon = skill.icon;
-                            sw.WriteLine("{" +
+                            sw.Write("{" +
                                       "source: '" + skillIcon + "'," +
                                       "xref: 'x'," +
                                       "yref: 'y'," +
@@ -4424,7 +4210,7 @@ namespace LuckParser.Controllers
                         {
                             // skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
                         }
-                        sw.WriteLine("{" +
+                        sw.Write("{" +
                                       "source: '" + skillIcon + "'," +
                                       "xref: 'x'," +
                                       "yref: 'y'," +
@@ -4448,7 +4234,7 @@ namespace LuckParser.Controllers
 
 
             }
-            sw.WriteLine("]," +
+            sw.Write("]," +
 
                     "font: { color: '#ffffff' }," +
                     "paper_bgcolor: 'rgba(0,0,0,0)'," +
@@ -4457,7 +4243,7 @@ namespace LuckParser.Controllers
                         "Plotly.newPlot('Graph" + p.getInstid() + "', data, layout);" +
             "</script> ");
             CreateDMGDistTable(sw, p);
-            sw.WriteLine("</div>");
+            sw.Write("</div>");
             foreach (AgentItem mobAgent in minionAgentList)
             {
                 sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">");
@@ -4467,15 +4253,15 @@ namespace LuckParser.Controllers
             // sw.Write("<div class=\"tab-pane fade \" id=\"condiUptime" + p.getInstid() + "\">");
             // CreateCondiUptimeTable(sw,p);
             //CreateDMGTakenDistTable(sw, p);
-            //sw.WriteLine("</div>");
-            sw.WriteLine("</div>");
+            //sw.Write("</div>");
+            sw.Write("</div>");
 
 
 
         }
-        public void CreateHTML(StreamWriter sw,bool[] settingsSnap)
+        public void CreateHTML(StreamWriter sw, bool[] settingsSnap)
         {
-            
+
             SnapSettings = settingsSnap;
             BossData b_data = getBossData();
             double fight_duration = (b_data.getLastAware() - b_data.getFirstAware()) / 1000.0;
@@ -4483,46 +4269,6 @@ namespace LuckParser.Controllers
             String durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
             string bossname = FilterStringChars(b_data.getName());
             setPresentBoons();
-           
-            sw.Write("<!DOCTYPE html><html lang=\"en\"><head> " +
-                 "<meta charset=\"utf-8\">" +
-             "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
-             "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.css \"  crossorigin=\"anonymous\">" +
-             "<link href=\"https://fonts.googleapis.com/css?family=Open+Sans \" rel=\"stylesheet\">" +
-             "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css \">" +
-            //JQuery
-            "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js \"></script> " +
-            //popper
-            "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js \"></script>" +
-             //js
-             "<script src=\"https://cdn.plot.ly/plotly-latest.min.js \"></script>" +
-               "<script src=\"https://code.jquery.com/jquery-1.12.4.js \"></script>" +
-               "<script src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js \"></script>" +
-             "<script src=\"https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js \"></script>" +
-              "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js \"></script>" +
-             "<style>" +
-             "table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}" +
-             "td, th {text-align: center; white-space: nowrap;}" +
-             "table.dataTable  td {color: black;}" +
-              ".sorting_disabled {padding: 5px !important;}" +
-                     "table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc " +
-                     "{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}" +
-                     "table.dataTable thead.sorting_asc{color: green;}" +
-                     ".text-left {text-align: left;}" +
-                     "table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }" +
-                     ".rot-table {width: 100%;border-collapse: separate;border-spacing: 5px 0px;}" +
-                     ".rot-table > tbody > tr > td {padding: 1px;text-align: left;}" +
-                     ".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}" +
-                     ".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}" +
-                     "div.dataTables_wrapper { width: 1100px; margin: 0 auto; }" +
-                     "th.dt-left, td.dt-left { text-align: left; }" +
-                     "table.dataTable.display tbody tr.condi {background-color: #ff6666;}"+
-                     ".rot-skill{width: 24px;height: 24px;display: inline - block;}"+
-                     ".rot-crop{width : 20px;height: 20px; display: inline-block}"+
-             "</style>" +
-                     "<script>$.extend( $.fn.dataTable.defaults, {searching: false, ordering: true,paging: false,dom:\"t\"} );</script>" +
-                  "</head>");
-
             string Html_playerDropdown = "";
             foreach (Player p in p_list)
             {
@@ -4531,206 +4277,370 @@ namespace LuckParser.Controllers
                 Html_playerDropdown += "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#" + p.getInstid() + "\">" + charname +
                     "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</a>";
             }
-
-            sw.WriteLine( "<body><div class=\"container\">");
-
-
-            sw.Write("<p> Time Start: " + log_data.getLogStart() + " | Time End: " + log_data.getLogEnd() + " </p> " +
-               //top 
-               "<div class=\"row\">" +
-                   //Boss deets
-                   "<div class=\"col-md-4 \"><div class=\"card border-danger\">" +
-                   "<h3 class=\"card-header\">" + bossname + "</h3>" +
-
-                    "<div class=\"card-body\"><blockquote class=\"card-blockquote\">" +
-                     "<div class=\"row\">" +
-                    "<div class=\"col-md-6 \">" +
-                       "<center><img src=\"" + GetLink(b_data.getID() + "-icon") + " \"alt=\"" + bossname + "-icon" + "\" style=\"height: 100px; width: 100 %; display: block; \" ></center>" +
-                      "</div>" + "<div class=\"col-md-6 \">");
-            if (log_data.getBosskill())
+            // HTML STARTS
+            sw.Write("<!DOCTYPE html><html lang=\"en\">");
             {
-                sw.WriteLine("<div class=\"progress\" style=\"width: 100 %; height: 20px;\"><div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:100%; ;display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"><p style=\"text-align:center; color: #FFF;\">" + getBossData().getHealth().ToString() + " Health</p></div></div>");
-            }
-            else {
-                double finalPercent = 100;
-                if (boss_data.getHealthOverTime().Count > 0) {
-                     finalPercent = boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1][1] * 0.01;
-                }
-               
-                sw.WriteLine("<div class=\"progress\" style=\"width: 100 %; height: 20px;\"><div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:"+finalPercent+"%; ;display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"><p style=\"text-align:center; color: #FFF;\">" + getBossData().getHealth().ToString() + " Health</p></div></div>");
+                sw.Write("<head>");
+                {
+                    sw.Write("<meta charset=\"utf-8\">" +
+                      "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
+                      "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.css \"  crossorigin=\"anonymous\">" +
+                      "<link href=\"https://fonts.googleapis.com/css?family=Open+Sans \" rel=\"stylesheet\">" +
+                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css \">" +
+                      //JQuery
+                      "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js \"></script> " +
+                      //popper
+                      "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js \"></script>" +
+                      //js
+                      "<script src=\"https://cdn.plot.ly/plotly-latest.min.js \"></script>" +
+                      "<script src=\"https://code.jquery.com/jquery-1.12.4.js \"></script>" +
+                      "<script src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js \"></script>" +
+                      "<script src=\"https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js \"></script>" +
+                      "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js \"></script>" +
+                      "<style>" +
+                          "table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}" +
+                          "td, th {text-align: center; white-space: nowrap;}" +
+                          "table.dataTable  td {color: black;}" +
+                          ".sorting_disabled {padding: 5px !important;}" +
+                          "table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc " +
+                          "{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}" +
+                          "table.dataTable thead.sorting_asc{color: green;}" +
+                          ".text-left {text-align: left;}" +
+                          "table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }" +
+                          ".rot-table {width: 100%;border-collapse: separate;border-spacing: 5px 0px;}" +
+                          ".rot-table > tbody > tr > td {padding: 1px;text-align: left;}" +
+                          ".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}" +
+                          ".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}" +
+                          "div.dataTables_wrapper { width: 1100px; margin: 0 auto; }" +
+                          "th.dt-left, td.dt-left { text-align: left; }" +
+                          "table.dataTable.display tbody tr.condi {background-color: #ff6666;}" +
+                          ".rot-skill{width: 24px;height: 24px;display: inline - block;}" +
+                          ".rot-crop{width : 20px;height: 20px; display: inline-block}" +
+                      "</style>" +
+                      "<script>$.extend( $.fn.dataTable.defaults, {searching: false, ordering: true,paging: false,dom:\"t\"} );</script>");
+                }         
+                sw.Write("</head>");
+                sw.Write("<body>");
+                {
+                    sw.Write("<div class=\"container\">");
+                    {
+                        sw.Write("<p> Time Start: " + log_data.getLogStart() + " | Time End: " + log_data.getLogEnd() + " </p> ");
+                        sw.Write("<div style=\"width:1200px;\" class=\"row\">");
+                        {
+                            sw.Write("<div class=\"col-md-4 \">");
+                            {
+                                sw.Write("<div class=\"card border-danger\">");
+                                {
+                                    sw.Write("<h3 class=\"card-header\">" + bossname + "</h3>");
+                                    sw.Write("<div class=\"card-body\">");
+                                    {
+                                        sw.Write("<blockquote class=\"card-blockquote\">");
+                                        {
+                                            sw.Write("<div class=\"row\">");
+                                            {
+                                                sw.Write("<div class=\"col-md-6 \">");
+                                                {
+                                                    sw.Write("<center><img src=\"" + GetLink(b_data.getID() + "-icon") + " \"alt=\"" + bossname + "-icon" + "\" style=\"height: 100px; width: 100 %; display: block; \" ></center>");
+                                                }
+                                                sw.Write("</div>");
+                                                sw.Write("<div class=\"col-md-6 \">");
+                                                {
+                                                    sw.Write("<div class=\"progress\" style=\"width: 100 %; height: 20px;\">");
+                                                    {
+                                                        if (log_data.getBosskill())
+                                                        {
+                                                            sw.Write("<div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:100%; ;display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">");
+                                                            {
+                                                                sw.Write("<p style=\"text-align:center; color: #FFF;\">" + getBossData().getHealth().ToString() + " Health</p>");
+                                                            }
+                                                            sw.Write("</div>");
+                                                        }
+                                                        else
+                                                        {
+                                                            double finalPercent = 100;
+                                                            if (boss_data.getHealthOverTime().Count > 0)
+                                                            {
+                                                                finalPercent = boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1][1] * 0.01;
+                                                            }
+                                                            sw.Write("<div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:" + finalPercent + "%; ;display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">");
+                                                            {
+                                                                sw.Write("<p style=\"text-align:center; color: #FFF;\">" + getBossData().getHealth().ToString() + " Health</p>");
+                                                            }
+                                                            sw.Write("</div>");
+                                                        }
+                                                    }
+                                                    sw.Write("</div>");
+                                                    if (log_data.getBosskill())
+                                                    {
+                                                        sw.Write("<p class='text text-success'> Result: Success</p>");
+                                                    }
+                                                    else if (boss_data.getID() == 17154)//Deimos is fucked
+                                                    {
+                                                        sw.Write("<p class='text'> Result: N/A</p>");
+                                                    }
+                                                    else
+                                                    {
+                                                        sw.Write("<p class='text text-warning'> Result: Fail</p>");
+                                                    }
+                                                    sw.Write("<p>Duration " + durationString + " </p> ");
+                                                }
+                                                sw.Write("</div>");
+                                            }
+                                            sw.Write("</div>");
+                                        }
+                                        sw.Write("</blockquote>");
+                                    }
+                                    sw.Write("</div>");
+                                }
+                                sw.Write("</div>");
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"col-md-7\">");
+                            {
+                                CreateCompTable(sw);
+                                sw.Write("<p>File recorded by:" + log_data.getPOV() + "</p>");
+                            }
+                            sw.Write("</div>");
+                        }
+                        sw.Write("</div>");
+                        sw.Write("<ul class=\"nav nav-tabs\">");
+                        {
+                            sw.Write("<li class=\"nav-item dropdown\">" +
+                                        "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Stats</a>" +
+                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
+                                            "<a class=\"dropdown-item \"  data-toggle=\"tab\" href=\"#dpsStats\">DPS</a>" +
+                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offStats\">Damage Stats</a>" +
+                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defStats\">Defence Stats</a>" +
+                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#healStats\">Heal Stats</a>" +
+                                        "</div>" +
+                                    "</li>" +
+                                    "<li class=\"nav-item\">" +
+                                        "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#dmgGraph\">Damage Graph</a>" +
+                                    "</li>" +
+                                    "<li class=\"nav-item dropdown\">" +
+                                        "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Boons</a>" +
+                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
+                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsUptime\">Boon Uptime</a>" +
+                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenSelf\">Boon Generation(Self)</a>" +
+                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenGroup\">Boon Generation(Group)</a>" +
+                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenOGroup\">Boon Generation(Off Group)</a>" +
+                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenSquad\">Boon Generation(Squad)</a>" +
+                                        "</div>" +
+                                    "</li>" +
+                                    "<li class=\"nav-item dropdown\">" +
+                                         "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Off. Buffs</a>" +
+                                         "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
+                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveUptime\">Off.Buffs Uptime</a>" +
+                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveGenSelf\">Off.Buffs Generation(Self)</a>" +
+                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveGenGroup\">Off.Buffs Generation(Group)</a>" +
+                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveGenOGroup\">Off.Buffs Generation(Off Group)</a>" +
+                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveGenSquad\">Off.Buffs Generation(Squad)</a>" +
+                                         "</div>" +
+                                     "</li>" +
+                                     "<li class=\"nav-item dropdown\">" +
+                                         "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Def. Buffs</a>" +
+                                         "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
+                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveUptime\">Def.Buffs Uptime</a>" +
+                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveGenSelf\">Def.Buff Generation(Self)</a>" +
+                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveGenGroup\">Def.Buff Generation(Group)</a>" +
+                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveGenOGroup\">Def.Buff Generation(Off Group)</a>" +
+                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveGenSquad\">Def.Buff Generation(Squad)</a>" +
+                                         "</div>" +
+                                     "</li>" +
+                                    "<li class=\"nav-item\">" +
+                                        "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#mechTable\">Mechanics</a>" +
+                                    "</li>" +
+                                    "<li class=\"nav-item dropdown\">" +
+                                        "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Player</a>" +
+                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
+                                            Html_playerDropdown +
+                                        "</div>" +
+                                    "</li>");
+                            if (settingsSnap[9])
+                            {
+                                sw.Write("<li class=\"nav-item\">" +
+                                                "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#bossSummary\">Boss</a>" +
+                                            "</li>");
+                            }
+                            if (settingsSnap[8])
+                            {
+                                sw.Write("<li class=\"nav-item\">" +
+                                                "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#eventList\">Event List</a>" +
+                                            "</li>");
+                            }
+                        }
+                        sw.Write("</ul>");
+                        sw.Write("<div id=\"myTabContent\" class=\"tab-content\">");
+                        {
+                            sw.Write("<div class=\"tab-pane fade show active\" id=\"dpsStats\">");
+                            {
+                                // DPS table
+                                CreateDPSTable(sw, fight_duration);
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade \" id=\"offStats\">");
+                            {
+                                // HTML_dmgstats 
+                                CreateDMGStatsTable(sw, fight_duration);
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade \" id=\"defStats\">");
+                            {
+                                // def stats
+                                CreateDefTable(sw, fight_duration);
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade\" id=\"healStats\">");
+                            {
+                                //  HTML_supstats
+                                CreateSupTable(sw, fight_duration);
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade\" id=\"dmgGraph\">");
+                            {
+                                //Html_dpsGraph
+                                CreateDPSGraph(sw);
+                            }
+                            sw.Write("</div>");
+                            //Boon Stats
+                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsUptime\">");
+                            {
+                                sw.Write("<p> Boon Uptime</p>");
+                                // Html_boons
+                                CreateUptimeTable(sw, present_boons, "boons_table");
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSelf\">");
+                            {
+                                //Html_boonGenSelf
+                                sw.Write("<p> Boons generated by a character for themselves</p>");
+                                CreateGenSelfTable(sw, present_boons, "boongenself_table");
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenGroup\">");
+                            {
+                                sw.Write("<p> Boons generated by a character for their sub group</p>");
+                                // Html_boonGenGroup
+                                CreateGenGroupTable(sw, present_boons, "boongengroup_table");
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenOGroup\">");
+                            {
+                                sw.Write("<p> Boons generated by a character for any subgroup that is not their own</p>");
+                                // Html_boonGenOGroup
+                                CreateGenOGroupTable(sw, present_boons, "boongenogroup_table");
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSquad\">");
+                            {
+                                sw.Write("<p> Boons generated by a character for the entire squad</p>");
+                                //  Html_boonGenSquad
+                                CreateGenSquadTable(sw, present_boons, "boongensquad_table");
+                            }
+                            sw.Write("</div>");
+                            //Offensive Buffs stats
+                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveUptime\">");
+                            {
+                                sw.Write("<p> Offensive Buffs Uptime</p>");
+                                CreateUptimeTable(sw, present_offbuffs, "offensive_table");
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSelf\">");
+                            {
+                                sw.Write("<p> Offensive Buffs generated by a character for themselves</p>");
+                                CreateGenSelfTable(sw, present_offbuffs, "offensivegenself_table");
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenGroup\">");
+                            {
+                                sw.Write("<p> Offensive Buffs generated by a character for their sub group</p>");
+                                CreateGenGroupTable(sw, present_offbuffs, "offensivegengroup_table");
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenOGroup\">");
+                            {
+                                sw.Write("<p> Offensive Buffs generated by a character for any subgroup that is not their own</p>");
+                                CreateGenOGroupTable(sw, present_offbuffs, "offensivegenogroup_table");
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSquad\">");
+                            {
+                                sw.Write("<p> Offensive Buffs generated by a character for the entire squad</p>");
+                                CreateGenSquadTable(sw, present_offbuffs, "offensivegensquad_table");
+                            }
+                            sw.Write("</div>");
+                            //Defensive Buffs stats
+                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveUptime\">");
+                            {
+                                sw.Write("<p> Defensive Buffs Uptime</p>");
+                                CreateUptimeTable(sw, present_defbuffs, "defensive_table");
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSelf\">");
+                            {
+                                sw.Write("<p> Defensive Buffs generated by a character for themselves</p>");
+                                CreateGenSelfTable(sw, present_defbuffs, "defensivegenself_table");
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenGroup\">");
+                            {
+                                sw.Write("<p> Defensive Buffs generated by a character for their sub group</p>");
+                                CreateGenGroupTable(sw, present_defbuffs, "defensivegengroup_table");
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenOGroup\">");
+                            {
+                                sw.Write("<p> Defensive Buffs generated by a character for any subgroup that is not their own</p>");
+                                CreateGenOGroupTable(sw, present_defbuffs, "defensivegenogroup_table");
+                            }
+                            sw.Write("</div>");
+                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSquad\">");
+                            {
+                                sw.Write("<p> Defensive Buffs generated by a character for the entire squad</p>");
+                                CreateGenSquadTable(sw, present_defbuffs, "defensivegensquad_table");
+                            }
+                            sw.Write("</div>");
+                            //mechanics
+                            sw.Write("<div class=\"tab-pane fade\" id=\"mechTable\">");
+                            {
+                                sw.Write("<p>Mechanics</p>");
+                                CreateMechanicTable(sw);
+                            }
+                            sw.Write("</div>");
+                            //boss summary
+                            if (settingsSnap[9])
+                            {
+                                sw.Write("<div class=\"tab-pane fade\" id=\"bossSummary\">");
+                                {
+                                    CreateBossSummary(sw);
+                                }
+                                sw.Write("</div>");
+                            }
+                            //event list
+                            if (settingsSnap[8])
+                            {
+                                sw.Write("<div class=\"tab-pane fade\" id=\"eventList\">");
+                                {
+                                    sw.Write("<p>List of all events.</p>");
+                                    // CreateEventList(sw);
+                                    CreateSkillList(sw);
+                                }
+                                sw.Write("</div>");
+                            }
+                            //Html_playertabs
+                            CreatePlayerTab(sw);
+                        }
+                        sw.Write("</div>");
+                        sw.Write("<p> ARC:" + getLogData().getBuildVersion().ToString() + " | Bossid " + getBossData().getID().ToString() + " </p> ");
 
-            }
-            //"<div class=\"progress\" style=\"width: 100 %; height: 20px; \"><div class=\"progress-bar-striped \" role=\"progressbar\" style=\"width:100%; display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"><p style=\"text-align:center; color: #FFF;\">" + 0 + " Armour(" + getBossData().getTough().ToString() + " Toughness)</p></div></div>" +
-            if (log_data.getBosskill())
-            {
-                sw.WriteLine("<p class='text text-success'> Result: Success</p>");
-            }
-            else if (boss_data.getID() == 17154)//Deimos is fucked
-            {
-                sw.WriteLine("<p class='text'> Result: N/A</p>");
-            }
-            else
-            {
-                sw.WriteLine("<p class='text text-warning'> Result: Fail</p>");
-            }
-
-
-            sw.Write("<p>Duration " + durationString + " </p> ");
-
-           sw.WriteLine( "</div>" + "</blockquote></div></div> " +
-                    "</div>" +
-
-                    //Raid Party
-                    "<div class=\"col-md-7\">");
-            //HTML_compTable +
-            CreateCompTable(sw);
-            sw.Write("<p>File recorded by:" + log_data.getPOV() + "</p>" +
-             //"<p>Tip: Build Icons appear if player has more than 0 of that stat. 0 = lowest stat in squad, 10 = highest stat in squad, in between is a scaler representation</p>" +
-             "</div>" +
-         "</div>" +
-         "<ul class=\"nav nav-tabs\">" +
-             "<li class=\"nav-item dropdown\">" +
-              "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Stats</a>" +
-                  "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
-
-
-                     "<a class=\"dropdown-item \"  data-toggle=\"tab\" href=\"#dpsStats\">DPS</a>" +
-                     "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offStats\">Damage Stats</a>" +
-                     "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defStats\">Defence Stats</a>" +
-                     "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#healStats\">Heal Stats</a>" +
-
-                 "</div>" +
-
-             "</li>" +
-             "<li class=\"nav-item\">" +
-                 "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#dmgGraph\">Damage Graph</a>" +
-             "</li>" +
-             "<li class=\"nav-item dropdown\">" +
-             "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Boons</a>" +
-                  "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
-
-
-                     "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsUptime\">Boon Uptime</a>" +
-                     "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveUptime\">Off.Buffs Uptime</a>" +
-                     "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveUptime\">Def.Buffs Uptime</a>" +
-                     "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenSelf\">Boon Generation(Self)</a>" +
-                     "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenGroup\">Boon Generation(Group)</a>" +
-                     "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenOGroup\">Boon Generation(Off Group)</a>" +
-                     "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenSquad\">Boon Generation(Squad)</a>" +
-                 "</div>" +
-
-             "</li>" +
-            "<li class=\"nav-item\">" +
-                 "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#mechTable\">Mechanics</a>" +
-             "</li>" +
-              "<li class=\"nav-item dropdown\">" +
-             "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Player</a>" +
-                  "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
-                 //Foreach player loop here
-                 Html_playerDropdown +
-                 "</div>" +
-
-             "</li>");
-            if (settingsSnap[9])
-            {
-                sw.WriteLine("<li class=\"nav-item\">" +
-                 "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#bossSummary\">Boss</a>" +
-             "</li>");
-            }
-            if (settingsSnap[8]) {
-                sw.WriteLine("<li class=\"nav-item\">" +
-                 "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#eventList\">Event List</a>" +
-             "</li>");
-            }
-        sw.Write( "</ul>" +
-         "<div id=\"myTabContent\" class=\"tab-content\">" +
-              "<div class=\"tab-pane fade show active\" id=\"dpsStats\">");
-            //table
-            CreateDPSTable(sw, fight_duration);
-            //HTML_dps +
-            sw.WriteLine("</div>" +
-              "<div class=\"tab-pane fade \" id=\"offStats\">");
-            // HTML_dmgstats 
-            CreateDMGStatsTable(sw, fight_duration);
-         sw.WriteLine("</div>" +
-           "<div class=\"tab-pane fade \" id=\"defStats\">");
-            //HTML_defstats 
-            CreateDefTable(sw, fight_duration);
-                        sw.WriteLine("</div>" +
-                          "<div class=\"tab-pane fade\" id=\"healStats\">");
-            //  HTML_supstats
-            CreateSupTable(sw, fight_duration);
-                          sw.WriteLine("</div>" +
-                         "<div class=\"tab-pane fade\" id=\"dmgGraph\">");
-            //DMG Graph
-            //Html_dpsGraph
-            CreateDPSGraph(sw);
-            //Boon Stats
-            // Html_boons
-            sw.WriteLine("</div>" +
-                         "<div class=\"tab-pane fade\" id=\"boonsUptime\">" +
-                         "<p> Boon Uptime</p>");
-            CreateBoonsUptimeTable(sw);
-            sw.WriteLine("</div>" +
-            "<div class=\"tab-pane fade\" id=\"offensiveUptime\">" +
-            "<p> Offensive Buffs Uptime</p>");
-            CreateOffensiveBuffsUptimeTable(sw);
-            sw.WriteLine("</div>" +
-            "<div class=\"tab-pane fade\" id=\"defensiveUptime\">" +
-            "<p> Defensive Buffs Uptime</p>");
-            CreateDefensiveBuffsUptimeTable(sw);
-            //Html_boonGenSelf
-            sw.WriteLine("</div>" +
-                         "<div class=\"tab-pane fade\" id=\"boonsGenSelf\">" +
-                          "<p> Boons generated by a character for themselves</p>");
-            
-            CreateBoonGenSelfTable(sw);
-                         sw.WriteLine("</div>" +
-                          "<div class=\"tab-pane fade\" id=\"boonsGenGroup\">" +
-                         "<p> Boons generated by a character for their sub group</p>");
-            // Html_boonGenGroup
-            CreateBoonGenGroupTable(sw);
-                       sw.WriteLine("</div>" +
-                          "<div class=\"tab-pane fade\" id=\"boonsGenOGroup\">" +
-                         "<p> Boons generated by a character for any subgroup that is not their own</p>");
-            // Html_boonGenOGroup
-            CreateBoonGenOGroupTable(sw);
-                          sw.WriteLine("</div>" +
-                          "<div class=\"tab-pane fade\" id=\"boonsGenSquad\">" +
-                          "<p> Boons generated by a character for the entire squad</p>");
-            //  Html_boonGenSquad
-            CreateBoonGenSquadTable(sw);
-                         sw.WriteLine("</div>");
-            //mechanics
-            sw.WriteLine("<div class=\"tab-pane fade\" id=\"mechTable\">" +
-                         "<p>Mechanics</p>");
-            CreateMechanicTable(sw);
-            sw.WriteLine("</div>");
-            //boss summary
-            if (settingsSnap[9])
-            {
-                sw.WriteLine("<div class=\"tab-pane fade\" id=\"bossSummary\">" );
-                CreateBossSummary(sw);
-                sw.WriteLine("</div>");
-            }
-            //event list
-            if (settingsSnap[8])
-            {
-                sw.WriteLine("<div class=\"tab-pane fade\" id=\"eventList\">" +
-                          "<p>List of all events.</p>");
-                // CreateEventList(sw);
-                CreateSkillList(sw);
-                sw.WriteLine("</div>");
-            }
-            //Html_playertabs
-            CreatePlayerTab(sw);
-            sw.WriteLine("</div>");
-
-            sw.WriteLine("<p> ARC:" + getLogData().getBuildVersion().ToString() + " | Bossid " + getBossData().getID().ToString() + " </p> ");
-            sw.WriteLine("</div>");
-            sw.WriteLine( "</body> <script> $(document).ready(function(){$('[data-toggle=\"tooltip\"]').tooltip(); });</script >");
+                    }
+                    sw.Write("</div>");
+                }         
+                sw.Write("</body>");
+                sw.Write("<script> $(document).ready(function(){$('[data-toggle=\"tooltip\"]').tooltip(); });</script >");
+            }     
             //end
-            sw.WriteLine("</html>");
+            sw.Write("</html>");
             return;
         }
         //Easy reference to links/color codes
@@ -5084,10 +4994,7 @@ namespace LuckParser.Controllers
                     return "";
             }
 
-        }
-       
-
-       
+        }   
         
     }
 }
