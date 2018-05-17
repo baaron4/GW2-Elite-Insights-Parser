@@ -95,9 +95,9 @@ namespace LuckParser.Models.ParseModels
                 average_duration = average_duration + (p.Y - p.X);
             }
             double number= 100 * (average_duration / (b_data.getLastAware() - b_data.getFirstAware()));
-            if (number > 100) {
+            /*if (number > 100) {
                 int stop = 0;
-            }
+            }*/
             return String.Format("{0:0}%",number);
         }
 

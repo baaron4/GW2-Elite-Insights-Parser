@@ -213,7 +213,7 @@
         private System.Windows.Forms.ColumnHeader Status;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ColumnHeader Location;
+        private new System.Windows.Forms.ColumnHeader Location;
         private System.Windows.Forms.Button settingsbtn;
         private System.Windows.Forms.Button btnClear;
     }
