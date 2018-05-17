@@ -1140,7 +1140,7 @@ namespace LuckParser.Controllers
                 }
                 if (SnapSettings[5])
                 {//All class specefic boons
-                    boon_list.AddRange(Boon.getRestList());
+                    boon_list.AddRange(Boon.getRemainingBuffsList());
 
                 }
             }
@@ -1343,8 +1343,6 @@ namespace LuckParser.Controllers
             boon_list.AddRange(Boon.getBoonList());
             //Shareable buffs
             boon_list.AddRange(Boon.getSharableProfList());
-
-
 
             int n = boon_list.Count();//# of diff boons
 
@@ -2670,7 +2668,6 @@ namespace LuckParser.Controllers
                     if (SnapSettings[3])
                     {//Main boons
                         parseBoonsList.AddRange(Boon.getBoonList());
-
                     }
                     if (SnapSettings[4] || SnapSettings[5])
                     {//Important Class specefic boons
@@ -2678,7 +2675,7 @@ namespace LuckParser.Controllers
                     }
                     if (SnapSettings[5])
                     {//All class specefic boons
-                        parseBoonsList.AddRange(Boon.getRestList());
+                        parseBoonsList.AddRange(Boon.getRemainingBuffsList());
 
                     }
                     List<BoonsGraphModel> boonGraphData = getBoonGraph(p);

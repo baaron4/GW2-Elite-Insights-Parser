@@ -416,7 +416,7 @@ namespace LuckParser.Models.ParseModels
         {
             return allBoons.Where(x => x.priority != BoonEnum.Condition).ToList();
         }
-        public static List<Boon> getRestList()
+        public static List<Boon> getRemainingBuffsList()
         {
             return allBoons.Where(x => x.priority == BoonEnum.NonShareableBuff).ToList();
         }
