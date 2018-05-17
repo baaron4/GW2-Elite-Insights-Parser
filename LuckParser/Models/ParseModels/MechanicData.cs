@@ -84,7 +84,7 @@ namespace LuckParser.Models.ParseModels
                 globalMechList.Add(new Mechanic(34411, "Shards of Rage", 3, 16115, "symbol:'hexagram',color:'rgb(255,0,0)',", "Backflip Shards"));//abom
                 globalMechList.Add(new Mechanic(34450, "Unstable Blood Magic", 0, 16115, "symbol:'diamond',color:'rgb(255,0,0)',", "Bomb"));
                 globalMechList.Add(new Mechanic(34416, "Corruption", 0, 16115, "symbol:'circle',color:'rgb(255,0,0)',", "Corruption"));
-                globalMechList.Add(new Mechanic(34442, "Sacrifice", 0, 16115, "symbol:'circle',color:'rgb(255,0,0)',", "Sacrifice"));
+                globalMechList.Add(new Mechanic(34442, "Sacrifice", 0, 16115, "symbol:'circle',color:'rgb(75,0,130)',", "Sacrifice"));
                 globalMechList.Add(new Mechanic(34367, "Unbalanced", 0, 16115, "symbol:'square',color:'rgb(75,30,150)',", "Rain Knockdown"));
                 globalMechList.Add(new Mechanic(34422, "Blood Fueled", 1, 16115, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(Bad)"));
                 globalMechList.Add(new Mechanic(34428, "Blood Fueled", 1, 16115, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(Bad)"));

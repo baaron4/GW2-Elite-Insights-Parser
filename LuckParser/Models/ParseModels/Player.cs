@@ -162,13 +162,13 @@ namespace LuckParser.Models.ParseModels
                                     everywhere++;
                                         if (c.isBuffremove().getID() == 0 && c.isBuff() > 0 && c.getBuffDmg() == 0 && c.getValue() > 0) {//Buff application
                                             huh++;
-                                            String skill_name = skillData.getName(c.getSkillID());
+                                           // String skill_name = skillData.getName(c.getSkillID());
                                             int count = 0;
                                            
                                             foreach (BoonMap bm in boonGen.ToList())
                                             {
-                                                if (skill_name.Contains(bm.getName()))
-                                                {
+                                            if (bm.getID() == c.getSkillID())
+                                            {
                                                         List<BoonLog> loglist = bm.getBoonLog();
                                                         loglist.Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
                                                         bm.setBoonLog(loglist);
@@ -203,7 +203,7 @@ namespace LuckParser.Models.ParseModels
                         int time = c.getTime() - time_start;
                         if (time > 0)
                         {
-                            if (Boon.getCondiList().Contains(c.getSkillID()))
+                            if (Boon.getCondiBoonList().Exists(x=>x.getID() == c.getSkillID()))
                             {
                                 cleanse[0]++;
                                 cleanse[1] += c.getBuffDmg();
@@ -623,14 +623,14 @@ namespace LuckParser.Models.ParseModels
             {
                 if (instid == c.getDstInstid())
                 {
-                    String skill_name = skillData.getName(c.getSkillID());
+                  //  String skill_name = skillData.getName(c.getSkillID());
 
                     if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove().getID() == 0)
                     {
                         int count = 0;
                         foreach (BoonMap bm in boon_map.ToList())
                         {
-                            if (skill_name.Contains(bm.getName()))
+                            if (bm.getID() == c.getSkillID())
                             {
                                 int time = c.getTime() - time_start;
                                 if (time < fight_duration)
@@ -658,7 +658,7 @@ namespace LuckParser.Models.ParseModels
                         int count = 0;
                         foreach (BoonMap bm in boon_map.ToList())
                         {
-                            if (skill_name.Contains(bm.getName()))
+                            if (bm.getID() == c.getSkillID())
                             {
                                 //make sure log is within fight time
                                 int time = c.getTime() - time_start;
@@ -695,7 +695,7 @@ namespace LuckParser.Models.ParseModels
                         int count = 0;
                         foreach (BoonMap bm in boon_map.ToList())
                         {
-                            if (skill_name.Contains(bm.getName()))
+                            if (bm.getID() == c.getSkillID())
                             {
 
                                 if (bm.getName().Contains("Fury"))
@@ -739,7 +739,7 @@ namespace LuckParser.Models.ParseModels
                         int count = 0;
                         foreach (BoonMap bm in boon_map.ToList())
                         {
-                            if (skill_name.Contains(bm.getName()))
+                            if (bm.getID() == c.getSkillID())
                             {
 
                                 if (bm.getName().Contains("Fury"))
