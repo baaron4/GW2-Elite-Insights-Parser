@@ -4701,48 +4701,18 @@ namespace LuckParser.Controllers
                         sw.Write("</div>");
                         sw.Write("<ul class=\"nav nav-tabs\">");
                         {
-                            sw.Write("<li class=\"nav-item dropdown\">" +
-                                        "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Stats</a>" +
-                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\">" +
-                                            "<a class=\"dropdown-item \"  data-toggle=\"tab\" href=\"#dpsStats\">DPS</a>" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offStats\">Damage Stats</a>" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defStats\">Defence Stats</a>" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#healStats\">Heal Stats</a>" +
-                                        "</div>" +
-                                    "</li>" +
+                            sw.Write("<li class=\"nav-item\">" +
+                                        "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#stats\">Stats</a>" +
+                                    "</li>" + 
+                                    
                                     "<li class=\"nav-item\">" +
                                         "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#dmgGraph\">Damage Graph</a>" +
                                     "</li>" +
-                                    "<li class=\"nav-item dropdown\">" +
-                                        "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Boons</a>" +
-                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\">" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsUptime\">Boon Uptime</a>" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenSelf\">Boon Generation(Self)</a>" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenGroup\">Boon Generation(Group)</a>" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenOGroup\">Boon Generation(Off Group)</a>" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenSquad\">Boon Generation(Squad)</a>" +
-                                        "</div>" +
+                                     "<li class=\"nav-item\">" +
+                                        "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#boons\">Boons</a>" +
                                     "</li>" +
-                                    "<li class=\"nav-item dropdown\">" +
-                                         "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Off. Buffs</a>" +
-                                         "<div class=\"dropdown-menu \" x-placement=\"bottom-start\">" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveUptime\">Off.Buffs Uptime</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveGenSelf\">Off.Buffs Generation(Self)</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveGenGroup\">Off.Buffs Generation(Group)</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveGenOGroup\">Off.Buffs Generation(Off Group)</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveGenSquad\">Off.Buffs Generation(Squad)</a>" +
-                                         "</div>" +
-                                     "</li>" +
-                                     "<li class=\"nav-item dropdown\">" +
-                                         "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Def. Buffs</a>" +
-                                         "<div class=\"dropdown-menu \" x-placement=\"bottom-start\">" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveUptime\">Def.Buffs Uptime</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveGenSelf\">Def.Buff Generation(Self)</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveGenGroup\">Def.Buff Generation(Group)</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveGenOGroup\">Def.Buff Generation(Off Group)</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveGenSquad\">Def.Buff Generation(Squad)</a>" +
-                                         "</div>" +
-                                     "</li>" +
+                                   
+                                    
                                     "<li class=\"nav-item\">" +
                                         "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#mechTable\">Mechanics</a>" +
                                     "</li>" +
@@ -4768,30 +4738,49 @@ namespace LuckParser.Controllers
                         sw.Write("</ul>");
                         sw.Write("<div id=\"myTabContent\" class=\"tab-content\">");
                         {
-                            sw.Write("<div class=\"tab-pane fade show active\" id=\"dpsStats\">");
+                            sw.Write("<div class=\"tab-pane fade show active\" id=\"stats\">");
                             {
-                                // DPS table
-                                CreateDPSTable(sw, fight_duration);
+                                //Stats Tab
+                                sw.Write("<h3 align=\"center\"> Stats </h3>");
+
+                                sw.Write("<ul class=\"nav nav-tabs\">"+
+                                        "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#dpsStats\">DPS</a></li>"+
+                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offStats\">Damage Stats</a></li>"+
+                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defStats\">Defensive Stats</a></li>"+
+                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#healStats\">Heal Stats</a></li>"+
+                                    "</ul>");
+                                sw.Write("<div id=\"statsSubTab\" class=\"tab-content\">");
+                                {
+                                    sw.Write("<div class=\"tab-pane fade show active\" id=\"dpsStats\">");
+                                    {
+                                        // DPS table
+                                        CreateDPSTable(sw, fight_duration);
+                                    }
+                                    sw.Write("</div>");
+                                    sw.Write("<div class=\"tab-pane fade \" id=\"offStats\">");
+                                    {
+                                        // HTML_dmgstats 
+                                        CreateDMGStatsTable(sw, fight_duration);
+                                    }
+                                    sw.Write("</div>");
+                                    sw.Write("<div class=\"tab-pane fade \" id=\"defStats\">");
+                                    {
+                                        // def stats
+                                        CreateDefTable(sw, fight_duration);
+                                    }
+                                    sw.Write("</div>");
+                                    sw.Write("<div class=\"tab-pane fade\" id=\"healStats\">");
+                                    {
+                                        //  HTML_supstats
+                                        CreateSupTable(sw, fight_duration);
+                                    }
+                                    sw.Write("</div>");
+                                }
+                                sw.Write("</div>");
+
                             }
                             sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade \" id=\"offStats\">");
-                            {
-                                // HTML_dmgstats 
-                                CreateDMGStatsTable(sw, fight_duration);
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade \" id=\"defStats\">");
-                            {
-                                // def stats
-                                CreateDefTable(sw, fight_duration);
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"healStats\">");
-                            {
-                                //  HTML_supstats
-                                CreateSupTable(sw, fight_duration);
-                            }
-                            sw.Write("</div>");
+                           
                             sw.Write("<div class=\"tab-pane fade\" id=\"dmgGraph\">");
                             {
                                 //Html_dpsGraph
@@ -4799,101 +4788,162 @@ namespace LuckParser.Controllers
                             }
                             sw.Write("</div>");
                             //Boon Stats
-                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsUptime\">");
+                            sw.Write("<div class=\"tab-pane fade \" id=\"boons\">");
                             {
-                                sw.Write("<p> Boon Uptime</p>");
-                                // Html_boons
-                                CreateUptimeTable(sw, present_boons, "boons_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSelf\">");
-                            {
-                                //Html_boonGenSelf
-                                sw.Write("<p> Boons generated by a character for themselves</p>");
-                                CreateGenSelfTable(sw, present_boons, "boongenself_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenGroup\">");
-                            {
-                                sw.Write("<p> Boons generated by a character for their sub group</p>");
-                                // Html_boonGenGroup
-                                CreateGenGroupTable(sw, present_boons, "boongengroup_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenOGroup\">");
-                            {
-                                sw.Write("<p> Boons generated by a character for any subgroup that is not their own</p>");
-                                // Html_boonGenOGroup
-                                CreateGenOGroupTable(sw, present_boons, "boongenogroup_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSquad\">");
-                            {
-                                sw.Write("<p> Boons generated by a character for the entire squad</p>");
-                                //  Html_boonGenSquad
-                                CreateGenSquadTable(sw, present_boons, "boongensquad_table");
-                            }
-                            sw.Write("</div>");
-                            //Offensive Buffs stats
-                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveUptime\">");
-                            {
-                                sw.Write("<p> Offensive Buffs Uptime</p>");
-                                CreateUptimeTable(sw, present_offbuffs, "offensive_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSelf\">");
-                            {
-                                sw.Write("<p> Offensive Buffs generated by a character for themselves</p>");
-                                CreateGenSelfTable(sw, present_offbuffs, "offensivegenself_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenGroup\">");
-                            {
-                                sw.Write("<p> Offensive Buffs generated by a character for their sub group</p>");
-                                CreateGenGroupTable(sw, present_offbuffs, "offensivegengroup_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenOGroup\">");
-                            {
-                                sw.Write("<p> Offensive Buffs generated by a character for any subgroup that is not their own</p>");
-                                CreateGenOGroupTable(sw, present_offbuffs, "offensivegenogroup_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSquad\">");
-                            {
-                                sw.Write("<p> Offensive Buffs generated by a character for the entire squad</p>");
-                                CreateGenSquadTable(sw, present_offbuffs, "offensivegensquad_table");
-                            }
-                            sw.Write("</div>");
-                            //Defensive Buffs stats
-                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveUptime\">");
-                            {
-                                sw.Write("<p> Defensive Buffs Uptime</p>");
-                                CreateUptimeTable(sw, present_defbuffs, "defensive_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSelf\">");
-                            {
-                                sw.Write("<p> Defensive Buffs generated by a character for themselves</p>");
-                                CreateGenSelfTable(sw, present_defbuffs, "defensivegenself_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenGroup\">");
-                            {
-                                sw.Write("<p> Defensive Buffs generated by a character for their sub group</p>");
-                                CreateGenGroupTable(sw, present_defbuffs, "defensivegengroup_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenOGroup\">");
-                            {
-                                sw.Write("<p> Defensive Buffs generated by a character for any subgroup that is not their own</p>");
-                                CreateGenOGroupTable(sw, present_defbuffs, "defensivegenogroup_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSquad\">");
-                            {
-                                sw.Write("<p> Defensive Buffs generated by a character for the entire squad</p>");
-                                CreateGenSquadTable(sw, present_defbuffs, "defensivegensquad_table");
+                                //Boons Tab
+                                sw.Write("<h3 align=\"center\"> Boons </h3>");
+
+                                sw.Write("<ul class=\"nav nav-tabs\">" +
+                                        "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#mainBoon\">Boons</a></li>" +
+                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offBuff\">Damage Buffs</a></li>" +
+                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defBuff\">Defensive SBuffs</a></li>" +
+                                    "</ul>");
+                                sw.Write("<div id=\"boonsSubTab\" class=\"tab-content\">");
+                                {
+                                    sw.Write("<div class=\"tab-pane fade show active  \" id=\"mainBoon\">");
+                                    {
+                                        sw.Write("<ul class=\"nav nav-tabs\">" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#boonsUptime\">Uptime</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenSelf\">Generation (Self)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenGroup\">Generation (Group)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenOGroup\">Generation (Off-Group)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenSquad\">Generation (Squad)</a></li>" +
+                                               "</ul>");
+                                        sw.Write("<div id=\"mainBoonsSubTab\" class=\"tab-content\">");
+                                        {
+                                            sw.Write("<div class=\"tab-pane fade show active\" id=\"boonsUptime\">");
+                                            {
+                                                sw.Write("<p> Boon Uptime</p>");
+                                                // Html_boons
+                                                CreateUptimeTable(sw, present_boons, "boons_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSelf\">");
+                                            {
+                                                //Html_boonGenSelf
+                                                sw.Write("<p> Boons generated by a character for themselves</p>");
+                                                CreateGenSelfTable(sw, present_boons, "boongenself_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenGroup\">");
+                                            {
+                                                sw.Write("<p> Boons generated by a character for their sub group</p>");
+                                                // Html_boonGenGroup
+                                                CreateGenGroupTable(sw, present_boons, "boongengroup_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenOGroup\">");
+                                            {
+                                                sw.Write("<p> Boons generated by a character for any subgroup that is not their own</p>");
+                                                // Html_boonGenOGroup
+                                                CreateGenOGroupTable(sw, present_boons, "boongenogroup_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSquad\">");
+                                            {
+                                                sw.Write("<p> Boons generated by a character for the entire squad</p>");
+                                                //  Html_boonGenSquad
+                                                CreateGenSquadTable(sw, present_boons, "boongensquad_table");
+                                            }
+                                            sw.Write("</div>");
+                                        }
+                                        sw.Write("</div>");
+                                    }
+                                    sw.Write("</div>");
+                                    sw.Write("<div class=\"tab-pane fade  \" id=\"offBuff\">");
+                                    {
+                                        sw.Write("<ul class=\"nav nav-tabs\">" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#offensiveUptime\">Uptime</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenSelf\">Generation (Self)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenGroup\">Generation (Group)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenOGroup\">Generation (Off-Group)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenSquad\">Generation (Squad)</a></li>" +
+                                               "</ul>");
+                                        sw.Write("<div id=\"offBuffSubTab\" class=\"tab-content\">");
+                                        {
+                                            //Offensive Buffs stats
+                                            sw.Write("<div class=\"tab-pane fade show active\" id=\"offensiveUptime\">");
+                                            {
+                                                sw.Write("<p> Offensive Buffs Uptime</p>");
+                                                CreateUptimeTable(sw, present_offbuffs, "offensive_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSelf\">");
+                                            {
+                                                sw.Write("<p> Offensive Buffs generated by a character for themselves</p>");
+                                                CreateGenSelfTable(sw, present_offbuffs, "offensivegenself_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenGroup\">");
+                                            {
+                                                sw.Write("<p> Offensive Buffs generated by a character for their sub group</p>");
+                                                CreateGenGroupTable(sw, present_offbuffs, "offensivegengroup_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenOGroup\">");
+                                            {
+                                                sw.Write("<p> Offensive Buffs generated by a character for any subgroup that is not their own</p>");
+                                                CreateGenOGroupTable(sw, present_offbuffs, "offensivegenogroup_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSquad\">");
+                                            {
+                                                sw.Write("<p> Offensive Buffs generated by a character for the entire squad</p>");
+                                                CreateGenSquadTable(sw, present_offbuffs, "offensivegensquad_table");
+                                            }
+                                            sw.Write("</div>");
+                                        }
+                                        sw.Write("</div>");
+                                    }
+                                    sw.Write("</div>");
+                                    sw.Write("<div class=\"tab-pane fade  \" id=\"defBuff\">");
+                                    {
+                                        sw.Write("<ul class=\"nav nav-tabs\">" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#defensiveUptime\">Uptime</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenSelf\">Generation (Self)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenGroup\">Generation (Group)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenOGroup\">Generation (Off-Group)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenSquad\">Generation (Squad)</a></li>" +
+                                               "</ul>");
+                                        sw.Write("<div id=\"defBuffSubTab\" class=\"tab-content\">");
+                                        {
+                                            //Defensive Buffs stats
+                                            sw.Write("<div class=\"tab-pane fade show active\" id=\"defensiveUptime\">");
+                                            {
+                                                sw.Write("<p> Defensive Buffs Uptime</p>");
+                                                CreateUptimeTable(sw, present_defbuffs, "defensive_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSelf\">");
+                                            {
+                                                sw.Write("<p> Defensive Buffs generated by a character for themselves</p>");
+                                                CreateGenSelfTable(sw, present_defbuffs, "defensivegenself_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenGroup\">");
+                                            {
+                                                sw.Write("<p> Defensive Buffs generated by a character for their sub group</p>");
+                                                CreateGenGroupTable(sw, present_defbuffs, "defensivegengroup_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenOGroup\">");
+                                            {
+                                                sw.Write("<p> Defensive Buffs generated by a character for any subgroup that is not their own</p>");
+                                                CreateGenOGroupTable(sw, present_defbuffs, "defensivegenogroup_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSquad\">");
+                                            {
+                                                sw.Write("<p> Defensive Buffs generated by a character for the entire squad</p>");
+                                                CreateGenSquadTable(sw, present_defbuffs, "defensivegensquad_table");
+                                            }
+                                            sw.Write("</div>");
+                                        }
+                                        sw.Write("</div>");
+                                    }
+                                    sw.Write("</div>");
+                                }
+                                sw.Write("</div>");
                             }
                             sw.Write("</div>");
                             //mechanics
