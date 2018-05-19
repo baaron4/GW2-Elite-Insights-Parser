@@ -1884,7 +1884,7 @@ namespace LuckParser.Controllers
                 }
             }
             //generate comp table
-            sw.Write("<table class=\"table\" style=\"width:auto;position:absolute; top:50%; height:10em; margin-top:-5em\">");
+            sw.Write("<table class=\"table\"");
             {
                 sw.Write("<tbody>");
                 for (int n = firstGroup; n <= groupCount; n++)
@@ -1918,7 +1918,7 @@ namespace LuckParser.Controllers
                             {
                                 build += "<img src=\"https://wiki.guildwars2.com/images/1/12/Toughness.png\" alt=\"Toughness\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Toughness-" + gPlay.getToughness() + "\">";//"<span class=\"badge badge-secondary\">Tough("+ gPlay.getToughness() + ")</span>";
                             }
-                            sw.Write("<td style=\"width: 150px; border:1px solid #EE5F5B;\">");
+                            sw.Write("<td style=\"width: 120px; border:1px solid #EE5F5B;\">");
                             {
                                 sw.Write("<img src=\"" + GetLink(gPlay.getProf().ToString()) + " \" alt=\"" + gPlay.getProf().ToString() + "\" height=\"18\" width=\"18\" >");
                                 sw.Write(build + "<br/>" + charName);
@@ -4553,6 +4553,27 @@ namespace LuckParser.Controllers
             }
             sw.Write("</div>");
         }
+        public void CreateCustomCSS(StreamWriter sw)
+        {
+            sw.Write("table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}");
+            sw.Write("td, th {text-align: center; white-space: nowrap;}");
+            sw.Write("table.dataTable  td {color: black;}");
+            sw.Write(".sorting_disabled {padding: 5px !important;}");
+            sw.Write("table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc ");
+            sw.Write("{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}");
+            sw.Write("table.dataTable thead.sorting_asc{color: green;}");
+            sw.Write(".text-left {text-align: left;}");
+            sw.Write("table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }");
+            sw.Write(".rot-table {width: 100%;border-collapse: separate;border-spacing: 5px 0px;}");
+            sw.Write(".rot-table > tbody > tr > td {padding: 1px;text-align: left;}");
+            sw.Write(".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}");
+            sw.Write(".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}");
+            sw.Write("div.dataTables_wrapper { width: 1100px; margin: 0 auto; }");
+            sw.Write("th.dt-left, td.dt-left { text-align: left; }");
+            sw.Write("table.dataTable.display tbody tr.condi {background-color: #ff6666;}");
+            sw.Write(".rot-skill{width: 24px;height: 24px;display: inline - block;}");
+            sw.Write(".rot-crop{width : 20px;height: 20px; display: inline-block}");
+        }
         public void CreateHTML(StreamWriter sw, bool[] settingsSnap)
         {
 
@@ -4587,57 +4608,39 @@ namespace LuckParser.Controllers
                       "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js \"></script>" +
                       //js
                       "<script src=\"https://cdn.plot.ly/plotly-latest.min.js \"></script>" +
-                      "<script src=\"https://code.jquery.com/jquery-1.12.4.js \"></script>" +
                       "<script src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js \"></script>" +
                       "<script src=\"https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js \"></script>" +
-                      "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js \"></script>" +
-                      "<style>" +
-                          "table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}" +
-                          "td, th {text-align: center; white-space: nowrap;}" +
-                          "table.dataTable  td {color: black;}" +
-                          ".sorting_disabled {padding: 5px !important;}" +
-                          "table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc " +
-                          "{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}" +
-                          "table.dataTable thead.sorting_asc{color: green;}" +
-                          ".text-left {text-align: left;}" +
-                          "table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }" +
-                          ".rot-table {width: 100%;border-collapse: separate;border-spacing: 5px 0px;}" +
-                          ".rot-table > tbody > tr > td {padding: 1px;text-align: left;}" +
-                          ".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}" +
-                          ".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}" +
-                          "div.dataTables_wrapper { width: 1100px; margin: 0 auto; }" +
-                          "th.dt-left, td.dt-left { text-align: left; }" +
-                          "table.dataTable.display tbody tr.condi {background-color: #ff6666;}" +
-                          ".rot-skill{width: 24px;height: 24px;display: inline - block;}" +
-                          ".rot-crop{width : 20px;height: 20px; display: inline-block}" +
-                      "</style>" +
-                      "<script>$.extend( $.fn.dataTable.defaults, {searching: false, ordering: true,paging: false,dom:\"t\"} );</script>");
-                }         
+                      "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js \"></script>");
+                    sw.Write("<style>");
+                    CreateCustomCSS(sw);
+                    sw.Write("</style>");
+                }
+                sw.Write("<script>$.extend( $.fn.dataTable.defaults, {searching: false, ordering: true,paging: false,dom:\"t\"} );</script>");
                 sw.Write("</head>");
-                sw.Write("<body>");
+                sw.Write("<body class=\"d-flex flex-column align-items-center\">");
                 {
-                    sw.Write("<div class=\"container\">");
+                    sw.Write("<div style=\"width: 1100px;\"class=\"d-flex flex-column\">");
                     {
-                        sw.Write("<p> Time Start: " + log_data.getLogStart() + " | Time End: " + log_data.getLogEnd() + " </p> ");
-                        sw.Write("<div style=\"width:1200px;\" class=\"row\">");
+                        sw.Write("<p> Time Start: " + log_data.getLogStart() + " | Time End: " + log_data.getLogEnd() + " </p> ");                     
+                        sw.Write("<div class=\"d-flex flex-row justify-content-center align-items-center flex-wrap\">");
                         {
-                            sw.Write("<div class=\"col-md-4 \">");
+                            sw.Write("<div class=\"mr-3\">");
                             {
-                                sw.Write("<div class=\"card border-danger\">");
+                                sw.Write("<div style=\"width: 400px;\" class=\"card border-danger d-flex flex-column\">");
                                 {
-                                    sw.Write("<h3 class=\"card-header\">" + bossname + "</h3>");
-                                    sw.Write("<div class=\"card-body\">");
+                                    sw.Write("<h3 class=\"card-header text-center\">" + bossname + "</h3>");
+                                    sw.Write("<div class=\"card-body d-flex flex-column align-items-center\">");
                                     {
-                                        sw.Write("<blockquote class=\"card-blockquote\">");
+                                        sw.Write("<blockquote class=\"card-blockquote mb-0\">");
                                         {
-                                            sw.Write("<div class=\"row\">");
+                                            sw.Write("<div style=\"width: 300px;\" class=\"d-flex flex-row justify-content-between align-items-center\">");
                                             {
-                                                sw.Write("<div class=\"col-md-6 \">");
+                                                sw.Write("<div>");
                                                 {
-                                                    sw.Write("<center><img src=\"" + GetLink(b_data.getID() + "-icon") + " \"alt=\"" + bossname + "-icon" + "\" style=\"height: 100px; width: 100 %; display: block; \" ></center>");
+                                                    sw.Write("<img src=\"" + GetLink(b_data.getID() + "-icon") + " \"alt=\"" + bossname + "-icon" + "\" style=\"height: 120px; width: 120px;\" >");
                                                 }
                                                 sw.Write("</div>");
-                                                sw.Write("<div class=\"col-md-6 \">");
+                                                sw.Write("<div>");
                                                 {
                                                     sw.Write("<div class=\"progress\" style=\"width: 100 %; height: 20px;\">");
                                                     {
@@ -4689,10 +4692,9 @@ namespace LuckParser.Controllers
                                 sw.Write("</div>");
                             }
                             sw.Write("</div>");
-                            sw.Write("<div class=\"col-md-7\">");
+                            sw.Write("<div class=\"ml-3 mt-3\">");
                             {
                                 CreateCompTable(sw);
-                                sw.Write("<p>File recorded by:" + log_data.getPOV() + "</p>");
                             }
                             sw.Write("</div>");
                         }
@@ -4701,7 +4703,7 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("<li class=\"nav-item dropdown\">" +
                                         "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Stats</a>" +
-                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
+                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\">" +
                                             "<a class=\"dropdown-item \"  data-toggle=\"tab\" href=\"#dpsStats\">DPS</a>" +
                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offStats\">Damage Stats</a>" +
                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defStats\">Defence Stats</a>" +
@@ -4713,7 +4715,7 @@ namespace LuckParser.Controllers
                                     "</li>" +
                                     "<li class=\"nav-item dropdown\">" +
                                         "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Boons</a>" +
-                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
+                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\">" +
                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsUptime\">Boon Uptime</a>" +
                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenSelf\">Boon Generation(Self)</a>" +
                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenGroup\">Boon Generation(Group)</a>" +
@@ -4723,7 +4725,7 @@ namespace LuckParser.Controllers
                                     "</li>" +
                                     "<li class=\"nav-item dropdown\">" +
                                          "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Off. Buffs</a>" +
-                                         "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
+                                         "<div class=\"dropdown-menu \" x-placement=\"bottom-start\">" +
                                              "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveUptime\">Off.Buffs Uptime</a>" +
                                              "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveGenSelf\">Off.Buffs Generation(Self)</a>" +
                                              "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveGenGroup\">Off.Buffs Generation(Group)</a>" +
@@ -4733,7 +4735,7 @@ namespace LuckParser.Controllers
                                      "</li>" +
                                      "<li class=\"nav-item dropdown\">" +
                                          "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Def. Buffs</a>" +
-                                         "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
+                                         "<div class=\"dropdown-menu \" x-placement=\"bottom-start\">" +
                                              "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveUptime\">Def.Buffs Uptime</a>" +
                                              "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveGenSelf\">Def.Buff Generation(Self)</a>" +
                                              "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveGenGroup\">Def.Buff Generation(Group)</a>" +
@@ -4746,7 +4748,7 @@ namespace LuckParser.Controllers
                                     "</li>" +
                                     "<li class=\"nav-item dropdown\">" +
                                         "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Player</a>" +
-                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
+                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\">" +
                                             Html_playerDropdown +
                                         "</div>" +
                                     "</li>");
@@ -4925,8 +4927,8 @@ namespace LuckParser.Controllers
                             CreatePlayerTab(sw);
                         }
                         sw.Write("</div>");
-                        sw.Write("<p> ARC:" + getLogData().getBuildVersion().ToString() + " | Bossid " + getBossData().getID().ToString() + " </p> ");
-
+                        sw.Write("<p style=\"margin-top:10px;\"> ARC:" + getLogData().getBuildVersion().ToString() + " | Bossid " + getBossData().getID().ToString() + " </p> ");
+                        sw.Write("<p style=\"margin-top:-15px;\">File recorded by: " + log_data.getPOV() + "</p>");
                     }
                     sw.Write("</div>");
                 }         
