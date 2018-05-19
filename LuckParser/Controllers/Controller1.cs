@@ -3948,7 +3948,7 @@ namespace LuckParser.Controllers
             }
             if (presMech.Count() > 0)
             {
-                sw.Write("<script> $(function () { $('#mech_table').DataTable({ \"order\": [[2, \"desc\"]]});});</script>");
+                sw.Write("<script> $(function () { $('#mech_table').DataTable({ \"order\": [[0, \"desc\"]]});});</script>");
                 sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"mech_table\">");
                 {
                     sw.Write("<thead>");
@@ -4622,7 +4622,7 @@ namespace LuckParser.Controllers
                     sw.Write("<div style=\"width: 1100px;\"class=\"d-flex flex-column\">");
                     {
                         sw.Write("<p> Time Start: " + log_data.getLogStart() + " | Time End: " + log_data.getLogEnd() + " </p> ");                     
-                        sw.Write("<div class=\"d-flex flex-row justify-content-center align-items-center flex-wrap\">");
+                        sw.Write("<div class=\"d-flex flex-row justify-content-center align-items-center flex-wrap mb-3\">");
                         {
                             sw.Write("<div class=\"mr-3\">");
                             {
