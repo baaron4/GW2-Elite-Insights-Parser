@@ -233,6 +233,13 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Signet of the Hunt",12626, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Signet of the Wild",12636, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
                 //spirits
+                 //spirits
+               // new Boon("Water Spirit", 50386, BoonSource.Ranger, "duration", 1, BoonEnum.DefensiveBuff),
+                new Boon("Frost Spirit", 12544, BoonSource.Ranger, "duration", 1, BoonEnum.OffensiveBuff),
+                new Boon("Sun Spirit", 12540, BoonSource.Ranger, "duration", 1, BoonEnum.OffensiveBuff),
+                new Boon("Stone Spirit", 12547, BoonSource.Ranger, "duration", 1, BoonEnum.DefensiveBuff),
+                //new Boon("Storm Spirit", 50381, BoonSource.Ranger, "duration", 1, BoonEnum.OffensiveBuff),
+                //reworked
                 new Boon("Water Spirit", 50386, BoonSource.Ranger, "duration", 1, BoonEnum.DefensiveBuff),
                 new Boon("Frost Spirit", 50421, BoonSource.Ranger, "duration", 1, BoonEnum.OffensiveBuff),
                 new Boon("Sun Spirit", 50413, BoonSource.Ranger, "duration", 1, BoonEnum.OffensiveBuff),

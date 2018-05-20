@@ -51,37 +51,25 @@ As for non coders there are still a few things you could consider adding/ mainta
 ### Adding Boons / Profession Boons / Conditions 
 
 
- Go to LuckParser>Models>ParseModels>Boon.cs
- 
-getCondiList() is unused
+ Go to LuckParser>Models>ParseModels>Boon.cs 
 
-getCondiName() is unused
-
-getCondiBoonList() is all condis
-
-getList() is used for all boons that show in Boon uptime and generation tables
-
-getMainList() is all universal boons (the orange ones)
-
-getSharableProfList() is a list of only important profession buffs (when set in settings)
-
-getAllProfList() is a list of all the buffs that a class/race can generate
+all boons can be added to private static List<Boon> allBoons
 
 --- 
 
-Add to any of these with this format:
-
-  Format: ** Boon(NAME,ID,Catagory,type,maxstacks)**
+  Format: ** Boon(NAME,ID,Catagory,type,maxstacks,BoonEnum)**
   
   * NAME is a string
   
  * ID is an int can be found with skillID list tab
   
- * Catagory doesnt really matter howeveer for future organization
+ * Catagory an enum on BoonSource indicating what class may use it
   
  * type: either "duration" ex: switness or "intensity" ex:might
   
  * maxstacks: both types have a max stacks. If unsure about duration go with 1
+ 
+ * BoonEnum: Indicates weather or not the boon is universal,conidtion, offensive, defensive, or none sharable 
 
 ### Adding Boss Mechanics
 

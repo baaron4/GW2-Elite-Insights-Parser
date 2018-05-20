@@ -75,6 +75,8 @@ namespace LuckParser.Models.ParseModels
 
         public String getName()
         {
+           // name = name.Replace("\0", "");
+            
             return name;
         }
 

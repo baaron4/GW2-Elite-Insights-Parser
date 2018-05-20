@@ -398,14 +398,14 @@ namespace LuckParser.Models.ParseModels
                                 else if (c.isBuff() == 0 && c.getValue() != 0)
                                 {
                                     damagetaken.Add(c.getValue());
-                                    damageTaken_logs.Add(new DamageLog(time, c.getValue(), c.getSkillID(), c.isBuff(),
+                                    damageTaken_logs.Add(new DamageLog(time,(int)c.getSrcAgent(),c.getSrcInstid(), c.getValue(), c.getSkillID(), c.isBuff(),
                                            c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation(),c.isShields()));
                                   
                                 }
                                 else if (c.isBuff() == 0  && c.getValue() == 0)
                                 {
                                   
-                                    damageTaken_logs.Add(new DamageLog(time, c.getBuffDmg(), c.getSkillID(), c.isBuff(),
+                                    damageTaken_logs.Add(new DamageLog(time,(int)c.getSrcAgent(),c.getSrcInstid(), c.getBuffDmg(), c.getSkillID(), c.isBuff(),
                                            c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation(),c.isShields()));
                                 }
                             }
