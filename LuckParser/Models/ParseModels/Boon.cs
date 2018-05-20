@@ -238,7 +238,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Frost Spirit", 12544, BoonSource.Ranger, "duration", 1, BoonEnum.OffensiveBuff),
                 new Boon("Sun Spirit", 12540, BoonSource.Ranger, "duration", 1, BoonEnum.OffensiveBuff),
                 new Boon("Stone Spirit", 12547, BoonSource.Ranger, "duration", 1, BoonEnum.DefensiveBuff),
-                //new Boon("Storm Spirit", 50381, BoonSource.Ranger, "duration", 1, BoonEnum.OffensiveBuff),
+                //new Boon("Storm Spirit", 50381, BoonSource.Ranger, "duration", 1, BoonEnum.DefensiveBuff),
                 //reworked
                 new Boon("Water Spirit", 50386, BoonSource.Ranger, "duration", 1, BoonEnum.DefensiveBuff),
                 new Boon("Frost Spirit", 50421, BoonSource.Ranger, "duration", 1, BoonEnum.OffensiveBuff),
@@ -285,10 +285,10 @@ namespace LuckParser.Models.ParseModels
                 //venoms
                 new Boon("Skelk Venom", BoonSource.Thief, "intensity", 4, BoonEnum.DefensiveBuff),
                 new Boon("Ice Drake Venom",13095, BoonSource.Thief, "intensity", 4, BoonEnum.DefensiveBuff),
-                new Boon("Devourer Venom", 13094, BoonSource.Thief, "intensity", 2, BoonEnum.DefensiveBuff),
+                new Boon("Devourer Venom", 13094, BoonSource.Thief, "intensity", 2, BoonEnum.OffensiveBuff),
                 new Boon("Skale Venom", 13036, BoonSource.Thief, "intensity", 4, BoonEnum.OffensiveBuff),
                 new Boon("Spider Venom",13036, BoonSource.Thief, "intensity", 6, BoonEnum.OffensiveBuff),
-                new Boon("Basilisk Venom", 13133, BoonSource.Thief, "intensity", 6, BoonEnum.OffensiveBuff),
+                new Boon("Basilisk Venom", 13133, BoonSource.Thief, "intensity", 6, BoonEnum.DefensiveBuff),
                 //physical
                 new Boon("Palm Strike",30423, BoonSource.Thief, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Pulmonary Impact",30510, BoonSource.Thief, "intensity", 2, BoonEnum.NonShareableBuff),
