@@ -61,6 +61,7 @@
             // 
             // lblStatus
             // 
+            this.lblStatus.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.lblStatus.AutoSize = true;
             this.lblStatus.Location = new System.Drawing.Point(246, 343);
             this.lblStatus.Name = "lblStatus";
@@ -70,6 +71,7 @@
             // 
             // progressBar1
             // 
+            this.progressBar1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.progressBar1.Location = new System.Drawing.Point(249, 317);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(104, 13);
@@ -77,6 +79,7 @@
             // 
             // btnStartAsyncOperation
             // 
+            this.btnStartAsyncOperation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStartAsyncOperation.Location = new System.Drawing.Point(525, 307);
             this.btnStartAsyncOperation.Name = "btnStartAsyncOperation";
             this.btnStartAsyncOperation.Size = new System.Drawing.Size(154, 23);
@@ -87,6 +90,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.Location = new System.Drawing.Point(525, 333);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -98,6 +102,9 @@
             // listView1
             // 
             this.listView1.AllowDrop = true;
+            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listView1.BackColor = System.Drawing.SystemColors.Menu;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Location,
@@ -128,6 +135,7 @@
             // 
             // label2
             // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(158, 343);
             this.label2.Name = "label2";
@@ -137,6 +145,7 @@
             // 
             // label3
             // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(158, 317);
             this.label3.Name = "label3";
@@ -147,6 +156,7 @@
             // 
             // settingsbtn
             // 
+            this.settingsbtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.settingsbtn.Location = new System.Drawing.Point(16, 331);
             this.settingsbtn.Name = "settingsbtn";
             this.settingsbtn.Size = new System.Drawing.Size(75, 23);
@@ -157,6 +167,7 @@
             // 
             // btnClear
             // 
+            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClear.Location = new System.Drawing.Point(604, 333);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);

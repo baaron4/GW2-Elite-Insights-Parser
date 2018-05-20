@@ -1120,7 +1120,7 @@ namespace LuckParser.Controllers
         }
         //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
         //Methods that make it easier to create Javascript graphs
-        public List<BoonsGraphModel> getBoonGraph(Player p ) {
+        private List<BoonsGraphModel> getBoonGraph(Player p ) {
             List<BoonsGraphModel> uptime = new List<BoonsGraphModel>();
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
@@ -1208,7 +1208,7 @@ namespace LuckParser.Controllers
             }
             return uptime;
         }
-        public List<int[]> getBossDPSGraph(Player p) {
+        private List<int[]> getBossDPSGraph(Player p) {
             List<int[]> bossdmgList = new List<int[]>();
             if (p.getBossDPSGraph().Count == 0)
             {
@@ -1277,7 +1277,7 @@ namespace LuckParser.Controllers
             
             return bossdmgList;
         }
-        public List<int[]> getTotalDPSGraph(Player p)
+        private List<int[]> getTotalDPSGraph(Player p)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
@@ -1329,7 +1329,7 @@ namespace LuckParser.Controllers
             }
             return totaldmgList;
         }
-        public List<BoonsGraphModel> getBossBoonGraph(Player p)
+        private List<BoonsGraphModel> getBossBoonGraph(Player p)
         {
             List<BoonsGraphModel> uptime = new List<BoonsGraphModel>();
             BossData b_data = getBossData();
@@ -1408,379 +1408,28 @@ namespace LuckParser.Controllers
             }
             return uptime;
         }
+        private bool getDied(Player p)
+        {
+            List<Point> dead = getCombatData().getStates(p.getInstid(), "CHANGE_DEAD");
 
-        bool[] SnapSettings;
-        public void CreateCompTable(StreamWriter sw) {
-            int groupCount = 0;
-            int firstGroup = 11;
-            foreach (Player play in p_list)
+            if (dead.Count() > 0)
             {
-                int playerGroup = Int32.Parse(play.getGroup());
-                if (playerGroup > groupCount)
-                {
-                    groupCount = playerGroup;
-                }
-                if (playerGroup < firstGroup)
-                {
-                    firstGroup = playerGroup;
-                }
+                return true;
             }
-            //generate comp table
-           sw.Write("<table class=\"table\" style=\"width:auto;position:absolute; top:50%; height:10em; margin-top:-5em\"><tbody>");
-            for (int n = firstGroup; n <= groupCount; n++)
+            else
             {
-                sw.Write("<tr>");
-                List<Player> sortedList = p_list.Where(x => Int32.Parse(x.getGroup()) == n).ToList();
-                if (sortedList.Count > 0)
-                {
-                    foreach (Player gPlay in sortedList)
-                    {
-                        string charName = "";
-                        if (gPlay.getCharacter().Length > 10)
-                        {
-                            charName = gPlay.getCharacter().Substring(0, 10);
-                        }
-                        else
-                        {
-                            charName = gPlay.getCharacter().ToString();
-                        }
-                        //Getting Build
-                        string build = "";
-                        if (gPlay.getCondition() > 0)
-                        {
-                            build += "<img src=\"https://wiki.guildwars2.com/images/5/54/Condition_Damage.png\" alt=\"Condition Damage\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Condition Damage-" + gPlay.getCondition() + "\">";//"<span class=\"badge badge-warning\">Condi("+ gPlay.getCondition() + ")</span>";
-                        }
-                        if (gPlay.getHealing() > 0)
-                        {
-                            build += "<img src=\"https://wiki.guildwars2.com/images/8/81/Healing_Power.png\" alt=\"Healing Power\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Healing Power-" + gPlay.getHealing() + "\">";//"<span class=\"badge badge-success\">Heal("+ gPlay.getHealing() + ")</span>";
-                        }
-                        if (gPlay.getToughness() > 0)
-                        {
-                            build += "<img src=\"https://wiki.guildwars2.com/images/1/12/Toughness.png\" alt=\"Toughness\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Toughness-" + gPlay.getToughness() + "\">";//"<span class=\"badge badge-secondary\">Tough("+ gPlay.getToughness() + ")</span>";
-                        }
-                        sw.Write("<td style=\"width: 150px; border:1px solid #EE5F5B;\">" +
-                             "<img src=\"" + GetLink(gPlay.getProf().ToString()) + " \" alt=\"" + gPlay.getProf().ToString() + "\" height=\"18\" width=\"18\" >" +
-                             build +
-                            "<br/>" + charName + "</td>");
-                    }
-                }
-                sw.Write("</tr>");
+                return false;
             }
-            sw.Write("</tbody></table>");
         }
-        public void CreateDPSTable(StreamWriter sw,double fight_duration) {
-            //generate dps table
-           sw.Write( " <script> $(function () { $('#dps_table').DataTable({ \"order\": [[4, \"desc\"]]});});</script>" +
-       " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dps_table\">" +
-           " <thead> <tr> <th>Sub</th><th></th><th>Name</th><th>Account</th> <th>Boss DPS</th><th>Power</th><th>Condi</th><th>All DPS</th><th>Power</th><th>Condi</th>" +
-           "<th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>" +
-           "<th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
-               " </tr> </thead><tbody>");
-            List<string[]> footerList = new List<string[]>();
-
-            foreach (Player player in p_list)
-            {
-                sw.Write("<tr>");
-                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
-                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-                sw.Write("<td>" + player.getAccount().TrimStart(':') + "</td>");
-                string[] dmg = getFinalDPS(player).Split('|');
-                //Boss dps
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[7] + " dmg \">" + dmg[6] + "</span>" + "</td>");
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[9] + " dmg \">" + dmg[8] + "</span>" + "</td>");
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[11] + " dmg \">" + dmg[10] + "</span>" + "</td>");
-                //All DPS
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[1] + " dmg \">" + dmg[0] + "</span>" + "</td>");
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[3] + " dmg \">" + dmg[2] + "</span>" + "</td>");
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[5] + " dmg \">" + dmg[4] + "</span>" + "</td>");
-
-
-
-                string[] stats = getFinalStats(player);
-                sw.Write("<td>" + stats[6] + "</td>");
-                TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));
-                if (timedead > TimeSpan.Zero)
-                {
-                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
-                }
-                else
-                {
-                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> 0</span>" + " </td>");
-
-                }
-                sw.Write("</tr>");
-
-                //gather data for footer
-                footerList.Add(new string[] { player.getGroup().ToString(), dmg[0], dmg[1], dmg[2], dmg[3], dmg[4], dmg[5], dmg[6], dmg[7], dmg[8], dmg[9], dmg[10], dmg[11] });
-            }
-
-            sw.Write("</tbody><tfoot>");
-            foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
-            {
-                List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
-                sw.Write("<tr>");
-                sw.Write("<td></td>");
-                sw.Write("<td></td>");
-                sw.Write("<td>Group " + groupNum + "</td>");
-                sw.Write("<td></td>");
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[8])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[7])) + "</span>" + "</td>");
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[10])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[9])) + "</span>" + "</td>");
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[12])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[11])) + "</span>" + "</td>");
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[2])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[1])) + "</span>" + "</td>");
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[4])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[3])) + "</span>" + "</td>");
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[6])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[5])) + "</span>" + "</td>");
-                sw.Write("<td></td>");
-                sw.Write("<td></td>");
-                sw.Write("</tr>");
-            }
-            sw.Write("<tr>");
-            sw.Write( "<td></td>");
-            sw.Write("<td></td>");
-            sw.Write("<td>Total</td>");
-            sw.Write("<td></td>");
-            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[8])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[7])) + "</span>" + "</td>");
-            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[10])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[9])) + "</span>" + "</td>");
-            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[12])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[11])) + "</span>" + "</td>");
-            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[2])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[1])) + "</span>" + "</td>");
-            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[4])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[3])) + "</span>" + "</td>");
-            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[6])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[5])) + "</span>" + "</td>");
-            sw.Write("<td></td>");
-            sw.Write("<td></td>");
-            sw.Write("</tr>");
-            sw.Write("</tfoot></table>");
-        }
-        public void CreateDMGStatsTable(StreamWriter sw,double fight_duration) {
-            //generate dmgstats table
-           sw.Write( " <script> $(function () { $('#dmgstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>" +
-       " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dmgstats_table\">" +
-           " <thead><tr><th>Sub</th><th></th><th>Name</th>" +
-           "<th><img src=" + GetLink("Crit") + " alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Scholar") + " alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("SwS") + " alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Flank") + " alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Glance") + " alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Blinded") + " alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Interupts") + " alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Invuln") + " alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Wasted") + " alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\">" +
-            "</th><th><img src=" + GetLink("Saved") + " alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\">" +
-
-           "</th><th><img src=" + GetLink("Swap") + " alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
-               " </tr> </thead><tbody>");
-           List<string[]> footerList = new List<string[]>();
-            foreach (Player player in p_list)
-            {
-              sw.Write("<tr>");
-                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
-                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-
-                string[] stats = getFinalStats(player);
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[1]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//crit
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[2] + " out of " + stats[0] + " hits <br> Pure Scholar Damage: "+stats[19]+"<br> Effective Damage Increase: "+ (int)(Double.Parse(stats[19]) / Double.Parse(stats[20]) * 100) + "% \">" + (int)(Double.Parse(stats[2]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//scholar
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[3]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//sws
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[4] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[4]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//flank
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[10] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[10]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//glance
-                sw.Write("<td>" + stats[11] + "</td>");//misses
-                sw.Write("<td>" + stats[12] + "</td>");//interupts
-                sw.Write("<td>" + stats[13] + "</td>");//dmg invulned
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[15] + "cancels \">" + stats[14] + "</span>" + "</td>");//time wasted
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[18] + "cancels \">" + stats[17] + "</span>" + "</td>");//timesaved
-                sw.Write("<td>" + stats[5] + "</td>");//w swaps
-                sw.Write("<td>" + stats[6] + "</td>");//downs
-                TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));//dead
-                if (timedead > TimeSpan.Zero)
-                {
-                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
-                }
-                else
-                {
-                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </span>" + " </td>");
-
-                }
-
-                sw.Write("</tr>");
-                //gather data for footer
-                footerList.Add(new string[] { player.getGroup().ToString(), stats[0], stats[1], stats[2], stats[3], stats[4], stats[10], stats[11], stats[12], stats[13], stats[5], stats[6] });
-            }
-            sw.Write("</tbody><tfoot>");
-            foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
-            {
-                List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
-                sw.Write("<tr>");
-                sw.Write("<td></td>");
-                sw.Write("<td></td>");
-                sw.Write("<td>Group " + groupNum + "</td>");
-
-                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[7])) + "</td>");
-                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[8])) + "</td>");
-                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[9])) + "</td>");
-                sw.Write("<td></td>");
-                sw.Write("<td></td>");
-                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[10])) + "</td>");
-                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[11])) + "</td>");
-                sw.Write("<td></td>");
-                sw.Write("</tr>");
-            }
-            sw.Write("<tr>");
-            sw.Write("<td></td>");
-            sw.Write("<td></td>");
-            sw.Write("<td>Total</td>");
-            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[7])) + "</td>");
-            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[8])) + "</td>");
-            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[9])) + "</td>");
-            sw.Write("<td></td>");
-            sw.Write("<td></td>");
-            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[10])) + "</td>");
-            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[11])) + "</td>");
-            sw.Write("<td></td>");
-            sw.Write("</tr>");
-            sw.Write("</tfoot></table>");
-
-        }
-        public void CreateDefTable(StreamWriter sw, double fight_duration) {
-            //generate Tankstats table
-            sw.Write( " <script> $(function () { $('#defstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>" +
-            " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"defstats_table\">" +
-           " <thead><tr><th>Sub</th><th></th><th>Name</th>" +
-           "<th>Dmg Taken" +
-           "</th><th>Dmg Barrier" +
-           "</th><th>Blocked" +
-           "</th><th>Invulned" +
-           "</th><th>Evaded" +
-           "</th><th>" +"<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Dodges or Mirage Cloak \">Dodges</span>"+
-           "</th><th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
-           "</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
-               " </tr> </thead><tbody>");
-            List<string[]>  footerList = new List<string[]>();
-            foreach (Player player in p_list)
-            {
-               sw.Write( "<tr>");
-                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
-                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-
-                string[] stats = getFinalDefenses(player);
-                sw.Write("<td>" + stats[0] + "</td>");//dmg taken
-                sw.Write("<td>" + stats[10] + "</td>");//dmgbarriar
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[4] + "Damage \">" + stats[1] + "</span>" + "</td>");//Blocks  
-                sw.Write("<td>" + stats[3] + "</td>");//invulns
-                sw.Write("<td>" + stats[6] + "</td>");// evades
-                sw.Write("<td>" + stats[5] + "</td>");//dodges
-                sw.Write("<td>" + stats[8] + "</td>");//downs
-                TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));//dead
-                if (timedead > TimeSpan.Zero)
-                {
-                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
-                }
-                else
-                {
-                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </span>" + " </td>");
-
-                }
-                sw.Write("</tr>");
-                //gather data for footer
-                footerList.Add(new string[] { player.getGroup().ToString(), stats[0], stats[10], stats[1], stats[3], stats[6], stats[5], stats[8] });
-            }
-            sw.Write("</tbody><tfoot>");
-            foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
-            {
-                List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
-                sw.Write("<tr>");
-                sw.Write("<td></td>");
-                sw.Write("<td></td>");
-                sw.Write("<td>Group " + groupNum + "</td>");
-                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[1])) + "</td>");
-                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[2])) + "</td>");
-                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[3])) + "</td>");
-                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[4])) + "</td>");
-                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[5])) + "</td>");
-                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[6])) + "</td>");
-                sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[7])) + "</td>");
-                sw.Write("<td></td>");
-                sw.Write("</tr>");
-            }
-            sw.Write("<tr>");
-            sw.Write("<td></td>");
-            sw.Write("<td></td>");
-            sw.Write("<td>Total</td>");
-            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[1])) + "</td>");
-            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[2])) + "</td>");
-            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[3])) + "</td>");
-            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[4])) + "</td>");
-            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[5])) + "</td>");
-            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[6])) + "</td>");
-            sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[7])) + "</td>");
-            sw.Write("<td></td>");
-            sw.Write("</tr>");
-            sw.Write("</tfoot></table>");
-        }
-        public void CreateSupTable(StreamWriter sw, double fight_duration) {
-            //generate suppstats table
-            sw.Write( " <script> $(function () { $('#supstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>" +
-       " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"supstats_table\">" +
-           " <thead><tr><th>Sub</th><th></th><th>Name</th>" +
-           "<th>Condi Cleanse" +
-           "</th><th>Resurrects" +
-           "</th>" +
-               " </tr> </thead><tbody>");
-            List<string[]>  footerList = new List<string[]>();
-            foreach (Player player in p_list)
-            {
-                sw.Write( "<tr>");
-                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
-                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-
-                string[] stats = getFinalSupport(player);
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " seconds \">" + stats[2] + "</span>" + "</td>");//condicleanse                                                                                                                                                                   //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " seconds \">" + stats[0] + "</span>" + "</td>");//res
-                sw.Write("</tr>");
-                //gather data for footer
-                footerList.Add(new string[] { player.getGroup().ToString(), stats[3], stats[2], stats[1], stats[0] });
-            }
-            sw.Write("</tbody><tfoot>");
-            foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
-            {
-                List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
-                sw.Write("<tr>");
-                sw.Write("<td></td>");
-                sw.Write("<td></td>");
-                sw.Write("<td>Group " + groupNum + "</td>");
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + groupList.Sum(c => Int32.Parse(c[2])).ToString() + " condis</span>" + "</td>");
-                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + groupList.Sum(c => Int32.Parse(c[4])) + "</span>" + "</td>");
-                sw.Write("</tr>");
-            }
-            sw.Write("<tr>");
-            sw.Write("<td></td>");
-            sw.Write("<td></td>");
-            sw.Write("<td>Total</td>");
-            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + footerList.Sum(c => Int32.Parse(c[2])).ToString() + " condis</span>" + "</td>");
-            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + footerList.Sum(c => Int32.Parse(c[4])).ToString() + "</span>" + "</td>");
-            sw.Write("</tr>");
-            sw.Write("</tfoot></table>");
-        }
-        public void CreateDPSGraph(StreamWriter sw) {
+        private void CreateDPSGraph(StreamWriter sw)
+        {
 
             //Generate DPS graph
-           sw.Write(
-            "<div id=\"DPSGraph\" style=\"height: 600px;width:1200px; display:inline-block \"></div>" +
- "<script>");
+            sw.Write(
+             "<div id=\"DPSGraph\" style=\"height: 600px;width:1200px; display:inline-block \"></div>" +
+  "<script>");
 
-           sw.Write( "var data = [");
+            sw.Write("var data = [");
             int maxDPS = 0;
             List<int[]> totalDpsAllPlayers = new List<int[]>();
             foreach (Player p in p_list)
@@ -1794,7 +1443,7 @@ namespace LuckParser.Controllers
                     {
                         int time = point[0];
                         int dmg = point[1];
-                        totalDpsAllPlayers.Add(new int[] { time,dmg});
+                        totalDpsAllPlayers.Add(new int[] { time, dmg });
                     }
                 }
 
@@ -1802,9 +1451,12 @@ namespace LuckParser.Controllers
                 int pbdgdCount = 0;
                 foreach (int[] dp in playerbossdpsgraphdata)
                 {
-                    if (pbdgdCount == playerbossdpsgraphdata.Count - 1) {
+                    if (pbdgdCount == playerbossdpsgraphdata.Count - 1)
+                    {
                         sw.Write("'" + dp[1] + "'");
-                    } else {
+                    }
+                    else
+                    {
                         sw.Write("'" + dp[1] + "',");
                     }
                     pbdgdCount++;
@@ -1818,28 +1470,31 @@ namespace LuckParser.Controllers
                 }
                 if (playerbossdpsgraphdata.Count == 0)
                 {
-                   sw.Write("'0'");
+                    sw.Write("'0'");
                 }
-                
-                sw.Write( "],");
+
+                sw.Write("],");
                 //add time axis
                 sw.Write("x: [");
                 pbdgdCount = 0;
                 foreach (int[] dp in playerbossdpsgraphdata)
                 {
-                    if (pbdgdCount == playerbossdpsgraphdata.Count - 1) {
+                    if (pbdgdCount == playerbossdpsgraphdata.Count - 1)
+                    {
                         sw.Write("'" + dp[0] + "'");
-                    } else {
-                       sw.Write("'" + dp[0] + "',");
+                    }
+                    else
+                    {
+                        sw.Write("'" + dp[0] + "',");
                     }
                     pbdgdCount++;
                 }
                 if (playerbossdpsgraphdata.Count == 0)
                 {
-                   sw.Write( "'0'");
+                    sw.Write("'0'");
                 }
-               
-               sw.Write( "],");
+
+                sw.Write("],");
                 sw.Write(" mode: 'lines'," +
                     " line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
            " name: '" + p.getCharacter() + " DPS'" +
@@ -1853,78 +1508,90 @@ namespace LuckParser.Controllers
                     pbdgdCount = 0;
                     foreach (int[] dp in playertotaldpsgraphdata)
                     {
-                        if (pbdgdCount == playertotaldpsgraphdata.Count - 1) {
+                        if (pbdgdCount == playertotaldpsgraphdata.Count - 1)
+                        {
                             sw.Write("'" + dp[1] + "'");
-                        } else {
-                             sw.Write( "'" + dp[1] + "',");
+                        }
+                        else
+                        {
+                            sw.Write("'" + dp[1] + "',");
                         }
                         pbdgdCount++;
-                        
+
                     }
                     //cuts off extra comma
                     if (playertotaldpsgraphdata.Count == 0)
                     {
-                      sw.Write("'0'");
+                        sw.Write("'0'");
                     }
-                   
-                    sw.Write( "],");
+
+                    sw.Write("],");
                     //add time axis
                     sw.Write("x: [");
                     pbdgdCount = 0;
                     foreach (int[] dp in playertotaldpsgraphdata)
                     {
-                        if (pbdgdCount == playertotaldpsgraphdata.Count - 1) {
+                        if (pbdgdCount == playertotaldpsgraphdata.Count - 1)
+                        {
                             sw.Write("'" + dp[0] + "'");
-                        } else {
-                           sw.Write( "'" + dp[0] + "',");
                         }
-                      
+                        else
+                        {
+                            sw.Write("'" + dp[0] + "',");
+                        }
+
                         pbdgdCount++;
                     }
                     if (playertotaldpsgraphdata.Count == 0)
                     {
-                      sw.Write( "'0'");
+                        sw.Write("'0'");
                     }
-                   
-                   sw.Write( "],");
-                    sw.Write( " mode: 'lines'," +
+
+                    sw.Write("],");
+                    sw.Write(" mode: 'lines'," +
                          " line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
                         "visible:'legendonly'," +
                " name: '" + p.getCharacter() + "TDPS'" + "},");
                 }
             }
             //All Player dps
-           sw.Write( "{");
+            sw.Write("{");
             //Adding dps axis
 
             sw.Write("y: [");
             int tdalpcount = 0;
             foreach (int[] dp in totalDpsAllPlayers)
             {
-                if (tdalpcount == totalDpsAllPlayers.Count - 1) {
+                if (tdalpcount == totalDpsAllPlayers.Count - 1)
+                {
                     sw.Write("'" + dp[1] + "'");
-                } else {
+                }
+                else
+                {
                     sw.Write("'" + dp[1] + "',");
                 }
                 tdalpcount++;
             }
-           
-           sw.Write( "],");
+
+            sw.Write("],");
             //add time axis
-           sw.Write( "x: [");
+            sw.Write("x: [");
             tdalpcount = 0;
             foreach (int[] dp in totalDpsAllPlayers)
             {
-                if (tdalpcount == totalDpsAllPlayers.Count - 1) {
+                if (tdalpcount == totalDpsAllPlayers.Count - 1)
+                {
                     sw.Write("'" + dp[0] + "'");
-                } else {
+                }
+                else
+                {
                     sw.Write("'" + dp[0] + "',");
                 }
-               
+
                 tdalpcount++;
             }
-          
-            sw.Write( "],");
+
+            sw.Write("],");
             sw.Write(" mode: 'lines'," +
                  " line: {shape: 'spline'}," +
                    "visible:'legendonly'," +
@@ -1936,7 +1603,8 @@ namespace LuckParser.Controllers
             {
                 List<Mechanic> mechs = presMech.Where(x => x.GetAltName() == mechAltString).ToList();
                 List<MechanicLog> filterdList = new List<MechanicLog>();
-                foreach (Mechanic me in mechs) {
+                foreach (Mechanic me in mechs)
+                {
                     filterdList.AddRange(mech_data.GetMDataLogs().Where(x => x.GetSkill() == me.GetSkill()).ToList());
                 }
                 Mechanic mech = mechs[0];
@@ -1944,7 +1612,7 @@ namespace LuckParser.Controllers
                 sw.Write("{");
                 sw.Write("y: [");
 
-               int  mechcount = 0;
+                int mechcount = 0;
                 foreach (MechanicLog ml in filterdList)
                 {
                     int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => x[0] == ml.GetTime());
@@ -1954,10 +1622,11 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("'" + check[1] + "'");
                         }
-                        else {
-                            sw.Write("'" +10000 + "'");
+                        else
+                        {
+                            sw.Write("'" + 10000 + "'");
                         }
-                      
+
                     }
                     else
                     {
@@ -1982,11 +1651,11 @@ namespace LuckParser.Controllers
                 {
                     if (mechcount == filterdList.Count - 1)
                     {
-                        sw.Write("'"+ml.GetTime()+"'");
+                        sw.Write("'" + ml.GetTime() + "'");
                     }
                     else
                     {
-                        sw.Write("'"+ml.GetTime()+"',");
+                        sw.Write("'" + ml.GetTime() + "',");
                     }
 
                     mechcount++;
@@ -1998,11 +1667,12 @@ namespace LuckParser.Controllers
                 {
                     //sw.Write("visible:'legendonly',");
                 }
-                else {
+                else
+                {
                     sw.Write("visible:'legendonly',");
                 }
-                sw.Write( "type:'scatter'," +
-                    "marker:{"+mech.GetPlotly()+ "size: 15" + "},"+
+                sw.Write("type:'scatter'," +
+                    "marker:{" + mech.GetPlotly() + "size: 15" + "}," +
                     "text:[");
                 foreach (MechanicLog ml in filterdList)
                 {
@@ -2019,21 +1689,21 @@ namespace LuckParser.Controllers
                 }
 
                 sw.Write("]," +
-                      
-            " name: '"+mech.GetAltName()+"'");
+
+            " name: '" + mech.GetAltName() + "'");
                 sw.Write("},");
             }
             //Downs and deaths
-            
+
 
             int mcount = 0;
-            
+
             List<String> DnDStringList = new List<string>();
             DnDStringList.Add("DOWN");
             DnDStringList.Add("DEAD");
             foreach (string state in DnDStringList)
             {
-                List<MechanicLog> DnDList = mech_data.GetMDataLogs().Where(x => x.GetName() == state ).ToList();
+                List<MechanicLog> DnDList = mech_data.GetMDataLogs().Where(x => x.GetName() == state).ToList();
                 sw.Write("{");
                 sw.Write("y: [");
                 foreach (MechanicLog ml in DnDList)
@@ -2133,7 +1803,8 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("'" + (dp[1] / 10000f) * maxDPS + "'");
                     }
-                    else {
+                    else
+                    {
                         sw.Write("'" + (dp[1] / 10000f) * maxDPS + "',");
                     }
                     hotCount++;
@@ -2170,7 +1841,8 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("'" + (float)(dp[0] / 1000f) + "'");
                     }
-                    else {
+                    else
+                    {
                         sw.Write("'" + (float)(dp[0] / 1000f) + "',");
                     }
 
@@ -2184,7 +1856,8 @@ namespace LuckParser.Controllers
            " name: 'Boss health'");
                 sw.Write("}");
             }
-            else{
+            else
+            {
                 sw.Write("{}");
             }
             sw.Write("];" +
@@ -2206,290 +1879,800 @@ namespace LuckParser.Controllers
         "Plotly.newPlot('DPSGraph', data, layout);" +
 "</script> ");
         }
+
+        bool[] SnapSettings;
+        private void CreateCompTable(StreamWriter sw) {
+            int groupCount = 0;
+            int firstGroup = 11;
+            foreach (Player play in p_list)
+            {
+                int playerGroup = Int32.Parse(play.getGroup());
+                if (playerGroup > groupCount)
+                {
+                    groupCount = playerGroup;
+                }
+                if (playerGroup < firstGroup)
+                {
+                    firstGroup = playerGroup;
+                }
+            }
+            //generate comp table
+            sw.Write("<table class=\"table\"");
+            {
+                sw.Write("<tbody>");
+                for (int n = firstGroup; n <= groupCount; n++)
+                {
+                    sw.Write("<tr>");
+                    List<Player> sortedList = p_list.Where(x => Int32.Parse(x.getGroup()) == n).ToList();
+                    if (sortedList.Count > 0)
+                    {
+                        foreach (Player gPlay in sortedList)
+                        {
+                            string charName = "";
+                            if (gPlay.getCharacter().Length > 10)
+                            {
+                                charName = gPlay.getCharacter().Substring(0, 10);
+                            }
+                            else
+                            {
+                                charName = gPlay.getCharacter().ToString();
+                            }
+                            //Getting Build
+                            string build = "";
+                            if (gPlay.getCondition() > 0)
+                            {
+                                build += "<img src=\"https://wiki.guildwars2.com/images/5/54/Condition_Damage.png\" alt=\"Condition Damage\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Condition Damage-" + gPlay.getCondition() + "\">";//"<span class=\"badge badge-warning\">Condi("+ gPlay.getCondition() + ")</span>";
+                            }
+                            if (gPlay.getHealing() > 0)
+                            {
+                                build += "<img src=\"https://wiki.guildwars2.com/images/8/81/Healing_Power.png\" alt=\"Healing Power\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Healing Power-" + gPlay.getHealing() + "\">";//"<span class=\"badge badge-success\">Heal("+ gPlay.getHealing() + ")</span>";
+                            }
+                            if (gPlay.getToughness() > 0)
+                            {
+                                build += "<img src=\"https://wiki.guildwars2.com/images/1/12/Toughness.png\" alt=\"Toughness\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Toughness-" + gPlay.getToughness() + "\">";//"<span class=\"badge badge-secondary\">Tough("+ gPlay.getToughness() + ")</span>";
+                            }
+                            sw.Write("<td style=\"width: 120px; border:1px solid #EE5F5B;\">");
+                            {
+                                sw.Write("<img src=\"" + GetLink(gPlay.getProf().ToString()) + " \" alt=\"" + gPlay.getProf().ToString() + "\" height=\"18\" width=\"18\" >");
+                                sw.Write(build + "<br/>" + charName);
+                            }
+                            sw.Write("</td>");
+                        }
+                    }
+                    sw.Write("</tr>");
+                }
+                sw.Write("</tbody>");
+            }
+            
+            sw.Write("</table>");
+        }
+        private void CreateDPSTable(StreamWriter sw,double fight_duration) {
+            //generate dps table
+            sw.Write("<script> $(function () { $('#dps_table').DataTable({ \"order\": [[4, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dps_table\">");
+            {
+                sw.Write("<thead>");
+                {
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<th>Sub</th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th>Name</th>");
+                        sw.Write("<th>Account</th>");
+                        sw.Write("<th>Boss DPS</th>");
+                        sw.Write("<th>Power</th>");
+                        sw.Write("<th>Condi</th>");
+                        sw.Write("<th>All DPS</th>");
+                        sw.Write("<th>Power</th>");
+                        sw.Write("<th>Condi</th>");
+                        sw.Write("<th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
+                    }
+                    sw.Write("</tr>");
+                }
+                
+                sw.Write("</thead>");
+                List<string[]> footerList = new List<string[]>();
+                sw.Write("<tbody>");
+                foreach (Player player in p_list)
+                {
+                    string[] dmg = getFinalDPS(player).Split('|');
+                    string[] stats = getFinalStats(player);
+                    //gather data for footer
+                    footerList.Add(new string[] { player.getGroup().ToString(), dmg[0], dmg[1], dmg[2], dmg[3], dmg[4], dmg[5], dmg[6], dmg[7], dmg[8], dmg[9], dmg[10], dmg[11] });
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                        sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                        sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
+                        sw.Write("<td>" + player.getAccount().TrimStart(':') + "</td>");
+                        //Boss dps
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[7] + " dmg \">" + dmg[6] + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[9] + " dmg \">" + dmg[8] + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[11] + " dmg \">" + dmg[10] + "</span>" + "</td>");
+                        //All DPS
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[1] + " dmg \">" + dmg[0] + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[3] + " dmg \">" + dmg[2] + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[5] + " dmg \">" + dmg[4] + "</span>" + "</td>");
+                        sw.Write("<td>" + stats[6] + "</td>");
+                        TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));
+                        if (timedead > TimeSpan.Zero)
+                        {
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                        }
+                        else
+                        {
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> 0</span>" + " </td>");
+                        }
+                    }            
+                    sw.Write("</tr>");           
+                }
+                sw.Write("</tbody>");
+                sw.Write("<tfoot>");
+                {
+                    foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
+                    {
+                        List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td></td>");
+                            sw.Write("<td></td>");
+                            sw.Write("<td>Group " + groupNum + "</td>");
+                            sw.Write("<td></td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[8])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[7])) + "</span>" + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[10])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[9])) + "</span>" + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[12])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[11])) + "</span>" + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[2])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[1])) + "</span>" + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[4])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[3])) + "</span>" + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[6])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[5])) + "</span>" + "</td>");
+                            sw.Write("<td></td>");
+                            sw.Write("<td></td>");
+                        }
+                        sw.Write("</tr>");
+                    }
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<td></td>");
+                        sw.Write("<td></td>");
+                        sw.Write("<td>Total</td>");
+                        sw.Write("<td></td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[8])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[7])) + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[10])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[9])) + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[12])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[11])) + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[2])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[1])) + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[4])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[3])) + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[6])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[5])) + "</span>" + "</td>");
+                        sw.Write("<td></td>");
+                        sw.Write("<td></td>");
+                    }
+                    sw.Write("</tr>");
+                }
+                sw.Write("</tfoot>");
+            }
+           
+            sw.Write("</table>");
+        }
+        private void CreateDMGStatsTable(StreamWriter sw,double fight_duration) {
+            //generate dmgstats table
+            sw.Write("<script> $(function () { $('#dmgstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dmgstats_table\">");
+            {
+                sw.Write("<thead>");
+                {
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<th>Sub</th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th>Name</th>");
+                        sw.Write("<th><img src=" + GetLink("Crit") + " alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + GetLink("Scholar") + " alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + GetLink("SwS") + " alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + GetLink("Flank") + " alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + GetLink("Glance") + " alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + GetLink("Blinded") + " alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + GetLink("Interupts") + " alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + GetLink("Invuln") + " alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + GetLink("Wasted") + " alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + GetLink("Saved") + " alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + GetLink("Swap") + " alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
+                    }
+                    sw.Write("</tr>");
+                }
+                sw.Write("</thead>");
+                List<string[]> footerList = new List<string[]>();
+                sw.Write("<tbody>");
+                {
+                    foreach (Player player in p_list)
+                    {
+                        string[] stats = getFinalStats(player);
+                        TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));//dead 
+                                                                                              //gather data for footer
+                        footerList.Add(new string[] { player.getGroup().ToString(), stats[0], stats[1], stats[2], stats[3], stats[4], stats[10], stats[11], stats[12], stats[13], stats[5], stats[6] });
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
+
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[1]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//crit
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[2] + " out of " + stats[0] + " hits <br> Pure Scholar Damage: " + stats[19] + "<br> Effective Damage Increase: " + (int)(Double.Parse(stats[19]) / Double.Parse(stats[20]) * 100) + "% \">" + (int)(Double.Parse(stats[2]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//scholar
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[3]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//sws
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[4] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[4]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//flank
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[10] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[10]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//glance
+                            sw.Write("<td>" + stats[11] + "</td>");//misses
+                            sw.Write("<td>" + stats[12] + "</td>");//interupts
+                            sw.Write("<td>" + stats[13] + "</td>");//dmg invulned
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[15] + "cancels \">" + stats[14] + "</span>" + "</td>");//time wasted
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[18] + "cancels \">" + stats[17] + "</span>" + "</td>");//timesaved
+                            sw.Write("<td>" + stats[5] + "</td>");//w swaps
+                            sw.Write("<td>" + stats[6] + "</td>");//downs
+                            if (timedead > TimeSpan.Zero)
+                            {
+                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                            }
+                            else
+                            {
+                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </span>" + " </td>");
+                            }
+                        }
+                        sw.Write("</tr>");
+                    }
+                }
+                sw.Write("</tbody>");
+                sw.Write("<tfoot>");
+                {
+                    foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
+                    {
+                        List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td></td>");
+                            sw.Write("<td></td>");
+                            sw.Write("<td>Group " + groupNum + "</td>");
+                            sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                            sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                            sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                            sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                            sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[7])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[8])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[9])) + "</td>");
+                            sw.Write("<td></td>");
+                            sw.Write("<td></td>");
+                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[10])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[11])) + "</td>");
+                            sw.Write("<td></td>");
+                        }
+                        sw.Write("</tr>");
+                    }
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<td></td>");
+                        sw.Write("<td></td>");
+                        sw.Write("<td>Total</td>");
+                        sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                        sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                        sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                        sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                        sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[7])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[8])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[9])) + "</td>");
+                        sw.Write("<td></td>");
+                        sw.Write("<td></td>");
+                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[10])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[11])) + "</td>");
+                        sw.Write("<td></td>");
+                    }
+                    sw.Write("</tr>");
+                }
+                sw.Write("</tfoot>");
+            }
+            sw.Write("</table>");
+
+        }
+        private void CreateDefTable(StreamWriter sw, double fight_duration) {
+            //generate Tankstats table
+            sw.Write("<script> $(function () { $('#defstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"defstats_table\">");
+            {
+                sw.Write("<thead>");
+                {
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<th>Sub</th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th>Name</th>");
+                        sw.Write("<th>Dmg Taken</th>");
+                        sw.Write("<th>Dmg Barrier</th>");
+                        sw.Write("<th>Blocked</th>");
+                        sw.Write("<th>Invulned</th>");
+                        sw.Write("<th>Evaded</th>");
+                        sw.Write("<th><span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Dodges or Mirage Cloak \">Dodges</span></th>");
+                        sw.Write("<th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>");
+                    }                
+                    sw.Write("</tr>");
+                }
+                
+                sw.Write("</thead>");
+                List<string[]> footerList = new List<string[]>();
+                sw.Write("<tbody>");
+                {
+                    foreach (Player player in p_list)
+                    {
+                        string[] stats = getFinalDefenses(player);
+                        TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));//dead
+                                                                                              //gather data for footer
+                        footerList.Add(new string[] { player.getGroup().ToString(), stats[0], stats[10], stats[1], stats[3], stats[6], stats[5], stats[8] });
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
+                            sw.Write("<td>" + stats[0] + "</td>");//dmg taken
+                            sw.Write("<td>" + stats[10] + "</td>");//dmgbarriar
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[4] + "Damage \">" + stats[1] + "</span>" + "</td>");//Blocks  
+                            sw.Write("<td>" + stats[3] + "</td>");//invulns
+                            sw.Write("<td>" + stats[6] + "</td>");// evades
+                            sw.Write("<td>" + stats[5] + "</td>");//dodges
+                            sw.Write("<td>" + stats[8] + "</td>");//downs
+                            if (timedead > TimeSpan.Zero)
+                            {
+                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                            }
+                            else
+                            {
+                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </span>" + " </td>");
+                            }
+                        }
+                        sw.Write("</tr>");
+                    }
+                }
+                sw.Write("</tbody>");
+                sw.Write("<tfoot>");
+                {
+                    foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
+                    {
+                        List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td></td>");
+                            sw.Write("<td></td>");
+                            sw.Write("<td>Group " + groupNum + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[1])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[2])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[3])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[4])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[5])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[6])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[7])) + "</td>");
+                            sw.Write("<td></td>");
+                        }
+                        sw.Write("</tr>");
+                    }
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<td></td>");
+                        sw.Write("<td></td>");
+                        sw.Write("<td>Total</td>");
+                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[1])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[2])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[3])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[4])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[5])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[6])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[7])) + "</td>");
+                        sw.Write("<td></td>");
+                    }
+                    sw.Write("</tr>");
+
+                }
+                sw.Write("</tfoot>");
+            }
+           
+            sw.Write("</table>");
+        }
+        private void CreateSupTable(StreamWriter sw, double fight_duration) {
+            //generate suppstats table
+            sw.Write("<script> $(function () { $('#supstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"supstats_table\">");
+            {
+                sw.Write("<thead>");
+                {
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<th>Sub</th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th>Name</th>");
+                        sw.Write("<th>Condi Cleanse</th>");
+                        sw.Write("<th>Resurrects</th>");
+                    }
+                    
+                    sw.Write("</tr>");
+                }             
+                sw.Write("</thead>");
+                List<string[]> footerList = new List<string[]>();
+                sw.Write("<tbody>");
+                {
+                    foreach (Player player in p_list)
+                    {
+                        string[] stats = getFinalSupport(player);
+                        //gather data for footer
+                        footerList.Add(new string[] { player.getGroup().ToString(), stats[3], stats[2], stats[1], stats[0] });
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " seconds \">" + stats[2] + "</span>" + "</td>");//condicleanse                                                                                                                                                                   //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " seconds \">" + stats[0] + "</span>" + "</td>");//res
+                        }
+                        sw.Write("</tr>");
+                    }
+                }
+                sw.Write("</tbody>");
+                sw.Write("<tfoot>");
+                {
+                    foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
+                    {
+                        List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td></td>");
+                            sw.Write("<td></td>");
+                            sw.Write("<td>Group " + groupNum + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + groupList.Sum(c => Int32.Parse(c[2])).ToString() + " condis</span>" + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + groupList.Sum(c => Int32.Parse(c[4])) + "</span>" + "</td>");
+                        }
+                        sw.Write("</tr>");
+                    }
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<td></td>");
+                        sw.Write("<td></td>");
+                        sw.Write("<td>Total</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + footerList.Sum(c => Int32.Parse(c[2])).ToString() + " condis</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + footerList.Sum(c => Int32.Parse(c[4])).ToString() + "</span>" + "</td>");
+                    }
+                    sw.Write("</tr>");
+                }
+                sw.Write("</tfoot>");
+            }
+            
+            sw.Write("</table>");
+        }
         private void CreateUptimeTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
         {
             //Generate Boon table------------------------------------------------------------------------------------------------
-            sw.Write(" <script> $(function () { $('#"+ table_id + "').DataTable({ \"order\": [[0, \"asc\"]] " +
-            // "\"scrollX\": true," +
-            " });});</script>" +
-            " <table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" id=\"" + table_id + "\">" +
-                " <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
-
+            sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
             List<List<string>> footList = new List<List<string>>();
-            foreach (Boon boon in list_to_use)
+            sw.Write("<table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" id=\"" + table_id + "\">");
             {
-                sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
-            }
-            sw.Write(" </tr> </thead><tbody>");
-            HashSet<int> intensityBoon = new HashSet<int>();
-            foreach (Player player in p_list)
-            {
-                sw.Write("<tr>");
-                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
-                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-                Dictionary<int, string> boonArray = getfinalboons(player, new List<int>());
-                List<string> boonArrayToList = new List<string>();
-                boonArrayToList.Add(player.getGroup());
-                int count = 0;
-                foreach (Boon boon in list_to_use)
+                sw.Write("<thead>");
                 {
-                    if (boon.getType() == "intensity")
+                    sw.Write("<tr>");
                     {
-                        intensityBoon.Add(count);
-                    }
-                    if (boonArray.ContainsKey(boon.getID()))
-                    {
-                        sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
-                        boonArrayToList.Add(boonArray[boon.getID()]);
-                    }
-                    else
-                    {
-                        sw.Write("<td>" + 0 + "</td>");
-                        boonArrayToList.Add("0");
-                    }
-                    count++;
-                }
-                sw.Write("</tr>");
-                //gather data for footer
-                footList.Add(boonArrayToList);
-            }
-            sw.Write("</tbody><tfoot>");
-            foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
-            {
-                List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
-                sw.Write("<tr>");
-                sw.Write("<td></td>");
-                sw.Write("<td></td>");
-                sw.Write("<td>Group " + groupNum + "</td>");
-                for (int i = 1; i < groupList[0].Count; i++)
+                        sw.Write("<th width=\"50px\">Sub</th>");
+                        sw.Write("<th width=\"50px\"></th>");
+                        sw.Write("<th>Name</th>");
+                        foreach (Boon boon in list_to_use)
+                        {
+                            sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                        }
+                    }                 
+                    sw.Write("</tr> ");
+                }           
+                sw.Write("</thead>");
+                HashSet<int> intensityBoon = new HashSet<int>();
+                sw.Write("<tbody>");
                 {
-                    if (intensityBoon.Contains(i-1))
+                    foreach (Player player in p_list)
                     {
-                        sw.Write("<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 2) + "</td>");
-                    }
-                    else
-                    {
-                        sw.Write("<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>");
-                    }
+                        Dictionary<int, string> boonArray = getfinalboons(player, new List<int>());
+                        List<string> boonArrayToList = new List<string>();
+                        boonArrayToList.Add(player.getGroup());
+                        int count = 0;
 
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
+                            foreach (Boon boon in list_to_use)
+                            {
+                                if (boon.getType() == "intensity")
+                                {
+                                    intensityBoon.Add(count);
+                                }
+                                if (boonArray.ContainsKey(boon.getID()))
+                                {
+                                    sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
+                                    boonArrayToList.Add(boonArray[boon.getID()]);
+                                }
+                                else
+                                {
+                                    sw.Write("<td>" + 0 + "</td>");
+                                    boonArrayToList.Add("0");
+                                }
+                                count++;
+                            }
+                        }
+                        sw.Write("</tr>");
+                        //gather data for footer
+                        footList.Add(boonArrayToList);
+                    }
                 }
-                sw.Write("</tr>");
-            }
-            sw.Write("<tr>");
-            sw.Write("<td></td>");
-            sw.Write("<td></td>");
-            sw.Write("<td>Averages</td>");
-            for (int i = 1; i < footList[0].Count; i++)
-            {
-                if (intensityBoon.Contains(i-1))
+
+                sw.Write("</tbody>");
+                sw.Write("<tfoot>");
                 {
-                    sw.Write("<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>");
+                    foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
+                    {
+                        List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td></td>");
+                            sw.Write("<td></td>");
+                            sw.Write("<td>Group " + groupNum + "</td>");
+                            for (int i = 1; i < groupList[0].Count; i++)
+                            {
+                                if (intensityBoon.Contains(i - 1))
+                                {
+                                    sw.Write("<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 2) + "</td>");
+                                }
+                                else
+                                {
+                                    sw.Write("<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>");
+                                }
+
+                            }
+                        }
+                        sw.Write("</tr>");
+                    }
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<td></td>");
+                        sw.Write("<td></td>");
+                        sw.Write("<td>Averages</td>");
+                        for (int i = 1; i < footList[0].Count; i++)
+                        {
+                            if (intensityBoon.Contains(i - 1))
+                            {
+                                sw.Write("<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>");
+                            }
+                            else
+                            {
+                                sw.Write("<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>");
+                            }
+                        }
+                    }
+                    sw.Write("</tr>");
                 }
-                else
-                {
-                    sw.Write("<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>");
-                }
-            }
-            sw.Write("</tr>");
-            sw.Write("</tfoot></table>");
+                sw.Write("</tfoot>");
+            }     
+            sw.Write("</table>");
         }
         private void CreateGenSelfTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
         { //Generate BoonGenSelf table
-            sw.Write(" <script> $(document).ready(function () { $('#"+ table_id + "').DataTable({ \"order\": [[0, \"asc\"]]" +
-             //  "\"scrollX\": true" +
-
-             "});});</script>" +
-             " <table class=\"display nowrap compact\" cellspacing=\"0\" width=\"100%\" id=\""+ table_id+"\">" +
-                 " <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
-            foreach (Boon boon in list_to_use)
+            sw.Write("<script> $(document).ready(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<table class=\"display nowrap compact\" cellspacing=\"0\" width=\"100%\" id=\"" + table_id + "\">");
             {
-                sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
-            }
-            sw.Write(" </tr> </thead><tbody>");
-
-            foreach (Player player in p_list)
-            {
-                sw.Write("<tr>");
-                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-
-                List<int> playerID = new List<int>();
-                playerID.Add(player.getInstid());
-                Dictionary<int, string> boonArray = getfinalboons(player, playerID);
-                List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in list_to_use)
+                sw.Write("<thead>");
                 {
-                    if (boonArray.ContainsKey(boon.getID()))
+                    sw.Write("<tr>");
                     {
-                        sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
-                        boonArrayToList.Add(boonArray[boon.getID()]);
+                        sw.Write("<th width=\"50px\">Sub</th>");
+                        sw.Write("<th width=\"50px\"></th>");
+                        sw.Write("<th>Name</th>");
+                        foreach (Boon boon in list_to_use)
+                        {
+                            sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                        }
                     }
-                    else
+                    
+                    sw.Write("</tr>");
+                }
+                
+                sw.Write("</thead>");
+                sw.Write("<tbody>");
+                {
+                    foreach (Player player in p_list)
                     {
-                        sw.Write("<td>" + 0 + "</td>");
-                        boonArrayToList.Add("0");
+                        List<int> playerID = new List<int>();
+                        playerID.Add(player.getInstid());
+                        Dictionary<int, string> boonArray = getfinalboons(player, playerID);
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
+                            sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
+                            foreach (Boon boon in list_to_use)
+                            {
+                                if (boonArray.ContainsKey(boon.getID()))
+                                {
+                                    sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
+                                }
+                                else
+                                {
+                                    sw.Write("<td>" + 0 + "</td>");
+                                }
+                            }
+                        }
+                        sw.Write("</tr>");
                     }
                 }
-                sw.Write("</tr>");
+                sw.Write("</tbody>");
             }
-
-            sw.Write("</tbody></table>");
+           
+            sw.Write("</table>");
         }
         private void CreateGenGroupTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
         { //Generate BoonGenGroup table
-           sw.Write( " <script> $(function () { $('#"+ table_id + "').DataTable({ \"order\": [[0, \"asc\"]] " +
-            //  "\"scrollX\": true," +
-            "});});</script>" +
-            " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\""+ table_id+"\">" +
-                " <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
-            List<List<string>> footList = new List<List<string>>();
-            foreach (Boon boon in list_to_use)
+            sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id + "\">");
             {
-                sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
-            }
-            sw.Write(" </tr> </thead><tbody>");
-            List<int> playerIDS = new List<int>();
-
-            foreach (Player player in p_list)
-            {
-                sw.Write("<tr>");
-                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-
-                foreach (Player p in p_list)
+                sw.Write("<thead>");
                 {
-                    if (p.getGroup() == player.getGroup())
-                        playerIDS.Add(p.getInstid());
-                }
-                Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
-                playerIDS = new List<int>();
-                List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in list_to_use)
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<th width=\"50px\">Sub</th>");
+                        sw.Write("<th width=\"50px\"></th>");
+                        sw.Write("<th>Name</th>");
+                        foreach (Boon boon in list_to_use)
+                        {
+                            sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                        }
+                    }
+                    
+                    sw.Write("</tr>");
+                }           
+                sw.Write("</thead>");
+                sw.Write("<tbody>");
                 {
-                    if (boonArray.ContainsKey(boon.getID()))
+                    List<int> playerIDS = new List<int>();
+                    foreach (Player player in p_list)
                     {
-                        sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
-                        boonArrayToList.Add(boonArray[boon.getID()]);
-                    }
-                    else
-                    {
-                        sw.Write("<td>" + 0 + "</td>");
-                        boonArrayToList.Add("0");
-                    }
-                }
-                sw.Write("</tr>");
-                //gather data for footer
-                footList.Add(boonArrayToList);
-            }
+                        foreach (Player p in p_list)
+                        {
+                            if (p.getGroup() == player.getGroup())
+                                playerIDS.Add(p.getInstid());
+                        }
+                        Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
+                        playerIDS.Clear();
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
+                            sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
-            sw.Write("</tbody></table>");
+
+                            foreach (Boon boon in list_to_use)
+                            {
+                                if (boonArray.ContainsKey(boon.getID()))
+                                {
+                                    sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
+                                }
+                                else
+                                {
+                                    sw.Write("<td>" + 0 + "</td>");
+                                }
+                            }
+                        }                  
+                        sw.Write("</tr>");
+                    }
+                }          
+                sw.Write("</tbody>");
+            }            
+            sw.Write("</table>");
         }
         private void CreateGenOGroupTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
         {  //Generate BoonGenOGroup table
-            sw.Write(" <script> $(function () { $('#"+ table_id+"').DataTable({ \"order\": [[0, \"asc\"]] " +
-              // "\"scrollX\": true," +
-              "});});</script>" +
-              " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\""+ table_id+"\">" +
-                  " <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
-            List<List<string>>  footList = new List<List<string>>();
-            foreach (Boon boon in list_to_use)
+            sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id + "\">");
             {
-                sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
-            }
-            sw.Write(" </tr> </thead><tbody>");
-            List<int> playerIDS = new List<int>();
-
-            foreach (Player player in p_list)
-            {
-                sw.Write("<tr>");
-                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-
-                foreach (Player p in p_list)
-                {
-                    if (p.getGroup() != player.getGroup())
-                        playerIDS.Add(p.getInstid());
-                }
-                Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
-                playerIDS = new List<int>();
-                List<string> boonArrayToList = new List<string>();
+                sw.Write(" <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
                 foreach (Boon boon in list_to_use)
                 {
-                    if (boonArray.ContainsKey(boon.getID()))
+                    sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                }
+                sw.Write(" </tr> </thead>");
+                sw.Write("<tbody>");
+                {
+                    List<int> playerIDS = new List<int>();
+                    foreach (Player player in p_list)
                     {
-                        sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
-                        boonArrayToList.Add(boonArray[boon.getID()]);
-                    }
-                    else
-                    {
-                        sw.Write("<td>" + 0 + "</td>");
-                        boonArrayToList.Add("0");
+                        foreach (Player p in p_list)
+                        {
+                            if (p.getGroup() != player.getGroup())
+                                playerIDS.Add(p.getInstid());
+                        }
+                        Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
+                        playerIDS.Clear();
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
+                            sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
+                            foreach (Boon boon in list_to_use)
+                            {
+                                if (boonArray.ContainsKey(boon.getID()))
+                                {
+                                    sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
+                                }
+                                else
+                                {
+                                    sw.Write("<td>" + 0 + "</td>");
+                                }
+                            }
+                        }
+                        sw.Write("</tr>");
                     }
                 }
-                sw.Write("</tr>");
-                //gather data for footer
-                footList.Add(boonArrayToList);
+                sw.Write("</tbody>");
             }
-
-            sw.Write("</tbody></table>");
+            sw.Write("</table>");
         }
-        public void CreateGenSquadTable(StreamWriter sw, List<Boon> list_to_use, string table_id) {
+        private void CreateGenSquadTable(StreamWriter sw, List<Boon> list_to_use, string table_id) {
             //Generate BoonGenSquad table
-            sw.Write(" <script> $(function () { $('#"+ table_id+"').DataTable({ \"order\": [[0, \"asc\"]] " +
-             // "\"scrollX\": true," +
-             "});});</script>" +
-             " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\""+ table_id+"\">" +
-                 " <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
-            foreach (Boon boon in list_to_use)
+            sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id + "\">");
             {
-                sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
-            }
-            sw.Write(" </tr> </thead><tbody>");
-            List<List<string>> footList = new List<List<string>>();
-            List<int>  playerIDS = new List<int>();
-            foreach (Player p in p_list)
-            {
-                playerIDS.Add(p.getInstid());
-            }
-            foreach (Player player in p_list)
-            {
-                sw.Write("<tr>");
-                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-
-
-                Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
-                List<string> boonArrayToList = new List<string>();
-                foreach (Boon boon in list_to_use)
+                sw.Write("<thead>");
                 {
-                    if (boonArray.ContainsKey(boon.getID()))
+                    sw.Write("<tr>");
                     {
-                        sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
-                        boonArrayToList.Add(boonArray[boon.getID()]);
+                        sw.Write("<th width=\"50px\">Sub</th>");
+                        sw.Write("<th width=\"50px\"></th>");
+                        sw.Write("<th>Name</th>");
+                        foreach (Boon boon in list_to_use)
+                        {
+                            sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                        }
+                    }            
+                    sw.Write("</tr>");
+                }           
+                sw.Write("</thead>");
+                sw.Write("<tbody>");
+                {
+                    List<int> playerIDS = new List<int>();
+                    foreach (Player p in p_list)
+                    {
+                        playerIDS.Add(p.getInstid());
                     }
-                    else
+                    foreach (Player player in p_list)
                     {
-                        sw.Write("<td>" + 0 + "</td>");
-                        boonArrayToList.Add("0");
+                        Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
+                            sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
+                            foreach (Boon boon in list_to_use)
+                            {
+                                if (boonArray.ContainsKey(boon.getID()))
+                                {
+                                    sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
+                                }
+                                else
+                                {
+                                    sw.Write("<td>" + 0 + "</td>");
+                                }
+                            }
+                        }
+
+                        sw.Write("</tr>");
                     }
                 }
-                sw.Write("</tr>");
-                //gather data for footer
-                footList.Add(boonArrayToList);
-            }
-
-            sw.Write("</tbody></table>");
+                sw.Write("</tbody>");
+            }         
+            sw.Write("</table>");
         }
-        public void CreatePlayerTab(StreamWriter sw)
+        private void CreatePlayerTab(StreamWriter sw)
         {
             //generate Player list Graphs
-
-
             foreach (Player p in p_list)
             {
                 CombatData c_data = getCombatData();
@@ -2498,6 +2681,7 @@ namespace LuckParser.Controllers
                 SkillData s_data = getSkillData();
                 List<SkillItem> s_list = s_data.getSkillList();
                 AgentData a_data = getAgentData();
+                bool died = getDied(p);
                 string charname = p.getCharacter();
                 sw.Write("<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">" +
                      "<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
@@ -2506,9 +2690,12 @@ namespace LuckParser.Controllers
                 if (SnapSettings[10])
                 {
                     sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#SimpleRot" + p.getInstid() + "\">Simple Rotation</a></li>");
+                }
+                if (died)
+                {
+                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#DeathRecap" + p.getInstid() + "\">Death Recap</a></li>");
 
                 }
-
                 //foreach pet loop here
                 List<int> minionIDlist = p.getMinionList(b_data, c_data.getCombatList(), a_data);
                 List<AgentItem> minionAgentList = new List<AgentItem>();
@@ -2976,6 +3163,12 @@ namespace LuckParser.Controllers
                     CreateSimpleRotationTab(sw, p);
                     sw.Write("</div>");
                 }
+                if (died)
+                {
+                    sw.Write("<div class=\"tab-pane fade \" id=\"DeathRecap" + p.getInstid() + "\">");
+                    CreateDeathRecap(sw, p);
+                    sw.Write("</div>");
+                }
                 sw.Write("<div class=\"tab-pane fade \" id=\"incDmg" + p.getInstid() + "\">");
 
                 CreateDMGTakenDistTable(sw, p);
@@ -2984,7 +3177,7 @@ namespace LuckParser.Controllers
             }
 
         }
-        public void CreateSimpleRotationTab(StreamWriter sw,Player p) {
+        private void CreateSimpleRotationTab(StreamWriter sw,Player p) {
             if (SnapSettings[6])//Display rotation
             {
                 SkillData s_data = getSkillData();
@@ -3056,7 +3249,161 @@ namespace LuckParser.Controllers
             }
 
         }
-        public void CreateDMGDistTable(StreamWriter sw,Player p) {
+        private void CreateDeathRecap(StreamWriter sw, Player p)
+        {
+            CombatData c_data = getCombatData();
+            BossData b_data = getBossData();
+            AgentData a_data = getAgentData();
+            List<DamageLog> damageLogs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(), getMechData());
+            SkillData s_data = getSkillData();
+            List<SkillItem> s_list = s_data.getSkillList();
+            List<Point> down = getCombatData().getStates(p.getInstid(), "CHANGE_DOWN");
+            List<Point> dead = getCombatData().getStates(p.getInstid(), "CHANGE_DEAD");
+            List<DamageLog> damageToDown = new List<DamageLog>();
+            List<DamageLog> damageToKill = new List<DamageLog>(); ;
+            if (down.Count > 0)
+            {//went to down state before death
+                damageToDown = damageLogs.Where(x => x.getTime() < down.Last().X-b_data.getFirstAware()).ToList();
+                damageToKill = damageLogs.Where(x => x.getTime() > down.Last().X - b_data.getFirstAware() && x.getTime() < dead.Last().X - b_data.getFirstAware()).ToList();
+                //Filter last 30k dmg taken
+                int totaldmg = 0;
+                for (int i = damageToDown.Count() - 1; i > 0; i--)
+                {
+                    totaldmg += damageToDown[i].getDamage();
+                    if (totaldmg > 30000)
+                    {
+                        damageToDown = damageToDown.GetRange(i, damageToDown.Count() - 1-i);
+                        break;
+                    }
+                }
+                sw.Write("<center><p>Took " + damageToDown.Sum(x => x.getDamage()) + " damage in " +
+                ((damageToDown.Last().getTime() - damageToDown.First().getTime()) / 1000f).ToString() + " seconds to enter downstate");
+                sw.Write("<p>Took " + damageToKill.Sum(x => x.getDamage()) + " damage in " +
+                   ((damageToKill.Last().getTime() - damageToKill.First().getTime()) / 1000f).ToString() + " seconds to die</center>");
+            }
+            else
+            {
+                damageToKill = damageLogs.Where(x =>  x.getTime() < dead.Last().X).ToList();
+                //Filter last 30k dmg taken
+                int totaldmg = 0;
+                for (int i = damageToKill.Count() - 1; i > 0; i--)
+                {
+                    totaldmg += damageToKill[i].getDamage();
+                    if (totaldmg > 30000)
+                    {
+                        damageToKill = damageToKill.GetRange(i, damageToKill.Count() - 1-i);
+                        break;
+                    }
+                }
+                sw.Write("<center><h3>Player was insta killed by a mechanic</h3></center>");
+            }
+            
+            sw.Write("<center><div id=\"BarDeathRecap"+p.getInstid()+"\"></div> </center>");
+            sw.Write("<script>");
+            {
+                sw.Write("var data = [{");
+                //Time on X
+                sw.Write("x : [");
+                if (damageToDown.Count() != 0)
+                {
+                    for (int d = 0;d<damageToDown.Count();d++)
+                    {
+                        sw.Write("'"+damageToDown[d].getTime()/1000f+"s',");
+                    }
+                }
+                for (int d = 0; d < damageToKill.Count(); d++)
+                {
+                    sw.Write("'" + damageToKill[d].getTime()/1000f + "s'");
+
+                    if (d != damageToKill.Count() - 1)
+                    {
+                        sw.Write(",");
+                    }
+                }
+                sw.Write("],");
+                //damage on Y
+                sw.Write("y : [");
+                if (damageToDown.Count() != 0)
+                {
+                    for (int d = 0; d < damageToDown.Count(); d++)
+                    {
+                        sw.Write("'" + damageToDown[d].getDamage() + "',");
+                    }
+                }
+                for (int d = 0; d < damageToKill.Count(); d++)
+                {
+                    sw.Write("'" + damageToKill[d].getDamage() + "'");
+
+                    if (d != damageToKill.Count() - 1)
+                    {
+                        sw.Write(",");
+                    }
+                }
+                sw.Write("],");
+                //Color 
+                sw.Write("marker : {color:[");
+                if (damageToDown.Count() != 0)
+                {
+                    for (int d = 0; d < damageToDown.Count(); d++)
+                    {
+                        sw.Write("'rgb(0,255,0,1)',");
+                    }
+                }
+                for (int d = 0; d < damageToKill.Count(); d++)
+                {
+                   
+                    if (down.Count() == 0)
+                    {
+                        //damagetoKill was instant(not in downstate)
+                        sw.Write("'rgb(0,255,0,1)'");
+                    }
+                    else
+                    {
+                        //damageto killwas from downstate
+                        sw.Write("'rgb(255,0,0,1)'");
+                    }
+                   
+
+                    if (d != damageToKill.Count() - 1)
+                    {
+                        sw.Write(",");
+                    }
+                }
+                sw.Write("]},");
+                //text
+                sw.Write("text : [");
+                if (damageToDown.Count() != 0)
+                {
+                    for (int d = 0; d < damageToDown.Count(); d++)
+                    {
+                        sw.Write("'" + a_data.GetAgentWInst(damageToDown[d].getInstidt()).getName().Replace("\0", "") + "<br>"+
+                            s_data.getName( damageToDown[d].getID()) +" hit you for "+damageToDown[d].getDamage() + "',");
+                    }
+                }
+                for (int d = 0; d < damageToKill.Count(); d++)
+                {
+                    sw.Write("'" + a_data.GetAgentWInst(damageToKill[d].getInstidt()).getName().Replace("\0","") + "<br>" +
+                           "hit you with <b>"+ s_data.getName(damageToKill[d].getID()) + "</b> for " + damageToKill[d].getDamage() + "'");
+
+                    if (d != damageToKill.Count() - 1)
+                    {
+                        sw.Write(",");
+                    }
+                }
+                sw.Write("],");
+                sw.Write("type:'bar',");
+                
+                sw.Write("}];");
+
+                sw.Write("var layout = { title: 'Last 30k Damage Taken before death', font: { color: '#ffffff' },"+
+                    "paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',showlegend: false,bargap :0.05,yaxis:{title:'Damage'},xaxis:{title:'Time(seconds)',type:'catagory'}};");
+                sw.Write("Plotly.newPlot('BarDeathRecap" + p.getInstid() + "', data, layout);");
+                sw.Write("</script>");
+            }
+           
+
+        }
+        private void CreateDMGDistTable(StreamWriter sw,Player p) {
 
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
@@ -3066,579 +3413,709 @@ namespace LuckParser.Controllers
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
-            sw.Write(" <script> $(function () { $('#dist_table_"+p.getInstid()+ "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>"+
-               " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_"+p.getInstid()+"\">" +
-               " <thead> <tr> <th>Skill</th><th></th><th>Damage</th> <th>Min</th><th>Avg</th><th>Max</th><th>Casts</th><th>Hits</th><th>Hits per Cast</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
-               "<th>Wasted</th><th>Saved</th> </tr> </thead><tbody>");
-            foreach (int id in casting.Select(x=>x.getID()).Distinct()) {//foreach casted skill
-                SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
-                List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
-                int casts = clList.Count();
-                double timeswasted = 0;
-                int countwasted = 0;
-                double timessaved = 0;
-                int countsaved = 0;
-                foreach (CastLog cl in clList) {
-                    if (cl.getExpDur() < cl.getActDur())
-                    {
-                        countsaved++;
-                        timessaved += ((double)(cl.getExpDur() - cl.getActDur()) / 1000f);
-                    }
-                    else if (cl.getExpDur() > cl.getActDur()) {
-                        countwasted++;
-                        timeswasted += ((double)( cl.getActDur()) / 1000f);
-                    }
-                }
-
-                int totaldamage = 0;
-                int mindamage = 0;
-                int avgdamage = 0;
-                int hits = 0;
-                int maxdamage = 0;
-                int crit = 0;
-                int flank = 0;
-                int glance = 0;
-                double hpcast = 0;
-                foreach (DamageLog dl in damageLogs.Where(x=>x.getID() == id)) {
-                    int curdmg = dl.getDamage();
-                    totaldamage += curdmg;
-                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                    if (0 == maxdamage|| curdmg > maxdamage) { maxdamage = curdmg; }
-                    hits++;
-                    int result = dl.getResult().getID();
-                    if (result == 1) { crit++; } else if (result == 2) { glance++; }
-                    if (dl.isFlanking() == 1) { flank++; }
-                }
-                avgdamage = (int)((double)totaldamage / (double)hits);
-                if (casts > 0) { hpcast = Math.Round((double)hits / (double)casts, 2); }
-
-                if (skill != null) {
-                    if (totaldamage != 0 && skill.GetGW2APISkill() != null)
-                    {
-                        sw.Write("<tr>"+
-                            "<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
-                            "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" + "<td>" + totaldamage + "</td>" + 
-                            "<td>" + mindamage + "</td>" + 
-                            "<td>" + avgdamage + "</td>" +
-                            "<td>" + maxdamage + "</td>" +
-                            "<td>" + casts + "</td>" +
-                            "<td>" + hits + "</td>" +
-                            "<td>" + hpcast + "</td>" +
-                            "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" +
-                            "<td>" + Math.Round(timeswasted, 2) + "s</td>" +
-                            "<td>" + Math.Round(timessaved,2) + "s</td>"+
-                            "</tr>");
-                    }
-                    else if (totaldamage != 0) {
-                        sw.Write("<tr>"+
-                            "<td align=\"left\">" + skill.getName() + "</td>" +
-                            "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                            "<td>" + totaldamage + "</td>" + 
-                            "<td>" + mindamage + "</td>" +
-                            "<td>" + avgdamage + "</td>" +
-                            "<td>" + maxdamage + "</td>" +
-                            "<td>" + casts + "</td>" +
-                            "<td>" + hits + "</td>" +
-                            "<td>" + hpcast + "</td>" +
-                            "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" +
-                            "<td>" + Math.Round(timeswasted, 2) + "s</td>" +
-                            "<td>" + Math.Round(timessaved, 2) + "s</td>"+
-                            "</tr>");
-                    } else if (skill.GetGW2APISkill() != null)
-                    {
-                        sw.Write("<tr>"+
-                            "<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td>" + casts + "</td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td>" + Math.Round(timeswasted, 2) + "s</td>" +
-                            "<td>" + Math.Round(timessaved, 2) + "s</td>" +
-                            "</tr>");
-                    }
-                    else {
-                        sw.Write("<tr>"+
-                            "<td align=\"left\">" + skill.getName() + "</td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td>" + casts + "</td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td>" + Math.Round(timeswasted, 2) + "s</td>" +
-                            "<td>" + Math.Round(timessaved, 2) + "s</td>"+
-                            "</tr>");
-                    }
-                }
-                
-            }
-            List<Boon> condiList = Boon.getCondiBoonList();
-
-            foreach (int condiID in damageLogs.Where(x=>x.isCondi() == 1).Select(x=>x.getID()).Distinct()) {//condis
-                Boon condiItem = condiList.FirstOrDefault(x => x.getID() == condiID);//Boon.getCondiName(condiID);
-                string condiName = "UNKOWN";
-                if (condiItem != null)
-                {
-                    condiName = condiItem.getName();
-                }
-                int totaldamage = 0;
-                    int mindamage = 0;
-                    int avgdamage = 0;
-                    int hits = 0;
-                    int maxdamage = 0;
-
-                    foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
-                    {
-                        int curdmg = dl.getDamage();
-                        totaldamage += curdmg;
-                        if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                        if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                        hits++;
-                        int result = dl.getResult().getID();
-
-                    }
-                    avgdamage = (int)((double)totaldamage / (double)hits);
-
-
-                    if (totaldamage != 0)
-                    {
-                        sw.Write("<tr class=\"condi\">"+
-                            "<td align=\"left\"><img src=" +GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
-                            "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                            "<td>" + totaldamage + "</td>" +
-                            "<td>" + mindamage + "</td>" +
-                            "<td>" + avgdamage + "</td>" +
-                            "<td>" + maxdamage + "</td>" +
-                            "<td></td>" +
-                            "<td>" + hits + "</td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "</tr>");
-                    }
-                
-            }
-            List<int> remainIDs = damageLogs.Where(x => x.isCondi() == 0).Select(x => x.getID()).Distinct().ToList();
-            foreach (int exist in casting.Select(x => x.getID()).Distinct()) {
-                remainIDs.Remove(exist);
-            }
-            remainIDs.Remove(873);//remove retail since itll duplicate
-            foreach (int id in remainIDs)//Foreach instant cast skill
+            sw.Write("<script> $(function () { $('#dist_table_"+p.getInstid()+ "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" +p.getInstid()+"\">");
             {
-                SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
-                List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
-                int casts = clList.Count();
-                double timeswasted = 0;
-                int countwasted = 0;
-                double timessaved = 0;
-                int countsaved = 0;
-                foreach (CastLog cl in clList)
+                sw.Write("<thead>");
                 {
-                    if (cl.getExpDur() < cl.getActDur())
+                    sw.Write("<tr>");
                     {
-                        countsaved++;
-                        timessaved += ((double)(cl.getExpDur() - cl.getActDur()) / 1000f);
-                    }
-                    else if (cl.getExpDur() > cl.getActDur())
-                    {
-                        countwasted++;
-                        timeswasted += ((double)(cl.getActDur()) / 1000f);
-                    }
-                }
+                        sw.Write("<th>Skill</th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th>Damage</th>");
+                        sw.Write("<th>Min</th>");
+                        sw.Write("<th>Avg</th>");
+                        sw.Write("<th>Max</th>");
+                        sw.Write("<th>Casts</th>");
+                        sw.Write("<th>Hits</th>");
+                        sw.Write("<th>Hits per Cast</th>");
+                        sw.Write("<th>Crit</th>");
+                        sw.Write("<th>Flank</th>");
+                        sw.Write("<th>Glance</th>");
+                        sw.Write("<th>Wasted</th>");
+                        sw.Write("<th>Saved</th>");
+                    }                 
+                    sw.Write("</tr>");
+                }           
+                sw.Write("</thead>");
+                sw.Write("<tbody>");
+                {
+                    foreach (int id in casting.Select(x => x.getID()).Distinct())
+                    {//foreach casted skill
+                        SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
+                        List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
+                        int casts = clList.Count();
+                        double timeswasted = 0;
+                        int countwasted = 0;
+                        double timessaved = 0;
+                        int countsaved = 0;
+                        foreach (CastLog cl in clList)
+                        {
+                            if (cl.getExpDur() < cl.getActDur())
+                            {
+                                countsaved++;
+                                timessaved += ((double)(cl.getExpDur() - cl.getActDur()) / 1000f);
+                            }
+                            else if (cl.getExpDur() > cl.getActDur())
+                            {
+                                countwasted++;
+                                timeswasted += ((double)(cl.getActDur()) / 1000f);
+                            }
+                        }
 
-                int totaldamage = 0;
-                int mindamage = 0;
-                int avgdamage = 0;
-                int hits = 0;
-                int maxdamage = 0;
-                int crit = 0;
-                int flank = 0;
-                int glance = 0;
-                double hpcast = 0;
-                foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
-                {
-                    int curdmg = dl.getDamage();
-                    totaldamage += curdmg;
-                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                    hits++;
-                    int result = dl.getResult().getID();
-                    if (result == 1) { crit++; } else if (result == 2) { glance++; }
-                    if (dl.isFlanking() == 1) { flank++; }
-                }
-                avgdamage = (int)((double)totaldamage / (double)hits);
-                if (casts > 0) { hpcast = Math.Round((double)hits / (double)casts,2); }
-                if (skill != null)
-                {
-                    if (totaldamage != 0 && skill.GetGW2APISkill() != null)
-                    {
-                        sw.Write("<tr>"+
-                            "<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
-                            "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                            "<td>" + totaldamage + "</td>" +
-                            "<td>" + mindamage + "</td>" +
-                            "<td>" + avgdamage + "</td>" +
-                            "<td>" + maxdamage + "</td>" +
-                            "<td>" + casts + "</td>" +
-                            "<td>" + hits + "</td>" +
-                            "<td>"  + hpcast + "</td>" +
-                            "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" +
-                            "<td>" + Math.Round(timeswasted, 2) + "s</td>" +
-                            "<td>" + Math.Round(timessaved, 2) + "s</td>"+
-                            "</tr>");
-                    }
-                    else if (totaldamage != 0)
-                    {
-                        sw.Write("<tr>"+
-                            "<td align=\"left\">" + skill.getName() + "</td>" +
-                            "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                            "<td>" + totaldamage + "</td>" + 
-                            "<td>" + mindamage + "</td>" +
-                            "<td>" + avgdamage + "</td>" +
-                            "<td>" + maxdamage + "</td>" +
-                            "<td>" + casts + "</td>" +
-                            "<td>" + hits + "</td>" +
-                            "<td></td>" +
-                            "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" +
-                            "<td>" + Math.Round(timeswasted, 2) + "s</td>" +
-                            "<td>" + Math.Round(timessaved, 2) + "s</td>"+
-                            "</tr>");
-                    }
-                    else if (skill.GetGW2APISkill() != null)
-                    {
-                        sw.Write("<tr><td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
-                          "<td></td>" + "<td></td>" +
-                          "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
-                            "<td>" + casts + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
-                             "<td></td>" + "<td></td>" +
-                              "<td></td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
-                    }
-                    else {
-                        sw.Write("<tr><td align=\"left\">" + skill.getName() + "</td>" +
-                          "<td></td>" + "<td></td>" +
-                            "<td>" + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
-                            "<td>" + casts + "</td>" + "<td>" + "</td>" + "<td>" + "</td>" +
-                            "<td></td>" + "<td></td>" +
-                             "<td></td>" + "<td>" + Math.Round(timeswasted, 2) + "s</td>" + "<td>" + Math.Round(timessaved, 2) + "s</td></tr>");
-                    }
-                }
+                        int totaldamage = 0;
+                        int mindamage = 0;
+                        int avgdamage = 0;
+                        int hits = 0;
+                        int maxdamage = 0;
+                        int crit = 0;
+                        int flank = 0;
+                        int glance = 0;
+                        double hpcast = 0;
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
+                        {
+                            int curdmg = dl.getDamage();
+                            totaldamage += curdmg;
+                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                            hits++;
+                            int result = dl.getResult().getID();
+                            if (result == 1) { crit++; } else if (result == 2) { glance++; }
+                            if (dl.isFlanking() == 1) { flank++; }
+                        }
+                        avgdamage = (int)((double)totaldamage / (double)hits);
+                        if (casts > 0) { hpcast = Math.Round((double)hits / (double)casts, 2); }
 
-            }
-            sw.Write("</tbody></table>");
+                        if (skill != null)
+                        {
+                            if (totaldamage != 0 && skill.GetGW2APISkill() != null)
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" + "<td>" + totaldamage + "</td>");
+                                    sw.Write("<td>" + mindamage + "</td>");
+                                    sw.Write("<td>" + avgdamage + "</td>");
+                                    sw.Write("<td>" + maxdamage + "</td>");
+                                    sw.Write("<td>" + casts + "</td>");
+                                    sw.Write("<td>" + hits + "</td>");
+                                    sw.Write("<td>" + hpcast + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
+                                    sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");                        
+                                }                               
+                                sw.Write("</tr>");
+                            }
+                            else if (totaldamage != 0)
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + totaldamage + "</td>");
+                                    sw.Write("<td>" + mindamage + "</td>");
+                                    sw.Write("<td>" + avgdamage + "</td>");
+                                    sw.Write("<td>" + maxdamage + "</td>");
+                                    sw.Write("<td>" + casts + "</td>");
+                                    sw.Write("<td>" + hits + "</td>");
+                                    sw.Write("<td>" + hpcast + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
+                                    sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");
+                                }
+                                sw.Write("</tr>");
+                            }
+                            else if (skill.GetGW2APISkill() != null)
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td>" + casts + "</td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
+                                    sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");
+                                }                  
+                                sw.Write("</tr>");
+                            }
+                            else
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td>" + casts + "</td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
+                                    sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");
+                                }
+                                sw.Write("</tr>");
+                            }
+                        }
+
+                    }
+                    List<Boon> condiList = Boon.getCondiBoonList();
+
+                    foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
+                    {//condis
+                        string condiName = condiList.FirstOrDefault(x => x.getID() == condiID).getName();// Boon.getCondiName(condiID);
+                        int totaldamage = 0;
+                        int mindamage = 0;
+                        int avgdamage = 0;
+                        int hits = 0;
+                        int maxdamage = 0;
+
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                        {
+                            int curdmg = dl.getDamage();
+                            totaldamage += curdmg;
+                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                            hits++;
+                            int result = dl.getResult().getID();
+
+                        }
+                        avgdamage = (int)((double)totaldamage / (double)hits);
+
+
+                        if (totaldamage != 0)
+                        {
+                            sw.Write("<tr class=\"condi\">");
+                            {
+                                sw.Write("<td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                                sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                sw.Write("<td>" + totaldamage + "</td>");
+                                sw.Write("<td>" + mindamage + "</td>");
+                                sw.Write("<td>" + avgdamage + "</td>");
+                                sw.Write("<td>" + maxdamage + "</td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td>" + hits + "</td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                            }
+                            sw.Write("</tr>");
+                        }
+                    }
+                    List<int> remainIDs = damageLogs.Where(x => x.isCondi() == 0).Select(x => x.getID()).Distinct().ToList();
+                    foreach (int exist in casting.Select(x => x.getID()).Distinct())
+                    {
+                        remainIDs.Remove(exist);
+                    }
+                    remainIDs.Remove(873);//remove retail since itll duplicate
+                    foreach (int id in remainIDs)//Foreach instant cast skill
+                    {
+                        SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
+                        List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
+                        int casts = clList.Count();
+                        double timeswasted = 0;
+                        int countwasted = 0;
+                        double timessaved = 0;
+                        int countsaved = 0;
+                        foreach (CastLog cl in clList)
+                        {
+                            if (cl.getExpDur() < cl.getActDur())
+                            {
+                                countsaved++;
+                                timessaved += ((double)(cl.getExpDur() - cl.getActDur()) / 1000f);
+                            }
+                            else if (cl.getExpDur() > cl.getActDur())
+                            {
+                                countwasted++;
+                                timeswasted += ((double)(cl.getActDur()) / 1000f);
+                            }
+                        }
+
+                        int totaldamage = 0;
+                        int mindamage = 0;
+                        int avgdamage = 0;
+                        int hits = 0;
+                        int maxdamage = 0;
+                        int crit = 0;
+                        int flank = 0;
+                        int glance = 0;
+                        double hpcast = 0;
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
+                        {
+                            int curdmg = dl.getDamage();
+                            totaldamage += curdmg;
+                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                            hits++;
+                            int result = dl.getResult().getID();
+                            if (result == 1) { crit++; } else if (result == 2) { glance++; }
+                            if (dl.isFlanking() == 1) { flank++; }
+                        }
+                        avgdamage = (int)((double)totaldamage / (double)hits);
+                        if (casts > 0) { hpcast = Math.Round((double)hits / (double)casts, 2); }
+                        if (skill != null)
+                        {
+                            if (totaldamage != 0 && skill.GetGW2APISkill() != null)
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + totaldamage + "</td>");
+                                    sw.Write("<td>" + mindamage + "</td>");
+                                    sw.Write("<td>" + avgdamage + "</td>");
+                                    sw.Write("<td>" + maxdamage + "</td>");
+                                    sw.Write("<td>" + casts + "</td>");
+                                    sw.Write("<td>" + hits + "</td>");
+                                    sw.Write("<td>" + hpcast + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
+                                    sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");
+                                }
+                                sw.Write("</tr>");
+                            }
+                            else if (totaldamage != 0)
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + totaldamage + "</td>");
+                                    sw.Write("<td>" + mindamage + "</td>");
+                                    sw.Write("<td>" + avgdamage + "</td>");
+                                    sw.Write("<td>" + maxdamage + "</td>");
+                                    sw.Write("<td>" + casts + "</td>");
+                                    sw.Write("<td>" + hits + "</td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
+                                    sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");
+                                }                              
+                                sw.Write("</tr>");
+                            }
+                            else if (skill.GetGW2APISkill() != null)
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td>" + casts + "</td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
+                                    sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");
+                                }
+                                sw.Write("</tr>");
+                            }
+                            else
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td>" + casts + "</td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
+                                    sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");
+                                }
+                                sw.Write("</tr>");
+                            }
+                        }
+                    }
+                }           
+                sw.Write("</tbody>");
+            }        
+            sw.Write("</table>");
         }
-        public void CreateDMGDistTable(StreamWriter sw, Player p,AgentItem agent)
+        private void CreateDMGDistTable(StreamWriter sw, Player p, AgentItem agent)
         {
 
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
-           // List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
-           
+            // List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
+
             List<DamageLog> damageLogs = p.getMinionDamageLogs((int)agent.getAgent(), b_data, c_data.getCombatList(), getAgentData());
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
 
-           
-            sw.Write(" <script> $(function () { $('#dist_table_" + p.getInstid()+"_"+agent.getInstid() + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>" +
-                " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + p.getInstid() +"_"+agent.getInstid()+ "\">" +
-           " <thead> <tr> <th>Skill</th><th>Damage</th><th>Percent</th><th>Hits</th> <th>Min</th><th>Avg</th><th>Max</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
-           "</tr> </thead><tbody>");
-            foreach (int id in damageLogs.Where(x => x.isCondi() != 1).Select(x => x.getID()).Distinct() )
-            {//foreach casted skill
-                SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
-                int totaldamage = 0;
-                int mindamage = 0;
-                int avgdamage = 0;
-                int hits = 0;
-                int maxdamage = 0;
-                int crit = 0;
-                int flank = 0;
-                int glance = 0;
-                foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
-                {
-                    int curdmg = dl.getDamage();
-                    totaldamage += curdmg;
-                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                    hits++;
-                    int result = dl.getResult().getID();
-                    if (result == 1) { crit++; } else if (result == 2) { glance++; }
-                    if (dl.isFlanking() == 1) { flank++; }
-                }
-                avgdamage = (int)((double)totaldamage / (double)hits);
-
-                if (skill != null)
-                {
-                    if (totaldamage != 0 && skill.GetGW2APISkill() != null)
-                    {
-                        sw.Write("<tr>" +
-                            "<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
-                            "<td>" + totaldamage + "</td>" +
-                            "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                            "<td>" + hits + "</td>" +
-                            "<td>" + mindamage + "</td>" +
-                            "<td>" + avgdamage + "</td>" +
-                            "<td>" + maxdamage + "</td>" +
-                            "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" +
-                            "</tr>");
-                    }
-                    else if (totaldamage != 0)
-                    {
-                        sw.Write("<tr>" +
-                            "<td align=\"left\">" + skill.getName() + "</td>" +
-                            "<td>" + totaldamage + "</td>" +
-                            "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                            "<td>" + hits + "</td>" +
-                            "<td>" + mindamage + "</td>" + 
-                            "<td>" + avgdamage + "</td>" +
-                            "<td>" + maxdamage + "</td>" +
-                            "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" + 
-                            "</tr>");
-                    }
-                    else if (skill.GetGW2APISkill() != null)
-                    {
-                        sw.Write("<tr>" + 
-                            "<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
-                            "<td></td>" + 
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" + 
-                            "<td></td>" + 
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" + 
-                            "</tr>");
-                    }
-                    else
-                    {
-                        sw.Write("<tr>" +
-                            "<td align=\"left\">" + skill.getName() + "</td>" +
-                            "<td></td>" + 
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "</tr>");
-                    }
-                }
-
-            }
-            //CONDIS
-            List<Boon> condiList = Boon.getCondiBoonList();
-            foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
+            sw.Write("<script> $(function () { $('#dist_table_" + p.getInstid() + "_" + agent.getInstid() + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + p.getInstid() + "_" + agent.getInstid() + "\">");
             {
-                Boon condiItem = condiList.FirstOrDefault(x=>x.getID() == condiID);//Boon.getCondiName(condiID);
-                string condiName = "UNKOWN";
-                if (condiItem != null)
+                sw.Write("<thead>");
                 {
-                   condiName= condiItem.getName();
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<th>Skill</th>");
+                        sw.Write("<th>Damage</th>");
+                        sw.Write("<th>Percent</th>");
+                        sw.Write("<th>Hits</th>");
+                        sw.Write("<th>Min</th>");
+                        sw.Write("<th>Avg</th>");
+                        sw.Write("<th>Max</th>");
+                        sw.Write("<th>Crit</th>");
+                        sw.Write("<th>Flank</th>");
+                        sw.Write("<th>Glance</th>");
+                    }
+                    sw.Write("</tr>");
                 }
-               
-                    int totaldamage = 0;
-                    int mindamage = 0;
-                    int avgdamage = 0;
-                    int hits = 0;
-                    int maxdamage = 0;
+                sw.Write("</thead>");
+                sw.Write("<tbody>");
+                {
+                    foreach (int id in damageLogs.Where(x => x.isCondi() != 1).Select(x => x.getID()).Distinct())
+                    {//foreach casted skill
+                        SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
+                        int totaldamage = 0;
+                        int mindamage = 0;
+                        int avgdamage = 0;
+                        int hits = 0;
+                        int maxdamage = 0;
+                        int crit = 0;
+                        int flank = 0;
+                        int glance = 0;
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
+                        {
+                            int curdmg = dl.getDamage();
+                            totaldamage += curdmg;
+                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                            hits++;
+                            int result = dl.getResult().getID();
+                            if (result == 1) { crit++; } else if (result == 2) { glance++; }
+                            if (dl.isFlanking() == 1) { flank++; }
+                        }
+                        avgdamage = (int)((double)totaldamage / (double)hits);
+                        if (skill != null)
+                        {
+                            if (totaldamage != 0 && skill.GetGW2APISkill() != null)
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                                    sw.Write("<td>" + totaldamage + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + hits + "</td>");
+                                    sw.Write("<td>" + mindamage + "</td>");
+                                    sw.Write("<td>" + avgdamage + "</td>");
+                                    sw.Write("<td>" + maxdamage + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                }
+                                sw.Write("</tr>");
+                            }
+                            else if (totaldamage != 0)
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
+                                    sw.Write("<td>" + totaldamage + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + hits + "</td>");
+                                    sw.Write("<td>" + mindamage + "</td>");
+                                    sw.Write("<td>" + avgdamage + "</td>");
+                                    sw.Write("<td>" + maxdamage + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                }
+                                sw.Write("</tr>");
+                            }
+                            else if (skill.GetGW2APISkill() != null)
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                }
+                                sw.Write("</tr>");
+                            }
+                            else
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                }
+                                sw.Write("</tr>");
+                            }
+                        }
+                    }
+                    //CONDIS
+                    List<Boon> condiList = Boon.getCondiBoonList();
+                    foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
+                    {
+                        string condiName = condiList.FirstOrDefault(x => x.getID() == condiID).getName();// Boon.getCondiName(condiID);
 
-                    foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
-                    {
-                        int curdmg = dl.getDamage();
-                        totaldamage += curdmg;
-                        if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                        if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                        hits++;
-                        int result = dl.getResult().getID();
+                        int totaldamage = 0;
+                        int mindamage = 0;
+                        int avgdamage = 0;
+                        int hits = 0;
+                        int maxdamage = 0;
+
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                        {
+                            int curdmg = dl.getDamage();
+                            totaldamage += curdmg;
+                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                            hits++;
+                            int result = dl.getResult().getID();
+                        }
+                        avgdamage = (int)((double)totaldamage / (double)hits);
+                        if (totaldamage != 0)
+                        {
+                            sw.Write("<tr class=\"condi\">");
+                            {
+                                sw.Write("<td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                                sw.Write("<td>" + totaldamage + "</td>");
+                                sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                sw.Write("<td>" + hits + "</td>");
+                                sw.Write("<td>" + mindamage + "</td>");
+                                sw.Write("<td>" + avgdamage + "</td>");
+                                sw.Write("<td>" + maxdamage + "</td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                            }
+                            sw.Write("</tr>");
+                        }
                     }
-                    avgdamage = (int)((double)totaldamage / (double)hits);
-                    if (totaldamage != 0)
-                    {
-                        sw.Write("<tr class=\"condi\">" + 
-                            "<td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
-                            "<td>" + totaldamage + "</td>" +
-                            "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                            "<td>" + hits + "</td>" +
-                            "<td>" + mindamage + "</td>" +
-                            "<td>" + avgdamage + "</td>" +
-                            "<td>" + maxdamage + "</td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "</tr>");
-                    }
-            }
-            sw.Write("</tbody></table>");
+                }            
+                sw.Write("</tbody>");
+            }  
+            sw.Write("</table>");
         }
-        public void CreateDMGTakenDistTable(StreamWriter sw, Player p)
+        private void CreateDMGTakenDistTable(StreamWriter sw, Player p)
         {
-
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             List<DamageLog> damageLogs = p.getDamageTakenLogs( b_data, c_data.getCombatList(), getAgentData(),getMechData());
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
-            sw.Write(" <script> $(function () { $('#distTaken_table_" + p.getInstid() + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>" +
-                " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"distTaken_table_" + p.getInstid() + "\">" +
-           " <thead> <tr> <th>Skill</th><th>Damage</th><th>Percent</th><th>Hits</th> <th>Min</th><th>Avg</th><th>Max</th><th>Crit</th><th>Flank</th><th>Glance</th>" +
-           " </tr> </thead><tbody>");
-            foreach (int id in damageLogs.Select(x => x.getID()).Distinct())
-            {//foreach casted skill
-                SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
-               
-                int totaldamage = 0;
-                int mindamage = 0;
-                int avgdamage = 0;
-                int hits = 0;
-                int maxdamage = 0;
-                int crit = 0;
-                int flank = 0;
-                int glance = 0;
-                foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
-                {
-                    int curdmg = dl.getDamage();
-                    totaldamage += curdmg;
-                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                    if (curdmg != 0) { hits++; };
-                    int result = dl.getResult().getID();
-                    if (result == 1) { crit++; } else if (result == 2) { glance++; }
-                    if (dl.isFlanking() == 1) { flank++; }
-                }
-                avgdamage = (int)((double)totaldamage / (double)hits);
-
-                if (skill != null)
-                {
-                    if (totaldamage != 0 && skill.GetGW2APISkill() != null)
-                    {
-                        sw.Write("<tr>"+
-                            "<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
-                            "<td>" + totaldamage + "</td>" +
-                            "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                            "<td>" + hits + "</td>" +
-                            "<td>" + mindamage + "</td>" +
-                            "<td>" + avgdamage + "</td>" +
-                            "<td>" + maxdamage + "</td>" +
-                            "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" +
-                            "</tr>");
-                    }
-                    else if (totaldamage != 0)
-                    {
-                        sw.Write("<tr>"+
-                            "<td align=\"left\">" + skill.getName() + "</td>" +
-                            "<td>" + totaldamage + "</td>" +
-                            "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                            "<td>" + hits + "</td>" +
-                            "<td>" + mindamage + "</td>" +
-                            "<td>" + avgdamage + "</td>" +
-                            "<td>" + maxdamage + "</td>" +
-                            "<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>" +
-                            "<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>" +
-                            "</tr>");
-                    }
-                    else if (skill.GetGW2APISkill() != null)
-                    {
-                        sw.Write("<tr>"+
-                            "<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" + 
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "</tr>");
-                    }
-                    else
-                    {
-                        sw.Write("<tr>"+
-                            "<td align=\"left\">" + skill.getName() + "</td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "<td></td>" +
-                            "</tr>");
-                    }
-                }
-
-            }
-            List<Boon> condiList = Boon.getCondiBoonList();
-            foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
+            sw.Write("<script> $(function () { $('#distTaken_table_" + p.getInstid() + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"distTaken_table_" + p.getInstid() + "\">");
             {
-                string condiName = condiList.FirstOrDefault(x=>x.getID() == condiID).getName();// Boon.getCondiName(condiID);
-                int totaldamage = 0;
-                int mindamage = 0;
-                int avgdamage = 0;
-                int hits = 0;
-                int maxdamage = 0;
-
-                foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                sw.Write("<thead>");
                 {
-                    int curdmg = dl.getDamage();
-                    totaldamage += curdmg;
-                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                    hits++;
-                    int result = dl.getResult().getID();
-
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<th>Skill</th>");
+                        sw.Write("<th>Damage</th>");
+                        sw.Write("<th>Percent</th>");
+                        sw.Write("<th>Hits</th>");
+                        sw.Write("<th>Min</th>");
+                        sw.Write("<th>Avg</th>");
+                        sw.Write("<th>Max</th>");
+                        sw.Write("<th>Crit</th>");
+                        sw.Write("<th>Flank</th>");
+                        sw.Write("<th>Glance</th>");
+                    }
+                    sw.Write("</tr>");
                 }
-                avgdamage = (int)((double)totaldamage / (double)hits);
-
-
-                if (totaldamage != 0)
+                sw.Write("</thead>");
+                sw.Write("<tbody>");
                 {
-                    sw.Write("<tr><td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>" +
-                        "<td></td>" + "<td>" + totaldamage + "</td>" + "<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" +
-                         "<td>" + hits + "</td>" + "<td>" + mindamage + "</td>" + "<td>" + avgdamage + "</td>" + "<td>" + maxdamage + "</td>" +
-                          "<td></td>" + "<td></td>" +
-                           "<td></td>" + "<td></td>" + "<td></td></tr>");
+                    foreach (int id in damageLogs.Select(x => x.getID()).Distinct())
+                    {//foreach casted skill
+                        SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
+
+                        int totaldamage = 0;
+                        int mindamage = 0;
+                        int avgdamage = 0;
+                        int hits = 0;
+                        int maxdamage = 0;
+                        int crit = 0;
+                        int flank = 0;
+                        int glance = 0;
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
+                        {
+                            int curdmg = dl.getDamage();
+                            totaldamage += curdmg;
+                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                            if (curdmg != 0) { hits++; };
+                            int result = dl.getResult().getID();
+                            if (result == 1) { crit++; } else if (result == 2) { glance++; }
+                            if (dl.isFlanking() == 1) { flank++; }
+                        }
+                        avgdamage = (int)((double)totaldamage / (double)hits);
+
+                        if (skill != null)
+                        {
+                            if (totaldamage != 0 && skill.GetGW2APISkill() != null)
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                                    sw.Write("<td>" + totaldamage + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + hits + "</td>");
+                                    sw.Write("<td>" + mindamage + "</td>");
+                                    sw.Write("<td>" + avgdamage + "</td>");
+                                    sw.Write("<td>" + maxdamage + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                }                             
+                                sw.Write("</tr>");
+                            }
+                            else if (totaldamage != 0)
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
+                                    sw.Write("<td>" + totaldamage + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + hits + "</td>");
+                                    sw.Write("<td>" + mindamage + "</td>");
+                                    sw.Write("<td>" + avgdamage + "</td>");
+                                    sw.Write("<td>" + maxdamage + "</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                }
+                                sw.Write("</tr>");
+                            }
+                            else if (skill.GetGW2APISkill() != null)
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                }
+                                sw.Write("</tr>");
+                            }
+                            else
+                            {
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                    sw.Write("<td></td>");
+                                }                               
+                                sw.Write("</tr>");
+                            }
+                        }
+
+                    }
+                    List<Boon> condiList = Boon.getCondiBoonList();
+                    foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
+                    {
+                        string condiName = condiList.FirstOrDefault(x => x.getID() == condiID).getName();// Boon.getCondiName(condiID);
+                        int totaldamage = 0;
+                        int mindamage = 0;
+                        int avgdamage = 0;
+                        int hits = 0;
+                        int maxdamage = 0;
+
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                        {
+                            int curdmg = dl.getDamage();
+                            totaldamage += curdmg;
+                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                            hits++;
+                            int result = dl.getResult().getID();
+
+                        }
+                        avgdamage = (int)((double)totaldamage / (double)hits);
+
+
+                        if (totaldamage != 0)
+                        {
+                            sw.Write("<tr>");
+                            {
+                                sw.Write("<td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                                sw.Write("<td>" + totaldamage + "</td>");
+                                sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                sw.Write("<td>" + hits + "</td>");
+                                sw.Write("<td>" + mindamage + "</td>");
+                                sw.Write("<td>" + avgdamage + "</td>");
+                                sw.Write("<td>" + maxdamage + "</td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                            }                          
+                            sw.Write("</tr>");
+                        }
+                    }
                 }
-            }
-            sw.Write("</tbody></table>");
+                sw.Write("</tbody>");
+            }       
+            sw.Write("</table>");
         }
-        public void CreateMechanicTable(StreamWriter sw) {
-            List<Mechanic> presMech = new List<Mechanic>();//mech_data.GetMechList().Where(x=>mech_data.GetMDataLogs().Contains())//mech_data.GetMDataLogs().Select(x => x.GetName()).Distinct().ToList();
+        private void CreateMechanicTable(StreamWriter sw) {
+            List<Mechanic> presMech = new List<Mechanic>();
             foreach (Mechanic item in mech_data.GetMechList(boss_data.getID()))
             {
                 if (mech_data.GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill()) != null)
@@ -3648,196 +4125,200 @@ namespace LuckParser.Controllers
             }
             if (presMech.Count() > 0)
             {
-                sw.Write(" <script> $(function () { $('#mech_table').DataTable({ \"order\": [[2, \"desc\"]]});});</script>" +
-                " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"mech_table\">" +
-                " <thead> <tr><th>Player</th> ");
-
-
-                foreach (String mechalt in presMech.Select(x => x.GetAltName()).Distinct().ToList())
+                sw.Write("<script> $(function () { $('#mech_table').DataTable({ \"order\": [[0, \"desc\"]]});});</script>");
+                sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"mech_table\">");
                 {
-                    sw.Write("<th>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + presMech.First(x=>x.GetAltName() == mechalt).GetName() + "\">" + mechalt + "</span>"  + "</th>");
-                }
-                sw.Write("</tr></thead><tbody>");
-                foreach (Player p in p_list)
-                {
-
-                    sw.Write("<tr><td>" + p.getCharacter() + "</td>");
-                    foreach (String mechalt in presMech.Select(x => x.GetAltName()).Distinct().ToList())
+                    sw.Write("<thead>");
                     {
-                        int count = 0;
-                        foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => mechalt == x.GetAltName()))
+                        sw.Write("<tr>");
                         {
-                            List<MechanicLog> test = mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).ToList();
-                            count += mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).Count();
-                        }
-
-                        sw.Write("<td>" + count + "</td>");
+                            sw.Write("<th>Player</th>");
+                            foreach (string mechalt in presMech.Select(x => x.GetAltName()).Distinct().ToList())
+                            {
+                                sw.Write("<th><span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + presMech.First(x => x.GetAltName() == mechalt).GetName() + "\">" + mechalt + "</span></th>");
+                            }
+                        }                   
+                        sw.Write("</tr>");
                     }
-                    sw.Write(" </tr>");
+                    
+                    sw.Write("</thead>");
+                    sw.Write("<tbody>");
+                    {
+                        foreach (Player p in p_list)
+                        {
+                            sw.Write("<tr>");
+                            {
+                                sw.Write("<td>" + p.getCharacter() + "</td>");
+                                foreach (string mechalt in presMech.Select(x => x.GetAltName()).Distinct().ToList())
+                                {
+                                    int count = 0;
+                                    foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => mechalt == x.GetAltName()))
+                                    {
+                                        List<MechanicLog> test = mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).ToList();
+                                        count += mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).Count();
+                                    }
+                                    sw.Write("<td>" + count + "</td>");
+                                }
+                            }
+                            sw.Write(" </tr>");
+                        }
+                    }
+                    sw.Write("</tbody>");
                 }
-                sw.Write(" </tbody></table>");
-                //  "<th>Sub</th><th></th><th>Name</th><th>Account</th> <th>Boss DPS</th><th>Power</th><th>Condi</th><th>All DPS</th><th>Power</th><th>Condi</th>" +
-                //"</th><th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\">" +
-                //"</th><th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>" +
-                //    " </tr> </thead><tbody>");
+                sw.Write("</table>");
             }
         }
-        public void CreateEventList(StreamWriter sw) {
+        private void CreateEventList(StreamWriter sw) {
             sw.Write("<ul class=\"list-group\">");
-            foreach (CombatItem c in combat_data.getCombatList()) {
-                if (c.isStateChange().getID() > 0) {
-                    AgentItem agent = agent_data.GetAgent(c.getSrcAgent());
-                    if (agent != null)
+            {
+                foreach (CombatItem c in combat_data.getCombatList())
+                {
+                    if (c.isStateChange().getID() > 0)
                     {
-                        switch (c.isStateChange().getID())
+                        AgentItem agent = agent_data.GetAgent(c.getSrcAgent());
+                        if (agent != null)
                         {
-
-                            case 1:
-                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                               agent.getName() + " entered combat in" + c.getDstAgent() + "subgroup" +
-                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
-                                              "</li>");
-                                break;
-                            case 2:
-                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                               agent.getName() + " exited combat" +
-                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
-                                              "</li>");
-                                break;
-                            case 3:
-                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                               agent.getName() + " is now alive" +
-                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
-                                              "</li>");
-                                break;
-                            case 4:
-                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                               agent.getName() + " is now dead" +
-                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
-                                              "</li>");
-                                break;
-                            case 5:
-                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                               agent.getName() + " is now downed" +
-                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
-                                              "</li>");
-                                break;
-                            case 6:
-                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                               agent.getName() + " is now in logging range of POV player" +
-                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
-                                              "</li>");
-                                break;
-                            case 7:
-                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                               agent.getName() + " is now out of range of logging player" +
-                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
-                                              "</li>");
-                                break;
-                            case 8:
-                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                               agent.getName() + " is at "+c.getDstAgent()/100 +"% health"+
-                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
-                                              "</li>");
-                                break;
-                            case 9:
-                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                               " LOG START" +
-                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
-                                              "</li>");
-                                break;
-                            case 10:
-                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                              "LOG END" +
-                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
-                                              "</li>");
-                                break;
-                            case 11:
-                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                               agent.getName() + " weapon swapped to " +c.getDstAgent() + "(0/1 water, 4/5 land)" +
-                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
-                                              "</li>");
-                                break;
-                            case 12:
-                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                               agent.getName() + " max health changed to  " + c.getDstAgent() + 
-                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
-                                              "</li>");
-                                break;
-                            case 13:
-                                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                               agent.getName() + " is recording log " +
-                                              // " <span class=\"badge badge-primary badge-pill\">14</span>"+
-                                              "</li>");
-                                break;
-                            default:
-                                break;
+                            switch (c.isStateChange().getID())
+                            {
+                                case 1:
+                                    sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                                   agent.getName() + " entered combat in" + c.getDstAgent() + "subgroup" +
+                                                  // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                                  "</li>");
+                                    break;
+                                case 2:
+                                    sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                                   agent.getName() + " exited combat" +
+                                                  // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                                  "</li>");
+                                    break;
+                                case 3:
+                                    sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                                   agent.getName() + " is now alive" +
+                                                  // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                                  "</li>");
+                                    break;
+                                case 4:
+                                    sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                                   agent.getName() + " is now dead" +
+                                                  // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                                  "</li>");
+                                    break;
+                                case 5:
+                                    sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                                   agent.getName() + " is now downed" +
+                                                  // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                                  "</li>");
+                                    break;
+                                case 6:
+                                    sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                                   agent.getName() + " is now in logging range of POV player" +
+                                                  // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                                  "</li>");
+                                    break;
+                                case 7:
+                                    sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                                   agent.getName() + " is now out of range of logging player" +
+                                                  // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                                  "</li>");
+                                    break;
+                                case 8:
+                                    sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                                   agent.getName() + " is at " + c.getDstAgent() / 100 + "% health" +
+                                                  // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                                  "</li>");
+                                    break;
+                                case 9:
+                                    sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                                   " LOG START" +
+                                                  // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                                  "</li>");
+                                    break;
+                                case 10:
+                                    sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                                  "LOG END" +
+                                                  // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                                  "</li>");
+                                    break;
+                                case 11:
+                                    sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                                   agent.getName() + " weapon swapped to " + c.getDstAgent() + "(0/1 water, 4/5 land)" +
+                                                  // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                                  "</li>");
+                                    break;
+                                case 12:
+                                    sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                                   agent.getName() + " max health changed to  " + c.getDstAgent() +
+                                                  // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                                  "</li>");
+                                    break;
+                                case 13:
+                                    sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                                   agent.getName() + " is recording log " +
+                                                  // " <span class=\"badge badge-primary badge-pill\">14</span>"+
+                                                  "</li>");
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                 }
-
-            }
-              //< li class="list-group-item d-flex justify-content-between align-items-center">
-              //  Cras justo odio
-              //  <span class="badge badge-primary badge-pill">14</span>
-              //</li>
-              //<li class="list-group-item d-flex justify-content-between align-items-center">
-              //  Dapibus ac facilisis in
-              //  <span class="badge badge-primary badge-pill">2</span>
-              //</li>
-              //<li class="list-group-item d-flex justify-content-between align-items-center">
-              //  Morbi leo risus
-              //  <span class="badge badge-primary badge-pill">1</span>
-              //</li>
+            }          
             sw.Write("</ul>");
         }
-        public void CreateSkillList(StreamWriter sw) {
+        private void CreateSkillList(StreamWriter sw) {
             sw.Write("<ul class=\"list-group\">");
-            SkillData s_data = getSkillData();
-            foreach (SkillItem skill in s_data.getSkillList()) {
-                sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                              skill.getID()  + " : " + skill.getName()  +
-                                             // " <span class=\"badge badge-primary badge-pill\">14</span>"+
-                                             "</li>");
+            {
+                SkillData s_data = getSkillData();
+                foreach (SkillItem skill in s_data.getSkillList())
+                {
+                    sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
+                                                  skill.getID() + " : " + skill.getName() +
+                             "</li>");
+                }
             }
+            sw.Write("</ul>");
         }
-        public void CreateCondiUptimeTable(StreamWriter sw,Player player)//Note player is just boss
+        private void CreateCondiUptimeTable(StreamWriter sw,Player boss)
         {
             //Generate Boon table------------------------------------------------------------------------------------------------
-            sw.Write(" <script> $(function () { $('#condi_table').DataTable({ \"order\": [[3, \"desc\"]] " +
-            // "\"scrollX\": true," +
-            " });});</script>" +
-            " <table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"condi_table\">" +
-                " <thead> <tr> <th>Name</th>");
-
-           
-            foreach (Boon boon in Boon.getCondiBoonList())
+            sw.Write("<script> $(function () { $('#condi_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"condi_table\">");
             {
-                sw.Write("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
-            }
-            sw.Write(" </tr> </thead><tbody>");
-            
-                sw.Write("<tr>");
-                
-                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-                string[] boonArray = getfinalcondis(player);
-                int count = 0;
-                List<string> boonArrayToList = new List<string>();
-                boonArrayToList.Add(player.getGroup());
-                foreach (Boon boon in Boon.getCondiBoonList())
+                sw.Write("<thead>");
                 {
-                    sw.Write("<td>" + boonArray[count] + "</td>");
-                    boonArrayToList.Add(boonArray[count]);
-                    count++;
-
-                }
-                sw.Write("</tr>");
-               
-            
-            sw.Write("</tbody>");
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<th>Name</th>");
+                        foreach (Boon boon in Boon.getCondiBoonList())
+                        {
+                            sw.Write("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                        }
+                    }                 
+                    sw.Write("</tr>");
+                }            
+                sw.Write("</thead>");
+                sw.Write("<tbody>");
+                {
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<td>" + boss.getCharacter().ToString() + "</td>");
+                        string[] boonArray = getfinalcondis(boss);
+                        int count = 0;
+                        foreach (Boon boon in Boon.getCondiBoonList())
+                        {
+                            sw.Write("<td>" + boonArray[count] + "</td>");
+                            count++;
+                        }
+                    }            
+                    sw.Write("</tr>");
+                }             
+                sw.Write("</tbody>");
+            }       
             sw.Write("</table>");
         }
-        public void CreateBossSummary(StreamWriter sw)
+        private void CreateBossSummary(StreamWriter sw)
         {
             //generate Player list Graphs
             AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
@@ -4247,14 +4728,28 @@ namespace LuckParser.Controllers
                 CreateDMGDistTable(sw, p, mobAgent);
                 sw.Write("</div>");
             }
-            // sw.Write("<div class=\"tab-pane fade \" id=\"condiUptime" + p.getInstid() + "\">");
-            // CreateCondiUptimeTable(sw,p);
-            //CreateDMGTakenDistTable(sw, p);
-            //sw.Write("</div>");
             sw.Write("</div>");
-
-
-
+        }
+        public void CreateCustomCSS(StreamWriter sw)
+        {
+            sw.Write("table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}");
+            sw.Write("td, th {text-align: center; white-space: nowrap;}");
+            sw.Write("table.dataTable  td {color: black;}");
+            sw.Write(".sorting_disabled {padding: 5px !important;}");
+            sw.Write("table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc ");
+            sw.Write("{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}");
+            sw.Write("table.dataTable thead.sorting_asc{color: green;}");
+            sw.Write(".text-left {text-align: left;}");
+            sw.Write("table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }");
+            sw.Write(".rot-table {width: 100%;border-collapse: separate;border-spacing: 5px 0px;}");
+            sw.Write(".rot-table > tbody > tr > td {padding: 1px;text-align: left;}");
+            sw.Write(".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}");
+            sw.Write(".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}");
+            sw.Write("div.dataTables_wrapper { width: 1100px; margin: 0 auto; }");
+            sw.Write("th.dt-left, td.dt-left { text-align: left; }");
+            sw.Write("table.dataTable.display tbody tr.condi {background-color: #ff6666;}");
+            sw.Write(".rot-skill{width: 24px;height: 24px;display: inline - block;}");
+            sw.Write(".rot-crop{width : 20px;height: 20px; display: inline-block}");
         }
         public void CreateHTML(StreamWriter sw, bool[] settingsSnap)
         {
@@ -4290,57 +4785,39 @@ namespace LuckParser.Controllers
                       "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js \"></script>" +
                       //js
                       "<script src=\"https://cdn.plot.ly/plotly-latest.min.js \"></script>" +
-                      "<script src=\"https://code.jquery.com/jquery-1.12.4.js \"></script>" +
                       "<script src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js \"></script>" +
                       "<script src=\"https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js \"></script>" +
-                      "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js \"></script>" +
-                      "<style>" +
-                          "table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}" +
-                          "td, th {text-align: center; white-space: nowrap;}" +
-                          "table.dataTable  td {color: black;}" +
-                          ".sorting_disabled {padding: 5px !important;}" +
-                          "table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc " +
-                          "{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}" +
-                          "table.dataTable thead.sorting_asc{color: green;}" +
-                          ".text-left {text-align: left;}" +
-                          "table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }" +
-                          ".rot-table {width: 100%;border-collapse: separate;border-spacing: 5px 0px;}" +
-                          ".rot-table > tbody > tr > td {padding: 1px;text-align: left;}" +
-                          ".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}" +
-                          ".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}" +
-                          "div.dataTables_wrapper { width: 1100px; margin: 0 auto; }" +
-                          "th.dt-left, td.dt-left { text-align: left; }" +
-                          "table.dataTable.display tbody tr.condi {background-color: #ff6666;}" +
-                          ".rot-skill{width: 24px;height: 24px;display: inline - block;}" +
-                          ".rot-crop{width : 20px;height: 20px; display: inline-block}" +
-                      "</style>" +
-                      "<script>$.extend( $.fn.dataTable.defaults, {searching: false, ordering: true,paging: false,dom:\"t\"} );</script>");
-                }         
+                      "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js \"></script>");
+                    sw.Write("<style>");
+                    CreateCustomCSS(sw);
+                    sw.Write("</style>");
+                }
+                sw.Write("<script>$.extend( $.fn.dataTable.defaults, {searching: false, ordering: true,paging: false,dom:\"t\"} );</script>");
                 sw.Write("</head>");
-                sw.Write("<body>");
+                sw.Write("<body class=\"d-flex flex-column align-items-center\">");
                 {
-                    sw.Write("<div class=\"container\">");
+                    sw.Write("<div style=\"width: 1100px;\"class=\"d-flex flex-column\">");
                     {
-                        sw.Write("<p> Time Start: " + log_data.getLogStart() + " | Time End: " + log_data.getLogEnd() + " </p> ");
-                        sw.Write("<div style=\"width:1200px;\" class=\"row\">");
+                        sw.Write("<p> Time Start: " + log_data.getLogStart() + " | Time End: " + log_data.getLogEnd() + " </p> ");                     
+                        sw.Write("<div class=\"d-flex flex-row justify-content-center align-items-center flex-wrap mb-3\">");
                         {
-                            sw.Write("<div class=\"col-md-4 \">");
+                            sw.Write("<div class=\"mr-3\">");
                             {
-                                sw.Write("<div class=\"card border-danger\">");
+                                sw.Write("<div style=\"width: 400px;\" class=\"card border-danger d-flex flex-column\">");
                                 {
-                                    sw.Write("<h3 class=\"card-header\">" + bossname + "</h3>");
-                                    sw.Write("<div class=\"card-body\">");
+                                    sw.Write("<h3 class=\"card-header text-center\">" + bossname + "</h3>");
+                                    sw.Write("<div class=\"card-body d-flex flex-column align-items-center\">");
                                     {
-                                        sw.Write("<blockquote class=\"card-blockquote\">");
+                                        sw.Write("<blockquote class=\"card-blockquote mb-0\">");
                                         {
-                                            sw.Write("<div class=\"row\">");
+                                            sw.Write("<div style=\"width: 300px;\" class=\"d-flex flex-row justify-content-between align-items-center\">");
                                             {
-                                                sw.Write("<div class=\"col-md-6 \">");
+                                                sw.Write("<div>");
                                                 {
-                                                    sw.Write("<center><img src=\"" + GetLink(b_data.getID() + "-icon") + " \"alt=\"" + bossname + "-icon" + "\" style=\"height: 100px; width: 100 %; display: block; \" ></center>");
+                                                    sw.Write("<img src=\"" + GetLink(b_data.getID() + "-icon") + " \"alt=\"" + bossname + "-icon" + "\" style=\"height: 120px; width: 120px;\" >");
                                                 }
                                                 sw.Write("</div>");
-                                                sw.Write("<div class=\"col-md-6 \">");
+                                                sw.Write("<div>");
                                                 {
                                                     sw.Write("<div class=\"progress\" style=\"width: 100 %; height: 20px;\">");
                                                     {
@@ -4392,64 +4869,33 @@ namespace LuckParser.Controllers
                                 sw.Write("</div>");
                             }
                             sw.Write("</div>");
-                            sw.Write("<div class=\"col-md-7\">");
+                            sw.Write("<div class=\"ml-3 mt-3\">");
                             {
                                 CreateCompTable(sw);
-                                sw.Write("<p>File recorded by:" + log_data.getPOV() + "</p>");
                             }
                             sw.Write("</div>");
                         }
                         sw.Write("</div>");
                         sw.Write("<ul class=\"nav nav-tabs\">");
                         {
-                            sw.Write("<li class=\"nav-item dropdown\">" +
-                                        "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Stats</a>" +
-                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
-                                            "<a class=\"dropdown-item \"  data-toggle=\"tab\" href=\"#dpsStats\">DPS</a>" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offStats\">Damage Stats</a>" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defStats\">Defence Stats</a>" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#healStats\">Heal Stats</a>" +
-                                        "</div>" +
-                                    "</li>" +
+                            sw.Write("<li class=\"nav-item\">" +
+                                        "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#stats\">Stats</a>" +
+                                    "</li>" + 
+                                    
                                     "<li class=\"nav-item\">" +
                                         "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#dmgGraph\">Damage Graph</a>" +
                                     "</li>" +
-                                    "<li class=\"nav-item dropdown\">" +
-                                        "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Boons</a>" +
-                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsUptime\">Boon Uptime</a>" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenSelf\">Boon Generation(Self)</a>" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenGroup\">Boon Generation(Group)</a>" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenOGroup\">Boon Generation(Off Group)</a>" +
-                                            "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#boonsGenSquad\">Boon Generation(Squad)</a>" +
-                                        "</div>" +
+                                     "<li class=\"nav-item\">" +
+                                        "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#boons\">Boons</a>" +
                                     "</li>" +
-                                    "<li class=\"nav-item dropdown\">" +
-                                         "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Off. Buffs</a>" +
-                                         "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveUptime\">Off.Buffs Uptime</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveGenSelf\">Off.Buffs Generation(Self)</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveGenGroup\">Off.Buffs Generation(Group)</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveGenOGroup\">Off.Buffs Generation(Off Group)</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#offensiveGenSquad\">Off.Buffs Generation(Squad)</a>" +
-                                         "</div>" +
-                                     "</li>" +
-                                     "<li class=\"nav-item dropdown\">" +
-                                         "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Def. Buffs</a>" +
-                                         "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveUptime\">Def.Buffs Uptime</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveGenSelf\">Def.Buff Generation(Self)</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveGenGroup\">Def.Buff Generation(Group)</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveGenOGroup\">Def.Buff Generation(Off Group)</a>" +
-                                             "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#defensiveGenSquad\">Def.Buff Generation(Squad)</a>" +
-                                         "</div>" +
-                                     "</li>" +
+                                   
+                                    
                                     "<li class=\"nav-item\">" +
                                         "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#mechTable\">Mechanics</a>" +
                                     "</li>" +
                                     "<li class=\"nav-item dropdown\">" +
                                         "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Player</a>" +
-                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\" style=\"position:absolute; transform:translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;\">" +
+                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\">" +
                                             Html_playerDropdown +
                                         "</div>" +
                                     "</li>");
@@ -4469,30 +4915,49 @@ namespace LuckParser.Controllers
                         sw.Write("</ul>");
                         sw.Write("<div id=\"myTabContent\" class=\"tab-content\">");
                         {
-                            sw.Write("<div class=\"tab-pane fade show active\" id=\"dpsStats\">");
+                            sw.Write("<div class=\"tab-pane fade show active\" id=\"stats\">");
                             {
-                                // DPS table
-                                CreateDPSTable(sw, fight_duration);
+                                //Stats Tab
+                                sw.Write("<h3 align=\"center\"> Stats </h3>");
+
+                                sw.Write("<ul class=\"nav nav-tabs\">"+
+                                        "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#dpsStats\">DPS</a></li>"+
+                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offStats\">Damage Stats</a></li>"+
+                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defStats\">Defensive Stats</a></li>"+
+                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#healStats\">Heal Stats</a></li>"+
+                                    "</ul>");
+                                sw.Write("<div id=\"statsSubTab\" class=\"tab-content\">");
+                                {
+                                    sw.Write("<div class=\"tab-pane fade show active\" id=\"dpsStats\">");
+                                    {
+                                        // DPS table
+                                        CreateDPSTable(sw, fight_duration);
+                                    }
+                                    sw.Write("</div>");
+                                    sw.Write("<div class=\"tab-pane fade \" id=\"offStats\">");
+                                    {
+                                        // HTML_dmgstats 
+                                        CreateDMGStatsTable(sw, fight_duration);
+                                    }
+                                    sw.Write("</div>");
+                                    sw.Write("<div class=\"tab-pane fade \" id=\"defStats\">");
+                                    {
+                                        // def stats
+                                        CreateDefTable(sw, fight_duration);
+                                    }
+                                    sw.Write("</div>");
+                                    sw.Write("<div class=\"tab-pane fade\" id=\"healStats\">");
+                                    {
+                                        //  HTML_supstats
+                                        CreateSupTable(sw, fight_duration);
+                                    }
+                                    sw.Write("</div>");
+                                }
+                                sw.Write("</div>");
+
                             }
                             sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade \" id=\"offStats\">");
-                            {
-                                // HTML_dmgstats 
-                                CreateDMGStatsTable(sw, fight_duration);
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade \" id=\"defStats\">");
-                            {
-                                // def stats
-                                CreateDefTable(sw, fight_duration);
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"healStats\">");
-                            {
-                                //  HTML_supstats
-                                CreateSupTable(sw, fight_duration);
-                            }
-                            sw.Write("</div>");
+                           
                             sw.Write("<div class=\"tab-pane fade\" id=\"dmgGraph\">");
                             {
                                 //Html_dpsGraph
@@ -4500,101 +4965,162 @@ namespace LuckParser.Controllers
                             }
                             sw.Write("</div>");
                             //Boon Stats
-                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsUptime\">");
+                            sw.Write("<div class=\"tab-pane fade \" id=\"boons\">");
                             {
-                                sw.Write("<p> Boon Uptime</p>");
-                                // Html_boons
-                                CreateUptimeTable(sw, present_boons, "boons_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSelf\">");
-                            {
-                                //Html_boonGenSelf
-                                sw.Write("<p> Boons generated by a character for themselves</p>");
-                                CreateGenSelfTable(sw, present_boons, "boongenself_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenGroup\">");
-                            {
-                                sw.Write("<p> Boons generated by a character for their sub group</p>");
-                                // Html_boonGenGroup
-                                CreateGenGroupTable(sw, present_boons, "boongengroup_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenOGroup\">");
-                            {
-                                sw.Write("<p> Boons generated by a character for any subgroup that is not their own</p>");
-                                // Html_boonGenOGroup
-                                CreateGenOGroupTable(sw, present_boons, "boongenogroup_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSquad\">");
-                            {
-                                sw.Write("<p> Boons generated by a character for the entire squad</p>");
-                                //  Html_boonGenSquad
-                                CreateGenSquadTable(sw, present_boons, "boongensquad_table");
-                            }
-                            sw.Write("</div>");
-                            //Offensive Buffs stats
-                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveUptime\">");
-                            {
-                                sw.Write("<p> Offensive Buffs Uptime</p>");
-                                CreateUptimeTable(sw, present_offbuffs, "offensive_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSelf\">");
-                            {
-                                sw.Write("<p> Offensive Buffs generated by a character for themselves</p>");
-                                CreateGenSelfTable(sw, present_offbuffs, "offensivegenself_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenGroup\">");
-                            {
-                                sw.Write("<p> Offensive Buffs generated by a character for their sub group</p>");
-                                CreateGenGroupTable(sw, present_offbuffs, "offensivegengroup_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenOGroup\">");
-                            {
-                                sw.Write("<p> Offensive Buffs generated by a character for any subgroup that is not their own</p>");
-                                CreateGenOGroupTable(sw, present_offbuffs, "offensivegenogroup_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSquad\">");
-                            {
-                                sw.Write("<p> Offensive Buffs generated by a character for the entire squad</p>");
-                                CreateGenSquadTable(sw, present_offbuffs, "offensivegensquad_table");
-                            }
-                            sw.Write("</div>");
-                            //Defensive Buffs stats
-                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveUptime\">");
-                            {
-                                sw.Write("<p> Defensive Buffs Uptime</p>");
-                                CreateUptimeTable(sw, present_defbuffs, "defensive_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSelf\">");
-                            {
-                                sw.Write("<p> Defensive Buffs generated by a character for themselves</p>");
-                                CreateGenSelfTable(sw, present_defbuffs, "defensivegenself_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenGroup\">");
-                            {
-                                sw.Write("<p> Defensive Buffs generated by a character for their sub group</p>");
-                                CreateGenGroupTable(sw, present_defbuffs, "defensivegengroup_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenOGroup\">");
-                            {
-                                sw.Write("<p> Defensive Buffs generated by a character for any subgroup that is not their own</p>");
-                                CreateGenOGroupTable(sw, present_defbuffs, "defensivegenogroup_table");
-                            }
-                            sw.Write("</div>");
-                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSquad\">");
-                            {
-                                sw.Write("<p> Defensive Buffs generated by a character for the entire squad</p>");
-                                CreateGenSquadTable(sw, present_defbuffs, "defensivegensquad_table");
+                                //Boons Tab
+                                sw.Write("<h3 align=\"center\"> Boons </h3>");
+
+                                sw.Write("<ul class=\"nav nav-tabs\">" +
+                                        "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#mainBoon\">Boons</a></li>" +
+                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offBuff\">Damage Buffs</a></li>" +
+                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defBuff\">Defensive SBuffs</a></li>" +
+                                    "</ul>");
+                                sw.Write("<div id=\"boonsSubTab\" class=\"tab-content\">");
+                                {
+                                    sw.Write("<div class=\"tab-pane fade show active  \" id=\"mainBoon\">");
+                                    {
+                                        sw.Write("<ul class=\"nav nav-tabs\">" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#boonsUptime\">Uptime</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenSelf\">Generation (Self)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenGroup\">Generation (Group)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenOGroup\">Generation (Off-Group)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenSquad\">Generation (Squad)</a></li>" +
+                                               "</ul>");
+                                        sw.Write("<div id=\"mainBoonsSubTab\" class=\"tab-content\">");
+                                        {
+                                            sw.Write("<div class=\"tab-pane fade show active\" id=\"boonsUptime\">");
+                                            {
+                                                sw.Write("<p> Boon Uptime</p>");
+                                                // Html_boons
+                                                CreateUptimeTable(sw, present_boons, "boons_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSelf\">");
+                                            {
+                                                //Html_boonGenSelf
+                                                sw.Write("<p> Boons generated by a character for themselves</p>");
+                                                CreateGenSelfTable(sw, present_boons, "boongenself_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenGroup\">");
+                                            {
+                                                sw.Write("<p> Boons generated by a character for their sub group</p>");
+                                                // Html_boonGenGroup
+                                                CreateGenGroupTable(sw, present_boons, "boongengroup_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenOGroup\">");
+                                            {
+                                                sw.Write("<p> Boons generated by a character for any subgroup that is not their own</p>");
+                                                // Html_boonGenOGroup
+                                                CreateGenOGroupTable(sw, present_boons, "boongenogroup_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSquad\">");
+                                            {
+                                                sw.Write("<p> Boons generated by a character for the entire squad</p>");
+                                                //  Html_boonGenSquad
+                                                CreateGenSquadTable(sw, present_boons, "boongensquad_table");
+                                            }
+                                            sw.Write("</div>");
+                                        }
+                                        sw.Write("</div>");
+                                    }
+                                    sw.Write("</div>");
+                                    sw.Write("<div class=\"tab-pane fade  \" id=\"offBuff\">");
+                                    {
+                                        sw.Write("<ul class=\"nav nav-tabs\">" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#offensiveUptime\">Uptime</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenSelf\">Generation (Self)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenGroup\">Generation (Group)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenOGroup\">Generation (Off-Group)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenSquad\">Generation (Squad)</a></li>" +
+                                               "</ul>");
+                                        sw.Write("<div id=\"offBuffSubTab\" class=\"tab-content\">");
+                                        {
+                                            //Offensive Buffs stats
+                                            sw.Write("<div class=\"tab-pane fade show active\" id=\"offensiveUptime\">");
+                                            {
+                                                sw.Write("<p> Offensive Buffs Uptime</p>");
+                                                CreateUptimeTable(sw, present_offbuffs, "offensive_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSelf\">");
+                                            {
+                                                sw.Write("<p> Offensive Buffs generated by a character for themselves</p>");
+                                                CreateGenSelfTable(sw, present_offbuffs, "offensivegenself_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenGroup\">");
+                                            {
+                                                sw.Write("<p> Offensive Buffs generated by a character for their sub group</p>");
+                                                CreateGenGroupTable(sw, present_offbuffs, "offensivegengroup_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenOGroup\">");
+                                            {
+                                                sw.Write("<p> Offensive Buffs generated by a character for any subgroup that is not their own</p>");
+                                                CreateGenOGroupTable(sw, present_offbuffs, "offensivegenogroup_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSquad\">");
+                                            {
+                                                sw.Write("<p> Offensive Buffs generated by a character for the entire squad</p>");
+                                                CreateGenSquadTable(sw, present_offbuffs, "offensivegensquad_table");
+                                            }
+                                            sw.Write("</div>");
+                                        }
+                                        sw.Write("</div>");
+                                    }
+                                    sw.Write("</div>");
+                                    sw.Write("<div class=\"tab-pane fade  \" id=\"defBuff\">");
+                                    {
+                                        sw.Write("<ul class=\"nav nav-tabs\">" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#defensiveUptime\">Uptime</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenSelf\">Generation (Self)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenGroup\">Generation (Group)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenOGroup\">Generation (Off-Group)</a></li>" +
+                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenSquad\">Generation (Squad)</a></li>" +
+                                               "</ul>");
+                                        sw.Write("<div id=\"defBuffSubTab\" class=\"tab-content\">");
+                                        {
+                                            //Defensive Buffs stats
+                                            sw.Write("<div class=\"tab-pane fade show active\" id=\"defensiveUptime\">");
+                                            {
+                                                sw.Write("<p> Defensive Buffs Uptime</p>");
+                                                CreateUptimeTable(sw, present_defbuffs, "defensive_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSelf\">");
+                                            {
+                                                sw.Write("<p> Defensive Buffs generated by a character for themselves</p>");
+                                                CreateGenSelfTable(sw, present_defbuffs, "defensivegenself_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenGroup\">");
+                                            {
+                                                sw.Write("<p> Defensive Buffs generated by a character for their sub group</p>");
+                                                CreateGenGroupTable(sw, present_defbuffs, "defensivegengroup_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenOGroup\">");
+                                            {
+                                                sw.Write("<p> Defensive Buffs generated by a character for any subgroup that is not their own</p>");
+                                                CreateGenOGroupTable(sw, present_defbuffs, "defensivegenogroup_table");
+                                            }
+                                            sw.Write("</div>");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSquad\">");
+                                            {
+                                                sw.Write("<p> Defensive Buffs generated by a character for the entire squad</p>");
+                                                CreateGenSquadTable(sw, present_defbuffs, "defensivegensquad_table");
+                                            }
+                                            sw.Write("</div>");
+                                        }
+                                        sw.Write("</div>");
+                                    }
+                                    sw.Write("</div>");
+                                }
+                                sw.Write("</div>");
                             }
                             sw.Write("</div>");
                             //mechanics
@@ -4628,8 +5154,8 @@ namespace LuckParser.Controllers
                             CreatePlayerTab(sw);
                         }
                         sw.Write("</div>");
-                        sw.Write("<p> ARC:" + getLogData().getBuildVersion().ToString() + " | Bossid " + getBossData().getID().ToString() + " </p> ");
-
+                        sw.Write("<p style=\"margin-top:10px;\"> ARC:" + getLogData().getBuildVersion().ToString() + " | Bossid " + getBossData().getID().ToString() + " </p> ");
+                        sw.Write("<p style=\"margin-top:-15px;\">File recorded by: " + log_data.getPOV() + "</p>");
                     }
                     sw.Write("</div>");
                 }         
