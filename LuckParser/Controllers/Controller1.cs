@@ -1408,6 +1408,19 @@ namespace LuckParser.Controllers
             }
             return uptime;
         }
+        private bool getDied(Player p)
+        {
+            List<Point> dead = getCombatData().getStates(p.getInstid(), "CHANGE_DEAD");
+
+            if (dead.Count() > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         private void CreateDPSGraph(StreamWriter sw)
         {
 
@@ -2668,6 +2681,7 @@ namespace LuckParser.Controllers
                 SkillData s_data = getSkillData();
                 List<SkillItem> s_list = s_data.getSkillList();
                 AgentData a_data = getAgentData();
+                bool died = getDied(p);
                 string charname = p.getCharacter();
                 sw.Write("<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">" +
                      "<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
@@ -2676,9 +2690,12 @@ namespace LuckParser.Controllers
                 if (SnapSettings[10])
                 {
                     sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#SimpleRot" + p.getInstid() + "\">Simple Rotation</a></li>");
+                }
+                if (died)
+                {
+                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#DeathRecap" + p.getInstid() + "\">Death Recap</a></li>");
 
                 }
-
                 //foreach pet loop here
                 List<int> minionIDlist = p.getMinionList(b_data, c_data.getCombatList(), a_data);
                 List<AgentItem> minionAgentList = new List<AgentItem>();
@@ -3146,6 +3163,12 @@ namespace LuckParser.Controllers
                     CreateSimpleRotationTab(sw, p);
                     sw.Write("</div>");
                 }
+                if (died)
+                {
+                    sw.Write("<div class=\"tab-pane fade \" id=\"DeathRecap" + p.getInstid() + "\">");
+                    CreateDeathRecap(sw, p);
+                    sw.Write("</div>");
+                }
                 sw.Write("<div class=\"tab-pane fade \" id=\"incDmg" + p.getInstid() + "\">");
 
                 CreateDMGTakenDistTable(sw, p);
@@ -3224,6 +3247,160 @@ namespace LuckParser.Controllers
 
                 }
             }
+
+        }
+        private void CreateDeathRecap(StreamWriter sw, Player p)
+        {
+            CombatData c_data = getCombatData();
+            BossData b_data = getBossData();
+            AgentData a_data = getAgentData();
+            List<DamageLog> damageLogs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(), getMechData());
+            SkillData s_data = getSkillData();
+            List<SkillItem> s_list = s_data.getSkillList();
+            List<Point> down = getCombatData().getStates(p.getInstid(), "CHANGE_DOWN");
+            List<Point> dead = getCombatData().getStates(p.getInstid(), "CHANGE_DEAD");
+            List<DamageLog> damageToDown = new List<DamageLog>();
+            List<DamageLog> damageToKill = new List<DamageLog>(); ;
+            if (down.Count > 0)
+            {//went to down state before death
+                damageToDown = damageLogs.Where(x => x.getTime() < down.Last().X-b_data.getFirstAware()).ToList();
+                damageToKill = damageLogs.Where(x => x.getTime() > down.Last().X - b_data.getFirstAware() && x.getTime() < dead.Last().X - b_data.getFirstAware()).ToList();
+                //Filter last 30k dmg taken
+                int totaldmg = 0;
+                for (int i = damageToDown.Count() - 1; i > 0; i--)
+                {
+                    totaldmg += damageToDown[i].getDamage();
+                    if (totaldmg > 30000)
+                    {
+                        damageToDown = damageToDown.GetRange(i, damageToDown.Count() - 1-i);
+                        break;
+                    }
+                }
+                sw.Write("<center><p>Took " + damageToDown.Sum(x => x.getDamage()) + " damage in " +
+                ((damageToDown.Last().getTime() - damageToDown.First().getTime()) / 1000f).ToString() + " seconds to enter downstate");
+                sw.Write("<p>Took " + damageToKill.Sum(x => x.getDamage()) + " damage in " +
+                   ((damageToKill.Last().getTime() - damageToKill.First().getTime()) / 1000f).ToString() + " seconds to die</center>");
+            }
+            else
+            {
+                damageToKill = damageLogs.Where(x =>  x.getTime() < dead.Last().X).ToList();
+                //Filter last 30k dmg taken
+                int totaldmg = 0;
+                for (int i = damageToKill.Count() - 1; i > 0; i--)
+                {
+                    totaldmg += damageToKill[i].getDamage();
+                    if (totaldmg > 30000)
+                    {
+                        damageToKill = damageToKill.GetRange(i, damageToKill.Count() - 1-i);
+                        break;
+                    }
+                }
+                sw.Write("<center><h3>Player was insta killed by a mechanic</h3></center>");
+            }
+            
+            sw.Write("<center><div id=\"BarDeathRecap"+p.getInstid()+"\"></div> </center>");
+            sw.Write("<script>");
+            {
+                sw.Write("var data = [{");
+                //Time on X
+                sw.Write("x : [");
+                if (damageToDown.Count() != 0)
+                {
+                    for (int d = 0;d<damageToDown.Count();d++)
+                    {
+                        sw.Write("'"+damageToDown[d].getTime()/1000f+"s',");
+                    }
+                }
+                for (int d = 0; d < damageToKill.Count(); d++)
+                {
+                    sw.Write("'" + damageToKill[d].getTime()/1000f + "s'");
+
+                    if (d != damageToKill.Count() - 1)
+                    {
+                        sw.Write(",");
+                    }
+                }
+                sw.Write("],");
+                //damage on Y
+                sw.Write("y : [");
+                if (damageToDown.Count() != 0)
+                {
+                    for (int d = 0; d < damageToDown.Count(); d++)
+                    {
+                        sw.Write("'" + damageToDown[d].getDamage() + "',");
+                    }
+                }
+                for (int d = 0; d < damageToKill.Count(); d++)
+                {
+                    sw.Write("'" + damageToKill[d].getDamage() + "'");
+
+                    if (d != damageToKill.Count() - 1)
+                    {
+                        sw.Write(",");
+                    }
+                }
+                sw.Write("],");
+                //Color 
+                sw.Write("marker : {color:[");
+                if (damageToDown.Count() != 0)
+                {
+                    for (int d = 0; d < damageToDown.Count(); d++)
+                    {
+                        sw.Write("'rgb(0,255,0,1)',");
+                    }
+                }
+                for (int d = 0; d < damageToKill.Count(); d++)
+                {
+                   
+                    if (down.Count() == 0)
+                    {
+                        //damagetoKill was instant(not in downstate)
+                        sw.Write("'rgb(0,255,0,1)'");
+                    }
+                    else
+                    {
+                        //damageto killwas from downstate
+                        sw.Write("'rgb(255,0,0,1)'");
+                    }
+                   
+
+                    if (d != damageToKill.Count() - 1)
+                    {
+                        sw.Write(",");
+                    }
+                }
+                sw.Write("]},");
+                //text
+                sw.Write("text : [");
+                if (damageToDown.Count() != 0)
+                {
+                    for (int d = 0; d < damageToDown.Count(); d++)
+                    {
+                        sw.Write("'" + a_data.GetAgentWInst(damageToDown[d].getInstidt()).getName().Replace("\0", "") + "<br>"+
+                            s_data.getName( damageToDown[d].getID()) +" hit you for "+damageToDown[d].getDamage() + "',");
+                    }
+                }
+                for (int d = 0; d < damageToKill.Count(); d++)
+                {
+                    sw.Write("'" + a_data.GetAgentWInst(damageToKill[d].getInstidt()).getName().Replace("\0","") + "<br>" +
+                           "hit you with <b>"+ s_data.getName(damageToKill[d].getID()) + "</b> for " + damageToKill[d].getDamage() + "'");
+
+                    if (d != damageToKill.Count() - 1)
+                    {
+                        sw.Write(",");
+                    }
+                }
+                sw.Write("],");
+                sw.Write("type:'bar',");
+                
+                sw.Write("}];");
+
+                sw.Write("var layout = { title: 'Last 30k Damage Taken before death', font: { color: '#ffffff' },"+
+                    "paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',showlegend: false,bargap :0.05,yaxis:{title:'Damage'},xaxis:{title:'Time(seconds)',type:'catagory'}};");
+                sw.Write("Plotly.newPlot('BarDeathRecap" + p.getInstid() + "', data, layout);");
+                sw.Write("</script>");
+            }
+           
 
         }
         private void CreateDMGDistTable(StreamWriter sw,Player p) {

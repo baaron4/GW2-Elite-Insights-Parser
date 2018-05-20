@@ -57,7 +57,18 @@ namespace LuckParser.Models.ParseModels
             return all_agents_list;
         }
         public AgentItem GetAgent(long agent) {
-            return all_agents_list.FirstOrDefault(x => x.getAgent() == agent);
+            if (agent != 0)
+            {
+                AgentItem agtreturn = all_agents_list.FirstOrDefault(x => x.getAgent() == agent);
+                if (agtreturn != null)
+                {
+                    return agtreturn;
+                }
+                
+            }
+            
+            return new AgentItem(0,"UNKOWN","UNKNOWN");
+            
         }
         public AgentItem GetAgentWInst(int instid)
         {

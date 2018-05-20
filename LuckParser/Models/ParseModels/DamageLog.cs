@@ -19,7 +19,7 @@ namespace LuckParser.Models.ParseModels
         private int is_flanking;
         private Activation is_activation;
         private int is_shields;
-        private int src_agent;
+        private long src_agent;
         private int src_instid;
 
         // Constructor
@@ -36,7 +36,7 @@ namespace LuckParser.Models.ParseModels
             this.is_flanking = is_flanking;
             this.is_activation = is_activation;
         }
-        public DamageLog(int time, int srcagent,int instid, int damage, int skill_id, int buff, Result result, int is_ninety, int is_moving,
+        public DamageLog(int time, long srcagent,int instid, int damage, int skill_id, int buff, Result result, int is_ninety, int is_moving,
                int is_flanking, Activation is_activation)
         {
             this.time = time;
@@ -65,6 +65,23 @@ namespace LuckParser.Models.ParseModels
             this.is_flanking = is_flanking;
             this.is_activation = is_activation;
             this.is_shields = is_shields;
+        }
+        public DamageLog(int time, long srcagent, int instid, int damage, int skill_id, int buff, Result result, int is_ninety, int is_moving,
+              int is_flanking, Activation is_activation,int is_shields)
+        {
+            this.time = time;
+            this.damage = damage;
+            this.skill_id = skill_id;
+            this.buff = buff;
+            this.result = result;
+            this.is_ninety = is_ninety;
+            this.is_moving = is_moving;
+            this.is_flanking = is_flanking;
+            this.is_activation = is_activation;
+            this.src_agent = srcagent;
+            this.src_instid = instid;
+            this.is_shields = is_shields;
+
         }
         // Getters
         public int getTime()
@@ -113,7 +130,7 @@ namespace LuckParser.Models.ParseModels
         public int isShields() {
             return is_shields;
         }
-        public int getSrcAgent()
+        public long getSrcAgent()
         {
             return src_agent;
         }
