@@ -92,7 +92,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Avatar of Melandru", 12368, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Power Suit",12326, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Reaper of Grenth", 12366, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Charrooka",43503, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Charrzooka",43503, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
                 ///REVENANT
                 //skills
                 new Boon("Crystal Hibernation", 28262, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
@@ -244,7 +244,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Frost Spirit", 50421, BoonSource.Ranger, "duration", 1, BoonEnum.OffensiveBuff),
                 new Boon("Sun Spirit", 50413, BoonSource.Ranger, "duration", 1, BoonEnum.OffensiveBuff),
                 new Boon("Stone Spirit", 50415, BoonSource.Ranger, "duration", 1, BoonEnum.DefensiveBuff),
-                new Boon("Storm Spirit", 50381, BoonSource.Ranger, "duration", 1, BoonEnum.OffensiveBuff),
+                new Boon("Storm Spirit", 50381, BoonSource.Ranger, "duration", 1, BoonEnum.DefensiveBuff),
                 //skills
                 new Boon("Attack of Opportunity",12574, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Call of the Wild",36781, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),

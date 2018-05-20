@@ -2451,8 +2451,8 @@ namespace LuckParser.Controllers
         }
         private void CreateGenSelfTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
         { //Generate BoonGenSelf table
-            sw.Write("<script> $(document).ready(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
-            sw.Write("<table class=\"display nowrap compact\" cellspacing=\"0\" width=\"100%\" id=\"" + table_id + "\">");
+            sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" width=\"100%\" id=\"" + table_id + "\">");
             {
                 sw.Write("<thead>");
                 {
@@ -3294,10 +3294,18 @@ namespace LuckParser.Controllers
                         break;
                     }
                 }
-                sw.Write("<center><p>Took " + damageToDown.Sum(x => x.getDamage()) + " damage in " +
+                sw.Write("<center>");
+                sw.Write("<p>Took " + damageToDown.Sum(x => x.getDamage()) + " damage in " +
                 ((damageToDown.Last().getTime() - damageToDown.First().getTime()) / 1000f).ToString() + " seconds to enter downstate");
-                sw.Write("<p>Took " + damageToKill.Sum(x => x.getDamage()) + " damage in " +
-                   ((damageToKill.Last().getTime() - damageToKill.First().getTime()) / 1000f).ToString() + " seconds to die</center>");
+                if (damageToKill.Count() > 0)
+                {
+                    sw.Write("<p>Took " + damageToKill.Sum(x => x.getDamage()) + " damage in " +
+                       ((damageToKill.Last().getTime() - damageToKill.First().getTime()) / 1000f).ToString() + " seconds to die</p>");
+                } else
+                {
+                    sw.Write("<p>Instant death after a down</p>");
+                }
+                sw.Write("</center>");
             }
             else
             {
@@ -3313,10 +3321,10 @@ namespace LuckParser.Controllers
                         break;
                     }
                 }
-                sw.Write("<center><h3>Player was insta killed by a mechanic</h3></center>");
+                sw.Write("<center><h3>Player was insta killed by a mechanic or fall damage</h3></center>");
             }
             
-            sw.Write("<center><div id=\"BarDeathRecap"+p.getInstid()+"\"></div> </center>");
+            sw.Write("<center><div id=\"BarDeathRecap" + p.getInstid()+"\"></div> </center>");
             sw.Write("<script>");
             {
                 sw.Write("var data = [{");
@@ -3413,13 +3421,12 @@ namespace LuckParser.Controllers
                 
                 sw.Write("}];");
 
-                sw.Write("var layout = { title: 'Last 30k Damage Taken before death', font: { color: '#ffffff' },"+
+                sw.Write("var layout = { title: 'Last 30k Damage Taken before death', font: { color: '#ffffff' },width: 1100," +
                     "paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',showlegend: false,bargap :0.05,yaxis:{title:'Damage'},xaxis:{title:'Time(seconds)',type:'catagory'}};");
                 sw.Write("Plotly.newPlot('BarDeathRecap" + p.getInstid() + "', data, layout);");
-                sw.Write("</script>");
+                
             }
-           
-
+            sw.Write("</script>");
         }
         private void CreateDMGDistTable(StreamWriter sw,Player p) {
 
@@ -4967,7 +4974,7 @@ namespace LuckParser.Controllers
                                 sw.Write("<ul class=\"nav nav-tabs\">" +
                                         "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#mainBoon\">Boons</a></li>" +
                                         "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offBuff\">Damage Buffs</a></li>" +
-                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defBuff\">Defensive SBuffs</a></li>" +
+                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defBuff\">Defensive Buffs</a></li>" +
                                     "</ul>");
                                 sw.Write("<div id=\"boonsSubTab\" class=\"tab-content\">");
                                 {
