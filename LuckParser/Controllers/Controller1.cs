@@ -957,7 +957,7 @@ namespace LuckParser.Controllers
                 // Boon boon = Boon.getEnum(boon_list[i].ToString());
                 Boon boon = boon_list[i];
                 AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                BoonMap bm = boon_logs.FirstOrDefault(x=>x.getID() == boon.getID());//boon_logs.FirstOrDefault(x => x.getName().Contains(boon.getName()) );
+                BoonMap bm = boon_logs.FirstOrDefault(x=>x.getID() == boon.getID());
                 if (bm != null)
                 {
                     List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
@@ -1008,11 +1008,7 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
-            List<BoonMap> boon_logs = new List<BoonMap>();
-           
-                boon_logs = p.getRawBoonMap(b_data, s_data, c_data.getCombatList());
-          
-
+            List<BoonMap> boon_logs = p.getCondiBoonMap(b_data, s_data, c_data.getCombatList());
             List<Boon> boon_list = Boon.getCondiBoonList();
             int n = boon_list.Count();//# of diff boons
             string[] rates = new string[n];
@@ -1021,7 +1017,7 @@ namespace LuckParser.Controllers
                 // Boon boon = Boon.getEnum(boon_list[i].ToString());
                 Boon boon = boon_list[i];
                 AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                BoonMap bm = boon_logs.FirstOrDefault(x => x.getName().Contains(boon.getName()));
+                BoonMap bm = boon_logs.FirstOrDefault(x => x.getID() == boon.getID());
                 if (bm != null)
                 {
                     List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
@@ -1150,7 +1146,7 @@ namespace LuckParser.Controllers
             {
                 Boon boon = boon_list[i];
                 AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                BoonMap bm = boon_logs.FirstOrDefault(x => x.getName().Contains(boon.getName()));
+                BoonMap bm = boon_logs.FirstOrDefault(x => x.getID() == boon.getID());
                 if (bm != null)
                 {
                     List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
@@ -1335,7 +1331,7 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
-            List<BoonMap> boon_logs = p.getRawBoonMap(b_data, s_data, c_data.getCombatList());
+            List<BoonMap> boon_logs = p.getCondiBoonMap(b_data, s_data, c_data.getCombatList());
             List<Boon> boon_list = new List<Boon>();
             //condis
             boon_list.AddRange(Boon.getCondiBoonList());
@@ -1350,7 +1346,7 @@ namespace LuckParser.Controllers
             {
                 Boon boon = boon_list[i];
                 AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                BoonMap bm = boon_logs.FirstOrDefault(x => x.getName().Contains(boon.getName()));
+                BoonMap bm = boon_logs.FirstOrDefault(x => x.getID() == boon.getID());
                 if (bm != null)
                 {
                     List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
@@ -2677,7 +2673,7 @@ namespace LuckParser.Controllers
                 AgentData a_data = getAgentData();
                 bool died = getDied(p);
                 string charname = p.getCharacter();
-                List<int> minionIDlist = p.getMinionList(b_data, c_data.getCombatList(), a_data);
+                List<int> minionIDlist = p.getCombatMinionList(b_data, c_data.getCombatList(), a_data);
                 List<AgentItem> minionAgentList = new List<AgentItem>();
                 sw.Write("<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">");
                 {
@@ -4355,7 +4351,7 @@ namespace LuckParser.Controllers
             List<SkillItem> s_list = s_data.getSkillList();
             AgentData a_data = getAgentData();
             string charname = p.getCharacter();
-            List<int> minionIDlist = p.getMinionList(b_data, c_data.getCombatList(), a_data);
+            List<int> minionIDlist = p.getCombatMinionList(b_data, c_data.getCombatList(), a_data);
             List<AgentItem> minionAgentList = new List<AgentItem>();
             sw.Write("<h1 align=\"center\"> " + charname + "</h1>");
             sw.Write("<ul class=\"nav nav-tabs\">");

@@ -406,23 +406,39 @@ namespace LuckParser.Models.ParseModels
         {
             return allBoons.Where(x => x.priority == BoonEnum.OffensiveBuff).ToList();
         }
+        public static List<Boon> getOffensiveList(BoonSource source)
+        {
+            return allBoons.Where(x => x.priority == BoonEnum.OffensiveBuff && x.plotlyGroup == source).ToList();
+        }
+
         public static List<Boon> getDefensiveList()
         {
             return allBoons.Where(x => x.priority == BoonEnum.DefensiveBuff).ToList();
+        }
+        public static List<Boon> getDefensiveList(BoonSource source)
+        {
+            return allBoons.Where(x => x.priority == BoonEnum.DefensiveBuff && x.plotlyGroup == source).ToList();
         }
 
         public static List<Boon> getBoonList()
         {
             return allBoons.Where(x => x.priority == BoonEnum.Boon).ToList();
         }
+
         public static List<Boon> getSharableProfList()
         {
             return allBoons.Where(x => x.priority == BoonEnum.OffensiveBuff || x.priority == BoonEnum.DefensiveBuff).ToList();   
         }
+        public static List<Boon> getSharableProfList(BoonSource source)
+        {
+            return allBoons.Where(x => (x.priority == BoonEnum.OffensiveBuff || x.priority == BoonEnum.DefensiveBuff) && x.plotlyGroup == source).ToList();
+        }
+
         public static List<Boon> getAllProfList()
         {
             return allBoons.Where(x => x.priority != BoonEnum.Condition).ToList();
         }
+
         public static List<Boon> getRemainingBuffsList()
         {
             return allBoons.Where(x => x.priority == BoonEnum.NonShareableBuff).ToList();
