@@ -3218,7 +3218,7 @@ namespace LuckParser.Controllers
                             if (autosCount > 0)
                             {
                                 sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + autoSkill.icon + "\" data-toggle=\"tooltip\" title= \"" + autoSkill.name + "[Auto Attack] x"+autosCount+ "ms \" height=\"20\" width=\"20\"></div></span>");
-                                AutoCompleteMode = 0;
+                                autosCount = 0;
                             }
                             sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
                         }
