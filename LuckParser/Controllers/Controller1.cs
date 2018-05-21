@@ -3199,6 +3199,8 @@ namespace LuckParser.Controllers
                 CombatData c_data = getCombatData();
                 BossData b_data = getBossData();
                 List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
+                GW2APISkill autoSkill = null;
+                int autosCount = 0;
                 foreach (CastLog cl in casting)
                 {
                     GW2APISkill apiskill = null;
@@ -3211,8 +3213,22 @@ namespace LuckParser.Controllers
 
                     if (apiskill != null)
                     {
-                        if (apiskill.slot != "Weapon_1") { 
-                        sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                        if (apiskill.slot != "Weapon_1")
+                        {
+                            if (autosCount > 0)
+                            {
+                                sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + autoSkill.icon + "\" data-toggle=\"tooltip\" title= \"" + autoSkill.name + "[Auto Attack] x"+autosCount+ "ms \" height=\"20\" width=\"20\"></div></span>");
+                                AutoCompleteMode = 0;
+                            }
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                        }
+                        else
+                        {
+                            if (autosCount == 0)
+                            {
+                                autoSkill = apiskill;
+                            }
+                            autosCount++;
                         }
                     }
                     else
