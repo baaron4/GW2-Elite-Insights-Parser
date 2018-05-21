@@ -3257,12 +3257,13 @@ namespace LuckParser.Controllers
                 CombatData c_data = getCombatData();
                 BossData b_data = getBossData();
                 List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
+                int autoAttack_count = 0;
+                GW2APISkill autoStored = null;
                 foreach (CastLog cl in casting)
                 {
                     GW2APISkill apiskill = null;
                     SkillItem skill = s_list.FirstOrDefault(x => x.getID() == cl.getID());
-                    int autoAttack_count = 0;
-                    GW2APISkill autoStored = null;
+                    
                     if (skill != null)
                     {
                         apiskill = skill.GetGW2APISkill();
@@ -3275,10 +3276,10 @@ namespace LuckParser.Controllers
                         {
                             if (autoAttack_count > 0)
                             {
-                                sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + autoStored.icon + "\" data-toggle=\"tooltip\" title= \"" + autoStored.name + " x " + autoAttack_count + "\" height=\"20\" width=\"20\"><div class=\"bottom-right\">x"+autoAttack_count+"</div></div></span>");
-
+                                sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + autoStored.icon + "\" data-toggle=\"tooltip\" title= \"[Auto Attack]" + autoStored.name + " x " + autoAttack_count + "\" height=\"20\" width=\"20\"></div></span>");
+                                autoAttack_count = 0;
                             }
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"30\" width=\"30\"></div></span>");
                         }
                         else {
                             if(autoAttack_count == 0)
@@ -3298,7 +3299,7 @@ namespace LuckParser.Controllers
                         {//wepswap
                             skillName = "Weapon Swap";
                             skillLink = GetLink("Swap");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"30\" width=\"30\"></div></span>");
                             sw.Write("<br>");
                             continue;
                         }
@@ -3306,7 +3307,7 @@ namespace LuckParser.Controllers
                         {
                             skillName = "Resurrect";
                             skillLink = GetLink("Downs");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"30\" width=\"30\"></div></span>");
 
                         }
                         else
@@ -3314,7 +3315,7 @@ namespace LuckParser.Controllers
                         {
                             skillName = "Bandage";
                             skillLink = GetLink("Bandage");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"30\" width=\"30\"></div></span>");
 
                         }
                         else
@@ -3322,12 +3323,12 @@ namespace LuckParser.Controllers
                         {
                             skillName = "Dodge";
                             skillLink = GetLink("Dodge");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"30\" width=\"30\"></div></span>");
 
                         }
                         else if(skill != null){
                             
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + GetLink("Blank") + "\" data-toggle=\"tooltip\" title= \"" + skill.getName() + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + GetLink("Blank") + "\" data-toggle=\"tooltip\" title= \"" + skill.getName() + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"30\" width=\"30\"></div></span>");
 
                         }
 
@@ -4912,8 +4913,8 @@ namespace LuckParser.Controllers
             sw.Write("div.dataTables_wrapper { width: 1100px; margin: 0 auto; }");
             sw.Write("th.dt-left, td.dt-left { text-align: left; }");
             sw.Write("table.dataTable.display tbody tr.condi {background-color: #ff6666;}");
-            sw.Write(".rot-skill{width: 24px;height: 24px;display: inline - block;}");
-            sw.Write(".rot-crop{width : 20px;height: 20px; display: inline-block}");
+            sw.Write(".rot-skill{width: 34px;height: 34px;display: inline-block;}");
+            sw.Write(".rot-crop{width : 30px;height: 30px; display: inline-block}");
         }
         public void CreateHTML(StreamWriter sw, bool[] settingsSnap)
         {
