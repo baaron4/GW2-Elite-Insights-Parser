@@ -92,7 +92,8 @@ namespace LuckParser
             checkBox9.Checked = Properties.Settings.Default.EventList ;
             outFolderTextBox.Text = Properties.Settings.Default.OutLocation;
             checkBossSummary.Checked = Properties.Settings.Default.BossSummary;
-
+            checkBox10.Checked = Properties.Settings.Default.ShowAutos;
+            checkBox11.Checked = Properties.Settings.Default.LargeRotIcons;
         }
 
         private void checkOutputLoc_CheckedChanged(object sender, EventArgs e)
@@ -135,6 +136,16 @@ namespace LuckParser
         private void SimpleRotCheck_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SimpleRotation = SimpleRotCheck.Checked;
+        }
+
+        private void checkBox10_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ShowAutos = SimpleRotCheck.Checked;
+        }
+
+        private void checkBox11_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.LargeRotIcons = SimpleRotCheck.Checked;
         }
     }
 }

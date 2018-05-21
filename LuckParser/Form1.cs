@@ -158,7 +158,10 @@ namespace LuckParser
                     Properties.Settings.Default.PlayerRotIcons,
                     Properties.Settings.Default.EventList,
                     Properties.Settings.Default.BossSummary,
-                    Properties.Settings.Default.SimpleRotation
+                    Properties.Settings.Default.SimpleRotation,
+                     Properties.Settings.Default.ShowAutos,
+                    Properties.Settings.Default.LargeRotIcons
+
                 };
                 for (int i = 0; i < listView1.Items.Count; i++)
                 {
