@@ -8,8 +8,8 @@ namespace LuckParser.Models.ParseModels
     public class Boon
     {
         // Boon
-        public enum BoonEnum { Condition, Boon, OffensiveBuff, DefensiveBuff, NonShareableBuff}
-        public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer  }
+        public enum BoonEnum { Condition, Boon, OffensiveBuff, DefensiveBuff, NonShareableBuff, Food, Utility}
+        public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item  }
 
         // Fields
         private String name;
@@ -406,6 +406,29 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Lesser Arcane Shield",25579, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Weaver's Prowess",42061, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Elements of Rage",42416, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
+                /// FOODS
+                new Boon("Plate of Truffle Steak",-1, BoonSource.Item, "duration", 1, BoonEnum.Food, "https://wiki.guildwars2.com/images/4/4c/Plate_of_Truffle_Steak.png"),
+                new Boon("Bowl of Sweet and Spicy Butternut Squash Soup",-1, BoonSource.Item, "duration", 1, BoonEnum.Food, "https://wiki.guildwars2.com/images/d/df/Bowl_of_Sweet_and_Spicy_Butternut_Squash_Soup.png"),
+                new Boon("Red-Lentil Saobosa",-1, BoonSource.Item, "duration", 1, BoonEnum.Food, "https://wiki.guildwars2.com/images/a/a8/Red-Lentil_Saobosa.png"),
+                new Boon("Rare Veggie Pizza",-1, BoonSource.Item, "duration", 1, BoonEnum.Food, "https://wiki.guildwars2.com/images/a/a0/Rare_Veggie_Pizza.png"),
+                new Boon("Bowl of Garlic Kale Sautee",-1, BoonSource.Item, "duration", 1, BoonEnum.Food, "https://wiki.guildwars2.com/images/0/04/Bowl_of_Garlic_Kale_Sautee.png"),
+                new Boon("Koi Cake",-1, BoonSource.Item, "duration", 1, BoonEnum.Food, "https://wiki.guildwars2.com/images/1/14/Koi_Cake.png"),
+                new Boon("Prickly Pear Pie",-1, BoonSource.Item, "duration", 1, BoonEnum.Food, "https://wiki.guildwars2.com/images/0/0a/Prickly_Pear_Pie.png"),
+                new Boon("Bowl of Nopalitos Sauté",-1, BoonSource.Item, "duration", 1, BoonEnum.Food, "https://wiki.guildwars2.com/images/f/f1/Bowl_of_Nopalitos_Saut%C3%A9.png"),
+                new Boon("Delicious Rice Ball",-1, BoonSource.Item, "duration", 1, BoonEnum.Food, "https://wiki.guildwars2.com/images/5/5d/Delicious_Rice_Ball.png"),
+                new Boon("Slice of Allspice Cake",-1, BoonSource.Item, "duration", 1, BoonEnum.Food, "https://wiki.guildwars2.com/images/1/13/Slice_of_Allspice_Cake.png"),
+                /// UTILITIES
+                new Boon("Superior Sharpening Stone",-1, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"),
+                new Boon("Master Maintenance Oil",-1, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
+                new Boon("Master Tuning Crystal",-1, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/58/Master_Tuning_Crystal.png"),
+                new Boon("Toxic Sharpening Stone",-1, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/d/db/Toxic_Sharpening_Stone.png"),
+                new Boon("Potent Superior Sharpening Stone",-1, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"),
+                new Boon("Toxic Maintenance Oil",-1, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/a/a6/Toxic_Maintenance_Oil.png"),
+                new Boon("Magnanimous Maintenance Oil",-1, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/53/Magnanimous_Maintenance_Oil.png"),
+                new Boon("Potent Master Maintenance Oil",-1, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
+                new Boon("Furious Maintenance Oil",-1, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
+                new Boon("Bountiful Maintenance Oil",-1, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
+                new Boon("Toxic Focusing Crystal",-1, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/d/de/Toxic_Focusing_Crystal.png"),
             };
 
         public static List<Boon> getCondiBoonList()
@@ -423,7 +446,7 @@ namespace LuckParser.Models.ParseModels
         }
         public static List<Boon> getOffensiveList(BoonSource source)
         {
-            return allBoons.Where(x => x.priority == BoonEnum.OffensiveBuff && x.plotlyGroup == source).ToList();
+            return getOffensiveList().Where(x => x.plotlyGroup == source).ToList();
         }
 
         public static List<Boon> getDefensiveList()
@@ -432,7 +455,7 @@ namespace LuckParser.Models.ParseModels
         }
         public static List<Boon> getDefensiveList(BoonSource source)
         {
-            return allBoons.Where(x => x.priority == BoonEnum.DefensiveBuff && x.plotlyGroup == source).ToList();
+            return getDefensiveList().Where(x => x.plotlyGroup == source).ToList();
         }
 
         public static List<Boon> getBoonList()
@@ -446,12 +469,22 @@ namespace LuckParser.Models.ParseModels
         }
         public static List<Boon> getSharableProfList(BoonSource source)
         {
-            return allBoons.Where(x => (x.priority == BoonEnum.OffensiveBuff || x.priority == BoonEnum.DefensiveBuff) && x.plotlyGroup == source).ToList();
+            return getSharableProfList().Where(x => x.plotlyGroup == source).ToList();
+        }
+
+        public static List<Boon> getFoodList()
+        {
+            return allBoons.Where(x => x.priority != BoonEnum.Food).ToList();
+        }
+
+        public static List<Boon> getUtilityList()
+        {
+            return allBoons.Where(x => x.priority != BoonEnum.Utility).ToList();
         }
 
         public static List<Boon> getAllProfList()
         {
-            return allBoons.Where(x => x.priority != BoonEnum.Condition).ToList();
+            return allBoons.Where(x => x.priority != BoonEnum.Condition && x.priority != BoonEnum.Food && x.priority != BoonEnum.Utility).ToList();
         }
 
         public static List<Boon> getRemainingBuffsList()
