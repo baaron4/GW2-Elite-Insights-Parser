@@ -3041,8 +3041,80 @@ namespace LuckParser.Controllers
                        " line: {shape: 'spline',color:'rgb(0,250,0)'}," +
                        " yaxis: 'y3'," +
                        // "legendgroup: 'Damage'," +
-                       " name: 'Total DPS'" + "}");
+                       " name: 'Total DPS'" + "},");
                     }
+                if (maxDPS > 0)
+                {
+                   
+                    //Boss Health
+                    sw.Write("{");
+                    //Adding dps axis
+                    sw.Write("y: [");
+
+                    float scaler = boss_data.getHealth() / maxDPS;
+                    int hotCount = 0;
+                    List<int[]> BossHOT = boss_data.getHealthOverTime();
+                    foreach (int[] dp in BossHOT)
+                    {
+                        if (hotCount == BossHOT.Count - 1)
+                        {
+                            sw.Write("'" + (dp[1] / 10000f) * maxDPS + "'");
+                        }
+                        else
+                        {
+                            sw.Write("'" + (dp[1] / 10000f) * maxDPS + "',");
+                        }
+                        hotCount++;
+
+                    }
+
+                    sw.Write("],");
+                    //text axis is boss hp in %
+                    sw.Write("text: [");
+
+                    float scaler2 = boss_data.getHealth() / 100;
+                    hotCount = 0;
+                    foreach (int[] dp in BossHOT)
+                    {
+                        if (hotCount == BossHOT.Count - 1)
+                        {
+                            sw.Write("'" + dp[1] / 100f + "% HP'");
+                        }
+                        else
+                        {
+                            sw.Write("'" + dp[1] / 100f + "% HP',");
+                        }
+                        hotCount++;
+
+                    }
+
+                    sw.Write("],");
+                    //add time axis
+                    sw.Write("x: [");
+                    hotCount = 0;
+                    foreach (int[] dp in BossHOT)
+                    {
+                        if (hotCount == BossHOT.Count - 1)
+                        {
+                            sw.Write("'" + (float)(dp[0] / 1000f) + "'");
+                        }
+                        else
+                        {
+                            sw.Write("'" + (float)(dp[0] / 1000f) + "',");
+                        }
+
+                        hotCount++;
+                    }
+
+                    sw.Write("],");
+                    sw.Write(" mode: 'lines'," +
+                        " line: {shape: 'spline', dash: 'dashdot'}," +
+                        " yaxis: 'y3'," +
+                        "hoverinfo: 'text'," +
+               " name: 'Boss health'");
+                    sw.Write("}");
+                }
+               
 
                 sw.Write("];" +
                     "var layout = {" +
@@ -3189,6 +3261,8 @@ namespace LuckParser.Controllers
                 {
                     GW2APISkill apiskill = null;
                     SkillItem skill = s_list.FirstOrDefault(x => x.getID() == cl.getID());
+                    int autoAttack_count = 0;
+                    GW2APISkill autoStored = null;
                     if (skill != null)
                     {
                         apiskill = skill.GetGW2APISkill();
@@ -3197,8 +3271,22 @@ namespace LuckParser.Controllers
 
                     if (apiskill != null)
                     {
-                        if (apiskill.slot != "Weapon_1") { 
-                        sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                        if (apiskill.slot != "Weapon_1")
+                        {
+                            if (autoAttack_count > 0)
+                            {
+                                sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + autoStored.icon + "\" data-toggle=\"tooltip\" title= \"" + autoStored.name + " x " + autoAttack_count + "\" height=\"20\" width=\"20\"><div class=\"bottom-right\">x"+autoAttack_count+"</div></div></span>");
+
+                            }
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
+                        }
+                        else {
+                            if(autoAttack_count == 0)
+                            {
+                                autoStored = apiskill;
+                            }
+                            autoStored = apiskill;
+                            autoAttack_count++;
                         }
                     }
                     else
@@ -4561,7 +4649,7 @@ namespace LuckParser.Controllers
 
             }
 
-            //int maxDPS = 0;
+            int maxDPS = 0;
 
             if (SnapSettings[1])
             {//show total dps plot
@@ -4572,6 +4660,10 @@ namespace LuckParser.Controllers
                 int ptdgCount = 0;
                 foreach (int[] dp in playertotaldpsgraphdata)
                 {
+                    if (dp[1] > maxDPS)
+                    {
+                        maxDPS = dp[1];
+                    }
                     if (ptdgCount == playertotaldpsgraphdata.Count - 1)
                     {
                         sw.Write("'" + dp[1] + "'");
@@ -4614,7 +4706,78 @@ namespace LuckParser.Controllers
                             " line: {shape: 'spline',color:'rgb(0,250,0)'}," +
                    " yaxis: 'y3'," +
                    // "legendgroup: 'Damage'," +
-                   " name: 'Total DPS'" + "}");
+                   " name: 'Total DPS'" + "},");
+            }
+            if (maxDPS > 0)
+            {
+
+                //Boss Health
+                sw.Write("{");
+                //Adding dps axis
+                sw.Write("y: [");
+
+                float scaler = boss_data.getHealth() / maxDPS;
+                int hotCount = 0;
+                List<int[]> BossHOT = boss_data.getHealthOverTime();
+                foreach (int[] dp in BossHOT)
+                {
+                    if (hotCount == BossHOT.Count - 1)
+                    {
+                        sw.Write("'" + (dp[1] / 10000f) * maxDPS + "'");
+                    }
+                    else
+                    {
+                        sw.Write("'" + (dp[1] / 10000f) * maxDPS + "',");
+                    }
+                    hotCount++;
+
+                }
+
+                sw.Write("],");
+                //text axis is boss hp in %
+                sw.Write("text: [");
+
+                float scaler2 = boss_data.getHealth() / 100;
+                hotCount = 0;
+                foreach (int[] dp in BossHOT)
+                {
+                    if (hotCount == BossHOT.Count - 1)
+                    {
+                        sw.Write("'" + dp[1] / 100f + "% HP'");
+                    }
+                    else
+                    {
+                        sw.Write("'" + dp[1] / 100f + "% HP',");
+                    }
+                    hotCount++;
+
+                }
+
+                sw.Write("],");
+                //add time axis
+                sw.Write("x: [");
+                hotCount = 0;
+                foreach (int[] dp in BossHOT)
+                {
+                    if (hotCount == BossHOT.Count - 1)
+                    {
+                        sw.Write("'" + (float)(dp[0] / 1000f) + "'");
+                    }
+                    else
+                    {
+                        sw.Write("'" + (float)(dp[0] / 1000f) + "',");
+                    }
+
+                    hotCount++;
+                }
+
+                sw.Write("],");
+                sw.Write(" mode: 'lines'," +
+                    " line: {shape: 'spline', dash: 'dashdot'}," +
+                    " yaxis: 'y3'," +
+                    "hoverinfo: 'text'," +
+           " name: 'Boss health'");
+                sw.Write("}");
             }
 
             sw.Write("];" +
@@ -4712,6 +4875,7 @@ namespace LuckParser.Controllers
 
 
             }
+
             sw.Write("]," +
 
                     "font: { color: '#ffffff' }," +
