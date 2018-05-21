@@ -584,6 +584,7 @@ namespace LuckParser.Controllers
         public List<Boon> present_boons =  new List<Boon>();//Used only for Boon tables
         public List<Boon> present_offbuffs = new List<Boon>();//Used only for Off Buff tables
         public List<Boon> present_defbuffs = new List<Boon>();//Used only for Def Buff tables
+        public Dictionary<int, List<Boon>> present_personnal = new Dictionary<int, List<Boon>>();//Used only for personnal
         public void setPresentBoons() {
             List<SkillItem> s_list = getSkillData().getSkillList();
             foreach (Boon boon in Boon.getBoonList())
@@ -605,6 +606,18 @@ namespace LuckParser.Controllers
                 if (s_list.Exists(x => x.getID() == boon.getID()))
                 {
                     present_defbuffs.Add(boon);
+                }
+            }
+            List<CombatItem> c_data = getCombatData().getCombatList();
+            foreach (Player p in p_list)
+            {
+                present_personnal[p.getInstid()] = new List<Boon>();
+                foreach (Boon boon in Boon.getRemainingBuffsList(Boon.ProfToEnum(p.getProf())))
+                {
+                    if (c_data.Exists(x => x.getSkillID() == boon.getID() && x.getDstInstid() == p.getInstid()))
+                    {
+                        present_personnal[p.getInstid()].Add(boon);
+                    }
                 }
             }
         }
@@ -1116,31 +1129,13 @@ namespace LuckParser.Controllers
         }
         //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
         //Methods that make it easier to create Javascript graphs
-        private List<BoonsGraphModel> getBoonGraph(Player p ) {
+        private List<BoonsGraphModel> getBoonGraph(Player p , List<Boon> boon_list) {
             List<BoonsGraphModel> uptime = new List<BoonsGraphModel>();
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
             List<BoonMap> boon_logs = p.getBoonMap(b_data, s_data, c_data.getCombatList());
-            List<Boon> boon_list = new List<Boon>();
-            if (SnapSettings[3] || SnapSettings[4] || SnapSettings[5])
-            {
-                if (SnapSettings[3])
-                {//Main boons
-                    boon_list.AddRange(Boon.getBoonList());
-
-                }
-                if (SnapSettings[4] || SnapSettings[5])
-                {//Important Class specefic boons
-                    boon_list.AddRange(Boon.getSharableProfList());
-                }
-                if (SnapSettings[5])
-                {//All class specefic boons
-                    boon_list.AddRange(Boon.getRemainingBuffsList());
-
-                }
-            }
-                int n = boon_list.Count();//# of diff boons
+            int n = boon_list.Count();//# of diff boons
 
             for (int i = 0; i < n; i++)//foreach boon
             {
@@ -2848,7 +2843,7 @@ namespace LuckParser.Controllers
                                     if (SnapSettings[3] || SnapSettings[4] || SnapSettings[5])
                                     {
                                         List<Boon> parseBoonsList = new List<Boon>();
-                                        if (SnapSettings[3])
+                                        /*if (SnapSettings[3])
                                         {//Main boons
                                             parseBoonsList.AddRange(Boon.getBoonList());
                                         }
@@ -2859,8 +2854,12 @@ namespace LuckParser.Controllers
                                         if (SnapSettings[5])
                                         {//All class specefic boons
                                             parseBoonsList.AddRange(Boon.getRemainingBuffsList());
-                                        }
-                                        List<BoonsGraphModel> boonGraphData = getBoonGraph(p);
+                                        }*/
+                                        parseBoonsList.AddRange(present_boons);
+                                        parseBoonsList.AddRange(present_offbuffs);
+                                        parseBoonsList.AddRange(present_defbuffs);
+                                        parseBoonsList.AddRange(present_personnal[p.getInstid()]);
+                                        List<BoonsGraphModel> boonGraphData = getBoonGraph(p, parseBoonsList);
                                         boonGraphData.Reverse();
                                         foreach (BoonsGraphModel bgm in boonGraphData)
                                         {

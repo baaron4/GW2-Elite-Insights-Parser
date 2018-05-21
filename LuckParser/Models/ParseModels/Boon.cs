@@ -8,8 +8,52 @@ namespace LuckParser.Models.ParseModels
     public class Boon
     {
         // Boon
-        public enum BoonEnum { Condition, Boon, OffensiveBuff, DefensiveBuff, NonShareableBuff, Food, Utility}
-        public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item  }
+        public enum BoonEnum { Condition, Boon, OffensiveBuff, DefensiveBuff, NonShareableBuff, Food, Utility, DontTrackForNow};
+        public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item  };
+
+        public static BoonSource ProfToEnum(string prof)
+        {
+            switch(prof)
+            {
+                case "Druid":
+                case "Ranger":
+                case "Soulbeast":
+                    return BoonSource.Ranger;
+                case "Scrapper":
+                case "Holosmith":
+                case "Engineer":
+                    return BoonSource.Engineer;
+                case "Daredevil":
+                case "Deadeye":
+                case "Thief":
+                    return BoonSource.Thief;
+                case "Weaver":
+                case "Tempest":
+                case "Elementalist":
+                    return BoonSource.Elementalist;
+                case "Mirage":
+                case "Chronomancer":
+                case "Mesmer":
+                    return BoonSource.Mesmer;
+                case "Scourge":
+                case "Reaper":
+                case "Necromancer":
+                    return BoonSource.Necromancer;
+                case "Spellbreaker":
+                case "Berserker":
+                case "Warrior":
+                    return BoonSource.Warrior;
+                case "Firebrand":
+                case "Dragonhunter":
+                case "Guardian":
+                    return BoonSource.Guardian;
+                case "Renegade":
+                case "Herald":
+                case "Revenant":
+                    return BoonSource.Revenant;
+            }
+            return BoonSource.Mixed;
+        }
 
         // Fields
         private String name;
@@ -88,8 +132,8 @@ namespace LuckParser.Models.ParseModels
                 // Generic
                 new Boon("Stealth", 13017, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Revealed", 890, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Superspeed", 5974, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Invulnerability", 801, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff, "https://wiki.guildwars2.com/images/e/eb/Determined.png"),
+                new Boon("Superspeed", 5974, BoonSource.Mixed, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
+                //new Boon("Invulnerability", 801, BoonSource.Mixed, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Boon("Unblockable", BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
                 //Auras
                 new Boon("Chaos Armor", 10332, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
@@ -113,25 +157,25 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Crystal Hibernation", 28262, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Vengeful Hammers", 27273, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Rite of the Great Dwarf", 26596, BoonSource.Revenant, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png"),
-                new Boon("Embrace the Darkness", 28001, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Embrace the Darkness", 28001, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),// incorrect id?
                 new Boon("Enchanted Daggers", 28557, BoonSource.Revenant, "intensity", 6, BoonEnum.NonShareableBuff),
                 new Boon("Impossible Odds", 27581, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
                 //facets
-                new Boon("Facet of Light",27336, BoonSource.Revenant, "duration", 1, BoonEnum.DefensiveBuff),
+                new Boon("Facet of Light",27336, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
                 new Boon("Infuse Light",27737, BoonSource.Revenant, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/6/60/Infuse_Light.png"),
-                new Boon("Facet of Darkness",28036, BoonSource.Revenant, "duration", 1, BoonEnum.OffensiveBuff),
-                new Boon("Facet of Elements",28243, BoonSource.Revenant, "duration", 1, BoonEnum.DefensiveBuff),
-                new Boon("Facet of Strength",27376, BoonSource.Revenant, "duration", 1, BoonEnum.OffensiveBuff),
-                new Boon("Facet of Chaos",27983, BoonSource.Revenant, "duration", 1, BoonEnum.DefensiveBuff),
-                new Boon("Facet of Nature",29275, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Facet of Darkness",28036, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Facet of Elements",28243, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Facet of Strength",27376, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Facet of Chaos",27983, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Facet of Nature",29275, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
                 new Boon("Naturalistic Resonance", 29379, BoonSource.Revenant, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),
                 //legends
-                new Boon("Legendary Centaur Stance",27972, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Legendary Dragon Stance",27732, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Legendary Dwarf Stance",27205, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Legendary Demon Stance",27928, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Legendary Assassin Stance",27890, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Legendary Renegade Stance",44272, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Legendary Centaur Stance",27972, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Legendary Dragon Stance",27732, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Legendary Dwarf Stance",27205, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Legendary Demon Stance",27928, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Legendary Assassin Stance",27890, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Legendary Renegade Stance",44272, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
                 //summons
                 new Boon("Breakrazor's Bastion",44682, BoonSource.Revenant, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png"),
                 new Boon("Razorclaw's Rage",41016, BoonSource.Revenant, "duration", 1, BoonEnum.OffensiveBuff, "https://wiki.guildwars2.com/images/7/73/Razorclaw%27s_Rage.png"),
@@ -139,13 +183,13 @@ namespace LuckParser.Models.ParseModels
                 //traits
                 new Boon("Vicious Lacerations",29395, BoonSource.Revenant, "intensity", 5, BoonEnum.NonShareableBuff),
                 new Boon("Assassin's Presence", 26854, BoonSource.Revenant, "duration", 1, BoonEnum.OffensiveBuff, "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png"),
-                new Boon("Expose Defenses", 48894, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
+                //new Boon("Expose Defenses", 48894, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Invoking Harmony",29025, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Selfless Amplification",30509, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Hardening Persistence",28957, BoonSource.Revenant, "intensity", 8, BoonEnum.NonShareableBuff),
                 new Boon("Soothing Bastion",34136, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Kalla's Fervor",42883, BoonSource.Revenant, "duration", 5, BoonEnum.NonShareableBuff),
-                new Boon("Improved Kalla's Fervor",45614, BoonSource.Revenant, "duration", 5, BoonEnum.NonShareableBuff),
+                new Boon("Kalla's Fervor",42883, BoonSource.Revenant, "intensity", 5, BoonEnum.NonShareableBuff),
+                new Boon("Improved Kalla's Fervor",45614, BoonSource.Revenant, "intensity", 5, BoonEnum.NonShareableBuff),
                 ///WARRIOR
                 //skills
                 new Boon("Riposte",14434, BoonSource.Warrior, "duration", 1, BoonEnum.NonShareableBuff),
@@ -155,12 +199,12 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Rock Guard", 34256 , BoonSource.Warrior, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Sight beyond Sight",40616, BoonSource.Warrior, "duration", 1, BoonEnum.NonShareableBuff),
                 //signets
-                new Boon("Healing Signet",786, BoonSource.Warrior, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Dolyak Signet",14458, BoonSource.Warrior, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Fury",14459, BoonSource.Warrior, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Might",14444, BoonSource.Warrior, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Stamina",14478, BoonSource.Warrior, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Rage",14496, BoonSource.Warrior, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Healing Signet",786, BoonSource.Warrior, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Dolyak Signet",14458, BoonSource.Warrior, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Fury",14459, BoonSource.Warrior, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Might",14444, BoonSource.Warrior, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Stamina",14478, BoonSource.Warrior, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Rage",14496, BoonSource.Warrior, "duration", 1, BoonEnum.DontTrackForNow),
                 //banners
                 new Boon("Banner of Strength", 14417, BoonSource.Warrior, "duration", 1, BoonEnum.OffensiveBuff, "https://wiki.guildwars2.com/images/thumb/e/e1/Banner_of_Strength.png/33px-Banner_of_Strength.png"),
                 new Boon("Banner of Discipline", 14449, BoonSource.Warrior, "duration", 1, BoonEnum.OffensiveBuff, "https://wiki.guildwars2.com/images/thumb/5/5f/Banner_of_Discipline.png/33px-Banner_of_Discipline.png"),
@@ -187,27 +231,27 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Zealot's Flame", 9103, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Purging Flames",21672, BoonSource.Guardian, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/2/28/Purging_Flames.png"),
                 new Boon("Litany of Wrath",21665, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Renewed Focus",9255, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Renewed Focus",9255, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
                 new Boon("Ashes of the Just",41957, BoonSource.Guardian, "intensity", 25, BoonEnum.OffensiveBuff, "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png"),
                 new Boon("Eternal Oasis",44871, BoonSource.Guardian, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png"),
                 new Boon("Unbroken Lines",43194, BoonSource.Guardian, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png"),
                 //signets
-                new Boon("Signet of Resolve",9220, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Bane Signet",9092, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Judgment",9156, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Mercy",9162, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Wrath",9100, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Courage",29633, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Signet of Resolve",9220, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Bane Signet",9092, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Judgment",9156, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Mercy",9162, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Wrath",9100, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Courage",29633, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
                 //virtues
-                new Boon("Virtue of Justice", 9114, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Spears of Justice", 29632, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Virtue of Courage", 9113, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Shield of Courage", 29523, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Virtue of Resolve", 9119, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Wings of Resolve", 30308, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Tome of Justice",40530, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Tome of Courage",43508,BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Tome of Resolve",46298, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Virtue of Justice", 9114, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Spears of Justice", 29632, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Virtue of Courage", 9113, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Shield of Courage", 29523, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Virtue of Resolve", 9119, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Wings of Resolve", 30308, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Tome of Justice",40530, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Tome of Courage",43508,BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Tome of Resolve",46298, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
                 //traits
                 new Boon("Strength in Numbers",13796, BoonSource.Guardian, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/7/7b/Strength_in_Numbers.png"),
                 new Boon("Invigorated Bulwark",30207, BoonSource.Guardian, "intensity", 5, BoonEnum.NonShareableBuff),
@@ -230,15 +274,15 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Gear Shield",5997, BoonSource.Engineer, "duration", 1, BoonEnum.NonShareableBuff),
                 //Transforms
                 new Boon("Rampage", BoonSource.Engineer, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Photon Forge",43708, BoonSource.Engineer, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Photon Forge",43708, BoonSource.Engineer, "duration", 1, BoonEnum.DontTrackForNow),
                 //Traits
-                new Boon("Laser's Edge",44414, BoonSource.Engineer, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Laser's Edge",44414, BoonSource.Engineer, "duration", 1, BoonEnum.DontTrackForNow),
                 new Boon("Afterburner",42210, BoonSource.Engineer, "intensity", 5, BoonEnum.NonShareableBuff),
                 new Boon("Iron Blooded",49065, BoonSource.Engineer, "intensity", 25, BoonEnum.NonShareableBuff),
                 new Boon("Streamlined Kits",18687, BoonSource.Engineer, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Kinetic Charge",45781, BoonSource.Engineer, "intensity", 5, BoonEnum.NonShareableBuff),
                 new Boon("Pinpoint Distribution", 38333, BoonSource.Engineer, "duration", 1, BoonEnum.OffensiveBuff, "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png"),
-                new Boon("Heat Therapy",40694, BoonSource.Engineer, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Heat Therapy",40694, BoonSource.Engineer, "duration", 1, BoonEnum.DontTrackForNow),
                 new Boon("Overheat", 40397, BoonSource.Engineer, "duration", 1, BoonEnum.NonShareableBuff),
                 ///RANGER
                 new Boon("Celestial Avatar", 31508, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
@@ -265,8 +309,8 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Call of the Wild",36781, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Strength of the pack!",12554, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Sick 'Em!",33902, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Sharpening Stones",12536, BoonSource.Ranger, "intenstiy", 10, BoonEnum.NonShareableBuff),
-                new Boon("Ancestral Grace", 31584, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Sharpening Stones",12536, BoonSource.Ranger, "intenstiy", 10, BoonEnum.DontTrackForNow),
+                new Boon("Ancestral Grace", 31584, BoonSource.Ranger, "duration", 1, BoonEnum.DontTrackForNow),
                 new Boon("Glyph of Empowerment", 31803, BoonSource.Ranger, "duration", 1, BoonEnum.OffensiveBuff, "https://wiki.guildwars2.com/images/thumb/f/f0/Glyph_of_Empowerment.png/33px-Glyph_of_Empowerment.png"),
                 new Boon("Dolyak Stance",41815, BoonSource.Ranger, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/7/71/Dolyak_Stance.png"),
                 new Boon("Griffon Stance",46280, BoonSource.Ranger, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/9/98/Griffon_Stance.png"),
@@ -277,10 +321,10 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Sharpen Spines",43266, BoonSource.Ranger, "intensity", 5, BoonEnum.NonShareableBuff),
                 //traits
                 new Boon("Spotter", 14055, BoonSource.Ranger, "duration", 1, BoonEnum.OffensiveBuff, "https://wiki.guildwars2.com/images/b/b0/Spotter.png"),
-                new Boon("Opening Strike",13988, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Opening Strike",13988, BoonSource.Ranger, "duration", 1, BoonEnum.DontTrackForNow),
                 new Boon("Quick Draw",29703, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Light on your feet",30673, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Natural Mender",30449, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Natural Mender",30449, BoonSource.Ranger, "intensity", 10, BoonEnum.NonShareableBuff),
                 new Boon("Lingering Light",32248, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Deadly",44932, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Ferocious",41720, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
@@ -291,12 +335,12 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Twice as Vicious",45600, BoonSource.Ranger, "duration", 1, BoonEnum.NonShareableBuff),
                 ///THIEF
                 //signets
-                new Boon("Signet of Malice",13049, BoonSource.Thief, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Assassin's Signet (Passive)",13047, BoonSource.Thief, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Assassin's Signet (Active)",44597, BoonSource.Thief, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Infiltrator's Signet",13063, BoonSource.Thief, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Agility",13061, BoonSource.Thief, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Shadows",13059, BoonSource.Thief, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Signet of Malice",13049, BoonSource.Thief, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Assassin's Signet (Passive)",13047, BoonSource.Thief, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Assassin's Signet (Active)",44597, BoonSource.Thief, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Infiltrator's Signet",13063, BoonSource.Thief, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Agility",13061, BoonSource.Thief, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Shadows",13059, BoonSource.Thief, "duration", 1, BoonEnum.DontTrackForNow),
                 //venoms
                 new Boon("Skelk Venom",-1, BoonSource.Thief, "intensity", 4, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
                 new Boon("Ice Drake Venom",13095, BoonSource.Thief, "intensity", 4, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
@@ -323,19 +367,19 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Bounding Dodger", 33162, BoonSource.Thief, "duration", 1, BoonEnum.NonShareableBuff),
                 ///MESMER
                 //signets
-                new Boon("Signet of the Ether", 21751, BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Domination",10231, BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Illusions",10246, BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Inspiration",10235, BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Midnight",10233, BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Humility",30739, BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Signet of the Ether", 21751, BoonSource.Mesmer, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Domination",10231, BoonSource.Mesmer, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Illusions",10246, BoonSource.Mesmer, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Inspiration",10235, BoonSource.Mesmer, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Midnight",10233, BoonSource.Mesmer, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Humility",30739, BoonSource.Mesmer, "duration", 1, BoonEnum.DontTrackForNow),
                 //skills
                 new Boon("Distortion",10243, BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Blur", 10335 , BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Blur", 10335 , BoonSource.Mesmer, "duration", 1, BoonEnum.DontTrackForNow),
                 new Boon("Mirror",10357, BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Echo",29664, BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Illusion of Life", BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Time Block",30134, BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff),
+                //new Boon("Time Block",30134, BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff), What is this?
                 new Boon("Time Echo",29582, BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Time Anchored",30136, BoonSource.Mesmer, "duration", 1, BoonEnum.NonShareableBuff),
                 //traits
@@ -347,14 +391,14 @@ namespace LuckParser.Models.ParseModels
                 ///NECROMANCER
                 //forms
                 new Boon("Lich Form",10631, BoonSource.Necromancer, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Death Shroud", 790, BoonSource.Necromancer, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Reaper's Shroud", 29446, BoonSource.Necromancer, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Death Shroud", 790, BoonSource.Necromancer, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Reaper's Shroud", 29446, BoonSource.Necromancer, "duration", 1, BoonEnum.DontTrackForNow),
                 //signets
-                new Boon("Signet of Vampirism",21761, BoonSource.Necromancer, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Plague Signet",10630, BoonSource.Necromancer, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Spite",10621, BoonSource.Necromancer, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of the Locust",10614, BoonSource.Necromancer, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Signet of Undeath",10610, BoonSource.Necromancer, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Signet of Vampirism",21761, BoonSource.Necromancer, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Plague Signet",10630, BoonSource.Necromancer, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Spite",10621, BoonSource.Necromancer, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of the Locust",10614, BoonSource.Necromancer, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Signet of Undeath",10610, BoonSource.Necromancer, "duration", 1, BoonEnum.DontTrackForNow),
                 //skills
                 new Boon("Spectral Walk",15083, BoonSource.Necromancer, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Infusing Terror", 30129, BoonSource.Necromancer, "duration", 1, BoonEnum.NonShareableBuff),
@@ -371,10 +415,10 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Signet of Fire",5544, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Signet of Water",5591, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
                 //attunments
-                new Boon("Fire Attunement", 5585, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Water Attunement", 5586, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Air Attunement", 5575, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Earth Attunement", 5580, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Fire Attunement", 5585, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Water Attunement", 5586, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Air Attunement", 5575, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Earth Attunement", 5580, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
                 //forms
                 new Boon("Mist Form",5543, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Ride the Lightning",5588, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
@@ -391,10 +435,10 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Arcane Power",5582, BoonSource.Elementalist, "duration", 1, BoonEnum.OffensiveBuff, "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png"),
                 new Boon("Arcane Shield",5640, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Renewal of Fire",5764, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Glyph of Elemental Power (Fire)",5739, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Glyph of Elemental Power (Water)",5741, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Glyph of Elemental Power (Air)",5740, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Glyph of Elemental Power (Earth)",5742, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Glyph of Elemental Power (Fire)",5739, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Glyph of Elemental Power (Water)",5741, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Glyph of Elemental Power (Air)",5740, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Glyph of Elemental Power (Earth)",5742, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
                 new Boon("Rebound",31337, BoonSource.Elementalist, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/0/03/%22Rebound%21%22.png"),
                 new Boon("Rock Barrier",34633, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),//750?
                 new Boon("Magnetic Wave",15794, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
@@ -476,7 +520,6 @@ namespace LuckParser.Models.ParseModels
         {
             return allBoons.Where(x => x.priority != BoonEnum.Food).ToList();
         }
-
         public static List<Boon> getUtilityList()
         {
             return allBoons.Where(x => x.priority != BoonEnum.Utility).ToList();
@@ -490,6 +533,10 @@ namespace LuckParser.Models.ParseModels
         public static List<Boon> getRemainingBuffsList()
         {
             return allBoons.Where(x => x.priority == BoonEnum.NonShareableBuff).ToList();
+        }
+        public static List<Boon> getRemainingBuffsList(BoonSource source)
+        {
+            return getRemainingBuffsList().Where(x => x.plotlyGroup == source || x.plotlyGroup == BoonSource.Mixed).ToList();
         }
 
 
