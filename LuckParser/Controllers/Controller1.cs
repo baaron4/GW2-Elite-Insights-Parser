@@ -1196,7 +1196,7 @@ namespace LuckParser.Controllers
                             }
 
                         }
-                        BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(), pointlist);
+                        BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(), pointlist, boon.getID());
                         uptime.Add(bgm);
                     }
                 }
@@ -1396,7 +1396,7 @@ namespace LuckParser.Controllers
                             }
 
                         }
-                        BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(), pointlist);
+                        BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(), pointlist, boon.getID());
                         uptime.Add(bgm);
                     }
                 }
@@ -2350,7 +2350,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in list_to_use)
                         {
-                            sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }                 
                     sw.Write("</tr> ");
@@ -2459,7 +2459,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in list_to_use)
                         {
-                            sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
                     
@@ -2513,7 +2513,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in list_to_use)
                         {
-                            sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
                     
@@ -2566,7 +2566,7 @@ namespace LuckParser.Controllers
                 sw.Write(" <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
                 foreach (Boon boon in list_to_use)
                 {
-                    sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                    sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                 }
                 sw.Write(" </tr> </thead>");
                 sw.Write("<tbody>");
@@ -2619,7 +2619,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in list_to_use)
                         {
-                            sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }            
                     sw.Write("</tr>");
@@ -2864,7 +2864,7 @@ namespace LuckParser.Controllers
                                         boonGraphData.Reverse();
                                         foreach (BoonsGraphModel bgm in boonGraphData)
                                         {
-                                            if (parseBoonsList.FirstOrDefault(x => x.getName() == bgm.getBoonName()) != null)
+                                            if (parseBoonsList.FirstOrDefault(x => x.getID() == bgm.getBoonId()) != null)
                                             {
                                                 sw.Write("{");
                                                 {
@@ -3398,13 +3398,13 @@ namespace LuckParser.Controllers
                 {
                     for (int d = 0; d < damageToDown.Count(); d++)
                     {
-                        sw.Write("'" + a_data.GetAgentWInst(damageToDown[d].getInstidt()).getName().Replace("\0", "") + "<br>"+
+                        sw.Write("'" + a_data.GetAgentWInst(damageToDown[d].getInstidt()).getName().Replace("\0", "").Replace("\'", "\\'") + "<br>"+
                             s_data.getName( damageToDown[d].getID()) +" hit you for "+damageToDown[d].getDamage() + "',");
                     }
                 }
                 for (int d = 0; d < damageToKill.Count(); d++)
                 {
-                    sw.Write("'" + a_data.GetAgentWInst(damageToKill[d].getInstidt()).getName().Replace("\0","") + "<br>" +
+                    sw.Write("'" + a_data.GetAgentWInst(damageToKill[d].getInstidt()).getName().Replace("\0","").Replace("\'", "\\'") + "<br>" +
                            "hit you with <b>"+ s_data.getName(damageToKill[d].getID()) + "</b> for " + damageToKill[d].getDamage() + "'");
 
                     if (d != damageToKill.Count() - 1)
@@ -3599,7 +3599,8 @@ namespace LuckParser.Controllers
 
                     foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
                     {//condis
-                        string condiName = condiList.FirstOrDefault(x => x.getID() == condiID).getName();// Boon.getCondiName(condiID);
+                        Boon condi = condiList.FirstOrDefault(x => x.getID() == condiID);
+                        string condiName = condi.getName();// Boon.getCondiName(condiID);
                         int totaldamage = 0;
                         int mindamage = 0;
                         int avgdamage = 0;
@@ -3623,7 +3624,7 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("<tr class=\"condi\">");
                             {
-                                sw.Write("<td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                                sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
                                 sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
                                 sw.Write("<td>" + totaldamage + "</td>");
                                 sw.Write("<td>" + mindamage + "</td>");
@@ -3919,7 +3920,8 @@ namespace LuckParser.Controllers
                     List<Boon> condiList = Boon.getCondiBoonList();
                     foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
                     {
-                        string condiName = condiList.FirstOrDefault(x => x.getID() == condiID).getName();// Boon.getCondiName(condiID);
+                        Boon condi = condiList.FirstOrDefault(x => x.getID() == condiID);
+                        string condiName = condi.getName();// Boon.getCondiName(condiID);
 
                         int totaldamage = 0;
                         int mindamage = 0;
@@ -3941,7 +3943,7 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("<tr class=\"condi\">");
                             {
-                                sw.Write("<td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                                sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
                                 sw.Write("<td>" + totaldamage + "</td>");
                                 sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
                                 sw.Write("<td>" + hits + "</td>");
@@ -4092,7 +4094,8 @@ namespace LuckParser.Controllers
                     List<Boon> condiList = Boon.getCondiBoonList();
                     foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
                     {
-                        string condiName = condiList.FirstOrDefault(x => x.getID() == condiID).getName();// Boon.getCondiName(condiID);
+                        Boon condi = condiList.FirstOrDefault(x => x.getID() == condiID);
+                        string condiName = condi.getName();// Boon.getCondiName(condiID);
                         int totaldamage = 0;
                         int mindamage = 0;
                         int avgdamage = 0;
@@ -4116,7 +4119,7 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("<tr>");
                             {
-                                sw.Write("<td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                                sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
                                 sw.Write("<td>" + totaldamage + "</td>");
                                 sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
                                 sw.Write("<td>" + hits + "</td>");
@@ -4314,7 +4317,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in Boon.getCondiBoonList())
                         {
-                            sw.Write("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            sw.Write("<th>" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }                 
                     sw.Write("</tr>");
@@ -4402,7 +4405,7 @@ namespace LuckParser.Controllers
                         boonGraphData.Reverse();
                         foreach (BoonsGraphModel bgm in boonGraphData)
                         {
-                            if (parseBoonsList.FirstOrDefault(x => x.getName() == bgm.getBoonName()) != null)
+                            if (parseBoonsList.FirstOrDefault(x => x.getID() == bgm.getBoonId()) != null)
                             {
                                 sw.Write("{");
                                 {
@@ -5284,6 +5287,8 @@ namespace LuckParser.Controllers
                     return "https://wiki.guildwars2.com/images/thumb/7/79/Daze.png/20px-Daze.png";
                 case "Invuln":
                     return "https://wiki.guildwars2.com/images/e/eb/Determined.png";
+                case "Blinded":
+                    return "https://wiki.guildwars2.com/images/thumb/3/33/Blinded.png/20px-Blinded.png";
                 case "Wasted":
                     return "https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png";
                 case "Saved":
@@ -5296,99 +5301,7 @@ namespace LuckParser.Controllers
                     return "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
                 case "Bandage":
                     return "https://render.guildwars2.com/file/D2D7D11874060D68760BFD519CFC77B6DF14981F/102928.png";
-
-                case "Bleeding":
-                    return "https://wiki.guildwars2.com/images/thumb/3/33/Bleeding.png/20px-Bleeding.png";
-                case "Burning":
-                    return "https://wiki.guildwars2.com/images/thumb/4/45/Burning.png/20px-Burning.png";
-                case "Confusion":
-                    return "https://wiki.guildwars2.com/images/thumb/e/e6/Confusion.png/20px-Confusion.png";
-                case "Poison":
-                    return "https://wiki.guildwars2.com/images/thumb/0/05/Poison.png/20px-Poison.png";
-                case "Torment":
-                    return "https://wiki.guildwars2.com/images/thumb/0/08/Torment.png/20px-Torment.png";
-                case "Blinded":
-                    return "https://wiki.guildwars2.com/images/thumb/3/33/Blinded.png/20px-Blinded.png";
-                case "Chilled":
-                    return "https://wiki.guildwars2.com/images/thumb/a/a6/Chilled.png/20px-Chilled.png";
-                case "Crippled":
-                    return "https://wiki.guildwars2.com/images/thumb/f/fb/Crippled.png/20px-Crippled.png";
-                case "Fear":
-                    return "https://wiki.guildwars2.com/images/thumb/e/e6/Fear.png/20px-Fear.png";
-                case "Immobile":
-                    return "https://wiki.guildwars2.com/images/thumb/3/32/Immobile.png/20px-Immobile.png";
-                case "Slow":
-                    return "https://wiki.guildwars2.com/images/thumb/f/fb/Slow_40px.png/20px-Slow_40px.png";
-                case "Taunt":
-                    return "https://wiki.guildwars2.com/images/thumb/c/cc/Taunt.png/20px-Taunt.png";
-                case "Weakness":
-                    return "https://wiki.guildwars2.com/images/thumb/f/f9/Weakness.png/20px-Weakness.png";
-                case "Vulnerability":
-                    return "https://wiki.guildwars2.com/images/thumb/a/af/Vulnerability.png/20px-Vulnerability.png";
-                case "Aegis": return "https://wiki.guildwars2.com/images/e/e5/Aegis.png";
-                case "Fury": return "https://wiki.guildwars2.com/images/4/46/Fury.png";
-                case "Might": return "https://wiki.guildwars2.com/images/7/7c/Might.png";
-                case "Protection": return "https://wiki.guildwars2.com/images/6/6c/Protection.png";
-                case "Quickness": return "https://wiki.guildwars2.com/images/b/b4/Quickness.png";
-                case "Regeneration": return "https://wiki.guildwars2.com/images/5/53/Regeneration.png";
-                case "Resistance": return "https://wiki.guildwars2.com/images/thumb/e/e9/Resistance_40px.png/20px-Resistance_40px.png";
-                case "Retaliation": return "https://wiki.guildwars2.com/images/5/53/Retaliation.png";
-                case "Stability": return "https://wiki.guildwars2.com/images/a/ae/Stability.png";
-                case "Swiftness": return "https://wiki.guildwars2.com/images/a/af/Swiftness.png";
-                case "Vigor": return "https://wiki.guildwars2.com/images/f/f4/Vigor.png";
-
-                case "Alacrity": return "https://wiki.guildwars2.com/images/thumb/4/4c/Alacrity.png/20px-Alacrity.png";
-                case "Glyph of Empowerment": return "https://wiki.guildwars2.com/images/thumb/f/f0/Glyph_of_Empowerment.png/33px-Glyph_of_Empowerment.png";
-                case "Grace of the Land": return "https://wiki.guildwars2.com/images/thumb/4/45/Grace_of_the_Land.png/25px-Grace_of_the_Land.png";
-                case "Sun Spirit": return "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png";
-                case "Water Spirit": return "https://wiki.guildwars2.com/images/thumb/0/06/Water_Spirit.png/33px-Water_Spirit.png";
-                case "Frost Spirit": return "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png";
-                case "Banner of Strength": return "https://wiki.guildwars2.com/images/thumb/e/e1/Banner_of_Strength.png/33px-Banner_of_Strength.png";
-                case "Banner of Discipline": return "https://wiki.guildwars2.com/images/thumb/5/5f/Banner_of_Discipline.png/33px-Banner_of_Discipline.png";
-                case "Banner of Tactics": return "https://wiki.guildwars2.com/images/thumb/3/3f/Banner_of_Tactics.png/33px-Banner_of_Tactics.png";
-                case "Banner of Defense": return "https://wiki.guildwars2.com/images/thumb/f/f1/Banner_of_Defense.png/33px-Banner_of_Defense.png";
-                case "Spotter": return "https://wiki.guildwars2.com/images/b/b0/Spotter.png";
-                case "Stone Spirit": return "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png";
-                case "Storm Spirit": return "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png";
-                case "Empower Allies": return "https://wiki.guildwars2.com/images/thumb/4/4c/Empower_Allies.png/20px-Empower_Allies.png";
-                case "Soothing Mist": return "https://wiki.guildwars2.com/images/f/f7/Soothing_Mist.png";
-                case "Pinpoint Distribution": return "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png";
-                case "Vampiric Aura": return "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png";
-                case "Assassin's Presence": return "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png";
-                case "Battle Presence": return "https://wiki.guildwars2.com/images/2/27/Battle_Presence.png";
-                case "Razorclaw's Rage": return "https://wiki.guildwars2.com/images/7/73/Razorclaw%27s_Rage.png";
-                case "Soulcleave's Summit": return "https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png";
-                case "Ashes of the Just": return "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png";
-                case "Vulture Stance": return "https://wiki.guildwars2.com/images/8/8f/Vulture_Stance.png";
-                case "One Wolf Pack": return "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png";
-                case "Skale Venom": return "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png";
-                case "Spider Venom": return "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png";
-                case "Basilisk Venom": return "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png";
-                case "Conjure Flame Axe": return "https://wiki.guildwars2.com/images/a/a1/Conjure_Flame_Axe.png";
-                case "Conjure Frost Bow": return "https://wiki.guildwars2.com/images/c/c3/Conjure_Frost_Bow.png";
-                case "Conjure Lightning Hammer": return "https://wiki.guildwars2.com/images/1/1f/Conjure_Lightning_Hammer.png";
-                case "Conjure Fiery Greatsword": return "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png";
-                case "Arcane Power": return "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png";
-                case "Rite of the Great Dwarf": return "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png";
-                case "Infuse Light": return "https://wiki.guildwars2.com/images/6/60/Infuse_Light.png";
-                case "Naturalistic Resonance": return "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png";
-                case "Breakrazor's Bastion": return "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png";
-                case "Purging Flames": return "https://wiki.guildwars2.com/images/2/28/Purging_Flames.png";
-                case "Eternal Oasis": return "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png";
-                case "Unbroken Lines": return "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png";
-                case "Strength in Numbers": return "https://wiki.guildwars2.com/images/7/7b/Strength_in_Numbers.png";
-                case "Dolyak Stance": return "https://wiki.guildwars2.com/images/7/71/Dolyak_Stance.png";
-                case "Griffon Stance": return "https://wiki.guildwars2.com/images/9/98/Griffon_Stance.png";
-                case "Moa Stance": return "https://wiki.guildwars2.com/images/6/66/Moa_Stance.png";
-                case "Bear Stance": return "https://wiki.guildwars2.com/images/f/f0/Bear_Stance.png";
-                case "Ice Drake Venom": return "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png";
-                case "Skelk Venom": return "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png";
-                case "Devourer Venom": return "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png";
-                case "Last Rites": return "https://wiki.guildwars2.com/images/1/1a/Last_Rites_%28effect%29.png";
-                case "Conjure Earth Shield": return "https://wiki.guildwars2.com/images/7/7a/Conjure_Earth_Shield.png";
-                case "Rebound": return "https://wiki.guildwars2.com/images/0/03/%22Rebound%21%22.png";
-
-
+                    
                 case "Color-Aegis": return "rgb(102,255,255)";
                 case "Color-Fury": return "rgb(255,153,0)";
                 case "Color-Might": return "rgb(153,0,0)";
