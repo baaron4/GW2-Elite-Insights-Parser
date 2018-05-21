@@ -957,7 +957,7 @@ namespace LuckParser.Controllers
                 // Boon boon = Boon.getEnum(boon_list[i].ToString());
                 Boon boon = boon_list[i];
                 AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                BoonMap bm = boon_logs.FirstOrDefault(x=>x.getID() == boon.getID());//boon_logs.FirstOrDefault(x => x.getName().Contains(boon.getName()) );
+                BoonMap bm = boon_logs.FirstOrDefault(x=>x.getID() == boon.getID());
                 if (bm != null)
                 {
                     List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
@@ -1008,11 +1008,7 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
-            List<BoonMap> boon_logs = new List<BoonMap>();
-           
-                boon_logs = p.getRawBoonMap(b_data, s_data, c_data.getCombatList());
-          
-
+            List<BoonMap> boon_logs = p.getCondiBoonMap(b_data, s_data, c_data.getCombatList());
             List<Boon> boon_list = Boon.getCondiBoonList();
             int n = boon_list.Count();//# of diff boons
             string[] rates = new string[n];
@@ -1021,7 +1017,7 @@ namespace LuckParser.Controllers
                 // Boon boon = Boon.getEnum(boon_list[i].ToString());
                 Boon boon = boon_list[i];
                 AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                BoonMap bm = boon_logs.FirstOrDefault(x => x.getName().Contains(boon.getName()));
+                BoonMap bm = boon_logs.FirstOrDefault(x => x.getID() == boon.getID());
                 if (bm != null)
                 {
                     List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
@@ -1150,7 +1146,7 @@ namespace LuckParser.Controllers
             {
                 Boon boon = boon_list[i];
                 AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                BoonMap bm = boon_logs.FirstOrDefault(x => x.getName().Contains(boon.getName()));
+                BoonMap bm = boon_logs.FirstOrDefault(x => x.getID() == boon.getID());
                 if (bm != null)
                 {
                     List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
@@ -1200,7 +1196,7 @@ namespace LuckParser.Controllers
                             }
 
                         }
-                        BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(), pointlist);
+                        BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(), pointlist, boon.getID());
                         uptime.Add(bgm);
                     }
                 }
@@ -1335,7 +1331,7 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
-            List<BoonMap> boon_logs = p.getRawBoonMap(b_data, s_data, c_data.getCombatList());
+            List<BoonMap> boon_logs = p.getCondiBoonMap(b_data, s_data, c_data.getCombatList());
             List<Boon> boon_list = new List<Boon>();
             //condis
             boon_list.AddRange(Boon.getCondiBoonList());
@@ -1350,7 +1346,7 @@ namespace LuckParser.Controllers
             {
                 Boon boon = boon_list[i];
                 AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                BoonMap bm = boon_logs.FirstOrDefault(x => x.getName().Contains(boon.getName()));
+                BoonMap bm = boon_logs.FirstOrDefault(x => x.getID() == boon.getID());
                 if (bm != null)
                 {
                     List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
@@ -1400,7 +1396,7 @@ namespace LuckParser.Controllers
                             }
 
                         }
-                        BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(), pointlist);
+                        BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(), pointlist, boon.getID());
                         uptime.Add(bgm);
                     }
                 }
@@ -1423,11 +1419,9 @@ namespace LuckParser.Controllers
         }
         private void CreateDPSGraph(StreamWriter sw)
         {
-
             //Generate DPS graph
-            sw.Write(
-             "<div id=\"DPSGraph\" style=\"height: 600px;width:1200px; display:inline-block \"></div>" +
-  "<script>");
+            sw.Write("<div id=\"DPSGraph\" style=\"height: 600px;width:1200px; display:inline-block \"></div>");
+            sw.Write("<script>");
 
             sw.Write("var data = [");
             int maxDPS = 0;
@@ -1495,10 +1489,10 @@ namespace LuckParser.Controllers
                 }
 
                 sw.Write("],");
-                sw.Write(" mode: 'lines'," +
-                    " line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
-           " name: '" + p.getCharacter() + " DPS'" +
-        "},");
+                sw.Write("mode: 'lines'," +
+                        "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
+                        "name: '" + p.getCharacter() + " DPS'" +
+                        "},");
                 if (SnapSettings[0])
                 {//Turns display on or off
                     sw.Write("{");
@@ -1548,10 +1542,10 @@ namespace LuckParser.Controllers
                     }
 
                     sw.Write("],");
-                    sw.Write(" mode: 'lines'," +
-                         " line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
-                        "visible:'legendonly'," +
-               " name: '" + p.getCharacter() + "TDPS'" + "},");
+                    sw.Write("mode: 'lines'," +
+                            "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
+                            "visible:'legendonly'," +
+                            "name: '" + p.getCharacter() + "TDPS'" + "},");
                 }
             }
             //All Player dps
@@ -1593,9 +1587,9 @@ namespace LuckParser.Controllers
 
             sw.Write("],");
             sw.Write(" mode: 'lines'," +
-                 " line: {shape: 'spline'}," +
-                   "visible:'legendonly'," +
-        " name: 'All Player Dps'");
+                    "line: {shape: 'spline'}," +
+                    "visible:'legendonly'," +
+                    "name: 'All Player Dps'");
             sw.Write("},");
             List<Mechanic> presMech = mech_data.GetMechList(boss_data.getID());
             List<string> distMech = presMech.Select(x => x.GetAltName()).Distinct().ToList();
@@ -1672,8 +1666,8 @@ namespace LuckParser.Controllers
                     sw.Write("visible:'legendonly',");
                 }
                 sw.Write("type:'scatter'," +
-                    "marker:{" + mech.GetPlotly() + "size: 15" + "}," +
-                    "text:[");
+                        "marker:{" + mech.GetPlotly() + "size: 15" + "}," +
+                        "text:[");
                 foreach (MechanicLog ml in filterdList)
                 {
                     if (mechcount == filterdList.Count - 1)
@@ -1689,8 +1683,7 @@ namespace LuckParser.Controllers
                 }
 
                 sw.Write("]," +
-
-            " name: '" + mech.GetAltName() + "'");
+                        " name: '" + mech.GetAltName() + "'");
                 sw.Write("},");
             }
             //Downs and deaths
@@ -1782,8 +1775,7 @@ namespace LuckParser.Controllers
                 }
 
                 sw.Write("]," +
-
-            " name: '" + state + "'");
+                        " name: '" + state + "'");
                 sw.Write("},");
             }
             if (maxDPS > 0)
@@ -1851,9 +1843,9 @@ namespace LuckParser.Controllers
 
                 sw.Write("],");
                 sw.Write(" mode: 'lines'," +
-                    " line: {shape: 'spline', dash: 'dashdot'}," +
-                    "hoverinfo: 'text'," +
-           " name: 'Boss health'");
+                        " line: {shape: 'spline', dash: 'dashdot'}," +
+                        "hoverinfo: 'text'," +
+                        " name: 'Boss health'");
                 sw.Write("}");
             }
             else
@@ -1861,23 +1853,21 @@ namespace LuckParser.Controllers
                 sw.Write("{}");
             }
             sw.Write("];" +
-"var layout = {" +
+                    "var layout = {" +
+                        "xaxis:{title:'DPS'}," +
+                        "yaxis:{title:'Time(sec)'}," +
+                        //"legend: { traceorder: 'reversed' }," +
+                        "hovermode: 'compare'," +
+                        "legend: {orientation: 'h'}," +
+                        // "yaxis: { title: 'DPS', domain: [0.51, 1] }," +
 
 
-    "xaxis:{title:'DPS'}," +
-      "yaxis:{title:'Time(sec)'}," +
-    //"legend: { traceorder: 'reversed' }," +
-    "hovermode: 'compare'," +
-    "legend: {orientation: 'h'}," +
-    // "yaxis: { title: 'DPS', domain: [0.51, 1] }," +
-
-
-    "font: { color: '#ffffff' }," +
-    "paper_bgcolor: 'rgba(0,0,0,0)'," +
-    "plot_bgcolor: 'rgba(0,0,0,0)'" +
-"};" +
-        "Plotly.newPlot('DPSGraph', data, layout);" +
-"</script> ");
+                        "font: { color: '#ffffff' }," +
+                        "paper_bgcolor: 'rgba(0,0,0,0)'," +
+                        "plot_bgcolor: 'rgba(0,0,0,0)'" +
+                    "};" +
+                    "Plotly.newPlot('DPSGraph', data, layout);");
+            sw.Write("</script> ");
         }
 
         bool[] SnapSettings;
@@ -2360,7 +2350,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in list_to_use)
                         {
-                            sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }                 
                     sw.Write("</tr> ");
@@ -2457,8 +2447,8 @@ namespace LuckParser.Controllers
         }
         private void CreateGenSelfTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
         { //Generate BoonGenSelf table
-            sw.Write("<script> $(document).ready(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
-            sw.Write("<table class=\"display nowrap compact\" cellspacing=\"0\" width=\"100%\" id=\"" + table_id + "\">");
+            sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" width=\"100%\" id=\"" + table_id + "\">");
             {
                 sw.Write("<thead>");
                 {
@@ -2469,7 +2459,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in list_to_use)
                         {
-                            sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
                     
@@ -2523,7 +2513,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in list_to_use)
                         {
-                            sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
                     
@@ -2576,7 +2566,7 @@ namespace LuckParser.Controllers
                 sw.Write(" <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
                 foreach (Boon boon in list_to_use)
                 {
-                    sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                    sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                 }
                 sw.Write(" </tr> </thead>");
                 sw.Write("<tbody>");
@@ -2629,7 +2619,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in list_to_use)
                         {
-                            sw.Write("<th width=\"50px\">" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }            
                     sw.Write("</tr>");
@@ -2683,569 +2673,521 @@ namespace LuckParser.Controllers
                 AgentData a_data = getAgentData();
                 bool died = getDied(p);
                 string charname = p.getCharacter();
-                sw.Write("<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">" +
-                     "<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
-
-                sw.Write("<ul class=\"nav nav-tabs\"><li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + p.getInstid() + "\">" + p.getCharacter() + "</a></li>");
-                if (SnapSettings[10])
-                {
-                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#SimpleRot" + p.getInstid() + "\">Simple Rotation</a></li>");
-                }
-                if (died)
-                {
-                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#DeathRecap" + p.getInstid() + "\">Death Recap</a></li>");
-
-                }
-                //foreach pet loop here
-                List<int> minionIDlist = p.getMinionList(b_data, c_data.getCombatList(), a_data);
+                List<int> minionIDlist = p.getCombatMinionList(b_data, c_data.getCombatList(), a_data);
                 List<AgentItem> minionAgentList = new List<AgentItem>();
-                foreach (int petid in minionIDlist)
+                sw.Write("<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">");
                 {
-                    AgentItem agent = a_data.getNPCAgentList().FirstOrDefault(x => x.getInstid() == petid);
-                    if (agent != null)
+                    sw.Write("<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
+                    sw.Write("<ul class=\"nav nav-tabs\">");
                     {
-                        if (minionAgentList.Count > 0)
+                        sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + p.getInstid() + "\">" + p.getCharacter() + "</a></li>");
+                        if (SnapSettings[10])
                         {
+                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#SimpleRot" + p.getInstid() + "\">Simple Rotation</a></li>");
 
-                            if (minionAgentList.FirstOrDefault(x => x.getName() == agent.getName()) == null)
+                        }
+                        if (died)
+                        {
+                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#DeathRecap" + p.getInstid() + "\">Death Recap</a></li>");
+
+                        }
+                        //foreach pet loop here                        
+                        foreach (int petid in minionIDlist)
+                        {
+                            AgentItem agent = a_data.getNPCAgentList().FirstOrDefault(x => x.getInstid() == petid);
+                            if (agent != null)
                             {
-                                minionAgentList.Add(agent);
-                            }
-                        }
-                        else
-                        {
-                            minionAgentList.Add(agent);
-                        }
-                    }
-                    //int i = 0;
-                }
-                foreach (AgentItem mobAgent in minionAgentList)
-                {
-
-                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">" + mobAgent.getName() + "</a></li>");
-
-                }
-                //inc dmg
-                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#incDmg" + p.getInstid() + "\">Damage Taken</a></li></ul>");
-
-                sw.Write("<div id=\"myTabContent\" class=\"tab-content\"><div class=\"tab-pane fade show active\" id=\"home" + p.getInstid() + "\">");
-                sw.Write("<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>" + "<script>");
-
-                sw.Write("var data = [");
-                if (SnapSettings[6])//Display rotation
-                {
-                    foreach (CastLog cl in casting)
-                    {
-                        string skillName = "";
-                        GW2APISkill skill = null;
-                        if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
-                        {
-                            skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
-                        }
-
-
-                        if (skill == null)
-                        {
-                            skillName = s_data.getName(cl.getID());
-                        }
-                        else
-                        {
-                            skillName = skill.name;
-                        }
-                        float dur = 0.0f;
-                        if (skillName == "Dodge")
-                        {
-                            dur = 0.5f;
-                        }
-                        else if (cl.getID() == -2)
-                        {//wepswap
-                            skillName = "Weapon Swap";
-                            dur = 0.1f;
-                        }
-                        else if (skillName == "Resurrect")
-                        {
-                            dur = cl.getActDur() / 1000f;
-                        }
-                        else if (skillName == "Bandage")
-                        {
-                            dur = cl.getActDur() / 1000f;
-                        }
-                        else
-                        {
-                            dur = cl.getActDur() / 1000f;
-                        }
-                        skillName = skillName.Replace("\"", "");
-                        sw.Write("{" +
-                            "y: ['1.5']," +
-                            "x: ['" + dur + "']," +
-                            "base:'" + cl.getTime() / 1000f + "'," +
-                            "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
-                            "orientation:'h'," +
-                            "mode: 'markers'," +
-                            "type: 'bar',");
-                        if (skill != null)
-                        {
-                            if (skill.slot == "Weapon_1")
-                            {
-                                sw.Write("width:'0.5',");
-                            }
-                            else
-                            {
-                                sw.Write("width:'1',");
-                            }
-
-                        }
-                        else
-                        {
-                            sw.Write("width:'1',");
-                        }
-
-                        sw.Write("hoverinfo: 'name'," +
-                        "hoverlabel:{namelength:'-1'}," +
-                        " marker: {");
-                        if (cl.endActivation() != null)
-                        {
-                            if (cl.endActivation().getID() == 3)
-                            {
-                                sw.Write("color: 'rgb(40,40,220)',");
-                            }
-                            else if (cl.endActivation().getID() == 4)
-                            {
-                                sw.Write("color: 'rgb(220,40,40)',");
-                            }
-                            else if (cl.endActivation().getID() == 5)
-                            {
-                                sw.Write("color: 'rgb(40,220,40)',");
-                            }
-                            else
-                            {
-                                sw.Write("color: 'rgb(220,220,0)',");
-                            }
-                        }
-                        else
-                        {
-                            sw.Write("color: 'rgb(220,220,0)',");
-                        }
-                        sw.Write(" width: 5," +
-                         "line:" +
-                          "{");
-                        if (cl.startActivation() != null)
-                        {
-                            if (cl.startActivation().getID() == 1)
-                            {
-                                sw.Write("color: 'rgb(20,20,20)',");
-                            }
-                            else if (cl.startActivation().getID() == 2)
-                            {
-                                sw.Write("color: 'rgb(220,40,220)',");
-                            }
-                        }
-                        sw.Write("width: 1" +
-                                "}" +
-                            "}," +
-                            "showlegend: false" +
-                        " },");
-
-                    }
-                }
-
-                if (SnapSettings[3] || SnapSettings[4] || SnapSettings[5])
-                {
-                    List<Boon> parseBoonsList = new List<Boon>();
-                    if (SnapSettings[3])
-                    {//Main boons
-                        parseBoonsList.AddRange(Boon.getBoonList());
-                    }
-                    if (SnapSettings[4] || SnapSettings[5])
-                    {//Important Class specefic boons
-                        parseBoonsList.AddRange(Boon.getSharableProfList());
-                    }
-                    if (SnapSettings[5])
-                    {//All class specefic boons
-                        parseBoonsList.AddRange(Boon.getRemainingBuffsList());
-
-                    }
-                    List<BoonsGraphModel> boonGraphData = getBoonGraph(p);
-                    boonGraphData.Reverse();
-                    foreach (BoonsGraphModel bgm in boonGraphData)
-                    {
-                        if (parseBoonsList.FirstOrDefault(x => x.getName() == bgm.getBoonName()) != null)
-                        {
-                            sw.Write("{");
-                            sw.Write("y: [");
-                            List<Point> bChart = bgm.getBoonChart();
-                            int bChartCount = 0;
-                            foreach (Point pnt in bChart)
-                            {
-                                if (bChartCount == bChart.Count - 1)
+                                if (minionAgentList.Count > 0)
                                 {
-                                    sw.Write("'" + pnt.Y + "'");
+                                    if (minionAgentList.FirstOrDefault(x => x.getName() == agent.getName()) == null)
+                                    {
+                                        minionAgentList.Add(agent);
+                                    }
                                 }
                                 else
                                 {
-                                    sw.Write("'" + pnt.Y + "',");
+                                    minionAgentList.Add(agent);
                                 }
-                                bChartCount++;
                             }
-                            if (bgm.getBoonChart().Count == 0)
+                            //int i = 0;
+                        }
+                        foreach (AgentItem mobAgent in minionAgentList)
+                        {
+                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">" + mobAgent.getName() + "</a></li>");
+                        }
+                        //inc dmg
+                        sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#incDmg" + p.getInstid() + "\">Damage Taken</a></li>");
+                    }
+                    sw.Write("</ul>");
+                    sw.Write("<div id=\"myTabContent\" class=\"tab-content\">");
+                    {
+                        sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + p.getInstid() + "\">");
+                        {
+                            sw.Write("<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>");
+                            sw.Write("<script>");
                             {
-                                sw.Write("'0'");
-                            }
-
-
-                            sw.Write("]," +
-                             "x: [");
-                            bChartCount = 0;
-                            foreach (Point pnt in bChart)
-                            {
-                                if (bChartCount == bChart.Count - 1)
+                                sw.Write("var data = [");
                                 {
-                                    sw.Write("'" + pnt.X + "'");
+                                    if (SnapSettings[6])//Display rotation
+                                    {
+                                        foreach (CastLog cl in casting)
+                                        {
+                                            string skillName = "";
+                                            GW2APISkill skill = null;
+                                            if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
+                                            {
+                                                skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
+                                            }
+                                            if (skill == null)
+                                            {
+                                                skillName = s_data.getName(cl.getID());
+                                            }
+                                            else
+                                            {
+                                                skillName = skill.name;
+                                            }
+                                            float dur = 0.0f;
+                                            if (skillName == "Dodge")
+                                            {
+                                                dur = 0.5f;
+                                            }
+                                            else if (cl.getID() == -2)
+                                            {//wepswap
+                                                skillName = "Weapon Swap";
+                                                dur = 0.1f;
+                                            }
+                                            else if (skillName == "Resurrect")
+                                            {
+                                                dur = cl.getActDur() / 1000f;
+                                            }
+                                            else if (skillName == "Bandage")
+                                            {
+                                                dur = cl.getActDur() / 1000f;
+                                            }
+                                            else
+                                            {
+                                                dur = cl.getActDur() / 1000f;
+                                            }
+                                            skillName = skillName.Replace("\"", "");
+                                            sw.Write("{");
+                                            {
+                                                sw.Write("y: ['1.5']," +
+                                                      "x: ['" + dur + "']," +
+                                                      "base:'" + cl.getTime() / 1000f + "'," +
+                                                      "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
+                                                      "orientation:'h'," +
+                                                      "mode: 'markers'," +
+                                                      "type: 'bar',");
+                                                if (skill != null)
+                                                {
+                                                    if (skill.slot == "Weapon_1")
+                                                    {
+                                                        sw.Write("width:'0.5',");
+                                                    }
+                                                    else
+                                                    {
+                                                        sw.Write("width:'1',");
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    sw.Write("width:'1',");
+                                                }
+                                                sw.Write("hoverinfo: 'name'," +
+                                                        "hoverlabel:{namelength:'-1'},");
+                                                sw.Write("marker: {");
+                                                {
+                                                    if (cl.endActivation() != null)
+                                                    {
+                                                        if (cl.endActivation().getID() == 3)
+                                                        {
+                                                            sw.Write("color: 'rgb(40,40,220)',");
+                                                        }
+                                                        else if (cl.endActivation().getID() == 4)
+                                                        {
+                                                            sw.Write("color: 'rgb(220,40,40)',");
+                                                        }
+                                                        else if (cl.endActivation().getID() == 5)
+                                                        {
+                                                            sw.Write("color: 'rgb(40,220,40)',");
+                                                        }
+                                                        else
+                                                        {
+                                                            sw.Write("color: 'rgb(220,220,0)',");
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        sw.Write("color: 'rgb(220,220,0)',");
+                                                    }
+                                                    sw.Write("width: 5,");
+                                                    sw.Write("line:{");
+                                                    {
+                                                        if (cl.startActivation() != null)
+                                                        {
+                                                            if (cl.startActivation().getID() == 1)
+                                                            {
+                                                                sw.Write("color: 'rgb(20,20,20)',");
+                                                            }
+                                                            else if (cl.startActivation().getID() == 2)
+                                                            {
+                                                                sw.Write("color: 'rgb(220,40,220)',");
+                                                            }
+                                                        }
+                                                        sw.Write("width: 1");
+                                                    }
+                                                    sw.Write("}");
+                                                }
+                                                sw.Write("},");
+                                                sw.Write("showlegend: false");
+                                            }
+                                            sw.Write(" },");
+                                        }
+                                    }
+                                    if (SnapSettings[3] || SnapSettings[4] || SnapSettings[5])
+                                    {
+                                        List<Boon> parseBoonsList = new List<Boon>();
+                                        if (SnapSettings[3])
+                                        {//Main boons
+                                            parseBoonsList.AddRange(Boon.getBoonList());
+                                        }
+                                        if (SnapSettings[4] || SnapSettings[5])
+                                        {//Important Class specefic boons
+                                            parseBoonsList.AddRange(Boon.getSharableProfList());
+                                        }
+                                        if (SnapSettings[5])
+                                        {//All class specefic boons
+                                            parseBoonsList.AddRange(Boon.getRemainingBuffsList());
+                                        }
+                                        List<BoonsGraphModel> boonGraphData = getBoonGraph(p);
+                                        boonGraphData.Reverse();
+                                        foreach (BoonsGraphModel bgm in boonGraphData)
+                                        {
+                                            if (parseBoonsList.FirstOrDefault(x => x.getID() == bgm.getBoonId()) != null)
+                                            {
+                                                sw.Write("{");
+                                                {
+                                                    List<Point> bChart = bgm.getBoonChart();
+                                                    int bChartCount = 0;
+                                                    sw.Write("y: [");
+                                                    {
+                                                        foreach (Point pnt in bChart)
+                                                        {
+                                                            if (bChartCount == bChart.Count - 1)
+                                                            {
+                                                                sw.Write("'" + pnt.Y + "'");
+                                                            }
+                                                            else
+                                                            {
+                                                                sw.Write("'" + pnt.Y + "',");
+                                                            }
+                                                            bChartCount++;
+                                                        }
+                                                        if (bgm.getBoonChart().Count == 0)
+                                                        {
+                                                            sw.Write("'0'");
+                                                        }
+                                                    }
+                                                    sw.Write("],");
+                                                    sw.Write("x: [");
+                                                    {
+                                                        bChartCount = 0;
+                                                        foreach (Point pnt in bChart)
+                                                        {
+                                                            if (bChartCount == bChart.Count - 1)
+                                                            {
+                                                                sw.Write("'" + pnt.X + "'");
+                                                            }
+                                                            else
+                                                            {
+                                                                sw.Write("'" + pnt.X + "',");
+                                                            }
+                                                            bChartCount++;
+                                                        }
+                                                        if (bgm.getBoonChart().Count == 0)
+                                                        {
+                                                            sw.Write("'0'");
+                                                        }
+                                                    }
+                                                    sw.Write("],");
+                                                    sw.Write("yaxis: 'y2'," +
+                                                             "type: 'scatter',");
+                                                    //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
+                                                    if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness")
+                                                    {
+                                                    }
+                                                    else
+                                                    {
+                                                        sw.Write(" visible: 'legendonly',");
+                                                    }
+                                                    sw.Write("line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
+                                                    sw.Write("fill: 'tozeroy'," +
+                                                            "name: \"" + bgm.getBoonName() + "\"");
+                                                }
+                                                sw.Write(" },");
+                                            }
+                                        }
+                                    }
+                                    int maxDPS = 0;
+                                    if (SnapSettings[2])
+                                    {//show boss dps plot
+                                     //Adding dps axis
+                                        List<int[]> playerbossdpsgraphdata = getBossDPSGraph(p);
+                                        int pbdgCount = 0;
+                                        sw.Write("{");
+                                        {
+                                            sw.Write("y: [");
+                                            {
+                                                foreach (int[] dp in playerbossdpsgraphdata)
+                                                {
+                                                    if (maxDPS < dp[1])
+                                                    {
+                                                        maxDPS = dp[1];
+                                                    }
+                                                    if (pbdgCount == playerbossdpsgraphdata.Count - 1)
+                                                    {
+                                                        sw.Write("'" + dp[1] + "'");
+                                                    }
+                                                    else
+                                                    {
+                                                        sw.Write("'" + dp[1] + "',");
+                                                    }
+                                                    pbdgCount++;
+                                                }
+                                                if (playerbossdpsgraphdata.Count == 0)
+                                                {
+                                                    sw.Write("'0'");
+                                                }
+                                            }
+                                            sw.Write("],");
+                                            //add time axis
+                                            sw.Write("x: [");
+                                            {
+                                                pbdgCount = 0;
+                                                foreach (int[] dp in playerbossdpsgraphdata)
+                                                {
+                                                    if (pbdgCount == playerbossdpsgraphdata.Count - 1)
+                                                    {
+                                                        sw.Write("'" + dp[0] + "'");
+                                                    }
+                                                    else
+                                                    {
+                                                        sw.Write("'" + dp[0] + "',");
+                                                    }
+
+                                                    pbdgCount++;
+                                                }
+                                                if (playerbossdpsgraphdata.Count == 0)
+                                                {
+                                                    sw.Write("'0'");
+                                                }
+                                            }
+                                            sw.Write("],");
+                                            sw.Write("mode: 'lines'," +
+                                                    "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
+                                                    "yaxis: 'y3'," +
+                                                    // "legendgroup: 'Damage',"+
+                                                    "name: 'Boss DPS'");
+                                        }
+
+                                        sw.Write("},");
+                                    }
+                                    if (SnapSettings[1])
+                                    {//show total dps plot
+                                        sw.Write("{");
+                                        { //Adding dps axis
+                                            List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
+                                            int ptdgCount = 0;
+                                            sw.Write("y: [");
+                                            {
+                                                foreach (int[] dp in playertotaldpsgraphdata)
+                                                {
+                                                    if (ptdgCount == playertotaldpsgraphdata.Count - 1)
+                                                    {
+                                                        sw.Write("'" + dp[1] + "'");
+                                                    }
+                                                    else
+                                                    {
+                                                        sw.Write("'" + dp[1] + "',");
+                                                    }
+                                                    ptdgCount++;
+                                                }
+                                                if (playertotaldpsgraphdata.Count == 0)
+                                                {
+                                                    sw.Write("'0'");
+                                                }
+                                            }
+                                            sw.Write("],");
+                                            //add time axis
+                                            sw.Write("x: [");
+                                            {
+                                                ptdgCount = 0;
+                                                foreach (int[] dp in playertotaldpsgraphdata)
+                                                {
+                                                    if (ptdgCount == playertotaldpsgraphdata.Count - 1)
+                                                    {
+                                                        sw.Write("'" + dp[0] + "'");
+                                                    }
+                                                    else
+                                                    {
+                                                        sw.Write("'" + dp[0] + "',");
+                                                    }
+                                                    ptdgCount++;
+                                                }
+                                                if (playertotaldpsgraphdata.Count == 0)
+                                                {
+                                                    sw.Write("'0'");
+                                                }
+                                            }
+                                            sw.Write("],");
+                                            sw.Write(" mode: 'lines'," +
+                                                   "line: {shape: 'spline',color:'rgb(0,250,0)'}," +
+                                                   "yaxis: 'y3'," +
+                                                   // "legendgroup: 'Damage'," +
+                                                   "name: 'Total DPS'");
+
+                                        }
+                                        sw.Write("}");
+                                    }
                                 }
-                                else
+                                sw.Write("];");
+                                sw.Write("var layout = {");
                                 {
-                                    sw.Write("'" + pnt.X + "',");
+                                    sw.Write("yaxis: {" +
+                                                "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
+                                                "range: [0, 2]" +
+                                            "}," +
+                                            "legend: { traceorder: 'reversed' }," +
+                                            "hovermode: 'compare'," +
+                                            "yaxis2: { title: 'Boons', domain: [0.11, 0.50], fixedrange: true }," +
+                                            "yaxis3: { title: 'DPS', domain: [0.51, 1] },"
+                                    );
+                                    sw.Write("images: [");
+                                    {
+                                        if (SnapSettings[7])//Display rotation
+                                        {
+                                            int castCount = 0;
+                                            foreach (CastLog cl in casting)
+                                            {
+                                                string skillIcon = "";
+                                                GW2APISkill skill = null;
+                                                if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
+                                                {
+                                                    skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
+                                                }
+                                                if (skill != null && cl.getID() != -2)
+                                                {
+                                                    if (skill.slot != "Weapon_1")
+                                                    {
+                                                        skillIcon = skill.icon;
+                                                        sw.Write("{" +
+                                                                     "source: '" + skillIcon + "'," +
+                                                                     "xref: 'x'," +
+                                                                     "yref: 'y'," +
+                                                                     "x: " + (cl.getTime() / 1000f) + "," +
+                                                                     "y: 0," +
+                                                                     "sizex: 1.1," +
+                                                                     "sizey: 1.1," +
+                                                                     "xanchor: 'left'," +
+                                                                     "yanchor: 'bottom'" +
+                                                                "}");
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    string skillName = "";
+
+                                                    if (cl.getID() == -2)
+                                                    { //wepswap
+                                                        skillName = "Weapon Swap";
+                                                        // skillIcon = "https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png";
+                                                    }
+                                                    else
+                                                    {
+                                                        skillName = skill_data.getName(cl.getID());
+                                                    }
+
+
+                                                    if (skillName == "Dodge")
+                                                    {
+                                                        // skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
+                                                    }
+                                                    else if (skillName == "Resurrect")
+                                                    {
+                                                        //skillIcon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
+                                                    }
+                                                    else if (skillName == "Bandage")
+                                                    {
+                                                        // skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
+                                                    }
+                                                    sw.Write("{" +
+                                                                  "source: '" + skillIcon + "'," +
+                                                                  "xref: 'x'," +
+                                                                  "yref: 'y'," +
+                                                                  "x: " + cl.getTime() / 1000f + "," +
+                                                                  "y: 0," +
+                                                                  "sizex: 1.1," +
+                                                                  "sizey: 1.1," +
+                                                                  "xanchor: 'left'," +
+                                                                  "yanchor: 'bottom'" +
+                                                              "}");
+                                                }
+                                                if (castCount == casting.Count - 1)
+                                                {
+                                                }
+                                                else
+                                                {
+                                                    sw.Write(",");
+                                                }
+                                            }
+                                        }
+                                    }
+                                    sw.Write("],");
+                                    sw.Write("font: { color: '#ffffff' }," +
+                                            "paper_bgcolor: 'rgba(0,0,0,0)'," +
+                                            "plot_bgcolor: 'rgba(0,0,0,0)'");
                                 }
-                                bChartCount++;
+                                sw.Write("};");
+                                sw.Write("Plotly.newPlot('Graph" + p.getInstid() + "', data, layout);");
                             }
-                            if (bgm.getBoonChart().Count == 0)
-                            {
-                                sw.Write("'0'");
-                            }
-                            sw.Write("]," +
-                                 " yaxis: 'y2'," +
-                                 " type: 'scatter',");
-                            //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
-                            if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness") { }
-                            else
-                            {
-                                sw.Write(" visible: 'legendonly',");
-                            }
-                            sw.Write(" line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
-                            sw.Write(" fill: 'tozeroy'," +
-                                 " name: \"" + bgm.getBoonName() + "\"" +
-                                 " },");
+                            sw.Write("</script> ");
+                            CreateDMGDistTable(sw, p);
                         }
-
+                        sw.Write("</div>");
+                        foreach (AgentItem mobAgent in minionAgentList)
+                        {
+                            sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">");
+                            {
+                                CreateDMGDistTable(sw, p, mobAgent);
+                            }
+                            sw.Write("</div>");
+                        }
+                        if (SnapSettings[10])
+                        {
+                            sw.Write("<div class=\"tab-pane fade \" id=\"SimpleRot" + p.getInstid() + "\">");
+                            {
+                                CreateSimpleRotationTab(sw, p);
+                            }
+                            sw.Write("</div>");
+                        }
+                        if (died)
+                        {
+                            sw.Write("<div class=\"tab-pane fade \" id=\"DeathRecap" + p.getInstid() + "\">");
+                            {
+                                CreateDeathRecap(sw, p);
+                            }
+                            sw.Write("</div>");
+                        }
+                        sw.Write("<div class=\"tab-pane fade \" id=\"incDmg" + p.getInstid() + "\">");
+                        {
+                            CreateDMGTakenDistTable(sw, p);
+                        }
+                        sw.Write("</div>");
                     }
+                    sw.Write("</div>");
                 }
-                int maxDPS = 0;
-                if (SnapSettings[2])
-                {//show boss dps plot
-                    //Adding dps axis
-                    List<int[]> playerbossdpsgraphdata = getBossDPSGraph(p);
-                    sw.Write("{");
-                    sw.Write("y: [");
-                    int pbdgCount = 0;
-                    foreach (int[] dp in playerbossdpsgraphdata)
-                    {
-                        if (maxDPS < dp[1])
-                        {
-                            maxDPS = dp[1];
-                        }
-                        if (pbdgCount == playerbossdpsgraphdata.Count - 1)
-                        {
-                            sw.Write("'" + dp[1] + "'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + dp[1] + "',");
-                        }
-                        pbdgCount++;
-                    }
-                    if (playerbossdpsgraphdata.Count == 0)
-                    {
-                        sw.Write("'0'");
-                    }
-
-                    sw.Write("],");
-                    //add time axis
-                    sw.Write("x: [");
-                    pbdgCount = 0;
-                    foreach (int[] dp in playerbossdpsgraphdata)
-                    {
-                        if (pbdgCount == playerbossdpsgraphdata.Count - 1)
-                        {
-                            sw.Write("'" + dp[0] + "'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + dp[0] + "',");
-                        }
-
-                        pbdgCount++;
-                    }
-                    if (playerbossdpsgraphdata.Count == 0)
-                    {
-                        sw.Write("'0'");
-                    }
-
-                    sw.Write("],");
-                    sw.Write(" mode: 'lines'," +
-                        " line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
-
-                       " yaxis: 'y3'," +
-                            // "legendgroup: 'Damage',"+
-                            " name: 'Boss DPS'" +
-                    "},"
-                    );
-                }
-                if (SnapSettings[1])
-                {//show total dps plot
-                    sw.Write("{");
-                    //Adding dps axis
-                    List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
-                    sw.Write("y: [");
-                    int ptdgCount = 0;
-                    foreach (int[] dp in playertotaldpsgraphdata)
-                    {
-                        if (ptdgCount == playertotaldpsgraphdata.Count - 1)
-                        {
-                            sw.Write("'" + dp[1] + "'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + dp[1] + "',");
-                        }
-
-                        ptdgCount++;
-                    }
-                    if (playertotaldpsgraphdata.Count == 0)
-                    {
-                        sw.Write("'0'");
-                    }
-
-                    sw.Write("],");
-                    //add time axis
-                    sw.Write("x: [");
-                    ptdgCount = 0;
-                    foreach (int[] dp in playertotaldpsgraphdata)
-                    {
-                        if (ptdgCount == playertotaldpsgraphdata.Count - 1)
-                        {
-                            sw.Write("'" + dp[0] + "'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + dp[0] + "',");
-                        }
-                        ptdgCount++;
-                    }
-                    if (playertotaldpsgraphdata.Count == 0)
-                    {
-                        sw.Write("'0'");
-                    }
-
-                    sw.Write("],");
-                    sw.Write(" mode: 'lines'," +
-                       " line: {shape: 'spline',color:'rgb(0,250,0)'}," +
-                       " yaxis: 'y3'," +
-                       // "legendgroup: 'Damage'," +
-                       " name: 'Total DPS'" + "},");
-                    }
-                if (maxDPS > 0)
-                {
-                   
-                    //Boss Health
-                    sw.Write("{");
-                    //Adding dps axis
-                    sw.Write("y: [");
-
-                    float scaler = boss_data.getHealth() / maxDPS;
-                    int hotCount = 0;
-                    List<int[]> BossHOT = boss_data.getHealthOverTime();
-                    foreach (int[] dp in BossHOT)
-                    {
-                        if (hotCount == BossHOT.Count - 1)
-                        {
-                            sw.Write("'" + (dp[1] / 10000f) * maxDPS + "'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + (dp[1] / 10000f) * maxDPS + "',");
-                        }
-                        hotCount++;
-
-                    }
-
-                    sw.Write("],");
-                    //text axis is boss hp in %
-                    sw.Write("text: [");
-
-                    float scaler2 = boss_data.getHealth() / 100;
-                    hotCount = 0;
-                    foreach (int[] dp in BossHOT)
-                    {
-                        if (hotCount == BossHOT.Count - 1)
-                        {
-                            sw.Write("'" + dp[1] / 100f + "% HP'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + dp[1] / 100f + "% HP',");
-                        }
-                        hotCount++;
-
-                    }
-
-                    sw.Write("],");
-                    //add time axis
-                    sw.Write("x: [");
-                    hotCount = 0;
-                    foreach (int[] dp in BossHOT)
-                    {
-                        if (hotCount == BossHOT.Count - 1)
-                        {
-                            sw.Write("'" + (float)(dp[0] / 1000f) + "'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + (float)(dp[0] / 1000f) + "',");
-                        }
-
-                        hotCount++;
-                    }
-
-                    sw.Write("],");
-                    sw.Write(" mode: 'lines'," +
-                        " line: {shape: 'spline', dash: 'dashdot'}," +
-                        " yaxis: 'y3'," +
-                        "hoverinfo: 'text'," +
-               " name: 'Boss health'");
-                    sw.Write("}");
-                }
-               
-
-                sw.Write("];" +
-                    "var layout = {" +
-
-                    "yaxis: {" +
-                        "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
-                        "range: [0, 2]" +
-                    "}," +
-
-                    "legend: { traceorder: 'reversed' }," +
-                    "hovermode: 'compare'," +
-                    "yaxis2: { title: 'Boons', domain: [0.11, 0.50], fixedrange: true }," +
-                    "yaxis3: { title: 'DPS', domain: [0.51, 1] }," +
-                    "images: ["
-                );
-                if (SnapSettings[7])//Display rotation
-                {
-                    int castCount = 0;
-                    foreach (CastLog cl in casting)
-                    {
-                        string skillIcon = "";
-                        GW2APISkill skill = null;
-                        if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
-                        {
-                            skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
-                        }
-
-
-                        if (skill != null && cl.getID() != -2)
-                        {
-                            if (skill.slot != "Weapon_1")
-                            {
-                                skillIcon = skill.icon;
-                                sw.Write("{" +
-                                          "source: '" + skillIcon + "'," +
-                                          "xref: 'x'," +
-                                          "yref: 'y'," +
-                                          "x: " + (cl.getTime() / 1000f) + "," +
-                                          "y: 0," +
-                                          "sizex: 1.1," +
-                                          "sizey: 1.1," +
-                                          "xanchor: 'left'," +
-                                          "yanchor: 'bottom'" +
-                                      "}");
-                            }
-                        }
-                        else
-                        {
-                            string skillName = "";
-
-                            if (cl.getID() == -2)
-                            { //wepswap
-                                skillName = "Weapon Swap";
-                                // skillIcon = "https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png";
-                            }
-                            else
-                            {
-                                skillName = skill_data.getName(cl.getID());
-                            }
-
-
-                            if (skillName == "Dodge")
-                            {
-                                // skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
-                            }
-                            else if (skillName == "Resurrect")
-                            {
-                                //skillIcon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
-                            }
-                            else if (skillName == "Bandage")
-                            {
-                                // skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
-                            }
-                            sw.Write("{" +
-                                          "source: '" + skillIcon + "'," +
-                                          "xref: 'x'," +
-                                          "yref: 'y'," +
-                                          "x: " + cl.getTime() / 1000f + "," +
-                                          "y: 0," +
-                                          "sizex: 1.1," +
-                                          "sizey: 1.1," +
-                                          "xanchor: 'left'," +
-                                          "yanchor: 'bottom'" +
-                                      "}");
-                        }
-
-                        if (castCount == casting.Count - 1)
-                        {
-                        }
-                        else
-                        {
-                            sw.Write(",");
-                        }
-                    }
-
-
-                }
-                sw.Write("]," +
-
-                        "font: { color: '#ffffff' }," +
-                        "paper_bgcolor: 'rgba(0,0,0,0)'," +
-                        "plot_bgcolor: 'rgba(0,0,0,0)'" +
-                    "};" +
-                            "Plotly.newPlot('Graph" + p.getInstid() + "', data, layout);" +
-                "</script> "
-                );
-                CreateDMGDistTable(sw, p);
                 sw.Write("</div>");
-                foreach (AgentItem mobAgent in minionAgentList)
-                {
-                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">");
-                    CreateDMGDistTable(sw, p, mobAgent);
-                    sw.Write("</div>");
-                }
-                if (SnapSettings[10])
-                {
-                    sw.Write("<div class=\"tab-pane fade \" id=\"SimpleRot" + p.getInstid() + "\">");
-                    CreateSimpleRotationTab(sw, p);
-                    sw.Write("</div>");
-                }
-                if (died)
-                {
-                    sw.Write("<div class=\"tab-pane fade \" id=\"DeathRecap" + p.getInstid() + "\">");
-                    CreateDeathRecap(sw, p);
-                    sw.Write("</div>");
-                }
-                sw.Write("<div class=\"tab-pane fade \" id=\"incDmg" + p.getInstid() + "\">");
-
-                CreateDMGTakenDistTable(sw, p);
-                sw.Write("</div></div></div>");
-
             }
 
         }
@@ -3257,13 +3199,10 @@ namespace LuckParser.Controllers
                 CombatData c_data = getCombatData();
                 BossData b_data = getBossData();
                 List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
-                int autoAttack_count = 0;
-                GW2APISkill autoStored = null;
                 foreach (CastLog cl in casting)
                 {
                     GW2APISkill apiskill = null;
                     SkillItem skill = s_list.FirstOrDefault(x => x.getID() == cl.getID());
-                    
                     if (skill != null)
                     {
                         apiskill = skill.GetGW2APISkill();
@@ -3272,22 +3211,8 @@ namespace LuckParser.Controllers
 
                     if (apiskill != null)
                     {
-                        if (apiskill.slot != "Weapon_1")
-                        {
-                            if (autoAttack_count > 0)
-                            {
-                                sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + autoStored.icon + "\" data-toggle=\"tooltip\" title= \"[Auto Attack]" + autoStored.name + " x " + autoAttack_count + "\" height=\"20\" width=\"20\"></div></span>");
-                                autoAttack_count = 0;
-                            }
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"30\" width=\"30\"></div></span>");
-                        }
-                        else {
-                            if(autoAttack_count == 0)
-                            {
-                                autoStored = apiskill;
-                            }
-                            autoStored = apiskill;
-                            autoAttack_count++;
+                        if (apiskill.slot != "Weapon_1") { 
+                        sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
                         }
                     }
                     else
@@ -3299,7 +3224,7 @@ namespace LuckParser.Controllers
                         {//wepswap
                             skillName = "Weapon Swap";
                             skillLink = GetLink("Swap");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"30\" width=\"30\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
                             sw.Write("<br>");
                             continue;
                         }
@@ -3307,7 +3232,7 @@ namespace LuckParser.Controllers
                         {
                             skillName = "Resurrect";
                             skillLink = GetLink("Downs");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"30\" width=\"30\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
 
                         }
                         else
@@ -3315,7 +3240,7 @@ namespace LuckParser.Controllers
                         {
                             skillName = "Bandage";
                             skillLink = GetLink("Bandage");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"30\" width=\"30\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
 
                         }
                         else
@@ -3323,12 +3248,12 @@ namespace LuckParser.Controllers
                         {
                             skillName = "Dodge";
                             skillLink = GetLink("Dodge");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"30\" width=\"30\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
 
                         }
                         else if(skill != null){
                             
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + GetLink("Blank") + "\" data-toggle=\"tooltip\" title= \"" + skill.getName() + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"30\" width=\"30\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + GetLink("Blank") + "\" data-toggle=\"tooltip\" title= \"" + skill.getName() + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"20\" width=\"20\"></div></span>");
 
                         }
 
@@ -3365,10 +3290,18 @@ namespace LuckParser.Controllers
                         break;
                     }
                 }
-                sw.Write("<center><p>Took " + damageToDown.Sum(x => x.getDamage()) + " damage in " +
+                sw.Write("<center>");
+                sw.Write("<p>Took " + damageToDown.Sum(x => x.getDamage()) + " damage in " +
                 ((damageToDown.Last().getTime() - damageToDown.First().getTime()) / 1000f).ToString() + " seconds to enter downstate");
-                sw.Write("<p>Took " + damageToKill.Sum(x => x.getDamage()) + " damage in " +
-                   ((damageToKill.Last().getTime() - damageToKill.First().getTime()) / 1000f).ToString() + " seconds to die</center>");
+                if (damageToKill.Count() > 0)
+                {
+                    sw.Write("<p>Took " + damageToKill.Sum(x => x.getDamage()) + " damage in " +
+                       ((damageToKill.Last().getTime() - damageToKill.First().getTime()) / 1000f).ToString() + " seconds to die</p>");
+                } else
+                {
+                    sw.Write("<p>Instant death after a down</p>");
+                }
+                sw.Write("</center>");
             }
             else
             {
@@ -3384,10 +3317,10 @@ namespace LuckParser.Controllers
                         break;
                     }
                 }
-                sw.Write("<center><h3>Player was insta killed by a mechanic</h3></center>");
+                sw.Write("<center><h3>Player was insta killed by a mechanic or fall damage</h3></center>");
             }
             
-            sw.Write("<center><div id=\"BarDeathRecap"+p.getInstid()+"\"></div> </center>");
+            sw.Write("<center><div id=\"BarDeathRecap" + p.getInstid()+"\"></div> </center>");
             sw.Write("<script>");
             {
                 sw.Write("var data = [{");
@@ -3465,13 +3398,13 @@ namespace LuckParser.Controllers
                 {
                     for (int d = 0; d < damageToDown.Count(); d++)
                     {
-                        sw.Write("'" + a_data.GetAgentWInst(damageToDown[d].getInstidt()).getName().Replace("\0", "") + "<br>"+
+                        sw.Write("'" + a_data.GetAgentWInst(damageToDown[d].getInstidt()).getName().Replace("\0", "").Replace("\'", "\\'") + "<br>"+
                             s_data.getName( damageToDown[d].getID()) +" hit you for "+damageToDown[d].getDamage() + "',");
                     }
                 }
                 for (int d = 0; d < damageToKill.Count(); d++)
                 {
-                    sw.Write("'" + a_data.GetAgentWInst(damageToKill[d].getInstidt()).getName().Replace("\0","") + "<br>" +
+                    sw.Write("'" + a_data.GetAgentWInst(damageToKill[d].getInstidt()).getName().Replace("\0","").Replace("\'", "\\'") + "<br>" +
                            "hit you with <b>"+ s_data.getName(damageToKill[d].getID()) + "</b> for " + damageToKill[d].getDamage() + "'");
 
                     if (d != damageToKill.Count() - 1)
@@ -3484,13 +3417,12 @@ namespace LuckParser.Controllers
                 
                 sw.Write("}];");
 
-                sw.Write("var layout = { title: 'Last 30k Damage Taken before death', font: { color: '#ffffff' },"+
+                sw.Write("var layout = { title: 'Last 30k Damage Taken before death', font: { color: '#ffffff' },width: 1100," +
                     "paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',showlegend: false,bargap :0.05,yaxis:{title:'Damage'},xaxis:{title:'Time(seconds)',type:'catagory'}};");
                 sw.Write("Plotly.newPlot('BarDeathRecap" + p.getInstid() + "', data, layout);");
-                sw.Write("</script>");
+                
             }
-           
-
+            sw.Write("</script>");
         }
         private void CreateDMGDistTable(StreamWriter sw,Player p) {
 
@@ -3667,7 +3599,8 @@ namespace LuckParser.Controllers
 
                     foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
                     {//condis
-                        string condiName = condiList.FirstOrDefault(x => x.getID() == condiID).getName();// Boon.getCondiName(condiID);
+                        Boon condi = condiList.FirstOrDefault(x => x.getID() == condiID);
+                        string condiName = condi.getName();// Boon.getCondiName(condiID);
                         int totaldamage = 0;
                         int mindamage = 0;
                         int avgdamage = 0;
@@ -3691,7 +3624,7 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("<tr class=\"condi\">");
                             {
-                                sw.Write("<td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                                sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
                                 sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
                                 sw.Write("<td>" + totaldamage + "</td>");
                                 sw.Write("<td>" + mindamage + "</td>");
@@ -3987,7 +3920,8 @@ namespace LuckParser.Controllers
                     List<Boon> condiList = Boon.getCondiBoonList();
                     foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
                     {
-                        string condiName = condiList.FirstOrDefault(x => x.getID() == condiID).getName();// Boon.getCondiName(condiID);
+                        Boon condi = condiList.FirstOrDefault(x => x.getID() == condiID);
+                        string condiName = condi.getName();// Boon.getCondiName(condiID);
 
                         int totaldamage = 0;
                         int mindamage = 0;
@@ -4009,7 +3943,7 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("<tr class=\"condi\">");
                             {
-                                sw.Write("<td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                                sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
                                 sw.Write("<td>" + totaldamage + "</td>");
                                 sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
                                 sw.Write("<td>" + hits + "</td>");
@@ -4160,7 +4094,8 @@ namespace LuckParser.Controllers
                     List<Boon> condiList = Boon.getCondiBoonList();
                     foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
                     {
-                        string condiName = condiList.FirstOrDefault(x => x.getID() == condiID).getName();// Boon.getCondiName(condiID);
+                        Boon condi = condiList.FirstOrDefault(x => x.getID() == condiID);
+                        string condiName = condi.getName();// Boon.getCondiName(condiID);
                         int totaldamage = 0;
                         int mindamage = 0;
                         int avgdamage = 0;
@@ -4184,7 +4119,7 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("<tr>");
                             {
-                                sw.Write("<td align=\"left\"><img src=" + GetLink(condiName) + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                                sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
                                 sw.Write("<td>" + totaldamage + "</td>");
                                 sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
                                 sw.Write("<td>" + hits + "</td>");
@@ -4382,7 +4317,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in Boon.getCondiBoonList())
                         {
-                            sw.Write("<th>" + "<img src=\"" + GetLink(boon.getName()) + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            sw.Write("<th>" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }                 
                     sw.Write("</tr>");
@@ -4412,7 +4347,6 @@ namespace LuckParser.Controllers
             //generate Player list Graphs
             AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
             Player p = new Player(bossAgent);
-
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
@@ -4420,479 +4354,285 @@ namespace LuckParser.Controllers
             List<SkillItem> s_list = s_data.getSkillList();
             AgentData a_data = getAgentData();
             string charname = p.getCharacter();
-            sw.Write(//"<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">" +
-                 "<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(b_data.getID()+"-icon") + " \" alt=\"" + p.getCharacter().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
-
-            sw.Write("<ul class=\"nav nav-tabs\"><li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + p.getInstid() + "\">" + p.getCharacter() + "</a></li>");
-            //foreach pet loop here
-            List<int> minionIDlist = p.getMinionList(b_data, c_data.getCombatList(), a_data);
+            List<int> minionIDlist = p.getCombatMinionList(b_data, c_data.getCombatList(), a_data);
             List<AgentItem> minionAgentList = new List<AgentItem>();
-            foreach (int petid in minionIDlist)
+            sw.Write("<h1 align=\"center\"> " + charname + "</h1>");
+            sw.Write("<ul class=\"nav nav-tabs\">");
             {
-                AgentItem agent = a_data.getNPCAgentList().FirstOrDefault(x => x.getInstid() == petid);
-                if (agent != null)
+                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + p.getInstid() + "\">" + p.getCharacter() + "</a></li>");
+                //foreach pet loop here
+                foreach (int petid in minionIDlist)
                 {
-                    if (minionAgentList.Count > 0)
+                    AgentItem agent = a_data.getNPCAgentList().FirstOrDefault(x => x.getInstid() == petid);
+                    if (agent != null)
                     {
+                        if (minionAgentList.Count > 0)
+                        {
 
-                        if (minionAgentList.FirstOrDefault(x => x.getName() == agent.getName()) == null)
+                            if (minionAgentList.FirstOrDefault(x => x.getName() == agent.getName()) == null)
+                            {
+                                minionAgentList.Add(agent);
+                            }
+                        }
+                        else
                         {
                             minionAgentList.Add(agent);
                         }
                     }
-                    else
-                    {
-                        minionAgentList.Add(agent);
-                    }
+                    //int i = 0;
                 }
-                //int i = 0;
-            }
-            foreach (AgentItem mobAgent in minionAgentList)
-            {
-
-                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">" + mobAgent.getName() + "</a></li>");
-
-            }
+                foreach (AgentItem mobAgent in minionAgentList)
+                {
+                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">" + mobAgent.getName() + "</a></li>");
+                }
+            }         
+            sw.Write("</ul>");
             //condi stats tab
-            // sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#condiUptime" + p.getInstid() + "\">Condition Uptime</a></li></ul>");
-
             sw.Write("<div id=\"myTabContent\" class=\"tab-content\"><div class=\"tab-pane fade show active\" id=\"home" + p.getInstid() + "\">");
-            CreateCondiUptimeTable(sw, p);
-            sw.Write("<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>" + "<script>");
-
-            sw.Write("var data = [");
-            if (SnapSettings[6])//Display rotation
             {
-                foreach (CastLog cl in casting)
+                CreateCondiUptimeTable(sw, p);
+                sw.Write("<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>");
+                sw.Write("<script>");
                 {
-                    string skillName = "";
-                    GW2APISkill skill = null;
-                    if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
+                    sw.Write("var data = [");
                     {
-                        skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
-                    }
+                        List<Boon> parseBoonsList = new List<Boon>();
+                        //Condis
+                        parseBoonsList.AddRange(Boon.getCondiBoonList());
+                        //Every boon and buffs
+                        parseBoonsList.AddRange(Boon.getAllProfList());
+                        List<BoonsGraphModel> boonGraphData = getBossBoonGraph(p);
+                        boonGraphData.Reverse();
+                        foreach (BoonsGraphModel bgm in boonGraphData)
+                        {
+                            if (parseBoonsList.FirstOrDefault(x => x.getID() == bgm.getBoonId()) != null)
+                            {
+                                sw.Write("{");
+                                {
+                                    List<Point> bChart = bgm.getBoonChart();
+                                    int bChartCount = 0;
+                                    sw.Write("y: [");
+                                    {
+                                        foreach (Point pnt in bChart)
+                                        {
+                                            if (bChartCount == bChart.Count - 1)
+                                            {
+                                                sw.Write("'" + pnt.Y + "'");
+                                            }
+                                            else
+                                            {
+                                                sw.Write("'" + pnt.Y + "',");
+                                            }
+                                            bChartCount++;
+                                        }
+                                        if (bgm.getBoonChart().Count == 0)
+                                        {
+                                            sw.Write("'0'");
+                                        }
+                                    }
+                                    sw.Write("],");
+                                    sw.Write("x: [");
+                                    {
+                                        bChartCount = 0;
+                                        foreach (Point pnt in bChart)
+                                        {
+                                            if (bChartCount == bChart.Count - 1)
+                                            {
+                                                sw.Write("'" + pnt.X + "'");
+                                            }
+                                            else
+                                            {
+                                                sw.Write("'" + pnt.X + "',");
+                                            }
+                                            bChartCount++;
+                                        }
+                                        if (bgm.getBoonChart().Count == 0)
+                                        {
+                                            sw.Write("'0'");
+                                        }
+                                    }
+                                    sw.Write("],");
+                                    sw.Write(" yaxis: 'y2'," +
+                                         " type: 'scatter',");
+                                    //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
+                                    if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness")
+                                    {
 
+                                    }
+                                    else
+                                    {
+                                        sw.Write(" visible: 'legendonly',");
+                                    }
+                                    sw.Write(" line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
+                                    sw.Write(" fill: 'tozeroy'," +
+                                         " name: \"" + bgm.getBoonName() + "\"");
+                                }
+                                sw.Write(" },");
+                            }
+                        }
+                        //int maxDPS = 0;
+                        if (SnapSettings[1])
+                        {//show total dps plot
+                            sw.Write("{");
+                            //Adding dps axis
+                            List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
+                            sw.Write("y: [");
+                            int ptdgCount = 0;
+                            foreach (int[] dp in playertotaldpsgraphdata)
+                            {
+                                if (ptdgCount == playertotaldpsgraphdata.Count - 1)
+                                {
+                                    sw.Write("'" + dp[1] + "'");
+                                }
+                                else
+                                {
+                                    sw.Write("'" + dp[1] + "',");
+                                }
 
-                    if (skill == null)
-                    {
-                        skillName = s_data.getName(cl.getID());
-                    }
-                    else
-                    {
-                        skillName = skill.name;
-                    }
-                    float dur = 0.0f;
-                    if (skillName == "Dodge")
-                    {
-                        dur = 0.5f;
-                    }
-                    else if (cl.getID() == -2)
-                    {//wepswap
-                        skillName = "Weapon Swap";
-                        dur = 0.1f;
-                    }
-                    else if (skillName == "Resurrect")
-                    {
-                        dur = cl.getActDur() / 1000f;
-                    }
-                    else if (skillName == "Bandage")
-                    {
-                        dur = cl.getActDur() / 1000f;
-                    }
-                    else
-                    {
-                        dur = cl.getActDur() / 1000f;
-                    }
-                    skillName = skillName.Replace("\"", "");
-                    sw.Write("{" +
-                        "y: ['1.5']," +
-                        "x: ['" + dur + "']," +
-                        "base:'" + cl.getTime() / 1000f + "'," +
-                        "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
-                        "orientation:'h'," +
-                        "mode: 'markers'," +
-                        "type: 'bar',");
-                    if (skill != null)
-                    {
-                        if (skill.slot == "Weapon_1")
-                        {
-                            sw.Write("width:'0.5',");
+                                ptdgCount++;
+                            }
+                            if (playertotaldpsgraphdata.Count == 0)
+                            {
+                                sw.Write("'0'");
+                            }
+                            sw.Write("],");
+                            //add time axis
+                            sw.Write("x: [");
+                            ptdgCount = 0;
+                            foreach (int[] dp in playertotaldpsgraphdata)
+                            {
+                                if (ptdgCount == playertotaldpsgraphdata.Count - 1)
+                                {
+                                    sw.Write("'" + dp[0] + "'");
+                                }
+                                else
+                                {
+                                    sw.Write("'" + dp[0] + "',");
+                                }
+                                ptdgCount++;
+                            }
+                            if (playertotaldpsgraphdata.Count == 0)
+                            {
+                                sw.Write("'0'");
+                            }
+                            sw.Write("],");
+                            sw.Write(" mode: 'lines'," +
+                                        " line: {shape: 'spline',color:'rgb(0,250,0)'}," +
+                               " yaxis: 'y3'," +
+                               // "legendgroup: 'Damage'," +
+                               " name: 'Total DPS'" + "}");
                         }
-                        else
-                        {
-                            sw.Write("width:'1',");
-                        }
+                    }                   
+                    sw.Write("];");
+                    sw.Write("var layout = {");
+                    {
+                        sw.Write("yaxis: {" +
+                               "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
+                               "range: [0, 2]" +
+                           "}," +
 
+                           "legend: { traceorder: 'reversed' }," +
+                           "hovermode: 'compare'," +
+                           "yaxis2: { title: 'Condis/Boons', domain: [0.11, 0.50], fixedrange: true }," +
+                           "yaxis3: { title: 'DPS', domain: [0.51, 1] },");
+                        sw.Write("images: [");
+                        {
+                            if (SnapSettings[7])//Display rotation
+                            {
+                                int castCount = 0;
+                                foreach (CastLog cl in casting)
+                                {
+                                    string skillIcon = "";
+                                    GW2APISkill skill = null;
+                                    if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
+                                    {
+                                        skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
+                                    }
+                                    if (skill != null && cl.getID() != -2)
+                                    {
+                                        if (skill.slot != "Weapon_1")
+                                        {
+                                            skillIcon = skill.icon;
+                                            sw.Write("{" +
+                                                      "source: '" + skillIcon + "'," +
+                                                      "xref: 'x'," +
+                                                      "yref: 'y'," +
+                                                      "x: " + (cl.getTime() / 1000f) + "," +
+                                                      "y: 0," +
+                                                      "sizex: 1.1," +
+                                                      "sizey: 1.1," +
+                                                      "xanchor: 'left'," +
+                                                      "yanchor: 'bottom'" +
+                                                  "}");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        string skillName = "";
+                                        if (cl.getID() == -2)
+                                        { //wepswap
+                                            skillName = "Weapon Swap";
+                                            // skillIcon = "https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png";
+                                        }
+                                        else
+                                        {
+                                            skillName = skill_data.getName(cl.getID());
+                                        }
+                                        if (skillName == "Dodge")
+                                        {
+                                            // skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
+                                        }
+                                        else if (skillName == "Resurrect")
+                                        {
+                                            //skillIcon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
+                                        }
+                                        else if (skillName == "Bandage")
+                                        {
+                                            // skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
+                                        }
+                                        sw.Write("{" +
+                                                      "source: '" + skillIcon + "'," +
+                                                      "xref: 'x'," +
+                                                      "yref: 'y'," +
+                                                      "x: " + cl.getTime() / 1000f + "," +
+                                                      "y: 0," +
+                                                      "sizex: 1.1," +
+                                                      "sizey: 1.1," +
+                                                      "xanchor: 'left'," +
+                                                      "yanchor: 'bottom'" +
+                                                  "}");
+                                    }
+                                    if (castCount == casting.Count - 1)
+                                    {
+                                    }
+                                    else
+                                    {
+                                        sw.Write(",");
+                                    }
+                                }
+                            }
+                        }
+                        sw.Write("],");
+                        sw.Write("font: { color: '#ffffff' }," +
+                                "paper_bgcolor: 'rgba(0,0,0,0)'," +
+                                "plot_bgcolor: 'rgba(0,0,0,0)'");
                     }
-                    else
-                    {
-                        sw.Write("width:'1',");
-                    }
-
-                    sw.Write("hoverinfo: 'name'," +
-                    "hoverlabel:{namelength:'-1'}," +
-                    " marker: {");
-                    if (cl.endActivation() != null)
-                    {
-                        if (cl.endActivation().getID() == 3)
-                        {
-                            sw.Write("color: 'rgb(40,40,220)',");
-                        }
-                        else if (cl.endActivation().getID() == 4)
-                        {
-                            sw.Write("color: 'rgb(220,40,40)',");
-                        }
-                        else if (cl.endActivation().getID() == 5)
-                        {
-                            sw.Write("color: 'rgb(40,220,40)',");
-                        }
-                        else
-                        {
-                            sw.Write("color: 'rgb(220,220,0)',");
-                        }
-                    }
-                    else
-                    {
-                        sw.Write("color: 'rgb(220,220,0)',");
-                    }
-                    sw.Write(" width: 5," +
-                     "line:" +
-                      "{");
-                    if (cl.startActivation() != null)
-                    {
-                        if (cl.startActivation().getID() == 1)
-                        {
-                            sw.Write("color: 'rgb(20,20,20)',");
-                        }
-                        else if (cl.startActivation().getID() == 2)
-                        {
-                            sw.Write("color: 'rgb(220,40,220)',");
-                        }
-                    }
-                    sw.Write("width: 1" +
-                            "}" +
-                        "}," +
-                        "showlegend: false" +
-                    " },");
-
+                    sw.Write("};");
+                    sw.Write("Plotly.newPlot('Graph" + p.getInstid() + "', data, layout);");
                 }
-            }
-
-
-            List<Boon> parseBoonsList = new List<Boon>();
-            //Condis
-            parseBoonsList.AddRange(Boon.getCondiBoonList());
-            //Every boon and buffs
-            parseBoonsList.AddRange(Boon.getAllProfList());
-
-
-            List<BoonsGraphModel> boonGraphData = getBossBoonGraph(p);
-            boonGraphData.Reverse();
-            foreach (BoonsGraphModel bgm in boonGraphData)
-            {
-                if (parseBoonsList.FirstOrDefault(x => x.getName() == bgm.getBoonName()) != null)
-                {
-                    sw.Write("{");
-                    sw.Write("y: [");
-                    List<Point> bChart = bgm.getBoonChart();
-                    int bChartCount = 0;
-                    foreach (Point pnt in bChart)
-                    {
-                        if (bChartCount == bChart.Count - 1)
-                        {
-                            sw.Write("'" + pnt.Y + "'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + pnt.Y + "',");
-                        }
-                        bChartCount++;
-                    }
-                    if (bgm.getBoonChart().Count == 0)
-                    {
-                        sw.Write("'0'");
-                    }
-
-
-                    sw.Write("]," +
-                     "x: [");
-                    bChartCount = 0;
-                    foreach (Point pnt in bChart)
-                    {
-                        if (bChartCount == bChart.Count - 1)
-                        {
-                            sw.Write("'" + pnt.X + "'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + pnt.X + "',");
-                        }
-                        bChartCount++;
-                    }
-                    if (bgm.getBoonChart().Count == 0)
-                    {
-                        sw.Write("'0'");
-                    }
-                    sw.Write("]," +
-                         " yaxis: 'y2'," +
-                         " type: 'scatter',");
-                    //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
-                    if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness") { }
-                    else
-                    {
-                        sw.Write(" visible: 'legendonly',");
-                    }
-                    sw.Write(" line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
-                    sw.Write(" fill: 'tozeroy'," +
-                         " name: \"" + bgm.getBoonName() + "\"" +
-                         " },");
-                }
-
-            }
-
-            int maxDPS = 0;
-
-            if (SnapSettings[1])
-            {//show total dps plot
-                sw.Write("{");
-                //Adding dps axis
-                List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
-                sw.Write("y: [");
-                int ptdgCount = 0;
-                foreach (int[] dp in playertotaldpsgraphdata)
-                {
-                    if (dp[1] > maxDPS)
-                    {
-                        maxDPS = dp[1];
-                    }
-                    if (ptdgCount == playertotaldpsgraphdata.Count - 1)
-                    {
-                        sw.Write("'" + dp[1] + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + dp[1] + "',");
-                    }
-
-                    ptdgCount++;
-                }
-                if (playertotaldpsgraphdata.Count == 0)
-                {
-                    sw.Write("'0'");
-                }
-
-                sw.Write("],");
-                //add time axis
-                sw.Write("x: [");
-                ptdgCount = 0;
-                foreach (int[] dp in playertotaldpsgraphdata)
-                {
-                    if (ptdgCount == playertotaldpsgraphdata.Count - 1)
-                    {
-                        sw.Write("'" + dp[0] + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + dp[0] + "',");
-                    }
-                    ptdgCount++;
-                }
-                if (playertotaldpsgraphdata.Count == 0)
-                {
-                    sw.Write("'0'");
-                }
-
-                sw.Write("],");
-                sw.Write(" mode: 'lines'," +
-                            " line: {shape: 'spline',color:'rgb(0,250,0)'}," +
-                   " yaxis: 'y3'," +
-                   // "legendgroup: 'Damage'," +
-                   " name: 'Total DPS'" + "},");
-            }
-            if (maxDPS > 0)
-            {
-
-                //Boss Health
-                sw.Write("{");
-                //Adding dps axis
-                sw.Write("y: [");
-
-                float scaler = boss_data.getHealth() / maxDPS;
-                int hotCount = 0;
-                List<int[]> BossHOT = boss_data.getHealthOverTime();
-                foreach (int[] dp in BossHOT)
-                {
-                    if (hotCount == BossHOT.Count - 1)
-                    {
-                        sw.Write("'" + (dp[1] / 10000f) * maxDPS + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + (dp[1] / 10000f) * maxDPS + "',");
-                    }
-                    hotCount++;
-
-                }
-
-                sw.Write("],");
-                //text axis is boss hp in %
-                sw.Write("text: [");
-
-                float scaler2 = boss_data.getHealth() / 100;
-                hotCount = 0;
-                foreach (int[] dp in BossHOT)
-                {
-                    if (hotCount == BossHOT.Count - 1)
-                    {
-                        sw.Write("'" + dp[1] / 100f + "% HP'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + dp[1] / 100f + "% HP',");
-                    }
-                    hotCount++;
-
-                }
-
-                sw.Write("],");
-                //add time axis
-                sw.Write("x: [");
-                hotCount = 0;
-                foreach (int[] dp in BossHOT)
-                {
-                    if (hotCount == BossHOT.Count - 1)
-                    {
-                        sw.Write("'" + (float)(dp[0] / 1000f) + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + (float)(dp[0] / 1000f) + "',");
-                    }
-
-                    hotCount++;
-                }
-
-                sw.Write("],");
-                sw.Write(" mode: 'lines'," +
-                    " line: {shape: 'spline', dash: 'dashdot'}," +
-                    " yaxis: 'y3'," +
-                    "hoverinfo: 'text'," +
-           " name: 'Boss health'");
-                sw.Write("}");
-            }
-
-            sw.Write("];" +
-            "var layout = {" +
-
-                "yaxis: {" +
-                    "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
-                    "range: [0, 2]" +
-                "}," +
-
-                "legend: { traceorder: 'reversed' }," +
-                "hovermode: 'compare'," +
-                "yaxis2: { title: 'Condis/Boons', domain: [0.11, 0.50], fixedrange: true }," +
-                "yaxis3: { title: 'DPS', domain: [0.51, 1] }," +
-                "images: [");
-            if (SnapSettings[7])//Display rotation
-            {
-                int castCount = 0;
-                foreach (CastLog cl in casting)
-                {
-                    string skillIcon = "";
-                    GW2APISkill skill = null;
-                    if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
-                    {
-                        skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
-                    }
-
-
-                    if (skill != null && cl.getID() != -2)
-                    {
-                        if (skill.slot != "Weapon_1")
-                        {
-                            skillIcon = skill.icon;
-                            sw.Write("{" +
-                                      "source: '" + skillIcon + "'," +
-                                      "xref: 'x'," +
-                                      "yref: 'y'," +
-                                      "x: " + (cl.getTime() / 1000f) + "," +
-                                      "y: 0," +
-                                      "sizex: 1.1," +
-                                      "sizey: 1.1," +
-                                      "xanchor: 'left'," +
-                                      "yanchor: 'bottom'" +
-                                  "}");
-                        }
-                    }
-                    else
-                    {
-                        string skillName = "";
-
-                        if (cl.getID() == -2)
-                        { //wepswap
-                            skillName = "Weapon Swap";
-                            // skillIcon = "https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png";
-                        }
-                        else
-                        {
-                            skillName = skill_data.getName(cl.getID());
-                        }
-
-
-                        if (skillName == "Dodge")
-                        {
-                            // skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
-                        }
-                        else if (skillName == "Resurrect")
-                        {
-                            //skillIcon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
-                        }
-                        else if (skillName == "Bandage")
-                        {
-                            // skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
-                        }
-                        sw.Write("{" +
-                                      "source: '" + skillIcon + "'," +
-                                      "xref: 'x'," +
-                                      "yref: 'y'," +
-                                      "x: " + cl.getTime() / 1000f + "," +
-                                      "y: 0," +
-                                      "sizex: 1.1," +
-                                      "sizey: 1.1," +
-                                      "xanchor: 'left'," +
-                                      "yanchor: 'bottom'" +
-                                  "}");
-                    }
-
-                    if (castCount == casting.Count - 1)
-                    {
-                    }
-                    else
-                    {
-                        sw.Write(",");
-                    }
-                }
-
-
-            }
-
-            sw.Write("]," +
-
-                    "font: { color: '#ffffff' }," +
-                    "paper_bgcolor: 'rgba(0,0,0,0)'," +
-                    "plot_bgcolor: 'rgba(0,0,0,0)'" +
-                "};" +
-                        "Plotly.newPlot('Graph" + p.getInstid() + "', data, layout);" +
-            "</script> ");
-            CreateDMGDistTable(sw, p);
-            sw.Write("</div>");
-            foreach (AgentItem mobAgent in minionAgentList)
-            {
-                sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">");
-                CreateDMGDistTable(sw, p, mobAgent);
+                sw.Write("</script> ");
+                CreateDMGDistTable(sw, p);
                 sw.Write("</div>");
-            }
+                foreach (AgentItem mobAgent in minionAgentList)
+                {
+                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">");
+                    {
+                        CreateDMGDistTable(sw, p, mobAgent);
+                    }
+                    sw.Write("</div>");
+                }
+
+            }         
             sw.Write("</div>");
         }
         public void CreateCustomCSS(StreamWriter sw)
@@ -4913,8 +4653,8 @@ namespace LuckParser.Controllers
             sw.Write("div.dataTables_wrapper { width: 1100px; margin: 0 auto; }");
             sw.Write("th.dt-left, td.dt-left { text-align: left; }");
             sw.Write("table.dataTable.display tbody tr.condi {background-color: #ff6666;}");
-            sw.Write(".rot-skill{width: 34px;height: 34px;display: inline-block;}");
-            sw.Write(".rot-crop{width : 30px;height: 30px; display: inline-block}");
+            sw.Write(".rot-skill{width: 24px;height: 24px;display: inline - block;}");
+            sw.Write(".rot-crop{width : 20px;height: 20px; display: inline-block}");
         }
         public void CreateHTML(StreamWriter sw, bool[] settingsSnap)
         {
@@ -5138,7 +4878,7 @@ namespace LuckParser.Controllers
                                 sw.Write("<ul class=\"nav nav-tabs\">" +
                                         "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#mainBoon\">Boons</a></li>" +
                                         "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offBuff\">Damage Buffs</a></li>" +
-                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defBuff\">Defensive SBuffs</a></li>" +
+                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defBuff\">Defensive Buffs</a></li>" +
                                     "</ul>");
                                 sw.Write("<div id=\"boonsSubTab\" class=\"tab-content\">");
                                 {
@@ -5547,6 +5287,8 @@ namespace LuckParser.Controllers
                     return "https://wiki.guildwars2.com/images/thumb/7/79/Daze.png/20px-Daze.png";
                 case "Invuln":
                     return "https://wiki.guildwars2.com/images/e/eb/Determined.png";
+                case "Blinded":
+                    return "https://wiki.guildwars2.com/images/thumb/3/33/Blinded.png/20px-Blinded.png";
                 case "Wasted":
                     return "https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png";
                 case "Saved":
@@ -5559,99 +5301,7 @@ namespace LuckParser.Controllers
                     return "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
                 case "Bandage":
                     return "https://render.guildwars2.com/file/D2D7D11874060D68760BFD519CFC77B6DF14981F/102928.png";
-
-                case "Bleeding":
-                    return "https://wiki.guildwars2.com/images/thumb/3/33/Bleeding.png/20px-Bleeding.png";
-                case "Burning":
-                    return "https://wiki.guildwars2.com/images/thumb/4/45/Burning.png/20px-Burning.png";
-                case "Confusion":
-                    return "https://wiki.guildwars2.com/images/thumb/e/e6/Confusion.png/20px-Confusion.png";
-                case "Poison":
-                    return "https://wiki.guildwars2.com/images/thumb/0/05/Poison.png/20px-Poison.png";
-                case "Torment":
-                    return "https://wiki.guildwars2.com/images/thumb/0/08/Torment.png/20px-Torment.png";
-                case "Blinded":
-                    return "https://wiki.guildwars2.com/images/thumb/3/33/Blinded.png/20px-Blinded.png";
-                case "Chilled":
-                    return "https://wiki.guildwars2.com/images/thumb/a/a6/Chilled.png/20px-Chilled.png";
-                case "Crippled":
-                    return "https://wiki.guildwars2.com/images/thumb/f/fb/Crippled.png/20px-Crippled.png";
-                case "Fear":
-                    return "https://wiki.guildwars2.com/images/thumb/e/e6/Fear.png/20px-Fear.png";
-                case "Immobile":
-                    return "https://wiki.guildwars2.com/images/thumb/3/32/Immobile.png/20px-Immobile.png";
-                case "Slow":
-                    return "https://wiki.guildwars2.com/images/thumb/f/fb/Slow_40px.png/20px-Slow_40px.png";
-                case "Taunt":
-                    return "https://wiki.guildwars2.com/images/thumb/c/cc/Taunt.png/20px-Taunt.png";
-                case "Weakness":
-                    return "https://wiki.guildwars2.com/images/thumb/f/f9/Weakness.png/20px-Weakness.png";
-                case "Vulnerability":
-                    return "https://wiki.guildwars2.com/images/thumb/a/af/Vulnerability.png/20px-Vulnerability.png";
-                case "Aegis": return "https://wiki.guildwars2.com/images/e/e5/Aegis.png";
-                case "Fury": return "https://wiki.guildwars2.com/images/4/46/Fury.png";
-                case "Might": return "https://wiki.guildwars2.com/images/7/7c/Might.png";
-                case "Protection": return "https://wiki.guildwars2.com/images/6/6c/Protection.png";
-                case "Quickness": return "https://wiki.guildwars2.com/images/b/b4/Quickness.png";
-                case "Regeneration": return "https://wiki.guildwars2.com/images/5/53/Regeneration.png";
-                case "Resistance": return "https://wiki.guildwars2.com/images/thumb/e/e9/Resistance_40px.png/20px-Resistance_40px.png";
-                case "Retaliation": return "https://wiki.guildwars2.com/images/5/53/Retaliation.png";
-                case "Stability": return "https://wiki.guildwars2.com/images/a/ae/Stability.png";
-                case "Swiftness": return "https://wiki.guildwars2.com/images/a/af/Swiftness.png";
-                case "Vigor": return "https://wiki.guildwars2.com/images/f/f4/Vigor.png";
-
-                case "Alacrity": return "https://wiki.guildwars2.com/images/thumb/4/4c/Alacrity.png/20px-Alacrity.png";
-                case "Glyph of Empowerment": return "https://wiki.guildwars2.com/images/thumb/f/f0/Glyph_of_Empowerment.png/33px-Glyph_of_Empowerment.png";
-                case "Grace of the Land": return "https://wiki.guildwars2.com/images/thumb/4/45/Grace_of_the_Land.png/25px-Grace_of_the_Land.png";
-                case "Sun Spirit": return "https://wiki.guildwars2.com/images/thumb/d/dd/Sun_Spirit.png/33px-Sun_Spirit.png";
-                case "Water Spirit": return "https://wiki.guildwars2.com/images/thumb/0/06/Water_Spirit.png/33px-Water_Spirit.png";
-                case "Frost Spirit": return "https://wiki.guildwars2.com/images/thumb/c/c6/Frost_Spirit.png/33px-Frost_Spirit.png";
-                case "Banner of Strength": return "https://wiki.guildwars2.com/images/thumb/e/e1/Banner_of_Strength.png/33px-Banner_of_Strength.png";
-                case "Banner of Discipline": return "https://wiki.guildwars2.com/images/thumb/5/5f/Banner_of_Discipline.png/33px-Banner_of_Discipline.png";
-                case "Banner of Tactics": return "https://wiki.guildwars2.com/images/thumb/3/3f/Banner_of_Tactics.png/33px-Banner_of_Tactics.png";
-                case "Banner of Defense": return "https://wiki.guildwars2.com/images/thumb/f/f1/Banner_of_Defense.png/33px-Banner_of_Defense.png";
-                case "Spotter": return "https://wiki.guildwars2.com/images/b/b0/Spotter.png";
-                case "Stone Spirit": return "https://wiki.guildwars2.com/images/thumb/3/35/Stone_Spirit.png/20px-Stone_Spirit.png";
-                case "Storm Spirit": return "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png";
-                case "Empower Allies": return "https://wiki.guildwars2.com/images/thumb/4/4c/Empower_Allies.png/20px-Empower_Allies.png";
-                case "Soothing Mist": return "https://wiki.guildwars2.com/images/f/f7/Soothing_Mist.png";
-                case "Pinpoint Distribution": return "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png";
-                case "Vampiric Aura": return "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png";
-                case "Assassin's Presence": return "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png";
-                case "Battle Presence": return "https://wiki.guildwars2.com/images/2/27/Battle_Presence.png";
-                case "Razorclaw's Rage": return "https://wiki.guildwars2.com/images/7/73/Razorclaw%27s_Rage.png";
-                case "Soulcleave's Summit": return "https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png";
-                case "Ashes of the Just": return "https://wiki.guildwars2.com/images/6/6d/Epilogue-_Ashes_of_the_Just.png";
-                case "Vulture Stance": return "https://wiki.guildwars2.com/images/8/8f/Vulture_Stance.png";
-                case "One Wolf Pack": return "https://wiki.guildwars2.com/images/3/3b/One_Wolf_Pack.png";
-                case "Skale Venom": return "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png";
-                case "Spider Venom": return "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png";
-                case "Basilisk Venom": return "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png";
-                case "Conjure Flame Axe": return "https://wiki.guildwars2.com/images/a/a1/Conjure_Flame_Axe.png";
-                case "Conjure Frost Bow": return "https://wiki.guildwars2.com/images/c/c3/Conjure_Frost_Bow.png";
-                case "Conjure Lightning Hammer": return "https://wiki.guildwars2.com/images/1/1f/Conjure_Lightning_Hammer.png";
-                case "Conjure Fiery Greatsword": return "https://wiki.guildwars2.com/images/e/e2/Conjure_Fiery_Greatsword.png";
-                case "Arcane Power": return "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png";
-                case "Rite of the Great Dwarf": return "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png";
-                case "Infuse Light": return "https://wiki.guildwars2.com/images/6/60/Infuse_Light.png";
-                case "Naturalistic Resonance": return "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png";
-                case "Breakrazor's Bastion": return "https://wiki.guildwars2.com/images/a/a7/Breakrazor%27s_Bastion.png";
-                case "Purging Flames": return "https://wiki.guildwars2.com/images/2/28/Purging_Flames.png";
-                case "Eternal Oasis": return "https://wiki.guildwars2.com/images/5/5f/Epilogue-_Eternal_Oasis.png";
-                case "Unbroken Lines": return "https://wiki.guildwars2.com/images/d/d8/Epilogue-_Unbroken_Lines.png";
-                case "Strength in Numbers": return "https://wiki.guildwars2.com/images/7/7b/Strength_in_Numbers.png";
-                case "Dolyak Stance": return "https://wiki.guildwars2.com/images/7/71/Dolyak_Stance.png";
-                case "Griffon Stance": return "https://wiki.guildwars2.com/images/9/98/Griffon_Stance.png";
-                case "Moa Stance": return "https://wiki.guildwars2.com/images/6/66/Moa_Stance.png";
-                case "Bear Stance": return "https://wiki.guildwars2.com/images/f/f0/Bear_Stance.png";
-                case "Ice Drake Venom": return "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png";
-                case "Skelk Venom": return "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png";
-                case "Devourer Venom": return "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png";
-                case "Last Rites": return "https://wiki.guildwars2.com/images/1/1a/Last_Rites_%28effect%29.png";
-                case "Conjure Earth Shield": return "https://wiki.guildwars2.com/images/7/7a/Conjure_Earth_Shield.png";
-                case "Rebound": return "https://wiki.guildwars2.com/images/0/03/%22Rebound%21%22.png";
-
-
+                    
                 case "Color-Aegis": return "rgb(102,255,255)";
                 case "Color-Fury": return "rgb(255,153,0)";
                 case "Color-Might": return "rgb(153,0,0)";
