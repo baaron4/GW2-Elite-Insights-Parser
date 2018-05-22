@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LuckParser.Controllers;
 
 namespace LuckParser
 {
@@ -146,6 +147,20 @@ namespace LuckParser
         private void checkBox11_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.LargeRotIcons = SimpleRotCheck.Checked;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //Update skill list
+            GW2APIController tempcontroller = new GW2APIController();
+            tempcontroller.WriteSkillListToFile();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //Update skill list
+            GW2APIController tempcontroller = new GW2APIController();
+            tempcontroller.RetryWriteSkillListtoFile();
         }
     }
 }
