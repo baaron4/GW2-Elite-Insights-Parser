@@ -1,4 +1,5 @@
 ﻿using LuckParser.Models;
+using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,13 +33,71 @@ namespace LuckParser.Controllers
             HttpResponseMessage response = APIClient.GetAsync(path).Result;
             if (response.IsSuccessStatusCode)
             {
-                skill = response.Content.ReadAsAsync<GW2APISkill>().Result;
+
+                //skill = response.Content.ReadAsAsync<GW2APISkill>().Result;
+                GW2APISkillCheck skillCheck = response.Content.ReadAsAsync<GW2APISkillCheck>().Result;
+                if (skillCheck.facts != null)
+                {
+                    bool block = true;
+                    foreach (GW2APIfacts fact in skillCheck.facts)
+                    {
+                        if (fact.type == "Unblockable" || fact.type == "StunBreak")//Unblockable changeing value from an int to a bool has caused so much chaos
+                        {
+                            skill = skillCheck;
+                            block = false;
+                            break;
+                        }
+                       
+                    }
+                    if (block)
+                    {
+                        response = APIClient.GetAsync(path).Result;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            skill = response.Content.ReadAsAsync<GW2APISkillDetailed>().Result;
+                        }
+                        
+                    }
+                }
+                else
+                {
+                    skill = skillCheck;
+                }
             }
             else {//try again after a wait
                 System.Threading.Thread.Sleep(1000);
                 response = APIClient.GetAsync(path).Result;
                 if (response.IsSuccessStatusCode) {
-                    skill = response.Content.ReadAsAsync<GW2APISkill>().Result;
+                    //skill = response.Content.ReadAsAsync<GW2APISkill>().Result;
+                    GW2APISkillCheck skillCheck = response.Content.ReadAsAsync<GW2APISkillCheck>().Result;
+                    if (skillCheck.facts != null)
+                    {
+                        bool block = true;
+                        foreach (GW2APIfacts fact in skillCheck.facts)
+                        {
+                            if (fact.type == "Unblockable" || fact.type == "StunBreak")//Unblockable changeing value from an int to a bool has caused so much chaos
+                            {
+                                skill = skillCheck;
+                                block = false;
+                                break;
+                            }
+
+                        }
+                        if (block == false)
+                        {
+                            response = APIClient.GetAsync(path).Result;
+                            if (response.IsSuccessStatusCode)
+                            {
+                                skill = response.Content.ReadAsAsync<GW2APISkillDetailed>().Result;
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        skill = skillCheck;
+                    }
+
                 }
             }
             return skill;
@@ -51,7 +110,115 @@ namespace LuckParser.Controllers
             }
             return ListOfSkills;
         }
+        public List<int> WriteSkillListToFile()
+        {
+            //used for wiritng new XMLs
+            FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+            + "/Content/SkillList.txt", FileMode.Create);
 
+            fcreate.Close();
+
+          
+            Console.WriteLine("Getting APi");
+            //Get list from API
+            GetAPIClient();
+
+            ListOfSkills = new SkillList();
+            HttpResponseMessage response = APIClient.GetAsync("/v2/skills").Result;
+            int[] idArray ;
+            List<int> failedList = new List<int>();
+            if (response.IsSuccessStatusCode)
+            {
+                // Get Skill ID list
+                idArray = response.Content.ReadAsAsync<int[]>().Result;
+                
+                foreach (int id in idArray)
+                {
+                    GW2APISkill curSkill = new GW2APISkill();
+                    curSkill = GetGW2APISKill("/v2/skills/" + id);
+                    if (curSkill != null)
+                    {
+
+                        ListOfSkills.Items.Add(curSkill);
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("Fail to get response");//fail to retrieve
+                        failedList.Add(id);
+                    }
+
+                }
+                Stream stream = System.IO.File.OpenWrite(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+            + "/Content/SkillList.txt");
+                Type[] tyList = { typeof(List<GW2APISkillCheck>), typeof(List<GW2APISkillDetailed>) };
+                
+                XmlSerializer xmlSer = new XmlSerializer(typeof(List<GW2APISkill>),tyList);
+                xmlSer.Serialize(stream, ListOfSkills.Items);
+                stream.Close();
+               
+            }
+            return failedList;
+        }
+        public void RetryWriteSkillListtoFile() {
+            if (new FileInfo(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                + "/Content/SkillList.txt").Length != 0)
+            {
+                Console.WriteLine("Reading Skilllist");
+
+                //Get list from local XML
+                using (var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+                + "/Content/SkillList.txt"))
+                {
+                    Type[] tyList = { typeof(List<GW2APISkillCheck>), typeof(List<GW2APISkillDetailed>) };
+
+
+                    XmlSerializer deserializer = new XmlSerializer(typeof(SkillList), tyList);
+                    ListOfSkills = (SkillList)deserializer.Deserialize(reader);
+
+                    reader.Close();
+                }
+            }
+            Console.WriteLine("Getting APi");
+            //Get list from API
+            GetAPIClient();
+
+            HttpResponseMessage response = APIClient.GetAsync("/v2/skills").Result;
+            int[] idArray;
+            if (response.IsSuccessStatusCode)
+            {
+                // Get Skill ID list
+                idArray = response.Content.ReadAsAsync<int[]>().Result;
+
+                foreach (int id in idArray)
+                {
+                    if (ListOfSkills.Items.FirstOrDefault(x => x.id == id) == null)
+                    {
+                        GW2APISkill curSkill = new GW2APISkill();
+                        curSkill = GetGW2APISKill("/v2/skills/" + id);
+                        if (curSkill != null)
+                        {
+
+                            ListOfSkills.Items.Add(curSkill);
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("Fail to get response");//fail to retrieve
+
+                        }
+                    }
+                }
+                Stream stream = System.IO.File.OpenWrite(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
+            + "/Content/SkillList.txt");
+                Type[] tyList = { typeof(List<GW2APISkillCheck>), typeof(List<GW2APISkillDetailed>) };
+
+                XmlSerializer xmlSer = new XmlSerializer(typeof(List<GW2APISkill>), tyList);
+                xmlSer.Serialize(stream, ListOfSkills.Items);
+                stream.Close();
+            }
+            
+        }
         private void SetSkillList()
         {
 
@@ -67,54 +234,16 @@ namespace LuckParser.Controllers
                     using (var reader = new StreamReader(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
                     + "/Content/SkillList.txt"))
                     {
-                        XmlSerializer deserializer = new XmlSerializer(typeof(SkillList));
+                        Type[] tyList = { typeof(List<GW2APISkillCheck>), typeof(List<GW2APISkillDetailed>) };
+
+                       
+                        XmlSerializer deserializer = new XmlSerializer(typeof(SkillList),tyList);
                         ListOfSkills = (SkillList)deserializer.Deserialize(reader);
 
                         reader.Close();
                     }
                 }
-                //used for wiritng new XMLs
-                //FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                //+ "/SkillList.txt", FileMode.Create);
-
-                //fcreate.Close();
-
-                //if (ListOfSkills.Items.Count == 0)
-                //{
-                //    Console.WriteLine("Getting APi");
-                //    //Get list from API
-                //    GetAPIClient();
-                //    ListOfSkills = new SkillList();
-                //    HttpResponseMessage response = APIClient.GetAsync("/v2/skills").Result;
-                //    int[] idArray;
-                //    if (response.IsSuccessStatusCode)
-                //    {
-                //        // Get Skill ID list
-                //        idArray = response.Content.ReadAsAsync<int[]>().Result;
-
-                //        foreach (int id in idArray)
-                //        {
-                //            GW2APISkill curSkill = new GW2APISkill();
-                //            curSkill = GetGW2APISKill("/v2/skills/" + id);
-                //            if (curSkill != null)
-                //            {
-
-                //                    ListOfSkills.Items.Add(curSkill);
-
-                //            }
-                //            else
-                //            {
-                //                Console.WriteLine("Fail to get response");//fail to retrieve
-                //            }
-
-                //        }
-                //        Stream stream = System.IO.File.OpenWrite(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
-                // + "/Content/SkillList.txt");
-                //        XmlSerializer xmlSer = new XmlSerializer(typeof(List<GW2APISkill>));
-                //        xmlSer.Serialize(stream, ListOfSkills.Items);
-                //        stream.Close();
-                //    }
-                //}
+               
             }
 
 
@@ -128,6 +257,9 @@ namespace LuckParser.Controllers
             [XmlElement("GW2APISkill")]
             public List<GW2APISkill> Items { get; set; }
         }
+        [XmlArray("GW2APISkill")]
+        [XmlArrayItem("GW2APISkillCheck", typeof(GW2APISkillCheck))]
+        [XmlArrayItem("GW2APISkillDetailed", typeof(GW2APISkillDetailed))]
         static SkillList ListOfSkills = new SkillList();
 
         public  GW2APISkill GetSkill(int id) {
