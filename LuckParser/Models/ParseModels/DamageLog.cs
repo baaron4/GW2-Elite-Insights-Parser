@@ -9,22 +9,22 @@ namespace LuckParser.Models.ParseModels
     public class DamageLog
     {
         // Fields
-        private int time;
+        private long time;
         private int damage;
         private int skill_id;
         private int buff;
         private Result result;
-        private int is_ninety;
-        private int is_moving;
-        private int is_flanking;
+        private ushort is_ninety;
+        private ushort is_moving;
+        private ushort is_flanking;
         private Activation is_activation;
-        private int is_shields;
+        private ushort is_shields;
         private long src_agent;
-        private int src_instid;
+        private ushort src_instid;
 
         // Constructor
-        public DamageLog(int time, int damage, int skill_id, int buff, Result result, int is_ninety, int is_moving,
-                int is_flanking,Activation is_activation)
+        public DamageLog(long time, int damage, int skill_id, int buff, Result result, ushort is_ninety, ushort is_moving,
+                ushort is_flanking,Activation is_activation)
         {
             this.time = time;
             this.damage = damage;
@@ -36,8 +36,8 @@ namespace LuckParser.Models.ParseModels
             this.is_flanking = is_flanking;
             this.is_activation = is_activation;
         }
-        public DamageLog(int time, long srcagent,int instid, int damage, int skill_id, int buff, Result result, int is_ninety, int is_moving,
-               int is_flanking, Activation is_activation)
+        public DamageLog(long time, long srcagent, ushort instid, int damage, int skill_id, int buff, Result result, ushort is_ninety, ushort is_moving,
+               ushort is_flanking, Activation is_activation)
         {
             this.time = time;
             this.damage = damage;
@@ -52,8 +52,8 @@ namespace LuckParser.Models.ParseModels
             this.src_instid = instid;
 
         }
-        public DamageLog(int time, int damage, int skill_id, int buff, Result result, int is_ninety, int is_moving,
-               int is_flanking, Activation is_activation,int is_shields)
+        public DamageLog(long time, int damage, int skill_id, int buff, Result result, ushort is_ninety, ushort is_moving,
+               ushort is_flanking, Activation is_activation, ushort is_shields)
         {
             this.time = time;
             this.damage = damage;
@@ -66,8 +66,8 @@ namespace LuckParser.Models.ParseModels
             this.is_activation = is_activation;
             this.is_shields = is_shields;
         }
-        public DamageLog(int time, long srcagent, int instid, int damage, int skill_id, int buff, Result result, int is_ninety, int is_moving,
-              int is_flanking, Activation is_activation,int is_shields)
+        public DamageLog(long time, long srcagent, ushort instid, int damage, int skill_id, int buff, Result result, ushort is_ninety, ushort is_moving,
+              ushort is_flanking, Activation is_activation, ushort is_shields)
         {
             this.time = time;
             this.damage = damage;
@@ -84,7 +84,7 @@ namespace LuckParser.Models.ParseModels
 
         }
         // Getters
-        public int getTime()
+        public long getTime()
         {
             return time;
         }
@@ -109,17 +109,17 @@ namespace LuckParser.Models.ParseModels
             return result;
         }
 
-        public int isNinety()
+        public ushort isNinety()
         {
             return is_ninety;
         }
 
-        public int isMoving()
+        public ushort isMoving()
         {
             return is_moving;
         }
 
-        public int isFlanking()
+        public ushort isFlanking()
         {
             return is_flanking;
         }
@@ -127,14 +127,14 @@ namespace LuckParser.Models.ParseModels
         {
             return is_activation;
         }
-        public int isShields() {
+        public ushort isShields() {
             return is_shields;
         }
         public long getSrcAgent()
         {
             return src_agent;
         }
-        public int getInstidt()
+        public ushort getInstidt()
         {
             return src_instid;
         }

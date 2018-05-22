@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
             }
             foreach (BoonLog bl in boon_logs)
             {
-                if (bl.getValue() + bl.getTime() > fight_duration)
+                if ((long)bl.getValue() + bl.getTime() > fight_duration)
                 {
                     os = os + (bl.getValue() - (fight_duration - bl.getTime())) + bl.getOverstack();
                 }
@@ -52,8 +52,8 @@ namespace LuckParser.Models.ParseModels
         public static List<Point> getBoonIntervalsList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data)
         {
             // Initialise variables
-            int t_prev = 0;
-            int t_curr = 0;
+            long t_prev = 0;
+            long t_curr = 0;
             List<Point> boon_intervals = new List<Point>();
 
             // Loop: update then add durations
@@ -61,25 +61,25 @@ namespace LuckParser.Models.ParseModels
             {
                 t_curr = log.getTime();
                 boon.update(t_curr - t_prev);
-                boon.add(log.getValue());
-                int duration = t_curr + boon.getStackValue();//this may overload
+                boon.add((int)log.getValue());
+                long duration = t_curr + (long)boon.getStackValue();
                 if (duration < 0) {
-                    duration = Int32.MaxValue;
+                    duration = int.MaxValue;
                 }
                 t_prev = t_curr;
-                boon_intervals.Add(new Point(t_curr, duration));
+                boon_intervals.Add(new Point((int)t_curr, (int)duration));
             }
 
             // Merge intervals
             boon_intervals = Utility.mergeIntervals(boon_intervals);
 
             // Trim duration overflow
-            int fight_duration = b_data.getLastAware() - b_data.getFirstAware();
+            long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
             int last = boon_intervals.Count() - 1;
-            if (boon_intervals[last].Y > fight_duration)
+            if ((long)boon_intervals[last].Y > fight_duration)
             {
                 Point mod = boon_intervals[last];
-                mod.Y = fight_duration;
+                mod.Y = (int)fight_duration;
                 boon_intervals[last] = mod;
             }
 
@@ -106,8 +106,8 @@ namespace LuckParser.Models.ParseModels
         public static List<int> getBoonStacksList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data)
         {
             // Initialise variables
-            int t_prev = 0;
-            int t_curr = 0;
+            long t_prev = 0;
+            long t_curr = 0;
             List<int> boon_stacks = new List<int>();
             boon_stacks.Add(0);
 
@@ -117,7 +117,7 @@ namespace LuckParser.Models.ParseModels
                 t_curr = log.getTime();
                 boon.addStacksBetween(boon_stacks, t_curr - t_prev);
                 boon.update(t_curr - t_prev);
-                boon.add(log.getValue());
+                boon.add((int)log.getValue());
                 if (t_curr != t_prev)
                 {
                     boon_stacks.Add(boon.getStackValue());

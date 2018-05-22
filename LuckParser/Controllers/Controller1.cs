@@ -67,7 +67,7 @@ namespace LuckParser.Controllers
 
             return byt;
         }
-        private int getShort()
+        private ushort getShort()
         {
             byte[] bytes = new byte[2];
             for (int b = 0; b < bytes.Length; b++)
@@ -216,7 +216,7 @@ namespace LuckParser.Controllers
             safeSkip(1);
 
             // 2 bytes: boss instance ID
-            int instid = getShort();
+            ushort instid = getShort();
 
             // 1 byte: position
             safeSkip(1);
@@ -323,7 +323,7 @@ namespace LuckParser.Controllers
             while (stream.Length - stream.Position >= 64)
             {
                 // 8 bytes: time
-                int time = (int)getLong();
+                long time = getLong();
 
                 // 8 bytes: src_agent
                 long src_agent = getLong();
@@ -338,19 +338,19 @@ namespace LuckParser.Controllers
                 int buff_dmg = getInt();
 
                 // 2 bytes: overstack_value
-                int overstack_value = getShort();
+                ushort overstack_value = getShort();
 
                 // 2 bytes: skill_id
-                int skill_id = getShort();
+                ushort skill_id = getShort();
 
                 // 2 bytes: src_instid
-                int src_instid = getShort();
+                ushort src_instid = getShort();
 
                 // 2 bytes: dst_instid
-                int dst_instid = getShort();
+                ushort dst_instid = getShort();
 
                 // 2 bytes: src_master_instid
-                int src_master_instid = getShort();
+                ushort src_master_instid = getShort();
 
                 // 9 bytes: garbage
                 safeSkip(9);
@@ -360,7 +360,7 @@ namespace LuckParser.Controllers
                IFF iff = new IFF(Convert.ToByte(stream.ReadByte())); //Convert.ToByte(stream.ReadByte());
 
                 // 1 byte: buff
-                int buff = stream.ReadByte();
+                ushort buff = (ushort)stream.ReadByte();
 
                 // 1 byte: result
                 //Result result = Result.getEnum(f.read());
@@ -375,23 +375,23 @@ namespace LuckParser.Controllers
                 BuffRemove is_buffremoved = new BuffRemove(Convert.ToByte(stream.ReadByte()));
 
                 // 1 byte: is_ninety
-                int is_ninety = stream.ReadByte();
+                ushort is_ninety = (ushort)stream.ReadByte();
 
                 // 1 byte: is_fifty
-                int is_fifty = stream.ReadByte();
+                ushort is_fifty = (ushort)stream.ReadByte();
 
                 // 1 byte: is_moving
-                int is_moving = stream.ReadByte();
+                ushort is_moving = (ushort)stream.ReadByte();
 
                 // 1 byte: is_statechange
                 //StateChange is_statechange = StateChange.getEnum(f.read());
                 StateChange is_statechange = new StateChange(Convert.ToByte(stream.ReadByte()));
 
                 // 1 byte: is_flanking
-                int is_flanking = stream.ReadByte();
+                ushort is_flanking = (ushort)stream.ReadByte();
 
                 // 1 byte: is_flanking
-                int is_shields = stream.ReadByte();
+                ushort is_shields = (ushort)stream.ReadByte();
                 // 2 bytes: garbage
                 safeSkip(2);
 
@@ -455,7 +455,7 @@ namespace LuckParser.Controllers
                     boss_data.setLastAware(NPC.getLastAware());
                 }
             }
-            List<int[]> bossHealthOverTime = new List<int[]>();
+            List<long[]> bossHealthOverTime = new List<long[]>();
 
             // Grab values threw combat data
             foreach (CombatItem c in combat_list)
@@ -479,11 +479,11 @@ namespace LuckParser.Controllers
                     }
                     else if (c.isStateChange().getID() == 9)//Log start
                     {
-                        log_data.setLogStart(c.getValue());
+                        log_data.setLogStart((long)c.getValue());
                     }
                     else if (c.isStateChange().getID() == 10)//log end
                     {
-                        log_data.setLogEnd(c.getValue());
+                        log_data.setLogEnd((long)c.getValue());
 
                     }
                     //set boss dead
@@ -495,7 +495,7 @@ namespace LuckParser.Controllers
                     //set health update
                     if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 8)
                     {
-                        bossHealthOverTime.Add(new int[] { c.getTime() - boss_data.getFirstAware(), (int)c.getDstAgent() });
+                        bossHealthOverTime.Add(new long[] { c.getTime() - boss_data.getFirstAware(), c.getDstAgent() });
                     }
                 
 
@@ -510,7 +510,7 @@ namespace LuckParser.Controllers
                 {
                     if (NPC.getProf().Contains("16286"))
                     {
-                        bossHealthOverTime = new List<int[]>();//reset boss health over time
+                        bossHealthOverTime = new List<long[]>();//reset boss health over time
                         xera_2_instid = NPC.getInstid();
                         boss_data.setHealth(24085950);
                         boss_data.setLastAware(NPC.getLastAware());
@@ -527,7 +527,7 @@ namespace LuckParser.Controllers
                             //set health update
                             if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 8)
                             {
-                                bossHealthOverTime.Add(new int[] { c.getTime() - boss_data.getFirstAware(), (int)c.getDstAgent() });
+                                bossHealthOverTime.Add(new long[] { c.getTime() - boss_data.getFirstAware(), c.getDstAgent() });
                             }
                         }
                         break;
@@ -575,7 +575,7 @@ namespace LuckParser.Controllers
                 }
             }
             // Sort
-            p_list = p_list.OrderBy(a => Int32.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>Int32.Parse(a.getGroup()) - Int32.Parse(b.getGroup()))
+            p_list = p_list.OrderBy(a => int.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>int.Parse(a.getGroup()) - int.Parse(b.getGroup()))
             getBossKilled();
             setMechData();
         }
@@ -659,24 +659,24 @@ namespace LuckParser.Controllers
             {
                 dps = damage / fight_duration;
             }
-            totalAll_dps = (Int32)dps;
-            totalAll_damage = (Int32)damage;
+            totalAll_dps = (int)dps;
+            totalAll_damage = (int)damage;
             //Allcondi
             damage = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
             if (fight_duration > 0)
             {
                 dps = damage / fight_duration;
             }
-            totalAllcondi_dps = (Int32)dps;
-            totalAllcondi_damage = (Int32)damage;
+            totalAllcondi_dps = (int)dps;
+            totalAllcondi_damage = (int)damage;
             //All Power
             damage = totalAll_damage - damage;
             if (fight_duration > 0)
             {
                 dps = damage / fight_duration;
             }
-            totalAllphys_dps = (Int32)dps;
-            totalAllphys_damage = (Int32)damage;
+            totalAllphys_dps = (int)dps;
+            totalAllphys_damage = (int)damage;
 
             // boss DPS
             damage = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Sum(x => x.getDamage());//p.getDamageLogs(b_data, c_data.getCombatList()).stream().mapToDouble(DamageLog::getDamage).sum();
@@ -684,24 +684,24 @@ namespace LuckParser.Controllers
             {
                 dps = damage / fight_duration;
             }
-            totalboss_dps = (Int32)dps;
-            totalboss_damage = (Int32)damage;
+            totalboss_dps = (int)dps;
+            totalboss_damage = (int)damage;
             //bosscondi
             damage = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
             if (fight_duration > 0)
             {
                 dps = damage / fight_duration;
             }
-            totalbosscondi_dps = (Int32)dps;
-            totalbosscondi_damage = (Int32)damage;
+            totalbosscondi_dps = (int)dps;
+            totalbosscondi_damage = (int)damage;
             //boss Power
             damage = totalboss_damage - damage;
             if (fight_duration > 0)
             {
                 dps = damage / fight_duration;
             }
-            totalbossphys_dps = (Int32)dps;
-            totalbossphys_damage = (Int32)damage;
+            totalbossphys_dps = (int)dps;
+            totalbossphys_damage = (int)damage;
             //Placeholders for further calc
             return totalAll_dps.ToString() + "|" + totalAll_damage.ToString() + "|" + totalAllphys_dps.ToString() + "|" + totalAllphys_damage.ToString() + "|" + totalAllcondi_dps.ToString() + "|" + totalAllcondi_damage.ToString() + "|"
                 + totalboss_dps.ToString() + "|" + totalboss_damage.ToString() + "|" + totalbossphys_dps.ToString() + "|" + totalbossphys_damage.ToString() + "|" + totalbosscondi_dps.ToString() + "|" + totalbosscondi_damage.ToString();
@@ -864,7 +864,7 @@ namespace LuckParser.Controllers
             double died = 0.0;
             if (dead.Count() > 0)
             {
-                died = dead[0].X - b_data.getFirstAware();
+                died = (long)dead[0].X - b_data.getFirstAware();
             }
 
             statsArray = new string[] { power_loop_count.ToString(), critical_rate.ToString(), scholar_rate.ToString(), moving_rate.ToString(),
@@ -925,7 +925,7 @@ namespace LuckParser.Controllers
             double died = 0.0;
             if (dead.Count() > 0)
             {
-                died = dead[0].X - b_data.getFirstAware();
+                died = (long)dead[0].X - b_data.getFirstAware();
             }
             String[] statsArray = new string[] { damagetaken.ToString(),
                 blocked.ToString(),"0"/*dmgblocked.ToString()*/,invulned.ToString(),dmginvulned.ToString(),
@@ -1074,12 +1074,12 @@ namespace LuckParser.Controllers
 
                 List<Point> down = c_data.getStates(p.getInstid(), "CHANGE_DOWN");
                 foreach (Point pnt in down) {
-                    mech_data.AddItem(new MechanicLog((int)((pnt.X -boss_data.getFirstAware())/ 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
+                    mech_data.AddItem(new MechanicLog((long)(((long)pnt.X -boss_data.getFirstAware())/ 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
                 }
                 List<Point> dead = c_data.getStates(p.getInstid(), "CHANGE_DEAD");
                 foreach (Point pnt in dead)
                 {
-                    mech_data.AddItem(new MechanicLog((int)((pnt.X - boss_data.getFirstAware() )/ 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
+                    mech_data.AddItem(new MechanicLog((long)(((long)pnt.X - boss_data.getFirstAware() )/ 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
                 }
                 List<DamageLog> dls = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data, mech_data);
                 //damage taken 
@@ -1094,7 +1094,7 @@ namespace LuckParser.Controllers
                             //Prevent multi hit attacks form multi registering
                             if (prevMech != null)
                             {
-                                if (dLog.getID() == prevMech.GetSkill() && mech.GetName() == prevMech.GetName() && (int)(dLog.getTime() / 1000f) == prevMech.GetTime())
+                                if (dLog.getID() == prevMech.GetSkill() && mech.GetName() == prevMech.GetName() && (dLog.getTime() / 1000f) == prevMech.GetTime())
                                 {
                                     break;
                                 }
@@ -1103,7 +1103,7 @@ namespace LuckParser.Controllers
                             {
                                 
                                 
-                                 prevMech = new MechanicLog((int)(dLog.getTime() / 1000f), dLog.getID(), mech.GetName(), dLog.getDamage(), p, mech.GetPlotly());
+                                 prevMech = new MechanicLog((long)(dLog.getTime() / 1000f), dLog.getID(), mech.GetName(), dLog.getDamage(), p, mech.GetPlotly());
                                 
                                 mech_data.AddItem(prevMech);
                                 break;
@@ -1123,7 +1123,7 @@ namespace LuckParser.Controllers
                             {
                                 if (c.getSkillID() == mech.GetSkill())
                                 {
-                                    mech_data.AddItem(new MechanicLog((int)((c.getTime() - boss_data.getFirstAware())/1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
+                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware())/1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
                                     break;
                                 }
                             }
@@ -1194,7 +1194,7 @@ namespace LuckParser.Controllers
                                 if (Math.Floor(time / 1000f) > timeGraphed)
                                 {
                                     timeGraphed = (int)Math.Floor(time / 1000f);
-                                    pointlist.Add(new Point(time / 1000, stack));
+                                    pointlist.Add(new Point(time / 1000, (int)stack));
                                 }
                                 time++;
                             }
@@ -1226,7 +1226,7 @@ namespace LuckParser.Controllers
 
                     totaldmg += log.getDamage();
 
-                    int time = log.getTime();
+                    long time = log.getTime();
                     if (time > 1000)
                     {
 
@@ -1237,7 +1237,7 @@ namespace LuckParser.Controllers
                             if ((Math.Floor(time / 1000f) - timeGraphed) < 2)
                             {
                                 timeGraphed = (int)Math.Floor(time / 1000f);
-                                bossdmgList.Add(new int[] { time / 1000, (int)(totaldmg / (float)(time / 1000f)) });
+                                bossdmgList.Add(new int[] { (int)time / 1000, (int)(totaldmg / (float)(time / 1000f)) });
                             }
                             else
                             {
@@ -1290,7 +1290,7 @@ namespace LuckParser.Controllers
             foreach (DamageLog log in damage_logs_all)
             {
                 totaldmg += log.getDamage();
-                int time = log.getTime();
+                long time = log.getTime();
                 if (time > 1000)
                 {
                     
@@ -1300,7 +1300,7 @@ namespace LuckParser.Controllers
                         if ((Math.Floor(time / 1000f) - timeGraphed) < 2)
                         {
                             timeGraphed = (int)Math.Floor(time / 1000f);
-                            totaldmgList.Add(new int[] { time / 1000, (int)(totaldmg / (float)(time / 1000f)) });
+                            totaldmgList.Add(new int[] { (int)time / 1000, (int)(totaldmg / (float)(time / 1000f)) });
                         }
                         else
                         {
@@ -1613,7 +1613,7 @@ namespace LuckParser.Controllers
                 int mechcount = 0;
                 foreach (MechanicLog ml in filterdList)
                 {
-                    int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => x[0] == ml.GetTime());
+                    int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => (long)x[0] == ml.GetTime());
                     if (mechcount == filterdList.Count - 1)
                     {
                         if (check != null)
@@ -1705,7 +1705,7 @@ namespace LuckParser.Controllers
                 sw.Write("y: [");
                 foreach (MechanicLog ml in DnDList)
                 {
-                    int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => x[0] == ml.GetTime());
+                    int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => (long)x[0] == ml.GetTime());
                     if (mcount == DnDList.Count - 1)
                     {
                         if (check != null)
@@ -1792,8 +1792,8 @@ namespace LuckParser.Controllers
 
                 float scaler = boss_data.getHealth() / maxDPS;
                 int hotCount = 0;
-                List<int[]> BossHOT = boss_data.getHealthOverTime();
-                foreach (int[] dp in BossHOT)
+                List<long[]> BossHOT = boss_data.getHealthOverTime();
+                foreach (long[] dp in BossHOT)
                 {
                     if (hotCount == BossHOT.Count - 1)
                     {
@@ -1813,7 +1813,7 @@ namespace LuckParser.Controllers
 
                 float scaler2 = boss_data.getHealth() / 100;
                 hotCount = 0;
-                foreach (int[] dp in BossHOT)
+                foreach (long[] dp in BossHOT)
                 {
                     if (hotCount == BossHOT.Count - 1)
                     {
@@ -1831,7 +1831,7 @@ namespace LuckParser.Controllers
                 //add time axis
                 sw.Write("x: [");
                 hotCount = 0;
-                foreach (int[] dp in BossHOT)
+                foreach (long[] dp in BossHOT)
                 {
                     if (hotCount == BossHOT.Count - 1)
                     {
@@ -1880,7 +1880,7 @@ namespace LuckParser.Controllers
             int firstGroup = 11;
             foreach (Player play in p_list)
             {
-                int playerGroup = Int32.Parse(play.getGroup());
+                int playerGroup = int.Parse(play.getGroup());
                 if (playerGroup > groupCount)
                 {
                     groupCount = playerGroup;
@@ -1897,7 +1897,7 @@ namespace LuckParser.Controllers
                 for (int n = firstGroup; n <= groupCount; n++)
                 {
                     sw.Write("<tr>");
-                    List<Player> sortedList = p_list.Where(x => Int32.Parse(x.getGroup()) == n).ToList();
+                    List<Player> sortedList = p_list.Where(x => int.Parse(x.getGroup()) == n).ToList();
                     if (sortedList.Count > 0)
                     {
                         foreach (Player gPlay in sortedList)
@@ -2013,12 +2013,12 @@ namespace LuckParser.Controllers
                             sw.Write("<td></td>");
                             sw.Write("<td>Group " + groupNum + "</td>");
                             sw.Write("<td></td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[8])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[7])) + "</span>" + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[10])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[9])) + "</span>" + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[12])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[11])) + "</span>" + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[2])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[1])) + "</span>" + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[4])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[3])) + "</span>" + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Int32.Parse(c[6])) + " dmg \">" + groupList.Sum(c => Int32.Parse(c[5])) + "</span>" + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[8])) + " dmg \">" + groupList.Sum(c => int.Parse(c[7])) + "</span>" + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[10])) + " dmg \">" + groupList.Sum(c => int.Parse(c[9])) + "</span>" + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[12])) + " dmg \">" + groupList.Sum(c => int.Parse(c[11])) + "</span>" + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[2])) + " dmg \">" + groupList.Sum(c => int.Parse(c[1])) + "</span>" + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[4])) + " dmg \">" + groupList.Sum(c => int.Parse(c[3])) + "</span>" + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[6])) + " dmg \">" + groupList.Sum(c => int.Parse(c[5])) + "</span>" + "</td>");
                             sw.Write("<td></td>");
                             sw.Write("<td></td>");
                         }
@@ -2030,12 +2030,12 @@ namespace LuckParser.Controllers
                         sw.Write("<td></td>");
                         sw.Write("<td>Total</td>");
                         sw.Write("<td></td>");
-                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[8])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[7])) + "</span>" + "</td>");
-                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[10])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[9])) + "</span>" + "</td>");
-                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[12])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[11])) + "</span>" + "</td>");
-                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[2])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[1])) + "</span>" + "</td>");
-                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[4])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[3])) + "</span>" + "</td>");
-                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Int32.Parse(c[6])) + " dmg \">" + footerList.Sum(c => Int32.Parse(c[5])) + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[8])) + " dmg \">" + footerList.Sum(c => int.Parse(c[7])) + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[10])) + " dmg \">" + footerList.Sum(c => int.Parse(c[9])) + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[12])) + " dmg \">" + footerList.Sum(c => int.Parse(c[11])) + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[2])) + " dmg \">" + footerList.Sum(c => int.Parse(c[1])) + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[4])) + " dmg \">" + footerList.Sum(c => int.Parse(c[3])) + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[6])) + " dmg \">" + footerList.Sum(c => int.Parse(c[5])) + "</span>" + "</td>");
                         sw.Write("<td></td>");
                         sw.Write("<td></td>");
                     }
@@ -2130,13 +2130,13 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
                             sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
                             sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[7])) + "</td>");
-                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[8])) + "</td>");
-                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[9])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => int.Parse(c[7])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => int.Parse(c[8])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => int.Parse(c[9])) + "</td>");
                             sw.Write("<td></td>");
                             sw.Write("<td></td>");
-                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[10])) + "</td>");
-                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[11])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => int.Parse(c[10])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => int.Parse(c[11])) + "</td>");
                             sw.Write("<td></td>");
                         }
                         sw.Write("</tr>");
@@ -2151,13 +2151,13 @@ namespace LuckParser.Controllers
                         sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
                         sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
                         sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[7])) + "</td>");
-                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[8])) + "</td>");
-                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[9])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => int.Parse(c[7])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => int.Parse(c[8])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => int.Parse(c[9])) + "</td>");
                         sw.Write("<td></td>");
                         sw.Write("<td></td>");
-                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[10])) + "</td>");
-                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[11])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => int.Parse(c[10])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => int.Parse(c[11])) + "</td>");
                         sw.Write("<td></td>");
                     }
                     sw.Write("</tr>");
@@ -2236,13 +2236,13 @@ namespace LuckParser.Controllers
                             sw.Write("<td></td>");
                             sw.Write("<td></td>");
                             sw.Write("<td>Group " + groupNum + "</td>");
-                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[1])) + "</td>");
-                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[2])) + "</td>");
-                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[3])) + "</td>");
-                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[4])) + "</td>");
-                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[5])) + "</td>");
-                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[6])) + "</td>");
-                            sw.Write("<td>" + groupList.Sum(c => Int32.Parse(c[7])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => int.Parse(c[1])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => int.Parse(c[2])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => int.Parse(c[3])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => int.Parse(c[4])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => int.Parse(c[5])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => int.Parse(c[6])) + "</td>");
+                            sw.Write("<td>" + groupList.Sum(c => int.Parse(c[7])) + "</td>");
                             sw.Write("<td></td>");
                         }
                         sw.Write("</tr>");
@@ -2252,13 +2252,13 @@ namespace LuckParser.Controllers
                         sw.Write("<td></td>");
                         sw.Write("<td></td>");
                         sw.Write("<td>Total</td>");
-                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[1])) + "</td>");
-                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[2])) + "</td>");
-                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[3])) + "</td>");
-                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[4])) + "</td>");
-                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[5])) + "</td>");
-                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[6])) + "</td>");
-                        sw.Write("<td>" + footerList.Sum(c => Int32.Parse(c[7])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => int.Parse(c[1])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => int.Parse(c[2])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => int.Parse(c[3])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => int.Parse(c[4])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => int.Parse(c[5])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => int.Parse(c[6])) + "</td>");
+                        sw.Write("<td>" + footerList.Sum(c => int.Parse(c[7])) + "</td>");
                         sw.Write("<td></td>");
                     }
                     sw.Write("</tr>");
@@ -2318,8 +2318,8 @@ namespace LuckParser.Controllers
                             sw.Write("<td></td>");
                             sw.Write("<td></td>");
                             sw.Write("<td>Group " + groupNum + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + groupList.Sum(c => Int32.Parse(c[2])).ToString() + " condis</span>" + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + groupList.Sum(c => Int32.Parse(c[4])) + "</span>" + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + groupList.Sum(c => int.Parse(c[2])).ToString() + " condis</span>" + "</td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + groupList.Sum(c => int.Parse(c[4])) + "</span>" + "</td>");
                         }
                         sw.Write("</tr>");
                     }
@@ -2328,8 +2328,8 @@ namespace LuckParser.Controllers
                         sw.Write("<td></td>");
                         sw.Write("<td></td>");
                         sw.Write("<td>Total</td>");
-                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + footerList.Sum(c => Int32.Parse(c[2])).ToString() + " condis</span>" + "</td>");
-                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + footerList.Sum(c => Int32.Parse(c[4])).ToString() + "</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + footerList.Sum(c => int.Parse(c[2])).ToString() + " condis</span>" + "</td>");
+                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + footerList.Sum(c => int.Parse(c[4])).ToString() + "</span>" + "</td>");
                     }
                     sw.Write("</tr>");
                 }
@@ -3297,8 +3297,8 @@ namespace LuckParser.Controllers
             List<DamageLog> damageToKill = new List<DamageLog>(); ;
             if (down.Count > 0)
             {//went to down state before death
-                damageToDown = damageLogs.Where(x => x.getTime() < down.Last().X-b_data.getFirstAware()).ToList();
-                damageToKill = damageLogs.Where(x => x.getTime() > down.Last().X - b_data.getFirstAware() && x.getTime() < dead.Last().X - b_data.getFirstAware()).ToList();
+                damageToDown = damageLogs.Where(x => x.getTime() < (long)down.Last().X-b_data.getFirstAware()).ToList();
+                damageToKill = damageLogs.Where(x => x.getTime() > (long)down.Last().X - b_data.getFirstAware() && x.getTime() < (long)dead.Last().X - b_data.getFirstAware()).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
                 for (int i = damageToDown.Count() - 1; i > 0; i--)
@@ -3325,7 +3325,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damageToKill = damageLogs.Where(x =>  x.getTime() < dead.Last().X).ToList();
+                damageToKill = damageLogs.Where(x =>  x.getTime() < (long)dead.Last().X).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
                 for (int i = damageToKill.Count() - 1; i > 0; i--)
@@ -3813,7 +3813,7 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             // List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
 
-            List<DamageLog> damageLogs = p.getMinionDamageLogs((int)agent.getAgent(), b_data, c_data.getCombatList(), getAgentData());
+            List<DamageLog> damageLogs = p.getMinionDamageLogs(agent.getAgent(), b_data, c_data.getCombatList(), getAgentData());
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());

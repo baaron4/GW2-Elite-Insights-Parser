@@ -21,13 +21,13 @@ namespace LuckParser.Models.ParseModels
         }
 
         
-    public override void update(int time_passed)
+    public override void update(long time_passed)
         {
 
             // Subtract from each
             for (int i = 0; i < boon_stack.Count(); i++)
             {
-                boon_stack[i] =( boon_stack[i] - time_passed);
+                boon_stack[i] = (int)( (long)boon_stack[i] - time_passed);
             }
             // Remove negatives
             int indexcount = 0;
@@ -50,7 +50,7 @@ namespace LuckParser.Models.ParseModels
         }
 
        
-    public override void addStacksBetween(List<int> boon_stacks, int time_between)
+    public override void addStacksBetween(List<int> boon_stacks, long time_between)
         {
 
             // Create copy of the boon
@@ -62,13 +62,13 @@ namespace LuckParser.Models.ParseModels
             if (stacks.Count() > 0)
             {
 
-                int time_passed = 0;
+                long time_passed = 0;
                 int min_duration = stacks.Min();
 
                 // Remove minimum duration from stack
-                for (int i = 1; i < time_between; i++)
+                for (long i = 1; i < time_between; i++)
                 {
-                    if ((i - time_passed) >= min_duration)
+                    if ((i - time_passed) >= (long)min_duration)
                     {
                         boon_copy.update(i - time_passed);
                         if (stacks.Count() > 0)
@@ -83,7 +83,7 @@ namespace LuckParser.Models.ParseModels
             // Fill in remaining time with 0 values
             else
             {
-                for (int i = 1; i < time_between; i++)
+                for (long i = 1; i < time_between; i++)
                 {
                     boon_stacks.Add(0);
                 }

@@ -21,9 +21,9 @@ namespace LuckParser.Models.ParseModels
         // Abstract Methods
         public abstract int getStackValue();
 
-        public abstract void update(int time_passed);
+        public abstract void update(long time_passed);
 
-        public abstract void addStacksBetween(List<int> boon_stacks, int time_between);
+        public abstract void addStacksBetween(List<int> boon_stacks, long time_between);
 
         // Public Methods
         public void add(int boon_duration)

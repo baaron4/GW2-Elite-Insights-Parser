@@ -62,14 +62,14 @@ namespace LuckParser.Models.ParseModels
             this.pov = pov.Substring(0, pov.LastIndexOf('\0'));
         }
 
-        public void setLogStart(int unix_seconds)
+        public void setLogStart(long unix_seconds)
         {
             System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(unix_seconds).ToLocalTime();
             this.log_start = dtDateTime.ToString("yyyy-MM-dd HH:mm:ss z");//sdf.format(new Date(unix_seconds * 1000L));
         }
 
-        public void setLogEnd(int unix_seconds)
+        public void setLogEnd(long unix_seconds)
         {
             System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(unix_seconds).ToLocalTime();
