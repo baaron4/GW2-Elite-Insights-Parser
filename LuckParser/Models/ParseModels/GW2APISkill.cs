@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Xml.Serialization;
+using LuckParser.Models.ParseModels;
 namespace LuckParser.Models
 {
     public class GW2APISkill
@@ -17,19 +18,21 @@ namespace LuckParser.Models
         public string weapon_type { get; set; }
         public string[] professions { get; set; }
         public string slot { get; set; }
+        //public string[]  facts { get; set; }
 
-
-       // public string attunment { get; set; }
+        // public string attunment { get; set; }
         //public string cost { get; set; }
-       // public string duel_wield { get; set; }
-       // public int flip_skill { get; set; }
-       // public int inititiative { get; set; }
-       // public int next_chain { get; set; }
-       // public int prev_chain { get; set; }
+        // public string duel_wield { get; set; }
+        // public int flip_skill { get; set; }
+        // public int inititiative { get; set; }
+        // public int next_chain { get; set; }
+        // public int prev_chain { get; set; }
 
 
         //public int toolbelt_skill { get; set; }
+       
 
         public GW2APISkill() { }
     }
+   
 }
