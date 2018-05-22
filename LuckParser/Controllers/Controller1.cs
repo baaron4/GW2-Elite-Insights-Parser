@@ -2855,7 +2855,10 @@ namespace LuckParser.Controllers
                                         parseBoonsList.AddRange(present_boons);
                                         parseBoonsList.AddRange(present_offbuffs);
                                         parseBoonsList.AddRange(present_defbuffs);
-                                        parseBoonsList.AddRange(present_personnal[p.getInstid()]);
+                                        if (present_personnal.ContainsKey(p.getInstid()))
+                                        {
+                                            parseBoonsList.AddRange(present_personnal[p.getInstid()]);
+                                        }
                                         List<BoonsGraphModel> boonGraphData = getBoonGraph(p, parseBoonsList);
                                         boonGraphData.Reverse();
                                         foreach (BoonsGraphModel bgm in boonGraphData)
