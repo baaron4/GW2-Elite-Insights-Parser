@@ -585,41 +585,50 @@ namespace LuckParser.Controllers
         public List<Boon> present_offbuffs = new List<Boon>();//Used only for Off Buff tables
         public List<Boon> present_defbuffs = new List<Boon>();//Used only for Def Buff tables
         public Dictionary<int, List<Boon>> present_personnal = new Dictionary<int, List<Boon>>();//Used only for personnal
-        public void setPresentBoons() {
+        public void setPresentBoons(bool[] SnapSettings) {
             List<SkillItem> s_list = getSkillData().getSkillList();
-            foreach (Boon boon in Boon.getBoonList())
-            {
-                if (s_list.Exists(x => x.getID() == boon.getID()))
+            if (SnapSettings[3])
+            {//Main boons
+                foreach (Boon boon in Boon.getBoonList())
                 {
-                    present_boons.Add(boon);
-                }
-            }
-            foreach (Boon boon in Boon.getOffensiveList())
-            {
-                if (s_list.Exists(x => x.getID() == boon.getID()))
-                {
-                    present_offbuffs.Add(boon);
-                }
-            }
-            foreach (Boon boon in Boon.getDefensiveList())
-            {
-                if (s_list.Exists(x => x.getID() == boon.getID()))
-                {
-                    present_defbuffs.Add(boon);
-                }
-            }
-            List<CombatItem> c_data = getCombatData().getCombatList();
-            foreach (Player p in p_list)
-            {
-                present_personnal[p.getInstid()] = new List<Boon>();
-                foreach (Boon boon in Boon.getRemainingBuffsList(Boon.ProfToEnum(p.getProf())))
-                {
-                    if (c_data.Exists(x => x.getSkillID() == boon.getID() && x.getDstInstid() == p.getInstid()))
+                    if (s_list.Exists(x => x.getID() == boon.getID()))
                     {
-                        present_personnal[p.getInstid()].Add(boon);
+                        present_boons.Add(boon);
                     }
                 }
             }
+            if (SnapSettings[4])
+            {//Important Class specefic boons
+                foreach (Boon boon in Boon.getOffensiveList())
+                {
+                    if (s_list.Exists(x => x.getID() == boon.getID()))
+                    {
+                        present_offbuffs.Add(boon);
+                    }
+                }
+                foreach (Boon boon in Boon.getDefensiveList())
+                {
+                    if (s_list.Exists(x => x.getID() == boon.getID()))
+                    {
+                        present_defbuffs.Add(boon);
+                    }
+                }
+            }
+            if (SnapSettings[5])
+            {//All class specefic boons
+                List<CombatItem> c_data = getCombatData().getCombatList();
+                foreach (Player p in p_list)
+                {
+                    present_personnal[p.getInstid()] = new List<Boon>();
+                    foreach (Boon boon in Boon.getRemainingBuffsList(Boon.ProfToEnum(p.getProf())))
+                    {
+                        if (c_data.Exists(x => x.getSkillID() == boon.getID() && x.getDstInstid() == p.getInstid()))
+                        {
+                            present_personnal[p.getInstid()].Add(boon);
+                        }
+                    }
+                }
+            }        
         }
         public String getFinalDPS(Player p)
         {
@@ -2840,21 +2849,9 @@ namespace LuckParser.Controllers
                                             sw.Write(" },");
                                         }
                                     }
-                                    if (SnapSettings[3] || SnapSettings[4] || SnapSettings[5])
+                                    if (present_boons.Count() > 0)
                                     {
-                                        List<Boon> parseBoonsList = new List<Boon>();
-                                        /*if (SnapSettings[3])
-                                        {//Main boons
-                                            parseBoonsList.AddRange(Boon.getBoonList());
-                                        }
-                                        if (SnapSettings[4] || SnapSettings[5])
-                                        {//Important Class specefic boons
-                                            parseBoonsList.AddRange(Boon.getSharableProfList());
-                                        }
-                                        if (SnapSettings[5])
-                                        {//All class specefic boons
-                                            parseBoonsList.AddRange(Boon.getRemainingBuffsList());
-                                        }*/
+                                        List<Boon> parseBoonsList = new List<Boon>();                                       
                                         parseBoonsList.AddRange(present_boons);
                                         parseBoonsList.AddRange(present_offbuffs);
                                         parseBoonsList.AddRange(present_defbuffs);
@@ -4420,7 +4417,7 @@ namespace LuckParser.Controllers
                         //Condis
                         parseBoonsList.AddRange(Boon.getCondiBoonList());
                         //Every boon and buffs
-                        parseBoonsList.AddRange(Boon.getAllProfList());
+                        parseBoonsList.AddRange(Boon.getSharableProfList());
                         List<BoonsGraphModel> boonGraphData = getBossBoonGraph(p);
                         boonGraphData.Reverse();
                         foreach (BoonsGraphModel bgm in boonGraphData)
@@ -4685,7 +4682,7 @@ namespace LuckParser.Controllers
             TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
             String durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
             string bossname = FilterStringChars(b_data.getName());
-            setPresentBoons();
+            setPresentBoons(settingsSnap);
             string Html_playerDropdown = "";
             foreach (Player p in p_list)
             {
