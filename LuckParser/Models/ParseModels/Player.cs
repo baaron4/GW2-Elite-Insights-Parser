@@ -403,24 +403,22 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        private void setBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList, bool only_condi)
+        private void setBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList, bool add_condi)
         {
             // Initialize Boon Map with every Boon
-            if (only_condi)
+            foreach (Boon boon in Boon.getAllProfList())
+            {
+                BoonMap map = new BoonMap(boon.getName(), boon.getID(), new List<BoonLog>());
+                boon_map[boon.getID()] = map;
+            }
+            // This only happens for bosses
+            if (add_condi)
             {
                 foreach (Boon boon in Boon.getCondiBoonList())
                 {
                     BoonMap map = new BoonMap(boon.getName(), boon.getID(), new List<BoonLog>());
                     boon_map[boon.getID()] = map;
                 }
-            } else
-            {
-                foreach (Boon boon in Boon.getAllProfList())
-                {
-                    BoonMap map = new BoonMap(boon.getName(), boon.getID(), new List<BoonLog>());
-                    boon_map[boon.getID()] = map;
-                }
-
             }
             // Fill in Boon Map
             int time_start = bossData.getFirstAware();
