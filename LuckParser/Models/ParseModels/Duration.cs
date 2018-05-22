@@ -15,13 +15,13 @@ namespace LuckParser.Models.ParseModels
 
         // Public Methods
         
-    public override int getStackValue()
+    public override long getStackValue()
         {
             // return boon_stack.stream().mapToInt(Integer::intValue).sum();
             //check for overflow
-            int total = boon_stack[0];
+            long total = boon_stack[0];
             for (int i =0;i<boon_stack.Count-1;i++) {
-                if (total > 0 && boon_stack[i + 1] > uint.MaxValue - total)
+                if (total > 0 && boon_stack[i + 1] > long.MaxValue - total)
                 {
                     //Overflow
                     return int.MaxValue;
@@ -62,7 +62,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         
-    public override void addStacksBetween(List<int> boon_stacks, long time_between)
+    public override void addStacksBetween(List<long> boon_stacks, long time_between)
         {
         }
     }

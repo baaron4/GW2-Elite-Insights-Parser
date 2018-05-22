@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
 
         // Public Methods
         
-    public override int getStackValue()
+    public override long getStackValue()
         {
             return boon_stack.Count();
         }
@@ -27,7 +27,7 @@ namespace LuckParser.Models.ParseModels
             // Subtract from each
             for (int i = 0; i < boon_stack.Count(); i++)
             {
-                boon_stack[i] = (int)( (long)boon_stack[i] - time_passed);
+                boon_stack[i] = boon_stack[i] - time_passed;
             }
             // Remove negatives
             int indexcount = 0;
@@ -50,20 +50,20 @@ namespace LuckParser.Models.ParseModels
         }
 
        
-    public override void addStacksBetween(List<int> boon_stacks, long time_between)
+    public override void addStacksBetween(List<long> boon_stacks, long time_between)
         {
 
             // Create copy of the boon
             Intensity boon_copy = new Intensity(this.capacity);
-            boon_copy.boon_stack = new List<int>(this.boon_stack);
-            List<int> stacks = boon_copy.boon_stack;
+            boon_copy.boon_stack = new List<long>(this.boon_stack);
+            List<long> stacks = boon_copy.boon_stack;
 
             // Simulate the boon stack decreasing
             if (stacks.Count() > 0)
             {
 
                 long time_passed = 0;
-                int min_duration = stacks.Min();
+                long min_duration = stacks.Min();
 
                 // Remove minimum duration from stack
                 for (long i = 1; i < time_between; i++)

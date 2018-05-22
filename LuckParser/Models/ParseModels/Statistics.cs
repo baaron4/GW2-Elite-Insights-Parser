@@ -103,12 +103,12 @@ namespace LuckParser.Models.ParseModels
 
       
 
-        public static List<int> getBoonStacksList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data)
+        public static List<long> getBoonStacksList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data)
         {
             // Initialise variables
             long t_prev = 0;
             long t_curr = 0;
-            List<int> boon_stacks = new List<int>();
+            List<long> boon_stacks = new List<long>();
             boon_stacks.Add(0);
 
             // Loop: fill, update, and add to stacks
@@ -136,7 +136,7 @@ namespace LuckParser.Models.ParseModels
             return boon_stacks;
         }
 
-        public static String getAverageStacks(List<int> boon_stacks)
+        public static String getAverageStacks(List<long> boon_stacks)
         {
             // Calculate average stacks
             double average_stacks = boon_stacks.Sum();

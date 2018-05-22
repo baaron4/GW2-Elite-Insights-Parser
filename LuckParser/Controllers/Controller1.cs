@@ -1186,10 +1186,10 @@ namespace LuckParser.Controllers
                         }
                         else if (boon.getType().Equals("intensity"))
                         {
-                            List<int> stackslist = Statistics.getBoonStacksList(boon_object, logs, b_data);
+                            List<long> stackslist = Statistics.getBoonStacksList(boon_object, logs, b_data);
                             int time = 0;
                             int timeGraphed = 0;
-                            foreach (int stack in stackslist)
+                            foreach (long stack in stackslist)
                             {
                                 if (Math.Floor(time / 1000f) > timeGraphed)
                                 {
@@ -1386,15 +1386,15 @@ namespace LuckParser.Controllers
                         }
                         else if (boon.getType().Equals("intensity"))
                         {
-                            List<int> stackslist = Statistics.getBoonStacksList(boon_object, logs, b_data);
+                            List<long> stackslist = Statistics.getBoonStacksList(boon_object, logs, b_data);
                             int time = 0;
                             int timeGraphed = 0;
-                            foreach (int stack in stackslist)
+                            foreach (long stack in stackslist)
                             {
                                 if (Math.Floor(time / 1000f) > timeGraphed)
                                 {
                                     timeGraphed = (int)Math.Floor(time / 1000f);
-                                    pointlist.Add(new Point(time / 1000, stack));
+                                    pointlist.Add(new Point(time / 1000, (int)stack));
                                 }
                                 time++;
                             }

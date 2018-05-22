@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
     {
 
         // Fields
-        protected List<int> boon_stack = new List<int>();
+        protected List<long> boon_stack = new List<long>();
         protected int capacity;
 
         // Constructor
@@ -19,14 +19,14 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Abstract Methods
-        public abstract int getStackValue();
+        public abstract long getStackValue();
 
         public abstract void update(long time_passed);
 
-        public abstract void addStacksBetween(List<int> boon_stacks, long time_between);
+        public abstract void addStacksBetween(List<long> boon_stacks, long time_between);
 
         // Public Methods
-        public void add(int boon_duration)
+        public void add(long boon_duration)
         {
             // Find empty slot
             if (!isFull())

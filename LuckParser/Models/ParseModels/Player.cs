@@ -408,7 +408,7 @@ namespace LuckParser.Models.ParseModels
         private void setBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList, bool add_condi)
         {
             // Initialize Boon Map with every Boon
-            foreach (Boon boon in Boon.getRemainingBuffsList(Boon.ProfToEnum(this.getProf())))
+            foreach (Boon boon in Boon.getAllProfList())
             {
                 BoonMap map = new BoonMap(boon.getName(), boon.getID(), new List<BoonLog>());
                 boon_map[boon.getID()] = map;
@@ -436,11 +436,8 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 long time = c.getTime() - time_start;
-                string name = boon_map[c.getSkillID()].getName();
                 if (instid == c.getDstInstid() && time > 0 && time < fight_duration)
                 {
-                    int isBuff = c.isBuff();
-                    int isRemove = c.isBuffremove().getID();
                     if (c.isBuff() == 1 && c.isBuffremove().getID() == 0)
                     {
                         boon_map[c.getSkillID()].getBoonLog().Add(new BoonLog(time, (long)c.getValue(), c.getOverstackValue()));
