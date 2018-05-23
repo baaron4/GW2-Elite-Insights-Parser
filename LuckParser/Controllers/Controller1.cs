@@ -465,39 +465,38 @@ namespace LuckParser.Controllers
                     boss_data.setHealth((int)c.getDstAgent());
 
                 }
-                    if (c.isStateChange().getID() == 13 && log_data.getPOV() == "N/A")//Point of View
+                if (c.isStateChange().getID() == 13 && log_data.getPOV() == "N/A")//Point of View
+                {
+                    long pov_agent = c.getSrcAgent();
+                    foreach (AgentItem p in player_list)
                     {
-                        long pov_agent = c.getSrcAgent();
-                        foreach (AgentItem p in player_list)
+                        if (pov_agent == p.getAgent())
                         {
-                            if (pov_agent == p.getAgent())
-                            {
-                                log_data.setPOV(p.getName());
-                            }
+                            log_data.setPOV(p.getName());
                         }
+                    }
 
-                    }
-                    else if (c.isStateChange().getID() == 9)//Log start
-                    {
-                        log_data.setLogStart((long)c.getValue());
-                    }
-                    else if (c.isStateChange().getID() == 10)//log end
-                    {
-                        log_data.setLogEnd((long)c.getValue());
+                }
+                else if (c.isStateChange().getID() == 9)//Log start
+                {
+                    log_data.setLogStart((long)c.getValue());
+                }
+                else if (c.isStateChange().getID() == 10)//log end
+                {
+                    log_data.setLogEnd((long)c.getValue());
 
-                    }
-                    //set boss dead
-                    if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 4)//change dead
-                    {
-                        log_data.setBossKill(true);
+                }
+                //set boss dead
+                if (c.isStateChange().getEnum() == "REWARD")//change dead
+                {
+                    log_data.setBossKill(true);
 
-                    }
-                    //set health update
-                    if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 8)
-                    {
-                        bossHealthOverTime.Add(new long[] { c.getTime() - boss_data.getFirstAware(), c.getDstAgent() });
-                    }
-                
+                }
+                //set health update
+                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 8)
+                {
+                    bossHealthOverTime.Add(new long[] { c.getTime() - boss_data.getFirstAware(), c.getDstAgent() });
+                }
 
             }
 
@@ -543,6 +542,11 @@ namespace LuckParser.Controllers
                     if (NPC.getProf().Contains("57069"))
                     {
                         deimos_2_instid = NPC.getInstid();
+                        if (NPC.getLastAware() < boss_data.getLastAware())
+                        {
+                            // No split
+                            break;
+                        }
                         boss_data.setLastAware(NPC.getLastAware());
                         //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos_2_instid ).ToList().Sum(x);
                         //int stop = 0;
@@ -1692,14 +1696,12 @@ namespace LuckParser.Controllers
             }
             //Downs and deaths
 
-
-            int mcount = 0;
-
             List<String> DnDStringList = new List<string>();
             DnDStringList.Add("DOWN");
             DnDStringList.Add("DEAD");
             foreach (string state in DnDStringList)
             {
+                int mcount = 0;
                 List<MechanicLog> DnDList = mech_data.GetMDataLogs().Where(x => x.GetName() == state).ToList();
                 sw.Write("{");
                 sw.Write("y: [");
@@ -4768,7 +4770,7 @@ namespace LuckParser.Controllers
                                                             }
                                                             sw.Write("<div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:" + finalPercent + "%; ;display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">");
                                                             {
-                                                                sw.Write("<p style=\"text-align:center; color: #FFF;\">" + getBossData().getHealth().ToString() + " Health</p>");
+                                                                sw.Write("<p style=\"text-align:center; color: #FFF;\">" + (getBossData().getHealth() * finalPercent/100.0).ToString() + " Health</p>");
                                                             }
                                                             sw.Write("</div>");
                                                         }
@@ -4777,10 +4779,6 @@ namespace LuckParser.Controllers
                                                     if (log_data.getBosskill())
                                                     {
                                                         sw.Write("<p class='text text-success'> Result: Success</p>");
-                                                    }
-                                                    else if (boss_data.getID() == 17154)//Deimos is fucked
-                                                    {
-                                                        sw.Write("<p class='text'> Result: N/A</p>");
                                                     }
                                                     else
                                                     {
