@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
     public class Boon
     {
         // Boon
-        public enum BoonEnum { Condition, Boon, OffensiveBuff, DefensiveBuff, NonShareableBuff, Food, Utility, DontTrackForNow};
+        public enum BoonEnum { Condition, Boon, OffensiveBuff, DefensiveBuff, NonShareableBuff, Food, Utility};
         public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item  };
 
         public static BoonSource ProfToEnum(string prof)
@@ -132,7 +132,7 @@ namespace LuckParser.Models.ParseModels
                 // Generic
                 new Boon("Stealth", 13017, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Revealed", 890, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Superspeed", 5974, BoonSource.Mixed, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
+                new Boon("Superspeed", 5974, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff, "https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
                 //new Boon("Invulnerability", 801, BoonSource.Mixed, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Boon("Unblockable", BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
                 //Auras
@@ -161,13 +161,13 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Enchanted Daggers", 28557, BoonSource.Revenant, "intensity", 6, BoonEnum.NonShareableBuff),
                 new Boon("Impossible Odds", 27581, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
                 //facets
-                new Boon("Facet of Light",27336, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Facet of Light",27336, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Infuse Light",27737, BoonSource.Revenant, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/6/60/Infuse_Light.png"),
-                new Boon("Facet of Darkness",28036, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Facet of Elements",28243, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Facet of Strength",27376, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Facet of Chaos",27983, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Facet of Nature",29275, BoonSource.Revenant, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Facet of Darkness",28036, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Facet of Elements",28243, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Facet of Strength",27376, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Facet of Chaos",27983, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Facet of Nature",29275, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Naturalistic Resonance", 29379, BoonSource.Revenant, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),
                 //legends
                 new Boon("Legendary Centaur Stance",27972, BoonSource.Revenant, "duration", 1, BoonEnum.NonShareableBuff),
@@ -243,15 +243,15 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Signet of Wrath",9100, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Signet of Courage",29633, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
                 //virtues
-                new Boon("Virtue of Justice", 9114, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Spears of Justice", 29632, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Virtue of Courage", 9113, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Shield of Courage", 29523, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Virtue of Resolve", 9119, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Wings of Resolve", 30308, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Tome of Justice",40530, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Tome of Courage",43508,BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Tome of Resolve",46298, BoonSource.Guardian, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Virtue of Justice", 9114, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Spears of Justice", 29632, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Virtue of Courage", 9113, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Shield of Courage", 29523, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Virtue of Resolve", 9119, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Wings of Resolve", 30308, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Tome of Justice",40530, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Tome of Courage",43508,BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Tome of Resolve",46298, BoonSource.Guardian, "duration", 1, BoonEnum.NonShareableBuff),
                 //traits
                 new Boon("Strength in Numbers",13796, BoonSource.Guardian, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/7/7b/Strength_in_Numbers.png"),
                 new Boon("Invigorated Bulwark",30207, BoonSource.Guardian, "intensity", 5, BoonEnum.NonShareableBuff),
@@ -415,10 +415,10 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Signet of Fire",5544, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Signet of Water",5591, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
                 //attunments
-                new Boon("Fire Attunement", 5585, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Water Attunement", 5586, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Air Attunement", 5575, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Earth Attunement", 5580, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Fire Attunement", 5585, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Water Attunement", 5586, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Air Attunement", 5575, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Earth Attunement", 5580, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
                 //forms
                 new Boon("Mist Form",5543, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Ride the Lightning",5588, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
@@ -435,10 +435,10 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Arcane Power",5582, BoonSource.Elementalist, "duration", 1, BoonEnum.OffensiveBuff, "https://wiki.guildwars2.com/images/7/72/Arcane_Power.png"),
                 new Boon("Arcane Shield",5640, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Renewal of Fire",5764, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
-                new Boon("Glyph of Elemental Power (Fire)",5739, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Glyph of Elemental Power (Water)",5741, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Glyph of Elemental Power (Air)",5740, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
-                new Boon("Glyph of Elemental Power (Earth)",5742, BoonSource.Elementalist, "duration", 1, BoonEnum.DontTrackForNow),
+                new Boon("Glyph of Elemental Power (Fire)",5739, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Glyph of Elemental Power (Water)",5741, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Glyph of Elemental Power (Air)",5740, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
+                new Boon("Glyph of Elemental Power (Earth)",5742, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Rebound",31337, BoonSource.Elementalist, "duration", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/0/03/%22Rebound%21%22.png"),
                 new Boon("Rock Barrier",34633, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),//750?
                 new Boon("Magnetic Wave",15794, BoonSource.Elementalist, "duration", 1, BoonEnum.NonShareableBuff),
@@ -512,12 +512,12 @@ namespace LuckParser.Models.ParseModels
         // Foods
         public static List<Boon> getFoodList()
         {
-            return allBoons.Where(x => x.priority != BoonEnum.Food).ToList();
+            return allBoons.Where(x => x.priority == BoonEnum.Food).ToList();
         }
         // Utilities
         public static List<Boon> getUtilityList()
         {
-            return allBoons.Where(x => x.priority != BoonEnum.Utility).ToList();
+            return allBoons.Where(x => x.priority == BoonEnum.Utility).ToList();
         }
         // All buffs
         public static List<Boon> getAllProfList()
