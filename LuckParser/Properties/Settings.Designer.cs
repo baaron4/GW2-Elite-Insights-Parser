@@ -202,5 +202,29 @@ namespace LuckParser.Properties {
                 this["LargeRotIcons"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SaveOutHTML {
+            get {
+                return ((bool)(this["SaveOutHTML"]));
+            }
+            set {
+                this["SaveOutHTML"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SaveOutCSV {
+            get {
+                return ((bool)(this["SaveOutCSV"]));
+            }
+            set {
+                this["SaveOutCSV"] = value;
+            }
+        }
     }
 }

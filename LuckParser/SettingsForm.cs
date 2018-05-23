@@ -95,6 +95,8 @@ namespace LuckParser
             checkBossSummary.Checked = Properties.Settings.Default.BossSummary;
             checkBox10.Checked = Properties.Settings.Default.ShowAutos;
             checkBox11.Checked = Properties.Settings.Default.LargeRotIcons;
+            saveoutHTML.Checked = Properties.Settings.Default.SaveOutHTML;
+            saveoutCSV.Checked = Properties.Settings.Default.SaveOutCSV;
         }
 
         private void checkOutputLoc_CheckedChanged(object sender, EventArgs e)
@@ -161,6 +163,16 @@ namespace LuckParser
             //Update skill list
             GW2APIController tempcontroller = new GW2APIController();
             tempcontroller.RetryWriteSkillListtoFile();
+        }
+
+        private void saveoutHTML_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveOutHTML = saveoutHTML.Checked;
+        }
+
+        private void saveoutCSV_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveOutCSV = saveoutCSV.Checked;
         }
     }
 }

@@ -223,22 +223,44 @@ namespace LuckParser
                         {
                             result = "kill";
                         }
-                        logger(i, "Creating File...", 60);
-                        FileStream fcreate = File.Open(location + fileName + "_" + control.GetLink(bossid + "-ext") + "_" + result + ".html", FileMode.Create);
-
-                        //return html string
-                        logger(i, "Writing HTML...", 80);
-
-
-                        using (StreamWriter sw = new StreamWriter(fcreate))
+                        if (Properties.Settings.Default.SaveOutHTML)
                         {
-                            // string htmlContent = control.CreateHTML(/*settingArray*/);
-                            // sw.Write(htmlContent);
-                            control.CreateHTML(sw, settingsSnap);
-                            sw.Close();
-                        }
+                            logger(i, "Creating File...", 60);
+                            FileStream fcreate = File.Open(location + fileName + "_" + control.GetLink(bossid + "-ext") + "_" + result + ".html", FileMode.Create);
 
-                        logger(i, "HTML Generated!", 100);
+                            //return html string
+                            logger(i, "Writing HTML...", 80);
+
+
+                            using (StreamWriter sw = new StreamWriter(fcreate))
+                            {
+                                // string htmlContent = control.CreateHTML(/*settingArray*/);
+                                // sw.Write(htmlContent);
+                                control.CreateHTML(sw, settingsSnap);
+                                sw.Close();
+                            }
+
+                            logger(i, "HTML Generated!", 100);
+                        }
+                        if (Properties.Settings.Default.SaveOutCSV)
+                        {
+                            logger(i, "Creating CSV File...", 60);
+                            FileStream fcreate = File.Open(location + fileName + "_" + control.GetLink(bossid + "-ext") + "_" + result + ".csv", FileMode.Create);
+
+                            //return html string
+                            logger(i, "Writing CSV...", 80);
+
+
+                            using (StreamWriter sw = new StreamWriter(fcreate))
+                            {
+                                // string htmlContent = control.CreateHTML(/*settingArray*/);
+                                // sw.Write(htmlContent);
+                                control.CreateCSV(sw,",");
+                                sw.Close();
+                            }
+
+                            logger(i, "CSV Generated!", 100);
+                        }
                     }
                     else
                     {

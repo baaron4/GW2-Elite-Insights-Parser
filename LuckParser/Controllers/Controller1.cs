@@ -5097,6 +5097,47 @@ namespace LuckParser.Controllers
             sw.Write("</html>");
             return;
         }
+        //Creating CSV---------------------------------------------------------------------------------
+        public void CreateCSV(StreamWriter sw,String delimiter)
+        {
+            BossData b_data = getBossData();
+            double fight_duration = (b_data.getLastAware() - b_data.getFirstAware()) / 1000.0;
+            TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
+            String durationString = duration.ToString("mm") +":" + duration.ToString("ss") ;
+
+            sw.Write("Group" + delimiter + "Class" + delimiter + "Character" + delimiter + "Account Name" +
+                delimiter + "DPS" + delimiter + "Physical" + delimiter + "Condi" + delimiter + "All DPS"+
+                delimiter +"Quick" +delimiter+ "Alacrity"+delimiter +"Might" + delimiter +"GOTL" + delimiter+ delimiter + "Boss Team DPS" + 
+                delimiter +"All Team DPS" + delimiter +"Time" + delimiter +"Cleave" + delimiter +"Team Cleave"  );
+            sw.Write("\r\n");
+
+            int[] teamStats= { 0,0,0};
+            foreach (Player p in p_list)
+            {
+                string[] finaldps = getFinalDPS(p).Split('|');
+                teamStats[0] += Int32.Parse(finaldps[6]);
+                teamStats[1] += Int32.Parse(finaldps[0]);
+                teamStats[2] += (Int32.Parse(finaldps[0]) - Int32.Parse(finaldps[6]));
+            }
+
+            foreach (Player p in p_list)
+            {
+                string[] finaldps = getFinalDPS(p).Split('|');
+                sw.Write(p.getGroup() + delimiter + p.getProf() + delimiter + p.getCharacter() + delimiter +
+                    p.getAccount().Remove(':') +delimiter+finaldps[6]+delimiter+ finaldps[8] + delimiter + finaldps[10] + delimiter +
+                    finaldps[0] + delimiter);
+
+                Dictionary<int, string> boonArray = getfinalboons(p, new List<int>());
+                sw.Write(boonArray[1187] + delimiter + boonArray[30328] + delimiter + boonArray[740] + delimiter + 
+                    "0" +delimiter+ delimiter);
+
+                sw.Write(teamStats[0] + delimiter + teamStats[1] + delimiter+ durationString + delimiter +
+                    ( Int32.Parse(finaldps[0])-Int32.Parse(finaldps[6])).ToString()+delimiter+teamStats[2]);
+                sw.Write("\r\n");
+            }
+           
+
+        }
         //Easy reference to links/color codes
         public string GetLink(string name)
         {

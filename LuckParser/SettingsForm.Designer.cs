@@ -56,6 +56,8 @@
             this.checkBox11 = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.saveoutHTML = new System.Windows.Forms.CheckBox();
+            this.saveoutCSV = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -217,6 +219,8 @@
             // checkOutputLoc
             // 
             this.checkOutputLoc.AutoSize = true;
+            this.checkOutputLoc.Checked = true;
+            this.checkOutputLoc.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkOutputLoc.Location = new System.Drawing.Point(27, 515);
             this.checkOutputLoc.Name = "checkOutputLoc";
             this.checkOutputLoc.Size = new System.Drawing.Size(192, 17);
@@ -344,11 +348,38 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // saveoutHTML
+            // 
+            this.saveoutHTML.AutoSize = true;
+            this.saveoutHTML.Checked = true;
+            this.saveoutHTML.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.saveoutHTML.Location = new System.Drawing.Point(24, 587);
+            this.saveoutHTML.Name = "saveoutHTML";
+            this.saveoutHTML.Size = new System.Drawing.Size(105, 17);
+            this.saveoutHTML.TabIndex = 26;
+            this.saveoutHTML.Text = "Output as HTML";
+            this.saveoutHTML.UseVisualStyleBackColor = true;
+            this.saveoutHTML.CheckedChanged += new System.EventHandler(this.saveoutHTML_CheckedChanged);
+            // 
+            // saveoutCSV
+            // 
+            this.saveoutCSV.AutoSize = true;
+            this.saveoutCSV.Location = new System.Drawing.Point(24, 611);
+            this.saveoutCSV.Name = "saveoutCSV";
+            this.saveoutCSV.Size = new System.Drawing.Size(96, 17);
+            this.saveoutCSV.TabIndex = 27;
+            this.saveoutCSV.Text = "Output as CSV";
+            this.saveoutCSV.UseVisualStyleBackColor = true;
+            this.saveoutCSV.CheckedChanged += new System.EventHandler(this.saveoutCSV_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(548, 597);
+            this.AutoScroll = true;
+            this.ClientSize = new System.Drawing.Size(564, 640);
+            this.Controls.Add(this.saveoutCSV);
+            this.Controls.Add(this.saveoutHTML);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.checkBox11);
@@ -414,5 +445,7 @@
         private System.Windows.Forms.CheckBox checkBox11;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox saveoutHTML;
+        private System.Windows.Forms.CheckBox saveoutCSV;
     }
 }
