@@ -4376,7 +4376,7 @@ namespace LuckParser.Controllers
                         //Condis
                         parseBoonsList.AddRange(Boon.getCondiBoonList());
                         //Every boon and buffs
-                        parseBoonsList.AddRange(Boon.getSharableProfList());
+                        parseBoonsList.AddRange(Boon.getAllProfList());
                         List<BoonsGraphModel> boonGraphData = getBossBoonGraph(p);
                         boonGraphData.Reverse();
                         foreach (BoonsGraphModel bgm in boonGraphData)
