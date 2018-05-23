@@ -542,6 +542,7 @@ namespace LuckParser.Controllers
                     if (NPC.getProf().Contains("57069"))
                     {
                         deimos_2_instid = NPC.getInstid();
+                        long oldAware = boss_data.getLastAware();
                         if (NPC.getLastAware() < boss_data.getLastAware())
                         {
                             // No split
@@ -552,16 +553,20 @@ namespace LuckParser.Controllers
                         //int stop = 0;
                         foreach (CombatItem c in combat_list)
                         {
-                            if (c.getSrcInstid() == deimos_2_instid)
+                            if (c.getTime() > oldAware)
                             {
-                                c.setSrcInstid(boss_data.getInstid());
-                                
+                                int lol = c.isStateChange().getID();
+                                if (c.getSrcInstid() == deimos_2_instid)
+                                {
+                                    c.setSrcInstid(boss_data.getInstid());
+
+                                }
+                                if (c.getDstInstid() == deimos_2_instid)
+                                {
+                                    c.setDstInstid(boss_data.getInstid());
+                                }
                             }
-                            if (c.getDstInstid() == deimos_2_instid)
-                            {
-                                c.setDstInstid(boss_data.getInstid());
-                            }
-                           
+
                         }
                         break;
                     }
@@ -580,7 +585,6 @@ namespace LuckParser.Controllers
             }
             // Sort
             p_list = p_list.OrderBy(a => int.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>int.Parse(a.getGroup()) - int.Parse(b.getGroup()))
-            getBossKilled();
             setMechData();
         }
 
@@ -709,57 +713,7 @@ namespace LuckParser.Controllers
             //Placeholders for further calc
             return totalAll_dps.ToString() + "|" + totalAll_damage.ToString() + "|" + totalAllphys_dps.ToString() + "|" + totalAllphys_damage.ToString() + "|" + totalAllcondi_dps.ToString() + "|" + totalAllcondi_damage.ToString() + "|"
                 + totalboss_dps.ToString() + "|" + totalboss_damage.ToString() + "|" + totalbossphys_dps.ToString() + "|" + totalbossphys_damage.ToString() + "|" + totalbosscondi_dps.ToString() + "|" + totalbosscondi_damage.ToString();
-        }
-        public bool getBossKilled() {
-            //if deimos
-            if (boss_data.getID() == 17154) {
-                //BossData b_data = getBossData();
-                //CombatData c_data = getCombatData();
-                //int totaldmg = 0;
-                
-                //int[] lasttick = boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1];
-                //if (lasttick[1] < 1100) {
-                //    foreach (Player p in p_list)
-                //    {
-                //        totaldmg += p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Where(x=>x.getTime() -boss_data.getFirstAware() > lasttick[0]).ToList().Sum(x => x.getDamage());
-                //    }
-                //    int stop = 0;
-                //}
-                
-            }
-            //fix kill for Horrer
-            if (boss_data.getID() == 19767)
-            {
-                if (boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1][1] < 200)
-                {
-                    log_data.setBossKill(true);
-                    return true;
-                }
-            }
-            if (log_data.getBosskill() == false)
-            {
-                BossData b_data = getBossData();
-                CombatData c_data = getCombatData();
-                int totaldmg = 0;
-
-                foreach (Player p in p_list)
-                {
-                    totaldmg += p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Sum(x => x.getDamage());
-                }
-                int healthremaining = b_data.getHealth() - totaldmg;
-                if (healthremaining > 0)
-                {
-                    log_data.setBossKill(false);
-                    return false;
-                }
-                else if (healthremaining <= 0)
-                {
-                    log_data.setBossKill(true);
-                    return true;
-                }
-            }
-            return false;
-        }
+        }      
         public String[] getFinalStats(Player p)
         {
             BossData b_data = getBossData();
@@ -4755,27 +4709,25 @@ namespace LuckParser.Controllers
                                                     {
                                                         if (log_data.getBosskill())
                                                         {
-                                                            sw.Write("<div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:100%; ;display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">");
-                                                            {
-                                                                sw.Write("<p style=\"text-align:center; color: #FFF;\">" + getBossData().getHealth().ToString() + " Health</p>");
-                                                            }
-                                                            sw.Write("</div>");
+                                                            string tp = getBossData().getHealth().ToString() + " Health";
+                                                            sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:100%; ;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
                                                         }
                                                         else
                                                         {
-                                                            double finalPercent = 100;
+                                                            double finalPercent = 0;
                                                             if (boss_data.getHealthOverTime().Count > 0)
                                                             {
-                                                                finalPercent = boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1][1] * 0.01;
+                                                                finalPercent = 100.0 - boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1][1] * 0.01;
                                                             }
-                                                            sw.Write("<div class=\"progress-bar bg-danger\" role=\"progressbar\" style=\"width:" + finalPercent + "%; ;display: inline-block;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\">");
-                                                            {
-                                                                sw.Write("<p style=\"text-align:center; color: #FFF;\">" + (getBossData().getHealth() * finalPercent/100.0).ToString() + " Health</p>");
-                                                            }
-                                                            sw.Write("</div>");
+                                                            string tp = getBossData().getHealth() * finalPercent / 100.0 + " Health";
+                                                            sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + finalPercent + "%;\" aria-valuenow=\""+ finalPercent+"\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
+                                                            tp = getBossData().getHealth() * (100.0-finalPercent) / 100.0 + " Health";
+                                                            sw.Write("<div class=\"progress-bar bg-danger\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + (100.0 - finalPercent) + "%;\" aria-valuenow=\""+ (100.0 - finalPercent )+ "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
+                                                            
                                                         }
                                                     }
                                                     sw.Write("</div>");
+                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: #FFF;\">" + getBossData().getHealth().ToString() + " Health</p>");
                                                     if (log_data.getBosskill())
                                                     {
                                                         sw.Write("<p class='text text-success'> Result: Success</p>");
