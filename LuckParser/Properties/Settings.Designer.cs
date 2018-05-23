@@ -226,5 +226,17 @@ namespace LuckParser.Properties {
                 this["SaveOutCSV"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowEstimates {
+            get {
+                return ((bool)(this["ShowEstimates"]));
+            }
+            set {
+                this["ShowEstimates"] = value;
+            }
+        }
     }
 }

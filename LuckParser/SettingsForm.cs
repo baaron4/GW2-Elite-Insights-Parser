@@ -97,6 +97,7 @@ namespace LuckParser
             checkBox11.Checked = Properties.Settings.Default.LargeRotIcons;
             saveoutHTML.Checked = Properties.Settings.Default.SaveOutHTML;
             saveoutCSV.Checked = Properties.Settings.Default.SaveOutCSV;
+            estimatesBox.Checked = Properties.Settings.Default.ShowEstimates;
         }
 
         private void checkOutputLoc_CheckedChanged(object sender, EventArgs e)
@@ -173,6 +174,11 @@ namespace LuckParser
         private void saveoutCSV_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutCSV = saveoutCSV.Checked;
+        }
+
+        private void estimatesBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ShowEstimates = estimatesBox.Checked;
         }
     }
 }

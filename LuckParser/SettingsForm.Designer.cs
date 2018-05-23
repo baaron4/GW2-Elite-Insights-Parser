@@ -58,6 +58,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.saveoutHTML = new System.Windows.Forms.CheckBox();
             this.saveoutCSV = new System.Windows.Forms.CheckBox();
+            this.estimatesBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -372,12 +373,26 @@
             this.saveoutCSV.UseVisualStyleBackColor = true;
             this.saveoutCSV.CheckedChanged += new System.EventHandler(this.saveoutCSV_CheckedChanged);
             // 
+            // estimatesBox
+            // 
+            this.estimatesBox.AutoSize = true;
+            this.estimatesBox.Checked = true;
+            this.estimatesBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.estimatesBox.Location = new System.Drawing.Point(30, 440);
+            this.estimatesBox.Name = "estimatesBox";
+            this.estimatesBox.Size = new System.Drawing.Size(123, 17);
+            this.estimatesBox.TabIndex = 28;
+            this.estimatesBox.Text = "Show Estimates Tab";
+            this.estimatesBox.UseVisualStyleBackColor = true;
+            this.estimatesBox.CheckedChanged += new System.EventHandler(this.estimatesBox_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(564, 640);
+            this.ClientSize = new System.Drawing.Size(577, 368);
+            this.Controls.Add(this.estimatesBox);
             this.Controls.Add(this.saveoutCSV);
             this.Controls.Add(this.saveoutHTML);
             this.Controls.Add(this.button2);
@@ -447,5 +462,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.CheckBox saveoutHTML;
         private System.Windows.Forms.CheckBox saveoutCSV;
+        private System.Windows.Forms.CheckBox estimatesBox;
     }
 }

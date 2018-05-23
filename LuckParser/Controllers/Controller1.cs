@@ -1829,6 +1829,11 @@ namespace LuckParser.Controllers
                     "Plotly.newPlot('DPSGraph', data, layout);");
             sw.Write("</script> ");
         }
+        private void GetRoles()
+        {
+            //tags: tank,healer,dps(power/condi)
+            //Roles:greenteam,green split,cacnoneers,flakkiter,eater,KCpusher,agony,epi,handkiter,golemkiter,orbs
+        }
 
         bool[] SnapSettings;
         private void CreateCompTable(StreamWriter sw) {
@@ -4611,6 +4616,40 @@ namespace LuckParser.Controllers
             }         
             sw.Write("</div>");
         }
+        private void CreateEstimateTabs(StreamWriter sw)
+        {
+            sw.Write("<ul class=\"nav nav-tabs\">");
+            {
+                sw.Write("<li class=\"nav-item\">" +
+                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est_role\">Roles</a>" +
+                        "</li>" +
+
+                        "<li class=\"nav-item\">" +
+                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est_cc\">CC</a>" +
+                        "</li>" +
+                         "<li class=\"nav-item\">" +
+                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est\">Maybe more</a>" +
+                        "</li>");
+            }
+            sw.Write("</ul>");
+            sw.Write("<div id=\"myTabContent\" class=\"tab-content\">");
+            {
+                sw.Write("<div class=\"tab-pane fade show active\" id=\"est_role\">");
+                {
+                    //Use cards
+                }
+                sw.Write("</div>");
+                sw.Write("<div class=\"tab-pane fade show active\" id=\"est_cc\">");
+                {
+                }
+                sw.Write("</div>");
+                sw.Write("<div class=\"tab-pane fade show active\" id=\"est\">");
+                {
+                }
+                sw.Write("</div>");
+            }
+            sw.Write("</div>");
+        }
         public void CreateCustomCSS(StreamWriter sw,int simpleRotSize)
         {
             sw.Write("table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}");
@@ -4789,6 +4828,12 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("<li class=\"nav-item\">" +
                                                 "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#eventList\">Event List</a>" +
+                                            "</li>");
+                            }
+                            if (settingsSnap[13])
+                            {
+                                sw.Write("<li class=\"nav-item\">" +
+                                                "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#estimates\">Estimates</a>" +
                                             "</li>");
                             }
                         }
@@ -5027,6 +5072,15 @@ namespace LuckParser.Controllers
                                     sw.Write("<p>List of all events.</p>");
                                     // CreateEventList(sw);
                                     CreateSkillList(sw);
+                                }
+                                sw.Write("</div>");
+                            }
+                            //boss summary
+                            if (settingsSnap[13])
+                            {
+                                sw.Write("<div class=\"tab-pane fade\" id=\"estimates\">");
+                                {
+                                    CreateEstimateTabs(sw);
                                 }
                                 sw.Write("</div>");
                             }
