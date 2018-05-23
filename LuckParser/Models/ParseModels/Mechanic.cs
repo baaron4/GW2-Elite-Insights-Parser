@@ -21,10 +21,10 @@ namespace LuckParser.Models.ParseModels
         //4 enemy boon stripped
         //5 spawn check
         //6 boss cast (check finished)
-        private int bossid;
+        private ushort bossid;
         private string plotlyShape;
 
-        public Mechanic( int skill_id, string name, int mechtype,int bossid, string plotlyShape,string friendlyName)
+        public Mechanic( int skill_id, string name, int mechtype, ushort bossid, string plotlyShape,string friendlyName)
         {
             this.skill_id = skill_id;
             this.name = name;
@@ -47,7 +47,7 @@ namespace LuckParser.Models.ParseModels
         {
             return mechType;
         }
-        public int GetBossID() {
+        public ushort GetBossID() {
             return bossid;
         }
 

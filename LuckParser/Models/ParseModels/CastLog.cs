@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
    public  class CastLog
     {
         // Fields
-        private int time;
+        private long time;
         private int skill_id;
         private int exp_dur;
         private int act_dur;
@@ -19,7 +19,7 @@ namespace LuckParser.Models.ParseModels
 
 
         // Constructor
-        public CastLog(int time, int skill_id, int exp_dur, Activation start_activation,int act_dur,Activation end_activation)
+        public CastLog(long time, int skill_id, int exp_dur, Activation start_activation,int act_dur,Activation end_activation)
         {
             this.time = time;
             this.skill_id = skill_id;
@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
             this.end_activation = end_activation;
         }
         //start cast log
-        public CastLog(int time, int skill_id, int exp_dur, Activation start_activation)
+        public CastLog(long time, int skill_id, int exp_dur, Activation start_activation)
         {
             this.time = time;
             this.skill_id = skill_id;
@@ -39,7 +39,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Getters
-        public int getTime()
+        public long getTime()
         {
             return time;
         }

@@ -9,9 +9,9 @@ namespace LuckParser.Models.ParseModels
     {
         // Fields
         private long agent;
-        private int instid = 0;
-        private int first_aware = 0;
-        private int last_aware = Int16.MaxValue;
+        private ushort instid = 0;
+        private long first_aware = 0;
+        private long last_aware = long.MaxValue;
         private String name;
         private String prof;
         private int toughness = 0;
@@ -58,17 +58,17 @@ namespace LuckParser.Models.ParseModels
             return agent;
         }
 
-        public int getInstid()
+        public ushort getInstid()
         {
             return instid;
         }
 
-        public int getFirstAware()
+        public long getFirstAware()
         {
             return first_aware;
         }
 
-        public int getLastAware()
+        public long getLastAware()
         {
             return last_aware;
         }
@@ -101,17 +101,17 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Setters
-        public void setInstid(int instid)
+        public void setInstid(ushort instid)
         {
             this.instid = instid;
         }
 
-        public void setFirstAware(int first_aware)
+        public void setFirstAware(long first_aware)
         {
             this.first_aware = first_aware;
         }
 
-        public void setLastAware(int last_aware)
+        public void setLastAware(long last_aware)
         {
             this.last_aware = last_aware;
         }

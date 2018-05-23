@@ -30,7 +30,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (c.getSrcInstid() == src_instid && c.isStateChange().getEnum() == change)
                 {
-                    states.Add(new Point(c.getTime(), (int)c.getDstAgent()));
+                    states.Add(new Point((int)c.getTime(), (int)c.getDstAgent()));
                 }
             }
             return states;
