@@ -1829,6 +1829,11 @@ namespace LuckParser.Controllers
                     "Plotly.newPlot('DPSGraph', data, layout);");
             sw.Write("</script> ");
         }
+        private void GetRoles()
+        {
+            //tags: tank,healer,dps(power/condi)
+            //Roles:greenteam,green split,cacnoneers,flakkiter,eater,KCpusher,agony,epi,handkiter,golemkiter,orbs
+        }
 
         bool[] SnapSettings;
         private void CreateCompTable(StreamWriter sw) {
@@ -4611,6 +4616,40 @@ namespace LuckParser.Controllers
             }         
             sw.Write("</div>");
         }
+        private void CreateEstimateTabs(StreamWriter sw)
+        {
+            sw.Write("<ul class=\"nav nav-tabs\">");
+            {
+                sw.Write("<li class=\"nav-item\">" +
+                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est_role\">Roles</a>" +
+                        "</li>" +
+
+                        "<li class=\"nav-item\">" +
+                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est_cc\">CC</a>" +
+                        "</li>" +
+                         "<li class=\"nav-item\">" +
+                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est\">Maybe more</a>" +
+                        "</li>");
+            }
+            sw.Write("</ul>");
+            sw.Write("<div id=\"myTabContent\" class=\"tab-content\">");
+            {
+                sw.Write("<div class=\"tab-pane fade show active\" id=\"est_role\">");
+                {
+                    //Use cards
+                }
+                sw.Write("</div>");
+                sw.Write("<div class=\"tab-pane fade show active\" id=\"est_cc\">");
+                {
+                }
+                sw.Write("</div>");
+                sw.Write("<div class=\"tab-pane fade show active\" id=\"est\">");
+                {
+                }
+                sw.Write("</div>");
+            }
+            sw.Write("</div>");
+        }
         public void CreateCustomCSS(StreamWriter sw,int simpleRotSize)
         {
             sw.Write("table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}");
@@ -4789,6 +4828,12 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("<li class=\"nav-item\">" +
                                                 "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#eventList\">Event List</a>" +
+                                            "</li>");
+                            }
+                            if (settingsSnap[13])
+                            {
+                                sw.Write("<li class=\"nav-item\">" +
+                                                "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#estimates\">Estimates</a>" +
                                             "</li>");
                             }
                         }
@@ -5030,6 +5075,15 @@ namespace LuckParser.Controllers
                                 }
                                 sw.Write("</div>");
                             }
+                            //boss summary
+                            if (settingsSnap[13])
+                            {
+                                sw.Write("<div class=\"tab-pane fade\" id=\"estimates\">");
+                                {
+                                    CreateEstimateTabs(sw);
+                                }
+                                sw.Write("</div>");
+                            }
                             //Html_playertabs
                             CreatePlayerTab(sw,settingsSnap);
                         }
@@ -5045,6 +5099,47 @@ namespace LuckParser.Controllers
             //end
             sw.Write("</html>");
             return;
+        }
+        //Creating CSV---------------------------------------------------------------------------------
+        public void CreateCSV(StreamWriter sw,String delimiter)
+        {
+            BossData b_data = getBossData();
+            double fight_duration = (b_data.getLastAware() - b_data.getFirstAware()) / 1000.0;
+            TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
+            String durationString = duration.ToString("mm") +":" + duration.ToString("ss") ;
+
+            sw.Write("Group" + delimiter + "Class" + delimiter + "Character" + delimiter + "Account Name" +
+                delimiter + "DPS" + delimiter + "Physical" + delimiter + "Condi" + delimiter + "All DPS"+
+                delimiter +"Quick" +delimiter+ "Alacrity"+delimiter +"Might" + delimiter +"GOTL" + delimiter+ delimiter + "Boss Team DPS" + 
+                delimiter +"All Team DPS" + delimiter +"Time" + delimiter +"Cleave" + delimiter +"Team Cleave"  );
+            sw.Write("\r\n");
+
+            int[] teamStats= { 0,0,0};
+            foreach (Player p in p_list)
+            {
+                string[] finaldps = getFinalDPS(p).Split('|');
+                teamStats[0] += Int32.Parse(finaldps[6]);
+                teamStats[1] += Int32.Parse(finaldps[0]);
+                teamStats[2] += (Int32.Parse(finaldps[0]) - Int32.Parse(finaldps[6]));
+            }
+
+            foreach (Player p in p_list)
+            {
+                string[] finaldps = getFinalDPS(p).Split('|');
+                sw.Write(p.getGroup() + delimiter + p.getProf() + delimiter + p.getCharacter() + delimiter +
+                    p.getAccount().Remove(':') +delimiter+finaldps[6]+delimiter+ finaldps[8] + delimiter + finaldps[10] + delimiter +
+                    finaldps[0] + delimiter);
+
+                Dictionary<int, string> boonArray = getfinalboons(p, new List<int>());
+                sw.Write(boonArray[1187] + delimiter + boonArray[30328] + delimiter + boonArray[740] + delimiter + 
+                    "0" +delimiter+ delimiter);
+
+                sw.Write(teamStats[0] + delimiter + teamStats[1] + delimiter+ durationString + delimiter +
+                    ( Int32.Parse(finaldps[0])-Int32.Parse(finaldps[6])).ToString()+delimiter+teamStats[2]);
+                sw.Write("\r\n");
+            }
+           
+
         }
         //Easy reference to links/color codes
         public string GetLink(string name)

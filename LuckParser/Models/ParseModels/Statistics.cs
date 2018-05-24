@@ -64,7 +64,7 @@ namespace LuckParser.Models.ParseModels
                 boon.add((int)log.getValue());
                 long duration = t_curr + (long)boon.getStackValue();
                 if (duration < 0) {
-                    duration = int.MaxValue;
+                    duration = long.MaxValue;
                 }
                 t_prev = t_curr;
                 boon_intervals.Add(new Point((int)t_curr, (int)duration));
