@@ -41,7 +41,7 @@ namespace LuckParser.Models.ParseModels
         private int prof;
 
         // Constructor
-       public Agent(long ID, String name,int prof,int elite)
+       public Agent(long ID, String name, int prof, int elite)
         {
             this.name = name;
             this.ID = ID;

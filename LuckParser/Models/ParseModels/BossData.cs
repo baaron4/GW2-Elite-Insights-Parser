@@ -9,16 +9,16 @@ namespace LuckParser.Models.ParseModels
     {
         // Fields
         private long agent = 0;
-        private int instid = 0;
-        private int first_aware = 0;
-        private int last_aware = Int16.MaxValue;
-        private int id;
+        private ushort instid = 0;
+        private long first_aware = 0;
+        private long last_aware = long.MaxValue;
+        private ushort id;
         private String name = "UNKNOWN";
         private int health = -1;
         private int toughness = -1;
-        private List<int[]> healthOverTime = new List<int[]>();
+        private List<long[]> healthOverTime = new List<long[]>();
         // Constructors
-        public BossData(int id)
+        public BossData(ushort id)
         {
             this.id = id;
         }
@@ -92,22 +92,22 @@ namespace LuckParser.Models.ParseModels
             return agent;
         }
 
-        public int getInstid()
+        public ushort getInstid()
         {
             return instid;
         }
 
-        public int getFirstAware()
+        public long getFirstAware()
         {
             return first_aware;
         }
 
-        public int getLastAware()
+        public long getLastAware()
         {
             return last_aware;
         }
 
-        public int getID()
+        public ushort getID()
         {
             return id;
         }
@@ -127,7 +127,7 @@ namespace LuckParser.Models.ParseModels
             return toughness;
         }
 
-        public List<int[]> getHealthOverTime() {
+        public List<long[]> getHealthOverTime() {
             return healthOverTime;
         }
         // Setters
@@ -136,17 +136,17 @@ namespace LuckParser.Models.ParseModels
             this.agent = agent;
         }
 
-        public void setInstid(int instid)
+        public void setInstid(ushort instid)
         {
             this.instid = instid;
         }
 
-        public void setFirstAware(int first_aware)
+        public void setFirstAware(long first_aware)
         {
             this.first_aware = first_aware;
         }
 
-        public void setLastAware(int last_aware)
+        public void setLastAware(long last_aware)
         {
             this.last_aware = last_aware;
         }
@@ -165,7 +165,7 @@ namespace LuckParser.Models.ParseModels
         {
             this.toughness = tough;
         }
-        public void setHealthOverTime(List<int[]> hot) {
+        public void setHealthOverTime(List<long[]> hot) {
             this.healthOverTime = hot;
         }
     }

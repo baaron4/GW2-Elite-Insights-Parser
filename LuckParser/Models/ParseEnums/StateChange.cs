@@ -82,6 +82,14 @@ namespace LuckParser.Models.ParseEnums
                     return "POINT_OF_VIEW";
                 case 14:
                     return "CBTS_LANGUAGE";
+                case 15:
+                    return "GWBUILD";
+                case 16:
+                    return "SHARDID";
+                case 17:
+                    return "REWARD";
+                case 18:
+                    return "BUFFINITIAL";
                 default:
                     return "UNKNOWN";
             }
