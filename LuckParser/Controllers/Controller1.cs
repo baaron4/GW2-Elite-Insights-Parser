@@ -2638,8 +2638,8 @@ namespace LuckParser.Controllers
                 AgentData a_data = getAgentData();
                 bool died = getDied(p);
                 string charname = p.getCharacter();
-                List<int> minionIDlist = p.getCombatMinionList(b_data, c_data.getCombatList(), a_data);
-                List<AgentItem> minionAgentList = new List<AgentItem>();
+                List<ushort> minionIDlist = p.getCombatMinionList(b_data, c_data.getCombatList(), a_data);
+                Dictionary<AgentItem, List<DamageLog>> minionAgentList = new Dictionary<AgentItem, List<DamageLog>>();
                 sw.Write("<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">");
                 {
                     sw.Write("<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
@@ -2662,23 +2662,28 @@ namespace LuckParser.Controllers
                             AgentItem agent = a_data.getNPCAgentList().FirstOrDefault(x => x.getInstid() == petid);
                             if (agent != null)
                             {
+                                List<DamageLog> damageLogs = p.getMinionDamageLogs(agent.getAgent(), b_data, c_data.getCombatList(), getAgentData());
+                                if (damageLogs.Count == 0)
+                                {
+                                    continue;
+                                }
                                 if (minionAgentList.Count > 0)
                                 {
-                                    if (minionAgentList.FirstOrDefault(x => x.getName() == agent.getName()) == null)
+                                    if (minionAgentList.Keys.ToList().FirstOrDefault(x => x.getName() == agent.getName()) == null)
                                     {
-                                        minionAgentList.Add(agent);
+                                        minionAgentList[agent] = damageLogs;
                                     }
                                 }
                                 else
                                 {
-                                    minionAgentList.Add(agent);
+                                    minionAgentList[agent] = damageLogs;
                                 }
                             }
                             //int i = 0;
                         }
-                        foreach (AgentItem mobAgent in minionAgentList)
+                        foreach (KeyValuePair<AgentItem, List<DamageLog>> element in minionAgentList)
                         {
-                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">" + mobAgent.getName() + "</a></li>");
+                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid() + "_" + element.Key.getInstid() + "\">" + element.Key.getName() + "</a></li>");
                         }
                         //inc dmg
                         sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#incDmg" + p.getInstid() + "\">Damage Taken</a></li>");
@@ -3115,11 +3120,11 @@ namespace LuckParser.Controllers
                             CreateDMGDistTable(sw, p);
                         }
                         sw.Write("</div>");
-                        foreach (AgentItem mobAgent in minionAgentList)
+                        foreach (KeyValuePair<AgentItem, List<DamageLog>> element in minionAgentList)
                         {
-                            sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">");
+                            sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid() + "_" + element.Key.getInstid() + "\">");
                             {
-                                CreateDMGDistTable(sw, p, mobAgent);
+                                CreateDMGDistTable(sw, p, element.Value, element.Key);
                             }
                             sw.Write("</div>");
                         }
@@ -3767,14 +3772,8 @@ namespace LuckParser.Controllers
             }        
             sw.Write("</table>");
         }
-        private void CreateDMGDistTable(StreamWriter sw, Player p, AgentItem agent)
+        private void CreateDMGDistTable(StreamWriter sw, Player p, List<DamageLog> damageLogs, AgentItem agent)
         {
-
-            CombatData c_data = getCombatData();
-            BossData b_data = getBossData();
-            // List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
-
-            List<DamageLog> damageLogs = p.getMinionDamageLogs(agent.getAgent(), b_data, c_data.getCombatList(), getAgentData());
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
@@ -4335,8 +4334,8 @@ namespace LuckParser.Controllers
             List<SkillItem> s_list = s_data.getSkillList();
             AgentData a_data = getAgentData();
             string charname = p.getCharacter();
-            List<int> minionIDlist = p.getCombatMinionList(b_data, c_data.getCombatList(), a_data);
-            List<AgentItem> minionAgentList = new List<AgentItem>();
+            List<ushort> minionIDlist = p.getCombatMinionList(b_data, c_data.getCombatList(), a_data);
+            Dictionary<AgentItem, List<DamageLog>> minionAgentList = new Dictionary<AgentItem, List<DamageLog>>();
             sw.Write("<h1 align=\"center\"> " + charname + "</h1>");
             sw.Write("<ul class=\"nav nav-tabs\">");
             {
@@ -4347,24 +4346,28 @@ namespace LuckParser.Controllers
                     AgentItem agent = a_data.getNPCAgentList().FirstOrDefault(x => x.getInstid() == petid);
                     if (agent != null)
                     {
+                        List<DamageLog> damageLogs = p.getMinionDamageLogs(agent.getAgent(), b_data, c_data.getCombatList(), getAgentData());
+                        if (damageLogs.Count == 0)
+                        {
+                            continue;
+                        }
                         if (minionAgentList.Count > 0)
                         {
-
-                            if (minionAgentList.FirstOrDefault(x => x.getName() == agent.getName()) == null)
+                            if (minionAgentList.Keys.ToList().FirstOrDefault(x => x.getName() == agent.getName()) == null)
                             {
-                                minionAgentList.Add(agent);
+                                minionAgentList[agent] = damageLogs;
                             }
                         }
                         else
                         {
-                            minionAgentList.Add(agent);
+                            minionAgentList[agent] = damageLogs;
                         }
                     }
                     //int i = 0;
                 }
-                foreach (AgentItem mobAgent in minionAgentList)
+                foreach (KeyValuePair<AgentItem, List<DamageLog>> element in minionAgentList)
                 {
-                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">" + mobAgent.getName() + "</a></li>");
+                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid() + "_" + element.Key.getInstid() + "\">" + element.Key.getName() + "</a></li>");
                 }
             }         
             sw.Write("</ul>");
@@ -4604,15 +4607,14 @@ namespace LuckParser.Controllers
                 sw.Write("</script> ");
                 CreateDMGDistTable(sw, p);
                 sw.Write("</div>");
-                foreach (AgentItem mobAgent in minionAgentList)
+                foreach (KeyValuePair<AgentItem, List<DamageLog>> element in minionAgentList)
                 {
-                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid() + "_" + mobAgent.getInstid() + "\">");
+                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid() + "_" + element.Key.getInstid() + "\">");
                     {
-                        CreateDMGDistTable(sw, p, mobAgent);
+                        CreateDMGDistTable(sw, p, element.Value, element.Key);
                     }
                     sw.Write("</div>");
                 }
-
             }         
             sw.Write("</div>");
         }

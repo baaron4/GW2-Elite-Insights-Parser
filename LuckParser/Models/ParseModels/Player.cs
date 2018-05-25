@@ -22,7 +22,7 @@ namespace LuckParser.Models.ParseModels
         private List<int> damagetaken = new List<int>();
         private Dictionary<int, BoonMap> boon_map = new Dictionary<int, BoonMap>();
         private List<CastLog> cast_logs = new List<CastLog>();
-        private List<int> combatMinionIDList;
+        private List<ushort> combatMinionIDList;
         private List<int[]> bossdpsGraph = new List<int[]>();
 
         // Constructors
@@ -238,9 +238,9 @@ namespace LuckParser.Models.ParseModels
             //}
             return reses;
         }
-        public List<int> getCombatMinionList(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
+        public List<ushort> getCombatMinionList(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
             if (combatMinionIDList == null) {
-                combatMinionIDList = combatList.Where(x => x.getSrcMasterInstid() == instid &&(( x.getValue() != 0 &&x.isBuff() ==0)||(x.isBuff() == 1 && x.getBuffDmg() != 0))).Select(x => (int)x.getSrcInstid()).Distinct().ToList();
+                combatMinionIDList = combatList.Where(x => x.getSrcMasterInstid() == instid &&(( x.getValue() != 0 &&x.isBuff() ==0)||(x.isBuff() == 1 && x.getBuffDmg() != 0))).Select(x => x.getSrcInstid()).Distinct().ToList();
                 //int test = 0;
             }
             return combatMinionIDList;
@@ -251,7 +251,7 @@ namespace LuckParser.Models.ParseModels
         }
         public List<DamageLog> getJustPlayerDamageLogs( BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
-            List<int> minionList = getCombatMinionList(bossData, combatList, agentData);
+            List<ushort> minionList = getCombatMinionList(bossData, combatList, agentData);
             List<DamageLog> dls = new List<DamageLog>();
             foreach (DamageLog dl in getDamageLogs(0, bossData, combatList, agentData)) {
                 if (combatMinionIDList.Contains(dl.getInstidt()))
