@@ -3267,7 +3267,7 @@ namespace LuckParser.Controllers
                     totaldmg += damageToDown[i].getDamage();
                     if (totaldmg > 30000)
                     {
-                        damageToDown = damageToDown.GetRange(i, damageToDown.Count() - 1-i);
+                        damageToDown = damageToDown.GetRange(i, damageToDown.Count() -i);
                         break;
                     }
                 }
