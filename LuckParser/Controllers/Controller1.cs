@@ -3611,6 +3611,7 @@ namespace LuckParser.Controllers
                         int hits = 0;
                         int maxdamage = 0;
                         int condiID = condi.getID();
+                        usedIDs.Add(condiID);
                         foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
                         {
                             int curdmg = dl.getDamage();
@@ -3624,7 +3625,6 @@ namespace LuckParser.Controllers
                         avgdamage = (int)((double)totaldamage / (double)hits);
                         if (totaldamage != 0)
                         {
-                            usedIDs.Add(condiID);
                             string condiName = condi.getName();// Boon.getCondiName(condiID);
                             sw.Write("<tr class=\"condi\">");
                             {
@@ -3832,7 +3832,7 @@ namespace LuckParser.Controllers
                         int avgdamage = 0;
                         int hits = 0;
                         int maxdamage = 0;
-
+                        usedIDs.Add(condiID);
                         foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
                         {
                             int curdmg = dl.getDamage();
@@ -3845,7 +3845,6 @@ namespace LuckParser.Controllers
                         avgdamage = (int)((double)totaldamage / (double)hits);
                         if (totaldamage != 0)
                         {
-                            usedIDs.Add(condiID);
                             string condiName = condi.getName();// Boon.getCondiName(condiID);
                             sw.Write("<tr class=\"condi\">");
                             {
@@ -4000,7 +3999,48 @@ namespace LuckParser.Controllers
                 sw.Write("</thead>");
                 sw.Write("<tbody>");
                 {
-                    foreach (int id in damageLogs.Select(x => x.getID()).Distinct())
+                    HashSet<int> usedIDs = new HashSet<int>();
+                    List<Boon> condiList = Boon.getCondiBoonList();
+                    foreach (Boon condi in condiList)
+                    {
+                        int condiID = condi.getID();
+                        int totaldamage = 0;
+                        int mindamage = 0;
+                        int avgdamage = 0;
+                        int hits = 0;
+                        int maxdamage = 0;
+                        usedIDs.Add(condiID);
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                        {
+                            int curdmg = dl.getDamage();
+                            totaldamage += curdmg;
+                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                            hits++;
+                            int result = dl.getResult().getID();
+
+                        }
+                        avgdamage = (int)((double)totaldamage / (double)hits);
+                        if (totaldamage > 0)
+                        {
+                            string condiName = condi.getName();// Boon.getCondiName(condiID);
+                            sw.Write("<tr>");
+                            {
+                                sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                                sw.Write("<td>" + totaldamage + "</td>");
+                                sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                sw.Write("<td>" + hits + "</td>");
+                                sw.Write("<td>" + mindamage + "</td>");
+                                sw.Write("<td>" + avgdamage + "</td>");
+                                sw.Write("<td>" + maxdamage + "</td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                            }
+                            sw.Write("</tr>");
+                        }
+                    }
+                    foreach (int id in damageLogs.Where(x => !usedIDs.Contains( x.getID())).Select(x => x.getID()).Distinct())
                     {//foreach casted skill
                         SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
 
@@ -4027,7 +4067,7 @@ namespace LuckParser.Controllers
 
                         if (skill != null)
                         {
-                            if (totaldamage != 0 && skill.GetGW2APISkill() != null)
+                            if (totaldamage > 0 && skill.GetGW2APISkill() != null)
                             {
                                 sw.Write("<tr>");
                                 {
@@ -4044,7 +4084,7 @@ namespace LuckParser.Controllers
                                 }                             
                                 sw.Write("</tr>");
                             }
-                            else if (totaldamage != 0)
+                            else if (totaldamage > 0)
                             {
                                 sw.Write("<tr>");
                                 {
@@ -4061,83 +4101,6 @@ namespace LuckParser.Controllers
                                 }
                                 sw.Write("</tr>");
                             }
-                            else if (skill.GetGW2APISkill() != null)
-                            {
-                                sw.Write("<tr>");
-                                {
-                                    sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                }
-                                sw.Write("</tr>");
-                            }
-                            else
-                            {
-                                sw.Write("<tr>");
-                                {
-                                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                }                               
-                                sw.Write("</tr>");
-                            }
-                        }
-
-                    }
-                    List<Boon> condiList = Boon.getCondiBoonList();
-                    foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
-                    {
-                        Boon condi = condiList.FirstOrDefault(x => x.getID() == condiID);
-                        string condiName = condi.getName();// Boon.getCondiName(condiID);
-                        int totaldamage = 0;
-                        int mindamage = 0;
-                        int avgdamage = 0;
-                        int hits = 0;
-                        int maxdamage = 0;
-
-                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
-                        {
-                            int curdmg = dl.getDamage();
-                            totaldamage += curdmg;
-                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                            hits++;
-                            int result = dl.getResult().getID();
-
-                        }
-                        avgdamage = (int)((double)totaldamage / (double)hits);
-
-
-                        if (totaldamage != 0)
-                        {
-                            sw.Write("<tr>");
-                            {
-                                sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
-                                sw.Write("<td>" + totaldamage + "</td>");
-                                sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
-                                sw.Write("<td>" + hits + "</td>");
-                                sw.Write("<td>" + mindamage + "</td>");
-                                sw.Write("<td>" + avgdamage + "</td>");
-                                sw.Write("<td>" + maxdamage + "</td>");
-                                sw.Write("<td></td>");
-                                sw.Write("<td></td>");
-                                sw.Write("<td></td>");
-                            }                          
-                            sw.Write("</tr>");
                         }
                     }
                 }
