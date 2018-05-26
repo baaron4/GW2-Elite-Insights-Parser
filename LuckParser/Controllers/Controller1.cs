@@ -2059,8 +2059,8 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + stats[11] + "</td>");//misses
                             sw.Write("<td>" + stats[12] + "</td>");//interupts
                             sw.Write("<td>" + stats[13] + "</td>");//dmg invulned
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[15] + "cancels \">" + stats[14] + "</span>" + "</td>");//time wasted
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[18] + "cancels \">" + stats[17] + "</span>" + "</td>");//timesaved
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[15] + "cancels \">" + stats[14] + " s</span>" + "</td>");//time wasted
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[18] + "cancels \">" + stats[17] + " s</span>" + "</td>");//timesaved
                             sw.Write("<td>" + stats[5] + "</td>");//w swaps
                             sw.Write("<td>" + stats[6] + "</td>");//downs
                             if (timedead > TimeSpan.Zero)
@@ -3522,16 +3522,16 @@ namespace LuckParser.Controllers
                                 sw.Write("<tr>");
                                 {
                                     sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>" + "<td>" + totaldamage + "</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>" + "<td>" + totaldamage + "</td>");
                                     sw.Write("<td>" + mindamage + "</td>");
                                     sw.Write("<td>" + avgdamage + "</td>");
                                     sw.Write("<td>" + maxdamage + "</td>");
                                     sw.Write("<td>" + casts + "</td>");
                                     sw.Write("<td>" + hits + "</td>");
                                     sw.Write("<td>" + hpcast + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</td>");
                                     sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
                                     sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");                        
                                 }                               
@@ -3542,7 +3542,7 @@ namespace LuckParser.Controllers
                                 sw.Write("<tr>");
                                 {
                                     sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                                     sw.Write("<td>" + totaldamage + "</td>");
                                     sw.Write("<td>" + mindamage + "</td>");
                                     sw.Write("<td>" + avgdamage + "</td>");
@@ -3550,9 +3550,9 @@ namespace LuckParser.Controllers
                                     sw.Write("<td>" + casts + "</td>");
                                     sw.Write("<td>" + hits + "</td>");
                                     sw.Write("<td>" + hpcast + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</td>");
                                     sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
                                     sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");
                                 }
@@ -3629,7 +3629,7 @@ namespace LuckParser.Controllers
                             sw.Write("<tr class=\"condi\">");
                             {
                                 sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
-                                sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                                 sw.Write("<td>" + totaldamage + "</td>");
                                 sw.Write("<td>" + mindamage + "</td>");
                                 sw.Write("<td>" + avgdamage + "</td>");
@@ -3699,7 +3699,7 @@ namespace LuckParser.Controllers
                                 sw.Write("<tr>");
                                 {
                                     sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                                     sw.Write("<td>" + totaldamage + "</td>");
                                     sw.Write("<td>" + mindamage + "</td>");
                                     sw.Write("<td>" + avgdamage + "</td>");
@@ -3707,9 +3707,9 @@ namespace LuckParser.Controllers
                                     sw.Write("<td>" + casts + "</td>");
                                     sw.Write("<td>" + hits + "</td>");
                                     sw.Write("<td>" + hpcast + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</td>");
                                     sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
                                     sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");
                                 }
@@ -3720,7 +3720,7 @@ namespace LuckParser.Controllers
                                 sw.Write("<tr>");
                                 {
                                     sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                                     sw.Write("<td>" + totaldamage + "</td>");
                                     sw.Write("<td>" + mindamage + "</td>");
                                     sw.Write("<td>" + avgdamage + "</td>");
@@ -3728,9 +3728,9 @@ namespace LuckParser.Controllers
                                     sw.Write("<td>" + casts + "</td>");
                                     sw.Write("<td>" + hits + "</td>");
                                     sw.Write("<td></td>");
-                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</td>");
                                     sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
                                     sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");
                                 }                              
@@ -3850,7 +3850,7 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
                                 sw.Write("<td>" + totaldamage + "</td>");
-                                sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                sw.Write("<td>" + String.Format("{0:0.00}",(100 * (double)totaldamage / finalTotalDamage)) + "%</td>");
                                 sw.Write("<td>" + hits + "</td>");
                                 sw.Write("<td>" + mindamage + "</td>");
                                 sw.Write("<td>" + avgdamage + "</td>");
@@ -3893,14 +3893,14 @@ namespace LuckParser.Controllers
                                 {
                                     sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
                                     sw.Write("<td>" + totaldamage + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                                     sw.Write("<td>" + hits + "</td>");
                                     sw.Write("<td>" + mindamage + "</td>");
                                     sw.Write("<td>" + avgdamage + "</td>");
                                     sw.Write("<td>" + maxdamage + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</td>");
                                 }
                                 sw.Write("</tr>");
                             }
@@ -3910,14 +3910,14 @@ namespace LuckParser.Controllers
                                 {
                                     sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
                                     sw.Write("<td>" + totaldamage + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                                     sw.Write("<td>" + hits + "</td>");
                                     sw.Write("<td>" + mindamage + "</td>");
                                     sw.Write("<td>" + avgdamage + "</td>");
                                     sw.Write("<td>" + maxdamage + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</td>");
                                 }
                                 sw.Write("</tr>");
                             }
@@ -4028,7 +4028,7 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
                                 sw.Write("<td>" + totaldamage + "</td>");
-                                sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                                 sw.Write("<td>" + hits + "</td>");
                                 sw.Write("<td>" + mindamage + "</td>");
                                 sw.Write("<td>" + avgdamage + "</td>");
@@ -4073,14 +4073,14 @@ namespace LuckParser.Controllers
                                 {
                                     sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
                                     sw.Write("<td>" + totaldamage + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
                                     sw.Write("<td>" + hits + "</td>");
                                     sw.Write("<td>" + mindamage + "</td>");
                                     sw.Write("<td>" + avgdamage + "</td>");
                                     sw.Write("<td>" + maxdamage + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</td>");
                                 }                             
                                 sw.Write("</tr>");
                             }
@@ -4090,14 +4090,14 @@ namespace LuckParser.Controllers
                                 {
                                     sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
                                     sw.Write("<td>" + totaldamage + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                                     sw.Write("<td>" + hits + "</td>");
                                     sw.Write("<td>" + mindamage + "</td>");
                                     sw.Write("<td>" + avgdamage + "</td>");
                                     sw.Write("<td>" + maxdamage + "</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)crit / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)flank / (double)hits) + "%</td>");
-                                    sw.Write("<td>" + (int)(100 * (double)glance / (double)hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</td>");
                                 }
                                 sw.Write("</tr>");
                             }
