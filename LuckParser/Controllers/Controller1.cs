@@ -3782,6 +3782,33 @@ namespace LuckParser.Controllers
                     }
                 }           
                 sw.Write("</tbody>");
+                // Don't do that for bosses
+                if (p.getAccount().Length > 0)
+                {
+                    string contribution = String.Format("{0:0.00}", 100.0 * finalTotalDamage / Int32.Parse(getFinalDPS(p).Split('|')[1]));
+                    sw.Write("<tfoot class=\"text-dark\">");
+                    {
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<th>Contribution</th>");
+                            sw.Write("<th>" + contribution + "%</th>");
+                            sw.Write("<th>" + finalTotalDamage + "</th>");
+                            sw.Write("<th></th>");
+                            sw.Write("<th></th>");
+                            sw.Write("<th></th>");
+                            sw.Write("<th></th>");
+                            sw.Write("<th></th>");
+                            sw.Write("<th></th>");
+                            sw.Write("<th></th>");
+                            sw.Write("<th></th>");
+                            sw.Write("<th></th>");
+                            sw.Write("<th></th>");
+                            sw.Write("<th></th>");
+                        }
+                        sw.Write("</tr>");
+                    }
+                    sw.Write("</tfoot>");
+                }
             }        
             sw.Write("</table>");
         }
@@ -3797,7 +3824,7 @@ namespace LuckParser.Controllers
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
-
+            string contribution = String.Format("{0:0.00}", 100.0 * finalTotalDamage / Int32.Parse(getFinalDPS(p).Split('|')[1]));
             sw.Write("<script> $(function () { $('#dist_table_" + p.getInstid() + "_" + agent.getInstid() + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + p.getInstid() + "_" + agent.getInstid() + "\">");
             {
@@ -3960,6 +3987,25 @@ namespace LuckParser.Controllers
                     
                 }            
                 sw.Write("</tbody>");
+
+                sw.Write("<tfoot class=\"text-dark\">");
+                {
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<th>Contribution</th>");
+                        sw.Write("<th>"+ finalTotalDamage +"</th>");
+                        sw.Write("<th>"+ contribution +"%</th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                    }
+                    sw.Write("</tr>");
+                }
+                sw.Write("</tfoot>");
             }  
             sw.Write("</table>");
         }
