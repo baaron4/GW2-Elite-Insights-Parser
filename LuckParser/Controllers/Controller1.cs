@@ -3126,7 +3126,26 @@ namespace LuckParser.Controllers
                                 sw.Write("Plotly.newPlot('Graph" + p.getInstid() + "', data, layout);");
                             }
                             sw.Write("</script> ");
-                            CreateDMGDistTable(sw, p, false);
+                            sw.Write("<ul class=\"nav nav-tabs\">");
+                            {
+                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabAll" + p.getInstid() +"\">" + "All" + "</a></li>");
+                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabBoss" + p.getInstid() + "\">" + "Boss" + "</a></li>");
+                            }
+                            sw.Write("</ul>");
+                            sw.Write("<div class=\"tab-content\">");
+                            {
+                                sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabAll" + p.getInstid() + "\">");
+                                {
+                                    CreateDMGDistTable(sw, p, false);
+                                }
+                                sw.Write("</div>");
+                                sw.Write("<div class=\"tab-pane fade\" id=\"distTabBoss" + p.getInstid() + "\">");
+                                {
+                                    CreateDMGDistTable(sw, p, true);
+                                }
+                                sw.Write("</div>");
+                            }
+                            sw.Write("</div>");
                         }
                         sw.Write("</div>");
                         foreach (KeyValuePair<AgentItem, List<DamageLog>> element in minionAgentList)
@@ -3793,7 +3812,6 @@ namespace LuckParser.Controllers
                     }
                 }
                 sw.Write("</tbody>");
-                // Don't do that for bosses
                 if (totalDamage > 0)
                 {
                     string contribution = String.Format("{0:0.00}", 100.0 * finalTotalDamage / totalDamage);
@@ -3999,7 +4017,6 @@ namespace LuckParser.Controllers
 
                 }
                 sw.Write("</tbody>");
-
                 if (totalDamage > 0)
                 {
                     string contribution = String.Format("{0:0.00}", 100.0 * finalTotalDamage / totalDamage);
