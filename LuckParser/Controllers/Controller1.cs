@@ -3307,8 +3307,8 @@ namespace LuckParser.Controllers
             List<DamageLog> damageToKill = new List<DamageLog>(); ;
             if (down.Count > 0)
             {//went to down state before death
-                damageToDown = damageLogs.Where(x => x.getTime() < (long)down.Last().X-b_data.getFirstAware()).ToList();
-                damageToKill = damageLogs.Where(x => x.getTime() > (long)down.Last().X - b_data.getFirstAware() && x.getTime() < (long)dead.Last().X - b_data.getFirstAware()).ToList();
+                damageToDown = damageLogs.Where(x => x.getTime() < (long)down.Last().X-b_data.getFirstAware() && x.getDamage() > 0).ToList();
+                damageToKill = damageLogs.Where(x => x.getTime() > (long)down.Last().X - b_data.getFirstAware() && x.getTime() < (long)dead.Last().X - b_data.getFirstAware() && x.getDamage() > 0).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
                 for (int i = damageToDown.Count() - 1; i > 0; i--)
@@ -3335,7 +3335,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damageToKill = damageLogs.Where(x =>  x.getTime() < (long)dead.Last().X).ToList();
+                damageToKill = damageLogs.Where(x =>  x.getTime() < (long)dead.Last().X && x.getDamage() > 0).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
                 for (int i = damageToKill.Count() - 1; i > 0; i--)
