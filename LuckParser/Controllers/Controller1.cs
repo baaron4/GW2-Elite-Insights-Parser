@@ -3258,6 +3258,11 @@ namespace LuckParser.Controllers
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             List<Point> down = getCombatData().getStates(p.getInstid(), "CHANGE_DOWN");
+            if (down.Count > 0)
+            {
+                List<Point> ups = getCombatData().getStates(p.getInstid(), "CHANGE_UP");
+                down = down.GetRange(ups.Count(), down.Count()-ups.Count());
+            }
             List<Point> dead = getCombatData().getStates(p.getInstid(), "CHANGE_DEAD");
             List<DamageLog> damageToDown = new List<DamageLog>();
             List<DamageLog> damageToKill = new List<DamageLog>(); ;
@@ -3303,7 +3308,7 @@ namespace LuckParser.Controllers
                         break;
                     }
                 }
-                sw.Write("<center><h3>Player was insta killed by a mechanic or fall damage</h3></center>");
+                sw.Write("<center><h3>Player was insta killed by a mechanic, fall damage or by /gg</h3></center>");
             }
             
             sw.Write("<center><div id=\"BarDeathRecap" + p.getInstid()+"\"></div> </center>");
