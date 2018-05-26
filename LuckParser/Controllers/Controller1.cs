@@ -3445,7 +3445,7 @@ namespace LuckParser.Controllers
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
-            List<DamageLog> damageLogs = p.getDamageLogs(toBoss? b_data.getInstid() : 0,b_data, c_data.getCombatList(), getAgentData());
+            List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(toBoss? b_data.getInstid() : 0,b_data, c_data.getCombatList(), getAgentData());
             int totalDamage = toBoss ? Int32.Parse(getFinalDPS(p).Split('|')[7]) : Int32.Parse(getFinalDPS(p).Split('|')[1]);
             string tabid = p.getInstid() + (toBoss ? "_boss" : "");
             sw.Write("<script> $(function () { $('#dist_table_"+ tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");

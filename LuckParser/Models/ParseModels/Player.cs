@@ -245,15 +245,15 @@ namespace LuckParser.Models.ParseModels
             }
             return combatMinionIDList;
         }
-        public List<DamageLog> getMinionDamageLogs(int dest, long srcagent,BossData bossData, List<CombatItem> combatList, AgentData agentData) {
-            List<DamageLog> dls = getDamageLogs(dest, bossData, combatList,agentData).Where(x => x.getSrcAgent() == srcagent).ToList();
+        public List<DamageLog> getMinionDamageLogs(int instidFilter, long srcagent,BossData bossData, List<CombatItem> combatList, AgentData agentData) {
+            List<DamageLog> dls = getDamageLogs(instidFilter, bossData, combatList,agentData).Where(x => x.getSrcAgent() == srcagent).ToList();
             return dls;
         }
-        /*public List<DamageLog> getJustPlayerDamageLogs( BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        public List<DamageLog> getJustPlayerDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
             List<ushort> minionList = getCombatMinionList(bossData, combatList, agentData);
             List<DamageLog> dls = new List<DamageLog>();
-            foreach (DamageLog dl in getDamageLogs(0, bossData, combatList, agentData)) {
+            foreach (DamageLog dl in getDamageLogs(instidFilter, bossData, combatList, agentData)) {
                 if (combatMinionIDList.Contains(dl.getInstidt()))
                 {
                     continue;
@@ -263,7 +263,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             return dls;
-        }*/
+        }
         public List<int[]> getBossDPSGraph() {
             return new List<int[]>(bossdpsGraph);
         }
