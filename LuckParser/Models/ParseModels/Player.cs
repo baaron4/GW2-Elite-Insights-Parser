@@ -269,70 +269,47 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Private Methods
-        private void setDamageLogs(BossData bossData, List<CombatItem> combatList,AgentData agentData)
+        private void setDamageLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
             long time_start = bossData.getFirstAware();
-            bool combatStart = false;
-            bool combatEnd = false;
             foreach (CombatItem c in combatList)
             {
-                if (combatStart == false)
-                {
-                    if (bossData.getInstid() == c.getSrcInstid() &&  c.isStateChange().getID() == 1)
-                    {//Make sure combat has started
 
-                        combatStart = true;
-                    }
-                }
-                if (combatEnd == false && combatStart == true)
+                if (instid == c.getSrcInstid() || instid == c.getSrcMasterInstid())//selecting player or minion as caster
                 {
-                    if (bossData.getInstid() == c.getSrcInstid() && c.isStateChange().getID() == 2)
-                    {//Make sure combat had ended
-                        combatEnd = true;
-                    }
-                }
-               
-                    if (instid == c.getSrcInstid() || instid == c.getSrcMasterInstid())//selecting player or minion as caster
-                    {
-                        LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
-                        long time = c.getTime() - time_start;
-                        foreach (AgentItem item in agentData.getNPCAgentList())
-                        {//selecting all
-                            if (item.getInstid() == c.getDstInstid() )
+                    LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
+                    long time = c.getTime() - time_start;
+                    foreach (AgentItem item in agentData.getNPCAgentList())
+                    {//selecting all
+                        if (item.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FOE")
+                        {
+                            if (state.getEnum() == "NORMAL" && c.isBuffremove().getID() == 0)
                             {
-                                if (c.getIFF().getEnum() == "FOE")
+
+                                if (c.isBuff() == 1 && c.getBuffDmg() != 0)//condi
                                 {
-                                    if (state.getID() == 0 && c.isBuffremove().getID() == 0)
-                                    {
-                                    
-                                        if (c.isBuff() == 1 && c.getBuffDmg() != 0)//condi
-                                        {
 
-                                            damage_logs.Add(new DamageLog(time,c.getSrcAgent(),c.getSrcInstid(), c.getBuffDmg(), c.getSkillID(), c.isBuff(),
-                                                    c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
-                                        }
-                                        else if (c.isBuff() == 0 && c.getValue() != 0)//power
-                                        {
-                                            damage_logs.Add(new DamageLog(time, c.getSrcAgent(), c.getSrcInstid(), c.getValue(), c.getSkillID(), c.isBuff(),
-                                                    c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
-                                        }
-                                        else if (c.getResult().getID() == 5 || c.getResult().getID() == 6 || c.getResult().getID() == 7)
-                                        {//Hits that where blinded, invulned, interupts
+                                    damage_logs.Add(new DamageLog(time, c));
+                                }
+                                else if (c.isBuff() == 0 && c.getValue() != 0)//power
+                                {
+                                    damage_logs.Add(new DamageLog(time, c));
+                                }
+                                else if (c.getResult().getID() == 5 || c.getResult().getID() == 6 || c.getResult().getID() == 7)
+                                {//Hits that where blinded, invulned, interupts
 
-                                            damage_logs.Add(new DamageLog(time, c.getSrcAgent(), c.getSrcInstid(), c.getValue(), c.getSkillID(), c.isBuff(),
-                                                    c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
-                                        }
-                                    }
+                                    damage_logs.Add(new DamageLog(time, c));
                                 }
                             }
+
                         }
                     }
-                
+                }
+
             }
         }
         private void setFilteredLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData,int instidFilter)
         {
-            List<DamageLog> filterDLog = new List<DamageLog>();
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
             {
@@ -345,27 +322,24 @@ namespace LuckParser.Models.ParseModels
                         
                         if (state.getEnum() == "NORMAL" && c.isBuffremove().getID() == 0)
                         {
-                           
-                            if (c.isBuff() == 1 && c.getBuffDmg() != 0)
+                            if (c.isBuff() == 1 && c.getBuffDmg() != 0)//condi
                             {
-                               
-                                filterDLog.Add(new DamageLog(time, c.getBuffDmg(), c.getSkillID(), c.isBuff(),
-                                        c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
+
+                                damage_logsFiltered.Add(new DamageLog(time, c));
                             }
-                            else if (c.isBuff() == 0 && c.getValue() != 0)
+                            else if (c.isBuff() == 0 && c.getValue() != 0)//power
                             {
-                                /*if (time > 300000)
-                                {
-                                    int fuck = 0;
-                                }*/
-                                filterDLog.Add(new DamageLog(time, c.getValue(), c.getSkillID(), c.isBuff(),
-                                        c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation()));
+                                damage_logsFiltered.Add(new DamageLog(time, c));
+                            }
+                            else if (c.getResult().getID() == 5 || c.getResult().getID() == 6 || c.getResult().getID() == 7)
+                            {//Hits that where blinded, invulned, interupts
+
+                                damage_logsFiltered.Add(new DamageLog(time, c));
                             }
                         }
                     }
                 }
             }
-            damage_logsFiltered = filterDLog;
         }
         private void setDamagetaken(BossData bossData, List<CombatItem> combatList, AgentData agentData,MechanicData m_data) {
             long time_start = bossData.getFirstAware();
@@ -389,15 +363,13 @@ namespace LuckParser.Models.ParseModels
                                 else if (c.isBuff() == 0 && c.getValue() != 0)
                                 {
                                     damagetaken.Add(c.getValue());
-                                    damageTaken_logs.Add(new DamageLog(time,c.getSrcAgent(),c.getSrcInstid(), c.getValue(), c.getSkillID(), c.isBuff(),
-                                           c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation(),c.isShields()));
+                                    damageTaken_logs.Add(new DamageLog(time,c));
                                   
                                 }
                                 else if (c.isBuff() == 0  && c.getValue() == 0)
                                 {
                                   
-                                    damageTaken_logs.Add(new DamageLog(time,c.getSrcAgent(),c.getSrcInstid(), c.getBuffDmg(), c.getSkillID(), c.isBuff(),
-                                           c.getResult(), c.isNinety(), c.isMoving(), c.isFlanking(), c.isActivation(),c.isShields()));
+                                    damageTaken_logs.Add(new DamageLog(time,c));
                                 }
                             }
                         }

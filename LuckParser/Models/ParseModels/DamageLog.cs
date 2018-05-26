@@ -23,71 +23,10 @@ namespace LuckParser.Models.ParseModels
         private ushort src_instid;
 
         // Constructor
-        public DamageLog(long time, int damage, int skill_id, int buff, Result result, ushort is_ninety, ushort is_moving,
-                ushort is_flanking, Activation is_activation)
-        {
-            this.time = time;
-            this.damage = damage;
-            this.skill_id = skill_id;
-            this.buff = buff;
-            this.result = result;
-            this.is_ninety = is_ninety;
-            this.is_moving = is_moving;
-            this.is_flanking = is_flanking;
-            this.is_activation = is_activation;
-        }
-        public DamageLog(long time, long srcagent, ushort instid, int damage, int skill_id, int buff, Result result, ushort is_ninety, ushort is_moving,
-               ushort is_flanking, Activation is_activation)
-        {
-            this.time = time;
-            this.damage = damage;
-            this.skill_id = skill_id;
-            this.buff = buff;
-            this.result = result;
-            this.is_ninety = is_ninety;
-            this.is_moving = is_moving;
-            this.is_flanking = is_flanking;
-            this.is_activation = is_activation;
-            this.src_agent = srcagent;
-            this.src_instid = instid;
-
-        }
-        public DamageLog(long time, int damage, int skill_id, int buff, Result result, ushort is_ninety, ushort is_moving,
-               ushort is_flanking, Activation is_activation, ushort is_shields)
-        {
-            this.time = time;
-            this.damage = damage;
-            this.skill_id = skill_id;
-            this.buff = buff;
-            this.result = result;
-            this.is_ninety = is_ninety;
-            this.is_moving = is_moving;
-            this.is_flanking = is_flanking;
-            this.is_activation = is_activation;
-            this.is_shields = is_shields;
-        }
-        public DamageLog(long time, long srcagent, ushort instid, int damage, int skill_id, int buff, Result result, ushort is_ninety, ushort is_moving,
-              ushort is_flanking, Activation is_activation, ushort is_shields)
-        {
-            this.time = time;
-            this.damage = damage;
-            this.skill_id = skill_id;
-            this.buff = buff;
-            this.result = result;
-            this.is_ninety = is_ninety;
-            this.is_moving = is_moving;
-            this.is_flanking = is_flanking;
-            this.is_activation = is_activation;
-            this.src_agent = srcagent;
-            this.src_instid = instid;
-            this.is_shields = is_shields;
-
-        }
-
         public DamageLog(long time, CombatItem c)
         {
             this.time = time;
-            this.damage = c.getValue();
+            this.damage = c.getValue() > 0 ? c.getValue() : c.getBuffDmg();
             this.skill_id = c.getSkillID();
             this.buff = c.isBuff();
             this.result = c.getResult();
