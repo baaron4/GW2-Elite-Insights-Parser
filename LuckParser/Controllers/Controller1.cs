@@ -2667,17 +2667,16 @@ namespace LuckParser.Controllers
                                 {
                                     continue;
                                 }
-                                if (minionAgentList.Count > 0)
-                                {
-                                    if (minionAgentList.Keys.ToList().FirstOrDefault(x => x.getName() == agent.getName()) == null)
-                                    {
-                                        minionAgentList[agent] = damageLogs;
-                                    }
-                                }
-                                else
+                                AgentItem key = minionAgentList.Keys.ToList().FirstOrDefault(x => x.getName() == agent.getName());
+                                if (key == null)
                                 {
                                     minionAgentList[agent] = damageLogs;
                                 }
+                                else
+                                {
+                                    minionAgentList[key].AddRange(damageLogs);
+                                }
+
                             }
                             //int i = 0;
                         }
@@ -4400,17 +4399,15 @@ namespace LuckParser.Controllers
                         {
                             continue;
                         }
-                        if (minionAgentList.Count > 0)
-                        {
-                            if (minionAgentList.Keys.ToList().FirstOrDefault(x => x.getName() == agent.getName()) == null)
-                            {
-                                minionAgentList[agent] = damageLogs;
-                            }
-                        }
-                        else
+                        AgentItem key = minionAgentList.Keys.ToList().FirstOrDefault(x => x.getName() == agent.getName());
+                        if (key == null)
                         {
                             minionAgentList[agent] = damageLogs;
+                        } else
+                        {
+                            minionAgentList[key].AddRange(damageLogs);
                         }
+
                     }
                     //int i = 0;
                 }
