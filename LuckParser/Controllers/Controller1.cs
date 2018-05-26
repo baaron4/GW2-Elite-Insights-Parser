@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
 {
     public class Controller1
     {
-        public static byte[] StreamToBytes(Stream input)
+        private static byte[] StreamToBytes(Stream input)
         {
             byte[] buffer = new byte[16 * 1024];
             using (MemoryStream ms = new MemoryStream())
@@ -138,7 +138,7 @@ namespace LuckParser.Controllers
         private SkillData skill_data = new SkillData();
         private CombatData combat_data = new CombatData();
         private MechanicData mech_data = new MechanicData();
-        public List<Player> p_list = new List<Player>();
+        private List<Player> p_list = new List<Player>();
 
         // Public Methods
         public LogData getLogData()
@@ -589,11 +589,11 @@ namespace LuckParser.Controllers
         }
 
         //Statistics--------------------------------------------------------------------------------------------------------------------------------------------------------
-        public List<Boon> present_boons =  new List<Boon>();//Used only for Boon tables
-        public List<Boon> present_offbuffs = new List<Boon>();//Used only for Off Buff tables
-        public List<Boon> present_defbuffs = new List<Boon>();//Used only for Def Buff tables
-        public Dictionary<int, List<Boon>> present_personnal = new Dictionary<int, List<Boon>>();//Used only for personnal
-        public void setPresentBoons(bool[] SnapSettings) {
+        private List<Boon> present_boons =  new List<Boon>();//Used only for Boon tables
+        private List<Boon> present_offbuffs = new List<Boon>();//Used only for Off Buff tables
+        private List<Boon> present_defbuffs = new List<Boon>();//Used only for Def Buff tables
+        private Dictionary<int, List<Boon>> present_personnal = new Dictionary<int, List<Boon>>();//Used only for personnal
+        private void setPresentBoons(bool[] SnapSettings) {
             List<SkillItem> s_list = getSkillData().getSkillList();
             if (SnapSettings[3])
             {//Main boons
@@ -638,7 +638,7 @@ namespace LuckParser.Controllers
                 }
             }        
         }
-        public String getFinalDPS(Player p)
+        private String getFinalDPS(Player p)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
@@ -713,8 +713,8 @@ namespace LuckParser.Controllers
             //Placeholders for further calc
             return totalAll_dps.ToString() + "|" + totalAll_damage.ToString() + "|" + totalAllphys_dps.ToString() + "|" + totalAllphys_damage.ToString() + "|" + totalAllcondi_dps.ToString() + "|" + totalAllcondi_damage.ToString() + "|"
                 + totalboss_dps.ToString() + "|" + totalboss_damage.ToString() + "|" + totalbossphys_dps.ToString() + "|" + totalbossphys_damage.ToString() + "|" + totalbosscondi_dps.ToString() + "|" + totalbosscondi_damage.ToString();
-        }      
-        public String[] getFinalStats(Player p)
+        }
+        private String[] getFinalStats(Player p)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
@@ -832,7 +832,7 @@ namespace LuckParser.Controllers
             };
             return statsArray;
         }
-        string getDamagetaken(Player p)
+        private string getDamagetaken(Player p)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
@@ -840,7 +840,7 @@ namespace LuckParser.Controllers
             int damagetaken = p.getDamagetaken(b_data, c_data.getCombatList(), getAgentData(),getMechData()).Sum();
             return damagetaken.ToString();
         }
-        string[] getFinalDefenses(Player p)
+        private string[] getFinalDefenses(Player p)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
@@ -892,7 +892,7 @@ namespace LuckParser.Controllers
             return statsArray;
         }
         //(currently not correct)
-        string[] getFinalSupport(Player p)
+        private string[] getFinalSupport(Player p)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
@@ -914,7 +914,7 @@ namespace LuckParser.Controllers
             String[] statsArray = new string[] { resurrects.ToString(), (restime/1000f).ToString(), condiCleanse.ToString(), (condiCleansetime/1000f).ToString() };
             return statsArray;
         }
-        public Dictionary<int, string> getfinalboons(Player p, List<int> trgetPlayers)
+        private Dictionary<int, string> getfinalboons(Player p, List<int> trgetPlayers)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
@@ -983,7 +983,7 @@ namespace LuckParser.Controllers
             //table.addrow(utility.concatstringarray(new string[] { p.getcharacter(), p.getprof() }, rates));
             return rates;
         }
-        public string[] getfinalcondis(Player p)
+        private string[] getfinalcondis(Player p)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
@@ -1024,7 +1024,7 @@ namespace LuckParser.Controllers
             //table.addrow(utility.concatstringarray(new string[] { p.getcharacter(), p.getprof() }, rates));
             return rates;
         }
-        public void setMechData() {
+        private void setMechData() {
             List<int> mIDList = new List<int>();
             CombatData c_data = getCombatData();
             foreach (Player p in p_list)
@@ -3161,6 +3161,12 @@ namespace LuckParser.Controllers
             }
 
         }
+        /// <summary>
+        /// Creates the rotation tab for a given player
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="p">The player</param>
+        /// <param name="simpleRotSize">Size of the images</param>
         private void CreateSimpleRotationTab(StreamWriter sw,Player p,int simpleRotSize) {
             if (SnapSettings[6])//Display rotation
             {
@@ -3249,6 +3255,11 @@ namespace LuckParser.Controllers
             }
 
         }
+        /// <summary>
+        /// Creates the death recap tab for a given player
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="p">The player</param>
         private void CreateDeathRecap(StreamWriter sw, Player p)
         {
             CombatData c_data = getCombatData();
@@ -3415,6 +3426,11 @@ namespace LuckParser.Controllers
             }
             sw.Write("</script>");
         }
+        /// <summary>
+        /// Creates the damage distribution table for a given player
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="p">The player</param>
         private void CreateDMGDistTable(StreamWriter sw,Player p) {
 
             CombatData c_data = getCombatData();
@@ -3452,8 +3468,10 @@ namespace LuckParser.Controllers
                 sw.Write("</thead>");
                 sw.Write("<tbody>");
                 {
+                    HashSet<int> usedIDs = new HashSet<int>();
                     foreach (int id in casting.Select(x => x.getID()).Distinct())
                     {//foreach casted skill
+                        usedIDs.Add(id);
                         SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
                         List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
                         int casts = clList.Count();
@@ -3586,18 +3604,14 @@ namespace LuckParser.Controllers
                         }
 
                     }
-                    List<Boon> condiList = Boon.getCondiBoonList();
-
-                    foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
-                    {//condis
-                        Boon condi = condiList.FirstOrDefault(x => x.getID() == condiID);
-                        string condiName = condi.getName();// Boon.getCondiName(condiID);
+                    foreach (Boon condi in Boon.getCondiBoonList())
+                    {
                         int totaldamage = 0;
                         int mindamage = 0;
                         int avgdamage = 0;
                         int hits = 0;
                         int maxdamage = 0;
-
+                        int condiID = condi.getID();
                         foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
                         {
                             int curdmg = dl.getDamage();
@@ -3609,10 +3623,10 @@ namespace LuckParser.Controllers
 
                         }
                         avgdamage = (int)((double)totaldamage / (double)hits);
-
-
                         if (totaldamage != 0)
                         {
+                            usedIDs.Add(condiID);
+                            string condiName = condi.getName();// Boon.getCondiName(condiID);
                             sw.Write("<tr class=\"condi\">");
                             {
                                 sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
@@ -3633,12 +3647,7 @@ namespace LuckParser.Controllers
                             sw.Write("</tr>");
                         }
                     }
-                    List<int> remainIDs = damageLogs.Where(x => x.isCondi() == 0).Select(x => x.getID()).Distinct().ToList();
-                    foreach (int exist in casting.Select(x => x.getID()).Distinct())
-                    {
-                        remainIDs.Remove(exist);
-                    }
-                    remainIDs.Remove(873);//remove retail since itll duplicate
+                    List<int> remainIDs = damageLogs.Where(x => !usedIDs.Contains(x.getID())).Select(x => x.getID()).Distinct().ToList();
                     foreach (int id in remainIDs)//Foreach instant cast skill
                     {
                         SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
@@ -3777,6 +3786,13 @@ namespace LuckParser.Controllers
             }        
             sw.Write("</table>");
         }
+        /// <summary>
+        /// Creates the damage distribution table for a given minion
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="p">Player, master of the minion</param>
+        /// <param name="damageLogs">Damage logs to use</param>
+        /// <param name="agent">The minion</param>
         private void CreateDMGDistTable(StreamWriter sw, Player p, List<DamageLog> damageLogs, AgentItem agent)
         {
             SkillData s_data = getSkillData();
@@ -3806,7 +3822,49 @@ namespace LuckParser.Controllers
                 sw.Write("</thead>");
                 sw.Write("<tbody>");
                 {
-                    foreach (int id in damageLogs.Where(x => x.isCondi() != 1).Select(x => x.getID()).Distinct())
+                    HashSet<int> usedIDs = new HashSet<int>();
+                    //CONDIS
+                    List<Boon> condiList = Boon.getCondiBoonList();
+                    foreach (Boon condi in condiList)
+                    {
+                        int condiID = condi.getID();
+                        int totaldamage = 0;
+                        int mindamage = 0;
+                        int avgdamage = 0;
+                        int hits = 0;
+                        int maxdamage = 0;
+
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                        {
+                            int curdmg = dl.getDamage();
+                            totaldamage += curdmg;
+                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                            hits++;
+                            int result = dl.getResult().getID();
+                        }
+                        avgdamage = (int)((double)totaldamage / (double)hits);
+                        if (totaldamage != 0)
+                        {
+                            usedIDs.Add(condiID);
+                            string condiName = condi.getName();// Boon.getCondiName(condiID);
+                            sw.Write("<tr class=\"condi\">");
+                            {
+                                sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                                sw.Write("<td>" + totaldamage + "</td>");
+                                sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                sw.Write("<td>" + hits + "</td>");
+                                sw.Write("<td>" + mindamage + "</td>");
+                                sw.Write("<td>" + avgdamage + "</td>");
+                                sw.Write("<td>" + maxdamage + "</td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                            }
+                            sw.Write("</tr>");
+                        }
+                    }
+                    foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.getID())).Select(x => x.getID()).Distinct())
                     {//foreach casted skill
                         SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
                         int totaldamage = 0;
@@ -3901,52 +3959,17 @@ namespace LuckParser.Controllers
                             }
                         }
                     }
-                    //CONDIS
-                    List<Boon> condiList = Boon.getCondiBoonList();
-                    foreach (int condiID in damageLogs.Where(x => x.isCondi() == 1).Select(x => x.getID()).Distinct())
-                    {
-                        Boon condi = condiList.FirstOrDefault(x => x.getID() == condiID);
-                        string condiName = condi.getName();// Boon.getCondiName(condiID);
-
-                        int totaldamage = 0;
-                        int mindamage = 0;
-                        int avgdamage = 0;
-                        int hits = 0;
-                        int maxdamage = 0;
-
-                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
-                        {
-                            int curdmg = dl.getDamage();
-                            totaldamage += curdmg;
-                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                            hits++;
-                            int result = dl.getResult().getID();
-                        }
-                        avgdamage = (int)((double)totaldamage / (double)hits);
-                        if (totaldamage != 0)
-                        {
-                            sw.Write("<tr class=\"condi\">");
-                            {
-                                sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
-                                sw.Write("<td>" + totaldamage + "</td>");
-                                sw.Write("<td>" + (int)(100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
-                                sw.Write("<td>" + hits + "</td>");
-                                sw.Write("<td>" + mindamage + "</td>");
-                                sw.Write("<td>" + avgdamage + "</td>");
-                                sw.Write("<td>" + maxdamage + "</td>");
-                                sw.Write("<td></td>");
-                                sw.Write("<td></td>");
-                                sw.Write("<td></td>");
-                            }
-                            sw.Write("</tr>");
-                        }
-                    }
+                    
                 }            
                 sw.Write("</tbody>");
             }  
             sw.Write("</table>");
         }
+        /// <summary>
+        /// Create the damage taken distribution table for a given player
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="p">The player</param>
         private void CreateDMGTakenDistTable(StreamWriter sw, Player p)
         {
             CombatData c_data = getCombatData();
@@ -4123,6 +4146,10 @@ namespace LuckParser.Controllers
             }       
             sw.Write("</table>");
         }
+        /// <summary>
+        /// Creates the mechanics table of the fight
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
         private void CreateMechanicTable(StreamWriter sw) {
             List<Mechanic> presMech = new List<Mechanic>();
             foreach (Mechanic item in mech_data.GetMechList(boss_data.getID()))
@@ -4177,6 +4204,10 @@ namespace LuckParser.Controllers
                 sw.Write("</table>");
             }
         }
+        /// <summary>
+        /// Creates the event list of the generation. Debbuging only
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
         private void CreateEventList(StreamWriter sw) {
             sw.Write("<ul class=\"list-group\">");
             {
@@ -4276,6 +4307,10 @@ namespace LuckParser.Controllers
             }          
             sw.Write("</ul>");
         }
+        /// <summary>
+        /// Creates a skill list. Debugging only
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
         private void CreateSkillList(StreamWriter sw) {
             sw.Write("<ul class=\"list-group\">");
             {
@@ -4289,6 +4324,11 @@ namespace LuckParser.Controllers
             }
             sw.Write("</ul>");
         }
+        /// <summary>
+        /// Creates the condition uptime table of the given boss
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="boss">The boss</param>
         private void CreateCondiUptimeTable(StreamWriter sw,Player boss)
         {
             //Generate Boon table------------------------------------------------------------------------------------------------
@@ -4327,6 +4367,10 @@ namespace LuckParser.Controllers
             }       
             sw.Write("</table>");
         }
+        /// <summary>
+        /// Creates the boss summary tab
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
         private void CreateBossSummary(StreamWriter sw)
         {
             //generate Player list Graphs
@@ -4623,6 +4667,10 @@ namespace LuckParser.Controllers
             }         
             sw.Write("</div>");
         }
+        /// <summary>
+        /// To define
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
         private void CreateEstimateTabs(StreamWriter sw)
         {
             sw.Write("<ul class=\"nav nav-tabs\">");
@@ -4657,27 +4705,41 @@ namespace LuckParser.Controllers
             }
             sw.Write("</div>");
         }
-        public void CreateCustomCSS(StreamWriter sw,int simpleRotSize)
+        /// <summary>
+        /// Creates custom css'
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="simpleRotSize">Size of the simple rotation images</param>
+        private void CreateCustomCSS(StreamWriter sw,int simpleRotSize)
         {
-            sw.Write("table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}");
-            sw.Write("td, th {text-align: center; white-space: nowrap;}");
-            sw.Write("table.dataTable  td {color: black;}");
-            sw.Write(".sorting_disabled {padding: 5px !important;}");
-            sw.Write("table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc ");
-            sw.Write("{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}");
-            sw.Write("table.dataTable thead.sorting_asc{color: green;}");
-            sw.Write(".text-left {text-align: left;}");
-            sw.Write("table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }");
-            sw.Write(".rot-table {width: 100%;border-collapse: separate;border-spacing: 5px 0px;}");
-            sw.Write(".rot-table > tbody > tr > td {padding: 1px;text-align: left;}");
-            sw.Write(".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}");
-            sw.Write(".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}");
-            sw.Write("div.dataTables_wrapper { width: 1100px; margin: 0 auto; }");
-            sw.Write("th.dt-left, td.dt-left { text-align: left; }");
-            sw.Write("table.dataTable.display tbody tr.condi {background-color: #ff6666;}");
-            sw.Write(".rot-skill{width: " + simpleRotSize + "px;height: " + simpleRotSize + "px;display: inline - block;}");
-            sw.Write(".rot-crop{width : " + simpleRotSize + "px;height: " + simpleRotSize + "px; display: inline-block}");
+            sw.Write("<style>");
+            {
+                sw.Write("table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}");
+                sw.Write("td, th {text-align: center; white-space: nowrap;}");
+                sw.Write("table.dataTable  td {color: black;}");
+                sw.Write(".sorting_disabled {padding: 5px !important;}");
+                sw.Write("table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc ");
+                sw.Write("{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}");
+                sw.Write("table.dataTable thead.sorting_asc{color: green;}");
+                sw.Write(".text-left {text-align: left;}");
+                sw.Write("table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }");
+                sw.Write(".rot-table {width: 100%;border-collapse: separate;border-spacing: 5px 0px;}");
+                sw.Write(".rot-table > tbody > tr > td {padding: 1px;text-align: left;}");
+                sw.Write(".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}");
+                sw.Write(".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}");
+                sw.Write("div.dataTables_wrapper { width: 1100px; margin: 0 auto; }");
+                sw.Write("th.dt-left, td.dt-left { text-align: left; }");
+                sw.Write("table.dataTable.display tbody tr.condi {background-color: #ff6666;}");
+                sw.Write(".rot-skill{width: " + simpleRotSize + "px;height: " + simpleRotSize + "px;display: inline - block;}");
+                sw.Write(".rot-crop{width : " + simpleRotSize + "px;height: " + simpleRotSize + "px; display: inline-block}");
+            }
+            sw.Write("</style>");
         }
+        /// <summary>
+        /// Creates the whole html
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="settingsSnap">Settings</param>
         public void CreateHTML(StreamWriter sw, bool[] settingsSnap)
         {
 
@@ -4714,15 +4776,13 @@ namespace LuckParser.Controllers
                       "<script src=\"https://cdn.plot.ly/plotly-latest.min.js \"></script>" +
                       "<script src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js \"></script>" +
                       "<script src=\"https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js \"></script>" +
-                      "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js \"></script>");
-                    sw.Write("<style>");
+                      "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js \"></script>");              
                     int simpleRotSize = 20;
                     if (settingsSnap[12])
                     {
                         simpleRotSize = 30;
                     }
                     CreateCustomCSS(sw,simpleRotSize);
-                    sw.Write("</style>");
                 }
                 sw.Write("<script>$.extend( $.fn.dataTable.defaults, {searching: false, ordering: true,paging: false,dom:\"t\"} );</script>");
                 sw.Write("</head>");
