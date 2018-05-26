@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
 
         // Constructor
         public DamageLog(long time, int damage, int skill_id, int buff, Result result, ushort is_ninety, ushort is_moving,
-                ushort is_flanking,Activation is_activation)
+                ushort is_flanking, Activation is_activation)
         {
             this.time = time;
             this.damage = damage;
@@ -81,6 +81,23 @@ namespace LuckParser.Models.ParseModels
             this.src_agent = srcagent;
             this.src_instid = instid;
             this.is_shields = is_shields;
+
+        }
+
+        public DamageLog(long time, CombatItem c)
+        {
+            this.time = time;
+            this.damage = c.getValue();
+            this.skill_id = c.getSkillID();
+            this.buff = c.isBuff();
+            this.result = c.getResult();
+            this.is_ninety = c.isNinety();
+            this.is_moving = c.isMoving();
+            this.is_flanking = c.isMoving();
+            this.is_activation = c.isActivation();
+            this.src_agent = c.getSrcAgent();
+            this.src_instid = c.getSrcInstid();
+            this.is_shields = c.isShields();
 
         }
         // Getters
