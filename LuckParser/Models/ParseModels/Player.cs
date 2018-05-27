@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
     public class Player
     {
         // Fields
-        private ushort instid;
+        protected ushort instid;
         private String account;
         private String character;
         private String group;
@@ -16,10 +16,10 @@ namespace LuckParser.Models.ParseModels
         private int toughness;
         private int healing;
         private int condition;
-        private List<DamageLog> damage_logs = new List<DamageLog>();
+        protected List<DamageLog> damage_logs = new List<DamageLog>();
         private List<DamageLog> damage_logsFiltered = new List<DamageLog>();
-        private List<DamageLog> damageTaken_logs = new List<DamageLog>();
-        private List<int> damagetaken = new List<int>();
+        protected List<DamageLog> damageTaken_logs = new List<DamageLog>();
+        protected List<int> damagetaken = new List<int>();
         private Dictionary<int, BoonMap> boon_map = new Dictionary<int, BoonMap>();
         private List<CastLog> cast_logs = new List<CastLog>();
         private List<ushort> combatMinionIDList;

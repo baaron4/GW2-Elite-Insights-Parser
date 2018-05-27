@@ -4416,31 +4416,31 @@ namespace LuckParser.Controllers
         {
             //generate Player list Graphs
             AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
-            Player p = new Player(bossAgent);
+            Boss boss = new Boss(bossAgent);
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
-            List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
+            List<CastLog> casting = boss.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
-            string charname = p.getCharacter();
+            string charname = boss.getCharacter();
             Dictionary<AgentItem, List<DamageLog>> minionAgentList = new Dictionary<AgentItem, List<DamageLog>>();
             sw.Write("<h1 align=\"center\"> " + charname + "</h1>");
             sw.Write("<ul class=\"nav nav-tabs\">");
             {
-                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + p.getInstid() + "\">" + p.getCharacter() + "</a></li>");
+                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + boss.getInstid() + "\">" + boss.getCharacter() + "</a></li>");
                 //foreach pet loop here
-                minionAgentList = getDamagingMinions(p);
+                minionAgentList = getDamagingMinions(boss);
                 foreach (KeyValuePair<AgentItem, List<DamageLog>> element in minionAgentList)
                 {
-                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid() + "_" + element.Key.getInstid() + "\">" + element.Key.getName() + "</a></li>");
+                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + boss.getInstid() + "_" + element.Key.getInstid() + "\">" + element.Key.getName() + "</a></li>");
                 }
             }         
             sw.Write("</ul>");
             //condi stats tab
-            sw.Write("<div id=\"myTabContent\" class=\"tab-content\"><div class=\"tab-pane fade show active\" id=\"home" + p.getInstid() + "\">");
+            sw.Write("<div id=\"myTabContent\" class=\"tab-content\"><div class=\"tab-pane fade show active\" id=\"home" + boss.getInstid() + "\">");
             {
-                CreateCondiUptimeTable(sw, p);
-                sw.Write("<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>");
+                CreateCondiUptimeTable(sw, boss);
+                sw.Write("<div id=\"Graph" + boss.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>");
                 sw.Write("<script>");
                 {
                     sw.Write("var data = [");
@@ -4450,7 +4450,7 @@ namespace LuckParser.Controllers
                         parseBoonsList.AddRange(Boon.getCondiBoonList());
                         //Every boon and buffs
                         parseBoonsList.AddRange(Boon.getAllProfList());
-                        List<BoonsGraphModel> boonGraphData = getBossBoonGraph(p);
+                        List<BoonsGraphModel> boonGraphData = getBossBoonGraph(boss);
                         boonGraphData.Reverse();
                         foreach (BoonsGraphModel bgm in boonGraphData)
                         {
@@ -4524,7 +4524,7 @@ namespace LuckParser.Controllers
                         {//show total dps plot
                             sw.Write("{");
                             //Adding dps axis
-                            List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
+                            List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(boss);
                             sw.Write("y: [");
                             int ptdgCount = 0;
                             foreach (int[] dp in playertotaldpsgraphdata)
@@ -4667,16 +4667,16 @@ namespace LuckParser.Controllers
                                 "plot_bgcolor: 'rgba(0,0,0,0)'");
                     }
                     sw.Write("};");
-                    sw.Write("Plotly.newPlot('Graph" + p.getInstid() + "', data, layout);");
+                    sw.Write("Plotly.newPlot('Graph" + boss.getInstid() + "', data, layout);");
                 }
                 sw.Write("</script> ");
-                CreateDMGDistTable(sw, p, false);
+                CreateDMGDistTable(sw, boss, false);
                 sw.Write("</div>");
                 foreach (KeyValuePair<AgentItem, List<DamageLog>> element in minionAgentList)
                 {
-                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid() + "_" + element.Key.getInstid() + "\">");
+                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + boss.getInstid() + "_" + element.Key.getInstid() + "\">");
                     {
-                        CreateDMGDistTable(sw, p, element.Value, element.Key, false);
+                        CreateDMGDistTable(sw, boss, element.Value, element.Key, false);
                     }
                     sw.Write("</div>");
                 }
