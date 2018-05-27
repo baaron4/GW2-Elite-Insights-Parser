@@ -926,7 +926,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                boon_logs = p.getboonGen(b_data, s_data, c_data.getCombatList(), agent_data, trgetPlayers);
+                boon_logs = p.getBoonGen(b_data, s_data, c_data.getCombatList(), agent_data, trgetPlayers);
             }
 
             List<Boon> boon_list = Boon.getAllProfList();
@@ -951,12 +951,12 @@ namespace LuckParser.Controllers
                             {
 
                                // rate = String.Format("{0:0.00}", Statistics.getBoonUptime(boon_object, logs, b_data,1)[0]);
-                                rate = Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data);//these 2 are problamatic
+                                rate = Math.Round(Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data),1).ToString() + "%";//these 2 are problamatic
                             }
                             else if (boon.getType().Equals("intensity"))
                             {
                                // rate = String.Format("{0:0.00}", Statistics.getBoonUptime(boon_object, logs, b_data, 1)[0]);
-                                rate = Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data));//issues
+                                rate = Math.Round(Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)),1).ToString();//issues
                             }
                         }
                         else//generation
@@ -964,12 +964,12 @@ namespace LuckParser.Controllers
                             if (boon.getType().Equals("duration"))
                             {
                                 double[] array = Statistics.getBoonUptime(boon_object, logs, b_data, trgetPlayers.Count());
-                                rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + String.Format("{0:0.0}%", array[1] * 100) + "with overstack \">" + String.Format("{0:0.0}%", array[0] * 100) + "</span>";
+                                rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + Math.Round(array[1] * 100.0, 1) + "% with overstack \">" + Math.Round(array[0] * 100.0, 1) + "%</span>";
                             }
                             else if (boon.getType().Equals("intensity"))
                             {
                                 double[] array = Statistics.getBoonUptime(boon_object, logs, b_data, trgetPlayers.Count());
-                                rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + String.Format("{0:0.00}", array[1]) + "with overstack \">" + String.Format("{0:0.00}", array[0]) + "</span>";
+                                rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + Math.Round(array[1],1) + "with overstack \">" + Math.Round(array[0], 1) + "</span>";
                             }
                         }
 
@@ -1007,11 +1007,11 @@ namespace LuckParser.Controllers
                         if (boon.getType().Equals("duration"))
                         {
 
-                            rate = Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data);//these 2 are problamatic
+                            rate = Math.Round(Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data),1).ToString();//these 2 are problamatic
                         }
                         else if (boon.getType().Equals("intensity"))
                         {
-                            rate = Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data));//issues
+                            rate = Math.Round(Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)),1).ToString();//issues
                         }
                     }
                     rates[i] = rate;
@@ -2297,11 +2297,11 @@ namespace LuckParser.Controllers
                             {
                                 if (intensityBoon.Contains(i - 1))
                                 {
-                                    sw.Write("<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 2) + "</td>");
+                                    sw.Write("<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 1) + "</td>");
                                 }
                                 else
                                 {
-                                    sw.Write("<td>" + (groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>");
+                                    sw.Write("<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count,1) + "%</td>");
                                 }
 
                             }
@@ -2317,11 +2317,11 @@ namespace LuckParser.Controllers
                         {
                             if (intensityBoon.Contains(i - 1))
                             {
-                                sw.Write("<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 2) + "</td>");
+                                sw.Write("<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 1) + "</td>");
                             }
                             else
                             {
-                                sw.Write("<td>" + (int)(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count) + "%</td>");
+                                sw.Write("<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count,1) + "%</td>");
                             }
                         }
                     }

@@ -86,7 +86,7 @@ namespace LuckParser.Models.ParseModels
             return boon_intervals;
         }
 
-        public static String getBoonDuration(List<Point> boon_intervals,BossData b_data)
+        public static double getBoonDuration(List<Point> boon_intervals,BossData b_data)
         {
             // Calculate average duration
             double average_duration = 0.0;
@@ -98,7 +98,7 @@ namespace LuckParser.Models.ParseModels
             /*if (number > 100) {
                 int stop = 0;
             }*/
-            return String.Format("{0:0.0}%",number);
+            return number;
         }
 
       
@@ -136,16 +136,13 @@ namespace LuckParser.Models.ParseModels
             return boon_stacks;
         }
 
-        public static String getAverageStacks(List<long> boon_stacks)
+        public static double getAverageStacks(List<long> boon_stacks)
         {
             // Calculate average stacks
             double average_stacks = boon_stacks.Sum();
             double average = average_stacks / boon_stacks.Count();
             
-
-            return String.Format("{0:0.00}", average);
-            
-           
+            return average;         
         }
 
        
