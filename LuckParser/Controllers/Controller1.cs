@@ -2091,8 +2091,8 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + stats[11] + "</td>");//misses
                             sw.Write("<td>" + stats[12] + "</td>");//interupts
                             sw.Write("<td>" + stats[13] + "</td>");//dmg invulned
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[15] + "cancels \">" + stats[14] + " s</span>" + "</td>");//time wasted
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[18] + "cancels \">" + stats[17] + " s</span>" + "</td>");//timesaved
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[15] + "cancels \">" + stats[14] + "</span>" + "</td>");//time wasted
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[18] + "cancels \">" + stats[17] + "</span>" + "</td>");//timesaved
                             sw.Write("<td>" + stats[5] + "</td>");//w swaps
                             sw.Write("<td>" + stats[6] + "</td>");//downs
                             if (timedead > TimeSpan.Zero)
