@@ -16,7 +16,7 @@ namespace LuckParser.Models.ParseModels
         
 
         // Private Methods
-        private void setDamageLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        protected override void setDamageLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
@@ -55,7 +55,7 @@ namespace LuckParser.Models.ParseModels
 
             }
         }
-        private void setDamagetaken(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data)
+        protected override void setDamagetaken(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data)
         {
             long time_start = bossData.getFirstAware();
 
