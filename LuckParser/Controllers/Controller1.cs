@@ -1287,85 +1287,6 @@ namespace LuckParser.Controllers
             }
             return totaldmgList;
         }
-        private List<BoonsGraphModel> getBossBoonGraph(Player p)
-        {
-            List<BoonsGraphModel> uptime = new List<BoonsGraphModel>();
-            BossData b_data = getBossData();
-            CombatData c_data = getCombatData();
-            SkillData s_data = getSkillData();
-            List<BoonMap> boon_logs = p.getCondiBoonMap(b_data, s_data, c_data.getCombatList());
-            List<Boon> boon_list = new List<Boon>();
-            //condis
-            boon_list.AddRange(Boon.getCondiBoonList());
-            //Main boons
-            boon_list.AddRange(Boon.getBoonList());
-            //Shareable buffs
-            boon_list.AddRange(Boon.getSharableProfList());
-
-            int n = boon_list.Count();//# of diff boons
-
-            for (int i = 0; i < n; i++)//foreach boon
-            {
-                Boon boon = boon_list[i];
-                AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                BoonMap bm = boon_logs.FirstOrDefault(x => x.getID() == boon.getID());
-                if (bm != null)
-                {
-                    List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
-
-                    List<Point> pointlist = new List<Point>();
-                    if (logs.Count() > 0)
-                    {
-                        if (boon.getType().Equals("duration"))
-                        {
-                            int fight_duration = (int)((b_data.getLastAware() - b_data.getFirstAware()) / 1000.0);
-                            List<Point> pointswierds = Statistics.getBoonIntervalsList(boon_object, logs, b_data);
-                            int pwindex = 0;
-                            int enddur = 0;
-                            for (int cur_time = 0; cur_time < fight_duration; cur_time++)
-                            {
-                                if (cur_time == (int)(pointswierds[pwindex].X / 1000f))
-                                {
-                                    pointlist.Add(new Point((int)(pointswierds[pwindex].X / 1000f), 1));
-                                    enddur = (int)(pointswierds[pwindex].Y / 1000f);
-                                    if (pwindex < pointswierds.Count() - 1) { pwindex++; }
-
-                                }
-                                else if (cur_time < enddur)
-                                {
-                                    pointlist.Add(new Point(cur_time, 1));
-                                }
-                                else
-                                {
-                                    pointlist.Add(new Point(cur_time, 0));
-                                }
-                            }
-
-                        }
-                        else if (boon.getType().Equals("intensity"))
-                        {
-                            List<long> stackslist = Statistics.getBoonStacksList(boon_object, logs, b_data);
-                            int time = 0;
-                            int timeGraphed = 0;
-                            foreach (long stack in stackslist)
-                            {
-                                if (Math.Floor(time / 1000f) > timeGraphed)
-                                {
-                                    timeGraphed = (int)Math.Floor(time / 1000f);
-                                    pointlist.Add(new Point(time / 1000, (int)stack));
-                                }
-                                time++;
-                            }
-
-                        }
-                        BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(), pointlist, boon.getID());
-                        uptime.Add(bgm);
-                    }
-                }
-
-            }
-            return uptime;
-        }
         private bool getDied(Player p)
         {
             List<Point> dead = getCombatData().getStates(p.getInstid(), "CHANGE_DEAD");
@@ -4437,9 +4358,11 @@ namespace LuckParser.Controllers
                         List<Boon> parseBoonsList = new List<Boon>();
                         //Condis
                         parseBoonsList.AddRange(Boon.getCondiBoonList());
-                        //Every boon and buffs
-                        parseBoonsList.AddRange(Boon.getAllProfList());
-                        List<BoonsGraphModel> boonGraphData = getBossBoonGraph(boss);
+                        //Every boons
+                        parseBoonsList.AddRange(Boon.getBoonList());
+                        //Every  buffs
+                        parseBoonsList.AddRange(Boon.getSharableProfList());
+                        List<BoonsGraphModel> boonGraphData = getBoonGraph(boss, parseBoonsList);
                         boonGraphData.Reverse();
                         foreach (BoonsGraphModel bgm in boonGraphData)
                         {
