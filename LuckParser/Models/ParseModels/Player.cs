@@ -258,11 +258,21 @@ namespace LuckParser.Models.ParseModels
         {
             if (minion_damage_logs.Count == 0)
             {
+                // make sure the keys matches
+                foreach (AgentItem agent in minion_damage_logsFiltered.Keys)
+                {
+                    minion_damage_logs[agent] = new List<DamageLog>();
+                }
                 setMinionsDamageLogs(0, bossData, combatList, agentData, minion_damage_logs);
             }
 
             if (minion_damage_logsFiltered.Count == 0)
             {
+                // make sure the keys matches
+                foreach (AgentItem agent in minion_damage_logs.Keys)
+                {
+                    minion_damage_logsFiltered[agent] = new List<DamageLog>();
+                }
                 setMinionsDamageLogs(bossData.getInstid(), bossData, combatList, agentData, minion_damage_logsFiltered);
             }
             if (instidFilter == 0)
