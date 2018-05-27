@@ -142,7 +142,6 @@ namespace LuckParser.Models.ParseModels
             Dictionary<int, BoonMap> boonGen = new Dictionary<int, BoonMap>();
             long time_start = bossData.getFirstAware();
             long fight_duration = bossData.getLastAware() - time_start;
-            int here = 0, there = 0, everywhere = 0, huh = 0;
             // Initialize Boon Map with every Boon
             foreach (Boon boon in Boon.getAllProfList())
             {
@@ -166,27 +165,19 @@ namespace LuckParser.Models.ParseModels
                 long time = c.getTime() - time_start;
                 if ((instid == srcID || instid == c.getSrcMasterInstid()) && state == "NORMAL" && time > 0 && time < fight_duration)//selecting player or minion as caster
                 {
-                    here++;
-                    foreach (AgentItem item in agentData.getPlayerAgentList())
-                    {//selecting all
-                        if (item.getInstid() == dstID /*&& c.getIFF().getEnum() == "FRIEND"*/)//Make sure target is friendly existing Agent
+                    foreach (int id in trgtPID)
+                    {//Make sure trgt is within paramaters
+                        if (id == dstID)
                         {
-                            there++;
-                            foreach (int id in trgtPID)
-                            {//Make sure trgt is within paramaters
-                                if (id == dstID)
-                                {
-                                    everywhere++;
-                                    if (c.isBuff() == 1 && c.isBuffremove().getID() == 0)
-                                    {//Buff application
-                                        huh++;
-                                        boonGen[c.getSkillID()].getBoonLog().Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
-                                    }
-                                }
+                            if (c.isBuff() == 1 && c.isBuffremove().getID() == 0)
+                            {//Buff application
+                                boonGen[c.getSkillID()].getBoonLog().Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
                             }
                         }
                     }
+
                 }
+
             }
             return boonGen.Values.ToList();
         }

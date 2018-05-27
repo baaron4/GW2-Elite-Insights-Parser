@@ -951,12 +951,12 @@ namespace LuckParser.Controllers
                             {
 
                                // rate = String.Format("{0:0.00}", Statistics.getBoonUptime(boon_object, logs, b_data,1)[0]);
-                                rate = String.Format("{0:0}", Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data));//these 2 are problamatic
+                                rate = Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data);//these 2 are problamatic
                             }
                             else if (boon.getType().Equals("intensity"))
                             {
                                // rate = String.Format("{0:0.00}", Statistics.getBoonUptime(boon_object, logs, b_data, 1)[0]);
-                                rate = String.Format("{0:0.0}", Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)));//issues
+                                rate = Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data));//issues
                             }
                         }
                         else//generation
@@ -964,12 +964,12 @@ namespace LuckParser.Controllers
                             if (boon.getType().Equals("duration"))
                             {
                                 double[] array = Statistics.getBoonUptime(boon_object, logs, b_data, trgetPlayers.Count());
-                                rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + String.Format("{0:0} %", array[1] * 100) + "with overstack \">" + String.Format("{0:0}%", array[0] * 100) + "</span>";
+                                rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + String.Format("{0:0.0}%", array[1] * 100) + "with overstack \">" + String.Format("{0:0.0}%", array[0] * 100) + "</span>";
                             }
                             else if (boon.getType().Equals("intensity"))
                             {
                                 double[] array = Statistics.getBoonUptime(boon_object, logs, b_data, trgetPlayers.Count());
-                                rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + String.Format("{0:0.0}", array[1]) + "with overstack \">" + String.Format("{0:0.0}", array[0]) + "</span>";
+                                rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + String.Format("{0:0.00}", array[1]) + "with overstack \">" + String.Format("{0:0.00}", array[0]) + "</span>";
                             }
                         }
 
@@ -1007,11 +1007,11 @@ namespace LuckParser.Controllers
                         if (boon.getType().Equals("duration"))
                         {
 
-                            rate = String.Format("{0:0}", Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data));//these 2 are problamatic
+                            rate = Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data);//these 2 are problamatic
                         }
                         else if (boon.getType().Equals("intensity"))
                         {
-                            rate = String.Format("{0:0.0}", Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)));//issues
+                            rate = Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data));//issues
                         }
                     }
                     rates[i] = rate;
@@ -2301,7 +2301,7 @@ namespace LuckParser.Controllers
                                 }
                                 else
                                 {
-                                    sw.Write("<td>" + (int)(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>");
+                                    sw.Write("<td>" + (groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count) + "%</td>");
                                 }
 
                             }

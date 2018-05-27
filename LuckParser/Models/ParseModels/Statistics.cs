@@ -50,7 +50,7 @@ namespace LuckParser.Models.ParseModels
             return  doubles ;
         }
         public static List<Point> getBoonIntervalsList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data)
-        {
+        { 
             // Initialise variables
             long t_prev = 0;
             long t_curr = 0;
@@ -61,7 +61,7 @@ namespace LuckParser.Models.ParseModels
             {
                 t_curr = log.getTime();
                 boon.update(t_curr - t_prev);
-                boon.add((int)log.getValue());
+                boon.add(log.getValue());
                 long duration = t_curr + boon.getStackValue();
                 if (duration < 0) {
                     duration = long.MaxValue;
@@ -82,7 +82,7 @@ namespace LuckParser.Models.ParseModels
                 mod.Y = (int)fight_duration;
                 boon_intervals[last] = mod;
             }
-
+            
             return boon_intervals;
         }
 
@@ -98,7 +98,7 @@ namespace LuckParser.Models.ParseModels
             /*if (number > 100) {
                 int stop = 0;
             }*/
-            return String.Format("{0:0}%",number);
+            return String.Format("{0:0.0}%",number);
         }
 
       
