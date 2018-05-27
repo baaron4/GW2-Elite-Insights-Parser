@@ -151,7 +151,7 @@ namespace LuckParser.Models.ParseModels
             }
             foreach (CombatItem c in combatList)
             {
-                if (c.getValue() == 0)
+                if (c.getValue() == 0 || c.isBuff() != 1 || c.getBuffDmg() > 0)
                 {
                     continue;
                 }
@@ -169,7 +169,7 @@ namespace LuckParser.Models.ParseModels
                     {//Make sure trgt is within paramaters
                         if (id == dstID)
                         {
-                            if (c.isBuff() == 1 && c.isBuffremove().getID() == 0)
+                            if (c.isBuffremove().getID() == 0)
                             {//Buff application
                                 boonGen[c.getSkillID()].getBoonLog().Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
                             }
@@ -420,7 +420,7 @@ namespace LuckParser.Models.ParseModels
             long fight_duration = bossData.getLastAware() - time_start;
             foreach (CombatItem c in combatList)
             {
-                if (c.getValue() == 0)
+                if (c.getValue() == 0 || c.isBuff() != 1 || c.getBuffDmg() > 0)
                 {
                     continue;
                 }
@@ -431,9 +431,9 @@ namespace LuckParser.Models.ParseModels
                 long time = c.getTime() - time_start;
                 if (instid == c.getDstInstid() && time > 0 && time < fight_duration)
                 {
-                    if (c.isBuff() == 1 && c.isBuffremove().getID() == 0)
+                    if (c.isBuffremove().getID() == 0)
                     {
-                        boon_map[c.getSkillID()].getBoonLog().Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
+                        boon_map[c.getSkillID()].getBoonLog().Add(new BoonLog(time, c.getValue()));
                     }
                     else if (c.isBuffremove().getID() == 1)//All
                     {
@@ -444,7 +444,7 @@ namespace LuckParser.Models.ParseModels
                             if (curBL.getTime() + curBL.getValue() > time)
                             {
                                 long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract, curBL.getOverstack() + subtract);
+                                loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract);
                             }
                         }
 
@@ -457,8 +457,7 @@ namespace LuckParser.Models.ParseModels
                         if (curBL.getTime() + curBL.getValue() > time)
                         {
                             long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                            loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract, curBL.getOverstack() + subtract);
-                            break;
+                            loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract);
                         }
                     }
                     else if (c.isBuffremove().getID() == 3)//Manuel
@@ -471,7 +470,7 @@ namespace LuckParser.Models.ParseModels
                             if (ctime > time)
                             {
                                 long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract, curBL.getOverstack() + subtract);
+                                loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract);
                                 break;
                             }
                         }
