@@ -258,12 +258,12 @@ namespace LuckParser.Models.ParseModels
         {
             if (minion_damage_logs.Count == 0)
             {
-                setMinionsDamageLogs(instidFilter, bossData, combatList, agentData, minion_damage_logs);
+                setMinionsDamageLogs(0, bossData, combatList, agentData, minion_damage_logs);
             }
 
             if (minion_damage_logsFiltered.Count == 0)
             {
-                setMinionsDamageLogs(instidFilter, bossData, combatList, agentData, minion_damage_logsFiltered);
+                setMinionsDamageLogs(bossData.getInstid(), bossData, combatList, agentData, minion_damage_logsFiltered);
             }
             if (instidFilter == 0)
             {
