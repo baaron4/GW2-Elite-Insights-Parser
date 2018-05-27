@@ -6,11 +6,11 @@ using LuckParser.Models.ParseEnums;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class DamageLog
+    public abstract class DamageLog
     {
         // Fields
         private long time;
-        private int damage;
+        protected int damage;
         private int skill_id;
         private int buff;
         private Result result;
@@ -26,7 +26,6 @@ namespace LuckParser.Models.ParseModels
         public DamageLog(long time, CombatItem c)
         {
             this.time = time;
-            this.damage = c.getValue() > 0 ? c.getValue() : c.getBuffDmg();
             this.skill_id = c.getSkillID();
             this.buff = c.isBuff();
             this.result = c.getResult();
