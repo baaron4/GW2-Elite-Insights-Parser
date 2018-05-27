@@ -24,32 +24,10 @@ namespace LuckParser.Models.ParseModels
 
                 if (instid == c.getSrcInstid() || instid == c.getSrcMasterInstid())//selecting player or minion as caster
                 {
-                    LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in agentData.getAllAgentsList())
                     {//selecting all
-                        if (item.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FOE")
-                        {
-                            if (state.getEnum() == "NORMAL" && c.isBuffremove().getID() == 0)
-                            {
-
-                                if (c.isBuff() == 1 && c.getBuffDmg() != 0)//condi
-                                {
-
-                                    damage_logs.Add(new CondiDamageLog(time, c));
-                                }
-                                else if (c.isBuff() == 0 && c.getValue() != 0)//power
-                                {
-                                    damage_logs.Add(new PowerDamageLog(time, c));
-                                }
-                                else if (c.getResult().getID() == 5 || c.getResult().getID() == 6 || c.getResult().getID() == 7)
-                                {//Hits that where blinded, invulned, interupts
-
-                                    damage_logs.Add(new PowerDamageLog(time, c));
-                                }
-                            }
-
-                        }
+                        addDamageLog(time, item.getInstid(), c, damage_logs);
                     }
                 }
 
@@ -68,28 +46,8 @@ namespace LuckParser.Models.ParseModels
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in agentData.getAllAgentsList())
                     {//selecting all
-                        if (item.getInstid() == c.getSrcInstid() && c.getIFF().getEnum() == "FOE")
-                        {
-                            if (state.getID() == 0)
-                            {
-                                if (c.isBuff() == 1 && c.getBuffDmg() != 0)
-                                {
-                                    //inco,ing condi dmg not working or just not present?
-                                    // damagetaken.Add(c.getBuffDmg());
-                                }
-                                else if (c.isBuff() == 0 && c.getValue() != 0)
-                                {
-                                    damagetaken.Add(c.getValue());
-                                    damageTaken_logs.Add(new PowerDamageLog(time, c));
 
-                                }
-                                else if (c.isBuff() == 0 && c.getValue() == 0)
-                                {
-
-                                    damageTaken_logs.Add(new PowerDamageLog(time, c));
-                                }
-                            }
-                        }
+                        setDamageTakenLog(time, item.getInstid(), c);
                     }
                 }
             }
