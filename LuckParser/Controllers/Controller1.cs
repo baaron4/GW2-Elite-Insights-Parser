@@ -2654,9 +2654,9 @@ namespace LuckParser.Controllers
 
                         }
                         //foreach pet loop here                        
-                        foreach (KeyValuePair<AgentItem, List<DamageLog>> element in p.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()))
+                        foreach (AgentItem agent in p.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Keys)
                         {
-                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid() + "_" + element.Key.getInstid() + "\">" + element.Key.getName() + "</a></li>");
+                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid() + "_" + agent.getInstid() + "\">" + agent.getName() + "</a></li>");
                         }
                         //inc dmg
                         sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#incDmg" + p.getInstid() + "\">Damage Taken</a></li>");
@@ -3092,7 +3092,7 @@ namespace LuckParser.Controllers
                             sw.Write("</script> ");
                             sw.Write("<ul class=\"nav nav-tabs\">");
                             {
-                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabAll" + p.getInstid() +"\">" + "All" + "</a></li>");
+                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabAll" + p.getInstid() +"\">" + "All" + "</a></li>");
                                 sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabBoss" + p.getInstid() + "\">" + "Boss" + "</a></li>");
                             }
                             sw.Write("</ul>");
@@ -3112,11 +3112,31 @@ namespace LuckParser.Controllers
                             sw.Write("</div>");
                         }
                         sw.Write("</div>");
-                        foreach (KeyValuePair<AgentItem, List<DamageLog>> element in p.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()))
+                        foreach (AgentItem agent in p.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Keys)
                         {
-                            sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid() + "_" + element.Key.getInstid() + "\">");
+                            string id = p.getInstid() + "_" + agent.getInstid();
+                            sw.Write("<div class=\"tab-pane fade \" id=\"minion" + id + "\">");
                             {
-                                CreateDMGDistTable(sw, p, element.Value, element.Key, false);
+                                sw.Write("<ul class=\"nav nav-tabs\">");
+                                {
+                                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabAll" + id + "\">" + "All" + "</a></li>");
+                                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabBoss" + id + "\">" + "Boss" + "</a></li>");
+                                }
+                                sw.Write("</ul>");
+                                sw.Write("<div class=\"tab-content\">");
+                                {
+                                    sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabAll" + id + "\">");
+                                    {
+                                        CreateDMGDistTable(sw, p, agent, false);
+                                    }
+                                    sw.Write("</div>");
+                                    sw.Write("<div class=\"tab-pane fade\" id=\"distTabBoss" + id + "\">");
+                                    {
+                                        CreateDMGDistTable(sw, p, agent, true);
+                                    }
+                                    sw.Write("</div>");
+                                }
+                                sw.Write("</div>");
                             }
                             sw.Write("</div>");
                         }
@@ -3417,26 +3437,31 @@ namespace LuckParser.Controllers
                 
             }
             sw.Write("</script>");
-        }     
+        }
         /// <summary>
         /// Creates the damage distribution table for a given player
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="p">The player</param>
-        private void CreateDMGDistTable(StreamWriter sw,Player p, bool toBoss) {
-
+        private void CreateDMGDistTable(StreamWriter sw, Player p, bool toBoss)
+        {
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
-            List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(toBoss? b_data.getInstid() : 0,b_data, c_data.getCombatList(), getAgentData());
+            List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(toBoss ? b_data.getInstid() : 0, b_data, c_data.getCombatList(), getAgentData());
             int totalDamage = toBoss ? Int32.Parse(getFinalDPS(p).Split('|')[7]) : Int32.Parse(getFinalDPS(p).Split('|')[1]);
+            int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
+            if (totalDamage > 0)
+            {
+                string contribution = String.Format("{0:0.00}", 100.0 * finalTotalDamage / totalDamage);
+                sw.Write("<div>" + p.getCharacter() + " did " + contribution + "% of its own total " + (toBoss ? "boss " : "") + "dps</div>");
+            }
             string tabid = p.getInstid() + (toBoss ? "_boss" : "");
-            sw.Write("<script> $(function () { $('#dist_table_"+ tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
+            sw.Write("<script> $(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + tabid + "\">");
             {
                 SkillData s_data = getSkillData();
                 List<SkillItem> s_list = s_data.getSkillList();
-                int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
                 sw.Write("<thead>");
                 {
                     sw.Write("<tr>");
@@ -3776,33 +3801,31 @@ namespace LuckParser.Controllers
                     }
                 }
                 sw.Write("</tbody>");
-                if (totalDamage > 0)
+
+                sw.Write("<tfoot class=\"text-dark\">");
                 {
-                    string contribution = String.Format("{0:0.00}", 100.0 * finalTotalDamage / totalDamage);
-                    sw.Write("<tfoot class=\"text-dark\">");
+                    sw.Write("<tr>");
                     {
-                        sw.Write("<tr>");
-                        {
-                            sw.Write("<th>Contribution</th>");
-                            sw.Write("<th>" + contribution + "%</th>");
-                            sw.Write("<th>" + finalTotalDamage + "</th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                        }
-                        sw.Write("</tr>");
+                        sw.Write("<th>Contribution</th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th>" + finalTotalDamage + "</th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
                     }
-                    sw.Write("</tfoot>");
+                    sw.Write("</tr>");
                 }
-            }        
+                sw.Write("</tfoot>");
+
+            }
             sw.Write("</table>");
         }
         /// <summary>
@@ -3812,16 +3835,24 @@ namespace LuckParser.Controllers
         /// <param name="p">Player, master of the minion</param>
         /// <param name="damageLogs">Damage logs to use</param>
         /// <param name="agent">The minion</param>
-        private void CreateDMGDistTable(StreamWriter sw, Player p, List<DamageLog> damageLogs, AgentItem agent, bool toBoss)
-        {          
-            int totalDamage = toBoss? Int32.Parse(getFinalDPS(p).Split('|')[7]) : Int32.Parse(getFinalDPS(p).Split('|')[1]);
+        private void CreateDMGDistTable(StreamWriter sw, Player p, AgentItem agent, bool toBoss)
+        {
+            int totalDamage = toBoss ? Int32.Parse(getFinalDPS(p).Split('|')[7]) : Int32.Parse(getFinalDPS(p).Split('|')[1]);
             string tabid = p.getInstid() + "_" + agent.getInstid() + (toBoss ? "_boss" : "");
+            CombatData c_data = getCombatData();
+            BossData b_data = getBossData();
+            List<DamageLog> damageLogs = p.getMinionsDamageLogs(toBoss ? b_data.getInstid() : 0, b_data, c_data.getCombatList(), getAgentData())[agent];
+            int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
+            if (totalDamage > 0)
+            {
+                string contribution = String.Format("{0:0.00}", 100.0 * finalTotalDamage / totalDamage);
+                sw.Write("<div>" + agent.getName() + " did " + contribution + "% of " + p.getCharacter() + "'s total " + (toBoss ? "boss " : "") + "dps</div>");
+            }
             sw.Write("<script> $(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + tabid + "\">");
             {
                 SkillData s_data = getSkillData();
                 List<SkillItem> s_list = s_data.getSkillList();
-                int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
                 sw.Write("<thead>");
                 {
                     sw.Write("<tr>");
@@ -3981,29 +4012,25 @@ namespace LuckParser.Controllers
 
                 }
                 sw.Write("</tbody>");
-                if (totalDamage > 0)
+                sw.Write("<tfoot class=\"text-dark\">");
                 {
-                    string contribution = String.Format("{0:0.00}", 100.0 * finalTotalDamage / totalDamage);
-                    sw.Write("<tfoot class=\"text-dark\">");
+                    sw.Write("<tr>");
                     {
-                        sw.Write("<tr>");
-                        {
-                            sw.Write("<th>Contribution</th>");
-                            sw.Write("<th>" + finalTotalDamage + "</th>");
-                            sw.Write("<th>" + contribution + "%</th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                            sw.Write("<th></th>");
-                        }
-                        sw.Write("</tr>");
+                        sw.Write("<th>Contribution</th>");
+                        sw.Write("<th>" + finalTotalDamage + "</th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th></th>");
                     }
-                    sw.Write("</tfoot>");
+                    sw.Write("</tr>");
                 }
-            }  
+                sw.Write("</tfoot>");
+            }
             sw.Write("</table>");
         }
         /// <summary>
@@ -4392,9 +4419,9 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + boss.getInstid() + "\">" + boss.getCharacter() + "</a></li>");
                 //foreach pet loop here
-                foreach (KeyValuePair<AgentItem, List<DamageLog>> element in boss.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()))
+                foreach (AgentItem agent in boss.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Keys)
                 {
-                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + boss.getInstid() + "_" + element.Key.getInstid() + "\">" + element.Key.getName() + "</a></li>");
+                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + boss.getInstid() + "_" + agent.getInstid() + "\">" + agent.getName() + "</a></li>");
                 }
             }         
             sw.Write("</ul>");
@@ -4634,11 +4661,11 @@ namespace LuckParser.Controllers
                 sw.Write("</script> ");
                 CreateDMGDistTable(sw, boss, false);
                 sw.Write("</div>");
-                foreach (KeyValuePair<AgentItem, List<DamageLog>> element in boss.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()))
+                foreach (AgentItem agent in boss.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Keys)
                 {
-                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + boss.getInstid() + "_" + element.Key.getInstid() + "\">");
+                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + boss.getInstid() + "_" + agent.getInstid() + "\">");
                     {
-                        CreateDMGDistTable(sw, boss, element.Value, element.Key, false);
+                        CreateDMGDistTable(sw, boss, agent, false);
                     }
                     sw.Write("</div>");
                 }
@@ -4843,7 +4870,7 @@ namespace LuckParser.Controllers
                         sw.Write("<ul class=\"nav nav-tabs\">");
                         {
                             sw.Write("<li class=\"nav-item\">" +
-                                        "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#stats\">Stats</a>" +
+                                        "<a class=\"nav-link active\" data-toggle=\"tab\" href=\"#stats\">Stats</a>" +
                                     "</li>" + 
                                     
                                     "<li class=\"nav-item\">" +
