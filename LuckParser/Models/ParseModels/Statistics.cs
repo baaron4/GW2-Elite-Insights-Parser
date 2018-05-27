@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
             }
             foreach (BoonLog bl in boon_logs)
             {
-                if ((long)bl.getValue() + bl.getTime() > fight_duration)
+                if (bl.getValue() + bl.getTime() > fight_duration)
                 {
                     os = os + (bl.getValue() - (fight_duration - bl.getTime())) + bl.getOverstack();
                 }
@@ -62,7 +62,7 @@ namespace LuckParser.Models.ParseModels
                 t_curr = log.getTime();
                 boon.update(t_curr - t_prev);
                 boon.add((int)log.getValue());
-                long duration = t_curr + (long)boon.getStackValue();
+                long duration = t_curr + boon.getStackValue();
                 if (duration < 0) {
                     duration = long.MaxValue;
                 }
@@ -76,7 +76,7 @@ namespace LuckParser.Models.ParseModels
             // Trim duration overflow
             long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
             int last = boon_intervals.Count() - 1;
-            if ((long)boon_intervals[last].Y > fight_duration)
+            if (boon_intervals[last].Y > fight_duration)
             {
                 Point mod = boon_intervals[last];
                 mod.Y = (int)fight_duration;

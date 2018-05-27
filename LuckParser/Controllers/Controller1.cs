@@ -479,11 +479,11 @@ namespace LuckParser.Controllers
                 }
                 else if (c.isStateChange().getID() == 9)//Log start
                 {
-                    log_data.setLogStart((long)c.getValue());
+                    log_data.setLogStart(c.getValue());
                 }
                 else if (c.isStateChange().getID() == 10)//log end
                 {
-                    log_data.setLogEnd((long)c.getValue());
+                    log_data.setLogEnd(c.getValue());
 
                 }
                 //set boss dead
@@ -822,7 +822,7 @@ namespace LuckParser.Controllers
             double died = 0.0;
             if (dead.Count() > 0)
             {
-                died = (long)dead[0].X - b_data.getFirstAware();
+                died = dead[0].X - b_data.getFirstAware();
             }
 
             statsArray = new string[] { power_loop_count.ToString(), critical_rate.ToString(), scholar_rate.ToString(), moving_rate.ToString(),
@@ -883,7 +883,7 @@ namespace LuckParser.Controllers
             double died = 0.0;
             if (dead.Count() > 0)
             {
-                died = (long)dead[0].X - b_data.getFirstAware();
+                died = dead[0].X - b_data.getFirstAware();
             }
             String[] statsArray = new string[] { damagetaken.ToString(),
                 blocked.ToString(),"0"/*dmgblocked.ToString()*/,invulned.ToString(),dmginvulned.ToString(),
@@ -1032,12 +1032,12 @@ namespace LuckParser.Controllers
 
                 List<Point> down = c_data.getStates(p.getInstid(), "CHANGE_DOWN");
                 foreach (Point pnt in down) {
-                    mech_data.AddItem(new MechanicLog((long)(((long)pnt.X -boss_data.getFirstAware())/ 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
+                    mech_data.AddItem(new MechanicLog((long)((pnt.X - boss_data.getFirstAware()) / 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
                 }
                 List<Point> dead = c_data.getStates(p.getInstid(), "CHANGE_DEAD");
                 foreach (Point pnt in dead)
                 {
-                    mech_data.AddItem(new MechanicLog((long)(((long)pnt.X - boss_data.getFirstAware() )/ 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
+                    mech_data.AddItem(new MechanicLog((long)((pnt.X - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
                 }
                 List<DamageLog> dls = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data, mech_data);
                 //damage taken 
@@ -1195,7 +1195,7 @@ namespace LuckParser.Controllers
                             if ((Math.Floor(time / 1000f) - timeGraphed) < 2)
                             {
                                 timeGraphed = (int)Math.Floor(time / 1000f);
-                                bossdmgList.Add(new int[] { (int)time / 1000, (int)(totaldmg / (float)(time / 1000f)) });
+                                bossdmgList.Add(new int[] { (int)time / 1000, (int)(totaldmg / (time / 1000f)) });
                             }
                             else
                             {
@@ -1258,7 +1258,7 @@ namespace LuckParser.Controllers
                         if ((Math.Floor(time / 1000f) - timeGraphed) < 2)
                         {
                             timeGraphed = (int)Math.Floor(time / 1000f);
-                            totaldmgList.Add(new int[] { (int)time / 1000, (int)(totaldmg / (float)(time / 1000f)) });
+                            totaldmgList.Add(new int[] { (int)time / 1000, (int)(totaldmg / (time / 1000f)) });
                         }
                         else
                         {
@@ -1492,7 +1492,7 @@ namespace LuckParser.Controllers
                 int mechcount = 0;
                 foreach (MechanicLog ml in filterdList)
                 {
-                    int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => (long)x[0] == ml.GetTime());
+                    int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => x[0] == ml.GetTime());
                     if (mechcount == filterdList.Count - 1)
                     {
                         if (check != null)
@@ -1582,7 +1582,7 @@ namespace LuckParser.Controllers
                 sw.Write("y: [");
                 foreach (MechanicLog ml in DnDList)
                 {
-                    int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => (long)x[0] == ml.GetTime());
+                    int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => x[0] == ml.GetTime());
                     if (mcount == DnDList.Count - 1)
                     {
                         if (check != null)
@@ -1712,11 +1712,11 @@ namespace LuckParser.Controllers
                 {
                     if (hotCount == BossHOT.Count - 1)
                     {
-                        sw.Write("'" + (float)(dp[0] / 1000f) + "'");
+                        sw.Write("'" + dp[0] / 1000f + "'");
                     }
                     else
                     {
-                        sw.Write("'" + (float)(dp[0] / 1000f) + "',");
+                        sw.Write("'" + dp[0] / 1000f + "',");
                     }
 
                     hotCount++;
@@ -3212,8 +3212,8 @@ namespace LuckParser.Controllers
             List<DamageLog> damageToKill = new List<DamageLog>(); ;
             if (down.Count > 0)
             {//went to down state before death
-                damageToDown = damageLogs.Where(x => x.getTime() < (long)down.Last().X-b_data.getFirstAware() && x.getDamage() > 0).ToList();
-                damageToKill = damageLogs.Where(x => x.getTime() > (long)down.Last().X - b_data.getFirstAware() && x.getTime() < (long)dead.Last().X - b_data.getFirstAware() && x.getDamage() > 0).ToList();
+                damageToDown = damageLogs.Where(x => x.getTime() < down.Last().X - b_data.getFirstAware() && x.getDamage() > 0).ToList();
+                damageToKill = damageLogs.Where(x => x.getTime() > down.Last().X - b_data.getFirstAware() && x.getTime() < dead.Last().X - b_data.getFirstAware() && x.getDamage() > 0).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
                 for (int i = damageToDown.Count() - 1; i > 0; i--)
@@ -3240,7 +3240,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damageToKill = damageLogs.Where(x =>  x.getTime() < (long)dead.Last().X && x.getDamage() > 0).ToList();
+                damageToKill = damageLogs.Where(x =>  x.getTime() < dead.Last().X && x.getDamage() > 0).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
                 for (int i = damageToKill.Count() - 1; i > 0; i--)
@@ -3452,8 +3452,8 @@ namespace LuckParser.Controllers
                             if (result == 1) { crit++; } else if (result == 2) { glance++; }
                             if (dl.isFlanking() == 1) { flank++; }
                         }
-                        avgdamage = (int)((double)totaldamage / (double)hits);
-                        if (casts > 0) { hpcast = Math.Round((double)hits / (double)casts, 2); }
+                        avgdamage = (int)(totaldamage / (double)hits);
+                        if (casts > 0) { hpcast = Math.Round(hits / (double)casts, 2); }
 
                         if (skill != null)
                         {
@@ -3562,7 +3562,7 @@ namespace LuckParser.Controllers
                             int result = dl.getResult().getID();
 
                         }
-                        avgdamage = (int)((double)totaldamage / (double)hits);
+                        avgdamage = (int)(totaldamage / (double)hits);
                         if (totaldamage != 0)
                         {
                             string condiName = condi.getName();// Boon.getCondiName(condiID);
@@ -3630,8 +3630,8 @@ namespace LuckParser.Controllers
                             if (result == 1) { crit++; } else if (result == 2) { glance++; }
                             if (dl.isFlanking() == 1) { flank++; }
                         }
-                        avgdamage = (int)((double)totaldamage / (double)hits);
-                        if (casts > 0) { hpcast = Math.Round((double)hits / (double)casts, 2); }
+                        avgdamage = (int)(totaldamage / (double)hits);
+                        if (casts > 0) { hpcast = Math.Round(hits / (double)casts, 2); }
                         if (skill != null)
                         {
                             if (totaldamage != 0 && skill.GetGW2APISkill() != null)
@@ -3815,7 +3815,7 @@ namespace LuckParser.Controllers
                             hits++;
                             int result = dl.getResult().getID();
                         }
-                        avgdamage = (int)((double)totaldamage / (double)hits);
+                        avgdamage = (int)(totaldamage / (double)hits);
                         if (totaldamage != 0)
                         {
                             string condiName = condi.getName();// Boon.getCondiName(condiID);
@@ -3857,7 +3857,7 @@ namespace LuckParser.Controllers
                             if (result == 1) { crit++; } else if (result == 2) { glance++; }
                             if (dl.isFlanking() == 1) { flank++; }
                         }
-                        avgdamage = (int)((double)totaldamage / (double)hits);
+                        avgdamage = (int)(totaldamage / (double)hits);
                         if (skill != null)
                         {
                             if (totaldamage != 0 && skill.GetGW2APISkill() != null)
@@ -4011,7 +4011,7 @@ namespace LuckParser.Controllers
                             int result = dl.getResult().getID();
 
                         }
-                        avgdamage = (int)((double)totaldamage / (double)hits);
+                        avgdamage = (int)(totaldamage / (double)hits);
                         if (totaldamage > 0)
                         {
                             string condiName = condi.getName();// Boon.getCondiName(condiID);
@@ -4054,7 +4054,7 @@ namespace LuckParser.Controllers
                             if (result == 1) { crit++; } else if (result == 2) { glance++; }
                             if (dl.isFlanking() == 1) { flank++; }
                         }
-                        avgdamage = (int)((double)totaldamage / (double)hits);
+                        avgdamage = (int)(totaldamage / (double)hits);
 
                         if (skill != null)
                         {
@@ -4064,7 +4064,7 @@ namespace LuckParser.Controllers
                                 {
                                     sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
                                     sw.Write("<td>" + totaldamage + "</td>");
-                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / (double)finalTotalDamage) + "%</td>");
+                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                                     sw.Write("<td>" + hits + "</td>");
                                     sw.Write("<td>" + mindamage + "</td>");
                                     sw.Write("<td>" + avgdamage + "</td>");

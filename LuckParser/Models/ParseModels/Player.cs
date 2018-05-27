@@ -180,7 +180,7 @@ namespace LuckParser.Models.ParseModels
                                     if (c.isBuff() == 1 && c.isBuffremove().getID() == 0)
                                     {//Buff application
                                         huh++;
-                                        boonGen[c.getSkillID()].getBoonLog().Add(new BoonLog(time, (long)c.getValue(), c.getOverstackValue()));
+                                        boonGen[c.getSkillID()].getBoonLog().Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
                                     }
                                 }
                             }
@@ -442,7 +442,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (c.isBuff() == 1 && c.isBuffremove().getID() == 0)
                     {
-                        boon_map[c.getSkillID()].getBoonLog().Add(new BoonLog(time, (long)c.getValue(), c.getOverstackValue()));
+                        boon_map[c.getSkillID()].getBoonLog().Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
                     }
                     else if (c.isBuffremove().getID() == 1)//All
                     {
@@ -450,7 +450,7 @@ namespace LuckParser.Models.ParseModels
                         for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
                         {
                             BoonLog curBL = loglist[cnt];
-                            if (curBL.getTime() + (long)curBL.getValue() > time)
+                            if (curBL.getTime() + curBL.getValue() > time)
                             {
                                 long subtract = (curBL.getTime() + curBL.getValue()) - time;
                                 loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract, curBL.getOverstack() + subtract);
@@ -463,7 +463,7 @@ namespace LuckParser.Models.ParseModels
                         List<BoonLog> loglist = boon_map[c.getSkillID()].getBoonLog();
                         int cnt = loglist.Count() - 1;
                         BoonLog curBL = loglist[cnt];
-                        if (curBL.getTime() + (long)curBL.getValue() > time)
+                        if (curBL.getTime() + curBL.getValue() > time)
                         {
                             long subtract = (curBL.getTime() + curBL.getValue()) - time;
                             loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract, curBL.getOverstack() + subtract);
@@ -476,7 +476,7 @@ namespace LuckParser.Models.ParseModels
                         for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
                         {
                             BoonLog curBL = loglist[cnt];
-                            long ctime = curBL.getTime() + (long)curBL.getValue();
+                            long ctime = curBL.getTime() + curBL.getValue();
                             if (ctime > time)
                             {
                                 long subtract = (curBL.getTime() + curBL.getValue()) - time;
