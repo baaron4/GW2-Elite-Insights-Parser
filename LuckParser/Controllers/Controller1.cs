@@ -1834,38 +1834,6 @@ namespace LuckParser.Controllers
             //tags: tank,healer,dps(power/condi)
             //Roles:greenteam,green split,cacnoneers,flakkiter,eater,KCpusher,agony,epi,handkiter,golemkiter,orbs
         }
-        private Dictionary<AgentItem, List<DamageLog>> getDamagingMinions(Player p)
-        {
-            Dictionary<AgentItem, List<DamageLog>> minionAgentList = new Dictionary<AgentItem, List<DamageLog>>();
-            CombatData c_data = getCombatData();
-            BossData b_data = getBossData();
-            AgentData a_data = getAgentData();
-            List<ushort> minionIDlist = p.getCombatMinionList(b_data, c_data.getCombatList(), a_data);
-            foreach (int petid in minionIDlist)
-            {
-                AgentItem agent = a_data.getNPCAgentList().FirstOrDefault(x => x.getInstid() == petid);
-                if (agent != null)
-                {
-                    List<DamageLog> damageLogs = p.getMinionDamageLogs(0, agent.getAgent(), b_data, c_data.getCombatList(), getAgentData());
-                    if (damageLogs.Count == 0)
-                    {
-                        continue;
-                    }
-                    AgentItem key = minionAgentList.Keys.ToList().FirstOrDefault(x => x.getName() == agent.getName());
-                    if (key == null)
-                    {
-                        minionAgentList[agent] = damageLogs;
-                    }
-                    else
-                    {
-                        minionAgentList[key].AddRange(damageLogs);
-                    }
-
-                }
-                //int i = 0;
-            }
-            return minionAgentList;
-        }
 
         bool[] SnapSettings;
         private void CreateCompTable(StreamWriter sw) {
@@ -2667,11 +2635,8 @@ namespace LuckParser.Controllers
                 List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
                 SkillData s_data = getSkillData();
                 List<SkillItem> s_list = s_data.getSkillList();
-                AgentData a_data = getAgentData();
                 bool died = getDied(p);
                 string charname = p.getCharacter();
-                List<ushort> minionIDlist = p.getCombatMinionList(b_data, c_data.getCombatList(), a_data);
-                Dictionary<AgentItem, List<DamageLog>> minionAgentList = new Dictionary<AgentItem, List<DamageLog>>();
                 sw.Write("<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">");
                 {
                     sw.Write("<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
@@ -2689,8 +2654,7 @@ namespace LuckParser.Controllers
 
                         }
                         //foreach pet loop here                        
-                        minionAgentList = getDamagingMinions(p);
-                        foreach (KeyValuePair<AgentItem, List<DamageLog>> element in minionAgentList)
+                        foreach (KeyValuePair<AgentItem, List<DamageLog>> element in p.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()))
                         {
                             sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid() + "_" + element.Key.getInstid() + "\">" + element.Key.getName() + "</a></li>");
                         }
@@ -3148,7 +3112,7 @@ namespace LuckParser.Controllers
                             sw.Write("</div>");
                         }
                         sw.Write("</div>");
-                        foreach (KeyValuePair<AgentItem, List<DamageLog>> element in minionAgentList)
+                        foreach (KeyValuePair<AgentItem, List<DamageLog>> element in p.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()))
                         {
                             sw.Write("<div class=\"tab-pane fade \" id=\"minion" + p.getInstid() + "_" + element.Key.getInstid() + "\">");
                             {
@@ -4423,14 +4387,12 @@ namespace LuckParser.Controllers
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             string charname = boss.getCharacter();
-            Dictionary<AgentItem, List<DamageLog>> minionAgentList = new Dictionary<AgentItem, List<DamageLog>>();
             sw.Write("<h1 align=\"center\"> " + charname + "</h1>");
             sw.Write("<ul class=\"nav nav-tabs\">");
             {
                 sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + boss.getInstid() + "\">" + boss.getCharacter() + "</a></li>");
                 //foreach pet loop here
-                minionAgentList = getDamagingMinions(boss);
-                foreach (KeyValuePair<AgentItem, List<DamageLog>> element in minionAgentList)
+                foreach (KeyValuePair<AgentItem, List<DamageLog>> element in boss.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()))
                 {
                     sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + boss.getInstid() + "_" + element.Key.getInstid() + "\">" + element.Key.getName() + "</a></li>");
                 }
@@ -4672,7 +4634,7 @@ namespace LuckParser.Controllers
                 sw.Write("</script> ");
                 CreateDMGDistTable(sw, boss, false);
                 sw.Write("</div>");
-                foreach (KeyValuePair<AgentItem, List<DamageLog>> element in minionAgentList)
+                foreach (KeyValuePair<AgentItem, List<DamageLog>> element in boss.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()))
                 {
                     sw.Write("<div class=\"tab-pane fade \" id=\"minion" + boss.getInstid() + "_" + element.Key.getInstid() + "\">");
                     {

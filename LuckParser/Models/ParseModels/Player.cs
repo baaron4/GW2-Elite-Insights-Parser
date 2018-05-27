@@ -16,14 +16,21 @@ namespace LuckParser.Models.ParseModels
         private int toughness;
         private int healing;
         private int condition;
+        // DPS
         protected List<DamageLog> damage_logs = new List<DamageLog>();
         private List<DamageLog> damage_logsFiltered = new List<DamageLog>();
+        private List<int[]> bossdpsGraph = new List<int[]>();
+        // Minions
+        private List<ushort> combatMinionIDList = new List<ushort>();
+        private Dictionary<AgentItem, List<DamageLog>> minion_damage_logs = new Dictionary<AgentItem, List<DamageLog>>();
+        private Dictionary<AgentItem, List<DamageLog>> minion_damage_logsFiltered = new Dictionary<AgentItem, List<DamageLog>>();
+        // Taken damage
         protected List<DamageLog> damageTaken_logs = new List<DamageLog>();
         protected List<int> damagetaken = new List<int>();
+        // Boons
         private Dictionary<int, BoonMap> boon_map = new Dictionary<int, BoonMap>();
+        // Casts
         private List<CastLog> cast_logs = new List<CastLog>();
-        private List<ushort> combatMinionIDList;
-        private List<int[]> bossdpsGraph = new List<int[]>();
 
         // Constructors
         public Player(AgentItem agent)
@@ -89,7 +96,7 @@ namespace LuckParser.Models.ParseModels
            
            
             if(damage_logsFiltered.Count == 0) {
-                setFilteredLogs(bossData, combatList, agentData,instidFilter);
+                setFilteredLogs(bossData, combatList, agentData);
             }
             if (instidFilter == 0)
             {
@@ -238,36 +245,49 @@ namespace LuckParser.Models.ParseModels
             //}
             return reses;
         }
-        public List<ushort> getCombatMinionList(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
-            if (combatMinionIDList == null) {
-                combatMinionIDList = combatList.Where(x => x.getSrcMasterInstid() == instid &&(( x.getValue() != 0 &&x.isBuff() ==0)||(x.isBuff() == 1 && x.getBuffDmg() != 0))).Select(x => x.getSrcInstid()).Distinct().ToList();
-                //int test = 0;
+        public List<CastLog> getCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        {
+            if (cast_logs.Count == 0)
+            {
+                setCastLogs(bossData, combatList, agentData);
             }
-            return combatMinionIDList;
+            return cast_logs;
+
         }
-        public List<DamageLog> getMinionDamageLogs(int instidFilter, long srcagent,BossData bossData, List<CombatItem> combatList, AgentData agentData) {
-            List<DamageLog> dls = getDamageLogs(instidFilter, bossData, combatList,agentData).Where(x => x.getSrcAgent() == srcagent).ToList();
-            return dls;
+        public Dictionary<AgentItem, List<DamageLog>> getMinionsDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        {
+            if (minion_damage_logs.Count == 0)
+            {
+                setMinionsDamageLogs(instidFilter, bossData, combatList, agentData, minion_damage_logs);
+            }
+
+            if (minion_damage_logsFiltered.Count == 0)
+            {
+                setMinionsDamageLogs(instidFilter, bossData, combatList, agentData, minion_damage_logsFiltered);
+            }
+            if (instidFilter == 0)
+            {
+                return minion_damage_logs;
+            }
+            else
+            {
+                return minion_damage_logsFiltered;
+            }
         }
         public List<DamageLog> getJustPlayerDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
             List<ushort> minionList = getCombatMinionList(bossData, combatList, agentData);
-            List<DamageLog> dls = new List<DamageLog>();
-            foreach (DamageLog dl in getDamageLogs(instidFilter, bossData, combatList, agentData)) {
-                if (combatMinionIDList.Contains(dl.getInstidt()))
-                {
-                    continue;
-                }
-                else {
-                    dls.Add(dl);
-                }
-            }
-            return dls;
+            return getDamageLogs(instidFilter, bossData, combatList, agentData).Where(x => !minionList.Contains(x.getInstidt())).ToList();
         }
-        public List<int[]> getBossDPSGraph() {
+        public List<int[]> getBossDPSGraph()
+        {
             return new List<int[]>(bossdpsGraph);
         }
-
+        // Public methods
+        public void setBossDPSGraph(List<int[]> list)
+        {
+            bossdpsGraph = new List<int[]>(list);
+        }
         // Private Methods
         protected virtual void setDamageLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
@@ -308,7 +328,7 @@ namespace LuckParser.Models.ParseModels
 
             }
         }
-        private void setFilteredLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData,int instidFilter)
+        private void setFilteredLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
@@ -460,15 +480,6 @@ namespace LuckParser.Models.ParseModels
             }
 
         }
-        public List<CastLog> getCastLogs( BossData bossData, List<CombatItem> combatList, AgentData agentData)
-        {
-            if (cast_logs.Count == 0)
-            {
-                setCastLogs(bossData, combatList, agentData);
-            }
-            return cast_logs;
-        
-        }
         private void setCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
             long time_start = bossData.getFirstAware();
             CastLog curCastLog = null;
@@ -519,10 +530,46 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-           
+
         }
-        public void setBossDPSGraph(List<int[]> list) {
-           bossdpsGraph = new List<int[]>(list);
+        private List<ushort> getCombatMinionList(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        {
+            if (combatMinionIDList.Count == 0)
+            {
+                combatMinionIDList = combatList.Where(x => x.getSrcMasterInstid() == instid && ((x.getValue() != 0 && x.isBuff() == 0) || (x.isBuff() == 1 && x.getBuffDmg() != 0))).Select(x => x.getSrcInstid()).Distinct().ToList();
+            }
+            return combatMinionIDList;
         }
+        private List<DamageLog> getMinionDamageLogs(int instidFilter, long srcagent, BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        {
+            List<DamageLog> dls = getDamageLogs(instidFilter, bossData, combatList, agentData).Where(x => x.getSrcAgent() == srcagent).ToList();
+            return dls;
+        }
+        private void setMinionsDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData, Dictionary<AgentItem, List<DamageLog>> toFill)
+        {
+            List<ushort> minionList = getCombatMinionList(bossData, combatList, agentData);
+            foreach (int petid in minionList)
+            {
+                AgentItem agent = agentData.getNPCAgentList().FirstOrDefault(x => x.getInstid() == petid);
+                if (agent != null)
+                {
+                    List<DamageLog> damageLogs = getMinionDamageLogs(instidFilter, agent.getAgent(), bossData, combatList, agentData);
+                    if (damageLogs.Count == 0)
+                    {
+                        continue;
+                    }
+                    AgentItem key = toFill.Keys.ToList().FirstOrDefault(x => x.getName() == agent.getName());
+                    if (key == null)
+                    {
+                        toFill[agent] = damageLogs;
+                    }
+                    else
+                    {
+                        toFill[key].AddRange(damageLogs);
+                    }
+                }
+            }
+        }
+
     }
 }
