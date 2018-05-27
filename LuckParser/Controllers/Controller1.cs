@@ -951,12 +951,12 @@ namespace LuckParser.Controllers
                             {
 
                                // rate = String.Format("{0:0.00}", Statistics.getBoonUptime(boon_object, logs, b_data,1)[0]);
-                                rate = Math.Round(Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data),1).ToString() + "%";//these 2 are problamatic
+                                rate = Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data).ToString() + "%";//these 2 are problamatic
                             }
                             else if (boon.getType().Equals("intensity"))
                             {
                                // rate = String.Format("{0:0.00}", Statistics.getBoonUptime(boon_object, logs, b_data, 1)[0]);
-                                rate = Math.Round(Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)),1).ToString();//issues
+                                rate = Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)).ToString();//issues
                             }
                         }
                         else//generation
@@ -2265,7 +2265,8 @@ namespace LuckParser.Controllers
                                 }
                                 if (boonArray.ContainsKey(boon.getID()))
                                 {
-                                    sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
+                                    string toWrite = Math.Round(float.Parse(boonArray[boon.getID()].Trim('%')), 1) + (intensityBoon.Contains(count) ? "" : "%");
+                                    sw.Write("<td>" + toWrite + "</td>");
                                     boonArrayToList.Add(boonArray[boon.getID()]);
                                 }
                                 else
