@@ -181,20 +181,22 @@ namespace LuckParser.Models.ParseModels
                         APIClient.DefaultRequestHeaders.Accept.Clear();
                         APIClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                     }
-
-                    //System.Threading.Thread.Sleep(100);
-                    GW2APISpec spec = null;
-                    HttpResponseMessage response = APIClient.GetAsync("/v2/specializations/" + is_elite).Result;
-                    if (response.IsSuccessStatusCode)
+                    if (APIClient != null)
                     {
-                        spec = response.Content.ReadAsAsync<GW2APISpec>().Result;
-                        if (spec.elite)
+                        //System.Threading.Thread.Sleep(100);
+                        GW2APISpec spec = null;
+                        HttpResponseMessage response = APIClient.GetAsync("/v2/specializations/" + is_elite).Result;
+                        if (response.IsSuccessStatusCode)
                         {
-                            return spec.name;
-                        }
-                        else
-                        {
-                            return spec.profession;
+                            spec = response.Content.ReadAsAsync<GW2APISpec>().Result;
+                            if (spec.elite)
+                            {
+                                return spec.name;
+                            }
+                            else
+                            {
+                                return spec.profession;
+                            }
                         }
                     }
                 }

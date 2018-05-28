@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
                 if (total > 0 && boon_stack[i + 1] > long.MaxValue - total)
                 {
                     //Overflow
-                    return int.MaxValue;
+                    return long.MaxValue;
                 }
                 else {
                     //ok
@@ -41,7 +41,7 @@ namespace LuckParser.Models.ParseModels
             if (boon_stack.Count() > 0)
             {
                 // Clear stack
-                if (time_passed >= (long)getStackValue())
+                if (time_passed >= getStackValue())
                 {
                     boon_stack.Clear();
                     return;
@@ -49,11 +49,11 @@ namespace LuckParser.Models.ParseModels
                 // Remove from the longest duration
                 else
                 {
-                    boon_stack[0] = (int)((long)boon_stack[0] - time_passed);
+                    boon_stack[0] = (int)(boon_stack[0] - time_passed);
                     if (boon_stack[0] <= 0)
                     {
                         // Spend leftover time
-                        time_passed = (long)Math.Abs(boon_stack[0]);
+                        time_passed = Math.Abs(boon_stack[0]);
                         boon_stack.RemoveAt(0);
                         update(time_passed);
                     }

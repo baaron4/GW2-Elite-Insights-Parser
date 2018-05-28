@@ -84,6 +84,8 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\ParseModels\Boss.cs" />
+    <Compile Include="Models\ParseModels\CondiDamageLog.cs" />
     <Compile Include="Models\ParseModels\GW2APISkillCheck.cs" />
     <Compile Include="Models\ParseModels\GW2APISkillDetailed.cs" />
     <Compile Include="Models\ParseModels\GW2APIfacts.cs" />
@@ -116,6 +118,7 @@
     <Compile Include="Models\ParseModels\MechanicData.cs" />
     <Compile Include="Models\ParseModels\MechanicLog.cs" />
     <Compile Include="Models\ParseModels\Player.cs" />
+    <Compile Include="Models\ParseModels\PowerDamageLog.cs" />
     <Compile Include="Models\ParseModels\SkillData.cs" />
     <Compile Include="Models\ParseModels\SkillItem.cs" />
     <Compile Include="Models\ParseModels\Statistics.cs" />
