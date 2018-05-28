@@ -108,10 +108,10 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Protection", 717, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/6/6c/Protection.png"),
                 new Boon("Regeneration", 718, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/5/53/Regeneration.png"),
                 new Boon("Vigor", 726, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/f/f4/Vigor.png"),
-                new Boon("Aegis", 743, BoonSource.Mixed, "duration", 9, BoonEnum.Boon, "https://wiki.guildwars2.com/images/e/e5/Aegis.png"),
+                new Boon("Aegis", 743, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/e/e5/Aegis.png"),
                 new Boon("Stability", 1122, BoonSource.Mixed, "intensity", 25, BoonEnum.Boon, "https://wiki.guildwars2.com/images/a/ae/Stability.png"),
                 new Boon("Swiftness", 719, BoonSource.Mixed, "duration", 9, BoonEnum.Boon, "https://wiki.guildwars2.com/images/a/af/Swiftness.png"),
-                new Boon("Retaliation", 873, BoonSource.Mixed, "duration", 9, BoonEnum.Boon, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
+                new Boon("Retaliation", 873, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
                 new Boon("Resistance", 26980, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/thumb/e/e9/Resistance_40px.png/20px-Resistance_40px.png"),
                 // Condis         
                 new Boon("Bleeding", 736, BoonSource.Mixed, "intensity", 1500, BoonEnum.Condition, "https://wiki.guildwars2.com/images/thumb/3/33/Bleeding.png/20px-Bleeding.png"),
@@ -128,7 +128,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Weakness", 742, BoonSource.Mixed, "duration", 5, BoonEnum.Condition, "https://wiki.guildwars2.com/images/thumb/f/f9/Weakness.png/20px-Weakness.png"),
                 new Boon("Taunt", 27705, BoonSource.Mixed, "duration", 5, BoonEnum.Condition, "https://wiki.guildwars2.com/images/thumb/c/cc/Taunt.png/20px-Taunt.png"),
                 new Boon("Vulnerability", 738, BoonSource.Mixed, "intensity", 25, BoonEnum.Condition, "https://wiki.guildwars2.com/images/thumb/a/af/Vulnerability.png/20px-Vulnerability.png"),
-                new Boon("Retaliation", 873, BoonSource.Mixed, "duration", 9, BoonEnum.Condition, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
+                new Boon("Retaliation", 873, BoonSource.Mixed, "duration", 5, BoonEnum.Condition, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
                 // Generic
                 new Boon("Stealth", 13017, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Revealed", 890, BoonSource.Mixed, "duration", 1, BoonEnum.NonShareableBuff),
