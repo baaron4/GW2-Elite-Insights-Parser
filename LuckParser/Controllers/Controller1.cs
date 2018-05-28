@@ -29,7 +29,7 @@ namespace LuckParser.Controllers
                 return ms.ToArray();
             }
         }
-
+        private GW2APIController APIContrioller = new GW2APIController();
 
         // Private Methods
         //for pulling from binary
@@ -258,25 +258,25 @@ namespace LuckParser.Controllers
                 if (a != null)
                 {
                     // NPC
-                    if (a.getProf(this.log_data.getBuildVersion()) == "NPC")
+                    if (a.getProf(this.log_data.getBuildVersion(),APIContrioller) == "NPC")
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0')), this.log_data.getBuildVersion());//a.getName() + ":" + String.format("%05d", prof)));
+                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0')), this.log_data.getBuildVersion(), APIContrioller);//a.getName() + ":" + String.format("%05d", prof)));
                     }
                     // Gadget
-                    else if (a.getProf(this.log_data.getBuildVersion()) == "GDG")
+                    else if (a.getProf(this.log_data.getBuildVersion(), APIContrioller) == "GDG")
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0')), this.log_data.getBuildVersion());//a.getName() + ":" + String.format("%05d", prof & 0x0000ffff)));
+                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0')), this.log_data.getBuildVersion(), APIContrioller);//a.getName() + ":" + String.format("%05d", prof & 0x0000ffff)));
                     }
                     // Player
                     else
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getProf(this.log_data.getBuildVersion()), toughness, healing, condition), this.log_data.getBuildVersion());
+                        agent_data.addItem(a, new AgentItem(agent, name, a.getProf(this.log_data.getBuildVersion(), APIContrioller), toughness, healing, condition), this.log_data.getBuildVersion(), APIContrioller);
                     }
                 }
                 // Unknown
                 else
                 {
-                    agent_data.addItem(a, new AgentItem(agent, name, prof.ToString(), toughness, healing, condition), this.log_data.getBuildVersion());
+                    agent_data.addItem(a, new AgentItem(agent, name, prof.ToString(), toughness, healing, condition), this.log_data.getBuildVersion(), APIContrioller);
                 }
             }
           
