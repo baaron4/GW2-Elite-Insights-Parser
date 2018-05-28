@@ -2595,8 +2595,10 @@ namespace LuckParser.Controllers
                                 {
                                     if (SnapSettings[6])//Display rotation
                                     {
+                                        bool flipFlop = true;
                                         foreach (CastLog cl in casting)
                                         {
+
                                             string skillName = "";
                                             GW2APISkill skill = null;
                                             if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
@@ -2636,7 +2638,17 @@ namespace LuckParser.Controllers
                                             skillName = skillName.Replace("\"", "");
                                             sw.Write("{");
                                             {
-                                                sw.Write("y: ['1.5']," +
+                                                flipFlop = !flipFlop;
+                                                if (flipFlop)
+                                                {
+                                                    sw.Write("y: ['1.5'],");
+                                                }
+                                                else
+                                                {
+                                                    sw.Write("y: ['1.49'],");
+                                                }
+                                                
+                                               sw.Write(
                                                       "x: ['" + dur + "']," +
                                                       "base:'" + cl.getTime() / 1000f + "'," +
                                                       "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
@@ -2686,7 +2698,7 @@ namespace LuckParser.Controllers
                                                     {
                                                         sw.Write("color: 'rgb(220,220,0)',");
                                                     }
-                                                    sw.Write("width: 5,");
+                                                    sw.Write("width: '5',");
                                                     sw.Write("line:{");
                                                     {
                                                         if (cl.startActivation() != null)
@@ -2700,7 +2712,7 @@ namespace LuckParser.Controllers
                                                                 sw.Write("color: 'rgb(220,40,220)',");
                                                             }
                                                         }
-                                                        sw.Write("width: 1");
+                                                        sw.Write("width: '1'");
                                                     }
                                                     sw.Write("}");
                                                 }
@@ -2781,7 +2793,7 @@ namespace LuckParser.Controllers
                                                     {
                                                         sw.Write(" visible: 'legendonly',");
                                                     }
-                                                    sw.Write("line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
+                                                    sw.Write("line: {shape: 'hv', color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
                                                     sw.Write("fill: 'tozeroy'," +
                                                             "name: \"" + bgm.getBoonName() + "\"");
                                                 }
