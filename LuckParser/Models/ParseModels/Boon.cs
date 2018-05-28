@@ -474,6 +474,13 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Bountiful Maintenance Oil",-1, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
                 new Boon("Toxic Focusing Crystal",-1, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/d/de/Toxic_Focusing_Crystal.png"),
             };
+        // debug
+        public static List<Boon> getBoonByName(string name)
+        {
+            return allBoons.Where(x => x.getName() == name).ToList();
+        }
+
+
         // Conditions
         public static List<Boon> getCondiBoonList()
         {

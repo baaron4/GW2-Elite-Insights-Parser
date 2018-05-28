@@ -34,21 +34,6 @@ namespace LuckParser.Models.ParseModels
 
             return doubles;
         }
-        public static double[] getBoonGenUptime(AbstractBoon boon, List<BoonLog> boon_logs, BossData b_data,int players) {
-            double fight_duration = b_data.getLastAware() - b_data.getFirstAware();
-            double boonDur = 0.00;
-            double os = 0.00;
-            if (players <= 0) {
-                players = 1;
-            }
-            foreach (BoonLog bl in boon_logs) {
-                boonDur = boonDur + bl.getValue();
-                os = os + bl.getOverstack();
-            }
-            double[] doubles = {(boonDur -os)/(fight_duration*players), boonDur/(fight_duration*players) };
-            
-            return  doubles ;
-        }
         public static List<Point> getBoonIntervalsList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data)
         { 
             // Initialise variables
