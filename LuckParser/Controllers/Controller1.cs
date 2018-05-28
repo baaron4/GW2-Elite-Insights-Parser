@@ -914,71 +914,98 @@ namespace LuckParser.Controllers
             String[] statsArray = new string[] { resurrects.ToString(), (restime/1000f).ToString(), condiCleanse.ToString(), (condiCleansetime/1000f).ToString() };
             return statsArray;
         }
-        private Dictionary<int, string> getfinalboons(Player p, List<int> trgetPlayers)
+        private Dictionary<int, string> getfinalboons(Player p)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
-            List<BoonMap> boon_logs = new List<BoonMap>();
+            BoonMap boon_logs = p.getBoonMap(b_data, s_data, c_data.getCombatList());
+            List<int> aaa = new List<int>();
+            aaa.Add(p.getInstid());
+            Dictionary<int, BoonMap> boon_logsGen = p.getBoonGen(b_data, s_data, c_data.getCombatList(), agent_data, aaa);
+            List<Boon> boon_list = Boon.getAllProfList();
+            int n = boon_list.Count();//# of diff boons
+            Dictionary<int, string> rates = new Dictionary<int, string>();
+            for (int i = 0; i < n; i++)
+            {
+                Boon boon = boon_list[i];
+                string rate = "0";
+                // Boon boon = Boon.getEnum(boon_list[i].ToString());
+                if (boon_logs.ContainsKey(boon_list[i].getID()))
+                {
+                    AbstractBoon boon_object = BoonFactory.makeBoon(boon);
+                    List<BoonLog> logs = boon_logs[boon.getID()];
+                    if (logs.Count() > 0)
+                    {
+                        if (boon.getType().Equals("duration"))
+                        {
+                            rate = Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data).ToString() + "%";//these 2 are problamatic
+                        }
+                        else if (boon.getType().Equals("intensity"))
+                        {
+                            rate = Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)).ToString();//issues
+                        }
+                    }
+                }
+                rates[boon.getID()] = rate;
+            }
+            //table.addrow(utility.concatstringarray(new string[] { p.getcharacter(), p.getprof() }, rates));
+            return rates;
+        }
+        private Dictionary<int, string> getfinalboons(Player p, List<int> trgetPlayers)
+        {
             if (trgetPlayers.Count() == 0)
             {
-                boon_logs = p.getBoonMap(b_data, s_data, c_data.getCombatList());
+                return getfinalboons(p);
             }
-            else
-            {
-                boon_logs = p.getBoonGen(b_data, s_data, c_data.getCombatList(), agent_data, trgetPlayers);
-            }
+
+            BossData b_data = getBossData();
+            CombatData c_data = getCombatData();
+            SkillData s_data = getSkillData();
+            Dictionary<int, BoonMap> boon_logsGen = p.getBoonGen(b_data, s_data, c_data.getCombatList(), agent_data, trgetPlayers);
 
             List<Boon> boon_list = Boon.getAllProfList();
             int n = boon_list.Count();//# of diff boons
-            Dictionary<int,string> rates = new Dictionary<int, string>();
+            Dictionary<int, string> rates = new Dictionary<int, string>();
             for (int i = 0; i < n; i++)
             {
-                // Boon boon = Boon.getEnum(boon_list[i].ToString());
                 Boon boon = boon_list[i];
-                AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                BoonMap bm = boon_logs.FirstOrDefault(x=>x.getID() == boon.getID());
-                if (bm != null)
+                string rate = "0";
+                double total = 0.0;
+                foreach (int player_id in trgetPlayers)
                 {
-                    List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
-                    string rate = "0";
-                    if (logs.Count() > 0)
+                    BoonMap boon_logs = boon_logsGen[player_id];
+                    // Boon boon = Boon.getEnum(boon_list[i].ToString());
+                    if (boon_logs.ContainsKey(boon_list[i].getID()))
                     {
-
-                        if (trgetPlayers.Count() == 0)//personal uptime
+                        AbstractBoon boon_object = BoonFactory.makeBoon(boon);
+                        List<BoonLog> logs = boon_logs[boon.getID()];
+                        if (logs.Count() > 0)
                         {
                             if (boon.getType().Equals("duration"))
                             {
-
-                               // rate = String.Format("{0:0.00}", Statistics.getBoonUptime(boon_object, logs, b_data,1)[0]);
-                                rate = Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data).ToString() + "%";//these 2 are problamatic
+                                total += Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data);
                             }
                             else if (boon.getType().Equals("intensity"))
                             {
-                               // rate = String.Format("{0:0.00}", Statistics.getBoonUptime(boon_object, logs, b_data, 1)[0]);
-                                rate = Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)).ToString();//issues
+                                total += Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data));
                             }
                         }
-                        else//generation
-                        {
-                            if (boon.getType().Equals("duration"))
-                            {
-                                double[] array = Statistics.getBoonUptime(boon_object, logs, b_data, trgetPlayers.Count());
-                                rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + Math.Round(array[1] * 100.0, 1) + "% with overstack \">" + Math.Round(array[0] * 100.0, 1) + "%</span>";
-                            }
-                            else if (boon.getType().Equals("intensity"))
-                            {
-                                double[] array = Statistics.getBoonUptime(boon_object, logs, b_data, trgetPlayers.Count());
-                                rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" + Math.Round(array[1],1) + "with overstack \">" + Math.Round(array[0], 1) + "</span>";
-                            }
-                        }
-
                     }
-                    rates[boon.getID()] = rate;
                 }
-                else {
-                    rates[boon.getID()] = "0";
+                if (total > 0)
+                {
+                    if (boon.getType().Equals("duration"))
+                    {
+                        rate = Math.Round(total/trgetPlayers.Count,1) + "%";
+                    }
+                    else if (boon.getType().Equals("intensity"))
+                    {
+                        rate = Math.Round(total/trgetPlayers.Count, 1).ToString();
+                    }
+
                 }
+                rates[boon.getID()] = rate;
             }
             //table.addrow(utility.concatstringarray(new string[] { p.getcharacter(), p.getprof() }, rates));
             return rates;
@@ -988,7 +1015,7 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
-            List<BoonMap> boon_logs = p.getCondiBoonMap(b_data, s_data, c_data.getCombatList());
+            BoonMap boon_logs = p.getCondiBoonMap(b_data, s_data, c_data.getCombatList());
             List<Boon> boon_list = Boon.getCondiBoonList();
             int n = boon_list.Count();//# of diff boons
             string[] rates = new string[n];
@@ -996,11 +1023,10 @@ namespace LuckParser.Controllers
             {
                 // Boon boon = Boon.getEnum(boon_list[i].ToString());
                 Boon boon = boon_list[i];
-                AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                BoonMap bm = boon_logs.FirstOrDefault(x => x.getID() == boon.getID());
-                if (bm != null)
+                if (boon_logs.ContainsKey(boon.getID()))
                 {
-                    List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
+                    AbstractBoon boon_object = BoonFactory.makeBoon(boon);
+                    List<BoonLog> logs = boon_logs[boon.getID()];
                     string rate = "0";
                     if (logs.Count() > 0)
                     {
@@ -1101,17 +1127,16 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
-            List<BoonMap> boon_logs = p.getBoonMap(b_data, s_data, c_data.getCombatList());
+            BoonMap boon_logs = p.getBoonMap(b_data, s_data, c_data.getCombatList());
             int n = boon_list.Count();//# of diff boons
 
             for (int i = 0; i < n; i++)//foreach boon
             {
                 Boon boon = boon_list[i];
-                AbstractBoon boon_object = BoonFactory.makeBoon(boon);
-                BoonMap bm = boon_logs.FirstOrDefault(x => x.getID() == boon.getID());
-                if (bm != null)
+                if (boon_logs.ContainsKey(boon.getID()))
                 {
-                    List<BoonLog> logs = bm.getBoonLog();//Maybe wrong pretty sure it ok tho
+                    AbstractBoon boon_object = BoonFactory.makeBoon(boon);
+                    List<BoonLog> logs = boon_logs[boon.getID()];//Maybe wrong pretty sure it ok tho
 
                     List<Point> pointlist = new List<Point>();
                     if (logs.Count() > 0)

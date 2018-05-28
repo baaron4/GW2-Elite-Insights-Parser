@@ -5,47 +5,47 @@ using System.Web;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class BoonMap
+    public class BoonMap : Dictionary<int, List<BoonLog>>
     {
-        // Fields
-        private String name;
-        private int boonID;
-        private List<BoonLog> b_log;
-        
         // Constructors
-        public BoonMap(String name,int boonID, List<BoonLog> b_log)
+        public BoonMap() : base()
         {
-            this.name = name;
-            this.boonID = boonID;
-            this.b_log = b_log;
         }
-
-        // Public Methods
-       
-
-        // Getters
-        public String getName()
+        public BoonMap(Boon boon): base()
         {
-            return name;
-        }
-        public int getID() {
-            return boonID;
+            this[boon.getID()] = new List<BoonLog>();
         }
 
-        public List<BoonLog> getBoonLog()
+        public BoonMap(List<Boon> boons) : base()
         {
-            return b_log;
+            foreach (Boon boon in boons)
+            {
+                this[boon.getID()] = new List<BoonLog>();
+            }
         }
 
 
-
-        // Setters
-
-        public void setBoonLog(List<BoonLog> bloglist)
+        public void add(List<Boon> boons)
         {
-            this.b_log = bloglist;
+            foreach (Boon boon in boons)
+            {
+                if (ContainsKey(boon.getID()))
+                {
+                    continue;
+                }
+                this[boon.getID()] = new List<BoonLog>();
+            }
         }
 
+        public void add(Boon boon)
+        {
+            if (ContainsKey(boon.getID()))
+            {
+                return;
+            }
+            this[boon.getID()] = new List<BoonLog>();
+        }
+        
     }
 
 }
