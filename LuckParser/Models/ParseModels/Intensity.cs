@@ -68,7 +68,7 @@ namespace LuckParser.Models.ParseModels
                 // Remove minimum duration from stack
                 for (long i = 1; i < time_between; i++)
                 {
-                    if ((i - time_passed) >= (long)min_duration)
+                    if ((i - time_passed) >= min_duration)
                     {
                         boon_copy.update(i - time_passed);
                         if (stacks.Count() > 0)

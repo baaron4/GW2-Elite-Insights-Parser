@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
             }
             foreach (BoonLog bl in boon_logs)
             {
-                if ((long)bl.getValue() + bl.getTime() > fight_duration)
+                if (bl.getValue() + bl.getTime() > fight_duration)
                 {
                     os = os + (bl.getValue() - (fight_duration - bl.getTime())) + bl.getOverstack();
                 }
@@ -50,7 +50,7 @@ namespace LuckParser.Models.ParseModels
             return  doubles ;
         }
         public static List<Point> getBoonIntervalsList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data)
-        {
+        { 
             // Initialise variables
             long t_prev = 0;
             long t_curr = 0;
@@ -61,8 +61,8 @@ namespace LuckParser.Models.ParseModels
             {
                 t_curr = log.getTime();
                 boon.update(t_curr - t_prev);
-                boon.add((int)log.getValue());
-                long duration = t_curr + (long)boon.getStackValue();
+                boon.add(log.getValue());
+                long duration = t_curr + boon.getStackValue();
                 if (duration < 0) {
                     duration = long.MaxValue;
                 }
@@ -76,17 +76,17 @@ namespace LuckParser.Models.ParseModels
             // Trim duration overflow
             long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
             int last = boon_intervals.Count() - 1;
-            if ((long)boon_intervals[last].Y > fight_duration)
+            if (boon_intervals[last].Y > fight_duration)
             {
                 Point mod = boon_intervals[last];
                 mod.Y = (int)fight_duration;
                 boon_intervals[last] = mod;
             }
-
+            
             return boon_intervals;
         }
 
-        public static String getBoonDuration(List<Point> boon_intervals,BossData b_data)
+        public static double getBoonDuration(List<Point> boon_intervals,BossData b_data)
         {
             // Calculate average duration
             double average_duration = 0.0;
@@ -98,7 +98,7 @@ namespace LuckParser.Models.ParseModels
             /*if (number > 100) {
                 int stop = 0;
             }*/
-            return String.Format("{0:0}%",number);
+            return number;
         }
 
       
@@ -136,16 +136,13 @@ namespace LuckParser.Models.ParseModels
             return boon_stacks;
         }
 
-        public static String getAverageStacks(List<long> boon_stacks)
+        public static double getAverageStacks(List<long> boon_stacks)
         {
             // Calculate average stacks
             double average_stacks = boon_stacks.Sum();
             double average = average_stacks / boon_stacks.Count();
             
-
-            return String.Format("{0:0.00}", average);
-            
-           
+            return average;         
         }
 
        
