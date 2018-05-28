@@ -159,50 +159,7 @@ namespace LuckParser.Models.ParseModels
                     long time = c.getTime() - time_start;
                     if (id == c.getDstInstid() && time > 0 && time < fight_duration)//selecting player or minion as caster
                     {
-                        if (c.isBuffremove().getID() == 0)
-                        {//Buff application
-                            boonGen[id][c.getSkillID()].Add(new BoonLog(time, c.getValue(), c.getOverstackValue()));
-                        }
-                        else if (c.isBuffremove().getID() == 1)//All
-                        {
-                            List<BoonLog> loglist = boonGen[id][c.getSkillID()];
-                            for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
-                            {
-                                BoonLog curBL = loglist[cnt];
-                                if (curBL.getTime() + curBL.getValue() > time)
-                                {
-                                    long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                    loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract, c.getOverstackValue()+ subtract);
-                                }
-                            }
-
-                        }
-                        else if (c.isBuffremove().getID() == 2)//Single
-                        {
-                            List<BoonLog> loglist = boonGen[id][c.getSkillID()];
-                            int cnt = loglist.Count() - 1;
-                            BoonLog curBL = loglist[cnt];
-                            if (curBL.getTime() + curBL.getValue() > time)
-                            {
-                                long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract, c.getOverstackValue() + subtract);
-                            }
-                        }
-                        else if (c.isBuffremove().getID() == 3 && c.getValue() > 1000)//Manuel
-                        {
-                            List<BoonLog> loglist = boonGen[id][c.getSkillID()];
-                            for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
-                            {
-                                BoonLog curBL = loglist[cnt];
-                                long ctime = curBL.getTime() + curBL.getValue();
-                                if (ctime > time)
-                                {
-                                    long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                    loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract, c.getOverstackValue() + subtract);
-                                    break;
-                                }
-                            }
-                        }
+                        addBoonLog(time, c, boonGen[id]);
                     }
                 }
             }
@@ -317,7 +274,54 @@ namespace LuckParser.Models.ParseModels
             bossdpsGraph = new List<int[]>(list);
         }
         // Private Methods
+        private void addBoonLog(long time, CombatItem c, BoonMap toFill)
+        {
+            if (c.isBuffremove().getID() == 0)
+            {
+                toFill[c.getSkillID()].Add(new BoonLog(time,c.getSrcInstid(), c.getValue(), c.getOverstackValue()));
+            }
+            else if (c.isBuffremove().getID() == 1)//All
+            {
+                List<BoonLog> loglist = toFill[c.getSkillID()];
+                for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
+                {
+                    BoonLog curBL = loglist[cnt];
+                    if (curBL.getTime() + curBL.getValue() > time)
+                    {
+                        long subtract = (curBL.getTime() + curBL.getValue()) - time;
+                        loglist[cnt].addValue(-subtract);
+                    }
+                }
 
+            }
+            else if (c.isBuffremove().getID() == 2)//Single
+            {
+                List<BoonLog> loglist = toFill[c.getSkillID()];
+                int cnt = loglist.Count() - 1;
+                BoonLog curBL = loglist[cnt];
+                if (curBL.getTime() + curBL.getValue() > time)
+                {
+                    long subtract = (curBL.getTime() + curBL.getValue()) - time;
+                    loglist[cnt].addValue(-subtract);
+                }
+            }
+            else if (c.isBuffremove().getID() == 3)//Manuel
+            {
+                List<BoonLog> loglist = toFill[c.getSkillID()];
+                for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
+                {
+                    BoonLog curBL = loglist[cnt];
+                    long ctime = curBL.getTime() + curBL.getValue();
+                    if (ctime > time)
+                    {
+                        long subtract = (curBL.getTime() + curBL.getValue()) - time;
+                        loglist[cnt].addValue(-subtract);
+                        break;
+                    }
+                }
+
+            }
+        }
         protected void addDamageLog(long time, ushort instid, CombatItem c, List<DamageLog> toFill)
         {
             LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
@@ -430,51 +434,7 @@ namespace LuckParser.Models.ParseModels
                 long time = c.getTime() - time_start;
                 if (instid == c.getDstInstid() && time > 0 && time < fight_duration)
                 {
-                    if (c.isBuffremove().getID() == 0)
-                    {
-                        boon_map[c.getSkillID()].Add(new BoonLog(time, c.getValue()));
-                    }
-                    else if (c.isBuffremove().getID() == 1)//All
-                    {
-                        List<BoonLog> loglist = boon_map[c.getSkillID()];
-                        for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
-                        {
-                            BoonLog curBL = loglist[cnt];
-                            if (curBL.getTime() + curBL.getValue() > time)
-                            {
-                                long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract);
-                            }
-                        }
-
-                    }
-                    else if (c.isBuffremove().getID() == 2)//Single
-                    {
-                        List<BoonLog> loglist = boon_map[c.getSkillID()];
-                        int cnt = loglist.Count() - 1;
-                        BoonLog curBL = loglist[cnt];
-                        if (curBL.getTime() + curBL.getValue() > time)
-                        {
-                            long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                            loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract);
-                        }
-                    }
-                    else if (c.isBuffremove().getID() == 3 && c.getValue() > 1000)//Manuel
-                    {
-                        List<BoonLog> loglist = boon_map[c.getSkillID()];
-                        for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
-                        {
-                            BoonLog curBL = loglist[cnt];
-                            long ctime = curBL.getTime() + curBL.getValue();
-                            if (ctime > time)
-                            {
-                                long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                loglist[cnt] = new BoonLog(curBL.getTime(), curBL.getValue() - subtract);
-                                break;
-                            }
-                        }
-
-                    }
+                    addBoonLog(time, c, boon_map);
                 }
             }
 
