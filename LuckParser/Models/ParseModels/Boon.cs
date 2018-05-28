@@ -342,12 +342,12 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Signet of Agility",13061, BoonSource.Thief, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Signet of Shadows",13059, BoonSource.Thief, "duration", 1, BoonEnum.NonShareableBuff),
                 //venoms
-                new Boon("Skelk Venom",-1, BoonSource.Thief, "intensity", 4, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
+                new Boon("Skelk Venom",-1, BoonSource.Thief, "intensity", 5, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
                 new Boon("Ice Drake Venom",13095, BoonSource.Thief, "intensity", 4, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
                 new Boon("Devourer Venom", 13094, BoonSource.Thief, "intensity", 2, BoonEnum.OffensiveBuff, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
                 new Boon("Skale Venom", 13036, BoonSource.Thief, "intensity", 4, BoonEnum.OffensiveBuff, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
                 new Boon("Spider Venom",13036, BoonSource.Thief, "intensity", 6, BoonEnum.OffensiveBuff, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
-                new Boon("Basilisk Venom", 13133, BoonSource.Thief, "intensity", 6, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
+                new Boon("Basilisk Venom", 13133, BoonSource.Thief, "intensity", 1, BoonEnum.DefensiveBuff, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
                 //physical
                 new Boon("Palm Strike",30423, BoonSource.Thief, "duration", 1, BoonEnum.NonShareableBuff),
                 new Boon("Pulmonary Impact",30510, BoonSource.Thief, "intensity", 2, BoonEnum.NonShareableBuff),
