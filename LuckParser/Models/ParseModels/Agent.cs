@@ -4,14 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Net.Http;
 using System.Net.Http.Formatting;
-
+using LuckParser.Controllers;
 
 namespace LuckParser.Models.ParseModels
 {
 
     public class Agent
     {
-        
+
         // Constants
         //NPC(-1, "NPC"),
         //GADGET(0, "GDG"),
@@ -41,7 +41,7 @@ namespace LuckParser.Models.ParseModels
         private int prof;
 
         // Constructor
-       public Agent(long ID, String name, int prof, int elite)
+        public Agent(long ID, String name, int prof, int elite)
         {
             this.name = name;
             this.ID = ID;
@@ -50,7 +50,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Public Methods
-        public string getProf(string build) {
+        public string getProf(string build, GW2APIController apiController) {
             if (is_elite == -1) {
                 if ((ID & 0xffff0000) == 0xffff0000)
                 {
@@ -60,7 +60,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     return "NPC";
                 }
-            }else if (is_elite == 0)
+            } else if (is_elite == 0)
             {
                 switch (prof)
                 {
@@ -82,14 +82,14 @@ namespace LuckParser.Models.ParseModels
                         return "Necromancer";
                     case 9:
                         return "Revenant";
-                    
+
 
                 }
 
 
             }
             else if (Convert.ToInt32(build.Substring(4, 8)) < 20170914) {
-                
+
                 if (is_elite == 1)
                 {
                     switch (prof + 9)
@@ -112,7 +112,7 @@ namespace LuckParser.Models.ParseModels
                             return "Reaper";
                         case 18:
                             return "Herald";
-                        
+
 
                     }
 
@@ -145,7 +145,7 @@ namespace LuckParser.Models.ParseModels
 
                     }
 
-                }else
+                } else
                 if (is_elite > 1)
                 {
                     switch (is_elite)
@@ -168,44 +168,30 @@ namespace LuckParser.Models.ParseModels
                             return "Firebrand";
                         case 63:
                             return "Renegade";
-                       
-                           
+
+
 
                     }
-                    //Connecting to API everytime would be bad so
-                    HttpClient APIClient = null;
-                    if (APIClient == null)
+
+                    GW2APISpec spec = apiController.GetSpec(is_elite);
+                    if (spec.elite)
                     {
-                        APIClient = new HttpClient();
-                        APIClient.BaseAddress = new Uri("https://api.guildwars2.com");
-                        APIClient.DefaultRequestHeaders.Accept.Clear();
-                        APIClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                        return spec.name;
                     }
-                    if (APIClient != null)
+                    else
                     {
-                        //System.Threading.Thread.Sleep(100);
-                        GW2APISpec spec = null;
-                        HttpResponseMessage response = APIClient.GetAsync("/v2/specializations/" + is_elite).Result;
-                        if (response.IsSuccessStatusCode)
-                        {
-                            spec = response.Content.ReadAsAsync<GW2APISpec>().Result;
-                            if (spec.elite)
-                            {
-                                return spec.name;
-                            }
-                            else
-                            {
-                                return spec.profession;
-                            }
-                        }
+                        return spec.profession;
                     }
+
                 }
-               
-                
             }
-     
+
             return null;
         }
+     
+           
+        
+
         // Getters
         public String getName()
         {

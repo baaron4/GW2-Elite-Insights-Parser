@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -19,13 +20,13 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Public Methods
-        public void addItem(Agent agent, AgentItem item,string buildVersion)
+        public void addItem(Agent agent, AgentItem item,string buildVersion,GW2APIController apiController)
         {
-            if (agent.getProf(buildVersion) == "NPC")
+            if (agent.getProf(buildVersion, apiController) == "NPC")
             {
                 NPC_agent_list.Add(item);
             }
-            else if (agent.getProf(buildVersion) == "GDG")
+            else if (agent.getProf(buildVersion, apiController) == "GDG")
             {
                 gadget_agent_list.Add(item);
             }

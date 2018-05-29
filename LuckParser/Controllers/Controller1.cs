@@ -29,7 +29,7 @@ namespace LuckParser.Controllers
                 return ms.ToArray();
             }
         }
-
+        private GW2APIController APIContrioller = new GW2APIController();
 
         // Private Methods
         //for pulling from binary
@@ -258,25 +258,25 @@ namespace LuckParser.Controllers
                 if (a != null)
                 {
                     // NPC
-                    if (a.getProf(this.log_data.getBuildVersion()) == "NPC")
+                    if (a.getProf(this.log_data.getBuildVersion(),APIContrioller) == "NPC")
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0')), this.log_data.getBuildVersion());//a.getName() + ":" + String.format("%05d", prof)));
+                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0')), this.log_data.getBuildVersion(), APIContrioller);//a.getName() + ":" + String.format("%05d", prof)));
                     }
                     // Gadget
-                    else if (a.getProf(this.log_data.getBuildVersion()) == "GDG")
+                    else if (a.getProf(this.log_data.getBuildVersion(), APIContrioller) == "GDG")
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0')), this.log_data.getBuildVersion());//a.getName() + ":" + String.format("%05d", prof & 0x0000ffff)));
+                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0')), this.log_data.getBuildVersion(), APIContrioller);//a.getName() + ":" + String.format("%05d", prof & 0x0000ffff)));
                     }
                     // Player
                     else
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getProf(this.log_data.getBuildVersion()), toughness, healing, condition), this.log_data.getBuildVersion());
+                        agent_data.addItem(a, new AgentItem(agent, name, a.getProf(this.log_data.getBuildVersion(), APIContrioller), toughness, healing, condition), this.log_data.getBuildVersion(), APIContrioller);
                     }
                 }
                 // Unknown
                 else
                 {
-                    agent_data.addItem(a, new AgentItem(agent, name, prof.ToString(), toughness, healing, condition), this.log_data.getBuildVersion());
+                    agent_data.addItem(a, new AgentItem(agent, name, prof.ToString(), toughness, healing, condition), this.log_data.getBuildVersion(), APIContrioller);
                 }
             }
           
@@ -2595,8 +2595,10 @@ namespace LuckParser.Controllers
                                 {
                                     if (SnapSettings[6])//Display rotation
                                     {
+                                        bool flipFlop = true;
                                         foreach (CastLog cl in casting)
                                         {
+
                                             string skillName = "";
                                             GW2APISkill skill = null;
                                             if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
@@ -2636,7 +2638,17 @@ namespace LuckParser.Controllers
                                             skillName = skillName.Replace("\"", "");
                                             sw.Write("{");
                                             {
-                                                sw.Write("y: ['1.5']," +
+                                                flipFlop = !flipFlop;
+                                                if (flipFlop)
+                                                {
+                                                    sw.Write("y: ['1.5'],");
+                                                }
+                                                else
+                                                {
+                                                    sw.Write("y: ['1.49'],");
+                                                }
+                                                
+                                               sw.Write(
                                                       "x: ['" + dur + "']," +
                                                       "base:'" + cl.getTime() / 1000f + "'," +
                                                       "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
@@ -2686,7 +2698,7 @@ namespace LuckParser.Controllers
                                                     {
                                                         sw.Write("color: 'rgb(220,220,0)',");
                                                     }
-                                                    sw.Write("width: 5,");
+                                                    sw.Write("width: '5',");
                                                     sw.Write("line:{");
                                                     {
                                                         if (cl.startActivation() != null)
@@ -2700,7 +2712,7 @@ namespace LuckParser.Controllers
                                                                 sw.Write("color: 'rgb(220,40,220)',");
                                                             }
                                                         }
-                                                        sw.Write("width: 1");
+                                                        sw.Write("width: '1'");
                                                     }
                                                     sw.Write("}");
                                                 }
@@ -2781,7 +2793,7 @@ namespace LuckParser.Controllers
                                                     {
                                                         sw.Write(" visible: 'legendonly',");
                                                     }
-                                                    sw.Write("line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
+                                                    sw.Write("line: {shape: 'hv', color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
                                                     sw.Write("fill: 'tozeroy'," +
                                                             "name: \"" + bgm.getBoonName() + "\"");
                                                 }
