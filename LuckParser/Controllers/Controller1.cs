@@ -2517,6 +2517,12 @@ namespace LuckParser.Controllers
             }
             sw.Write("</table>");
         }
+        /// <summary>
+        /// Create the squad buff generation table
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="list_to_use">Boon list to use</param>
+        /// <param name="table_id">id of the table</param>
         private void CreateGenSquadTable(StreamWriter sw, List<Boon> list_to_use, string table_id) {
             //Generate BoonGenSquad table
             sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
@@ -2572,6 +2578,11 @@ namespace LuckParser.Controllers
             }         
             sw.Write("</table>");
         }
+        /// <summary>
+        /// Creates the player tab
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="settingsSnap">Settings to use</param>
         private void CreatePlayerTab(StreamWriter sw, bool[] settingsSnap)
         {
             //generate Player list Graphs
@@ -4713,7 +4724,11 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             double fight_duration = (b_data.getLastAware() - b_data.getFirstAware()) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
-            String durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
+            string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
+            if (duration.ToString("hh").Length > 0)
+            {
+                durationString = duration.ToString("hh") + "h" + durationString;
+            }
             string bossname = FilterStringChars(b_data.getName());
             setPresentBoons(settingsSnap);
             string Html_playerDropdown = "";
