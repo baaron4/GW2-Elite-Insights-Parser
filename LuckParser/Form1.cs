@@ -242,6 +242,7 @@ namespace LuckParser
                             }
 
                             logger(i, "HTML Generated!", 100);
+                            logger(i, fcreate.Name, 100);
                         }
                         if (Properties.Settings.Default.SaveOutCSV)
                         {
@@ -261,6 +262,7 @@ namespace LuckParser
                             }
 
                             logger(i, "CSV Generated!", 100);
+                            logger(i, fcreate.Name, 100);
                         }
                     }
                     else
