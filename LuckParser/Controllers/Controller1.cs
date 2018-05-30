@@ -4702,7 +4702,7 @@ namespace LuckParser.Controllers
             string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
             if (duration.ToString("hh").Length > 0)
             {
-                durationString = duration.ToString("hh") + "h" + durationString;
+                durationString = duration.ToString("hh") + "h " + durationString;
             }
             string bossname = FilterStringChars(b_data.getName());
             setPresentBoons(settingsSnap);
