@@ -241,7 +241,7 @@ namespace LuckParser
                                 sw.Close();
                             }
 
-                            logger(i, "HTML Generated!", 100);
+                            logger(i, "HTML Generated!", 100);//keeping here for console usage
                             logger(i, fcreate.Name, 100);
                         }
                         if (Properties.Settings.Default.SaveOutCSV)
@@ -352,11 +352,13 @@ namespace LuckParser
 
                 ListViewItem item = new ListViewItem(file);
                 item.SubItems.Add(" ");
+                
                 listView1.Items.Add(item);
+                
 
             }
         }
-
+       
         private void listView1_DragDrop(object sender, DragEventArgs e)
         {
             btnStartAsyncOperation.Enabled = true;
@@ -403,6 +405,33 @@ namespace LuckParser
         private void label3_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void listView1_MouseMove_1(object sender, MouseEventArgs e)
+        {
+            var hit = listView1.HitTest(e.Location);
+            if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1]) listView1.Cursor = Cursors.Hand;
+            else listView1.Cursor = Cursors.Default;
+        }
+
+        private void listView1_MouseUp(object sender, MouseEventArgs e)
+        {
+            
+        }
+
+        private void listView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            var hit = listView1.HitTest(e.Location);
+            if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1])
+            {
+                string fileLoc = hit.SubItem.Text;
+                if (File.Exists(fileLoc))
+                {
+                    System.Diagnostics.Process.Start(fileLoc);
+                }
+                //var url = new Uri(hit.SubItem.Text);
+                // etc..
+            }
         }
     }
 }
