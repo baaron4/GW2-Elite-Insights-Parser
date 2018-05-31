@@ -18,17 +18,19 @@ all boons can be added to private static List<Boon> allBoons
 
   Format: ** Boon(NAME,ID,Catagory,type,maxstacks,BoonEnum)**
   
-  * NAME is a string
+ * name: name of the object
   
- * ID is an int can be found with skillID list tab
+ * id: an int thatcan be found with skillID list tab
   
- * Catagory an enum on BoonSource indicating what class may use it
+ * source an enum on BoonSource indicating from which class the boon originates (MIXED in doubt)
   
  * type: either "duration" ex: switness or "intensity" ex:might
   
- * maxstacks: both types have a max stacks. If unsure about duration go with 1
+ * capacity: both types have a max stacks. If unsure about duration go with 1
  
- * BoonEnum: Indicates weather or not the boon is universal,conidtion, offensive, defensive, or none sharable 
+ * nature: indicates if the object is a CONDITION, BOON, OFFENSIVEBUFFTABLE (offensive buffs you'd like to see on the table, ex: Pinpoint Distribution), DEFENSIVEBUFFTABLE, GRAPHONLY (buffs that should only be visible on graphs), FOOD or UTILITY
+
+ * link: an url to the image of the object
 
 ### Adding Boss Mechanics
 

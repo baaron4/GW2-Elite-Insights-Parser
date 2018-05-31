@@ -144,7 +144,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = bossData.getFirstAware();
             long fight_duration = bossData.getLastAware() - time_start;
             // Initialize Boon Map with every Boon
-            foreach (Boon boon in Boon.getAllProfList())
+            foreach (Boon boon in Boon.getAllBuffList())
             {
                 BoonMap map = new BoonMap(boon.getName(), boon.getID(), new List<BoonLog>());
                 boonGen[boon.getID()] = map;
@@ -392,7 +392,7 @@ namespace LuckParser.Models.ParseModels
         private void setBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList, bool add_condi)
         {
             // Initialize Boon Map with every Boon
-            foreach (Boon boon in Boon.getAllProfList())
+            foreach (Boon boon in Boon.getAllBuffList())
             {
                 BoonMap map = new BoonMap(boon.getName(), boon.getID(), new List<BoonLog>());
                 boon_map[boon.getID()] = map;
