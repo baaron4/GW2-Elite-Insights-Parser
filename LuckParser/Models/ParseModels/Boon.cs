@@ -11,7 +11,7 @@ namespace LuckParser.Models.ParseModels
         public enum BoonEnum { Condition, Boon, OffensiveBuff, DefensiveBuff, NonShareableBuff, Food, Utility};
         public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item  };
 
-        public static BoonSource ProfToEnum(string prof)
+        private static BoonSource ProfToEnum(string prof)
         {
             switch(prof)
             {
@@ -56,44 +56,44 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Fields
-        private String name;
+        private string name;
         private int id;
-        private BoonEnum priority;
-        private BoonSource plotlyGroup;
-        private String type;
+        private BoonEnum nature;
+        private BoonSource source;
+        private string type;
         private int capacity;
         private string link;
 
 
-        private Boon(String name, BoonSource group, String type, int capacity, BoonEnum priority)
+        private Boon(string name, BoonSource source, string type, int capacity, BoonEnum nature)
         {
             this.name = name;
-            this.plotlyGroup = group;
+            this.source = source;
             this.type = type;
             this.id = -1;
             this.capacity = capacity;
-            this.priority = priority;
+            this.nature = nature;
             this.link = "";
         }
-        private Boon(String name, int id, BoonSource group, String type, int capacity, BoonEnum priority)
+        private Boon(string name, int id, BoonSource source, string type, int capacity, BoonEnum nature)
         {
             this.name = name;
             this.id = id;
-            this.plotlyGroup = group;
+            this.source = source;
             this.type = type;
             this.capacity = capacity;
-            this.priority = priority;
+            this.nature = nature;
             this.link = "";
         }
 
-        private Boon(String name, int id, BoonSource group, String type, int capacity, BoonEnum priority, string link)
+        private Boon(string name, int id, BoonSource source, string type, int capacity, BoonEnum nature, string link)
         {
             this.name = name;
             this.id = id;
-            this.plotlyGroup = group;
+            this.source = source;
             this.type = type;
             this.capacity = capacity;
-            this.priority = priority;
+            this.nature = nature;
             this.link = link;
         }
         // Public Methods
@@ -477,91 +477,107 @@ namespace LuckParser.Models.ParseModels
         // Conditions
         public static List<Boon> getCondiBoonList()
         {
-            return allBoons.Where(x => x.priority == BoonEnum.Condition).ToList();
+            return allBoons.Where(x => x.nature == BoonEnum.Condition).ToList();
         }
         // Boons
         public static List<Boon> getBoonList()
         {
-            return allBoons.Where(x => x.priority == BoonEnum.Boon).ToList();
+            return allBoons.Where(x => x.nature == BoonEnum.Boon).ToList();
         }
         // Shareable buffs
         public static List<Boon> getOffensiveList()
         {
-            return allBoons.Where(x => x.priority == BoonEnum.OffensiveBuff).ToList();
+            return allBoons.Where(x => x.nature == BoonEnum.OffensiveBuff).ToList();
         }
-        public static List<Boon> getOffensiveList(BoonSource source)
+        private static List<Boon> getOffensiveList(BoonSource source)
         {
-            return getOffensiveList().Where(x => x.plotlyGroup == source).ToList();
+            return getOffensiveList().Where(x => x.source == source).ToList();
+        }
+        public static List<Boon> getOffensiveList(String source)
+        {
+            return getOffensiveList(ProfToEnum(source));
         }
         public static List<Boon> getDefensiveList()
         {
-            return allBoons.Where(x => x.priority == BoonEnum.DefensiveBuff).ToList();
+            return allBoons.Where(x => x.nature == BoonEnum.DefensiveBuff).ToList();
         }
-        public static List<Boon> getDefensiveList(BoonSource source)
+        private static List<Boon> getDefensiveList(BoonSource source)
         {
-            return getDefensiveList().Where(x => x.plotlyGroup == source).ToList();
+            return getDefensiveList().Where(x => x.source == source).ToList();
+        }
+        public static List<Boon> getDefensiveList(String source)
+        {
+            return getDefensiveList(ProfToEnum(source));
         }
         public static List<Boon> getSharableProfList()
         {
-            return allBoons.Where(x => x.priority == BoonEnum.OffensiveBuff || x.priority == BoonEnum.DefensiveBuff).ToList();   
+            return allBoons.Where(x => x.nature == BoonEnum.OffensiveBuff || x.nature == BoonEnum.DefensiveBuff).ToList();   
         }
-        public static List<Boon> getSharableProfList(BoonSource source)
+        private static List<Boon> getSharableProfList(BoonSource source)
         {
-            return getSharableProfList().Where(x => x.plotlyGroup == source).ToList();
+            return getSharableProfList().Where(x => x.source == source).ToList();
+        }
+        public static List<Boon> getSharableProfList(String source)
+        {
+            return getSharableProfList(ProfToEnum(source));
         }
         // Foods
         public static List<Boon> getFoodList()
         {
-            return allBoons.Where(x => x.priority == BoonEnum.Food).ToList();
+            return allBoons.Where(x => x.nature == BoonEnum.Food).ToList();
         }
         // Utilities
         public static List<Boon> getUtilityList()
         {
-            return allBoons.Where(x => x.priority == BoonEnum.Utility).ToList();
+            return allBoons.Where(x => x.nature == BoonEnum.Utility).ToList();
         }
         // All buffs
         public static List<Boon> getAllProfList()
         {
-            return allBoons.Where(x => x.priority != BoonEnum.Condition && x.priority != BoonEnum.Food && x.priority != BoonEnum.Utility).ToList();
+            return allBoons.Where(x => x.nature != BoonEnum.Condition && x.nature != BoonEnum.Food && x.nature != BoonEnum.Utility).ToList();
         }
         // Non shareable buffs
         public static List<Boon> getRemainingBuffsList()
         {
-            return allBoons.Where(x => x.priority == BoonEnum.NonShareableBuff).ToList();
+            return allBoons.Where(x => x.nature == BoonEnum.NonShareableBuff).ToList();
         }
-        public static List<Boon> getRemainingBuffsList(BoonSource source)
+        private static List<Boon> getRemainingBuffsList(BoonSource source)
         {
-            return getRemainingBuffsList().Where(x => x.plotlyGroup == source).ToList();
+            return getRemainingBuffsList().Where(x => x.source == source).ToList();
+        }
+        public static List<Boon> getRemainingBuffsList(String source)
+        {
+            return getRemainingBuffsList(ProfToEnum(source));
         }
 
 
         // Getters
-        public String getName()
+        public string getName()
         {
             return this.name;
         }
         public int getID()
         {
-            return this.id;
+            return id;
         }
-        public BoonSource getPloltyGroup()
+        public BoonSource getSource()
         {
-            return this.plotlyGroup;
+            return source;
         }
 
-        public String getType()
+        public string getType()
         {
-            return this.type;
+            return type;
         }
 
         public int getCapacity()
         {
-            return this.capacity;
+            return capacity;
         }
 
         public string getLink()
         {
-            return this.link;
+            return link;
         }
     }
 }
