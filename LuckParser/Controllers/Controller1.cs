@@ -694,14 +694,14 @@ namespace LuckParser.Controllers
             }
             if (SnapSettings[4])
             {//Important Class specefic boons
-                foreach (Boon boon in Boon.getOffensiveList())
+                foreach (Boon boon in Boon.getOffensiveTableList())
                 {
                     if (s_list.Exists(x => x.getID() == boon.getID()))
                     {
                         present_offbuffs.Add(boon);
                     }
                 }
-                foreach (Boon boon in Boon.getDefensiveList())
+                foreach (Boon boon in Boon.getDefensiveTableList())
                 {
                     if (s_list.Exists(x => x.getID() == boon.getID()))
                     {
@@ -1022,7 +1022,7 @@ namespace LuckParser.Controllers
                 boon_logs = p.getBoonGen(b_data, s_data, c_data.getCombatList(), agent_data, trgetPlayers);
             }
 
-            List<Boon> boon_list = Boon.getAllProfList();
+            List<Boon> boon_list = Boon.getAllBuffList();
             int n = boon_list.Count();//# of diff boons
             Dictionary<int,string> rates = new Dictionary<int, string>();
             for (int i = 0; i < n; i++)
@@ -1100,7 +1100,7 @@ namespace LuckParser.Controllers
                         if (boon.getType().Equals("duration"))
                         {
 
-                            rate = Math.Round(Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data),1).ToString();//these 2 are problamatic
+                            rate = Math.Round(Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data),1).ToString() + "%";//these 2 are problamatic
                         }
                         else if (boon.getType().Equals("intensity"))
                         {
@@ -3913,7 +3913,7 @@ namespace LuckParser.Controllers
                 {
                     sw.Write("<tr>");
                     {
-                        sw.Write("<th>Contribution</th>");
+                        sw.Write("<th>Total</th>");
                         sw.Write("<th></th>");
                         sw.Write("<th>" + finalTotalDamage + "</th>");
                         sw.Write("<th></th>");
@@ -4123,7 +4123,7 @@ namespace LuckParser.Controllers
                 {
                     sw.Write("<tr>");
                     {
-                        sw.Write("<th>Contribution</th>");
+                        sw.Write("<th>Total</th>");
                         sw.Write("<th>" + finalTotalDamage + "</th>");
                         sw.Write("<th></th>");
                         sw.Write("<th></th>");
@@ -4544,10 +4544,8 @@ namespace LuckParser.Controllers
                         List<Boon> parseBoonsList = new List<Boon>();
                         //Condis
                         parseBoonsList.AddRange(Boon.getCondiBoonList());
-                        //Every boons
-                        parseBoonsList.AddRange(Boon.getBoonList());
-                        //Every  buffs
-                        parseBoonsList.AddRange(Boon.getSharableProfList());
+                        //Every buffs and boons
+                        parseBoonsList.AddRange(Boon.getAllBuffList());
                         List<BoonsGraphModel> boonGraphData = getBoonGraph(boss, parseBoonsList);
                         boonGraphData.Reverse();
                         foreach (BoonsGraphModel bgm in boonGraphData)
