@@ -1013,9 +1013,6 @@ namespace LuckParser.Controllers
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
             BoonMap boon_logs = p.getBoonMap(b_data, s_data, c_data.getCombatList());
-            List<int> aaa = new List<int>();
-            aaa.Add(p.getInstid());
-            Dictionary<int, BoonMap> boon_logsGen = p.getBoonGen(b_data, s_data, c_data.getCombatList(), agent_data, aaa);
             List<Boon> boon_list = Boon.getAllBuffList();
             int n = boon_list.Count();//# of diff boons
             Dictionary<int, string> rates = new Dictionary<int, string>();
@@ -1055,9 +1052,7 @@ namespace LuckParser.Controllers
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
             Dictionary<int, BoonMap> boon_logsGen = p.getBoonGen(b_data, s_data, c_data.getCombatList(), agent_data, trgetPlayers);
-
             List<Boon> boon_list = Boon.getAllBuffList();
-
             int n = boon_list.Count();//# of diff boons
             Dictionary<int, string> rates = new Dictionary<int, string>();
             for (int i = 0; i < n; i++)
@@ -3545,13 +3540,13 @@ namespace LuckParser.Controllers
                     for (int d = 0; d < damageToDown.Count(); d++)
                     {
                         sw.Write("'" + a_data.GetAgentWInst(damageToDown[d].getInstidt()).getName().Replace("\0", "").Replace("\'", "\\'") + "<br>"+
-                            s_data.getName( damageToDown[d].getID()) +" hit you for "+damageToDown[d].getDamage() + "',");
+                            s_data.getName( damageToDown[d].getID()).Replace("\'", "\\'") + " hit you for "+damageToDown[d].getDamage() + "',");
                     }
                 }
                 for (int d = 0; d < damageToKill.Count(); d++)
                 {
                     sw.Write("'" + a_data.GetAgentWInst(damageToKill[d].getInstidt()).getName().Replace("\0","").Replace("\'", "\\'") + "<br>" +
-                           "hit you with <b>"+ s_data.getName(damageToKill[d].getID()) + "</b> for " + damageToKill[d].getDamage() + "'");
+                           "hit you with <b>"+ s_data.getName(damageToKill[d].getID()).Replace("\'", "\\'") + "</b> for " + damageToKill[d].getDamage() + "'");
 
                     if (d != damageToKill.Count() - 1)
                     {
