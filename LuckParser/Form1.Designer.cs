@@ -121,17 +121,20 @@
             this.listView1.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.listView1_DrawColumnHeader);
             this.listView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.listView1_DragDrop);
             this.listView1.DragEnter += new System.Windows.Forms.DragEventHandler(this.listView1_DragEnter);
+            this.listView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
+            this.listView1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseMove_1);
+            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
             // 
             // Location
             // 
             this.Location.Text = "Location";
-            this.Location.Width = 534;
+            this.Location.Width = 310;
             // 
             // Status
             // 
             this.Status.Text = "Status";
             this.Status.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.Status.Width = 113;
+            this.Status.Width = 335;
             // 
             // label2
             // 
