@@ -164,9 +164,14 @@ namespace LuckParser.Controllers
         public MechanicData getMechData() {
             return mech_data;
         }
-       
+
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Parses the given log
+        /// </summary>
+        /// <param name="evtc">The path to the log to parse</param>
+        /// <returns></returns>
         public bool ParseLog(string evtc)
         {
             //used to stream from a database, probably could use better stream now
@@ -206,6 +211,9 @@ namespace LuckParser.Controllers
         }
 
         //sub Parse methods
+        /// <summary>
+        /// Parses boss related data
+        /// </summary>
         private void parseBossData()
         {
             // 12 bytes: arc build version
@@ -225,6 +233,9 @@ namespace LuckParser.Controllers
             // TempData["Debug"] = build_version +" "+ instid.ToString() ;
             this.boss_data = new BossData(instid);
         }
+        /// <summary>
+        /// Parses agent related data
+        /// </summary>
         private void parseAgentData()
         {
             // 4 bytes: player count
@@ -281,6 +292,9 @@ namespace LuckParser.Controllers
             }
           
         }
+        /// <summary>
+        /// Parses skill related data
+        /// </summary>
         private void parseSkillData()
         {
             GW2APIController apiController = new GW2APIController();
@@ -317,6 +331,9 @@ namespace LuckParser.Controllers
                 skill_data.addItem(skill);
             }
         }
+        /// <summary>
+        /// Parses combat related data
+        /// </summary>
         private void parseCombatList()
         {
             // 64 bytes: each combat
@@ -402,6 +419,9 @@ namespace LuckParser.Controllers
                         is_ninety, is_fifty, is_moving, is_statechange, is_flanking,is_shields));
             }
         }
+        /// <summary>
+        /// Parses all the data again and link related stuff to each other
+        /// </summary>
         private void fillMissingData()
         {
             // Set Agent instid, first_aware and last_aware
@@ -574,15 +594,78 @@ namespace LuckParser.Controllers
             }
             
             boss_data.setHealthOverTime(bossHealthOverTime);//after xera in case of change
-            // Players
-            List<AgentItem> playerAgentList = getAgentData().getPlayerAgentList();
+
+            //players
             if (p_list.Count == 0)
             {
+                
+                  
+                
+
+                //Fix Disconected players
+                List<AgentItem> playerAgentList = getAgentData().getPlayerAgentList();
+
                 foreach (AgentItem playerAgent in playerAgentList)
                 {
-                    p_list.Add(new Player(playerAgent));
+                    List<Point> lp = combat_data.getStates(playerAgent.getInstid(), "DESPAWN");
+                    Player player = new Player(playerAgent);
+                    bool skip = false;
+                    foreach (Player p in p_list)
+                    {
+                        if (p.getAccount() == player.getAccount())//is this a copy of original?
+                        {
+                            skip = true;
+                        }
+                    }
+                    if (skip)
+                    {
+                        continue;
+                    }
+                    if (lp.Count > 0)
+                    {
+                        //make all actions of other isntances to original instid
+                        int extra_login_Id = 0;
+                        foreach (AgentItem extra in NPC_list)
+                        {
+                            if (extra.getAgent() == playerAgent.getAgent())
+                            {
+
+                                extra_login_Id = extra.getInstid();
+
+
+                                foreach (CombatItem c in combat_list)
+                                {
+                                    if (c.getSrcInstid() == extra_login_Id)
+                                    {
+                                        c.setSrcInstid(playerAgent.getInstid());
+                                    }
+                                    if (c.getDstInstid() == extra_login_Id)
+                                    {
+                                        c.setDstInstid(playerAgent.getInstid());
+                                    }
+
+                                }
+                                break;
+                            }
+                        }
+                        
+                        player.SetDC(lp[0].X);
+                        p_list.Add(player);
+                    }
+                    else//didnt dc
+                    {
+                        if (player.GetDC() == 0)
+                        {
+                            p_list.Add(player);
+                        }
+                        
+                    }
                 }
+
             }
+          
+           
+            
             // Sort
             p_list = p_list.OrderBy(a => int.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>int.Parse(a.getGroup()) - int.Parse(b.getGroup()))
             setMechData();
@@ -593,6 +676,10 @@ namespace LuckParser.Controllers
         private List<Boon> present_offbuffs = new List<Boon>();//Used only for Off Buff tables
         private List<Boon> present_defbuffs = new List<Boon>();//Used only for Def Buff tables
         private Dictionary<int, List<Boon>> present_personnal = new Dictionary<int, List<Boon>>();//Used only for personnal
+        /// <summary>
+        /// Checks the combat data and gets buffs that were present during the fight
+        /// </summary>
+        /// <param name="SnapSettings">Settings to use</param>
         private void setPresentBoons(bool[] SnapSettings) {
             List<SkillItem> s_list = getSkillData().getSkillList();
             if (SnapSettings[3])
@@ -607,14 +694,14 @@ namespace LuckParser.Controllers
             }
             if (SnapSettings[4])
             {//Important Class specefic boons
-                foreach (Boon boon in Boon.getOffensiveList())
+                foreach (Boon boon in Boon.getOffensiveTableList())
                 {
                     if (s_list.Exists(x => x.getID() == boon.getID()))
                     {
                         present_offbuffs.Add(boon);
                     }
                 }
-                foreach (Boon boon in Boon.getDefensiveList())
+                foreach (Boon boon in Boon.getDefensiveTableList())
                 {
                     if (s_list.Exists(x => x.getID() == boon.getID()))
                     {
@@ -628,7 +715,7 @@ namespace LuckParser.Controllers
                 foreach (Player p in p_list)
                 {
                     present_personnal[p.getInstid()] = new List<Boon>();
-                    foreach (Boon boon in Boon.getRemainingBuffsList(Boon.ProfToEnum(p.getProf())))
+                    foreach (Boon boon in Boon.getRemainingBuffsList(p.getProf()))
                     {
                         if (c_data.Exists(x => x.getSkillID() == boon.getID() && x.getDstInstid() == p.getInstid()))
                         {
@@ -819,16 +906,22 @@ namespace LuckParser.Controllers
 
             // R.I.P
             List<Point> dead = c_data.getStates(instid, "CHANGE_DEAD");
+            
             double died = 0.0;
             if (dead.Count() > 0)
             {
                 died = dead[0].X - b_data.getFirstAware();
             }
-
+            List<Point> disconect = c_data.getStates(instid, "DESPAWN");
+            double dcd = 0.0;
+            if (disconect.Count() > 0)
+            {
+                dcd = disconect[0].X - b_data.getFirstAware();
+            }
             statsArray = new string[] { power_loop_count.ToString(), critical_rate.ToString(), scholar_rate.ToString(), moving_rate.ToString(),
                 flanking_rate.ToString(), swap.ToString(),down.ToString(),dodge.ToString(),ress.ToString(),died.ToString("0.00"),
             glance_rate.ToString(),missed.ToString(),interupts.ToString(),invulned.ToString(),(time_wasted/1000f).ToString(),wasted.ToString(),avgBoons.ToString(),(time_saved/1000f).ToString(),saved.ToString(),
-            scholar_dmg.ToString(),totaldamage.ToString()
+            scholar_dmg.ToString(),totaldamage.ToString(),dcd.ToString("0.00"),
             };
             return statsArray;
         }
@@ -923,7 +1016,7 @@ namespace LuckParser.Controllers
             List<int> aaa = new List<int>();
             aaa.Add(p.getInstid());
             Dictionary<int, BoonMap> boon_logsGen = p.getBoonGen(b_data, s_data, c_data.getCombatList(), agent_data, aaa);
-            List<Boon> boon_list = Boon.getAllProfList();
+            List<Boon> boon_list = Boon.getAllBuffList();
             int n = boon_list.Count();//# of diff boons
             Dictionary<int, string> rates = new Dictionary<int, string>();
             for (int i = 0; i < n; i++)
@@ -958,13 +1051,13 @@ namespace LuckParser.Controllers
             {
                 return getfinalboons(p);
             }
-
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
             Dictionary<int, BoonMap> boon_logsGen = p.getBoonGen(b_data, s_data, c_data.getCombatList(), agent_data, trgetPlayers);
 
-            List<Boon> boon_list = Boon.getAllProfList();
+            List<Boon> boon_list = Boon.getAllBuffList();
+
             int n = boon_list.Count();//# of diff boons
             Dictionary<int, string> rates = new Dictionary<int, string>();
             for (int i = 0; i < n; i++)
@@ -1033,7 +1126,7 @@ namespace LuckParser.Controllers
                         if (boon.getType().Equals("duration"))
                         {
 
-                            rate = Math.Round(Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data),1).ToString();//these 2 are problamatic
+                            rate = Math.Round(Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data),1).ToString() + "%";//these 2 are problamatic
                         }
                         else if (boon.getType().Equals("intensity"))
                         {
@@ -1122,6 +1215,12 @@ namespace LuckParser.Controllers
         }
         //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
         //Methods that make it easier to create Javascript graphs
+        /// <summary>
+        /// Gets the boon graph for a given player using given buff list
+        /// </summary>
+        /// <param name="p">The player</param>
+        /// <param name="boon_list">The buff list</param>
+        /// <returns></returns>
         private List<BoonsGraphModel> getBoonGraph(Player p , List<Boon> boon_list) {
             List<BoonsGraphModel> uptime = new List<BoonsGraphModel>();
             BossData b_data = getBossData();
@@ -1191,6 +1290,11 @@ namespace LuckParser.Controllers
             }
             return uptime;
         }
+        /// <summary>
+        /// Gets the points for the boss dps graph for a given player
+        /// </summary>
+        /// <param name="p">The player</param>
+        /// <returns></returns>
         private List<int[]> getBossDPSGraph(Player p) {
             List<int[]> bossdmgList = new List<int[]>();
             if (p.getBossDPSGraph().Count == 0)
@@ -1260,6 +1364,11 @@ namespace LuckParser.Controllers
             
             return bossdmgList;
         }
+        /// <summary>
+        /// Gets the points for the total dps graph for a given player
+        /// </summary>
+        /// <param name="p">The player</param>
+        /// <returns></returns>
         private List<int[]> getTotalDPSGraph(Player p)
         {
             BossData b_data = getBossData();
@@ -1312,7 +1421,12 @@ namespace LuckParser.Controllers
             }
             return totaldmgList;
         }
-        private bool getDied(Player p)
+        /// <summary>
+        /// Checks if the given player has died during the combat
+        /// </summary>
+        /// <param name="p">The player</param>
+        /// <returns></returns>
+        private bool hasDied(Player p)
         {
             List<Point> dead = getCombatData().getStates(p.getInstid(), "CHANGE_DEAD");
 
@@ -1325,6 +1439,10 @@ namespace LuckParser.Controllers
                 return false;
             }
         }
+        /// <summary>
+        /// Creates the dps graph
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
         private void CreateDPSGraph(StreamWriter sw)
         {
             //Generate DPS graph
@@ -1782,6 +1900,10 @@ namespace LuckParser.Controllers
         }
 
         bool[] SnapSettings;
+        /// <summary>
+        /// Creates the composition table
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
         private void CreateCompTable(StreamWriter sw) {
             int groupCount = 0;
             int firstGroup = 11;
@@ -1847,6 +1969,11 @@ namespace LuckParser.Controllers
             
             sw.Write("</table>");
         }
+        /// <summary>
+        /// Creates the dps table
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="fight_duration">Duration of the fight</param>
         private void CreateDPSTable(StreamWriter sw,double fight_duration) {
             //generate dps table
             sw.Write("<script> $(function () { $('#dps_table').DataTable({ \"order\": [[4, \"desc\"]]});});</script>");
@@ -1897,13 +2024,14 @@ namespace LuckParser.Controllers
                         sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[5] + " dmg \">" + dmg[4] + "</span>" + "</td>");
                         sw.Write("<td>" + stats[6] + "</td>");
                         TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));
+                        
                         if (timedead > TimeSpan.Zero)
                         {
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
                         }
                         else
                         {
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> 0</span>" + " </td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive \"> 0</span>" + " </td>");
                         }
                     }            
                     sw.Write("</tr>");           
@@ -1953,6 +2081,11 @@ namespace LuckParser.Controllers
            
             sw.Write("</table>");
         }
+        /// <summary>
+        /// Creates the damage stats table
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="fight_duration">Duration of the fight</param>
         private void CreateDMGStatsTable(StreamWriter sw,double fight_duration) {
             //generate dmgstats table
             sw.Write("<script> $(function () { $('#dmgstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
@@ -2074,6 +2207,11 @@ namespace LuckParser.Controllers
             sw.Write("</table>");
 
         }
+        /// <summary>
+        /// Creates the defense table
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="fight_duration">Duration of the fight</param>
         private void CreateDefTable(StreamWriter sw, double fight_duration) {
             //generate Tankstats table
             sw.Write("<script> $(function () { $('#defstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
@@ -2176,6 +2314,11 @@ namespace LuckParser.Controllers
            
             sw.Write("</table>");
         }
+        /// <summary>
+        /// Creates the support table
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="fight_duration">Duration of the fight</param>
         private void CreateSupTable(StreamWriter sw, double fight_duration) {
             //generate suppstats table
             sw.Write("<script> $(function () { $('#supstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
@@ -2245,6 +2388,12 @@ namespace LuckParser.Controllers
             
             sw.Write("</table>");
         }
+        /// <summary>
+        /// Create the buff uptime table
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="list_to_use">Boon list to use</param>
+        /// <param name="table_id">id of the table</param>
         private void CreateUptimeTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
         {
             //Generate Boon table------------------------------------------------------------------------------------------------
@@ -2357,6 +2506,12 @@ namespace LuckParser.Controllers
             }     
             sw.Write("</table>");
         }
+        /// <summary>
+        /// Create the self buff generation table
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="list_to_use">Boon list to use</param>
+        /// <param name="table_id">id of the table</param>
         private void CreateGenSelfTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
         { //Generate BoonGenSelf table
             sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
@@ -2411,6 +2566,12 @@ namespace LuckParser.Controllers
            
             sw.Write("</table>");
         }
+        /// <summary>
+        /// Create the group buff generation table
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="list_to_use">Boon list to use</param>
+        /// <param name="table_id">id of the table</param>
         private void CreateGenGroupTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
         { //Generate BoonGenGroup table
             sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
@@ -2470,6 +2631,12 @@ namespace LuckParser.Controllers
             }            
             sw.Write("</table>");
         }
+        /// <summary>
+        /// Create the off squade buff generation table
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="list_to_use">Boon list to use</param>
+        /// <param name="table_id">id of the table</param>
         private void CreateGenOGroupTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
         {  //Generate BoonGenOGroup table
             sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
@@ -2593,7 +2760,7 @@ namespace LuckParser.Controllers
                 List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
                 SkillData s_data = getSkillData();
                 List<SkillItem> s_list = s_data.getSkillList();
-                bool died = getDied(p);
+                bool died = hasDied(p);
                 string charname = p.getCharacter();
                 sw.Write("<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">");
                 {
@@ -2631,7 +2798,7 @@ namespace LuckParser.Controllers
                                 {
                                     if (SnapSettings[6])//Display rotation
                                     {
-                                        bool flipFlop = true;
+                                        
                                         foreach (CastLog cl in casting)
                                         {
 
@@ -2674,15 +2841,9 @@ namespace LuckParser.Controllers
                                             skillName = skillName.Replace("\"", "");
                                             sw.Write("{");
                                             {
-                                                flipFlop = !flipFlop;
-                                                if (flipFlop)
-                                                {
+                                                
                                                     sw.Write("y: ['1.5'],");
-                                                }
-                                                else
-                                                {
-                                                    sw.Write("y: ['1.49'],");
-                                                }
+                                               
                                                 
                                                sw.Write(
                                                       "x: ['" + dur + "']," +
@@ -2962,7 +3123,8 @@ namespace LuckParser.Controllers
                                 sw.Write("];");
                                 sw.Write("var layout = {");
                                 {
-                                    sw.Write("yaxis: {" +
+                                    sw.Write("barmode:'stack',");
+                                   sw.Write("yaxis: {" +
                                                 "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
                                                 "range: [0, 2]" +
                                             "}," +
@@ -3776,7 +3938,7 @@ namespace LuckParser.Controllers
                 {
                     sw.Write("<tr>");
                     {
-                        sw.Write("<th>Contribution</th>");
+                        sw.Write("<th>Total</th>");
                         sw.Write("<th></th>");
                         sw.Write("<th>" + finalTotalDamage + "</th>");
                         sw.Write("<th></th>");
@@ -3986,7 +4148,7 @@ namespace LuckParser.Controllers
                 {
                     sw.Write("<tr>");
                     {
-                        sw.Write("<th>Contribution</th>");
+                        sw.Write("<th>Total</th>");
                         sw.Write("<th>" + finalTotalDamage + "</th>");
                         sw.Write("<th></th>");
                         sw.Write("<th></th>");
@@ -4407,10 +4569,8 @@ namespace LuckParser.Controllers
                         List<Boon> parseBoonsList = new List<Boon>();
                         //Condis
                         parseBoonsList.AddRange(Boon.getCondiBoonList());
-                        //Every boons
-                        parseBoonsList.AddRange(Boon.getBoonList());
-                        //Every  buffs
-                        parseBoonsList.AddRange(Boon.getSharableProfList());
+                        //Every buffs and boons
+                        parseBoonsList.AddRange(Boon.getAllBuffList());
                         List<BoonsGraphModel> boonGraphData = getBoonGraph(boss, parseBoonsList);
                         boonGraphData.Reverse();
                         foreach (BoonsGraphModel bgm in boonGraphData)
@@ -4727,7 +4887,7 @@ namespace LuckParser.Controllers
             string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
             if (duration.ToString("hh").Length > 0)
             {
-                durationString = duration.ToString("hh") + "h" + durationString;
+                durationString = duration.ToString("hh") + "h " + durationString;
             }
             string bossname = FilterStringChars(b_data.getName());
             setPresentBoons(settingsSnap);
@@ -5189,7 +5349,11 @@ namespace LuckParser.Controllers
            
 
         }
-        //Easy reference to links/color codes
+        /// <summary>
+        /// Returns the img links and colors code for the given data
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public string GetLink(string name)
         {
             switch (name)

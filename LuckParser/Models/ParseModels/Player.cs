@@ -16,6 +16,7 @@ namespace LuckParser.Models.ParseModels
         private int toughness;
         private int healing;
         private int condition;
+        private int dcd = 0;//time in ms the player dcd
         // DPS
         protected List<DamageLog> damage_logs = new List<DamageLog>();
         private List<DamageLog> damage_logsFiltered = new List<DamageLog>();
@@ -141,11 +142,10 @@ namespace LuckParser.Models.ParseModels
         {
             Dictionary<int, BoonMap> boonGen = new Dictionary<int, BoonMap>();
             long time_start = bossData.getFirstAware();
-            long fight_duration = bossData.getLastAware() - time_start;
-            
+            long fight_duration = bossData.getLastAware() - time_start;            
             foreach (int id in trgtPID)
             {
-                boonGen[id] = new BoonMap(Boon.getAllProfList());
+                boonGen[id] = new BoonMap(Boon.getAllBuffList());
                 foreach (CombatItem c in combatList)
                 {
                     if (c.getValue() == 0 || c.isBuff() != 1 || c.getBuffDmg() > 0 || !(instid == c.getSrcInstid() || instid == c.getSrcMasterInstid()))
@@ -273,6 +273,15 @@ namespace LuckParser.Models.ParseModels
         {
             bossdpsGraph = new List<int[]>(list);
         }
+        public int GetDC()
+        {
+            return dcd;
+        }
+        public void SetDC(int value)
+        {
+            dcd = value;
+        }
+
         // Private Methods
         private void addBoonLog(long time, CombatItem c, BoonMap toFill)
         {
@@ -412,7 +421,7 @@ namespace LuckParser.Models.ParseModels
         }
         private void setBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList, bool add_condi)
         {
-            boon_map.add(Boon.getAllProfList());
+            boon_map.add(Boon.getAllBuffList());
             // This only happens for bosses
             if (add_condi)
             {
@@ -522,6 +531,6 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-
+        
     }
 }
