@@ -574,15 +574,78 @@ namespace LuckParser.Controllers
             }
             
             boss_data.setHealthOverTime(bossHealthOverTime);//after xera in case of change
-            // Players
-            List<AgentItem> playerAgentList = getAgentData().getPlayerAgentList();
+
+            //players
             if (p_list.Count == 0)
             {
+                
+                  
+                
+
+                //Fix Disconected players
+                List<AgentItem> playerAgentList = getAgentData().getPlayerAgentList();
+
                 foreach (AgentItem playerAgent in playerAgentList)
                 {
-                    p_list.Add(new Player(playerAgent));
+                    List<Point> lp = combat_data.getStates(playerAgent.getInstid(), "DESPAWN");
+                    Player player = new Player(playerAgent);
+                    bool skip = false;
+                    foreach (Player p in p_list)
+                    {
+                        if (p.getAccount() == player.getAccount())//is this a copy of original?
+                        {
+                            skip = true;
+                        }
+                    }
+                    if (skip)
+                    {
+                        continue;
+                    }
+                    if (lp.Count > 0)
+                    {
+                        //make all actions of other isntances to original instid
+                        int extra_login_Id = 0;
+                        foreach (AgentItem extra in NPC_list)
+                        {
+                            if (extra.getAgent() == playerAgent.getAgent())
+                            {
+
+                                extra_login_Id = extra.getInstid();
+
+
+                                foreach (CombatItem c in combat_list)
+                                {
+                                    if (c.getSrcInstid() == extra_login_Id)
+                                    {
+                                        c.setSrcInstid(playerAgent.getInstid());
+                                    }
+                                    if (c.getDstInstid() == extra_login_Id)
+                                    {
+                                        c.setDstInstid(playerAgent.getInstid());
+                                    }
+
+                                }
+                                break;
+                            }
+                        }
+                        
+                        player.SetDC(lp[0].X);
+                        p_list.Add(player);
+                    }
+                    else//didnt dc
+                    {
+                        if (player.GetDC() == 0)
+                        {
+                            p_list.Add(player);
+                        }
+                        
+                    }
                 }
+
             }
+          
+           
+            
             // Sort
             p_list = p_list.OrderBy(a => int.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>int.Parse(a.getGroup()) - int.Parse(b.getGroup()))
             setMechData();
@@ -819,16 +882,22 @@ namespace LuckParser.Controllers
 
             // R.I.P
             List<Point> dead = c_data.getStates(instid, "CHANGE_DEAD");
+            
             double died = 0.0;
             if (dead.Count() > 0)
             {
                 died = dead[0].X - b_data.getFirstAware();
             }
-
+            List<Point> disconect = c_data.getStates(instid, "DESPAWN");
+            double dcd = 0.0;
+            if (disconect.Count() > 0)
+            {
+                dcd = disconect[0].X - b_data.getFirstAware();
+            }
             statsArray = new string[] { power_loop_count.ToString(), critical_rate.ToString(), scholar_rate.ToString(), moving_rate.ToString(),
                 flanking_rate.ToString(), swap.ToString(),down.ToString(),dodge.ToString(),ress.ToString(),died.ToString("0.00"),
             glance_rate.ToString(),missed.ToString(),interupts.ToString(),invulned.ToString(),(time_wasted/1000f).ToString(),wasted.ToString(),avgBoons.ToString(),(time_saved/1000f).ToString(),saved.ToString(),
-            scholar_dmg.ToString(),totaldamage.ToString()
+            scholar_dmg.ToString(),totaldamage.ToString(),dcd.ToString("0.00"),
             };
             return statsArray;
         }
@@ -1872,13 +1941,14 @@ namespace LuckParser.Controllers
                         sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[5] + " dmg \">" + dmg[4] + "</span>" + "</td>");
                         sw.Write("<td>" + stats[6] + "</td>");
                         TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));
+                        
                         if (timedead > TimeSpan.Zero)
                         {
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
                         }
                         else
                         {
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> 0</span>" + " </td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive \"> 0</span>" + " </td>");
                         }
                     }            
                     sw.Write("</tr>");           
@@ -2595,7 +2665,7 @@ namespace LuckParser.Controllers
                                 {
                                     if (SnapSettings[6])//Display rotation
                                     {
-                                        bool flipFlop = true;
+                                        
                                         foreach (CastLog cl in casting)
                                         {
 
@@ -2638,15 +2708,9 @@ namespace LuckParser.Controllers
                                             skillName = skillName.Replace("\"", "");
                                             sw.Write("{");
                                             {
-                                                flipFlop = !flipFlop;
-                                                if (flipFlop)
-                                                {
+                                                
                                                     sw.Write("y: ['1.5'],");
-                                                }
-                                                else
-                                                {
-                                                    sw.Write("y: ['1.49'],");
-                                                }
+                                               
                                                 
                                                sw.Write(
                                                       "x: ['" + dur + "']," +
@@ -2926,7 +2990,8 @@ namespace LuckParser.Controllers
                                 sw.Write("];");
                                 sw.Write("var layout = {");
                                 {
-                                    sw.Write("yaxis: {" +
+                                    sw.Write("barmode:'stack',");
+                                   sw.Write("yaxis: {" +
                                                 "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
                                                 "range: [0, 2]" +
                                             "}," +

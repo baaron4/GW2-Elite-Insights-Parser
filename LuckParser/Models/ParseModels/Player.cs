@@ -16,6 +16,7 @@ namespace LuckParser.Models.ParseModels
         private int toughness;
         private int healing;
         private int condition;
+        private int dcd = 0;//time in ms the player dcd
         // DPS
         protected List<DamageLog> damage_logs = new List<DamageLog>();
         private List<DamageLog> damage_logsFiltered = new List<DamageLog>();
@@ -289,6 +290,15 @@ namespace LuckParser.Models.ParseModels
         {
             bossdpsGraph = new List<int[]>(list);
         }
+        public int GetDC()
+        {
+            return dcd;
+        }
+        public void SetDC(int value)
+        {
+            dcd = value;
+        }
+
         // Private Methods
 
         protected void addDamageLog(long time, ushort instid, CombatItem c, List<DamageLog> toFill)
@@ -544,6 +554,6 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-
+        
     }
 }
