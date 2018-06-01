@@ -7,9 +7,19 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractBoon
     {
+        public struct SrcDuration
+        {
+            public long duration;
+            public ushort src;
+            public SrcDuration(long duration, ushort src)
+            {
+                this.duration = duration;
+                this.src = src;
+            }
+        }
 
         // Fields
-        protected List<long> boon_stack = new List<long>();
+        protected List<SrcDuration> boon_stack = new List<SrcDuration>();
         protected int capacity;
 
         // Constructor
@@ -19,28 +29,29 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Abstract Methods
-        public abstract long getStackValue();
+        public abstract long getStackValue(ushort src = 0);
 
         public abstract void update(long time_passed);
 
-        public abstract void addStacksBetween(List<long> boon_stacks, long time_between);
+        public abstract void addStacksBetween(List<long> boon_stacks, long time_between, ushort src = 0);
 
         // Public Methods
-        public void add(long boon_duration)
+        public void add(long boon_duration, ushort srcinstid)
         {
+            SrcDuration toAdd = new SrcDuration(boon_duration, srcinstid);
             // Find empty slot
             if (!isFull())
             {
-                boon_stack.Add(boon_duration);
+                boon_stack.Add(toAdd);
                 sort();
             }
             // Replace lowest value
             else
             {
                 int index = boon_stack.Count() - 1;
-                if (boon_stack[index] < boon_duration)
+                if (boon_stack[index].duration < boon_duration)
                 {
-                    boon_stack[index] = boon_duration;
+                    boon_stack[index] = toAdd;
                     sort();
                 }
             }
@@ -55,7 +66,7 @@ namespace LuckParser.Models.ParseModels
         protected void sort()
         {
             // Collections.sort(boon_stack, Collections.reverseOrder());
-            boon_stack = boon_stack.OrderByDescending(x=>x).ToList();
+            boon_stack = boon_stack.OrderByDescending(x=>x.duration).ToList();
         }
     }
 }

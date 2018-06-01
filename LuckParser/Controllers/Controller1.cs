@@ -1042,7 +1042,7 @@ namespace LuckParser.Controllers
             //table.addrow(utility.concatstringarray(new string[] { p.getcharacter(), p.getprof() }, rates));
             return rates;
         }
-        private Dictionary<int, string> getfinalboons(Player p, List<int> trgetPlayers)
+        private Dictionary<int, string> getfinalboons(Player p, List<Player> trgetPlayers)
         {
             if (trgetPlayers.Count() == 0)
             {
@@ -1051,7 +1051,11 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
-            Dictionary<int, BoonMap> boon_logsGen = p.getBoonGen(b_data, s_data, c_data.getCombatList(), agent_data, trgetPlayers);
+            Dictionary<Player, BoonMap> boon_logsGen = new Dictionary<Player, BoonMap>();
+            foreach (Player player in trgetPlayers)
+            {
+                boon_logsGen[player] = player.getBoonMap(b_data, s_data, c_data.getCombatList());
+            }
             List<Boon> boon_list = Boon.getAllBuffList();
             int n = boon_list.Count();//# of diff boons
             Dictionary<int, string> rates = new Dictionary<int, string>();
@@ -1060,9 +1064,9 @@ namespace LuckParser.Controllers
                 Boon boon = boon_list[i];
                 string rate = "0";
                 double total = 0.0;
-                foreach (int player_id in trgetPlayers)
+                foreach (Player player in trgetPlayers)
                 {
-                    BoonMap boon_logs = boon_logsGen[player_id];
+                    BoonMap boon_logs = boon_logsGen[player];
                     // Boon boon = Boon.getEnum(boon_list[i].ToString());
                     if (boon_logs.ContainsKey(boon_list[i].getID()))
                     {
@@ -1072,11 +1076,11 @@ namespace LuckParser.Controllers
                         {
                             if (boon.getType().Equals("duration"))
                             {
-                                total += Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data);
+                                total += Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data, p.getInstid()), b_data);
                             }
                             else if (boon.getType().Equals("intensity"))
                             {
-                                total += Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data));
+                                total += Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data, p.getInstid()));
                             }
                         }
                     }
@@ -2416,7 +2420,7 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        Dictionary<int, string> boonArray = getfinalboons(player, new List<int>());
+                        Dictionary<int, string> boonArray = getfinalboons(player);
                         List<string> boonArrayToList = new List<string>();
                         boonArrayToList.Add(player.getGroup());
                         int count = 0;
@@ -2533,8 +2537,8 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        List<int> playerID = new List<int>();
-                        playerID.Add(player.getInstid());
+                        List<Player> playerID = new List<Player>();
+                        playerID.Add(player);
                         Dictionary<int, string> boonArray = getfinalboons(player, playerID);
                         sw.Write("<tr>");
                         {
@@ -2590,13 +2594,13 @@ namespace LuckParser.Controllers
                 sw.Write("</thead>");
                 sw.Write("<tbody>");
                 {
-                    List<int> playerIDS = new List<int>();
+                    List<Player> playerIDS = new List<Player>();
                     foreach (Player player in p_list)
                     {
                         foreach (Player p in p_list)
                         {
                             if (p.getGroup() == player.getGroup())
-                                playerIDS.Add(p.getInstid());
+                                playerIDS.Add(p);
                         }
                         Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
                         playerIDS.Clear();
@@ -2645,13 +2649,13 @@ namespace LuckParser.Controllers
                 sw.Write(" </tr> </thead>");
                 sw.Write("<tbody>");
                 {
-                    List<int> playerIDS = new List<int>();
+                    List<Player> playerIDS = new List<Player>();
                     foreach (Player player in p_list)
                     {
                         foreach (Player p in p_list)
                         {
                             if (p.getGroup() != player.getGroup())
-                                playerIDS.Add(p.getInstid());
+                                playerIDS.Add(p);
                         }
                         Dictionary<int, string> boonArray = getfinalboons(player, playerIDS);
                         playerIDS.Clear();
@@ -2707,10 +2711,10 @@ namespace LuckParser.Controllers
                 sw.Write("</thead>");
                 sw.Write("<tbody>");
                 {
-                    List<int> playerIDS = new List<int>();
+                    List<Player> playerIDS = new List<Player>();
                     foreach (Player p in p_list)
                     {
-                        playerIDS.Add(p.getInstid());
+                        playerIDS.Add(p);
                     }
                     foreach (Player player in p_list)
                     {
@@ -5333,7 +5337,7 @@ namespace LuckParser.Controllers
                     p.getAccount().Remove(':') +delimiter+finaldps[6]+delimiter+ finaldps[8] + delimiter + finaldps[10] + delimiter +
                     finaldps[0] + delimiter);
 
-                Dictionary<int, string> boonArray = getfinalboons(p, new List<int>());
+                Dictionary<int, string> boonArray = getfinalboons(p);
                 sw.Write(boonArray[1187] + delimiter + boonArray[30328] + delimiter + boonArray[740] + delimiter + 
                     "0" +delimiter+ delimiter);
 

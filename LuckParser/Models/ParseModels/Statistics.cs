@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class Statistics
     {
-        public static double[] getBoonUptime(AbstractBoon boon, List<BoonLog> boon_logs, BossData b_data, int players)
+        /*public static double[] getBoonUptime(AbstractBoon boon, List<BoonLog> boon_logs, BossData b_data, int players)
         {
             double fight_duration = b_data.getLastAware() - b_data.getFirstAware();
             double boonDur = 0.00;
@@ -33,8 +33,9 @@ namespace LuckParser.Models.ParseModels
             double[] doubles = { (boonDur-os ) / (fight_duration * players), boonDur / (fight_duration * players) };
 
             return doubles;
-        }
-        public static List<Point> getBoonIntervalsList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data)
+        }*/
+        // DURATION
+        public static List<Point> getBoonIntervalsList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data, ushort instid = 0)
         { 
             // Initialise variables
             long t_prev = 0;
@@ -46,8 +47,8 @@ namespace LuckParser.Models.ParseModels
             {
                 t_curr = log.getTime();
                 boon.update(t_curr - t_prev);
-                boon.add(log.getValue());
-                long duration = t_curr + boon.getStackValue();
+                boon.add(log.getValue(), log.getSrcInstid());
+                long duration = t_curr + boon.getStackValue(instid);
                 if (duration < 0) {
                     duration = long.MaxValue;
                 }
@@ -61,7 +62,7 @@ namespace LuckParser.Models.ParseModels
             // Trim duration overflow
             long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
             int last = boon_intervals.Count() - 1;
-            if (boon_intervals[last].Y > fight_duration)
+            if (last > -1 && boon_intervals[last].Y > fight_duration)
             {
                 Point mod = boon_intervals[last];
                 mod.Y = (int)fight_duration;
@@ -85,10 +86,9 @@ namespace LuckParser.Models.ParseModels
             }*/
             return number;
         }
-
-      
-
-        public static List<long> getBoonStacksList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data)
+    
+        // INTENSITY
+        public static List<long> getBoonStacksList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data, ushort instid = 0)
         {
             // Initialise variables
             long t_prev = 0;
@@ -100,24 +100,22 @@ namespace LuckParser.Models.ParseModels
             foreach (BoonLog log in boon_logs)
             {
                 t_curr = log.getTime();
-                boon.addStacksBetween(boon_stacks, t_curr - t_prev);
+                boon.addStacksBetween(boon_stacks, t_curr - t_prev, instid);
                 boon.update(t_curr - t_prev);
-                boon.add((int)log.getValue());
+                boon.add(log.getValue(), log.getSrcInstid());
                 if (t_curr != t_prev)
                 {
-                    boon_stacks.Add(boon.getStackValue());
+                    boon_stacks.Add(boon.getStackValue(instid));
                 }
                 else
                 {
-                    boon_stacks[boon_stacks.Count() - 1] = boon.getStackValue();
+                    boon_stacks[boon_stacks.Count() - 1] = boon.getStackValue(instid);
                 }
                 t_prev = t_curr;
             }
 
             // Fill in remaining stacks
             boon.addStacksBetween(boon_stacks, b_data.getLastAware() - b_data.getFirstAware() - t_prev);
-            boon.update(1);
-            boon_stacks.Add(boon.getStackValue());
             return boon_stacks;
         }
 
