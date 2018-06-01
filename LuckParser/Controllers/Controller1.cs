@@ -507,10 +507,15 @@ namespace LuckParser.Controllers
 
                 }
                 //set boss dead
-                if (c.isStateChange().getEnum() == "REWARD")//change dead
+                if (c.isStateChange().getEnum() == "REWARD")//got reward
                 {
                     log_data.setBossKill(true);
 
+                }
+                //set boss dead
+                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 4)//change dead
+                {
+                   log_data.setBossKill(true);
                 }
                 //set health update
                 if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 8)
