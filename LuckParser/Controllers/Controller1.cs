@@ -4860,7 +4860,7 @@ namespace LuckParser.Controllers
             double fight_duration = (b_data.getLastAware() - b_data.getFirstAware()) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
             string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
-            if (duration.ToString("hh").Length > 0)
+            if (duration.ToString("hh") != "00")
             {
                 durationString = duration.ToString("hh") + "h " + durationString;
             }
