@@ -11,7 +11,7 @@ namespace LuckParser.Models.ParseModels
         public static List<Point> mergeIntervals(List<Point> intervals)
         {
 
-            if (intervals.Count() == 1)
+            if (intervals.Count() <= 1)
             {
                 return intervals;
             }
