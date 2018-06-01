@@ -85,6 +85,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\ParseModels\Boss.cs" />
+    <Compile Include="Models\ParseModels\GW2APISpec.cs" />
     <Compile Include="Models\ParseModels\LogDamageCondition.cs" />
     <Compile Include="Models\ParseModels\GW2APISkillCheck.cs" />
     <Compile Include="Models\ParseModels\GW2APISkillDetailed.cs" />
@@ -110,7 +111,6 @@
     <Compile Include="Models\ParseModels\CombatItem.cs" />
     <Compile Include="Models\ParseModels\LogDamage.cs" />
     <Compile Include="Models\ParseModels\BoonSimulatorDuration.cs" />
-    <Compile Include="GW2API\GW2APISpec.cs" />
     <Compile Include="Models\ParseModels\BoonSimulatorIntensity.cs" />
     <Compile Include="Models\ParseModels\LogData.cs" />
     <Compile Include="Models\ParseModels\Mechanic.cs" />
