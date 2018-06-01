@@ -48,27 +48,27 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Getters
-        public int getInstid()
+        public ushort getInstid()
         {
             return instid;
         }
 
-        public String getAccount()
+        public string getAccount()
         {
             return account;
         }
 
-        public String getCharacter()
+        public string getCharacter()
         {
             return character;
         }
 
-        public String getGroup()
+        public string getGroup()
         {
             return group;
         }
 
-        public String getProf()
+        public string getProf()
         {
             return prof;
         }
@@ -137,33 +137,6 @@ namespace LuckParser.Models.ParseModels
                 setBoonMap(bossData, skillData, combatList, true);
             }
             return boon_map;
-        }
-        public Dictionary<int, BoonMap> getBoonGen(BossData bossData, SkillData skillData, List<CombatItem> combatList, AgentData agentData,List<int> trgtPID)
-        {
-            Dictionary<int, BoonMap> boonGen = new Dictionary<int, BoonMap>();
-            long time_start = bossData.getFirstAware();
-            long fight_duration = bossData.getLastAware() - time_start;            
-            foreach (int id in trgtPID)
-            {
-                boonGen[id] = new BoonMap(Boon.getAllBuffList());
-                foreach (CombatItem c in combatList)
-                {
-                    if (c.getValue() == 0 || c.isBuff() != 1 || c.getBuffDmg() > 0 || !(instid == c.getSrcInstid() || instid == c.getSrcMasterInstid()))
-                    {
-                        continue;
-                    }
-                    if (!boonGen[id].ContainsKey(c.getSkillID()))
-                    {
-                        continue;
-                    }
-                    long time = c.getTime() - time_start;
-                    if (id == c.getDstInstid() && time > 0 && time < fight_duration)//selecting player or minion as caster
-                    {
-                        addBoonLog(time, c, boonGen[id]);
-                    }
-                }
-            }
-            return boonGen;
         }
         public int[] getCleanses(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
             long time_start = bossData.getFirstAware();
@@ -281,56 +254,6 @@ namespace LuckParser.Models.ParseModels
         {
             dcd = value;
         }
-
-        // Private Methods
-        private void addBoonLog(long time, CombatItem c, BoonMap toFill)
-        {
-            if (c.isBuffremove().getID() == 0)
-            {
-                toFill[c.getSkillID()].Add(new BoonLog(time,c.getSrcInstid(), c.getValue(), c.getOverstackValue()));
-            }
-            else if (c.isBuffremove().getID() == 1)//All
-            {
-                List<BoonLog> loglist = toFill[c.getSkillID()];
-                for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
-                {
-                    BoonLog curBL = loglist[cnt];
-                    if (curBL.getTime() + curBL.getValue() > time)
-                    {
-                        long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                        loglist[cnt].addValue(-subtract);
-                    }
-                }
-
-            }
-            else if (c.isBuffremove().getID() == 2)//Single
-            {
-                List<BoonLog> loglist = toFill[c.getSkillID()];
-                int cnt = loglist.Count() - 1;
-                BoonLog curBL = loglist[cnt];
-                if (curBL.getTime() + curBL.getValue() > time)
-                {
-                    long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                    loglist[cnt].addValue(-subtract);
-                }
-            }
-            else if (c.isBuffremove().getID() == 3)//Manuel
-            {
-                List<BoonLog> loglist = toFill[c.getSkillID()];
-                for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
-                {
-                    BoonLog curBL = loglist[cnt];
-                    long ctime = curBL.getTime() + curBL.getValue();
-                    if (ctime > time)
-                    {
-                        long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                        loglist[cnt].addValue(-subtract);
-                        break;
-                    }
-                }
-
-            }
-        }
         protected void addDamageLog(long time, ushort instid, CombatItem c, List<DamageLog> toFill)
         {
             LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
@@ -443,7 +366,52 @@ namespace LuckParser.Models.ParseModels
                 long time = c.getTime() - time_start;
                 if (instid == c.getDstInstid() && time > 0 && time < fight_duration)
                 {
-                    addBoonLog(time, c, boon_map);
+                    ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
+                    if (c.isBuffremove().getID() == 0)
+                    {
+                        boon_map[c.getSkillID()].Add(new BoonLog(time, src, c.getValue(), c.getOverstackValue()));
+                    }
+                    else if (c.isBuffremove().getID() == 1)//All
+                    {
+                        List<BoonLog> loglist = boon_map[c.getSkillID()];
+                        for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
+                        {
+                            BoonLog curBL = loglist[cnt];
+                            if (curBL.getTime() + curBL.getValue() > time)
+                            {
+                                long subtract = (curBL.getTime() + curBL.getValue()) - time;
+                                loglist[cnt].addValue(-subtract);
+                            }
+                        }
+
+                    }
+                    else if (c.isBuffremove().getID() == 2)//Single
+                    {
+                        List<BoonLog> loglist = boon_map[c.getSkillID()];
+                        int cnt = loglist.Count() - 1;
+                        BoonLog curBL = loglist[cnt];
+                        if (curBL.getTime() + curBL.getValue() > time)
+                        {
+                            long subtract = (curBL.getTime() + curBL.getValue()) - time;
+                            loglist[cnt].addValue(-subtract);
+                        }
+                    }
+                    else if (c.isBuffremove().getID() == 3)//Manuel
+                    {
+                        List<BoonLog> loglist = boon_map[c.getSkillID()];
+                        for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
+                        {
+                            BoonLog curBL = loglist[cnt];
+                            long ctime = curBL.getTime() + curBL.getValue();
+                            if (ctime > time)
+                            {
+                                long subtract = (curBL.getTime() + curBL.getValue()) - time;
+                                loglist[cnt].addValue(-subtract);
+                                break;
+                            }
+                        }
+
+                    }
                 }
             }
 
@@ -501,11 +469,6 @@ namespace LuckParser.Models.ParseModels
             }
             return combatMinionIDList;
         }
-        private List<DamageLog> getMinionDamageLogs(int instidFilter, long srcagent, BossData bossData, List<CombatItem> combatList, AgentData agentData)
-        {
-            List<DamageLog> dls = getDamageLogs(instidFilter, bossData, combatList, agentData).Where(x => x.getSrcAgent() == srcagent).ToList();
-            return dls;
-        }
         private void setMinionsDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData, Dictionary<AgentItem, List<DamageLog>> toFill)
         {
             List<ushort> minionList = getCombatMinionList(bossData, combatList, agentData);
@@ -514,7 +477,7 @@ namespace LuckParser.Models.ParseModels
                 AgentItem agent = agentData.getNPCAgentList().FirstOrDefault(x => x.getInstid() == petid);
                 if (agent != null)
                 {
-                    List<DamageLog> damageLogs = getMinionDamageLogs(instidFilter, agent.getAgent(), bossData, combatList, agentData);
+                    List<DamageLog> damageLogs = getDamageLogs(instidFilter, bossData, combatList, agentData).Where(x => x.getSrcAgent() == agent.getAgent()).ToList();
                     if (damageLogs.Count == 0)
                     {
                         continue;
