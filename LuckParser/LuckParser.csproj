@@ -85,7 +85,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\ParseModels\Boss.cs" />
-    <Compile Include="Models\ParseModels\DamageLogCondition.cs" />
+    <Compile Include="Models\ParseModels\LogDamageCondition.cs" />
     <Compile Include="Models\ParseModels\GW2APISkillCheck.cs" />
     <Compile Include="Models\ParseModels\GW2APISkillDetailed.cs" />
     <Compile Include="Models\ParseModels\GW2APIfacts.cs" />
@@ -101,23 +101,23 @@
     <Compile Include="Models\ParseModels\AgentData.cs" />
     <Compile Include="Models\ParseModels\AgentItem.cs" />
     <Compile Include="Models\ParseModels\Boon.cs" />
-    <Compile Include="Models\ParseModels\BoonLog.cs" />
+    <Compile Include="Models\ParseModels\LogBoon.cs" />
     <Compile Include="Models\ParseModels\BoonMap.cs" />
     <Compile Include="Models\ParseModels\BoonsGraphModel.cs" />
     <Compile Include="Models\ParseModels\BossData.cs" />
     <Compile Include="Models\ParseModels\CastLog.cs" />
     <Compile Include="Models\ParseModels\CombatData.cs" />
     <Compile Include="Models\ParseModels\CombatItem.cs" />
-    <Compile Include="Models\ParseModels\DamageLog.cs" />
+    <Compile Include="Models\ParseModels\LogDamage.cs" />
     <Compile Include="Models\ParseModels\BoonSimulatorDuration.cs" />
-    <Compile Include="Models\ParseModels\GW2APISpec.cs" />
+    <Compile Include="GW2API\GW2APISpec.cs" />
     <Compile Include="Models\ParseModels\BoonSimulatorIntensity.cs" />
     <Compile Include="Models\ParseModels\LogData.cs" />
     <Compile Include="Models\ParseModels\Mechanic.cs" />
     <Compile Include="Models\ParseModels\MechanicData.cs" />
-    <Compile Include="Models\ParseModels\MechanicLog.cs" />
+    <Compile Include="Models\ParseModels\LogMechanic.cs" />
     <Compile Include="Models\ParseModels\Player.cs" />
-    <Compile Include="Models\ParseModels\DamageLogPower.cs" />
+    <Compile Include="Models\ParseModels\LogDamagePower.cs" />
     <Compile Include="Models\ParseModels\SkillData.cs" />
     <Compile Include="Models\ParseModels\SkillItem.cs" />
     <Compile Include="Models\ParseModels\Statistics.cs" />

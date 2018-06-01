@@ -5,7 +5,7 @@ using System.Web;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class BoonMap : Dictionary<int, List<BoonLog>>
+    public class BoonMap : Dictionary<int, List<LogBoon>>
     {
         // Constructors
         public BoonMap() : base()
@@ -13,14 +13,14 @@ namespace LuckParser.Models.ParseModels
         }
         public BoonMap(Boon boon): base()
         {
-            this[boon.getID()] = new List<BoonLog>();
+            this[boon.getID()] = new List<LogBoon>();
         }
 
         public BoonMap(List<Boon> boons) : base()
         {
             foreach (Boon boon in boons)
             {
-                this[boon.getID()] = new List<BoonLog>();
+                this[boon.getID()] = new List<LogBoon>();
             }
         }
 
@@ -33,7 +33,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     continue;
                 }
-                this[boon.getID()] = new List<BoonLog>();
+                this[boon.getID()] = new List<LogBoon>();
             }
         }
 
@@ -43,7 +43,7 @@ namespace LuckParser.Models.ParseModels
             {
                 return;
             }
-            this[boon.getID()] = new List<BoonLog>();
+            this[boon.getID()] = new List<LogBoon>();
         }
         
     }

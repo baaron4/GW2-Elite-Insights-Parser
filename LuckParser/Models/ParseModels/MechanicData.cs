@@ -8,18 +8,18 @@ namespace LuckParser.Models.ParseModels
 {
     public class MechanicData
     {
-        private List<MechanicLog> m_Data;
+        private List<LogMechanic> m_Data;
         private List<Mechanic> globalMechList = new List<Mechanic>();
 
         public MechanicData() {
-            this.m_Data = new List<MechanicLog>();
+            this.m_Data = new List<LogMechanic>();
         }
 
-        public void AddItem(MechanicLog mLog) {
+        public void AddItem(LogMechanic mLog) {
             this.m_Data.Add(mLog);
         }
 
-        public List<MechanicLog> GetMDataLogs() {
+        public List<LogMechanic> GetMDataLogs() {
             return this.m_Data;
         }
         public List<Mechanic> GetMechList(int bossid) {
@@ -202,7 +202,7 @@ namespace LuckParser.Models.ParseModels
             }
            
         }
-        public Mechanic GetMech(MechanicLog m_log) {
+        public Mechanic GetMech(LogMechanic m_log) {
             return GetMechList(0).FirstOrDefault(x => x.GetSkill() == m_log.GetSkill());
         }
         public string GetPLoltyShape(string mechName)

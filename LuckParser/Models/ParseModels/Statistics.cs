@@ -35,7 +35,7 @@ namespace LuckParser.Models.ParseModels
             return doubles;
         }*/
         // DURATION
-        public static List<Point> getBoonIntervalsList(BoonSimulator boon, List<BoonLog> boon_logs,BossData b_data)
+        public static List<Point> getBoonIntervalsList(BoonSimulator boon, List<LogBoon> boon_logs,BossData b_data)
         { 
             // Initialise variables
             long t_prev = 0;
@@ -43,7 +43,7 @@ namespace LuckParser.Models.ParseModels
             List<Point> boon_intervals = new List<Point>();
 
             // Loop: update then add durations
-            foreach (BoonLog log in boon_logs)
+            foreach (LogBoon log in boon_logs)
             {
                 t_curr = log.getTime();
                 boon.update(t_curr - t_prev);
@@ -88,7 +88,7 @@ namespace LuckParser.Models.ParseModels
         }
     
         // INTENSITY
-        public static List<long> getBoonStacksList(BoonSimulator boon, List<BoonLog> boon_logs,BossData b_data)
+        public static List<long> getBoonStacksList(BoonSimulator boon, List<LogBoon> boon_logs,BossData b_data)
         {
             // Initialise variables
             long t_prev = 0;
@@ -97,7 +97,7 @@ namespace LuckParser.Models.ParseModels
             boon_stacks.Add(0);
 
             // Loop: fill, update, and add to stacks
-            foreach (BoonLog log in boon_logs)
+            foreach (LogBoon log in boon_logs)
             {
                 t_curr = log.getTime();
                 boon.addStacksBetween(boon_stacks, t_curr - t_prev);
