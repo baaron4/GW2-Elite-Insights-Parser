@@ -5,33 +5,28 @@ using System.Web;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class Duration : AbstractBoon
+    public class BoonSimulatorDuration : BoonSimulator
     {
         // Constructor
-        public Duration(int capacity) : base(capacity)
+        public BoonSimulatorDuration(int capacity) : base(capacity)
         {
             //super(capacity);
         }
 
         // Public Methods
 
-        public override long getStackValue(ushort src = 0)
+        public override long getStackValue()
         {
             // return boon_stack.stream().mapToInt(Integer::intValue).sum();
             //check for overflow
-            List<SrcDuration> toCheck = boon_stack;
-            if (src > 0)
-            {
-                toCheck = toCheck.Where(x => x.src == src).ToList();
-            }
-            if (toCheck.Count == 0)
+            if (boon_stack.Count == 0)
             {
                 return 0;
             }
-            long total = toCheck[0].duration;
-            for (int i = 1; i < toCheck.Count; i++)
+            long total = boon_stack[0].duration;
+            for (int i = 1; i < boon_stack.Count; i++)
             {
-                if (total > 0 && toCheck[i].duration > long.MaxValue - total)
+                if (total > 0 && boon_stack[i].duration > long.MaxValue - total)
                 {
                     //Overflow
                     return long.MaxValue;
@@ -39,7 +34,7 @@ namespace LuckParser.Models.ParseModels
                 else
                 {
                     //ok
-                    total += toCheck[i].duration;
+                    total += boon_stack[i].duration;
                 }
             }
             return total;
@@ -72,7 +67,7 @@ namespace LuckParser.Models.ParseModels
         }
 
 
-        public override void addStacksBetween(List<long> boon_stacks, long time_between, ushort src = 0)
+        public override void addStacksBetween(List<long> boon_stacks, long time_between)
         {
         }
     }

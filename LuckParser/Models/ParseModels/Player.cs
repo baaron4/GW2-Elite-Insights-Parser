@@ -263,15 +263,15 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (c.isBuff() == 1 && c.getBuffDmg() != 0)//condi
                     {
-                        toFill.Add(new CondiDamageLog(time, c));
+                        toFill.Add(new DamageLogCondition(time, c));
                     }
                     else if (c.isBuff() == 0 && c.getValue() != 0)//power
                     {
-                        toFill.Add(new PowerDamageLog(time, c));
+                        toFill.Add(new DamageLogPower(time, c));
                     }
                     else if (c.getResult().getID() == 5 || c.getResult().getID() == 6 || c.getResult().getID() == 7)
                     {//Hits that where blinded, invulned, interupts
-                        toFill.Add(new PowerDamageLog(time, c));
+                        toFill.Add(new DamageLogPower(time, c));
                     }
                 }
             }
@@ -320,12 +320,12 @@ namespace LuckParser.Models.ParseModels
                     else if (c.isBuff() == 0 && c.getValue() != 0)
                     {
                         damagetaken.Add(c.getValue());
-                        damageTaken_logs.Add(new PowerDamageLog(time, c));
+                        damageTaken_logs.Add(new DamageLogPower(time, c));
 
                     }
                     else if (c.isBuff() == 0 && c.getValue() == 0)
                     {
-                        damageTaken_logs.Add(new PowerDamageLog(time, c));
+                        damageTaken_logs.Add(new DamageLogPower(time, c));
                     }
                 }
             }

@@ -586,5 +586,16 @@ namespace LuckParser.Models.ParseModels
         {
             return link;
         }
+
+        public BoonSimulator getSimulator()
+        {
+            if (type == "intensity")
+            {
+                return new BoonSimulatorIntensity(capacity);
+            } else
+            {
+                return new BoonSimulatorDuration(capacity);
+            }
+        }
     }
 }

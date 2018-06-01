@@ -5,22 +5,18 @@ using System.Web;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class Intensity : AbstractBoon
+    public class BoonSimulatorIntensity : BoonSimulator
     {
         // Constructor
-        public Intensity(int capacity) : base(capacity)
+        public BoonSimulatorIntensity(int capacity) : base(capacity)
         {
             //super(capacity);
         }
 
         // Public Methods
 
-        public override long getStackValue(ushort src = 0)
+        public override long getStackValue()
         {
-            if (src != 0)
-            {
-                return boon_stack.Where(x => x.src == src ).Count();
-            }
             return boon_stack.Count();
         }
         
@@ -56,18 +52,15 @@ namespace LuckParser.Models.ParseModels
         }
 
 
-        public override void addStacksBetween(List<long> boon_stacks, long time_between, ushort src = 0)
+        public override void addStacksBetween(List<long> boon_stacks, long time_between)
         {
-
             // Create copy of the boon
-            Intensity boon_copy = new Intensity(capacity);
+            BoonSimulatorIntensity boon_copy = new BoonSimulatorIntensity(capacity);
             boon_copy.boon_stack = new List<SrcDuration>(boon_stack);
             List<SrcDuration> stacks = boon_copy.boon_stack;
-
             // Simulate the boon stack decreasing
             if (stacks.Count() > 0)
             {
-
                 long time_passed = 0;
                 long min_duration = stacks.Select(x => x.duration).Min();
 
@@ -83,7 +76,7 @@ namespace LuckParser.Models.ParseModels
                         }
                         time_passed = i;
                     }
-                    boon_stacks.Add(boon_copy.getStackValue(src));
+                    boon_stacks.Add(boon_copy.getStackValue());
                 }
             }
             // Fill in remaining time with 0 values

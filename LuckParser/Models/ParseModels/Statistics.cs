@@ -35,7 +35,7 @@ namespace LuckParser.Models.ParseModels
             return doubles;
         }*/
         // DURATION
-        public static List<Point> getBoonIntervalsList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data, ushort instid = 0)
+        public static List<Point> getBoonIntervalsList(BoonSimulator boon, List<BoonLog> boon_logs,BossData b_data)
         { 
             // Initialise variables
             long t_prev = 0;
@@ -48,7 +48,7 @@ namespace LuckParser.Models.ParseModels
                 t_curr = log.getTime();
                 boon.update(t_curr - t_prev);
                 boon.add(log.getValue(), log.getSrcInstid());
-                long duration = t_curr + boon.getStackValue(instid);
+                long duration = t_curr + boon.getStackValue();
                 if (duration < 0) {
                     duration = long.MaxValue;
                 }
@@ -88,7 +88,7 @@ namespace LuckParser.Models.ParseModels
         }
     
         // INTENSITY
-        public static List<long> getBoonStacksList(AbstractBoon boon, List<BoonLog> boon_logs,BossData b_data, ushort instid = 0)
+        public static List<long> getBoonStacksList(BoonSimulator boon, List<BoonLog> boon_logs,BossData b_data)
         {
             // Initialise variables
             long t_prev = 0;
@@ -100,16 +100,16 @@ namespace LuckParser.Models.ParseModels
             foreach (BoonLog log in boon_logs)
             {
                 t_curr = log.getTime();
-                boon.addStacksBetween(boon_stacks, t_curr - t_prev, instid);
+                boon.addStacksBetween(boon_stacks, t_curr - t_prev);
                 boon.update(t_curr - t_prev);
                 boon.add(log.getValue(), log.getSrcInstid());
                 if (t_curr != t_prev)
                 {
-                    boon_stacks.Add(boon.getStackValue(instid));
+                    boon_stacks.Add(boon.getStackValue());
                 }
                 else
                 {
-                    boon_stacks[boon_stacks.Count() - 1] = boon.getStackValue(instid);
+                    boon_stacks[boon_stacks.Count() - 1] = boon.getStackValue();
                 }
                 t_prev = t_curr;
             }

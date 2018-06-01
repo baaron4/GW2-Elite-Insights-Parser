@@ -13,13 +13,7 @@ namespace LuckParser.Models.ParseModels
         private ushort overstack = 0;
         private ushort src_instid = 0;
 
-        // Constructor
-        public BoonLog(long time, ushort src_instid, long value)
-        {
-            this.time = time;
-            this.value = value;
-            this.src_instid = src_instid;
-        }
+        //Constructor
         public BoonLog(long time, ushort src_instid, long value, ushort overstack)
         {
             this.time = time;

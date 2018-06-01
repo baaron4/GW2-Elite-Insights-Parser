@@ -1023,7 +1023,7 @@ namespace LuckParser.Controllers
                 // Boon boon = Boon.getEnum(boon_list[i].ToString());
                 if (boon_logs.ContainsKey(boon_list[i].getID()))
                 {
-                    AbstractBoon boon_object = BoonFactory.makeBoon(boon);
+                    BoonSimulator boon_object = boon.getSimulator();
                     List<BoonLog> logs = boon_logs[boon.getID()];
                     if (logs.Count() > 0)
                     {
@@ -1070,17 +1070,17 @@ namespace LuckParser.Controllers
                     // Boon boon = Boon.getEnum(boon_list[i].ToString());
                     if (boon_logs.ContainsKey(boon_list[i].getID()))
                     {
-                        AbstractBoon boon_object = BoonFactory.makeBoon(boon);
+                        BoonSimulator boon_object = boon.getSimulator();
                         List<BoonLog> logs = boon_logs[boon.getID()];
                         if (logs.Count() > 0)
                         {
                             if (boon.getType().Equals("duration"))
                             {
-                                total += Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data, p.getInstid()), b_data);
+                                total += Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data);
                             }
                             else if (boon.getType().Equals("intensity"))
                             {
-                                total += Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data, p.getInstid()));
+                                total += Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data));
                             }
                         }
                     }
@@ -1117,7 +1117,7 @@ namespace LuckParser.Controllers
                 Boon boon = boon_list[i];
                 if (boon_logs.ContainsKey(boon.getID()))
                 {
-                    AbstractBoon boon_object = BoonFactory.makeBoon(boon);
+                    BoonSimulator boon_object = boon.getSimulator();
                     List<BoonLog> logs = boon_logs[boon.getID()];
                     string rate = "0";
                     if (logs.Count() > 0)
@@ -1233,7 +1233,7 @@ namespace LuckParser.Controllers
                 Boon boon = boon_list[i];
                 if (boon_logs.ContainsKey(boon.getID()))
                 {
-                    AbstractBoon boon_object = BoonFactory.makeBoon(boon);
+                    BoonSimulator boon_object = boon.getSimulator();
                     List<BoonLog> logs = boon_logs[boon.getID()];//Maybe wrong pretty sure it ok tho
 
                     List<Point> pointlist = new List<Point>();

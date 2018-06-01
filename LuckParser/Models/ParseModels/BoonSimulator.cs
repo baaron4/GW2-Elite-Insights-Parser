@@ -5,7 +5,7 @@ using System.Web;
 
 namespace LuckParser.Models.ParseModels
 {
-    public abstract class AbstractBoon
+    public abstract class BoonSimulator
     {
         public struct SrcDuration
         {
@@ -23,17 +23,17 @@ namespace LuckParser.Models.ParseModels
         protected int capacity;
 
         // Constructor
-        public AbstractBoon(int capacity)
+        public BoonSimulator(int capacity)
         {
             this.capacity = capacity;
         }
 
         // Abstract Methods
-        public abstract long getStackValue(ushort src = 0);
+        public abstract long getStackValue();
 
         public abstract void update(long time_passed);
 
-        public abstract void addStacksBetween(List<long> boon_stacks, long time_between, ushort src = 0);
+        public abstract void addStacksBetween(List<long> boon_stacks, long time_between);
 
         // Public Methods
         public void add(long boon_duration, ushort srcinstid)
