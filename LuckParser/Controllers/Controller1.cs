@@ -1009,38 +1009,25 @@ namespace LuckParser.Controllers
         private Dictionary<int, string> getfinalboons(Player p)
         {
             BossData b_data = getBossData();
-            CombatData c_data = getCombatData();
-            SkillData s_data = getSkillData();
-            BoonMap boon_logs = p.getBoonMap(b_data, s_data, c_data.getCombatList());
-            BoonDistribution boon_distrib = p.getBoonDistribution(b_data, s_data, c_data.getCombatList());
-            List<Boon> boon_list = Boon.getAllBuffList();
-            int n = boon_list.Count();//# of diff boons
+            BoonDistribution boon_distrib = p.getBoonDistribution(b_data, getSkillData(), getCombatData().getCombatList());
             Dictionary<int, string> rates = new Dictionary<int, string>();
-            for (int i = 0; i < n; i++)
+            foreach(Boon boon in Boon.getAllBuffList())
             {
-                Boon boon = boon_list[i];
                 string rate = "0";
-                // Boon boon = Boon.getEnum(boon_list[i].ToString());
-                if (boon_logs.ContainsKey(boon_list[i].getID()))
+                if (boon_distrib.ContainsKey(boon.getID()))
                 {
-                    BoonSimulator boon_object = boon.getSimulator();
-                    List<LogBoon> logs = boon_logs[boon.getID()];
-                    if (logs.Count() > 0)
+                    if (boon.getType().Equals("duration"))
                     {
-                        if (boon.getType().Equals("duration"))
-                        {
-                            long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
-                            rate = Math.Round(100.0*(double)boon_distrib.getUptime(boon.getID()) / fight_duration, 1) + "%";
-                        }
-                        else if (boon.getType().Equals("intensity"))
-                        {
-                            rate = Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)).ToString();//issues
-                        }
+                        long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
+                        rate = Math.Round(100.0 * boon_distrib.getUptime(boon.getID()) / fight_duration, 1) + "%";
                     }
+                    else if (boon.getType().Equals("intensity"))
+                    {
+                    }
+
                 }
                 rates[boon.getID()] = rate;
             }
-            //table.addrow(utility.concatstringarray(new string[] { p.getcharacter(), p.getprof() }, rates));
             return rates;
         }
         private Dictionary<int, string> getfinalboons(Player p, List<Player> trgetPlayers)
@@ -1052,42 +1039,31 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
-            Dictionary<Player, BoonMap> boon_logsGen = new Dictionary<Player, BoonMap>();
             Dictionary<Player, BoonDistribution> boon_logsDist = new Dictionary<Player, BoonDistribution>();
             foreach (Player player in trgetPlayers)
             {
-                boon_logsGen[player] = player.getBoonMap(b_data, s_data, c_data.getCombatList());
                 boon_logsDist[player] = player.getBoonDistribution(b_data, s_data, c_data.getCombatList());
             }
-            List<Boon> boon_list = Boon.getAllBuffList();
-            int n = boon_list.Count();//# of diff boons
             Dictionary<int, string> rates = new Dictionary<int, string>();
-            for (int i = 0; i < n; i++)
+            foreach (Boon boon in Boon.getAllBuffList())
             {
-                Boon boon = boon_list[i];
                 string rate = "0";
                 double total = 0.0;
                 foreach (Player player in trgetPlayers)
                 {
-                    BoonMap boon_logs = boon_logsGen[player];
                     BoonDistribution boon_dist = boon_logsDist[player];
-                    // Boon boon = Boon.getEnum(boon_list[i].ToString());
-                    if (boon_logs.ContainsKey(boon_list[i].getID()))
+                    if (boon_dist.ContainsKey(boon.getID()))
                     {
-                        BoonSimulator boon_object = boon.getSimulator();
-                        List<LogBoon> logs = boon_logs[boon.getID()];
                         long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
-                        if (logs.Count() > 0)
+
+                        if (boon.getType().Equals("duration"))
                         {
-                            if (boon.getType().Equals("duration"))
-                            {
-                                total += 100.0*(double)boon_dist.getGeneration(boon.getID(), p.getInstid()) / fight_duration;
-                            }
-                            else if (boon.getType().Equals("intensity"))
-                            {
-                                total += Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data));
-                            }
+                            total += 100.0 * (double)boon_dist.getGeneration(boon.getID(), p.getInstid()) / fight_duration;
                         }
+                        else if (boon.getType().Equals("intensity"))
+                        {
+                        }
+
                     }
                 }
                 if (total > 0)
@@ -1104,47 +1080,33 @@ namespace LuckParser.Controllers
                 }
                 rates[boon.getID()] = rate;
             }
-            //table.addrow(utility.concatstringarray(new string[] { p.getcharacter(), p.getprof() }, rates));
             return rates;
         }
-        private string[] getfinalcondis(Player p)
+        private Dictionary<int, string> getfinalcondis(Player p)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
-            BoonMap boon_logs = p.getCondiBoonMap(b_data, s_data, c_data.getCombatList());
-            List<Boon> boon_list = Boon.getCondiBoonList();
-            int n = boon_list.Count();//# of diff boons
-            string[] rates = new string[n];
-            for (int i = 0; i < n; i++)
+            BoonDistribution boon_distrib = p.getBoonDistribution(b_data, s_data, c_data.getCombatList());
+            Dictionary<int, string> rates = new Dictionary<int, string>();
+            foreach (Boon boon in Boon.getCondiBoonList())
             {
-                // Boon boon = Boon.getEnum(boon_list[i].ToString());
-                Boon boon = boon_list[i];
-                if (boon_logs.ContainsKey(boon.getID()))
+                rates[boon.getID()] = "0";
+                if (boon_distrib.ContainsKey(boon.getID()))
                 {
-                    BoonSimulator boon_object = boon.getSimulator();
-                    List<LogBoon> logs = boon_logs[boon.getID()];
                     string rate = "0";
-                    if (logs.Count() > 0)
+                    if (boon.getType().Equals("duration"))
                     {
-                        if (boon.getType().Equals("duration"))
-                        {
-
-                            rate = Math.Round(Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data),1).ToString() + "%";//these 2 are problamatic
-                        }
-                        else if (boon.getType().Equals("intensity"))
-                        {
-                            rate = Math.Round(Statistics.getAverageStacks(Statistics.getBoonStacksList(boon_object, logs, b_data)),1).ToString();//issues
-                        }
+                        long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
+                        rate = Math.Round(100.0 * boon_distrib.getUptime(boon.getID()) / fight_duration, 1) + "%";
                     }
-                    rates[i] = rate;
-                }
-                else
-                {
-                    rates[i] = "0";
+                    else if (boon.getType().Equals("intensity"))
+                    {
+                    }
+
+                    rates[boon.getID()] = rate;
                 }
             }
-            //table.addrow(utility.concatstringarray(new string[] { p.getcharacter(), p.getprof() }, rates));
             return rates;
         }
         private void setMechData() {
@@ -1228,69 +1190,60 @@ namespace LuckParser.Controllers
         private List<BoonsGraphModel> getBoonGraph(Player p , List<Boon> boon_list) {
             List<BoonsGraphModel> uptime = new List<BoonsGraphModel>();
             BossData b_data = getBossData();
-            CombatData c_data = getCombatData();
-            SkillData s_data = getSkillData();
-            BoonMap boon_logs = p.getBoonMap(b_data, s_data, c_data.getCombatList());
-            int n = boon_list.Count();//# of diff boons
-
-            for (int i = 0; i < n; i++)//foreach boon
+            // TODO
+            BoonDistribution boon_dist = p.getBoonDistribution(b_data, getSkillData(), getCombatData().getCombatList());
+            foreach (Boon boon in boon_list)//foreach boon
             {
-                Boon boon = boon_list[i];
-                if (boon_logs.ContainsKey(boon.getID()))
+                if (boon_dist.ContainsKey(boon.getID()))
                 {
-                    BoonSimulator boon_object = boon.getSimulator();
-                    List<LogBoon> logs = boon_logs[boon.getID()];//Maybe wrong pretty sure it ok tho
-
                     List<Point> pointlist = new List<Point>();
-                    if (logs.Count() > 0)
+                    if (boon.getType().Equals("duration"))
                     {
-                        if (boon.getType().Equals("duration"))
+                        int fight_duration = (int)((b_data.getLastAware() - b_data.getFirstAware()) / 1000.0);
+                        List<Point> pointswierds = new List<Point>();
+                        int pwindex = 0;
+                        int enddur = 0;
+                        for (int cur_time = 0; cur_time < fight_duration; cur_time++)
                         {
-                            int fight_duration = (int)((b_data.getLastAware() - b_data.getFirstAware()) / 1000.0);
-                            List<Point> pointswierds = Statistics.getBoonIntervalsList(boon_object, logs, b_data);
-                            int pwindex = 0;
-                            int enddur = 0;
-                            for (int cur_time = 0; cur_time < fight_duration; cur_time++)
+                            if (cur_time == (int)(pointswierds[pwindex].X / 1000f))
                             {
-                                if (cur_time == (int)(pointswierds[pwindex].X / 1000f))
-                                {
-                                    pointlist.Add(new Point((int)(pointswierds[pwindex].X / 1000f), 1));
-                                    enddur = (int)(pointswierds[pwindex].Y / 1000f);
-                                    if (pwindex < pointswierds.Count() - 1) { pwindex++; }
+                                pointlist.Add(new Point((int)(pointswierds[pwindex].X / 1000f), 1));
+                                enddur = (int)(pointswierds[pwindex].Y / 1000f);
+                                if (pwindex < pointswierds.Count() - 1) { pwindex++; }
 
-                                }
-                                else if (cur_time < enddur)
-                                {
-                                    pointlist.Add(new Point(cur_time, 1));
-                                }
-                                else
-                                {
-                                    pointlist.Add(new Point(cur_time, 0));
-                                }
                             }
-
-                        }
-                        else if (boon.getType().Equals("intensity"))
-                        {
-                            List<long> stackslist = Statistics.getBoonStacksList(boon_object, logs, b_data);
-                            int time = 0;
-                            int timeGraphed = 0;
-                            foreach (long stack in stackslist)
+                            else if (cur_time < enddur)
                             {
-                                if (Math.Floor(time / 1000f) > timeGraphed)
-                                {
-                                    timeGraphed = (int)Math.Floor(time / 1000f);
-                                    pointlist.Add(new Point(time / 1000, (int)stack));
-                                }
-                                time++;
+                                pointlist.Add(new Point(cur_time, 1));
                             }
-
+                            else
+                            {
+                                pointlist.Add(new Point(cur_time, 0));
+                            }
                         }
-                        BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(), pointlist, boon.getID());
-                        uptime.Add(bgm);
+
                     }
+                    else if (boon.getType().Equals("intensity"))
+                    {
+                        List<long> stackslist = new List<long>();
+                        int time = 0;
+                        int timeGraphed = 0;
+                        foreach (long stack in stackslist)
+                        {
+                            if (Math.Floor(time / 1000f) > timeGraphed)
+                            {
+                                timeGraphed = (int)Math.Floor(time / 1000f);
+                                pointlist.Add(new Point(time / 1000, (int)stack));
+                            }
+                            time++;
+                        }
+
+                    }
+                    BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(), pointlist, boon.getID());
+                    uptime.Add(bgm);
+
                 }
-                
+
             }
             return uptime;
         }
@@ -4536,12 +4489,10 @@ namespace LuckParser.Controllers
                     sw.Write("<tr>");
                     {
                         sw.Write("<td>" + boss.getCharacter().ToString() + "</td>");
-                        string[] boonArray = getfinalcondis(boss);
-                        int count = 0;
+                        Dictionary<int, string> boonArray = getfinalcondis(boss);
                         foreach (Boon boon in Boon.getCondiBoonList())
                         {
-                            sw.Write("<td>" + boonArray[count] + "</td>");
-                            count++;
+                            sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
                         }
                     }            
                     sw.Write("</tr>");

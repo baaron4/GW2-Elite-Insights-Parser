@@ -29,7 +29,6 @@ namespace LuckParser.Models.ParseModels
         protected List<LogDamage> damageTaken_logs = new List<LogDamage>();
         protected List<int> damagetaken = new List<int>();
         // Boons
-        private BoonMap boon_map = new BoonMap();
         private BoonDistribution boon_distribution = new BoonDistribution();
         private Dictionary<int, List<BoonSimulationItem>> boon_simulation = new Dictionary<int, List<BoonSimulationItem>>();
         // Casts
@@ -124,14 +123,6 @@ namespace LuckParser.Models.ParseModels
             }
             return damageTaken_logs;
         }
-        public BoonMap getBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList)
-        {
-            if (boon_map.Count == 0)
-            {
-                setBoonMap(bossData, skillData, combatList, false);
-            }
-            return boon_map;
-        }
         public BoonDistribution getBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList)
         {
             if (boon_distribution.Count == 0)
@@ -139,14 +130,6 @@ namespace LuckParser.Models.ParseModels
                 setBoonDistribution(bossData, skillData, combatList);
             }
             return boon_distribution;
-        }
-        public BoonMap getCondiBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList)
-        {
-            if (boon_map.Count == 0)
-            {
-                setBoonMap(bossData, skillData, combatList, true);
-            }
-            return boon_map;
         }
         public int[] getCleanses(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
             long time_start = bossData.getFirstAware();
@@ -354,10 +337,10 @@ namespace LuckParser.Models.ParseModels
         }
         private void setBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList)
         {
-            BoonMap to_use = getBoonMap(bossData,skillData,combatList);
+            BoonMap to_use = getBoonMap(bossData,skillData,combatList, true);
             List<Boon> boon_to_use = Boon.getAllBuffList();
             boon_to_use.AddRange(Boon.getCondiBoonList());
-            foreach (Boon boon in Boon.getAllBuffList())
+            foreach (Boon boon in boon_to_use)
             {
                 if (to_use.ContainsKey(boon.getID()))
                 {
@@ -387,8 +370,9 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        private void setBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList, bool add_condi)
+        private BoonMap getBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList, bool add_condi)
         {
+            BoonMap boon_map = new BoonMap();
             boon_map.add(Boon.getAllBuffList());
             // This only happens for bosses
             if (add_condi)
@@ -459,7 +443,7 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-
+            return boon_map;
         }
         private void setCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
             long time_start = bossData.getFirstAware();
