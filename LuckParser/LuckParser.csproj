@@ -100,6 +100,7 @@
     <Compile Include="Models\ParseEnums\IFF.cs" />
     <Compile Include="Models\ParseEnums\Result.cs" />
     <Compile Include="Models\ParseEnums\StateChange.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationItemDuration.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulator.cs" />
     <Compile Include="Models\ParseModels\Agents\Agent.cs" />
     <Compile Include="Models\ParseModels\Agents\AgentData.cs" />

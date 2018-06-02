@@ -1182,72 +1182,6 @@ namespace LuckParser.Controllers
         //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
         //Methods that make it easier to create Javascript graphs
         /// <summary>
-        /// Gets the boon graph for a given player using given buff list
-        /// </summary>
-        /// <param name="p">The player</param>
-        /// <param name="boon_list">The buff list</param>
-        /// <returns></returns>
-        private List<BoonsGraphModel> getBoonGraph(Player p , List<Boon> boon_list) {
-            List<BoonsGraphModel> uptime = new List<BoonsGraphModel>();
-            BossData b_data = getBossData();
-            // TODO
-            BoonDistribution boon_dist = p.getBoonDistribution(b_data, getSkillData(), getCombatData().getCombatList());
-            foreach (Boon boon in boon_list)//foreach boon
-            {
-                if (boon_dist.ContainsKey(boon.getID()))
-                {
-                    List<Point> pointlist = new List<Point>();
-                    if (boon.getType().Equals("duration"))
-                    {
-                        int fight_duration = (int)((b_data.getLastAware() - b_data.getFirstAware()) / 1000.0);
-                        List<Point> pointswierds = new List<Point>();
-                        int pwindex = 0;
-                        int enddur = 0;
-                        for (int cur_time = 0; cur_time < fight_duration; cur_time++)
-                        {
-                            if (cur_time == (int)(pointswierds[pwindex].X / 1000f))
-                            {
-                                pointlist.Add(new Point((int)(pointswierds[pwindex].X / 1000f), 1));
-                                enddur = (int)(pointswierds[pwindex].Y / 1000f);
-                                if (pwindex < pointswierds.Count() - 1) { pwindex++; }
-
-                            }
-                            else if (cur_time < enddur)
-                            {
-                                pointlist.Add(new Point(cur_time, 1));
-                            }
-                            else
-                            {
-                                pointlist.Add(new Point(cur_time, 0));
-                            }
-                        }
-
-                    }
-                    else if (boon.getType().Equals("intensity"))
-                    {
-                        List<long> stackslist = new List<long>();
-                        int time = 0;
-                        int timeGraphed = 0;
-                        foreach (long stack in stackslist)
-                        {
-                            if (Math.Floor(time / 1000f) > timeGraphed)
-                            {
-                                timeGraphed = (int)Math.Floor(time / 1000f);
-                                pointlist.Add(new Point(time / 1000, (int)stack));
-                            }
-                            time++;
-                        }
-
-                    }
-                    BoonsGraphModel bgm = new BoonsGraphModel(boon.getName(), pointlist, boon.getID());
-                    uptime.Add(bgm);
-
-                }
-
-            }
-            return uptime;
-        }
-        /// <summary>
         /// Gets the points for the boss dps graph for a given player
         /// </summary>
         /// <param name="p">The player</param>
@@ -1377,24 +1311,6 @@ namespace LuckParser.Controllers
                 }
             }
             return totaldmgList;
-        }
-        /// <summary>
-        /// Checks if the given player has died during the combat
-        /// </summary>
-        /// <param name="p">The player</param>
-        /// <returns></returns>
-        private bool hasDied(Player p)
-        {
-            List<Point> dead = getCombatData().getStates(p.getInstid(), "CHANGE_DEAD");
-
-            if (dead.Count() > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
         /// <summary>
         /// Creates the dps graph
@@ -2732,7 +2648,7 @@ namespace LuckParser.Controllers
                 List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
                 SkillData s_data = getSkillData();
                 List<SkillItem> s_list = s_data.getSkillList();
-                bool died = hasDied(p);
+                bool died = p.getDeath(getCombatData().getCombatList()) > 0;
                 string charname = p.getCharacter();
                 sw.Write("<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">");
                 {
@@ -2901,14 +2817,14 @@ namespace LuckParser.Controllers
                                         {
                                             parseBoonsList.AddRange(present_personnal[p.getInstid()]);
                                         }
-                                        List<BoonsGraphModel> boonGraphData = getBoonGraph(p, parseBoonsList);
-                                        boonGraphData.Reverse();
-                                        foreach (BoonsGraphModel bgm in boonGraphData)
+                                        Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(getBossData(), getSkillData(), getCombatData().getCombatList());
+                                        foreach (int boonid in boonGraphData.Keys.Reverse())
                                         {
-                                            if (parseBoonsList.FirstOrDefault(x => x.getID() == bgm.getBoonId()) != null)
+                                            if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null)
                                             {
                                                 sw.Write("{");
                                                 {
+                                                    BoonsGraphModel bgm = boonGraphData[boonid];
                                                     List<Point> bChart = bgm.getBoonChart();
                                                     int bChartCount = 0;
                                                     sw.Write("y: [");
@@ -4541,14 +4457,14 @@ namespace LuckParser.Controllers
                         parseBoonsList.AddRange(Boon.getCondiBoonList());
                         //Every buffs and boons
                         parseBoonsList.AddRange(Boon.getAllBuffList());
-                        List<BoonsGraphModel> boonGraphData = getBoonGraph(boss, parseBoonsList);
-                        boonGraphData.Reverse();
-                        foreach (BoonsGraphModel bgm in boonGraphData)
+                        Dictionary<int,BoonsGraphModel> boonGraphData = boss.getBoonGraphs(getBossData(), getSkillData(),getCombatData().getCombatList());
+                        foreach (int boonid in boonGraphData.Keys.Reverse())
                         {
-                            if (parseBoonsList.FirstOrDefault(x => x.getID() == bgm.getBoonId()) != null)
+                            if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null)
                             {
                                 sw.Write("{");
                                 {
+                                    BoonsGraphModel bgm = boonGraphData[boonid];
                                     List<Point> bChart = bgm.getBoonChart();
                                     int bChartCount = 0;
                                     sw.Write("y: [");
@@ -5438,14 +5354,14 @@ namespace LuckParser.Controllers
                         {
                             parseBoonsList.AddRange(present_personnal[p.getInstid()]);
                         }
-                        List<BoonsGraphModel> boonGraphData = getBoonGraph(p, parseBoonsList);
-                        boonGraphData.Reverse();
-                        foreach (BoonsGraphModel bgm in boonGraphData)
+                        Dictionary<int,BoonsGraphModel> boonGraphData = p.getBoonGraphs(getBossData(), getSkillData(), getCombatData().getCombatList());
+                        foreach (int boonid in boonGraphData.Keys.Reverse())
                         {
-                            if (parseBoonsList.FirstOrDefault(x => x.getID() == bgm.getBoonId()) != null)
+                            if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null)
                             {
                                 sw.Write("{");
                                 {
+                                    BoonsGraphModel bgm = boonGraphData[boonid];
                                     List<Point> bChart = bgm.getBoonChart();
                                     int bChartCount = 0;
                                     sw.Write("y: [");

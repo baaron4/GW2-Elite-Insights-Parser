@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
 
         // Public Methods
 
-        public override long getStackValue()
+        public long getStackValue()
         {
             return boon_stack.Count();
         }
@@ -25,7 +25,7 @@ namespace LuckParser.Models.ParseModels
         {
 
             // Subtract from each
-            for (int i = 0; i < boon_stack.Count(); i++)
+            /*for (int i = 0; i < boon_stack.Count(); i++)
             {
                 boon_stack[i] = new BoonSimulationItem(boon_stack[i], time_passed, -time_passed);
             }
@@ -40,7 +40,7 @@ namespace LuckParser.Models.ParseModels
                     indexcount--;
                 }
                 indexcount++;
-            }
+            }*/
             //for (iterator<int> iter = boon_stack.listIterator(); iter.hasNext();)
             //{
             //    int stack = iter.next();
@@ -52,17 +52,17 @@ namespace LuckParser.Models.ParseModels
         }
 
 
-        public override void addStacksBetween(List<long> boon_stacks, long time_between)
+        public void addStacksBetween(List<long> boon_stacks, long time_between)
         {
             // Create copy of the boon
             BoonSimulatorIntensity boon_copy = new BoonSimulatorIntensity(capacity);
-            boon_copy.boon_stack = new List<BoonSimulationItem>(boon_stack);
-            List<BoonSimulationItem> stacks = boon_copy.boon_stack;
+            boon_copy.boon_stack = new List<BoonStackItem>(boon_stack);
+            List<BoonStackItem> stacks = boon_copy.boon_stack;
             // Simulate the boon stack decreasing
             if (stacks.Count() > 0)
             {
                 long time_passed = 0;
-                long min_duration = stacks.Select(x => x.getDuration()).Min();
+                long min_duration = stacks.Select(x => x.boon_duration).Min();
 
                 // Remove minimum duration from stack
                 for (long i = 1; i < time_between; i++)
@@ -72,7 +72,7 @@ namespace LuckParser.Models.ParseModels
                         boon_copy.update(i - time_passed);
                         if (stacks.Count() > 0)
                         {
-                            min_duration = stacks.Select(x => x.getDuration()).Min();
+                            min_duration = stacks.Select(x => x.boon_duration).Min();
                         }
                         time_passed = i;
                     }
@@ -97,6 +97,11 @@ namespace LuckParser.Models.ParseModels
         public override void trim(long fight_duration)
         {
             return;
+        }
+
+        public override List<BoonSimulationItem> getSimulationResult()
+        {
+            return new List<BoonSimulationItem>();
         }
     }
 }

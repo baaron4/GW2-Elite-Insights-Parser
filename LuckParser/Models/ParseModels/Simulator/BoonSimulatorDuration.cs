@@ -7,6 +7,8 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSimulatorDuration : BoonSimulator
     {
+
+        private List<BoonSimulationItemDuration> simulation = new List<BoonSimulationItemDuration>();
         // Constructor
         public BoonSimulatorDuration(int capacity) : base(capacity)
         {
@@ -15,29 +17,10 @@ namespace LuckParser.Models.ParseModels
 
         // Public Methods
 
-        public override long getStackValue()
+
+        public override List<BoonSimulationItem> getSimulationResult()
         {
-            // return boon_stack.stream().mapToInt(Integer::intValue).sum();
-            //check for overflow
-            if (boon_stack.Count == 0)
-            {
-                return 0;
-            }
-            long total = boon_stack[0].getDuration();
-            for (int i = 1; i < boon_stack.Count; i++)
-            {
-                if (total > 0 && boon_stack[i].getDuration() > long.MaxValue - total)
-                {
-                    //Overflow
-                    return long.MaxValue;
-                }
-                else
-                {
-                    //ok
-                    total += boon_stack[i].getDuration();
-                }
-            }
-            return total;
+            return new List<BoonSimulationItem>(simulation);
         }
 
         public override void simulate(List<LogBoon> logs)
@@ -58,48 +41,46 @@ namespace LuckParser.Models.ParseModels
         {
             if (boon_stack.Count() > 0)
             {
-                BoonSimulationItem toAdd = boon_stack[0];
+                BoonSimulationItem toAdd = new BoonSimulationItemDuration(boon_stack[0]);
                 if (simulation.Count > 0)
                 {
-                    BoonSimulationItem last = simulation.Last();
+                    BoonSimulationItemDuration last = simulation.Last();
                     if (last.getEnd() > toAdd.getStart())
                     {
                         last.setEnd(toAdd.getStart());
                     }
                 }
-                simulation.Add(boon_stack[0]);
-                boon_stack[0] = new BoonSimulationItem(boon_stack[0], time_passed, -time_passed);
-                long diff = time_passed - Math.Abs(Math.Min(boon_stack[0].getDuration(), 0));
+                simulation.Add(new BoonSimulationItemDuration(boon_stack[0]));
+                boon_stack[0] = new BoonStackItem(boon_stack[0], time_passed, -time_passed);
+                long diff = time_passed - Math.Abs(Math.Min(boon_stack[0].boon_duration, 0));
                 for (int i = 1; i < boon_stack.Count(); i++)
                 {
-                    boon_stack[i] = new BoonSimulationItem(boon_stack[i], diff, 0);
+                    boon_stack[i] = new BoonStackItem(boon_stack[i], diff, 0);
                 }
-                if (boon_stack[0].getDuration() <= 0)
+                if (boon_stack[0].boon_duration <= 0)
                 {
                     // Spend leftover time
-                    long leftover = Math.Abs(boon_stack[0].getDuration());
+                    long leftover = Math.Abs(boon_stack[0].boon_duration);
                     boon_stack.RemoveAt(0);
                     update(leftover);
                 }
 
             }
         }
-
-
-        public override void addStacksBetween(List<long> boon_stacks, long time_between)
-        {
-        }
-
         public override void trim(long fight_duration)
         {
-            if (simulation.Count > 0)
+            for (int i = simulation.Count - 1; i >= 0; i--)
             {
-                BoonSimulationItem last = simulation.Last();
-                if (last.getEnd() > fight_duration)
+                BoonSimulationItemDuration data = simulation[i];
+                if (data.getEnd() > fight_duration)
                 {
-                    last.setEnd(fight_duration);
+                    data.setEnd(fight_duration);
+                } else
+                {
+                    break;
                 }
             }
         }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 
@@ -30,7 +31,7 @@ namespace LuckParser.Models.ParseModels
         protected List<int> damagetaken = new List<int>();
         // Boons
         private BoonDistribution boon_distribution = new BoonDistribution();
-        private Dictionary<int, List<BoonSimulationItem>> boon_simulation = new Dictionary<int, List<BoonSimulationItem>>();
+        private Dictionary<int, BoonsGraphModel> boon_points = new Dictionary<int, BoonsGraphModel>();
         // Casts
         private List<CastLog> cast_logs = new List<CastLog>();
 
@@ -130,6 +131,14 @@ namespace LuckParser.Models.ParseModels
                 setBoonDistribution(bossData, skillData, combatList);
             }
             return boon_distribution;
+        }
+        public Dictionary<int, BoonsGraphModel> getBoonGraphs(BossData bossData, SkillData skillData, List<CombatItem> combatList)
+        {
+            if (boon_points.Count == 0)
+            {
+                setBoonDistribution(bossData, skillData, combatList);
+            }
+            return boon_points;
         }
         public int[] getCleanses(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
             long time_start = bossData.getFirstAware();
@@ -247,6 +256,16 @@ namespace LuckParser.Models.ParseModels
         {
             dcd = value;
         }
+        public long getDeath(List<CombatItem> combatList)
+        {
+            CombatItem dead = combatList.FirstOrDefault( x => x.getSrcInstid() == instid && x.isStateChange().getEnum() == "CHANGE_DEAD");
+            if (dead != null && dead.getTime() > 0)
+            {
+                return dead.getTime();
+            }
+            return 0;
+        }
+        // Privates
         protected void addDamageLog(long time, ushort instid, CombatItem c, List<LogDamage> toFill)
         {
             LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
@@ -340,6 +359,7 @@ namespace LuckParser.Models.ParseModels
             BoonMap to_use = getBoonMap(bossData,skillData,combatList, true);
             List<Boon> boon_to_use = Boon.getAllBuffList();
             boon_to_use.AddRange(Boon.getCondiBoonList());
+            int fight_duration = (int)(bossData.getLastAware() - bossData.getFirstAware()) / 1000;
             foreach (Boon boon in boon_to_use)
             {
                 if (to_use.ContainsKey(boon.getID()))
@@ -355,9 +375,15 @@ namespace LuckParser.Models.ParseModels
                     boon_distribution[boon.getID()] = new Dictionary<ushort, long>();
                     BoonSimulator simulator = boon.getSimulator();
                     simulator.simulate(logs);
-                    simulator.trim(bossData.getLastAware() - bossData.getFirstAware());
-                    boon_simulation[boon.getID()] = simulator.getSimulationResult();
-                    foreach (BoonSimulationItem simul in boon_simulation[boon.getID()])
+                    if (getDeath(combatList) > 0)
+                    {
+                        simulator.trim(getDeath(combatList) - bossData.getFirstAware());
+                    } else
+                    {
+                        simulator.trim(bossData.getLastAware() - bossData.getFirstAware());
+                    }
+                    List<BoonSimulationItem> simulation = simulator.getSimulationResult();
+                    foreach (BoonSimulationItem simul in simulation)
                     {
                         if (!boon_distribution[boon.getID()].ContainsKey(simul.getSrc()))
                         {
@@ -367,6 +393,32 @@ namespace LuckParser.Models.ParseModels
                             boon_distribution[boon.getID()][simul.getSrc()] += simul.getDuration();
                         }
                     }
+                    int prev = 0;
+                    List<Point> toFill = new List<Point>();
+                    foreach (BoonSimulationItem simul in simulation)
+                    {
+                        int start = (int)Math.Floor(simul.getStart() / 1000.0);
+                        int end = (int)Math.Floor(simul.getEnd() / 1000.0);
+                        // fill
+                        if (toFill.Count < start)
+                        {
+                            for (int i = prev; i < start; i++)
+                            {
+                                toFill.Add(new Point(i, 0));
+                            }
+                        }
+                        for (int i = start; i < end; i++)
+                        {
+                            toFill.Add(new Point(i, simul.getStack()));
+                        }
+                        prev = end;
+                    }
+                    // fill
+                    for (int i = prev; i < fight_duration; i++)
+                    {
+                        toFill.Add(new Point(i, 0));
+                    }
+                    boon_points[boon.getID()] = new BoonsGraphModel(boon.getName(), toFill);
                 }
             }
         }

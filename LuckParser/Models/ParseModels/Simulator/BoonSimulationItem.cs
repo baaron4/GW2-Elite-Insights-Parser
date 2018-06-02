@@ -6,59 +6,22 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class BoonSimulationItem
+    public abstract class BoonSimulationItem
     {
-        private long start;
-        private long duration;
-        private ushort src;
 
-        public BoonSimulationItem(long start, long duration, ushort src)
+        public BoonSimulationItem()
         {
-            this.start = start;
-            this.duration = duration;
-            this.src = src;
         }
 
-        public BoonSimulationItem(BoonSimulationItem other, long start_shift, long duration_shift)
-        {
-            this.start = other.start + start_shift;
-            this.duration = other.duration + duration_shift;
-            this.src = other.src;
-        }
+        public abstract long getDuration();
 
-        public long getDuration()
-        {
-            return this.duration;
-        }
 
-        public void shiftStart(long shift)
-        {
-            start += shift;
-        }
+        public abstract long getStart();
 
-        public long getStart()
-        {
-            return start;
-        }
+        public abstract ushort getSrc();
 
-        public void setDuration(long duration)
-        {
-            this.duration = duration;
-        }
+        public abstract long getEnd();
 
-        public ushort getSrc()
-        {
-            return src;
-        }
-
-        public void setEnd(long end)
-        {
-            this.duration = end - this.start;
-        }
-
-        public long getEnd()
-        {
-            return start + duration;
-        }
+        public abstract int getStack();
     }
 }
