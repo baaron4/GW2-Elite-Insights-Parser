@@ -277,7 +277,6 @@ namespace LuckParser
 
                 //Report 100% completion on operation completed
                 logger(0, "Finish", 100);
-                btnStartAsyncOperation.Enabled = false;
             }
             finally
             {

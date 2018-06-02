@@ -1048,17 +1048,17 @@ namespace LuckParser.Controllers
             foreach (Boon boon in Boon.getAllBuffList())
             {
                 string rate = "0";
-                double total = 0.0;
+                long total = 0;
+                long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
                 foreach (Player player in trgetPlayers)
                 {
                     BoonDistribution boon_dist = boon_logsDist[player];
                     if (boon_dist.ContainsKey(boon.getID()))
                     {
-                        long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
 
                         if (boon.getType().Equals("duration"))
                         {
-                            total += 100.0 * (double)boon_dist.getGeneration(boon.getID(), p.getInstid()) / fight_duration;
+                            total += boon_dist.getGeneration(boon.getID(), p.getInstid());
                         }
                         else if (boon.getType().Equals("intensity"))
                         {
@@ -1070,11 +1070,11 @@ namespace LuckParser.Controllers
                 {
                     if (boon.getType().Equals("duration"))
                     {
-                        rate = Math.Round(total/trgetPlayers.Count,1) + "%";
+                        rate = Math.Round(100.0 * total/ fight_duration / trgetPlayers.Count,1) + "%";
                     }
                     else if (boon.getType().Equals("intensity"))
                     {
-                        rate = Math.Round(total/trgetPlayers.Count, 1).ToString();
+                        rate = Math.Round((double)total / fight_duration / trgetPlayers.Count, 1).ToString();
                     }
 
                 }
