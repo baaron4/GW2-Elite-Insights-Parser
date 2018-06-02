@@ -7,19 +7,10 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class BoonSimulator
     {
-        public struct SrcDuration
-        {
-            public long duration;
-            public ushort src;
-            public SrcDuration(long duration, ushort src)
-            {
-                this.duration = duration;
-                this.src = src;
-            }
-        }
-
+ 
         // Fields
-        protected List<SrcDuration> boon_stack = new List<SrcDuration>();
+        protected List<BoonSimulationItem> boon_stack = new List<BoonSimulationItem>();
+        protected List<BoonSimulationItem> simulation = new List<BoonSimulationItem>();
         protected int capacity;
 
         // Constructor
@@ -27,6 +18,19 @@ namespace LuckParser.Models.ParseModels
         {
             this.capacity = capacity;
         }
+
+        public abstract void simulate(List<LogBoon> logs);
+
+        public List<BoonSimulationItem> getSimulationResult()
+        {
+            return new List<BoonSimulationItem>(simulation);
+        }
+
+        /// <summary>
+        /// Make sure the last element does not overflow the fight
+        /// </summary>
+        /// <param name="fight_duration">Duration of the fight</param>
+        public abstract void trim(long fight_duration);
 
         // Abstract Methods
         public abstract long getStackValue();
@@ -36,9 +40,9 @@ namespace LuckParser.Models.ParseModels
         public abstract void addStacksBetween(List<long> boon_stacks, long time_between);
 
         // Public Methods
-        public void add(long boon_duration, ushort srcinstid)
+        public void add(long boon_duration, ushort srcinstid, long start = 0)
         {
-            SrcDuration toAdd = new SrcDuration(boon_duration, srcinstid);
+            BoonSimulationItem toAdd = new BoonSimulationItem(start, boon_duration, srcinstid);
             // Find empty slot
             if (!isFull())
             {
@@ -49,7 +53,7 @@ namespace LuckParser.Models.ParseModels
             else
             {
                 int index = boon_stack.Count() - 1;
-                if (boon_stack[index].duration < boon_duration)
+                if (boon_stack[index].getDuration() < boon_duration)
                 {
                     boon_stack[index] = toAdd;
                     sort();
@@ -66,7 +70,7 @@ namespace LuckParser.Models.ParseModels
         protected void sort()
         {
             // Collections.sort(boon_stack, Collections.reverseOrder());
-            boon_stack = boon_stack.OrderByDescending(x=>x.duration).ToList();
+            boon_stack = boon_stack.OrderByDescending(x=>x.getDuration()).ToList();
         }
     }
 }

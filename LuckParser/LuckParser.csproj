@@ -84,6 +84,8 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\ParseModels\BoonDistribution.cs" />
+    <Compile Include="Models\ParseModels\BoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Boss.cs" />
     <Compile Include="Models\ParseModels\GW2APISpec.cs" />
     <Compile Include="Models\ParseModels\LogDamageCondition.cs" />

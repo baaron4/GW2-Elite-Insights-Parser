@@ -603,9 +603,6 @@ namespace LuckParser.Controllers
             //players
             if (p_list.Count == 0)
             {
-                
-                  
-                
 
                 //Fix Disconected players
                 List<AgentItem> playerAgentList = getAgentData().getPlayerAgentList();
@@ -668,9 +665,6 @@ namespace LuckParser.Controllers
                 }
 
             }
-          
-           
-            
             // Sort
             p_list = p_list.OrderBy(a => int.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>int.Parse(a.getGroup()) - int.Parse(b.getGroup()))
             setMechData();
@@ -1018,6 +1012,7 @@ namespace LuckParser.Controllers
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
             BoonMap boon_logs = p.getBoonMap(b_data, s_data, c_data.getCombatList());
+            BoonDistribution boon_distrib = p.getBoonDistribution(b_data, s_data, c_data.getCombatList());
             List<Boon> boon_list = Boon.getAllBuffList();
             int n = boon_list.Count();//# of diff boons
             Dictionary<int, string> rates = new Dictionary<int, string>();
@@ -1034,7 +1029,8 @@ namespace LuckParser.Controllers
                     {
                         if (boon.getType().Equals("duration"))
                         {
-                            rate = Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data).ToString() + "%";//these 2 are problamatic
+                            long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
+                            rate = Math.Round(100.0*(double)boon_distrib.getUptime(boon.getID()) / fight_duration, 1) + "%";
                         }
                         else if (boon.getType().Equals("intensity"))
                         {
@@ -1057,9 +1053,11 @@ namespace LuckParser.Controllers
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
             Dictionary<Player, BoonMap> boon_logsGen = new Dictionary<Player, BoonMap>();
+            Dictionary<Player, BoonDistribution> boon_logsDist = new Dictionary<Player, BoonDistribution>();
             foreach (Player player in trgetPlayers)
             {
                 boon_logsGen[player] = player.getBoonMap(b_data, s_data, c_data.getCombatList());
+                boon_logsDist[player] = player.getBoonDistribution(b_data, s_data, c_data.getCombatList());
             }
             List<Boon> boon_list = Boon.getAllBuffList();
             int n = boon_list.Count();//# of diff boons
@@ -1072,16 +1070,18 @@ namespace LuckParser.Controllers
                 foreach (Player player in trgetPlayers)
                 {
                     BoonMap boon_logs = boon_logsGen[player];
+                    BoonDistribution boon_dist = boon_logsDist[player];
                     // Boon boon = Boon.getEnum(boon_list[i].ToString());
                     if (boon_logs.ContainsKey(boon_list[i].getID()))
                     {
                         BoonSimulator boon_object = boon.getSimulator();
                         List<LogBoon> logs = boon_logs[boon.getID()];
+                        long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
                         if (logs.Count() > 0)
                         {
                             if (boon.getType().Equals("duration"))
                             {
-                                total += Statistics.getBoonDuration(Statistics.getBoonIntervalsList(boon_object, logs, b_data), b_data);
+                                total += 100.0*(double)boon_dist.getGeneration(boon.getID(), p.getInstid()) / fight_duration;
                             }
                             else if (boon.getType().Equals("intensity"))
                             {

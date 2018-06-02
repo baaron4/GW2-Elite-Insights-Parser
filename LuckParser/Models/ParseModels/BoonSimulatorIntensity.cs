@@ -27,11 +27,11 @@ namespace LuckParser.Models.ParseModels
             // Subtract from each
             for (int i = 0; i < boon_stack.Count(); i++)
             {
-                boon_stack[i] = new SrcDuration(boon_stack[i].duration - time_passed, boon_stack[i].src);
+                boon_stack[i] = new BoonSimulationItem(boon_stack[i], time_passed, -time_passed);
             }
             // Remove negatives
             int indexcount = 0;
-            foreach (long iter in boon_stack.Select(x => x.duration).ToList())
+            foreach (long iter in boon_stack.Select(x => x.getDuration()).ToList())
             {
 
                 if (iter <= 0)
@@ -56,13 +56,13 @@ namespace LuckParser.Models.ParseModels
         {
             // Create copy of the boon
             BoonSimulatorIntensity boon_copy = new BoonSimulatorIntensity(capacity);
-            boon_copy.boon_stack = new List<SrcDuration>(boon_stack);
-            List<SrcDuration> stacks = boon_copy.boon_stack;
+            boon_copy.boon_stack = new List<BoonSimulationItem>(boon_stack);
+            List<BoonSimulationItem> stacks = boon_copy.boon_stack;
             // Simulate the boon stack decreasing
             if (stacks.Count() > 0)
             {
                 long time_passed = 0;
-                long min_duration = stacks.Select(x => x.duration).Min();
+                long min_duration = stacks.Select(x => x.getDuration()).Min();
 
                 // Remove minimum duration from stack
                 for (long i = 1; i < time_between; i++)
@@ -72,7 +72,7 @@ namespace LuckParser.Models.ParseModels
                         boon_copy.update(i - time_passed);
                         if (stacks.Count() > 0)
                         {
-                            min_duration = stacks.Select(x => x.duration).Min();
+                            min_duration = stacks.Select(x => x.getDuration()).Min();
                         }
                         time_passed = i;
                     }
@@ -87,6 +87,16 @@ namespace LuckParser.Models.ParseModels
                     boon_stacks.Add(0);
                 }
             }
+        }
+
+        public override void simulate(List<LogBoon> logs)
+        {
+            return;
+        }
+
+        public override void trim(long fight_duration)
+        {
+            return;
         }
     }
 }

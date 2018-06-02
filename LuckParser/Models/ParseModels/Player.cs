@@ -30,6 +30,8 @@ namespace LuckParser.Models.ParseModels
         protected List<int> damagetaken = new List<int>();
         // Boons
         private BoonMap boon_map = new BoonMap();
+        private BoonDistribution boon_distribution = new BoonDistribution();
+        private Dictionary<int, List<BoonSimulationItem>> boon_simulation = new Dictionary<int, List<BoonSimulationItem>>();
         // Casts
         private List<CastLog> cast_logs = new List<CastLog>();
 
@@ -129,6 +131,14 @@ namespace LuckParser.Models.ParseModels
                 setBoonMap(bossData, skillData, combatList, false);
             }
             return boon_map;
+        }
+        public BoonDistribution getBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList)
+        {
+            if (boon_distribution.Count == 0)
+            {
+                setBoonDistribution(bossData, skillData, combatList);
+            }
+            return boon_distribution;
         }
         public BoonMap getCondiBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList)
         {
@@ -338,6 +348,41 @@ namespace LuckParser.Models.ParseModels
                     foreach (AgentItem item in agentData.getNPCAgentList())
                     {//selecting all
                         setDamageTakenLog(time, item.getInstid(), c);
+                    }
+                }
+            }
+        }
+        private void setBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList)
+        {
+            BoonMap to_use = getBoonMap(bossData,skillData,combatList);
+            List<Boon> boon_to_use = Boon.getAllBuffList();
+            boon_to_use.AddRange(Boon.getCondiBoonList());
+            foreach (Boon boon in Boon.getAllBuffList())
+            {
+                if (to_use.ContainsKey(boon.getID()))
+                {
+                    List<LogBoon> logs = to_use[boon.getID()];
+                    if (logs.Count == 0)
+                    {
+                        continue;
+                    }
+                    if (boon_distribution.ContainsKey(boon.getID())) {
+                        continue;
+                    }
+                    boon_distribution[boon.getID()] = new Dictionary<ushort, long>();
+                    BoonSimulator simulator = boon.getSimulator();
+                    simulator.simulate(logs);
+                    simulator.trim(bossData.getLastAware() - bossData.getFirstAware());
+                    boon_simulation[boon.getID()] = simulator.getSimulationResult();
+                    foreach (BoonSimulationItem simul in boon_simulation[boon.getID()])
+                    {
+                        if (!boon_distribution[boon.getID()].ContainsKey(simul.getSrc()))
+                        {
+                            boon_distribution[boon.getID()][simul.getSrc()] = simul.getDuration();
+                        } else
+                        {
+                            boon_distribution[boon.getID()][simul.getSrc()] += simul.getDuration();
+                        }
                     }
                 }
             }
