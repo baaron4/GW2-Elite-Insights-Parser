@@ -10,15 +10,18 @@ namespace LuckParser.Models.ParseModels
     public class BoonSimulationItemDuration: BoonSimulationItem
     {
         private ushort src;
+        private long overstack;
 
-        public BoonSimulationItemDuration(long start, long duration, ushort src) : base(start, duration)
+        public BoonSimulationItemDuration(long start, long duration, ushort src, long overstack) : base(start, duration)
         {
             this.src = src;
+            this.overstack = overstack;
         }
 
         public BoonSimulationItemDuration(BoonStackItem other) : base(other.start, other.boon_duration)
         {
             this.src = other.src;
+            this.overstack = other.overstack;
         }
 
         public override long getDuration(ushort src)
@@ -42,6 +45,11 @@ namespace LuckParser.Models.ParseModels
         public override int getStack(long end)
         {
             return 1;
+        }
+
+        public override long getOverstack(ushort src)
+        {
+            return overstack;
         }
     }
 }

@@ -13,18 +13,22 @@ namespace LuckParser.Models.ParseModels
             public long start;
             public long boon_duration;
             public ushort src;
+            public long overstack;
 
-            public BoonStackItem(long start, long boon_duration, ushort srcinstid)
+            public BoonStackItem(long start, long boon_duration, ushort srcinstid, long overstack)
             {
                 this.start = start;
                 this.boon_duration = boon_duration;
                 this.src = srcinstid;
+                this.overstack = overstack;
             }
 
             public BoonStackItem(BoonStackItem other, long start_shift, long duration_shift)
             {
                 this.start = Math.Max(other.start + start_shift, 0);
                 this.boon_duration = other.boon_duration + duration_shift;
+                // if duration shift > 0 this means the boon ticked, aka already in simulation, we remove the overstack
+                this.overstack = duration_shift > 0 ? 0 : other.overstack;
                 this.src = other.src;
             }
         }
@@ -71,7 +75,7 @@ namespace LuckParser.Models.ParseModels
             {
                 t_curr = log.getTime();
                 update(t_curr - t_prev);
-                add(log.getValue(), log.getSrcInstid(), t_curr);
+                add(log.getValue(), log.getSrcInstid(), t_curr, log.getOverstack());
                 t_prev = t_curr;
             }
             update(fight_duration - t_prev);
@@ -81,9 +85,9 @@ namespace LuckParser.Models.ParseModels
         public abstract void update(long time_passed);
         
         // Public Methods
-        public void add(long boon_duration, ushort srcinstid, long start = 0)
+        public void add(long boon_duration, ushort srcinstid, long start, long overstack)
         {
-            BoonStackItem toAdd = new BoonStackItem(start, boon_duration, srcinstid);
+            BoonStackItem toAdd = new BoonStackItem(start, boon_duration, srcinstid, overstack);
             // Find empty slot
             if (!isFull())
             {

@@ -50,6 +50,15 @@ namespace LuckParser.Models.ParseModels
         {
             return stacks.Where(x => x.getEnd() >= end).Count();
         }
-        
+
+        public override long getOverstack(ushort src)
+        {
+            long total = 0;
+            foreach (BoonSimulationItemDuration stack in stacks.Where(x => src == 0 || x.getSrc()[0] == src))
+            {
+                total += stack.getOverstack(src);
+            }
+            return total;
+        }
     }
 }

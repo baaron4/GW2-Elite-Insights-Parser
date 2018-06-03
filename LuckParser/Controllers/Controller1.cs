@@ -1051,23 +1051,32 @@ namespace LuckParser.Controllers
             {
                 string rate = "0";
                 long total = 0;
+                long totaloverstack = 0;
                 foreach (Player player in trgetPlayers)
                 {
                     BoonDistribution boon_dist = boon_logsDist[player];
                     if (boon_dist.ContainsKey(boon.getID()))
                     {
                         total += boon_dist.getGeneration(boon.getID(), p.getInstid());
+                        totaloverstack += boon_dist.getOverstack(boon.getID(), p.getInstid());
                     }
                 }
+                totaloverstack += total;
                 if (total > 0)
                 {
                     if (boon.getType().Equals("duration"))
                     {
-                        rate = Math.Round(100.0 * total/ fight_duration / trgetPlayers.Count,1) + "%";
+                        rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" 
+                            + Math.Round(100.0 * totaloverstack / fight_duration / trgetPlayers.Count, 1) + "% with overstack \">" 
+                            + Math.Round(100.0 * total / fight_duration / trgetPlayers.Count, 1) 
+                            + "%</span>";
                     }
                     else if (boon.getType().Equals("intensity"))
                     {
-                        rate = Math.Round((double)total / fight_duration / trgetPlayers.Count, 1).ToString();
+                        rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" 
+                            + Math.Round((double)totaloverstack / fight_duration / trgetPlayers.Count, 1).ToString() + " with overstack \">" 
+                            + Math.Round((double)total / fight_duration / trgetPlayers.Count, 1).ToString() 
+                            + "</span>";
                     }
 
                 }

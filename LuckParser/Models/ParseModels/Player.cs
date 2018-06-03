@@ -373,7 +373,7 @@ namespace LuckParser.Models.ParseModels
                     if (boon_distribution.ContainsKey(boon.getID())) {
                         continue;
                     }
-                    boon_distribution[boon.getID()] = new Dictionary<ushort, long>();
+                    boon_distribution[boon.getID()] = new Dictionary<ushort, OverAndValue>();
                     BoonSimulator simulator = boon.getSimulator();
                     simulator.simulate(logs, dur);
                     if (getDeath(combatList) > 0)
@@ -390,11 +390,14 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (!boon_distribution[boon.getID()].ContainsKey(src))
                             {
-                                boon_distribution[boon.getID()][src] = simul.getDuration(src);
+                                boon_distribution[boon.getID()][src] = new OverAndValue(simul.getDuration(src), simul.getOverstack(src));
                             }
                             else
                             {
-                                boon_distribution[boon.getID()][src] += simul.getDuration(src);
+                                OverAndValue toModify = boon_distribution[boon.getID()][src];
+                                toModify.value += simul.getDuration(src);
+                                toModify.overstack += simul.getOverstack(src);
+                                boon_distribution[boon.getID()][src] = toModify;
                             }
                         }
                     }
