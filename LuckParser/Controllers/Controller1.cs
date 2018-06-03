@@ -132,7 +132,7 @@ namespace LuckParser.Controllers
         }
 
         //Main data storage after binary parse
-        private DataLog log_data;
+        private LogData log_data;
         private BossData boss_data;
         private AgentData agent_data = new AgentData();
         private SkillData skill_data = new SkillData();
@@ -141,7 +141,7 @@ namespace LuckParser.Controllers
         private List<Player> p_list = new List<Player>();
 
         // Public Methods
-        public DataLog getLogData()
+        public LogData getLogData()
         {
             return log_data;
         }
@@ -218,7 +218,7 @@ namespace LuckParser.Controllers
         {
             // 12 bytes: arc build version
             String build_version = getString(12);
-            this.log_data = new DataLog(build_version);
+            this.log_data = new LogData(build_version);
 
             // 1 byte: skip
             safeSkip(1);

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class DataLog
+    public class LogData
     {
         // Fields
         private String build_version;
@@ -16,7 +16,7 @@ namespace LuckParser.Models.ParseModels
        // private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
         // Constructors
-        public DataLog(String build_version)
+        public LogData(String build_version)
         {
             this.build_version = build_version;
            // this.sdf.setTimeZone(TimeZone.getDefault());
