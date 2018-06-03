@@ -116,7 +116,7 @@
     <Compile Include="Models\ParseModels\Logs\DamageLog.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulatorDuration.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulatorIntensity.cs" />
-    <Compile Include="Models\ParseModels\Logs\DataLog.cs" />
+    <Compile Include="Models\ParseModels\Logs\LogData.cs" />
     <Compile Include="Models\ParseModels\Mechanic.cs" />
     <Compile Include="Models\ParseModels\MechanicData.cs" />
     <Compile Include="Models\ParseModels\Logs\MechanicLog.cs" />
