@@ -21,7 +21,6 @@ namespace LuckParser.Models.ParseModels
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
             {
-
                 if (instid == c.getSrcInstid() || instid == c.getSrcMasterInstid())//selecting player or minion as caster
                 {
                     long time = c.getTime() - time_start;
@@ -30,14 +29,11 @@ namespace LuckParser.Models.ParseModels
                         addDamageLog(time, item.getInstid(), c, damage_logs);
                     }
                 }
-
             }
         }
         protected override void setDamagetaken(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data)
         {
             long time_start = bossData.getFirstAware();
-
-
             foreach (CombatItem c in combatList)
             {
                 if (instid == c.getDstInstid())

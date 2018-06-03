@@ -108,10 +108,10 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Protection", 717, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/6/6c/Protection.png"),
                 new Boon("Regeneration", 718, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/5/53/Regeneration.png"),
                 new Boon("Vigor", 726, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/f/f4/Vigor.png"),
-                new Boon("Aegis", 743, BoonSource.Mixed, "duration", 9, BoonEnum.Boon, "https://wiki.guildwars2.com/images/e/e5/Aegis.png"),
+                new Boon("Aegis", 743, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/e/e5/Aegis.png"),
                 new Boon("Stability", 1122, BoonSource.Mixed, "intensity", 25, BoonEnum.Boon, "https://wiki.guildwars2.com/images/a/ae/Stability.png"),
                 new Boon("Swiftness", 719, BoonSource.Mixed, "duration", 9, BoonEnum.Boon, "https://wiki.guildwars2.com/images/a/af/Swiftness.png"),
-                new Boon("Retaliation", 873, BoonSource.Mixed, "duration", 9, BoonEnum.Boon, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
+                new Boon("Retaliation", 873, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
                 new Boon("Resistance", 26980, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/thumb/e/e9/Resistance_40px.png/20px-Resistance_40px.png"),
                 // Condis         
                 new Boon("Bleeding", 736, BoonSource.Mixed, "intensity", 1500, BoonEnum.Condition, "https://wiki.guildwars2.com/images/thumb/3/33/Bleeding.png/20px-Bleeding.png"),
@@ -128,7 +128,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Weakness", 742, BoonSource.Mixed, "duration", 5, BoonEnum.Condition, "https://wiki.guildwars2.com/images/thumb/f/f9/Weakness.png/20px-Weakness.png"),
                 new Boon("Taunt", 27705, BoonSource.Mixed, "duration", 5, BoonEnum.Condition, "https://wiki.guildwars2.com/images/thumb/c/cc/Taunt.png/20px-Taunt.png"),
                 new Boon("Vulnerability", 738, BoonSource.Mixed, "intensity", 25, BoonEnum.Condition, "https://wiki.guildwars2.com/images/thumb/a/af/Vulnerability.png/20px-Vulnerability.png"),
-                new Boon("Retaliation", 873, BoonSource.Mixed, "duration", 9, BoonEnum.Condition, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
+                new Boon("Retaliation", 873, BoonSource.Mixed, "duration", 5, BoonEnum.Condition, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
                 // Generic
                 new Boon("Stealth", 13017, BoonSource.Mixed, "duration", 1, BoonEnum.GraphOnlyBuff),
                 new Boon("Revealed", 890, BoonSource.Mixed, "duration", 1, BoonEnum.GraphOnlyBuff),
@@ -342,12 +342,12 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Signet of Agility",13061, BoonSource.Thief, "duration", 1, BoonEnum.GraphOnlyBuff),
                 new Boon("Signet of Shadows",13059, BoonSource.Thief, "duration", 1, BoonEnum.GraphOnlyBuff),
                 //venoms
-                new Boon("Skelk Venom",-1, BoonSource.Thief, "intensity", 4, BoonEnum.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
+                new Boon("Skelk Venom",-1, BoonSource.Thief, "intensity", 5, BoonEnum.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
                 new Boon("Ice Drake Venom",13095, BoonSource.Thief, "intensity", 4, BoonEnum.GraphOnlyBuff, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
                 new Boon("Devourer Venom", 13094, BoonSource.Thief, "intensity", 2, BoonEnum.GraphOnlyBuff, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
                 new Boon("Skale Venom", 13036, BoonSource.Thief, "intensity", 4, BoonEnum.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
                 new Boon("Spider Venom",13036, BoonSource.Thief, "intensity", 6, BoonEnum.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
-                new Boon("Basilisk Venom", 13133, BoonSource.Thief, "intensity", 6, BoonEnum.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
+                new Boon("Basilisk Venom", 13133, BoonSource.Thief, "intensity", 1, BoonEnum.GraphOnlyBuff, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
                 //physical
                 new Boon("Palm Strike",30423, BoonSource.Thief, "duration", 1, BoonEnum.GraphOnlyBuff),
                 new Boon("Pulmonary Impact",30510, BoonSource.Thief, "intensity", 2, BoonEnum.GraphOnlyBuff),
@@ -478,13 +478,19 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Peppermint Oil",34187, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/b/bc/Peppermint_Oil.png"),
                 new Boon("Potent Master Maintenance Oil",9968, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
                 new Boon("Furious Maintenance Oil",-1, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
-                 new Boon("Furious Sharpening Stone",25882, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"),
+                new Boon("Furious Sharpening Stone",25882, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"),
                 new Boon("Bountiful Maintenance Oil",25879, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
                 new Boon("Toxic Focusing Crystal",21828, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/d/de/Toxic_Focusing_Crystal.png"),
                 new Boon("Tin of Fruitcake",34211, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/a/af/Tin_of_Fruitcake.png"),
                // new Boon("Hylek Maintenance Oil",9968, BoonSource.Item, "duration", 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"), when wiki says "same stats" its litteraly the same buff
-
         };
+        // debug
+        public static List<Boon> getBoonByName(string name)
+        {
+            return allBoons.Where(x => x.getName() == name).ToList();
+        }
+
+
         // Conditions
         public static List<Boon> getCondiBoonList()
         {
@@ -589,6 +595,17 @@ namespace LuckParser.Models.ParseModels
         public string getLink()
         {
             return link;
+        }
+
+        public BoonSimulator getSimulator()
+        {
+            if (type == "intensity")
+            {
+                return new BoonSimulatorIntensity(capacity);
+            } else
+            {
+                return new BoonSimulatorDuration(capacity);
+            }
         }
     }
 }
