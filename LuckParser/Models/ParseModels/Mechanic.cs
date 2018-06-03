@@ -15,12 +15,13 @@ namespace LuckParser.Models.ParseModels
         private string altname;
         private int mechType;
         //0 boon on player
-        //1 boon on boss
-        //2 skill by player
+        //1 boon on boss X
+        //2 skill by player X
         //3 skill on player
-        //4 enemy boon stripped
-        //5 spawn check
-        //6 boss cast (check finished)
+        //4 enemy boon stripped X
+        //5 spawn check X
+        //6 boss cast (check finished) X
+        //7 player on player 
         private ushort bossid;
         private string plotlyShape;
 
