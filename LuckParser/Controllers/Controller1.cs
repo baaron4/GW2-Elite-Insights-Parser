@@ -1104,6 +1104,8 @@ namespace LuckParser.Controllers
                     }
                     else if (boon.getType().Equals("intensity"))
                     {
+                        long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
+                        rate = Math.Round((double)boon_distrib.getUptime(boon.getID()) / fight_duration, 1).ToString();
                     }
 
                     rates[boon.getID()] = rate;
