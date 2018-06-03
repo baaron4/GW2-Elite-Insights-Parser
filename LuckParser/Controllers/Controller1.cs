@@ -4531,6 +4531,130 @@ namespace LuckParser.Controllers
                 {
                     sw.Write("var data = [");
                     {
+                        if (SnapSettings[6])//Display rotation
+                        {
+
+                            foreach (CastLog cl in casting)
+                            {
+
+                                string skillName = "";
+                                GW2APISkill skill = null;
+                                if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
+                                {
+                                    skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
+                                }
+                                if (skill == null)
+                                {
+                                    skillName = s_data.getName(cl.getID());
+                                }
+                                else
+                                {
+                                    skillName = skill.name;
+                                }
+                                float dur = 0.0f;
+                                if (skillName == "Dodge")
+                                {
+                                    dur = 0.5f;
+                                }
+                                else if (cl.getID() == -2)
+                                {//wepswap
+                                    skillName = "Weapon Swap";
+                                    dur = 0.1f;
+                                }
+                                else if (skillName == "Resurrect")
+                                {
+                                    dur = cl.getActDur() / 1000f;
+                                }
+                                else if (skillName == "Bandage")
+                                {
+                                    dur = cl.getActDur() / 1000f;
+                                }
+                                else
+                                {
+                                    dur = cl.getActDur() / 1000f;
+                                }
+                                skillName = skillName.Replace("\"", "");
+                                sw.Write("{");
+                                {
+
+                                    sw.Write("y: ['1.5'],");
+
+
+                                    sw.Write(
+                                           "x: ['" + dur + "']," +
+                                           "base:'" + cl.getTime() / 1000f + "'," +
+                                           "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
+                                           "orientation:'h'," +
+                                           "mode: 'markers'," +
+                                           "type: 'bar',");
+                                    if (skill != null)
+                                    {
+                                        if (skill.slot == "Weapon_1")
+                                        {
+                                            sw.Write("width:'0.5',");
+                                        }
+                                        else
+                                        {
+                                            sw.Write("width:'1',");
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        sw.Write("width:'1',");
+                                    }
+                                    sw.Write("hoverinfo: 'name'," +
+                                            "hoverlabel:{namelength:'-1'},");
+                                    sw.Write("marker: {");
+                                    {
+                                        if (cl.endActivation() != null)
+                                        {
+                                            if (cl.endActivation().getID() == 3)
+                                            {
+                                                sw.Write("color: 'rgb(40,40,220)',");
+                                            }
+                                            else if (cl.endActivation().getID() == 4)
+                                            {
+                                                sw.Write("color: 'rgb(220,40,40)',");
+                                            }
+                                            else if (cl.endActivation().getID() == 5)
+                                            {
+                                                sw.Write("color: 'rgb(40,220,40)',");
+                                            }
+                                            else
+                                            {
+                                                sw.Write("color: 'rgb(220,220,0)',");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            sw.Write("color: 'rgb(220,220,0)',");
+                                        }
+                                        sw.Write("width: '5',");
+                                        sw.Write("line:{");
+                                        {
+                                            if (cl.startActivation() != null)
+                                            {
+                                                if (cl.startActivation().getID() == 1)
+                                                {
+                                                    sw.Write("color: 'rgb(20,20,20)',");
+                                                }
+                                                else if (cl.startActivation().getID() == 2)
+                                                {
+                                                    sw.Write("color: 'rgb(220,40,220)',");
+                                                }
+                                            }
+                                            sw.Write("width: '1'");
+                                        }
+                                        sw.Write("}");
+                                    }
+                                    sw.Write("},");
+                                    sw.Write("showlegend: false");
+                                }
+                                sw.Write(" },");
+                            }
+                        }
+                        //============================================
                         List<Boon> parseBoonsList = new List<Boon>();
                         //Condis
                         parseBoonsList.AddRange(Boon.getCondiBoonList());
@@ -4543,6 +4667,7 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("{");
                                 {
+                                   
                                     BoonsGraphModel bgm = boonGraphData[boonid];
                                     List<Point> bChart = bgm.getBoonChart();
                                     int bChartCount = 0;

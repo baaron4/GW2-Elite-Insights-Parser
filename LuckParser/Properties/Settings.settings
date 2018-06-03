@@ -18,7 +18,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="PlayerBoonsAllProf" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="PlayerRot" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -54,7 +54,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="ShowEstimates" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>
