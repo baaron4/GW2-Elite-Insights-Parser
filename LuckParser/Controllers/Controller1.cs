@@ -378,7 +378,7 @@ namespace LuckParser.Controllers
 
                 // 1 byte: buff
                 ushort buff = (ushort)stream.ReadByte();
-
+               
                 // 1 byte: result
                 //Result result = Result.getEnum(f.read());
                 Result result = new Result(Convert.ToByte(stream.ReadByte()));
@@ -403,7 +403,7 @@ namespace LuckParser.Controllers
                 // 1 byte: is_statechange
                 //StateChange is_statechange = StateChange.getEnum(f.read());
                 StateChange is_statechange = new StateChange(Convert.ToByte(stream.ReadByte()));
-
+                
                 // 1 byte: is_flanking
                 ushort is_flanking = (ushort)stream.ReadByte();
 
@@ -2693,6 +2693,71 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + p.getInstid() + "\">");
                         {
+                            List<int[]> consume = p.getConsumablesList(b_data,s_data, c_data.getCombatList());
+                            List<int[]> initial = consume.Where(x => x[1] == 0).ToList();
+                            List<int[]> refreshed = consume.Where(x => x[1] > 0).ToList();
+                            if (initial.Count() > 0)
+                            {
+                                Boon food = null;
+                                Boon utility = null;
+                                foreach (int[] buff in initial)
+                                {
+
+                                    Boon foodCheck = Boon.getFoodList().FirstOrDefault(x => x.getID() == buff[0]);
+                                    if (foodCheck != null)
+                                    {
+                                        food = foodCheck;
+                                        continue;
+                                    }
+                                    Boon utilCheck = Boon.getUtilityList().FirstOrDefault(x => x.getID() == buff[0]);
+                                    if (utilCheck != null)
+                                    {
+                                        utility = utilCheck;
+                                        continue;
+                                    }
+                                }
+                                sw.Write("<p>Started with " );
+                                if (food != null)
+                                {
+                                    sw.Write(food.getName() + "<img src=\"" +food.getLink() + " \" alt=\"" + food.getName() + "\" height=\"18\" width=\"18\" >");
+                                }
+                                if (utility != null)
+                                {
+                                    sw.Write(utility.getName() + "<img src=\"" + utility.getLink() + " \" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
+                                }
+                                sw.Write("</p>");
+                            }
+                            if (refreshed.Count() > 0)
+                            {
+                                Boon food = null;
+                                Boon utility = null;
+                                foreach (int[] buff in refreshed)
+                                {
+
+                                    Boon foodCheck = Boon.getFoodList().FirstOrDefault(x => x.getID() == buff[0]);
+                                    if (foodCheck != null)
+                                    {
+                                        food = foodCheck;
+                                        continue;
+                                    }
+                                    Boon utilCheck = Boon.getUtilityList().FirstOrDefault(x => x.getID() == buff[0]);
+                                    if (utilCheck != null)
+                                    {
+                                        utility = utilCheck;
+                                        continue;
+                                    }
+                                }
+                                sw.Write("<p>Refreshed ");
+                                if (food != null)
+                                {
+                                    sw.Write(food.getName() + "<img src=\"" + food.getLink() + " \" alt=\"" + food.getName() + "\" height=\"18\" width=\"18\" >");
+                                }
+                                if (utility != null)
+                                {
+                                    sw.Write(utility.getName() + "<img src=\"" + utility.getLink() + " \" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
+                                }
+                                sw.Write("</p>");
+                            }
                             sw.Write("<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>");
                             sw.Write("<script>");
                             {

@@ -18,6 +18,7 @@ namespace LuckParser.Models.ParseModels
         private int healing;
         private int condition;
         private int dcd = 0;//time in ms the player dcd
+       
         // DPS
         protected List<DamageLog> damage_logs = new List<DamageLog>();
         private List<DamageLog> damage_logsFiltered = new List<DamageLog>();
@@ -32,6 +33,7 @@ namespace LuckParser.Models.ParseModels
         // Boons
         private BoonDistribution boon_distribution = new BoonDistribution();
         private Dictionary<int, BoonsGraphModel> boon_points = new Dictionary<int, BoonsGraphModel>();
+        private List<int[]> consumeList = new List<int[]>();
         // Casts
         private List<CastLog> cast_logs = new List<CastLog>();
 
@@ -265,7 +267,16 @@ namespace LuckParser.Models.ParseModels
             }
             return 0;
         }
-        // Privates
+        public List<int[]> getConsumablesList(BossData bossData, SkillData skillData, List<CombatItem> combatList)
+        {
+            if (consumeList.Count() == 0)
+            {
+                setConsumablesList( bossData, skillData, combatList);
+            }
+            return consumeList;
+        }
+        // Private Methods
+
         protected void addDamageLog(long time, ushort instid, CombatItem c, List<DamageLog> toFill)
         {
             LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
@@ -351,6 +362,35 @@ namespace LuckParser.Models.ParseModels
                     {//selecting all
                         setDamageTakenLog(time, item.getInstid(), c);
                     }
+                }
+            }
+        }
+        private void setConsumablesList(BossData bossData, SkillData skillData, List<CombatItem> combatList)
+        {
+            List<Boon> foodBoon = Boon.getFoodList();
+            List<Boon> utilityBoon = Boon.getUtilityList();
+            long time_start = bossData.getFirstAware();
+            long fight_duration = bossData.getLastAware() - time_start;
+            foreach (CombatItem c in combatList)
+            {
+                if ( c.isBuff() != 18 && c.isBuff() != 1)
+                {
+                    continue;
+                }
+                
+                if (foodBoon.FirstOrDefault(x => x.getID() == c.getSkillID()) == null  && utilityBoon.FirstOrDefault(x => x.getID() == c.getSkillID()) == null)
+                {
+                    continue;
+                }
+                long time = c.getTime() - time_start;
+                if (instid == c.getDstInstid())
+                {
+                   // if (c.isBuffremove().getID() == 0)
+                    //{
+                        consumeList.Add(new int[] { c.getSkillID(), (int)time });
+                   // }
+                   
+                   
                 }
             }
         }
@@ -449,9 +489,10 @@ namespace LuckParser.Models.ParseModels
             // Fill in Boon Map
             long time_start = bossData.getFirstAware();
             long fight_duration = bossData.getLastAware() - time_start;
+            
             foreach (CombatItem c in combatList)
             {
-                if (c.getValue() == 0 || c.isBuff() != 1 || c.getBuffDmg() > 0)
+                if (c.getValue() == 0 || c.isBuff() != 1  || c.getBuffDmg() > 0)
                 {
                     continue;
                 }
@@ -460,6 +501,7 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 long time = c.getTime() - time_start;
+
                 if (instid == c.getDstInstid() && time > 0 && time < fight_duration)
                 {
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
