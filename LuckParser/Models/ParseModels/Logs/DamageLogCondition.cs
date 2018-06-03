@@ -6,11 +6,11 @@ using LuckParser.Models.ParseEnums;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class LogDamageCondition : LogDamage
+    public class DamageLogCondition : DamageLog
     {
 
         // Constructor
-        public LogDamageCondition(long time, CombatItem c) : base(time, c)
+        public DamageLogCondition(long time, CombatItem c) : base(time, c)
         {
             damage = c.getBuffDmg();
         }

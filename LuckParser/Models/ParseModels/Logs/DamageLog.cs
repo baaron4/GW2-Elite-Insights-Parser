@@ -6,7 +6,7 @@ using LuckParser.Models.ParseEnums;
 
 namespace LuckParser.Models.ParseModels
 {
-    public abstract class LogDamage
+    public abstract class DamageLog
     {
         // Fields
         private long time;
@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
         private ushort src_instid;
 
         // Constructor
-        public LogDamage(long time, CombatItem c)
+        public DamageLog(long time, CombatItem c)
         {
             this.time = time;
             this.skill_id = c.getSkillID();

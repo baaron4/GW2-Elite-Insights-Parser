@@ -5,7 +5,7 @@ using System.Web;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class LogBoon
+    public class BoonLog
     {
         // Fields
         private long time = 0;
@@ -14,7 +14,7 @@ namespace LuckParser.Models.ParseModels
         private ushort src_instid = 0;
 
         //Constructor
-        public LogBoon(long time, ushort src_instid, long value, ushort overstack)
+        public BoonLog(long time, ushort src_instid, long value, ushort overstack)
         {
             this.time = time;
             this.value = value;

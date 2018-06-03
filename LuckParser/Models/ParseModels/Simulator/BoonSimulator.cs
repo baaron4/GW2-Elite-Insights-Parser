@@ -67,11 +67,11 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        public void simulate(List<LogBoon> logs, long fight_duration)
+        public void simulate(List<BoonLog> logs, long fight_duration)
         {
             long t_curr = 0;
             long t_prev = 0;
-            foreach (LogBoon log in logs)
+            foreach (BoonLog log in logs)
             {
                 t_curr = log.getTime();
                 update(t_curr - t_prev);

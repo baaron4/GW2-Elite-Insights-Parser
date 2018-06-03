@@ -132,7 +132,7 @@ namespace LuckParser.Controllers
         }
 
         //Main data storage after binary parse
-        private LogData log_data;
+        private DataLog log_data;
         private BossData boss_data;
         private AgentData agent_data = new AgentData();
         private SkillData skill_data = new SkillData();
@@ -141,7 +141,7 @@ namespace LuckParser.Controllers
         private List<Player> p_list = new List<Player>();
 
         // Public Methods
-        public LogData getLogData()
+        public DataLog getLogData()
         {
             return log_data;
         }
@@ -218,7 +218,7 @@ namespace LuckParser.Controllers
         {
             // 12 bytes: arc build version
             String build_version = getString(12);
-            this.log_data = new LogData(build_version);
+            this.log_data = new DataLog(build_version);
 
             // 1 byte: skip
             safeSkip(1);
@@ -805,7 +805,7 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             String[] statsArray;
-            List<LogDamage> damage_logs = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
+            List<DamageLog> damage_logs = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
             List<CastLog> cast_logs = p.getCastLogs( b_data, c_data.getCombatList(), getAgentData());
             int instid = p.getInstid();
 
@@ -836,7 +836,7 @@ namespace LuckParser.Controllers
             //avgboons
             double avgBoons = 0.0;
 
-            foreach (LogDamage log in damage_logs)
+            foreach (DamageLog log in damage_logs)
             {
                 if (log.isCondi() == 0)
                 {
@@ -936,7 +936,7 @@ namespace LuckParser.Controllers
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
-            List<LogDamage> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(),getMechData());
+            List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(),getMechData());
             int instid = p.getInstid();
 
             int damagetaken = p.getDamagetaken(b_data, c_data.getCombatList(), getAgentData(),getMechData()).Sum();
@@ -949,22 +949,22 @@ namespace LuckParser.Controllers
             int evades = 0;
             //int dmgevaded = 0;
             int dmgBarriar = 0;
-            foreach (LogDamage log in damage_logs.Where(x => x.getResult().getEnum() == "BLOCK"))
+            foreach (DamageLog log in damage_logs.Where(x => x.getResult().getEnum() == "BLOCK"))
             {
                 blocked++;
                 //dmgblocked += log.getDamage();
             }
-            foreach (LogDamage log in damage_logs.Where(x => x.getResult().getEnum() == "ABSORB"))
+            foreach (DamageLog log in damage_logs.Where(x => x.getResult().getEnum() == "ABSORB"))
             {
                 invulned++;
                 dmginvulned += log.getDamage();
             }
-            foreach (LogDamage log in damage_logs.Where(x => x.getResult().getEnum() == "EVADE"))
+            foreach (DamageLog log in damage_logs.Where(x => x.getResult().getEnum() == "EVADE"))
             {
                 evades++;
                 // dmgevaded += log.getDamage();
             }
-            foreach (LogDamage log in damage_logs.Where(x => x.isShields() == 1))
+            foreach (DamageLog log in damage_logs.Where(x => x.isShields() == 1))
             {
 
                 dmgBarriar += log.getDamage();
@@ -1119,17 +1119,17 @@ namespace LuckParser.Controllers
 
                 List<Point> down = c_data.getStates(p.getInstid(), "CHANGE_DOWN");
                 foreach (Point pnt in down) {
-                    mech_data.AddItem(new LogMechanic((long)((pnt.X - boss_data.getFirstAware()) / 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
+                    mech_data.AddItem(new MechanicLog((long)((pnt.X - boss_data.getFirstAware()) / 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
                 }
                 List<Point> dead = c_data.getStates(p.getInstid(), "CHANGE_DEAD");
                 foreach (Point pnt in dead)
                 {
-                    mech_data.AddItem(new LogMechanic((long)((pnt.X - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
+                    mech_data.AddItem(new MechanicLog((long)((pnt.X - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
                 }
-                List<LogDamage> dls = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data, mech_data);
-                //damage taken 
-                LogMechanic prevMech = null;
-                foreach (LogDamage dLog in dls)
+                List<DamageLog> dls = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data, mech_data);
+                //Player hit by skill 3
+                MechanicLog prevMech = null;
+                foreach (DamageLog dLog in dls)
                 {
                     string name = skill_data.getName(dLog.getID());
                     if (dLog.getResult().getID() < 3 ) {
@@ -1148,7 +1148,7 @@ namespace LuckParser.Controllers
                             {
                                 
                                 
-                                 prevMech = new LogMechanic((long)(dLog.getTime() / 1000f), dLog.getID(), mech.GetName(), dLog.getDamage(), p, mech.GetPlotly());
+                                 prevMech = new MechanicLog((long)(dLog.getTime() / 1000f), dLog.getID(), mech.GetName(), dLog.getDamage(), p, mech.GetPlotly());
                                 
                                 mech_data.AddItem(prevMech);
                                 break;
@@ -1156,7 +1156,7 @@ namespace LuckParser.Controllers
                         }
                     }
                 }
-                //Gainign Buff mech
+                //Player gain buff 0,7
                 foreach (CombatItem c in combat_data.getCombatList().Where(x=>x.isBuffremove().getID() == 0 &&x.isStateChange().getID() == 0))
                 {
                     if (p.getInstid() == c.getDstInstid())
@@ -1164,11 +1164,25 @@ namespace LuckParser.Controllers
                         if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove().getID() == 0 && c.getResult().getID() < 3)
                         {
                             String name = skill_data.getName(c.getSkillID());
+                            //buff on player 0
                             foreach (Mechanic mech in getMechData().GetMechList(boss_data.getID()).Where(x => x.GetMechType() == 0))
                             {
                                 if (c.getSkillID() == mech.GetSkill())
                                 {
-                                    mech_data.AddItem(new LogMechanic((long)((c.getTime() - boss_data.getFirstAware())/1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
+                                    //dst player
+                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware())/1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
+                                    break;
+                                }
+                            }
+                            //player on player 7
+                            foreach (Mechanic mech in getMechData().GetMechList(boss_data.getID()).Where(x => x.GetMechType() == 7))
+                            {
+                                if (c.getSkillID() == mech.GetSkill())
+                                {
+                                    //dst player
+                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
+                                    //src player
+                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p_list.FirstOrDefault(i=>i.getInstid() == c.getSrcInstid()), mech.GetPlotly()));
                                     break;
                                 }
                             }
@@ -1178,8 +1192,6 @@ namespace LuckParser.Controllers
                 }
             }
 
-            //int stop = 0;
-            
         }
         //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
         //Methods that make it easier to create Javascript graphs
@@ -1197,11 +1209,11 @@ namespace LuckParser.Controllers
 
                 // bossdmgList.Add(new int[] {1, 0 });
                 // List<DamageLog> damage_logs_all = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
-                List<LogDamage> damage_logs_boss = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData());
+                List<DamageLog> damage_logs_boss = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData());
                 int totaldmg = 0;
 
                 int timeGraphed = 0;
-                foreach (LogDamage log in damage_logs_boss)
+                foreach (DamageLog log in damage_logs_boss)
                 {
 
                     totaldmg += log.getDamage();
@@ -1268,11 +1280,11 @@ namespace LuckParser.Controllers
             CombatData c_data = getCombatData();
             List<int[]> totaldmgList = new List<int[]>();
            // totaldmgList.Add(new int[] { 1, 0 });
-            List<LogDamage> damage_logs_all = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
+            List<DamageLog> damage_logs_all = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
             //List<DamageLog> damage_logs_boss = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData());
             int totaldmg = 0;
             int timeGraphed = 0;
-            foreach (LogDamage log in damage_logs_all)
+            foreach (DamageLog log in damage_logs_all)
             {
                 totaldmg += log.getDamage();
                 long time = log.getTime();
@@ -1497,7 +1509,7 @@ namespace LuckParser.Controllers
             foreach (string mechAltString in distMech)
             {
                 List<Mechanic> mechs = presMech.Where(x => x.GetAltName() == mechAltString).ToList();
-                List<LogMechanic> filterdList = new List<LogMechanic>();
+                List<MechanicLog> filterdList = new List<MechanicLog>();
                 foreach (Mechanic me in mechs)
                 {
                     filterdList.AddRange(mech_data.GetMDataLogs().Where(x => x.GetSkill() == me.GetSkill()).ToList());
@@ -1508,7 +1520,7 @@ namespace LuckParser.Controllers
                 sw.Write("y: [");
 
                 int mechcount = 0;
-                foreach (LogMechanic ml in filterdList)
+                foreach (MechanicLog ml in filterdList)
                 {
                     int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => x[0] == ml.GetTime());
                     if (mechcount == filterdList.Count - 1)
@@ -1542,7 +1554,7 @@ namespace LuckParser.Controllers
                 sw.Write("x: [");
                 tdalpcount = 0;
                 mechcount = 0;
-                foreach (LogMechanic ml in filterdList)
+                foreach (MechanicLog ml in filterdList)
                 {
                     if (mechcount == filterdList.Count - 1)
                     {
@@ -1569,7 +1581,7 @@ namespace LuckParser.Controllers
                 sw.Write("type:'scatter'," +
                         "marker:{" + mech.GetPlotly() + "size: 15" + "}," +
                         "text:[");
-                foreach (LogMechanic ml in filterdList)
+                foreach (MechanicLog ml in filterdList)
                 {
                     if (mechcount == filterdList.Count - 1)
                     {
@@ -1595,10 +1607,10 @@ namespace LuckParser.Controllers
             foreach (string state in DnDStringList)
             {
                 int mcount = 0;
-                List<LogMechanic> DnDList = mech_data.GetMDataLogs().Where(x => x.GetName() == state).ToList();
+                List<MechanicLog> DnDList = mech_data.GetMDataLogs().Where(x => x.GetName() == state).ToList();
                 sw.Write("{");
                 sw.Write("y: [");
-                foreach (LogMechanic ml in DnDList)
+                foreach (MechanicLog ml in DnDList)
                 {
                     int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => x[0] == ml.GetTime());
                     if (mcount == DnDList.Count - 1)
@@ -1632,7 +1644,7 @@ namespace LuckParser.Controllers
                 sw.Write("x: [");
                 tdalpcount = 0;
                 mcount = 0;
-                foreach (LogMechanic ml in DnDList)
+                foreach (MechanicLog ml in DnDList)
                 {
                     if (mcount == DnDList.Count - 1)
                     {
@@ -1659,7 +1671,7 @@ namespace LuckParser.Controllers
                 sw.Write("type:'scatter'," +
                     "marker:{" + getMechData().GetPLoltyShape(state) + "size: 15" + "}," +
                     "text:[");
-                foreach (LogMechanic ml in DnDList)
+                foreach (MechanicLog ml in DnDList)
                 {
                     if (mcount == DnDList.Count - 1)
                     {
@@ -3299,7 +3311,7 @@ namespace LuckParser.Controllers
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             AgentData a_data = getAgentData();
-            List<LogDamage> damageLogs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(), getMechData());
+            List<DamageLog> damageLogs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(), getMechData());
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             List<Point> down = getCombatData().getStates(p.getInstid(), "CHANGE_DOWN");
@@ -3309,8 +3321,8 @@ namespace LuckParser.Controllers
                 down = down.GetRange(ups.Count(), down.Count()-ups.Count());
             }
             List<Point> dead = getCombatData().getStates(p.getInstid(), "CHANGE_DEAD");
-            List<LogDamage> damageToDown = new List<LogDamage>();
-            List<LogDamage> damageToKill = new List<LogDamage>(); ;
+            List<DamageLog> damageToDown = new List<DamageLog>();
+            List<DamageLog> damageToKill = new List<DamageLog>(); ;
             if (down.Count > 0)
             {//went to down state before death
                 damageToDown = damageLogs.Where(x => x.getTime() < down.Last().X - b_data.getFirstAware() && x.getDamage() > 0).ToList();
@@ -3470,7 +3482,7 @@ namespace LuckParser.Controllers
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
-            List<LogDamage> damageLogs = p.getJustPlayerDamageLogs(toBoss ? b_data.getInstid() : 0, b_data, c_data.getCombatList(), getAgentData());
+            List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(toBoss ? b_data.getInstid() : 0, b_data, c_data.getCombatList(), getAgentData());
             int totalDamage = toBoss ? Int32.Parse(getFinalDPS(p).Split('|')[7]) : Int32.Parse(getFinalDPS(p).Split('|')[1]);
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
             if (totalDamage > 0)
@@ -3542,7 +3554,7 @@ namespace LuckParser.Controllers
                         int flank = 0;
                         int glance = 0;
                         double hpcast = 0;
-                        foreach (LogDamage dl in damageLogs.Where(x => x.getID() == id))
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
                         {
                             int curdmg = dl.getDamage();
                             totaldamage += curdmg;
@@ -3653,7 +3665,7 @@ namespace LuckParser.Controllers
                         int maxdamage = 0;
                         int condiID = condi.getID();
                         usedIDs.Add(condiID);
-                        foreach (LogDamage dl in damageLogs.Where(x => x.getID() == condiID))
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
                         {
                             int curdmg = dl.getDamage();
                             totaldamage += curdmg;
@@ -3720,7 +3732,7 @@ namespace LuckParser.Controllers
                         int flank = 0;
                         int glance = 0;
                         double hpcast = 0;
-                        foreach (LogDamage dl in damageLogs.Where(x => x.getID() == id))
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
                         {
                             int curdmg = dl.getDamage();
                             totaldamage += curdmg;
@@ -3863,7 +3875,7 @@ namespace LuckParser.Controllers
             string tabid = p.getInstid() + "_" + agent.getInstid() + (toBoss ? "_boss" : "");
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
-            List<LogDamage> damageLogs = p.getMinionsDamageLogs(toBoss ? b_data.getInstid() : 0, b_data, c_data.getCombatList(), getAgentData())[agent];
+            List<DamageLog> damageLogs = p.getMinionsDamageLogs(toBoss ? b_data.getInstid() : 0, b_data, c_data.getCombatList(), getAgentData())[agent];
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
             if (totalDamage > 0)
             {
@@ -3907,7 +3919,7 @@ namespace LuckParser.Controllers
                         int hits = 0;
                         int maxdamage = 0;
                         usedIDs.Add(condiID);
-                        foreach (LogDamage dl in damageLogs.Where(x => x.getID() == condiID))
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
                         {
                             int curdmg = dl.getDamage();
                             totaldamage += curdmg;
@@ -3947,7 +3959,7 @@ namespace LuckParser.Controllers
                         int crit = 0;
                         int flank = 0;
                         int glance = 0;
-                        foreach (LogDamage dl in damageLogs.Where(x => x.getID() == id))
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
                         {
                             int curdmg = dl.getDamage();
                             totaldamage += curdmg;
@@ -4064,7 +4076,7 @@ namespace LuckParser.Controllers
         {
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
-            List<LogDamage> damageLogs = p.getDamageTakenLogs( b_data, c_data.getCombatList(), getAgentData(),getMechData());
+            List<DamageLog> damageLogs = p.getDamageTakenLogs( b_data, c_data.getCombatList(), getAgentData(),getMechData());
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
@@ -4102,7 +4114,7 @@ namespace LuckParser.Controllers
                         int hits = 0;
                         int maxdamage = 0;
                         usedIDs.Add(condiID);
-                        foreach (LogDamage dl in damageLogs.Where(x => x.getID() == condiID))
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
                         {
                             int curdmg = dl.getDamage();
                             totaldamage += curdmg;
@@ -4144,7 +4156,7 @@ namespace LuckParser.Controllers
                         int crit = 0;
                         int flank = 0;
                         int glance = 0;
-                        foreach (LogDamage dl in damageLogs.Where(x => x.getID() == id))
+                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
                         {
                             int curdmg = dl.getDamage();
                             totaldamage += curdmg;
@@ -4244,7 +4256,7 @@ namespace LuckParser.Controllers
                                     int count = 0;
                                     foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => mechalt == x.GetAltName()))
                                     {
-                                        List<LogMechanic> test = mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).ToList();
+                                        List<MechanicLog> test = mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).ToList();
                                         count += mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).Count();
                                     }
                                     sw.Write("<td>" + count + "</td>");
