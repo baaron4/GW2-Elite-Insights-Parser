@@ -1011,18 +1011,19 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             BoonDistribution boon_distrib = p.getBoonDistribution(b_data, getSkillData(), getCombatData().getCombatList());
             Dictionary<int, string> rates = new Dictionary<int, string>();
-            foreach(Boon boon in Boon.getAllBuffList())
+            long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
+            foreach (Boon boon in Boon.getAllBuffList())
             {
                 string rate = "0";
                 if (boon_distrib.ContainsKey(boon.getID()))
                 {
                     if (boon.getType().Equals("duration"))
                     {
-                        long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
                         rate = Math.Round(100.0 * boon_distrib.getUptime(boon.getID()) / fight_duration, 1) + "%";
                     }
                     else if (boon.getType().Equals("intensity"))
                     {
+                        rate = Math.Round((double)boon_distrib.getUptime(boon.getID()) / fight_duration, 1).ToString();
                     }
 
                 }
@@ -1039,6 +1040,7 @@ namespace LuckParser.Controllers
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             SkillData s_data = getSkillData();
+            long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
             Dictionary<Player, BoonDistribution> boon_logsDist = new Dictionary<Player, BoonDistribution>();
             foreach (Player player in trgetPlayers)
             {
@@ -1049,21 +1051,12 @@ namespace LuckParser.Controllers
             {
                 string rate = "0";
                 long total = 0;
-                long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
                 foreach (Player player in trgetPlayers)
                 {
                     BoonDistribution boon_dist = boon_logsDist[player];
                     if (boon_dist.ContainsKey(boon.getID()))
                     {
-
-                        if (boon.getType().Equals("duration"))
-                        {
-                            total += boon_dist.getGeneration(boon.getID(), p.getInstid());
-                        }
-                        else if (boon.getType().Equals("intensity"))
-                        {
-                        }
-
+                        total += boon_dist.getGeneration(boon.getID(), p.getInstid());
                     }
                 }
                 if (total > 0)

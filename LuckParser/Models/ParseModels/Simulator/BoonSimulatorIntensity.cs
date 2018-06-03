@@ -7,101 +7,38 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSimulatorIntensity : BoonSimulator
     {
+        
         // Constructor
         public BoonSimulatorIntensity(int capacity) : base(capacity)
         {
-            //super(capacity);
         }
 
         // Public Methods
-
-        public long getStackValue()
-        {
-            return boon_stack.Count();
-        }
-        
-
+             
         public override void update(long time_passed)
         {
-
-            // Subtract from each
-            /*for (int i = 0; i < boon_stack.Count(); i++)
-            {
-                boon_stack[i] = new BoonSimulationItem(boon_stack[i], time_passed, -time_passed);
-            }
-            // Remove negatives
-            int indexcount = 0;
-            foreach (long iter in boon_stack.Select(x => x.getDuration()).ToList())
+            if (boon_stack.Count() > 0)
             {
 
-                if (iter <= 0)
+                BoonSimulationItemIntensity toAdd = new BoonSimulationItemIntensity(boon_stack);
+                if (simulation.Count > 0)
                 {
-                    boon_stack.RemoveAt(indexcount);
-                    indexcount--;
-                }
-                indexcount++;
-            }*/
-            //for (iterator<int> iter = boon_stack.listIterator(); iter.hasNext();)
-            //{
-            //    int stack = iter.next();
-            //    if (stack <= 0)
-            //    {
-            //        iter.remove();
-            //    }
-            //}
-        }
-
-
-        public void addStacksBetween(List<long> boon_stacks, long time_between)
-        {
-            // Create copy of the boon
-            BoonSimulatorIntensity boon_copy = new BoonSimulatorIntensity(capacity);
-            boon_copy.boon_stack = new List<BoonStackItem>(boon_stack);
-            List<BoonStackItem> stacks = boon_copy.boon_stack;
-            // Simulate the boon stack decreasing
-            if (stacks.Count() > 0)
-            {
-                long time_passed = 0;
-                long min_duration = stacks.Select(x => x.boon_duration).Min();
-
-                // Remove minimum duration from stack
-                for (long i = 1; i < time_between; i++)
-                {
-                    if ((i - time_passed) >= min_duration)
+                    BoonSimulationItem last = simulation.Last();
+                    if (last.getEnd() > toAdd.getStart())
                     {
-                        boon_copy.update(i - time_passed);
-                        if (stacks.Count() > 0)
-                        {
-                            min_duration = stacks.Select(x => x.boon_duration).Min();
-                        }
-                        time_passed = i;
+                        last.setEnd(toAdd.getStart());
                     }
-                    boon_stacks.Add(boon_copy.getStackValue());
                 }
-            }
-            // Fill in remaining time with 0 values
-            else
-            {
-                for (long i = 1; i < time_between; i++)
+                simulation.Add(toAdd);
+                // Subtract from each
+                for (int i = 0; i < boon_stack.Count(); i++)
                 {
-                    boon_stacks.Add(0);
+                    boon_stack[i] = new BoonStackItem(boon_stack[i], time_passed, -time_passed);
                 }
+                // Remove negatives
+                boon_stack = boon_stack.Where(x => x.boon_duration > 0).ToList();
+
             }
-        }
-
-        public override void simulate(List<LogBoon> logs)
-        {
-            return;
-        }
-
-        public override void trim(long fight_duration)
-        {
-            return;
-        }
-
-        public override List<BoonSimulationItem> getSimulationResult()
-        {
-            return new List<BoonSimulationItem>();
         }
     }
 }

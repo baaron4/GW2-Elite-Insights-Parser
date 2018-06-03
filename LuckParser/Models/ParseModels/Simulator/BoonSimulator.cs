@@ -31,6 +31,7 @@ namespace LuckParser.Models.ParseModels
 
         // Fields
         protected List<BoonStackItem> boon_stack = new List<BoonStackItem>();
+        protected List<BoonSimulationItem> simulation = new List<BoonSimulationItem>();
         protected int capacity;
 
         // Constructor
@@ -38,14 +39,45 @@ namespace LuckParser.Models.ParseModels
         {
             this.capacity = capacity;
         }
-        public abstract List<BoonSimulationItem> getSimulationResult();
+        public List<BoonSimulationItem> getSimulationResult()
+        {
+            return new List<BoonSimulationItem>(simulation);
+        }
         // Abstract Methods
         /// <summary>
         /// Make sure the last element does not overflow the fight
         /// </summary>
         /// <param name="fight_duration">Duration of the fight</param>
-        public abstract void trim(long fight_duration);
-        public abstract void simulate(List<LogBoon> logs);
+        public void trim(long fight_duration)
+        {
+            for (int i = simulation.Count - 1; i >= 0; i--)
+            {
+                BoonSimulationItem data = simulation[i];
+                if (data.getEnd() > fight_duration)
+                {
+                    data.setEnd(fight_duration);
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        public void simulate(List<LogBoon> logs, long fight_duration)
+        {
+            long t_curr = 0;
+            long t_prev = 0;
+            foreach (LogBoon log in logs)
+            {
+                t_curr = log.getTime();
+                update(t_curr - t_prev);
+                add(log.getValue(), log.getSrcInstid(), t_curr);
+                t_prev = t_curr;
+            }
+            update(fight_duration - t_prev);
+            simulation = simulation.Where(x => x.getDuration(0) > 0).ToList();
+            boon_stack.Clear();
+        }
         public abstract void update(long time_passed);
         
         // Public Methods

@@ -9,55 +9,37 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSimulationItemDuration: BoonSimulationItem
     {
-        private long start;
-        private long duration;
         private ushort src;
 
-        public BoonSimulationItemDuration(long start, long duration, ushort src) : base()
+        public BoonSimulationItemDuration(long start, long duration, ushort src) : base(start, duration)
         {
-            this.start = start;
-            this.duration = duration;
             this.src = src;
         }
 
-        public BoonSimulationItemDuration(BoonStackItem other) : base()
+        public BoonSimulationItemDuration(BoonStackItem other) : base(other.start, other.boon_duration)
         {
-            this.start = other.start ;
-            this.duration = other.boon_duration;
             this.src = other.src;
         }
 
-        public override long getDuration()
+        public override long getDuration(ushort src)
         {
             return this.duration;
         }
-
-        public override long getStart()
+        public override void setEnd(long end)
         {
-            return start;
+            this.duration = Math.Min(Math.Max(end - this.start, 0),duration);
         }
 
-        public void setDuration(long duration)
+        public override List<ushort> getSrc()
         {
-            this.duration = duration;
+            List<ushort> res = new List<ushort>
+            {
+                src
+            };
+            return res;
         }
 
-        public override ushort getSrc()
-        {
-            return src;
-        }
-
-        public void setEnd(long end)
-        {
-            this.duration = Math.Max(end - this.start, 0);
-        }
-
-        public override long getEnd()
-        {
-            return start + duration;
-        }
-
-        public override int getStack()
+        public override int getStack(long end)
         {
             return 1;
         }

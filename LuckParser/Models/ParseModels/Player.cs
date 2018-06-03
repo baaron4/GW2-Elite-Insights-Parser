@@ -359,7 +359,8 @@ namespace LuckParser.Models.ParseModels
             BoonMap to_use = getBoonMap(bossData,skillData,combatList, true);
             List<Boon> boon_to_use = Boon.getAllBuffList();
             boon_to_use.AddRange(Boon.getCondiBoonList());
-            int fight_duration = (int)(bossData.getLastAware() - bossData.getFirstAware()) / 1000;
+            long dur = bossData.getLastAware() - bossData.getFirstAware();
+            int fight_duration = (int)(dur) / 1000;
             foreach (Boon boon in boon_to_use)
             {
                 if (to_use.ContainsKey(boon.getID()))
@@ -374,31 +375,36 @@ namespace LuckParser.Models.ParseModels
                     }
                     boon_distribution[boon.getID()] = new Dictionary<ushort, long>();
                     BoonSimulator simulator = boon.getSimulator();
-                    simulator.simulate(logs);
+                    simulator.simulate(logs, dur);
                     if (getDeath(combatList) > 0)
                     {
                         simulator.trim(getDeath(combatList) - bossData.getFirstAware());
                     } else
                     {
-                        simulator.trim(bossData.getLastAware() - bossData.getFirstAware());
+                        simulator.trim(dur);
                     }
                     List<BoonSimulationItem> simulation = simulator.getSimulationResult();
                     foreach (BoonSimulationItem simul in simulation)
                     {
-                        if (!boon_distribution[boon.getID()].ContainsKey(simul.getSrc()))
+                        foreach (ushort src in simul.getSrc())
                         {
-                            boon_distribution[boon.getID()][simul.getSrc()] = simul.getDuration();
-                        } else
-                        {
-                            boon_distribution[boon.getID()][simul.getSrc()] += simul.getDuration();
+                            if (!boon_distribution[boon.getID()].ContainsKey(src))
+                            {
+                                boon_distribution[boon.getID()][src] = simul.getDuration(src);
+                            }
+                            else
+                            {
+                                boon_distribution[boon.getID()][src] += simul.getDuration(src);
+                            }
                         }
                     }
                     int prev = 0;
+                    // full precision
                     List<Point> toFill = new List<Point>();
                     foreach (BoonSimulationItem simul in simulation)
                     {
-                        int start = (int)Math.Floor(simul.getStart() / 1000.0);
-                        int end = (int)Math.Floor(simul.getEnd() / 1000.0);
+                        int start = (int)simul.getStart();
+                        int end = (int)simul.getEnd();
                         // fill
                         if (toFill.Count < start)
                         {
@@ -409,16 +415,22 @@ namespace LuckParser.Models.ParseModels
                         }
                         for (int i = start; i < end; i++)
                         {
-                            toFill.Add(new Point(i, simul.getStack()));
+                            toFill.Add(new Point(i, simul.getStack(i)));
                         }
                         prev = end;
                     }
                     // fill
-                    for (int i = prev; i < fight_duration; i++)
+                    for (int i = prev; i < dur; i++)
                     {
                         toFill.Add(new Point(i, 0));
                     }
-                    boon_points[boon.getID()] = new BoonsGraphModel(boon.getName(), toFill);
+                    // reduce precision to seconds
+                    List<Point> reducedPrecision = new List<Point>();
+                    for (int i = 0; i < fight_duration; i++)
+                    {
+                        reducedPrecision.Add(new Point(i, toFill[1000 * i].Y));
+                    }
+                    boon_points[boon.getID()] = new BoonsGraphModel(boon.getName(), reducedPrecision);
                 }
             }
         }
