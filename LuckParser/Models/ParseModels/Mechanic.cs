@@ -14,6 +14,7 @@ namespace LuckParser.Models.ParseModels
         private string name;
         private string altname;
         private int mechType;
+        //X indicates not gathering mechanic in mech logs
         //0 boon on player
         //1 boon on boss X
         //2 skill by player X
