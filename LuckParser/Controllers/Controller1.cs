@@ -1138,7 +1138,7 @@ namespace LuckParser.Controllers
                     mech_data.AddItem(new MechanicLog((long)((pnt.X - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
                 }
                 List<DamageLog> dls = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data, mech_data);
-                //damage taken 
+                //Player hit by skill 3
                 MechanicLog prevMech = null;
                 foreach (DamageLog dLog in dls)
                 {
@@ -1167,7 +1167,7 @@ namespace LuckParser.Controllers
                         }
                     }
                 }
-                //Gainign Buff mech
+                //Player gain buff 0,7
                 foreach (CombatItem c in combat_data.getCombatList().Where(x=>x.isBuffremove().getID() == 0 &&x.isStateChange().getID() == 0))
                 {
                     if (p.getInstid() == c.getDstInstid())
@@ -1175,11 +1175,25 @@ namespace LuckParser.Controllers
                         if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove().getID() == 0 && c.getResult().getID() < 3)
                         {
                             String name = skill_data.getName(c.getSkillID());
+                            //buff on player 0
                             foreach (Mechanic mech in getMechData().GetMechList(boss_data.getID()).Where(x => x.GetMechType() == 0))
                             {
                                 if (c.getSkillID() == mech.GetSkill())
                                 {
+                                    //dst player
                                     mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware())/1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
+                                    break;
+                                }
+                            }
+                            //player on player 7
+                            foreach (Mechanic mech in getMechData().GetMechList(boss_data.getID()).Where(x => x.GetMechType() == 7))
+                            {
+                                if (c.getSkillID() == mech.GetSkill())
+                                {
+                                    //dst player
+                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
+                                    //src player
+                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p_list.FirstOrDefault(i=>i.getInstid() == c.getSrcInstid()), mech.GetPlotly()));
                                     break;
                                 }
                             }
@@ -1189,8 +1203,6 @@ namespace LuckParser.Controllers
                 }
             }
 
-            //int stop = 0;
-            
         }
         //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
         //Methods that make it easier to create Javascript graphs
