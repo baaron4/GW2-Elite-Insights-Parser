@@ -5065,9 +5065,9 @@ namespace LuckParser.Controllers
                                                             {
                                                                 finalPercent = 100.0 - boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1][1] * 0.01;
                                                             }
-                                                            string tp = getBossData().getHealth() * finalPercent / 100.0 + " Health";
+                                                            string tp = Math.Round(getBossData().getHealth() * finalPercent / 100.0) + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + finalPercent + "%;\" aria-valuenow=\""+ finalPercent+"\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
-                                                            tp = getBossData().getHealth() * (100.0-finalPercent) / 100.0 + " Health";
+                                                            tp = Math.Round(getBossData().getHealth() * (100.0-finalPercent) / 100.0) + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-danger\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + (100.0 - finalPercent) + "%;\" aria-valuenow=\""+ (100.0 - finalPercent )+ "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
                                                             
                                                         }

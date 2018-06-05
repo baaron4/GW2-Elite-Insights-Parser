@@ -554,6 +554,7 @@ namespace LuckParser.Models.ParseModels
         {
             return getDefensiveTableList(ProfToEnum(source));
         }
+        // Table + graph
         public static List<Boon> getTableProfList()
         {
             return allBoons.Where(x => x.nature == BoonEnum.OffensiveBuffTable || x.nature == BoonEnum.DefensiveBuffTable).ToList();   
@@ -579,7 +580,13 @@ namespace LuckParser.Models.ParseModels
         // All buffs
         public static List<Boon> getAllBuffList()
         {
-            return allBoons.Where(x => x.nature != BoonEnum.Condition && x.nature != BoonEnum.Food && x.nature != BoonEnum.Utility).ToList();
+            List<Boon> res = new List<Boon>();
+            // correct order for the boon graph
+            res.AddRange(getBoonList());
+            res.AddRange(getOffensiveTableList());
+            res.AddRange(getDefensiveTableList());
+            res.AddRange(getRemainingBuffsList());
+            return res;
         }
         // Non shareable buffs
         public static List<Boon> getRemainingBuffsList()
