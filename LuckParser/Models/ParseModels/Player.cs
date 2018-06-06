@@ -509,11 +509,26 @@ namespace LuckParser.Models.ParseModels
                     {
                         boon_map[c.getSkillID()].Add(new BoonLog(time, src, c.getValue(), c.getOverstackValue()));
                     }
-                    else if (c.isBuffremove().getID() == 1)//All
+                    else if (Boon.removePermission(c.getSkillID(), c.isBuffremove().getID()))
                     {
-                        List<BoonLog> loglist = boon_map[c.getSkillID()];
-                        for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
+                        if (c.isBuffremove().getID() == 1)//All
                         {
+                            List<BoonLog> loglist = boon_map[c.getSkillID()];
+                            for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
+                            {
+                                BoonLog curBL = loglist[cnt];
+                                if (curBL.getTime() + curBL.getValue() > time)
+                                {
+                                    long subtract = (curBL.getTime() + curBL.getValue()) - time;
+                                    loglist[cnt].addValue(-subtract);
+                                }
+                            }
+
+                        }
+                        else if (c.isBuffremove().getID() == 2)//Single
+                        {
+                            List<BoonLog> loglist = boon_map[c.getSkillID()];
+                            int cnt = loglist.Count() - 1;
                             BoonLog curBL = loglist[cnt];
                             if (curBL.getTime() + curBL.getValue() > time)
                             {
@@ -521,35 +536,24 @@ namespace LuckParser.Models.ParseModels
                                 loglist[cnt].addValue(-subtract);
                             }
                         }
-
-                    }
-                    else if (c.isBuffremove().getID() == 2)//Single
-                    {
-                        List<BoonLog> loglist = boon_map[c.getSkillID()];
-                        int cnt = loglist.Count() - 1;
-                        BoonLog curBL = loglist[cnt];
-                        if (curBL.getTime() + curBL.getValue() > time)
+                        else if (c.isBuffremove().getID() == 3)//Manuel
                         {
-                            long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                            loglist[cnt].addValue(-subtract);
-                        }
-                    }
-                    else if (c.isBuffremove().getID() == 3)//Manuel
-                    {
-                        List<BoonLog> loglist = boon_map[c.getSkillID()];
-                        for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
-                        {
-                            BoonLog curBL = loglist[cnt];
-                            long ctime = curBL.getTime() + curBL.getValue();
-                            if (ctime > time)
+                            List<BoonLog> loglist = boon_map[c.getSkillID()];
+                            for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
                             {
-                                long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                loglist[cnt].addValue(-subtract);
-                                break;
+                                BoonLog curBL = loglist[cnt];
+                                long ctime = curBL.getTime() + curBL.getValue();
+                                if (ctime > time)
+                                {
+                                    long subtract = (curBL.getTime() + curBL.getValue()) - time;
+                                    loglist[cnt].addValue(-subtract);
+                                    break;
+                                }
                             }
-                        }
 
+                        }
                     }
+                    
                 }
             }
             return boon_map;

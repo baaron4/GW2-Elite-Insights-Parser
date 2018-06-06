@@ -506,17 +506,6 @@ namespace LuckParser.Controllers
                     log_data.setLogEnd(c.getValue());
 
                 }
-                //set boss dead
-                if (c.isStateChange().getEnum() == "REWARD")//got reward
-                {
-                    log_data.setBossKill(true);
-
-                }
-                //set boss dead
-                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 4)//change dead
-                {
-                   log_data.setBossKill(true);
-                }
                 //set health update
                 if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 8)
                 {
@@ -596,9 +585,27 @@ namespace LuckParser.Controllers
                         break;
                     }
                 }
-            }
-            
+            }        
             boss_data.setHealthOverTime(bossHealthOverTime);//after xera in case of change
+
+            // Re parse to see if the boss is dead and update last aware
+            foreach (CombatItem c in combat_list)
+            {
+                //set boss dead
+                if (c.isStateChange().getEnum() == "REWARD")//got reward
+                {
+                    log_data.setBossKill(true);
+                    boss_data.setLastAware(c.getTime());
+                    break;
+                }
+                //set boss dead
+                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 4 && !log_data.getBosskill())//change dead
+                {
+                    log_data.setBossKill(true);
+                    boss_data.setLastAware(c.getTime());
+                }
+
+            }
 
             //players
             if (p_list.Count == 0)
@@ -5058,9 +5065,9 @@ namespace LuckParser.Controllers
                                                             {
                                                                 finalPercent = 100.0 - boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1][1] * 0.01;
                                                             }
-                                                            string tp = getBossData().getHealth() * finalPercent / 100.0 + " Health";
+                                                            string tp = Math.Round(getBossData().getHealth() * finalPercent / 100.0) + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + finalPercent + "%;\" aria-valuenow=\""+ finalPercent+"\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
-                                                            tp = getBossData().getHealth() * (100.0-finalPercent) / 100.0 + " Health";
+                                                            tp = Math.Round(getBossData().getHealth() * (100.0-finalPercent) / 100.0) + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-danger\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + (100.0 - finalPercent) + "%;\" aria-valuenow=\""+ (100.0 - finalPercent )+ "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
                                                             
                                                         }
