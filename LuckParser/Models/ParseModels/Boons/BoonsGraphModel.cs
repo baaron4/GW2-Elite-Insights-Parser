@@ -9,10 +9,14 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonsGraphModel
     {
-        protected string boonname = null;
-        protected List<Point> boonChart = new List<Point>();
+        private string boonname = null;
+        private List<Point> boonChart = new List<Point>();
 
         // Constructor
+        public BoonsGraphModel(string boonname)
+        {
+            this.boonname = boonname;
+        }
         public BoonsGraphModel(string boonname, List<Point> boonChart)
         {
             this.boonname = boonname;
