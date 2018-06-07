@@ -534,7 +534,7 @@ namespace LuckParser.Models.ParseModels
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                     if (c.isBuffremove().getID() == 0)
                     {
-                        boon_map[c.getSkillID()].Add(new BoonLog(time, src, c.getValue(), c.getOverstackValue()));
+                        boon_map[c.getSkillID()].Add(new BoonLog(time, src, c.getValue(), 0));
                     }
                     else if (Boon.removePermission(c.getSkillID(), c.isBuffremove().getID()))
                     {

@@ -60,5 +60,21 @@ namespace LuckParser.Models.ParseModels
             }
             return total;
         }
+
+        public override bool addOverstack(ushort src, long overstack)
+        {
+            if (duration == 0)
+            {
+                return false;
+            }
+            foreach(BoonSimulationItemDuration stack in stacks)
+            {
+                if (stack.addOverstack(src,overstack))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
