@@ -523,11 +523,7 @@ namespace LuckParser.Models.ParseModels
             
             foreach (CombatItem c in combatList)
             {
-                if (c.getValue() == 0 || c.isBuff() != 1  || c.getBuffDmg() > 0)
-                {
-                    continue;
-                }
-                if (!boon_map.ContainsKey(c.getSkillID()))
+                if (c.isBuff() != 1 || !boon_map.ContainsKey(c.getSkillID()))
                 {
                     continue;
                 }
