@@ -100,6 +100,7 @@ namespace LuckParser.Models.ParseModels
                 int index = boon_stack.Count() - 1;
                 if (boon_stack[index].boon_duration < boon_duration)
                 {
+                    // added overwritten value as a overstack
                     long overstackValue = boon_stack[index].overstack + boon_stack[index].boon_duration;
                     ushort srcValue = boon_stack[index].src;
                     for (int i = simulation.Count -1; i >= 0; i--)

@@ -548,6 +548,8 @@ namespace LuckParser.Models.ParseModels
                                 {
                                     long subtract = (curBL.getTime() + curBL.getValue()) - time;
                                     loglist[cnt].addValue(-subtract);
+                                    // add removed as overstack
+                                    loglist[cnt].addOverstack((ushort)subtract);
                                 }
                             }
 
@@ -561,6 +563,8 @@ namespace LuckParser.Models.ParseModels
                             {
                                 long subtract = (curBL.getTime() + curBL.getValue()) - time;
                                 loglist[cnt].addValue(-subtract);
+                                // add removed as overstack
+                                loglist[cnt].addOverstack((ushort)subtract);
                             }
                         }
                         else if (c.isBuffremove().getID() == 3)//Manuel
@@ -574,6 +578,8 @@ namespace LuckParser.Models.ParseModels
                                 {
                                     long subtract = (curBL.getTime() + curBL.getValue()) - time;
                                     loglist[cnt].addValue(-subtract);
+                                    // add removed as overstack
+                                    loglist[cnt].addOverstack((ushort)subtract);
                                     break;
                                 }
                             }
