@@ -411,7 +411,7 @@ namespace LuckParser.Models.ParseModels
             long dur = bossData.getLastAware() - bossData.getFirstAware();
             int fight_duration = (int)(dur) / 1000;
             // Init boon presence points
-            BoonsGraphModel boon_presence_points = new BoonsGraphModel("Average Boons");
+            BoonsGraphModel boon_presence_points = new BoonsGraphModel("Number of Boons");
             for (int i = 0; i < fight_duration; i++)
             {
                 boon_presence_points.getBoonChart().Add(new Point(i, 0));
