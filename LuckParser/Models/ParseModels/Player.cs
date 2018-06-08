@@ -32,6 +32,7 @@ namespace LuckParser.Models.ParseModels
         protected List<int> damagetaken = new List<int>();
         // Boons
         private BoonDistribution boon_distribution = new BoonDistribution();
+        private Dictionary<int, long> boon_presence = new Dictionary<int, long>();
         private Dictionary<int, BoonsGraphModel> boon_points = new Dictionary<int, BoonsGraphModel>();
         private List<int[]> consumeList = new List<int[]>();
         // Casts
@@ -136,11 +137,19 @@ namespace LuckParser.Models.ParseModels
         }
         public Dictionary<int, BoonsGraphModel> getBoonGraphs(BossData bossData, SkillData skillData, List<CombatItem> combatList)
         {
-            if (boon_points.Count == 0)
+            if (boon_distribution.Count == 0)
             {
                 setBoonDistribution(bossData, skillData, combatList);
             }
             return boon_points;
+        }
+        public Dictionary<int, long> getBoonPresence(BossData bossData, SkillData skillData, List<CombatItem> combatList)
+        {
+            if (boon_distribution.Count == 0)
+            {
+                setBoonDistribution(bossData, skillData, combatList);
+            }
+            return boon_presence;
         }
         public int[] getCleanses(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
             long time_start = bossData.getFirstAware();
@@ -401,19 +410,26 @@ namespace LuckParser.Models.ParseModels
             boon_to_use.AddRange(Boon.getCondiBoonList());
             long dur = bossData.getLastAware() - bossData.getFirstAware();
             int fight_duration = (int)(dur) / 1000;
+            // Init boon presence points
+            BoonsGraphModel boon_presence_points = new BoonsGraphModel("Number of Boons");
+            for (int i = 0; i < fight_duration; i++)
+            {
+                boon_presence_points.getBoonChart().Add(new Point(i, 0));
+            }
             foreach (Boon boon in boon_to_use)
             {
-                if (to_use.ContainsKey(boon.getID()))
+                int boonid = boon.getID();
+                if (to_use.ContainsKey(boonid))
                 {
-                    List<BoonLog> logs = to_use[boon.getID()];
+                    List<BoonLog> logs = to_use[boonid];
                     if (logs.Count == 0)
                     {
                         continue;
                     }
-                    if (boon_distribution.ContainsKey(boon.getID())) {
+                    if (boon_distribution.ContainsKey(boonid)) {
                         continue;
                     }
-                    boon_distribution[boon.getID()] = new Dictionary<ushort, OverAndValue>();
+                    boon_distribution[boonid] = new Dictionary<ushort, OverAndValue>();
                     BoonSimulator simulator = boon.getSimulator();
                     simulator.simulate(logs, dur);
                     if (getDeath(combatList) > 0)
@@ -426,24 +442,32 @@ namespace LuckParser.Models.ParseModels
                     List<BoonSimulationItem> simulation = simulator.getSimulationResult();
                     foreach (BoonSimulationItem simul in simulation)
                     {
+                        if (!boon_presence.ContainsKey(boonid))
+                        {
+                            boon_presence[boonid] = simul.getItemDuration();
+                        } else
+                        {
+                            boon_presence[boonid] += simul.getItemDuration();
+                        }
                         foreach (ushort src in simul.getSrc())
                         {
-                            if (!boon_distribution[boon.getID()].ContainsKey(src))
+                            if (!boon_distribution[boonid].ContainsKey(src))
                             {
-                                boon_distribution[boon.getID()][src] = new OverAndValue(simul.getDuration(src), simul.getOverstack(src));
+                                boon_distribution[boonid][src] = new OverAndValue(simul.getDuration(src), simul.getOverstack(src));
                             }
                             else
                             {
-                                OverAndValue toModify = boon_distribution[boon.getID()][src];
+                                OverAndValue toModify = boon_distribution[boonid][src];
                                 toModify.value += simul.getDuration(src);
                                 toModify.overstack += simul.getOverstack(src);
-                                boon_distribution[boon.getID()][src] = toModify;
+                                boon_distribution[boonid][src] = toModify;
                             }
                         }
                     }
                     int prev = 0;
                     // full precision
                     List<Point> toFill = new List<Point>();
+                    List<Point> toFillPresence = new List<Point>();
                     foreach (BoonSimulationItem simul in simulation)
                     {
                         int start = (int)simul.getStart();
@@ -454,11 +478,13 @@ namespace LuckParser.Models.ParseModels
                             for (int i = prev; i < start; i++)
                             {
                                 toFill.Add(new Point(i, 0));
+                                toFillPresence.Add(new Point(i, 0));
                             }
                         }
                         for (int i = start; i < end; i++)
                         {
                             toFill.Add(new Point(i, simul.getStack(i)));
+                            toFillPresence.Add(new Point(i, simul.getItemDuration() > 0 ? 1 : 0));
                         }
                         prev = end;
                     }
@@ -466,16 +492,21 @@ namespace LuckParser.Models.ParseModels
                     for (int i = prev; i < dur; i++)
                     {
                         toFill.Add(new Point(i, 0));
+                        toFillPresence.Add(new Point(i, 0));
                     }
                     // reduce precision to seconds
                     List<Point> reducedPrecision = new List<Point>();
+                    List<Point> boonPresence = boon_presence_points.getBoonChart();
                     for (int i = 0; i < fight_duration; i++)
                     {
                         reducedPrecision.Add(new Point(i, toFill[1000 * i].Y));
+                        if (Boon.getBoonList().Select(x => x.getID()).Contains(boonid))
+                            boonPresence[i] = new Point(i, boonPresence[i].Y + toFillPresence[1000 * i].Y);
                     }
-                    boon_points[boon.getID()] = new BoonsGraphModel(boon.getName(), reducedPrecision);
+                    boon_points[boonid] = new BoonsGraphModel(boon.getName(), reducedPrecision);
                 }
             }
+            boon_points[-2] = boon_presence_points;
         }
         private BoonMap getBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList, bool add_condi)
         {
@@ -492,22 +523,18 @@ namespace LuckParser.Models.ParseModels
             
             foreach (CombatItem c in combatList)
             {
-                if (c.getValue() == 0 || c.isBuff() != 1  || c.getBuffDmg() > 0)
-                {
-                    continue;
-                }
-                if (!boon_map.ContainsKey(c.getSkillID()))
+                if (c.isBuff() != 1 || !boon_map.ContainsKey(c.getSkillID()))
                 {
                     continue;
                 }
                 long time = c.getTime() - time_start;
 
-                if (instid == c.getDstInstid() && time > 0 && time < fight_duration)
+                if (instid == c.getDstInstid() && time >= 0 && time <= fight_duration)
                 {
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                     if (c.isBuffremove().getID() == 0)
                     {
-                        boon_map[c.getSkillID()].Add(new BoonLog(time, src, c.getValue(), c.getOverstackValue()));
+                        boon_map[c.getSkillID()].Add(new BoonLog(time, src, c.getValue(), 0));
                     }
                     else if (Boon.removePermission(c.getSkillID(), c.isBuffremove().getID()))
                     {
@@ -521,6 +548,8 @@ namespace LuckParser.Models.ParseModels
                                 {
                                     long subtract = (curBL.getTime() + curBL.getValue()) - time;
                                     loglist[cnt].addValue(-subtract);
+                                    // add removed as overstack
+                                    loglist[cnt].addOverstack((ushort)subtract);
                                 }
                             }
 
@@ -534,6 +563,8 @@ namespace LuckParser.Models.ParseModels
                             {
                                 long subtract = (curBL.getTime() + curBL.getValue()) - time;
                                 loglist[cnt].addValue(-subtract);
+                                // add removed as overstack
+                                loglist[cnt].addOverstack((ushort)subtract);
                             }
                         }
                         else if (c.isBuffremove().getID() == 3)//Manuel
@@ -547,6 +578,8 @@ namespace LuckParser.Models.ParseModels
                                 {
                                     long subtract = (curBL.getTime() + curBL.getValue()) - time;
                                     loglist[cnt].addValue(-subtract);
+                                    // add removed as overstack
+                                    loglist[cnt].addOverstack((ushort)subtract);
                                     break;
                                 }
                             }

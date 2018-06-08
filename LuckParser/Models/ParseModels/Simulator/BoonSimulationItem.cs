@@ -38,7 +38,14 @@ namespace LuckParser.Models.ParseModels
             return start + duration;
         }
 
+        public abstract bool addOverstack(ushort src, long overstack);
+
         public abstract long getOverstack(ushort src);
+
+        public long getItemDuration()
+        {
+            return duration;
+        }
 
         public abstract void setEnd(long end);
 
