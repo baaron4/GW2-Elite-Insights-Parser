@@ -9,6 +9,18 @@ namespace LuckParser.Models.ParseModels
     {
         // Fields
         private List<SkillItem> skill_list;
+        private Dictionary<int, string> apiMissingID = new Dictionary<int, string>()
+        {
+            {1066, "Resurrect"},
+            {1175, "Bandage" },
+            {65001, "Dodge" },
+            // Gorseval
+            {31834,"Ghastly Rampage" },
+            {31759,"Protective Shadow" },
+            {31466,"Ghastly Rampage (Begin)" },
+            // Sabetha
+            {31372, "Shadow Step" }
+        };
 
         // Constructors
         public SkillData()
@@ -26,14 +38,9 @@ namespace LuckParser.Models.ParseModels
         {
 
             // Custom
-            if (ID == 1066 ) {
-                return "Resurrect";
-            }
-            if ( ID == 1175  ) {
-                return "Bandage";
-            }
-            if (ID == 65001) {
-                return "Dodge";
+            if (apiMissingID.ContainsKey(ID))
+            {
+                return apiMissingID[ID];
             }
 
             // Normal

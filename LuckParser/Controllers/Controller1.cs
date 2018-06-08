@@ -11,6 +11,7 @@ using System.Net;
 using LuckParser.Models;
 using System.IO.Compression;
 using System.Windows.Forms;
+using static LuckParser.Models.ParseModels.Boss;
 //recomend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {
@@ -117,7 +118,7 @@ namespace LuckParser.Controllers
             }
             return "UNKNOWN";
         }
-        private String FilterStringChars(string str)
+        private static String FilterStringChars(string str)
         {
             string filtered = "";
             string filter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
@@ -139,6 +140,7 @@ namespace LuckParser.Controllers
         private CombatData combat_data = new CombatData();
         private MechanicData mech_data = new MechanicData();
         private List<Player> p_list = new List<Player>();
+        private Boss boss;
 
         // Public Methods
         public LogData getLogData()
@@ -672,6 +674,8 @@ namespace LuckParser.Controllers
                 }
 
             }
+            AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
+            boss = new Boss(bossAgent);
             // Sort
             p_list = p_list.OrderBy(a => int.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>int.Parse(a.getGroup()) - int.Parse(b.getGroup()))
             setMechData();
@@ -4527,8 +4531,6 @@ namespace LuckParser.Controllers
         private void CreateBossSummary(StreamWriter sw)
         {
             //generate Player list Graphs
-            AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
-            Boss boss = new Boss(bossAgent);
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             List<CastLog> casting = boss.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
@@ -5005,6 +5007,7 @@ namespace LuckParser.Controllers
             }
             string bossname = FilterStringChars(b_data.getName());
             setPresentBoons(settingsSnap);
+            List<PhaseData> phases = boss.getPhases(getBossData(), getCombatData().getCombatList(), getAgentData());
             string Html_playerDropdown = "";
             foreach (Player p in p_list)
             {
