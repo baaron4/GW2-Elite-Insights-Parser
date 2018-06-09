@@ -1804,43 +1804,51 @@ namespace LuckParser.Controllers
             string[] wep = p.getWeaponsArray(s_data,c_data,b_data,a_data);
             if (wep[0] != null)
             {
-                sw.Write("<img src=\"" + GetLink(wep[0]) + " \" alt=\"" + wep[0] + "\" height=\"18\" width=\"18\" >");
+                sw.Write("<img src=\"" + GetLink(wep[0]) + " \" alt=\"" + wep[0] + "\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" +wep[0] + "\">");
             }
             else
             {
-                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
+                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Unknown\">");
             }
             if (wep[1] != null)
             {
                 if (wep[1] != "2Hand")
                 {
-                    sw.Write("<img src=\"" + GetLink(wep[1]) + " \" alt=\"" + wep[1] + "\" height=\"18\" width=\"18\" >");
+                    sw.Write("<img src=\"" + GetLink(wep[1]) + " \" alt=\"" + wep[1] + "\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[1] + "\">");
                 }
             }
             else
             {
-                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
+                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Unknown\">");
             }
-            sw.Write("/");
+            if (wep[2] == null && wep[3] == null)
+            {
+                
+            }
+            else {
+                sw.Write("/");
+            }
+            
             if (wep[2] != null)
             {
-                sw.Write("<img src=\"" + GetLink(wep[2]) + " \" alt=\"" + wep[2] + "\" height=\"18\" width=\"18\" >");
+                sw.Write("<img src=\"" + GetLink(wep[2]) + " \" alt=\"" + wep[2] + "\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[2] + "\">");
             }
             else
             {
-                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
+               // sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
             }
             if (wep[3] != null)
             {
                 if (wep[3] != "2Hand")
                 {
-                    sw.Write("<img src=\"" + GetLink(wep[3]) + " \" alt=\"" + wep[3] + "\" height=\"18\" width=\"18\" >");
+                    sw.Write("<img src=\"" + GetLink(wep[3]) + " \" alt=\"" + wep[3] + "\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[3] + "\">");
                 }
             }
             else
             {
-                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
+                //sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
             }
+            sw.Write("<br>");
         }
 
         bool[] SnapSettings;
@@ -6020,6 +6028,38 @@ namespace LuckParser.Controllers
         {
             switch (name)
             {
+                case "Sword":
+                    return "https://wiki.guildwars2.com/images/6/61/Sword_Proficiency.png";
+                case "Axe":
+                    return "https://wiki.guildwars2.com/images/a/a2/Axe_Proficiency.png";
+                case "Dagger":
+                    return "https://wiki.guildwars2.com/images/c/c9/Dagger_Proficiency.png";
+                case "Mace":
+                    return "https://wiki.guildwars2.com/images/3/37/Mace_Smash.png";
+                case "Pistol":
+                    return "https://wiki.guildwars2.com/images/7/7a/Phantasmal_Duelist.png";
+                case "Sceptor":
+                    return "https://wiki.guildwars2.com/images/2/22/Water_Trident.png";
+                case "Focus":
+                    return "https://wiki.guildwars2.com/images/7/79/Focus_Mastery.png";
+                case "Shield":
+                    return "https://wiki.guildwars2.com/images/c/c6/Shield_Proficiency.png";
+                case "Torch":
+                    return "https://wiki.guildwars2.com/images/1/11/Torch_Proficiency.png";
+                case "Warhorn":
+                    return "https://wiki.guildwars2.com/images/b/b8/Warhorn_Proficiency.png";
+                case "Greatsword":
+                    return "https://wiki.guildwars2.com/images/8/8b/Greatsword_Proficiency.png";
+                case "Hammer":
+                    return "https://wiki.guildwars2.com/images/5/5f/Hammer_Proficiency.png";
+                case "Longbow":
+                    return "https://wiki.guildwars2.com/images/5/53/Longbow_Proficiency.png";
+                case "Shortbow":
+                    return "https://wiki.guildwars2.com/images/e/e7/Short_Bow_Proficiency_%28renegade%29.png";
+                case "Rifle":
+                    return "https://wiki.guildwars2.com/images/5/5d/Rifle_Proficiency_%28deadeye%29.png";
+                case "Staff":
+                    return "https://wiki.guildwars2.com/images/7/78/Staff_Proficiency.png";
                 case "Vale Guardian-icon":
                     return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
                 case "Gorseval the Multifarious-icon":

@@ -311,7 +311,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 if (apiskill != null)
                 {
-                    if (apiskill.type != "Weapon")
+                    if (apiskill.type == "Weapon")
                     {
                         if (apiskill.weapon_type == "Greatsword" || apiskill.weapon_type == "Staff" || apiskill.weapon_type == "Rifle" || apiskill.weapon_type == "Longbow" || apiskill.weapon_type == "Shortbow" || apiskill.weapon_type == "Hammer")
                         {
@@ -328,16 +328,16 @@ namespace LuckParser.Models.ParseModels
                                 continue;
                             }
 
-                            if (weapons[0] == null && weapons[1] == null)
-                            {
-                                weapons[0] = apiskill.weapon_type;
-                                weapons[1] = "2Hand";
-                            }
-                            else if (weapons[2] == null && weapons[3] == null)
-                            {
-                                weapons[2] = apiskill.weapon_type;
-                                weapons[3] = "2Hand";
-                            }
+                            //if (weapons[0] == null && weapons[1] == null)
+                            //{
+                            //    weapons[0] = apiskill.weapon_type;
+                            //    weapons[1] = "2Hand";
+                            //}
+                            //else if (weapons[2] == null && weapons[3] == null)
+                            //{
+                            //    weapons[2] = apiskill.weapon_type;
+                            //    weapons[3] = "2Hand";
+                            //}
                             continue;
                         }//2 handed
                         if (apiskill.weapon_type == "Focus" || apiskill.weapon_type == "Shield" || apiskill.weapon_type == "Torch" || apiskill.weapon_type == "Warhorn")
@@ -354,16 +354,16 @@ namespace LuckParser.Models.ParseModels
                                 weapons[3] = apiskill.weapon_type;
                                 continue;
                             }
-                            if (weapons[1] == null)
-                            {
+                            //if (weapons[1] == null)
+                            //{
 
-                                weapons[1] = apiskill.weapon_type;
-                            }
-                            else if (weapons[3] == null)
-                            {
+                            //    weapons[1] = apiskill.weapon_type;
+                            //}
+                            //else if (weapons[3] == null)
+                            //{
 
-                                weapons[3] = apiskill.weapon_type;
-                            }
+                            //    weapons[3] = apiskill.weapon_type;
+                            //}
                             continue;
                         }//OffHand
                         if (apiskill.weapon_type == "Axe" || apiskill.weapon_type == "Dagger" || apiskill.weapon_type == "Mace" || apiskill.weapon_type == "Pistol" || apiskill.weapon_type == "Sword" || apiskill.weapon_type == "Sceptor")
@@ -382,16 +382,16 @@ namespace LuckParser.Models.ParseModels
                                     weapons[2] = apiskill.weapon_type;
                                     continue;
                                 }
-                                if (weapons[0] == null)
-                                {
+                                //if (weapons[0] == null)
+                                //{
 
-                                    weapons[0] = apiskill.weapon_type;
-                                }
-                                else if (weapons[2] == null)
-                                {
+                                //    weapons[0] = apiskill.weapon_type;
+                                //}
+                                //else if (weapons[2] == null)
+                                //{
 
-                                    weapons[2] = apiskill.weapon_type;
-                                }
+                                //    weapons[2] = apiskill.weapon_type;
+                                //}
                                 continue;
                             }
                             if (apiskill.slot == "Weapon_4" || apiskill.slot == "Weapon_5")
@@ -408,16 +408,16 @@ namespace LuckParser.Models.ParseModels
                                     weapons[3] = apiskill.weapon_type;
                                     continue;
                                 }
-                                if (weapons[1] == null)
-                                {
+                                //if (weapons[1] == null)
+                                //{
 
-                                    weapons[1] = apiskill.weapon_type;
-                                }
-                                else if (weapons[3] == null)
-                                {
+                                //    weapons[1] = apiskill.weapon_type;
+                                //}
+                                //else if (weapons[3] == null)
+                                //{
 
-                                    weapons[3] = apiskill.weapon_type;
-                                }
+                                //    weapons[3] = apiskill.weapon_type;
+                                //}
                                 continue;
                             }
                         }//1 handed
