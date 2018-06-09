@@ -1794,6 +1794,54 @@ namespace LuckParser.Controllers
             //tags: tank,healer,dps(power/condi)
             //Roles:greenteam,green split,cacnoneers,flakkiter,eater,KCpusher,agony,epi,handkiter,golemkiter,orbs
         }
+        private void PrintWeapons(StreamWriter sw, Player p)
+        {
+             SkillData s_data = getSkillData();
+             CombatData c_data = getCombatData();
+             BossData b_data = getBossData();
+            AgentData a_data = getAgentData();
+            //print weapon sets
+            string[] wep = p.getWeaponsArray(s_data,c_data,b_data,a_data);
+            if (wep[0] != null)
+            {
+                sw.Write("<img src=\"" + GetLink(wep[0]) + " \" alt=\"" + wep[0] + "\" height=\"18\" width=\"18\" >");
+            }
+            else
+            {
+                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
+            }
+            if (wep[1] != null)
+            {
+                if (wep[1] != "2Hand")
+                {
+                    sw.Write("<img src=\"" + GetLink(wep[1]) + " \" alt=\"" + wep[1] + "\" height=\"18\" width=\"18\" >");
+                }
+            }
+            else
+            {
+                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
+            }
+            sw.Write("/");
+            if (wep[2] != null)
+            {
+                sw.Write("<img src=\"" + GetLink(wep[2]) + " \" alt=\"" + wep[2] + "\" height=\"18\" width=\"18\" >");
+            }
+            else
+            {
+                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
+            }
+            if (wep[3] != null)
+            {
+                if (wep[3] != "2Hand")
+                {
+                    sw.Write("<img src=\"" + GetLink(wep[3]) + " \" alt=\"" + wep[3] + "\" height=\"18\" width=\"18\" >");
+                }
+            }
+            else
+            {
+                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
+            }
+        }
 
         bool[] SnapSettings;
         /// <summary>
@@ -1853,6 +1901,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td style=\"width: 120px; border:1px solid #EE5F5B;\">");
                             {
                                 sw.Write("<img src=\"" + GetLink(gPlay.getProf().ToString()) + " \" alt=\"" + gPlay.getProf().ToString() + "\" height=\"18\" width=\"18\" >");
+                                PrintWeapons(sw,gPlay);
                                 sw.Write(build + "<br/>" + charName);
                             }
                             sw.Write("</td>");
@@ -2346,7 +2395,11 @@ namespace LuckParser.Controllers
                                 double avg_boons = 0.0;
                                 foreach(Boon boon in list_to_use)
                                 {
-                                    avg_boons += boonPresence[boon.getID()];
+                                    if (boonPresence.ContainsKey(boon.getID()))
+                                    {
+                                        avg_boons += boonPresence[boon.getID()];
+                                    }
+                                   
                                 }
                                 avg_boons /= fight_duration;
                                 sw.Write("<td data-toggle=\"tooltip\" title=\"Average number of boons: " + Math.Round(avg_boons,1) + "\">" + player.getCharacter().ToString() + " </td>");
