@@ -278,15 +278,15 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Gear Shield",5997, BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff),
                 //Transforms
                 new Boon("Rampage", BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
-                new Boon("Photon Forge",43708, BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
+                //new Boon("Photon Forge",43708, BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual), Never removed?
                 //Traits
                 new Boon("Laser's Edge",44414, BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
-                //new Boon("Afterburner",42210, BoonSource.Engineer, "intensity", 5, BoonEnum.GraphOnlyBuff), What is this?
-                new Boon("Iron Blooded",49065, BoonSource.Engineer, "intensity", 25, BoonEnum.GraphOnlyBuff),
+                new Boon("Afterburner",42210, BoonSource.Engineer, "intensity", 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
+                new Boon("Iron Blooded",49065, BoonSource.Engineer, "intensity", 25, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
                 new Boon("Streamlined Kits",18687, BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
                 new Boon("Kinetic Charge",45781, BoonSource.Engineer, "intensity", 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
                 new Boon("Pinpoint Distribution", 38333, BoonSource.Engineer, "duration", 1, BoonEnum.OffensiveBuffTable, "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png"),
-                new Boon("Heat Therapy",40694, BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff),
+                new Boon("Heat Therapy",40694, BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
                 new Boon("Overheat", 40397, BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff),
                 ///RANGER
                 new Boon("Celestial Avatar", 31508, BoonSource.Ranger, "duration", 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
@@ -504,7 +504,7 @@ namespace LuckParser.Models.ParseModels
                     case RemoveType.Cleanse:
                         return buffremove == 1 || buffremove == 2;
                     case RemoveType.Manual:
-                        return buffremove == 3;
+                        return buffremove == 3 || buffremove == 1;
                     case RemoveType.All:
                         return buffremove == 1 || buffremove == 2 || buffremove == 3;
                     default:

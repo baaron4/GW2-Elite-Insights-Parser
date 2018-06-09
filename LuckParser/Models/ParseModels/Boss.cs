@@ -63,16 +63,57 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 case "Sabetha the Saboteur":
-                    cls = getCastLogs(bossData, combatList, agentData).Where(x => x.getID() == 31372).ToList();
-                    foreach (CastLog cl in cls)
+                    cls = getCastLogs(bossData, combatList, agentData);
+                    for (int i = 0; i < cls.Count; i++)
                     {
-
+                        CastLog cur = cls[i];
+                        if (cur.getID() == 31372)
+                        {
+                            end = cur.getTime();
+                            phases.Add(new PhaseData(start, end));
+                            for (int j = i; j < cls.Count; j++)
+                            {
+                                CastLog next = cls[j];
+                                if (next.getID() != 31372)
+                                {
+                                    i = j;
+                                    break;
+                                } else
+                                {
+                                    start = next.getTime() + next.getActDur();
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case "Matthias Gabrel":
+                    CombatItem heat_wave = combatList.Find(x => x.getSkillID() == 34526);
+                    List<long> phase_starts = new List<long>();
+                    if (heat_wave != null)
+                    {
+                        phase_starts.Add(heat_wave.getTime() - bossData.getFirstAware());
+                        CombatItem down_pour = combatList.Find(x => x.getSkillID() == 34554);
+                        if (down_pour != null)
+                        {
+                            phase_starts.Add(down_pour.getTime() - bossData.getFirstAware());
+                            CastLog abo = getCastLogs(bossData, combatList, agentData).Find(x => x.getID() == 34427);
+                            if (abo != null)
+                            {
+                                phase_starts.Add(abo.getTime());
+                            }
+                        }
+                    }
+                    foreach (long t in phase_starts)
+                    {
+                        end = t;
+                        phases.Add(new PhaseData(start, end));
+                        start = t;
                     }
                     break;
                 default:
                     return;
             }
-            if (phases.Last().end != fight_dur)
+            if (fight_dur - start > 5000 && start > 0)
             {
                 phases.Add(new PhaseData(start, fight_dur));
             }

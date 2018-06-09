@@ -5418,6 +5418,12 @@ namespace LuckParser.Controllers
                             CreatePlayerTab(sw,settingsSnap);
                         }
                         sw.Write("</div>");
+                        sw.Write("<div>");
+                        for (int i = 1; i < phases.Count; i++)
+                        {
+                            sw.Write("<p>Phase " + i + " started at " + Math.Round(phases[i].start / 1000.0) + "s and ended at " + Math.Round(phases[i].end / 1000.0) + "s</p>");
+                        }
+                        sw.Write("</div>");
                         sw.Write("<p style=\"margin-top:10px;\"> ARC:" + getLogData().getBuildVersion().ToString() + " | Bossid " + getBossData().getID().ToString() + " </p> ");
                         sw.Write("<p style=\"margin-top:-15px;\">File recorded by: " + log_data.getPOV() + "</p>");
                     }

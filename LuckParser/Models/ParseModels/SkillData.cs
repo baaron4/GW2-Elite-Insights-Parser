@@ -19,7 +19,11 @@ namespace LuckParser.Models.ParseModels
             {31759,"Protective Shadow" },
             {31466,"Ghastly Rampage (Begin)" },
             // Sabetha
-            {31372, "Shadow Step" }
+            {31372, "Shadow Step" },
+            // Matthias
+            { 34468, "Shield (Human)"},
+            { 34427, "Abomination Transformation"},
+            { 34510, "Shiled (Abomination)"}
         };
 
         // Constructors
