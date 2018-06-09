@@ -335,7 +335,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(108, 23);
             this.button1.TabIndex = 24;
-            this.button1.Text = "Reset Skill List";
+            this.button1.Text = "Reset Skill List ";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -380,9 +380,9 @@
             this.estimatesBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.estimatesBox.Location = new System.Drawing.Point(30, 440);
             this.estimatesBox.Name = "estimatesBox";
-            this.estimatesBox.Size = new System.Drawing.Size(123, 17);
+            this.estimatesBox.Size = new System.Drawing.Size(153, 17);
             this.estimatesBox.TabIndex = 28;
-            this.estimatesBox.Text = "Show Estimates Tab";
+            this.estimatesBox.Text = "Show Estimates Tab (WIP)";
             this.estimatesBox.UseVisualStyleBackColor = true;
             this.estimatesBox.CheckedChanged += new System.EventHandler(this.estimatesBox_CheckedChanged);
             // 
