@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
         // Boon
         public enum BoonEnum { Condition, Boon, OffensiveBuffTable, DefensiveBuffTable, GraphOnlyBuff, Food, Utility};
         public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item  };
-        public enum RemoveType { Cleanse, Manual, None};
+        public enum RemoveType { Cleanse, Manual, None, All};
 
         private static BoonSource ProfToEnum(string prof)
         {
@@ -113,8 +113,8 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Protection", 717, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/6/6c/Protection.png", RemoveType.Cleanse),
                 new Boon("Regeneration", 718, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/5/53/Regeneration.png", RemoveType.Cleanse),
                 new Boon("Vigor", 726, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/f/f4/Vigor.png", RemoveType.Cleanse),
-                new Boon("Aegis", 743, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/e/e5/Aegis.png", RemoveType.Cleanse),
-                new Boon("Stability", 1122, BoonSource.Mixed, "intensity", 25, BoonEnum.Boon, "https://wiki.guildwars2.com/images/a/ae/Stability.png", RemoveType.Cleanse),
+                new Boon("Aegis", 743, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/e/e5/Aegis.png", RemoveType.All),
+                new Boon("Stability", 1122, BoonSource.Mixed, "intensity", 25, BoonEnum.Boon, "https://wiki.guildwars2.com/images/a/ae/Stability.png", RemoveType.All),
                 new Boon("Swiftness", 719, BoonSource.Mixed, "duration", 9, BoonEnum.Boon, "https://wiki.guildwars2.com/images/a/af/Swiftness.png", RemoveType.Cleanse),
                 new Boon("Retaliation", 873, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/5/53/Retaliation.png", RemoveType.Cleanse),
                 new Boon("Resistance", 26980, BoonSource.Mixed, "duration", 5, BoonEnum.Boon, "https://wiki.guildwars2.com/images/thumb/e/e9/Resistance_40px.png/20px-Resistance_40px.png", RemoveType.Cleanse),
@@ -505,6 +505,8 @@ namespace LuckParser.Models.ParseModels
                         return buffremove == 1 || buffremove == 2;
                     case RemoveType.Manual:
                         return buffremove == 3;
+                    case RemoveType.All:
+                        return buffremove == 1 || buffremove == 2 || buffremove == 3;
                     default:
                         return false;
                 }

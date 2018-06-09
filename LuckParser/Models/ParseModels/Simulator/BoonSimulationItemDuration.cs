@@ -51,5 +51,15 @@ namespace LuckParser.Models.ParseModels
         {
             return overstack;
         }
+
+        public override bool addOverstack(ushort src, long overstack)
+        {
+            if (this.src != src || duration == 0)
+            {
+                return false;
+            }
+            this.overstack += overstack;
+            return true;
+        }
     }
 }

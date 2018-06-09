@@ -2325,6 +2325,7 @@ namespace LuckParser.Controllers
                 }           
                 sw.Write("</thead>");
                 HashSet<int> intensityBoon = new HashSet<int>();
+                bool boonTable = list_to_use.Select(x => x.getID()).Contains(740);
                 sw.Write("<tbody>");
                 {
                     foreach (Player player in p_list)
@@ -2338,7 +2339,21 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
                             sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
-                            sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
+                            if (boonTable)
+                            {
+                                long fight_duration = getBossData().getLastAware() - getBossData().getFirstAware();
+                                Dictionary<int, long> boonPresence = player.getBoonPresence(getBossData(), getSkillData(), getCombatData().getCombatList());
+                                double avg_boons = 0.0;
+                                foreach(Boon boon in list_to_use)
+                                {
+                                    avg_boons += boonPresence[boon.getID()];
+                                }
+                                avg_boons /= fight_duration;
+                                sw.Write("<td data-toggle=\"tooltip\" title=\"Average number of boons: " + Math.Round(avg_boons,1) + "\">" + player.getCharacter().ToString() + " </td>");
+                            } else
+                            {
+                                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
+                            }
                             foreach (Boon boon in list_to_use)
                             {
                                 if (boon.getType() == "intensity")
@@ -2908,7 +2923,7 @@ namespace LuckParser.Controllers
                                         Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(getBossData(), getSkillData(), getCombatData().getCombatList());
                                         foreach (int boonid in boonGraphData.Keys.Reverse())
                                         {
-                                            if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null)
+                                            if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null || boonid == -2)
                                             {
                                                 sw.Write("{");
                                                 {
