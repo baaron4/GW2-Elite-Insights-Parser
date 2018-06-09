@@ -132,7 +132,7 @@
             // 
             // Status
             // 
-            this.Status.Text = "Status";
+            this.Status.Text = "Status (Click to open when done)";
             this.Status.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.Status.Width = 335;
             // 
