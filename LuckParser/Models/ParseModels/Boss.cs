@@ -53,6 +53,27 @@ namespace LuckParser.Models.ParseModels
             List<CastLog> cls;
             switch (name)
             {
+                case "Vale Guardian":
+                    List<CombatItem> invulsVG = combatList.Where(x => x.getSkillID() == 757 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
+                    for (int i = 0; i < invulsVG.Count; i++)
+                    {
+                        CombatItem c = invulsVG[i];
+                        if (c.isBuffremove().getID() == 0)
+                        {
+                            end = c.getTime() - bossData.getFirstAware();
+                            phases.Add(new PhaseData(start, end));
+                            if (i == invulsVG.Count - 1)
+                            {
+                                getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -5, (int)(fight_dur - end), new ParseEnums.Activation(0), (int)(fight_dur - end), new ParseEnums.Activation(0)));
+                            }
+                        }
+                        else
+                        {
+                            start = c.getTime() - bossData.getFirstAware();
+                            getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                        }
+                    }
+                    break;
                 case "Gorseval the Multifarious":
                     cls = getCastLogs(bossData, combatList, agentData).Where(x => x.getID() == 31759).ToList();
                     foreach (CastLog cl in cls)
@@ -63,26 +84,23 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 case "Sabetha the Saboteur":
-                    cls = getCastLogs(bossData, combatList, agentData);
-                    for (int i = 0; i < cls.Count; i++)
+                    List<CombatItem> invulsSab = combatList.Where(x => x.getSkillID() == 757 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
+                    for (int i = 0; i < invulsSab.Count; i++)
                     {
-                        CastLog cur = cls[i];
-                        if (cur.getID() == 31372)
+                        CombatItem c = invulsSab[i];
+                        if (c.isBuffremove().getID() == 0)
                         {
-                            end = cur.getTime();
+                            end = c.getTime() - bossData.getFirstAware();
                             phases.Add(new PhaseData(start, end));
-                            for (int j = i; j < cls.Count; j++)
+                            if (i == invulsSab.Count - 1)
                             {
-                                CastLog next = cls[j];
-                                if (next.getID() != 31372)
-                                {
-                                    i = j;
-                                    break;
-                                } else
-                                {
-                                    start = next.getTime() + next.getActDur();
-                                }
+                                getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -5, (int)(fight_dur - end), new ParseEnums.Activation(0), (int)(fight_dur - end), new ParseEnums.Activation(0)));
                             }
+                        }
+                        else
+                        {
+                            start = c.getTime() - bossData.getFirstAware();
+                            getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
                         }
                     }
                     break;
@@ -113,7 +131,7 @@ namespace LuckParser.Models.ParseModels
                 default:
                     return;
             }
-            if (fight_dur - start > 5000 && start > 0)
+            if (fight_dur - start > 5000 && start > phases.Last().end)
             {
                 phases.Add(new PhaseData(start, fight_dur));
             }

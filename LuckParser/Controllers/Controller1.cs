@@ -477,6 +477,8 @@ namespace LuckParser.Controllers
                     boss_data.setLastAware(NPC.getLastAware());
                 }
             }
+            AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
+            boss = new Boss(bossAgent);
             List<long[]> bossHealthOverTime = new List<long[]>();
 
             // Grab values threw combat data
@@ -674,8 +676,6 @@ namespace LuckParser.Controllers
                 }
 
             }
-            AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
-            boss = new Boss(bossAgent);
             // Sort
             p_list = p_list.OrderBy(a => int.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>int.Parse(a.getGroup()) - int.Parse(b.getGroup()))
             setMechData();
@@ -5421,7 +5421,7 @@ namespace LuckParser.Controllers
                         sw.Write("<div>");
                         for (int i = 1; i < phases.Count; i++)
                         {
-                            sw.Write("<p>Phase " + i + " started at " + Math.Round(phases[i].start / 1000.0) + "s and ended at " + Math.Round(phases[i].end / 1000.0) + "s</p>");
+                            sw.Write("<p>Phase " + i + " started at " + phases[i].start / 1000 + "s and ended at " + phases[i].end / 1000 + "s</p>");
                         }
                         sw.Write("</div>");
                         sw.Write("<p style=\"margin-top:10px;\"> ARC:" + getLogData().getBuildVersion().ToString() + " | Bossid " + getBossData().getID().ToString() + " </p> ");

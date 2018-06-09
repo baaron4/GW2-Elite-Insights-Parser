@@ -23,7 +23,11 @@ namespace LuckParser.Models.ParseModels
             // Matthias
             { 34468, "Shield (Human)"},
             { 34427, "Abomination Transformation"},
-            { 34510, "Shiled (Abomination)"}
+            { 34510, "Shield (Abomination)"},
+            // Generic
+            {-5, "Phase out" },
+            // Deimos
+            {-6, "Roleplay" }
         };
 
         // Constructors
