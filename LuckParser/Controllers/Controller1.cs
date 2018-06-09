@@ -566,6 +566,7 @@ namespace LuckParser.Controllers
                             // No split
                             break;
                         }
+                        boss.addPhaseData(boss_data.getLastAware());
                         boss_data.setLastAware(NPC.getLastAware());
                         //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos_2_instid ).ToList().Sum(x);
                         //int stop = 0;
@@ -2350,7 +2351,10 @@ namespace LuckParser.Controllers
                                 double avg_boons = 0.0;
                                 foreach(Boon boon in list_to_use)
                                 {
-                                    avg_boons += boonPresence[boon.getID()];
+                                    if (boonPresence.ContainsKey(boon.getID()))
+                                    {
+                                        avg_boons += boonPresence[boon.getID()];
+                                    }
                                 }
                                 avg_boons /= fight_duration;
                                 sw.Write("<td data-toggle=\"tooltip\" title=\"Average number of boons: " + Math.Round(avg_boons,1) + "\">" + player.getCharacter().ToString() + " </td>");

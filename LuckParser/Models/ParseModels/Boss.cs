@@ -26,7 +26,8 @@ namespace LuckParser.Models.ParseModels
 
         }
 
-        public List<PhaseData> phases = new List<PhaseData>();
+        private List<PhaseData> phases = new List<PhaseData>();
+        private List<long> phaseData = new List<long>();
 
         public List<PhaseData> getPhases(BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
@@ -37,9 +38,9 @@ namespace LuckParser.Models.ParseModels
             return phases;
         }
 
-        public void forcePhase(List<PhaseData> phases)
+        public void addPhaseData(long data)
         {
-            this.phases = phases;
+            phaseData.Add(data);
         }
 
         // Private Methods
@@ -128,8 +129,18 @@ namespace LuckParser.Models.ParseModels
                         start = t;
                     }
                     break;
+                case "Deimos":
+                    CombatItem invulDei = combatList.Find(x => x.getSkillID() == 762 && x.isBuff() == 1 && x.isBuffremove().getID() == 0 && x.getDstInstid() == getInstid()); 
+                    if (invulDei != null)
+                    {
+                        end = invulDei.getTime() - bossData.getFirstAware();
+                        phases.Add(new PhaseData(start, end));
+                        start = (phaseData.Count == 1 ? phaseData[0] : fight_dur) - bossData.getFirstAware();
+                        getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -6, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                    }
+                    break;
                 default:
-                    return;
+                    break;
             }
             if (fight_dur - start > 5000 && start > phases.Last().end)
             {
