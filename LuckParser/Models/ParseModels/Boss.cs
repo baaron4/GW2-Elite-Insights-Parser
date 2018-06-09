@@ -51,10 +51,10 @@ namespace LuckParser.Models.ParseModels
             string name = getCharacter();
             long start = 0;
             long end = 0;
-            List<CastLog> cls;
             switch (name)
             {
                 case "Vale Guardian":
+                    // Invul check
                     List<CombatItem> invulsVG = combatList.Where(x => x.getSkillID() == 757 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
                     for (int i = 0; i < invulsVG.Count; i++)
                     {
@@ -76,8 +76,9 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 case "Gorseval the Multifarious":
-                    cls = getCastLogs(bossData, combatList, agentData).Where(x => x.getID() == 31759).ToList();
-                    foreach (CastLog cl in cls)
+                    // Ghostly protection check
+                    List<CastLog> clsG = getCastLogs(bossData, combatList, agentData).Where(x => x.getID() == 31759).ToList();
+                    foreach (CastLog cl in clsG)
                     {
                         end = cl.getTime();
                         phases.Add(new PhaseData(start, end));
@@ -85,6 +86,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 case "Sabetha the Saboteur":
+                    // Invul check
                     List<CombatItem> invulsSab = combatList.Where(x => x.getSkillID() == 757 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
                     for (int i = 0; i < invulsSab.Count; i++)
                     {
@@ -106,6 +108,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 case "Matthias Gabrel":
+                    // Special buff cast check
                     CombatItem heat_wave = combatList.Find(x => x.getSkillID() == 34526);
                     List<long> phase_starts = new List<long>();
                     if (heat_wave != null)
@@ -129,7 +132,46 @@ namespace LuckParser.Models.ParseModels
                         start = t;
                     }
                     break;
+                case "Samarog":
+                    // Determined check
+                    List<CombatItem> invulsSam = combatList.Where(x => x.getSkillID() == 762 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
+                    // Samarog receives determined twice and its removed twice, filter it
+                    List<CombatItem> invulsSamFiltered = new List<CombatItem>();
+                    foreach( CombatItem c in invulsSam)
+                    {
+                        if (invulsSamFiltered.Count > 0)
+                        {
+                            CombatItem last = invulsSamFiltered.Last();
+                            if (last.getTime() != c.getTime())
+                            {
+                                invulsSamFiltered.Add(c);
+                            }
+                        } else
+                        {
+                            invulsSamFiltered.Add(c);
+                        }
+                    }
+                    for (int i = 0; i < invulsSamFiltered.Count; i++)
+                    {
+                        CombatItem c = invulsSamFiltered[i];
+                        if (c.isBuffremove().getID() == 0)
+                        {
+                            end = c.getTime() - bossData.getFirstAware();
+                            phases.Add(new PhaseData(start, end));
+                            if (i == invulsSamFiltered.Count - 1)
+                            {
+                                getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -5, (int)(fight_dur - end), new ParseEnums.Activation(0), (int)(fight_dur - end), new ParseEnums.Activation(0)));
+                            }
+                        }
+                        else
+                        {
+                            start = c.getTime() - bossData.getFirstAware();
+                            getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                        }
+                    }
+                    break;
                 case "Deimos":
+                    // Determined + additional data on inst change
                     CombatItem invulDei = combatList.Find(x => x.getSkillID() == 762 && x.isBuff() == 1 && x.isBuffremove().getID() == 0 && x.getDstInstid() == getInstid()); 
                     if (invulDei != null)
                     {
