@@ -5904,10 +5904,22 @@ namespace LuckParser.Controllers
             TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
             String durationString = duration.ToString("mm") +":" + duration.ToString("ss") ;
 
-            sw.Write("Group" + delimiter + "Class" + delimiter + "Character" + delimiter + "Account Name" +
-                delimiter + "DPS" + delimiter + "Physical" + delimiter + "Condi" + delimiter + "All DPS"+
-                delimiter +"Quick" +delimiter+ "Alacrity"+delimiter +"Might" + delimiter +"GOTL" + delimiter+ delimiter + "Boss Team DPS" + 
-                delimiter +"All Team DPS" + delimiter +"Time" + delimiter +"Cleave" + delimiter +"Team Cleave"  );
+            sw.Write("Group" + delimiter + 
+                    "Class" + delimiter + 
+                    "Character" + delimiter + 
+                    "Account Name" + delimiter +
+                    "Boss DPS" + delimiter +
+                    "Boss Physical" + delimiter +
+                    "Boss Condi" + delimiter + 
+                    "All DPS"+ delimiter +
+                    "Quick" +delimiter+ 
+                    "Alacrity"+delimiter +
+                    "Might" + delimiter +
+                    "Boss Team DPS" + delimiter +
+                    "All Team DPS" + delimiter +
+                    "Time" + delimiter +
+                    "Cleave" + delimiter +
+                    "Team Cleave"  );
             sw.Write("\r\n");
 
             int[] teamStats= { 0,0,0};
@@ -5922,16 +5934,25 @@ namespace LuckParser.Controllers
             foreach (Player p in p_list)
             {
                 string[] finaldps = getFinalDPS(p).Split('|');
-                sw.Write(p.getGroup() + delimiter + p.getProf() + delimiter + p.getCharacter() + delimiter +
-                    p.getAccount().Remove(':') +delimiter+finaldps[6]+delimiter+ finaldps[8] + delimiter + finaldps[10] + delimiter +
-                    finaldps[0] + delimiter);
+                sw.Write(p.getGroup() + delimiter + // group
+                        p.getProf() + delimiter +  // class
+                        p.getCharacter() + delimiter + // character
+                        p.getAccount().Substring(1) + delimiter + // account
+                        finaldps[6] + delimiter + // dps
+                        finaldps[8] + delimiter + // physical
+                        finaldps[10] + delimiter + // condi
+                        finaldps[0] + delimiter); // all dps
 
                 Dictionary<int, string> boonArray = getfinalboons(p);
-                sw.Write(boonArray[1187] + delimiter + boonArray[30328] + delimiter + boonArray[740] + delimiter + 
-                    "0" +delimiter+ delimiter);
+                sw.Write(boonArray[1187] + delimiter + // Quickness
+                        boonArray[30328] + delimiter + // Alacrity
+                        boonArray[740] + delimiter); // Might
 
-                sw.Write(teamStats[0] + delimiter + teamStats[1] + delimiter+ durationString + delimiter +
-                    ( Int32.Parse(finaldps[0])-Int32.Parse(finaldps[6])).ToString()+delimiter+teamStats[2]);
+                sw.Write(teamStats[0] + delimiter  // boss dps
+                        + teamStats[1] + delimiter // all
+                        + durationString + delimiter + // duration
+                    ( Int32.Parse(finaldps[0])-Int32.Parse(finaldps[6])).ToString()+delimiter // cleave
+                        +teamStats[2]); // team cleave
                 sw.Write("\r\n");
             }
            
