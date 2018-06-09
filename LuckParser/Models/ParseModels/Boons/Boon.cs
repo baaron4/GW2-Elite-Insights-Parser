@@ -278,6 +278,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Spectrum Shield",43066, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.ManualFriend),
                 new Boon("Gear Shield",5997, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
                 //Transforms
+<<<<<<< HEAD
                 new Boon("Rampage", BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.ManualFriend),
                 new Boon("Photon Forge",43708, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.ManualFriend),
                 //Traits
@@ -289,6 +290,19 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Pinpoint Distribution", 38333, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable, "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png"),
                 new Boon("Heat Therapy",40694, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.ManualFriend),
                 new Boon("Overheat", 40397, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
+=======
+                new Boon("Rampage", BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
+                //new Boon("Photon Forge",43708, BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual), Never removed?
+                //Traits
+                new Boon("Laser's Edge",44414, BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
+                new Boon("Afterburner",42210, BoonSource.Engineer, "intensity", 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
+                new Boon("Iron Blooded",49065, BoonSource.Engineer, "intensity", 25, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
+                new Boon("Streamlined Kits",18687, BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
+                new Boon("Kinetic Charge",45781, BoonSource.Engineer, "intensity", 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
+                new Boon("Pinpoint Distribution", 38333, BoonSource.Engineer, "duration", 1, BoonEnum.OffensiveBuffTable, "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png"),
+                new Boon("Heat Therapy",40694, BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
+                new Boon("Overheat", 40397, BoonSource.Engineer, "duration", 1, BoonEnum.GraphOnlyBuff),
+>>>>>>> added phase data on the controller for testing purpose, can detect phases for sab, matt and gorseval, added some skill data, corrected some boon issues
                 ///RANGER
                 new Boon("Celestial Avatar", 31508, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.ManualFriend),
                 new Boon("Counterattack",14509, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.ManualFriend),
