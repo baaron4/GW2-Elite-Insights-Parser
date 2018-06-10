@@ -4262,10 +4262,11 @@ namespace LuckParser.Controllers
         {
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
-            List<DamageLog> damageLogs = p.getDamageTakenLogs( b_data, c_data.getCombatList(), getAgentData(),getMechData());
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
+            List<DamageLog> damageLogs = p.getDamageTakenLogs( b_data, c_data.getCombatList(), getAgentData(),getMechData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
-            int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
+            int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
             string pid = p.getInstid() + "_" + phase_index;
             sw.Write("<script> $(function () { $('#distTaken_table_" + pid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"distTaken_table_" + pid + "\">");
