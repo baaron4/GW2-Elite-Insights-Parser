@@ -194,7 +194,7 @@ namespace LuckParser.Models.ParseModels
                 default:
                     break;
             }
-            if (fight_dur - start > 5000 && start > phases.Last().end)
+            if (fight_dur - start > 5000 && start >= phases.Last().end)
             {
                 phases.Add(new PhaseData(start, fight_dur));
             }
