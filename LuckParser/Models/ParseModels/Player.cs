@@ -315,13 +315,13 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (apiskill.weapon_type == "Greatsword" || apiskill.weapon_type == "Staff" || apiskill.weapon_type == "Rifle" || apiskill.weapon_type == "Longbow" || apiskill.weapon_type == "Shortbow" || apiskill.weapon_type == "Hammer")
                         {
-                            if (swapped == 4)
+                            if (swapped == 4 && (weapons[0] == null && weapons[1] == null))
                             {
                                 weapons[0] = apiskill.weapon_type;
                                 weapons[1] = "2Hand";
                                 continue;
                             }
-                            else if (swapped == 5)
+                            else if (swapped == 5 && (weapons[2] == null && weapons[3] == null))
                             {
                                 weapons[2] = apiskill.weapon_type;
                                 weapons[3] = "2Hand";
@@ -342,13 +342,13 @@ namespace LuckParser.Models.ParseModels
                         }//2 handed
                         if (apiskill.weapon_type == "Focus" || apiskill.weapon_type == "Shield" || apiskill.weapon_type == "Torch" || apiskill.weapon_type == "Warhorn")
                         {
-                            if (swapped == 4)
+                            if (swapped == 4 && (weapons[1] == null))
                             {
 
                                 weapons[1] = apiskill.weapon_type;
                                 continue;
                             }
-                            else if (swapped == 5)
+                            else if (swapped == 5 && (weapons[3] == null))
                             {
 
                                 weapons[3] = apiskill.weapon_type;
@@ -370,13 +370,13 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (apiskill.slot == "Weapon_1" || apiskill.slot == "Weapon_2" || apiskill.slot == "Weapon_3")
                             {
-                                if (swapped == 4)
+                                if (swapped == 4 && (weapons[0] == null))
                                 {
 
                                     weapons[0] = apiskill.weapon_type;
                                     continue;
                                 }
-                                else if (swapped == 5)
+                                else if (swapped == 5 && (weapons[2] == null))
                                 {
 
                                     weapons[2] = apiskill.weapon_type;
@@ -396,13 +396,13 @@ namespace LuckParser.Models.ParseModels
                             }
                             if (apiskill.slot == "Weapon_4" || apiskill.slot == "Weapon_5")
                             {
-                                if (swapped == 4)
+                                if (swapped == 4 && (weapons[1] == null))
                                 {
 
                                     weapons[1] = apiskill.weapon_type;
                                     continue;
                                 }
-                                else if (swapped == 5)
+                                else if (swapped == 5 && (weapons[3] == null))
                                 {
 
                                     weapons[3] = apiskill.weapon_type;
