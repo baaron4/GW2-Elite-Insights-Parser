@@ -6028,6 +6028,8 @@ namespace LuckParser.Controllers
         {
             switch (name)
             {
+                case "Question":
+                    return "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png";
                 case "Sword":
                     return "https://wiki.guildwars2.com/images/6/61/Sword_Proficiency.png";
                 case "Axe":
