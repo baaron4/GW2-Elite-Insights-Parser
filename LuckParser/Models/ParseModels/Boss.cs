@@ -132,6 +132,16 @@ namespace LuckParser.Models.ParseModels
                         start = t;
                     }
                     break;
+                case "Xera":
+                    // split happened
+                    if (phaseData.Count == 2)
+                    {
+                        end = phaseData[0] - bossData.getFirstAware();
+                        phases.Add(new PhaseData(start, end));
+                        start = phaseData[1] - bossData.getFirstAware();
+                        getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));                       
+                    }
+                    break;
                 case "Samarog":
                     // Determined check
                     List<CombatItem> invulsSam = combatList.Where(x => x.getSkillID() == 762 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
