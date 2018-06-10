@@ -689,7 +689,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         boon_map[c.getSkillID()].Add(new BoonLog(time, src, c.getValue(), 0));
                     }
-                    else if (Boon.removePermission(c.getSkillID(), c.isBuffremove().getID()))
+                    else if (Boon.removePermission(c.getSkillID(), c.isBuffremove().getID(), c.getIFF().getID()))
                     {
                         if (c.isBuffremove().getID() == 1)//All
                         {
