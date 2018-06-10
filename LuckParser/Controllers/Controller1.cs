@@ -622,7 +622,7 @@ namespace LuckParser.Controllers
 
                 foreach (AgentItem playerAgent in playerAgentList)
                 {
-                    List<Point> lp = combat_data.getStates(playerAgent.getInstid(), "DESPAWN");
+                    List<CombatItem> lp = combat_data.getStates(playerAgent.getInstid(), "DESPAWN", boss_data.getFirstAware(), boss_data.getLastAware());
                     Player player = new Player(playerAgent);
                     bool skip = false;
                     foreach (Player p in p_list)
@@ -664,7 +664,7 @@ namespace LuckParser.Controllers
                             }
                         }
                         
-                        player.SetDC(lp[0].X);
+                        player.SetDC(lp[0].getTime());
                         p_list.Add(player);
                     }
                     else//didnt dc
@@ -737,7 +737,7 @@ namespace LuckParser.Controllers
                 }
             }        
         }
-        private String getFinalDPS(Player p)
+        private String getFinalDPS(Player p, int phase_index)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
@@ -754,14 +754,14 @@ namespace LuckParser.Controllers
             int totalAllcondi_damage = 0;
             int totalAllphys_dps = 0;
             int totalAllphys_damage = 0;
-            double fight_duration = (b_data.getLastAware() - b_data.getFirstAware()) / 1000.0;
-
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
+            double fight_duration = (phase.end - phase.start) / 1000.0;
 
             double damage = 0.0;
             double dps = 0.0;
             // All DPS
             
-            damage = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Sum(x => x.getDamage());//p.getDamageLogs(b_data, c_data.getCombatList()).stream().mapToDouble(DamageLog::getDamage).sum();
+            damage = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).Sum(x => x.getDamage());//p.getDamageLogs(b_data, c_data.getCombatList()).stream().mapToDouble(DamageLog::getDamage).sum();
             if (fight_duration > 0)
             {
                 dps = damage / fight_duration;
@@ -769,7 +769,7 @@ namespace LuckParser.Controllers
             totalAll_dps = (int)dps;
             totalAll_damage = (int)damage;
             //Allcondi
-            damage = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
+            damage = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Where(x => x.isCondi() > 0 && x.getTime() >= phase.start && x.getTime() < phase.end).Sum(x => x.getDamage());
             if (fight_duration > 0)
             {
                 dps = damage / fight_duration;
@@ -786,7 +786,7 @@ namespace LuckParser.Controllers
             totalAllphys_damage = (int)damage;
 
             // boss DPS
-            damage = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Sum(x => x.getDamage());//p.getDamageLogs(b_data, c_data.getCombatList()).stream().mapToDouble(DamageLog::getDamage).sum();
+            damage = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).Sum(x => x.getDamage());//p.getDamageLogs(b_data, c_data.getCombatList()).stream().mapToDouble(DamageLog::getDamage).sum();
             if (fight_duration > 0)
             {
                 dps = damage / fight_duration;
@@ -794,7 +794,7 @@ namespace LuckParser.Controllers
             totalboss_dps = (int)dps;
             totalboss_damage = (int)damage;
             //bosscondi
-            damage = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
+            damage = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Where(x => x.isCondi() > 0 && x.getTime() >= phase.start && x.getTime() < phase.end).Sum(x => x.getDamage());
             if (fight_duration > 0)
             {
                 dps = damage / fight_duration;
@@ -813,13 +813,16 @@ namespace LuckParser.Controllers
             return totalAll_dps.ToString() + "|" + totalAll_damage.ToString() + "|" + totalAllphys_dps.ToString() + "|" + totalAllphys_damage.ToString() + "|" + totalAllcondi_dps.ToString() + "|" + totalAllcondi_damage.ToString() + "|"
                 + totalboss_dps.ToString() + "|" + totalboss_damage.ToString() + "|" + totalbossphys_dps.ToString() + "|" + totalbossphys_damage.ToString() + "|" + totalbosscondi_dps.ToString() + "|" + totalbosscondi_damage.ToString();
         }
-        private String[] getFinalStats(Player p)
+        private String[] getFinalStats(Player p, int phase_index)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             String[] statsArray;
-            List<DamageLog> damage_logs = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
-            List<CastLog> cast_logs = p.getCastLogs( b_data, c_data.getCombatList(), getAgentData());
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
+            long start = phase.start + b_data.getFirstAware();
+            long end = phase.end + b_data.getFirstAware();
+            List<DamageLog> damage_logs = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
+            List<CastLog> cast_logs = p.getCastLogs( b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
             int instid = p.getInstid();
 
             // Rates
@@ -827,7 +830,7 @@ namespace LuckParser.Controllers
             int critical_rate = 0;
             int scholar_rate = 0;
             int scholar_dmg = 0;
-            int totaldamage = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Sum(x => x.getDamage());
+            int totaldamage = damage_logs.Sum(x => x.getDamage());
 
             int moving_rate = 0;
             int flanking_rate = 0;
@@ -911,54 +914,67 @@ namespace LuckParser.Controllers
             power_loop_count = (power_loop_count == 0) ? 1 : power_loop_count;
 
             // Counts
-            int swap = c_data.getStates(instid, "WEAPON_SWAP").Count();
-            int down = c_data.getStates(instid, "CHANGE_DOWN").Count();
-            int dodge = c_data.getSkillCount(instid, 65001) + c_data.getBuffCount(instid, 40408);//dodge = 65001 mirage cloak =40408
-            int ress = c_data.getSkillCount(instid, 1066); //Res = 1066
+            int swap = c_data.getStates(instid, "WEAPON_SWAP", start, end).Count();
+            int down = c_data.getStates(instid, "CHANGE_DOWN", start, end).Count();
+            int dodge = c_data.getSkillCount(instid, 65001, start, end) + c_data.getBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
+            int ress = c_data.getSkillCount(instid, 1066, start, end); //Res = 1066
 
             // R.I.P
-            List<Point> dead = c_data.getStates(instid, "CHANGE_DEAD");
+            List<CombatItem> dead = c_data.getStates(instid, "CHANGE_DEAD", start, end);
             
             double died = 0.0;
             if (dead.Count() > 0)
             {
-                died = dead[0].X - b_data.getFirstAware();
+                died = dead[0].getTime() - start;
             }
-            List<Point> disconect = c_data.getStates(instid, "DESPAWN");
+            List<CombatItem> disconect = c_data.getStates(instid, "DESPAWN", start, end);
             double dcd = 0.0;
             if (disconect.Count() > 0)
             {
-                dcd = disconect[0].X - b_data.getFirstAware();
+                dcd = disconect[0].getTime() - start;
             }
-            statsArray = new string[] { power_loop_count.ToString(), critical_rate.ToString(), scholar_rate.ToString(), moving_rate.ToString(),
-                flanking_rate.ToString(), swap.ToString(),down.ToString(),dodge.ToString(),ress.ToString(),died.ToString("0.00"),
-            glance_rate.ToString(),missed.ToString(),interupts.ToString(),invulned.ToString(),(time_wasted/1000f).ToString(),wasted.ToString(),avgBoons.ToString(),(time_saved/1000f).ToString(),saved.ToString(),
-            scholar_dmg.ToString(),totaldamage.ToString(),dcd.ToString("0.00"),
+            statsArray = new string[] { power_loop_count.ToString(),
+                                        critical_rate.ToString(),
+                                        scholar_rate.ToString(),
+                                        moving_rate.ToString(),
+                                        flanking_rate.ToString(),
+                                        swap.ToString(),
+                                        down.ToString(),
+                                        dodge.ToString(),
+                                        ress.ToString(),
+                                        died.ToString("0.00"),
+                                        glance_rate.ToString(),
+                                        missed.ToString(),
+                                        interupts.ToString(),
+                                        invulned.ToString(),
+                                        (time_wasted/1000f).ToString(),
+                                        wasted.ToString(),
+                                        avgBoons.ToString(),
+                                        (time_saved/1000f).ToString(),
+                                        saved.ToString(),
+                                        scholar_dmg.ToString(),
+                                        totaldamage.ToString(),
+                                        dcd.ToString("0.00"),
             };
             return statsArray;
         }
-        private string getDamagetaken(Player p)
+        private string[] getFinalDefenses(Player p, int phase_index)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
-            int instid = p.getInstid();
-            int damagetaken = p.getDamagetaken(b_data, c_data.getCombatList(), getAgentData(),getMechData()).Sum();
-            return damagetaken.ToString();
-        }
-        private string[] getFinalDefenses(Player p)
-        {
-            BossData b_data = getBossData();
-            CombatData c_data = getCombatData();
-            List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(),getMechData());
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
+            long start = phase.start + b_data.getFirstAware();
+            long end = phase.end + b_data.getFirstAware();
+            List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(),getMechData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
             int instid = p.getInstid();
 
-            int damagetaken = p.getDamagetaken(b_data, c_data.getCombatList(), getAgentData(),getMechData()).Sum();
+            int damagetaken = damage_logs.Select(x => x.getDamage()).Sum();
             int blocked = 0;
             //int dmgblocked = 0;
             int invulned = 0;
             int dmginvulned = 0;
-            int dodge = c_data.getSkillCount(instid, 65001);//dodge = 65001
-            dodge += c_data.getBuffCount(instid, 40408);//mirage cloak add
+            int dodge = c_data.getSkillCount(instid, 65001, start, end);//dodge = 65001
+            dodge += c_data.getBuffCount(instid, 40408, start, end);//mirage cloak add
             int evades = 0;
             //int dmgevaded = 0;
             int dmgBarriar = 0;
@@ -982,25 +998,35 @@ namespace LuckParser.Controllers
 
                 dmgBarriar += log.getDamage();
             }
-            int down = c_data.getStates(instid, "CHANGE_DOWN").Count();
+            int down = c_data.getStates(instid, "CHANGE_DOWN", start, end).Count();
             // R.I.P
-            List<Point> dead = c_data.getStates(instid, "CHANGE_DEAD");
+            List<CombatItem> dead = c_data.getStates(instid, "CHANGE_DEAD", start, end);
             double died = 0.0;
             if (dead.Count() > 0)
             {
-                died = dead[0].X - b_data.getFirstAware();
+                died = dead[0].getTime()- start;
             }
             String[] statsArray = new string[] { damagetaken.ToString(),
-                blocked.ToString(),"0"/*dmgblocked.ToString()*/,invulned.ToString(),dmginvulned.ToString(),
-                dodge.ToString(),evades.ToString(),"0"/*dmgevaded.ToString()*/,
-            down.ToString(),died.ToString("0.00"),dmgBarriar.ToString()};
+                                                blocked.ToString(),
+                                                "0"/*dmgblocked.ToString()*/,
+                                                invulned.ToString(),
+                                                dmginvulned.ToString(),
+                                                dodge.ToString(),
+                                                evades.ToString(),
+                                                "0"/*dmgevaded.ToString()*/,
+                                                down.ToString(),
+                                                died.ToString("0.00"),
+                                                dmgBarriar.ToString()};
             return statsArray;
         }
         //(currently not correct)
-        private string[] getFinalSupport(Player p)
+        private string[] getFinalSupport(Player p, int phase_index)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
+            long start = phase.start + b_data.getFirstAware();
+            long end = phase.end + b_data.getFirstAware();
             // List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData());
             int instid = p.getInstid();
             int resurrects = 0;
@@ -1008,8 +1034,8 @@ namespace LuckParser.Controllers
             int condiCleanse = 0;
             double condiCleansetime = 0.0;
 
-            int[] resArray = p.getReses(b_data, c_data.getCombatList(), getAgentData());
-            int[] cleanseArray = p.getCleanses(b_data, c_data.getCombatList(), getAgentData());
+            int[] resArray = p.getReses(b_data, c_data.getCombatList(), getAgentData(), start, end);
+            int[] cleanseArray = p.getCleanses(b_data, c_data.getCombatList(), getAgentData(), start, end);
             resurrects = resArray[0];
             restime = resArray[1];
             condiCleanse = cleanseArray[0];
@@ -1132,14 +1158,14 @@ namespace LuckParser.Controllers
             foreach (Player p in p_list)
             {
 
-                List<Point> down = c_data.getStates(p.getInstid(), "CHANGE_DOWN");
-                foreach (Point pnt in down) {
-                    mech_data.AddItem(new MechanicLog((long)((pnt.X - boss_data.getFirstAware()) / 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
+                List<CombatItem> down = c_data.getStates(p.getInstid(), "CHANGE_DOWN", boss_data.getFirstAware(), boss_data.getLastAware());
+                foreach (CombatItem pnt in down) {
+                    mech_data.AddItem(new MechanicLog((long)((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
                 }
-                List<Point> dead = c_data.getStates(p.getInstid(), "CHANGE_DEAD");
-                foreach (Point pnt in dead)
+                List<CombatItem> dead = c_data.getStates(p.getInstid(), "CHANGE_DEAD", boss_data.getFirstAware(), boss_data.getLastAware());
+                foreach (CombatItem pnt in dead)
                 {
-                    mech_data.AddItem(new MechanicLog((long)((pnt.X - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
+                    mech_data.AddItem(new MechanicLog((long)((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
                 }
                 List<DamageLog> dls = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data, mech_data);
                 //Player hit by skill 3
@@ -1215,73 +1241,60 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="p">The player</param>
         /// <returns></returns>
-        private List<int[]> getBossDPSGraph(Player p) {
+        private List<int[]> getBossDPSGraph(Player p, int phase_index)
+        {
             List<int[]> bossdmgList = new List<int[]>();
-            if (p.getBossDPSGraph().Count == 0)
+            BossData b_data = getBossData();
+            CombatData c_data = getCombatData();
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
+            List<DamageLog> damage_logs_boss = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
+            int totaldmg = 0;
+
+            int timeGraphed = (int)phase.start;
+            foreach (DamageLog log in damage_logs_boss)
             {
-                BossData b_data = getBossData();
-                CombatData c_data = getCombatData();
 
-                // bossdmgList.Add(new int[] {1, 0 });
-                // List<DamageLog> damage_logs_all = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
-                List<DamageLog> damage_logs_boss = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData());
-                int totaldmg = 0;
+                totaldmg += log.getDamage();
 
-                int timeGraphed = 0;
-                foreach (DamageLog log in damage_logs_boss)
+                long time = log.getTime();
+                if (time > 1000)
                 {
 
-                    totaldmg += log.getDamage();
-
-                    long time = log.getTime();
-                    if (time > 1000)
+                    //to reduce processing time only graph 1 point per sec
+                    if (Math.Floor(time / 1000f) > timeGraphed)
                     {
 
-                        //to reduce processing time only graph 1 point per sec
-                        if (Math.Floor(time / 1000f) > timeGraphed)
+                        if ((Math.Floor(time / 1000f) - timeGraphed) < 2)
                         {
-
-                            if ((Math.Floor(time / 1000f) - timeGraphed) < 2)
-                            {
-                                timeGraphed = (int)Math.Floor(time / 1000f);
-                                bossdmgList.Add(new int[] { (int)time / 1000, (int)(totaldmg / (time / 1000f)) });
-                            }
-                            else
-                            {
-                                int gap = (int)Math.Floor(time / 1000f) - timeGraphed;
-                                bool startOfFight = true;
-                                if (bossdmgList.Count > 0)
-                                {
-                                    startOfFight = false;
-                                }
-
-                                for (int itr = 0; itr < gap - 1; itr++)
-                                {
-                                    timeGraphed++;
-                                    if (!startOfFight)
-                                    {
-                                        bossdmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
-                                    }
-                                    else
-                                    {//hasnt hit boss yet gap
-                                        bossdmgList.Add(new int[] { timeGraphed, 0 });
-                                    }
-
-                                }
-                            }
-
+                            timeGraphed = (int)Math.Floor(time / 1000f);
+                            bossdmgList.Add(new int[] { (int)time / 1000, (int)(totaldmg / (time / 1000f)) });
                         }
+                        else
+                        {
+                            int gap = (int)Math.Floor(time / 1000f) - timeGraphed;
+                            bool startOfFight = true;
+                            if (bossdmgList.Count > 0)
+                            {
+                                startOfFight = false;
+                            }
 
+                            for (int itr = 0; itr < gap - 1; itr++)
+                            {
+                                timeGraphed++;
+                                if (!startOfFight)
+                                {
+                                    bossdmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
+                                }
+                                else
+                                {//hasnt hit boss yet gap
+                                    bossdmgList.Add(new int[] { timeGraphed, 0 });
+                                }
 
+                            }
+                        }
                     }
-
                 }
-                p.setBossDPSGraph(bossdmgList);
             }
-            else {
-                bossdmgList = p.getBossDPSGraph();
-            }
-            
             return bossdmgList;
         }
         /// <summary>
@@ -1289,16 +1302,15 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="p">The player</param>
         /// <returns></returns>
-        private List<int[]> getTotalDPSGraph(Player p)
+        private List<int[]> getTotalDPSGraph(Player p, int phase_index)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
             List<int[]> totaldmgList = new List<int[]>();
-           // totaldmgList.Add(new int[] { 1, 0 });
-            List<DamageLog> damage_logs_all = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData());
-            //List<DamageLog> damage_logs_boss = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData());
+            List<DamageLog> damage_logs_all = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
             int totaldmg = 0;
-            int timeGraphed = 0;
+            int timeGraphed = (int) phase.start;
             foreach (DamageLog log in damage_logs_all)
             {
                 totaldmg += log.getDamage();
@@ -1345,10 +1357,10 @@ namespace LuckParser.Controllers
         /// Creates the dps graph
         /// </summary>
         /// <param name="sw">Stream writer</param>
-        private void CreateDPSGraph(StreamWriter sw)
+        private void CreateDPSGraph(StreamWriter sw, int phase_index)
         {
             //Generate DPS graph
-            sw.Write("<div id=\"DPSGraph\" style=\"height: 600px;width:1200px; display:inline-block \"></div>");
+            sw.Write("<div id=\"DPSGraph"+ phase_index + "\" style=\"height: 600px;width:1200px; display:inline-block \"></div>");
             sw.Write("<script>");
 
             sw.Write("var data = [");
@@ -1357,7 +1369,7 @@ namespace LuckParser.Controllers
             foreach (Player p in p_list)
             {
                 //Adding dps axis
-                List<int[]> playerbossdpsgraphdata = new List<int[]>(getBossDPSGraph(p));
+                List<int[]> playerbossdpsgraphdata = new List<int[]>(getBossDPSGraph(p, phase_index));
                 if (totalDpsAllPlayers.Count == 0)
                 {
                     //totalDpsAllPlayers = new List<int[]>(playerbossdpsgraphdata);
@@ -1425,7 +1437,7 @@ namespace LuckParser.Controllers
                 {//Turns display on or off
                     sw.Write("{");
                     //Adding dps axis
-                    List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
+                    List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p,phase_index);
                     sw.Write("y: [");
                     pbdgdCount = 0;
                     foreach (int[] dp in playertotaldpsgraphdata)
@@ -1537,7 +1549,7 @@ namespace LuckParser.Controllers
                 int mechcount = 0;
                 foreach (MechanicLog ml in filterdList)
                 {
-                    int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => x[0] == ml.GetTime());
+                    int[] check = getBossDPSGraph(ml.GetPlayer(), phase_index).FirstOrDefault(x => x[0] == ml.GetTime());
                     if (mechcount == filterdList.Count - 1)
                     {
                         if (check != null)
@@ -1627,7 +1639,7 @@ namespace LuckParser.Controllers
                 sw.Write("y: [");
                 foreach (MechanicLog ml in DnDList)
                 {
-                    int[] check = getBossDPSGraph(ml.GetPlayer()).FirstOrDefault(x => x[0] == ml.GetTime());
+                    int[] check = getBossDPSGraph(ml.GetPlayer(), phase_index).FirstOrDefault(x => x[0] == ml.GetTime());
                     if (mcount == DnDList.Count - 1)
                     {
                         if (check != null)
@@ -1792,7 +1804,7 @@ namespace LuckParser.Controllers
                         "paper_bgcolor: 'rgba(0,0,0,0)'," +
                         "plot_bgcolor: 'rgba(0,0,0,0)'" +
                     "};" +
-                    "Plotly.newPlot('DPSGraph', data, layout);");
+                    "Plotly.newPlot('DPSGraph" + phase_index + "', data, layout);");
             sw.Write("</script> ");
         }
         private void GetRoles()
@@ -1936,10 +1948,11 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="fight_duration">Duration of the fight</param>
-        private void CreateDPSTable(StreamWriter sw,double fight_duration) {
+        private void CreateDPSTable(StreamWriter sw, int phase_index) {
             //generate dps table
-            sw.Write("<script> $(function () { $('#dps_table').DataTable({ \"order\": [[4, \"desc\"]]});});</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dps_table\">");
+            PhaseData phase = boss.getPhases(getBossData(), getCombatData().getCombatList(), getAgentData())[phase_index];
+            sw.Write("<script> $(function () { $('#dps_table"+ phase_index + "').DataTable({ \"order\": [[4, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dps_table" + phase_index + "\">");
             {
                 sw.Write("<thead>");
                 {
@@ -1966,8 +1979,8 @@ namespace LuckParser.Controllers
                 sw.Write("<tbody>");
                 foreach (Player player in p_list)
                 {
-                    string[] dmg = getFinalDPS(player).Split('|');
-                    string[] stats = getFinalStats(player);
+                    string[] dmg = getFinalDPS(player, phase_index).Split('|');
+                    string[] stats = getFinalStats(player, phase_index);
                     //gather data for footer
                     footerList.Add(new string[] { player.getGroup().ToString(), dmg[0], dmg[1], dmg[2], dmg[3], dmg[4], dmg[5], dmg[6], dmg[7], dmg[8], dmg[9], dmg[10], dmg[11] });
                     sw.Write("<tr>");
@@ -1986,7 +1999,7 @@ namespace LuckParser.Controllers
                         sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[5] + " dmg \">" + dmg[4] + "</span>" + "</td>");
                         sw.Write("<td>" + stats[6] + "</td>");
                         TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));
-                        
+                        long fight_duration = (phase.end - phase.start)/1000;
                         if (timedead > TimeSpan.Zero)
                         {
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
@@ -2051,10 +2064,11 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="fight_duration">Duration of the fight</param>
-        private void CreateDMGStatsTable(StreamWriter sw,double fight_duration) {
+        private void CreateDMGStatsTable(StreamWriter sw, int phase_index) {
             //generate dmgstats table
-            sw.Write("<script> $(function () { $('#dmgstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dmgstats_table\">");
+            PhaseData phase = boss.getPhases(getBossData(), getCombatData().getCombatList(), getAgentData())[phase_index];
+            sw.Write("<script> $(function () { $('#dmgstats_table"+ phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dmgstats_table"+ phase_index + "\">");
             {
                 sw.Write("<thead>");
                 {
@@ -2085,7 +2099,7 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        string[] stats = getFinalStats(player);
+                        string[] stats = getFinalStats(player, phase_index);
                         TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));//dead 
                                                                                               //gather data for footer
                         footerList.Add(new string[] { player.getGroup().ToString(), stats[0], stats[1], stats[2], stats[3], stats[4], stats[10], stats[11], stats[12], stats[13], stats[5], stats[6] });
@@ -2107,6 +2121,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[18] + "cancels \">" + stats[17] + "</span>" + "</td>");//timesaved
                             sw.Write("<td>" + stats[5] + "</td>");//w swaps
                             sw.Write("<td>" + stats[6] + "</td>");//downs
+                            long fight_duration = (phase.end - phase.start) / 1000;
                             if (timedead > TimeSpan.Zero)
                             {
                                 sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
@@ -2180,10 +2195,11 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="fight_duration">Duration of the fight</param>
-        private void CreateDefTable(StreamWriter sw, double fight_duration) {
+        private void CreateDefTable(StreamWriter sw, int phase_index) {
             //generate Tankstats table
-            sw.Write("<script> $(function () { $('#defstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"defstats_table\">");
+            PhaseData phase = boss.getPhases(getBossData(), getCombatData().getCombatList(), getAgentData())[phase_index];
+            sw.Write("<script> $(function () { $('#defstats_table"+ phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"defstats_table"+ phase_index+"\">");
             {
                 sw.Write("<thead>");
                 {
@@ -2210,7 +2226,7 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        string[] stats = getFinalDefenses(player);
+                        string[] stats = getFinalDefenses(player, phase_index);
                         TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));//dead
                                                                                               //gather data for footer
                         footerList.Add(new string[] { player.getGroup().ToString(), stats[0], stats[10], stats[1], stats[3], stats[6], stats[5], stats[8] });
@@ -2226,6 +2242,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + stats[6] + "</td>");// evades
                             sw.Write("<td>" + stats[5] + "</td>");//dodges
                             sw.Write("<td>" + stats[8] + "</td>");//downs
+                            long fight_duration = (phase.end - phase.start)/1000;
                             if (timedead > TimeSpan.Zero)
                             {
                                 sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
@@ -2290,10 +2307,10 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="fight_duration">Duration of the fight</param>
-        private void CreateSupTable(StreamWriter sw, double fight_duration) {
+        private void CreateSupTable(StreamWriter sw, int phase_index) {
             //generate suppstats table
-            sw.Write("<script> $(function () { $('#supstats_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"supstats_table\">");
+            sw.Write("<script> $(function () { $('#supstats_table"+ phase_index+"').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"supstats_table"+ phase_index+"\">");
             {
                 sw.Write("<thead>");
                 {
@@ -2314,7 +2331,7 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        string[] stats = getFinalSupport(player);
+                        string[] stats = getFinalSupport(player, phase_index);
                         //gather data for footer
                         footerList.Add(new string[] { player.getGroup().ToString(), stats[3], stats[2], stats[1], stats[0] });
                         sw.Write("<tr>");
@@ -2368,12 +2385,12 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         /// <param name="list_to_use">Boon list to use</param>
         /// <param name="table_id">id of the table</param>
-        private void CreateUptimeTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
+        private void CreateUptimeTable(StreamWriter sw, List<Boon> list_to_use, string table_id, int phase_index)
         {
             //Generate Boon table------------------------------------------------------------------------------------------------
-            sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<script> $(function () { $('#" + table_id+ phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
             List<List<string>> footList = new List<List<string>>();
-            sw.Write("<table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" id=\"" + table_id + "\">");
+            sw.Write("<table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" id=\"" + table_id+ phase_index + "\">");
             {
                 sw.Write("<thead>");
                 {
@@ -2507,10 +2524,10 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         /// <param name="list_to_use">Boon list to use</param>
         /// <param name="table_id">id of the table</param>
-        private void CreateGenSelfTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
+        private void CreateGenSelfTable(StreamWriter sw, List<Boon> list_to_use, string table_id, int phase_index)
         { //Generate BoonGenSelf table
-            sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" width=\"100%\" id=\"" + table_id + "\">");
+            sw.Write("<script> $(function () { $('#" + table_id+ phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" width=\"100%\" id=\"" + table_id+ phase_index + "\">");
             {
                 sw.Write("<thead>");
                 {
@@ -2567,10 +2584,10 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         /// <param name="list_to_use">Boon list to use</param>
         /// <param name="table_id">id of the table</param>
-        private void CreateGenGroupTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
+        private void CreateGenGroupTable(StreamWriter sw, List<Boon> list_to_use, string table_id, int phase_index)
         { //Generate BoonGenGroup table
-            sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id + "\">");
+            sw.Write("<script> $(function () { $('#" + table_id+ phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id+ phase_index + "\">");
             {
                 sw.Write("<thead>");
                 {
@@ -2632,10 +2649,10 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         /// <param name="list_to_use">Boon list to use</param>
         /// <param name="table_id">id of the table</param>
-        private void CreateGenOGroupTable(StreamWriter sw, List<Boon> list_to_use, string table_id)
+        private void CreateGenOGroupTable(StreamWriter sw, List<Boon> list_to_use, string table_id, int phase_index)
         {  //Generate BoonGenOGroup table
-            sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id + "\">");
+            sw.Write("<script> $(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id + phase_index + "\">");
             {
                 sw.Write(" <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
                 foreach (Boon boon in list_to_use)
@@ -2685,10 +2702,10 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         /// <param name="list_to_use">Boon list to use</param>
         /// <param name="table_id">id of the table</param>
-        private void CreateGenSquadTable(StreamWriter sw, List<Boon> list_to_use, string table_id) {
+        private void CreateGenSquadTable(StreamWriter sw, List<Boon> list_to_use, string table_id, int phase_index) {
             //Generate BoonGenSquad table
-            sw.Write("<script> $(function () { $('#" + table_id + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id + "\">");
+            sw.Write("<script> $(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id + phase_index + "\">");
             {
                 sw.Write("<thead>");
                 {
@@ -2745,48 +2762,52 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="settingsSnap">Settings to use</param>
-        private void CreatePlayerTab(StreamWriter sw, bool[] settingsSnap)
+        private void CreatePlayerTab(StreamWriter sw, bool[] settingsSnap, int phase_index)
         {
             //generate Player list Graphs
             foreach (Player p in p_list)
             {
                 CombatData c_data = getCombatData();
                 BossData b_data = getBossData();
-                List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
+                PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
+                long start = phase.start + b_data.getFirstAware();
+                long end = phase.end + b_data.getFirstAware();
+                List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData()).Where( x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
                 SkillData s_data = getSkillData();
                 List<SkillItem> s_list = s_data.getSkillList();
-                bool died = p.getDeath(getCombatData().getCombatList()) > 0;
+                bool died = p.getDeath(getCombatData().getCombatList(), start, end) > 0;
                 string charname = p.getCharacter();
-                sw.Write("<div class=\"tab-pane fade\" id=\"" + p.getInstid() + "\">");
+                string pid = p.getInstid() + "_" + phase_index;
+                sw.Write("<div class=\"tab-pane fade\" id=\"" + pid + "\">");
                 {
                     sw.Write("<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
                     sw.Write("<ul class=\"nav nav-tabs\">");
                     {
-                        sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + p.getInstid() + "\">" + p.getCharacter() + "</a></li>");
+                        sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + pid + "\">" + p.getCharacter() + "</a></li>");
                         if (SnapSettings[10])
                         {
-                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#SimpleRot" + p.getInstid() + "\">Simple Rotation</a></li>");
+                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#SimpleRot" + pid + "\">Simple Rotation</a></li>");
 
                         }
                         if (died)
                         {
-                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#DeathRecap" + p.getInstid() + "\">Death Recap</a></li>");
+                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#DeathRecap" + pid + "\">Death Recap</a></li>");
 
                         }
                         //foreach pet loop here                        
                         foreach (AgentItem agent in p.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Keys)
                         {
-                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + p.getInstid() + "_" + agent.getInstid() + "\">" + agent.getName() + "</a></li>");
+                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + agent.getInstid() + "\">" + agent.getName() + "</a></li>");
                         }
                         //inc dmg
-                        sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#incDmg" + p.getInstid() + "\">Damage Taken</a></li>");
+                        sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#incDmg" + pid + "\">Damage Taken</a></li>");
                     }
                     sw.Write("</ul>");
                     sw.Write("<div id=\"myTabContent\" class=\"tab-content\">");
                     {
-                        sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + p.getInstid() + "\">");
+                        sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
                         {
-                            List<int[]> consume = p.getConsumablesList(b_data,s_data, c_data.getCombatList());
+                            List<int[]> consume = p.getConsumablesList(b_data, s_data, c_data.getCombatList(), phase.start, phase.end);
                             List<int[]> initial = consume.Where(x => x[1] == 0).ToList();
                             List<int[]> refreshed = consume.Where(x => x[1] > 0).ToList();
                             if (initial.Count() > 0)
@@ -2851,7 +2872,7 @@ namespace LuckParser.Controllers
                                 }
                                 sw.Write("</p>");
                             }
-                            sw.Write("<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>");
+                            sw.Write("<div id=\"Graph" + pid + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>");
                             sw.Write("<script>");
                             {
                                 sw.Write("var data = [");
@@ -3062,7 +3083,7 @@ namespace LuckParser.Controllers
                                     if (SnapSettings[2])
                                     {//show boss dps plot
                                      //Adding dps axis
-                                        List<int[]> playerbossdpsgraphdata = getBossDPSGraph(p);
+                                        List<int[]> playerbossdpsgraphdata = getBossDPSGraph(p, phase_index);
                                         int pbdgCount = 0;
                                         sw.Write("{");
                                         {
@@ -3126,7 +3147,7 @@ namespace LuckParser.Controllers
                                     {//show total dps plot
                                         sw.Write("{");
                                         { //Adding dps axis
-                                            List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
+                                            List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p, phase_index);
                                             int ptdgCount = 0;
                                             sw.Write("y: [");
                                             {
@@ -3279,25 +3300,25 @@ namespace LuckParser.Controllers
                                             "plot_bgcolor: 'rgba(0,0,0,0)'");
                                 }
                                 sw.Write("};");
-                                sw.Write("Plotly.newPlot('Graph" + p.getInstid() + "', data, layout);");
+                                sw.Write("Plotly.newPlot('Graph" + pid + "', data, layout);");
                             }
                             sw.Write("</script> ");
                             sw.Write("<ul class=\"nav nav-tabs\">");
                             {
-                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabAll" + p.getInstid() +"\">" + "All" + "</a></li>");
-                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabBoss" + p.getInstid() + "\">" + "Boss" + "</a></li>");
+                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabAll" + pid + "\">" + "All" + "</a></li>");
+                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabBoss" + pid + "\">" + "Boss" + "</a></li>");
                             }
                             sw.Write("</ul>");
                             sw.Write("<div class=\"tab-content\">");
                             {
-                                sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabAll" + p.getInstid() + "\">");
+                                sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabAll" + pid + "\">");
                                 {
-                                    CreateDMGDistTable(sw, p, false);
+                                    CreateDMGDistTable(sw, p, false, phase_index);
                                 }
                                 sw.Write("</div>");
-                                sw.Write("<div class=\"tab-pane fade\" id=\"distTabBoss" + p.getInstid() + "\">");
+                                sw.Write("<div class=\"tab-pane fade\" id=\"distTabBoss" + pid + "\">");
                                 {
-                                    CreateDMGDistTable(sw, p, true);
+                                    CreateDMGDistTable(sw, p, true, phase_index);
                                 }
                                 sw.Write("</div>");
                             }
@@ -3306,8 +3327,8 @@ namespace LuckParser.Controllers
                         sw.Write("</div>");
                         foreach (AgentItem agent in p.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Keys)
                         {
-                            string id = p.getInstid() + "_" + agent.getInstid();
-                            sw.Write("<div class=\"tab-pane fade \" id=\"minion" + id + "\">");
+                            string id = pid + "_" + agent.getInstid();
+                            sw.Write("<div class=\"tab-pane fade \" id=\"minion" + id  + "\">");
                             {
                                 sw.Write("<ul class=\"nav nav-tabs\">");
                                 {
@@ -3319,12 +3340,12 @@ namespace LuckParser.Controllers
                                 {
                                     sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabAll" + id + "\">");
                                     {
-                                        CreateDMGDistTable(sw, p, agent, false);
+                                        CreateDMGDistTable(sw, p, agent, false, phase_index);
                                     }
                                     sw.Write("</div>");
                                     sw.Write("<div class=\"tab-pane fade\" id=\"distTabBoss" + id + "\">");
                                     {
-                                        CreateDMGDistTable(sw, p, agent, true);
+                                        CreateDMGDistTable(sw, p, agent, true, phase_index);
                                     }
                                     sw.Write("</div>");
                                 }
@@ -3334,28 +3355,28 @@ namespace LuckParser.Controllers
                         }
                         if (SnapSettings[10])
                         {
-                            sw.Write("<div class=\"tab-pane fade \" id=\"SimpleRot" + p.getInstid() + "\">");
+                            sw.Write("<div class=\"tab-pane fade \" id=\"SimpleRot" + pid + "\">");
                             {
                                 int simpleRotSize = 20;
                                 if (settingsSnap[12])
                                 {
                                     simpleRotSize = 30;
                                 }
-                                CreateSimpleRotationTab(sw, p,simpleRotSize);
+                                CreateSimpleRotationTab(sw, p,simpleRotSize, phase_index);
                             }
                             sw.Write("</div>");
                         }
                         if (died)
                         {
-                            sw.Write("<div class=\"tab-pane fade \" id=\"DeathRecap" + p.getInstid() + "\">");
+                            sw.Write("<div class=\"tab-pane fade \" id=\"DeathRecap" + pid + "\">");
                             {
-                                CreateDeathRecap(sw, p);
+                                CreateDeathRecap(sw, p, phase_index);
                             }
                             sw.Write("</div>");
                         }
-                        sw.Write("<div class=\"tab-pane fade \" id=\"incDmg" + p.getInstid() + "\">");
+                        sw.Write("<div class=\"tab-pane fade \" id=\"incDmg" + pid + "\">");
                         {
-                            CreateDMGTakenDistTable(sw, p);
+                            CreateDMGTakenDistTable(sw, p, phase_index);
                         }
                         sw.Write("</div>");
                     }
@@ -3371,14 +3392,15 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         /// <param name="p">The player</param>
         /// <param name="simpleRotSize">Size of the images</param>
-        private void CreateSimpleRotationTab(StreamWriter sw,Player p,int simpleRotSize) {
+        private void CreateSimpleRotationTab(StreamWriter sw,Player p,int simpleRotSize, int phase_index) {
             if (SnapSettings[6])//Display rotation
             {
                 SkillData s_data = getSkillData();
                 List<SkillItem> s_list = s_data.getSkillList();
                 CombatData c_data = getCombatData();
                 BossData b_data = getBossData();
-                List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
+                PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
+                List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
                 GW2APISkill autoSkill = null;
                 int autosCount = 0;
                 foreach (CastLog cl in casting)
@@ -3464,7 +3486,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="p">The player</param>
-        private void CreateDeathRecap(StreamWriter sw, Player p)
+        private void CreateDeathRecap(StreamWriter sw, Player p, int phase_index)
         {
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
@@ -3472,19 +3494,22 @@ namespace LuckParser.Controllers
             List<DamageLog> damageLogs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(), getMechData());
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
-            List<Point> down = getCombatData().getStates(p.getInstid(), "CHANGE_DOWN");
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data)[phase_index];
+            long start = phase.start + b_data.getFirstAware();
+            long end = phase.end + b_data.getFirstAware();
+            List<CombatItem> down = getCombatData().getStates(p.getInstid(), "CHANGE_DOWN", start, end);
             if (down.Count > 0)
             {
-                List<Point> ups = getCombatData().getStates(p.getInstid(), "CHANGE_UP");
+                List<CombatItem> ups = getCombatData().getStates(p.getInstid(), "CHANGE_UP", start, end);
                 down = down.GetRange(ups.Count(), down.Count()-ups.Count());
             }
-            List<Point> dead = getCombatData().getStates(p.getInstid(), "CHANGE_DEAD");
+            List<CombatItem> dead = getCombatData().getStates(p.getInstid(), "CHANGE_DEAD", start, end);
             List<DamageLog> damageToDown = new List<DamageLog>();
-            List<DamageLog> damageToKill = new List<DamageLog>(); ;
+            List<DamageLog> damageToKill = new List<DamageLog>();
             if (down.Count > 0)
             {//went to down state before death
-                damageToDown = damageLogs.Where(x => x.getTime() < down.Last().X - b_data.getFirstAware() && x.getDamage() > 0).ToList();
-                damageToKill = damageLogs.Where(x => x.getTime() > down.Last().X - b_data.getFirstAware() && x.getTime() < dead.Last().X - b_data.getFirstAware() && x.getDamage() > 0).ToList();
+                damageToDown = damageLogs.Where(x => x.getTime() < down.Last().getTime() - start && x.getDamage() > 0).ToList();
+                damageToKill = damageLogs.Where(x => x.getTime() > down.Last().getTime() - start && x.getTime() < dead.Last().getTime() - start && x.getDamage() > 0).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
                 for (int i = damageToDown.Count() - 1; i > 0; i--)
@@ -3511,7 +3536,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damageToKill = damageLogs.Where(x =>  x.getTime() < dead.Last().X && x.getDamage() > 0).ToList();
+                damageToKill = damageLogs.Where(x =>  x.getTime() < dead.Last().getTime() && x.getDamage() > 0).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
                 for (int i = damageToKill.Count() - 1; i > 0; i--)
@@ -3525,8 +3550,8 @@ namespace LuckParser.Controllers
                 }
                 sw.Write("<center><h3>Player was insta killed by a mechanic, fall damage or by /gg</h3></center>");
             }
-            
-            sw.Write("<center><div id=\"BarDeathRecap" + p.getInstid()+"\"></div> </center>");
+            string pid = p.getInstid() + "_" + phase_index;
+            sw.Write("<center><div id=\"BarDeathRecap" + pid + "\"></div> </center>");
             sw.Write("<script>");
             {
                 sw.Write("var data = [{");
@@ -3625,7 +3650,7 @@ namespace LuckParser.Controllers
 
                 sw.Write("var layout = { title: 'Last 30k Damage Taken before death', font: { color: '#ffffff' },width: 1100," +
                     "paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',showlegend: false,bargap :0.05,yaxis:{title:'Damage'},xaxis:{title:'Time(seconds)',type:'catagory'}};");
-                sw.Write("Plotly.newPlot('BarDeathRecap" + p.getInstid() + "', data, layout);");
+                sw.Write("Plotly.newPlot('BarDeathRecap" + pid + "', data, layout);");
                 
             }
             sw.Write("</script>");
@@ -3635,20 +3660,21 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="p">The player</param>
-        private void CreateDMGDistTable(StreamWriter sw, Player p, bool toBoss)
+        private void CreateDMGDistTable(StreamWriter sw, Player p, bool toBoss, int phase_index)
         {
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
-            List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
-            List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(toBoss ? b_data.getInstid() : 0, b_data, c_data.getCombatList(), getAgentData());
-            int totalDamage = toBoss ? Int32.Parse(getFinalDPS(p).Split('|')[7]) : Int32.Parse(getFinalDPS(p).Split('|')[1]);
-            int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
+            List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData()).Where( x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
+            List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(toBoss ? b_data.getInstid() : 0, b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
+            int totalDamage = toBoss ? Int32.Parse(getFinalDPS(p, phase_index).Split('|')[7]) : Int32.Parse(getFinalDPS(p, phase_index).Split('|')[1]);
+            int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
             if (totalDamage > 0)
             {
                 string contribution = String.Format("{0:0.00}", 100.0 * finalTotalDamage / totalDamage);
                 sw.Write("<div>" + p.getCharacter() + " did " + contribution + "% of its own total " + (toBoss ? "boss " : "") + "dps</div>");
             }
-            string tabid = p.getInstid() + (toBoss ? "_boss" : "");
+            string tabid = p.getInstid() +"_"+ phase_index + (toBoss ? "_boss" : "");
             sw.Write("<script> $(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + tabid + "\">");
             {
@@ -4027,14 +4053,15 @@ namespace LuckParser.Controllers
         /// <param name="p">Player, master of the minion</param>
         /// <param name="damageLogs">Damage logs to use</param>
         /// <param name="agent">The minion</param>
-        private void CreateDMGDistTable(StreamWriter sw, Player p, AgentItem agent, bool toBoss)
+        private void CreateDMGDistTable(StreamWriter sw, Player p, AgentItem agent, bool toBoss, int phase_index)
         {
-            int totalDamage = toBoss ? Int32.Parse(getFinalDPS(p).Split('|')[7]) : Int32.Parse(getFinalDPS(p).Split('|')[1]);
-            string tabid = p.getInstid() + "_" + agent.getInstid() + (toBoss ? "_boss" : "");
+            int totalDamage = toBoss ? Int32.Parse(getFinalDPS(p, phase_index).Split('|')[7]) : Int32.Parse(getFinalDPS(p, phase_index).Split('|')[1]);
+            string tabid = p.getInstid() +"_"+phase_index + "_" + agent.getInstid() + (toBoss ? "_boss" : "");
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
-            List<DamageLog> damageLogs = p.getMinionsDamageLogs(toBoss ? b_data.getInstid() : 0, b_data, c_data.getCombatList(), getAgentData())[agent];
-            int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
+            List<DamageLog> damageLogs = p.getMinionsDamageLogs(toBoss ? b_data.getInstid() : 0, b_data, c_data.getCombatList(), getAgentData())[agent].Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
+            int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
             if (totalDamage > 0)
             {
                 string contribution = String.Format("{0:0.00}", 100.0 * finalTotalDamage / totalDamage);
@@ -4230,7 +4257,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="p">The player</param>
-        private void CreateDMGTakenDistTable(StreamWriter sw, Player p)
+        private void CreateDMGTakenDistTable(StreamWriter sw, Player p, int phase_index)
         {
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
@@ -4238,8 +4265,9 @@ namespace LuckParser.Controllers
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             int finalTotalDamage = damageLogs.Sum(x => x.getDamage());
-            sw.Write("<script> $(function () { $('#distTaken_table_" + p.getInstid() + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"distTaken_table_" + p.getInstid() + "\">");
+            string pid = p.getInstid() + "_" + phase_index;
+            sw.Write("<script> $(function () { $('#distTaken_table_" + pid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"distTaken_table_" + pid + "\">");
             {
                 sw.Write("<thead>");
                 {
@@ -4374,28 +4402,33 @@ namespace LuckParser.Controllers
         /// Creates the mechanics table of the fight
         /// </summary>
         /// <param name="sw">Stream writer</param>
-        private void CreateMechanicTable(StreamWriter sw) {
-            List<Mechanic> presMech = new List<Mechanic>();
+        private void CreateMechanicTable(StreamWriter sw, int phase_index) {
+            Dictionary<string,List<Mechanic>> presMech = new Dictionary<string, List<Mechanic>>();
+            PhaseData phase = boss.getPhases(getBossData(), getCombatData().getCombatList(), getAgentData())[phase_index];
             foreach (Mechanic item in mech_data.GetMechList(boss_data.getID()))
             {
                 if (mech_data.GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill()) != null)
                 {
-                    presMech.Add(item);
+                    if (!presMech.ContainsKey(item.GetAltName()))
+                    {
+                        presMech[item.GetAltName()] = new List<Mechanic>();
+                    }
+                    presMech[item.GetAltName()].Add(item);                   
                 }
             }
             if (presMech.Count() > 0)
             {
-                sw.Write("<script> $(function () { $('#mech_table').DataTable({ \"order\": [[0, \"desc\"]]});});</script>");
-                sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"mech_table\">");
+                sw.Write("<script> $(function () { $('#mech_table"+ phase_index+"').DataTable({ \"order\": [[0, \"desc\"]]});});</script>");
+                sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"mech_table"+ phase_index+"\">");
                 {
                     sw.Write("<thead>");
                     {
                         sw.Write("<tr>");
                         {
                             sw.Write("<th>Player</th>");
-                            foreach (string mechalt in presMech.Select(x => x.GetAltName()).Distinct().ToList())
+                            foreach (string mechalt in presMech.Keys)
                             {
-                                sw.Write("<th><span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + presMech.First(x => x.GetAltName() == mechalt).GetName() + "\">" + mechalt + "</span></th>");
+                                sw.Write("<th><span>" + mechalt + "</span></th>");
                             }
                         }                   
                         sw.Write("</tr>");
@@ -4409,13 +4442,13 @@ namespace LuckParser.Controllers
                             sw.Write("<tr>");
                             {
                                 sw.Write("<td>" + p.getCharacter() + "</td>");
-                                foreach (string mechalt in presMech.Select(x => x.GetAltName()).Distinct().ToList())
+                                foreach (List<Mechanic> mechs in presMech.Values)
                                 {
                                     int count = 0;
-                                    foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => mechalt == x.GetAltName()))
+                                    foreach (Mechanic mech in mechs)
                                     {
-                                        List<MechanicLog> test = mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).ToList();
-                                        count += mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p).Count();
+                                        List<MechanicLog> test = mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= phase.start / 1000 && x.GetTime() < phase.end / 1000).ToList();
+                                        count += test.Count();                                     
                                     }
                                     sw.Write("<td>" + count + "</td>");
                                 }
@@ -4553,11 +4586,11 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="boss">The boss</param>
-        private void CreateCondiUptimeTable(StreamWriter sw,Player boss)
+        private void CreateCondiUptimeTable(StreamWriter sw,Player boss, int phase_index)
         {
             //Generate Boon table------------------------------------------------------------------------------------------------
-            sw.Write("<script> $(function () { $('#condi_table').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"condi_table\">");
+            sw.Write("<script> $(function () { $('#condi_table"+ phase_index+"').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"condi_table"+ phase_index+"\">");
             {
                 sw.Write("<thead>");
                 {
@@ -4593,7 +4626,7 @@ namespace LuckParser.Controllers
         /// Creates the boss summary tab
         /// </summary>
         /// <param name="sw">Stream writer</param>
-        private void CreateBossSummary(StreamWriter sw)
+        private void CreateBossSummary(StreamWriter sw, int phase_index)
         {
             //generate Player list Graphs
             CombatData c_data = getCombatData();
@@ -4602,22 +4635,23 @@ namespace LuckParser.Controllers
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             string charname = boss.getCharacter();
+            string pid = boss.getInstid() + "_" + phase_index;
             sw.Write("<h1 align=\"center\"> " + charname + "</h1>");
             sw.Write("<ul class=\"nav nav-tabs\">");
             {
-                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + boss.getInstid() + "\">" + boss.getCharacter() + "</a></li>");
+                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + pid + "\">" + boss.getCharacter() + "</a></li>");
                 //foreach pet loop here
                 foreach (AgentItem agent in boss.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Keys)
                 {
-                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + boss.getInstid() + "_" + agent.getInstid() + "\">" + agent.getName() + "</a></li>");
+                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + agent.getInstid()+ "\">" + agent.getName() + "</a></li>");
                 }
             }         
             sw.Write("</ul>");
             //condi stats tab
-            sw.Write("<div id=\"myTabContent\" class=\"tab-content\"><div class=\"tab-pane fade show active\" id=\"home" + boss.getInstid() + "\">");
+            sw.Write("<div id=\"myTabContent\" class=\"tab-content\"><div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
             {
-                CreateCondiUptimeTable(sw, boss);
-                sw.Write("<div id=\"Graph" + boss.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>");
+                CreateCondiUptimeTable(sw, boss, phase_index);
+                sw.Write("<div id=\"Graph" + pid + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>");
                 sw.Write("<script>");
                 {
                     sw.Write("var data = [");
@@ -4826,7 +4860,7 @@ namespace LuckParser.Controllers
                         {//show total dps plot
                             sw.Write("{");
                             //Adding dps axis
-                            List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(boss);
+                            List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(boss, phase_index);
                             sw.Write("y: [");
                             int ptdgCount = 0;
                             foreach (int[] dp in playertotaldpsgraphdata)
@@ -4969,16 +5003,16 @@ namespace LuckParser.Controllers
                                 "plot_bgcolor: 'rgba(0,0,0,0)'");
                     }
                     sw.Write("};");
-                    sw.Write("Plotly.newPlot('Graph" + boss.getInstid() + "', data, layout);");
+                    sw.Write("Plotly.newPlot('Graph" + pid + "', data, layout);");
                 }
                 sw.Write("</script> ");
-                CreateDMGDistTable(sw, boss, false);
+                CreateDMGDistTable(sw, boss, false, phase_index);
                 sw.Write("</div>");
                 foreach (AgentItem agent in boss.getMinionsDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Keys)
                 {
-                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + boss.getInstid() + "_" + agent.getInstid() + "\">");
+                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + pid + "_" + agent.getInstid() + "\">");
                     {
-                        CreateDMGDistTable(sw, boss, agent, false);
+                        CreateDMGDistTable(sw, boss, agent, false, phase_index);
                     }
                     sw.Write("</div>");
                 }
@@ -4989,34 +5023,34 @@ namespace LuckParser.Controllers
         /// To define
         /// </summary>
         /// <param name="sw">Stream writer</param>
-        private void CreateEstimateTabs(StreamWriter sw)
+        private void CreateEstimateTabs(StreamWriter sw, int phase_index)
         {
             sw.Write("<ul class=\"nav nav-tabs\">");
             {
                 sw.Write("<li class=\"nav-item\">" +
-                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est_role\">Roles</a>" +
+                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est_role"+ phase_index+"\">Roles</a>" +
                         "</li>" +
 
                         "<li class=\"nav-item\">" +
-                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est_cc\">CC</a>" +
+                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est_cc" + phase_index + "\">CC</a>" +
                         "</li>" +
                          "<li class=\"nav-item\">" +
-                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est\">Maybe more</a>" +
+                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#est" + phase_index + "\">Maybe more</a>" +
                         "</li>");
             }
             sw.Write("</ul>");
             sw.Write("<div id=\"myTabContent\" class=\"tab-content\">");
             {
-                sw.Write("<div class=\"tab-pane fade show active\" id=\"est_role\">");
+                sw.Write("<div class=\"tab-pane fade show active\" id=\"est_role" + phase_index + "\">");
                 {
                     //Use cards
                 }
                 sw.Write("</div>");
-                sw.Write("<div class=\"tab-pane fade show active\" id=\"est_cc\">");
+                sw.Write("<div class=\"tab-pane fade show active\" id=\"est_cc" + phase_index + "\">");
                 {
                 }
                 sw.Write("</div>");
-                sw.Write("<div class=\"tab-pane fade show active\" id=\"est\">");
+                sw.Write("<div class=\"tab-pane fade show active\" id=\"est" + phase_index + "\">");
                 {
                 }
                 sw.Write("</div>");
@@ -5072,15 +5106,7 @@ namespace LuckParser.Controllers
             }
             string bossname = FilterStringChars(b_data.getName());
             setPresentBoons(settingsSnap);
-            List<PhaseData> phases = boss.getPhases(getBossData(), getCombatData().getCombatList(), getAgentData());
-            string Html_playerDropdown = "";
-            foreach (Player p in p_list)
-            {
-
-                string charname = p.getCharacter();
-                Html_playerDropdown += "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#" + p.getInstid() + "\">" + charname +
-                    "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</a>";
-            }
+            List<PhaseData> phases = boss.getPhases(getBossData(), getCombatData().getCombatList(), getAgentData());           
             // HTML STARTS
             sw.Write("<!DOCTYPE html><html lang=\"en\">");
             {
@@ -5184,303 +5210,338 @@ namespace LuckParser.Controllers
                             }
                             sw.Write("</div>");
                         }
+                        sw.Write("</div>");
                         //if (p_list.Count() == 1)//Create condensed version of log
                         //{
                         //    CreateSoloHTML(sw,settingsSnap);
                         //    return;
                         //}
-                        sw.Write("</div>");
-                        sw.Write("<ul class=\"nav nav-tabs\">");
+                        if (phases.Count > 1)
                         {
-                            sw.Write("<li class=\"nav-item\">" +
-                                        "<a class=\"nav-link active\" data-toggle=\"tab\" href=\"#stats\">Stats</a>" +
-                                    "</li>" + 
-                                    
-                                    "<li class=\"nav-item\">" +
-                                        "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#dmgGraph\">Damage Graph</a>" +
-                                    "</li>" +
-                                     "<li class=\"nav-item\">" +
-                                        "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#boons\">Boons</a>" +
-                                    "</li>" +
-                                   
-                                    
-                                    "<li class=\"nav-item\">" +
-                                        "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#mechTable\">Mechanics</a>" +
-                                    "</li>" +
-                                    "<li class=\"nav-item dropdown\">" +
-                                        "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Player</a>" +
-                                        "<div class=\"dropdown-menu \" x-placement=\"bottom-start\">" +
-                                            Html_playerDropdown +
-                                        "</div>" +
-                                    "</li>");
-                            if (settingsSnap[9])
+                            sw.Write("<ul class=\"nav nav-tabs\">");
                             {
-                                sw.Write("<li class=\"nav-item\">" +
-                                                "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#bossSummary\">Boss</a>" +
-                                            "</li>");
+                                for (int i = 0; i < phases.Count; i++)
+                                {
+                                    string active = (i > 0 ? "" : "active");
+                                    string name = i > 0 ? "Phase " + i : "Full Fight";
+                                    sw.Write("<li class=\"nav-item\">" +
+                                            "<a class=\"nav-link "+active+"\" data-toggle=\"tab\" href=\"#phase" + i + "\">" + name + "</a>" +
+                                        "</li>");
+                                }
                             }
-                            if (settingsSnap[8])
-                            {
-                                sw.Write("<li class=\"nav-item\">" +
-                                                "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#eventList\">Event List</a>" +
-                                            "</li>");
-                            }
-                            if (settingsSnap[13])
-                            {
-                                sw.Write("<li class=\"nav-item\">" +
-                                                "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#estimates\">Estimates</a>" +
-                                            "</li>");
-                            }
+                            sw.Write("</ul>");
                         }
-                        sw.Write("</ul>");
-                        sw.Write("<div id=\"myTabContent\" class=\"tab-content\">");
+                        sw.Write("<div id=\"myTabContent" + "\" class=\"tab-content\">");
                         {
-                            sw.Write("<div class=\"tab-pane fade show active\" id=\"stats\">");
+                            for (int i = 0; i < phases.Count; i++)
                             {
-                                //Stats Tab
-                                sw.Write("<h3 align=\"center\"> Stats </h3>");
+                                string active = (i > 0 ? "" : "show active");
 
-                                sw.Write("<ul class=\"nav nav-tabs\">"+
-                                        "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#dpsStats\">DPS</a></li>"+
-                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offStats\">Damage Stats</a></li>"+
-                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defStats\">Defensive Stats</a></li>"+
-                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#healStats\">Heal Stats</a></li>"+
-                                    "</ul>");
-                                sw.Write("<div id=\"statsSubTab\" class=\"tab-content\">");
+
+                                sw.Write("<div class=\"tab-pane fade " + active + "\" id=\"phase" + i + "\">");
                                 {
-                                    sw.Write("<div class=\"tab-pane fade show active\" id=\"dpsStats\">");
+                                    string Html_playerDropdown = "";
+                                    foreach (Player p in p_list)
                                     {
-                                        // DPS table
-                                        CreateDPSTable(sw, fight_duration);
+                                        string charname = p.getCharacter();
+                                        Html_playerDropdown += "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#" + p.getInstid() + "_" + i + "\">" + charname +
+                                            "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</a>";
                                     }
-                                    sw.Write("</div>");
-                                    sw.Write("<div class=\"tab-pane fade \" id=\"offStats\">");
+                                    sw.Write("<ul class=\"nav nav-tabs\">");
                                     {
-                                        // HTML_dmgstats 
-                                        CreateDMGStatsTable(sw, fight_duration);
-                                    }
-                                    sw.Write("</div>");
-                                    sw.Write("<div class=\"tab-pane fade \" id=\"defStats\">");
-                                    {
-                                        // def stats
-                                        CreateDefTable(sw, fight_duration);
-                                    }
-                                    sw.Write("</div>");
-                                    sw.Write("<div class=\"tab-pane fade\" id=\"healStats\">");
-                                    {
-                                        //  HTML_supstats
-                                        CreateSupTable(sw, fight_duration);
-                                    }
-                                    sw.Write("</div>");
-                                }
-                                sw.Write("</div>");
+                                        sw.Write("<li class=\"nav-item\">" +
+                                                    "<a class=\"nav-link active\" data-toggle=\"tab\" href=\"#stats" + i + "\">Stats</a>" +
+                                                "</li>" +
 
-                            }
-                            sw.Write("</div>");
-                           
-                            sw.Write("<div class=\"tab-pane fade\" id=\"dmgGraph\">");
-                            {
-                                //Html_dpsGraph
-                                CreateDPSGraph(sw);
-                            }
-                            sw.Write("</div>");
-                            //Boon Stats
-                            sw.Write("<div class=\"tab-pane fade \" id=\"boons\">");
-                            {
-                                //Boons Tab
-                                sw.Write("<h3 align=\"center\"> Boons </h3>");
-
-                                sw.Write("<ul class=\"nav nav-tabs\">" +
-                                        "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#mainBoon\">Boons</a></li>" +
-                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offBuff\">Damage Buffs</a></li>" +
-                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defBuff\">Defensive Buffs</a></li>" +
-                                    "</ul>");
-                                sw.Write("<div id=\"boonsSubTab\" class=\"tab-content\">");
-                                {
-                                    sw.Write("<div class=\"tab-pane fade show active  \" id=\"mainBoon\">");
-                                    {
-                                        sw.Write("<ul class=\"nav nav-tabs\">" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#boonsUptime\">Uptime</a></li>" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenSelf\">Generation (Self)</a></li>" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenGroup\">Generation (Group)</a></li>" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenOGroup\">Generation (Off-Group)</a></li>" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenSquad\">Generation (Squad)</a></li>" +
-                                               "</ul>");
-                                        sw.Write("<div id=\"mainBoonsSubTab\" class=\"tab-content\">");
+                                                "<li class=\"nav-item\">" +
+                                                    "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#dmgGraph" + i + "\">Damage Graph</a>" +
+                                                "</li>" +
+                                                 "<li class=\"nav-item\">" +
+                                                    "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#boons" + i + "\">Boons</a>" +
+                                                "</li>" +
+                                                "<li class=\"nav-item\">" +
+                                                    "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#mechTable" + i + "\">Mechanics</a>" +
+                                                "</li>" +
+                                                "<li class=\"nav-item dropdown\">" +
+                                                    "<a class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"true\">Player</a>" +
+                                                    "<div class=\"dropdown-menu \" x-placement=\"bottom-start\">" +
+                                                        Html_playerDropdown +
+                                                    "</div>" +
+                                                "</li>");
+                                        if (settingsSnap[9])
                                         {
-                                            sw.Write("<div class=\"tab-pane fade show active\" id=\"boonsUptime\">");
+                                            sw.Write("<li class=\"nav-item\">" +
+                                                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#bossSummary" + i + "\">Boss</a>" +
+                                                        "</li>");
+                                        }
+                                        if (settingsSnap[8])
+                                        {
+                                            sw.Write("<li class=\"nav-item\">" +
+                                                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#eventList" + i + "\">Event List</a>" +
+                                                        "</li>");
+                                        }
+                                        if (settingsSnap[13])
+                                        {
+                                            sw.Write("<li class=\"nav-item\">" +
+                                                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#estimates" + i + "\">Estimates</a>" +
+                                                        "</li>");
+                                        }
+                                    }
+                                    sw.Write("</ul>");
+                                    sw.Write("<div id=\"myTabContent" + "\" class=\"tab-content\">");
+                                    {
+                                        sw.Write("<div class=\"tab-pane fade show active\" id=\"stats" + i + "\">");
+                                        {
+                                            //Stats Tab
+                                            sw.Write("<h3 align=\"center\"> Stats </h3>");
+
+                                            sw.Write("<ul class=\"nav nav-tabs\">" +
+                                                    "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#dpsStats" + i + "\">DPS</a></li>" +
+                                                    "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offStats" + i + "\">Damage Stats</a></li>" +
+                                                    "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defStats" + i + "\">Defensive Stats</a></li>" +
+                                                    "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#healStats" + i + "\">Heal Stats</a></li>" +
+                                                "</ul>");
+                                            sw.Write("<div id=\"statsSubTab" + i + "\" class=\"tab-content\">");
                                             {
-                                                sw.Write("<p> Boon Uptime</p>");
-                                                // Html_boons
-                                                CreateUptimeTable(sw, present_boons, "boons_table");
+                                                sw.Write("<div class=\"tab-pane fade show active\" id=\"dpsStats" + i + "\">");
+                                                {
+                                                    // DPS table
+                                                    CreateDPSTable(sw, i);
+                                                }
+                                                sw.Write("</div>");
+                                                sw.Write("<div class=\"tab-pane fade \" id=\"offStats" + i + "\">");
+                                                {
+                                                    // HTML_dmgstats 
+                                                    CreateDMGStatsTable(sw, i);
+                                                }
+                                                sw.Write("</div>");
+                                                sw.Write("<div class=\"tab-pane fade \" id=\"defStats" + i + "\">");
+                                                {
+                                                    // def stats
+                                                    CreateDefTable(sw, i);
+                                                }
+                                                sw.Write("</div>");
+                                                sw.Write("<div class=\"tab-pane fade\" id=\"healStats" + i + "\">");
+                                                {
+                                                    //  HTML_supstats
+                                                    CreateSupTable(sw, i);
+                                                }
+                                                sw.Write("</div>");
                                             }
                                             sw.Write("</div>");
-                                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSelf\">");
+
+                                        }
+                                        sw.Write("</div>");
+
+                                        sw.Write("<div class=\"tab-pane fade\" id=\"dmgGraph" + i + "\">");
+                                        {
+                                            //Html_dpsGraph
+                                            CreateDPSGraph(sw, i);
+                                        }
+                                        sw.Write("</div>");
+                                        //Boon Stats
+                                        sw.Write("<div class=\"tab-pane fade \" id=\"boons" + i + "\">");
+                                        {
+                                            //Boons Tab
+                                            sw.Write("<h3 align=\"center\"> Boons </h3>");
+
+                                            sw.Write("<ul class=\"nav nav-tabs\">" +
+                                                    "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#mainBoon" + i + "\">Boons</a></li>" +
+                                                    "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offBuff" + i + "\">Damage Buffs</a></li>" +
+                                                    "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defBuff" + i + "\">Defensive Buffs</a></li>" +
+                                                "</ul>");
+                                            sw.Write("<div id=\"boonsSubTab" + i + "\" class=\"tab-content\">");
                                             {
-                                                //Html_boonGenSelf
-                                                sw.Write("<p> Boons generated by a character for themselves</p>");
-                                                CreateGenSelfTable(sw, present_boons, "boongenself_table");
-                                            }
-                                            sw.Write("</div>");
-                                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenGroup\">");
-                                            {
-                                                sw.Write("<p> Boons generated by a character for their sub group</p>");
-                                                // Html_boonGenGroup
-                                                CreateGenGroupTable(sw, present_boons, "boongengroup_table");
-                                            }
-                                            sw.Write("</div>");
-                                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenOGroup\">");
-                                            {
-                                                sw.Write("<p> Boons generated by a character for any subgroup that is not their own</p>");
-                                                // Html_boonGenOGroup
-                                                CreateGenOGroupTable(sw, present_boons, "boongenogroup_table");
-                                            }
-                                            sw.Write("</div>");
-                                            sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSquad\">");
-                                            {
-                                                sw.Write("<p> Boons generated by a character for the entire squad</p>");
-                                                //  Html_boonGenSquad
-                                                CreateGenSquadTable(sw, present_boons, "boongensquad_table");
+                                                sw.Write("<div class=\"tab-pane fade show active  \" id=\"mainBoon" + i + "\">");
+                                                {
+                                                    sw.Write("<ul class=\"nav nav-tabs\">" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#boonsUptime" + i + "\">Uptime</a></li>" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenSelf" + i + "\">Generation (Self)</a></li>" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenGroup" + i + "\">Generation (Group)</a></li>" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenOGroup" + i + "\">Generation (Off-Group)</a></li>" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#boonsGenSquad" + i + "\">Generation (Squad)</a></li>" +
+                                                           "</ul>");
+                                                    sw.Write("<div id=\"mainBoonsSubTab" + i + "\" class=\"tab-content\">");
+                                                    {
+                                                        sw.Write("<div class=\"tab-pane fade show active\" id=\"boonsUptime" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Boon Uptime</p>");
+                                                            // Html_boons
+                                                            CreateUptimeTable(sw, present_boons, "boons_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                        sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSelf" + i + "\">");
+                                                        {
+                                                            //Html_boonGenSelf
+                                                            sw.Write("<p> Boons generated by a character for themselves</p>");
+                                                            CreateGenSelfTable(sw, present_boons, "boongenself_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                        sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenGroup" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Boons generated by a character for their sub group</p>");
+                                                            // Html_boonGenGroup
+                                                            CreateGenGroupTable(sw, present_boons, "boongengroup_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                        sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenOGroup" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Boons generated by a character for any subgroup that is not their own</p>");
+                                                            // Html_boonGenOGroup
+                                                            CreateGenOGroupTable(sw, present_boons, "boongenogroup_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                        sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSquad" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Boons generated by a character for the entire squad</p>");
+                                                            //  Html_boonGenSquad
+                                                            CreateGenSquadTable(sw, present_boons, "boongensquad_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                    }
+                                                    sw.Write("</div>");
+                                                }
+                                                sw.Write("</div>");
+                                                sw.Write("<div class=\"tab-pane fade  \" id=\"offBuff" + i + "\">");
+                                                {
+                                                    sw.Write("<ul class=\"nav nav-tabs\">" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#offensiveUptime" + i + "\">Uptime</a></li>" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenSelf" + i + "\">Generation (Self)</a></li>" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenGroup" + i + "\">Generation (Group)</a></li>" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenOGroup" + i + "\">Generation (Off-Group)</a></li>" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenSquad" + i + "\">Generation (Squad)</a></li>" +
+                                                           "</ul>");
+                                                    sw.Write("<div id=\"offBuffSubTab" + i + "\" class=\"tab-content\">");
+                                                    {
+                                                        //Offensive Buffs stats
+                                                        sw.Write("<div class=\"tab-pane fade show active\" id=\"offensiveUptime" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Offensive Buffs Uptime</p>");
+                                                            CreateUptimeTable(sw, present_offbuffs, "offensive_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                        sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSelf" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Offensive Buffs generated by a character for themselves</p>");
+                                                            CreateGenSelfTable(sw, present_offbuffs, "offensivegenself_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                        sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenGroup" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Offensive Buffs generated by a character for their sub group</p>");
+                                                            CreateGenGroupTable(sw, present_offbuffs, "offensivegengroup_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                        sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenOGroup" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Offensive Buffs generated by a character for any subgroup that is not their own</p>");
+                                                            CreateGenOGroupTable(sw, present_offbuffs, "offensivegenogroup_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                        sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSquad" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Offensive Buffs generated by a character for the entire squad</p>");
+                                                            CreateGenSquadTable(sw, present_offbuffs, "offensivegensquad_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                    }
+                                                    sw.Write("</div>");
+                                                }
+                                                sw.Write("</div>");
+                                                sw.Write("<div class=\"tab-pane fade  \" id=\"defBuff" + i + "\">");
+                                                {
+                                                    sw.Write("<ul class=\"nav nav-tabs\">" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#defensiveUptime" + i + "\">Uptime</a></li>" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenSelf" + i + "\">Generation (Self)</a></li>" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenGroup" + i + "\">Generation (Group)</a></li>" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenOGroup" + i + "\">Generation (Off-Group)</a></li>" +
+                                                               "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenSquad" + i + "\">Generation (Squad)</a></li>" +
+                                                           "</ul>");
+                                                    sw.Write("<div id=\"defBuffSubTab" + i + "\" class=\"tab-content\">");
+                                                    {
+                                                        //Defensive Buffs stats
+                                                        sw.Write("<div class=\"tab-pane fade show active\" id=\"defensiveUptime" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Defensive Buffs Uptime</p>");
+                                                            CreateUptimeTable(sw, present_defbuffs, "defensive_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                        sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSelf" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Defensive Buffs generated by a character for themselves</p>");
+                                                            CreateGenSelfTable(sw, present_defbuffs, "defensivegenself_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                        sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenGroup" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Defensive Buffs generated by a character for their sub group</p>");
+                                                            CreateGenGroupTable(sw, present_defbuffs, "defensivegengroup_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                        sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenOGroup" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Defensive Buffs generated by a character for any subgroup that is not their own</p>");
+                                                            CreateGenOGroupTable(sw, present_defbuffs, "defensivegenogroup_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                        sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSquad" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Defensive Buffs generated by a character for the entire squad</p>");
+                                                            CreateGenSquadTable(sw, present_defbuffs, "defensivegensquad_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                    }
+                                                    sw.Write("</div>");
+                                                }
+                                                sw.Write("</div>");
                                             }
                                             sw.Write("</div>");
                                         }
                                         sw.Write("</div>");
-                                    }
-                                    sw.Write("</div>");
-                                    sw.Write("<div class=\"tab-pane fade  \" id=\"offBuff\">");
-                                    {
-                                        sw.Write("<ul class=\"nav nav-tabs\">" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#offensiveUptime\">Uptime</a></li>" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenSelf\">Generation (Self)</a></li>" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenGroup\">Generation (Group)</a></li>" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenOGroup\">Generation (Off-Group)</a></li>" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offensiveGenSquad\">Generation (Squad)</a></li>" +
-                                               "</ul>");
-                                        sw.Write("<div id=\"offBuffSubTab\" class=\"tab-content\">");
+                                        //mechanics
+                                        sw.Write("<div class=\"tab-pane fade\" id=\"mechTable" + i + "\">");
                                         {
-                                            //Offensive Buffs stats
-                                            sw.Write("<div class=\"tab-pane fade show active\" id=\"offensiveUptime\">");
+                                            sw.Write("<p>Mechanics</p>");
+                                            CreateMechanicTable(sw, i);
+                                        }
+                                        sw.Write("</div>");
+                                        //boss summary
+                                        if (settingsSnap[9])
+                                        {
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"bossSummary" + i + "\">");
                                             {
-                                                sw.Write("<p> Offensive Buffs Uptime</p>");
-                                                CreateUptimeTable(sw, present_offbuffs, "offensive_table");
-                                            }
-                                            sw.Write("</div>");
-                                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSelf\">");
-                                            {
-                                                sw.Write("<p> Offensive Buffs generated by a character for themselves</p>");
-                                                CreateGenSelfTable(sw, present_offbuffs, "offensivegenself_table");
-                                            }
-                                            sw.Write("</div>");
-                                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenGroup\">");
-                                            {
-                                                sw.Write("<p> Offensive Buffs generated by a character for their sub group</p>");
-                                                CreateGenGroupTable(sw, present_offbuffs, "offensivegengroup_table");
-                                            }
-                                            sw.Write("</div>");
-                                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenOGroup\">");
-                                            {
-                                                sw.Write("<p> Offensive Buffs generated by a character for any subgroup that is not their own</p>");
-                                                CreateGenOGroupTable(sw, present_offbuffs, "offensivegenogroup_table");
-                                            }
-                                            sw.Write("</div>");
-                                            sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSquad\">");
-                                            {
-                                                sw.Write("<p> Offensive Buffs generated by a character for the entire squad</p>");
-                                                CreateGenSquadTable(sw, present_offbuffs, "offensivegensquad_table");
+                                                CreateBossSummary(sw, i);
                                             }
                                             sw.Write("</div>");
                                         }
-                                        sw.Write("</div>");
-                                    }
-                                    sw.Write("</div>");
-                                    sw.Write("<div class=\"tab-pane fade  \" id=\"defBuff\">");
-                                    {
-                                        sw.Write("<ul class=\"nav nav-tabs\">" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#defensiveUptime\">Uptime</a></li>" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenSelf\">Generation (Self)</a></li>" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenGroup\">Generation (Group)</a></li>" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenOGroup\">Generation (Off-Group)</a></li>" +
-                                                   "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defensiveGenSquad\">Generation (Squad)</a></li>" +
-                                               "</ul>");
-                                        sw.Write("<div id=\"defBuffSubTab\" class=\"tab-content\">");
+                                        //event list
+                                        if (settingsSnap[8] && i == 0)
                                         {
-                                            //Defensive Buffs stats
-                                            sw.Write("<div class=\"tab-pane fade show active\" id=\"defensiveUptime\">");
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"eventList" + i + "\">");
                                             {
-                                                sw.Write("<p> Defensive Buffs Uptime</p>");
-                                                CreateUptimeTable(sw, present_defbuffs, "defensive_table");
-                                            }
-                                            sw.Write("</div>");
-                                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSelf\">");
-                                            {
-                                                sw.Write("<p> Defensive Buffs generated by a character for themselves</p>");
-                                                CreateGenSelfTable(sw, present_defbuffs, "defensivegenself_table");
-                                            }
-                                            sw.Write("</div>");
-                                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenGroup\">");
-                                            {
-                                                sw.Write("<p> Defensive Buffs generated by a character for their sub group</p>");
-                                                CreateGenGroupTable(sw, present_defbuffs, "defensivegengroup_table");
-                                            }
-                                            sw.Write("</div>");
-                                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenOGroup\">");
-                                            {
-                                                sw.Write("<p> Defensive Buffs generated by a character for any subgroup that is not their own</p>");
-                                                CreateGenOGroupTable(sw, present_defbuffs, "defensivegenogroup_table");
-                                            }
-                                            sw.Write("</div>");
-                                            sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSquad\">");
-                                            {
-                                                sw.Write("<p> Defensive Buffs generated by a character for the entire squad</p>");
-                                                CreateGenSquadTable(sw, present_defbuffs, "defensivegensquad_table");
+                                                sw.Write("<p>List of all events.</p>");
+                                                // CreateEventList(sw);
+                                                CreateSkillList(sw);
                                             }
                                             sw.Write("</div>");
                                         }
-                                        sw.Write("</div>");
+                                        //boss summary
+                                        if (settingsSnap[13])
+                                        {
+                                            sw.Write("<div class=\"tab-pane fade\" id=\"estimates" + i + "\">");
+                                            {
+                                                CreateEstimateTabs(sw, i);
+                                            }
+                                            sw.Write("</div>");
+                                        }
+                                        //Html_playertabs
+                                        CreatePlayerTab(sw, settingsSnap, i);
                                     }
                                     sw.Write("</div>");
                                 }
                                 sw.Write("</div>");
+
                             }
-                            sw.Write("</div>");
-                            //mechanics
-                            sw.Write("<div class=\"tab-pane fade\" id=\"mechTable\">");
-                            {
-                                sw.Write("<p>Mechanics</p>");
-                                CreateMechanicTable(sw);
-                            }
-                            sw.Write("</div>");
-                            //boss summary
-                            if (settingsSnap[9])
-                            {
-                                sw.Write("<div class=\"tab-pane fade\" id=\"bossSummary\">");
-                                {
-                                    CreateBossSummary(sw);
-                                }
-                                sw.Write("</div>");
-                            }
-                            //event list
-                            if (settingsSnap[8])
-                            {
-                                sw.Write("<div class=\"tab-pane fade\" id=\"eventList\">");
-                                {
-                                    sw.Write("<p>List of all events.</p>");
-                                    // CreateEventList(sw);
-                                    CreateSkillList(sw);
-                                }
-                                sw.Write("</div>");
-                            }
-                            //boss summary
-                            if (settingsSnap[13])
-                            {
-                                sw.Write("<div class=\"tab-pane fade\" id=\"estimates\">");
-                                {
-                                    CreateEstimateTabs(sw);
-                                }
-                                sw.Write("</div>");
-                            }
-                            //Html_playertabs
-                            CreatePlayerTab(sw,settingsSnap);
                         }
                         sw.Write("</div>");
                         sw.Write("<div>");
@@ -5513,10 +5574,10 @@ namespace LuckParser.Controllers
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
 
-            CreateDPSTable(sw, fight_duration);
-            CreateDMGStatsTable(sw, fight_duration);
-            CreateDefTable(sw, fight_duration);
-            CreateSupTable(sw, fight_duration);
+            CreateDPSTable(sw, 0);
+            CreateDMGStatsTable(sw, 0);
+            CreateDefTable(sw, 0);
+            CreateSupTable(sw, 0);
             // CreateDPSGraph(sw);
             sw.Write("<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>");
             sw.Write("<script>");
@@ -5729,7 +5790,7 @@ namespace LuckParser.Controllers
                     if (SnapSettings[2])
                     {//show boss dps plot
                      //Adding dps axis
-                        List<int[]> playerbossdpsgraphdata = getBossDPSGraph(p);
+                        List<int[]> playerbossdpsgraphdata = getBossDPSGraph(p, 0);
                         int pbdgCount = 0;
                         sw.Write("{");
                         {
@@ -5793,7 +5854,7 @@ namespace LuckParser.Controllers
                     {//show total dps plot
                         sw.Write("{");
                         { //Adding dps axis
-                            List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p);
+                            List<int[]> playertotaldpsgraphdata = getTotalDPSGraph(p,0);
                             int ptdgCount = 0;
                             sw.Write("y: [");
                             {
@@ -5959,12 +6020,12 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabAll" + p.getInstid() + "\">");
                 {
-                    CreateDMGDistTable(sw, p, false);
+                    CreateDMGDistTable(sw, p, false,0);
                 }
                 sw.Write("</div>");
                 sw.Write("<div class=\"tab-pane fade\" id=\"distTabBoss" + p.getInstid() + "\">");
                 {
-                    CreateDMGDistTable(sw, p, true);
+                    CreateDMGDistTable(sw, p, true,0);
                 }
                 sw.Write("</div>");
             }
@@ -5999,7 +6060,7 @@ namespace LuckParser.Controllers
             int[] teamStats= { 0,0,0};
             foreach (Player p in p_list)
             {
-                string[] finaldps = getFinalDPS(p).Split('|');
+                string[] finaldps = getFinalDPS(p, 0).Split('|');
                 teamStats[0] += Int32.Parse(finaldps[6]);
                 teamStats[1] += Int32.Parse(finaldps[0]);
                 teamStats[2] += (Int32.Parse(finaldps[0]) - Int32.Parse(finaldps[6]));
@@ -6007,7 +6068,7 @@ namespace LuckParser.Controllers
 
             foreach (Player p in p_list)
             {
-                string[] finaldps = getFinalDPS(p).Split('|');
+                string[] finaldps = getFinalDPS(p, 0).Split('|');
                 sw.Write(p.getGroup() + delimiter + // group
                         p.getProf() + delimiter +  // class
                         p.getCharacter() + delimiter + // character

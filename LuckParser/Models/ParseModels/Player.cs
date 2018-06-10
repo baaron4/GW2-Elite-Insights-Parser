@@ -17,24 +17,22 @@ namespace LuckParser.Models.ParseModels
         private int toughness;
         private int healing;
         private int condition;
-        private int dcd = 0;//time in ms the player dcd
+        private long dcd = 0;//time in ms the player dcd
        
         // DPS
         protected List<DamageLog> damage_logs = new List<DamageLog>();
         private List<DamageLog> damage_logsFiltered = new List<DamageLog>();
-        private List<int[]> bossdpsGraph = new List<int[]>();
         // Minions
         private List<ushort> combatMinionIDList = new List<ushort>();
         private Dictionary<AgentItem, List<DamageLog>> minion_damage_logs = new Dictionary<AgentItem, List<DamageLog>>();
         private Dictionary<AgentItem, List<DamageLog>> minion_damage_logsFiltered = new Dictionary<AgentItem, List<DamageLog>>();
         // Taken damage
         protected List<DamageLog> damageTaken_logs = new List<DamageLog>();
-        protected List<int> damagetaken = new List<int>();
         // Boons
         private BoonDistribution boon_distribution = new BoonDistribution();
         private Dictionary<int, long> boon_presence = new Dictionary<int, long>();
         private Dictionary<int, BoonsGraphModel> boon_points = new Dictionary<int, BoonsGraphModel>();
-        private List<int[]> consumeList = new List<int[]>();
+        private List<CombatItem> consumeList = new List<CombatItem>();
         // Casts
         private List<CastLog> cast_logs = new List<CastLog>();
         //weaponslist
@@ -112,19 +110,11 @@ namespace LuckParser.Models.ParseModels
                 return damage_logsFiltered;
             }
         }
-        public List<int> getDamagetaken( BossData bossData, List<CombatItem> combatList, AgentData agentData,MechanicData m_data)
-        {
-            if (damagetaken.Count == 0)
-            {
-                setDamagetaken(bossData, combatList, agentData,m_data);
-            }
-            return damagetaken;
-        }
         public List<DamageLog> getDamageTakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData,MechanicData m_data)
         {
-            if (damagetaken.Count == 0)
+            if (damageTaken_logs.Count == 0)
             {
-                setDamagetaken(bossData, combatList, agentData,m_data);
+                setDamagetakenLogs(bossData, combatList, agentData,m_data);
             }
             return damageTaken_logs;
         }
@@ -152,10 +142,10 @@ namespace LuckParser.Models.ParseModels
             }
             return boon_presence;
         }
-        public int[] getCleanses(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
+        public int[] getCleanses(BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end) {
             long time_start = bossData.getFirstAware();
             int[] cleanse = { 0, 0 };
-            foreach (CombatItem c in combatList.Where(x=>x.isStateChange().getID() == 0 && x.isBuff() == 1))
+            foreach (CombatItem c in combatList.Where(x=>x.isStateChange().getID() == 0 && x.isBuff() == 1 && x.getTime() >= start && x.getTime() < end))
             {
                 if (c.isActivation().getID() == 0)
                 {
@@ -178,33 +168,17 @@ namespace LuckParser.Models.ParseModels
             }
             return cleanse;
         }
-        public int[] getReses(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        public int[] getReses(BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)
         {
             long time_start = bossData.getFirstAware();
             int[] reses = { 0, 0 };
-            foreach (CastLog log in cast_logs) {
+            foreach (CastLog log in cast_logs.Where(x => x.getTime() >= start - time_start && x.getTime() < end - time_start)) {
                 if (log.getID() == 1066)
                 {
                     reses[0]++;
                     reses[1] += log.getActDur();
                 }
             }
-            //foreach (CombatItem c in combatList)
-            //{
-            //    if (instid == c.getDstInstid()/* || instid == c.getSrcMasterInstid()*/)//selecting player most likyl wrong
-            //    {
-            //        LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
-            //        int time = c.getTime() - time_start;
-            //           if (state.getID() == 0 && time > 0)
-            //                {
-            //                    if (c.getSkillID() == 1066)
-            //                    {
-            //                        reses[0]++;
-            //                        reses[1] += c.getValue();
-            //                    }
-            //                }
-            //    }
-            //}
             return reses;
         }
         public List<CastLog> getCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
@@ -251,10 +225,6 @@ namespace LuckParser.Models.ParseModels
             List<ushort> minionList = getCombatMinionList(bossData, combatList, agentData);
             return getDamageLogs(instidFilter, bossData, combatList, agentData).Where(x => !minionList.Contains(x.getInstidt())).ToList();
         }
-        public List<int[]> getBossDPSGraph()
-        {
-            return new List<int[]>(bossdpsGraph);
-        }
         public string[] getWeaponsArray(SkillData s_data, CombatData c_data, BossData b_data, AgentData a_data)
         {
             if (weapons_array == null)
@@ -264,35 +234,30 @@ namespace LuckParser.Models.ParseModels
             return weapons_array;
         }
         // Public methods
-       
-        public void setBossDPSGraph(List<int[]> list)
-        {
-            bossdpsGraph = new List<int[]>(list);
-        }
-        public int GetDC()
+        public long GetDC()
         {
             return dcd;
         }
-        public void SetDC(int value)
+        public void SetDC(long value)
         {
             dcd = value;
         }
-        public long getDeath(List<CombatItem> combatList)
+        public long getDeath(List<CombatItem> combatList, long start, long end)
         {
-            CombatItem dead = combatList.FirstOrDefault( x => x.getSrcInstid() == instid && x.isStateChange().getEnum() == "CHANGE_DEAD");
+            CombatItem dead = combatList.FirstOrDefault( x => x.getSrcInstid() == instid && x.isStateChange().getEnum() == "CHANGE_DEAD" && x.getTime() >= start && x.getTime() < end);
             if (dead != null && dead.getTime() > 0)
             {
                 return dead.getTime();
             }
             return 0;
         }
-        public List<int[]> getConsumablesList(BossData bossData, SkillData skillData, List<CombatItem> combatList)
+        public List<int[]> getConsumablesList(BossData bossData, SkillData skillData, List<CombatItem> combatList, long start, long end)
         {
             if (consumeList.Count() == 0)
             {
                 setConsumablesList( bossData, skillData, combatList);
             }
-            return consumeList;
+            return consumeList.Where(x => x.getTime() >= start && x.getTime() < end).Select( x => new int[] { x.getSkillID(), (int)x.getTime() }).ToList() ;
         }
         // Private Methods
         private void EstimateWeapons(SkillData s_data, CombatData c_data, BossData b_data, AgentData a_data)
@@ -493,7 +458,7 @@ namespace LuckParser.Models.ParseModels
         protected void setDamageTakenLog(long time, ushort instid, CombatItem c)
         {
             LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
-            if (instid == c.getSrcInstid() && c.getIFF().getEnum() == "FOE")
+            if (instid == c.getSrcInstid())
             {
                 if (state.getID() == 0)
                 {
@@ -501,10 +466,10 @@ namespace LuckParser.Models.ParseModels
                     {
                         //inco,ing condi dmg not working or just not present?
                         // damagetaken.Add(c.getBuffDmg());
+                        damageTaken_logs.Add(new DamageLogCondition(time, c));
                     }
                     else if (c.isBuff() == 0 && c.getValue() != 0)
                     {
-                        damagetaken.Add(c.getValue());
                         damageTaken_logs.Add(new DamageLogPower(time, c));
 
                     }
@@ -515,7 +480,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        protected virtual void setDamagetaken(BossData bossData, List<CombatItem> combatList, AgentData agentData,MechanicData m_data) {
+        protected virtual void setDamagetakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData,MechanicData m_data) {
             long time_start = bossData.getFirstAware();               
             foreach (CombatItem c in combatList) {
                 if (instid == c.getDstInstid()) {//selecting player as target
@@ -549,7 +514,7 @@ namespace LuckParser.Models.ParseModels
                 {
                    // if (c.isBuffremove().getID() == 0)
                     //{
-                        consumeList.Add(new int[] { c.getSkillID(), (int)time });
+                        consumeList.Add(c);
                    // }
                    
                    
@@ -585,9 +550,10 @@ namespace LuckParser.Models.ParseModels
                     boon_distribution[boonid] = new Dictionary<ushort, OverAndValue>();
                     BoonSimulator simulator = boon.getSimulator();
                     simulator.simulate(logs, dur);
-                    if (getDeath(combatList) > 0)
+                    long death = getDeath(combatList, bossData.getFirstAware(), bossData.getLastAware());
+                    if (death > 0)
                     {
-                        simulator.trim(getDeath(combatList) - bossData.getFirstAware());
+                        simulator.trim(death - bossData.getFirstAware());
                     } else
                     {
                         simulator.trim(dur);

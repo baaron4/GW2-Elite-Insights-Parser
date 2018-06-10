@@ -215,7 +215,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        protected override void setDamagetaken(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data)
+        protected override void setDamagetakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data)
         {
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)

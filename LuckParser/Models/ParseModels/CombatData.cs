@@ -23,23 +23,23 @@ namespace LuckParser.Models.ParseModels
             combat_list.Add(item);
         }
 
-        public List<Point> getStates(int src_instid, String change)
+        public List<CombatItem> getStates(int src_instid, String change, long start, long end)
         {
-            List<Point> states = new List<Point>();
-            foreach (CombatItem c in combat_list)
+            List<CombatItem> states = new List<CombatItem>();
+            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() < end))
             {
                 if (c.getSrcInstid() == src_instid && c.isStateChange().getEnum() == change)
                 {
-                    states.Add(new Point((int)c.getTime(), (int)c.getDstAgent()));
+                    states.Add(c);
                 }
             }
             return states;
         }
 
-        public int getSkillCount(int src_instid, int skill_id)
+        public int getSkillCount(int src_instid, int skill_id, long start, long end)
         {
             int count = 0;
-            foreach (CombatItem c in combat_list)
+            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() < end))
             {
                 if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
                 {
@@ -49,10 +49,10 @@ namespace LuckParser.Models.ParseModels
             }
             return count;
         }
-        public int getBuffCount(int src_instid, int skill_id)
+        public int getBuffCount(int src_instid, int skill_id, long start, long end)
         {
             int count = 0;
-            foreach (CombatItem c in combat_list)
+            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() < end))
             {
                 if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
                 {
