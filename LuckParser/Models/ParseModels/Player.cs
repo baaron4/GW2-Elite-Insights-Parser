@@ -159,7 +159,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (c.isActivation().getID() == 0)
                 {
-                    if (instid == c.getDstInstid() && c.getIFF().getEnum() == "FRIEND" && (c.isBuffremove().getID() == 2 || c.isBuffremove().getID() == 1)/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
+                    if (instid == c.getDstInstid() && c.getIFF().getEnum() == "FRIEND" && (c.isBuffremove().getID() == 1)/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
                     {
                         long time = c.getTime() - time_start;
                         if (time > 0)
