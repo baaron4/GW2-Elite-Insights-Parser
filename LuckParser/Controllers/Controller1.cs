@@ -3394,7 +3394,7 @@ namespace LuckParser.Controllers
                         {
                             if (autosCount > 0 && SnapSettings[11])
                             {
-                                sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + autoSkill.icon + "\" data-toggle=\"tooltip\" title= \"" + autoSkill.name + "[Auto Attack] x"+autosCount+ "ms \" height=\""+simpleRotSize+ "\" width=\"" + simpleRotSize + "\"></div></span>");
+                                sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + autoSkill.icon + "\" data-toggle=\"tooltip\" title= \"" + autoSkill.name + "[Auto Attack] x"+autosCount+ " \" height=\""+simpleRotSize+ "\" width=\"" + simpleRotSize + "\"></div></span>");
                                 autosCount = 0;
                             }
                             sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
@@ -6038,6 +6038,8 @@ namespace LuckParser.Controllers
         {
             switch (name)
             {
+                case "Question":
+                    return "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png";
                 case "Sword":
                     return "https://wiki.guildwars2.com/images/6/61/Sword_Proficiency.png";
                 case "Axe":
