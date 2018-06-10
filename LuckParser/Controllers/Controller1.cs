@@ -530,6 +530,8 @@ namespace LuckParser.Controllers
                         bossHealthOverTime = new List<long[]>();//reset boss health over time
                         xera_2_instid = NPC.getInstid();
                         boss_data.setHealth(24085950);
+                        boss.addPhaseData(boss_data.getLastAware());
+                        boss.addPhaseData(NPC.getFirstAware());
                         boss_data.setLastAware(NPC.getLastAware());
                         foreach (CombatItem c in combat_list)
                         {
@@ -574,7 +576,6 @@ namespace LuckParser.Controllers
                         {
                             if (c.getTime() > oldAware)
                             {
-                                int lol = c.isStateChange().getID();
                                 if (c.getSrcInstid() == deimos_2_instid)
                                 {
                                     c.setSrcInstid(boss_data.getInstid());
