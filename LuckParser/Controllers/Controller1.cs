@@ -1811,7 +1811,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<img src=\"" + GetLink(wep[0]) + " \" alt=\"" + wep[0] + "\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" +wep[0] + "\">");
             }
-            else
+            else if(wep[1] != null)
             {
                 sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Unknown\">");
             }
