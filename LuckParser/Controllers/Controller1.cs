@@ -2416,13 +2416,6 @@ namespace LuckParser.Controllers
                                     {
                                         avg_boons += boonPresence[boon.getID()];
                                     }
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-                                   
-=======
->>>>>>> fixed a bug where avg boons calculation would hang up, added Deimos phase detection
->>>>>>> fixed a bug where avg boons calculation would hang up, added Deimos phase detection
                                 }
                                 avg_boons /= fight_duration;
                                 sw.Write("<td data-toggle=\"tooltip\" title=\"Average number of boons: " + Math.Round(avg_boons,1) + "\">" + player.getCharacter().ToString() + " </td>");
