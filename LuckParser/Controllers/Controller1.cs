@@ -2764,17 +2764,18 @@ namespace LuckParser.Controllers
         /// <param name="settingsSnap">Settings to use</param>
         private void CreatePlayerTab(StreamWriter sw, bool[] settingsSnap, int phase_index)
         {
+            CombatData c_data = getCombatData();
+            BossData b_data = getBossData();
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
+            long start = phase.start + b_data.getFirstAware();
+            long end = phase.end + b_data.getFirstAware();
+            SkillData s_data = getSkillData();
+            List<SkillItem> s_list = s_data.getSkillList();
             //generate Player list Graphs
             foreach (Player p in p_list)
             {
-                CombatData c_data = getCombatData();
-                BossData b_data = getBossData();
-                PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
-                long start = phase.start + b_data.getFirstAware();
-                long end = phase.end + b_data.getFirstAware();
                 List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData()).Where( x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
-                SkillData s_data = getSkillData();
-                List<SkillItem> s_list = s_data.getSkillList();
+                
                 bool died = p.getDeath(getCombatData().getCombatList(), start, end) > 0;
                 string charname = p.getCharacter();
                 string pid = p.getInstid() + "_" + phase_index;
@@ -2807,7 +2808,7 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
                         {
-                            List<int[]> consume = p.getConsumablesList(b_data, s_data, c_data.getCombatList(), phase.start, phase.end);
+                            List<int[]> consume = p.getConsumablesList(b_data, s_data, c_data.getCombatList(), start, end);
                             List<int[]> initial = consume.Where(x => x[1] == 0).ToList();
                             List<int[]> refreshed = consume.Where(x => x[1] > 0).ToList();
                             if (initial.Count() > 0)
@@ -2928,7 +2929,7 @@ namespace LuckParser.Controllers
                                                 
                                                sw.Write(
                                                       "x: ['" + dur + "']," +
-                                                      "base:'" + cl.getTime() / 1000f + "'," +
+                                                      "base:'" + (cl.getTime() - phase.start) / 1000f + "'," +
                                                       "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
                                                       "orientation:'h'," +
                                                       "mode: 'markers'," +
@@ -3018,7 +3019,7 @@ namespace LuckParser.Controllers
                                                 sw.Write("{");
                                                 {
                                                     BoonsGraphModel bgm = boonGraphData[boonid];
-                                                    List<Point> bChart = bgm.getBoonChart();
+                                                    List<Point> bChart = bgm.getBoonChart().Where(x => x.X >= phase.start / 1000 && x.X < phase.end / 1000).ToList();
                                                     int bChartCount = 0;
                                                     sw.Write("y: [");
                                                     {
@@ -3047,11 +3048,11 @@ namespace LuckParser.Controllers
                                                         {
                                                             if (bChartCount == bChart.Count - 1)
                                                             {
-                                                                sw.Write("'" + pnt.X + "'");
+                                                                sw.Write("'" + (pnt.X - (int)phase.start / 1000) + "'");
                                                             }
                                                             else
                                                             {
-                                                                sw.Write("'" + pnt.X + "',");
+                                                                sw.Write("'" + (pnt.X - (int)phase.start / 1000) + "',");
                                                             }
                                                             bChartCount++;
                                                         }
@@ -3236,7 +3237,7 @@ namespace LuckParser.Controllers
                                                                      "source: '" + skillIcon + "'," +
                                                                      "xref: 'x'," +
                                                                      "yref: 'y'," +
-                                                                     "x: " + (cl.getTime() / 1000f) + "," +
+                                                                     "x: " + (cl.getTime() - phase.start) / 1000f + "," +
                                                                      "y: 0," +
                                                                      "sizex: 1.1," +
                                                                      "sizey: 1.1," +
@@ -3276,7 +3277,7 @@ namespace LuckParser.Controllers
                                                                   "source: '" + skillIcon + "'," +
                                                                   "xref: 'x'," +
                                                                   "yref: 'y'," +
-                                                                  "x: " + cl.getTime() / 1000f + "," +
+                                                                  "x: " + (cl.getTime() - phase.start) / 1000f + "," +
                                                                   "y: 0," +
                                                                   "sizex: 1.1," +
                                                                   "sizey: 1.1," +
@@ -4631,7 +4632,8 @@ namespace LuckParser.Controllers
             //generate Player list Graphs
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
-            List<CastLog> casting = boss.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
+            List<CastLog> casting = boss.getCastLogs(b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             string charname = boss.getCharacter();
@@ -4707,7 +4709,7 @@ namespace LuckParser.Controllers
 
                                     sw.Write(
                                            "x: ['" + dur + "']," +
-                                           "base:'" + cl.getTime() / 1000f + "'," +
+                                           "base:'" + (cl.getTime() - phase.start)/ 1000f + "'," +
                                            "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
                                            "orientation:'h'," +
                                            "mode: 'markers'," +
@@ -4794,7 +4796,7 @@ namespace LuckParser.Controllers
                                 {
                                    
                                     BoonsGraphModel bgm = boonGraphData[boonid];
-                                    List<Point> bChart = bgm.getBoonChart();
+                                    List<Point> bChart = bgm.getBoonChart().Where(x => x.X >= phase.start / 1000 && x.X < phase.end/1000).ToList();
                                     int bChartCount = 0;
                                     sw.Write("y: [");
                                     {
@@ -4823,11 +4825,11 @@ namespace LuckParser.Controllers
                                         {
                                             if (bChartCount == bChart.Count - 1)
                                             {
-                                                sw.Write("'" + pnt.X + "'");
+                                                sw.Write("'" + (pnt.X - (int)phase.start / 1000) + "'");
                                             }
                                             else
                                             {
-                                                sw.Write("'" + pnt.X + "',");
+                                                sw.Write("'" + (pnt.X - (int)phase.start / 1000) + "',");
                                             }
                                             bChartCount++;
                                         }
@@ -4942,7 +4944,7 @@ namespace LuckParser.Controllers
                                                       "source: '" + skillIcon + "'," +
                                                       "xref: 'x'," +
                                                       "yref: 'y'," +
-                                                      "x: " + (cl.getTime() / 1000f) + "," +
+                                                      "x: " + (cl.getTime() - phase.start) / 1000f + "," +
                                                       "y: 0," +
                                                       "sizex: 1.1," +
                                                       "sizey: 1.1," +
@@ -4979,7 +4981,7 @@ namespace LuckParser.Controllers
                                                       "source: '" + skillIcon + "'," +
                                                       "xref: 'x'," +
                                                       "yref: 'y'," +
-                                                      "x: " + cl.getTime() / 1000f + "," +
+                                                      "x: " + (cl.getTime() - phase.start) / 1000f + "," +
                                                       "y: 0," +
                                                       "sizex: 1.1," +
                                                       "sizey: 1.1," +
