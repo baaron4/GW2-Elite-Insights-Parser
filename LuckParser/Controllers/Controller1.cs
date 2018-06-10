@@ -2422,7 +2422,7 @@ namespace LuckParser.Controllers
                             }
                             foreach (Boon boon in list_to_use)
                             {
-                                if (boon.getType() == "intensity")
+                                if (boon.getType() == Boon.BoonType.Intensity)
                                 {
                                     intensityBoon.Add(count);
                                 }

@@ -155,11 +155,11 @@ namespace LuckParser.Models.ParseModels
         public int[] getCleanses(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
             long time_start = bossData.getFirstAware();
             int[] cleanse = { 0, 0 };
-            foreach (CombatItem c in combatList.Where(x=>x.isStateChange().getID() == 0))
+            foreach (CombatItem c in combatList.Where(x=>x.isStateChange().getID() == 0 && x.isBuff() == 1))
             {
                 if (c.isActivation().getID() == 0)
                 {
-                    if (instid == c.getSrcInstid() && c.getIFF().getEnum() == "FRIEND" && c.isBuffremove().getID() == 1/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
+                    if (instid == c.getDstInstid() && c.getIFF().getEnum() == "FRIEND" && (c.isBuffremove().getID() == 2 || c.isBuffremove().getID() == 1)/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
                     {
                         long time = c.getTime() - time_start;
                         if (time > 0)
@@ -681,8 +681,8 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 long time = c.getTime() - time_start;
-
-                if (instid == c.getDstInstid() && time >= 0 && time <= fight_duration)
+                ushort dst = c.isBuffremove().getID() == 0 ? c.getDstInstid() : c.getSrcInstid();
+                if (instid == dst && time >= 0 && time <= fight_duration)
                 {
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                     if (c.isBuffremove().getID() == 0)
