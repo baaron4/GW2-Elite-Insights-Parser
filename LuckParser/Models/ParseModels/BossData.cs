@@ -107,6 +107,11 @@ namespace LuckParser.Models.ParseModels
             return last_aware;
         }
 
+        public long getAwareDuration()
+        {
+            return last_aware - first_aware;
+        }
+
         public ushort getID()
         {
             return id;

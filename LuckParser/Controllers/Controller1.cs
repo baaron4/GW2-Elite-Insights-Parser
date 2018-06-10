@@ -737,7 +737,7 @@ namespace LuckParser.Controllers
                 }
             }        
         }
-        private String getFinalDPS(Player p, int phase_index)
+        private String getFinalDPS(AbstractPlayer p, int phase_index)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
@@ -761,7 +761,7 @@ namespace LuckParser.Controllers
             double dps = 0.0;
             // All DPS
             
-            damage = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).Sum(x => x.getDamage());//p.getDamageLogs(b_data, c_data.getCombatList()).stream().mapToDouble(DamageLog::getDamage).sum();
+            damage = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData(), phase.start, phase.end).Sum(x => x.getDamage());//p.getDamageLogs(b_data, c_data.getCombatList()).stream().mapToDouble(DamageLog::getDamage).sum();
             if (fight_duration > 0)
             {
                 dps = damage / fight_duration;
@@ -769,7 +769,7 @@ namespace LuckParser.Controllers
             totalAll_dps = (int)dps;
             totalAll_damage = (int)damage;
             //Allcondi
-            damage = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Where(x => x.isCondi() > 0 && x.getTime() >= phase.start && x.getTime() < phase.end).Sum(x => x.getDamage());
+            damage = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData(), phase.start, phase.end).Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
             if (fight_duration > 0)
             {
                 dps = damage / fight_duration;
@@ -786,7 +786,7 @@ namespace LuckParser.Controllers
             totalAllphys_damage = (int)damage;
 
             // boss DPS
-            damage = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).Sum(x => x.getDamage());//p.getDamageLogs(b_data, c_data.getCombatList()).stream().mapToDouble(DamageLog::getDamage).sum();
+            damage = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData(), phase.start, phase.end).Sum(x => x.getDamage());//p.getDamageLogs(b_data, c_data.getCombatList()).stream().mapToDouble(DamageLog::getDamage).sum();
             if (fight_duration > 0)
             {
                 dps = damage / fight_duration;
@@ -794,7 +794,7 @@ namespace LuckParser.Controllers
             totalboss_dps = (int)dps;
             totalboss_damage = (int)damage;
             //bosscondi
-            damage = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Where(x => x.isCondi() > 0 && x.getTime() >= phase.start && x.getTime() < phase.end).Sum(x => x.getDamage());
+            damage = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData(), phase.start, phase.end).Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
             if (fight_duration > 0)
             {
                 dps = damage / fight_duration;
@@ -821,8 +821,8 @@ namespace LuckParser.Controllers
             PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
             long start = phase.start + b_data.getFirstAware();
             long end = phase.end + b_data.getFirstAware();
-            List<DamageLog> damage_logs = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
-            List<CastLog> cast_logs = p.getCastLogs( b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
+            List<DamageLog> damage_logs = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData(), phase.start, phase.end);
+            List<CastLog> cast_logs = p.getCastLogs( b_data, c_data.getCombatList(), getAgentData(), phase.start, phase.end);
             int instid = p.getInstid();
 
             // Rates
@@ -965,7 +965,7 @@ namespace LuckParser.Controllers
             PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
             long start = phase.start + b_data.getFirstAware();
             long end = phase.end + b_data.getFirstAware();
-            List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(),getMechData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
+            List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(),getMechData(), phase.start, phase.end);
             int instid = p.getInstid();
 
             int damagetaken = damage_logs.Select(x => x.getDamage()).Sum();
@@ -1034,8 +1034,8 @@ namespace LuckParser.Controllers
             int condiCleanse = 0;
             double condiCleansetime = 0.0;
 
-            int[] resArray = p.getReses(b_data, c_data.getCombatList(), getAgentData(), start, end);
-            int[] cleanseArray = p.getCleanses(b_data, c_data.getCombatList(), getAgentData(), start, end);
+            int[] resArray = p.getReses(b_data, c_data.getCombatList(), getAgentData(), phase.start, phase.end);
+            int[] cleanseArray = p.getCleanses(b_data, c_data.getCombatList(), getAgentData(), phase.start, phase.end);
             resurrects = resArray[0];
             restime = resArray[1];
             condiCleanse = cleanseArray[0];
@@ -1123,7 +1123,7 @@ namespace LuckParser.Controllers
             }
             return rates;
         }
-        private Dictionary<int, string> getfinalcondis(Player p)
+        private Dictionary<int, string> getfinalcondis(AbstractPlayer p)
         {
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
@@ -1167,7 +1167,7 @@ namespace LuckParser.Controllers
                 {
                     mech_data.AddItem(new MechanicLog((long)((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
                 }
-                List<DamageLog> dls = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data, mech_data);
+                List<DamageLog> dls = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data, mech_data, 0, boss_data.getAwareDuration());
                 //Player hit by skill 3
                 MechanicLog prevMech = null;
                 foreach (DamageLog dLog in dls)
@@ -1235,23 +1235,18 @@ namespace LuckParser.Controllers
 
         }
         //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
-        //Methods that make it easier to create Javascript graphs
-        /// <summary>
-        /// Gets the points for the boss dps graph for a given player
-        /// </summary>
-        /// <param name="p">The player</param>
-        /// <returns></returns>
-        private List<int[]> getBossDPSGraph(Player p, int phase_index)
+        //Methods that make it easier to create Javascript graphs      
+        private List<int[]> getDPSGraph(AbstractPlayer p, int phase_index, ushort dstid)
         {
-            List<int[]> bossdmgList = new List<int[]>();
+            List<int[]> dmgList = new List<int[]>();
             BossData b_data = getBossData();
             CombatData c_data = getCombatData();
             PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
-            List<DamageLog> damage_logs_boss = p.getDamageLogs(b_data.getInstid(), b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
+            List<DamageLog> damage_logs = p.getDamageLogs(dstid, b_data, c_data.getCombatList(), getAgentData(), phase.start, phase.end).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
             int totaldmg = 0;
 
             int timeGraphed = (int)phase.start;
-            foreach (DamageLog log in damage_logs_boss)
+            foreach (DamageLog log in damage_logs)
             {
 
                 totaldmg += log.getDamage();
@@ -1267,13 +1262,13 @@ namespace LuckParser.Controllers
                         if ((Math.Floor(time / 1000f) - timeGraphed) < 2)
                         {
                             timeGraphed = (int)Math.Floor(time / 1000f);
-                            bossdmgList.Add(new int[] { (int)time / 1000, (int)(totaldmg / (time / 1000f)) });
+                            dmgList.Add(new int[] { (int)time / 1000, (int)(totaldmg / (time / 1000f)) });
                         }
                         else
                         {
                             int gap = (int)Math.Floor(time / 1000f) - timeGraphed;
                             bool startOfFight = true;
-                            if (bossdmgList.Count > 0)
+                            if (dmgList.Count > 0)
                             {
                                 startOfFight = false;
                             }
@@ -1283,11 +1278,11 @@ namespace LuckParser.Controllers
                                 timeGraphed++;
                                 if (!startOfFight)
                                 {
-                                    bossdmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
+                                    dmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
                                 }
                                 else
                                 {//hasnt hit boss yet gap
-                                    bossdmgList.Add(new int[] { timeGraphed, 0 });
+                                    dmgList.Add(new int[] { timeGraphed, 0 });
                                 }
 
                             }
@@ -1295,63 +1290,25 @@ namespace LuckParser.Controllers
                     }
                 }
             }
-            return bossdmgList;
+            return dmgList;
+        }
+        /// <summary>
+        /// Gets the points for the boss dps graph for a given player
+        /// </summary>
+        /// <param name="p">The player</param>
+        /// <returns></returns>
+        private List<int[]> getBossDPSGraph(AbstractPlayer p, int phase_index)
+        {
+            return getDPSGraph(p, phase_index, getBossData().getInstid());
         }
         /// <summary>
         /// Gets the points for the total dps graph for a given player
         /// </summary>
         /// <param name="p">The player</param>
         /// <returns></returns>
-        private List<int[]> getTotalDPSGraph(Player p, int phase_index)
+        private List<int[]> getTotalDPSGraph(AbstractPlayer p, int phase_index)
         {
-            BossData b_data = getBossData();
-            CombatData c_data = getCombatData();
-            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
-            List<int[]> totaldmgList = new List<int[]>();
-            List<DamageLog> damage_logs_all = p.getDamageLogs(0, b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
-            int totaldmg = 0;
-            int timeGraphed = (int) phase.start;
-            foreach (DamageLog log in damage_logs_all)
-            {
-                totaldmg += log.getDamage();
-                long time = log.getTime();
-                if (time > 1000)
-                {
-                    
-                    // to reduce processing time only graph 1 point per sec
-                    if (Math.Floor(time / 1000f) > timeGraphed)
-                    {
-                        if ((Math.Floor(time / 1000f) - timeGraphed) < 2)
-                        {
-                            timeGraphed = (int)Math.Floor(time / 1000f);
-                            totaldmgList.Add(new int[] { (int)time / 1000, (int)(totaldmg / (time / 1000f)) });
-                        }
-                        else
-                        {
-                            int gap = (int)Math.Floor(time / 1000f) - timeGraphed;
-                            bool startOfFight = true;
-                            if (totaldmgList.Count > 0)
-                            {
-                                startOfFight = false;
-                            }
-                            for (int itr = 0; itr < gap - 1; itr++)
-                            {
-                                timeGraphed++;
-                               // totaldmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
-                                if (!startOfFight)
-                                {
-                                    totaldmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
-                                }
-                                else
-                                {//hasnt hit boss yet gap
-                                    totaldmgList.Add(new int[] { timeGraphed, 0 });
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return totaldmgList;
+            return getDPSGraph(p, phase_index, 0);
         }
         /// <summary>
         /// Creates the dps graph
@@ -2774,9 +2731,9 @@ namespace LuckParser.Controllers
             //generate Player list Graphs
             foreach (Player p in p_list)
             {
-                List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData()).Where( x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
-                
-                bool died = p.getDeath(getCombatData().getCombatList(), start, end) > 0;
+                List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData(), phase.start, phase.end);
+
+                bool died = p.getDeath(b_data, c_data.getCombatList(), phase.start, phase.end) > 0;
                 string charname = p.getCharacter();
                 string pid = p.getInstid() + "_" + phase_index;
                 sw.Write("<div class=\"tab-pane fade\" id=\"" + pid + "\">");
@@ -2808,7 +2765,7 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
                         {
-                            List<int[]> consume = p.getConsumablesList(b_data, s_data, c_data.getCombatList(), start, end);
+                            List<int[]> consume = p.getConsumablesList(b_data, s_data, c_data.getCombatList(), phase.start, phase.end);
                             List<int[]> initial = consume.Where(x => x[1] == 0).ToList();
                             List<int[]> refreshed = consume.Where(x => x[1] > 0).ToList();
                             if (initial.Count() > 0)
@@ -3401,7 +3358,7 @@ namespace LuckParser.Controllers
                 CombatData c_data = getCombatData();
                 BossData b_data = getBossData();
                 PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
-                List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
+                List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData(), phase.start, phase.end);
                 GW2APISkill autoSkill = null;
                 int autosCount = 0;
                 foreach (CastLog cl in casting)
@@ -3492,10 +3449,10 @@ namespace LuckParser.Controllers
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             AgentData a_data = getAgentData();
-            List<DamageLog> damageLogs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(), getMechData());
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data)[phase_index];
+            List<DamageLog> damageLogs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(), getMechData(), phase.start, phase.end);
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
-            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data)[phase_index];
             long start = phase.start + b_data.getFirstAware();
             long end = phase.end + b_data.getFirstAware();
             List<CombatItem> down = getCombatData().getStates(p.getInstid(), "CHANGE_DOWN", start, end);
@@ -3661,13 +3618,13 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="p">The player</param>
-        private void CreateDMGDistTable(StreamWriter sw, Player p, bool toBoss, int phase_index)
+        private void CreateDMGDistTable(StreamWriter sw, AbstractPlayer p, bool toBoss, int phase_index)
         {
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
-            List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData()).Where( x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
-            List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(toBoss ? b_data.getInstid() : 0, b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
+            List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData(), phase.start, phase.end);
+            List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(toBoss ? b_data.getInstid() : 0, b_data, c_data.getCombatList(), getAgentData(), phase.start, phase.end);
             int totalDamage = toBoss ? Int32.Parse(getFinalDPS(p, phase_index).Split('|')[7]) : Int32.Parse(getFinalDPS(p, phase_index).Split('|')[1]);
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
             if (totalDamage > 0)
@@ -4054,7 +4011,7 @@ namespace LuckParser.Controllers
         /// <param name="p">Player, master of the minion</param>
         /// <param name="damageLogs">Damage logs to use</param>
         /// <param name="agent">The minion</param>
-        private void CreateDMGDistTable(StreamWriter sw, Player p, AgentItem agent, bool toBoss, int phase_index)
+        private void CreateDMGDistTable(StreamWriter sw, AbstractPlayer p, AgentItem agent, bool toBoss, int phase_index)
         {
             int totalDamage = toBoss ? Int32.Parse(getFinalDPS(p, phase_index).Split('|')[7]) : Int32.Parse(getFinalDPS(p, phase_index).Split('|')[1]);
             string tabid = p.getInstid() +"_"+phase_index + "_" + agent.getInstid() + (toBoss ? "_boss" : "");
@@ -4263,7 +4220,7 @@ namespace LuckParser.Controllers
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
-            List<DamageLog> damageLogs = p.getDamageTakenLogs( b_data, c_data.getCombatList(), getAgentData(),getMechData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
+            List<DamageLog> damageLogs = p.getDamageTakenLogs( b_data, c_data.getCombatList(), getAgentData(),getMechData(), phase.start, phase.end);
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
@@ -4588,7 +4545,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="boss">The boss</param>
-        private void CreateCondiUptimeTable(StreamWriter sw,Player boss, int phase_index)
+        private void CreateCondiUptimeTable(StreamWriter sw,Boss boss, int phase_index)
         {
             //Generate Boon table------------------------------------------------------------------------------------------------
             sw.Write("<script> $(function () { $('#condi_table"+ phase_index+"').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
@@ -4634,7 +4591,7 @@ namespace LuckParser.Controllers
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), getAgentData())[phase_index];
-            List<CastLog> casting = boss.getCastLogs(b_data, c_data.getCombatList(), getAgentData()).Where(x => x.getTime() >= phase.start && x.getTime() < phase.end).ToList();
+            List<CastLog> casting = boss.getCastLogs(b_data, c_data.getCombatList(), getAgentData(), phase.start, phase.end);
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
             string charname = boss.getCharacter();
@@ -5573,7 +5530,7 @@ namespace LuckParser.Controllers
 
             CombatData c_data = getCombatData();
             
-            List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
+            List<CastLog> casting = p.getCastLogs(b_data, c_data.getCombatList(), getAgentData(), 0, b_data.getAwareDuration());
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
 

@@ -84,6 +84,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\ParseModels\AbstractPlayer.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonsGraphModel.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonDistribution.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItem.cs" />

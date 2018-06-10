@@ -5,7 +5,7 @@ using System.Web;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class Boss : Player
+    public class Boss : AbstractPlayer
     {
         
         public struct PhaseData
@@ -51,6 +51,7 @@ namespace LuckParser.Models.ParseModels
             string name = getCharacter();
             long start = 0;
             long end = 0;
+            getCastLogs(bossData, combatList, agentData, 0, fight_dur);
             switch (name)
             {
                 case "Vale Guardian":
@@ -65,19 +66,19 @@ namespace LuckParser.Models.ParseModels
                             phases.Add(new PhaseData(start, end));
                             if (i == invulsVG.Count - 1)
                             {
-                                getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -5, (int)(fight_dur - end), new ParseEnums.Activation(0), (int)(fight_dur - end), new ParseEnums.Activation(0)));
+                                cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), new ParseEnums.Activation(0), (int)(fight_dur - end), new ParseEnums.Activation(0)));
                             }
                         }
                         else
                         {
                             start = c.getTime() - bossData.getFirstAware();
-                            getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                            cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
                         }
                     }
                     break;
                 case "Gorseval the Multifarious":
                     // Ghostly protection check
-                    List<CastLog> clsG = getCastLogs(bossData, combatList, agentData).Where(x => x.getID() == 31759).ToList();
+                    List<CastLog> clsG = cast_logs.Where(x => x.getID() == 31759).ToList();
                     foreach (CastLog cl in clsG)
                     {
                         end = cl.getTime();
@@ -97,13 +98,13 @@ namespace LuckParser.Models.ParseModels
                             phases.Add(new PhaseData(start, end));
                             if (i == invulsSab.Count - 1)
                             {
-                                getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -5, (int)(fight_dur - end), new ParseEnums.Activation(0), (int)(fight_dur - end), new ParseEnums.Activation(0)));
+                                cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), new ParseEnums.Activation(0), (int)(fight_dur - end), new ParseEnums.Activation(0)));
                             }
                         }
                         else
                         {
                             start = c.getTime() - bossData.getFirstAware();
-                            getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                            cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
                         }
                     }
                     break;
@@ -118,7 +119,7 @@ namespace LuckParser.Models.ParseModels
                         if (down_pour != null)
                         {
                             phase_starts.Add(down_pour.getTime() - bossData.getFirstAware());
-                            CastLog abo = getCastLogs(bossData, combatList, agentData).Find(x => x.getID() == 34427);
+                            CastLog abo = cast_logs.Find(x => x.getID() == 34427);
                             if (abo != null)
                             {
                                 phase_starts.Add(abo.getTime());
@@ -139,7 +140,7 @@ namespace LuckParser.Models.ParseModels
                         end = phaseData[0] - bossData.getFirstAware();
                         phases.Add(new PhaseData(start, end));
                         start = phaseData[1] - bossData.getFirstAware();
-                        getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));                       
+                        cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));                       
                     }
                     break;
                 case "Samarog":
@@ -170,13 +171,13 @@ namespace LuckParser.Models.ParseModels
                             phases.Add(new PhaseData(start, end));
                             if (i == invulsSamFiltered.Count - 1)
                             {
-                                getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -5, (int)(fight_dur - end), new ParseEnums.Activation(0), (int)(fight_dur - end), new ParseEnums.Activation(0)));
+                                cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), new ParseEnums.Activation(0), (int)(fight_dur - end), new ParseEnums.Activation(0)));
                             }
                         }
                         else
                         {
                             start = c.getTime() - bossData.getFirstAware();
-                            getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                            cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
                         }
                     }
                     break;
@@ -188,7 +189,7 @@ namespace LuckParser.Models.ParseModels
                         end = invulDei.getTime() - bossData.getFirstAware();
                         phases.Add(new PhaseData(start, end));
                         start = (phaseData.Count == 1 ? phaseData[0] : fight_dur) - bossData.getFirstAware();
-                        getCastLogs(bossData, combatList, agentData).Add(new CastLog(end, -6, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                        cast_logs.Add(new CastLog(end, -6, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
                     }
                     break;
                 default:
