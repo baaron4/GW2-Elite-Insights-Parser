@@ -283,7 +283,7 @@ namespace LuckParser.Models.ParseModels
                 //Traits
                 new Boon("Laser's Edge",44414, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
                 new Boon("Afterburner",42210, BoonSource.Engineer, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
-                new Boon("Iron Blooded",49065, BoonSource.Engineer, BoonType.Intensity, 25, BoonEnum.GraphOnlyBuff),
+                new Boon("Iron Blooded",49065, BoonSource.Engineer, BoonType.Intensity, 25, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
                 new Boon("Streamlined Kits",18687, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
                 new Boon("Kinetic Charge",45781, BoonSource.Engineer, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
                 new Boon("Pinpoint Distribution", 38333, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable, "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png"),
