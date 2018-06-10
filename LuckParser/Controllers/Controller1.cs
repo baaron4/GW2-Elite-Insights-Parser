@@ -1030,11 +1030,11 @@ namespace LuckParser.Controllers
                 string rate = "0";
                 if (boon_distrib.ContainsKey(boon.getID()))
                 {
-                    if (boon.getType().Equals("duration"))
+                    if (boon.getType() == Boon.BoonType.Duration)
                     {
                         rate = Math.Round(100.0 * boon_distrib.getUptime(boon.getID()) / fight_duration, 1) + "%";
                     }
-                    else if (boon.getType().Equals("intensity"))
+                    else if (boon.getType() == Boon.BoonType.Intensity)
                     {
                         rate = Math.Round((double)boon_distrib.getUptime(boon.getID()) / fight_duration, 1).ToString();
                     }
@@ -1077,14 +1077,14 @@ namespace LuckParser.Controllers
                 totaloverstack += total;
                 if (total > 0)
                 {
-                    if (boon.getType().Equals("duration"))
+                    if (boon.getType() == Boon.BoonType.Duration)
                     {
                         rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" 
                             + Math.Round(100.0 * totaloverstack / fight_duration / trgetPlayers.Count, 1) + "% with overstack \">" 
                             + Math.Round(100.0 * total / fight_duration / trgetPlayers.Count, 1) 
                             + "%</span>";
                     }
-                    else if (boon.getType().Equals("intensity"))
+                    else if (boon.getType() == Boon.BoonType.Intensity)
                     {
                         rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" 
                             + Math.Round((double)totaloverstack / fight_duration / trgetPlayers.Count, 1).ToString() + " with overstack \">" 
@@ -1110,12 +1110,12 @@ namespace LuckParser.Controllers
                 if (boon_distrib.ContainsKey(boon.getID()))
                 {
                     string rate = "0";
-                    if (boon.getType().Equals("duration"))
+                    if (boon.getType() == Boon.BoonType.Duration)
                     {
                         long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
                         rate = Math.Round(100.0 * boon_distrib.getUptime(boon.getID()) / fight_duration, 1) + "%";
                     }
-                    else if (boon.getType().Equals("intensity"))
+                    else if (boon.getType() == Boon.BoonType.Intensity)
                     {
                         long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
                         rate = Math.Round((double)boon_distrib.getUptime(boon.getID()) / fight_duration, 1).ToString();
