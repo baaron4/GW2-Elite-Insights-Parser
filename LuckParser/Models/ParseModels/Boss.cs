@@ -46,7 +46,7 @@ namespace LuckParser.Models.ParseModels
         // Private Methods
         private void setPhases(BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
-            long fight_dur = bossData.getLastAware() - bossData.getFirstAware();
+            long fight_dur = bossData.getAwareDuration();
             phases.Add(new PhaseData(0, fight_dur));
             string name = getCharacter();
             long start = 0;
@@ -191,6 +191,25 @@ namespace LuckParser.Models.ParseModels
                         phases.Add(new PhaseData(start, end));
                         start = (phaseData.Count == 1 ? phaseData[0] : fight_dur) - bossData.getFirstAware();
                         cast_logs.Add(new CastLog(end, -6, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                    }
+                    break;
+                case "Dhuum":
+                    if (fight_dur > 120000)
+                    {
+                        end = 120000;
+                        phases.Add(new PhaseData(start, end));
+                        start = end + 1;
+                        CastLog shield = cast_logs.Find(x => x.getID() == 47396);
+                        if (shield != null)
+                        {
+                            end = shield.getTime();
+                            phases.Add(new PhaseData(start, end));
+                            start = shield.getTime() + shield.getActDur();
+                            if (start < fight_dur - 5000)
+                            {
+                                phases.Add(new PhaseData(start, fight_dur));
+                            }
+                        }
                     }
                     break;
                 default:
