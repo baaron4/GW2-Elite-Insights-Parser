@@ -1984,7 +1984,7 @@ namespace LuckParser.Controllers
             //generate Player list Graphs
             foreach (Player p in p_list)
             {
-                List<CastLog> casting = p.getCastLogs(boss_data, combat_data.getCombatList(), agent_data, phase.start, phase.end);
+                List<CastLog> casting = p.getCastLogsActDur(boss_data, combat_data.getCombatList(), agent_data, phase.start, phase.end);
 
                 bool died = p.getDeath(boss_data, combat_data.getCombatList(), phase.start, phase.end) > 0;
                 string charname = p.getCharacter();
@@ -3288,7 +3288,7 @@ namespace LuckParser.Controllers
         {
             //generate Player list Graphs
             PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
-            List<CastLog> casting = boss.getCastLogs(boss_data, combat_data.getCombatList(), agent_data, phase.start, phase.end);
+            List<CastLog> casting = boss.getCastLogsActDur(boss_data, combat_data.getCombatList(), agent_data, phase.start, phase.end);
             List<SkillItem> s_list = skill_data.getSkillList();
             string charname = boss.getCharacter();
             string pid = boss.getInstid() + "_" + phase_index;
@@ -4041,7 +4041,7 @@ namespace LuckParser.Controllers
         {
             double fight_duration = (boss_data.getAwareDuration()) / 1000.0;
             Player p = p_list[0];               
-            List<CastLog> casting = p.getCastLogs(boss_data, combat_data.getCombatList(), agent_data, 0, boss_data.getAwareDuration());
+            List<CastLog> casting = p.getCastLogsActDur(boss_data, combat_data.getCombatList(), agent_data, 0, boss_data.getAwareDuration());
             List<SkillItem> s_list = skill_data.getSkillList();
 
             CreateDPSTable(sw, 0);

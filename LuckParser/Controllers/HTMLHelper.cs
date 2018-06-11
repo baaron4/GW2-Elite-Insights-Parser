@@ -528,14 +528,21 @@ namespace LuckParser.Controllers
                 dur = cl.getActDur() / 1000f;
             }
             skillName = skillName.Replace("\"", "");
+            float offset = (cl.getTime() - start) / 1000f;
+            float xVal = dur;
+            if (offset < 0.0f)
+            {
+                xVal += offset;
+            }
+            xVal = Math.Min(dur, (end - cl.getTime()) / 1000f);
             sw.Write("{");
             {
 
                 sw.Write("y: ['1.5'],");
 
                 sw.Write(
-                       "x: ['" + Math.Min(dur, (end - cl.getTime()) / 1000f) + "']," +
-                       "base:'" + (cl.getTime() - start) / 1000f + "'," +
+                       "x: ['" + xVal + "']," +
+                       "base:'" + Math.Max(offset,0.0f) + "'," +
                        "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
                        "orientation:'h'," +
                        "mode: 'markers'," +
@@ -618,6 +625,7 @@ namespace LuckParser.Controllers
             }
             if (skill != null && cl.getID() != -2)
             {
+                float offset = (cl.getTime() - start) / 1000f;
                 if (skill.slot != "Weapon_1")
                 {
                     skillIcon = skill.icon;
@@ -625,7 +633,7 @@ namespace LuckParser.Controllers
                                  "source: '" + skillIcon + "'," +
                                  "xref: 'x'," +
                                  "yref: 'y'," +
-                                 "x: " + (cl.getTime() - start) / 1000f + "," +
+                                 "x: " + Math.Max(offset, 0.0f) + "," +
                                  "y: 0," +
                                  "sizex: 1.1," +
                                  "sizey: 1.1," +

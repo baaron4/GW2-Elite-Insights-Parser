@@ -114,6 +114,16 @@ namespace LuckParser.Models.ParseModels
             return cast_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
 
         }
+
+        public List<CastLog> getCastLogsActDur(BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)
+        {
+            if (cast_logs.Count == 0)
+            {
+                setCastLogs(bossData, combatList, agentData);
+            }
+            return cast_logs.Where(x => x.getTime() + x.getActDur() >= start && x.getTime() <= end).ToList();
+
+        }
         public Dictionary<AgentItem, List<DamageLog>> getMinionsDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
             if (minion_damage_logs.Count == 0)
