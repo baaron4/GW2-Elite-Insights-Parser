@@ -1717,11 +1717,11 @@ namespace LuckParser.Controllers
                 {
                     if (hotCount == BossHOT.Count - 1)
                     {
-                        sw.Write("'" + (dp[1] / 10000f) * maxDPS + "'");
+                        sw.Write("'" + ((dp[1] / 10000f) * maxDPS).ToString().Replace(',','.') + "'");
                     }
                     else
                     {
-                        sw.Write("'" + (dp[1] / 10000f) * maxDPS + "',");
+                        sw.Write("'" + ((dp[1] / 10000f) * maxDPS).ToString().Replace(',', '.') + "',");
                     }
                     hotCount++;
 
@@ -1755,11 +1755,11 @@ namespace LuckParser.Controllers
                 {
                     if (hotCount == BossHOT.Count - 1)
                     {
-                        sw.Write("'" + dp[0] / 1000f + "'");
+                        sw.Write("'" + (dp[0] / 1000).ToString().Replace(',','.') + "'");
                     }
                     else
                     {
-                        sw.Write("'" + dp[0] / 1000f + "',");
+                        sw.Write("'" + (dp[0] / 1000).ToString().Replace(',', '.') + "',");
                     }
 
                     hotCount++;
@@ -2094,7 +2094,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[1]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//crit
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[2] + " out of " + stats[0] + " hits <br> Pure Scholar Damage: " + stats[19] + "<br> Effective Damage Increase: " + (int)(Double.Parse(stats[19]) / Double.Parse(stats[20]) * 100) + "% \">" + (int)(Double.Parse(stats[2]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//scholar
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[2] + " out of " + stats[0] + " hits <br> Pure Scholar Damage: " + stats[19] + "<br> Effective Damage Increase: " + Math.Round((Double.Parse(stats[19]) / Double.Parse(stats[20]) * 100),3) + "% \">" + (int)(Double.Parse(stats[2]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//scholar
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[3]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//sws
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[4] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[4]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//flank
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[10] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[10]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//glance
