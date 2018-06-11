@@ -1,6 +1,6 @@
 ﻿namespace LuckParser
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
@@ -140,11 +140,11 @@
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(158, 343);
+            this.label2.Location = new System.Drawing.Point(169, 343);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(82, 13);
+            this.label2.Size = new System.Drawing.Size(40, 13);
             this.label2.TabIndex = 13;
-            this.label2.Text = "Program Status:";
+            this.label2.Text = "Status:";
             // 
             // label3
             // 
@@ -152,9 +152,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(158, 317);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(74, 13);
+            this.label3.Size = new System.Drawing.Size(51, 13);
             this.label3.TabIndex = 14;
-            this.label3.Text = "Current Parse:";
+            this.label3.Text = "Progress:";
             this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // settingsbtn
@@ -179,7 +179,7 @@
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -196,7 +196,7 @@
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "GW2 Elite Insights Parser";
             this.TransparencyKey = System.Drawing.Color.OrangeRed;
             this.Load += new System.EventHandler(this.Form1_Load);

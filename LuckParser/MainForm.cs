@@ -16,7 +16,7 @@ public delegate void Cancellation(int i, DoWorkEventArgs e);
 
 namespace LuckParser
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
 
         BackgroundWorker m_oWorker;
@@ -25,7 +25,7 @@ namespace LuckParser
         bool completedOp = false;
         List<string> paths = new List<string>();// Environment.CurrentDirectory + "/" + "parsedhtml.html";
         Controller1 controller = new Controller1();
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
@@ -47,7 +47,7 @@ namespace LuckParser
 
         }
 
-        public Form1(string[] args)
+        public MainForm(string[] args)
         {
             InitializeComponent();
             listView1_AddItems(args);

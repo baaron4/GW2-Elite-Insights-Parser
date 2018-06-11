@@ -147,9 +147,9 @@
             this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox5.Location = new System.Drawing.Point(43, 191);
             this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(228, 17);
+            this.checkBox5.Size = new System.Drawing.Size(224, 17);
             this.checkBox5.TabIndex = 7;
-            this.checkBox5.Text = "Show Important Profession specefic Boons";
+            this.checkBox5.Text = "Show Important Profession specific Boons";
             this.checkBox5.UseVisualStyleBackColor = true;
             this.checkBox5.CheckedChanged += new System.EventHandler(this.checkBox5_CheckedChanged);
             // 
@@ -158,9 +158,9 @@
             this.checkBox6.AutoSize = true;
             this.checkBox6.Location = new System.Drawing.Point(43, 214);
             this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(195, 17);
+            this.checkBox6.Size = new System.Drawing.Size(191, 17);
             this.checkBox6.TabIndex = 8;
-            this.checkBox6.Text = "Show All Profession specefic Boons";
+            this.checkBox6.Text = "Show All Profession specific Boons";
             this.checkBox6.UseVisualStyleBackColor = true;
             this.checkBox6.CheckedChanged += new System.EventHandler(this.checkBox6_CheckedChanged);
             // 
@@ -204,9 +204,9 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(27, 13);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(240, 13);
+            this.label5.Size = new System.Drawing.Size(245, 13);
             this.label5.TabIndex = 12;
-            this.label5.Text = "*Settings will not alter file in the middle of parseing";
+            this.label5.Text = "*Settings will not alter files in the middle of parseing";
             // 
             // label6
             // 
@@ -264,9 +264,9 @@
             this.checkBox9.AutoSize = true;
             this.checkBox9.Location = new System.Drawing.Point(27, 479);
             this.checkBox9.Name = "checkBox9";
-            this.checkBox9.Size = new System.Drawing.Size(174, 17);
+            this.checkBox9.Size = new System.Drawing.Size(177, 17);
             this.checkBox9.TabIndex = 18;
-            this.checkBox9.Text = "Show Event List(for debugging)";
+            this.checkBox9.Text = "Show Event List (for debugging)";
             this.checkBox9.UseVisualStyleBackColor = true;
             this.checkBox9.CheckedChanged += new System.EventHandler(this.checkBox9_CheckedChanged);
             // 
