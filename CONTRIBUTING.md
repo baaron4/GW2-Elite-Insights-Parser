@@ -24,7 +24,7 @@ all boons can be added to private static List<Boon> allBoons
   
  * source an enum on BoonSource indicating from which class the boon originates (MIXED in doubt)
   
- * type: either "duration" ex: switness or "intensity" ex:might
+ * type: either BoonType.Duration ex: switness or BoonType.Intensity ex:might
   
  * capacity: both types have a max stacks. If unsure about duration go with 1
  

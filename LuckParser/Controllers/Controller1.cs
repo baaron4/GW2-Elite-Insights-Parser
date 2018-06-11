@@ -11,6 +11,7 @@ using System.Net;
 using LuckParser.Models;
 using System.IO.Compression;
 using System.Windows.Forms;
+using static LuckParser.Models.ParseModels.Boss;
 //recomend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {
@@ -117,7 +118,7 @@ namespace LuckParser.Controllers
             }
             return "UNKNOWN";
         }
-        private String FilterStringChars(string str)
+        private static String FilterStringChars(string str)
         {
             string filtered = "";
             string filter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
@@ -139,6 +140,7 @@ namespace LuckParser.Controllers
         private CombatData combat_data = new CombatData();
         private MechanicData mech_data = new MechanicData();
         private List<Player> p_list = new List<Player>();
+        private Boss boss;
 
         // Public Methods
         public LogData getLogData()
@@ -672,6 +674,8 @@ namespace LuckParser.Controllers
                 }
 
             }
+            AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
+            boss = new Boss(bossAgent);
             // Sort
             p_list = p_list.OrderBy(a => int.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>int.Parse(a.getGroup()) - int.Parse(b.getGroup()))
             setMechData();
@@ -1024,11 +1028,11 @@ namespace LuckParser.Controllers
                 string rate = "0";
                 if (boon_distrib.ContainsKey(boon.getID()))
                 {
-                    if (boon.getType().Equals("duration"))
+                    if (boon.getType() == Boon.BoonType.Duration)
                     {
                         rate = Math.Round(100.0 * boon_distrib.getUptime(boon.getID()) / fight_duration, 1) + "%";
                     }
-                    else if (boon.getType().Equals("intensity"))
+                    else if (boon.getType() == Boon.BoonType.Intensity)
                     {
                         rate = Math.Round((double)boon_distrib.getUptime(boon.getID()) / fight_duration, 1).ToString();
                     }
@@ -1071,14 +1075,14 @@ namespace LuckParser.Controllers
                 totaloverstack += total;
                 if (total > 0)
                 {
-                    if (boon.getType().Equals("duration"))
+                    if (boon.getType() == Boon.BoonType.Duration)
                     {
                         rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" 
                             + Math.Round(100.0 * totaloverstack / fight_duration / trgetPlayers.Count, 1) + "% with overstack \">" 
                             + Math.Round(100.0 * total / fight_duration / trgetPlayers.Count, 1) 
                             + "%</span>";
                     }
-                    else if (boon.getType().Equals("intensity"))
+                    else if (boon.getType() == Boon.BoonType.Intensity)
                     {
                         rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" 
                             + Math.Round((double)totaloverstack / fight_duration / trgetPlayers.Count, 1).ToString() + " with overstack \">" 
@@ -1104,12 +1108,12 @@ namespace LuckParser.Controllers
                 if (boon_distrib.ContainsKey(boon.getID()))
                 {
                     string rate = "0";
-                    if (boon.getType().Equals("duration"))
+                    if (boon.getType() == Boon.BoonType.Duration)
                     {
                         long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
                         rate = Math.Round(100.0 * boon_distrib.getUptime(boon.getID()) / fight_duration, 1) + "%";
                     }
-                    else if (boon.getType().Equals("intensity"))
+                    else if (boon.getType() == Boon.BoonType.Intensity)
                     {
                         long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
                         rate = Math.Round((double)boon_distrib.getUptime(boon.getID()) / fight_duration, 1).ToString();
@@ -1802,11 +1806,12 @@ namespace LuckParser.Controllers
             AgentData a_data = getAgentData();
             //print weapon sets
             string[] wep = p.getWeaponsArray(s_data,c_data,b_data,a_data);
+            sw.Write("<div>");
             if (wep[0] != null)
             {
                 sw.Write("<img src=\"" + GetLink(wep[0]) + " \" alt=\"" + wep[0] + "\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" +wep[0] + "\">");
             }
-            else
+            else if(wep[1] != null)
             {
                 sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Unknown\">");
             }
@@ -1826,16 +1831,16 @@ namespace LuckParser.Controllers
                 
             }
             else {
-                sw.Write("/");
+                sw.Write(" / ");
             }
             
             if (wep[2] != null)
             {
                 sw.Write("<img src=\"" + GetLink(wep[2]) + " \" alt=\"" + wep[2] + "\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[2] + "\">");
             }
-            else
+            else if(wep[3] != null)
             {
-               // sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
+                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
             }
             if (wep[3] != null)
             {
@@ -1849,6 +1854,7 @@ namespace LuckParser.Controllers
                 //sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
             }
             sw.Write("<br>");
+            sw.Write("</div>");
         }
 
         bool[] SnapSettings;
@@ -1909,8 +1915,9 @@ namespace LuckParser.Controllers
                             sw.Write("<td style=\"width: 120px; border:1px solid #EE5F5B;\">");
                             {
                                 sw.Write("<img src=\"" + GetLink(gPlay.getProf().ToString()) + " \" alt=\"" + gPlay.getProf().ToString() + "\" height=\"18\" width=\"18\" >");
+                                sw.Write(build);
                                 PrintWeapons(sw,gPlay);
-                                sw.Write(build + "<br/>" + charName);
+                                sw.Write(charName);
                             }
                             sw.Write("</td>");
                         }
@@ -2417,7 +2424,7 @@ namespace LuckParser.Controllers
                             }
                             foreach (Boon boon in list_to_use)
                             {
-                                if (boon.getType() == "intensity")
+                                if (boon.getType() == Boon.BoonType.Intensity)
                                 {
                                     intensityBoon.Add(count);
                                 }
@@ -3464,10 +3471,10 @@ namespace LuckParser.Controllers
             List<DamageLog> damageLogs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(), getMechData());
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
-            List<Point> down = getCombatData().getStates(p.getInstid(), "CHANGE_DOWN");
+            List<Point> down = getCombatData().getStates(p.getInstid(), "CHANGE_DOWN", b_data.getFirstAware(), b_data.getLastAware());
             if (down.Count > 0)
             {
-                List<Point> ups = getCombatData().getStates(p.getInstid(), "CHANGE_UP");
+                List<Point> ups = getCombatData().getStates(p.getInstid(), "CHANGE_UP", b_data.getFirstAware(), b_data.getLastAware());
                 down = down.GetRange(ups.Count(), down.Count()-ups.Count());
             }
             List<Point> dead = getCombatData().getStates(p.getInstid(), "CHANGE_DEAD");
@@ -4588,8 +4595,6 @@ namespace LuckParser.Controllers
         private void CreateBossSummary(StreamWriter sw)
         {
             //generate Player list Graphs
-            AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
-            Boss boss = new Boss(bossAgent);
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             List<CastLog> casting = boss.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
@@ -5066,6 +5071,7 @@ namespace LuckParser.Controllers
             }
             string bossname = FilterStringChars(b_data.getName());
             setPresentBoons(settingsSnap);
+            List<PhaseData> phases = boss.getPhases(getBossData(), getCombatData().getCombatList(), getAgentData());
             string Html_playerDropdown = "";
             foreach (Player p in p_list)
             {
@@ -6062,7 +6068,6 @@ namespace LuckParser.Controllers
                     return "https://wiki.guildwars2.com/images/1/19/Crimson_Antique_Musket.png";
                 case "Staff":
                     return "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png";
-                //dont use these as it only works for english
                 case "Vale Guardian-icon":
                     return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
                 case "Gorseval the Multifarious-icon":

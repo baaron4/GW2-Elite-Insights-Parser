@@ -23,10 +23,11 @@ namespace LuckParser.Models.ParseModels
             combat_list.Add(item);
         }
 
-        public List<Point> getStates(int src_instid, String change)
+        public List<Point> getStates(int src_instid, String change, long start = 0, long end = 0)
         {
             List<Point> states = new List<Point>();
-            foreach (CombatItem c in combat_list)
+            List<CombatItem> li = (end - start) > 0 ? combat_list.Where(x => x.getTime() >= 0 && x.getTime() < end).ToList() : combat_list;
+            foreach (CombatItem c in li)
             {
                 if (c.getSrcInstid() == src_instid && c.isStateChange().getEnum() == change)
                 {
