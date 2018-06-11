@@ -3471,10 +3471,10 @@ namespace LuckParser.Controllers
             List<DamageLog> damageLogs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData(), getMechData());
             SkillData s_data = getSkillData();
             List<SkillItem> s_list = s_data.getSkillList();
-            List<Point> down = getCombatData().getStates(p.getInstid(), "CHANGE_DOWN");
+            List<Point> down = getCombatData().getStates(p.getInstid(), "CHANGE_DOWN", b_data.getFirstAware(), b_data.getLastAware());
             if (down.Count > 0)
             {
-                List<Point> ups = getCombatData().getStates(p.getInstid(), "CHANGE_UP");
+                List<Point> ups = getCombatData().getStates(p.getInstid(), "CHANGE_UP", b_data.getFirstAware(), b_data.getLastAware());
                 down = down.GetRange(ups.Count(), down.Count()-ups.Count());
             }
             List<Point> dead = getCombatData().getStates(p.getInstid(), "CHANGE_DEAD");
