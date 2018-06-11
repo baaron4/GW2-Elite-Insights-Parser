@@ -6031,37 +6031,38 @@ namespace LuckParser.Controllers
                 case "Question":
                     return "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png";
                 case "Sword":
-                    return "https://wiki.guildwars2.com/images/6/61/Sword_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
                 case "Axe":
-                    return "https://wiki.guildwars2.com/images/a/a2/Axe_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/d/d4/Crimson_Antique_Reaver.png";
                 case "Dagger":
-                    return "https://wiki.guildwars2.com/images/c/c9/Dagger_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/6/65/Crimson_Antique_Razor.png";
                 case "Mace":
-                    return "https://wiki.guildwars2.com/images/3/37/Mace_Smash.png";
+                    return "https://wiki.guildwars2.com/images/6/6d/Crimson_Antique_Flanged_Mace.png";
                 case "Pistol":
-                    return "https://wiki.guildwars2.com/images/7/7a/Phantasmal_Duelist.png";
-                case "Sceptor":
-                    return "https://wiki.guildwars2.com/images/2/22/Water_Trident.png";
+                    return "https://wiki.guildwars2.com/images/4/46/Crimson_Antique_Revolver.png";
+                case "Scepter":
+                    return "https://wiki.guildwars2.com/images/e/e2/Crimson_Antique_Wand.png";
                 case "Focus":
-                    return "https://wiki.guildwars2.com/images/7/79/Focus_Mastery.png";
+                    return "https://wiki.guildwars2.com/images/8/87/Crimson_Antique_Artifact.png";
                 case "Shield":
-                    return "https://wiki.guildwars2.com/images/c/c6/Shield_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/b/b0/Crimson_Antique_Bastion.png";
                 case "Torch":
-                    return "https://wiki.guildwars2.com/images/1/11/Torch_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/7/76/Crimson_Antique_Brazier.png";
                 case "Warhorn":
-                    return "https://wiki.guildwars2.com/images/b/b8/Warhorn_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/1/1c/Crimson_Antique_Herald.png";
                 case "Greatsword":
-                    return "https://wiki.guildwars2.com/images/8/8b/Greatsword_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/5/50/Crimson_Antique_Claymore.png";
                 case "Hammer":
-                    return "https://wiki.guildwars2.com/images/5/5f/Hammer_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/3/38/Crimson_Antique_Warhammer.png";
                 case "Longbow":
-                    return "https://wiki.guildwars2.com/images/5/53/Longbow_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/f/f0/Crimson_Antique_Greatbow.png";
                 case "Shortbow":
-                    return "https://wiki.guildwars2.com/images/e/e7/Short_Bow_Proficiency_%28renegade%29.png";
+                    return "https://wiki.guildwars2.com/images/1/17/Crimson_Antique_Short_Bow.png";
                 case "Rifle":
-                    return "https://wiki.guildwars2.com/images/5/5d/Rifle_Proficiency_%28deadeye%29.png";
+                    return "https://wiki.guildwars2.com/images/1/19/Crimson_Antique_Musket.png";
                 case "Staff":
-                    return "https://wiki.guildwars2.com/images/7/78/Staff_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png";
+                //dont use these as it only works for english
                 case "Vale Guardian-icon":
                     return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
                 case "Gorseval the Multifarious-icon":
@@ -6114,7 +6115,8 @@ namespace LuckParser.Controllers
                     return "sh";
                 case "Dhuum-ext":
                     return "dhuum";
-                    //ID version for multilingual
+
+                //ID version for multilingual
                 case "15438-icon":
                     return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
                 case "15429-icon":
@@ -6141,6 +6143,19 @@ namespace LuckParser.Controllers
                     return "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
                 case "19450-icon":
                     return "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
+                case "17021-icon":
+                    return "http://dulfy.net/wp-content/uploads/2016/11/gw2-nightmare-fractal-teaser.jpg";
+                case "17028-icon":
+                    return "https://wiki.guildwars2.com/images/d/dc/Siax_the_Corrupted.jpg";
+                case "16948-icon":
+                    return "https://wiki.guildwars2.com/images/5/57/Champion_Toxic_Hybrid.jpg";
+                case "17632-icon":
+                    return "https://wiki.guildwars2.com/images/c/c1/Skorvald_the_Shattered.jpg";
+                case "17949-icon":
+                    return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+                case "17759-icon":
+                    return "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
+
                 case "15438-ext":
                     return "vg";
                 case "15429-ext":
@@ -6167,6 +6182,18 @@ namespace LuckParser.Controllers
                     return "sh";
                 case "19450-ext":
                     return "dhuum";
+                case "17021-ext":
+                    return "mama";
+                case "17028-ext":
+                    return "siax";
+                case "16948-ext":
+                    return "ensol";
+                case "17632-ext":
+                    return "skorv";
+                case "17949-ext":
+                    return "arstra";
+                case "17759-ext":
+                    return "arkk";
 
                 case "Warrior":
                     return "https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png";
@@ -6225,33 +6252,33 @@ namespace LuckParser.Controllers
                 case "Scourge":
                     return "https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png";
 
-                case"Color-Warrior":return "rgb(255,209,102)";
-                case"Color-Berserker": return "rgb(255,209,102)";
-                case"Color-Spellbreaker": return "rgb(255,209,102)";
-                case"Color-Guardian": return "rgb(114,193,217)";
-                case"Color-Dragonhunter": return "rgb(114,193,217)";
-                case"Color-Firebrand": return "rgb(114,193,217)";
-                case"Color-Revenant": return "rgb(209,110,90)";
-                case"Color-Herald": return "rgb(209,110,90)";
-                case"Color-Renegade": return "rgb(209,110,90)";
-                case"Color-Engineer": return "rgb(208,156,89)";
-                case"Color-Scrapper": return "rgb(208,156,89)";
-                case"Color-Holosmith": return "rgb(208,156,89)";
-                case"Color-Ranger": return "rgb(140,220,130)";
-                case"Color-Druid": return "rgb(140,220,130)";
-                case"Color-Soulbeast": return "rgb(140,220,130)";
-                case"Color-Thief": return "rgb(192,143,149)";
-                case"Color-Daredevil": return "rgb(192,143,149)";
-                case"Color-Deadeye": return "rgb(192,143,149)";
-                case"Color-Elementalist": return "rgb(246,138,135)";
-                case"Color-Tempest": return "rgb(246,138,135)";
-                case"Color-Weaver": return "rgb(246,138,135)";
-                case"Color-Mesmer": return "rgb(182,121,213)";
-                case"Color-Chronomancer": return "rgb(182,121,213)";
-                case"Color-Mirage": return "rgb(182,121,213)";
-                case"Color-Necromancer": return "rgb(82,167,111)";
-                case"Color-Reaper": return "rgb(82,167,111)";
-                case"Color-Scourge": return "rgb(82,167,111)";
+                case "Color-Warrior": return "rgb(255,209,102)";
+                case "Color-Berserker": return "rgb(255,209,102)";
+                case "Color-Spellbreaker": return "rgb(255,209,102)";
+                case "Color-Guardian": return "rgb(114,193,217)";
+                case "Color-Dragonhunter": return "rgb(114,193,217)";
+                case "Color-Firebrand": return "rgb(114,193,217)";
+                case "Color-Revenant": return "rgb(209,110,90)";
+                case "Color-Herald": return "rgb(209,110,90)";
+                case "Color-Renegade": return "rgb(209,110,90)";
+                case "Color-Engineer": return "rgb(208,156,89)";
+                case "Color-Scrapper": return "rgb(208,156,89)";
+                case "Color-Holosmith": return "rgb(208,156,89)";
+                case "Color-Ranger": return "rgb(140,220,130)";
+                case "Color-Druid": return "rgb(140,220,130)";
+                case "Color-Soulbeast": return "rgb(140,220,130)";
+                case "Color-Thief": return "rgb(192,143,149)";
+                case "Color-Daredevil": return "rgb(192,143,149)";
+                case "Color-Deadeye": return "rgb(192,143,149)";
+                case "Color-Elementalist": return "rgb(246,138,135)";
+                case "Color-Tempest": return "rgb(246,138,135)";
+                case "Color-Weaver": return "rgb(246,138,135)";
+                case "Color-Mesmer": return "rgb(182,121,213)";
+                case "Color-Chronomancer": return "rgb(182,121,213)";
+                case "Color-Mirage": return "rgb(182,121,213)";
+                case "Color-Necromancer": return "rgb(82,167,111)";
+                case "Color-Reaper": return "rgb(82,167,111)";
+                case "Color-Scourge": return "rgb(82,167,111)";
 
                 case "Crit":
                     return "https://wiki.guildwars2.com/images/9/95/Critical_Chance.png";
@@ -6287,7 +6314,7 @@ namespace LuckParser.Controllers
                     return "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
                 case "Bandage":
                     return "https://render.guildwars2.com/file/D2D7D11874060D68760BFD519CFC77B6DF14981F/102928.png";
-                    
+
                 case "Color-Aegis": return "rgb(102,255,255)";
                 case "Color-Fury": return "rgb(255,153,0)";
                 case "Color-Might": return "rgb(153,0,0)";
