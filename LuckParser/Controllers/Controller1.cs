@@ -2700,9 +2700,9 @@ namespace LuckParser.Controllers
                 sw.Write("<tbody>");
                 {
                     HashSet<int> usedIDs = new HashSet<int>();
-                    foreach (int id in casting.Select(x => x.getID()).Distinct())
-                    {//foreach casted skill
-                        usedIDs.Add(id);
+                    HTMLHelper.writeDamageDistTableCondi(sw,usedIDs, damageLogs, finalTotalDamage);
+                    foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.getID())).Select(x => x.getID()).Distinct().ToList())
+                    {
                         SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
                         List<DamageLog> list_to_use = damageLogs.Where(x => x.getID() == id).ToList();
                         if (skill != null && list_to_use.Count > 0)
@@ -2726,141 +2726,7 @@ namespace LuckParser.Controllers
                                     timeswasted += ((double)(cl.getActDur()) / 1000f);
                                 }
                             }
-                            HTMLHelper.writeDamageDistTableSkill(sw, skill, list_to_use, finalTotalDamage, casts,timeswasted,timessaved);
-                        }
-                    }
-                    HTMLHelper.writeDamageDistTableCondi(sw,usedIDs, damageLogs, finalTotalDamage);
-                    foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.getID())).Select(x => x.getID()).Distinct().ToList())//Foreach instant cast skill
-                    {
-                        SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
-                        List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
-                        int casts = clList.Count();
-                        double timeswasted = 0;
-                        int countwasted = 0;
-                        double timessaved = 0;
-                        int countsaved = 0;
-                        foreach (CastLog cl in clList)
-                        {
-                            if (cl.getExpDur() < cl.getActDur())
-                            {
-                                countsaved++;
-                                timessaved += ((double)(cl.getExpDur() - cl.getActDur()) / 1000f);
-                            }
-                            else if (cl.getExpDur() > cl.getActDur())
-                            {
-                                countwasted++;
-                                timeswasted += ((double)(cl.getActDur()) / 1000f);
-                            }
-                        }
-
-                        int totaldamage = 0;
-                        int mindamage = 0;
-                        int avgdamage = 0;
-                        int hits = 0;
-                        int maxdamage = 0;
-                        int crit = 0;
-                        int flank = 0;
-                        int glance = 0;
-                        double hpcast = 0;
-                        foreach (DamageLog dl in damageLogs.Where(x => x.getID() == id))
-                        {
-                            int curdmg = dl.getDamage();
-                            totaldamage += curdmg;
-                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                            hits++;
-                            int result = dl.getResult().getID();
-                            if (result == 1) { crit++; } else if (result == 2) { glance++; }
-                            if (dl.isFlanking() == 1) { flank++; }
-                        }
-                        avgdamage = (int)(totaldamage / (double)hits);
-                        if (casts > 0) { hpcast = Math.Round(hits / (double)casts, 2); }
-                        if (skill != null)
-                        {
-                            if (totaldamage != 0 && skill.GetGW2APISkill() != null)
-                            {
-                                sw.Write("<tr>");
-                                {
-                                    sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
-                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
-                                    sw.Write("<td>" + totaldamage + "</td>");
-                                    sw.Write("<td>" + mindamage + "</td>");
-                                    sw.Write("<td>" + avgdamage + "</td>");
-                                    sw.Write("<td>" + maxdamage + "</td>");
-                                    sw.Write("<td>" + casts + "</td>");
-                                    sw.Write("<td>" + hits + "</td>");
-                                    sw.Write("<td>" + hpcast + "</td>");
-                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</td>");
-                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</td>");
-                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</td>");
-                                    sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
-                                    sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");
-                                }
-                                sw.Write("</tr>");
-                            }
-                            else if (totaldamage != 0)
-                            {
-                                sw.Write("<tr>");
-                                {
-                                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
-                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
-                                    sw.Write("<td>" + totaldamage + "</td>");
-                                    sw.Write("<td>" + mindamage + "</td>");
-                                    sw.Write("<td>" + avgdamage + "</td>");
-                                    sw.Write("<td>" + maxdamage + "</td>");
-                                    sw.Write("<td>" + casts + "</td>");
-                                    sw.Write("<td>" + hits + "</td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</td>");
-                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</td>");
-                                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</td>");
-                                    sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
-                                    sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");
-                                }
-                                sw.Write("</tr>");
-                            }
-                            else if (skill.GetGW2APISkill() != null)
-                            {
-                                sw.Write("<tr>");
-                                {
-                                    sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td>" + casts + "</td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
-                                    sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");
-                                }
-                                sw.Write("</tr>");
-                            }
-                            else
-                            {
-                                sw.Write("<tr>");
-                                {
-                                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td>" + casts + "</td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td></td>");
-                                    sw.Write("<td>" + Math.Round(timeswasted, 2) + "s</td>");
-                                    sw.Write("<td>" + Math.Round(timessaved, 2) + "s</td>");
-                                }
-                                sw.Write("</tr>");
-                            }
+                            HTMLHelper.writeDamageDistTableSkill(sw, skill, list_to_use, finalTotalDamage, casts, timeswasted, timessaved);
                         }
                     }
                 }
