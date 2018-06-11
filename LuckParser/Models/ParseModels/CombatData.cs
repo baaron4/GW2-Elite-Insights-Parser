@@ -26,7 +26,7 @@ namespace LuckParser.Models.ParseModels
         public List<CombatItem> getStates(int src_instid, String change, long start, long end)
         {
             List<CombatItem> states = new List<CombatItem>();
-            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() < end))
+            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() <= end))
             {
                 if (c.getSrcInstid() == src_instid && c.isStateChange().getEnum() == change)
                 {
@@ -39,7 +39,7 @@ namespace LuckParser.Models.ParseModels
         public int getSkillCount(int src_instid, int skill_id, long start, long end)
         {
             int count = 0;
-            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() < end))
+            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() <= end))
             {
                 if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
                 {
@@ -52,7 +52,7 @@ namespace LuckParser.Models.ParseModels
         public int getBuffCount(int src_instid, int skill_id, long start, long end)
         {
             int count = 0;
-            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() < end))
+            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() <= end))
             {
                 if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
                 {

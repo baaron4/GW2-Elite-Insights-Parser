@@ -45,7 +45,7 @@ namespace LuckParser.Models.ParseModels
         public long getDeath(BossData bossData, List<CombatItem> combatList, long start, long end)
         {
             long offset = bossData.getFirstAware();
-            CombatItem dead = combatList.FirstOrDefault(x => x.getSrcInstid() == instid && x.isStateChange().getEnum() == "CHANGE_DEAD" && x.getTime() >= start + offset && x.getTime() < end + offset);
+            CombatItem dead = combatList.FirstOrDefault(x => x.getSrcInstid() == instid && x.isStateChange().getEnum() == "CHANGE_DEAD" && x.getTime() >= start + offset && x.getTime() <= end + offset);
             if (dead != null && dead.getTime() > 0)
             {
                 return dead.getTime();
@@ -66,11 +66,11 @@ namespace LuckParser.Models.ParseModels
             }
             if (instidFilter == 0)
             {
-                return damage_logs.Where(x => x.getTime() >= start && x.getTime() < end).ToList();
+                return damage_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
             }
             else
             {
-                return damage_logsFiltered.Where( x => x.getTime() >= start && x.getTime() < end).ToList();
+                return damage_logsFiltered.Where( x => x.getTime() >= start && x.getTime() <= end).ToList();
             }
         }
         public List<DamageLog> getDamageTakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data, long start, long end)
@@ -79,7 +79,7 @@ namespace LuckParser.Models.ParseModels
             {
                 setDamagetakenLogs(bossData, combatList, agentData, m_data);
             }
-            return damageTaken_logs.Where(x => x.getTime() >= start && x.getTime() < end).ToList();
+            return damageTaken_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
         public BoonDistribution getBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList)
         {
@@ -111,7 +111,7 @@ namespace LuckParser.Models.ParseModels
             {
                 setCastLogs(bossData, combatList, agentData);
             }
-            return cast_logs.Where(x => x.getTime() >= start && x.getTime() < end).ToList();
+            return cast_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
 
         }
         public Dictionary<AgentItem, List<DamageLog>> getMinionsDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData)
@@ -220,7 +220,7 @@ namespace LuckParser.Models.ParseModels
             int fight_duration = (int)(dur) / 1000;
             // Init boon presence points
             BoonsGraphModel boon_presence_points = new BoonsGraphModel("Number of Boons");
-            for (int i = 0; i < fight_duration; i++)
+            for (int i = 0; i <= fight_duration; i++)
             {
                 boon_presence_points.getBoonChart().Add(new Point(i, 0));
             }
@@ -276,40 +276,29 @@ namespace LuckParser.Models.ParseModels
                             }
                         }
                     }
-                    int prev = 0;
                     // full precision
-                    List<Point> toFill = new List<Point>();
+                    List<Point> toFill = new List<Point>();                   
                     List<Point> toFillPresence = new List<Point>();
-                    foreach (BoonSimulationItem simul in simulation)
-                    {
-                        int start = (int)simul.getStart();
-                        int end = (int)simul.getEnd();
-                        // fill
-                        if (toFill.Count < start)
-                        {
-                            for (int i = prev; i < start; i++)
-                            {
-                                toFill.Add(new Point(i, 0));
-                                toFillPresence.Add(new Point(i, 0));
-                            }
-                        }
-                        for (int i = start; i < end; i++)
-                        {
-                            toFill.Add(new Point(i, simul.getStack(i)));
-                            toFillPresence.Add(new Point(i, simul.getItemDuration() > 0 ? 1 : 0));
-                        }
-                        prev = end;
-                    }
-                    // fill
-                    for (int i = prev; i < dur; i++)
+                    for (int i = 0; i < dur + 1; i++)
                     {
                         toFill.Add(new Point(i, 0));
                         toFillPresence.Add(new Point(i, 0));
                     }
+                    foreach (BoonSimulationItem simul in simulation)
+                    {
+                        int start = (int)simul.getStart();
+                        int end = (int)simul.getEnd();
+                        
+                        for (int i = start; i <= end; i++)
+                        {
+                            toFill[i] = new Point(i, simul.getStack(i));
+                            toFillPresence[i] = new Point(i, simul.getItemDuration() > 0 ? 1 : 0);
+                        }
+                    }
                     // reduce precision to seconds
                     List<Point> reducedPrecision = new List<Point>();
                     List<Point> boonPresence = boon_presence_points.getBoonChart();
-                    for (int i = 0; i < fight_duration; i++)
+                    for (int i = 0; i <= fight_duration; i++)
                     {
                         reducedPrecision.Add(new Point(i, toFill[1000 * i].Y));
                         if (Boon.getBoonList().Select(x => x.getID()).Contains(boonid))

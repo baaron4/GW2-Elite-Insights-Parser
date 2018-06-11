@@ -66,7 +66,7 @@ namespace LuckParser.Models.ParseModels
         public int[] getCleanses(BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end) {
             long time_start = bossData.getFirstAware();
             int[] cleanse = { 0, 0 };
-            foreach (CombatItem c in combatList.Where(x=>x.isStateChange().getID() == 0 && x.isBuff() == 1 && x.getTime() >= (start + time_start) && x.getTime() < (end + time_start)))
+            foreach (CombatItem c in combatList.Where(x=>x.isStateChange().getID() == 0 && x.isBuff() == 1 && x.getTime() >= (start + time_start) && x.getTime() <= (end + time_start)))
             {
                 if (c.isActivation().getID() == 0)
                 {
@@ -125,7 +125,7 @@ namespace LuckParser.Models.ParseModels
             {
                 setConsumablesList( bossData, skillData, combatList);
             }
-            return consumeList.Where(x => x.getTime() >= start && x.getTime() < end).Select( x => new int[] { x.getSkillID(), (int)x.getTime() }).ToList() ;
+            return consumeList.Where(x => x.getTime() >= start && x.getTime() <= end).Select( x => new int[] { x.getSkillID(), (int)x.getTime() }).ToList() ;
         }
         // Private Methods
         private void EstimateWeapons(SkillData s_data, CombatData c_data, BossData b_data, AgentData a_data)
