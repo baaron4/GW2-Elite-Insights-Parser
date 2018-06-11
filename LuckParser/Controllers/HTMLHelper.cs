@@ -534,7 +534,7 @@ namespace LuckParser.Controllers
             {
                 xVal += offset;
             }
-            xVal = Math.Min(dur, (end - cl.getTime()) / 1000f);
+            xVal = Math.Min(xVal, (end - cl.getTime()) / 1000f);
             sw.Write("{");
             {
 
