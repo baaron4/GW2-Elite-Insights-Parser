@@ -2275,7 +2275,7 @@ namespace LuckParser.Controllers
                                                
                                                 
                                                sw.Write(
-                                                      "x: ['" + dur + "']," +
+                                                      "x: ['" + Math.Min(dur, (phase.end - cl.getTime() / 1000f)) + "']," +
                                                       "base:'" + (cl.getTime() - phase.start) / 1000f + "'," +
                                                       "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
                                                       "orientation:'h'," +

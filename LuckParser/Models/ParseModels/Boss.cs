@@ -130,7 +130,8 @@ namespace LuckParser.Models.ParseModels
                     {
                         end = t;
                         phases.Add(new PhaseData(start, end));
-                        start = t;
+                        // make sure stuff from the precedent phase mix witch each other
+                        start = t+1;
                     }
                     break;
                 case "Xera":
