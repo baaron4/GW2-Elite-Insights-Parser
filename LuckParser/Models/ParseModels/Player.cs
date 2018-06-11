@@ -155,11 +155,11 @@ namespace LuckParser.Models.ParseModels
         public int[] getCleanses(BossData bossData, List<CombatItem> combatList, AgentData agentData) {
             long time_start = bossData.getFirstAware();
             int[] cleanse = { 0, 0 };
-            foreach (CombatItem c in combatList.Where(x=>x.isStateChange().getID() == 0))
+            foreach (CombatItem c in combatList.Where(x=>x.isStateChange().getID() == 0 && x.isBuff() == 1))
             {
                 if (c.isActivation().getID() == 0)
                 {
-                    if (instid == c.getSrcInstid() && c.getIFF().getEnum() == "FRIEND" && c.isBuffremove().getID() == 1/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
+                    if (instid == c.getDstInstid() && c.getIFF().getEnum() == "FRIEND" && (c.isBuffremove().getID() == 1)/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
                     {
                         long time = c.getTime() - time_start;
                         if (time > 0)
@@ -315,13 +315,13 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (apiskill.weapon_type == "Greatsword" || apiskill.weapon_type == "Staff" || apiskill.weapon_type == "Rifle" || apiskill.weapon_type == "Longbow" || apiskill.weapon_type == "Shortbow" || apiskill.weapon_type == "Hammer")
                         {
-                            if (swapped == 4)
+                            if (swapped == 4 && (weapons[0] == null && weapons[1] == null))
                             {
                                 weapons[0] = apiskill.weapon_type;
                                 weapons[1] = "2Hand";
                                 continue;
                             }
-                            else if (swapped == 5)
+                            else if (swapped == 5 && (weapons[2] == null && weapons[3] == null))
                             {
                                 weapons[2] = apiskill.weapon_type;
                                 weapons[3] = "2Hand";
@@ -342,13 +342,13 @@ namespace LuckParser.Models.ParseModels
                         }//2 handed
                         if (apiskill.weapon_type == "Focus" || apiskill.weapon_type == "Shield" || apiskill.weapon_type == "Torch" || apiskill.weapon_type == "Warhorn")
                         {
-                            if (swapped == 4)
+                            if (swapped == 4 && (weapons[1] == null))
                             {
 
                                 weapons[1] = apiskill.weapon_type;
                                 continue;
                             }
-                            else if (swapped == 5)
+                            else if (swapped == 5 && (weapons[3] == null))
                             {
 
                                 weapons[3] = apiskill.weapon_type;
@@ -366,17 +366,17 @@ namespace LuckParser.Models.ParseModels
                             //}
                             continue;
                         }//OffHand
-                        if (apiskill.weapon_type == "Axe" || apiskill.weapon_type == "Dagger" || apiskill.weapon_type == "Mace" || apiskill.weapon_type == "Pistol" || apiskill.weapon_type == "Sword" || apiskill.weapon_type == "Sceptor")
+                        if (apiskill.weapon_type == "Axe" || apiskill.weapon_type == "Dagger" || apiskill.weapon_type == "Mace" || apiskill.weapon_type == "Pistol" || apiskill.weapon_type == "Sword" || apiskill.weapon_type == "Scepter")
                         {
                             if (apiskill.slot == "Weapon_1" || apiskill.slot == "Weapon_2" || apiskill.slot == "Weapon_3")
                             {
-                                if (swapped == 4)
+                                if (swapped == 4 && (weapons[0] == null))
                                 {
 
                                     weapons[0] = apiskill.weapon_type;
                                     continue;
                                 }
-                                else if (swapped == 5)
+                                else if (swapped == 5 && (weapons[2] == null))
                                 {
 
                                     weapons[2] = apiskill.weapon_type;
@@ -396,13 +396,13 @@ namespace LuckParser.Models.ParseModels
                             }
                             if (apiskill.slot == "Weapon_4" || apiskill.slot == "Weapon_5")
                             {
-                                if (swapped == 4)
+                                if (swapped == 4 && (weapons[1] == null))
                                 {
 
                                     weapons[1] = apiskill.weapon_type;
                                     continue;
                                 }
-                                else if (swapped == 5)
+                                else if (swapped == 5 && (weapons[3] == null))
                                 {
 
                                     weapons[3] = apiskill.weapon_type;
@@ -681,15 +681,15 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 long time = c.getTime() - time_start;
-
-                if (instid == c.getDstInstid() && time >= 0 && time <= fight_duration)
+                ushort dst = c.isBuffremove().getID() == 0 ? c.getDstInstid() : c.getSrcInstid();
+                if (instid == dst && time >= 0 && time <= fight_duration)
                 {
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                     if (c.isBuffremove().getID() == 0)
                     {
                         boon_map[c.getSkillID()].Add(new BoonLog(time, src, c.getValue(), 0));
                     }
-                    else if (Boon.removePermission(c.getSkillID(), c.isBuffremove().getID()))
+                    else if (Boon.removePermission(c.getSkillID(), c.isBuffremove().getID(), c.getIFF().getID()))
                     {
                         if (c.isBuffremove().getID() == 1)//All
                         {

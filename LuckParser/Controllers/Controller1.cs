@@ -11,6 +11,7 @@ using System.Net;
 using LuckParser.Models;
 using System.IO.Compression;
 using System.Windows.Forms;
+using static LuckParser.Models.ParseModels.Boss;
 //recomend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {
@@ -117,7 +118,7 @@ namespace LuckParser.Controllers
             }
             return "UNKNOWN";
         }
-        private String FilterStringChars(string str)
+        private static String FilterStringChars(string str)
         {
             string filtered = "";
             string filter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
@@ -139,6 +140,7 @@ namespace LuckParser.Controllers
         private CombatData combat_data = new CombatData();
         private MechanicData mech_data = new MechanicData();
         private List<Player> p_list = new List<Player>();
+        private Boss boss;
 
         // Public Methods
         public LogData getLogData()
@@ -672,6 +674,8 @@ namespace LuckParser.Controllers
                 }
 
             }
+            AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
+            boss = new Boss(bossAgent);
             // Sort
             p_list = p_list.OrderBy(a => int.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>int.Parse(a.getGroup()) - int.Parse(b.getGroup()))
             setMechData();
@@ -1024,11 +1028,11 @@ namespace LuckParser.Controllers
                 string rate = "0";
                 if (boon_distrib.ContainsKey(boon.getID()))
                 {
-                    if (boon.getType().Equals("duration"))
+                    if (boon.getType() == Boon.BoonType.Duration)
                     {
                         rate = Math.Round(100.0 * boon_distrib.getUptime(boon.getID()) / fight_duration, 1) + "%";
                     }
-                    else if (boon.getType().Equals("intensity"))
+                    else if (boon.getType() == Boon.BoonType.Intensity)
                     {
                         rate = Math.Round((double)boon_distrib.getUptime(boon.getID()) / fight_duration, 1).ToString();
                     }
@@ -1071,14 +1075,14 @@ namespace LuckParser.Controllers
                 totaloverstack += total;
                 if (total > 0)
                 {
-                    if (boon.getType().Equals("duration"))
+                    if (boon.getType() == Boon.BoonType.Duration)
                     {
                         rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" 
                             + Math.Round(100.0 * totaloverstack / fight_duration / trgetPlayers.Count, 1) + "% with overstack \">" 
                             + Math.Round(100.0 * total / fight_duration / trgetPlayers.Count, 1) 
                             + "%</span>";
                     }
-                    else if (boon.getType().Equals("intensity"))
+                    else if (boon.getType() == Boon.BoonType.Intensity)
                     {
                         rate = "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\"" 
                             + Math.Round((double)totaloverstack / fight_duration / trgetPlayers.Count, 1).ToString() + " with overstack \">" 
@@ -1104,12 +1108,12 @@ namespace LuckParser.Controllers
                 if (boon_distrib.ContainsKey(boon.getID()))
                 {
                     string rate = "0";
-                    if (boon.getType().Equals("duration"))
+                    if (boon.getType() == Boon.BoonType.Duration)
                     {
                         long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
                         rate = Math.Round(100.0 * boon_distrib.getUptime(boon.getID()) / fight_duration, 1) + "%";
                     }
-                    else if (boon.getType().Equals("intensity"))
+                    else if (boon.getType() == Boon.BoonType.Intensity)
                     {
                         long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
                         rate = Math.Round((double)boon_distrib.getUptime(boon.getID()) / fight_duration, 1).ToString();
@@ -1802,11 +1806,12 @@ namespace LuckParser.Controllers
             AgentData a_data = getAgentData();
             //print weapon sets
             string[] wep = p.getWeaponsArray(s_data,c_data,b_data,a_data);
+            sw.Write("<div>");
             if (wep[0] != null)
             {
                 sw.Write("<img src=\"" + GetLink(wep[0]) + " \" alt=\"" + wep[0] + "\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" +wep[0] + "\">");
             }
-            else
+            else if(wep[1] != null)
             {
                 sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Unknown\">");
             }
@@ -1826,16 +1831,16 @@ namespace LuckParser.Controllers
                 
             }
             else {
-                sw.Write("/");
+                sw.Write(" / ");
             }
             
             if (wep[2] != null)
             {
                 sw.Write("<img src=\"" + GetLink(wep[2]) + " \" alt=\"" + wep[2] + "\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[2] + "\">");
             }
-            else
+            else if(wep[3] != null)
             {
-               // sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
+                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
             }
             if (wep[3] != null)
             {
@@ -1849,6 +1854,7 @@ namespace LuckParser.Controllers
                 //sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
             }
             sw.Write("<br>");
+            sw.Write("</div>");
         }
 
         bool[] SnapSettings;
@@ -1909,8 +1915,9 @@ namespace LuckParser.Controllers
                             sw.Write("<td style=\"width: 120px; border:1px solid #EE5F5B;\">");
                             {
                                 sw.Write("<img src=\"" + GetLink(gPlay.getProf().ToString()) + " \" alt=\"" + gPlay.getProf().ToString() + "\" height=\"18\" width=\"18\" >");
+                                sw.Write(build);
                                 PrintWeapons(sw,gPlay);
-                                sw.Write(build + "<br/>" + charName);
+                                sw.Write(charName);
                             }
                             sw.Write("</td>");
                         }
@@ -2417,7 +2424,7 @@ namespace LuckParser.Controllers
                             }
                             foreach (Boon boon in list_to_use)
                             {
-                                if (boon.getType() == "intensity")
+                                if (boon.getType() == Boon.BoonType.Intensity)
                                 {
                                     intensityBoon.Add(count);
                                 }
@@ -4588,8 +4595,6 @@ namespace LuckParser.Controllers
         private void CreateBossSummary(StreamWriter sw)
         {
             //generate Player list Graphs
-            AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
-            Boss boss = new Boss(bossAgent);
             CombatData c_data = getCombatData();
             BossData b_data = getBossData();
             List<CastLog> casting = boss.getCastLogs(b_data, c_data.getCombatList(), getAgentData());
@@ -5066,6 +5071,7 @@ namespace LuckParser.Controllers
             }
             string bossname = FilterStringChars(b_data.getName());
             setPresentBoons(settingsSnap);
+            List<PhaseData> phases = boss.getPhases(getBossData(), getCombatData().getCombatList(), getAgentData());
             string Html_playerDropdown = "";
             foreach (Player p in p_list)
             {
@@ -6031,37 +6037,37 @@ namespace LuckParser.Controllers
                 case "Question":
                     return "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png";
                 case "Sword":
-                    return "https://wiki.guildwars2.com/images/6/61/Sword_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
                 case "Axe":
-                    return "https://wiki.guildwars2.com/images/a/a2/Axe_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/d/d4/Crimson_Antique_Reaver.png";
                 case "Dagger":
-                    return "https://wiki.guildwars2.com/images/c/c9/Dagger_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/6/65/Crimson_Antique_Razor.png";
                 case "Mace":
-                    return "https://wiki.guildwars2.com/images/3/37/Mace_Smash.png";
+                    return "https://wiki.guildwars2.com/images/6/6d/Crimson_Antique_Flanged_Mace.png";
                 case "Pistol":
-                    return "https://wiki.guildwars2.com/images/7/7a/Phantasmal_Duelist.png";
-                case "Sceptor":
-                    return "https://wiki.guildwars2.com/images/2/22/Water_Trident.png";
+                    return "https://wiki.guildwars2.com/images/4/46/Crimson_Antique_Revolver.png";
+                case "Scepter":
+                    return "https://wiki.guildwars2.com/images/e/e2/Crimson_Antique_Wand.png";
                 case "Focus":
-                    return "https://wiki.guildwars2.com/images/7/79/Focus_Mastery.png";
+                    return "https://wiki.guildwars2.com/images/8/87/Crimson_Antique_Artifact.png";
                 case "Shield":
-                    return "https://wiki.guildwars2.com/images/c/c6/Shield_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/b/b0/Crimson_Antique_Bastion.png";
                 case "Torch":
-                    return "https://wiki.guildwars2.com/images/1/11/Torch_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/7/76/Crimson_Antique_Brazier.png";
                 case "Warhorn":
-                    return "https://wiki.guildwars2.com/images/b/b8/Warhorn_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/1/1c/Crimson_Antique_Herald.png";
                 case "Greatsword":
-                    return "https://wiki.guildwars2.com/images/8/8b/Greatsword_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/5/50/Crimson_Antique_Claymore.png";
                 case "Hammer":
-                    return "https://wiki.guildwars2.com/images/5/5f/Hammer_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/3/38/Crimson_Antique_Warhammer.png";
                 case "Longbow":
-                    return "https://wiki.guildwars2.com/images/5/53/Longbow_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/f/f0/Crimson_Antique_Greatbow.png";
                 case "Shortbow":
-                    return "https://wiki.guildwars2.com/images/e/e7/Short_Bow_Proficiency_%28renegade%29.png";
+                    return "https://wiki.guildwars2.com/images/1/17/Crimson_Antique_Short_Bow.png";
                 case "Rifle":
-                    return "https://wiki.guildwars2.com/images/5/5d/Rifle_Proficiency_%28deadeye%29.png";
+                    return "https://wiki.guildwars2.com/images/1/19/Crimson_Antique_Musket.png";
                 case "Staff":
-                    return "https://wiki.guildwars2.com/images/7/78/Staff_Proficiency.png";
+                    return "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png";
                 case "Vale Guardian-icon":
                     return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
                 case "Gorseval the Multifarious-icon":
