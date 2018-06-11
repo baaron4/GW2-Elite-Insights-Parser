@@ -1778,8 +1778,8 @@ namespace LuckParser.Controllers
             }
             sw.Write("];" +
                     "var layout = {" +
-                        "xaxis:{title:'DPS'}," +
-                        "yaxis:{title:'Time(sec)'}," +
+                        "yaxis:{title:'DPS'}," +
+                        "xaxis:{title:'Time(sec)'}," +
                         //"legend: { traceorder: 'reversed' }," +
                         "hovermode: 'compare'," +
                         "legend: {orientation: 'h'}," +
