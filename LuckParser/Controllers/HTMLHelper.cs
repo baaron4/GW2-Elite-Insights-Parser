@@ -828,7 +828,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        public static void writeDamageDistTableSkill(StreamWriter sw, SkillItem skill, List<DamageLog> damageLogs, int finalTotalDamage, int casts = -1, double timeswasted = -1, double timessaved = -1)
+        public static void writeDamageDistTableSkill(StreamWriter sw, SkillItem skill, List<DamageLog> damageLogs, int finalTotalDamage, int casts = -1, double timeswasted = -1, double timessaved = 1)
         {
             int totaldamage = 0;
             int mindamage = 0;
@@ -851,7 +851,7 @@ namespace LuckParser.Controllers
             }
             avgdamage = (int)(totaldamage / (double)hits);
             string wasted = timeswasted > 0.0 ? Math.Round(timeswasted, 2) + "s" : "";
-            string saved = timessaved > 0.0 ? Math.Round(timessaved, 2) + "s" : "";
+            string saved = timessaved < 0.0 ? Math.Round(timessaved, 2) + "s" : "";
             double hpcast = -1;
             if (casts > 0) {
                 hpcast = Math.Round(hits / (double)casts, 2);
