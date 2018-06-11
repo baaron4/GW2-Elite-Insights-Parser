@@ -18,6 +18,7 @@ namespace LuckParser
         [STAThread]
         static int Main(string[] args)
         {
+            Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             if (args.Length > 0)
             {
                 AttachConsole(ATTACH_PARENT_PROCESS);
@@ -30,7 +31,7 @@ namespace LuckParser
                 
                 return 0;
             }
-            Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
