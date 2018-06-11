@@ -1742,21 +1742,7 @@ namespace LuckParser.Controllers
             List<List<string>> footList = new List<List<string>>();
             sw.Write("<table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" id=\"" + table_id+ phase_index + "\">");
             {
-                sw.Write("<thead>");
-                {
-                    sw.Write("<tr>");
-                    {
-                        sw.Write("<th width=\"50px\">Sub</th>");
-                        sw.Write("<th width=\"50px\"></th>");
-                        sw.Write("<th>Name</th>");
-                        foreach (Boon boon in list_to_use)
-                        {
-                            sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
-                        }
-                    }                 
-                    sw.Write("</tr> ");
-                }           
-                sw.Write("</thead>");
+                HTMLHelper.writeBoonTableHeader(sw, list_to_use);
                 HashSet<int> intensityBoon = new HashSet<int>();
                 bool boonTable = list_to_use.Select(x => x.getID()).Contains(740);
                 sw.Write("<tbody>");
@@ -1879,23 +1865,7 @@ namespace LuckParser.Controllers
             sw.Write("<script> $(function () { $('#" + table_id+ phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" width=\"100%\" id=\"" + table_id+ phase_index + "\">");
             {
-                sw.Write("<thead>");
-                {
-                    sw.Write("<tr>");
-                    {
-                        sw.Write("<th width=\"50px\">Sub</th>");
-                        sw.Write("<th width=\"50px\"></th>");
-                        sw.Write("<th>Name</th>");
-                        foreach (Boon boon in list_to_use)
-                        {
-                            sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
-                        }
-                    }
-                    
-                    sw.Write("</tr>");
-                }
-                
-                sw.Write("</thead>");
+                HTMLHelper.writeBoonTableHeader(sw, list_to_use);
                 sw.Write("<tbody>");
                 {
                     foreach (Player player in p_list)
@@ -1903,24 +1873,7 @@ namespace LuckParser.Controllers
                         List<Player> playerID = new List<Player>();
                         playerID.Add(player);
                         Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,player, playerID);
-                        sw.Write("<tr>");
-                        {
-                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                            sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-                            foreach (Boon boon in list_to_use)
-                            {
-                                if (boonArray.ContainsKey(boon.getID()))
-                                {
-                                    sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
-                                }
-                                else
-                                {
-                                    sw.Write("<td>" + 0 + "</td>");
-                                }
-                            }
-                        }
-                        sw.Write("</tr>");
+                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray, GetLink(player.getProf().ToString()));
                     }
                 }
                 sw.Write("</tbody>");
@@ -1939,22 +1892,7 @@ namespace LuckParser.Controllers
             sw.Write("<script> $(function () { $('#" + table_id+ phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id+ phase_index + "\">");
             {
-                sw.Write("<thead>");
-                {
-                    sw.Write("<tr>");
-                    {
-                        sw.Write("<th width=\"50px\">Sub</th>");
-                        sw.Write("<th width=\"50px\"></th>");
-                        sw.Write("<th>Name</th>");
-                        foreach (Boon boon in list_to_use)
-                        {
-                            sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
-                        }
-                    }
-                    
-                    sw.Write("</tr>");
-                }           
-                sw.Write("</thead>");
+                HTMLHelper.writeBoonTableHeader(sw, list_to_use);
                 sw.Write("<tbody>");
                 {
                     List<Player> playerIDS = new List<Player>();
@@ -1966,27 +1904,7 @@ namespace LuckParser.Controllers
                                 playerIDS.Add(p);
                         }
                         Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,player, playerIDS);
-                        playerIDS.Clear();
-                        sw.Write("<tr>");
-                        {
-                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                            sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-
-
-                            foreach (Boon boon in list_to_use)
-                            {
-                                if (boonArray.ContainsKey(boon.getID()))
-                                {
-                                    sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
-                                }
-                                else
-                                {
-                                    sw.Write("<td>" + 0 + "</td>");
-                                }
-                            }
-                        }                  
-                        sw.Write("</tr>");
+                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray, GetLink(player.getProf().ToString()));
                     }
                 }          
                 sw.Write("</tbody>");
@@ -2004,12 +1922,7 @@ namespace LuckParser.Controllers
             sw.Write("<script> $(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id + phase_index + "\">");
             {
-                sw.Write(" <thead> <tr> <th width=\"50px\">Sub</th><th width=\"50px\"></th><th>Name</th>");
-                foreach (Boon boon in list_to_use)
-                {
-                    sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
-                }
-                sw.Write(" </tr> </thead>");
+                HTMLHelper.writeBoonTableHeader(sw, list_to_use);
                 sw.Write("<tbody>");
                 {
                     List<Player> playerIDS = new List<Player>();
@@ -2021,25 +1934,7 @@ namespace LuckParser.Controllers
                                 playerIDS.Add(p);
                         }
                         Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,player, playerIDS);
-                        playerIDS.Clear();
-                        sw.Write("<tr>");
-                        {
-                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                            sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-                            foreach (Boon boon in list_to_use)
-                            {
-                                if (boonArray.ContainsKey(boon.getID()))
-                                {
-                                    sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
-                                }
-                                else
-                                {
-                                    sw.Write("<td>" + 0 + "</td>");
-                                }
-                            }
-                        }
-                        sw.Write("</tr>");
+                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray, GetLink(player.getProf().ToString()));
                     }
                 }
                 sw.Write("</tbody>");
@@ -2057,21 +1952,7 @@ namespace LuckParser.Controllers
             sw.Write("<script> $(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id + phase_index + "\">");
             {
-                sw.Write("<thead>");
-                {
-                    sw.Write("<tr>");
-                    {
-                        sw.Write("<th width=\"50px\">Sub</th>");
-                        sw.Write("<th width=\"50px\"></th>");
-                        sw.Write("<th>Name</th>");
-                        foreach (Boon boon in list_to_use)
-                        {
-                            sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
-                        }
-                    }            
-                    sw.Write("</tr>");
-                }           
-                sw.Write("</thead>");
+                HTMLHelper.writeBoonTableHeader(sw, list_to_use);
                 sw.Write("<tbody>");
                 {
                     List<Player> playerIDS = new List<Player>();
@@ -2082,25 +1963,7 @@ namespace LuckParser.Controllers
                     foreach (Player player in p_list)
                     {
                         Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,player, playerIDS);
-                        sw.Write("<tr>");
-                        {
-                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                            sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-                            foreach (Boon boon in list_to_use)
-                            {
-                                if (boonArray.ContainsKey(boon.getID()))
-                                {
-                                    sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
-                                }
-                                else
-                                {
-                                    sw.Write("<td>" + 0 + "</td>");
-                                }
-                            }
-                        }
-
-                        sw.Write("</tr>");
+                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray, GetLink(player.getProf().ToString()));
                     }
                 }
                 sw.Write("</tbody>");
@@ -2227,125 +2090,9 @@ namespace LuckParser.Controllers
                                 {
                                     if (SnapSettings[6])//Display rotation
                                     {
-                                        
                                         foreach (CastLog cl in casting)
                                         {
-
-                                            string skillName = "";
-                                            GW2APISkill skill = null;
-                                            if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
-                                            {
-                                                skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
-                                            }
-                                            if (skill == null)
-                                            {
-                                                skillName = skill_data.getName(cl.getID());
-                                            }
-                                            else
-                                            {
-                                                skillName = skill.name;
-                                            }
-                                            float dur = 0.0f;
-                                            if (skillName == "Dodge")
-                                            {
-                                                dur = 0.5f;
-                                            }
-                                            else if (cl.getID() == -2)
-                                            {//wepswap
-                                                skillName = "Weapon Swap";
-                                                dur = 0.1f;
-                                            }
-                                            else if (skillName == "Resurrect")
-                                            {
-                                                dur = cl.getActDur() / 1000f;
-                                            }
-                                            else if (skillName == "Bandage")
-                                            {
-                                                dur = cl.getActDur() / 1000f;
-                                            }
-                                            else
-                                            {
-                                                dur = cl.getActDur() / 1000f;
-                                            }
-                                            skillName = skillName.Replace("\"", "");
-                                            sw.Write("{");
-                                            {
-                                                
-                                                    sw.Write("y: ['1.5'],");
-                                               
-                                                
-                                               sw.Write(
-                                                      "x: ['" + Math.Min(dur, (phase.end - cl.getTime()) / 1000f) + "']," +
-                                                      "base:'" + (cl.getTime() - phase.start) / 1000f + "'," +
-                                                      "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
-                                                      "orientation:'h'," +
-                                                      "mode: 'markers'," +
-                                                      "type: 'bar',");
-                                                if (skill != null)
-                                                {
-                                                    if (skill.slot == "Weapon_1")
-                                                    {
-                                                        sw.Write("width:'0.5',");
-                                                    }
-                                                    else
-                                                    {
-                                                        sw.Write("width:'1',");
-                                                    }
-
-                                                }
-                                                else
-                                                {
-                                                    sw.Write("width:'1',");
-                                                }
-                                                sw.Write("hoverinfo: 'name'," +
-                                                        "hoverlabel:{namelength:'-1'},");
-                                                sw.Write("marker: {");
-                                                {
-                                                    if (cl.endActivation() != null)
-                                                    {
-                                                        if (cl.endActivation().getID() == 3)
-                                                        {
-                                                            sw.Write("color: 'rgb(40,40,220)',");
-                                                        }
-                                                        else if (cl.endActivation().getID() == 4)
-                                                        {
-                                                            sw.Write("color: 'rgb(220,40,40)',");
-                                                        }
-                                                        else if (cl.endActivation().getID() == 5)
-                                                        {
-                                                            sw.Write("color: 'rgb(40,220,40)',");
-                                                        }
-                                                        else
-                                                        {
-                                                            sw.Write("color: 'rgb(220,220,0)',");
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        sw.Write("color: 'rgb(220,220,0)',");
-                                                    }
-                                                    sw.Write("width: '5',");
-                                                    sw.Write("line:{");
-                                                    {
-                                                        if (cl.startActivation() != null)
-                                                        {
-                                                            if (cl.startActivation().getID() == 1)
-                                                            {
-                                                                sw.Write("color: 'rgb(20,20,20)',");
-                                                            }
-                                                            else if (cl.startActivation().getID() == 2)
-                                                            {
-                                                                sw.Write("color: 'rgb(220,40,220)',");
-                                                            }
-                                                        }
-                                                        sw.Write("width: '1'");
-                                                    }
-                                                    sw.Write("}");
-                                                }
-                                                sw.Write("},");
-                                                sw.Write("showlegend: false");
-                                            }
-                                            sw.Write(" },");
+                                            HTMLHelper.writeCastingItem(sw, cl, skill_data, phase.start, phase.end);
                                         }
                                     }
                                     if (present_boons.Count() > 0)
@@ -2569,76 +2316,8 @@ namespace LuckParser.Controllers
                                             int castCount = 0;
                                             foreach (CastLog cl in casting)
                                             {
-                                                string skillIcon = "";
-                                                GW2APISkill skill = null;
-                                                if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
-                                                {
-                                                    skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
-                                                }
-                                                if (skill != null && cl.getID() != -2)
-                                                {
-                                                    if (skill.slot != "Weapon_1")
-                                                    {
-                                                        skillIcon = skill.icon;
-                                                        sw.Write("{" +
-                                                                     "source: '" + skillIcon + "'," +
-                                                                     "xref: 'x'," +
-                                                                     "yref: 'y'," +
-                                                                     "x: " + (cl.getTime() - phase.start) / 1000f + "," +
-                                                                     "y: 0," +
-                                                                     "sizex: 1.1," +
-                                                                     "sizey: 1.1," +
-                                                                     "xanchor: 'left'," +
-                                                                     "yanchor: 'bottom'" +
-                                                                "}");
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    string skillName = "";
-
-                                                    if (cl.getID() == -2)
-                                                    { //wepswap
-                                                        skillName = "Weapon Swap";
-                                                        // skillIcon = "https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png";
-                                                    }
-                                                    else
-                                                    {
-                                                        skillName = skill_data.getName(cl.getID());
-                                                    }
-
-
-                                                    if (skillName == "Dodge")
-                                                    {
-                                                        // skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
-                                                    }
-                                                    else if (skillName == "Resurrect")
-                                                    {
-                                                        //skillIcon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
-                                                    }
-                                                    else if (skillName == "Bandage")
-                                                    {
-                                                        // skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
-                                                    }
-                                                    sw.Write("{" +
-                                                                  "source: '" + skillIcon + "'," +
-                                                                  "xref: 'x'," +
-                                                                  "yref: 'y'," +
-                                                                  "x: " + (cl.getTime() - phase.start) / 1000f + "," +
-                                                                  "y: 0," +
-                                                                  "sizex: 1.1," +
-                                                                  "sizey: 1.1," +
-                                                                  "xanchor: 'left'," +
-                                                                  "yanchor: 'bottom'" +
-                                                              "}");
-                                                }
-                                                if (castCount == casting.Count - 1)
-                                                {
-                                                }
-                                                else
-                                                {
-                                                    sw.Write(",");
-                                                }
+                                                HTMLHelper.writeCastingItemIcon(sw, cl, skill_data, phase.start, castCount == casting.Count - 1);
+                                                castCount++;
                                             }
                                         }
                                     }
@@ -3993,121 +3672,7 @@ namespace LuckParser.Controllers
 
                             foreach (CastLog cl in casting)
                             {
-
-                                string skillName = "";
-                                GW2APISkill skill = null;
-                                if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
-                                {
-                                    skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
-                                }
-                                if (skill == null)
-                                {
-                                    skillName = skill_data.getName(cl.getID());
-                                }
-                                else
-                                {
-                                    skillName = skill.name;
-                                }
-                                float dur = 0.0f;
-                                if (skillName == "Dodge")
-                                {
-                                    dur = 0.5f;
-                                }
-                                else if (cl.getID() == -2)
-                                {//wepswap
-                                    skillName = "Weapon Swap";
-                                    dur = 0.1f;
-                                }
-                                else if (skillName == "Resurrect")
-                                {
-                                    dur = cl.getActDur() / 1000f;
-                                }
-                                else if (skillName == "Bandage")
-                                {
-                                    dur = cl.getActDur() / 1000f;
-                                }
-                                else
-                                {
-                                    dur = cl.getActDur() / 1000f;
-                                }
-                                skillName = skillName.Replace("\"", "");
-                                sw.Write("{");
-                                {
-
-                                    sw.Write("y: ['1.5'],");
-                                    
-                                    sw.Write(
-                                           "x: ['" + Math.Min(dur, (phase.end - cl.getTime()) / 1000f) + "']," +
-                                           "base:'" + (cl.getTime() - phase.start)/ 1000f + "'," +
-                                           "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
-                                           "orientation:'h'," +
-                                           "mode: 'markers'," +
-                                           "type: 'bar',");
-                                    if (skill != null)
-                                    {
-                                        if (skill.slot == "Weapon_1")
-                                        {
-                                            sw.Write("width:'0.5',");
-                                        }
-                                        else
-                                        {
-                                            sw.Write("width:'1',");
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        sw.Write("width:'1',");
-                                    }
-                                    sw.Write("hoverinfo: 'name'," +
-                                            "hoverlabel:{namelength:'-1'},");
-                                    sw.Write("marker: {");
-                                    {
-                                        if (cl.endActivation() != null)
-                                        {
-                                            if (cl.endActivation().getID() == 3)
-                                            {
-                                                sw.Write("color: 'rgb(40,40,220)',");
-                                            }
-                                            else if (cl.endActivation().getID() == 4)
-                                            {
-                                                sw.Write("color: 'rgb(220,40,40)',");
-                                            }
-                                            else if (cl.endActivation().getID() == 5)
-                                            {
-                                                sw.Write("color: 'rgb(40,220,40)',");
-                                            }
-                                            else
-                                            {
-                                                sw.Write("color: 'rgb(220,220,0)',");
-                                            }
-                                        }
-                                        else
-                                        {
-                                            sw.Write("color: 'rgb(220,220,0)',");
-                                        }
-                                        sw.Write("width: '5',");
-                                        sw.Write("line:{");
-                                        {
-                                            if (cl.startActivation() != null)
-                                            {
-                                                if (cl.startActivation().getID() == 1)
-                                                {
-                                                    sw.Write("color: 'rgb(20,20,20)',");
-                                                }
-                                                else if (cl.startActivation().getID() == 2)
-                                                {
-                                                    sw.Write("color: 'rgb(220,40,220)',");
-                                                }
-                                            }
-                                            sw.Write("width: '1'");
-                                        }
-                                        sw.Write("}");
-                                    }
-                                    sw.Write("},");
-                                    sw.Write("showlegend: false");
-                                }
-                                sw.Write(" },");
+                                HTMLHelper.writeCastingItem(sw, cl, skill_data, phase.start, phase.end);
                             }
                         }
                         //============================================
@@ -4258,73 +3823,8 @@ namespace LuckParser.Controllers
                                 int castCount = 0;
                                 foreach (CastLog cl in casting)
                                 {
-                                    string skillIcon = "";
-                                    GW2APISkill skill = null;
-                                    if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
-                                    {
-                                        skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
-                                    }
-                                    if (skill != null && cl.getID() != -2)
-                                    {
-                                        if (skill.slot != "Weapon_1")
-                                        {
-                                            skillIcon = skill.icon;
-                                            sw.Write("{" +
-                                                      "source: '" + skillIcon + "'," +
-                                                      "xref: 'x'," +
-                                                      "yref: 'y'," +
-                                                      "x: " + (cl.getTime() - phase.start) / 1000f + "," +
-                                                      "y: 0," +
-                                                      "sizex: 1.1," +
-                                                      "sizey: 1.1," +
-                                                      "xanchor: 'left'," +
-                                                      "yanchor: 'bottom'" +
-                                                  "}");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        string skillName = "";
-                                        if (cl.getID() == -2)
-                                        { //wepswap
-                                            skillName = "Weapon Swap";
-                                            // skillIcon = "https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png";
-                                        }
-                                        else
-                                        {
-                                            skillName = skill_data.getName(cl.getID());
-                                        }
-                                        if (skillName == "Dodge")
-                                        {
-                                            // skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
-                                        }
-                                        else if (skillName == "Resurrect")
-                                        {
-                                            //skillIcon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
-                                        }
-                                        else if (skillName == "Bandage")
-                                        {
-                                            // skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
-                                        }
-                                        sw.Write("{" +
-                                                      "source: '" + skillIcon + "'," +
-                                                      "xref: 'x'," +
-                                                      "yref: 'y'," +
-                                                      "x: " + (cl.getTime() - phase.start) / 1000f + "," +
-                                                      "y: 0," +
-                                                      "sizex: 1.1," +
-                                                      "sizey: 1.1," +
-                                                      "xanchor: 'left'," +
-                                                      "yanchor: 'bottom'" +
-                                                  "}");
-                                    }
-                                    if (castCount == casting.Count - 1)
-                                    {
-                                    }
-                                    else
-                                    {
-                                        sw.Write(",");
-                                    }
+                                    HTMLHelper.writeCastingItemIcon(sw, cl, skill_data, phase.start, castCount == casting.Count - 1);
+                                    castCount++;
                                 }
                             }
                         }
@@ -4914,122 +4414,7 @@ namespace LuckParser.Controllers
 
                         foreach (CastLog cl in casting)
                         {
-
-                            string skillName = "";
-                            GW2APISkill skill = null;
-                            if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
-                            {
-                                skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
-                            }
-                            if (skill == null)
-                            {
-                                skillName = skill_data.getName(cl.getID());
-                            }
-                            else
-                            {
-                                skillName = skill.name;
-                            }
-                            float dur = 0.0f;
-                            if (skillName == "Dodge")
-                            {
-                                dur = 0.5f;
-                            }
-                            else if (cl.getID() == -2)
-                            {//wepswap
-                                skillName = "Weapon Swap";
-                                dur = 0.1f;
-                            }
-                            else if (skillName == "Resurrect")
-                            {
-                                dur = cl.getActDur() / 1000f;
-                            }
-                            else if (skillName == "Bandage")
-                            {
-                                dur = cl.getActDur() / 1000f;
-                            }
-                            else
-                            {
-                                dur = cl.getActDur() / 1000f;
-                            }
-                            skillName = skillName.Replace("\"", "");
-                            sw.Write("{");
-                            {
-
-                                sw.Write("y: ['1.5'],");
-
-
-                                sw.Write(
-                                       "x: ['" + dur + "']," +
-                                       "base:'" + cl.getTime() / 1000f + "'," +
-                                       "name: \"" + skillName + " " + dur + "s\"," +//get name should be handled by api
-                                       "orientation:'h'," +
-                                       "mode: 'markers'," +
-                                       "type: 'bar',");
-                                if (skill != null)
-                                {
-                                    if (skill.slot == "Weapon_1")
-                                    {
-                                        sw.Write("width:'0.5',");
-                                    }
-                                    else
-                                    {
-                                        sw.Write("width:'1',");
-                                    }
-
-                                }
-                                else
-                                {
-                                    sw.Write("width:'1',");
-                                }
-                                sw.Write("hoverinfo: 'name'," +
-                                        "hoverlabel:{namelength:'-1'},");
-                                sw.Write("marker: {");
-                                {
-                                    if (cl.endActivation() != null)
-                                    {
-                                        if (cl.endActivation().getID() == 3)
-                                        {
-                                            sw.Write("color: 'rgb(40,40,220)',");
-                                        }
-                                        else if (cl.endActivation().getID() == 4)
-                                        {
-                                            sw.Write("color: 'rgb(220,40,40)',");
-                                        }
-                                        else if (cl.endActivation().getID() == 5)
-                                        {
-                                            sw.Write("color: 'rgb(40,220,40)',");
-                                        }
-                                        else
-                                        {
-                                            sw.Write("color: 'rgb(220,220,0)',");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        sw.Write("color: 'rgb(220,220,0)',");
-                                    }
-                                    sw.Write("width: '5',");
-                                    sw.Write("line:{");
-                                    {
-                                        if (cl.startActivation() != null)
-                                        {
-                                            if (cl.startActivation().getID() == 1)
-                                            {
-                                                sw.Write("color: 'rgb(20,20,20)',");
-                                            }
-                                            else if (cl.startActivation().getID() == 2)
-                                            {
-                                                sw.Write("color: 'rgb(220,40,220)',");
-                                            }
-                                        }
-                                        sw.Write("width: '1'");
-                                    }
-                                    sw.Write("}");
-                                }
-                                sw.Write("},");
-                                sw.Write("showlegend: false");
-                            }
-                            sw.Write(" },");
+                            HTMLHelper.writeCastingItem(sw, cl, skill_data, 0, boss_data.getAwareDuration());
                         }
                     }
                     if (present_boons.Count() > 0)
@@ -5253,76 +4638,8 @@ namespace LuckParser.Controllers
                             int castCount = 0;
                             foreach (CastLog cl in casting)
                             {
-                                string skillIcon = "";
-                                GW2APISkill skill = null;
-                                if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
-                                {
-                                    skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
-                                }
-                                if (skill != null && cl.getID() != -2)
-                                {
-                                    if (skill.slot != "Weapon_1")
-                                    {
-                                        skillIcon = skill.icon;
-                                        sw.Write("{" +
-                                                     "source: '" + skillIcon + "'," +
-                                                     "xref: 'x'," +
-                                                     "yref: 'y'," +
-                                                     "x: " + (cl.getTime() / 1000f) + "," +
-                                                     "y: 0," +
-                                                     "sizex: 1.1," +
-                                                     "sizey: 1.1," +
-                                                     "xanchor: 'left'," +
-                                                     "yanchor: 'bottom'" +
-                                                "}");
-                                    }
-                                }
-                                else
-                                {
-                                    string skillName = "";
-
-                                    if (cl.getID() == -2)
-                                    { //wepswap
-                                        skillName = "Weapon Swap";
-                                        // skillIcon = "https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png";
-                                    }
-                                    else
-                                    {
-                                        skillName = skill_data.getName(cl.getID());
-                                    }
-
-
-                                    if (skillName == "Dodge")
-                                    {
-                                        // skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
-                                    }
-                                    else if (skillName == "Resurrect")
-                                    {
-                                        //skillIcon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
-                                    }
-                                    else if (skillName == "Bandage")
-                                    {
-                                        // skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
-                                    }
-                                    sw.Write("{" +
-                                                  "source: '" + skillIcon + "'," +
-                                                  "xref: 'x'," +
-                                                  "yref: 'y'," +
-                                                  "x: " + cl.getTime() / 1000f + "," +
-                                                  "y: 0," +
-                                                  "sizex: 1.1," +
-                                                  "sizey: 1.1," +
-                                                  "xanchor: 'left'," +
-                                                  "yanchor: 'bottom'" +
-                                              "}");
-                                }
-                                if (castCount == casting.Count - 1)
-                                {
-                                }
-                                else
-                                {
-                                    sw.Write(",");
-                                }
+                                HTMLHelper.writeCastingItemIcon(sw, cl, skill_data, 0, castCount == casting.Count - 1);
+                                castCount++;
                             }
                         }
                     }
