@@ -723,69 +723,8 @@ namespace LuckParser.Controllers
             foreach (Player p in p_list)
             {
                 //Adding dps axis
-                List<Point> playerbossdpsgraphdata = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data,p, boss, phase_index);
-                if (totalDpsAllPlayers.Count == 0)
-                {
-                    //totalDpsAllPlayers = new List<int[]>(playerbossdpsgraphdata);
-                    foreach (Point point in playerbossdpsgraphdata)
-                    {
-                        int time = point.X;
-                        int dmg = point.Y;
-                        totalDpsAllPlayers.Add(new Point( time, dmg ));
-                    }
-                }
 
-                sw.Write("{y: [");
                 int pbdgdCount = 0;
-                foreach (Point dp in playerbossdpsgraphdata)
-                {
-                    if (pbdgdCount == playerbossdpsgraphdata.Count - 1)
-                    {
-                        sw.Write("'" + dp.Y + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + dp.Y + "',");
-                    }
-                    pbdgdCount++;
-
-                    if (dp.Y > maxDPS) { maxDPS = dp.Y; }
-                    if (totalDpsAllPlayers.Count != 0)
-                    {
-                        totalDpsAllPlayers[dp.X] = new Point(dp.X, totalDpsAllPlayers[dp.X].Y + dp.Y);
-                    }
-                }
-                if (playerbossdpsgraphdata.Count == 0)
-                {
-                    sw.Write("'0'");
-                }
-
-                sw.Write("],");
-                //add time axis
-                sw.Write("x: [");
-                pbdgdCount = 0;
-                foreach (Point dp in playerbossdpsgraphdata)
-                {
-                    if (pbdgdCount == playerbossdpsgraphdata.Count - 1)
-                    {
-                        sw.Write("'" + dp.X + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + dp.X + "',");
-                    }
-                    pbdgdCount++;
-                }
-                if (playerbossdpsgraphdata.Count == 0)
-                {
-                    sw.Write("'0'");
-                }
-
-                sw.Write("],");
-                sw.Write("mode: 'lines'," +
-                        "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf()) + "'}," +
-                        "name: '" + p.getCharacter() + " DPS'" +
-                        "},");
                 if (SnapSettings[0])
                 {//Turns display on or off
                     sw.Write("{");
@@ -836,10 +775,73 @@ namespace LuckParser.Controllers
 
                     sw.Write("],");
                     sw.Write("mode: 'lines'," +
-                            "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf()) + "'}," +
+                            "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf()+ "-Total") + "'}," +
                             "visible:'legendonly'," +
                             "name: '" + p.getCharacter() + "TDPS'" + "},");
                 }
+                List<Point> playerbossdpsgraphdata = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index);
+                if (totalDpsAllPlayers.Count == 0)
+                {
+                    //totalDpsAllPlayers = new List<int[]>(playerbossdpsgraphdata);
+                    foreach (Point point in playerbossdpsgraphdata)
+                    {
+                        int time = point.X;
+                        int dmg = point.Y;
+                        totalDpsAllPlayers.Add(new Point(time, dmg));
+                    }
+                }
+
+                sw.Write("{y: [");
+                pbdgdCount = 0;
+                foreach (Point dp in playerbossdpsgraphdata)
+                {
+                    if (pbdgdCount == playerbossdpsgraphdata.Count - 1)
+                    {
+                        sw.Write("'" + dp.Y + "'");
+                    }
+                    else
+                    {
+                        sw.Write("'" + dp.Y + "',");
+                    }
+                    pbdgdCount++;
+
+                    if (dp.Y > maxDPS) { maxDPS = dp.Y; }
+                    if (totalDpsAllPlayers.Count != 0)
+                    {
+                        totalDpsAllPlayers[dp.X] = new Point(dp.X, totalDpsAllPlayers[dp.X].Y + dp.Y);
+                    }
+                }
+                if (playerbossdpsgraphdata.Count == 0)
+                {
+                    sw.Write("'0'");
+                }
+
+                sw.Write("],");
+                //add time axis
+                sw.Write("x: [");
+                pbdgdCount = 0;
+                foreach (Point dp in playerbossdpsgraphdata)
+                {
+                    if (pbdgdCount == playerbossdpsgraphdata.Count - 1)
+                    {
+                        sw.Write("'" + dp.X + "'");
+                    }
+                    else
+                    {
+                        sw.Write("'" + dp.X + "',");
+                    }
+                    pbdgdCount++;
+                }
+                if (playerbossdpsgraphdata.Count == 0)
+                {
+                    sw.Write("'0'");
+                }
+
+                sw.Write("],");
+                sw.Write("mode: 'lines'," +
+                        "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf()) + "'}," +
+                        "name: '" + p.getCharacter() + " DPS'" +
+                        "},");
             }
             //All Player dps
             sw.Write("{");
@@ -892,7 +894,7 @@ namespace LuckParser.Controllers
                 List<MechanicLog> filterdList = new List<MechanicLog>();
                 foreach (Mechanic me in mechs)
                 {
-                    filterdList.AddRange(mech_data.GetMDataLogs().Where(x => x.GetSkill() == me.GetSkill()).ToList());
+                    filterdList.AddRange(mech_data.GetMDataLogs().Where(x => x.GetSkill() == me.GetSkill() && phase.inInterval(1000 * x.GetTime())).ToList());
                 }
                 Mechanic mech = mechs[0];
                 //List<MechanicLog> filterdList = mech_data.GetMDataLogs().Where(x => x.GetName() == mech.GetName()).ToList();
@@ -902,7 +904,7 @@ namespace LuckParser.Controllers
                 int mechcount = 0;
                 foreach (MechanicLog ml in filterdList)
                 {
-                    Point check = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data,ml.GetPlayer(), boss, phase_index).FirstOrDefault(x => x.X == ml.GetTime());
+                    Point check = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data,ml.GetPlayer(), boss, phase_index).FirstOrDefault(x => x.X == ml.GetTime() - phase.start/1000);
                     if (mechcount == filterdList.Count - 1)
                     {
                         if (check != null)
@@ -938,11 +940,11 @@ namespace LuckParser.Controllers
                 {
                     if (mechcount == filterdList.Count - 1)
                     {
-                        sw.Write("'" + ml.GetTime() + "'");
+                        sw.Write("'" + (ml.GetTime() - phase.start / 1000) + "'");
                     }
                     else
                     {
-                        sw.Write("'" + ml.GetTime() + "',");
+                        sw.Write("'" + (ml.GetTime() - phase.start / 1000) + "',");
                     }
 
                     mechcount++;
@@ -950,11 +952,7 @@ namespace LuckParser.Controllers
 
                 sw.Write("],");
                 sw.Write(" mode: 'markers',");
-                if (mech.GetName() == "DEAD" || mech.GetName() == "DOWN")
-                {
-                    //sw.Write("visible:'legendonly',");
-                }
-                else
+                if (mech.GetName() != "DEAD" && mech.GetName() != "DOWN")
                 {
                     sw.Write("visible:'legendonly',");
                 }
@@ -987,14 +985,14 @@ namespace LuckParser.Controllers
             foreach (string state in DnDStringList)
             {
                 int mcount = 0;
-                List<MechanicLog> DnDList = mech_data.GetMDataLogs().Where(x => x.GetName() == state).ToList();
+                List<MechanicLog> DnDList = mech_data.GetMDataLogs().Where(x => x.GetName() == state && phase.inInterval(1000*x.GetTime())).ToList();
                 sw.Write("{");
                 {
                     sw.Write("y: [");
                     {
                         foreach (MechanicLog ml in DnDList)
                         {
-                            Point check = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, ml.GetPlayer(), boss, phase_index).FirstOrDefault(x => x.X == ml.GetTime());
+                            Point check = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, ml.GetPlayer(), boss, phase_index).FirstOrDefault(x => x.X == ml.GetTime() - phase.start/1000);
                             if (mcount == DnDList.Count - 1)
                             {
                                 if (check != null)
@@ -1033,11 +1031,11 @@ namespace LuckParser.Controllers
                         {
                             if (mcount == DnDList.Count - 1)
                             {
-                                sw.Write("'" + ml.GetTime() + "'");
+                                sw.Write("'" + (ml.GetTime() - phase.start / 1000) + "'");
                             }
                             else
                             {
-                                sw.Write("'" + ml.GetTime() + "',");
+                                sw.Write("'" + (ml.GetTime() - phase.start / 1000) + "',");
                             }
 
                             mcount++;
@@ -1046,11 +1044,7 @@ namespace LuckParser.Controllers
 
                     sw.Write("],");
                     sw.Write(" mode: 'markers',");
-                    if (state == "DEAD" || state == "DOWN")
-                    {
-                        //sw.Write("visible:'legendonly',");
-                    }
-                    else
+                    if (state != "DEAD" && state != "DOWN")
                     {
                         sw.Write("visible:'legendonly',");
                     }
@@ -2061,17 +2055,6 @@ namespace LuckParser.Controllers
                                         }
                                     }
                                     int maxDPS = 0;
-                                    if (SnapSettings[2])
-                                    {//show boss dps plot
-                                     //Adding dps axis
-                                        List<Point> playerbossdpsgraphdata = HTMLHelper.getBossDPSGraph(boss_data,combat_data,agent_data,p, boss,phase_index);
-                                        sw.Write("{");
-                                        {
-                                            HTMLHelper.writeDPSGraph(sw, "Boss DPS", playerbossdpsgraphdata, p);
-                                        }
-                                        maxDPS = Math.Max(maxDPS, playerbossdpsgraphdata.Max(x => x.Y));
-                                        sw.Write("},");
-                                    }
                                     if (SnapSettings[1])
                                     {//show total dps plot
                                         List<Point> playertotaldpsgraphdata = HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index);
@@ -2079,6 +2062,17 @@ namespace LuckParser.Controllers
                                         { //Adding dps axis
                                             HTMLHelper.writeDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, p);
                                         }
+                                        sw.Write("},");
+                                    }
+                                    if (SnapSettings[2])
+                                    {//show boss dps plot
+                                     //Adding dps axis
+                                        List<Point> playerbossdpsgraphdata = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index);
+                                        sw.Write("{");
+                                        {
+                                            HTMLHelper.writeDPSGraph(sw, "Boss DPS", playerbossdpsgraphdata, p);
+                                        }
+                                        maxDPS = Math.Max(maxDPS, playerbossdpsgraphdata.Max(x => x.Y));
                                         sw.Write("}");
                                     }
                                 }
@@ -3256,7 +3250,7 @@ namespace LuckParser.Controllers
                                 {
                                     string active = (i > 0 ? "" : "active");
                                     string name = i > 0 ? "Phase " + i : "Full Fight";
-                                    sw.Write("<li class=\"nav-item\">" +
+                                    sw.Write("<li data-toggle=\"tooltip\" title=\"" + phases[i].getDuration("s") + "\" class=\"nav-item\">" +
                                             "<a class=\"nav-link "+active+"\" data-toggle=\"tab\" href=\"#phase" + i + "\">" + name + "</a>" +
                                         "</li>");
                                 }
@@ -3576,12 +3570,6 @@ namespace LuckParser.Controllers
                             }
                         }
                         sw.Write("</div>");
-                        sw.Write("<div>");
-                        for (int i = 1; i < phases.Count; i++)
-                        {
-                            sw.Write("<p>Phase " + i + " started at " + phases[i].start / 1000 + "s and ended at " + phases[i].end / 1000 + "s</p>");
-                        }
-                        sw.Write("</div>");
                         sw.Write("<p style=\"margin-top:10px;\"> ARC:" + log_data.getBuildVersion().ToString() + " | Bossid " + boss_data.getID().ToString() + " </p> ");
                         sw.Write("<p style=\"margin-top:-15px;\">File recorded by: " + log_data.getPOV() + "</p>");
                     }
@@ -3634,191 +3622,39 @@ namespace LuckParser.Controllers
                         {
                             if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null)
                             {
+                                BoonsGraphModel bgm = boonGraphData[boonid];
                                 sw.Write("{");
                                 {
-                                    BoonsGraphModel bgm = boonGraphData[boonid];
-                                    List<Point> bChart = bgm.getBoonChart();
-                                    int bChartCount = 0;
-                                    sw.Write("y: [");
-                                    {
-                                        foreach (Point pnt in bChart)
-                                        {
-                                            if (bChartCount == bChart.Count - 1)
-                                            {
-                                                sw.Write("'" + pnt.Y + "'");
-                                            }
-                                            else
-                                            {
-                                                sw.Write("'" + pnt.Y + "',");
-                                            }
-                                            bChartCount++;
-                                        }
-                                        if (bgm.getBoonChart().Count == 0)
-                                        {
-                                            sw.Write("'0'");
-                                        }
-                                    }
-                                    sw.Write("],");
-                                    sw.Write("x: [");
-                                    {
-                                        bChartCount = 0;
-                                        foreach (Point pnt in bChart)
-                                        {
-                                            if (bChartCount == bChart.Count - 1)
-                                            {
-                                                sw.Write("'" + pnt.X + "'");
-                                            }
-                                            else
-                                            {
-                                                sw.Write("'" + pnt.X + "',");
-                                            }
-                                            bChartCount++;
-                                        }
-                                        if (bgm.getBoonChart().Count == 0)
-                                        {
-                                            sw.Write("'0'");
-                                        }
-                                    }
-                                    sw.Write("],");
-                                    sw.Write("yaxis: 'y2'," +
-                                             "type: 'scatter',");
-                                    //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
-                                    if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness")
-                                    {
-                                    }
-                                    else
-                                    {
-                                        sw.Write(" visible: 'legendonly',");
-                                    }
-                                    sw.Write("line: {shape: 'hv', color:'" + HTMLHelper.GetLink("Color-" + bgm.getBoonName()) + "'},");
-                                    sw.Write("fill: 'tozeroy'," +
-                                            "name: \"" + bgm.getBoonName() + "\"");
+                                    HTMLHelper.writeBoonGraph(sw, bgm, 0, boss_data.getAwareDuration());
                                 }
                                 sw.Write(" },");
                             }
                         }
                     }
                     int maxDPS = 0;
+                    if (SnapSettings[1])
+                    {//show total dps plot
+                        List<Point> playertotaldpsgraphdata = HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data, p, boss, 0);
+                        sw.Write("{");
+                        {
+                            HTMLHelper.writeDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, p);
+                        }
+                        sw.Write("},");
+                    }
                     if (SnapSettings[2])
                     {//show boss dps plot
                      //Adding dps axis
-                        List<Point> playerbossdpsgraphdata = HTMLHelper.getBossDPSGraph(boss_data,combat_data,agent_data,p,boss, 0);
-                        int pbdgCount = 0;
+                        List<Point> playerbossdpsgraphdata = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, p, boss, 0);
                         sw.Write("{");
                         {
-                            sw.Write("y: [");
-                            {
-                                foreach (Point dp in playerbossdpsgraphdata)
-                                {
-                                    if (maxDPS < dp.Y)
-                                    {
-                                        maxDPS = dp.Y;
-                                    }
-                                    if (pbdgCount == playerbossdpsgraphdata.Count - 1)
-                                    {
-                                        sw.Write("'" + dp.Y + "'");
-                                    }
-                                    else
-                                    {
-                                        sw.Write("'" + dp.Y + "',");
-                                    }
-                                    pbdgCount++;
-                                }
-                                if (playerbossdpsgraphdata.Count == 0)
-                                {
-                                    sw.Write("'0'");
-                                }
-                            }
-                            sw.Write("],");
-                            //add time axis
-                            sw.Write("x: [");
-                            {
-                                pbdgCount = 0;
-                                foreach (Point dp in playerbossdpsgraphdata)
-                                {
-                                    if (pbdgCount == playerbossdpsgraphdata.Count - 1)
-                                    {
-                                        sw.Write("'" + dp.X + "'");
-                                    }
-                                    else
-                                    {
-                                        sw.Write("'" + dp.X + "',");
-                                    }
-
-                                    pbdgCount++;
-                                }
-                                if (playerbossdpsgraphdata.Count == 0)
-                                {
-                                    sw.Write("'0'");
-                                }
-                            }
-                            sw.Write("],");
-                            sw.Write("mode: 'lines'," +
-                                    "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf()) + "'}," +
-                                    "yaxis: 'y3'," +
-                                    // "legendgroup: 'Damage',"+
-                                    "name: 'Boss DPS'");
+                            HTMLHelper.writeDPSGraph(sw, "Boss DPS", playerbossdpsgraphdata, p);
                         }
-
+                        maxDPS = Math.Max(maxDPS, playerbossdpsgraphdata.Max(x => x.Y));
                         sw.Write("},");
                     }
-                    if (SnapSettings[1])
-                    {//show total dps plot
-                        sw.Write("{");
-                        { //Adding dps axis
-                            List<Point> playertotaldpsgraphdata = HTMLHelper.getTotalDPSGraph(boss_data,combat_data,agent_data,p, boss,0);
-                            int ptdgCount = 0;
-                            sw.Write("y: [");
-                            {
-                                foreach (Point dp in playertotaldpsgraphdata)
-                                {
-                                    if (ptdgCount == playertotaldpsgraphdata.Count - 1)
-                                    {
-                                        sw.Write("'" + dp.Y + "'");
-                                    }
-                                    else
-                                    {
-                                        sw.Write("'" + dp.Y + "',");
-                                    }
-                                    ptdgCount++;
-                                }
-                                if (playertotaldpsgraphdata.Count == 0)
-                                {
-                                    sw.Write("'0'");
-                                }
-                            }
-                            sw.Write("],");
-                            //add time axis
-                            sw.Write("x: [");
-                            {
-                                ptdgCount = 0;
-                                foreach (Point dp in playertotaldpsgraphdata)
-                                {
-                                    if (ptdgCount == playertotaldpsgraphdata.Count - 1)
-                                    {
-                                        sw.Write("'" + dp.X + "'");
-                                    }
-                                    else
-                                    {
-                                        sw.Write("'" + dp.X + "',");
-                                    }
-                                    ptdgCount++;
-                                }
-                                if (playertotaldpsgraphdata.Count == 0)
-                                {
-                                    sw.Write("'0'");
-                                }
-                            }
-                            sw.Write("],");
-                            sw.Write(" mode: 'lines'," +
-                                   "line: {shape: 'spline',color:'rgb(0,250,0)'}," +
-                                   "yaxis: 'y3'," +
-                                   // "legendgroup: 'Damage'," +
-                                   "name: 'Total DPS'");
-
-                        }
-                        sw.Write("}");
-                    }
+                    sw.Write("{");
+                    HTMLHelper.writeBossHealthGraph(sw, maxDPS, 0, boss_data.getAwareDuration(), boss_data, "y3");
+                    sw.Write("}");
                 }
                 sw.Write("];");
                 sw.Write("var layout = {");

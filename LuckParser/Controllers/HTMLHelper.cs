@@ -940,7 +940,10 @@ namespace LuckParser.Controllers
             //Boss Health
             //Adding dps axis
             sw.Write("y: [");
-
+            if (maxDPS == 0)
+            {
+                maxDPS = 1000;
+            }
             int hotCount = 0;
             List<Point> BossHOT = boss_data.getHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
             foreach (Point dp in BossHOT)
