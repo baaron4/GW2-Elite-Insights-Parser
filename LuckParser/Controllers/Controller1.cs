@@ -3279,8 +3279,10 @@ namespace LuckParser.Controllers
                                 {
                                     string active = (i > 0 ? "" : "active");
                                     string name = i > 0 ? "Phase " + i : "Full Fight";
-                                    sw.Write("<li data-toggle=\"tooltip\" title=\"" + phases[i].getDuration("s") + "\" class=\"nav-item\">" +
-                                            "<a class=\"nav-link "+active+"\" data-toggle=\"tab\" href=\"#phase" + i + "\">" + name + "</a>" +
+                                    sw.Write("<li  class=\"nav-item\">" +
+                                            "<a class=\"nav-link "+active+"\" data-toggle=\"tab\" href=\"#phase" + i + "\">" +
+                                                "<span data-toggle=\"tooltip\" title=\"" + phases[i].getDuration("s") + "\">" + name+ " seconds</span>" +
+                                            "</a>" +
                                         "</li>");
                                 }
                             }
