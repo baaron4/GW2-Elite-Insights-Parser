@@ -1085,11 +1085,11 @@ namespace LuckParser.Controllers
                 {
                     if (hotCount == BossHOT.Count - 1)
                     {
-                        sw.Write("'" + (dp[1] / 10000f) * maxDPS + "'");
+                        sw.Write("'" + ((dp[1] / 10000f) * maxDPS).ToString().Replace(',','.') + "'");
                     }
                     else
                     {
-                        sw.Write("'" + (dp[1] / 10000f) * maxDPS + "',");
+                        sw.Write("'" + ((dp[1] / 10000f) * maxDPS).ToString().Replace(',', '.') + "',");
                     }
                     hotCount++;
 
@@ -1123,11 +1123,11 @@ namespace LuckParser.Controllers
                 {
                     if (hotCount == BossHOT.Count - 1)
                     {
-                        sw.Write("'" + dp[0] / 1000f + "'");
+                        sw.Write("'" + (dp[0] / 1000).ToString().Replace(',','.') + "'");
                     }
                     else
                     {
-                        sw.Write("'" + dp[0] / 1000f + "',");
+                        sw.Write("'" + (dp[0] / 1000).ToString().Replace(',', '.') + "',");
                     }
 
                     hotCount++;
@@ -1146,8 +1146,8 @@ namespace LuckParser.Controllers
             }
             sw.Write("];" +
                     "var layout = {" +
-                        "xaxis:{title:'DPS'}," +
-                        "yaxis:{title:'Time(sec)'}," +
+                        "yaxis:{title:'DPS'}," +
+                        "xaxis:{title:'Time(sec)'}," +
                         //"legend: { traceorder: 'reversed' }," +
                         "hovermode: 'compare'," +
                         "legend: {orientation: 'h'}," +
@@ -1459,8 +1459,8 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[1]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//crit
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[2] + " out of " + stats[0] + " hits <br> Pure Scholar Damage: " + stats[19] + "<br> Effective Damage Increase: " + (int)(Double.Parse(stats[19]) / Double.Parse(stats[20]) * 100) + "% \">" + (int)(Double.Parse(stats[2]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//scholar
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " out of " + stats[0] + "hits<br> Total Damage Effected by Crits: "+stats[22]+" \">" + (int)(Double.Parse(stats[1]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//crit
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[2] + " out of " + stats[0] + " hits <br> Pure Scholar Damage: " + stats[19] + "<br> Effective Damage Increase: " + Math.Round((Double.Parse(stats[19]) / Double.Parse(stats[20]) * 100),3) + "% \">" + (int)(Double.Parse(stats[2]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//scholar
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[3]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//sws
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[4] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[4]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//flank
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[10] + " out of " + stats[0] + "hits \">" + (int)(Double.Parse(stats[10]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//glance
@@ -4340,7 +4340,8 @@ namespace LuckParser.Controllers
                     return "sh";
                 case "Dhuum-ext":
                     return "dhuum";
-                    //ID version for multilingual
+
+                //ID version for multilingual
                 case "15438-icon":
                     return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
                 case "15429-icon":
@@ -4367,6 +4368,19 @@ namespace LuckParser.Controllers
                     return "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
                 case "19450-icon":
                     return "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
+                case "17021-icon":
+                    return "http://dulfy.net/wp-content/uploads/2016/11/gw2-nightmare-fractal-teaser.jpg";
+                case "17028-icon":
+                    return "https://wiki.guildwars2.com/images/d/dc/Siax_the_Corrupted.jpg";
+                case "16948-icon":
+                    return "https://wiki.guildwars2.com/images/5/57/Champion_Toxic_Hybrid.jpg";
+                case "17632-icon":
+                    return "https://wiki.guildwars2.com/images/c/c1/Skorvald_the_Shattered.jpg";
+                case "17949-icon":
+                    return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+                case "17759-icon":
+                    return "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
+
                 case "15438-ext":
                     return "vg";
                 case "15429-ext":
@@ -4393,6 +4407,18 @@ namespace LuckParser.Controllers
                     return "sh";
                 case "19450-ext":
                     return "dhuum";
+                case "17021-ext":
+                    return "mama";
+                case "17028-ext":
+                    return "siax";
+                case "16948-ext":
+                    return "ensol";
+                case "17632-ext":
+                    return "skorv";
+                case "17949-ext":
+                    return "arstra";
+                case "17759-ext":
+                    return "arkk";
 
                 case "Warrior":
                     return "https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png";
@@ -4451,33 +4477,33 @@ namespace LuckParser.Controllers
                 case "Scourge":
                     return "https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png";
 
-                case"Color-Warrior":return "rgb(255,209,102)";
-                case"Color-Berserker": return "rgb(255,209,102)";
-                case"Color-Spellbreaker": return "rgb(255,209,102)";
-                case"Color-Guardian": return "rgb(114,193,217)";
-                case"Color-Dragonhunter": return "rgb(114,193,217)";
-                case"Color-Firebrand": return "rgb(114,193,217)";
-                case"Color-Revenant": return "rgb(209,110,90)";
-                case"Color-Herald": return "rgb(209,110,90)";
-                case"Color-Renegade": return "rgb(209,110,90)";
-                case"Color-Engineer": return "rgb(208,156,89)";
-                case"Color-Scrapper": return "rgb(208,156,89)";
-                case"Color-Holosmith": return "rgb(208,156,89)";
-                case"Color-Ranger": return "rgb(140,220,130)";
-                case"Color-Druid": return "rgb(140,220,130)";
-                case"Color-Soulbeast": return "rgb(140,220,130)";
-                case"Color-Thief": return "rgb(192,143,149)";
-                case"Color-Daredevil": return "rgb(192,143,149)";
-                case"Color-Deadeye": return "rgb(192,143,149)";
-                case"Color-Elementalist": return "rgb(246,138,135)";
-                case"Color-Tempest": return "rgb(246,138,135)";
-                case"Color-Weaver": return "rgb(246,138,135)";
-                case"Color-Mesmer": return "rgb(182,121,213)";
-                case"Color-Chronomancer": return "rgb(182,121,213)";
-                case"Color-Mirage": return "rgb(182,121,213)";
-                case"Color-Necromancer": return "rgb(82,167,111)";
-                case"Color-Reaper": return "rgb(82,167,111)";
-                case"Color-Scourge": return "rgb(82,167,111)";
+                case "Color-Warrior": return "rgb(255,209,102)";
+                case "Color-Berserker": return "rgb(255,209,102)";
+                case "Color-Spellbreaker": return "rgb(255,209,102)";
+                case "Color-Guardian": return "rgb(114,193,217)";
+                case "Color-Dragonhunter": return "rgb(114,193,217)";
+                case "Color-Firebrand": return "rgb(114,193,217)";
+                case "Color-Revenant": return "rgb(209,110,90)";
+                case "Color-Herald": return "rgb(209,110,90)";
+                case "Color-Renegade": return "rgb(209,110,90)";
+                case "Color-Engineer": return "rgb(208,156,89)";
+                case "Color-Scrapper": return "rgb(208,156,89)";
+                case "Color-Holosmith": return "rgb(208,156,89)";
+                case "Color-Ranger": return "rgb(140,220,130)";
+                case "Color-Druid": return "rgb(140,220,130)";
+                case "Color-Soulbeast": return "rgb(140,220,130)";
+                case "Color-Thief": return "rgb(192,143,149)";
+                case "Color-Daredevil": return "rgb(192,143,149)";
+                case "Color-Deadeye": return "rgb(192,143,149)";
+                case "Color-Elementalist": return "rgb(246,138,135)";
+                case "Color-Tempest": return "rgb(246,138,135)";
+                case "Color-Weaver": return "rgb(246,138,135)";
+                case "Color-Mesmer": return "rgb(182,121,213)";
+                case "Color-Chronomancer": return "rgb(182,121,213)";
+                case "Color-Mirage": return "rgb(182,121,213)";
+                case "Color-Necromancer": return "rgb(82,167,111)";
+                case "Color-Reaper": return "rgb(82,167,111)";
+                case "Color-Scourge": return "rgb(82,167,111)";
 
                 case "Crit":
                     return "https://wiki.guildwars2.com/images/9/95/Critical_Chance.png";
@@ -4513,7 +4539,7 @@ namespace LuckParser.Controllers
                     return "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
                 case "Bandage":
                     return "https://render.guildwars2.com/file/D2D7D11874060D68760BFD519CFC77B6DF14981F/102928.png";
-                    
+
                 case "Color-Aegis": return "rgb(102,255,255)";
                 case "Color-Fury": return "rgb(255,153,0)";
                 case "Color-Might": return "rgb(153,0,0)";

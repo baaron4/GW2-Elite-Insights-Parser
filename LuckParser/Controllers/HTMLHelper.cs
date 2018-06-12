@@ -99,6 +99,7 @@ namespace LuckParser.Controllers
             // Rates
             int power_loop_count = 0;
             int critical_rate = 0;
+            int crit_dmg = 0;
             int scholar_rate = 0;
             int scholar_dmg = 0;
             int totaldamage = damage_logs.Sum(x => x.getDamage());
@@ -130,6 +131,8 @@ namespace LuckParser.Controllers
                     if (log.getResult().getEnum() == "CRIT")
                     {
                         critical_rate++;
+
+                        crit_dmg += log.getDamage();
                     }
                     if (log.isNinety() > 0)
                     {
@@ -228,6 +231,7 @@ namespace LuckParser.Controllers
                                         scholar_dmg.ToString(),
                                         totaldamage.ToString(),
                                         dcd.ToString("0.00"),
+                                        crit_dmg.ToString()
             };
             return statsArray;
         }
