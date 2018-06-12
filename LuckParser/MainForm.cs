@@ -50,7 +50,7 @@ namespace LuckParser
         public MainForm(string[] args)
         {
             InitializeComponent();
-            listView1_AddItems(args);
+            LvFileList_AddItems(args);
             m_DoWork(log_Console, null, null);
         }
 
@@ -290,7 +290,7 @@ namespace LuckParser
             m_DoWork(log_Worker, cancel_Worker, e);
         }
 
-        private void btnStartAsyncOperation_Click(object sender, EventArgs e)
+        private void BtnParse_Click(object sender, EventArgs e)
         {
             //Change the status of the buttons on the UI accordingly
             //The start button is disabled as soon as the background operation is started
@@ -305,7 +305,7 @@ namespace LuckParser
                 m_oWorker.RunWorkerAsync();
             }
         }
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void BtnCancel_Click(object sender, EventArgs e)
         {
             if (m_oWorker.IsBusy)
             {
@@ -317,7 +317,7 @@ namespace LuckParser
             }
         }
 
-        private void listView1_AddItems(string[] filesArray)
+        private void LvFileList_AddItems(string[] filesArray)
         {
             List<string> files = new List<string>();
             foreach (string file in filesArray)
@@ -358,7 +358,7 @@ namespace LuckParser
             }
         }
        
-        private void listView1_DragDrop(object sender, DragEventArgs e)
+        private void LvFileList_DragDrop(object sender, DragEventArgs e)
         {
             btnParse.Enabled = true;
             if (completedOp)
@@ -368,32 +368,27 @@ namespace LuckParser
             }
             //Get files as list
             string[] filesArray = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-            listView1_AddItems(filesArray);
+            LvFileList_AddItems(filesArray);
         }
 
-        private void listView1_DragEnter(object sender, DragEventArgs e)
+        private void LvFileList_DragEnter(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.All;
         }
 
-        private void listView1_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        private void LvFileList_DrawHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             e.Graphics.FillRectangle(Brushes.Yellow, e.Bounds);
             e.DrawText();
         }
 
-        private void settingsbtn_Click(object sender, EventArgs e)
+        private void BtnSettings_Click(object sender, EventArgs e)
         {
             setFrm = new SettingsForm(/*settingArray,this*/);
             setFrm.Show();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnClear_Click(object sender, EventArgs e)
+        private void BtnClear_Click(object sender, EventArgs e)
         {
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
@@ -401,24 +396,14 @@ namespace LuckParser
             lvFileList.Items.Clear();
         }
 
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listView1_MouseMove_1(object sender, MouseEventArgs e)
+        private void LvFileList_MouseMove(object sender, MouseEventArgs e)
         {
             var hit = lvFileList.HitTest(e.Location);
             if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1]) lvFileList.Cursor = Cursors.Hand;
             else lvFileList.Cursor = Cursors.Default;
         }
 
-        private void listView1_MouseUp(object sender, MouseEventArgs e)
-        {
-            
-        }
-
-        private void listView1_MouseClick(object sender, MouseEventArgs e)
+        private void LvFilesList_MouseClick(object sender, MouseEventArgs e)
         {
             var hit = lvFileList.HitTest(e.Location);
             if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1])

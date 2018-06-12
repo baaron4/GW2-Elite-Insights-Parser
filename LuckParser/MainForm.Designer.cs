@@ -85,7 +85,7 @@
             this.btnParse.TabIndex = 10;
             this.btnParse.Text = "Parse";
             this.btnParse.UseVisualStyleBackColor = true;
-            this.btnParse.Click += new System.EventHandler(this.btnStartAsyncOperation_Click);
+            this.btnParse.Click += new System.EventHandler(this.BtnParse_Click);
             // 
             // btnCancel
             // 
@@ -96,7 +96,7 @@
             this.btnCancel.TabIndex = 11;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // lvFileList
             // 
@@ -117,12 +117,11 @@
             this.lvFileList.TabIndex = 12;
             this.lvFileList.UseCompatibleStateImageBehavior = false;
             this.lvFileList.View = System.Windows.Forms.View.Details;
-            this.lvFileList.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.listView1_DrawColumnHeader);
-            this.lvFileList.DragDrop += new System.Windows.Forms.DragEventHandler(this.listView1_DragDrop);
-            this.lvFileList.DragEnter += new System.Windows.Forms.DragEventHandler(this.listView1_DragEnter);
-            this.lvFileList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
-            this.lvFileList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseMove_1);
-            this.lvFileList.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
+            this.lvFileList.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.LvFileList_DrawHeader);
+            this.lvFileList.DragDrop += new System.Windows.Forms.DragEventHandler(this.LvFileList_DragDrop);
+            this.lvFileList.DragEnter += new System.Windows.Forms.DragEventHandler(this.LvFileList_DragEnter);
+            this.lvFileList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.LvFilesList_MouseClick);
+            this.lvFileList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LvFileList_MouseMove);
             // 
             // Location
             // 
@@ -154,7 +153,6 @@
             this.lblProgress.Size = new System.Drawing.Size(51, 13);
             this.lblProgress.TabIndex = 14;
             this.lblProgress.Text = "Progress:";
-            this.lblProgress.Click += new System.EventHandler(this.label3_Click);
             // 
             // btnSettings
             // 
@@ -165,7 +163,7 @@
             this.btnSettings.TabIndex = 15;
             this.btnSettings.Text = "Settings";
             this.btnSettings.UseVisualStyleBackColor = true;
-            this.btnSettings.Click += new System.EventHandler(this.settingsbtn_Click);
+            this.btnSettings.Click += new System.EventHandler(this.BtnSettings_Click);
             // 
             // btnClear
             // 
@@ -176,7 +174,7 @@
             this.btnClear.TabIndex = 16;
             this.btnClear.Text = "Clear";
             this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // MainForm
             // 
@@ -198,7 +196,6 @@
             this.Name = "MainForm";
             this.Text = "GW2 Elite Insights Parser";
             this.TransparencyKey = System.Drawing.Color.OrangeRed;
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

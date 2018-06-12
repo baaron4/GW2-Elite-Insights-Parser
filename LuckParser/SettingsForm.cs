@@ -23,47 +23,47 @@ namespace LuckParser
            // mainfrm = mnfrm;
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void PlayerDpsPlot_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.DPSGraphTotals = chkPlayerDpsPlot.Checked;
             //mainfrm.settingArray[0] = checkBox1.Checked;
         }
 
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        private void TotalDpsPlot_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerGraphTotals = chkTotalDpsPlot.Checked;
             //mainfrm.settingArray[1] = checkBox2.Checked;
         }
 
-        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        private void BossDpsPlot_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerGraphBoss = chkBossDpsPlot.Checked;
            // mainfrm.settingArray[2] = checkBox3.Checked;
         }
 
-        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        private void UniversalBoons_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerBoonsUniversal = chkUniversalBoons.Checked;
             //mainfrm.settingArray[3] = checkBox4.Checked;
         }
 
-        private void checkBox5_CheckedChanged(object sender, EventArgs e)
+        private void ImportantProfessionSpecificBoons_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerBoonsImpProf = chkImpProfSpecBoons.Checked;
            // mainfrm.settingArray[4] = checkBox5.Checked;
         }
-        private void checkBox6_CheckedChanged(object sender, EventArgs e)
+        private void AllProfessionSpecificBoons_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerBoonsAllProf = chkAllProfSpecBoons.Checked;
             //mainfrm.settingArray[5] = checkBox6.Checked;
         }
-        private void checkBox8_CheckedChanged(object sender, EventArgs e)
+        private void Rotation_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerRot = chkRotation.Checked;
            // mainfrm.settingArray[7] = checkBox8.Checked;
         }
         
-        private void checkBox7_CheckedChanged(object sender, EventArgs e)
+        private void SkillIcons_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerRotIcons = chkSkillIcons.Checked;
             // mainfrm.settingArray[6] = checkBox7.Checked;
@@ -100,12 +100,12 @@ namespace LuckParser
             chkShowEstimates.Checked = Properties.Settings.Default.ShowEstimates;
         }
 
-        private void checkOutputLoc_CheckedChanged(object sender, EventArgs e)
+        private void DefaultOutputLocation_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveAtOut = chkDefaultOutputLoc.Checked;
         }
 
-        private void btnFolderSelect_Click(object sender, EventArgs e)
+        private void BtnFolderSelect_Click(object sender, EventArgs e)
         {
             using (var fbd = new FolderBrowserDialog())
             {
@@ -122,61 +122,61 @@ namespace LuckParser
             }
         }
 
-        private void checkBox9_CheckedChanged(object sender, EventArgs e)
+        private void EventListDebug_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.EventList = chkEventListDbg.Checked;
         }
 
-        private void outFolderTextBox_TextChanged(object sender, EventArgs e)
+        private void CustomSaveLocation_TextChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void checkBossSummary_CheckedChanged(object sender, EventArgs e)
+        private void BossSummary_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.BossSummary = checkBossSummary.Checked;
         }
 
-        private void SimpleRotCheck_CheckedChanged(object sender, EventArgs e)
+        private void SimpleRotationTab_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SimpleRotation = chkSimpleRotationTab.Checked;
         }
 
-        private void checkBox10_CheckedChanged(object sender, EventArgs e)
+        private void ShowAutos_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.ShowAutos = chkSimpleRotationTab.Checked;
+            Properties.Settings.Default.ShowAutos = chkShowAutos.Checked;
         }
 
-        private void checkBox11_CheckedChanged(object sender, EventArgs e)
+        private void LargeSkillIcons_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.LargeRotIcons = chkSimpleRotationTab.Checked;
+            Properties.Settings.Default.LargeRotIcons = chkLargeSkillIcons.Checked;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ResetSkillList_Click(object sender, EventArgs e)
         {
             //Update skill list
             GW2APIController tempcontroller = new GW2APIController();
             tempcontroller.WriteSkillListToFile();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void RetrySkillList_Click(object sender, EventArgs e)
         {
             //Update skill list
             GW2APIController tempcontroller = new GW2APIController();
             tempcontroller.RetryWriteSkillListtoFile();
         }
 
-        private void saveoutHTML_CheckedChanged(object sender, EventArgs e)
+        private void OuputHtml_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutHTML = chkOutputHtml.Checked;
         }
 
-        private void saveoutCSV_CheckedChanged(object sender, EventArgs e)
+        private void OutputCsv_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutCSV = chkOutputCsv.Checked;
         }
 
-        private void estimatesBox_CheckedChanged(object sender, EventArgs e)
+        private void ShowEstimates_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ShowEstimates = chkShowEstimates.Checked;
         }
