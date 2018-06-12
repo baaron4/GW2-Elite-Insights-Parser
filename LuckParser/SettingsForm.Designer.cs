@@ -29,216 +29,216 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
-            this.label1 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.checkBox5 = new System.Windows.Forms.CheckBox();
-            this.checkBox6 = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.checkBox7 = new System.Windows.Forms.CheckBox();
-            this.checkBox8 = new System.Windows.Forms.CheckBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.checkOutputLoc = new System.Windows.Forms.CheckBox();
-            this.outFolderTextBox = new System.Windows.Forms.TextBox();
+            this.lblDamageGraphSection = new System.Windows.Forms.Label();
+            this.chkPlayerDpsPlot = new System.Windows.Forms.CheckBox();
+            this.lblPlayerSummarySection = new System.Windows.Forms.Label();
+            this.chkTotalDpsPlot = new System.Windows.Forms.CheckBox();
+            this.chkBossDpsPlot = new System.Windows.Forms.CheckBox();
+            this.chkUniversalBoons = new System.Windows.Forms.CheckBox();
+            this.lblBoonGraphSection = new System.Windows.Forms.Label();
+            this.chkImpProfSpecBoons = new System.Windows.Forms.CheckBox();
+            this.chkAllProfSpecBoons = new System.Windows.Forms.CheckBox();
+            this.lblRotationGraphSection = new System.Windows.Forms.Label();
+            this.chkSkillIcons = new System.Windows.Forms.CheckBox();
+            this.chkRotation = new System.Windows.Forms.CheckBox();
+            this.lblSettingsInfoMsg = new System.Windows.Forms.Label();
+            this.lblOutputSection = new System.Windows.Forms.Label();
+            this.chkDefaultOutputLoc = new System.Windows.Forms.CheckBox();
+            this.txtCustomSaveLoc = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.btnFolderSelect = new System.Windows.Forms.Button();
-            this.label7 = new System.Windows.Forms.Label();
-            this.checkBox9 = new System.Windows.Forms.CheckBox();
-            this.label8 = new System.Windows.Forms.Label();
+            this.lblCustomSaveLoc = new System.Windows.Forms.Label();
+            this.chkEventListDbg = new System.Windows.Forms.CheckBox();
+            this.lblBossSection = new System.Windows.Forms.Label();
             this.checkBossSummary = new System.Windows.Forms.CheckBox();
-            this.SimpleRotCheck = new System.Windows.Forms.CheckBox();
-            this.checkBox10 = new System.Windows.Forms.CheckBox();
-            this.checkBox11 = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.saveoutHTML = new System.Windows.Forms.CheckBox();
-            this.saveoutCSV = new System.Windows.Forms.CheckBox();
-            this.estimatesBox = new System.Windows.Forms.CheckBox();
+            this.chkSimpleRotationTab = new System.Windows.Forms.CheckBox();
+            this.chkShowAutos = new System.Windows.Forms.CheckBox();
+            this.chkLargeSkillIcons = new System.Windows.Forms.CheckBox();
+            this.btnResetSkillList = new System.Windows.Forms.Button();
+            this.btnRetrySkillList = new System.Windows.Forms.Button();
+            this.chkOutputHtml = new System.Windows.Forms.CheckBox();
+            this.chkOutputCsv = new System.Windows.Forms.CheckBox();
+            this.chkShowEstimates = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
-            // label1
+            // lblDamageGraphSection
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 39);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Damage Graph";
+            this.lblDamageGraphSection.AutoSize = true;
+            this.lblDamageGraphSection.Location = new System.Drawing.Point(24, 39);
+            this.lblDamageGraphSection.Name = "lblDamageGraphSection";
+            this.lblDamageGraphSection.Size = new System.Drawing.Size(79, 13);
+            this.lblDamageGraphSection.TabIndex = 0;
+            this.lblDamageGraphSection.Text = "Damage Graph";
             // 
-            // checkBox1
+            // chkPlayerDpsPlot
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(43, 55);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(190, 17);
-            this.checkBox1.TabIndex = 1;
-            this.checkBox1.Text = "Show Each Players Total DPS plot";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.chkPlayerDpsPlot.AutoSize = true;
+            this.chkPlayerDpsPlot.Checked = true;
+            this.chkPlayerDpsPlot.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkPlayerDpsPlot.Location = new System.Drawing.Point(43, 55);
+            this.chkPlayerDpsPlot.Name = "chkPlayerDpsPlot";
+            this.chkPlayerDpsPlot.Size = new System.Drawing.Size(190, 17);
+            this.chkPlayerDpsPlot.TabIndex = 1;
+            this.chkPlayerDpsPlot.Text = "Show Each Players Total DPS plot";
+            this.chkPlayerDpsPlot.UseVisualStyleBackColor = true;
+            this.chkPlayerDpsPlot.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
-            // label2
+            // lblPlayerSummarySection
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 75);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(82, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Player Summary";
+            this.lblPlayerSummarySection.AutoSize = true;
+            this.lblPlayerSummarySection.Location = new System.Drawing.Point(24, 75);
+            this.lblPlayerSummarySection.Name = "lblPlayerSummarySection";
+            this.lblPlayerSummarySection.Size = new System.Drawing.Size(82, 13);
+            this.lblPlayerSummarySection.TabIndex = 2;
+            this.lblPlayerSummarySection.Text = "Player Summary";
             // 
-            // checkBox2
+            // chkTotalDpsPlot
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Checked = true;
-            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox2.Location = new System.Drawing.Point(43, 100);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(126, 17);
-            this.checkBox2.TabIndex = 3;
-            this.checkBox2.Text = "Show Total DPS Plot";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            this.chkTotalDpsPlot.AutoSize = true;
+            this.chkTotalDpsPlot.Checked = true;
+            this.chkTotalDpsPlot.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkTotalDpsPlot.Location = new System.Drawing.Point(43, 100);
+            this.chkTotalDpsPlot.Name = "chkTotalDpsPlot";
+            this.chkTotalDpsPlot.Size = new System.Drawing.Size(126, 17);
+            this.chkTotalDpsPlot.TabIndex = 3;
+            this.chkTotalDpsPlot.Text = "Show Total DPS Plot";
+            this.chkTotalDpsPlot.UseVisualStyleBackColor = true;
+            this.chkTotalDpsPlot.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
-            // checkBox3
+            // chkBossDpsPlot
             // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Checked = true;
-            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox3.Location = new System.Drawing.Point(43, 123);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(125, 17);
-            this.checkBox3.TabIndex = 4;
-            this.checkBox3.Text = "Show Boss DPS Plot";
-            this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
+            this.chkBossDpsPlot.AutoSize = true;
+            this.chkBossDpsPlot.Checked = true;
+            this.chkBossDpsPlot.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkBossDpsPlot.Location = new System.Drawing.Point(43, 123);
+            this.chkBossDpsPlot.Name = "chkBossDpsPlot";
+            this.chkBossDpsPlot.Size = new System.Drawing.Size(125, 17);
+            this.chkBossDpsPlot.TabIndex = 4;
+            this.chkBossDpsPlot.Text = "Show Boss DPS Plot";
+            this.chkBossDpsPlot.UseVisualStyleBackColor = true;
+            this.chkBossDpsPlot.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
-            // checkBox4
+            // chkUniversalBoons
             // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Checked = true;
-            this.checkBox4.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox4.Location = new System.Drawing.Point(43, 168);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(133, 17);
-            this.checkBox4.TabIndex = 5;
-            this.checkBox4.Text = "Show Universal Boons";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
+            this.chkUniversalBoons.AutoSize = true;
+            this.chkUniversalBoons.Checked = true;
+            this.chkUniversalBoons.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkUniversalBoons.Location = new System.Drawing.Point(43, 168);
+            this.chkUniversalBoons.Name = "chkUniversalBoons";
+            this.chkUniversalBoons.Size = new System.Drawing.Size(133, 17);
+            this.chkUniversalBoons.TabIndex = 5;
+            this.chkUniversalBoons.Text = "Show Universal Boons";
+            this.chkUniversalBoons.UseVisualStyleBackColor = true;
+            this.chkUniversalBoons.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
             // 
-            // label3
+            // lblBoonGraphSection
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(40, 152);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(69, 13);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Boons Graph";
+            this.lblBoonGraphSection.AutoSize = true;
+            this.lblBoonGraphSection.Location = new System.Drawing.Point(40, 152);
+            this.lblBoonGraphSection.Name = "lblBoonGraphSection";
+            this.lblBoonGraphSection.Size = new System.Drawing.Size(69, 13);
+            this.lblBoonGraphSection.TabIndex = 6;
+            this.lblBoonGraphSection.Text = "Boons Graph";
             // 
-            // checkBox5
+            // chkImpProfSpecBoons
             // 
-            this.checkBox5.AutoSize = true;
-            this.checkBox5.Checked = true;
-            this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox5.Location = new System.Drawing.Point(43, 191);
-            this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(224, 17);
-            this.checkBox5.TabIndex = 7;
-            this.checkBox5.Text = "Show Important Profession specific Boons";
-            this.checkBox5.UseVisualStyleBackColor = true;
-            this.checkBox5.CheckedChanged += new System.EventHandler(this.checkBox5_CheckedChanged);
+            this.chkImpProfSpecBoons.AutoSize = true;
+            this.chkImpProfSpecBoons.Checked = true;
+            this.chkImpProfSpecBoons.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkImpProfSpecBoons.Location = new System.Drawing.Point(43, 191);
+            this.chkImpProfSpecBoons.Name = "chkImpProfSpecBoons";
+            this.chkImpProfSpecBoons.Size = new System.Drawing.Size(224, 17);
+            this.chkImpProfSpecBoons.TabIndex = 7;
+            this.chkImpProfSpecBoons.Text = "Show Important Profession specific Boons";
+            this.chkImpProfSpecBoons.UseVisualStyleBackColor = true;
+            this.chkImpProfSpecBoons.CheckedChanged += new System.EventHandler(this.checkBox5_CheckedChanged);
             // 
-            // checkBox6
+            // chkAllProfSpecBoons
             // 
-            this.checkBox6.AutoSize = true;
-            this.checkBox6.Location = new System.Drawing.Point(43, 214);
-            this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(191, 17);
-            this.checkBox6.TabIndex = 8;
-            this.checkBox6.Text = "Show All Profession specific Boons";
-            this.checkBox6.UseVisualStyleBackColor = true;
-            this.checkBox6.CheckedChanged += new System.EventHandler(this.checkBox6_CheckedChanged);
+            this.chkAllProfSpecBoons.AutoSize = true;
+            this.chkAllProfSpecBoons.Location = new System.Drawing.Point(43, 214);
+            this.chkAllProfSpecBoons.Name = "chkAllProfSpecBoons";
+            this.chkAllProfSpecBoons.Size = new System.Drawing.Size(191, 17);
+            this.chkAllProfSpecBoons.TabIndex = 8;
+            this.chkAllProfSpecBoons.Text = "Show All Profession specific Boons";
+            this.chkAllProfSpecBoons.UseVisualStyleBackColor = true;
+            this.chkAllProfSpecBoons.CheckedChanged += new System.EventHandler(this.checkBox6_CheckedChanged);
             // 
-            // label4
+            // lblRotationGraphSection
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(40, 245);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(79, 13);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "Rotation Graph";
+            this.lblRotationGraphSection.AutoSize = true;
+            this.lblRotationGraphSection.Location = new System.Drawing.Point(40, 245);
+            this.lblRotationGraphSection.Name = "lblRotationGraphSection";
+            this.lblRotationGraphSection.Size = new System.Drawing.Size(79, 13);
+            this.lblRotationGraphSection.TabIndex = 9;
+            this.lblRotationGraphSection.Text = "Rotation Graph";
             // 
-            // checkBox7
+            // chkSkillIcons
             // 
-            this.checkBox7.AutoSize = true;
-            this.checkBox7.Checked = true;
-            this.checkBox7.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox7.Location = new System.Drawing.Point(43, 295);
-            this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(104, 17);
-            this.checkBox7.TabIndex = 10;
-            this.checkBox7.Text = "Show Skill Icons";
-            this.checkBox7.UseVisualStyleBackColor = true;
-            this.checkBox7.CheckedChanged += new System.EventHandler(this.checkBox7_CheckedChanged);
+            this.chkSkillIcons.AutoSize = true;
+            this.chkSkillIcons.Checked = true;
+            this.chkSkillIcons.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkSkillIcons.Location = new System.Drawing.Point(43, 295);
+            this.chkSkillIcons.Name = "chkSkillIcons";
+            this.chkSkillIcons.Size = new System.Drawing.Size(104, 17);
+            this.chkSkillIcons.TabIndex = 10;
+            this.chkSkillIcons.Text = "Show Skill Icons";
+            this.chkSkillIcons.UseVisualStyleBackColor = true;
+            this.chkSkillIcons.CheckedChanged += new System.EventHandler(this.checkBox7_CheckedChanged);
             // 
-            // checkBox8
+            // chkRotation
             // 
-            this.checkBox8.AutoSize = true;
-            this.checkBox8.Checked = true;
-            this.checkBox8.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox8.Location = new System.Drawing.Point(43, 272);
-            this.checkBox8.Name = "checkBox8";
-            this.checkBox8.Size = new System.Drawing.Size(96, 17);
-            this.checkBox8.TabIndex = 11;
-            this.checkBox8.Text = "Parse Rotation";
-            this.checkBox8.UseVisualStyleBackColor = true;
-            this.checkBox8.CheckedChanged += new System.EventHandler(this.checkBox8_CheckedChanged);
+            this.chkRotation.AutoSize = true;
+            this.chkRotation.Checked = true;
+            this.chkRotation.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkRotation.Location = new System.Drawing.Point(43, 272);
+            this.chkRotation.Name = "chkRotation";
+            this.chkRotation.Size = new System.Drawing.Size(96, 17);
+            this.chkRotation.TabIndex = 11;
+            this.chkRotation.Text = "Parse Rotation";
+            this.chkRotation.UseVisualStyleBackColor = true;
+            this.chkRotation.CheckedChanged += new System.EventHandler(this.checkBox8_CheckedChanged);
             // 
-            // label5
+            // lblSettingsInfoMsg
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(27, 13);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(245, 13);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "*Settings will not alter files in the middle of parseing";
+            this.lblSettingsInfoMsg.AutoSize = true;
+            this.lblSettingsInfoMsg.Location = new System.Drawing.Point(27, 13);
+            this.lblSettingsInfoMsg.Name = "lblSettingsInfoMsg";
+            this.lblSettingsInfoMsg.Size = new System.Drawing.Size(245, 13);
+            this.lblSettingsInfoMsg.TabIndex = 12;
+            this.lblSettingsInfoMsg.Text = "*Settings will not alter files in the middle of parseing";
             // 
-            // label6
+            // lblOutputSection
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(24, 499);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(42, 13);
-            this.label6.TabIndex = 13;
-            this.label6.Text = "Output:";
+            this.lblOutputSection.AutoSize = true;
+            this.lblOutputSection.Location = new System.Drawing.Point(24, 499);
+            this.lblOutputSection.Name = "lblOutputSection";
+            this.lblOutputSection.Size = new System.Drawing.Size(42, 13);
+            this.lblOutputSection.TabIndex = 13;
+            this.lblOutputSection.Text = "Output:";
             // 
-            // checkOutputLoc
+            // chkDefaultOutputLoc
             // 
-            this.checkOutputLoc.AutoSize = true;
-            this.checkOutputLoc.Checked = true;
-            this.checkOutputLoc.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkOutputLoc.Location = new System.Drawing.Point(27, 515);
-            this.checkOutputLoc.Name = "checkOutputLoc";
-            this.checkOutputLoc.Size = new System.Drawing.Size(192, 17);
-            this.checkOutputLoc.TabIndex = 14;
-            this.checkOutputLoc.Text = "Save Output in same folder as evtc";
-            this.checkOutputLoc.UseVisualStyleBackColor = true;
-            this.checkOutputLoc.CheckedChanged += new System.EventHandler(this.checkOutputLoc_CheckedChanged);
+            this.chkDefaultOutputLoc.AutoSize = true;
+            this.chkDefaultOutputLoc.Checked = true;
+            this.chkDefaultOutputLoc.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDefaultOutputLoc.Location = new System.Drawing.Point(27, 515);
+            this.chkDefaultOutputLoc.Name = "chkDefaultOutputLoc";
+            this.chkDefaultOutputLoc.Size = new System.Drawing.Size(192, 17);
+            this.chkDefaultOutputLoc.TabIndex = 14;
+            this.chkDefaultOutputLoc.Text = "Save Output in same folder as evtc";
+            this.chkDefaultOutputLoc.UseVisualStyleBackColor = true;
+            this.chkDefaultOutputLoc.CheckedChanged += new System.EventHandler(this.checkOutputLoc_CheckedChanged);
             // 
-            // outFolderTextBox
+            // txtCustomSaveLoc
             // 
-            this.outFolderTextBox.Enabled = false;
-            this.outFolderTextBox.Location = new System.Drawing.Point(24, 552);
-            this.outFolderTextBox.Name = "outFolderTextBox";
-            this.outFolderTextBox.Size = new System.Drawing.Size(412, 20);
-            this.outFolderTextBox.TabIndex = 15;
-            this.outFolderTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.outFolderTextBox.TextChanged += new System.EventHandler(this.outFolderTextBox_TextChanged);
+            this.txtCustomSaveLoc.Enabled = false;
+            this.txtCustomSaveLoc.Location = new System.Drawing.Point(24, 552);
+            this.txtCustomSaveLoc.Name = "txtCustomSaveLoc";
+            this.txtCustomSaveLoc.Size = new System.Drawing.Size(412, 20);
+            this.txtCustomSaveLoc.TabIndex = 15;
+            this.txtCustomSaveLoc.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtCustomSaveLoc.TextChanged += new System.EventHandler(this.outFolderTextBox_TextChanged);
             // 
             // btnFolderSelect
             // 
@@ -250,34 +250,34 @@
             this.btnFolderSelect.UseVisualStyleBackColor = true;
             this.btnFolderSelect.Click += new System.EventHandler(this.btnFolderSelect_Click);
             // 
-            // label7
+            // lblCustomSaveLoc
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(100, 533);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(59, 13);
-            this.label7.TabIndex = 17;
-            this.label7.Text = "Or save at:";
+            this.lblCustomSaveLoc.AutoSize = true;
+            this.lblCustomSaveLoc.Location = new System.Drawing.Point(100, 533);
+            this.lblCustomSaveLoc.Name = "lblCustomSaveLoc";
+            this.lblCustomSaveLoc.Size = new System.Drawing.Size(59, 13);
+            this.lblCustomSaveLoc.TabIndex = 17;
+            this.lblCustomSaveLoc.Text = "Or save at:";
             // 
-            // checkBox9
+            // chkEventListDbg
             // 
-            this.checkBox9.AutoSize = true;
-            this.checkBox9.Location = new System.Drawing.Point(27, 479);
-            this.checkBox9.Name = "checkBox9";
-            this.checkBox9.Size = new System.Drawing.Size(177, 17);
-            this.checkBox9.TabIndex = 18;
-            this.checkBox9.Text = "Show Event List (for debugging)";
-            this.checkBox9.UseVisualStyleBackColor = true;
-            this.checkBox9.CheckedChanged += new System.EventHandler(this.checkBox9_CheckedChanged);
+            this.chkEventListDbg.AutoSize = true;
+            this.chkEventListDbg.Location = new System.Drawing.Point(27, 479);
+            this.chkEventListDbg.Name = "chkEventListDbg";
+            this.chkEventListDbg.Size = new System.Drawing.Size(177, 17);
+            this.chkEventListDbg.TabIndex = 18;
+            this.chkEventListDbg.Text = "Show Event List (for debugging)";
+            this.chkEventListDbg.UseVisualStyleBackColor = true;
+            this.chkEventListDbg.CheckedChanged += new System.EventHandler(this.checkBox9_CheckedChanged);
             // 
-            // label8
+            // lblBossSection
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(27, 392);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(30, 13);
-            this.label8.TabIndex = 19;
-            this.label8.Text = "Boss";
+            this.lblBossSection.AutoSize = true;
+            this.lblBossSection.Location = new System.Drawing.Point(27, 392);
+            this.lblBossSection.Name = "lblBossSection";
+            this.lblBossSection.Size = new System.Drawing.Size(30, 13);
+            this.lblBossSection.TabIndex = 19;
+            this.lblBossSection.Text = "Boss";
             // 
             // checkBossSummary
             // 
@@ -292,99 +292,99 @@
             this.checkBossSummary.UseVisualStyleBackColor = true;
             this.checkBossSummary.CheckedChanged += new System.EventHandler(this.checkBossSummary_CheckedChanged);
             // 
-            // SimpleRotCheck
+            // chkSimpleRotationTab
             // 
-            this.SimpleRotCheck.AutoSize = true;
-            this.SimpleRotCheck.Checked = true;
-            this.SimpleRotCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.SimpleRotCheck.Location = new System.Drawing.Point(43, 318);
-            this.SimpleRotCheck.Name = "SimpleRotCheck";
-            this.SimpleRotCheck.Size = new System.Drawing.Size(152, 17);
-            this.SimpleRotCheck.TabIndex = 21;
-            this.SimpleRotCheck.Text = "Show Simple Rotation Tab";
-            this.SimpleRotCheck.UseVisualStyleBackColor = true;
-            this.SimpleRotCheck.CheckedChanged += new System.EventHandler(this.SimpleRotCheck_CheckedChanged);
+            this.chkSimpleRotationTab.AutoSize = true;
+            this.chkSimpleRotationTab.Checked = true;
+            this.chkSimpleRotationTab.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkSimpleRotationTab.Location = new System.Drawing.Point(43, 318);
+            this.chkSimpleRotationTab.Name = "chkSimpleRotationTab";
+            this.chkSimpleRotationTab.Size = new System.Drawing.Size(152, 17);
+            this.chkSimpleRotationTab.TabIndex = 21;
+            this.chkSimpleRotationTab.Text = "Show Simple Rotation Tab";
+            this.chkSimpleRotationTab.UseVisualStyleBackColor = true;
+            this.chkSimpleRotationTab.CheckedChanged += new System.EventHandler(this.SimpleRotCheck_CheckedChanged);
             // 
-            // checkBox10
+            // chkShowAutos
             // 
-            this.checkBox10.AutoSize = true;
-            this.checkBox10.Checked = true;
-            this.checkBox10.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox10.Location = new System.Drawing.Point(49, 341);
-            this.checkBox10.Name = "checkBox10";
-            this.checkBox10.Size = new System.Drawing.Size(117, 17);
-            this.checkBox10.TabIndex = 22;
-            this.checkBox10.Text = "Show Auto Attacks";
-            this.checkBox10.UseVisualStyleBackColor = true;
-            this.checkBox10.CheckedChanged += new System.EventHandler(this.checkBox10_CheckedChanged);
+            this.chkShowAutos.AutoSize = true;
+            this.chkShowAutos.Checked = true;
+            this.chkShowAutos.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkShowAutos.Location = new System.Drawing.Point(49, 341);
+            this.chkShowAutos.Name = "chkShowAutos";
+            this.chkShowAutos.Size = new System.Drawing.Size(117, 17);
+            this.chkShowAutos.TabIndex = 22;
+            this.chkShowAutos.Text = "Show Auto Attacks";
+            this.chkShowAutos.UseVisualStyleBackColor = true;
+            this.chkShowAutos.CheckedChanged += new System.EventHandler(this.checkBox10_CheckedChanged);
             // 
-            // checkBox11
+            // chkLargeSkillIcons
             // 
-            this.checkBox11.AutoSize = true;
-            this.checkBox11.Location = new System.Drawing.Point(49, 364);
-            this.checkBox11.Name = "checkBox11";
-            this.checkBox11.Size = new System.Drawing.Size(104, 17);
-            this.checkBox11.TabIndex = 23;
-            this.checkBox11.Text = "Large Skill Icons";
-            this.checkBox11.UseVisualStyleBackColor = true;
-            this.checkBox11.CheckedChanged += new System.EventHandler(this.checkBox11_CheckedChanged);
+            this.chkLargeSkillIcons.AutoSize = true;
+            this.chkLargeSkillIcons.Location = new System.Drawing.Point(49, 364);
+            this.chkLargeSkillIcons.Name = "chkLargeSkillIcons";
+            this.chkLargeSkillIcons.Size = new System.Drawing.Size(104, 17);
+            this.chkLargeSkillIcons.TabIndex = 23;
+            this.chkLargeSkillIcons.Text = "Large Skill Icons";
+            this.chkLargeSkillIcons.UseVisualStyleBackColor = true;
+            this.chkLargeSkillIcons.CheckedChanged += new System.EventHandler(this.checkBox11_CheckedChanged);
             // 
-            // button1
+            // btnResetSkillList
             // 
-            this.button1.Location = new System.Drawing.Point(428, 13);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(108, 23);
-            this.button1.TabIndex = 24;
-            this.button1.Text = "Reset Skill List ";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnResetSkillList.Location = new System.Drawing.Point(428, 13);
+            this.btnResetSkillList.Name = "btnResetSkillList";
+            this.btnResetSkillList.Size = new System.Drawing.Size(108, 23);
+            this.btnResetSkillList.TabIndex = 24;
+            this.btnResetSkillList.Text = "Reset Skill List ";
+            this.btnResetSkillList.UseVisualStyleBackColor = true;
+            this.btnResetSkillList.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // btnRetrySkillList
             // 
-            this.button2.Location = new System.Drawing.Point(428, 49);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(108, 23);
-            this.button2.TabIndex = 25;
-            this.button2.Text = "Retry Skill List";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btnRetrySkillList.Location = new System.Drawing.Point(428, 49);
+            this.btnRetrySkillList.Name = "btnRetrySkillList";
+            this.btnRetrySkillList.Size = new System.Drawing.Size(108, 23);
+            this.btnRetrySkillList.TabIndex = 25;
+            this.btnRetrySkillList.Text = "Retry Skill List";
+            this.btnRetrySkillList.UseVisualStyleBackColor = true;
+            this.btnRetrySkillList.Click += new System.EventHandler(this.button2_Click);
             // 
-            // saveoutHTML
+            // chkOutputHtml
             // 
-            this.saveoutHTML.AutoSize = true;
-            this.saveoutHTML.Checked = true;
-            this.saveoutHTML.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.saveoutHTML.Location = new System.Drawing.Point(24, 587);
-            this.saveoutHTML.Name = "saveoutHTML";
-            this.saveoutHTML.Size = new System.Drawing.Size(105, 17);
-            this.saveoutHTML.TabIndex = 26;
-            this.saveoutHTML.Text = "Output as HTML";
-            this.saveoutHTML.UseVisualStyleBackColor = true;
-            this.saveoutHTML.CheckedChanged += new System.EventHandler(this.saveoutHTML_CheckedChanged);
+            this.chkOutputHtml.AutoSize = true;
+            this.chkOutputHtml.Checked = true;
+            this.chkOutputHtml.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkOutputHtml.Location = new System.Drawing.Point(24, 587);
+            this.chkOutputHtml.Name = "chkOutputHtml";
+            this.chkOutputHtml.Size = new System.Drawing.Size(105, 17);
+            this.chkOutputHtml.TabIndex = 26;
+            this.chkOutputHtml.Text = "Output as HTML";
+            this.chkOutputHtml.UseVisualStyleBackColor = true;
+            this.chkOutputHtml.CheckedChanged += new System.EventHandler(this.saveoutHTML_CheckedChanged);
             // 
-            // saveoutCSV
+            // chkOutputCsv
             // 
-            this.saveoutCSV.AutoSize = true;
-            this.saveoutCSV.Location = new System.Drawing.Point(24, 611);
-            this.saveoutCSV.Name = "saveoutCSV";
-            this.saveoutCSV.Size = new System.Drawing.Size(96, 17);
-            this.saveoutCSV.TabIndex = 27;
-            this.saveoutCSV.Text = "Output as CSV";
-            this.saveoutCSV.UseVisualStyleBackColor = true;
-            this.saveoutCSV.CheckedChanged += new System.EventHandler(this.saveoutCSV_CheckedChanged);
+            this.chkOutputCsv.AutoSize = true;
+            this.chkOutputCsv.Location = new System.Drawing.Point(24, 611);
+            this.chkOutputCsv.Name = "chkOutputCsv";
+            this.chkOutputCsv.Size = new System.Drawing.Size(96, 17);
+            this.chkOutputCsv.TabIndex = 27;
+            this.chkOutputCsv.Text = "Output as CSV";
+            this.chkOutputCsv.UseVisualStyleBackColor = true;
+            this.chkOutputCsv.CheckedChanged += new System.EventHandler(this.saveoutCSV_CheckedChanged);
             // 
-            // estimatesBox
+            // chkShowEstimates
             // 
-            this.estimatesBox.AutoSize = true;
-            this.estimatesBox.Checked = true;
-            this.estimatesBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.estimatesBox.Location = new System.Drawing.Point(30, 440);
-            this.estimatesBox.Name = "estimatesBox";
-            this.estimatesBox.Size = new System.Drawing.Size(153, 17);
-            this.estimatesBox.TabIndex = 28;
-            this.estimatesBox.Text = "Show Estimates Tab (WIP)";
-            this.estimatesBox.UseVisualStyleBackColor = true;
-            this.estimatesBox.CheckedChanged += new System.EventHandler(this.estimatesBox_CheckedChanged);
+            this.chkShowEstimates.AutoSize = true;
+            this.chkShowEstimates.Checked = true;
+            this.chkShowEstimates.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkShowEstimates.Location = new System.Drawing.Point(30, 440);
+            this.chkShowEstimates.Name = "chkShowEstimates";
+            this.chkShowEstimates.Size = new System.Drawing.Size(153, 17);
+            this.chkShowEstimates.TabIndex = 28;
+            this.chkShowEstimates.Text = "Show Estimates Tab (WIP)";
+            this.chkShowEstimates.UseVisualStyleBackColor = true;
+            this.chkShowEstimates.CheckedChanged += new System.EventHandler(this.estimatesBox_CheckedChanged);
             // 
             // SettingsForm
             // 
@@ -392,35 +392,35 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(577, 368);
-            this.Controls.Add(this.estimatesBox);
-            this.Controls.Add(this.saveoutCSV);
-            this.Controls.Add(this.saveoutHTML);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.checkBox11);
-            this.Controls.Add(this.checkBox10);
-            this.Controls.Add(this.SimpleRotCheck);
+            this.Controls.Add(this.chkShowEstimates);
+            this.Controls.Add(this.chkOutputCsv);
+            this.Controls.Add(this.chkOutputHtml);
+            this.Controls.Add(this.btnRetrySkillList);
+            this.Controls.Add(this.btnResetSkillList);
+            this.Controls.Add(this.chkLargeSkillIcons);
+            this.Controls.Add(this.chkShowAutos);
+            this.Controls.Add(this.chkSimpleRotationTab);
             this.Controls.Add(this.checkBossSummary);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.checkBox9);
-            this.Controls.Add(this.label7);
+            this.Controls.Add(this.lblBossSection);
+            this.Controls.Add(this.chkEventListDbg);
+            this.Controls.Add(this.lblCustomSaveLoc);
             this.Controls.Add(this.btnFolderSelect);
-            this.Controls.Add(this.outFolderTextBox);
-            this.Controls.Add(this.checkOutputLoc);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.checkBox8);
-            this.Controls.Add(this.checkBox7);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.checkBox6);
-            this.Controls.Add(this.checkBox5);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.checkBox4);
-            this.Controls.Add(this.checkBox3);
-            this.Controls.Add(this.checkBox2);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtCustomSaveLoc);
+            this.Controls.Add(this.chkDefaultOutputLoc);
+            this.Controls.Add(this.lblOutputSection);
+            this.Controls.Add(this.lblSettingsInfoMsg);
+            this.Controls.Add(this.chkRotation);
+            this.Controls.Add(this.chkSkillIcons);
+            this.Controls.Add(this.lblRotationGraphSection);
+            this.Controls.Add(this.chkAllProfSpecBoons);
+            this.Controls.Add(this.chkImpProfSpecBoons);
+            this.Controls.Add(this.lblBoonGraphSection);
+            this.Controls.Add(this.chkUniversalBoons);
+            this.Controls.Add(this.chkBossDpsPlot);
+            this.Controls.Add(this.chkTotalDpsPlot);
+            this.Controls.Add(this.lblPlayerSummarySection);
+            this.Controls.Add(this.chkPlayerDpsPlot);
+            this.Controls.Add(this.lblDamageGraphSection);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SettingsForm";
             this.Text = "Parse settings";
@@ -433,35 +433,35 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.CheckBox checkBox5;
-        private System.Windows.Forms.CheckBox checkBox6;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.CheckBox checkBox7;
-        private System.Windows.Forms.CheckBox checkBox8;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.CheckBox checkOutputLoc;
-        private System.Windows.Forms.TextBox outFolderTextBox;
+        private System.Windows.Forms.Label lblDamageGraphSection;
+        private System.Windows.Forms.CheckBox chkPlayerDpsPlot;
+        private System.Windows.Forms.Label lblPlayerSummarySection;
+        private System.Windows.Forms.CheckBox chkTotalDpsPlot;
+        private System.Windows.Forms.CheckBox chkBossDpsPlot;
+        private System.Windows.Forms.CheckBox chkUniversalBoons;
+        private System.Windows.Forms.Label lblBoonGraphSection;
+        private System.Windows.Forms.CheckBox chkImpProfSpecBoons;
+        private System.Windows.Forms.CheckBox chkAllProfSpecBoons;
+        private System.Windows.Forms.Label lblRotationGraphSection;
+        private System.Windows.Forms.CheckBox chkSkillIcons;
+        private System.Windows.Forms.CheckBox chkRotation;
+        private System.Windows.Forms.Label lblSettingsInfoMsg;
+        private System.Windows.Forms.Label lblOutputSection;
+        private System.Windows.Forms.CheckBox chkDefaultOutputLoc;
+        private System.Windows.Forms.TextBox txtCustomSaveLoc;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button btnFolderSelect;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.CheckBox checkBox9;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label lblCustomSaveLoc;
+        private System.Windows.Forms.CheckBox chkEventListDbg;
+        private System.Windows.Forms.Label lblBossSection;
         private System.Windows.Forms.CheckBox checkBossSummary;
-        private System.Windows.Forms.CheckBox SimpleRotCheck;
-        private System.Windows.Forms.CheckBox checkBox10;
-        private System.Windows.Forms.CheckBox checkBox11;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.CheckBox saveoutHTML;
-        private System.Windows.Forms.CheckBox saveoutCSV;
-        private System.Windows.Forms.CheckBox estimatesBox;
+        private System.Windows.Forms.CheckBox chkSimpleRotationTab;
+        private System.Windows.Forms.CheckBox chkShowAutos;
+        private System.Windows.Forms.CheckBox chkLargeSkillIcons;
+        private System.Windows.Forms.Button btnResetSkillList;
+        private System.Windows.Forms.Button btnRetrySkillList;
+        private System.Windows.Forms.CheckBox chkOutputHtml;
+        private System.Windows.Forms.CheckBox chkOutputCsv;
+        private System.Windows.Forms.CheckBox chkShowEstimates;
     }
 }

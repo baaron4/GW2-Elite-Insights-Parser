@@ -30,7 +30,7 @@ namespace LuckParser
             InitializeComponent();
 
             btnCancel.Enabled = false;
-            btnStartAsyncOperation.Enabled = false;
+            btnParse.Enabled = false;
             m_oWorker = new BackgroundWorker();
 
             // Create a background worker thread that ReportsProgress &
@@ -60,30 +60,30 @@ namespace LuckParser
         {
             if (e.Cancelled)
             {
-                lblStatus.Text = "Task Cancelled.";
+                lblStatusValue.Text = "Task Cancelled.";
             }
             // Check to see if an error occurred in the background process.
             else if (e.Error != null)
             {
-                lblStatus.Text = "Error while performing background operation.";
+                lblStatusValue.Text = "Error while performing background operation.";
             }
             else
             {
                 // Everything completed normally.
-                lblStatus.Text = "Task Completed";
+                lblStatusValue.Text = "Task Completed";
                 // Flash window until it recieves focus
                 FlashWindow.Flash(this);
             }
 
             //Change the status of the buttons on the UI accordingly
-            btnStartAsyncOperation.Enabled = true;
+            btnParse.Enabled = true;
             btnCancel.Enabled = false;
         }
 
         // Notification is performed here to the progress bar
         void m_oWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            progressBar1.Value = e.ProgressPercentage;
+            pgbProgress.Value = e.ProgressPercentage;
             string[] progstr = (string[])e.UserState;
             if (progstr[1] == "Cancel")
             {
@@ -91,7 +91,7 @@ namespace LuckParser
                 //listView1.Items.Clear();
                 completedOp = true;
                 btnClear.Enabled = true;
-                lblStatus.Text = "Canceled Parseing";
+                lblStatusValue.Text = "Canceled Parseing";
             }
             else if (progstr[1] == "Finish")
             {
@@ -99,13 +99,13 @@ namespace LuckParser
                 //listView1.Items.Clear();
                 completedOp = true;
                 btnClear.Enabled = true;
-                btnStartAsyncOperation.Enabled = false;
-                lblStatus.Text = "Finished Parseing";
+                btnParse.Enabled = false;
+                lblStatusValue.Text = "Finished Parseing";
             }
             else
             {
-                lblStatus.Text = "Parseing...";
-                listView1.Items[Int32.Parse(progstr[0])].SubItems[1].Text = progstr[1];
+                lblStatusValue.Text = "Parseing...";
+                lvFileList.Items[Int32.Parse(progstr[0])].SubItems[1].Text = progstr[1];
             }
         }
 
@@ -129,7 +129,7 @@ namespace LuckParser
                 e.Cancel = true;
                 string[] reportObject = new string[] { i.ToString(), "Cancel" };
                 m_oWorker.ReportProgress(0, reportObject);
-                btnStartAsyncOperation.Enabled = false;
+                btnParse.Enabled = false;
                 return;
             }
         }
@@ -164,7 +164,7 @@ namespace LuckParser
                     Properties.Settings.Default.ShowEstimates
 
                 };
-                for (int i = 0; i < listView1.Items.Count; i++)
+                for (int i = 0; i < lvFileList.Items.Count; i++)
                 {
                     
 
@@ -298,7 +298,7 @@ namespace LuckParser
             //at any point of time during the execution
             if (paths != null)
             {
-                btnStartAsyncOperation.Enabled = false;
+                btnParse.Enabled = false;
                 btnCancel.Enabled = true;
                 btnClear.Enabled = false;
 
@@ -352,7 +352,7 @@ namespace LuckParser
                 ListViewItem item = new ListViewItem(file);
                 item.SubItems.Add(" ");
                 
-                listView1.Items.Add(item);
+                lvFileList.Items.Add(item);
                 
 
             }
@@ -360,10 +360,10 @@ namespace LuckParser
        
         private void listView1_DragDrop(object sender, DragEventArgs e)
         {
-            btnStartAsyncOperation.Enabled = true;
+            btnParse.Enabled = true;
             if (completedOp)
             {
-                listView1.Items.Clear();
+                lvFileList.Items.Clear();
                 completedOp = false;
             }
             //Get files as list
@@ -396,9 +396,9 @@ namespace LuckParser
         private void btnClear_Click(object sender, EventArgs e)
         {
             btnCancel.Enabled = false;
-            btnStartAsyncOperation.Enabled = false;
+            btnParse.Enabled = false;
             paths = null;
-            listView1.Items.Clear();
+            lvFileList.Items.Clear();
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -408,9 +408,9 @@ namespace LuckParser
 
         private void listView1_MouseMove_1(object sender, MouseEventArgs e)
         {
-            var hit = listView1.HitTest(e.Location);
-            if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1]) listView1.Cursor = Cursors.Hand;
-            else listView1.Cursor = Cursors.Default;
+            var hit = lvFileList.HitTest(e.Location);
+            if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1]) lvFileList.Cursor = Cursors.Hand;
+            else lvFileList.Cursor = Cursors.Default;
         }
 
         private void listView1_MouseUp(object sender, MouseEventArgs e)
@@ -420,7 +420,7 @@ namespace LuckParser
 
         private void listView1_MouseClick(object sender, MouseEventArgs e)
         {
-            var hit = listView1.HitTest(e.Location);
+            var hit = lvFileList.HitTest(e.Location);
             if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1])
             {
                 string fileLoc = hit.SubItem.Text;
