@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 
@@ -16,7 +17,7 @@ namespace LuckParser.Models.ParseModels
         private String name = "UNKNOWN";
         private int health = -1;
         private int toughness = -1;
-        private List<long[]> healthOverTime = new List<long[]>();
+        private List<Point> healthOverTime = new List<Point>();
         // Constructors
         public BossData(ushort id)
         {
@@ -132,7 +133,7 @@ namespace LuckParser.Models.ParseModels
             return toughness;
         }
 
-        public List<long[]> getHealthOverTime() {
+        public List<Point> getHealthOverTime() {
             return healthOverTime;
         }
         // Setters
@@ -170,7 +171,7 @@ namespace LuckParser.Models.ParseModels
         {
             this.toughness = tough;
         }
-        public void setHealthOverTime(List<long[]> hot) {
+        public void setHealthOverTime(List<Point> hot) {
             this.healthOverTime = hot;
         }
     }

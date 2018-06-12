@@ -10,7 +10,6 @@ namespace LuckParser.Models.ParseModels
         // Fields
         private String account;
         private String group;
-        private String prof;
         private int toughness;
         private int healing;
         private int condition;
@@ -43,10 +42,6 @@ namespace LuckParser.Models.ParseModels
             return group;
         }
 
-        public string getProf()
-        {
-            return prof;
-        }
 
         public int getToughness()
         {

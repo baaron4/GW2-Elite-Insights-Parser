@@ -227,7 +227,7 @@ namespace LuckParser
                         if (Properties.Settings.Default.SaveOutHTML)
                         {
                             logger(i, "Creating File...", 60);
-                            FileStream fcreate = File.Open(location + fileName + "_" + control.GetLink(bossid + "-ext") + "_" + result + ".html", FileMode.Create);
+                            FileStream fcreate = File.Open(location + fileName + "_" + HTMLHelper.GetLink(bossid + "-ext") + "_" + result + ".html", FileMode.Create);
 
                             //return html string
                             logger(i, "Writing HTML...", 80);
@@ -247,7 +247,7 @@ namespace LuckParser
                         if (Properties.Settings.Default.SaveOutCSV)
                         {
                             logger(i, "Creating CSV File...", 60);
-                            FileStream fcreate = File.Open(location + fileName + "_" + control.GetLink(bossid + "-ext") + "_" + result + ".csv", FileMode.Create);
+                            FileStream fcreate = File.Open(location + fileName + "_" + HTMLHelper.GetLink(bossid + "-ext") + "_" + result + ".csv", FileMode.Create);
 
                             //return html string
                             logger(i, "Writing CSV...", 80);

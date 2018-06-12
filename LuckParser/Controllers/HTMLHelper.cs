@@ -2,6 +2,7 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -419,58 +420,45 @@ namespace LuckParser.Controllers
             return rates;
         }
 
-        public static List<int[]> getDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index, ushort dstid)
+        public static List<Point> getDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index, ushort dstid)
         {
-            List<int[]> dmgList = new List<int[]>();
-            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data)[phase_index];
-            List<DamageLog> damage_logs = p.getDamageLogs(dstid, b_data, c_data.getCombatList(), a_data, phase.start, phase.end).Where(x => x.getTime() >= phase.start && x.getTime() <= phase.end).ToList();
-            int totaldmg = 0;
+            int id = phase_index + dstid;
+            if (p.getDPSGraph(id).Count > 0)
+            {
+                return p.getDPSGraph(id);
+            }
 
-            int timeGraphed = (int)phase.start;
+            List<Point> dmgList = new List<Point>();
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data)[phase_index];
+            List<DamageLog> damage_logs = p.getDamageLogs(dstid, b_data, c_data.getCombatList(), a_data, phase.start, phase.end);
+            // fill the graph, full precision
+            List<double> dmgListFull = new List<double>();
+            for (int i = 0; i <= (phase.end - phase.start); i++) {
+                dmgListFull.Add(0.0);
+            }
+            int total_time = 1;
+            int total_damage = 0;
             foreach (DamageLog log in damage_logs)
             {
-
-                totaldmg += log.getDamage();
-
-                long time = log.getTime();
-                if (time > 1000)
+                int time = (int)(log.getTime()- phase.start);
+                // fill
+                for (; total_time < time; total_time++)
                 {
-
-                    //to reduce processing time only graph 1 point per sec
-                    if (Math.Floor(time / 1000f) > timeGraphed)
-                    {
-
-                        if ((Math.Floor(time / 1000f) - timeGraphed) < 2)
-                        {
-                            timeGraphed = (int)Math.Floor(time / 1000f);
-                            dmgList.Add(new int[] { (int)time / 1000, (int)(totaldmg / (time / 1000f)) });
-                        }
-                        else
-                        {
-                            int gap = (int)Math.Floor(time / 1000f) - timeGraphed;
-                            bool startOfFight = true;
-                            if (dmgList.Count > 0)
-                            {
-                                startOfFight = false;
-                            }
-
-                            for (int itr = 0; itr < gap - 1; itr++)
-                            {
-                                timeGraphed++;
-                                if (!startOfFight)
-                                {
-                                    dmgList.Add(new int[] { timeGraphed, (int)(totaldmg / (float)timeGraphed) });
-                                }
-                                else
-                                {//hasnt hit boss yet gap
-                                    dmgList.Add(new int[] { timeGraphed, 0 });
-                                }
-
-                            }
-                        }
-                    }
+                    dmgListFull[total_time] = (1000.0 * total_damage / total_time);
                 }
+                total_damage += log.getDamage();
+                dmgListFull[total_time] = (1000.0 * total_damage / total_time);
             }
+            // fill
+            for (; total_time <= (phase.end - phase.start); total_time++)
+            {
+                dmgListFull[total_time] = (1000.0 * total_damage / total_time);
+            }
+            for (int i = 0; i <= (phase.end - phase.start)/1000; i++)
+            {
+                dmgList.Add(new Point(i, (int)Math.Round(dmgListFull[1000 * i])));
+            }
+            p.addDPSGraph(id, dmgList);
             return dmgList;
         }
         /// <summary>
@@ -478,16 +466,17 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="p">The player</param>
         /// <returns></returns>
-        public static List<int[]> getBossDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index)
+        public static List<Point> getBossDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index)
         {
             return getDPSGraph(b_data, c_data, a_data, p, boss, phase_index, b_data.getInstid());
         }
+       
         /// <summary>
         /// Gets the points for the total dps graph for a given player
         /// </summary>
         /// <param name="p">The player</param>
         /// <returns></returns>
-        public static List<int[]> getTotalDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index)
+        public static List<Point> getTotalDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index)
         {
             return getDPSGraph(b_data, c_data, a_data, p, boss, phase_index, 0);
         }
@@ -711,12 +700,12 @@ namespace LuckParser.Controllers
 
         }
 
-        public static void writeBoonGenTableBody(StreamWriter sw, Player player, List<Boon> list_to_use, Dictionary<int, string> boonArray, string prof_icon)
+        public static void writeBoonGenTableBody(StreamWriter sw, Player player, List<Boon> list_to_use, Dictionary<int, string> boonArray)
         {
             sw.Write("<tr>");
             {
                 sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"" + prof_icon + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
                 sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
                 foreach (Boon boon in list_to_use)
                 {
@@ -944,6 +933,540 @@ namespace LuckParser.Controllers
                 }
                 sw.Write("</tr>");
             }
+        }
+
+        public static void writeBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, BossData boss_data, string y_axis = "")
+        {
+            //Boss Health
+            //Adding dps axis
+            sw.Write("y: [");
+
+            int hotCount = 0;
+            List<Point> BossHOT = boss_data.getHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
+            foreach (Point dp in BossHOT)
+            {
+                if (hotCount == BossHOT.Count - 1)
+                {
+                    sw.Write("'" + ((dp.Y / 10000f) * maxDPS).ToString().Replace(',', '.') + "'");
+                }
+                else
+                {
+                    sw.Write("'" + ((dp.Y / 10000f) * maxDPS).ToString().Replace(',', '.') + "',");
+                }
+                hotCount++;
+
+            }
+
+            sw.Write("],");
+            //text axis is boss hp in %
+            sw.Write("text: [");
+
+            float scaler2 = boss_data.getHealth() / 100;
+            hotCount = 0;
+            foreach (Point dp in BossHOT)
+            {
+                if (hotCount == BossHOT.Count - 1)
+                {
+                    sw.Write("'" + dp.Y / 100f + "% HP'");
+                }
+                else
+                {
+                    sw.Write("'" + dp.Y / 100f + "% HP',");
+                }
+                hotCount++;
+
+            }
+
+            sw.Write("],");
+            //add time axis
+            sw.Write("x: [");
+            hotCount = 0;
+            foreach (Point dp in BossHOT)
+            {
+                if (hotCount == BossHOT.Count - 1)
+                {
+                    sw.Write("'" + ((dp.X - start) / 1000).ToString().Replace(',', '.') + "'");
+                }
+                else
+                {
+                    sw.Write("'" + ((dp.X - start) / 1000).ToString().Replace(',', '.') + "',");
+                }
+
+                hotCount++;
+            }
+
+            sw.Write("],");
+            sw.Write(" mode: 'lines'," +
+                    " line: {shape: 'spline', dash: 'dashdot'}," +
+                   ( y_axis.Length > 0 ? " yaxis: '"+ y_axis+"',"  : "") +
+                    "hoverinfo: 'text'," +
+                    " name: 'Boss health'");
+            
+        }
+
+        public static void writeBoonGraph(StreamWriter sw, BoonsGraphModel bgm, long start, long end)
+        {
+            List<Point> bChart = bgm.getBoonChart().Where(x => x.X >= start / 1000 && x.X <= end / 1000).ToList();
+            int bChartCount = 0;
+            sw.Write("y: [");
+            {
+                foreach (Point pnt in bChart)
+                {
+                    if (bChartCount == bChart.Count - 1)
+                    {
+                        sw.Write("'" + pnt.Y + "'");
+                    }
+                    else
+                    {
+                        sw.Write("'" + pnt.Y + "',");
+                    }
+                    bChartCount++;
+                }
+                if (bgm.getBoonChart().Count == 0)
+                {
+                    sw.Write("'0'");
+                }
+            }
+            sw.Write("],");
+            sw.Write("x: [");
+            {
+                bChartCount = 0;
+                foreach (Point pnt in bChart)
+                {
+                    if (bChartCount == bChart.Count - 1)
+                    {
+                        sw.Write("'" + (pnt.X - (int)start / 1000) + "'");
+                    }
+                    else
+                    {
+                        sw.Write("'" + (pnt.X - (int)start / 1000) + "',");
+                    }
+                    bChartCount++;
+                }
+                if (bgm.getBoonChart().Count == 0)
+                {
+                    sw.Write("'0'");
+                }
+            }
+            sw.Write("],");
+            sw.Write(" yaxis: 'y2'," +
+                 " type: 'scatter',");
+            //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
+            if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness")
+            {
+
+            }
+            else
+            {
+                sw.Write(" visible: 'legendonly',");
+            }
+            sw.Write(" line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
+            sw.Write(" fill: 'tozeroy'," +
+                 " name: \"" + bgm.getBoonName() + "\"");
+        }
+
+        public static void writeDPSGraph(StreamWriter sw, string name, List<Point> playerdpsgraphdata, AbstractPlayer p)
+        {
+            int ptdgCount = 0;
+            sw.Write("y: [");
+            {
+                foreach (Point dp in playerdpsgraphdata)
+                {
+                    if (ptdgCount == playerdpsgraphdata.Count - 1)
+                    {
+                        sw.Write("'" + dp.Y + "'");
+                    }
+                    else
+                    {
+                        sw.Write("'" + dp.Y + "',");
+                    }
+                    ptdgCount++;
+                }
+                if (playerdpsgraphdata.Count == 0)
+                {
+                    sw.Write("'0'");
+                }
+            }
+            sw.Write("],");
+            //add time axis
+            sw.Write("x: [");
+            {
+                ptdgCount = 0;
+                foreach (Point dp in playerdpsgraphdata)
+                {
+                    if (ptdgCount == playerdpsgraphdata.Count - 1)
+                    {
+                        sw.Write("'" + dp.X + "'");
+                    }
+                    else
+                    {
+                        sw.Write("'" + dp.X + "',");
+                    }
+                    ptdgCount++;
+                }
+                if (playerdpsgraphdata.Count == 0)
+                {
+                    sw.Write("'0'");
+                }
+            }
+            sw.Write("],");
+            sw.Write(" mode: 'lines'," +
+                   "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf() + (name.Contains("Total") ? "-Total" : ""))  + "'}," +
+                   "yaxis: 'y3'," +
+                   // "legendgroup: 'Damage'," +
+                   "name: '"+ name+"'");
+        }
+
+        public static string GetLink(string name)
+        {
+            switch (name)
+            {
+                case "Question":
+                    return "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png";
+                case "Sword":
+                    return "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
+                case "Axe":
+                    return "https://wiki.guildwars2.com/images/d/d4/Crimson_Antique_Reaver.png";
+                case "Dagger":
+                    return "https://wiki.guildwars2.com/images/6/65/Crimson_Antique_Razor.png";
+                case "Mace":
+                    return "https://wiki.guildwars2.com/images/6/6d/Crimson_Antique_Flanged_Mace.png";
+                case "Pistol":
+                    return "https://wiki.guildwars2.com/images/4/46/Crimson_Antique_Revolver.png";
+                case "Scepter":
+                    return "https://wiki.guildwars2.com/images/e/e2/Crimson_Antique_Wand.png";
+                case "Focus":
+                    return "https://wiki.guildwars2.com/images/8/87/Crimson_Antique_Artifact.png";
+                case "Shield":
+                    return "https://wiki.guildwars2.com/images/b/b0/Crimson_Antique_Bastion.png";
+                case "Torch":
+                    return "https://wiki.guildwars2.com/images/7/76/Crimson_Antique_Brazier.png";
+                case "Warhorn":
+                    return "https://wiki.guildwars2.com/images/1/1c/Crimson_Antique_Herald.png";
+                case "Greatsword":
+                    return "https://wiki.guildwars2.com/images/5/50/Crimson_Antique_Claymore.png";
+                case "Hammer":
+                    return "https://wiki.guildwars2.com/images/3/38/Crimson_Antique_Warhammer.png";
+                case "Longbow":
+                    return "https://wiki.guildwars2.com/images/f/f0/Crimson_Antique_Greatbow.png";
+                case "Shortbow":
+                    return "https://wiki.guildwars2.com/images/1/17/Crimson_Antique_Short_Bow.png";
+                case "Rifle":
+                    return "https://wiki.guildwars2.com/images/1/19/Crimson_Antique_Musket.png";
+                case "Staff":
+                    return "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png";
+                case "Vale Guardian-icon":
+                    return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
+                case "Gorseval the Multifarious-icon":
+                    return "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
+                case "Sabetha the Saboteur-icon":
+                    return "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
+                case "Slothasor-icon":
+                    return "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
+                case "Matthias Gabrel-icon":
+                    return "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
+                case "Keep Construct-icon":
+                    return "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
+                case "Xera-icon":
+                    return "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
+                case "Cairn the Indomitable-icon":
+                    return "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
+                case "Mursaat Overseer-icon":
+                    return "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
+                case "Samarog-icon":
+                    return "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
+                case "Deimos-icon":
+                    return "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
+                case "Soulless Horror-icon":
+                    return "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
+                case "Dhuum-icon":
+                    return "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
+                case "Vale Guardian-ext":
+                    return "vg";
+                case "Gorseval the Multifarious-ext":
+                    return "gors";
+                case "Sabetha the Saboteur-ext":
+                    return "sab";
+                case "Slothasor-ext":
+                    return "sloth";
+                case "Matthias Gabrel-ext":
+                    return "matt";
+                case "Keep Construct-ext":
+                    return "kc";
+                case "Xera-ext":
+                    return "xera";
+                case "Cairn the Indomitable-ext":
+                    return "cairn";
+                case "Mursaat Overseer-ext":
+                    return "mo";
+                case "Samarog-ext":
+                    return "sam";
+                case "Deimos-ext":
+                    return "dei";
+                case "Soulless Horror-ext":
+                    return "sh";
+                case "Dhuum-ext":
+                    return "dhuum";
+
+                //ID version for multilingual
+                case "15438-icon":
+                    return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
+                case "15429-icon":
+                    return "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
+                case "15375-icon":
+                    return "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
+                case "16123-icon":
+                    return "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
+                case "16115-icon":
+                    return "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
+                case "16235-icon":
+                    return "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
+                case "16246-icon":
+                    return "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
+                case "17194-icon":
+                    return "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
+                case "17172-icon":
+                    return "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
+                case "17188-icon":
+                    return "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
+                case "17154-icon":
+                    return "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
+                case "19767-icon":
+                    return "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
+                case "19450-icon":
+                    return "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
+                case "17021-icon":
+                    return "http://dulfy.net/wp-content/uploads/2016/11/gw2-nightmare-fractal-teaser.jpg";
+                case "17028-icon":
+                    return "https://wiki.guildwars2.com/images/d/dc/Siax_the_Corrupted.jpg";
+                case "16948-icon":
+                    return "https://wiki.guildwars2.com/images/5/57/Champion_Toxic_Hybrid.jpg";
+                case "17632-icon":
+                    return "https://wiki.guildwars2.com/images/c/c1/Skorvald_the_Shattered.jpg";
+                case "17949-icon":
+                    return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+                case "17759-icon":
+                    return "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
+
+                case "15438-ext":
+                    return "vg";
+                case "15429-ext":
+                    return "gors";
+                case "15375-ext":
+                    return "sab";
+                case "16123-ext":
+                    return "sloth";
+                case "16115-ext":
+                    return "matt";
+                case "16235-ext":
+                    return "kc";
+                case "16246-ext":
+                    return "xera";
+                case "17194-ext":
+                    return "cairn";
+                case "17172-ext":
+                    return "mo";
+                case "17188-ext":
+                    return "sam";
+                case "17154-ext":
+                    return "dei";
+                case "19767-ext":
+                    return "sh";
+                case "19450-ext":
+                    return "dhuum";
+                case "17021-ext":
+                    return "mama";
+                case "17028-ext":
+                    return "siax";
+                case "16948-ext":
+                    return "ensol";
+                case "17632-ext":
+                    return "skorv";
+                case "17949-ext":
+                    return "arstra";
+                case "17759-ext":
+                    return "arkk";
+
+                case "Warrior":
+                    return "https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png";
+                case "Berserker":
+                    return "https://wiki.guildwars2.com/images/d/da/Berserker_tango_icon_20px.png";
+                case "Spellbreaker":
+                    return "https://wiki.guildwars2.com/images/e/ed/Spellbreaker_tango_icon_20px.png";
+                case "Guardian":
+                    return "https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png";
+                case "Dragonhunter":
+                    return "https://wiki.guildwars2.com/images/c/c9/Dragonhunter_tango_icon_20px.png";
+                case "DragonHunter":
+                    return "https://wiki.guildwars2.com/images/c/c9/Dragonhunter_tango_icon_20px.png";
+                case "Firebrand":
+                    return "https://wiki.guildwars2.com/images/0/02/Firebrand_tango_icon_20px.png";
+                case "Revenant":
+                    return "https://wiki.guildwars2.com/images/b/b5/Revenant_tango_icon_20px.png";
+                case "Herald":
+                    return "https://wiki.guildwars2.com/images/6/67/Herald_tango_icon_20px.png";
+                case "Renegade":
+                    return "https://wiki.guildwars2.com/images/7/7c/Renegade_tango_icon_20px.png";
+                case "Engineer":
+                    return "https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png";
+                case "Scrapper":
+                    return "https://wiki.guildwars2.com/images/3/3a/Scrapper_tango_icon_200px.png";
+                case "Holosmith":
+                    return "https://wiki.guildwars2.com/images/2/28/Holosmith_tango_icon_20px.png";
+                case "Ranger":
+                    return "https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png";
+                case "Druid":
+                    return "https://wiki.guildwars2.com/images/d/d2/Druid_tango_icon_20px.png";
+                case "Soulbeast":
+                    return "https://wiki.guildwars2.com/images/7/7c/Soulbeast_tango_icon_20px.png";
+                case "Thief":
+                    return "https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png";
+                case "Daredevil":
+                    return "https://wiki.guildwars2.com/images/e/e1/Daredevil_tango_icon_20px.png";
+                case "Deadeye":
+                    return "https://wiki.guildwars2.com/images/c/c9/Deadeye_tango_icon_20px.png";
+                case "Elementalist":
+                    return "https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png";
+                case "Tempest":
+                    return "https://wiki.guildwars2.com/images/4/4a/Tempest_tango_icon_20px.png";
+                case "Weaver":
+                    return "https://wiki.guildwars2.com/images/f/fc/Weaver_tango_icon_20px.png";
+                case "Mesmer":
+                    return "https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png";
+                case "Chronomancer":
+                    return "https://wiki.guildwars2.com/images/f/f4/Chronomancer_tango_icon_20px.png";
+                case "Mirage":
+                    return "https://wiki.guildwars2.com/images/d/df/Mirage_tango_icon_20px.png";
+                case "Necromancer":
+                    return "https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png";
+                case "Reaper":
+                    return "https://wiki.guildwars2.com/images/1/11/Reaper_tango_icon_20px.png";
+                case "Scourge":
+                    return "https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png";
+
+                case "Color-Warrior": return "rgb(255,209,102)";
+                case "Color-Berserker": return "rgb(255,209,102)";
+                case "Color-Spellbreaker": return "rgb(255,209,102)";
+                case "Color-Guardian": return "rgb(114,193,217)";
+                case "Color-Dragonhunter": return "rgb(114,193,217)";
+                case "Color-Firebrand": return "rgb(114,193,217)";
+                case "Color-Revenant": return "rgb(209,110,90)";
+                case "Color-Herald": return "rgb(209,110,90)";
+                case "Color-Renegade": return "rgb(209,110,90)";
+                case "Color-Engineer": return "rgb(208,156,89)";
+                case "Color-Scrapper": return "rgb(208,156,89)";
+                case "Color-Holosmith": return "rgb(208,156,89)";
+                case "Color-Ranger": return "rgb(140,220,130)";
+                case "Color-Druid": return "rgb(140,220,130)";
+                case "Color-Soulbeast": return "rgb(140,220,130)";
+                case "Color-Thief": return "rgb(192,143,149)";
+                case "Color-Daredevil": return "rgb(192,143,149)";
+                case "Color-Deadeye": return "rgb(192,143,149)";
+                case "Color-Elementalist": return "rgb(246,138,135)";
+                case "Color-Tempest": return "rgb(246,138,135)";
+                case "Color-Weaver": return "rgb(246,138,135)";
+                case "Color-Mesmer": return "rgb(182,121,213)";
+                case "Color-Chronomancer": return "rgb(182,121,213)";
+                case "Color-Mirage": return "rgb(182,121,213)";
+                case "Color-Necromancer": return "rgb(82,167,111)";
+                case "Color-Reaper": return "rgb(82,167,111)";
+                case "Color-Scourge": return "rgb(82,167,111)";
+                case "Color-Boss": return "rgb(82,167,250)";
+
+                case "Color-Warrior-Total": return "rgb(125,109,66)";
+                case "Color-Berserker-Total": return "rgb(125,109,66)";
+                case "Color-Spellbreaker-Total": return "rgb(125,109,66)";
+                case "Color-Guardian-Total": return "rgb(62,101,113)";
+                case "Color-Dragonhunter-Total": return "rgb(62,101,113)";
+                case "Color-Firebrand-Total": return "rgb(62,101,113)";
+                case "Color-Revenant-Total": return "rgb(110,60,50)";
+                case "Color-Herald-Total": return "rgb(110,60,50)";
+                case "Color-Renegade-Total": return "rgb(110,60,50)";
+                case "Color-Engineer-Total": return "rgb(109,83,48)";
+                case "Color-Scrapper-Total": return "rgb(109,83,48)";
+                case "Color-Holosmith-Total": return "rgb(109,83,48)";
+                case "Color-Ranger-Total": return "rgb(75,115,70)";
+                case "Color-Druid-Total": return "rgb(75,115,70)";
+                case "Color-Soulbeast-Total": return "rgb(75,115,70)";
+                case "Color-Thief-Total": return "rgb(101,76,79)";
+                case "Color-Daredevil-Total": return "rgb(101,76,79)";
+                case "Color-Deadeye-Total": return "rgb(101,76,79)";
+                case "Color-Elementalist-Total": return "rgb(127,74,72)";
+                case "Color-Tempest-Total": return "rgb(127,74,72)";
+                case "Color-Weaver-Total": return "rgb(127,74,72)";
+                case "Color-Mesmer-Total": return "rgb(96,60,111)";
+                case "Color-Chronomancer-Total": return "rgb(96,60,111)";
+                case "Color-Mirage-Total": return "rgb(96,60,111)";
+                case "Color-Necromancer-Total": return "rgb(46,88,60)";
+                case "Color-Reaper-Total": return "rgb(46,88,60)";
+                case "Color-Scourge-Total": return "rgb(46,88,60)";
+                case "Color-Boss-Total": return "rgb(92,177,250)";
+
+                case "Crit":
+                    return "https://wiki.guildwars2.com/images/9/95/Critical_Chance.png";
+                case "Scholar":
+                    return "https://wiki.guildwars2.com/images/thumb/2/2b/Superior_Rune_of_the_Scholar.png/40px-Superior_Rune_of_the_Scholar.png";
+                case "SwS":
+                    return "https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png";
+                case "Downs":
+                    return "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
+                case "Dead":
+                    return "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
+                case "Flank":
+                    return "https://wiki.guildwars2.com/images/thumb/b/bb/Hunter%27s_Tactics.png/40px-Hunter%27s_Tactics.png";
+                case "Glance":
+                    return "https://wiki.guildwars2.com/images/f/f9/Weakness.png";
+                case "Miss":
+                    return "https://wiki.guildwars2.com/images/3/33/Blinded.png";
+                case "Interupts":
+                    return "https://wiki.guildwars2.com/images/thumb/7/79/Daze.png/20px-Daze.png";
+                case "Invuln":
+                    return "https://wiki.guildwars2.com/images/e/eb/Determined.png";
+                case "Blinded":
+                    return "https://wiki.guildwars2.com/images/thumb/3/33/Blinded.png/20px-Blinded.png";
+                case "Wasted":
+                    return "https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png";
+                case "Saved":
+                    return "https://wiki.guildwars2.com/images/e/eb/Ready.png";
+                case "Swap":
+                    return "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
+                case "Blank":
+                    return "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png";
+                case "Dodge":
+                    return "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
+                case "Bandage":
+                    return "https://render.guildwars2.com/file/D2D7D11874060D68760BFD519CFC77B6DF14981F/102928.png";
+
+                case "Color-Aegis": return "rgb(102,255,255)";
+                case "Color-Fury": return "rgb(255,153,0)";
+                case "Color-Might": return "rgb(153,0,0)";
+                case "Color-Protection": return "rgb(102,255,255)";
+                case "Color-Quickness": return "rgb(255,0,255)";
+                case "Color-Regeneration": return "rgb(0,204,0)";
+                case "Color-Resistance": return "rgb(255, 153, 102)";
+                case "Color-Retaliation": return "rgb(255, 51, 0)";
+                case "Color-Stability": return "rgb(153, 102, 0)";
+                case "Color-Swiftness": return "rgb(255,255,0)";
+                case "Color-Vigor": return "rgb(102, 153, 0)";
+
+                case "Color-Alacrity": return "rgb(0,102,255)";
+                case "Color-Glyph of Empowerment": return "rgb(204, 153, 0)";
+                case "Color-Grace of the Land": return "rgb(,,)";
+                case "Color-Sun Spirit": return "rgb(255, 102, 0)";
+                case "Color-Banner of Strength": return "rgb(153, 0, 0)";
+                case "Color-Banner of Discipline": return "rgb(0, 51, 0)";
+                case "Color-Spotter": return "rgb(0,255,0)";
+                case "Color-Stone Spirit": return "rgb(204, 102, 0)";
+                case "Color-Storm Spirit": return "rgb(102, 0, 102)";
+                case "Color-Empower Allies": return "rgb(255, 153, 0)";
+
+                case "Condi": return "https://wiki.guildwars2.com/images/5/54/Condition_Damage.png";
+                case "Healing": return "https://wiki.guildwars2.com/images/8/81/Healing_Power.png";
+                case "Tough": return "https://wiki.guildwars2.com/images/1/12/Toughness.png";
+                default:
+                    return "";
+            }
+
         }
 
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 
@@ -22,8 +23,8 @@ namespace LuckParser.Models.ParseModels
         
         // Constructors
         public Boss(AgentItem agent) : base(agent)
-        {        
-
+        {
+            prof = "Boss";
         }
 
         private List<PhaseData> phases = new List<PhaseData>();
@@ -42,7 +43,7 @@ namespace LuckParser.Models.ParseModels
         {
             phaseData.Add(data);
         }
-
+        
         // Private Methods
         private void setPhases(BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {

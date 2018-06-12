@@ -11,6 +11,7 @@ namespace LuckParser.Models.ParseModels
     {
         protected ushort instid;
         private String character;
+        protected String prof;
         // Boons
         private BoonDistribution boon_distribution = new BoonDistribution();
         private Dictionary<int, long> boon_presence = new Dictionary<int, long>();
@@ -18,6 +19,7 @@ namespace LuckParser.Models.ParseModels
         // DPS
         protected List<DamageLog> damage_logs = new List<DamageLog>();
         private List<DamageLog> damage_logsFiltered = new List<DamageLog>();
+        private Dictionary<int, List<Point>> dps_graph = new Dictionary<int, List<Point>>();
         // Minions
         private List<ushort> combatMinionIDList = new List<ushort>();
         private Dictionary<AgentItem, List<DamageLog>> minion_damage_logs = new Dictionary<AgentItem, List<DamageLog>>();
@@ -51,7 +53,26 @@ namespace LuckParser.Models.ParseModels
                 return dead.getTime();
             }
             return 0;
-        }    
+        }
+        public string getProf()
+        {
+            return prof;
+        }
+
+        public void addDPSGraph(int id, List<Point> graph)
+        {
+            dps_graph[id] = graph;
+        }
+
+        public List<Point> getDPSGraph(int id)
+        {
+            if (dps_graph.ContainsKey(id))
+            {
+                return dps_graph[id];
+            }
+            return new List<Point>();
+        }
+
         public List<DamageLog> getDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)//isntid = 0 gets all logs if specefied sets and returns filterd logs
         {
             if (damage_logs.Count == 0)

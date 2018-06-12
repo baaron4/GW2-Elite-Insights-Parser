@@ -365,7 +365,7 @@ namespace LuckParser.Controllers
             }
             AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
             boss = new Boss(bossAgent);
-            List<long[]> bossHealthOverTime = new List<long[]>();
+            List<Point> bossHealthOverTime = new List<Point>();
 
             // Grab values threw combat data
             foreach (CombatItem c in combat_list)
@@ -399,7 +399,7 @@ namespace LuckParser.Controllers
                 //set health update
                 if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 8)
                 {
-                    bossHealthOverTime.Add(new long[] { c.getTime() - boss_data.getFirstAware(), c.getDstAgent() });
+                    bossHealthOverTime.Add(new Point ( (int)(c.getTime() - boss_data.getFirstAware()), (int)c.getDstAgent() ));
                 }
 
             }
@@ -414,7 +414,7 @@ namespace LuckParser.Controllers
                 {
                     if (NPC.getProf().Contains("16286"))
                     {
-                        bossHealthOverTime = new List<long[]>();//reset boss health over time
+                        bossHealthOverTime = new List<Point>();//reset boss health over time
                         xera_2_instid = NPC.getInstid();
                         boss_data.setHealth(24085950);
                         boss.addPhaseData(boss_data.getLastAware());
@@ -433,7 +433,7 @@ namespace LuckParser.Controllers
                             //set health update
                             if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 8)
                             {
-                                bossHealthOverTime.Add(new long[] { c.getTime() - boss_data.getFirstAware(), c.getDstAgent() });
+                                bossHealthOverTime.Add(new Point ( (int)(c.getTime() - boss_data.getFirstAware()), (int)c.getDstAgent() ));
                             }
                         }
                         break;
@@ -716,44 +716,43 @@ namespace LuckParser.Controllers
             //Generate DPS graph
             sw.Write("<div id=\"DPSGraph"+ phase_index + "\" style=\"height: 600px;width:1200px; display:inline-block \"></div>");
             sw.Write("<script>");
-
+            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
             sw.Write("var data = [");
             int maxDPS = 0;
-            List<int[]> totalDpsAllPlayers = new List<int[]>();
+            List<Point> totalDpsAllPlayers = new List<Point>();
             foreach (Player p in p_list)
             {
                 //Adding dps axis
-                List<int[]> playerbossdpsgraphdata = new List<int[]>(HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data,p, boss, phase_index));
+                List<Point> playerbossdpsgraphdata = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data,p, boss, phase_index);
                 if (totalDpsAllPlayers.Count == 0)
                 {
                     //totalDpsAllPlayers = new List<int[]>(playerbossdpsgraphdata);
-                    foreach (int[] point in playerbossdpsgraphdata)
+                    foreach (Point point in playerbossdpsgraphdata)
                     {
-                        int time = point[0];
-                        int dmg = point[1];
-                        totalDpsAllPlayers.Add(new int[] { time, dmg });
+                        int time = point.X;
+                        int dmg = point.Y;
+                        totalDpsAllPlayers.Add(new Point( time, dmg ));
                     }
                 }
 
                 sw.Write("{y: [");
                 int pbdgdCount = 0;
-                foreach (int[] dp in playerbossdpsgraphdata)
+                foreach (Point dp in playerbossdpsgraphdata)
                 {
                     if (pbdgdCount == playerbossdpsgraphdata.Count - 1)
                     {
-                        sw.Write("'" + dp[1] + "'");
+                        sw.Write("'" + dp.Y + "'");
                     }
                     else
                     {
-                        sw.Write("'" + dp[1] + "',");
+                        sw.Write("'" + dp.Y + "',");
                     }
                     pbdgdCount++;
 
-                    if (dp[1] > maxDPS) { maxDPS = dp[1]; }
+                    if (dp.Y > maxDPS) { maxDPS = dp.Y; }
                     if (totalDpsAllPlayers.Count != 0)
                     {
-                        if (totalDpsAllPlayers.FirstOrDefault(x => x[0] == dp[0]) != null)
-                            totalDpsAllPlayers.FirstOrDefault(x => x[0] == dp[0])[1] += dp[1];
+                        totalDpsAllPlayers[dp.X] = new Point(dp.X, totalDpsAllPlayers[dp.X].Y + dp.Y);
                     }
                 }
                 if (playerbossdpsgraphdata.Count == 0)
@@ -765,15 +764,15 @@ namespace LuckParser.Controllers
                 //add time axis
                 sw.Write("x: [");
                 pbdgdCount = 0;
-                foreach (int[] dp in playerbossdpsgraphdata)
+                foreach (Point dp in playerbossdpsgraphdata)
                 {
                     if (pbdgdCount == playerbossdpsgraphdata.Count - 1)
                     {
-                        sw.Write("'" + dp[0] + "'");
+                        sw.Write("'" + dp.X + "'");
                     }
                     else
                     {
-                        sw.Write("'" + dp[0] + "',");
+                        sw.Write("'" + dp.X + "',");
                     }
                     pbdgdCount++;
                 }
@@ -784,25 +783,25 @@ namespace LuckParser.Controllers
 
                 sw.Write("],");
                 sw.Write("mode: 'lines'," +
-                        "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
+                        "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf()) + "'}," +
                         "name: '" + p.getCharacter() + " DPS'" +
                         "},");
                 if (SnapSettings[0])
                 {//Turns display on or off
                     sw.Write("{");
                     //Adding dps axis
-                    List<int[]> playertotaldpsgraphdata = HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data,p,boss,phase_index);
+                    List<Point> playertotaldpsgraphdata = HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data,p,boss,phase_index);
                     sw.Write("y: [");
                     pbdgdCount = 0;
-                    foreach (int[] dp in playertotaldpsgraphdata)
+                    foreach (Point dp in playertotaldpsgraphdata)
                     {
                         if (pbdgdCount == playertotaldpsgraphdata.Count - 1)
                         {
-                            sw.Write("'" + dp[1] + "'");
+                            sw.Write("'" + dp.Y + "'");
                         }
                         else
                         {
-                            sw.Write("'" + dp[1] + "',");
+                            sw.Write("'" + dp.Y + "',");
                         }
                         pbdgdCount++;
 
@@ -817,15 +816,15 @@ namespace LuckParser.Controllers
                     //add time axis
                     sw.Write("x: [");
                     pbdgdCount = 0;
-                    foreach (int[] dp in playertotaldpsgraphdata)
+                    foreach (Point dp in playertotaldpsgraphdata)
                     {
                         if (pbdgdCount == playertotaldpsgraphdata.Count - 1)
                         {
-                            sw.Write("'" + dp[0] + "'");
+                            sw.Write("'" + dp.X + "'");
                         }
                         else
                         {
-                            sw.Write("'" + dp[0] + "',");
+                            sw.Write("'" + dp.X + "',");
                         }
 
                         pbdgdCount++;
@@ -837,7 +836,7 @@ namespace LuckParser.Controllers
 
                     sw.Write("],");
                     sw.Write("mode: 'lines'," +
-                            "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
+                            "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf()) + "'}," +
                             "visible:'legendonly'," +
                             "name: '" + p.getCharacter() + "TDPS'" + "},");
                 }
@@ -848,15 +847,15 @@ namespace LuckParser.Controllers
 
             sw.Write("y: [");
             int tdalpcount = 0;
-            foreach (int[] dp in totalDpsAllPlayers)
+            foreach (Point dp in totalDpsAllPlayers)
             {
                 if (tdalpcount == totalDpsAllPlayers.Count - 1)
                 {
-                    sw.Write("'" + dp[1] + "'");
+                    sw.Write("'" + dp.Y + "'");
                 }
                 else
                 {
-                    sw.Write("'" + dp[1] + "',");
+                    sw.Write("'" + dp.Y + "',");
                 }
                 tdalpcount++;
             }
@@ -865,15 +864,15 @@ namespace LuckParser.Controllers
             //add time axis
             sw.Write("x: [");
             tdalpcount = 0;
-            foreach (int[] dp in totalDpsAllPlayers)
+            foreach (Point dp in totalDpsAllPlayers)
             {
                 if (tdalpcount == totalDpsAllPlayers.Count - 1)
                 {
-                    sw.Write("'" + dp[0] + "'");
+                    sw.Write("'" + dp.X + "'");
                 }
                 else
                 {
-                    sw.Write("'" + dp[0] + "',");
+                    sw.Write("'" + dp.X + "',");
                 }
 
                 tdalpcount++;
@@ -903,12 +902,12 @@ namespace LuckParser.Controllers
                 int mechcount = 0;
                 foreach (MechanicLog ml in filterdList)
                 {
-                    int[] check = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data,ml.GetPlayer(), boss, phase_index).FirstOrDefault(x => x[0] == ml.GetTime());
+                    Point check = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data,ml.GetPlayer(), boss, phase_index).FirstOrDefault(x => x.X == ml.GetTime());
                     if (mechcount == filterdList.Count - 1)
                     {
                         if (check != null)
                         {
-                            sw.Write("'" + check[1] + "'");
+                            sw.Write("'" + check.Y + "'");
                         }
                         else
                         {
@@ -920,7 +919,7 @@ namespace LuckParser.Controllers
                     {
                         if (check != null)
                         {
-                            sw.Write("'" + check[1] + "',");
+                            sw.Write("'" + check.Y + "',");
                         }
                         else
                         {
@@ -990,154 +989,96 @@ namespace LuckParser.Controllers
                 int mcount = 0;
                 List<MechanicLog> DnDList = mech_data.GetMDataLogs().Where(x => x.GetName() == state).ToList();
                 sw.Write("{");
-                sw.Write("y: [");
-                foreach (MechanicLog ml in DnDList)
                 {
-                    int[] check = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, ml.GetPlayer(),boss, phase_index).FirstOrDefault(x => x[0] == ml.GetTime());
-                    if (mcount == DnDList.Count - 1)
+                    sw.Write("y: [");
                     {
-                        if (check != null)
+                        foreach (MechanicLog ml in DnDList)
                         {
-                            sw.Write("'" + check[1] + "'");
+                            Point check = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, ml.GetPlayer(), boss, phase_index).FirstOrDefault(x => x.X == ml.GetTime());
+                            if (mcount == DnDList.Count - 1)
+                            {
+                                if (check != null)
+                                {
+                                    sw.Write("'" + check.Y + "'");
+                                }
+                                else
+                                {
+                                    sw.Write("'" + 10000 + "'");
+                                }
+
+                            }
+                            else
+                            {
+                                if (check != null)
+                                {
+                                    sw.Write("'" + check.Y + "',");
+                                }
+                                else
+                                {
+                                    sw.Write("'" + 10000 + "',");
+                                }
+                            }
+
+                            mcount++;
+                        }
+                    }
+                   
+                    sw.Write("],");
+                    //add time axis
+                    sw.Write("x: [");
+                    {
+                        tdalpcount = 0;
+                        mcount = 0;
+                        foreach (MechanicLog ml in DnDList)
+                        {
+                            if (mcount == DnDList.Count - 1)
+                            {
+                                sw.Write("'" + ml.GetTime() + "'");
+                            }
+                            else
+                            {
+                                sw.Write("'" + ml.GetTime() + "',");
+                            }
+
+                            mcount++;
+                        }
+                    }
+
+                    sw.Write("],");
+                    sw.Write(" mode: 'markers',");
+                    if (state == "DEAD" || state == "DOWN")
+                    {
+                        //sw.Write("visible:'legendonly',");
+                    }
+                    else
+                    {
+                        sw.Write("visible:'legendonly',");
+                    }
+                    sw.Write("type:'scatter'," +
+                        "marker:{" + mech_data.GetPLoltyShape(state) + "size: 15" + "},");
+                    sw.Write("text:[");
+                    foreach (MechanicLog ml in DnDList)
+                    {
+                        if (mcount == DnDList.Count - 1)
+                        {
+                            sw.Write("'" + ml.GetPlayer().getCharacter() + "'");
                         }
                         else
                         {
-                            sw.Write("'" + 10000 + "'");
+                            sw.Write("'" + ml.GetPlayer().getCharacter() + "',");
                         }
 
+                        mcount++;
                     }
-                    else
-                    {
-                        if (check != null)
-                        {
-                            sw.Write("'" + check[1] + "',");
-                        }
-                        else
-                        {
-                            sw.Write("'" + 10000 + "',");
-                        }
-                    }
-
-                    mcount++;
-                }
-                sw.Write("],");
-                //add time axis
-                sw.Write("x: [");
-                tdalpcount = 0;
-                mcount = 0;
-                foreach (MechanicLog ml in DnDList)
-                {
-                    if (mcount == DnDList.Count - 1)
-                    {
-                        sw.Write("'" + ml.GetTime() + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + ml.GetTime() + "',");
-                    }
-
-                    mcount++;
-                }
-
-                sw.Write("],");
-                sw.Write(" mode: 'markers',");
-                if (state == "DEAD" || state == "DOWN")
-                {
-                    //sw.Write("visible:'legendonly',");
-                }
-                else
-                {
-                    sw.Write("visible:'legendonly',");
-                }
-                sw.Write("type:'scatter'," +
-                    "marker:{" + mech_data.GetPLoltyShape(state) + "size: 15" + "}," +
-                    "text:[");
-                foreach (MechanicLog ml in DnDList)
-                {
-                    if (mcount == DnDList.Count - 1)
-                    {
-                        sw.Write("'" + ml.GetPlayer().getCharacter() + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + ml.GetPlayer().getCharacter() + "',");
-                    }
-
-                    mcount++;
-                }
-
-                sw.Write("]," +
-                        " name: '" + state + "'");
+                    sw.Write("]," +
+                            " name: '" + state + "'");
+                }              
                 sw.Write("},");
             }
             if (maxDPS > 0)
             {
-                //sw.Write(",");
-                //Boss Health
                 sw.Write("{");
-                //Adding dps axis
-                sw.Write("y: [");
-
-                float scaler = boss_data.getHealth() / maxDPS;
-                int hotCount = 0;
-                List<long[]> BossHOT = boss_data.getHealthOverTime();
-                foreach (long[] dp in BossHOT)
-                {
-                    if (hotCount == BossHOT.Count - 1)
-                    {
-                        sw.Write("'" + ((dp[1] / 10000f) * maxDPS).ToString().Replace(',','.') + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + ((dp[1] / 10000f) * maxDPS).ToString().Replace(',', '.') + "',");
-                    }
-                    hotCount++;
-
-                }
-
-                sw.Write("],");
-                //text axis is boss hp in %
-                sw.Write("text: [");
-
-                float scaler2 = boss_data.getHealth() / 100;
-                hotCount = 0;
-                foreach (long[] dp in BossHOT)
-                {
-                    if (hotCount == BossHOT.Count - 1)
-                    {
-                        sw.Write("'" + dp[1] / 100f + "% HP'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + dp[1] / 100f + "% HP',");
-                    }
-                    hotCount++;
-
-                }
-
-                sw.Write("],");
-                //add time axis
-                sw.Write("x: [");
-                hotCount = 0;
-                foreach (long[] dp in BossHOT)
-                {
-                    if (hotCount == BossHOT.Count - 1)
-                    {
-                        sw.Write("'" + (dp[0] / 1000).ToString().Replace(',','.') + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + (dp[0] / 1000).ToString().Replace(',', '.') + "',");
-                    }
-
-                    hotCount++;
-                }
-
-                sw.Write("],");
-                sw.Write(" mode: 'lines'," +
-                        " line: {shape: 'spline', dash: 'dashdot'}," +
-                        "hoverinfo: 'text'," +
-                        " name: 'Boss health'");
+                HTMLHelper.writeBossHealthGraph(sw, maxDPS, phase.start, phase.end, boss_data);
                 sw.Write("}");
             }
             else
@@ -1173,22 +1114,22 @@ namespace LuckParser.Controllers
             sw.Write("<div>");
             if (wep[0] != null)
             {
-                sw.Write("<img src=\"" + GetLink(wep[0]) + " \" alt=\"" + wep[0] + "\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" +wep[0] + "\">");
+                sw.Write("<img src=\"" + HTMLHelper.GetLink(wep[0]) + " \" alt=\"" + wep[0] + "\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" +wep[0] + "\">");
             }
             else if(wep[1] != null)
             {
-                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Unknown\">");
+                sw.Write("<img src=\"" + HTMLHelper.GetLink("Question") + " \" alt=\"Unknown\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Unknown\">");
             }
             if (wep[1] != null)
             {
                 if (wep[1] != "2Hand")
                 {
-                    sw.Write("<img src=\"" + GetLink(wep[1]) + " \" alt=\"" + wep[1] + "\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[1] + "\">");
+                    sw.Write("<img src=\"" + HTMLHelper.GetLink(wep[1]) + " \" alt=\"" + wep[1] + "\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[1] + "\">");
                 }
             }
             else
             {
-                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Unknown\">");
+                sw.Write("<img src=\"" + HTMLHelper.GetLink("Question") + " \" alt=\"Unknown\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Unknown\">");
             }
             if (wep[2] == null && wep[3] == null)
             {
@@ -1200,22 +1141,22 @@ namespace LuckParser.Controllers
             
             if (wep[2] != null)
             {
-                sw.Write("<img src=\"" + GetLink(wep[2]) + " \" alt=\"" + wep[2] + "\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[2] + "\">");
+                sw.Write("<img src=\"" + HTMLHelper.GetLink(wep[2]) + " \" alt=\"" + wep[2] + "\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[2] + "\">");
             }
             else if(wep[3] != null)
             {
-                sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
+                sw.Write("<img src=\"" + HTMLHelper.GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
             }
             if (wep[3] != null)
             {
                 if (wep[3] != "2Hand")
                 {
-                    sw.Write("<img src=\"" + GetLink(wep[3]) + " \" alt=\"" + wep[3] + "\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[3] + "\">");
+                    sw.Write("<img src=\"" + HTMLHelper.GetLink(wep[3]) + " \" alt=\"" + wep[3] + "\"  data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"" + wep[3] + "\">");
                 }
             }
             else
             {
-                //sw.Write("<img src=\"" + GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
+                //sw.Write("<img src=\"" + HTMLHelper.GetLink("Question") + " \" alt=\"Unknown\" height=\"18\" width=\"18\" >");
             }
             sw.Write("<br>");
             sw.Write("</div>");
@@ -1278,7 +1219,7 @@ namespace LuckParser.Controllers
                             }
                             sw.Write("<td style=\"width: 120px; border:1px solid #EE5F5B;\">");
                             {
-                                sw.Write("<img src=\"" + GetLink(gPlay.getProf().ToString()) + " \" alt=\"" + gPlay.getProf().ToString() + "\" height=\"18\" width=\"18\" >");
+                                sw.Write("<img src=\"" + HTMLHelper.GetLink(gPlay.getProf().ToString()) + " \" alt=\"" + gPlay.getProf().ToString() + "\" height=\"18\" width=\"18\" >");
                                 sw.Write(build);
                                 PrintWeapons(sw,gPlay);
                                 sw.Write(charName);
@@ -1318,8 +1259,8 @@ namespace LuckParser.Controllers
                         sw.Write("<th>All DPS</th>");
                         sw.Write("<th>Power</th>");
                         sw.Write("<th>Condi</th>");
-                        sw.Write("<th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
                     }
                     sw.Write("</tr>");
                 }
@@ -1336,7 +1277,7 @@ namespace LuckParser.Controllers
                     sw.Write("<tr>");
                     {
                         sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                        sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                        sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                         sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
                         sw.Write("<td>" + player.getAccount().TrimStart(':') + "</td>");
                         //Boss dps
@@ -1427,19 +1368,19 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Sub</th>");
                         sw.Write("<th></th>");
                         sw.Write("<th>Name</th>");
-                        sw.Write("<th><img src=" + GetLink("Crit") + " alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + GetLink("Scholar") + " alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + GetLink("SwS") + " alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + GetLink("Flank") + " alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + GetLink("Glance") + " alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + GetLink("Blinded") + " alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + GetLink("Interupts") + " alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + GetLink("Invuln") + " alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + GetLink("Wasted") + " alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + GetLink("Saved") + " alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + GetLink("Swap") + " alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Crit") + " alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Scholar") + " alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("SwS") + " alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Flank") + " alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Glance") + " alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Blinded") + " alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Interupts") + " alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Invuln") + " alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Wasted") + " alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Saved") + " alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Swap") + " alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
                     }
                     sw.Write("</tr>");
                 }
@@ -1456,7 +1397,7 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " out of " + stats[0] + "hits<br> Total Damage Effected by Crits: "+stats[22]+" \">" + (int)(Double.Parse(stats[1]) / Double.Parse(stats[0]) * 100) + "%</span>" + "</td>");//crit
@@ -1564,8 +1505,8 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Invulned</th>");
                         sw.Write("<th>Evaded</th>");
                         sw.Write("<th><span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Dodges or Mirage Cloak \">Dodges</span></th>");
-                        sw.Write("<th><img src=" + GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>");
                     }                
                     sw.Write("</tr>");
                 }
@@ -1583,7 +1524,7 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
                             sw.Write("<td>" + stats[0] + "</td>");//dmg taken
                             sw.Write("<td>" + stats[10] + "</td>");//dmgbarriar
@@ -1687,7 +1628,7 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " seconds \">" + stats[2] + "</span>" + "</td>");//condicleanse                                                                                                                                                                   //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " seconds \">" + stats[0] + "</span>" + "</td>");//res
@@ -1757,7 +1698,7 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             if (boonTable)
                             {
                                 long fight_duration = boss_data.getLastAware() - boss_data.getFirstAware();
@@ -1873,7 +1814,7 @@ namespace LuckParser.Controllers
                         List<Player> playerID = new List<Player>();
                         playerID.Add(player);
                         Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,player, playerID);
-                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray, GetLink(player.getProf().ToString()));
+                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
                     }
                 }
                 sw.Write("</tbody>");
@@ -1904,7 +1845,7 @@ namespace LuckParser.Controllers
                                 playerIDS.Add(p);
                         }
                         Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,player, playerIDS);
-                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray, GetLink(player.getProf().ToString()));
+                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
                     }
                 }          
                 sw.Write("</tbody>");
@@ -1934,7 +1875,7 @@ namespace LuckParser.Controllers
                                 playerIDS.Add(p);
                         }
                         Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,player, playerIDS);
-                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray, GetLink(player.getProf().ToString()));
+                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
                     }
                 }
                 sw.Write("</tbody>");
@@ -1963,7 +1904,7 @@ namespace LuckParser.Controllers
                     foreach (Player player in p_list)
                     {
                         Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,player, playerIDS);
-                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray, GetLink(player.getProf().ToString()));
+                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
                     }
                 }
                 sw.Write("</tbody>");
@@ -1991,7 +1932,7 @@ namespace LuckParser.Controllers
                 string pid = p.getInstid() + "_" + phase_index;
                 sw.Write("<div class=\"tab-pane fade\" id=\"" + pid + "\">");
                 {
-                    sw.Write("<h1 align=\"center\"> " + charname + "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
+                    sw.Write("<h1 align=\"center\"> " + charname + "<img src=\"" + HTMLHelper.GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
                     sw.Write("<ul class=\"nav nav-tabs\">");
                     {
                         sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + pid + "\">" + p.getCharacter() + "</a></li>");
@@ -2108,67 +2049,12 @@ namespace LuckParser.Controllers
                                         Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(boss_data, skill_data, combat_data.getCombatList());
                                         foreach (int boonid in boonGraphData.Keys.Reverse())
                                         {
+                                            BoonsGraphModel bgm = boonGraphData[boonid];
                                             if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null || boonid == -2)
                                             {
                                                 sw.Write("{");
                                                 {
-                                                    BoonsGraphModel bgm = boonGraphData[boonid];
-                                                    List<Point> bChart = bgm.getBoonChart().Where(x => x.X >= phase.start / 1000 && x.X <= phase.end / 1000).ToList();
-                                                    int bChartCount = 0;
-                                                    sw.Write("y: [");
-                                                    {
-                                                        foreach (Point pnt in bChart)
-                                                        {
-                                                            if (bChartCount == bChart.Count - 1)
-                                                            {
-                                                                sw.Write("'" + pnt.Y + "'");
-                                                            }
-                                                            else
-                                                            {
-                                                                sw.Write("'" + pnt.Y + "',");
-                                                            }
-                                                            bChartCount++;
-                                                        }
-                                                        if (bgm.getBoonChart().Count == 0)
-                                                        {
-                                                            sw.Write("'0'");
-                                                        }
-                                                    }
-                                                    sw.Write("],");
-                                                    sw.Write("x: [");
-                                                    {
-                                                        bChartCount = 0;
-                                                        foreach (Point pnt in bChart)
-                                                        {
-                                                            if (bChartCount == bChart.Count - 1)
-                                                            {
-                                                                sw.Write("'" + (pnt.X - (int)phase.start / 1000) + "'");
-                                                            }
-                                                            else
-                                                            {
-                                                                sw.Write("'" + (pnt.X - (int)phase.start / 1000) + "',");
-                                                            }
-                                                            bChartCount++;
-                                                        }
-                                                        if (bgm.getBoonChart().Count == 0)
-                                                        {
-                                                            sw.Write("'0'");
-                                                        }
-                                                    }
-                                                    sw.Write("],");
-                                                    sw.Write("yaxis: 'y2'," +
-                                                             "type: 'scatter',");
-                                                    //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
-                                                    if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness")
-                                                    {
-                                                    }
-                                                    else
-                                                    {
-                                                        sw.Write(" visible: 'legendonly',");
-                                                    }
-                                                    sw.Write("line: {shape: 'hv', color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
-                                                    sw.Write("fill: 'tozeroy'," +
-                                                            "name: \"" + bgm.getBoonName() + "\"");
+                                                    HTMLHelper.writeBoonGraph(sw, bgm, phase.start, phase.end);
                                                 }
                                                 sw.Write(" },");
                                             }
@@ -2178,120 +2064,20 @@ namespace LuckParser.Controllers
                                     if (SnapSettings[2])
                                     {//show boss dps plot
                                      //Adding dps axis
-                                        List<int[]> playerbossdpsgraphdata = HTMLHelper.getBossDPSGraph(boss_data,combat_data,agent_data,p, boss,phase_index);
-                                        int pbdgCount = 0;
+                                        List<Point> playerbossdpsgraphdata = HTMLHelper.getBossDPSGraph(boss_data,combat_data,agent_data,p, boss,phase_index);
                                         sw.Write("{");
                                         {
-                                            sw.Write("y: [");
-                                            {
-                                                foreach (int[] dp in playerbossdpsgraphdata)
-                                                {
-                                                    if (maxDPS < dp[1])
-                                                    {
-                                                        maxDPS = dp[1];
-                                                    }
-                                                    if (pbdgCount == playerbossdpsgraphdata.Count - 1)
-                                                    {
-                                                        sw.Write("'" + dp[1] + "'");
-                                                    }
-                                                    else
-                                                    {
-                                                        sw.Write("'" + dp[1] + "',");
-                                                    }
-                                                    pbdgCount++;
-                                                }
-                                                if (playerbossdpsgraphdata.Count == 0)
-                                                {
-                                                    sw.Write("'0'");
-                                                }
-                                            }
-                                            sw.Write("],");
-                                            //add time axis
-                                            sw.Write("x: [");
-                                            {
-                                                pbdgCount = 0;
-                                                foreach (int[] dp in playerbossdpsgraphdata)
-                                                {
-                                                    if (pbdgCount == playerbossdpsgraphdata.Count - 1)
-                                                    {
-                                                        sw.Write("'" + dp[0] + "'");
-                                                    }
-                                                    else
-                                                    {
-                                                        sw.Write("'" + dp[0] + "',");
-                                                    }
-
-                                                    pbdgCount++;
-                                                }
-                                                if (playerbossdpsgraphdata.Count == 0)
-                                                {
-                                                    sw.Write("'0'");
-                                                }
-                                            }
-                                            sw.Write("],");
-                                            sw.Write("mode: 'lines'," +
-                                                    "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
-                                                    "yaxis: 'y3'," +
-                                                    // "legendgroup: 'Damage',"+
-                                                    "name: 'Boss DPS'");
+                                            HTMLHelper.writeDPSGraph(sw, "Boss DPS", playerbossdpsgraphdata, p);
                                         }
-
+                                        maxDPS = Math.Max(maxDPS, playerbossdpsgraphdata.Max(x => x.Y));
                                         sw.Write("},");
                                     }
                                     if (SnapSettings[1])
                                     {//show total dps plot
+                                        List<Point> playertotaldpsgraphdata = HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index);
                                         sw.Write("{");
                                         { //Adding dps axis
-                                            List<int[]> playertotaldpsgraphdata = HTMLHelper.getTotalDPSGraph(boss_data,combat_data,agent_data,p,boss, phase_index);
-                                            int ptdgCount = 0;
-                                            sw.Write("y: [");
-                                            {
-                                                foreach (int[] dp in playertotaldpsgraphdata)
-                                                {
-                                                    if (ptdgCount == playertotaldpsgraphdata.Count - 1)
-                                                    {
-                                                        sw.Write("'" + dp[1] + "'");
-                                                    }
-                                                    else
-                                                    {
-                                                        sw.Write("'" + dp[1] + "',");
-                                                    }
-                                                    ptdgCount++;
-                                                }
-                                                if (playertotaldpsgraphdata.Count == 0)
-                                                {
-                                                    sw.Write("'0'");
-                                                }
-                                            }
-                                            sw.Write("],");
-                                            //add time axis
-                                            sw.Write("x: [");
-                                            {
-                                                ptdgCount = 0;
-                                                foreach (int[] dp in playertotaldpsgraphdata)
-                                                {
-                                                    if (ptdgCount == playertotaldpsgraphdata.Count - 1)
-                                                    {
-                                                        sw.Write("'" + dp[0] + "'");
-                                                    }
-                                                    else
-                                                    {
-                                                        sw.Write("'" + dp[0] + "',");
-                                                    }
-                                                    ptdgCount++;
-                                                }
-                                                if (playertotaldpsgraphdata.Count == 0)
-                                                {
-                                                    sw.Write("'0'");
-                                                }
-                                            }
-                                            sw.Write("],");
-                                            sw.Write(" mode: 'lines'," +
-                                                   "line: {shape: 'spline',color:'rgb(0,250,0)'}," +
-                                                   "yaxis: 'y3'," +
-                                                   // "legendgroup: 'Damage'," +
-                                                   "name: 'Total DPS'");
-
+                                            HTMLHelper.writeDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, p);
                                         }
                                         sw.Write("}");
                                     }
@@ -2464,7 +2250,7 @@ namespace LuckParser.Controllers
                         if (cl.getID() == -2)
                         {//wepswap
                             skillName = "Weapon Swap";
-                            skillLink = GetLink("Swap");
+                            skillLink = HTMLHelper.GetLink("Swap");
                             sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
                             sw.Write("<br>");
                             continue;
@@ -2472,7 +2258,7 @@ namespace LuckParser.Controllers
                         else if (cl.getID() == 1066)
                         {
                             skillName = "Resurrect";
-                            skillLink = GetLink("Downs");
+                            skillLink = HTMLHelper.GetLink("Downs");
                             sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
 
                         }
@@ -2480,7 +2266,7 @@ namespace LuckParser.Controllers
                         if (cl.getID() == 1175)
                         {
                             skillName = "Bandage";
-                            skillLink = GetLink("Bandage");
+                            skillLink = HTMLHelper.GetLink("Bandage");
                             sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
 
                         }
@@ -2488,13 +2274,13 @@ namespace LuckParser.Controllers
                         if (cl.getID() == 65001)
                         {
                             skillName = "Dodge";
-                            skillLink = GetLink("Dodge");
+                            skillLink = HTMLHelper.GetLink("Dodge");
                             sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
 
                         }
                         else if(skill != null){
                             
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + GetLink("Blank") + "\" data-toggle=\"tooltip\" title= \"" + skill.getName() + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + HTMLHelper.GetLink("Blank") + "\" data-toggle=\"tooltip\" title= \"" + skill.getName() + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
 
                         }
 
@@ -3197,67 +2983,10 @@ namespace LuckParser.Controllers
                         {
                             if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null)
                             {
+                                BoonsGraphModel bgm = boonGraphData[boonid];
                                 sw.Write("{");
                                 {
-                                   
-                                    BoonsGraphModel bgm = boonGraphData[boonid];
-                                    List<Point> bChart = bgm.getBoonChart().Where(x => x.X >= phase.start / 1000 && x.X <= phase.end/1000).ToList();
-                                    int bChartCount = 0;
-                                    sw.Write("y: [");
-                                    {
-                                        foreach (Point pnt in bChart)
-                                        {
-                                            if (bChartCount == bChart.Count - 1)
-                                            {
-                                                sw.Write("'" + pnt.Y + "'");
-                                            }
-                                            else
-                                            {
-                                                sw.Write("'" + pnt.Y + "',");
-                                            }
-                                            bChartCount++;
-                                        }
-                                        if (bgm.getBoonChart().Count == 0)
-                                        {
-                                            sw.Write("'0'");
-                                        }
-                                    }
-                                    sw.Write("],");
-                                    sw.Write("x: [");
-                                    {
-                                        bChartCount = 0;
-                                        foreach (Point pnt in bChart)
-                                        {
-                                            if (bChartCount == bChart.Count - 1)
-                                            {
-                                                sw.Write("'" + (pnt.X - (int)phase.start / 1000) + "'");
-                                            }
-                                            else
-                                            {
-                                                sw.Write("'" + (pnt.X - (int)phase.start / 1000) + "',");
-                                            }
-                                            bChartCount++;
-                                        }
-                                        if (bgm.getBoonChart().Count == 0)
-                                        {
-                                            sw.Write("'0'");
-                                        }
-                                    }
-                                    sw.Write("],");
-                                    sw.Write(" yaxis: 'y2'," +
-                                         " type: 'scatter',");
-                                    //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
-                                    if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness")
-                                    {
-
-                                    }
-                                    else
-                                    {
-                                        sw.Write(" visible: 'legendonly',");
-                                    }
-                                    sw.Write(" line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
-                                    sw.Write(" fill: 'tozeroy'," +
-                                         " name: \"" + bgm.getBoonName() + "\"");
+                                    HTMLHelper.writeBoonGraph(sw, bgm, phase.start, phase.end);
                                 }
                                 sw.Write(" },");
                             }
@@ -3265,55 +2994,17 @@ namespace LuckParser.Controllers
                         //int maxDPS = 0;
                         if (SnapSettings[1])
                         {//show total dps plot
+                            List<Point> playertotaldpsgraphdata = HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data, boss, boss, phase_index);
                             sw.Write("{");
-                            //Adding dps axis
-                            List<int[]> playertotaldpsgraphdata = HTMLHelper.getTotalDPSGraph(boss_data,combat_data,agent_data,boss,boss, phase_index);
-                            sw.Write("y: [");
-                            int ptdgCount = 0;
-                            foreach (int[] dp in playertotaldpsgraphdata)
-                            {
-                                if (ptdgCount == playertotaldpsgraphdata.Count - 1)
-                                {
-                                    sw.Write("'" + dp[1] + "'");
-                                }
-                                else
-                                {
-                                    sw.Write("'" + dp[1] + "',");
-                                }
-
-                                ptdgCount++;
+                            { 
+                                //Adding dps axis
+                                HTMLHelper.writeDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, boss);
                             }
-                            if (playertotaldpsgraphdata.Count == 0)
-                            {
-                                sw.Write("'0'");
-                            }
-                            sw.Write("],");
-                            //add time axis
-                            sw.Write("x: [");
-                            ptdgCount = 0;
-                            foreach (int[] dp in playertotaldpsgraphdata)
-                            {
-                                if (ptdgCount == playertotaldpsgraphdata.Count - 1)
-                                {
-                                    sw.Write("'" + dp[0] + "'");
-                                }
-                                else
-                                {
-                                    sw.Write("'" + dp[0] + "',");
-                                }
-                                ptdgCount++;
-                            }
-                            if (playertotaldpsgraphdata.Count == 0)
-                            {
-                                sw.Write("'0'");
-                            }
-                            sw.Write("],");
-                            sw.Write(" mode: 'lines'," +
-                                        " line: {shape: 'spline',color:'rgb(0,250,0)'}," +
-                               " yaxis: 'y3'," +
-                               // "legendgroup: 'Damage'," +
-                               " name: 'Total DPS'" + "}");
+                            sw.Write("},");                           
                         }
+                        sw.Write("{");
+                        HTMLHelper.writeBossHealthGraph(sw, HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data, boss, boss, phase_index).Max(x => x.Y), phase.start, phase.end, boss_data, "y3");
+                        sw.Write("}");
                     }                   
                     sw.Write("];");
                     sw.Write("var layout = {");
@@ -3496,7 +3187,7 @@ namespace LuckParser.Controllers
                                             {
                                                 sw.Write("<div>");
                                                 {
-                                                    sw.Write("<img src=\"" + GetLink(boss_data.getID() + "-icon") + " \"alt=\"" + bossname + "-icon" + "\" style=\"height: 120px; width: 120px;\" >");
+                                                    sw.Write("<img src=\"" + HTMLHelper.GetLink(boss_data.getID() + "-icon") + " \"alt=\"" + bossname + "-icon" + "\" style=\"height: 120px; width: 120px;\" >");
                                                 }
                                                 sw.Write("</div>");
                                                 sw.Write("<div>");
@@ -3513,7 +3204,7 @@ namespace LuckParser.Controllers
                                                             double finalPercent = 0;
                                                             if (boss_data.getHealthOverTime().Count > 0)
                                                             {
-                                                                finalPercent = 100.0 - boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1][1] * 0.01;
+                                                                finalPercent = 100.0 - boss_data.getHealthOverTime()[boss_data.getHealthOverTime().Count - 1].Y * 0.01;
                                                             }
                                                             string tp = Math.Round(boss_data.getHealth() * finalPercent / 100.0) + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + finalPercent + "%;\" aria-valuenow=\""+ finalPercent+"\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
@@ -3586,7 +3277,7 @@ namespace LuckParser.Controllers
                                     {
                                         string charname = p.getCharacter();
                                         Html_playerDropdown += "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#" + p.getInstid() + "_" + i + "\">" + charname +
-                                            "<img src=\"" + GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</a>";
+                                            "<img src=\"" + HTMLHelper.GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</a>";
                                     }
                                     sw.Write("<ul class=\"nav nav-tabs\">");
                                     {
@@ -3999,7 +3690,7 @@ namespace LuckParser.Controllers
                                     {
                                         sw.Write(" visible: 'legendonly',");
                                     }
-                                    sw.Write("line: {shape: 'hv', color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
+                                    sw.Write("line: {shape: 'hv', color:'" + HTMLHelper.GetLink("Color-" + bgm.getBoonName()) + "'},");
                                     sw.Write("fill: 'tozeroy'," +
                                             "name: \"" + bgm.getBoonName() + "\"");
                                 }
@@ -4011,25 +3702,25 @@ namespace LuckParser.Controllers
                     if (SnapSettings[2])
                     {//show boss dps plot
                      //Adding dps axis
-                        List<int[]> playerbossdpsgraphdata = HTMLHelper.getBossDPSGraph(boss_data,combat_data,agent_data,p,boss, 0);
+                        List<Point> playerbossdpsgraphdata = HTMLHelper.getBossDPSGraph(boss_data,combat_data,agent_data,p,boss, 0);
                         int pbdgCount = 0;
                         sw.Write("{");
                         {
                             sw.Write("y: [");
                             {
-                                foreach (int[] dp in playerbossdpsgraphdata)
+                                foreach (Point dp in playerbossdpsgraphdata)
                                 {
-                                    if (maxDPS < dp[1])
+                                    if (maxDPS < dp.Y)
                                     {
-                                        maxDPS = dp[1];
+                                        maxDPS = dp.Y;
                                     }
                                     if (pbdgCount == playerbossdpsgraphdata.Count - 1)
                                     {
-                                        sw.Write("'" + dp[1] + "'");
+                                        sw.Write("'" + dp.Y + "'");
                                     }
                                     else
                                     {
-                                        sw.Write("'" + dp[1] + "',");
+                                        sw.Write("'" + dp.Y + "',");
                                     }
                                     pbdgCount++;
                                 }
@@ -4043,15 +3734,15 @@ namespace LuckParser.Controllers
                             sw.Write("x: [");
                             {
                                 pbdgCount = 0;
-                                foreach (int[] dp in playerbossdpsgraphdata)
+                                foreach (Point dp in playerbossdpsgraphdata)
                                 {
                                     if (pbdgCount == playerbossdpsgraphdata.Count - 1)
                                     {
-                                        sw.Write("'" + dp[0] + "'");
+                                        sw.Write("'" + dp.X + "'");
                                     }
                                     else
                                     {
-                                        sw.Write("'" + dp[0] + "',");
+                                        sw.Write("'" + dp.X + "',");
                                     }
 
                                     pbdgCount++;
@@ -4063,7 +3754,7 @@ namespace LuckParser.Controllers
                             }
                             sw.Write("],");
                             sw.Write("mode: 'lines'," +
-                                    "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf()) + "'}," +
+                                    "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf()) + "'}," +
                                     "yaxis: 'y3'," +
                                     // "legendgroup: 'Damage',"+
                                     "name: 'Boss DPS'");
@@ -4075,19 +3766,19 @@ namespace LuckParser.Controllers
                     {//show total dps plot
                         sw.Write("{");
                         { //Adding dps axis
-                            List<int[]> playertotaldpsgraphdata = HTMLHelper.getTotalDPSGraph(boss_data,combat_data,agent_data,p, boss,0);
+                            List<Point> playertotaldpsgraphdata = HTMLHelper.getTotalDPSGraph(boss_data,combat_data,agent_data,p, boss,0);
                             int ptdgCount = 0;
                             sw.Write("y: [");
                             {
-                                foreach (int[] dp in playertotaldpsgraphdata)
+                                foreach (Point dp in playertotaldpsgraphdata)
                                 {
                                     if (ptdgCount == playertotaldpsgraphdata.Count - 1)
                                     {
-                                        sw.Write("'" + dp[1] + "'");
+                                        sw.Write("'" + dp.Y + "'");
                                     }
                                     else
                                     {
-                                        sw.Write("'" + dp[1] + "',");
+                                        sw.Write("'" + dp.Y + "',");
                                     }
                                     ptdgCount++;
                                 }
@@ -4101,15 +3792,15 @@ namespace LuckParser.Controllers
                             sw.Write("x: [");
                             {
                                 ptdgCount = 0;
-                                foreach (int[] dp in playertotaldpsgraphdata)
+                                foreach (Point dp in playertotaldpsgraphdata)
                                 {
                                     if (ptdgCount == playertotaldpsgraphdata.Count - 1)
                                     {
-                                        sw.Write("'" + dp[0] + "'");
+                                        sw.Write("'" + dp.X + "'");
                                     }
                                     else
                                     {
-                                        sw.Write("'" + dp[0] + "',");
+                                        sw.Write("'" + dp.X + "',");
                                     }
                                     ptdgCount++;
                                 }
@@ -4250,327 +3941,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public string GetLink(string name)
-        {
-            switch (name)
-            {
-                case "Question":
-                    return "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png";
-                case "Sword":
-                    return "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
-                case "Axe":
-                    return "https://wiki.guildwars2.com/images/d/d4/Crimson_Antique_Reaver.png";
-                case "Dagger":
-                    return "https://wiki.guildwars2.com/images/6/65/Crimson_Antique_Razor.png";
-                case "Mace":
-                    return "https://wiki.guildwars2.com/images/6/6d/Crimson_Antique_Flanged_Mace.png";
-                case "Pistol":
-                    return "https://wiki.guildwars2.com/images/4/46/Crimson_Antique_Revolver.png";
-                case "Scepter":
-                    return "https://wiki.guildwars2.com/images/e/e2/Crimson_Antique_Wand.png";
-                case "Focus":
-                    return "https://wiki.guildwars2.com/images/8/87/Crimson_Antique_Artifact.png";
-                case "Shield":
-                    return "https://wiki.guildwars2.com/images/b/b0/Crimson_Antique_Bastion.png";
-                case "Torch":
-                    return "https://wiki.guildwars2.com/images/7/76/Crimson_Antique_Brazier.png";
-                case "Warhorn":
-                    return "https://wiki.guildwars2.com/images/1/1c/Crimson_Antique_Herald.png";
-                case "Greatsword":
-                    return "https://wiki.guildwars2.com/images/5/50/Crimson_Antique_Claymore.png";
-                case "Hammer":
-                    return "https://wiki.guildwars2.com/images/3/38/Crimson_Antique_Warhammer.png";
-                case "Longbow":
-                    return "https://wiki.guildwars2.com/images/f/f0/Crimson_Antique_Greatbow.png";
-                case "Shortbow":
-                    return "https://wiki.guildwars2.com/images/1/17/Crimson_Antique_Short_Bow.png";
-                case "Rifle":
-                    return "https://wiki.guildwars2.com/images/1/19/Crimson_Antique_Musket.png";
-                case "Staff":
-                    return "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png";
-                case "Vale Guardian-icon":
-                    return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
-                case "Gorseval the Multifarious-icon":
-                    return "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
-                case "Sabetha the Saboteur-icon":
-                    return "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
-                case "Slothasor-icon":
-                    return "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
-                case "Matthias Gabrel-icon":
-                    return "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
-                case "Keep Construct-icon":
-                    return "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
-                case "Xera-icon":
-                    return "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
-                case "Cairn the Indomitable-icon":
-                    return "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
-                case "Mursaat Overseer-icon":
-                    return "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
-                case "Samarog-icon":
-                    return "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
-                case "Deimos-icon":
-                    return "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
-                case "Soulless Horror-icon":
-                    return "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
-                case "Dhuum-icon":
-                    return "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
-                case "Vale Guardian-ext":
-                    return "vg";
-                case "Gorseval the Multifarious-ext":
-                    return "gors";
-                case "Sabetha the Saboteur-ext":
-                    return "sab";
-                case "Slothasor-ext":
-                    return "sloth";
-                case "Matthias Gabrel-ext":
-                    return "matt";
-                case "Keep Construct-ext":
-                    return "kc";
-                case "Xera-ext":
-                    return "xera";
-                case "Cairn the Indomitable-ext":
-                    return "cairn";
-                case "Mursaat Overseer-ext":
-                    return "mo";
-                case "Samarog-ext":
-                    return "sam";
-                case "Deimos-ext":
-                    return "dei";
-                case "Soulless Horror-ext":
-                    return "sh";
-                case "Dhuum-ext":
-                    return "dhuum";
-
-                //ID version for multilingual
-                case "15438-icon":
-                    return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
-                case "15429-icon":
-                    return "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
-                case "15375-icon":
-                    return "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
-                case "16123-icon":
-                    return "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
-                case "16115-icon":
-                    return "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
-                case "16235-icon":
-                    return "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
-                case "16246-icon":
-                    return "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
-                case "17194-icon":
-                    return "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
-                case "17172-icon":
-                    return "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
-                case "17188-icon":
-                    return "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
-                case "17154-icon":
-                    return "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
-                case "19767-icon":
-                    return "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
-                case "19450-icon":
-                    return "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
-                case "17021-icon":
-                    return "http://dulfy.net/wp-content/uploads/2016/11/gw2-nightmare-fractal-teaser.jpg";
-                case "17028-icon":
-                    return "https://wiki.guildwars2.com/images/d/dc/Siax_the_Corrupted.jpg";
-                case "16948-icon":
-                    return "https://wiki.guildwars2.com/images/5/57/Champion_Toxic_Hybrid.jpg";
-                case "17632-icon":
-                    return "https://wiki.guildwars2.com/images/c/c1/Skorvald_the_Shattered.jpg";
-                case "17949-icon":
-                    return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
-                case "17759-icon":
-                    return "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
-
-                case "15438-ext":
-                    return "vg";
-                case "15429-ext":
-                    return "gors";
-                case "15375-ext":
-                    return "sab";
-                case "16123-ext":
-                    return "sloth";
-                case "16115-ext":
-                    return "matt";
-                case "16235-ext":
-                    return "kc";
-                case "16246-ext":
-                    return "xera";
-                case "17194-ext":
-                    return "cairn";
-                case "17172-ext":
-                    return "mo";
-                case "17188-ext":
-                    return "sam";
-                case "17154-ext":
-                    return "dei";
-                case "19767-ext":
-                    return "sh";
-                case "19450-ext":
-                    return "dhuum";
-                case "17021-ext":
-                    return "mama";
-                case "17028-ext":
-                    return "siax";
-                case "16948-ext":
-                    return "ensol";
-                case "17632-ext":
-                    return "skorv";
-                case "17949-ext":
-                    return "arstra";
-                case "17759-ext":
-                    return "arkk";
-
-                case "Warrior":
-                    return "https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png";
-                case "Berserker":
-                    return "https://wiki.guildwars2.com/images/d/da/Berserker_tango_icon_20px.png";
-                case "Spellbreaker":
-                    return "https://wiki.guildwars2.com/images/e/ed/Spellbreaker_tango_icon_20px.png";
-                case "Guardian":
-                    return "https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png";
-                case "Dragonhunter":
-                    return "https://wiki.guildwars2.com/images/c/c9/Dragonhunter_tango_icon_20px.png";
-                case "DragonHunter":
-                    return "https://wiki.guildwars2.com/images/c/c9/Dragonhunter_tango_icon_20px.png";
-                case "Firebrand":
-                    return "https://wiki.guildwars2.com/images/0/02/Firebrand_tango_icon_20px.png";
-                case "Revenant":
-                    return "https://wiki.guildwars2.com/images/b/b5/Revenant_tango_icon_20px.png";
-                case "Herald":
-                    return "https://wiki.guildwars2.com/images/6/67/Herald_tango_icon_20px.png";
-                case "Renegade":
-                    return "https://wiki.guildwars2.com/images/7/7c/Renegade_tango_icon_20px.png";
-                case "Engineer":
-                    return "https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png";
-                case "Scrapper":
-                    return "https://wiki.guildwars2.com/images/3/3a/Scrapper_tango_icon_200px.png";
-                case "Holosmith":
-                    return "https://wiki.guildwars2.com/images/2/28/Holosmith_tango_icon_20px.png";
-                case "Ranger":
-                    return "https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png";
-                case "Druid":
-                    return "https://wiki.guildwars2.com/images/d/d2/Druid_tango_icon_20px.png";
-                case "Soulbeast":
-                    return "https://wiki.guildwars2.com/images/7/7c/Soulbeast_tango_icon_20px.png";
-                case "Thief":
-                    return "https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png";
-                case "Daredevil":
-                    return "https://wiki.guildwars2.com/images/e/e1/Daredevil_tango_icon_20px.png";
-                case "Deadeye":
-                    return "https://wiki.guildwars2.com/images/c/c9/Deadeye_tango_icon_20px.png";
-                case "Elementalist":
-                    return "https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png";
-                case "Tempest":
-                    return "https://wiki.guildwars2.com/images/4/4a/Tempest_tango_icon_20px.png";
-                case "Weaver":
-                    return "https://wiki.guildwars2.com/images/f/fc/Weaver_tango_icon_20px.png";
-                case "Mesmer":
-                    return "https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png";
-                case "Chronomancer":
-                    return "https://wiki.guildwars2.com/images/f/f4/Chronomancer_tango_icon_20px.png";
-                case "Mirage":
-                    return "https://wiki.guildwars2.com/images/d/df/Mirage_tango_icon_20px.png";
-                case "Necromancer":
-                    return "https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png";
-                case "Reaper":
-                    return "https://wiki.guildwars2.com/images/1/11/Reaper_tango_icon_20px.png";
-                case "Scourge":
-                    return "https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png";
-
-                case "Color-Warrior": return "rgb(255,209,102)";
-                case "Color-Berserker": return "rgb(255,209,102)";
-                case "Color-Spellbreaker": return "rgb(255,209,102)";
-                case "Color-Guardian": return "rgb(114,193,217)";
-                case "Color-Dragonhunter": return "rgb(114,193,217)";
-                case "Color-Firebrand": return "rgb(114,193,217)";
-                case "Color-Revenant": return "rgb(209,110,90)";
-                case "Color-Herald": return "rgb(209,110,90)";
-                case "Color-Renegade": return "rgb(209,110,90)";
-                case "Color-Engineer": return "rgb(208,156,89)";
-                case "Color-Scrapper": return "rgb(208,156,89)";
-                case "Color-Holosmith": return "rgb(208,156,89)";
-                case "Color-Ranger": return "rgb(140,220,130)";
-                case "Color-Druid": return "rgb(140,220,130)";
-                case "Color-Soulbeast": return "rgb(140,220,130)";
-                case "Color-Thief": return "rgb(192,143,149)";
-                case "Color-Daredevil": return "rgb(192,143,149)";
-                case "Color-Deadeye": return "rgb(192,143,149)";
-                case "Color-Elementalist": return "rgb(246,138,135)";
-                case "Color-Tempest": return "rgb(246,138,135)";
-                case "Color-Weaver": return "rgb(246,138,135)";
-                case "Color-Mesmer": return "rgb(182,121,213)";
-                case "Color-Chronomancer": return "rgb(182,121,213)";
-                case "Color-Mirage": return "rgb(182,121,213)";
-                case "Color-Necromancer": return "rgb(82,167,111)";
-                case "Color-Reaper": return "rgb(82,167,111)";
-                case "Color-Scourge": return "rgb(82,167,111)";
-
-                case "Crit":
-                    return "https://wiki.guildwars2.com/images/9/95/Critical_Chance.png";
-                case "Scholar":
-                    return "https://wiki.guildwars2.com/images/thumb/2/2b/Superior_Rune_of_the_Scholar.png/40px-Superior_Rune_of_the_Scholar.png";
-                case "SwS":
-                    return "https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png";
-                case "Downs":
-                    return "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
-                case "Dead":
-                    return "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
-                case "Flank":
-                    return "https://wiki.guildwars2.com/images/thumb/b/bb/Hunter%27s_Tactics.png/40px-Hunter%27s_Tactics.png";
-                case "Glance":
-                    return "https://wiki.guildwars2.com/images/f/f9/Weakness.png";
-                case "Miss":
-                    return "https://wiki.guildwars2.com/images/3/33/Blinded.png";
-                case "Interupts":
-                    return "https://wiki.guildwars2.com/images/thumb/7/79/Daze.png/20px-Daze.png";
-                case "Invuln":
-                    return "https://wiki.guildwars2.com/images/e/eb/Determined.png";
-                case "Blinded":
-                    return "https://wiki.guildwars2.com/images/thumb/3/33/Blinded.png/20px-Blinded.png";
-                case "Wasted":
-                    return "https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png";
-                case "Saved":
-                    return "https://wiki.guildwars2.com/images/e/eb/Ready.png";
-                case "Swap":
-                    return "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
-                case "Blank":
-                    return "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png";
-                case "Dodge":
-                    return "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
-                case "Bandage":
-                    return "https://render.guildwars2.com/file/D2D7D11874060D68760BFD519CFC77B6DF14981F/102928.png";
-
-                case "Color-Aegis": return "rgb(102,255,255)";
-                case "Color-Fury": return "rgb(255,153,0)";
-                case "Color-Might": return "rgb(153,0,0)";
-                case "Color-Protection": return "rgb(102,255,255)";
-                case "Color-Quickness": return "rgb(255,0,255)";
-                case "Color-Regeneration": return "rgb(0,204,0)";
-                case "Color-Resistance": return "rgb(255, 153, 102)";
-                case "Color-Retaliation": return "rgb(255, 51, 0)";
-                case "Color-Stability": return "rgb(153, 102, 0)";
-                case "Color-Swiftness": return "rgb(255,255,0)";
-                case "Color-Vigor": return "rgb(102, 153, 0)";
-
-                case "Color-Alacrity": return "rgb(0,102,255)";
-                case "Color-Glyph of Empowerment": return "rgb(204, 153, 0)";
-                case "Color-Grace of the Land": return "rgb(,,)";
-                case "Color-Sun Spirit": return "rgb(255, 102, 0)";
-                case "Color-Banner of Strength": return "rgb(153, 0, 0)";
-                case "Color-Banner of Discipline": return "rgb(0, 51, 0)";
-                case "Color-Spotter": return "rgb(0,255,0)";
-                case "Color-Stone Spirit": return "rgb(204, 102, 0)";
-                case "Color-Storm Spirit": return "rgb(102, 0, 102)";
-                case "Color-Empower Allies": return "rgb(255, 153, 0)";
-
-                case "Condi": return "https://wiki.guildwars2.com/images/5/54/Condition_Damage.png";
-                case "Healing": return "https://wiki.guildwars2.com/images/8/81/Healing_Power.png";
-                case "Tough": return "https://wiki.guildwars2.com/images/1/12/Toughness.png";
-                default:
-                    return "";
-            }
-
-        }   
+       
         
     }
 }
