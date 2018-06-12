@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LuckParser.Models.ParseModels;
 using LuckParser.Models.ParseEnums;
 using System.Drawing;
 using System.Net;
 using LuckParser.Models;
 using System.IO.Compression;
-using System.Windows.Forms;
-using static LuckParser.Models.ParseModels.Boss;
 //recomend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {

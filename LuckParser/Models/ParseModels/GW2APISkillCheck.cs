@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LuckParser.Models.ParseModels;
+﻿using LuckParser.Models.ParseModels;
 namespace LuckParser.Models
 {
     public class GW2APISkillCheck :GW2APISkill
