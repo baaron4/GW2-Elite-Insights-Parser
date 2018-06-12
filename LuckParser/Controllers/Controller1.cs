@@ -2481,6 +2481,7 @@ namespace LuckParser.Controllers
                     {
                         SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
                         List<DamageLog> list_to_use = damageLogs.Where(x => x.getID() == id).ToList();
+                        usedIDs.Add(id);
                         if (skill != null && list_to_use.Count > 0)
                         {
                             List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
@@ -2505,6 +2506,38 @@ namespace LuckParser.Controllers
                             HTMLHelper.writeDamageDistTableSkill(sw, skill, list_to_use, finalTotalDamage, casts, timeswasted, timessaved);
                         }
                     }
+                    // non damaging stuff
+                    if (!toBoss)
+                    {
+                        foreach (int id in casting.Where(x => !usedIDs.Contains(x.getID())).Select(x => x.getID()).Distinct())
+                        {
+                            SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
+                            if (skill != null)
+                            {
+                                List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
+                                int casts = clList.Count();
+                                double timeswasted = 0;
+                                int countwasted = 0;
+                                double timessaved = 0;
+                                int countsaved = 0;
+                                foreach (CastLog cl in clList)
+                                {
+                                    if (cl.getExpDur() < cl.getActDur())
+                                    {
+                                        countsaved++;
+                                        timessaved += ((double)(cl.getExpDur() - cl.getActDur()) / 1000f);
+                                    }
+                                    else if (cl.getExpDur() > cl.getActDur())
+                                    {
+                                        countwasted++;
+                                        timeswasted += ((double)(cl.getActDur()) / 1000f);
+                                    }
+                                }
+                                HTMLHelper.writeDamageDistTableSkill(sw, skill, new List<DamageLog>(), finalTotalDamage, casts, timeswasted, timessaved);
+                            }
+                        }
+                    }
+                   
                 }
                 sw.Write("</tbody>");
                 HTMLHelper.writeDamageDistTableFoot(sw, finalTotalDamage);
