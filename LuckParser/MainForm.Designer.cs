@@ -30,17 +30,17 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.label1 = new System.Windows.Forms.Label();
-            this.lblStatus = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.btnStartAsyncOperation = new System.Windows.Forms.Button();
+            this.lblHeader = new System.Windows.Forms.Label();
+            this.lblStatusValue = new System.Windows.Forms.Label();
+            this.pgbProgress = new System.Windows.Forms.ProgressBar();
+            this.btnParse = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.lvFileList = new System.Windows.Forms.ListView();
             this.Location = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.settingsbtn = new System.Windows.Forms.Button();
+            this.lblStatus = new System.Windows.Forms.Label();
+            this.lblProgress = new System.Windows.Forms.Label();
+            this.btnSettings = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -48,45 +48,44 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // label1
+            // lblHeader
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(279, 20);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Drag and Drop EVTC file(s) below";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lblHeader.AutoSize = true;
+            this.lblHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHeader.Location = new System.Drawing.Point(12, 22);
+            this.lblHeader.Name = "lblHeader";
+            this.lblHeader.Size = new System.Drawing.Size(279, 20);
+            this.lblHeader.TabIndex = 4;
+            this.lblHeader.Text = "Drag and Drop EVTC file(s) below";
+            this.lblHeader.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // lblStatus
+            // lblStatusValue
             // 
-            this.lblStatus.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(246, 343);
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(35, 13);
-            this.lblStatus.TabIndex = 8;
-            this.lblStatus.Text = "status";
+            this.lblStatusValue.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.lblStatusValue.AutoSize = true;
+            this.lblStatusValue.Location = new System.Drawing.Point(246, 343);
+            this.lblStatusValue.Name = "lblStatusValue";
+            this.lblStatusValue.Size = new System.Drawing.Size(0, 13);
+            this.lblStatusValue.TabIndex = 8;
             // 
-            // progressBar1
+            // pgbProgress
             // 
-            this.progressBar1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.progressBar1.Location = new System.Drawing.Point(249, 317);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(104, 13);
-            this.progressBar1.TabIndex = 9;
+            this.pgbProgress.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.pgbProgress.Location = new System.Drawing.Point(249, 317);
+            this.pgbProgress.Name = "pgbProgress";
+            this.pgbProgress.Size = new System.Drawing.Size(104, 13);
+            this.pgbProgress.TabIndex = 9;
             // 
-            // btnStartAsyncOperation
+            // btnParse
             // 
-            this.btnStartAsyncOperation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStartAsyncOperation.Location = new System.Drawing.Point(525, 307);
-            this.btnStartAsyncOperation.Name = "btnStartAsyncOperation";
-            this.btnStartAsyncOperation.Size = new System.Drawing.Size(154, 23);
-            this.btnStartAsyncOperation.TabIndex = 10;
-            this.btnStartAsyncOperation.Text = "Parse";
-            this.btnStartAsyncOperation.UseVisualStyleBackColor = true;
-            this.btnStartAsyncOperation.Click += new System.EventHandler(this.btnStartAsyncOperation_Click);
+            this.btnParse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnParse.Location = new System.Drawing.Point(525, 307);
+            this.btnParse.Name = "btnParse";
+            this.btnParse.Size = new System.Drawing.Size(154, 23);
+            this.btnParse.TabIndex = 10;
+            this.btnParse.Text = "Parse";
+            this.btnParse.UseVisualStyleBackColor = true;
+            this.btnParse.Click += new System.EventHandler(this.btnStartAsyncOperation_Click);
             // 
             // btnCancel
             // 
@@ -99,31 +98,31 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // listView1
+            // lvFileList
             // 
-            this.listView1.AllowDrop = true;
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.lvFileList.AllowDrop = true;
+            this.lvFileList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.BackColor = System.Drawing.SystemColors.Menu;
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.lvFileList.BackColor = System.Drawing.SystemColors.Menu;
+            this.lvFileList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Location,
             this.Status});
-            this.listView1.FullRowSelect = true;
-            this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(12, 45);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(667, 256);
-            this.listView1.TabIndex = 12;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.listView1_DrawColumnHeader);
-            this.listView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.listView1_DragDrop);
-            this.listView1.DragEnter += new System.Windows.Forms.DragEventHandler(this.listView1_DragEnter);
-            this.listView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
-            this.listView1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseMove_1);
-            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
+            this.lvFileList.FullRowSelect = true;
+            this.lvFileList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.lvFileList.HideSelection = false;
+            this.lvFileList.Location = new System.Drawing.Point(12, 45);
+            this.lvFileList.Name = "lvFileList";
+            this.lvFileList.Size = new System.Drawing.Size(667, 256);
+            this.lvFileList.TabIndex = 12;
+            this.lvFileList.UseCompatibleStateImageBehavior = false;
+            this.lvFileList.View = System.Windows.Forms.View.Details;
+            this.lvFileList.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.listView1_DrawColumnHeader);
+            this.lvFileList.DragDrop += new System.Windows.Forms.DragEventHandler(this.listView1_DragDrop);
+            this.lvFileList.DragEnter += new System.Windows.Forms.DragEventHandler(this.listView1_DragEnter);
+            this.lvFileList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
+            this.lvFileList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseMove_1);
+            this.lvFileList.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
             // 
             // Location
             // 
@@ -136,37 +135,37 @@
             this.Status.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.Status.Width = 335;
             // 
-            // label2
+            // lblStatus
             // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(169, 343);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(40, 13);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "Status:";
+            this.lblStatus.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Location = new System.Drawing.Point(169, 343);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(40, 13);
+            this.lblStatus.TabIndex = 13;
+            this.lblStatus.Text = "Status:";
             // 
-            // label3
+            // lblProgress
             // 
-            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(158, 317);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(51, 13);
-            this.label3.TabIndex = 14;
-            this.label3.Text = "Progress:";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
+            this.lblProgress.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.lblProgress.AutoSize = true;
+            this.lblProgress.Location = new System.Drawing.Point(158, 317);
+            this.lblProgress.Name = "lblProgress";
+            this.lblProgress.Size = new System.Drawing.Size(51, 13);
+            this.lblProgress.TabIndex = 14;
+            this.lblProgress.Text = "Progress:";
+            this.lblProgress.Click += new System.EventHandler(this.label3_Click);
             // 
-            // settingsbtn
+            // btnSettings
             // 
-            this.settingsbtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.settingsbtn.Location = new System.Drawing.Point(16, 331);
-            this.settingsbtn.Name = "settingsbtn";
-            this.settingsbtn.Size = new System.Drawing.Size(75, 23);
-            this.settingsbtn.TabIndex = 15;
-            this.settingsbtn.Text = "Settings";
-            this.settingsbtn.UseVisualStyleBackColor = true;
-            this.settingsbtn.Click += new System.EventHandler(this.settingsbtn_Click);
+            this.btnSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnSettings.Location = new System.Drawing.Point(16, 331);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(75, 23);
+            this.btnSettings.TabIndex = 15;
+            this.btnSettings.Text = "Settings";
+            this.btnSettings.UseVisualStyleBackColor = true;
+            this.btnSettings.Click += new System.EventHandler(this.settingsbtn_Click);
             // 
             // btnClear
             // 
@@ -186,15 +185,15 @@
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.ClientSize = new System.Drawing.Size(696, 375);
             this.Controls.Add(this.btnClear);
-            this.Controls.Add(this.settingsbtn);
-            this.Controls.Add(this.listView1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnStartAsyncOperation);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.btnSettings);
+            this.Controls.Add(this.lvFileList);
+            this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.lblStatus);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnParse);
+            this.Controls.Add(this.pgbProgress);
+            this.Controls.Add(this.lblStatusValue);
+            this.Controls.Add(this.lblHeader);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "GW2 Elite Insights Parser";
@@ -207,17 +206,17 @@
 
         #endregion
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label lblStatus;
-        private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Button btnStartAsyncOperation;
+        private System.Windows.Forms.Label lblHeader;
+        private System.Windows.Forms.Label lblStatusValue;
+        private System.Windows.Forms.ProgressBar pgbProgress;
+        private System.Windows.Forms.Button btnParse;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView lvFileList;
         private System.Windows.Forms.ColumnHeader Status;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.Label lblProgress;
         private new System.Windows.Forms.ColumnHeader Location;
-        private System.Windows.Forms.Button settingsbtn;
+        private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnClear;
     }
 }
