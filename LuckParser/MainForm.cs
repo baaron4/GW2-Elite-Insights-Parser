@@ -16,21 +16,23 @@ public delegate void Cancellation(int i, DoWorkEventArgs e);
 
 namespace LuckParser
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
 
         BackgroundWorker m_oWorker;
         private SettingsForm setFrm;
         //public bool[] settingArray = { true, true, true, true, true, false, true, true };
         bool completedOp = false;
-        List<string> paths = new List<string>();// Environment.CurrentDirectory + "/" + "parsedhtml.html";
+        List<string> _logsFiles;
         Controller1 controller = new Controller1();
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
+            _logsFiles = new List<string>();
+
             btnCancel.Enabled = false;
-            btnStartAsyncOperation.Enabled = false;
+            btnParse.Enabled = false;
             m_oWorker = new BackgroundWorker();
 
             // Create a background worker thread that ReportsProgress &
@@ -47,10 +49,10 @@ namespace LuckParser
 
         }
 
-        public Form1(string[] args)
+        public MainForm(string[] args)
         {
             InitializeComponent();
-            listView1_AddItems(args);
+            LvFileList_AddItems(args);
             m_DoWork(log_Console, null, null);
         }
 
@@ -60,52 +62,52 @@ namespace LuckParser
         {
             if (e.Cancelled)
             {
-                lblStatus.Text = "Task Cancelled.";
+                lblStatusValue.Text = "Task Cancelled.";
             }
             // Check to see if an error occurred in the background process.
             else if (e.Error != null)
             {
-                lblStatus.Text = "Error while performing background operation.";
+                lblStatusValue.Text = "Error while performing background operation.";
             }
             else
             {
                 // Everything completed normally.
-                lblStatus.Text = "Task Completed";
+                lblStatusValue.Text = "Task Completed";
                 // Flash window until it recieves focus
                 FlashWindow.Flash(this);
             }
 
             //Change the status of the buttons on the UI accordingly
-            btnStartAsyncOperation.Enabled = true;
+            btnParse.Enabled = true;
             btnCancel.Enabled = false;
         }
 
         // Notification is performed here to the progress bar
         void m_oWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            progressBar1.Value = e.ProgressPercentage;
+            pgbProgress.Value = e.ProgressPercentage;
             string[] progstr = (string[])e.UserState;
             if (progstr[1] == "Cancel")
             {
-                paths = null;
+                _logsFiles.Clear();
                 //listView1.Items.Clear();
                 completedOp = true;
                 btnClear.Enabled = true;
-                lblStatus.Text = "Canceled Parseing";
+                lblStatusValue.Text = "Canceled Parsing";
             }
             else if (progstr[1] == "Finish")
             {
-                paths = null;
+                _logsFiles.Clear();
                 //listView1.Items.Clear();
                 completedOp = true;
                 btnClear.Enabled = true;
-                btnStartAsyncOperation.Enabled = false;
-                lblStatus.Text = "Finished Parseing";
+                btnParse.Enabled = false;
+                lblStatusValue.Text = "Finished Parsing";
             }
             else
             {
-                lblStatus.Text = "Parseing...";
-                listView1.Items[Int32.Parse(progstr[0])].SubItems[1].Text = progstr[1];
+                lblStatusValue.Text = "Parsing...";
+                lvFileList.Items[Int32.Parse(progstr[0])].SubItems[1].Text = progstr[1];
             }
         }
 
@@ -129,7 +131,7 @@ namespace LuckParser
                 e.Cancel = true;
                 string[] reportObject = new string[] { i.ToString(), "Cancel" };
                 m_oWorker.ReportProgress(0, reportObject);
-                btnStartAsyncOperation.Enabled = false;
+                btnParse.Enabled = false;
                 return;
             }
         }
@@ -141,7 +143,6 @@ namespace LuckParser
             //globalization
             System.Globalization.CultureInfo before = System.Threading.Thread.CurrentThread.CurrentCulture;
             try
-
             {
                 System.Threading.Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
@@ -159,120 +160,83 @@ namespace LuckParser
                     Properties.Settings.Default.EventList,
                     Properties.Settings.Default.BossSummary,
                     Properties.Settings.Default.SimpleRotation,
-                     Properties.Settings.Default.ShowAutos,
+                    Properties.Settings.Default.ShowAutos,
                     Properties.Settings.Default.LargeRotIcons,
                     Properties.Settings.Default.ShowEstimates
-
                 };
-                for (int i = 0; i < listView1.Items.Count; i++)
+                for (int i = 0; i < lvFileList.Items.Count; i++)
                 {
-                    
-
-                    string path = paths[i];
-                    if (path.Contains("\\"))
-                    {
-                        path = path.Replace("\\", "/");
-                    }
-                    if (!File.Exists(path))
+                    FileInfo fInfo = new FileInfo(_logsFiles[i]);
+                    if (!fInfo.Exists)
                     {
                         logger(i, "File does not exist", 100);
                         continue;
                     }
-                    int pos = path.LastIndexOf("/") + 1;
-                    //if (pos == 0) {
-                    //     pos = path.LastIndexOf('\\') + 1;
-                    //}
-                    string file = path.Substring(pos, path.Length - pos);
-                    int pos1 = file.LastIndexOf(".") + 1;
-                    if (path.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
-                    {
-                        pos1 = pos1 - 5;
-                    }
-
-                    string appendix = file.Substring(pos1, file.Length - pos1);
-                    string fileName = file.Substring(0, pos1 - 1);
 
                     logger(i, "Working...", 20);
                     Controller1 control = new Controller1();
-                    if (path.EndsWith(".evtc", StringComparison.OrdinalIgnoreCase) ||
-                        path.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
+
+                    if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) || 
+                        fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
                     {
                         //Process evtc here
                         logger(i, "Reading Binary...", 40);
-                        control.ParseLog(path);
-
+                        control.ParseLog(fInfo.FullName);
 
                         //Creating File
                         //save location
-                        string location = "";
+                        DirectoryInfo saveDirectory;
                         if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
                         {
-                            location = path.Substring(0, path.Length - file.Length);
-
+                            //Default save directory
+                            saveDirectory = fInfo.Directory;
                         }
                         else
                         {
-                            location = Properties.Settings.Default.OutLocation + "/";
+                            //Customised save directory
+                            saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
                         }
-                        if (location.Contains("\\"))
-                        {
-                            location = location.Replace("\\", "/");
-                        }
+
                         string bossid = control.getBossData().getID().ToString();
                         string result = "fail";
+
                         if (control.getLogData().getBosskill())
                         {
                             result = "kill";
                         }
-                        if (Properties.Settings.Default.SaveOutHTML)
+
+                        string outputType = Properties.Settings.Default.SaveOutHTML ? "html" : "csv";
+                        string outputFile = Path.Combine(
+                            saveDirectory.FullName, 
+                            $"{fInfo.Name}_{control.GetLink(bossid + "-ext")}_{result}.{outputType}"
+                        );
+
+                        logger(i, "Creating File...", 60);
+                        using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         {
-                            logger(i, "Creating File...", 60);
-                            FileStream fcreate = File.Open(location + fileName + "_" + control.GetLink(bossid + "-ext") + "_" + result + ".html", FileMode.Create);
-
-                            //return html string
-                            logger(i, "Writing HTML...", 80);
-
-
-                            using (StreamWriter sw = new StreamWriter(fcreate))
+                            logger(i, $"Writing {outputType.ToUpper()}...", 80);
+                            using (StreamWriter sw = new StreamWriter(fs))
                             {
-                                // string htmlContent = control.CreateHTML(/*settingArray*/);
-                                // sw.Write(htmlContent);
-                                control.CreateHTML(sw, settingsSnap);
-                                sw.Close();
+                                if (Properties.Settings.Default.SaveOutHTML)
+                                {
+                                    control.CreateHTML(sw, settingsSnap);
+                                }
+                                else
+                                {
+                                    control.CreateCSV(sw, ",");
+                                }
                             }
-
-                            logger(i, "HTML Generated!", 100);//keeping here for console usage
-                            logger(i, fcreate.Name, 100);
                         }
-                        if (Properties.Settings.Default.SaveOutCSV)
-                        {
-                            logger(i, "Creating CSV File...", 60);
-                            FileStream fcreate = File.Open(location + fileName + "_" + control.GetLink(bossid + "-ext") + "_" + result + ".csv", FileMode.Create);
 
-                            //return html string
-                            logger(i, "Writing CSV...", 80);
-
-
-                            using (StreamWriter sw = new StreamWriter(fcreate))
-                            {
-                                // string htmlContent = control.CreateHTML(/*settingArray*/);
-                                // sw.Write(htmlContent);
-                                control.CreateCSV(sw,",");
-                                sw.Close();
-                            }
-
-                            logger(i, "CSV Generated!", 100);
-                            logger(i, fcreate.Name, 100);
-                        }
+                        logger(i, $"{outputType.ToUpper()} Generated!", 100); //keeping here for console usage
+                        logger(i, outputFile, 100);
                     }
                     else
                     {
                         logger(i, "Not EVTC...", 100);
                     }
-                    if (cancel != null)
-                    {
-                        cancel(i, e);
-                    }
+
+                    cancel?.Invoke(i, e);
                 }
 
                 //Report 100% completion on operation completed
@@ -290,22 +254,22 @@ namespace LuckParser
             m_DoWork(log_Worker, cancel_Worker, e);
         }
 
-        private void btnStartAsyncOperation_Click(object sender, EventArgs e)
+        private void BtnParse_Click(object sender, EventArgs e)
         {
             //Change the status of the buttons on the UI accordingly
             //The start button is disabled as soon as the background operation is started
             //The Cancel button is enabled so that the user can stop the operation 
             //at any point of time during the execution
-            if (paths != null)
+            if (_logsFiles.Count > 0)
             {
-                btnStartAsyncOperation.Enabled = false;
+                btnParse.Enabled = false;
                 btnCancel.Enabled = true;
                 btnClear.Enabled = false;
 
                 m_oWorker.RunWorkerAsync();
             }
         }
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void BtnCancel_Click(object sender, EventArgs e)
         {
             if (m_oWorker.IsBusy)
             {
@@ -317,110 +281,71 @@ namespace LuckParser
             }
         }
 
-        private void listView1_AddItems(string[] filesArray)
+        private void LvFileList_AddItems(string[] filesArray)
         {
-            List<string> files = new List<string>();
             foreach (string file in filesArray)
             {
-                files.Add(file);
-            }
-            //Add files to paths
-            if (paths == null)
-            {
-                paths = files;
-
-            }
-            else
-            {
-                //Dont add doubles
-                for (int f = 0; f < files.Count(); f++)
+                if (_logsFiles.Contains(file))
                 {
-                    for (int p = 0; p < paths.Count(); p++)
-                    {
-                        if (paths[p] == files[f])
-                        {
-                            files.Remove(files[f]);
-                        }
-                    }
+                    //Don't add doubles
+                    continue;
                 }
-                paths.AddRange(files);
-            }
-            //Show in listbox
-            foreach (string file in files)
-            {
+                _logsFiles.Add(file);
 
-                ListViewItem item = new ListViewItem(file);
-                item.SubItems.Add(" ");
-                
-                listView1.Items.Add(item);
-                
-
+                ListViewItem lvItem = new ListViewItem(file);
+                lvItem.SubItems.Add(" ");
+                lvFileList.Items.Add(lvItem);
             }
         }
        
-        private void listView1_DragDrop(object sender, DragEventArgs e)
+        private void LvFileList_DragDrop(object sender, DragEventArgs e)
         {
-            btnStartAsyncOperation.Enabled = true;
+            btnParse.Enabled = true;
             if (completedOp)
             {
-                listView1.Items.Clear();
+                lvFileList.Items.Clear();
                 completedOp = false;
             }
             //Get files as list
             string[] filesArray = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-            listView1_AddItems(filesArray);
+            LvFileList_AddItems(filesArray);
         }
 
-        private void listView1_DragEnter(object sender, DragEventArgs e)
+        private void LvFileList_DragEnter(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.All;
         }
 
-        private void listView1_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        private void LvFileList_DrawHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             e.Graphics.FillRectangle(Brushes.Yellow, e.Bounds);
             e.DrawText();
         }
 
-        private void settingsbtn_Click(object sender, EventArgs e)
+        private void BtnSettings_Click(object sender, EventArgs e)
         {
             setFrm = new SettingsForm(/*settingArray,this*/);
             setFrm.Show();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnClear_Click(object sender, EventArgs e)
+        private void BtnClear_Click(object sender, EventArgs e)
         {
             btnCancel.Enabled = false;
-            btnStartAsyncOperation.Enabled = false;
-            paths = null;
-            listView1.Items.Clear();
+            btnParse.Enabled = false;
+            _logsFiles.Clear();
+            lvFileList.Items.Clear();
         }
 
-        private void label3_Click(object sender, EventArgs e)
+        private void LvFileList_MouseMove(object sender, MouseEventArgs e)
         {
-
+            var hit = lvFileList.HitTest(e.Location);
+            if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1]) lvFileList.Cursor = Cursors.Hand;
+            else lvFileList.Cursor = Cursors.Default;
         }
 
-        private void listView1_MouseMove_1(object sender, MouseEventArgs e)
+        private void LvFilesList_MouseClick(object sender, MouseEventArgs e)
         {
-            var hit = listView1.HitTest(e.Location);
-            if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1]) listView1.Cursor = Cursors.Hand;
-            else listView1.Cursor = Cursors.Default;
-        }
-
-        private void listView1_MouseUp(object sender, MouseEventArgs e)
-        {
-            
-        }
-
-        private void listView1_MouseClick(object sender, MouseEventArgs e)
-        {
-            var hit = listView1.HitTest(e.Location);
+            var hit = lvFileList.HitTest(e.Location);
             if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1])
             {
                 string fileLoc = hit.SubItem.Text;
