@@ -898,8 +898,8 @@ namespace LuckParser.Controllers
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
-                    sw.Write("<td></td>");
                     sw.Write("<td>" + (casts != -1 ? casts.ToString() : "") + "</td>");
+                    sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
@@ -919,8 +919,8 @@ namespace LuckParser.Controllers
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
-                    sw.Write("<td></td>");
                     sw.Write("<td>" + (casts != -1 ? casts.ToString() : "") + "</td>");
+                    sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");

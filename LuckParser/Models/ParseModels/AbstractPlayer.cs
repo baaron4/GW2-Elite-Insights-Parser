@@ -175,8 +175,7 @@ namespace LuckParser.Models.ParseModels
         }
         public List<DamageLog> getJustPlayerDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)
         {
-            List<ushort> minionList = getCombatMinionList(bossData, combatList, agentData);
-            return getDamageLogs(instidFilter, bossData, combatList, agentData, start, end).Where(x => !minionList.Contains(x.getInstidt())).ToList();
+            return getDamageLogs(instidFilter, bossData, combatList, agentData, start, end).Where(x => x.getInstidt() == instid).ToList();
         }
         // privates
         protected void addDamageLog(long time, ushort instid, CombatItem c, List<DamageLog> toFill)
@@ -501,7 +500,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (combatMinionIDList.Count == 0)
             {
-                combatMinionIDList = combatList.Where(x => x.getSrcMasterInstid() == instid && ((x.getValue() != 0 && x.isBuff() == 0) || (x.isBuff() == 1 && x.getBuffDmg() != 0))).Select(x => x.getSrcInstid()).Distinct().ToList();
+                combatMinionIDList = combatList.Where(x => x.getSrcMasterInstid() == instid).Select(x => x.getSrcInstid()).Distinct().ToList();
             }
             return combatMinionIDList;
         }
