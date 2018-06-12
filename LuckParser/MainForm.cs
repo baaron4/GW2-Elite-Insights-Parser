@@ -23,11 +23,13 @@ namespace LuckParser
         private SettingsForm setFrm;
         //public bool[] settingArray = { true, true, true, true, true, false, true, true };
         bool completedOp = false;
-        List<string> paths = new List<string>();// Environment.CurrentDirectory + "/" + "parsedhtml.html";
+        List<string> _logsFiles;
         Controller1 controller = new Controller1();
         public MainForm()
         {
             InitializeComponent();
+
+            _logsFiles = new List<string>();
 
             btnCancel.Enabled = false;
             btnStartAsyncOperation.Enabled = false;
@@ -87,24 +89,24 @@ namespace LuckParser
             string[] progstr = (string[])e.UserState;
             if (progstr[1] == "Cancel")
             {
-                paths = null;
+                _logsFiles.Clear();
                 //listView1.Items.Clear();
                 completedOp = true;
                 btnClear.Enabled = true;
-                lblStatus.Text = "Canceled Parseing";
+                lblStatus.Text = "Canceled Parsing";
             }
             else if (progstr[1] == "Finish")
             {
-                paths = null;
+                _logsFiles.Clear();
                 //listView1.Items.Clear();
                 completedOp = true;
                 btnClear.Enabled = true;
                 btnStartAsyncOperation.Enabled = false;
-                lblStatus.Text = "Finished Parseing";
+                lblStatus.Text = "Finished Parsing";
             }
             else
             {
-                lblStatus.Text = "Parseing...";
+                lblStatus.Text = "Parsing...";
                 listView1.Items[Int32.Parse(progstr[0])].SubItems[1].Text = progstr[1];
             }
         }
@@ -141,7 +143,6 @@ namespace LuckParser
             //globalization
             System.Globalization.CultureInfo before = System.Threading.Thread.CurrentThread.CurrentCulture;
             try
-
             {
                 System.Threading.Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
@@ -159,120 +160,84 @@ namespace LuckParser
                     Properties.Settings.Default.EventList,
                     Properties.Settings.Default.BossSummary,
                     Properties.Settings.Default.SimpleRotation,
-                     Properties.Settings.Default.ShowAutos,
+                    Properties.Settings.Default.ShowAutos,
                     Properties.Settings.Default.LargeRotIcons,
                     Properties.Settings.Default.ShowEstimates
-
                 };
+
                 for (int i = 0; i < listView1.Items.Count; i++)
                 {
-                    
-
-                    string path = paths[i];
-                    if (path.Contains("\\"))
-                    {
-                        path = path.Replace("\\", "/");
-                    }
-                    if (!File.Exists(path))
+                    FileInfo fInfo = new FileInfo(_logsFiles[i]);
+                    if (!fInfo.Exists)
                     {
                         logger(i, "File does not exist", 100);
                         continue;
                     }
-                    int pos = path.LastIndexOf("/") + 1;
-                    //if (pos == 0) {
-                    //     pos = path.LastIndexOf('\\') + 1;
-                    //}
-                    string file = path.Substring(pos, path.Length - pos);
-                    int pos1 = file.LastIndexOf(".") + 1;
-                    if (path.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
-                    {
-                        pos1 = pos1 - 5;
-                    }
-
-                    string appendix = file.Substring(pos1, file.Length - pos1);
-                    string fileName = file.Substring(0, pos1 - 1);
 
                     logger(i, "Working...", 20);
                     Controller1 control = new Controller1();
-                    if (path.EndsWith(".evtc", StringComparison.OrdinalIgnoreCase) ||
-                        path.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
+
+                    if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) || 
+                        fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
                     {
                         //Process evtc here
                         logger(i, "Reading Binary...", 40);
-                        control.ParseLog(path);
-
+                        control.ParseLog(fInfo.FullName);
 
                         //Creating File
                         //save location
-                        string location = "";
+                        DirectoryInfo saveDirectory;
                         if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
                         {
-                            location = path.Substring(0, path.Length - file.Length);
-
+                            //Default save directory
+                            saveDirectory = fInfo.Directory;
                         }
                         else
                         {
-                            location = Properties.Settings.Default.OutLocation + "/";
+                            //Customised save directory
+                            saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
                         }
-                        if (location.Contains("\\"))
-                        {
-                            location = location.Replace("\\", "/");
-                        }
+
                         string bossid = control.getBossData().getID().ToString();
                         string result = "fail";
+
                         if (control.getLogData().getBosskill())
                         {
                             result = "kill";
                         }
-                        if (Properties.Settings.Default.SaveOutHTML)
+
+                        string outputType = Properties.Settings.Default.SaveOutHTML ? "html" : "csv";
+                        string outputFile = Path.Combine(
+                            saveDirectory.FullName, 
+                            $"{fInfo.Name}_{control.GetLink(bossid + "-ext")}_{result}.{outputType}"
+                        );
+
+                        logger(i, "Creating File...", 60);
+                        using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         {
-                            logger(i, "Creating File...", 60);
-                            FileStream fcreate = File.Open(location + fileName + "_" + control.GetLink(bossid + "-ext") + "_" + result + ".html", FileMode.Create);
-
-                            //return html string
-                            logger(i, "Writing HTML...", 80);
-
-
-                            using (StreamWriter sw = new StreamWriter(fcreate))
+                            logger(i, $"Writing {outputType.ToUpper()}...", 80);
+                            using (StreamWriter sw = new StreamWriter(fs))
                             {
-                                // string htmlContent = control.CreateHTML(/*settingArray*/);
-                                // sw.Write(htmlContent);
-                                control.CreateHTML(sw, settingsSnap);
-                                sw.Close();
+                                if (Properties.Settings.Default.SaveOutHTML)
+                                {
+                                    control.CreateHTML(sw, settingsSnap);
+                                }
+                                else
+                                {
+                                    control.CreateCSV(sw, ",");
+                                }
                             }
-
-                            logger(i, "HTML Generated!", 100);//keeping here for console usage
-                            logger(i, fcreate.Name, 100);
                         }
-                        if (Properties.Settings.Default.SaveOutCSV)
-                        {
-                            logger(i, "Creating CSV File...", 60);
-                            FileStream fcreate = File.Open(location + fileName + "_" + control.GetLink(bossid + "-ext") + "_" + result + ".csv", FileMode.Create);
 
-                            //return html string
-                            logger(i, "Writing CSV...", 80);
-
-
-                            using (StreamWriter sw = new StreamWriter(fcreate))
-                            {
-                                // string htmlContent = control.CreateHTML(/*settingArray*/);
-                                // sw.Write(htmlContent);
-                                control.CreateCSV(sw,",");
-                                sw.Close();
-                            }
-
-                            logger(i, "CSV Generated!", 100);
-                            logger(i, fcreate.Name, 100);
-                        }
+                        logger(i, $"{outputType.ToUpper()} Generated!", 100); //keeping here for console usage
+                        logger(i, outputFile, 100);
                     }
                     else
                     {
                         logger(i, "Not EVTC...", 100);
                     }
-                    if (cancel != null)
-                    {
-                        cancel(i, e);
-                    }
+
+                    cancel?.Invoke(i, e);
                 }
 
                 //Report 100% completion on operation completed
@@ -296,7 +261,7 @@ namespace LuckParser
             //The start button is disabled as soon as the background operation is started
             //The Cancel button is enabled so that the user can stop the operation 
             //at any point of time during the execution
-            if (paths != null)
+            if (_logsFiles.Count > 0)
             {
                 btnStartAsyncOperation.Enabled = false;
                 btnCancel.Enabled = true;
@@ -319,42 +284,18 @@ namespace LuckParser
 
         private void listView1_AddItems(string[] filesArray)
         {
-            List<string> files = new List<string>();
             foreach (string file in filesArray)
             {
-                files.Add(file);
-            }
-            //Add files to paths
-            if (paths == null)
-            {
-                paths = files;
-
-            }
-            else
-            {
-                //Dont add doubles
-                for (int f = 0; f < files.Count(); f++)
+                if (_logsFiles.Contains(file))
                 {
-                    for (int p = 0; p < paths.Count(); p++)
-                    {
-                        if (paths[p] == files[f])
-                        {
-                            files.Remove(files[f]);
-                        }
-                    }
+                    //Don't add doubles
+                    continue;
                 }
-                paths.AddRange(files);
-            }
-            //Show in listbox
-            foreach (string file in files)
-            {
+                _logsFiles.Add(file);
 
-                ListViewItem item = new ListViewItem(file);
-                item.SubItems.Add(" ");
-                
-                listView1.Items.Add(item);
-                
-
+                ListViewItem lvItem = new ListViewItem(file);
+                lvItem.SubItems.Add(" ");
+                listView1.Items.Add(lvItem);
             }
         }
        
@@ -397,7 +338,7 @@ namespace LuckParser
         {
             btnCancel.Enabled = false;
             btnStartAsyncOperation.Enabled = false;
-            paths = null;
+            _logsFiles.Clear();
             listView1.Items.Clear();
         }
 
