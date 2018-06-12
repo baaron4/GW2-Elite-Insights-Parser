@@ -81,7 +81,7 @@
             this.chkPlayerDpsPlot.TabIndex = 1;
             this.chkPlayerDpsPlot.Text = "Show Each Players Total DPS plot";
             this.chkPlayerDpsPlot.UseVisualStyleBackColor = true;
-            this.chkPlayerDpsPlot.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.chkPlayerDpsPlot.CheckedChanged += new System.EventHandler(this.PlayerDpsPlot_CheckedChanged);
             // 
             // lblPlayerSummarySection
             // 
@@ -103,7 +103,7 @@
             this.chkTotalDpsPlot.TabIndex = 3;
             this.chkTotalDpsPlot.Text = "Show Total DPS Plot";
             this.chkTotalDpsPlot.UseVisualStyleBackColor = true;
-            this.chkTotalDpsPlot.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            this.chkTotalDpsPlot.CheckedChanged += new System.EventHandler(this.TotalDpsPlot_CheckedChanged);
             // 
             // chkBossDpsPlot
             // 
@@ -116,7 +116,7 @@
             this.chkBossDpsPlot.TabIndex = 4;
             this.chkBossDpsPlot.Text = "Show Boss DPS Plot";
             this.chkBossDpsPlot.UseVisualStyleBackColor = true;
-            this.chkBossDpsPlot.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
+            this.chkBossDpsPlot.CheckedChanged += new System.EventHandler(this.BossDpsPlot_CheckedChanged);
             // 
             // chkUniversalBoons
             // 
@@ -129,7 +129,7 @@
             this.chkUniversalBoons.TabIndex = 5;
             this.chkUniversalBoons.Text = "Show Universal Boons";
             this.chkUniversalBoons.UseVisualStyleBackColor = true;
-            this.chkUniversalBoons.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
+            this.chkUniversalBoons.CheckedChanged += new System.EventHandler(this.UniversalBoons_CheckedChanged);
             // 
             // lblBoonGraphSection
             // 
@@ -151,7 +151,7 @@
             this.chkImpProfSpecBoons.TabIndex = 7;
             this.chkImpProfSpecBoons.Text = "Show Important Profession specific Boons";
             this.chkImpProfSpecBoons.UseVisualStyleBackColor = true;
-            this.chkImpProfSpecBoons.CheckedChanged += new System.EventHandler(this.checkBox5_CheckedChanged);
+            this.chkImpProfSpecBoons.CheckedChanged += new System.EventHandler(this.ImportantProfessionSpecificBoons_CheckedChanged);
             // 
             // chkAllProfSpecBoons
             // 
@@ -162,7 +162,7 @@
             this.chkAllProfSpecBoons.TabIndex = 8;
             this.chkAllProfSpecBoons.Text = "Show All Profession specific Boons";
             this.chkAllProfSpecBoons.UseVisualStyleBackColor = true;
-            this.chkAllProfSpecBoons.CheckedChanged += new System.EventHandler(this.checkBox6_CheckedChanged);
+            this.chkAllProfSpecBoons.CheckedChanged += new System.EventHandler(this.AllProfessionSpecificBoons_CheckedChanged);
             // 
             // lblRotationGraphSection
             // 
@@ -184,7 +184,7 @@
             this.chkSkillIcons.TabIndex = 10;
             this.chkSkillIcons.Text = "Show Skill Icons";
             this.chkSkillIcons.UseVisualStyleBackColor = true;
-            this.chkSkillIcons.CheckedChanged += new System.EventHandler(this.checkBox7_CheckedChanged);
+            this.chkSkillIcons.CheckedChanged += new System.EventHandler(this.SkillIcons_CheckedChanged);
             // 
             // chkRotation
             // 
@@ -197,7 +197,7 @@
             this.chkRotation.TabIndex = 11;
             this.chkRotation.Text = "Parse Rotation";
             this.chkRotation.UseVisualStyleBackColor = true;
-            this.chkRotation.CheckedChanged += new System.EventHandler(this.checkBox8_CheckedChanged);
+            this.chkRotation.CheckedChanged += new System.EventHandler(this.Rotation_CheckedChanged);
             // 
             // lblSettingsInfoMsg
             // 
@@ -228,7 +228,7 @@
             this.chkDefaultOutputLoc.TabIndex = 14;
             this.chkDefaultOutputLoc.Text = "Save Output in same folder as evtc";
             this.chkDefaultOutputLoc.UseVisualStyleBackColor = true;
-            this.chkDefaultOutputLoc.CheckedChanged += new System.EventHandler(this.checkOutputLoc_CheckedChanged);
+            this.chkDefaultOutputLoc.CheckedChanged += new System.EventHandler(this.DefaultOutputLocation_CheckedChanged);
             // 
             // txtCustomSaveLoc
             // 
@@ -238,7 +238,7 @@
             this.txtCustomSaveLoc.Size = new System.Drawing.Size(412, 20);
             this.txtCustomSaveLoc.TabIndex = 15;
             this.txtCustomSaveLoc.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.txtCustomSaveLoc.TextChanged += new System.EventHandler(this.outFolderTextBox_TextChanged);
+            this.txtCustomSaveLoc.TextChanged += new System.EventHandler(this.CustomSaveLocation_TextChanged);
             // 
             // btnFolderSelect
             // 
@@ -248,7 +248,7 @@
             this.btnFolderSelect.TabIndex = 16;
             this.btnFolderSelect.Text = "Select";
             this.btnFolderSelect.UseVisualStyleBackColor = true;
-            this.btnFolderSelect.Click += new System.EventHandler(this.btnFolderSelect_Click);
+            this.btnFolderSelect.Click += new System.EventHandler(this.BtnFolderSelect_Click);
             // 
             // lblCustomSaveLoc
             // 
@@ -268,7 +268,7 @@
             this.chkEventListDbg.TabIndex = 18;
             this.chkEventListDbg.Text = "Show Event List (for debugging)";
             this.chkEventListDbg.UseVisualStyleBackColor = true;
-            this.chkEventListDbg.CheckedChanged += new System.EventHandler(this.checkBox9_CheckedChanged);
+            this.chkEventListDbg.CheckedChanged += new System.EventHandler(this.EventListDebug_CheckedChanged);
             // 
             // lblBossSection
             // 
@@ -290,7 +290,7 @@
             this.checkBossSummary.TabIndex = 20;
             this.checkBossSummary.Text = "Show Boss Summary";
             this.checkBossSummary.UseVisualStyleBackColor = true;
-            this.checkBossSummary.CheckedChanged += new System.EventHandler(this.checkBossSummary_CheckedChanged);
+            this.checkBossSummary.CheckedChanged += new System.EventHandler(this.BossSummary_CheckedChanged);
             // 
             // chkSimpleRotationTab
             // 
@@ -303,7 +303,7 @@
             this.chkSimpleRotationTab.TabIndex = 21;
             this.chkSimpleRotationTab.Text = "Show Simple Rotation Tab";
             this.chkSimpleRotationTab.UseVisualStyleBackColor = true;
-            this.chkSimpleRotationTab.CheckedChanged += new System.EventHandler(this.SimpleRotCheck_CheckedChanged);
+            this.chkSimpleRotationTab.CheckedChanged += new System.EventHandler(this.SimpleRotationTab_CheckedChanged);
             // 
             // chkShowAutos
             // 
@@ -316,7 +316,7 @@
             this.chkShowAutos.TabIndex = 22;
             this.chkShowAutos.Text = "Show Auto Attacks";
             this.chkShowAutos.UseVisualStyleBackColor = true;
-            this.chkShowAutos.CheckedChanged += new System.EventHandler(this.checkBox10_CheckedChanged);
+            this.chkShowAutos.CheckedChanged += new System.EventHandler(this.ShowAutos_CheckedChanged);
             // 
             // chkLargeSkillIcons
             // 
@@ -327,7 +327,7 @@
             this.chkLargeSkillIcons.TabIndex = 23;
             this.chkLargeSkillIcons.Text = "Large Skill Icons";
             this.chkLargeSkillIcons.UseVisualStyleBackColor = true;
-            this.chkLargeSkillIcons.CheckedChanged += new System.EventHandler(this.checkBox11_CheckedChanged);
+            this.chkLargeSkillIcons.CheckedChanged += new System.EventHandler(this.LargeSkillIcons_CheckedChanged);
             // 
             // btnResetSkillList
             // 
@@ -337,7 +337,7 @@
             this.btnResetSkillList.TabIndex = 24;
             this.btnResetSkillList.Text = "Reset Skill List ";
             this.btnResetSkillList.UseVisualStyleBackColor = true;
-            this.btnResetSkillList.Click += new System.EventHandler(this.button1_Click);
+            this.btnResetSkillList.Click += new System.EventHandler(this.ResetSkillList_Click);
             // 
             // btnRetrySkillList
             // 
@@ -347,7 +347,7 @@
             this.btnRetrySkillList.TabIndex = 25;
             this.btnRetrySkillList.Text = "Retry Skill List";
             this.btnRetrySkillList.UseVisualStyleBackColor = true;
-            this.btnRetrySkillList.Click += new System.EventHandler(this.button2_Click);
+            this.btnRetrySkillList.Click += new System.EventHandler(this.RetrySkillList_Click);
             // 
             // chkOutputHtml
             // 
@@ -360,7 +360,7 @@
             this.chkOutputHtml.TabIndex = 26;
             this.chkOutputHtml.Text = "Output as HTML";
             this.chkOutputHtml.UseVisualStyleBackColor = true;
-            this.chkOutputHtml.CheckedChanged += new System.EventHandler(this.saveoutHTML_CheckedChanged);
+            this.chkOutputHtml.CheckedChanged += new System.EventHandler(this.OuputHtml_CheckedChanged);
             // 
             // chkOutputCsv
             // 
@@ -371,7 +371,7 @@
             this.chkOutputCsv.TabIndex = 27;
             this.chkOutputCsv.Text = "Output as CSV";
             this.chkOutputCsv.UseVisualStyleBackColor = true;
-            this.chkOutputCsv.CheckedChanged += new System.EventHandler(this.saveoutCSV_CheckedChanged);
+            this.chkOutputCsv.CheckedChanged += new System.EventHandler(this.OutputCsv_CheckedChanged);
             // 
             // chkShowEstimates
             // 
@@ -384,7 +384,7 @@
             this.chkShowEstimates.TabIndex = 28;
             this.chkShowEstimates.Text = "Show Estimates Tab (WIP)";
             this.chkShowEstimates.UseVisualStyleBackColor = true;
-            this.chkShowEstimates.CheckedChanged += new System.EventHandler(this.estimatesBox_CheckedChanged);
+            this.chkShowEstimates.CheckedChanged += new System.EventHandler(this.ShowEstimates_CheckedChanged);
             // 
             // SettingsForm
             // 
