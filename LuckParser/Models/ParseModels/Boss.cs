@@ -7,20 +7,7 @@ using System.Web;
 namespace LuckParser.Models.ParseModels
 {
     public class Boss : AbstractPlayer
-    {
-        
-        public struct PhaseData
-        {
-            public long start;
-            public long end;
-
-            public PhaseData(long start, long end)
-            {
-                this.start = start;
-                this.end = end;
-            }
-        }
-        
+    {   
         // Constructors
         public Boss(AgentItem agent) : base(agent)
         {
