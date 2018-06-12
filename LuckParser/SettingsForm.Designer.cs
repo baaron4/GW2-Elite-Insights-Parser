@@ -204,9 +204,9 @@
             this.lblSettingsInfoMsg.AutoSize = true;
             this.lblSettingsInfoMsg.Location = new System.Drawing.Point(27, 13);
             this.lblSettingsInfoMsg.Name = "lblSettingsInfoMsg";
-            this.lblSettingsInfoMsg.Size = new System.Drawing.Size(245, 13);
+            this.lblSettingsInfoMsg.Size = new System.Drawing.Size(251, 13);
             this.lblSettingsInfoMsg.TabIndex = 12;
-            this.lblSettingsInfoMsg.Text = "*Settings will not alter files in the middle of parseing";
+            this.lblSettingsInfoMsg.Text = "*Changes will not alter files that are currently parsing";
             // 
             // lblOutputSection
             // 
