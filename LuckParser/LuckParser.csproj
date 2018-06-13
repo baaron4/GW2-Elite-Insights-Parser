@@ -86,15 +86,15 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\ParseModels\AbstractPlayer.cs" />
-    <Compile Include="Models\ParseModels\Actor.cs" />
+    <Compile Include="Models\ParseModels\Players\AbstractMasterPlayer.cs" />
+    <Compile Include="Models\ParseModels\Players\AbstractPlayer.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonsGraphModel.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonDistribution.cs" />
-    <Compile Include="Models\ParseModels\Minion.cs" />
-    <Compile Include="Models\ParseModels\Minions.cs" />
+    <Compile Include="Models\ParseModels\Players\Minion.cs" />
+    <Compile Include="Models\ParseModels\Players\Minions.cs" />
     <Compile Include="Models\ParseModels\PhaseData.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItem.cs" />
-    <Compile Include="Models\ParseModels\Boss.cs" />
+    <Compile Include="Models\ParseModels\Players\Boss.cs" />
     <Compile Include="Models\ParseModels\GW2APISpec.cs" />
     <Compile Include="Models\ParseModels\Logs\DamageLogCondition.cs" />
     <Compile Include="Models\ParseModels\GW2APISkillCheck.cs" />
@@ -127,7 +127,7 @@
     <Compile Include="Models\ParseModels\Mechanic.cs" />
     <Compile Include="Models\ParseModels\MechanicData.cs" />
     <Compile Include="Models\ParseModels\Logs\MechanicLog.cs" />
-    <Compile Include="Models\ParseModels\Player.cs" />
+    <Compile Include="Models\ParseModels\Players\Player.cs" />
     <Compile Include="Models\ParseModels\Logs\DamageLogPower.cs" />
     <Compile Include="Models\ParseModels\SkillData.cs" />
     <Compile Include="Models\ParseModels\SkillItem.cs" />

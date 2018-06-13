@@ -18,10 +18,6 @@ namespace LuckParser.Models.ParseModels
         protected List<DamageLog> damage_logs = new List<DamageLog>();
         private List<DamageLog> damage_logsFiltered = new List<DamageLog>();
         private Dictionary<int, List<Point>> dps_graph = new Dictionary<int, List<Point>>();
-        // Minions
-        private List<ushort> combatMinionIDList = new List<ushort>();
-        private Dictionary<AgentItem, List<DamageLog>> minion_damage_logs = new Dictionary<AgentItem, List<DamageLog>>();
-        private Dictionary<AgentItem, List<DamageLog>> minion_damage_logsFiltered = new Dictionary<AgentItem, List<DamageLog>>();
         // Taken damage
         protected List<DamageLog> damageTaken_logs = new List<DamageLog>();
         // Casts
@@ -142,36 +138,6 @@ namespace LuckParser.Models.ParseModels
             }
             return cast_logs.Where(x => x.getTime() + x.getActDur() >= start && x.getTime() <= end).ToList();
 
-        }
-        public Dictionary<AgentItem, List<DamageLog>> getMinionsDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData)
-        {
-            if (minion_damage_logs.Count == 0)
-            {
-                // make sure the keys matches
-                foreach (AgentItem agent in minion_damage_logsFiltered.Keys)
-                {
-                    minion_damage_logs[agent] = new List<DamageLog>();
-                }
-                setMinionsDamageLogs(0, bossData, combatList, agentData, minion_damage_logs);
-            }
-
-            if (minion_damage_logsFiltered.Count == 0)
-            {
-                // make sure the keys matches
-                foreach (AgentItem agent in minion_damage_logs.Keys)
-                {
-                    minion_damage_logsFiltered[agent] = new List<DamageLog>();
-                }
-                setMinionsDamageLogs(bossData.getInstid(), bossData, combatList, agentData, minion_damage_logsFiltered);
-            }
-            if (instidFilter == 0)
-            {
-                return minion_damage_logs;
-            }
-            else
-            {
-                return minion_damage_logsFiltered;
-            }
         }
         public List<DamageLog> getJustPlayerDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)
         {
@@ -386,31 +352,6 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        private void setMinionsDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData, Dictionary<AgentItem, List<DamageLog>> toFill)
-        {
-            List<ushort> minionList = getCombatMinionList(bossData, combatList, agentData);
-            foreach (int petid in minionList)
-            {
-                AgentItem agent = agentData.getNPCAgentList().FirstOrDefault(x => x.getInstid() == petid);
-                if (agent != null)
-                {
-                    List<DamageLog> damageLogs = getDamageLogs(instidFilter, bossData, combatList, agentData, 0, bossData.getAwareDuration()).Where(x => x.getSrcAgent() == agent.getAgent()).ToList();
-                    if (damageLogs.Count == 0)
-                    {
-                        continue;
-                    }
-                    AgentItem key = toFill.Keys.ToList().FirstOrDefault(x => x.getName() == agent.getName());
-                    if (key == null)
-                    {
-                        toFill[agent] = damageLogs;
-                    }
-                    else
-                    {
-                        toFill[key].AddRange(damageLogs);
-                    }
-                }
-            }
-        }
         protected abstract void setDamagetakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data);
         // private getters
         private BoonMap getBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList, bool add_condi)
@@ -496,14 +437,7 @@ namespace LuckParser.Models.ParseModels
             }
             return boon_map;
         }
-        private List<ushort> getCombatMinionList(BossData bossData, List<CombatItem> combatList, AgentData agentData)
-        {
-            if (combatMinionIDList.Count == 0)
-            {
-                combatMinionIDList = combatList.Where(x => x.getSrcMasterInstid() == instid).Select(x => x.getSrcInstid()).Distinct().ToList();
-            }
-            return combatMinionIDList;
-        }
+        
 
     }
 }

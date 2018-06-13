@@ -1937,9 +1937,9 @@ namespace LuckParser.Controllers
 
                         }
                         //foreach pet loop here                        
-                        foreach (AgentItem agent in p.getMinionsDamageLogs(0, boss_data, combat_data.getCombatList(), agent_data).Keys)
+                        foreach (KeyValuePair<string, Minions> pair in p.getMinions(boss_data, combat_data.getCombatList(), agent_data))
                         {
-                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + agent.getInstid() + "\">" + agent.getName() + "</a></li>");
+                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.getInstid() + "\">" + pair.Key + "</a></li>");
                         }
                         //inc dmg
                         sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#incDmg" + pid + "\">Damage Taken</a></li>");
@@ -2128,9 +2128,9 @@ namespace LuckParser.Controllers
                             sw.Write("</div>");
                         }
                         sw.Write("</div>");
-                        foreach (AgentItem agent in p.getMinionsDamageLogs(0, boss_data, combat_data.getCombatList(), agent_data).Keys)
+                        foreach (KeyValuePair<string, Minions> pair in p.getMinions(boss_data, combat_data.getCombatList(), agent_data))
                         {
-                            string id = pid + "_" + agent.getInstid();
+                            string id = pid + "_" + pair.Value.getInstid();
                             sw.Write("<div class=\"tab-pane fade \" id=\"minion" + id  + "\">");
                             {
                                 sw.Write("<ul class=\"nav nav-tabs\">");
@@ -2143,12 +2143,12 @@ namespace LuckParser.Controllers
                                 {
                                     sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabAll" + id + "\">");
                                     {
-                                        CreateDMGDistTable(sw, p, agent, false, phase_index);
+                                        CreateDMGDistTable(sw, p, pair.Value, false, phase_index);
                                     }
                                     sw.Write("</div>");
                                     sw.Write("<div class=\"tab-pane fade\" id=\"distTabBoss" + id + "\">");
                                     {
-                                        CreateDMGDistTable(sw, p, agent, true, phase_index);
+                                        CreateDMGDistTable(sw, p, pair.Value, true, phase_index);
                                     }
                                     sw.Write("</div>");
                                 }
@@ -2449,12 +2449,79 @@ namespace LuckParser.Controllers
             }
             sw.Write("</script>");
         }
+
+        private void CreateDMGDistTableBody(StreamWriter sw, bool toBoss, List<CastLog> casting, List<DamageLog> damageLogs, int finalTotalDamage)
+        {
+            HashSet<int> usedIDs = new HashSet<int>();
+            List<SkillItem> s_list = skill_data.getSkillList();
+            HTMLHelper.writeDamageDistTableCondi(sw, usedIDs, damageLogs, finalTotalDamage);
+            foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.getID())).Select(x => x.getID()).Distinct().ToList())
+            {
+                SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
+                List<DamageLog> list_to_use = damageLogs.Where(x => x.getID() == id).ToList();
+                usedIDs.Add(id);
+                if (skill != null && list_to_use.Count > 0)
+                {
+                    List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
+                    int casts = clList.Count();
+                    double timeswasted = 0;
+                    int countwasted = 0;
+                    double timessaved = 0;
+                    int countsaved = 0;
+                    foreach (CastLog cl in clList)
+                    {
+                        if (cl.getExpDur() < cl.getActDur())
+                        {
+                            countsaved++;
+                            timessaved += ((double)(cl.getExpDur() - cl.getActDur()) / 1000f);
+                        }
+                        else if (cl.getExpDur() > cl.getActDur())
+                        {
+                            countwasted++;
+                            timeswasted += ((double)(cl.getActDur()) / 1000f);
+                        }
+                    }
+                    HTMLHelper.writeDamageDistTableSkill(sw, skill, list_to_use, finalTotalDamage, casts, timeswasted, timessaved);
+                }
+            }
+            // non damaging stuff
+            if (!toBoss)
+            {
+                foreach (int id in casting.Where(x => !usedIDs.Contains(x.getID())).Select(x => x.getID()).Distinct())
+                {
+                    SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
+                    if (skill != null)
+                    {
+                        List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
+                        int casts = clList.Count();
+                        double timeswasted = 0;
+                        int countwasted = 0;
+                        double timessaved = 0;
+                        int countsaved = 0;
+                        foreach (CastLog cl in clList)
+                        {
+                            if (cl.getExpDur() < cl.getActDur())
+                            {
+                                countsaved++;
+                                timessaved += ((double)(cl.getExpDur() - cl.getActDur()) / 1000f);
+                            }
+                            else if (cl.getExpDur() > cl.getActDur())
+                            {
+                                countwasted++;
+                                timeswasted += ((double)(cl.getActDur()) / 1000f);
+                            }
+                        }
+                        HTMLHelper.writeDamageDistTableSkill(sw, skill, new List<DamageLog>(), finalTotalDamage, casts, timeswasted, timessaved);
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Creates the damage distribution table for a given player
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="p">The player</param>
-        private void CreateDMGDistTable(StreamWriter sw, AbstractPlayer p, bool toBoss, int phase_index)
+        private void CreateDMGDistTable(StreamWriter sw, AbstractMasterPlayer p, bool toBoss, int phase_index)
         {
             PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
             List<CastLog> casting = p.getCastLogs(boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
@@ -2471,73 +2538,10 @@ namespace LuckParser.Controllers
             sw.Write("<script> $(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + tabid + "\">");
             {
-                List<SkillItem> s_list = skill_data.getSkillList();
                 HTMLHelper.writeDamageDistTableHeader(sw);
                 sw.Write("<tbody>");
                 {
-                    HashSet<int> usedIDs = new HashSet<int>();
-                    HTMLHelper.writeDamageDistTableCondi(sw,usedIDs, damageLogs, finalTotalDamage);
-                    foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.getID())).Select(x => x.getID()).Distinct().ToList())
-                    {
-                        SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
-                        List<DamageLog> list_to_use = damageLogs.Where(x => x.getID() == id).ToList();
-                        usedIDs.Add(id);
-                        if (skill != null && list_to_use.Count > 0)
-                        {
-                            List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
-                            int casts = clList.Count();
-                            double timeswasted = 0;
-                            int countwasted = 0;
-                            double timessaved = 0;
-                            int countsaved = 0;
-                            foreach (CastLog cl in clList)
-                            {
-                                if (cl.getExpDur() < cl.getActDur())
-                                {
-                                    countsaved++;
-                                    timessaved += ((double)(cl.getExpDur() - cl.getActDur()) / 1000f);
-                                }
-                                else if (cl.getExpDur() > cl.getActDur())
-                                {
-                                    countwasted++;
-                                    timeswasted += ((double)(cl.getActDur()) / 1000f);
-                                }
-                            }
-                            HTMLHelper.writeDamageDistTableSkill(sw, skill, list_to_use, finalTotalDamage, casts, timeswasted, timessaved);
-                        }
-                    }
-                    // non damaging stuff
-                    if (!toBoss)
-                    {
-                        foreach (int id in casting.Where(x => !usedIDs.Contains(x.getID())).Select(x => x.getID()).Distinct())
-                        {
-                            SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
-                            if (skill != null)
-                            {
-                                List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
-                                int casts = clList.Count();
-                                double timeswasted = 0;
-                                int countwasted = 0;
-                                double timessaved = 0;
-                                int countsaved = 0;
-                                foreach (CastLog cl in clList)
-                                {
-                                    if (cl.getExpDur() < cl.getActDur())
-                                    {
-                                        countsaved++;
-                                        timessaved += ((double)(cl.getExpDur() - cl.getActDur()) / 1000f);
-                                    }
-                                    else if (cl.getExpDur() > cl.getActDur())
-                                    {
-                                        countwasted++;
-                                        timeswasted += ((double)(cl.getActDur()) / 1000f);
-                                    }
-                                }
-                                HTMLHelper.writeDamageDistTableSkill(sw, skill, new List<DamageLog>(), finalTotalDamage, casts, timeswasted, timessaved);
-                            }
-                        }
-                    }
-                   
+                    CreateDMGDistTableBody(sw, toBoss, casting, damageLogs, finalTotalDamage);                
                 }
                 sw.Write("</tbody>");
                 HTMLHelper.writeDamageDistTableFoot(sw, finalTotalDamage);
@@ -2551,37 +2555,27 @@ namespace LuckParser.Controllers
         /// <param name="p">Player, master of the minion</param>
         /// <param name="damageLogs">Damage logs to use</param>
         /// <param name="agent">The minion</param>
-        private void CreateDMGDistTable(StreamWriter sw, AbstractPlayer p, AgentItem agent, bool toBoss, int phase_index)
+        private void CreateDMGDistTable(StreamWriter sw, AbstractMasterPlayer p, Minions minions, bool toBoss, int phase_index)
         {
             string finalDPSdata = HTMLHelper.getFinalDPS(boss_data, combat_data, agent_data, p, boss, phase_index);
             int totalDamage = toBoss ? Int32.Parse(finalDPSdata.Split('|')[7]) : Int32.Parse(finalDPSdata.Split('|')[1]);
-            string tabid = p.getInstid() +"_"+phase_index + "_" + agent.getInstid() + (toBoss ? "_boss" : "");
+            string tabid = p.getInstid() +"_"+phase_index + "_" + minions.getInstid() + (toBoss ? "_boss" : "");
             PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
-            List<DamageLog> damageLogs = p.getMinionsDamageLogs(toBoss ? boss_data.getInstid() : 0, boss_data, combat_data.getCombatList(), agent_data)[agent].Where(x => x.getTime() >= phase.getStart() && x.getTime() <= phase.getEnd()).ToList();
+            List<CastLog> casting = minions.getCastLogs(boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
+            List<DamageLog> damageLogs = minions.getDamageLogs(toBoss ? boss_data.getInstid() : 0, boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
             if (totalDamage > 0)
             {
                 string contribution = String.Format("{0:0.00}", 100.0 * finalTotalDamage / totalDamage);
-                sw.Write("<div>" + agent.getName() + " did " + contribution + "% of " + p.getCharacter() + "'s total " + (toBoss ? "boss " : "") + "dps</div>");
+                sw.Write("<div>" + minions.getCharacter() + " did " + contribution + "% of " + p.getCharacter() + "'s total " + (toBoss ? "boss " : "") + "dps</div>");
             }
             sw.Write("<script> $(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + tabid + "\">");
             {
-                SkillData s_data = skill_data;
-                List<SkillItem> s_list = s_data.getSkillList();
                 HTMLHelper.writeDamageDistTableHeader(sw);
                 sw.Write("<tbody>");
                 {
-                    HashSet<int> usedIDs = new HashSet<int>();
-                    HTMLHelper.writeDamageDistTableCondi(sw, usedIDs, damageLogs, finalTotalDamage);
-                    foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.getID())).Select(x => x.getID()).Distinct())
-                    {//foreach casted skill
-                        SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);                               
-                        if (skill != null)
-                        {
-                            HTMLHelper.writeDamageDistTableSkill(sw, skill, damageLogs.Where(x => x.getID() == id).ToList(), finalTotalDamage);
-                        }
-                    }
+                    CreateDMGDistTableBody(sw, toBoss, casting, damageLogs, finalTotalDamage);
                 }
                 sw.Write("</tbody>");
                 HTMLHelper.writeDamageDistTableFoot(sw, finalTotalDamage);
@@ -2972,9 +2966,9 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + pid + "\">" + boss.getCharacter() + "</a></li>");
                 //foreach pet loop here
-                foreach (AgentItem agent in boss.getMinionsDamageLogs(0, boss_data, combat_data.getCombatList(), agent_data).Keys)
+                foreach (KeyValuePair<string, Minions> pair in boss.getMinions(boss_data, combat_data.getCombatList(), agent_data))
                 {
-                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + agent.getInstid()+ "\">" + agent.getName() + "</a></li>");
+                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.getInstid()+ "\">" + pair.Key + "</a></li>");
                 }
             }         
             sw.Write("</ul>");
@@ -3064,11 +3058,11 @@ namespace LuckParser.Controllers
                 sw.Write("</script> ");
                 CreateDMGDistTable(sw, boss, false, phase_index);
                 sw.Write("</div>");
-                foreach (AgentItem agent in boss.getMinionsDamageLogs(0, boss_data, combat_data.getCombatList(), agent_data).Keys)
+                foreach (KeyValuePair<string, Minions> pair in boss.getMinions(boss_data, combat_data.getCombatList(), agent_data))
                 {
-                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + pid + "_" + agent.getInstid() + "\">");
+                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + pid + "_" + pair.Value.getInstid() + "\">");
                     {
-                        CreateDMGDistTable(sw, boss, agent, false, phase_index);
+                        CreateDMGDistTable(sw, boss, pair.Value, false, phase_index);
                     }
                     sw.Write("</div>");
                 }

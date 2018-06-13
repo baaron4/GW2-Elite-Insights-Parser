@@ -13,6 +13,7 @@ namespace LuckParser.Models.ParseModels
         public Minion(ushort master, AgentItem agent) : base(agent)
         {
             master_id = master;
+            prof = "Minion";
         }
 
         protected override void setDamageLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
@@ -20,7 +21,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
             {
-                if (instid == c.getSrcInstid())//selecting player or minion as caster
+                if (instid == c.getSrcInstid())//selecting minion as caster
                 {
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in agentData.getNPCAgentList())

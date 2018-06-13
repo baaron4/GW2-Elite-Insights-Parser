@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class Boss : AbstractPlayer
+    public class Boss : AbstractMasterPlayer
     {   
         // Constructors
         public Boss(AgentItem agent) : base(agent)

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class Player : AbstractPlayer
+    public class Player : AbstractMasterPlayer
     {
         // Fields
         private String account;
