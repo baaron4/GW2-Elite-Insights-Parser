@@ -65,6 +65,18 @@ namespace LuckParser.Controllers
             // return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getLong();
             return BitConverter.ToInt64(bytes, 0);
         }
+        public static ulong getULong(MemoryStream stream)
+        {
+            byte[] bytes = new byte[8];
+            for (int b = 0; b < bytes.Length; b++)
+            {
+                bytes[b] = Convert.ToByte(stream.ReadByte());
+                // stream.Position++;
+            }
+
+            // return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getLong();
+            return BitConverter.ToUInt64(bytes, 0);
+        }
         public static string getString(MemoryStream stream, int length)
         {
             byte[] bytes = new byte[length];
