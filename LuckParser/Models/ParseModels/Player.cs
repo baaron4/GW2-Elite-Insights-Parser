@@ -74,10 +74,7 @@ namespace LuckParser.Models.ParseModels
                                 cleanse[0]++;
                                 cleanse[1] += c.getBuffDmg();
                             }
-
                         }
-
-
                     }
                 }
             }
@@ -154,17 +151,6 @@ namespace LuckParser.Models.ParseModels
                                 weapons[3] = "2Hand";
                                 continue;
                             }
-
-                            //if (weapons[0] == null && weapons[1] == null)
-                            //{
-                            //    weapons[0] = apiskill.weapon_type;
-                            //    weapons[1] = "2Hand";
-                            //}
-                            //else if (weapons[2] == null && weapons[3] == null)
-                            //{
-                            //    weapons[2] = apiskill.weapon_type;
-                            //    weapons[3] = "2Hand";
-                            //}
                             continue;
                         }//2 handed
                         if (apiskill.weapon_type == "Focus" || apiskill.weapon_type == "Shield" || apiskill.weapon_type == "Torch" || apiskill.weapon_type == "Warhorn")
@@ -181,16 +167,6 @@ namespace LuckParser.Models.ParseModels
                                 weapons[3] = apiskill.weapon_type;
                                 continue;
                             }
-                            //if (weapons[1] == null)
-                            //{
-
-                            //    weapons[1] = apiskill.weapon_type;
-                            //}
-                            //else if (weapons[3] == null)
-                            //{
-
-                            //    weapons[3] = apiskill.weapon_type;
-                            //}
                             continue;
                         }//OffHand
                         if (apiskill.weapon_type == "Axe" || apiskill.weapon_type == "Dagger" || apiskill.weapon_type == "Mace" || apiskill.weapon_type == "Pistol" || apiskill.weapon_type == "Sword" || apiskill.weapon_type == "Scepter")
@@ -209,16 +185,6 @@ namespace LuckParser.Models.ParseModels
                                     weapons[2] = apiskill.weapon_type;
                                     continue;
                                 }
-                                //if (weapons[0] == null)
-                                //{
-
-                                //    weapons[0] = apiskill.weapon_type;
-                                //}
-                                //else if (weapons[2] == null)
-                                //{
-
-                                //    weapons[2] = apiskill.weapon_type;
-                                //}
                                 continue;
                             }
                             if (apiskill.slot == "Weapon_4" || apiskill.slot == "Weapon_5")
@@ -235,21 +201,9 @@ namespace LuckParser.Models.ParseModels
                                     weapons[3] = apiskill.weapon_type;
                                     continue;
                                 }
-                                //if (weapons[1] == null)
-                                //{
-
-                                //    weapons[1] = apiskill.weapon_type;
-                                //}
-                                //else if (weapons[3] == null)
-                                //{
-
-                                //    weapons[3] = apiskill.weapon_type;
-                                //}
                                 continue;
                             }
-                        }//1 handed
-
-
+                        }// 1 handed
                     }
 
                 }
@@ -265,7 +219,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             weapons_array = weapons;
-        }
+        }    
         protected override void setDamageLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
             long time_start = bossData.getFirstAware();
@@ -294,7 +248,7 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-        }
+        }  
         private void setConsumablesList(BossData bossData, SkillData skillData, List<CombatItem> combatList)
         {
             List<Boon> foodBoon = Boon.getFoodList();
@@ -315,12 +269,7 @@ namespace LuckParser.Models.ParseModels
                 long time = c.getTime() - time_start;
                 if (instid == c.getDstInstid())
                 {
-                   // if (c.isBuffremove().getID() == 0)
-                    //{
-                        consumeList.Add(c);
-                   // }
-                   
-                   
+                    consumeList.Add(c); 
                 }
             }
         }
