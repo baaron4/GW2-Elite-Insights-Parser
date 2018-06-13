@@ -1681,7 +1681,7 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player);
+                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player, phase_index);
                         List<string> boonArrayToList = new List<string>();
                         boonArrayToList.Add(player.getGroup());
                         int count = 0;
@@ -1692,8 +1692,8 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             if (boonTable)
                             {
-                                long fight_duration = boss_data.getLastAware() - boss_data.getFirstAware();
-                                Dictionary<int, long> boonPresence = player.getBoonPresence(boss_data, skill_data, combat_data.getCombatList(), phases);
+                                long fight_duration = phases[phase_index].getEnd() - phases[phase_index].getStart();
+                                Dictionary<int, long> boonPresence = player.getBoonPresence(boss_data, skill_data, combat_data.getCombatList(), phases, phase_index);
                                 double avg_boons = 0.0;
                                 foreach(Boon boon in list_to_use)
                                 {
@@ -1804,7 +1804,7 @@ namespace LuckParser.Controllers
                     {
                         List<Player> playerID = new List<Player>();
                         playerID.Add(player);
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player, playerID);
+                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player, playerID, phase_index);
                         HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
                     }
                 }
@@ -1835,7 +1835,7 @@ namespace LuckParser.Controllers
                             if (p.getGroup() == player.getGroup())
                                 playerIDS.Add(p);
                         }
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player, playerIDS);
+                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player, playerIDS, phase_index);
                         HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
                     }
                 }          
@@ -1865,7 +1865,7 @@ namespace LuckParser.Controllers
                             if (p.getGroup() != player.getGroup())
                                 playerIDS.Add(p);
                         }
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player, playerIDS);
+                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player, playerIDS, phase_index);
                         HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
                     }
                 }
@@ -1894,7 +1894,7 @@ namespace LuckParser.Controllers
                     }
                     foreach (Player player in p_list)
                     {
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player, playerIDS);
+                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player, playerIDS, phase_index);
                         HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
                     }
                 }
@@ -2939,7 +2939,7 @@ namespace LuckParser.Controllers
                     sw.Write("<tr>");
                     {
                         sw.Write("<td>" + boss.getCharacter().ToString() + "</td>");
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalcondis(boss_data,combat_data,skill_data,agent_data, boss,boss);
+                        Dictionary<int, string> boonArray = HTMLHelper.getfinalcondis(boss_data,combat_data,skill_data,agent_data, boss,boss, phase_index);
                         foreach (Boon boon in Boon.getCondiBoonList())
                         {
                             sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
@@ -3786,7 +3786,7 @@ namespace LuckParser.Controllers
                         finaldps[10] + delimiter + // condi
                         finaldps[0] + delimiter); // all dps
 
-                Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,agent_data, boss,p);
+                Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,agent_data, boss,p, 0);
                 sw.Write(boonArray[1187] + delimiter + // Quickness
                         boonArray[30328] + delimiter + // Alacrity
                         boonArray[740] + delimiter); // Might

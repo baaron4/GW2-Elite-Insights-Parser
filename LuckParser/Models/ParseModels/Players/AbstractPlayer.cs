@@ -11,8 +11,8 @@ namespace LuckParser.Models.ParseModels
         private String character;
         protected String prof;
         // Boons
-        private BoonDistribution boon_distribution = new BoonDistribution();
-        private Dictionary<int, long> boon_presence = new Dictionary<int, long>();
+        private List<BoonDistribution> boon_distribution = new List<BoonDistribution>();
+        private List<Dictionary<int, long>> boon_presence = new List<Dictionary<int, long>>();
         private Dictionary<int, BoonsGraphModel> boon_points = new Dictionary<int, BoonsGraphModel>();
         // DPS
         protected List<DamageLog> damage_logs = new List<DamageLog>();
@@ -96,13 +96,13 @@ namespace LuckParser.Models.ParseModels
             }
             return damageTaken_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
-        public BoonDistribution getBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList, List<PhaseData> phases)
+        public BoonDistribution getBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList, List<PhaseData> phases, int phase_index)
         {
             if (boon_distribution.Count == 0)
             {
                 setBoonDistribution(bossData, skillData, combatList, phases);
             }
-            return boon_distribution;
+            return boon_distribution[phase_index];
         }
         public Dictionary<int, BoonsGraphModel> getBoonGraphs(BossData bossData, SkillData skillData, List<CombatItem> combatList, List<PhaseData> phases)
         {
@@ -112,13 +112,13 @@ namespace LuckParser.Models.ParseModels
             }
             return boon_points;
         }
-        public Dictionary<int, long> getBoonPresence(BossData bossData, SkillData skillData, List<CombatItem> combatList, List<PhaseData> phases)
+        public Dictionary<int, long> getBoonPresence(BossData bossData, SkillData skillData, List<CombatItem> combatList, List<PhaseData> phases, int phase_index)
         {
             if (boon_distribution.Count == 0)
             {
                 setBoonDistribution(bossData, skillData, combatList, phases);
             }
-            return boon_presence;
+            return boon_presence[phase_index];
         }
         public List<CastLog> getCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)
         {
@@ -218,6 +218,11 @@ namespace LuckParser.Models.ParseModels
             {
                 boon_presence_points.getBoonChart().Add(new Point(i, 0));
             }
+            for (int i = 0; i < phases.Count; i++)
+            {
+                boon_distribution.Add( new BoonDistribution());
+                boon_presence.Add(new Dictionary<int, long>());
+            }
             foreach (Boon boon in boon_to_use)
             {
                 int boonid = boon.getID();
@@ -228,11 +233,10 @@ namespace LuckParser.Models.ParseModels
                     {
                         continue;
                     }
-                    if (boon_distribution.ContainsKey(boonid))
+                    if (boon_distribution[0].ContainsKey(boonid))
                     {
                         continue;
                     }
-                    boon_distribution[boonid] = new Dictionary<ushort, OverAndValue>();
                     BoonSimulator simulator = boon.getSimulator();
                     simulator.simulate(logs, dur);
                     long death = getDeath(bossData, combatList, 0, dur);
@@ -247,29 +251,38 @@ namespace LuckParser.Models.ParseModels
                     List<BoonSimulationItem> simulation = simulator.getSimulationResult();
                     foreach (BoonSimulationItem simul in simulation)
                     {
-                        if (!boon_presence.ContainsKey(boonid))
+                        for (int i = 0; i < phases.Count; i++)
                         {
-                            boon_presence[boonid] = simul.getItemDuration();
-                        }
-                        else
-                        {
-                            boon_presence[boonid] += simul.getItemDuration();
-                        }
-                        foreach (ushort src in simul.getSrc())
-                        {
-                            if (!boon_distribution[boonid].ContainsKey(src))
+                            PhaseData phase = phases[i];
+                            Dictionary<int, long> presenceDict = boon_presence[i];
+                            BoonDistribution distrib = boon_distribution[i];
+                            distrib[boonid] = new Dictionary<ushort, OverAndValue>();
+                            if (!presenceDict.ContainsKey(boonid))
                             {
-                                boon_distribution[boonid][src] = new OverAndValue(simul.getDuration(src), simul.getOverstack(src));
+                                presenceDict[boonid] = simul.getItemDuration(phase.getStart(), phase.getEnd());
                             }
                             else
                             {
-                                OverAndValue toModify = boon_distribution[boonid][src];
-                                toModify.value += simul.getDuration(src);
-                                toModify.overstack += simul.getOverstack(src);
-                                boon_distribution[boonid][src] = toModify;
+                                presenceDict[boonid] += simul.getItemDuration(phase.getStart(), phase.getEnd());
+                            }
+                            foreach (ushort src in simul.getSrc())
+                            {
+                                if (!distrib[boonid].ContainsKey(src))
+                                {
+                                    distrib[boonid][src] = new OverAndValue(simul.getDuration(src), simul.getOverstack(src));
+                                }
+                                else
+                                {
+                                    OverAndValue toModify = distrib[boonid][src];
+                                    toModify.value += simul.getDuration(src);
+                                    toModify.overstack += simul.getOverstack(src);
+                                    distrib[boonid][src] = toModify;
+                                }
                             }
                         }
+                        
                     }
+                    // Graphs
                     // full precision
                     List<Point> toFill = new List<Point>();                   
                     List<Point> toFillPresence = new List<Point>();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -38,8 +39,15 @@ namespace LuckParser.Models.ParseModels
 
         public abstract long getOverstack(ushort src);
 
-        public long getItemDuration()
+        public long getItemDuration(long start = 0, long end = 0)
         {
+            if (end > 0)
+            {
+                long start_offset = Math.Max(Math.Min(duration, start - this.start),0);
+                long item_end = this.start + duration;
+                long end_offset = Math.Max(Math.Min(duration, item_end - end),0);
+                return duration - start_offset - end_offset;
+            }
             return duration;
         }
 
