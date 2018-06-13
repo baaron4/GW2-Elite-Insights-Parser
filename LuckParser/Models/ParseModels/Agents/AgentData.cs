@@ -74,5 +74,12 @@ namespace LuckParser.Models.ParseModels
         {
             return all_agents_list.FirstOrDefault(x => x.getInstid() == instid);
         }
+
+        public void clean()
+        {
+            NPC_agent_list = NPC_agent_list.Where(x => x.getInstid() != 0).ToList();
+            gadget_agent_list = NPC_agent_list.Where(x => x.getInstid() != 0).ToList();
+            all_agents_list = all_agents_list.Where(x => x.getInstid() != 0).ToList();
+        }
     }
 }

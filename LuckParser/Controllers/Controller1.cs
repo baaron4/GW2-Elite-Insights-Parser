@@ -562,6 +562,7 @@ namespace LuckParser.Controllers
                 }
 
             }
+            agent_data.clean();
             // Sort
             p_list = p_list.OrderBy(a => int.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>int.Parse(a.getGroup()) - int.Parse(b.getGroup()))
             setMechData();

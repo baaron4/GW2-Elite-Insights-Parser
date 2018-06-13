@@ -318,55 +318,7 @@ namespace LuckParser.Models.ParseModels
             }
             boon_points[-2] = boon_presence_points;
         }
-        private void setCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
-        {
-            long time_start = bossData.getFirstAware();
-            CastLog curCastLog = null;
-
-            foreach (CombatItem c in combatList)
-            {
-                LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
-                if (state.getID() == 0)
-                {
-                    if (instid == c.getSrcInstid())//selecting player as caster
-                    {
-                        if (c.isActivation().getID() > 0)
-                        {
-                            if (c.isActivation().getID() < 3)
-                            {
-                                long time = c.getTime() - time_start;
-                                curCastLog = new CastLog(time, c.getSkillID(), c.getValue(), c.isActivation());
-                            }
-                            else
-                            {
-                                if (curCastLog != null)
-                                {
-                                    if (curCastLog.getID() == c.getSkillID())
-                                    {
-                                        curCastLog = new CastLog(curCastLog.getTime(), curCastLog.getID(), curCastLog.getExpDur(), curCastLog.startActivation(), c.getValue(), c.isActivation());
-                                        cast_logs.Add(curCastLog);
-                                        curCastLog = null;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                else if (state.getID() == 11)
-                {//Weapon swap
-                    if (instid == c.getSrcInstid())//selecting player as caster
-                    {
-                        if ((int)c.getDstAgent() == 4 || (int)c.getDstAgent() == 5)
-                        {
-                            long time = c.getTime() - time_start;
-                            curCastLog = new CastLog(time, -2, (int)c.getDstAgent(), c.isActivation());
-                            cast_logs.Add(curCastLog);
-                            curCastLog = null;
-                        }
-                    }
-                }
-            }
-        }
+        protected abstract void setCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData);
         protected abstract void setDamagetakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data);
         // private getters
         private BoonMap getBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList, bool add_condi)

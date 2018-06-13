@@ -21,7 +21,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
             {
-                if (instid == c.getSrcInstid())//selecting minion as caster
+                if (instid == c.getSrcInstid() && c.getSrcMasterInstid() == master_id)//selecting minion as caster
                 {
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in agentData.getNPCAgentList())
@@ -30,6 +30,43 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
 
+            }
+        }
+
+        protected override void setCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        {
+            long time_start = bossData.getFirstAware();
+            CastLog curCastLog = null;
+
+            foreach (CombatItem c in combatList)
+            {
+                LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
+                if (state.getID() == 0)
+                {
+                    if (instid == c.getSrcInstid() && c.getSrcMasterInstid() == master_id)//selecting player as caster
+                    {
+                        if (c.isActivation().getID() > 0)
+                        {
+                            if (c.isActivation().getID() < 3)
+                            {
+                                long time = c.getTime() - time_start;
+                                curCastLog = new CastLog(time, c.getSkillID(), c.getValue(), c.isActivation());
+                            }
+                            else
+                            {
+                                if (curCastLog != null)
+                                {
+                                    if (curCastLog.getID() == c.getSkillID())
+                                    {
+                                        curCastLog = new CastLog(curCastLog.getTime(), curCastLog.getID(), curCastLog.getExpDur(), curCastLog.startActivation(), c.getValue(), c.isActivation());
+                                        cast_logs.Add(curCastLog);
+                                        curCastLog = null;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
