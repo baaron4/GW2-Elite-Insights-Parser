@@ -132,20 +132,21 @@ namespace LuckParser.Controllers
                 ulong agent = ParseHelper.getULong(stream);
 
                 // 4 bytes: profession
-                int prof = ParseHelper.getInt(stream);
+                uint prof = ParseHelper.getUInt(stream);
 
                 // 4 bytes: is_elite
-                int is_elite = ParseHelper.getInt(stream);
+                uint is_elite = ParseHelper.getUInt(stream);
 
-                // 4 bytes: toughness
-                int toughness = ParseHelper.getInt(stream);
-
-                // 4 bytes: healing
-                int healing = ParseHelper.getInt(stream);
-
-                // 4 bytes: condition
-                int condition = ParseHelper.getInt(stream);
-
+                // 2 bytes: toughness
+                int toughness = ParseHelper.getShort(stream);
+                // skip concentration
+                ParseHelper.safeSkip(stream, 2);
+                // 2 bytes: healing
+                int healing = ParseHelper.getShort(stream);
+                ParseHelper.safeSkip(stream, 2);
+                // 2 bytes: condition
+                int condition = ParseHelper.getShort(stream);
+                ParseHelper.safeSkip(stream, 2);
                 // 68 bytes: name
                 String name = ParseHelper.getString(stream, 68);
                 //Save
