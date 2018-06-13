@@ -2,8 +2,8 @@
 {
     public class PhaseData
     {
-        public long start;
-        public long end;
+        private long start;
+        private long end;
 
         public PhaseData(long start, long end)
         {
@@ -29,6 +29,16 @@
         public bool inInterval(long time, long offset = 0)
         {
             return start <= time - offset && time - offset <= end;
+        }
+
+        public long getStart()
+        {
+            return start;
+        }
+
+        public long getEnd()
+        {
+            return end;
         }
     }
 }

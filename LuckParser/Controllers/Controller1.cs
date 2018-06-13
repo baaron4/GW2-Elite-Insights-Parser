@@ -900,7 +900,7 @@ namespace LuckParser.Controllers
                 int mechcount = 0;
                 foreach (MechanicLog ml in filterdList)
                 {
-                    Point check = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data,ml.GetPlayer(), boss, phase_index).FirstOrDefault(x => x.X == ml.GetTime() - phase.start/1000);
+                    Point check = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data,ml.GetPlayer(), boss, phase_index).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart()/1000);
                     if (mechcount == filterdList.Count - 1)
                     {
                         if (check != null)
@@ -936,11 +936,11 @@ namespace LuckParser.Controllers
                 {
                     if (mechcount == filterdList.Count - 1)
                     {
-                        sw.Write("'" + (ml.GetTime() - phase.start / 1000) + "'");
+                        sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "'");
                     }
                     else
                     {
-                        sw.Write("'" + (ml.GetTime() - phase.start / 1000) + "',");
+                        sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "',");
                     }
 
                     mechcount++;
@@ -988,7 +988,7 @@ namespace LuckParser.Controllers
                     {
                         foreach (MechanicLog ml in DnDList)
                         {
-                            Point check = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, ml.GetPlayer(), boss, phase_index).FirstOrDefault(x => x.X == ml.GetTime() - phase.start/1000);
+                            Point check = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, ml.GetPlayer(), boss, phase_index).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart()/1000);
                             if (mcount == DnDList.Count - 1)
                             {
                                 if (check != null)
@@ -1027,11 +1027,11 @@ namespace LuckParser.Controllers
                         {
                             if (mcount == DnDList.Count - 1)
                             {
-                                sw.Write("'" + (ml.GetTime() - phase.start / 1000) + "'");
+                                sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "'");
                             }
                             else
                             {
-                                sw.Write("'" + (ml.GetTime() - phase.start / 1000) + "',");
+                                sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "',");
                             }
 
                             mcount++;
@@ -1068,7 +1068,7 @@ namespace LuckParser.Controllers
             if (maxDPS > 0)
             {
                 sw.Write("{");
-                HTMLHelper.writeBossHealthGraph(sw, maxDPS, phase.start, phase.end, boss_data);
+                HTMLHelper.writeBossHealthGraph(sw, maxDPS, phase.getStart(), phase.getEnd(), boss_data);
                 sw.Write("}");
             }
             else
@@ -1280,7 +1280,7 @@ namespace LuckParser.Controllers
                         sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[5] + " dmg \">" + dmg[4] + "</span>" + "</td>");
                         sw.Write("<td>" + stats[6] + "</td>");
                         TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));
-                        long fight_duration = (phase.end - phase.start)/1000;
+                        long fight_duration = (phase.getEnd() - phase.getStart())/1000;
                         if (timedead > TimeSpan.Zero)
                         {
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
@@ -1402,7 +1402,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[18] + "cancels \">" + stats[17] + "</span>" + "</td>");//timesaved
                             sw.Write("<td>" + stats[5] + "</td>");//w swaps
                             sw.Write("<td>" + stats[6] + "</td>");//downs
-                            long fight_duration = (phase.end - phase.start) / 1000;
+                            long fight_duration = (phase.getEnd() - phase.getStart()) / 1000;
                             if (timedead > TimeSpan.Zero)
                             {
                                 sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
@@ -1523,7 +1523,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + stats[6] + "</td>");// evades
                             sw.Write("<td>" + stats[5] + "</td>");//dodges
                             sw.Write("<td>" + stats[8] + "</td>");//downs
-                            long fight_duration = (phase.end - phase.start)/1000;
+                            long fight_duration = (phase.getEnd() - phase.getStart())/1000;
                             if (timedead > TimeSpan.Zero)
                             {
                                 sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
@@ -1909,15 +1909,15 @@ namespace LuckParser.Controllers
         private void CreatePlayerTab(StreamWriter sw, bool[] settingsSnap, int phase_index)
         {
             PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
-            long start = phase.start + boss_data.getFirstAware();
-            long end = phase.end + boss_data.getFirstAware();
+            long start = phase.getStart() + boss_data.getFirstAware();
+            long end = phase.getEnd() + boss_data.getFirstAware();
             List<SkillItem> s_list = skill_data.getSkillList();
             //generate Player list Graphs
             foreach (Player p in p_list)
             {
-                List<CastLog> casting = p.getCastLogsActDur(boss_data, combat_data.getCombatList(), agent_data, phase.start, phase.end);
+                List<CastLog> casting = p.getCastLogsActDur(boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
 
-                bool died = p.getDeath(boss_data, combat_data.getCombatList(), phase.start, phase.end) > 0;
+                bool died = p.getDeath(boss_data, combat_data.getCombatList(), phase.getStart(), phase.getEnd()) > 0;
                 string charname = p.getCharacter();
                 string pid = p.getInstid() + "_" + phase_index;
                 sw.Write("<div class=\"tab-pane fade\" id=\"" + pid + "\">");
@@ -1949,7 +1949,7 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
                         {
-                            List<int[]> consume = p.getConsumablesList(boss_data, skill_data, combat_data.getCombatList(), phase.start, phase.end);
+                            List<int[]> consume = p.getConsumablesList(boss_data, skill_data, combat_data.getCombatList(), phase.getStart(), phase.getEnd());
                             List<int[]> initial = consume.Where(x => x[1] == 0).ToList();
                             List<int[]> refreshed = consume.Where(x => x[1] > 0).ToList();
                             if (initial.Count() > 0)
@@ -2023,7 +2023,7 @@ namespace LuckParser.Controllers
                                     {
                                         foreach (CastLog cl in casting)
                                         {
-                                            HTMLHelper.writeCastingItem(sw, cl, skill_data, phase.start, phase.end);
+                                            HTMLHelper.writeCastingItem(sw, cl, skill_data, phase.getStart(), phase.getEnd());
                                         }
                                     }
                                     if (present_boons.Count() > 0)
@@ -2044,7 +2044,7 @@ namespace LuckParser.Controllers
                                             {
                                                 sw.Write("{");
                                                 {
-                                                    HTMLHelper.writeBoonGraph(sw, bgm, phase.start, phase.end);
+                                                    HTMLHelper.writeBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
                                                 }
                                                 sw.Write(" },");
                                             }
@@ -2092,7 +2092,7 @@ namespace LuckParser.Controllers
                                             int castCount = 0;
                                             foreach (CastLog cl in casting)
                                             {
-                                                HTMLHelper.writeCastingItemIcon(sw, cl, skill_data, phase.start, castCount == casting.Count - 1);
+                                                HTMLHelper.writeCastingItemIcon(sw, cl, skill_data, phase.getStart(), castCount == casting.Count - 1);
                                                 castCount++;
                                             }
                                         }
@@ -2199,7 +2199,7 @@ namespace LuckParser.Controllers
             if (SnapSettings[6])//Display rotation
             {
                 PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
-                List<CastLog> casting = p.getCastLogs(boss_data, combat_data.getCombatList(), agent_data, phase.start, phase.end);
+                List<CastLog> casting = p.getCastLogs(boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
                 GW2APISkill autoSkill = null;
                 int autosCount = 0;
                 foreach (CastLog cl in casting)
@@ -2457,8 +2457,8 @@ namespace LuckParser.Controllers
         private void CreateDMGDistTable(StreamWriter sw, AbstractPlayer p, bool toBoss, int phase_index)
         {
             PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
-            List<CastLog> casting = p.getCastLogs(boss_data, combat_data.getCombatList(), agent_data, phase.start, phase.end);
-            List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(toBoss ? boss_data.getInstid() : 0, boss_data, combat_data.getCombatList(), agent_data, phase.start, phase.end);
+            List<CastLog> casting = p.getCastLogs(boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
+            List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(toBoss ? boss_data.getInstid() : 0, boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
             string finalDPSdata = HTMLHelper.getFinalDPS(boss_data, combat_data, agent_data, p, boss, phase_index);
             int totalDamage = toBoss ? Int32.Parse(finalDPSdata.Split('|')[7]) : Int32.Parse(finalDPSdata.Split('|')[1]);
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
@@ -2557,7 +2557,7 @@ namespace LuckParser.Controllers
             int totalDamage = toBoss ? Int32.Parse(finalDPSdata.Split('|')[7]) : Int32.Parse(finalDPSdata.Split('|')[1]);
             string tabid = p.getInstid() +"_"+phase_index + "_" + agent.getInstid() + (toBoss ? "_boss" : "");
             PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
-            List<DamageLog> damageLogs = p.getMinionsDamageLogs(toBoss ? boss_data.getInstid() : 0, boss_data, combat_data.getCombatList(), agent_data)[agent].Where(x => x.getTime() >= phase.start && x.getTime() <= phase.end).ToList();
+            List<DamageLog> damageLogs = p.getMinionsDamageLogs(toBoss ? boss_data.getInstid() : 0, boss_data, combat_data.getCombatList(), agent_data)[agent].Where(x => x.getTime() >= phase.getStart() && x.getTime() <= phase.getEnd()).ToList();
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
             if (totalDamage > 0)
             {
@@ -2596,7 +2596,7 @@ namespace LuckParser.Controllers
         private void CreateDMGTakenDistTable(StreamWriter sw, Player p, int phase_index)
         {
             PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
-            List<DamageLog> damageLogs = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data,mech_data, phase.start, phase.end);
+            List<DamageLog> damageLogs = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data,mech_data, phase.getStart(), phase.getEnd());
             List<SkillItem> s_list = skill_data.getSkillList();
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
             string pid = p.getInstid() + "_" + phase_index;
@@ -2781,7 +2781,7 @@ namespace LuckParser.Controllers
                                     int count = 0;
                                     foreach (Mechanic mech in mechs)
                                     {
-                                        List<MechanicLog> test = mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= phase.start / 1000 && x.GetTime() <= phase.end / 1000).ToList();
+                                        List<MechanicLog> test = mech_data.GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= phase.getStart() / 1000 && x.GetTime() <= phase.getEnd() / 1000).ToList();
                                         count += test.Count();                                     
                                     }
                                     sw.Write("<td>" + count + "</td>");
@@ -2963,7 +2963,7 @@ namespace LuckParser.Controllers
         {
             //generate Player list Graphs
             PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
-            List<CastLog> casting = boss.getCastLogsActDur(boss_data, combat_data.getCombatList(), agent_data, phase.start, phase.end);
+            List<CastLog> casting = boss.getCastLogsActDur(boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
             List<SkillItem> s_list = skill_data.getSkillList();
             string charname = boss.getCharacter();
             string pid = boss.getInstid() + "_" + phase_index;
@@ -2992,7 +2992,7 @@ namespace LuckParser.Controllers
 
                             foreach (CastLog cl in casting)
                             {
-                                HTMLHelper.writeCastingItem(sw, cl, skill_data, phase.start, phase.end);
+                                HTMLHelper.writeCastingItem(sw, cl, skill_data, phase.getStart(), phase.getEnd());
                             }
                         }
                         //============================================
@@ -3009,7 +3009,7 @@ namespace LuckParser.Controllers
                                 BoonsGraphModel bgm = boonGraphData[boonid];
                                 sw.Write("{");
                                 {
-                                    HTMLHelper.writeBoonGraph(sw, bgm, phase.start, phase.end);
+                                    HTMLHelper.writeBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
                                 }
                                 sw.Write(" },");
                             }
@@ -3026,7 +3026,7 @@ namespace LuckParser.Controllers
                             sw.Write("},");                           
                         }
                         sw.Write("{");
-                        HTMLHelper.writeBossHealthGraph(sw, HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data, boss, boss, phase_index).Max(x => x.Y), phase.start, phase.end, boss_data, "y3");
+                        HTMLHelper.writeBossHealthGraph(sw, HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data, boss, boss, phase_index).Max(x => x.Y), phase.getStart(), phase.getEnd(), boss_data, "y3");
                         sw.Write("}");
                     }                   
                     sw.Write("];");
@@ -3048,7 +3048,7 @@ namespace LuckParser.Controllers
                                 int castCount = 0;
                                 foreach (CastLog cl in casting)
                                 {
-                                    HTMLHelper.writeCastingItemIcon(sw, cl, skill_data, phase.start, castCount == casting.Count - 1);
+                                    HTMLHelper.writeCastingItemIcon(sw, cl, skill_data, phase.getStart(), castCount == casting.Count - 1);
                                     castCount++;
                                 }
                             }
