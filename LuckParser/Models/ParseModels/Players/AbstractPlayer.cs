@@ -256,7 +256,9 @@ namespace LuckParser.Models.ParseModels
                             PhaseData phase = phases[i];
                             Dictionary<int, long> presenceDict = boon_presence[i];
                             BoonDistribution distrib = boon_distribution[i];
-                            distrib[boonid] = new Dictionary<ushort, OverAndValue>();
+                            if (!distrib.ContainsKey(boonid)) {
+                                distrib[boonid] = new Dictionary<ushort, OverAndValue>();
+                            }
                             if (!presenceDict.ContainsKey(boonid))
                             {
                                 presenceDict[boonid] = simul.getItemDuration(phase.getStart(), phase.getEnd());
