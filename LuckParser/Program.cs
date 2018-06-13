@@ -24,14 +24,14 @@ namespace LuckParser
                     //Console.WriteLine(arg);
                 }
                 // Use the application through console 
-                Form1 myConsoleParser = new Form1(args);
+                MainForm myConsoleParser = new MainForm(args);
                 
                 return 0;
             }
             
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new MainForm());
             return 0;
         }
     }
