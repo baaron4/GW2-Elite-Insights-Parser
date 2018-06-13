@@ -96,27 +96,27 @@ namespace LuckParser.Models.ParseModels
             }
             return damageTaken_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
-        public BoonDistribution getBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList)
+        public BoonDistribution getBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList, List<PhaseData> phases)
         {
             if (boon_distribution.Count == 0)
             {
-                setBoonDistribution(bossData, skillData, combatList);
+                setBoonDistribution(bossData, skillData, combatList, phases);
             }
             return boon_distribution;
         }
-        public Dictionary<int, BoonsGraphModel> getBoonGraphs(BossData bossData, SkillData skillData, List<CombatItem> combatList)
+        public Dictionary<int, BoonsGraphModel> getBoonGraphs(BossData bossData, SkillData skillData, List<CombatItem> combatList, List<PhaseData> phases)
         {
             if (boon_distribution.Count == 0)
             {
-                setBoonDistribution(bossData, skillData, combatList);
+                setBoonDistribution(bossData, skillData, combatList, phases);
             }
             return boon_points;
         }
-        public Dictionary<int, long> getBoonPresence(BossData bossData, SkillData skillData, List<CombatItem> combatList)
+        public Dictionary<int, long> getBoonPresence(BossData bossData, SkillData skillData, List<CombatItem> combatList, List<PhaseData> phases)
         {
             if (boon_distribution.Count == 0)
             {
-                setBoonDistribution(bossData, skillData, combatList);
+                setBoonDistribution(bossData, skillData, combatList, phases);
             }
             return boon_presence;
         }
@@ -205,7 +205,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        private void setBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList)
+        private void setBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList, List<PhaseData> phases)
         {
             BoonMap to_use = getBoonMap(bossData, skillData, combatList, true);
             List<Boon> boon_to_use = Boon.getAllBuffList();

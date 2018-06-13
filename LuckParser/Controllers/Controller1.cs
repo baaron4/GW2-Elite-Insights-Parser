@@ -1668,6 +1668,7 @@ namespace LuckParser.Controllers
         /// <param name="table_id">id of the table</param>
         private void CreateUptimeTable(StreamWriter sw, List<Boon> list_to_use, string table_id, int phase_index)
         {
+            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data);
             //Generate Boon table------------------------------------------------------------------------------------------------
             sw.Write("<script> $(function () { $('#" + table_id+ phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
             List<List<string>> footList = new List<List<string>>();
@@ -1680,7 +1681,7 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,player);
+                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player);
                         List<string> boonArrayToList = new List<string>();
                         boonArrayToList.Add(player.getGroup());
                         int count = 0;
@@ -1692,7 +1693,7 @@ namespace LuckParser.Controllers
                             if (boonTable)
                             {
                                 long fight_duration = boss_data.getLastAware() - boss_data.getFirstAware();
-                                Dictionary<int, long> boonPresence = player.getBoonPresence(boss_data, skill_data, combat_data.getCombatList());
+                                Dictionary<int, long> boonPresence = player.getBoonPresence(boss_data, skill_data, combat_data.getCombatList(), phases);
                                 double avg_boons = 0.0;
                                 foreach(Boon boon in list_to_use)
                                 {
@@ -1803,7 +1804,7 @@ namespace LuckParser.Controllers
                     {
                         List<Player> playerID = new List<Player>();
                         playerID.Add(player);
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,player, playerID);
+                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player, playerID);
                         HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
                     }
                 }
@@ -1834,7 +1835,7 @@ namespace LuckParser.Controllers
                             if (p.getGroup() == player.getGroup())
                                 playerIDS.Add(p);
                         }
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,player, playerIDS);
+                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player, playerIDS);
                         HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
                     }
                 }          
@@ -1864,7 +1865,7 @@ namespace LuckParser.Controllers
                             if (p.getGroup() != player.getGroup())
                                 playerIDS.Add(p);
                         }
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,player, playerIDS);
+                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player, playerIDS);
                         HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
                     }
                 }
@@ -1893,7 +1894,7 @@ namespace LuckParser.Controllers
                     }
                     foreach (Player player in p_list)
                     {
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,player, playerIDS);
+                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data, agent_data, boss,player, playerIDS);
                         HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
                     }
                 }
@@ -1908,7 +1909,8 @@ namespace LuckParser.Controllers
         /// <param name="settingsSnap">Settings to use</param>
         private void CreatePlayerTab(StreamWriter sw, bool[] settingsSnap, int phase_index)
         {
-            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
+            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data);
+            PhaseData phase = phases[phase_index];
             long start = phase.getStart() + boss_data.getFirstAware();
             long end = phase.getEnd() + boss_data.getFirstAware();
             List<SkillItem> s_list = skill_data.getSkillList();
@@ -2036,7 +2038,7 @@ namespace LuckParser.Controllers
                                         {
                                             parseBoonsList.AddRange(present_personnal[p.getInstid()]);
                                         }
-                                        Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(boss_data, skill_data, combat_data.getCombatList());
+                                        Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(boss_data, skill_data, combat_data.getCombatList(), phases);
                                         foreach (int boonid in boonGraphData.Keys.Reverse())
                                         {
                                             BoonsGraphModel bgm = boonGraphData[boonid];
@@ -2937,7 +2939,7 @@ namespace LuckParser.Controllers
                     sw.Write("<tr>");
                     {
                         sw.Write("<td>" + boss.getCharacter().ToString() + "</td>");
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalcondis(boss_data,combat_data,skill_data,boss);
+                        Dictionary<int, string> boonArray = HTMLHelper.getfinalcondis(boss_data,combat_data,skill_data,agent_data, boss,boss);
                         foreach (Boon boon in Boon.getCondiBoonList())
                         {
                             sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
@@ -2956,7 +2958,8 @@ namespace LuckParser.Controllers
         private void CreateBossSummary(StreamWriter sw, int phase_index)
         {
             //generate Player list Graphs
-            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
+            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data);
+            PhaseData phase = phases[phase_index];
             List<CastLog> casting = boss.getCastLogsActDur(boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
             List<SkillItem> s_list = skill_data.getSkillList();
             string charname = boss.getCharacter();
@@ -2995,7 +2998,7 @@ namespace LuckParser.Controllers
                         parseBoonsList.AddRange(Boon.getCondiBoonList());
                         //Every buffs and boons
                         parseBoonsList.AddRange(Boon.getAllBuffList());
-                        Dictionary<int,BoonsGraphModel> boonGraphData = boss.getBoonGraphs(boss_data, skill_data,combat_data.getCombatList());
+                        Dictionary<int,BoonsGraphModel> boonGraphData = boss.getBoonGraphs(boss_data, skill_data,combat_data.getCombatList(), phases);
                         foreach (int boonid in boonGraphData.Keys.Reverse())
                         {
                             if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null)
@@ -3609,6 +3612,7 @@ namespace LuckParser.Controllers
         }
         public void CreateSoloHTML(StreamWriter sw, bool[] settingsSnap)
         {
+            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data);
             double fight_duration = (boss_data.getAwareDuration()) / 1000.0;
             Player p = p_list[0];               
             List<CastLog> casting = p.getCastLogsActDur(boss_data, combat_data.getCombatList(), agent_data, 0, boss_data.getAwareDuration());
@@ -3642,7 +3646,7 @@ namespace LuckParser.Controllers
                         {
                             parseBoonsList.AddRange(present_personnal[p.getInstid()]);
                         }
-                        Dictionary<int,BoonsGraphModel> boonGraphData = p.getBoonGraphs(boss_data, skill_data, combat_data.getCombatList());
+                        Dictionary<int,BoonsGraphModel> boonGraphData = p.getBoonGraphs(boss_data, skill_data, combat_data.getCombatList(), phases);
                         foreach (int boonid in boonGraphData.Keys.Reverse())
                         {
                             if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null)
@@ -3782,7 +3786,7 @@ namespace LuckParser.Controllers
                         finaldps[10] + delimiter + // condi
                         finaldps[0] + delimiter); // all dps
 
-                Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,p);
+                Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,agent_data, boss,p);
                 sw.Write(boonArray[1187] + delimiter + // Quickness
                         boonArray[30328] + delimiter + // Alacrity
                         boonArray[740] + delimiter); // Might

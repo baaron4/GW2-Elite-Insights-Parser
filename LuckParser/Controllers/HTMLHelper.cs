@@ -316,9 +316,10 @@ namespace LuckParser.Controllers
             String[] statsArray = new string[] { resurrects.ToString(), (restime / 1000f).ToString(), condiCleanse.ToString(), (condiCleansetime / 1000f).ToString() };
             return statsArray;
         }
-        public static Dictionary<int, string> getfinalboons(BossData b_data, CombatData c_data, SkillData s_data, Player p)
+        public static Dictionary<int, string> getfinalboons(BossData b_data, CombatData c_data, SkillData s_data, AgentData a_data, Boss boss, Player p)
         {
-            BoonDistribution boon_distrib = p.getBoonDistribution(b_data, s_data, c_data.getCombatList());
+            List<PhaseData> phases = boss.getPhases(b_data, c_data.getCombatList(), a_data);
+            BoonDistribution boon_distrib = p.getBoonDistribution(b_data, s_data, c_data.getCombatList(), phases);
             Dictionary<int, string> rates = new Dictionary<int, string>();
             long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
             foreach (Boon boon in Boon.getAllBuffList())
@@ -340,17 +341,18 @@ namespace LuckParser.Controllers
             }
             return rates;
         }
-        public static Dictionary<int, string> getfinalboons(BossData b_data, CombatData c_data, SkillData s_data, Player p, List<Player> trgetPlayers)
-        {
+        public static Dictionary<int, string> getfinalboons(BossData b_data, CombatData c_data, SkillData s_data, AgentData a_data, Boss boss, Player p, List<Player> trgetPlayers)
+        {   
             if (trgetPlayers.Count() == 0)
             {
-                return getfinalboons(b_data, c_data, s_data, p);
+                return getfinalboons(b_data, c_data, s_data, a_data, boss, p);
             }
+            List<PhaseData> phases = boss.getPhases(b_data, c_data.getCombatList(), a_data);
             long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
             Dictionary<Player, BoonDistribution> boon_logsDist = new Dictionary<Player, BoonDistribution>();
             foreach (Player player in trgetPlayers)
             {
-                boon_logsDist[player] = player.getBoonDistribution(b_data, s_data, c_data.getCombatList());
+                boon_logsDist[player] = player.getBoonDistribution(b_data, s_data, c_data.getCombatList(), phases);
             }
             Dictionary<int, string> rates = new Dictionary<int, string>();
             foreach (Boon boon in Boon.getAllBuffList())
@@ -390,9 +392,10 @@ namespace LuckParser.Controllers
             }
             return rates;
         }
-        public static Dictionary<int, string> getfinalcondis(BossData b_data, CombatData c_data, SkillData s_data, AbstractPlayer p)
+        public static Dictionary<int, string> getfinalcondis(BossData b_data, CombatData c_data, SkillData s_data, AgentData a_data, Boss boss, AbstractPlayer p)
         {
-            BoonDistribution boon_distrib = p.getBoonDistribution(b_data, s_data, c_data.getCombatList());
+            List<PhaseData> phases = boss.getPhases(b_data, c_data.getCombatList(), a_data);
+            BoonDistribution boon_distrib = p.getBoonDistribution(b_data, s_data, c_data.getCombatList(),phases);
             Dictionary<int, string> rates = new Dictionary<int, string>();
             foreach (Boon boon in Boon.getCondiBoonList())
             {
