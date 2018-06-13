@@ -27,17 +27,38 @@ namespace LuckParser.Models.ParseModels
         {
             phaseData.Add(data);
         }
+
+        public string getPhaseName(int phase_index)
+        {
+            if (phase_index == 0)
+            {
+                return "Full Fight";
+            }
+
+            switch (getCharacter())
+            {
+                case "Matthias Gabrel":
+                    return new string[] { "Fire Phase", "Ice Phase", "Storm Phase", "Abomination Phase" }[phase_index + 1];
+                case "Dhuum":
+                    return new string[] { "Roleplay", "Main Fight", "Ritual" }[phase_index + 1];
+                case "Keep Construct":
+                    return new string[] { "Phase 1", "Burn 1", "Phase 2", "Burn 2", "Phase 3", "Burn 3" }[phase_index + 1];
+                default:
+                    break;
+            }
+
+            return "Phase " + phase_index;
+        }
         
         // Private Methods
         private void setPhases(BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
             long fight_dur = bossData.getAwareDuration();
             phases.Add(new PhaseData(0, fight_dur));
-            string name = getCharacter();
             long start = 0;
             long end = 0;
             getCastLogs(bossData, combatList, agentData, 0, fight_dur);
-            switch (name)
+            switch (getCharacter())
             {
                 case "Vale Guardian":
                     // Invul check

@@ -3274,8 +3274,10 @@ namespace LuckParser.Controllers
                             {
                                 for (int i = 0; i < phases.Count; i++)
                                 {
+                                    if (phases[i].getDuration() == 0)
+                                        continue;
                                     string active = (i > 0 ? "" : "active");
-                                    string name = i > 0 ? "Phase " + i : "Full Fight";
+                                    string name = boss.getPhaseName(i);
                                     sw.Write("<li  class=\"nav-item\">" +
                                             "<a class=\"nav-link "+active+"\" data-toggle=\"tab\" href=\"#phase" + i + "\">" +
                                                 "<span data-toggle=\"tooltip\" title=\"" + phases[i].getDuration("s") + " seconds\">" + name+ "</span>" +
@@ -3291,7 +3293,8 @@ namespace LuckParser.Controllers
                             {
                                 string active = (i > 0 ? "" : "show active");
 
-
+                                if (phases[i].getDuration() == 0)
+                                    continue;
                                 sw.Write("<div class=\"tab-pane fade " + active + "\" id=\"phase" + i + "\">");
                                 {
                                     string Html_playerDropdown = "";
