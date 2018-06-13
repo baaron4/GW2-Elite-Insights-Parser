@@ -179,9 +179,10 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 case "Dhuum":
-                    if (fight_dur > 120000)
+                    CombatItem invulDhuum = combatList.Find(x => x.getSkillID() == 762 && x.isBuff() == 1 && x.isBuffremove().getID() > 0 && x.getSrcInstid() == getInstid());
+                    if (invulDhuum != null)
                     {
-                        end = 120000;
+                        end = invulDhuum.getTime() - bossData.getFirstAware();
                         phases.Add(new PhaseData(start, end));
                         start = end + 1;
                         CastLog shield = cast_logs.Find(x => x.getID() == 47396);
@@ -200,7 +201,7 @@ namespace LuckParser.Models.ParseModels
                 default:
                     break;
             }
-            if (fight_dur - start > 5000 && start >= phases.Last().end)
+            if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
             {
                 phases.Add(new PhaseData(start, fight_dur));
             }
