@@ -30,12 +30,12 @@ namespace LuckParser.Models.ParseModels
         private void setMinions(BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
             List<ushort> combatMinionIDList = combatList.Where(x => x.getSrcMasterInstid() == instid).Select(x => x.getSrcInstid()).Distinct().ToList();
-            foreach (int petid in combatMinionIDList)
+            foreach (ushort petid in combatMinionIDList)
             {
                 AgentItem agent = agentData.getNPCAgentList().FirstOrDefault(x => x.getInstid() == petid);
                 if (agent != null)
                 {
-                    List<DamageLog> damageLogs = getDamageLogs(0, bossData, combatList, agentData, 0, bossData.getAwareDuration()).Where(x => x.getSrcAgent() == agent.getAgent()).ToList();
+                    List<DamageLog> damageLogs = getDamageLogs(0, bossData, combatList, agentData, 0, bossData.getAwareDuration()).Where(x => x.getInstidt() == petid).ToList();
                     if (damageLogs.Count == 0)
                     {
                         continue;
