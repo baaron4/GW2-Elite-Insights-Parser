@@ -7,7 +7,7 @@ namespace LuckParser.Models.ParseModels
     public class BossData
     {
         // Fields
-        private long agent = 0;
+        private ulong agent = 0;
         private ushort instid = 0;
         private long first_aware = 0;
         private long last_aware = long.MaxValue;
@@ -36,7 +36,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Getters
-        public long getAgent()
+        public ulong getAgent()
         {
             return agent;
         }
@@ -85,7 +85,7 @@ namespace LuckParser.Models.ParseModels
             return healthOverTime;
         }
         // Setters
-        public void setAgent(long agent)
+        public void setAgent(ulong agent)
         {
             this.agent = agent;
         }

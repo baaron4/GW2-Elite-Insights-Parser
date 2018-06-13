@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
         private ushort is_flanking;
         private Activation is_activation;
         private ushort is_shields;
-        private long src_agent;
+        private ulong src_agent;
         private ushort src_instid;
 
         // Constructor
@@ -81,7 +81,7 @@ namespace LuckParser.Models.ParseModels
         public ushort isShields() {
             return is_shields;
         }
-        public long getSrcAgent()
+        public ulong getSrcAgent()
         {
             return src_agent;
         }

@@ -129,7 +129,7 @@ namespace LuckParser.Controllers
             for (int i = 0; i < player_count; i++)
             {
                 // 8 bytes: agent
-                long agent = ParseHelper.getLong(stream);
+                ulong agent = ParseHelper.getULong(stream);
 
                 // 4 bytes: profession
                 int prof = ParseHelper.getInt(stream);
@@ -227,10 +227,10 @@ namespace LuckParser.Controllers
                 long time = ParseHelper.getLong(stream);
 
                 // 8 bytes: src_agent
-                long src_agent = ParseHelper.getLong(stream);
+                ulong src_agent = ParseHelper.getULong(stream);
 
                 // 8 bytes: dst_agent
-                long dst_agent = ParseHelper.getLong(stream);
+                ulong dst_agent = ParseHelper.getULong(stream);
 
                 // 4 bytes: value
                 int value = ParseHelper.getInt(stream);
@@ -373,7 +373,7 @@ namespace LuckParser.Controllers
                 }
                 if (c.isStateChange().getID() == 13 && log_data.getPOV() == "N/A")//Point of View
                 {
-                    long pov_agent = c.getSrcAgent();
+                    ulong pov_agent = c.getSrcAgent();
                     foreach (AgentItem p in player_list)
                     {
                         if (pov_agent == p.getAgent())

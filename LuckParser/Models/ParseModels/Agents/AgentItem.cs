@@ -5,7 +5,7 @@ namespace LuckParser.Models.ParseModels
     public class AgentItem
     {
         // Fields
-        private long agent;
+        private ulong agent;
         private ushort instid = 0;
         private long first_aware = 0;
         private long last_aware = long.MaxValue;
@@ -16,14 +16,14 @@ namespace LuckParser.Models.ParseModels
         private int condition = 0;
 
         // Constructors
-        public AgentItem(long agent, String name, String prof)
+        public AgentItem(ulong agent, String name, String prof)
         {
             this.agent = agent;
             this.name = name;
             this.prof = prof;
         }
 
-        public AgentItem(long agent, String name, String prof, int toughness, int healing, int condition)
+        public AgentItem(ulong agent, String name, String prof, int toughness, int healing, int condition)
         {
             this.agent = agent;
             this.name = name;
@@ -50,7 +50,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Getters
-        public long getAgent()
+        public ulong getAgent()
         {
             return agent;
         }

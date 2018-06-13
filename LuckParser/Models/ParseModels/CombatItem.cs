@@ -8,8 +8,8 @@ namespace LuckParser.Models.ParseModels
 
         // Fields
         private long time;
-        private long src_agent;
-        private long dst_agent;
+        private ulong src_agent;
+        private ulong dst_agent;
         private int value;
         private int buff_dmg;
         private ushort overstack_value;
@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
         private ushort is_flanking;
         private ushort is_shields;
         // Constructor
-        public CombatItem(long time, long src_agent, long dst_agent, int value, int buff_dmg, ushort overstack_value,
+        public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, ushort overstack_value,
                 int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, IFF iff, ushort buff, Result result,
                 Activation is_activation,BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
                 StateChange is_statechange, ushort is_flanking)
@@ -55,7 +55,7 @@ namespace LuckParser.Models.ParseModels
            this.is_statechange = is_statechange;
             this.is_flanking = is_flanking;
         }
-        public CombatItem(long time, long src_agent, long dst_agent, int value, int buff_dmg, ushort overstack_value,
+        public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, ushort overstack_value,
                int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, IFF iff, ushort buff, Result result,
                Activation is_activation, BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
                StateChange is_statechange, ushort is_flanking, ushort is_shields)
@@ -116,12 +116,12 @@ namespace LuckParser.Models.ParseModels
             return time;
         }
 
-        public long getSrcAgent()
+        public ulong getSrcAgent()
         {
             return src_agent;
         }
 
-        public long getDstAgent()
+        public ulong getDstAgent()
         {
             return dst_agent;
         }
@@ -214,12 +214,12 @@ namespace LuckParser.Models.ParseModels
             return is_shields;
         }
         // Setters
-        public void setSrcAgent(long src_agent)
+        public void setSrcAgent(ulong src_agent)
         {
             this.src_agent = src_agent;
         }
 
-        public void setDstAgent(long dst_agent)
+        public void setDstAgent(ulong dst_agent)
         {
             this.dst_agent = dst_agent;
         }
