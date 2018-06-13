@@ -28,12 +28,12 @@ namespace LuckParser.Models.ParseModels
             this.duration = this.stacks.Max(x => x.getDuration(0));
         }
 
-        public override long getDuration(ushort src)
+        public override long getDuration(ushort src, long start = 0, long end = 0)
         {
             long total = 0;
             foreach (BoonSimulationItemDuration stack in stacks.Where(x => src == 0 || x.getSrc()[0] == src))
             {
-                total += stack.getDuration(src);
+                total += stack.getDuration(src, start, end);
             }
             return total;
         }
@@ -48,12 +48,12 @@ namespace LuckParser.Models.ParseModels
             return stacks.Where(x => x.getEnd() >= end).Count();
         }
 
-        public override long getOverstack(ushort src)
+        public override long getOverstack(ushort src, long start = 0, long end = 0)
         {
             long total = 0;
             foreach (BoonSimulationItemDuration stack in stacks.Where(x => src == 0 || x.getSrc()[0] == src))
             {
-                total += stack.getOverstack(src);
+                total += stack.getOverstack(src, start, end);
             }
             return total;
         }

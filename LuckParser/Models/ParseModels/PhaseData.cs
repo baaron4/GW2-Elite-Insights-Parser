@@ -11,7 +11,7 @@
             this.end = end;
         }
 
-        public long getDuration(string format)
+        public long getDuration(string format = "ms")
         {
             switch (format)
             {

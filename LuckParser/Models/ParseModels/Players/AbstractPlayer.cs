@@ -271,13 +271,13 @@ namespace LuckParser.Models.ParseModels
                             {
                                 if (!distrib[boonid].ContainsKey(src))
                                 {
-                                    distrib[boonid][src] = new OverAndValue(simul.getDuration(src), simul.getOverstack(src));
+                                    distrib[boonid][src] = new OverAndValue(simul.getDuration(src, phase.getStart(), phase.getEnd()), simul.getOverstack(src, phase.getStart(), phase.getEnd()));
                                 }
                                 else
                                 {
                                     OverAndValue toModify = distrib[boonid][src];
-                                    toModify.value += simul.getDuration(src);
-                                    toModify.overstack += simul.getOverstack(src);
+                                    toModify.value += simul.getDuration(src,phase.getStart(), phase.getEnd());
+                                    toModify.overstack += simul.getOverstack(src, phase.getStart(), phase.getEnd());
                                     distrib[boonid][src] = toModify;
                                 }
                             }
