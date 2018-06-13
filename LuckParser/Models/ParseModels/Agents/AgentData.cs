@@ -27,6 +27,7 @@ namespace LuckParser.Models.ParseModels
             else if (agent.getProf(buildVersion, apiController) == "GDG")
             {
                 gadget_agent_list.Add(item);
+                return;
             }
             else
             {
