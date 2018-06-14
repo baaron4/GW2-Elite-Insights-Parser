@@ -37,9 +37,9 @@ namespace LuckParser.Models.ParseModels
             long start = 0;
             long end = 0;
             getCastLogs(bossData, combatList, agentData, 0, fight_dur);
-            switch (getCharacter())
+            switch (bossData.getID())
             {
-                case "Vale Guardian":
+                case 0x3C4E:
                     // Invul check
                     List<CombatItem> invulsVG = combatList.Where(x => x.getSkillID() == 757 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
                     for (int i = 0; i < invulsVG.Count; i++)
@@ -69,7 +69,7 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName("Phase " + i);
                     }
                     break;
-                case "Gorseval the Multifarious":
+                case 0x3C45:
                     // Ghostly protection check
                     List<CastLog> clsG = cast_logs.Where(x => x.getID() == 31759).ToList();
                     foreach (CastLog cl in clsG)
@@ -87,7 +87,7 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName("Phase " + i);
                     }
                     break;
-                case "Sabetha the Saboteur":
+                case 0x3C0F:
                     // Invul check
                     List<CombatItem> invulsSab = combatList.Where(x => x.getSkillID() == 757 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
                     for (int i = 0; i < invulsSab.Count; i++)
@@ -117,7 +117,7 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName("Phase " + i);
                     }
                     break;
-                case "Matthias Gabrel":
+                case 0x3EF3:
                     // Special buff cast check
                     CombatItem heat_wave = combatList.Find(x => x.getSkillID() == 34526);
                     List<long> phase_starts = new List<long>();
@@ -149,10 +149,10 @@ namespace LuckParser.Models.ParseModels
                     string[] namesMat = new string[] { "Fire Phase", "Ice Phase", "Storm Phase", "Abomination Phase" };
                     for (int i = 1; i < phases.Count; i++)
                     {
-                        phases[i].setName(namesMat[i]);
+                        phases[i].setName(namesMat[i-1]);
                     }
                     break;
-                case "Keep Construct":
+                case 0x3F6B:
                     // Main phases
                     List<CastLog> clsKC = cast_logs.Where(x => x.getID() == 35048).ToList();
                     foreach (CastLog cl in clsKC)
@@ -223,7 +223,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     phases.Sort((x, y) => (x.getStart() < y.getStart()) ? -1 : 1);
                     break;
-                case "Xera":
+                case 0x3F76:
                     // split happened
                     if (phaseData.Count == 2)
                     {
@@ -241,7 +241,7 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName("Phase " + i);
                     }
                     break;
-                case "Samarog":
+                case 0x4324:
                     // Determined check
                     List<CombatItem> invulsSam = combatList.Where(x => x.getSkillID() == 762 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
                     // Samarog receives determined twice and its removed twice, filter it
@@ -287,7 +287,7 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName("Phase " + i);
                     }
                     break;
-                case "Deimos":
+                case 0x4302:
                     // Determined + additional data on inst change
                     CombatItem invulDei = combatList.Find(x => x.getSkillID() == 762 && x.isBuff() == 1 && x.isBuffremove().getID() == 0 && x.getDstInstid() == getInstid()); 
                     if (invulDei != null)
@@ -306,7 +306,7 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName("Phase " + i);
                     }
                     break;
-                case "Dhuum":
+                case 0x4D37:
                     CombatItem invulDhuum = combatList.Find(x => x.getSkillID() == 762 && x.isBuff() == 1 && x.isBuffremove().getID() > 0 && x.getSrcInstid() == getInstid());
                     if (invulDhuum != null)
                     {
@@ -332,7 +332,7 @@ namespace LuckParser.Models.ParseModels
                     string[] namesDh = new string[] { "Roleplay", "Main Fight", "Ritual" };
                     for (int i = 1; i < phases.Count; i++)
                     {
-                        phases[i].setName(namesDh[i]);
+                        phases[i].setName(namesDh[i-1]);
                     }
                     break;
                 default:
