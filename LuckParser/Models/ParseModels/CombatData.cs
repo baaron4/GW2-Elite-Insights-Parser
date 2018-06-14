@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Web;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -23,24 +21,23 @@ namespace LuckParser.Models.ParseModels
             combat_list.Add(item);
         }
 
-        public List<Point> getStates(int src_instid, String change, long start = 0, long end = 0)
+        public List<CombatItem> getStates(int src_instid, String change, long start, long end)
         {
-            List<Point> states = new List<Point>();
-            List<CombatItem> li = (end - start) > 0 ? combat_list.Where(x => x.getTime() >= 0 && x.getTime() < end).ToList() : combat_list;
-            foreach (CombatItem c in li)
+            List<CombatItem> states = new List<CombatItem>();
+            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() <= end))
             {
                 if (c.getSrcInstid() == src_instid && c.isStateChange().getEnum() == change)
                 {
-                    states.Add(new Point((int)c.getTime(), (int)c.getDstAgent()));
+                    states.Add(c);
                 }
             }
             return states;
         }
 
-        public int getSkillCount(int src_instid, int skill_id)
+        public int getSkillCount(int src_instid, int skill_id, long start, long end)
         {
             int count = 0;
-            foreach (CombatItem c in combat_list)
+            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() <= end))
             {
                 if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
                 {
@@ -50,10 +47,10 @@ namespace LuckParser.Models.ParseModels
             }
             return count;
         }
-        public int getBuffCount(int src_instid, int skill_id)
+        public int getBuffCount(int src_instid, int skill_id, long start, long end)
         {
             int count = 0;
-            foreach (CombatItem c in combat_list)
+            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() <= end))
             {
                 if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
                 {

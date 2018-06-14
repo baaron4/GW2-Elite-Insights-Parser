@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Net.Http;
-using System.Net.Http.Formatting;
 using LuckParser.Controllers;
 
 namespace LuckParser.Models.ParseModels
@@ -36,12 +31,12 @@ namespace LuckParser.Models.ParseModels
 
         // Fields
         private String name;
-        private long ID;
-        private int is_elite;
-        private int prof;
+        private ulong ID;
+        private uint is_elite;
+        private uint prof;
 
         // Constructor
-        public Agent(long ID, String name, int prof, int elite)
+        public Agent(ulong ID, String name, uint prof, uint elite)
         {
             this.name = name;
             this.ID = ID;
@@ -51,8 +46,8 @@ namespace LuckParser.Models.ParseModels
 
         // Public Methods
         public string getProf(string build, GW2APIController apiController) {
-            if (is_elite == -1) {
-                if ((ID & 0xffff0000) == 0xffff0000)
+            if (is_elite == 0xFFFFFFFF) {
+                if ((prof & 0xffff0000) == 0xffff0000)
                 {
                     return "GDG";
                 }
@@ -173,7 +168,7 @@ namespace LuckParser.Models.ParseModels
 
                     }
 
-                    GW2APISpec spec = apiController.GetSpec(is_elite);
+                    GW2APISpec spec = apiController.GetSpec((int)is_elite);
                     if (spec.elite)
                     {
                         return spec.name;
@@ -198,7 +193,7 @@ namespace LuckParser.Models.ParseModels
             return name;
         }
 
-        public long getID()
+        public ulong getID()
         {
             return ID;
         }

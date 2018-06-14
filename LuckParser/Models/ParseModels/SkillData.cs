@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -19,7 +17,17 @@ namespace LuckParser.Models.ParseModels
             {31759,"Protective Shadow" },
             {31466,"Ghastly Rampage (Begin)" },
             // Sabetha
-            {31372, "Shadow Step" }
+            {31372, "Shadow Step" },
+            // Matthias
+            { 34468, "Shield (Human)"},
+            { 34427, "Abomination Transformation"},
+            { 34510, "Shield (Abomination)"},
+            // Generic
+            {-5, "Phase out" },
+            // Deimos
+            {-6, "Roleplay" },
+            // Dhuum
+            {47396, "Major Soul Split" }
         };
 
         // Constructors

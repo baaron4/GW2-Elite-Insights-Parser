@@ -176,7 +176,7 @@ namespace LuckParser
                     logger(i, "Working...", 20);
                     Controller1 control = new Controller1();
 
-                    if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) || 
+                    if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
                         fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
                     {
                         //Process evtc here
@@ -207,8 +207,8 @@ namespace LuckParser
 
                         string outputType = Properties.Settings.Default.SaveOutHTML ? "html" : "csv";
                         string outputFile = Path.Combine(
-                            saveDirectory.FullName, 
-                            $"{fInfo.Name}_{control.GetLink(bossid + "-ext")}_{result}.{outputType}"
+                            saveDirectory.FullName,
+                            $"{fInfo.Name}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.{outputType}"
                         );
 
                         logger(i, "Creating File...", 60);
@@ -247,7 +247,7 @@ namespace LuckParser
                 System.Threading.Thread.CurrentThread.CurrentUICulture = before;
             }
         }
-        
+
         /// Worker job
         void m_oWorker_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -297,7 +297,7 @@ namespace LuckParser
                 lvFileList.Items.Add(lvItem);
             }
         }
-       
+
         private void LvFileList_DragDrop(object sender, DragEventArgs e)
         {
             btnParse.Enabled = true;
