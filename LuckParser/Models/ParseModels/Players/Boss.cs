@@ -28,33 +28,12 @@ namespace LuckParser.Models.ParseModels
             phaseData.Add(data);
         }
 
-        public string getPhaseName(int phase_index)
-        {
-            if (phase_index == 0)
-            {
-                return "Full Fight";
-            }
-
-            switch (getCharacter())
-            {
-                case "Matthias Gabrel":
-                    return new string[] { "Fire Phase", "Ice Phase", "Storm Phase", "Abomination Phase" }[phase_index + 1];
-                case "Dhuum":
-                    return new string[] { "Roleplay", "Main Fight", "Ritual" }[phase_index + 1];
-                case "Keep Construct":
-                    return new string[] { "Phase 1", "Burn 1", "Phase 2", "Burn 2", "Phase 3", "Burn 3" }[phase_index + 1];
-                default:
-                    break;
-            }
-
-            return "Phase " + phase_index;
-        }
-        
         // Private Methods
         private void setPhases(BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
             long fight_dur = bossData.getAwareDuration();
             phases.Add(new PhaseData(0, fight_dur));
+            phases[0].setName("Full Fight");
             long start = 0;
             long end = 0;
             getCastLogs(bossData, combatList, agentData, 0, fight_dur);
@@ -81,6 +60,14 @@ namespace LuckParser.Models.ParseModels
                             cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
                         }
                     }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
+                    }
                     break;
                 case "Gorseval the Multifarious":
                     // Ghostly protection check
@@ -90,6 +77,14 @@ namespace LuckParser.Models.ParseModels
                         end = cl.getTime();
                         phases.Add(new PhaseData(start, end));
                         start = end + cl.getActDur();
+                    }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
                     }
                     break;
                 case "Sabetha the Saboteur":
@@ -112,6 +107,14 @@ namespace LuckParser.Models.ParseModels
                             start = c.getTime() - bossData.getFirstAware();
                             cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
                         }
+                    }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
                     }
                     break;
                 case "Matthias Gabrel":
@@ -139,6 +142,36 @@ namespace LuckParser.Models.ParseModels
                         // make sure stuff from the precedent phase mix witch each other
                         start = t+1;
                     }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    string[] namesMat = new string[] { "Fire Phase", "Ice Phase", "Storm Phase", "Abomination Phase" };
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName(namesMat[i]);
+                    }
+                    break;
+                case "Keep Construct":
+                    // Main phases
+                    List<CastLog> clsKC = cast_logs.Where(x => x.getID() == 35048).ToList();
+                    foreach (CastLog cl in clsKC)
+                    {
+                        end = cl.getTime();
+                        phases.Add(new PhaseData(start, end));
+                        start = end + cl.getActDur();
+                    }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                        start = fight_dur;
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
+                    }
+                    // add burn phases
+                    int offset = phases.Count;
                     break;
                 case "Xera":
                     // split happened
@@ -147,7 +180,15 @@ namespace LuckParser.Models.ParseModels
                         end = phaseData[0] - bossData.getFirstAware();
                         phases.Add(new PhaseData(start, end));
                         start = phaseData[1] - bossData.getFirstAware();
-                        cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));                       
+                        cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                    }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
                     }
                     break;
                 case "Samarog":
@@ -187,6 +228,14 @@ namespace LuckParser.Models.ParseModels
                             cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
                         }
                     }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
+                    }
                     break;
                 case "Deimos":
                     // Determined + additional data on inst change
@@ -197,6 +246,14 @@ namespace LuckParser.Models.ParseModels
                         phases.Add(new PhaseData(start, end));
                         start = (phaseData.Count == 1 ? phaseData[0] : fight_dur) - bossData.getFirstAware();
                         cast_logs.Add(new CastLog(end, -6, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                    }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
                     }
                     break;
                 case "Dhuum":
@@ -218,13 +275,18 @@ namespace LuckParser.Models.ParseModels
                             }
                         }
                     }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    string[] namesDh = new string[] { "Roleplay", "Main Fight", "Ritual" };
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName(namesDh[i]);
+                    }
                     break;
                 default:
                     break;
-            }
-            if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
-            {
-                phases.Add(new PhaseData(start, fight_dur));
             }
         }
 

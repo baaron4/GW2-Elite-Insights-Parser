@@ -4,11 +4,22 @@
     {
         private long start;
         private long end;
+        private string name;
 
         public PhaseData(long start, long end)
         {
             this.start = start;
             this.end = end;
+        }
+
+        public void setName(string name)
+        {
+            this.name = name;
+        }
+
+        public string getName()
+        {
+            return name;
         }
 
         public long getDuration(string format = "ms")
@@ -21,7 +32,7 @@
                     return (end - start) / 1000;
                 case "ms":
                 default:
-                    return (end - start) / 1000;
+                    return (end - start);
             }
 
         }
