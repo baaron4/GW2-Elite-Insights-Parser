@@ -1829,9 +1829,9 @@ namespace LuckParser.Controllers
                 HTMLHelper.writeBoonTableHeader(sw, list_to_use);
                 sw.Write("<tbody>");
                 {
-                    List<Player> playerIDS = new List<Player>();
                     foreach (Player player in p_list)
                     {
+                        List<Player> playerIDS = new List<Player>();
                         foreach (Player p in p_list)
                         {
                             if (p.getGroup() == player.getGroup())
@@ -1859,9 +1859,9 @@ namespace LuckParser.Controllers
                 HTMLHelper.writeBoonTableHeader(sw, list_to_use);
                 sw.Write("<tbody>");
                 {
-                    List<Player> playerIDS = new List<Player>();
                     foreach (Player player in p_list)
                     {
+                        List<Player> playerIDS = new List<Player>();
                         foreach (Player p in p_list)
                         {
                             if (p.getGroup() != player.getGroup())

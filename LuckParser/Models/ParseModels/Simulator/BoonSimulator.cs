@@ -65,6 +65,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 }
             }
+            simulation = simulation.Where(x => x.getDuration(0) > 0).ToList();
         }
         public void simulate(List<BoonLog> logs, long fight_duration)
         {
