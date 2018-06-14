@@ -306,7 +306,7 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName("Phase " + i);
                     }
                     break;
-                case 0x4D37:
+                case 0x4BFA:
                     CombatItem invulDhuum = combatList.Find(x => x.getSkillID() == 762 && x.isBuff() == 1 && x.isBuffremove().getID() > 0 && x.getSrcInstid() == getInstid());
                     if (invulDhuum != null)
                     {
