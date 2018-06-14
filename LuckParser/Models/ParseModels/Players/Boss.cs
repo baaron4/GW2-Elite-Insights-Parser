@@ -172,6 +172,56 @@ namespace LuckParser.Models.ParseModels
                     }
                     // add burn phases
                     int offset = phases.Count;
+                    List<CombatItem> orbItems = combatList.Where(x => x.isBuff() == 1 && x.getDstInstid() == instid && x.getSkillID() == 35096).ToList();
+                    // Get number of orbs and filter the list
+                    List<CombatItem> orbItemsFiltered = new List<CombatItem>();
+                    Dictionary<long, int> orbs = new Dictionary<long, int>();
+                    foreach (CombatItem c in orbItems)
+                    {
+                        long time = c.getTime() - bossData.getFirstAware();
+                        if (!orbs.ContainsKey(time))
+                        {
+                            orbs[time] = 0;
+                        }
+                        if (c.isBuffremove().getID() == 0)
+                        {
+                            orbs[time] = orbs[time] + 1;
+                        }
+                        if (orbItemsFiltered.Count > 0)
+                        {
+                            CombatItem last = orbItemsFiltered.Last();
+                            if (last.getTime() != c.getTime())
+                            {
+                                orbItemsFiltered.Add(c);
+                            }
+                        }
+                        else
+                        {
+                            orbItemsFiltered.Add(c);
+                        }
+
+                    }
+                    foreach (CombatItem c in orbItemsFiltered)
+                    {
+                        if (c.isBuffremove().getID() == 0)
+                        {
+                            start = c.getTime() - bossData.getFirstAware();
+                        } else
+                        {
+                            end = c.getTime() - bossData.getFirstAware();
+                            phases.Add(new PhaseData(start, end));
+                        }
+                    }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                        start = fight_dur;
+                    }
+                    for (int i = offset; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Burn " + (i - offset + 1) + " (" + orbs[phases[i].getStart()] +" orbs)");
+                    }
+                    phases.Sort((x, y) => (x.getStart() < y.getStart()) ? -1 : 1);
                     break;
                 case "Xera":
                     // split happened

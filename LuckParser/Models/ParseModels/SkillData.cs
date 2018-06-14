@@ -29,12 +29,7 @@ namespace LuckParser.Models.ParseModels
             // Dhuum
             {47396, "Major Soul Split" },
             // Keep Construct
-            {35048, "Magical Explosion" },
-            {-10, "1 Orb" },
-            {-11, "2 Orbs" },
-            {-12, "3 Orbs" },
-            {-13, "4 Orbs" },
-            {-14, "5 Orbs" }
+            {35048, "Magical Blast" }
         };
 
         // Constructors
