@@ -54,6 +54,8 @@ namespace LuckParser
                 
                 gridRowBindingSource.Add(gRow);
             }
+
+            btnParse.Enabled = true;
         }
 
         /// <summary>
@@ -213,7 +215,8 @@ namespace LuckParser
                 row = (GridRow)e.Result;
                 row.ButtonState = GridRow.STATUS_OPEN;
             }
-
+            
+            btnParse.Enabled = true;
             dgvFiles.Invalidate();
         }
 
@@ -225,15 +228,10 @@ namespace LuckParser
         /// <param name="e"></param>
         private void BtnParse_Click(object sender, EventArgs e)
         {
-            //Change the status of the buttons on the UI accordingly
-            //The start button is disabled as soon as the background operation is started
-            //The Cancel button is enabled so that the user can stop the operation 
-            //at any point of time during the execution
             if (_logsFiles.Count > 0)
             {
                 btnParse.Enabled = false;
                 btnCancel.Enabled = true;
-                btnClear.Enabled = false;
 
                 foreach (GridRow row in gridRowBindingSource)
                 {
@@ -339,11 +337,13 @@ namespace LuckParser
                 {
                     case GridRow.STATUS_PARSE:
                         row.Run();
+                        btnCancel.Enabled = true;
                         break;
 
                     case GridRow.STATUS_CANCEL:
                         row.Cancel();
                         dgvFiles.Invalidate();
+                        btnParse.Enabled = true;
                         break;
 
                     case GridRow.STATUS_OPEN:
