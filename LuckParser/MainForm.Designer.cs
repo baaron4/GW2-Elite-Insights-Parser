@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.lblHeader = new System.Windows.Forms.Label();
@@ -35,13 +36,17 @@
             this.pgbProgress = new System.Windows.Forms.ProgressBar();
             this.btnParse = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.lvFileList = new System.Windows.Forms.ListView();
-            this.Location = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lblStatus = new System.Windows.Forms.Label();
             this.lblProgress = new System.Windows.Forms.Label();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
+            this.dgvFiles = new System.Windows.Forms.DataGridView();
+            this.gridRowBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.statusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ButtonState = new System.Windows.Forms.DataGridViewButtonColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridRowBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -83,7 +88,7 @@
             this.btnParse.Name = "btnParse";
             this.btnParse.Size = new System.Drawing.Size(154, 23);
             this.btnParse.TabIndex = 10;
-            this.btnParse.Text = "Parse";
+            this.btnParse.Text = "Parse All";
             this.btnParse.UseVisualStyleBackColor = true;
             this.btnParse.Click += new System.EventHandler(this.BtnParse_Click);
             // 
@@ -94,45 +99,9 @@
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 11;
-            this.btnCancel.Text = "Cancel";
+            this.btnCancel.Text = "Cancel All";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
-            // 
-            // lvFileList
-            // 
-            this.lvFileList.AllowDrop = true;
-            this.lvFileList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lvFileList.BackColor = System.Drawing.SystemColors.Menu;
-            this.lvFileList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Location,
-            this.Status});
-            this.lvFileList.FullRowSelect = true;
-            this.lvFileList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.lvFileList.HideSelection = false;
-            this.lvFileList.Location = new System.Drawing.Point(12, 45);
-            this.lvFileList.Name = "lvFileList";
-            this.lvFileList.Size = new System.Drawing.Size(667, 256);
-            this.lvFileList.TabIndex = 12;
-            this.lvFileList.UseCompatibleStateImageBehavior = false;
-            this.lvFileList.View = System.Windows.Forms.View.Details;
-            this.lvFileList.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.LvFileList_DrawHeader);
-            this.lvFileList.DragDrop += new System.Windows.Forms.DragEventHandler(this.LvFileList_DragDrop);
-            this.lvFileList.DragEnter += new System.Windows.Forms.DragEventHandler(this.LvFileList_DragEnter);
-            this.lvFileList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.LvFilesList_MouseClick);
-            this.lvFileList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LvFileList_MouseMove);
-            // 
-            // Location
-            // 
-            this.Location.Text = "Location";
-            this.Location.Width = 310;
-            // 
-            // Status
-            // 
-            this.Status.Text = "Status (Click to open when done)";
-            this.Status.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.Status.Width = 335;
             // 
             // lblStatus
             // 
@@ -176,15 +145,64 @@
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
             // 
+            // dgvFiles
+            // 
+            this.dgvFiles.AllowDrop = true;
+            this.dgvFiles.AllowUserToAddRows = false;
+            this.dgvFiles.AutoGenerateColumns = false;
+            this.dgvFiles.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dgvFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.locationDataGridViewTextBoxColumn,
+            this.statusDataGridViewTextBoxColumn,
+            this.ButtonState});
+            this.dgvFiles.DataSource = this.gridRowBindingSource;
+            this.dgvFiles.GridColor = System.Drawing.SystemColors.Control;
+            this.dgvFiles.Location = new System.Drawing.Point(16, 46);
+            this.dgvFiles.MultiSelect = false;
+            this.dgvFiles.Name = "dgvFiles";
+            this.dgvFiles.Size = new System.Drawing.Size(663, 255);
+            this.dgvFiles.TabIndex = 17;
+            this.dgvFiles.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvFiles_CellContentClick);
+            this.dgvFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.DgvFiles_DragDrop);
+            this.dgvFiles.DragEnter += new System.Windows.Forms.DragEventHandler(this.DgvFiles_DragEnter);
+            // 
+            // gridRowBindingSource
+            // 
+            this.gridRowBindingSource.DataSource = typeof(LuckParser.GridRow);
+            // 
+            // locationDataGridViewTextBoxColumn
+            // 
+            this.locationDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.locationDataGridViewTextBoxColumn.DataPropertyName = "Location";
+            this.locationDataGridViewTextBoxColumn.HeaderText = "Location";
+            this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
+            this.locationDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // statusDataGridViewTextBoxColumn
+            // 
+            this.statusDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.statusDataGridViewTextBoxColumn.DataPropertyName = "Status";
+            this.statusDataGridViewTextBoxColumn.HeaderText = "Status";
+            this.statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
+            this.statusDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // ButtonState
+            // 
+            this.ButtonState.DataPropertyName = "ButtonState";
+            this.ButtonState.HeaderText = "";
+            this.ButtonState.Name = "ButtonState";
+            this.ButtonState.ReadOnly = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.ClientSize = new System.Drawing.Size(696, 375);
+            this.Controls.Add(this.dgvFiles);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnSettings);
-            this.Controls.Add(this.lvFileList);
             this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.btnCancel);
@@ -196,6 +214,8 @@
             this.Name = "MainForm";
             this.Text = "GW2 Elite Insights Parser";
             this.TransparencyKey = System.Drawing.Color.OrangeRed;
+            ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridRowBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -208,13 +228,16 @@
         private System.Windows.Forms.ProgressBar pgbProgress;
         private System.Windows.Forms.Button btnParse;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.ListView lvFileList;
-        private System.Windows.Forms.ColumnHeader Status;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Label lblProgress;
-        private new System.Windows.Forms.ColumnHeader Location;
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.DataGridView dgvFiles;
+        private System.Windows.Forms.BindingSource gridRowBindingSource;
+        private System.Windows.Forms.DataGridViewButtonColumn buttonDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn locationDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewButtonColumn ButtonState;
     }
 }
 

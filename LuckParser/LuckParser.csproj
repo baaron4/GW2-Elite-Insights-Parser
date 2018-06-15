@@ -80,6 +80,7 @@
     <Compile Include="Controllers\GW2APIController.cs" />
     <Compile Include="Controllers\HTMLHelper.cs" />
     <Compile Include="Controllers\ParseHelper.cs" />
+    <Compile Include="GridRow.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,6 +157,7 @@
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\GridRow.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
