@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CancellationException.cs" />
     <Compile Include="Controllers\Controller1.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />

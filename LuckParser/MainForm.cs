@@ -12,12 +12,11 @@ namespace LuckParser
         private SettingsForm _settingsForm;
         List<string> _logsFiles;
         Controller1 controller = new Controller1();
+
         public MainForm()
         {
             InitializeComponent();
-
             _logsFiles = new List<string>();
-
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
         }
@@ -25,6 +24,7 @@ namespace LuckParser
         public MainForm(string[] args)
         {
             InitializeComponent();
+            _logsFiles = new List<string>();
             AddLogFiles(args);
         }
 
@@ -51,32 +51,8 @@ namespace LuckParser
                 gRow.BgWorker.DoWork += BgWorker_DoWork;
                 gRow.BgWorker.ProgressChanged += BgWorker_ProgressChanged;
                 gRow.BgWorker.RunWorkerCompleted += BgWorker_Completed;
-
+                
                 gridRowBindingSource.Add(gRow);
-            }
-        }
-
-        /// <summary>
-        /// Invoked when the 'Parse All' button is clicked. Begins processing of all files
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnParse_Click(object sender, EventArgs e)
-        {
-            //Change the status of the buttons on the UI accordingly
-            //The start button is disabled as soon as the background operation is started
-            //The Cancel button is enabled so that the user can stop the operation 
-            //at any point of time during the execution
-            if (_logsFiles.Count > 0)
-            {
-                btnParse.Enabled = false;
-                btnCancel.Enabled = true;
-                btnClear.Enabled = false;
-
-                foreach (GridRow row in gridRowBindingSource)
-                {
-                    row.BgWorker.RunWorkerAsync();
-                }
             }
         }
 
@@ -90,20 +66,23 @@ namespace LuckParser
             BackgroundWorker bg = sender as BackgroundWorker;
             GridRow rowData = e.Argument as GridRow;
 
+            e.Result = rowData;
+
             if (bg.CancellationPending)
             {
-                rowData.Status = "100% - Cancelled";
+                rowData.Status = "Cancelled";
                 bg.ReportProgress(100, rowData);
                 e.Cancel = true;
-                return;
+                throw new CancellationException(rowData);
             }
 
             FileInfo fInfo = new FileInfo(rowData.Location);
             if (!fInfo.Exists)
             {
-                rowData.Status = "100% - File does not exist";
+                rowData.Status = "File does not exist";
                 bg.ReportProgress(100, rowData);
-                return;
+                e.Cancel = true;
+                throw new CancellationException(rowData);
             }
 
             rowData.Status = "20% - Working...";
@@ -120,10 +99,10 @@ namespace LuckParser
 
                 if (bg.CancellationPending)
                 {
-                    rowData.Status = "100% - Cancelled";
+                    rowData.Status = "Cancelled";
                     bg.ReportProgress(100, rowData);
                     e.Cancel = true;
-                    return;
+                    throw new CancellationException(rowData);
                 }
 
                 //Creating File
@@ -171,6 +150,7 @@ namespace LuckParser
                     $"{fInfo.Name}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.{outputType}"
                 );
 
+                rowData.LogLocation = outputFile;
                 rowData.Status = "60% - Creating File...";
                 bg.ReportProgress(60, rowData);
 
@@ -196,23 +176,19 @@ namespace LuckParser
             }
             else
             {
-                rowData.Status = "100% - Not EVTC";
-                bg.ReportProgress(100, rowData);
+                rowData.Status = "Not EVTC";
+                e.Cancel = true;
+                throw new CancellationException(rowData);
             }
         }
 
         /// <summary>
-        /// Invoked when a BackgroundWorker reprots a change in progress
+        /// Invoked when a BackgroundWorker reports a change in progress
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            double total = _logsFiles.Count * 100.0d;
-            double percent = (e.ProgressPercentage / total) * 100;
-
-            pgbProgress.Value = (int)percent;
-
             dgvFiles.Invalidate();
         }
 
@@ -223,9 +199,52 @@ namespace LuckParser
         /// <param name="e"></param>
         private void BgWorker_Completed(object sender, RunWorkerCompletedEventArgs e)
         {
+            GridRow row;
+            if (e.Cancelled || e.Error != null)
+            {
+                if (e.Error is CancellationException)
+                {
+                    row = ((CancellationException)e.Error).Row;
+                    row.ButtonState = GridRow.STATUS_PARSE;
+                }
+            }
+            else
+            {
+                row = (GridRow)e.Result;
+                row.ButtonState = GridRow.STATUS_OPEN;
+            }
 
+            dgvFiles.Invalidate();
         }
-        
+
+
+        /// <summary>
+        /// Invoked when the 'Parse All' button is clicked. Begins processing of all files
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnParse_Click(object sender, EventArgs e)
+        {
+            //Change the status of the buttons on the UI accordingly
+            //The start button is disabled as soon as the background operation is started
+            //The Cancel button is enabled so that the user can stop the operation 
+            //at any point of time during the execution
+            if (_logsFiles.Count > 0)
+            {
+                btnParse.Enabled = false;
+                btnCancel.Enabled = true;
+                btnClear.Enabled = false;
+
+                foreach (GridRow row in gridRowBindingSource)
+                {
+                    if (!row.BgWorker.IsBusy)
+                    {
+                        row.Run();
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Invoked when the 'Cancel All' button is clicked. Cancels all pending operations
         /// </summary>
@@ -238,9 +257,13 @@ namespace LuckParser
             {
                 if (row.BgWorker.IsBusy)
                 {
-                    row.BgWorker.CancelAsync();
+                    row.Cancel();
+                    dgvFiles.Invalidate();
                 }
             }
+
+            btnClear.Enabled = true;
+            btnParse.Enabled = true;
         }
 
         /// <summary>
@@ -269,7 +292,7 @@ namespace LuckParser
                 GridRow row = gridRowBindingSource[i] as GridRow;
                 if (row.BgWorker.IsBusy)
                 {
-                    row.BgWorker.CancelAsync();
+                    row.Cancel();
                 }
                 else
                 {
@@ -315,14 +338,20 @@ namespace LuckParser
                 switch (row.ButtonState)
                 {
                     case GridRow.STATUS_PARSE:
-                        row.ButtonState = GridRow.STATUS_CANCEL;
-                        row.BgWorker.RunWorkerAsync(row);
+                        row.Run();
                         break;
 
                     case GridRow.STATUS_CANCEL:
-                        row.BgWorker.CancelAsync();
-                        row.Status = "Cancelling...";
+                        row.Cancel();
                         dgvFiles.Invalidate();
+                        break;
+
+                    case GridRow.STATUS_OPEN:
+                        string fileLoc = row.LogLocation;
+                        if (File.Exists(fileLoc))
+                        {
+                            System.Diagnostics.Process.Start(fileLoc);
+                        }
                         break;
 
                     default:
