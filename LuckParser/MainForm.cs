@@ -52,6 +52,7 @@ namespace LuckParser
         public MainForm(string[] args)
         {
             InitializeComponent();
+            _logsFiles = new List<string>();
             LvFileList_AddItems(args);
             m_DoWork(log_Console, null, null);
         }

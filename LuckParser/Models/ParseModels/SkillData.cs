@@ -27,7 +27,9 @@ namespace LuckParser.Models.ParseModels
             // Deimos
             {-6, "Roleplay" },
             // Dhuum
-            {47396, "Major Soul Split" }
+            {47396, "Major Soul Split" },
+            // Keep Construct
+            {35048, "Magical Blast" }
         };
 
         // Constructors

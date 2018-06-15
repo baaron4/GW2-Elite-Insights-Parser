@@ -26,7 +26,7 @@ namespace LuckParser.Controllers
             int totalAllphys_dps = 0;
             int totalAllphys_damage = 0;
             PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data)[phase_index];
-            double fight_duration = (phase.getEnd() - phase.getStart()) / 1000.0;
+            double fight_duration = (phase.getDuration()) / 1000.0;
 
             double damage = 0.0;
             double dps = 0.0;
@@ -348,7 +348,7 @@ namespace LuckParser.Controllers
                 return getfinalboons(b_data, c_data, s_data, a_data, boss, p, phase_index);
             }
             List<PhaseData> phases = boss.getPhases(b_data, c_data.getCombatList(), a_data);
-            long fight_duration = phases[phase_index].getEnd() - phases[phase_index].getStart();
+            long fight_duration = phases[phase_index].getDuration();
             Dictionary<Player, BoonDistribution> boon_logsDist = new Dictionary<Player, BoonDistribution>();
             foreach (Player player in trgetPlayers)
             {
@@ -397,20 +397,20 @@ namespace LuckParser.Controllers
             List<PhaseData> phases = boss.getPhases(b_data, c_data.getCombatList(), a_data);
             BoonDistribution boon_distrib = p.getBoonDistribution(b_data, s_data, c_data.getCombatList(),phases, phase_index);
             Dictionary<int, string> rates = new Dictionary<int, string>();
+            PhaseData phase = phases[phase_index];
             foreach (Boon boon in Boon.getCondiBoonList())
             {
                 rates[boon.getID()] = "0";
                 if (boon_distrib.ContainsKey(boon.getID()))
                 {
+                    long fight_duration = phase.getDuration();
                     string rate = "0";
                     if (boon.getType() == Boon.BoonType.Duration)
-                    {
-                        long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
+                    {                 
                         rate = Math.Round(100.0 * boon_distrib.getUptime(boon.getID()) / fight_duration, 1) + "%";
                     }
                     else if (boon.getType() == Boon.BoonType.Intensity)
                     {
-                        long fight_duration = b_data.getLastAware() - b_data.getFirstAware();
                         rate = Math.Round((double)boon_distrib.getUptime(boon.getID()) / fight_duration, 1).ToString();
                     }
 
@@ -433,7 +433,7 @@ namespace LuckParser.Controllers
             List<DamageLog> damage_logs = p.getDamageLogs(dstid, b_data, c_data.getCombatList(), a_data, phase.getStart(), phase.getEnd());
             // fill the graph, full precision
             List<double> dmgListFull = new List<double>();
-            for (int i = 0; i <= (phase.getEnd() - phase.getStart()); i++) {
+            for (int i = 0; i <= phase.getDuration(); i++) {
                 dmgListFull.Add(0.0);
             }
             int total_time = 1;
@@ -450,11 +450,11 @@ namespace LuckParser.Controllers
                 dmgListFull[total_time] = (1000.0 * total_damage / total_time);
             }
             // fill
-            for (; total_time <= (phase.getEnd() - phase.getStart()); total_time++)
+            for (; total_time <= phase.getDuration(); total_time++)
             {
                 dmgListFull[total_time] = (1000.0 * total_damage / total_time);
             }
-            for (int i = 0; i <= (phase.getEnd() - phase.getStart())/1000; i++)
+            for (int i = 0; i <= phase.getDuration("s"); i++)
             {
                 dmgList.Add(new Point(i, (int)Math.Round(dmgListFull[1000 * i])));
             }
