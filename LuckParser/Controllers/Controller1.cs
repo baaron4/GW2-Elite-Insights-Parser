@@ -1282,7 +1282,7 @@ namespace LuckParser.Controllers
                         sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dmg[5] + " dmg \">" + dmg[4] + "</span>" + "</td>");
                         sw.Write("<td>" + stats[6] + "</td>");
                         TimeSpan timedead = TimeSpan.FromMilliseconds(Double.Parse(stats[9]));
-                        long fight_duration = (phase.getEnd() - phase.getStart())/1000;
+                        long fight_duration = phase.getDuration("s");
                         if (timedead > TimeSpan.Zero)
                         {
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
@@ -1404,7 +1404,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[18] + "cancels \">" + stats[17] + "</span>" + "</td>");//timesaved
                             sw.Write("<td>" + stats[5] + "</td>");//w swaps
                             sw.Write("<td>" + stats[6] + "</td>");//downs
-                            long fight_duration = (phase.getEnd() - phase.getStart()) / 1000;
+                            long fight_duration = phase.getDuration("s");
                             if (timedead > TimeSpan.Zero)
                             {
                                 sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
@@ -1525,7 +1525,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + stats[6] + "</td>");// evades
                             sw.Write("<td>" + stats[5] + "</td>");//dodges
                             sw.Write("<td>" + stats[8] + "</td>");//downs
-                            long fight_duration = (phase.getEnd() - phase.getStart())/1000;
+                            long fight_duration = phase.getDuration("s");
                             if (timedead > TimeSpan.Zero)
                             {
                                 sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
@@ -1694,7 +1694,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             if (boonTable)
                             {
-                                long fight_duration = phases[phase_index].getEnd() - phases[phase_index].getStart();
+                                long fight_duration = phases[phase_index].getDuration();
                                 Dictionary<int, long> boonPresence = player.getBoonPresence(boss_data, skill_data, combat_data.getCombatList(), phases, phase_index);
                                 double avg_boons = 0.0;
                                 foreach(Boon boon in list_to_use)
@@ -3279,7 +3279,7 @@ namespace LuckParser.Controllers
                                     if (phases[i].getDuration() == 0)
                                         continue;
                                     string active = (i > 0 ? "" : "active");
-                                    string name = boss.getPhaseName(i);
+                                    string name = phases[i].getName();
                                     sw.Write("<li  class=\"nav-item\">" +
                                             "<a class=\"nav-link "+active+"\" data-toggle=\"tab\" href=\"#phase" + i + "\">" +
                                                 "<span data-toggle=\"tooltip\" title=\"" + phases[i].getDuration("s") + " seconds\">" + name+ "</span>" +

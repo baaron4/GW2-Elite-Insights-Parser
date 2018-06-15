@@ -36,9 +36,9 @@ namespace LuckParser.Models.ParseModels
 
                 globalMechList.Add(new Mechanic(31886, "Magic Pulse", 3, 15438, "symbol:'circle',color:'rgb(255,0,0)',", "Hit by Red"));
 
-                globalMechList.Add(new Mechanic(0, "Pylon Attunement: Red", 0, 15438, "symbol:'square',color:'rgb(255,0,0)',", "Attune:Red"));
+                globalMechList.Add(new Mechanic(-1, "Pylon Attunement: Red", 0, 15438, "symbol:'square',color:'rgb(255,0,0)',", "Attune:Red"));
                 globalMechList.Add(new Mechanic(31317, "Pylon Attunement: Blue", 0, 15438, "symbol:'square',color:'rgb(0,0,255)',", "Attune:Blue"));
-                globalMechList.Add(new Mechanic(0, "Pylon Attunement: Green", 0, 15438, "symbol:'square',color:'rgb(0,128,0)',", "Attune:Green"));
+                globalMechList.Add(new Mechanic(-1, "Pylon Attunement: Green", 0, 15438, "symbol:'square',color:'rgb(0,128,0)',", "Attune:Green"));
 
                 globalMechList.Add(new Mechanic(31413, "Blue Pylon Power", 4, 15438, "symbol:'square',color:'rgb(0,0,255)',", "Striped Blue Invuln"));
 
@@ -92,7 +92,7 @@ namespace LuckParser.Models.ParseModels
                 globalMechList.Add(new Mechanic(34912, "Fixate", 0, 16235, "symbol:'star',color:'rgb(0,0,250)',", "Fixate"));
                 globalMechList.Add(new Mechanic(34925, "Fixate", 0, 16235, "symbol:'star',color:'rgb(0,0,250)',", "Fixate"));
                 globalMechList.Add(new Mechanic(35077, "Hail of Fury", 3, 16235, "symbol:'hexagram',color:'rgb(0,0,250)',", "Debris"));
-                globalMechList.Add(new Mechanic(0, "Insidious Projection", 5, 16235, "symbol:'octagram',color:'rgb(0,0,250)',", "Merge"));//Spawn check
+                globalMechList.Add(new Mechanic(-1, "Insidious Projection", 5, 16235, "symbol:'octagram',color:'rgb(0,0,250)',", "Merge"));//Spawn check
                 globalMechList.Add(new Mechanic(35137, "Phantasmal Blades", 3, 16235, "symbol:'star',color:'rgb(250,0,0)',", "Bunker and rotate"));
                 globalMechList.Add(new Mechanic(35064, "Phantasmal Blades", 3, 16235, "symbol:'star',color:'rgb(250,0,0)',", "Bunker and rotate"));
                 globalMechList.Add(new Mechanic(35086, "Tower Drop", 3, 16235, "symbol:'circle',color:'rgb(250,0,0)',", "Tower Drop"));

@@ -8,6 +8,9 @@ namespace LuckParser
     {
         [DllImport("kernel32.dll")]
         static extern bool AttachConsole(int dwProcessId);
+        [DllImport("kernel32.dll")]
+        private static extern bool AllocConsole();
+
         private const int ATTACH_PARENT_PROCESS = -1;
         /// <summary>
         /// The main entry point for the application.
@@ -18,7 +21,10 @@ namespace LuckParser
             Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             if (args.Length > 0)
             {
-                AttachConsole(ATTACH_PARENT_PROCESS);
+                if ( !AttachConsole(ATTACH_PARENT_PROCESS))
+                {
+                    AllocConsole();
+                }
                 foreach (String arg in args)
                 {
                     //Console.WriteLine(arg);

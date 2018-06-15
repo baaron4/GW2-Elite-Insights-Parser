@@ -28,39 +28,18 @@ namespace LuckParser.Models.ParseModels
             phaseData.Add(data);
         }
 
-        public string getPhaseName(int phase_index)
-        {
-            if (phase_index == 0)
-            {
-                return "Full Fight";
-            }
-
-            switch (getCharacter())
-            {
-                case "Matthias Gabrel":
-                    return new string[] { "Fire Phase", "Ice Phase", "Storm Phase", "Abomination Phase" }[phase_index + 1];
-                case "Dhuum":
-                    return new string[] { "Roleplay", "Main Fight", "Ritual" }[phase_index + 1];
-                case "Keep Construct":
-                    return new string[] { "Phase 1", "Burn 1", "Phase 2", "Burn 2", "Phase 3", "Burn 3" }[phase_index + 1];
-                default:
-                    break;
-            }
-
-            return "Phase " + phase_index;
-        }
-        
         // Private Methods
         private void setPhases(BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
             long fight_dur = bossData.getAwareDuration();
             phases.Add(new PhaseData(0, fight_dur));
+            phases[0].setName("Full Fight");
             long start = 0;
             long end = 0;
             getCastLogs(bossData, combatList, agentData, 0, fight_dur);
-            switch (getCharacter())
+            switch (bossData.getID())
             {
-                case "Vale Guardian":
+                case 0x3C4E:
                     // Invul check
                     List<CombatItem> invulsVG = combatList.Where(x => x.getSkillID() == 757 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
                     for (int i = 0; i < invulsVG.Count; i++)
@@ -81,8 +60,16 @@ namespace LuckParser.Models.ParseModels
                             cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
                         }
                     }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
+                    }
                     break;
-                case "Gorseval the Multifarious":
+                case 0x3C45:
                     // Ghostly protection check
                     List<CastLog> clsG = cast_logs.Where(x => x.getID() == 31759).ToList();
                     foreach (CastLog cl in clsG)
@@ -91,8 +78,16 @@ namespace LuckParser.Models.ParseModels
                         phases.Add(new PhaseData(start, end));
                         start = end + cl.getActDur();
                     }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
+                    }
                     break;
-                case "Sabetha the Saboteur":
+                case 0x3C0F:
                     // Invul check
                     List<CombatItem> invulsSab = combatList.Where(x => x.getSkillID() == 757 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
                     for (int i = 0; i < invulsSab.Count; i++)
@@ -113,8 +108,16 @@ namespace LuckParser.Models.ParseModels
                             cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
                         }
                     }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
+                    }
                     break;
-                case "Matthias Gabrel":
+                case 0x3EF3:
                     // Special buff cast check
                     CombatItem heat_wave = combatList.Find(x => x.getSkillID() == 34526);
                     List<long> phase_starts = new List<long>();
@@ -139,18 +142,106 @@ namespace LuckParser.Models.ParseModels
                         // make sure stuff from the precedent phase mix witch each other
                         start = t+1;
                     }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    string[] namesMat = new string[] { "Fire Phase", "Ice Phase", "Storm Phase", "Abomination Phase" };
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName(namesMat[i-1]);
+                    }
                     break;
-                case "Xera":
+                case 0x3F6B:
+                    // Main phases
+                    List<CastLog> clsKC = cast_logs.Where(x => x.getID() == 35048).ToList();
+                    foreach (CastLog cl in clsKC)
+                    {
+                        end = cl.getTime();
+                        phases.Add(new PhaseData(start, end));
+                        start = end + cl.getActDur();
+                    }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                        start = fight_dur;
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
+                    }
+                    // add burn phases
+                    int offset = phases.Count;
+                    List<CombatItem> orbItems = combatList.Where(x => x.isBuff() == 1 && x.getDstInstid() == instid && x.getSkillID() == 35096).ToList();
+                    // Get number of orbs and filter the list
+                    List<CombatItem> orbItemsFiltered = new List<CombatItem>();
+                    Dictionary<long, int> orbs = new Dictionary<long, int>();
+                    foreach (CombatItem c in orbItems)
+                    {
+                        long time = c.getTime() - bossData.getFirstAware();
+                        if (!orbs.ContainsKey(time))
+                        {
+                            orbs[time] = 0;
+                        }
+                        if (c.isBuffremove().getID() == 0)
+                        {
+                            orbs[time] = orbs[time] + 1;
+                        }
+                        if (orbItemsFiltered.Count > 0)
+                        {
+                            CombatItem last = orbItemsFiltered.Last();
+                            if (last.getTime() != c.getTime())
+                            {
+                                orbItemsFiltered.Add(c);
+                            }
+                        }
+                        else
+                        {
+                            orbItemsFiltered.Add(c);
+                        }
+
+                    }
+                    foreach (CombatItem c in orbItemsFiltered)
+                    {
+                        if (c.isBuffremove().getID() == 0)
+                        {
+                            start = c.getTime() - bossData.getFirstAware();
+                        } else
+                        {
+                            end = c.getTime() - bossData.getFirstAware();
+                            phases.Add(new PhaseData(start, end));
+                        }
+                    }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                        start = fight_dur;
+                    }
+                    for (int i = offset; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Burn " + (i - offset + 1) + " (" + orbs[phases[i].getStart()] +" orbs)");
+                    }
+                    phases.Sort((x, y) => (x.getStart() < y.getStart()) ? -1 : 1);
+                    break;
+                case 0x3F76:
                     // split happened
                     if (phaseData.Count == 2)
                     {
                         end = phaseData[0] - bossData.getFirstAware();
                         phases.Add(new PhaseData(start, end));
                         start = phaseData[1] - bossData.getFirstAware();
-                        cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));                       
+                        cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                    }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
                     }
                     break;
-                case "Samarog":
+                case 0x4324:
                     // Determined check
                     List<CombatItem> invulsSam = combatList.Where(x => x.getSkillID() == 762 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
                     // Samarog receives determined twice and its removed twice, filter it
@@ -187,8 +278,16 @@ namespace LuckParser.Models.ParseModels
                             cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
                         }
                     }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
+                    }
                     break;
-                case "Deimos":
+                case 0x4302:
                     // Determined + additional data on inst change
                     CombatItem invulDei = combatList.Find(x => x.getSkillID() == 762 && x.isBuff() == 1 && x.isBuffremove().getID() == 0 && x.getDstInstid() == getInstid()); 
                     if (invulDei != null)
@@ -198,8 +297,16 @@ namespace LuckParser.Models.ParseModels
                         start = (phaseData.Count == 1 ? phaseData[0] : fight_dur) - bossData.getFirstAware();
                         cast_logs.Add(new CastLog(end, -6, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
                     }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
+                    }
                     break;
-                case "Dhuum":
+                case 0x4BFA:
                     CombatItem invulDhuum = combatList.Find(x => x.getSkillID() == 762 && x.isBuff() == 1 && x.isBuffremove().getID() > 0 && x.getSrcInstid() == getInstid());
                     if (invulDhuum != null)
                     {
@@ -218,13 +325,18 @@ namespace LuckParser.Models.ParseModels
                             }
                         }
                     }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    string[] namesDh = new string[] { "Roleplay", "Main Fight", "Ritual" };
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName(namesDh[i-1]);
+                    }
                     break;
                 default:
                     break;
-            }
-            if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
-            {
-                phases.Add(new PhaseData(start, fight_dur));
             }
         }
 
