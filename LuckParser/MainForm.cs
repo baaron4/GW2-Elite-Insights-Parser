@@ -1,153 +1,133 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using LuckParser.Controllers;
-
-public delegate void Logger(int i, string msg, int prog);
-public delegate void Cancellation(int i, DoWorkEventArgs e);
 
 namespace LuckParser
 {
     public partial class MainForm : Form
     {
-
-        BackgroundWorker m_oWorker;
-        private SettingsForm setFrm;
-        //public bool[] settingArray = { true, true, true, true, true, false, true, true };
-        bool completedOp = false;
+        private SettingsForm _settingsForm;
         List<string> _logsFiles;
         Controller1 controller = new Controller1();
+
         public MainForm()
         {
             InitializeComponent();
-
             _logsFiles = new List<string>();
-
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
-            m_oWorker = new BackgroundWorker();
-
-            // Create a background worker thread that ReportsProgress &
-            // SupportsCancellation
-            // Hook up the appropriate events.
-            m_oWorker.DoWork += new DoWorkEventHandler(m_oWorker_DoWork);
-            m_oWorker.ProgressChanged += new ProgressChangedEventHandler
-                    (m_oWorker_ProgressChanged);
-            m_oWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler
-                    (m_oWorker_RunWorkerCompleted);
-            m_oWorker.WorkerReportsProgress = true;
-            m_oWorker.WorkerSupportsCancellation = true;
-
-
         }
 
         public MainForm(string[] args)
         {
             InitializeComponent();
             _logsFiles = new List<string>();
-            LvFileList_AddItems(args);
-            m_DoWork(log_Console, null, null);
+            AddLogFiles(args);
         }
 
-        // On completed do the appropriate task
-
-        void m_oWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        /// <summary>
+        /// Adds log files to the bound data source for display in the interface
+        /// </summary>
+        /// <param name="filesArray"></param>
+        private void AddLogFiles(string[] filesArray)
         {
-            if (e.Cancelled)
+            foreach (string file in filesArray)
             {
-                lblStatusValue.Text = "Task Cancelled.";
-            }
-            // Check to see if an error occurred in the background process.
-            else if (e.Error != null)
-            {
-                lblStatusValue.Text = "Error while performing background operation.";
-            }
-            else
-            {
-                // Everything completed normally.
-                lblStatusValue.Text = "Task Completed";
-                // Flash window until it recieves focus
-                FlashWindow.Flash(this);
+                if (_logsFiles.Contains(file))
+                {
+                    //Don't add doubles
+                    continue;
+                }
+
+                _logsFiles.Add(file);
+
+                GridRow gRow = new GridRow(file, " ")
+                {
+                    BgWorker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true }
+                };
+                gRow.BgWorker.DoWork += BgWorker_DoWork;
+                gRow.BgWorker.ProgressChanged += BgWorker_ProgressChanged;
+                gRow.BgWorker.RunWorkerCompleted += BgWorker_Completed;
+                
+                gridRowBindingSource.Add(gRow);
             }
 
-            //Change the status of the buttons on the UI accordingly
             btnParse.Enabled = true;
-            btnCancel.Enabled = false;
         }
 
-        // Notification is performed here to the progress bar
-        void m_oWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        /// <summary>
+        /// Invoked when a BackgroundWorker begins working.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            pgbProgress.Value = e.ProgressPercentage;
-            string[] progstr = (string[])e.UserState;
-            if (progstr[1] == "Cancel")
-            {
-                _logsFiles.Clear();
-                //listView1.Items.Clear();
-                completedOp = true;
-                btnClear.Enabled = true;
-                lblStatusValue.Text = "Canceled Parsing";
-            }
-            else if (progstr[1] == "Finish")
-            {
-                _logsFiles.Clear();
-                //listView1.Items.Clear();
-                completedOp = true;
-                btnClear.Enabled = true;
-                btnParse.Enabled = false;
-                lblStatusValue.Text = "Finished Parsing";
-            }
-            else
-            {
-                lblStatusValue.Text = "Parsing...";
-                lvFileList.Items[Int32.Parse(progstr[0])].SubItems[1].Text = progstr[1];
-            }
-        }
+            BackgroundWorker bg = sender as BackgroundWorker;
+            GridRow rowData = e.Argument as GridRow;
 
-        private void log_Console(int i, string msg, int prog)
-        {
-            Console.WriteLine(msg);
-        }
+            e.Result = rowData;
 
-        private void log_Worker(int i, string msg, int prog)
-        {
-            string[] reportObject = { i.ToString(), msg };
-            m_oWorker.ReportProgress(prog, reportObject);
-        }
-
-        private void cancel_Worker(int i, DoWorkEventArgs e)
-        {
-            if (m_oWorker.CancellationPending)
+            if (bg.CancellationPending)
             {
-                // Set the e.Cancel flag so that the WorkerCompleted event
-                // knows that the process was cancelled.
+                rowData.Status = "Cancelled";
+                bg.ReportProgress(100, rowData);
                 e.Cancel = true;
-                string[] reportObject = new string[] { i.ToString(), "Cancel" };
-                m_oWorker.ReportProgress(0, reportObject);
-                btnParse.Enabled = false;
-                return;
+                throw new CancellationException(rowData);
             }
-        }
 
-        /// Time consuming operations go here </br>
-        /// i.e. Database operations,Reporting
-        void m_DoWork(Logger logger, Cancellation cancel, DoWorkEventArgs e)
-        {
-            //globalization
-            System.Globalization.CultureInfo before = System.Threading.Thread.CurrentThread.CurrentCulture;
-            try
+            FileInfo fInfo = new FileInfo(rowData.Location);
+            if (!fInfo.Exists)
             {
-                System.Threading.Thread.CurrentThread.CurrentCulture =
-                    new System.Globalization.CultureInfo("en-US");
-                // Proceed with specific code
+                rowData.Status = "File does not exist";
+                bg.ReportProgress(100, rowData);
+                e.Cancel = true;
+                throw new CancellationException(rowData);
+            }
+
+            rowData.Status = "20% - Working...";
+            bg.ReportProgress(20, rowData);
+            Controller1 control = new Controller1();
+
+            if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
+                fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
+            {
+                //Process evtc here
+                rowData.Status = "40% - Reading Binary...";
+                bg.ReportProgress(40, rowData);
+                control.ParseLog(fInfo.FullName);
+
+                if (bg.CancellationPending)
+                {
+                    rowData.Status = "Cancelled";
+                    bg.ReportProgress(100, rowData);
+                    e.Cancel = true;
+                    throw new CancellationException(rowData);
+                }
+
+                //Creating File
+                //save location
+                DirectoryInfo saveDirectory;
+                if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
+                {
+                    //Default save directory
+                    saveDirectory = fInfo.Directory;
+                }
+                else
+                {
+                    //Customised save directory
+                    saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
+                }
+
+                string bossid = control.getBossData().getID().ToString();
+                string result = "fail";
+
+                if (control.getLogData().getBosskill())
+                {
+                    result = "kill";
+                }
 
                 bool[] settingsSnap = new bool[] {
                     Properties.Settings.Default.DPSGraphTotals,
@@ -165,197 +145,218 @@ namespace LuckParser
                     Properties.Settings.Default.LargeRotIcons,
                     Properties.Settings.Default.ShowEstimates
                 };
-                for (int i = 0; i < lvFileList.Items.Count; i++)
+
+                string outputType = Properties.Settings.Default.SaveOutHTML ? "html" : "csv";
+                string outputFile = Path.Combine(
+                    saveDirectory.FullName,
+                    $"{fInfo.Name}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.{outputType}"
+                );
+
+                rowData.LogLocation = outputFile;
+                rowData.Status = "60% - Creating File...";
+                bg.ReportProgress(60, rowData);
+
+                using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 {
-                    FileInfo fInfo = new FileInfo(_logsFiles[i]);
-                    if (!fInfo.Exists)
+                    bg.ReportProgress(80, $"Writing {outputType.ToUpper()}...");
+                    using (StreamWriter sw = new StreamWriter(fs))
                     {
-                        logger(i, "File does not exist", 100);
-                        continue;
-                    }
-
-                    logger(i, "Working...", 20);
-                    Controller1 control = new Controller1();
-
-                    if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
-                        fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
-                    {
-                        //Process evtc here
-                        logger(i, "Reading Binary...", 40);
-                        control.ParseLog(fInfo.FullName);
-
-                        //Creating File
-                        //save location
-                        DirectoryInfo saveDirectory;
-                        if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
+                        if (Properties.Settings.Default.SaveOutHTML)
                         {
-                            //Default save directory
-                            saveDirectory = fInfo.Directory;
+                            control.CreateHTML(sw, settingsSnap);
                         }
                         else
                         {
-                            //Customised save directory
-                            saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
+                            control.CreateCSV(sw, ",");
                         }
-
-                        string bossid = control.getBossData().getID().ToString();
-                        string result = "fail";
-
-                        if (control.getLogData().getBosskill())
-                        {
-                            result = "kill";
-                        }
-
-                        string outputType = Properties.Settings.Default.SaveOutHTML ? "html" : "csv";
-                        string outputFile = Path.Combine(
-                            saveDirectory.FullName,
-                            $"{fInfo.Name}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.{outputType}"
-                        );
-
-                        logger(i, "Creating File...", 60);
-                        using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                        {
-                            logger(i, $"Writing {outputType.ToUpper()}...", 80);
-                            using (StreamWriter sw = new StreamWriter(fs))
-                            {
-                                if (Properties.Settings.Default.SaveOutHTML)
-                                {
-                                    control.CreateHTML(sw, settingsSnap);
-                                }
-                                else
-                                {
-                                    control.CreateCSV(sw, ",");
-                                }
-                            }
-                        }
-
-                        logger(i, $"{outputType.ToUpper()} Generated!", 100); //keeping here for console usage
-                        logger(i, outputFile, 100);
                     }
-                    else
-                    {
-                        logger(i, "Not EVTC...", 100);
-                    }
-
-                    cancel?.Invoke(i, e);
                 }
 
-                //Report 100% completion on operation completed
-                logger(0, "Finish", 100);
+                rowData.Status = "100% - Complete";
+                bg.ReportProgress(100, rowData);
+                rowData.ButtonState = GridRow.STATUS_OPEN;
             }
-            finally
+            else
             {
-                System.Threading.Thread.CurrentThread.CurrentUICulture = before;
+                rowData.Status = "Not EVTC";
+                e.Cancel = true;
+                throw new CancellationException(rowData);
             }
         }
 
-        /// Worker job
-        void m_oWorker_DoWork(object sender, DoWorkEventArgs e)
+        /// <summary>
+        /// Invoked when a BackgroundWorker reports a change in progress
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            m_DoWork(log_Worker, cancel_Worker, e);
+            dgvFiles.Invalidate();
         }
 
+        /// <summary>
+        /// Invoked when a BackgroundWorker completes its task
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BgWorker_Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            GridRow row;
+            if (e.Cancelled || e.Error != null)
+            {
+                if (e.Error is CancellationException)
+                {
+                    row = ((CancellationException)e.Error).Row;
+                    row.ButtonState = GridRow.STATUS_PARSE;
+                }
+            }
+            else
+            {
+                row = (GridRow)e.Result;
+                row.ButtonState = GridRow.STATUS_OPEN;
+            }
+            
+            btnParse.Enabled = true;
+            dgvFiles.Invalidate();
+        }
+
+
+        /// <summary>
+        /// Invoked when the 'Parse All' button is clicked. Begins processing of all files
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnParse_Click(object sender, EventArgs e)
         {
-            //Change the status of the buttons on the UI accordingly
-            //The start button is disabled as soon as the background operation is started
-            //The Cancel button is enabled so that the user can stop the operation 
-            //at any point of time during the execution
             if (_logsFiles.Count > 0)
             {
                 btnParse.Enabled = false;
                 btnCancel.Enabled = true;
-                btnClear.Enabled = false;
 
-                m_oWorker.RunWorkerAsync();
+                foreach (GridRow row in gridRowBindingSource)
+                {
+                    if (!row.BgWorker.IsBusy)
+                    {
+                        row.Run();
+                    }
+                }
             }
         }
+
+        /// <summary>
+        /// Invoked when the 'Cancel All' button is clicked. Cancels all pending operations
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            if (m_oWorker.IsBusy)
+            //Cancel all workers
+            foreach (GridRow row in gridRowBindingSource)
             {
-                // Notify the worker thread that a cancel has been requested.
-                // The cancel will not actually happen until the thread in the
-                // DoWork checks the m_oWorker.CancellationPending flag. 
-
-                m_oWorker.CancelAsync();
-            }
-        }
-
-        private void LvFileList_AddItems(string[] filesArray)
-        {
-            foreach (string file in filesArray)
-            {
-                if (_logsFiles.Contains(file))
+                if (row.BgWorker.IsBusy)
                 {
-                    //Don't add doubles
-                    continue;
+                    row.Cancel();
+                    dgvFiles.Invalidate();
                 }
-                _logsFiles.Add(file);
-
-                ListViewItem lvItem = new ListViewItem(file);
-                lvItem.SubItems.Add(" ");
-                lvFileList.Items.Add(lvItem);
             }
-        }
 
-        private void LvFileList_DragDrop(object sender, DragEventArgs e)
-        {
+            btnClear.Enabled = true;
             btnParse.Enabled = true;
-            if (completedOp)
-            {
-                lvFileList.Items.Clear();
-                completedOp = false;
-            }
-            //Get files as list
-            string[] filesArray = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-            LvFileList_AddItems(filesArray);
         }
 
-        private void LvFileList_DragEnter(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.All;
-        }
-
-        private void LvFileList_DrawHeader(object sender, DrawListViewColumnHeaderEventArgs e)
-        {
-            e.Graphics.FillRectangle(Brushes.Yellow, e.Bounds);
-            e.DrawText();
-        }
-
+        /// <summary>
+        /// Invoked when the 'Settings' button is clicked. Opens the settings window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSettings_Click(object sender, EventArgs e)
         {
-            setFrm = new SettingsForm(/*settingArray,this*/);
-            setFrm.Show();
+            _settingsForm = new SettingsForm(/*settingArray,this*/);
+            _settingsForm.Show();
         }
 
+        /// <summary>
+        /// Invoked when the 'Clear All' button is clicked. Cancels pending operations and clears completed & un-started operations.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnClear_Click(object sender, EventArgs e)
         {
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
-            _logsFiles.Clear();
-            lvFileList.Items.Clear();
-        }
 
-        private void LvFileList_MouseMove(object sender, MouseEventArgs e)
-        {
-            var hit = lvFileList.HitTest(e.Location);
-            if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1]) lvFileList.Cursor = Cursors.Hand;
-            else lvFileList.Cursor = Cursors.Default;
-        }
-
-        private void LvFilesList_MouseClick(object sender, MouseEventArgs e)
-        {
-            var hit = lvFileList.HitTest(e.Location);
-            if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1])
+            for (int i = gridRowBindingSource.Count - 1; i >= 0; i--)
             {
-                string fileLoc = hit.SubItem.Text;
-                if (File.Exists(fileLoc))
+                GridRow row = gridRowBindingSource[i] as GridRow;
+                if (row.BgWorker.IsBusy)
                 {
-                    System.Diagnostics.Process.Start(fileLoc);
+                    row.Cancel();
                 }
-                //var url = new Uri(hit.SubItem.Text);
-                // etc..
+                else
+                {
+                    dgvFiles.Rows.RemoveAt(i);
+                    _logsFiles.RemoveAt(i);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Invoked when a file is dropped onto the datagridview
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DgvFiles_DragDrop(object sender, DragEventArgs e)
+        {
+            btnParse.Enabled = true;
+            string[] filesArray = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            AddLogFiles(filesArray);
+        }
+
+        /// <summary>
+        /// Invoked when a dragged file enters the data grid view
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DgvFiles_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.All;
+        }
+
+        /// <summary>
+        /// Invoked when a the content of a datagridview cell is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DgvFiles_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 2)
+            {
+                GridRow row = (GridRow)gridRowBindingSource[e.RowIndex];
+
+                switch (row.ButtonState)
+                {
+                    case GridRow.STATUS_PARSE:
+                        row.Run();
+                        btnCancel.Enabled = true;
+                        break;
+
+                    case GridRow.STATUS_CANCEL:
+                        row.Cancel();
+                        dgvFiles.Invalidate();
+                        btnParse.Enabled = true;
+                        break;
+
+                    case GridRow.STATUS_OPEN:
+                        string fileLoc = row.LogLocation;
+                        if (File.Exists(fileLoc))
+                        {
+                            System.Diagnostics.Process.Start(fileLoc);
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
     }
