@@ -18,20 +18,20 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Public Methods
-        public void addItem(Agent agent, AgentItem item,string buildVersion,GW2APIController apiController)
+        public void addItem(AgentItem item, string prof)
         {
-            if (agent.getProf(buildVersion, apiController) == "NPC")
+            if (prof == "NPC")
             {
                 NPC_agent_list.Add(item);
             }
-            else if (agent.getProf(buildVersion, apiController) == "GDG")
+            else if (prof == "GDG")
             {
                 gadget_agent_list.Add(item);
                 return;
             }
             else
             {
-                player_agent_list.Add(item);
+                    player_agent_list.Add(item);
             }
             all_agents_list.Add(item);
         }
@@ -77,9 +77,8 @@ namespace LuckParser.Models.ParseModels
 
         public void clean()
         {
-            NPC_agent_list = NPC_agent_list.Where(x => x.getInstid() != 0).ToList();
-            gadget_agent_list = NPC_agent_list.Where(x => x.getInstid() != 0).ToList();
-            all_agents_list = all_agents_list.Where(x => x.getInstid() != 0).ToList();
+            NPC_agent_list = NPC_agent_list.Where(x => x.getInstid() != 0 && x.getLastAware() - x.getFirstAware() > 0).ToList();
+            all_agents_list = all_agents_list.Where(x => x.getInstid() != 0 && x.getLastAware() - x.getFirstAware() > 0).ToList();
         }
     }
 }

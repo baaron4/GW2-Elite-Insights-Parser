@@ -142,29 +142,30 @@ namespace LuckParser.Controllers
                 // 68 bytes: name
                 String name = ParseHelper.getString(stream, 68);
                 //Save
-                Agent a = new Agent(agent, name, prof, is_elite);
+                string agent_prof = "";
                 if (a != null)
                 {
+                    agent_prof = a.getProf(this.log_data.getBuildVersion(), APIController);
                     // NPC
-                    if (a.getProf(this.log_data.getBuildVersion(), APIController) == "NPC")
+                    if (agent_prof == "NPC")
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0')), this.log_data.getBuildVersion(), APIController);//a.getName() + ":" + String.format("%05d", prof)));
+                        agent_data.addItem( new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0')), agent_prof);//a.getName() + ":" + String.format("%05d", prof)));
                     }
                     // Gadget
-                    else if (a.getProf(this.log_data.getBuildVersion(), APIController) == "GDG")
+                    else if (agent_prof == "GDG")
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0')), this.log_data.getBuildVersion(), APIController);//a.getName() + ":" + String.format("%05d", prof & 0x0000ffff)));
+                        agent_data.addItem( new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0')), agent_prof);//a.getName() + ":" + String.format("%05d", prof & 0x0000ffff)));
                     }
                     // Player
                     else
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getProf(this.log_data.getBuildVersion(), APIController), toughness, healing, condition), this.log_data.getBuildVersion(), APIController);
+                        agent_data.addItem( new AgentItem(agent, name, agent_prof, toughness, healing, condition), agent_prof);
                     }
                 }
                 // Unknown
                 else
                 {
-                    agent_data.addItem(a, new AgentItem(agent, name, prof.ToString(), toughness, healing, condition), this.log_data.getBuildVersion(), APIController);
+                    agent_data.addItem( new AgentItem(agent, name, prof.ToString(), toughness, healing, condition), agent_prof);
                 }
             }
 
