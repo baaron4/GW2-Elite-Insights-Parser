@@ -218,7 +218,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
             {
-                if (agent.getInstid() == c.getSrcInstid())//selecting player or minion as caster
+                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware())//selecting player or minion as caster
                 {
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in agentData.getNPCAgentList())
@@ -236,7 +236,7 @@ namespace LuckParser.Models.ParseModels
         protected override void setDamagetakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData,MechanicData m_data) {
             long time_start = bossData.getFirstAware();               
             foreach (CombatItem c in combatList) {
-                if (agent.getInstid() == c.getDstInstid()) {//selecting player as target
+                if (agent.getInstid() == c.getDstInstid() && c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware()) {//selecting player as target
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in agentData.getNPCAgentList())
                     {//selecting all

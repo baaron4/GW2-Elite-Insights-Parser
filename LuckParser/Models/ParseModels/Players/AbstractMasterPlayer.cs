@@ -49,7 +49,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
             {
-                if (agent.getInstid() == c.getSrcInstid())
+                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware())
                 {
                     long time = c.getTime() - time_start;
                     addDamageLog(time, bossData.getInstid(), c, damage_logsFiltered);
@@ -58,7 +58,7 @@ namespace LuckParser.Models.ParseModels
             Dictionary<string, Minions> min_list = getMinions(bossData, combatList, agentData);
             foreach (Minions mins in min_list.Values)
             {
-                damage_logs.AddRange(mins.getDamageLogs(bossData.getInstid(), bossData, combatList, agentData, 0, bossData.getAwareDuration()));
+                damage_logsFiltered.AddRange(mins.getDamageLogs(bossData.getInstid(), bossData, combatList, agentData, 0, bossData.getAwareDuration()));
             }
         }
 
@@ -72,7 +72,7 @@ namespace LuckParser.Models.ParseModels
                 LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
                 if (state.getID() == 0)
                 {
-                    if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
+                    if (agent.getInstid() == c.getSrcInstid() && c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware())//selecting player as caster
                     {
                         if (c.isActivation().getID() > 0)
                         {
@@ -98,7 +98,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 else if (state.getID() == 11)
                 {//Weapon swap
-                    if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
+                    if (agent.getInstid() == c.getSrcInstid() && c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware())//selecting player as caster
                     {
                         if ((int)c.getDstAgent() == 4 || (int)c.getDstAgent() == 5)
                         {

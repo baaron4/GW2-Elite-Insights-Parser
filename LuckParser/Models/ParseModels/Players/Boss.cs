@@ -353,7 +353,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
             {
-                if (agent.getInstid() == c.getSrcInstid())//selecting player or minion as caster
+                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > bossData.getFirstAware() && c.getTime() < bossData.getLastAware())//selecting player or minion as caster
                 {
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in agentData.getAllAgentsList())
@@ -373,7 +373,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
             {
-                if (agent.getInstid() == c.getDstInstid())
+                if (agent.getInstid() == c.getDstInstid() && c.getTime() > bossData.getFirstAware() && c.getTime() < bossData.getLastAware())
                 {//selecting player as target
                     LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
                     long time = c.getTime() - time_start;

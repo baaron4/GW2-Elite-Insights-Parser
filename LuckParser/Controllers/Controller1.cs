@@ -316,7 +316,7 @@ namespace LuckParser.Controllers
                     {
                         a.setInstid(c.getSrcInstid());
                     }
-                    if (a.getInstid() != 0 && a.getInstid() == c.getSrcInstid())
+                    if (a.getInstid() != 0 && a.getAgent() == c.getSrcAgent())
                     {
                         if (a.getFirstAware() == 0)
                         {
@@ -336,7 +336,7 @@ namespace LuckParser.Controllers
                     AgentItem master = agent_list.Find(x => x.getInstid() == c.getSrcMasterInstid() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
                     if (master != null)
                     {
-                        AgentItem minion = agent_list.Find(x => x.getInstid() == c.getSrcInstid() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
+                        AgentItem minion = agent_list.Find(x => x.getAgent() == c.getSrcAgent() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
                         if (minion != null)
                         {
                             minion.setMasterAgent(master.getAgent());
