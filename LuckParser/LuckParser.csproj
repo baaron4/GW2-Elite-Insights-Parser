@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\Controller1.cs" />
+    <Compile Include="Controllers\CSVBuilder.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
     <Compile Include="Controllers\HTMLBuilder.cs" />

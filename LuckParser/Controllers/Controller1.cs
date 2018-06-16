@@ -36,7 +36,30 @@ namespace LuckParser.Controllers
             return boss_data;
         }
 
-        
+        /// <summary>
+        /// Builds the final html
+        /// </summary>
+        /// <param name="sw"></param>
+        /// <param name="settingsSnap"></param>
+        public void CreateHTML(StreamWriter sw, bool[] settingsSnap)
+        {
+            ParsedLog log = new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss);
+            HTMLBuilder htmlBuilder = new HTMLBuilder(log);
+            htmlBuilder.CreateHTML(sw, settingsSnap);
+        }
+
+        /// <summary>
+        /// Builds the final csv
+        /// </summary>
+        /// <param name="sw"></param>
+        /// <param name="settingsSnap"></param>
+        public void CreateCSV(StreamWriter sw,String delimiter, bool[] settingsSnap)
+        {
+            ParsedLog log = new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss);
+            CSVBuilder csvBuilder = new CSVBuilder(log);
+            csvBuilder.CreateCSV(sw, delimiter, settingsSnap);
+        }
+
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
         /// <summary>
         /// Parses the given log
@@ -291,13 +314,6 @@ namespace LuckParser.Controllers
                         src_instid, dst_instid, src_master_instid, iff, buff, result, is_activation, is_buffremoved,
                         is_ninety, is_fifty, is_moving, is_statechange, is_flanking, is_shields));
             }
-        }
-
-        public void CreateHTML(StreamWriter sw, bool[] settingsSnap)
-        {
-            ParsedLog log = new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss);
-            HTMLBuilder htmlBuilder = new HTMLBuilder(log);
-            htmlBuilder.CreateHTML(sw, settingsSnap);
         }
 
         /// <summary>
@@ -644,77 +660,5 @@ namespace LuckParser.Controllers
             }
 
         }
-
-        bool[] SnapSettings;
-
-        //Creating CSV---------------------------------------------------------------------------------
-        public void CreateCSV(StreamWriter sw,String delimiter, bool[] settingsSnap)
-        {
-            double fight_duration = (boss_data.getAwareDuration()) / 1000.0;
-            TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
-            String durationString = duration.ToString("mm") +":" + duration.ToString("ss") ;
-            SnapSettings = settingsSnap;
-            HTMLHelper.SnapSettings = settingsSnap;
-            sw.Write("Group" + delimiter + 
-                    "Class" + delimiter + 
-                    "Character" + delimiter + 
-                    "Account Name" + delimiter +
-                    "Boss DPS" + delimiter +
-                    "Boss Physical" + delimiter +
-                    "Boss Condi" + delimiter + 
-                    "All DPS"+ delimiter +
-                    "Quick" +delimiter+ 
-                    "Alacrity"+delimiter +
-                    "Might" + delimiter +
-                    "Boss Team DPS" + delimiter +
-                    "All Team DPS" + delimiter +
-                    "Time" + delimiter +
-                    "Cleave" + delimiter +
-                    "Team Cleave"  );
-            sw.Write("\r\n");
-
-            int[] teamStats= { 0,0,0};
-            foreach (Player p in p_list)
-            {
-                string[] finaldps = HTMLHelper.getFinalDPS(boss_data,combat_data,agent_data,p,boss, 0).Split('|');
-                teamStats[0] += Int32.Parse(finaldps[6]);
-                teamStats[1] += Int32.Parse(finaldps[0]);
-                teamStats[2] += (Int32.Parse(finaldps[0]) - Int32.Parse(finaldps[6]));
-            }
-
-            foreach (Player p in p_list)
-            {
-                string[] finaldps = HTMLHelper.getFinalDPS(boss_data, combat_data, agent_data, p, boss, 0).Split('|');
-                sw.Write(p.getGroup() + delimiter + // group
-                        p.getProf() + delimiter +  // class
-                        p.getCharacter() + delimiter + // character
-                        p.getAccount().Substring(1) + delimiter + // account
-                        finaldps[6] + delimiter + // dps
-                        finaldps[8] + delimiter + // physical
-                        finaldps[10] + delimiter + // condi
-                        finaldps[0] + delimiter); // all dps
-
-                Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data,combat_data,skill_data,agent_data, boss,p, 0);
-                sw.Write(boonArray[1187] + delimiter + // Quickness
-                        boonArray[30328] + delimiter + // Alacrity
-                        boonArray[740] + delimiter); // Might
-
-                sw.Write(teamStats[0] + delimiter  // boss dps
-                        + teamStats[1] + delimiter // all
-                        + durationString + delimiter + // duration
-                    ( Int32.Parse(finaldps[0])-Int32.Parse(finaldps[6])).ToString()+delimiter // cleave
-                        +teamStats[2]); // team cleave
-                sw.Write("\r\n");
-            }
-           
-
-        }
-        /// <summary>
-        /// Returns the img links and colors code for the given data
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-       
-        
     }
 }
