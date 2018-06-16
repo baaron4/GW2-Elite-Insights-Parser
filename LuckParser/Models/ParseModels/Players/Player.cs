@@ -244,7 +244,7 @@ namespace LuckParser.Models.ParseModels
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in agentData.getNPCAgentList())
                     {//selecting all
-                        setDamageTakenLog(time, item.getInstid(), c);
+                        addDamageTakenLog(time, item.getInstid(), c);
                     }
                 }
             }

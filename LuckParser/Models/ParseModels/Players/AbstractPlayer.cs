@@ -16,7 +16,7 @@ namespace LuckParser.Models.ParseModels
         private Dictionary<int, BoonsGraphModel> boon_points = new Dictionary<int, BoonsGraphModel>();
         // DPS
         protected List<DamageLog> damage_logs = new List<DamageLog>();
-        private List<DamageLog> damage_logsFiltered = new List<DamageLog>();
+        protected List<DamageLog> damage_logsFiltered = new List<DamageLog>();
         private Dictionary<int, List<Point>> dps_graph = new Dictionary<int, List<Point>>();
         // Taken damage
         protected List<DamageLog> damageTaken_logs = new List<DamageLog>();
@@ -166,9 +166,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        // Setters
-        protected abstract void setDamageLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData);
-        protected void setDamageTakenLog(long time, ushort instid, CombatItem c)
+        protected void addDamageTakenLog(long time, ushort instid, CombatItem c)
         {
             LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
             if (instid == c.getSrcInstid())
@@ -193,18 +191,12 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        private void setFilteredLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
-        {
-            long time_start = bossData.getFirstAware();
-            foreach (CombatItem c in combatList)
-            {
-                if (instid == c.getSrcInstid() || instid == c.getSrcMasterInstid())//selecting player
-                {
-                    long time = c.getTime() - time_start;
-                    addDamageLog(time, bossData.getInstid(), c, damage_logsFiltered);
-                }
-            }
-        }
+        // Setters
+        protected abstract void setDamageLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData);     
+        protected abstract void setFilteredLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData);
+        protected abstract void setCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData);
+        protected abstract void setDamagetakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data);
+
         private void setBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList, List<PhaseData> phases)
         {
             BoonMap to_use = getBoonMap(bossData, skillData, combatList, true);
@@ -220,7 +212,7 @@ namespace LuckParser.Models.ParseModels
             }
             for (int i = 0; i < phases.Count; i++)
             {
-                boon_distribution.Add( new BoonDistribution());
+                boon_distribution.Add(new BoonDistribution());
                 boon_presence.Add(new Dictionary<int, long>());
             }
             foreach (Boon boon in boon_to_use)
@@ -256,7 +248,8 @@ namespace LuckParser.Models.ParseModels
                             PhaseData phase = phases[i];
                             Dictionary<int, long> presenceDict = boon_presence[i];
                             BoonDistribution distrib = boon_distribution[i];
-                            if (!distrib.ContainsKey(boonid)) {
+                            if (!distrib.ContainsKey(boonid))
+                            {
                                 distrib[boonid] = new Dictionary<ushort, OverAndValue>();
                             }
                             if (!presenceDict.ContainsKey(boonid))
@@ -276,17 +269,17 @@ namespace LuckParser.Models.ParseModels
                                 else
                                 {
                                     OverAndValue toModify = distrib[boonid][src];
-                                    toModify.value += simul.getDuration(src,phase.getStart(), phase.getEnd());
+                                    toModify.value += simul.getDuration(src, phase.getStart(), phase.getEnd());
                                     toModify.overstack += simul.getOverstack(src, phase.getStart(), phase.getEnd());
                                     distrib[boonid][src] = toModify;
                                 }
                             }
                         }
-                        
+
                     }
                     // Graphs
                     // full precision
-                    List<Point> toFill = new List<Point>();                   
+                    List<Point> toFill = new List<Point>();
                     List<Point> toFillPresence = new List<Point>();
                     for (int i = 0; i < dur + 1; i++)
                     {
@@ -297,7 +290,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         int start = (int)simul.getStart();
                         int end = (int)simul.getEnd();
-                        
+
                         for (int i = start; i <= end; i++)
                         {
                             toFill[i] = new Point(i, simul.getStack(i));
@@ -318,8 +311,6 @@ namespace LuckParser.Models.ParseModels
             }
             boon_points[-2] = boon_presence_points;
         }
-        protected abstract void setCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData);
-        protected abstract void setDamagetakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data);
         // private getters
         private BoonMap getBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList, bool add_condi)
         {

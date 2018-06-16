@@ -50,6 +50,19 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
+        protected override void setFilteredLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        {
+            long time_start = bossData.getFirstAware();
+            foreach (CombatItem c in combatList)
+            {
+                if (instid == c.getSrcInstid() || instid == c.getSrcMasterInstid())//selecting player
+                {
+                    long time = c.getTime() - time_start;
+                    addDamageLog(time, bossData.getInstid(), c, damage_logsFiltered);
+                }
+            }
+        }
+
         protected override void setCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
             long time_start = bossData.getFirstAware();

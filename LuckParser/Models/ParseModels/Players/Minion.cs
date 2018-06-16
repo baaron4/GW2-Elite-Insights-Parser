@@ -27,9 +27,21 @@ namespace LuckParser.Models.ParseModels
                     foreach (AgentItem item in agentData.getNPCAgentList())
                     {//selecting all
                         addDamageLog(time, item.getInstid(), c, damage_logs);
-                    }
+                    }                
                 }
+            }
+        }
 
+        protected override void setFilteredLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        {
+            long time_start = bossData.getFirstAware();
+            foreach (CombatItem c in combatList)
+            {
+                if (instid == c.getSrcInstid() && master_id == c.getSrcMasterInstid())//selecting player
+                {
+                    long time = c.getTime() - time_start;
+                    addDamageLog(time, bossData.getInstid(), c, damage_logsFiltered);
+                }
             }
         }
 
