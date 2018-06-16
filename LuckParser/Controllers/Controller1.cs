@@ -6,15 +6,15 @@ using LuckParser.Models.ParseModels;
 using LuckParser.Models.ParseEnums;
 using System.Drawing;
 using System.Net;
-using LuckParser.Models;
 using System.IO.Compression;
 using LuckParser.Models.DataModels;
-//recomend CTRL+M+O to collapse all
+
+//recommend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {
     public class Controller1
     {
-        private GW2APIController APIContrioller = new GW2APIController();            
+        private GW2APIController APIController = new GW2APIController();            
 
         //Main data storage after binary parse
         private LogData log_data;
@@ -146,25 +146,25 @@ namespace LuckParser.Controllers
                 if (a != null)
                 {
                     // NPC
-                    if (a.getProf(this.log_data.getBuildVersion(), APIContrioller) == "NPC")
+                    if (a.getProf(this.log_data.getBuildVersion(), APIController) == "NPC")
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0')), this.log_data.getBuildVersion(), APIContrioller);//a.getName() + ":" + String.format("%05d", prof)));
+                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0')), this.log_data.getBuildVersion(), APIController);//a.getName() + ":" + String.format("%05d", prof)));
                     }
                     // Gadget
-                    else if (a.getProf(this.log_data.getBuildVersion(), APIContrioller) == "GDG")
+                    else if (a.getProf(this.log_data.getBuildVersion(), APIController) == "GDG")
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0')), this.log_data.getBuildVersion(), APIContrioller);//a.getName() + ":" + String.format("%05d", prof & 0x0000ffff)));
+                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0')), this.log_data.getBuildVersion(), APIController);//a.getName() + ":" + String.format("%05d", prof & 0x0000ffff)));
                     }
                     // Player
                     else
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getProf(this.log_data.getBuildVersion(), APIContrioller), toughness, healing, condition), this.log_data.getBuildVersion(), APIContrioller);
+                        agent_data.addItem(a, new AgentItem(agent, name, a.getProf(this.log_data.getBuildVersion(), APIController), toughness, healing, condition), this.log_data.getBuildVersion(), APIController);
                     }
                 }
                 // Unknown
                 else
                 {
-                    agent_data.addItem(a, new AgentItem(agent, name, prof.ToString(), toughness, healing, condition), this.log_data.getBuildVersion(), APIContrioller);
+                    agent_data.addItem(a, new AgentItem(agent, name, prof.ToString(), toughness, healing, condition), this.log_data.getBuildVersion(), APIController);
                 }
             }
 

@@ -89,6 +89,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\DataModels\ParsedLog.cs" />
+    <Compile Include="Models\DataModels\SettingsContainer.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractMasterPlayer.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractPlayer.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonsGraphModel.cs" />

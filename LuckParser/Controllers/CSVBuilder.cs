@@ -11,18 +11,18 @@ namespace LuckParser.Controllers
 {
     class CSVBuilder
     {
-        BossData boss_data;
-        Boss boss;
-        CombatData combat_data;
-        AgentData agent_data;
-        List<Player> p_list;
-        MechanicData mech_data;
-        SkillData skill_data;
-        LogData log_data;
+        private BossData boss_data;
+        private Boss boss;
+        private CombatData combat_data;
+        private AgentData agent_data;
+        private List<Player> p_list;
+        private MechanicData mech_data;
+        private SkillData skill_data;
+        private LogData log_data;
 
-        bool[] SnapSettings;
+        private SettingsContainer settings;
 
-        public CSVBuilder(ParsedLog log)
+        public CSVBuilder(ParsedLog log, SettingsContainer settings)
         {
             boss_data = log.getBossData();
             boss = log.getBoss();
@@ -32,16 +32,17 @@ namespace LuckParser.Controllers
             mech_data = log.getMechanicData();
             skill_data = log.getSkillData();
             log_data = log.getLogData();
+
+            this.settings = settings;
+            HTMLHelper.settings = settings;
         }
 
         //Creating CSV---------------------------------------------------------------------------------
-        public void CreateCSV(StreamWriter sw, String delimiter, bool[] settingsSnap)
+        public void CreateCSV(StreamWriter sw, String delimiter)
         {
             double fight_duration = (boss_data.getAwareDuration()) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
             String durationString = duration.ToString("mm") + ":" + duration.ToString("ss");
-            SnapSettings = settingsSnap;
-            HTMLHelper.SnapSettings = settingsSnap;
             sw.Write("Group" + delimiter +
                     "Class" + delimiter +
                     "Character" + delimiter +

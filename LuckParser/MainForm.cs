@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LuckParser.Controllers;
+using LuckParser.Models.DataModels;
 
 public delegate void Logger(int i, string msg, int prog);
 public delegate void Cancellation(int i, DoWorkEventArgs e);
@@ -149,23 +150,8 @@ namespace LuckParser
                     new System.Globalization.CultureInfo("en-US");
                 // Proceed with specific code
 
-                bool[] settingsSnap = new bool[] {
-                    Properties.Settings.Default.DPSGraphTotals,
-                    Properties.Settings.Default.PlayerGraphTotals,
-                    Properties.Settings.Default.PlayerGraphBoss,
-                    Properties.Settings.Default.PlayerBoonsUniversal,
-                    Properties.Settings.Default.PlayerBoonsImpProf,
-                    Properties.Settings.Default.PlayerBoonsAllProf,
-                    Properties.Settings.Default.PlayerRot,
-                    Properties.Settings.Default.PlayerRotIcons,
-                    Properties.Settings.Default.EventList,
-                    Properties.Settings.Default.BossSummary,
-                    Properties.Settings.Default.SimpleRotation,
-                    Properties.Settings.Default.ShowAutos,
-                    Properties.Settings.Default.LargeRotIcons,
-                    Properties.Settings.Default.ShowEstimates,
-                    Properties.Settings.Default.ParsePhases
-                };
+               SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
+
                 for (int i = 0; i < lvFileList.Items.Count; i++)
                 {
                     FileInfo fInfo = new FileInfo(_logsFiles[i]);
@@ -221,13 +207,13 @@ namespace LuckParser
                             {
                                 if (Properties.Settings.Default.SaveOutHTML)
                                 {
-                                    HTMLBuilder builder = new HTMLBuilder(control.GetParsedLog());
-                                    builder.CreateHTML(sw, settingsSnap);
+                                    HTMLBuilder builder = new HTMLBuilder(control.GetParsedLog(), settings);
+                                    builder.CreateHTML(sw);
                                 }
                                 else
                                 {
-                                    CSVBuilder builder = new CSVBuilder(control.GetParsedLog());
-                                    builder.CreateCSV(sw, ",", settingsSnap);
+                                    CSVBuilder builder = new CSVBuilder(control.GetParsedLog(), settings);
+                                    builder.CreateCSV(sw, ",");
                                 }
                             }
                         }
