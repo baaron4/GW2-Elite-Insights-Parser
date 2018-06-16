@@ -142,6 +142,7 @@ namespace LuckParser.Controllers
                 // 68 bytes: name
                 String name = ParseHelper.getString(stream, 68);
                 //Save
+                Agent a = new Agent(agent, name, prof, is_elite);
                 string agent_prof = "";
                 if (a != null)
                 {
