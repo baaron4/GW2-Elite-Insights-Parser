@@ -221,11 +221,13 @@ namespace LuckParser
                             {
                                 if (Properties.Settings.Default.SaveOutHTML)
                                 {
-                                    control.CreateHTML(sw, settingsSnap);
+                                    HTMLBuilder builder = new HTMLBuilder(control.GetParsedLog());
+                                    builder.CreateHTML(sw, settingsSnap);
                                 }
                                 else
                                 {
-                                    control.CreateCSV(sw, ",",settingsSnap);
+                                    CSVBuilder builder = new CSVBuilder(control.GetParsedLog());
+                                    builder.CreateCSV(sw, ",", settingsSnap);
                                 }
                             }
                         }

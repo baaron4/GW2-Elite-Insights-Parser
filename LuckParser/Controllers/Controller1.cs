@@ -36,28 +36,9 @@ namespace LuckParser.Controllers
             return boss_data;
         }
 
-        /// <summary>
-        /// Builds the final html
-        /// </summary>
-        /// <param name="sw"></param>
-        /// <param name="settingsSnap"></param>
-        public void CreateHTML(StreamWriter sw, bool[] settingsSnap)
+        public ParsedLog GetParsedLog()
         {
-            ParsedLog log = new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss);
-            HTMLBuilder htmlBuilder = new HTMLBuilder(log);
-            htmlBuilder.CreateHTML(sw, settingsSnap);
-        }
-
-        /// <summary>
-        /// Builds the final csv
-        /// </summary>
-        /// <param name="sw"></param>
-        /// <param name="settingsSnap"></param>
-        public void CreateCSV(StreamWriter sw,String delimiter, bool[] settingsSnap)
-        {
-            ParsedLog log = new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss);
-            CSVBuilder csvBuilder = new CSVBuilder(log);
-            csvBuilder.CreateCSV(sw, delimiter, settingsSnap);
+            return new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss);
         }
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------

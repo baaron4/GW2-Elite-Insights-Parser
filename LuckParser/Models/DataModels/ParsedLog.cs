@@ -7,7 +7,7 @@ using LuckParser.Models.ParseModels;
 
 namespace LuckParser.Models.DataModels
 {
-    class ParsedLog
+    public class ParsedLog
     {
         private LogData log_data;
         private BossData boss_data;
