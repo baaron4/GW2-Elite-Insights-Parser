@@ -714,7 +714,7 @@ namespace LuckParser.Controllers
             //Generate DPS graph
             sw.Write("<div id=\"DPSGraph"+ phase_index + "\" style=\"height: 600px;width:1200px; display:inline-block \"></div>");
             sw.Write("<script>");
-            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
+            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, SnapSettings[14])[phase_index];
             sw.Write("var data = [");
             int maxDPS = 0;
             List<Point> totalDpsAllPlayers = new List<Point>();
@@ -1233,7 +1233,7 @@ namespace LuckParser.Controllers
         /// <param name="fight_duration">Duration of the fight</param>
         private void CreateDPSTable(StreamWriter sw, int phase_index) {
             //generate dps table
-            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
+            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, SnapSettings[14])[phase_index];
             sw.Write("<script> $(function () { $('#dps_table"+ phase_index + "').DataTable({ \"order\": [[4, \"desc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dps_table" + phase_index + "\">");
             {
@@ -1349,7 +1349,7 @@ namespace LuckParser.Controllers
         /// <param name="fight_duration">Duration of the fight</param>
         private void CreateDMGStatsTable(StreamWriter sw, int phase_index) {
             //generate dmgstats table
-            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
+            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, SnapSettings[14])[phase_index];
             sw.Write("<script> $(function () { $('#dmgstats_table"+ phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dmgstats_table"+ phase_index + "\">");
             {
@@ -1480,7 +1480,7 @@ namespace LuckParser.Controllers
         /// <param name="fight_duration">Duration of the fight</param>
         private void CreateDefTable(StreamWriter sw, int phase_index) {
             //generate Tankstats table
-            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
+            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, SnapSettings[14])[phase_index];
             sw.Write("<script> $(function () { $('#defstats_table"+ phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"defstats_table"+ phase_index+"\">");
             {
@@ -1670,7 +1670,7 @@ namespace LuckParser.Controllers
         /// <param name="table_id">id of the table</param>
         private void CreateUptimeTable(StreamWriter sw, List<Boon> list_to_use, string table_id, int phase_index)
         {
-            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data);
+            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, SnapSettings[14]);
             //Generate Boon table------------------------------------------------------------------------------------------------
             sw.Write("<script> $(function () { $('#" + table_id+ phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
             List<List<string>> footList = new List<List<string>>();
@@ -1911,7 +1911,7 @@ namespace LuckParser.Controllers
         /// <param name="settingsSnap">Settings to use</param>
         private void CreatePlayerTab(StreamWriter sw, bool[] settingsSnap, int phase_index)
         {
-            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data);
+            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, SnapSettings[14]);
             PhaseData phase = phases[phase_index];
             long start = phase.getStart() + boss_data.getFirstAware();
             long end = phase.getEnd() + boss_data.getFirstAware();
@@ -2202,7 +2202,7 @@ namespace LuckParser.Controllers
         private void CreateSimpleRotationTab(StreamWriter sw,Player p,int simpleRotSize, int phase_index) {
             if (SnapSettings[6])//Display rotation
             {
-                PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
+                PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, SnapSettings[14])[phase_index];
                 List<CastLog> casting = p.getCastLogs(boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
                 GW2APISkill autoSkill = null;
                 int autosCount = 0;
@@ -2527,7 +2527,7 @@ namespace LuckParser.Controllers
         /// <param name="p">The player</param>
         private void CreateDMGDistTable(StreamWriter sw, AbstractMasterPlayer p, bool toBoss, int phase_index)
         {
-            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
+            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, SnapSettings[14])[phase_index];
             List<CastLog> casting = p.getCastLogs(boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
             List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(toBoss ? boss_data.getInstid() : 0, boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
             string finalDPSdata = HTMLHelper.getFinalDPS(boss_data, combat_data, agent_data, p, boss, phase_index);
@@ -2564,7 +2564,7 @@ namespace LuckParser.Controllers
             string finalDPSdata = HTMLHelper.getFinalDPS(boss_data, combat_data, agent_data, p, boss, phase_index);
             int totalDamage = toBoss ? Int32.Parse(finalDPSdata.Split('|')[7]) : Int32.Parse(finalDPSdata.Split('|')[1]);
             string tabid = p.getInstid() +"_"+phase_index + "_" + minions.getInstid() + (toBoss ? "_boss" : "");
-            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
+            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, SnapSettings[14])[phase_index];
             List<CastLog> casting = minions.getCastLogs(boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
             List<DamageLog> damageLogs = minions.getDamageLogs(toBoss ? boss_data.getInstid() : 0, boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
@@ -2593,7 +2593,7 @@ namespace LuckParser.Controllers
         /// <param name="p">The player</param>
         private void CreateDMGTakenDistTable(StreamWriter sw, Player p, int phase_index)
         {
-            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
+            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, SnapSettings[14])[phase_index];
             List<DamageLog> damageLogs = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data,mech_data, phase.getStart(), phase.getEnd());
             List<SkillItem> s_list = skill_data.getSkillList();
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
@@ -2736,7 +2736,7 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         private void CreateMechanicTable(StreamWriter sw, int phase_index) {
             Dictionary<string,List<Mechanic>> presMech = new Dictionary<string, List<Mechanic>>();
-            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data)[phase_index];
+            PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, SnapSettings[14])[phase_index];
             foreach (Mechanic item in mech_data.GetMechList(boss_data.getID()))
             {
                 if (mech_data.GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill()) != null)
@@ -2960,7 +2960,7 @@ namespace LuckParser.Controllers
         private void CreateBossSummary(StreamWriter sw, int phase_index)
         {
             //generate Player list Graphs
-            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data);
+            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, SnapSettings[14]);
             PhaseData phase = phases[phase_index];
             List<CastLog> casting = boss.getCastLogsActDur(boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
             List<SkillItem> s_list = skill_data.getSkillList();
@@ -3151,6 +3151,7 @@ namespace LuckParser.Controllers
         {
 
             SnapSettings = settingsSnap;
+            HTMLHelper.SnapSettings = settingsSnap;
             double fight_duration = (boss_data.getAwareDuration()) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
             string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
@@ -3160,7 +3161,7 @@ namespace LuckParser.Controllers
             }
             string bossname = FilterStringChars(boss_data.getName());
             setPresentBoons(settingsSnap);
-            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data);           
+            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data,SnapSettings[14]);           
             // HTML STARTS
             sw.Write("<!DOCTYPE html><html lang=\"en\">");
             {
@@ -3617,11 +3618,13 @@ namespace LuckParser.Controllers
         }
         public void CreateSoloHTML(StreamWriter sw, bool[] settingsSnap)
         {
-            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data);
+            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, SnapSettings[14]);
             double fight_duration = (boss_data.getAwareDuration()) / 1000.0;
             Player p = p_list[0];               
             List<CastLog> casting = p.getCastLogsActDur(boss_data, combat_data.getCombatList(), agent_data, 0, boss_data.getAwareDuration());
             List<SkillItem> s_list = skill_data.getSkillList();
+            SnapSettings = settingsSnap;
+            HTMLHelper.SnapSettings = settingsSnap;
 
             CreateDPSTable(sw, 0);
             CreateDMGStatsTable(sw, 0);
@@ -3746,12 +3749,13 @@ namespace LuckParser.Controllers
             sw.Write("</div>");
         }
         //Creating CSV---------------------------------------------------------------------------------
-        public void CreateCSV(StreamWriter sw,String delimiter)
+        public void CreateCSV(StreamWriter sw,String delimiter, bool[] settingsSnap)
         {
             double fight_duration = (boss_data.getAwareDuration()) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
             String durationString = duration.ToString("mm") +":" + duration.ToString("ss") ;
-
+            SnapSettings = settingsSnap;
+            HTMLHelper.SnapSettings = settingsSnap;
             sw.Write("Group" + delimiter + 
                     "Class" + delimiter + 
                     "Character" + delimiter + 

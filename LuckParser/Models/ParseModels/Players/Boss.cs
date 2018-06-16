@@ -14,10 +14,19 @@ namespace LuckParser.Models.ParseModels
         private List<PhaseData> phases = new List<PhaseData>();
         private List<long> phaseData = new List<long>();
 
-        public List<PhaseData> getPhases(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        public List<PhaseData> getPhases(BossData bossData, List<CombatItem> combatList, AgentData agentData,bool getAllPhases)
         {
+           
             if (phases.Count == 0)
             {
+                if (!getAllPhases)
+                {
+                    long fight_dur = bossData.getAwareDuration();
+                    phases.Add(new PhaseData(0, fight_dur));
+                    phases[0].setName("Full Fight");
+                    getCastLogs(bossData, combatList, agentData, 0, fight_dur);
+                    return phases;
+                }
                 setPhases(bossData, combatList, agentData);
             }
             return phases;

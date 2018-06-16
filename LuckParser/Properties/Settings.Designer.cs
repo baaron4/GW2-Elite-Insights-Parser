@@ -238,5 +238,17 @@ namespace LuckParser.Properties {
                 this["ShowEstimates"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ParsePhases {
+            get {
+                return ((bool)(this["ParsePhases"]));
+            }
+            set {
+                this["ParsePhases"] = value;
+            }
+        }
     }
 }

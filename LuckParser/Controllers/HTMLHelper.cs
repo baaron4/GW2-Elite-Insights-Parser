@@ -10,7 +10,9 @@ namespace LuckParser.Controllers
 {
     class HTMLHelper
     {
-
+        
+        public static bool[] SnapSettings;
+        
         public static string getFinalDPS(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index)
         {
             int totalboss_dps = 0;
@@ -25,7 +27,7 @@ namespace LuckParser.Controllers
             int totalAllcondi_damage = 0;
             int totalAllphys_dps = 0;
             int totalAllphys_damage = 0;
-            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data)[phase_index];
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data, SnapSettings[14])[phase_index];
             double fight_duration = (phase.getDuration()) / 1000.0;
 
             double damage = 0.0;
@@ -87,7 +89,7 @@ namespace LuckParser.Controllers
         public static string[] getFinalStats(BossData b_data, CombatData c_data, AgentData a_data, Player p, Boss boss, int phase_index)
         {
             String[] statsArray;
-            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data)[phase_index];
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data, SnapSettings[14])[phase_index];
             long start = phase.getStart() + b_data.getFirstAware();
             long end = phase.getEnd() + b_data.getFirstAware();
             List<DamageLog> damage_logs = p.getDamageLogs(0, b_data, c_data.getCombatList(), a_data, phase.getStart(), phase.getEnd());
@@ -235,7 +237,7 @@ namespace LuckParser.Controllers
         }
         public static string[] getFinalDefenses(BossData b_data, CombatData c_data, AgentData a_data, MechanicData m_data, Player p, Boss boss, int phase_index)
         {
-            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data)[phase_index];
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data, SnapSettings[14])[phase_index];
             long start = phase.getStart() + b_data.getFirstAware();
             long end = phase.getEnd() + b_data.getFirstAware();
             List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), a_data, m_data, phase.getStart(), phase.getEnd());
@@ -295,7 +297,7 @@ namespace LuckParser.Controllers
         //(currently not correct)
         public static string[] getFinalSupport(BossData b_data, CombatData c_data, AgentData a_data, Player p, Boss boss, int phase_index)
         {
-            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data)[phase_index];
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data, SnapSettings[14])[phase_index];
             long start = phase.getStart() + b_data.getFirstAware();
             long end = phase.getEnd() + b_data.getFirstAware();
             // List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData());
@@ -318,7 +320,7 @@ namespace LuckParser.Controllers
         }
         public static Dictionary<int, string> getfinalboons(BossData b_data, CombatData c_data, SkillData s_data, AgentData a_data, Boss boss, Player p, int phase_index)
         {
-            List<PhaseData> phases = boss.getPhases(b_data, c_data.getCombatList(), a_data);
+            List<PhaseData> phases = boss.getPhases(b_data, c_data.getCombatList(), a_data, SnapSettings[14]);
             BoonDistribution boon_distrib = p.getBoonDistribution(b_data, s_data, c_data.getCombatList(), phases, phase_index);
             Dictionary<int, string> rates = new Dictionary<int, string>();
             long fight_duration = phases[phase_index].getEnd() - phases[phase_index].getStart();
@@ -347,7 +349,7 @@ namespace LuckParser.Controllers
             {
                 return getfinalboons(b_data, c_data, s_data, a_data, boss, p, phase_index);
             }
-            List<PhaseData> phases = boss.getPhases(b_data, c_data.getCombatList(), a_data);
+            List<PhaseData> phases = boss.getPhases(b_data, c_data.getCombatList(), a_data, SnapSettings[14]);
             long fight_duration = phases[phase_index].getDuration();
             Dictionary<Player, BoonDistribution> boon_logsDist = new Dictionary<Player, BoonDistribution>();
             foreach (Player player in trgetPlayers)
@@ -394,7 +396,7 @@ namespace LuckParser.Controllers
         }
         public static Dictionary<int, string> getfinalcondis(BossData b_data, CombatData c_data, SkillData s_data, AgentData a_data, Boss boss, AbstractPlayer p, int phase_index)
         {
-            List<PhaseData> phases = boss.getPhases(b_data, c_data.getCombatList(), a_data);
+            List<PhaseData> phases = boss.getPhases(b_data, c_data.getCombatList(), a_data, SnapSettings[14]);
             BoonDistribution boon_distrib = p.getBoonDistribution(b_data, s_data, c_data.getCombatList(),phases, phase_index);
             Dictionary<int, string> rates = new Dictionary<int, string>();
             PhaseData phase = phases[phase_index];
@@ -429,7 +431,7 @@ namespace LuckParser.Controllers
             }
 
             List<Point> dmgList = new List<Point>();
-            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data)[phase_index];
+            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data, SnapSettings[14])[phase_index];
             List<DamageLog> damage_logs = p.getDamageLogs(dstid, b_data, c_data.getCombatList(), a_data, phase.getStart(), phase.getEnd());
             // fill the graph, full precision
             List<double> dmgListFull = new List<double>();

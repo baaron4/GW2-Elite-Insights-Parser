@@ -163,7 +163,8 @@ namespace LuckParser
                     Properties.Settings.Default.SimpleRotation,
                     Properties.Settings.Default.ShowAutos,
                     Properties.Settings.Default.LargeRotIcons,
-                    Properties.Settings.Default.ShowEstimates
+                    Properties.Settings.Default.ShowEstimates,
+                    Properties.Settings.Default.ParsePhases
                 };
                 for (int i = 0; i < lvFileList.Items.Count; i++)
                 {
@@ -224,7 +225,7 @@ namespace LuckParser
                                 }
                                 else
                                 {
-                                    control.CreateCSV(sw, ",");
+                                    control.CreateCSV(sw, ",",settingsSnap);
                                 }
                             }
                         }
