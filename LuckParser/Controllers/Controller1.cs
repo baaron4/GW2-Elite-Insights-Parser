@@ -308,32 +308,40 @@ namespace LuckParser.Controllers
             List<AgentItem> player_list = agent_data.getPlayerAgentList();
             List<AgentItem> agent_list = agent_data.getAllAgentsList();
             List<CombatItem> combat_list = combat_data.getCombatList();
-            foreach (AgentItem a in agent_list)
+            foreach (CombatItem c in combat_list)
             {
-                bool assigned_first = false;
-                foreach (CombatItem c in combat_list)
+                foreach (AgentItem a in agent_list)
                 {
-                    if (a.getAgent() == c.getSrcAgent() && c.getSrcInstid() != 0)
+                    if (a.getInstid() == 0 && a.getAgent() == c.getSrcAgent() && c.isStateChange().getID() == 0)
                     {
-                        if (!assigned_first)
-                        {
-                            a.setInstid(c.getSrcInstid());
-                            a.setFirstAware(c.getTime());
-                            assigned_first = true;
-                        }
-                        a.setLastAware(c.getTime());
+                        a.setInstid(c.getSrcInstid());
                     }
-                    else if (a.getAgent() == c.getDstAgent() && c.getDstInstid() != 0)
+                    if (a.getInstid() != 0 && a.getInstid() == c.getSrcInstid())
                     {
-                        if (!assigned_first)
+                        if (a.getFirstAware() == 0)
                         {
-                            a.setInstid(c.getDstInstid());
                             a.setFirstAware(c.getTime());
-                            assigned_first = true;
+                        } else
+                        {
+                            a.setLastAware(c.getTime());
                         }
-                        a.setLastAware(c.getTime());
                     }
+                }
+            }
 
+            foreach (CombatItem c in combat_list)
+            {
+                if (c.getSrcMasterInstid() != 0)
+                {
+                    AgentItem master = agent_list.Find(x => x.getInstid() == c.getSrcMasterInstid() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
+                    if (master != null)
+                    {
+                        AgentItem minion = agent_list.Find(x => x.getInstid() == c.getSrcInstid() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
+                        if (minion != null)
+                        {
+                            minion.setMasterAgent(master.getAgent());
+                        }
+                    }
                 }
             }
 

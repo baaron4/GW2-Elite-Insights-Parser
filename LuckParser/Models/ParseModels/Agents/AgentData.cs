@@ -27,11 +27,10 @@ namespace LuckParser.Models.ParseModels
             else if (prof == "GDG")
             {
                 gadget_agent_list.Add(item);
-                return;
             }
             else
             {
-                    player_agent_list.Add(item);
+                player_agent_list.Add(item);
             }
             all_agents_list.Add(item);
         }
@@ -56,7 +55,8 @@ namespace LuckParser.Models.ParseModels
         {
             return all_agents_list;
         }
-        public AgentItem GetAgent(ulong agent) {
+        public AgentItem GetAgent(ulong agent)
+        {
             if (agent != 0)
             {
                 AgentItem agtreturn = all_agents_list.FirstOrDefault(x => x.getAgent() == agent);
@@ -64,11 +64,11 @@ namespace LuckParser.Models.ParseModels
                 {
                     return agtreturn;
                 }
-                
+
             }
-            
-            return new AgentItem(0,"UNKOWN","UNKNOWN");
-            
+
+            return new AgentItem(0, "UNKOWN", "UNKNOWN");
+
         }
         public AgentItem GetAgentWInst(ushort instid)
         {
@@ -77,6 +77,7 @@ namespace LuckParser.Models.ParseModels
 
         public void clean()
         {
+            gadget_agent_list = gadget_agent_list.Where(x => x.getInstid() != 0 && x.getLastAware() - x.getFirstAware() > 0).ToList();
             NPC_agent_list = NPC_agent_list.Where(x => x.getInstid() != 0 && x.getLastAware() - x.getFirstAware() > 0).ToList();
             all_agents_list = all_agents_list.Where(x => x.getInstid() != 0 && x.getLastAware() - x.getFirstAware() > 0).ToList();
         }
