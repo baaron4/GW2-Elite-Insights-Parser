@@ -367,6 +367,7 @@ namespace LuckParser.Models.ParseModels
             {
                 damage_logs.AddRange(mins.getDamageLogs(0, bossData,combatList,agentData,0, bossData.getAwareDuration()));
             }
+            damage_logs.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
         }
         protected override void setDamagetakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data)
         {

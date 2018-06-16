@@ -322,7 +322,6 @@ namespace LuckParser.Models.ParseModels
             }
             // Fill in Boon Map
             long time_start = bossData.getFirstAware();
-            long fight_duration = bossData.getLastAware() - time_start;
 
             foreach (CombatItem c in combatList)
             {
@@ -332,7 +331,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 long time = c.getTime() - time_start;
                 ushort dst = c.isBuffremove().getID() == 0 ? c.getDstInstid() : c.getSrcInstid();
-                if (agent.getInstid() == dst && time >= 0 && time <= fight_duration)
+                if (agent.getInstid() == dst && c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware())
                 {
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                     if (c.isBuffremove().getID() == 0)

@@ -60,6 +60,7 @@ namespace LuckParser.Models.ParseModels
             {
                 damage_logsFiltered.AddRange(mins.getDamageLogs(bossData.getInstid(), bossData, combatList, agentData, 0, bossData.getAwareDuration()));
             }
+            damage_logsFiltered.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
         }
 
         protected override void setCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
