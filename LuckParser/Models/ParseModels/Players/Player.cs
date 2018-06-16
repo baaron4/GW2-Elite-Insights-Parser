@@ -9,9 +9,6 @@ namespace LuckParser.Models.ParseModels
         // Fields
         private String account;
         private String group;
-        private int toughness;
-        private int healing;
-        private int condition;
         private long dcd = 0;//time in ms the player dcd
        
         private List<CombatItem> consumeList = new List<CombatItem>();
@@ -23,10 +20,6 @@ namespace LuckParser.Models.ParseModels
             String[] name = agent.getName().Split('\0');
             account = name[1];
             group = name[2];
-            prof = agent.getProf();
-            toughness = agent.getToughness();
-            healing = agent.getHealing();
-            condition = agent.getCondition();
         }
 
         // Getters
@@ -44,17 +37,17 @@ namespace LuckParser.Models.ParseModels
 
         public int getToughness()
         {
-            return toughness;
+            return agent.getToughness();
         }
 
         public int getHealing()
         {
-            return healing;
+            return agent.getHealing();
         }
 
         public int getCondition()
         {
-            return condition;
+            return agent.getCondition();
         }
         // Public methods
         public int[] getCleanses(BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end) {
@@ -64,7 +57,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (c.isActivation().getID() == 0)
                 {
-                    if (instid == c.getDstInstid() && c.getIFF().getEnum() == "FRIEND" && (c.isBuffremove().getID() == 1)/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
+                    if (agent.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FRIEND" && (c.isBuffremove().getID() == 1)/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
                     {
                         long time = c.getTime() - time_start;
                         if (time > 0)
@@ -225,8 +218,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
             {
-
-                if (instid == c.getSrcInstid() || instid == c.getSrcMasterInstid())//selecting player or minion as caster
+                if (agent.getInstid() == c.getSrcInstid())//selecting player or minion as caster
                 {
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in agentData.getNPCAgentList())
@@ -234,13 +226,17 @@ namespace LuckParser.Models.ParseModels
                         addDamageLog(time, item.getInstid(), c, damage_logs);
                     }
                 }
-
+            }
+            Dictionary<string, Minions> min_list = getMinions(bossData, combatList, agentData);
+            foreach (Minions mins in min_list.Values)
+            {
+                damage_logs.AddRange(mins.getDamageLogs(0, bossData, combatList, agentData, 0, bossData.getAwareDuration()));
             }
         }     
         protected override void setDamagetakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData,MechanicData m_data) {
             long time_start = bossData.getFirstAware();               
             foreach (CombatItem c in combatList) {
-                if (instid == c.getDstInstid()) {//selecting player as target
+                if (agent.getInstid() == c.getDstInstid()) {//selecting player as target
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in agentData.getNPCAgentList())
                     {//selecting all
@@ -267,7 +263,7 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 long time = c.getTime() - time_start;
-                if (instid == c.getDstInstid())
+                if (agent.getInstid() == c.getDstInstid())
                 {
                     consumeList.Add(c); 
                 }

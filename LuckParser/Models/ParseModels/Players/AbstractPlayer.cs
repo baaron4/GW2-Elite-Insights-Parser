@@ -7,9 +7,8 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractPlayer
     {
-        protected ushort instid;
+        protected AgentItem agent;
         private String character;
-        protected String prof;
         // Boons
         private List<BoonDistribution> boon_distribution = new List<BoonDistribution>();
         private List<Dictionary<int, long>> boon_presence = new List<Dictionary<int, long>>();
@@ -27,30 +26,30 @@ namespace LuckParser.Models.ParseModels
         {
             String[] name = agent.getName().Split('\0');
             character = name[0];
-            instid = agent.getInstid();
+            this.agent = agent;
         }
         // Getters
         public ushort getInstid()
         {
-            return instid;
+            return agent.getInstid();
         }
         public string getCharacter()
         {
             return character;
         }
+        public string getProf()
+        {
+            return agent.getProf();
+        }
         public long getDeath(BossData bossData, List<CombatItem> combatList, long start, long end)
         {
             long offset = bossData.getFirstAware();
-            CombatItem dead = combatList.FirstOrDefault(x => x.getSrcInstid() == instid && x.isStateChange().getEnum() == "CHANGE_DEAD" && x.getTime() >= start + offset && x.getTime() <= end + offset);
+            CombatItem dead = combatList.FirstOrDefault(x => x.getSrcInstid() == agent.getInstid() && x.isStateChange().getEnum() == "CHANGE_DEAD" && x.getTime() >= start + offset && x.getTime() <= end + offset);
             if (dead != null && dead.getTime() > 0)
             {
                 return dead.getTime();
             }
             return 0;
-        }
-        public string getProf()
-        {
-            return prof;
         }
 
         public void addDPSGraph(int id, List<Point> graph)
@@ -141,7 +140,7 @@ namespace LuckParser.Models.ParseModels
         }
         public List<DamageLog> getJustPlayerDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)
         {
-            return getDamageLogs(instidFilter, bossData, combatList, agentData, start, end).Where(x => x.getInstidt() == instid).ToList();
+            return getDamageLogs(instidFilter, bossData, combatList, agentData, start, end).Where(x => x.getInstidt() == agent.getInstid()).ToList();
         }
         // privates
         protected void addDamageLog(long time, ushort instid, CombatItem c, List<DamageLog> toFill)
@@ -333,7 +332,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 long time = c.getTime() - time_start;
                 ushort dst = c.isBuffremove().getID() == 0 ? c.getDstInstid() : c.getSrcInstid();
-                if (instid == dst && time >= 0 && time <= fight_duration)
+                if (agent.getInstid() == dst && time >= 0 && time <= fight_duration)
                 {
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                     if (c.isBuffremove().getID() == 0)
