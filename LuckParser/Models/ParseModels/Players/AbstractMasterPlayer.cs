@@ -32,15 +32,12 @@ namespace LuckParser.Models.ParseModels
             List<AgentItem> combatMinion = agentData.getNPCAgentList().Where(x => x.getMasterAgent() == agent.getAgent()).ToList();
             foreach (AgentItem agent in combatMinion)
             {
-                if (agent != null)
+                string id = agent.getName();
+                if (!minions.ContainsKey(id))
                 {
-                    string id = agent.getName();
-                    if (!minions.ContainsKey(id))
-                    {
-                        minions[id] = new Minions();
-                    }
-                    minions[id].Add(new Minion(agent.getInstid(), agent));
+                    minions[id] = new Minions();
                 }
+                minions[id].Add(new Minion(agent.getInstid(), agent));
             }
         }
 
@@ -70,10 +67,14 @@ namespace LuckParser.Models.ParseModels
 
             foreach (CombatItem c in combatList)
             {
+                if (! (c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware()))
+                {
+                    continue;
+                }
                 LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
                 if (state.getID() == 0)
                 {
-                    if (agent.getInstid() == c.getSrcInstid() && c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware())//selecting player as caster
+                    if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {
                         if (c.isActivation().getID() > 0)
                         {
@@ -99,7 +100,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 else if (state.getID() == 11)
                 {//Weapon swap
-                    if (agent.getInstid() == c.getSrcInstid() && c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware())//selecting player as caster
+                    if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {
                         if ((int)c.getDstAgent() == 4 || (int)c.getDstAgent() == 5)
                         {

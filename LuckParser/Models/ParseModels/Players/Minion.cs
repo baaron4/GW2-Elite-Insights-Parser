@@ -49,10 +49,14 @@ namespace LuckParser.Models.ParseModels
 
             foreach (CombatItem c in combatList)
             {
+                if (!(c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware()))
+                {
+                    continue;
+                }
                 LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
                 if (state.getID() == 0)
                 {
-                    if (agent.getInstid() == c.getSrcInstid() && c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware())//selecting player as caster
+                    if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {
                         if (c.isActivation().getID() > 0)
                         {
