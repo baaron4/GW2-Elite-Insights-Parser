@@ -14,6 +14,11 @@ namespace LuckParser.Models.DataModels
             finalDps = new Dictionary<Player, FinalDPS[]>();
             finalDefenses = new Dictionary<Player, FinalDefenses[]>();
             finalStats = new Dictionary<Player, FinalStats[]>();
+            finalSupport = new Dictionary<Player, FinalSupport[]>();
+            finalBoons = new Dictionary<Player, Dictionary<int, FinalBoonUptime>[]>();
+            finalGroupBoons = new Dictionary<Player, Dictionary<int, FinalBoonUptime>[]>();
+            finalOffGroupBoons = new Dictionary<Player, Dictionary<int, FinalBoonUptime>[]>();
+            finalSquadBoons = new Dictionary<Player, Dictionary<int, FinalBoonUptime>[]>();
         }
 
         public class FinalDPS
@@ -79,5 +84,28 @@ namespace LuckParser.Models.DataModels
         }
 
         public Dictionary<Player, FinalDefenses[]> finalDefenses;
+
+        public class FinalSupport
+        {
+            public int resurrects;
+            public float ressurrectTime;
+            public int condiCleanse;
+            public float condiCleanseTime;
+        }
+
+        public Dictionary<Player, FinalSupport[]> finalSupport;
+
+        public class FinalBoonUptime
+        {
+            public double uptime;
+            public double generation;
+            public double overstack;
+            public Boon.BoonType boonType;
+        }
+
+        public Dictionary<Player, Dictionary<int, FinalBoonUptime>[]> finalBoons;
+        public Dictionary<Player, Dictionary<int, FinalBoonUptime>[]> finalGroupBoons;
+        public Dictionary<Player, Dictionary<int, FinalBoonUptime>[]> finalOffGroupBoons;
+        public Dictionary<Player, Dictionary<int, FinalBoonUptime>[]> finalSquadBoons;
     }
 }

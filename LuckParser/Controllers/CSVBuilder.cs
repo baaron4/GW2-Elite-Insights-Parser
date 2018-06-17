@@ -86,10 +86,10 @@ namespace LuckParser.Controllers
                         dps.bossCondiDps + delimiter + // condi
                         dps.allDps + delimiter); // all dps
 
-                Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data, combat_data, skill_data, agent_data, boss, p, 0);
-                sw.Write(boonArray[1187] + delimiter + // Quickness
-                        boonArray[30328] + delimiter + // Alacrity
-                        boonArray[740] + delimiter); // Might
+                Dictionary<int, Statistics.FinalBoonUptime> boons = statistics.finalBoons[p][0];
+                sw.Write(boons[1187].uptime + delimiter + // Quickness
+                         boons[30328].uptime + delimiter + // Alacrity
+                         boons[740].uptime + delimiter); // Might
 
                 sw.Write(teamStats[0] + delimiter  // boss dps
                         + teamStats[1] + delimiter // all

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
 
@@ -20,6 +18,7 @@ namespace LuckParser.Controllers
         private AgentData agentData;
         private List<Player> players;
         private MechanicData mechanicData;
+        private SkillData skillData;
 
         private List<PhaseData> phases;
 
@@ -38,12 +37,15 @@ namespace LuckParser.Controllers
             agentData = log.getAgentData();
             players = log.getPlayerList();
             mechanicData = log.getMechanicData();
+            skillData = log.getSkillData();
 
             phases = boss.getPhases(bossData, combatData.getCombatList(), agentData, settings.ParsePhases);
 
             calculateFinalDPS();
             calculateFinalStats();
             calculateFinalDefenses();
+            calculateFinalSupport();
+            calculateFinalBoons();
 
             return statistics;
         }
@@ -325,6 +327,289 @@ namespace LuckParser.Controllers
                     phaseDefense[phaseIndex] = final;
                 }
                 statistics.finalDefenses[player] = phaseDefense;
+            }
+        }
+
+        // TODO ensure it is working correctly
+        private void calculateFinalSupport()
+        {
+            foreach (Player player in players)
+            {
+                Statistics.FinalSupport[] phaseSupport = new Statistics.FinalSupport[phases.Count];
+                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                {
+                    Statistics.FinalSupport final = new Statistics.FinalSupport();
+
+                    PhaseData phase = phases[phaseIndex];
+                    long start = phase.getStart() + bossData.getFirstAware();
+                    long end = phase.getEnd() + bossData.getFirstAware();
+
+                    // List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData());
+                    int instid = player.getInstid();
+                    int resurrects = 0;
+                    double restime = 0.0;
+                    int condiCleanse = 0;
+                    double condiCleansetime = 0.0;
+
+                    int[] resArray = player.getReses(bossData, combatData.getCombatList(), agentData, phase.getStart(), phase.getEnd());
+                    int[] cleanseArray = player.getCleanses(bossData, combatData.getCombatList(), agentData, phase.getStart(), phase.getEnd());
+                    final.resurrects = resArray[0];
+                    final.ressurrectTime = resArray[1]/1000f;
+                    final.condiCleanse = cleanseArray[0];
+                    final.condiCleanseTime = cleanseArray[1]/1000f;
+
+                    phaseSupport[phaseIndex] = final;
+                }
+                statistics.finalSupport[player] = phaseSupport;
+            }
+        }
+
+        private void calculateFinalBoons()
+        {
+            // Player Boons
+            foreach (Player player in players)
+            {
+                Dictionary<int, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<int, Statistics.FinalBoonUptime>[phases.Count];
+                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                {
+                    Dictionary<int, Statistics.FinalBoonUptime> final = new Dictionary<int, Statistics.FinalBoonUptime>();
+
+                    PhaseData phase = phases[phaseIndex];
+
+                    BoonDistribution selfBoons = player.getBoonDistribution(bossData, skillData, combatData.getCombatList(), phases, phaseIndex);
+
+                    long fightDuration = phase.getEnd() - phase.getStart();
+                    foreach (Boon boon in Boon.getAllBuffList())
+                    {
+                        Statistics.FinalBoonUptime uptime = new Statistics.FinalBoonUptime();
+
+                        uptime.uptime = 0;
+                        uptime.generation = 0;
+                        uptime.overstack = 0;
+                        if (selfBoons.ContainsKey(boon.getID()))
+                        {
+                            if (boon.getType() == Boon.BoonType.Duration)
+                            {
+                                uptime.uptime = Math.Round(100.0 * selfBoons.getUptime(boon.getID()) / fightDuration, 1);
+                                uptime.generation = Math.Round(100.0f * selfBoons.getGeneration(boon.getID(), player.getInstid()) / fightDuration, 1);
+                                uptime.overstack = Math.Round(100.0f * selfBoons.getOverstack(boon.getID(), player.getInstid()) / fightDuration, 1);
+                            }
+                            else if (boon.getType() == Boon.BoonType.Intensity)
+                            {
+                                uptime.uptime = Math.Round((double)selfBoons.getUptime(boon.getID()) / fightDuration, 1);
+                                uptime.generation = Math.Round((double)selfBoons.getGeneration(boon.getID(), player.getInstid()) / fightDuration, 1);
+                                uptime.overstack = Math.Round((double)selfBoons.getOverstack(boon.getID(), player.getInstid()) / fightDuration, 1);
+                            }
+
+                            uptime.boonType = boon.getType();
+                        }
+                        final[boon.getID()] = uptime;
+                    }
+
+                    phaseBoons[phaseIndex] = final;
+                }
+                statistics.finalBoons[player] = phaseBoons;
+            }
+
+            // Group Boons
+            foreach (Player player in players)
+            {
+                Dictionary<int, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<int, Statistics.FinalBoonUptime>[phases.Count];
+                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                {
+                    PhaseData phase = phases[phaseIndex];
+                    long fightDuration = phase.getEnd() - phase.getStart();
+
+                    List<Player> groupPlayers = new List<Player>();
+                    foreach (Player p in players)
+                    {
+                        if (p.getGroup() == player.getGroup()) groupPlayers.Add(p);
+                    }
+
+                    Dictionary<Player, BoonDistribution> boonDistributions = new Dictionary<Player, BoonDistribution>();
+                    foreach (Player p in groupPlayers)
+                    {
+                        boonDistributions[p] = p.getBoonDistribution(bossData, skillData, combatData.getCombatList(),
+                            phases, phaseIndex);
+                    }
+
+                    Dictionary<int, Statistics.FinalBoonUptime> final =
+                        new Dictionary<int, Statistics.FinalBoonUptime>();
+
+                    foreach (Boon boon in Boon.getAllBuffList())
+                    {
+                        long totalGeneration = 0;
+                        long totalOverstack = 0;
+                        long totalUptime = 0;
+
+                        foreach (Player p in groupPlayers)
+                        {
+                            BoonDistribution boons = boonDistributions[p];
+                            if (boons.ContainsKey(boon.getID()))
+                            {
+                                totalGeneration += boons.getGeneration(boon.getID(), player.getInstid());
+                                totalOverstack += boons.getOverstack(boon.getID(), player.getInstid());
+                                totalUptime += boons.getUptime(boon.getID());
+                            }
+                        }
+
+                        Statistics.FinalBoonUptime uptime = new Statistics.FinalBoonUptime();
+
+                        if (boon.getType() == Boon.BoonType.Duration)
+                        {
+                            uptime.uptime = Math.Round(100.0 * totalUptime / fightDuration / groupPlayers.Count, 1);
+                            uptime.generation = Math.Round(100.0f * totalGeneration / fightDuration / groupPlayers.Count, 1);
+                            uptime.overstack = Math.Round(100.0f * totalOverstack / fightDuration / groupPlayers.Count, 1);
+                        }
+                        else if (boon.getType() == Boon.BoonType.Intensity)
+                        {
+                            uptime.uptime = Math.Round((double)totalUptime / fightDuration / groupPlayers.Count, 1);
+                            uptime.generation = Math.Round((double)totalGeneration / fightDuration / groupPlayers.Count, 1);
+                            uptime.overstack = Math.Round((double)totalOverstack / fightDuration / groupPlayers.Count, 1);
+                        }
+
+                        uptime.boonType = boon.getType();
+
+                        final[boon.getID()] = uptime;
+
+                        phaseBoons[phaseIndex] = final;
+                    }
+                }
+                statistics.finalGroupBoons[player] = phaseBoons;
+            }
+
+            // Off Group Boons
+            foreach (Player player in players)
+            {
+                Dictionary<int, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<int, Statistics.FinalBoonUptime>[phases.Count];
+                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                {
+                    PhaseData phase = phases[phaseIndex];
+                    long fightDuration = phase.getEnd() - phase.getStart();
+
+                    List<Player> groupPlayers = new List<Player>();
+                    foreach (Player p in players)
+                    {
+                        if (p.getGroup() != player.getGroup()) groupPlayers.Add(p);
+                    }
+
+                    Dictionary<Player, BoonDistribution> boonDistributions = new Dictionary<Player, BoonDistribution>();
+                    foreach (Player p in groupPlayers)
+                    {
+                        boonDistributions[p] = p.getBoonDistribution(bossData, skillData, combatData.getCombatList(),
+                            phases, phaseIndex);
+                    }
+
+                    Dictionary<int, Statistics.FinalBoonUptime> final =
+                        new Dictionary<int, Statistics.FinalBoonUptime>();
+
+                    foreach (Boon boon in Boon.getAllBuffList())
+                    {
+                        long totalGeneration = 0;
+                        long totalOverstack = 0;
+                        long totalUptime = 0;
+
+                        foreach (Player p in groupPlayers)
+                        {
+                            BoonDistribution boons = boonDistributions[p];
+                            if (boons.ContainsKey(boon.getID()))
+                            {
+                                totalGeneration += boons.getGeneration(boon.getID(), player.getInstid());
+                                totalOverstack += boons.getOverstack(boon.getID(), player.getInstid());
+                                totalUptime += boons.getUptime(boon.getID());
+                            }
+                        }
+
+                        Statistics.FinalBoonUptime uptime = new Statistics.FinalBoonUptime();
+
+                        if (boon.getType() == Boon.BoonType.Duration)
+                        {
+                            uptime.uptime = Math.Round(100.0 * totalUptime / fightDuration / groupPlayers.Count, 1);
+                            uptime.generation = Math.Round(100.0f * totalGeneration / fightDuration / groupPlayers.Count, 1);
+                            uptime.overstack = Math.Round(100.0f * totalOverstack / fightDuration / groupPlayers.Count, 1);
+                        }
+                        else if (boon.getType() == Boon.BoonType.Intensity)
+                        {
+                            uptime.uptime = Math.Round((double)totalUptime / fightDuration / groupPlayers.Count, 1);
+                            uptime.generation = Math.Round((double)totalGeneration / fightDuration / groupPlayers.Count, 1);
+                            uptime.overstack = Math.Round((double)totalOverstack / fightDuration / groupPlayers.Count, 1);
+                        }
+
+                        uptime.boonType = boon.getType();
+
+                        final[boon.getID()] = uptime;
+
+                        phaseBoons[phaseIndex] = final;
+                    }
+                }
+                statistics.finalOffGroupBoons[player] = phaseBoons;
+            }
+
+            // Squad Boons
+            foreach (Player player in players)
+            {
+                Dictionary<int, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<int, Statistics.FinalBoonUptime>[phases.Count];
+                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                {
+                    PhaseData phase = phases[phaseIndex];
+                    long fightDuration = phase.getEnd() - phase.getStart();
+
+                    List<Player> groupPlayers = new List<Player>();
+                    foreach (Player p in players)
+                    {
+                        groupPlayers.Add(p);
+                    }
+
+                    Dictionary<Player, BoonDistribution> boonDistributions = new Dictionary<Player, BoonDistribution>();
+                    foreach (Player p in groupPlayers)
+                    {
+                        boonDistributions[p] = p.getBoonDistribution(bossData, skillData, combatData.getCombatList(),
+                            phases, phaseIndex);
+                    }
+
+                    Dictionary<int, Statistics.FinalBoonUptime> final =
+                        new Dictionary<int, Statistics.FinalBoonUptime>();
+
+                    foreach (Boon boon in Boon.getAllBuffList())
+                    {
+                        long totalGeneration = 0;
+                        long totalOverstack = 0;
+                        long totalUptime = 0;
+
+                        foreach (Player p in groupPlayers)
+                        {
+                            BoonDistribution boons = boonDistributions[p];
+                            if (boons.ContainsKey(boon.getID()))
+                            {
+                                totalGeneration += boons.getGeneration(boon.getID(), player.getInstid());
+                                totalOverstack += boons.getOverstack(boon.getID(), player.getInstid());
+                                totalUptime += boons.getUptime(boon.getID());
+                            }
+                        }
+
+                        Statistics.FinalBoonUptime uptime = new Statistics.FinalBoonUptime();
+
+                        if (boon.getType() == Boon.BoonType.Duration)
+                        {
+                            uptime.uptime = Math.Round(100.0 * totalUptime / fightDuration / groupPlayers.Count, 1);
+                            uptime.generation = Math.Round(100.0f * totalGeneration / fightDuration / groupPlayers.Count, 1);
+                            uptime.overstack = Math.Round(100.0f * totalOverstack / fightDuration / groupPlayers.Count, 1);
+                        }
+                        else if (boon.getType() == Boon.BoonType.Intensity)
+                        {
+                            uptime.uptime = Math.Round((double)totalUptime / fightDuration / groupPlayers.Count, 1);
+                            uptime.generation = Math.Round((double)totalGeneration / fightDuration / groupPlayers.Count, 1);
+                            uptime.overstack = Math.Round((double)totalOverstack / fightDuration / groupPlayers.Count, 1);
+                        }
+
+                        uptime.boonType = boon.getType();
+
+                        final[boon.getID()] = uptime;
+
+                        phaseBoons[phaseIndex] = final;
+                    }
+                }
+                statistics.finalSquadBoons[player] = phaseBoons;
             }
         }
     }

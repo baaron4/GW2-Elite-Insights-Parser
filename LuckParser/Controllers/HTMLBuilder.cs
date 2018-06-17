@@ -1057,16 +1057,21 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        string[] stats = HTMLHelper.getFinalSupport(boss_data, combat_data, agent_data, player, boss, phase_index);
+                        Statistics.FinalSupport support = statistics.finalSupport[player][phase_index];
+
                         //gather data for footer
-                        footerList.Add(new string[] { player.getGroup().ToString(), stats[3], stats[2], stats[1], stats[0] });
+                        footerList.Add(new string[] {
+                            player.getGroup().ToString(),
+                            support.condiCleanseTime.ToString(), support.condiCleanse.ToString(),
+                            support.ressurrectTime.ToString(), support.resurrects.ToString()
+                        });
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[3] + " seconds \">" + stats[2] + "</span>" + "</td>");//condicleanse                                                                                                                                                                   //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[1] + " seconds \">" + stats[0] + "</span>" + "</td>");//res
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.condiCleanseTime + " seconds \">" + support.condiCleanse + "</span>" + "</td>");//condicleanse                                                                                                                                                                   //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.ressurrectTime + " seconds \">" + support.resurrects + "</span>" + "</td>");//res
                         }
                         sw.Write("</tr>");
                     }
@@ -1126,7 +1131,8 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data, combat_data, skill_data, agent_data, boss, player, phase_index);
+
+                        Dictionary<int, Statistics.FinalBoonUptime> boons = statistics.finalBoons[player][phase_index];
                         List<string> boonArrayToList = new List<string>();
                         boonArrayToList.Add(player.getGroup());
                         int count = 0;
@@ -1160,11 +1166,11 @@ namespace LuckParser.Controllers
                                 {
                                     intensityBoon.Add(count);
                                 }
-                                if (boonArray.ContainsKey(boon.getID()))
+                                if (boons.ContainsKey(boon.getID()))
                                 {
-                                    string toWrite = Math.Round(float.Parse(boonArray[boon.getID()].Trim('%')), 1) + (intensityBoon.Contains(count) ? "" : "%");
+                                    string toWrite = boons[boon.getID()].uptime + (intensityBoon.Contains(count) ? "" : "%");
                                     sw.Write("<td>" + toWrite + "</td>");
-                                    boonArrayToList.Add(boonArray[boon.getID()]);
+                                    boonArrayToList.Add(boons[boon.getID()].uptime.ToString());
                                 }
                                 else
                                 {
@@ -1248,10 +1254,40 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        List<Player> playerID = new List<Player>();
-                        playerID.Add(player);
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data, combat_data, skill_data, agent_data, boss, player, playerID, phase_index);
-                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
+                        Dictionary<int, Statistics.FinalBoonUptime> uptimes = statistics.finalBoons[player][phase_index];
+
+                        Dictionary<int, string> rates = new Dictionary<int, string>();
+                        foreach (Boon boon in Boon.getAllBuffList())
+                        {
+                            string rate = "0";
+
+                            Statistics.FinalBoonUptime uptime = uptimes[boon.getID()];
+
+                            if (uptime.generation > 0)
+                            {
+                                if (boon.getType() == Boon.BoonType.Duration)
+                                {
+                                    rate =
+                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
+                                        + uptime.overstack + "% with overstack \">"
+                                        + uptime.generation
+                                        + "%</span>";
+                                }
+                                else if (boon.getType() == Boon.BoonType.Intensity)
+                                {
+                                    rate =
+                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
+                                        + uptime.overstack + " with overstack \">"
+                                        + uptime.generation
+                                        + "</span>";
+                                }
+
+                            }
+
+                            rates[boon.getID()] = rate;
+                        }
+
+                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, rates);
                     }
                 }
                 sw.Write("</tbody>");
@@ -1275,14 +1311,40 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        List<Player> playerIDS = new List<Player>();
-                        foreach (Player p in p_list)
+                        Dictionary<int, Statistics.FinalBoonUptime> boons =
+                            statistics.finalGroupBoons[player][phase_index];
+
+                        Dictionary<int, string> rates = new Dictionary<int, string>();
+                        foreach (Boon boon in Boon.getAllBuffList())
                         {
-                            if (p.getGroup() == player.getGroup())
-                                playerIDS.Add(p);
+                            string rate = "0";
+
+                            Statistics.FinalBoonUptime uptime = boons[boon.getID()];
+
+                            if (uptime.generation > 0)
+                            {
+                                if (boon.getType() == Boon.BoonType.Duration)
+                                {
+                                    rate =
+                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
+                                        + uptime.overstack + "% with overstack \">"
+                                        + uptime.generation
+                                        + "%</span>";
+                                }
+                                else if (boon.getType() == Boon.BoonType.Intensity)
+                                {
+                                    rate =
+                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
+                                        + uptime.overstack + " with overstack \">"
+                                        + uptime.generation
+                                        + "</span>";
+                                }
+                            }
+
+                            rates[boon.getID()] = rate;
                         }
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data, combat_data, skill_data, agent_data, boss, player, playerIDS, phase_index);
-                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
+
+                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, rates);
                     }
                 }
                 sw.Write("</tbody>");
@@ -1305,14 +1367,40 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        List<Player> playerIDS = new List<Player>();
-                        foreach (Player p in p_list)
+                        Dictionary<int, Statistics.FinalBoonUptime> boons =
+                            statistics.finalOffGroupBoons[player][phase_index];
+
+                        Dictionary<int, string> rates = new Dictionary<int, string>();
+                        foreach (Boon boon in Boon.getAllBuffList())
                         {
-                            if (p.getGroup() != player.getGroup())
-                                playerIDS.Add(p);
+                            string rate = "0";
+
+                            Statistics.FinalBoonUptime uptime = boons[boon.getID()];
+
+                            if (uptime.generation > 0)
+                            {
+                                if (boon.getType() == Boon.BoonType.Duration)
+                                {
+                                    rate =
+                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
+                                        + uptime.overstack + "% with overstack \">"
+                                        + uptime.generation
+                                        + "%</span>";
+                                }
+                                else if (boon.getType() == Boon.BoonType.Intensity)
+                                {
+                                    rate =
+                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
+                                        + uptime.overstack + " with overstack \">"
+                                        + uptime.generation
+                                        + "</span>";
+                                }
+                            }
+
+                            rates[boon.getID()] = rate;
                         }
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data, combat_data, skill_data, agent_data, boss, player, playerIDS, phase_index);
-                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
+
+                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, rates);
                     }
                 }
                 sw.Write("</tbody>");
@@ -1334,15 +1422,42 @@ namespace LuckParser.Controllers
                 HTMLHelper.writeBoonTableHeader(sw, list_to_use);
                 sw.Write("<tbody>");
                 {
-                    List<Player> playerIDS = new List<Player>();
-                    foreach (Player p in p_list)
-                    {
-                        playerIDS.Add(p);
-                    }
                     foreach (Player player in p_list)
                     {
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data, combat_data, skill_data, agent_data, boss, player, playerIDS, phase_index);
-                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, boonArray);
+                        Dictionary<int, Statistics.FinalBoonUptime> boons =
+                            statistics.finalSquadBoons[player][phase_index];
+
+                        Dictionary<int, string> rates = new Dictionary<int, string>();
+                        foreach (Boon boon in Boon.getAllBuffList())
+                        {
+                            string rate = "0";
+
+                            Statistics.FinalBoonUptime uptime = boons[boon.getID()];
+
+                            if (uptime.generation > 0)
+                            {
+                                if (boon.getType() == Boon.BoonType.Duration)
+                                {
+                                    rate =
+                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
+                                        + uptime.overstack + "% with overstack \">"
+                                        + uptime.generation
+                                        + "%</span>";
+                                }
+                                else if (boon.getType() == Boon.BoonType.Intensity)
+                                {
+                                    rate =
+                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
+                                        + uptime.overstack + " with overstack \">"
+                                        + uptime.generation
+                                        + "</span>";
+                                }
+                            }
+
+                            rates[boon.getID()] = rate;
+                        }
+
+                        HTMLHelper.writeBoonGenTableBody(sw, player, list_to_use, rates);
                     }
                 }
                 sw.Write("</tbody>");
