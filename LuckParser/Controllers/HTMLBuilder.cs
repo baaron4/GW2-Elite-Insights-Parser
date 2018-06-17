@@ -960,7 +960,7 @@ namespace LuckParser.Controllers
                                 sw.Write("<td></td>");
                                 sw.Write("<td></td>");
                                 sw.Write("<td>Group " + groupNum + "</td>");
-                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[1])) + "</td>");
+                                sw.Write("<td>" + groupList.Sum(c => long.Parse(c[1])) + "</td>");
                                 sw.Write("<td>" + groupList.Sum(c => int.Parse(c[2])) + "</td>");
                                 sw.Write("<td>" + groupList.Sum(c => int.Parse(c[3])) + "</td>");
                                 sw.Write("<td>" + groupList.Sum(c => int.Parse(c[4])) + "</td>");
@@ -976,7 +976,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td></td>");
                             sw.Write("<td></td>");
                             sw.Write("<td>Total</td>");
-                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[1])) + "</td>");
+                            sw.Write("<td>" + footerList.Sum(c => long.Parse(c[1])) + "</td>");
                             sw.Write("<td>" + footerList.Sum(c => int.Parse(c[2])) + "</td>");
                             sw.Write("<td>" + footerList.Sum(c => int.Parse(c[3])) + "</td>");
                             sw.Write("<td>" + footerList.Sum(c => int.Parse(c[4])) + "</td>");
@@ -2010,7 +2010,7 @@ namespace LuckParser.Controllers
             PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, settings.ParsePhases)[phase_index];
             List<DamageLog> damageLogs = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data, mech_data, phase.getStart(), phase.getEnd());
             List<SkillItem> s_list = skill_data.getSkillList();
-            int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
+            long finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.getDamage()) : 0;
             string pid = p.getInstid() + "_" + phase_index;
             sw.Write("<script> $(function () { $('#distTaken_table_" + pid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"distTaken_table_" + pid + "\">");

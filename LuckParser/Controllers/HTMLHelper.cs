@@ -244,7 +244,7 @@ namespace LuckParser.Controllers
             List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), a_data, m_data, phase.getStart(), phase.getEnd());
             int instid = p.getInstid();
 
-            int damagetaken = damage_logs.Select(x => x.getDamage()).Sum();
+            long damagetaken = damage_logs.Select(x => (long)x.getDamage()).Sum();
             int blocked = 0;
             //int dmgblocked = 0;
             int invulned = 0;
