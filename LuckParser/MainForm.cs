@@ -163,13 +163,17 @@ namespace LuckParser
 
                     logger(i, "Working...", 20);
                     Controller1 control = new Controller1();
+                    StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
 
                     if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
                         fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
                     {
                         //Process evtc here
                         logger(i, "Reading Binary...", 40);
+
                         control.ParseLog(fInfo.FullName);
+                        ParsedLog log = control.GetParsedLog();
+                        Statistics statistics = statisticsCalculator.calculateStatistics(log);
 
                         //Creating File
                         //save location
@@ -207,12 +211,12 @@ namespace LuckParser
                             {
                                 if (Properties.Settings.Default.SaveOutHTML)
                                 {
-                                    HTMLBuilder builder = new HTMLBuilder(control.GetParsedLog(), settings);
+                                    HTMLBuilder builder = new HTMLBuilder(log, settings, statistics);
                                     builder.CreateHTML(sw);
                                 }
                                 else
                                 {
-                                    CSVBuilder builder = new CSVBuilder(control.GetParsedLog(), settings);
+                                    CSVBuilder builder = new CSVBuilder(log, settings, statistics);
                                     builder.CreateCSV(sw, ",");
                                 }
                             }
