@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Net;
 using LuckParser.Models;
 using System.IO.Compression;
+using System.ComponentModel;
 //recomend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {
@@ -55,7 +56,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="evtc">The path to the log to parse</param>
         /// <returns></returns>
-        public bool ParseLog(string evtc)
+        public void ParseLog(BackgroundWorker bg, GridRow row, string evtc)
         {
             MemoryStream stream = new MemoryStream();
             //used to stream from a database, probably could use better stream now
@@ -68,7 +69,7 @@ namespace LuckParser.Controllers
                     {
                         if(arch.Entries.Count != 1)
                         {
-                            return false;
+                            bg.ThrowIfCanceled(row, "Invalid Archive");
                         }
                         using(var data = arch.Entries[0].Open())
                         {
@@ -81,17 +82,25 @@ namespace LuckParser.Controllers
                     origstream.CopyTo(stream);
                 }
                 stream.Position = 0;
-
+                
+                bg.ThrowIfCanceled(row, "Cancelled");
+                bg.UpdateProgress(row, "15% - Parsing boss data...", 15);
                 parseBossData(stream);
+                bg.ThrowIfCanceled(row, "Cancelled");
+                bg.UpdateProgress(row, "20% - Parsing agent data...", 20);
                 parseAgentData(stream);
+                bg.ThrowIfCanceled(row, "Cancelled");
+                bg.UpdateProgress(row, "25% - Parsing skill data...", 25);
                 parseSkillData(stream);
+                bg.ThrowIfCanceled(row, "Cancelled");
+                bg.UpdateProgress(row, "30% - Parsing combat list...", 30);
                 parseCombatList(stream);
+                bg.ThrowIfCanceled(row, "Cancelled");
+                bg.UpdateProgress(row, "35% - Pairing data...", 35);
                 fillMissingData(stream);
-
+                bg.ThrowIfCanceled(row, "Cancelled");
                 stream.Close();
             }
-            ////CreateHTML(); is now runnable dont run here
-            return (true);
         }
 
         //sub Parse methods
@@ -3147,7 +3156,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="settingsSnap">Settings</param>
-        public void CreateHTML(StreamWriter sw, bool[] settingsSnap)
+        public void CreateHTML(BackgroundWorker bg, GridRow row, StreamWriter sw, bool[] settingsSnap)
         {
 
             SnapSettings = settingsSnap;
@@ -3160,7 +3169,10 @@ namespace LuckParser.Controllers
             }
             string bossname = FilterStringChars(boss_data.getName());
             setPresentBoons(settingsSnap);
-            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data);           
+            List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data);
+
+            bg.ThrowIfCanceled(row, "Cancelled");
+            bg.UpdateProgress(row, "70% - Writing HTML...", 70);
             // HTML STARTS
             sw.Write("<!DOCTYPE html><html lang=\"en\">");
             {
@@ -3613,7 +3625,6 @@ namespace LuckParser.Controllers
             }     
             //end
             sw.Write("</html>");
-            return;
         }
         public void CreateSoloHTML(StreamWriter sw, bool[] settingsSnap)
         {

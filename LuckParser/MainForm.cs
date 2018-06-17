@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -25,14 +26,15 @@ namespace LuckParser
         {
             InitializeComponent();
             _logsFiles = new List<string>();
-            AddLogFiles(args);
+            AddLogFiles(args, consoleStart: true);
         }
 
         /// <summary>
         /// Adds log files to the bound data source for display in the interface
         /// </summary>
         /// <param name="filesArray"></param>
-        private void AddLogFiles(string[] filesArray)
+        /// <param name="consoleStart"></param>
+        private void AddLogFiles(string[] filesArray, bool consoleStart = false)
         {
             foreach (string file in filesArray)
             {
@@ -51,13 +53,20 @@ namespace LuckParser
                 gRow.BgWorker.DoWork += BgWorker_DoWork;
                 gRow.BgWorker.ProgressChanged += BgWorker_ProgressChanged;
                 gRow.BgWorker.RunWorkerCompleted += BgWorker_Completed;
-                
-                gridRowBindingSource.Add(gRow);
+
+                if (consoleStart)
+                {
+                    gRow.BgWorker.RunWorkerAsync();
+                }
+                else
+                {
+                    gridRowBindingSource.Add(gRow);
+                }
             }
 
             btnParse.Enabled = true;
         }
-
+        
         /// <summary>
         /// Invoked when a BackgroundWorker begins working.
         /// </summary>
@@ -70,42 +79,27 @@ namespace LuckParser
 
             e.Result = rowData;
 
-            if (bg.CancellationPending)
-            {
-                rowData.Status = "Cancelled";
-                bg.ReportProgress(100, rowData);
-                e.Cancel = true;
-                throw new CancellationException(rowData);
-            }
+            bg.ThrowIfCanceled(rowData, "Cancelled");
 
             FileInfo fInfo = new FileInfo(rowData.Location);
             if (!fInfo.Exists)
             {
-                rowData.Status = "File does not exist";
-                bg.ReportProgress(100, rowData);
+                bg.UpdateProgress(rowData, "File does not exist", 100);
                 e.Cancel = true;
                 throw new CancellationException(rowData);
             }
 
-            rowData.Status = "20% - Working...";
-            bg.ReportProgress(20, rowData);
+            bg.UpdateProgress(rowData, " Working...", 0);
             Controller1 control = new Controller1();
 
             if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
                 fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
             {
                 //Process evtc here
-                rowData.Status = "40% - Reading Binary...";
-                bg.ReportProgress(40, rowData);
-                control.ParseLog(fInfo.FullName);
-
-                if (bg.CancellationPending)
-                {
-                    rowData.Status = "Cancelled";
-                    bg.ReportProgress(100, rowData);
-                    e.Cancel = true;
-                    throw new CancellationException(rowData);
-                }
+                bg.UpdateProgress(rowData, "10% - Reading Binary...", 10);
+                control.ParseLog(bg, rowData, fInfo.FullName);
+                bg.ThrowIfCanceled(rowData, "Cancelled");
+                bg.UpdateProgress(rowData, "45% - Data parsed", 45);
 
                 //Creating File
                 //save location
@@ -152,18 +146,16 @@ namespace LuckParser
                     $"{fInfo.Name}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.{outputType}"
                 );
 
-                rowData.LogLocation = outputFile;
-                rowData.Status = "60% - Creating File...";
-                bg.ReportProgress(60, rowData);
+                bg.UpdateProgress(rowData, "50% - Creating File...", 50);
 
                 using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 {
-                    bg.ReportProgress(80, $"Writing {outputType.ToUpper()}...");
+                    bg.UpdateProgress(rowData, $"50% - Writing {outputType.ToUpper()}...", 50);
                     using (StreamWriter sw = new StreamWriter(fs))
                     {
                         if (Properties.Settings.Default.SaveOutHTML)
                         {
-                            control.CreateHTML(sw, settingsSnap);
+                            control.CreateHTML(bg, rowData, sw, settingsSnap);
                         }
                         else
                         {
@@ -172,13 +164,12 @@ namespace LuckParser
                     }
                 }
 
-                rowData.Status = "100% - Complete";
-                bg.ReportProgress(100, rowData);
+                bg.UpdateProgress(rowData, "100% - Complete", 100);
                 rowData.ButtonState = GridRow.STATUS_OPEN;
             }
             else
             {
-                rowData.Status = "Not EVTC";
+                bg.UpdateProgress(rowData, "Not EVTC", 100);
                 e.Cancel = true;
                 throw new CancellationException(rowData);
             }
