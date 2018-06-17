@@ -114,10 +114,11 @@ namespace LuckParser.Controllers
         /// Creates the dps graph
         /// </summary>
         /// <param name="sw">Stream writer</param>
-        private void CreateDPSGraph(StreamWriter sw, int phase_index)
+        private void CreateDPSGraph(StreamWriter sw, int phase_index, ushort offset = ushort.MaxValue)
         {
             //Generate DPS graph
-            sw.Write("<div id=\"DPSGraph" + phase_index + "\" style=\"height: 600px;width:1200px; display:inline-block \"></div>");
+            string plotID = "DPSGraph" + phase_index + "_" + offset;
+            sw.Write("<div id=\"" + plotID + "\" style=\"height: 600px;width:1200px; display:inline-block \"></div>");
             sw.Write("<script>");
             PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, settings.ParsePhases)[phase_index];
             sw.Write("var data = [");
@@ -132,7 +133,7 @@ namespace LuckParser.Controllers
                 {//Turns display on or off
                     sw.Write("{");
                     //Adding dps axis
-                    List<Point> playertotaldpsgraphdata = HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index);
+                    List<Point> playertotaldpsgraphdata = HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index, offset);
                     sw.Write("y: [");
                     pbdgdCount = 0;
                     foreach (Point dp in playertotaldpsgraphdata)
@@ -182,7 +183,7 @@ namespace LuckParser.Controllers
                             "visible:'legendonly'," +
                             "name: '" + p.getCharacter() + "TDPS'" + "},");
                 }
-                List<Point> playerbossdpsgraphdata = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index);
+                List<Point> playerbossdpsgraphdata = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index, offset);
                 if (totalDpsAllPlayers.Count == 0)
                 {
                     //totalDpsAllPlayers = new List<int[]>(playerbossdpsgraphdata);
@@ -496,7 +497,7 @@ namespace LuckParser.Controllers
                         "paper_bgcolor: 'rgba(0,0,0,0)'," +
                         "plot_bgcolor: 'rgba(0,0,0,0)'" +
                     "};" +
-                    "Plotly.newPlot('DPSGraph" + phase_index + "', data, layout);");
+                    "Plotly.newPlot('" + plotID + "', data, layout);");
             sw.Write("</script> ");
         }
         private void GetRoles()
@@ -2810,7 +2811,32 @@ namespace LuckParser.Controllers
                                         sw.Write("<div class=\"tab-pane fade\" id=\"dmgGraph" + i + "\">");
                                         {
                                             //Html_dpsGraph
-                                            CreateDPSGraph(sw, i);
+                                            sw.Write("<ul class=\"nav nav-tabs\">");
+                                            {
+                                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#Full" + i + "\">Full</a></li>");
+                                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#10s" + i + "\">10s</a></li>");
+                                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#30s" + i + "\">30s</a></li>");
+                                            }
+                                            sw.Write("</ul>");
+                                            sw.Write("<div id=\"dpsSubTab" + i + "\" class=\"tab-content\">");
+                                            {
+                                                sw.Write("<div class=\"tab-pane fade show active  \" id=\"Full" + i + "\">");
+                                                {
+                                                    CreateDPSGraph(sw, i);
+                                                }
+                                                sw.Write("</div>");
+                                                sw.Write("<div class=\"tab-pane fade \" id=\"10s" + i + "\">");
+                                                {
+                                                    CreateDPSGraph(sw, i, 10);
+                                                }
+                                                sw.Write("</div>");
+                                                sw.Write("<div class=\"tab-pane fade \" id=\"30s" + i + "\">");
+                                                {
+                                                    CreateDPSGraph(sw, i, 30);
+                                                }
+                                                sw.Write("</div>");
+                                            }
+                                            sw.Write("</div>");
                                         }
                                         sw.Write("</div>");
                                         //Boon Stats
