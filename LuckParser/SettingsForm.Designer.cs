@@ -59,6 +59,8 @@
             this.chkOutputHtml = new System.Windows.Forms.CheckBox();
             this.chkOutputCsv = new System.Windows.Forms.CheckBox();
             this.chkShowEstimates = new System.Windows.Forms.CheckBox();
+            this.chkPhaseParsing = new System.Windows.Forms.CheckBox();
+            this.lblGlobalSettings = new System.Windows.Forms.Label();
             this.chkOneAtATime = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
@@ -387,6 +389,28 @@
             this.chkShowEstimates.UseVisualStyleBackColor = true;
             this.chkShowEstimates.CheckedChanged += new System.EventHandler(this.ShowEstimates_CheckedChanged);
             // 
+            // chkPhaseParsing
+            // 
+            this.checkPhaseParsing.AutoSize = true;
+            this.checkPhaseParsing.Checked = true;
+            this.checkPhaseParsing.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkPhaseParsing.Location = new System.Drawing.Point(404, 100);
+            this.checkPhaseParsing.Name = "checkPhaseParsing";
+            this.checkPhaseParsing.Size = new System.Drawing.Size(144, 17);
+            this.checkPhaseParsing.TabIndex = 30;
+            this.checkPhaseParsing.Text = "Parse all possible phases";
+            this.checkPhaseParsing.UseVisualStyleBackColor = true;
+            this.checkPhaseParsing.CheckedChanged += new System.EventHandler(this.checkPhaseParsing_CheckedChanged);
+            // 
+            // lblGlobalSettings
+            // 
+            this.lblGlobalSettings.AutoSize = true;
+            this.lblGlobalSettings.Location = new System.Drawing.Point(385, 84);
+            this.lblGlobalSettings.Name = "label1";
+            this.lblGlobalSettings.Size = new System.Drawing.Size(78, 13);
+            this.lblGlobalSettings.TabIndex = 29;
+            this.lblGlobalSettings.Text = "Global Settings";
+            // 
             // chkOneAtATime
             // 
             this.chkOneAtATime.AutoSize = true;
@@ -404,6 +428,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(577, 368);
+            this.Controls.Add(this.chkPhaseParsing);
+            this.Controls.Add(this.lblGlobalSettings);
             this.Controls.Add(this.chkOneAtATime);
             this.Controls.Add(this.chkShowEstimates);
             this.Controls.Add(this.chkOutputCsv);
@@ -476,6 +502,8 @@
         private System.Windows.Forms.CheckBox chkOutputHtml;
         private System.Windows.Forms.CheckBox chkOutputCsv;
         private System.Windows.Forms.CheckBox chkShowEstimates;
+        private System.Windows.Forms.CheckBox chkPhaseParsing;
+        private System.Windows.Forms.Label lblGlobalSettings;
         private System.Windows.Forms.CheckBox chkOneAtATime;
     }
 }

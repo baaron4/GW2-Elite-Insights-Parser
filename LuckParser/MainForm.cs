@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 using LuckParser.Controllers;
+using LuckParser.Models.DataModels;
 
 namespace LuckParser
 {
@@ -149,22 +150,7 @@ namespace LuckParser
                     result = "kill";
                 }
 
-                bool[] settingsSnap = new bool[] {
-                    Properties.Settings.Default.DPSGraphTotals,
-                    Properties.Settings.Default.PlayerGraphTotals,
-                    Properties.Settings.Default.PlayerGraphBoss,
-                    Properties.Settings.Default.PlayerBoonsUniversal,
-                    Properties.Settings.Default.PlayerBoonsImpProf,
-                    Properties.Settings.Default.PlayerBoonsAllProf,
-                    Properties.Settings.Default.PlayerRot,
-                    Properties.Settings.Default.PlayerRotIcons,
-                    Properties.Settings.Default.EventList,
-                    Properties.Settings.Default.BossSummary,
-                    Properties.Settings.Default.SimpleRotation,
-                    Properties.Settings.Default.ShowAutos,
-                    Properties.Settings.Default.LargeRotIcons,
-                    Properties.Settings.Default.ShowEstimates
-                };
+                SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
 
                 string outputType = Properties.Settings.Default.SaveOutHTML ? "html" : "csv";
                 string outputFile = Path.Combine(

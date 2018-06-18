@@ -6,6 +6,7 @@ namespace LuckParser.Models.ParseModels
     {
         // Fields
         private ulong agent;
+        private ulong master_agent = 0;
         private ushort instid = 0;
         private long first_aware = 0;
         private long last_aware = long.MaxValue;
@@ -82,6 +83,11 @@ namespace LuckParser.Models.ParseModels
             return prof;
         }
 
+        public ulong getMasterAgent()
+        {
+            return master_agent;
+        }
+
         public int getToughness()
         {
             return toughness;
@@ -101,6 +107,11 @@ namespace LuckParser.Models.ParseModels
         public void setInstid(ushort instid)
         {
             this.instid = instid;
+        }
+
+        public void setMasterAgent(ulong master)
+        {
+            this.master_agent = master;
         }
 
         public void setFirstAware(long first_aware)
