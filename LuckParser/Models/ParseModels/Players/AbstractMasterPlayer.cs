@@ -29,25 +29,35 @@ namespace LuckParser.Models.ParseModels
 
         private void setMinions(BossData bossData, List<CombatItem> combatList, AgentData agentData)
         {
-            List<ushort> combatMinionIDList = combatList.Where(x => x.getSrcMasterInstid() == instid).Select(x => x.getSrcInstid()).Distinct().ToList();
-            foreach (ushort petid in combatMinionIDList)
+            List<AgentItem> combatMinion = agentData.getNPCAgentList().Where(x => x.getMasterAgent() == agent.getAgent()).ToList();
+            foreach (AgentItem agent in combatMinion)
             {
-                AgentItem agent = agentData.getNPCAgentList().FirstOrDefault(x => x.getInstid() == petid);
-                if (agent != null)
+                string id = agent.getName();
+                if (!minions.ContainsKey(id))
                 {
-                    List<DamageLog> damageLogs = getDamageLogs(0, bossData, combatList, agentData, 0, bossData.getAwareDuration()).Where(x => x.getInstidt() == petid).ToList();
-                    if (damageLogs.Count == 0)
-                    {
-                        continue;
-                    }
-                    string id = agent.getName();
-                    if (!minions.ContainsKey(id))
-                    {
-                        minions[id] = new Minions();
-                    }
-                    minions[id].Add(new Minion(instid, agent));
+                    minions[id] = new Minions();
+                }
+                minions[id].Add(new Minion(agent.getInstid(), agent));
+            }
+        }
+
+        protected override void setFilteredLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        {
+            long time_start = bossData.getFirstAware();
+            foreach (CombatItem c in combatList)
+            {
+                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware())
+                {
+                    long time = c.getTime() - time_start;
+                    addDamageLog(time, bossData.getInstid(), c, damage_logsFiltered);
                 }
             }
+            Dictionary<string, Minions> min_list = getMinions(bossData, combatList, agentData);
+            foreach (Minions mins in min_list.Values)
+            {
+                damage_logsFiltered.AddRange(mins.getDamageLogs(bossData.getInstid(), bossData, combatList, agentData, 0, bossData.getAwareDuration()));
+            }
+            damage_logsFiltered.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
         }
 
         protected override void setCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
@@ -57,10 +67,14 @@ namespace LuckParser.Models.ParseModels
 
             foreach (CombatItem c in combatList)
             {
+                if (! (c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware()))
+                {
+                    continue;
+                }
                 LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
                 if (state.getID() == 0)
                 {
-                    if (instid == c.getSrcInstid())//selecting player as caster
+                    if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {
                         if (c.isActivation().getID() > 0)
                         {
@@ -86,7 +100,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 else if (state.getID() == 11)
                 {//Weapon swap
-                    if (instid == c.getSrcInstid())//selecting player as caster
+                    if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {
                         if ((int)c.getDstAgent() == 4 || (int)c.getDstAgent() == 5)
                         {

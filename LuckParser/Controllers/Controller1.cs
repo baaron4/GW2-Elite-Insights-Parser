@@ -143,28 +143,30 @@ namespace LuckParser.Controllers
                 String name = ParseHelper.getString(stream, 68);
                 //Save
                 Agent a = new Agent(agent, name, prof, is_elite);
+                string agent_prof = "";
                 if (a != null)
                 {
+                    agent_prof = a.getProf(this.log_data.getBuildVersion(), APIController);
                     // NPC
-                    if (a.getProf(this.log_data.getBuildVersion(), APIController) == "NPC")
+                    if (agent_prof == "NPC")
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0')), this.log_data.getBuildVersion(), APIController);//a.getName() + ":" + String.format("%05d", prof)));
+                        agent_data.addItem( new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0')), agent_prof);//a.getName() + ":" + String.format("%05d", prof)));
                     }
                     // Gadget
-                    else if (a.getProf(this.log_data.getBuildVersion(), APIController) == "GDG")
+                    else if (agent_prof == "GDG")
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0')), this.log_data.getBuildVersion(), APIController);//a.getName() + ":" + String.format("%05d", prof & 0x0000ffff)));
+                        agent_data.addItem( new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0')), agent_prof);//a.getName() + ":" + String.format("%05d", prof & 0x0000ffff)));
                     }
                     // Player
                     else
                     {
-                        agent_data.addItem(a, new AgentItem(agent, name, a.getProf(this.log_data.getBuildVersion(), APIController), toughness, healing, condition), this.log_data.getBuildVersion(), APIController);
+                        agent_data.addItem( new AgentItem(agent, name, agent_prof, toughness, healing, condition), agent_prof);
                     }
                 }
                 // Unknown
                 else
                 {
-                    agent_data.addItem(a, new AgentItem(agent, name, prof.ToString(), toughness, healing, condition), this.log_data.getBuildVersion(), APIController);
+                    agent_data.addItem( new AgentItem(agent, name, prof.ToString(), toughness, healing, condition), agent_prof);
                 }
             }
 
@@ -306,32 +308,40 @@ namespace LuckParser.Controllers
             List<AgentItem> player_list = agent_data.getPlayerAgentList();
             List<AgentItem> agent_list = agent_data.getAllAgentsList();
             List<CombatItem> combat_list = combat_data.getCombatList();
-            foreach (AgentItem a in agent_list)
+            foreach (CombatItem c in combat_list)
             {
-                bool assigned_first = false;
-                foreach (CombatItem c in combat_list)
+                foreach (AgentItem a in agent_list)
                 {
-                    if (a.getAgent() == c.getSrcAgent() && c.getSrcInstid() != 0)
+                    if (a.getInstid() == 0 && a.getAgent() == c.getSrcAgent() && c.isStateChange().getID() == 0)
                     {
-                        if (!assigned_first)
-                        {
-                            a.setInstid(c.getSrcInstid());
-                            a.setFirstAware(c.getTime());
-                            assigned_first = true;
-                        }
-                        a.setLastAware(c.getTime());
+                        a.setInstid(c.getSrcInstid());
                     }
-                    else if (a.getAgent() == c.getDstAgent() && c.getDstInstid() != 0)
+                    if (a.getInstid() != 0 && a.getAgent() == c.getSrcAgent())
                     {
-                        if (!assigned_first)
+                        if (a.getFirstAware() == 0)
                         {
-                            a.setInstid(c.getDstInstid());
                             a.setFirstAware(c.getTime());
-                            assigned_first = true;
+                        } else
+                        {
+                            a.setLastAware(c.getTime());
                         }
-                        a.setLastAware(c.getTime());
                     }
+                }
+            }
 
+            foreach (CombatItem c in combat_list)
+            {
+                if (c.getSrcMasterInstid() != 0)
+                {
+                    AgentItem master = agent_list.Find(x => x.getInstid() == c.getSrcMasterInstid() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
+                    if (master != null)
+                    {
+                        AgentItem minion = agent_list.Find(x => x.getAgent() == c.getSrcAgent() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
+                        if (minion != null)
+                        {
+                            minion.setMasterAgent(master.getAgent());
+                        }
+                    }
                 }
             }
 

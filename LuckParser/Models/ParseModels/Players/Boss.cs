@@ -8,7 +8,6 @@ namespace LuckParser.Models.ParseModels
         // Constructors
         public Boss(AgentItem agent) : base(agent)
         {
-            prof = "Boss";
         }
 
         private List<PhaseData> phases = new List<PhaseData>();
@@ -181,7 +180,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     // add burn phases
                     int offset = phases.Count;
-                    List<CombatItem> orbItems = combatList.Where(x => x.isBuff() == 1 && x.getDstInstid() == instid && x.getSkillID() == 35096).ToList();
+                    List<CombatItem> orbItems = combatList.Where(x => x.isBuff() == 1 && x.getDstInstid() == agent.getInstid() && x.getSkillID() == 35096).ToList();
                     // Get number of orbs and filter the list
                     List<CombatItem> orbItemsFiltered = new List<CombatItem>();
                     Dictionary<long, int> orbs = new Dictionary<long, int>();
@@ -354,7 +353,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
             {
-                if (instid == c.getSrcInstid() || instid == c.getSrcMasterInstid())//selecting player or minion as caster
+                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > bossData.getFirstAware() && c.getTime() < bossData.getLastAware())//selecting player or minion as caster
                 {
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in agentData.getAllAgentsList())
@@ -363,20 +362,25 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
+            Dictionary<string, Minions> min_list = getMinions(bossData, combatList, agentData);
+            foreach (Minions mins in min_list.Values)
+            {
+                damage_logs.AddRange(mins.getDamageLogs(0, bossData,combatList,agentData,0, bossData.getAwareDuration()));
+            }
+            damage_logs.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
         }
         protected override void setDamagetakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data)
         {
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
             {
-                if (instid == c.getDstInstid())
+                if (agent.getInstid() == c.getDstInstid() && c.getTime() > bossData.getFirstAware() && c.getTime() < bossData.getLastAware())
                 {//selecting player as target
                     LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in agentData.getAllAgentsList())
                     {//selecting all
-
-                        setDamageTakenLog(time, item.getInstid(), c);
+                        addDamageTakenLog(time, item.getInstid(), c);
                     }
                 }
             }

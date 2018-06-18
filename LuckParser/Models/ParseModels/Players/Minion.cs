@@ -8,12 +8,9 @@ namespace LuckParser.Models.ParseModels
 {
     public class Minion : AbstractPlayer
     {
-        private ushort master_id;
 
         public Minion(ushort master, AgentItem agent) : base(agent)
         {
-            master_id = master;
-            prof = "Minion";
         }
 
         protected override void setDamageLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
@@ -21,15 +18,27 @@ namespace LuckParser.Models.ParseModels
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
             {
-                if (instid == c.getSrcInstid() && c.getSrcMasterInstid() == master_id)//selecting minion as caster
+                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware())//selecting minion as caster
                 {
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in agentData.getNPCAgentList())
                     {//selecting all
                         addDamageLog(time, item.getInstid(), c, damage_logs);
-                    }
+                    }                
                 }
+            }
+        }
 
+        protected override void setFilteredLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        {
+            long time_start = bossData.getFirstAware();
+            foreach (CombatItem c in combatList)
+            {
+                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware())//selecting player
+                {
+                    long time = c.getTime() - time_start;
+                    addDamageLog(time, bossData.getInstid(), c, damage_logsFiltered);
+                }
             }
         }
 
@@ -40,10 +49,14 @@ namespace LuckParser.Models.ParseModels
 
             foreach (CombatItem c in combatList)
             {
+                if (!(c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware()))
+                {
+                    continue;
+                }
                 LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
                 if (state.getID() == 0)
                 {
-                    if (instid == c.getSrcInstid() && c.getSrcMasterInstid() == master_id)//selecting player as caster
+                    if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {
                         if (c.isActivation().getID() > 0)
                         {
