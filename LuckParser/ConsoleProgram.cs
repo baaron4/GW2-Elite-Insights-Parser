@@ -1,4 +1,5 @@
 ﻿using LuckParser.Controllers;
+using LuckParser.Models.DataModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,7 +41,7 @@ namespace LuckParser
                 BgWorker = new System.ComponentModel.BackgroundWorker()
                 {
                     WorkerReportsProgress = true
-                }//Prevent nullrefs & other exceptions related to background worker, even though the BgWorker isn't used by console
+                }
             };
             row.Metadata.FromConsole = true;
 
@@ -49,12 +50,12 @@ namespace LuckParser
             {
                 throw new CancellationException(row, new FileNotFoundException("File does not exist", fInfo.FullName));
             }
-            
+
             Controller1 control = new Controller1();
 
             if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
                 fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
-            {   
+            {
                 //Process evtc here
                 control.ParseLog(row, fInfo.FullName);
 
@@ -80,44 +81,31 @@ namespace LuckParser
                     result = "kill";
                 }
 
-                bool[] settingsSnap = new bool[] {
-                    Properties.Settings.Default.DPSGraphTotals,
-                    Properties.Settings.Default.PlayerGraphTotals,
-                    Properties.Settings.Default.PlayerGraphBoss,
-                    Properties.Settings.Default.PlayerBoonsUniversal,
-                    Properties.Settings.Default.PlayerBoonsImpProf,
-                    Properties.Settings.Default.PlayerBoonsAllProf,
-                    Properties.Settings.Default.PlayerRot,
-                    Properties.Settings.Default.PlayerRotIcons,
-                    Properties.Settings.Default.EventList,
-                    Properties.Settings.Default.BossSummary,
-                    Properties.Settings.Default.SimpleRotation,
-                    Properties.Settings.Default.ShowAutos,
-                    Properties.Settings.Default.LargeRotIcons,
-                    Properties.Settings.Default.ShowEstimates
-                };
+                SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
 
                 string outputType = Properties.Settings.Default.SaveOutHTML ? "html" : "csv";
                 string outputFile = Path.Combine(
                     saveDirectory.FullName,
                     $"{fInfo.Name}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.{outputType}"
                 );
-                
+
                 using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 {
                     using (StreamWriter sw = new StreamWriter(fs))
                     {
                         if (Properties.Settings.Default.SaveOutHTML)
                         {
-                            control.CreateHTML(row, sw, settingsSnap);
+                            HTMLBuilder builder = new HTMLBuilder(control.GetParsedLog(), settings);
+                            builder.CreateHTML(sw);
                         }
                         else
                         {
-                            control.CreateCSV(sw, ",");
+                            CSVBuilder builder = new CSVBuilder(control.GetParsedLog(), settings);
+                            builder.CreateCSV(sw, ",");
                         }
                     }
                 }
-                
+
             }
             else
             {

@@ -178,7 +178,7 @@ namespace LuckParser
 
         private void PhaseParsing_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.ParsePhases = checkPhaseParsing.Checked;
+            Properties.Settings.Default.ParsePhases = chkPhaseParsing.Checked;
         }
     }
 }

@@ -391,16 +391,16 @@
             // 
             // chkPhaseParsing
             // 
-            this.checkPhaseParsing.AutoSize = true;
-            this.checkPhaseParsing.Checked = true;
-            this.checkPhaseParsing.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkPhaseParsing.Location = new System.Drawing.Point(404, 100);
-            this.checkPhaseParsing.Name = "checkPhaseParsing";
-            this.checkPhaseParsing.Size = new System.Drawing.Size(144, 17);
-            this.checkPhaseParsing.TabIndex = 30;
-            this.checkPhaseParsing.Text = "Parse all possible phases";
-            this.checkPhaseParsing.UseVisualStyleBackColor = true;
-            this.checkPhaseParsing.CheckedChanged += new System.EventHandler(this.checkPhaseParsing_CheckedChanged);
+            this.chkPhaseParsing.AutoSize = true;
+            this.chkPhaseParsing.Checked = true;
+            this.chkPhaseParsing.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkPhaseParsing.Location = new System.Drawing.Point(404, 100);
+            this.chkPhaseParsing.Name = "checkPhaseParsing";
+            this.chkPhaseParsing.Size = new System.Drawing.Size(144, 17);
+            this.chkPhaseParsing.TabIndex = 30;
+            this.chkPhaseParsing.Text = "Parse all possible phases";
+            this.chkPhaseParsing.UseVisualStyleBackColor = true;
+            this.chkPhaseParsing.CheckedChanged += new System.EventHandler(this.PhaseParsing_CheckedChanged);
             // 
             // lblGlobalSettings
             // 

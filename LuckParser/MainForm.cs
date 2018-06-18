@@ -167,11 +167,13 @@ namespace LuckParser
                     {
                         if (Properties.Settings.Default.SaveOutHTML)
                         {
-                            control.CreateHTML(rowData, sw, settingsSnap);
+                            HTMLBuilder builder = new HTMLBuilder(control.GetParsedLog(), settings);
+                            builder.CreateHTML(sw);
                         }
                         else
                         {
-                            control.CreateCSV(sw, ",");
+                            CSVBuilder builder = new CSVBuilder(control.GetParsedLog(), settings);
+                            builder.CreateCSV(sw, ",");
                         }
                     }
                 }
