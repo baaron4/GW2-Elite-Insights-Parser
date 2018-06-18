@@ -59,6 +59,7 @@
             this.chkOutputHtml = new System.Windows.Forms.CheckBox();
             this.chkOutputCsv = new System.Windows.Forms.CheckBox();
             this.chkShowEstimates = new System.Windows.Forms.CheckBox();
+            this.chkOneAtATime = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblDamageGraphSection
@@ -386,12 +387,24 @@
             this.chkShowEstimates.UseVisualStyleBackColor = true;
             this.chkShowEstimates.CheckedChanged += new System.EventHandler(this.ShowEstimates_CheckedChanged);
             // 
+            // chkOneAtATime
+            // 
+            this.chkOneAtATime.AutoSize = true;
+            this.chkOneAtATime.Location = new System.Drawing.Point(24, 634);
+            this.chkOneAtATime.Name = "chkOneAtATime";
+            this.chkOneAtATime.Size = new System.Drawing.Size(287, 17);
+            this.chkOneAtATime.TabIndex = 29;
+            this.chkOneAtATime.Text = "Parse logs one at a time (less CPU load, slower parsing)";
+            this.chkOneAtATime.UseVisualStyleBackColor = true;
+            this.chkOneAtATime.CheckedChanged += new System.EventHandler(this.chkOneAtATime_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(577, 368);
+            this.Controls.Add(this.chkOneAtATime);
             this.Controls.Add(this.chkShowEstimates);
             this.Controls.Add(this.chkOutputCsv);
             this.Controls.Add(this.chkOutputHtml);
@@ -463,5 +476,6 @@
         private System.Windows.Forms.CheckBox chkOutputHtml;
         private System.Windows.Forms.CheckBox chkOutputCsv;
         private System.Windows.Forms.CheckBox chkShowEstimates;
+        private System.Windows.Forms.CheckBox chkOneAtATime;
     }
 }

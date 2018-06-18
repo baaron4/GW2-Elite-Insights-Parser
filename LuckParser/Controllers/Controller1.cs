@@ -58,7 +58,7 @@ namespace LuckParser.Controllers
         /// <param name="row">GridRow object bound to the UI</param>
         /// <param name="evtc">The path to the log to parse</param>
         /// <returns></returns>
-        public void ParseLog(BackgroundWorker bg, GridRow row, string evtc)
+        public void ParseLog(GridRow row, string evtc)
         {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -70,7 +70,7 @@ namespace LuckParser.Controllers
                         {
                             if (arch.Entries.Count != 1)
                             {
-                                bg.ThrowIfCanceled(row, "Invalid Archive");
+                                throw new CancellationException(row, new InvalidDataException("Invalid Archive"));
                             }
                             using (var data = arch.Entries[0].Open())
                             {
@@ -87,25 +87,30 @@ namespace LuckParser.Controllers
 
                 try
                 {
-                    bg.ThrowIfCanceled(row, "Cancelled");
-                    bg.UpdateProgress(row, "15% - Parsing boss data...", 15);
+                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
+                    row.BgWorker.UpdateProgress(row, "15% - Parsing boss data...", 15);
                     parseBossData(stream);
-                    bg.ThrowIfCanceled(row, "Cancelled");
-                    bg.UpdateProgress(row, "20% - Parsing agent data...", 20);
+                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
+                    row.BgWorker.UpdateProgress(row, "20% - Parsing agent data...", 20);
                     parseAgentData(stream);
-                    bg.ThrowIfCanceled(row, "Cancelled");
-                    bg.UpdateProgress(row, "25% - Parsing skill data...", 25);
+                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
+                    row.BgWorker.UpdateProgress(row, "25% - Parsing skill data...", 25);
                     parseSkillData(stream);
-                    bg.ThrowIfCanceled(row, "Cancelled");
-                    bg.UpdateProgress(row, "30% - Parsing combat list...", 30);
+                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
+                    row.BgWorker.UpdateProgress(row, "30% - Parsing combat list...", 30);
                     parseCombatList(stream);
-                    bg.ThrowIfCanceled(row, "Cancelled");
-                    bg.UpdateProgress(row, "35% - Pairing data...", 35);
+                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
+                    row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
                     fillMissingData(stream);
-                    bg.ThrowIfCanceled(row, "Cancelled");
+                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
                 }
                 catch (Exception ex)
                 {
+                    if (ex is CancellationException)
+                    {
+                        throw ex;
+                    }
+
                     throw new CancellationException(row, ex);
                 }
             }
@@ -3164,9 +3169,8 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw">Stream writer</param>
         /// <param name="settingsSnap">Settings</param>
-        public void CreateHTML(BackgroundWorker bg, GridRow row, StreamWriter sw, bool[] settingsSnap)
+        public void CreateHTML(GridRow row, StreamWriter sw, bool[] settingsSnap)
         {
-
             SnapSettings = settingsSnap;
             double fight_duration = (boss_data.getAwareDuration()) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
@@ -3179,8 +3183,8 @@ namespace LuckParser.Controllers
             setPresentBoons(settingsSnap);
             List<PhaseData> phases = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data);
 
-            bg.ThrowIfCanceled(row, "Cancelled");
-            bg.UpdateProgress(row, "70% - Writing HTML...", 70);
+            row.BgWorker.ThrowIfCanceled(row, "Cancelled");
+            row.BgWorker.UpdateProgress(row, "70% - Writing HTML...", 70);
             // HTML STARTS
             sw.Write("<!DOCTYPE html><html lang=\"en\">");
             {

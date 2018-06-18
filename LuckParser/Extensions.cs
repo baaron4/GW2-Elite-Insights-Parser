@@ -20,6 +20,10 @@ namespace LuckParser
         {
             row.Status = status;
             bg.ReportProgress(percent, row);
+            if (row.Metadata.FromConsole)
+            {
+                Console.WriteLine($"{row.Location}: {status}");
+            }
         }
 
         /// <summary>

@@ -11,22 +11,16 @@ namespace LuckParser
     public partial class MainForm : Form
     {
         private SettingsForm _settingsForm;
-        List<string> _logsFiles;
-        Controller1 controller = new Controller1();
+        private List<string> _logsFiles = new List<string>();
+        private Controller1 controller = new Controller1();
+        private bool _AnyRunning = false;
+        private Queue<GridRow> _logQueue = new Queue<GridRow>();
 
         public MainForm()
         {
             InitializeComponent();
-            _logsFiles = new List<string>();
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
-        }
-
-        public MainForm(string[] args)
-        {
-            InitializeComponent();
-            _logsFiles = new List<string>();
-            AddLogFiles(args, consoleStart: true);
         }
 
         /// <summary>
@@ -34,7 +28,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="filesArray"></param>
         /// <param name="consoleStart"></param>
-        private void AddLogFiles(string[] filesArray, bool consoleStart = false)
+        private void AddLogFiles(string[] filesArray)
         {
             foreach (string file in filesArray)
             {
@@ -54,17 +48,49 @@ namespace LuckParser
                 gRow.BgWorker.ProgressChanged += BgWorker_ProgressChanged;
                 gRow.BgWorker.RunWorkerCompleted += BgWorker_Completed;
 
-                if (consoleStart)
-                {
-                    gRow.BgWorker.RunWorkerAsync();
-                }
-                else
-                {
-                    gridRowBindingSource.Add(gRow);
-                }
+                gridRowBindingSource.Add(gRow);
             }
 
             btnParse.Enabled = true;
+        }
+
+        /// <summary>
+        /// Queues a background worker. If the 'ParseOneAtATime' setting is false, workers are run asynchronously
+        /// </summary>
+        /// <param name="row"></param>
+        private void QueueOrRunWorker(GridRow row)
+        {
+            if (Properties.Settings.Default.ParseOneAtATime)
+            {
+                if (_AnyRunning)
+                {
+                    _logQueue.Enqueue(row);
+                    row.Status = "Queued";
+                    row.Metadata.State = RowState.Pending;
+                    dgvFiles.Invalidate();
+                }
+                else
+                {
+                    row.Run();
+                    _AnyRunning = true;
+                }
+            }
+            else
+            {
+                row.Run();
+            }
+        }
+
+        /// <summary>
+        /// Runs the next background worker, if one is available
+        /// </summary>
+        private void RunNextWorker()
+        {
+            if (_logQueue.Count > 0)
+            {
+                GridRow row = _logQueue.Dequeue();
+                row.Run();
+            }
         }
         
         /// <summary>
@@ -97,7 +123,7 @@ namespace LuckParser
             {
                 //Process evtc here
                 bg.UpdateProgress(rowData, "10% - Reading Binary...", 10);
-                control.ParseLog(bg, rowData, fInfo.FullName);
+                control.ParseLog(rowData, fInfo.FullName);
                 bg.ThrowIfCanceled(rowData, "Cancelled");
                 bg.UpdateProgress(rowData, "45% - Data parsed", 45);
 
@@ -155,7 +181,7 @@ namespace LuckParser
                     {
                         if (Properties.Settings.Default.SaveOutHTML)
                         {
-                            control.CreateHTML(bg, rowData, sw, settingsSnap);
+                            control.CreateHTML(rowData, sw, settingsSnap);
                         }
                         else
                         {
@@ -165,7 +191,6 @@ namespace LuckParser
                 }
 
                 bg.UpdateProgress(rowData, "100% - Complete", 100);
-                rowData.ButtonState = GridRow.STATUS_OPEN;
             }
             else
             {
@@ -193,6 +218,8 @@ namespace LuckParser
         /// <param name="e"></param>
         private void BgWorker_Completed(object sender, RunWorkerCompletedEventArgs e)
         {
+            _AnyRunning = false;
+
             GridRow row;
             if (e.Cancelled || e.Error != null)
             {
@@ -203,20 +230,41 @@ namespace LuckParser
                     {
                         row.Status = e.Error.InnerException.Message;
                     }
-                    row.ButtonState = GridRow.STATUS_PARSE;
+
+                    if (row.Metadata.State == RowState.ClearOnComplete)
+                    {
+                        gridRowBindingSource.Remove(row);
+                    }
+                    else
+                    {
+                        row.Metadata.State = RowState.Ready;
+                        row.ButtonText = "Parse";
+                    }
                 }
             }
             else
             {
                 row = (GridRow)e.Result;
-                row.ButtonState = GridRow.STATUS_OPEN;
+                if (row.Metadata.State == RowState.ClearOnComplete)
+                {
+                    gridRowBindingSource.Remove(row);
+                }
+                else
+                {
+                    row.ButtonText = "Open";
+                    row.Metadata.State = RowState.Complete;
+                }
             }
             
             btnParse.Enabled = true;
             dgvFiles.Invalidate();
+
+            if (Properties.Settings.Default.ParseOneAtATime)
+            {
+                RunNextWorker();
+            }
         }
-
-
+        
         /// <summary>
         /// Invoked when the 'Parse All' button is clicked. Begins processing of all files
         /// </summary>
@@ -224,6 +272,9 @@ namespace LuckParser
         /// <param name="e"></param>
         private void BtnParse_Click(object sender, EventArgs e)
         {
+            //Clear queue before parsing all
+            _logQueue.Clear();
+
             if (_logsFiles.Count > 0)
             {
                 btnParse.Enabled = false;
@@ -233,7 +284,7 @@ namespace LuckParser
                 {
                     if (!row.BgWorker.IsBusy)
                     {
-                        row.Run();
+                        QueueOrRunWorker(row);
                     }
                 }
             }
@@ -246,14 +297,22 @@ namespace LuckParser
         /// <param name="e"></param>
         private void BtnCancel_Click(object sender, EventArgs e)
         {
+            //Clear queue so queued workers don't get started by any cancellations
+            _logQueue.Clear();
+
             //Cancel all workers
             foreach (GridRow row in gridRowBindingSource)
             {
+                if (row.Metadata.State == RowState.Pending)
+                {
+                    row.Metadata.State = RowState.Ready;
+                }
+
                 if (row.BgWorker.IsBusy)
                 {
                     row.Cancel();
-                    dgvFiles.Invalidate();
                 }
+                dgvFiles.Invalidate();
             }
 
             btnClear.Enabled = true;
@@ -267,7 +326,7 @@ namespace LuckParser
         /// <param name="e"></param>
         private void BtnSettings_Click(object sender, EventArgs e)
         {
-            _settingsForm = new SettingsForm(/*settingArray,this*/);
+            _settingsForm = new SettingsForm();
             _settingsForm.Show();
         }
 
@@ -281,17 +340,21 @@ namespace LuckParser
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
 
+            //Clear the queue so that cancelled workers don't invoke queued workers
+            _logQueue.Clear();
+            _logsFiles.Clear();
+
             for (int i = gridRowBindingSource.Count - 1; i >= 0; i--)
             {
                 GridRow row = gridRowBindingSource[i] as GridRow;
                 if (row.BgWorker.IsBusy)
                 {
                     row.Cancel();
+                    row.Metadata.State = RowState.ClearOnComplete;
                 }
                 else
                 {
-                    dgvFiles.Rows.RemoveAt(i);
-                    _logsFiles.RemoveAt(i);
+                    gridRowBindingSource.RemoveAt(i);
                 }
             }
         }
@@ -329,20 +392,19 @@ namespace LuckParser
             {
                 GridRow row = (GridRow)gridRowBindingSource[e.RowIndex];
 
-                switch (row.ButtonState)
+                switch (row.Metadata.State)
                 {
-                    case GridRow.STATUS_PARSE:
-                        row.Run();
+                    case RowState.Ready:
+                        QueueOrRunWorker(row);
                         btnCancel.Enabled = true;
                         break;
 
-                    case GridRow.STATUS_CANCEL:
+                    case RowState.Parsing:
                         row.Cancel();
                         dgvFiles.Invalidate();
-                        btnParse.Enabled = true;
                         break;
 
-                    case GridRow.STATUS_OPEN:
+                    case RowState.Complete:
                         string fileLoc = row.LogLocation;
                         if (File.Exists(fileLoc))
                         {

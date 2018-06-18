@@ -26,8 +26,7 @@ namespace LuckParser
                     AllocConsole();
                 }
                 // Use the application through console 
-                MainForm myConsoleParser = new MainForm(args);
-                
+                new ConsoleProgram(args);
                 return 0;
             }
             
