@@ -1466,26 +1466,46 @@ namespace LuckParser.Controllers
                                             }
                                         }
                                     }
-                                    int maxDPS = 0;
                                     if (settings.PlayerGraphTotals)
                                     {//show total dps plot
-                                        List<Point> playertotaldpsgraphdata = HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index, HTMLHelper.GraphMode.Full);
                                         sw.Write("{");
                                         { //Adding dps axis
-                                            HTMLHelper.writeDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, p);
+                                            HTMLHelper.writeDPSGraph(sw, "Total DPS", HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index, HTMLHelper.GraphMode.Full), p);                                         
                                         }
                                         sw.Write("},");
+                                        if (settings.Show10s)
+                                        {
+                                            sw.Write("{");
+                                            HTMLHelper.writeDPSGraph(sw, "Total DPS - 10s", HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index, HTMLHelper.GraphMode.s10), p);
+                                            sw.Write("},");
+                                        }
+                                        if (settings.Show30s)
+                                        {
+                                            sw.Write("{");
+                                            HTMLHelper.writeDPSGraph(sw, "Total DPS - 30s", HTMLHelper.getTotalDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index, HTMLHelper.GraphMode.s30), p);
+                                            sw.Write("},");
+                                        }
                                     }
                                     if (settings.PlayerGraphBoss)
                                     {//show boss dps plot
                                      //Adding dps axis
-                                        List<Point> playerbossdpsgraphdata = HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index, HTMLHelper.GraphMode.Full);
                                         sw.Write("{");
                                         {
-                                            HTMLHelper.writeDPSGraph(sw, "Boss DPS", playerbossdpsgraphdata, p);
+                                            HTMLHelper.writeDPSGraph(sw, "Boss DPS", HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index, HTMLHelper.GraphMode.Full), p);
                                         }
-                                        maxDPS = Math.Max(maxDPS, playerbossdpsgraphdata.Max(x => x.Y));
-                                        sw.Write("}");
+                                        sw.Write("},");
+                                        if (settings.Show10s)
+                                        {
+                                            sw.Write("{");
+                                            HTMLHelper.writeDPSGraph(sw, "Boss DPS - 10s", HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index, HTMLHelper.GraphMode.s10), p);
+                                            sw.Write("},");
+                                        }
+                                        if (settings.Show30s)
+                                        {
+                                            sw.Write("{");
+                                            HTMLHelper.writeDPSGraph(sw, "Boss DPS - 30s", HTMLHelper.getBossDPSGraph(boss_data, combat_data, agent_data, p, boss, phase_index, HTMLHelper.GraphMode.s30), p);
+                                            sw.Write("},");
+                                        }
                                     }
                                 }
                                 sw.Write("];");

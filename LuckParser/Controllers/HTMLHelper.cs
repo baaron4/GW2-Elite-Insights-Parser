@@ -1146,10 +1146,14 @@ namespace LuckParser.Controllers
             }
             sw.Write("],");
             sw.Write(" mode: 'lines'," +
-                   "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf() + (name.Contains("Total") ? "-Total" : ""))  + "'}," +
-                   "yaxis: 'y3'," +
-                   // "legendgroup: 'Damage'," +
-                   "name: '"+ name+"'");
+                   "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf() + (name.Contains("Total") ? "-Total" : "")) + "'}," +
+                   "yaxis: 'y3',");
+            if (name.Contains("10s") || name.Contains("30s"))
+            {
+                sw.Write(" visible: 'legendonly',");
+            }
+            // "legendgroup: 'Damage'," +
+            sw.Write("name: '" + name+"'");
         }
 
         public static string GetLink(string name)
