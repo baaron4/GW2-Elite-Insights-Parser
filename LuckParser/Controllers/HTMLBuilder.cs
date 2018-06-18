@@ -2813,7 +2813,8 @@ namespace LuckParser.Controllers
                                             //Html_dpsGraph
                                             sw.Write("<ul class=\"nav nav-tabs\">");
                                             {
-                                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#Full" + i + "\">Full</a></li>");
+                                                if (settings.Show10s || settings.Show30s)
+                                                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#Full" + i + "\">Full</a></li>");
                                                 if (settings.Show10s)
                                                     sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#10s" + i + "\">10s</a></li>");
                                                 if (settings.Show30s)
@@ -2841,8 +2842,8 @@ namespace LuckParser.Controllers
                                                     {
                                                         CreateDPSGraph(sw, i, HTMLHelper.GraphMode.s30);
                                                     }
+                                                    sw.Write("</div>");
                                                 }
-                                                sw.Write("</div>");
                                             }
                                             sw.Write("</div>");
                                         }
