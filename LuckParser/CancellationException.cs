@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser
 {
@@ -11,6 +7,11 @@ namespace LuckParser
         public GridRow Row { get; }
 
         public CancellationException(GridRow row)
+        {
+            Row = row;
+        }
+
+        public CancellationException(GridRow row, Exception inner) : base("", inner)
         {
             Row = row;
         }

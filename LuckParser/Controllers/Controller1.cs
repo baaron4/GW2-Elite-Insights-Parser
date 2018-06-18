@@ -54,52 +54,60 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Parses the given log
         /// </summary>
+        /// <param name="bg">BackgroundWorker handling the log</param>
+        /// <param name="row">GridRow object bound to the UI</param>
         /// <param name="evtc">The path to the log to parse</param>
         /// <returns></returns>
         public void ParseLog(BackgroundWorker bg, GridRow row, string evtc)
         {
-            MemoryStream stream = new MemoryStream();
-            //used to stream from a database, probably could use better stream now
-            using(var client = new WebClient())
-            using(var origstream = client.OpenRead(evtc))
+            using (MemoryStream stream = new MemoryStream())
             {
-                if(evtc.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+                using (FileStream origstream = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    using(var arch = new ZipArchive(origstream, ZipArchiveMode.Read))
+                    if (evtc.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
                     {
-                        if(arch.Entries.Count != 1)
+                        using (var arch = new ZipArchive(origstream, ZipArchiveMode.Read))
                         {
-                            bg.ThrowIfCanceled(row, "Invalid Archive");
-                        }
-                        using(var data = arch.Entries[0].Open())
-                        {
-                            data.CopyTo(stream);
+                            if (arch.Entries.Count != 1)
+                            {
+                                bg.ThrowIfCanceled(row, "Invalid Archive");
+                            }
+                            using (var data = arch.Entries[0].Open())
+                            {
+                                data.CopyTo(stream);
+                            }
                         }
                     }
-                }
-                else
-                {
-                    origstream.CopyTo(stream);
+                    else
+                    {
+                        origstream.CopyTo(stream);
+                    }
                 }
                 stream.Position = 0;
-                
-                bg.ThrowIfCanceled(row, "Cancelled");
-                bg.UpdateProgress(row, "15% - Parsing boss data...", 15);
-                parseBossData(stream);
-                bg.ThrowIfCanceled(row, "Cancelled");
-                bg.UpdateProgress(row, "20% - Parsing agent data...", 20);
-                parseAgentData(stream);
-                bg.ThrowIfCanceled(row, "Cancelled");
-                bg.UpdateProgress(row, "25% - Parsing skill data...", 25);
-                parseSkillData(stream);
-                bg.ThrowIfCanceled(row, "Cancelled");
-                bg.UpdateProgress(row, "30% - Parsing combat list...", 30);
-                parseCombatList(stream);
-                bg.ThrowIfCanceled(row, "Cancelled");
-                bg.UpdateProgress(row, "35% - Pairing data...", 35);
-                fillMissingData(stream);
-                bg.ThrowIfCanceled(row, "Cancelled");
-                stream.Close();
+
+                try
+                {
+                    bg.ThrowIfCanceled(row, "Cancelled");
+                    bg.UpdateProgress(row, "15% - Parsing boss data...", 15);
+                    parseBossData(stream);
+                    bg.ThrowIfCanceled(row, "Cancelled");
+                    bg.UpdateProgress(row, "20% - Parsing agent data...", 20);
+                    parseAgentData(stream);
+                    bg.ThrowIfCanceled(row, "Cancelled");
+                    bg.UpdateProgress(row, "25% - Parsing skill data...", 25);
+                    parseSkillData(stream);
+                    bg.ThrowIfCanceled(row, "Cancelled");
+                    bg.UpdateProgress(row, "30% - Parsing combat list...", 30);
+                    parseCombatList(stream);
+                    bg.ThrowIfCanceled(row, "Cancelled");
+                    bg.UpdateProgress(row, "35% - Pairing data...", 35);
+                    fillMissingData(stream);
+                    bg.ThrowIfCanceled(row, "Cancelled");
+                }
+                catch (Exception ex)
+                {
+                    throw new CancellationException(row, ex);
+                }
             }
         }
 

@@ -182,6 +182,7 @@ namespace LuckParser
         /// <param name="e"></param>
         private void BgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            //Redraw rows
             dgvFiles.Invalidate();
         }
 
@@ -198,6 +199,10 @@ namespace LuckParser
                 if (e.Error is CancellationException)
                 {
                     row = ((CancellationException)e.Error).Row;
+                    if (e.Error.InnerException != null)
+                    {
+                        row.Status = e.Error.InnerException.Message;
+                    }
                     row.ButtonState = GridRow.STATUS_PARSE;
                 }
             }
