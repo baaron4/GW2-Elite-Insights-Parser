@@ -51,6 +51,7 @@ namespace LuckParser.Controllers
 
             this.settings = settings;
             HTMLHelper.settings = settings;
+            GraphHelper.settings = settings;
 
             this.statistics = statistics;
         }
