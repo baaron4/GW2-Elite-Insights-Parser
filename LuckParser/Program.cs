@@ -25,13 +25,8 @@ namespace LuckParser
                 {
                     AllocConsole();
                 }
-                foreach (String arg in args)
-                {
-                    //Console.WriteLine(arg);
-                }
                 // Use the application through console 
-                MainForm myConsoleParser = new MainForm(args);
-                
+                new ConsoleProgram(args);
                 return 0;
             }
             

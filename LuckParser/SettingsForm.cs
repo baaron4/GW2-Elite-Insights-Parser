@@ -6,13 +6,9 @@ namespace LuckParser
 {
     public partial class SettingsForm : Form
     {
-       // private bool[] settingArray;
-       // private Form1 mainfrm;
-        public SettingsForm(/*bool[] setArray,Form1 mnfrm*/)
+        public SettingsForm()
         {
             InitializeComponent();
-            //settingArray = setArray;
-           // mainfrm = mnfrm;
         }
 
         private void PlayerDpsPlot_CheckedChanged(object sender, EventArgs e)
@@ -88,8 +84,10 @@ namespace LuckParser
             chkShowAutos.Checked = Properties.Settings.Default.ShowAutos;
             chkLargeSkillIcons.Checked = Properties.Settings.Default.LargeRotIcons;
             chkOutputHtml.Checked = Properties.Settings.Default.SaveOutHTML;
-            chkOutputCsv.Checked = Properties.Settings.Default.SaveOutCSV;
+            chkOutputCsv.Checked = Properties.Settings.Default.SaveOutCSV;  
             chkShowEstimates.Checked = Properties.Settings.Default.ShowEstimates;
+            chkPhaseParsing.Checked = Properties.Settings.Default.ParsePhases;
+            chkOneAtATime.Checked = Properties.Settings.Default.ParseOneAtATime;
         }
 
         private void DefaultOutputLocation_CheckedChanged(object sender, EventArgs e)
@@ -171,6 +169,16 @@ namespace LuckParser
         private void ShowEstimates_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ShowEstimates = chkShowEstimates.Checked;
+        }
+
+        private void chkOneAtATime_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ParseOneAtATime = chkOneAtATime.Checked;
+        }
+
+        private void PhaseParsing_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ParsePhases = chkPhaseParsing.Checked;
         }
     }
 }

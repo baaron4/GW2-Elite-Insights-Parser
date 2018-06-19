@@ -37,10 +37,10 @@
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
-            this.ButtonState = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.gridRowBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.gridRowBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.ButtonState = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridRowBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -130,12 +130,9 @@
             this.dgvFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.DgvFiles_DragDrop);
             this.dgvFiles.DragEnter += new System.Windows.Forms.DragEventHandler(this.DgvFiles_DragEnter);
             // 
-            // ButtonState
+            // gridRowBindingSource
             // 
-            this.ButtonState.DataPropertyName = "ButtonState";
-            this.ButtonState.HeaderText = "";
-            this.ButtonState.Name = "ButtonState";
-            this.ButtonState.ReadOnly = true;
+            this.gridRowBindingSource.DataSource = typeof(LuckParser.GridRow);
             // 
             // locationDataGridViewTextBoxColumn
             // 
@@ -153,9 +150,12 @@
             this.statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
             this.statusDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // gridRowBindingSource
+            // ButtonState
             // 
-            this.gridRowBindingSource.DataSource = typeof(LuckParser.GridRow);
+            this.ButtonState.DataPropertyName = "ButtonText";
+            this.ButtonState.HeaderText = "";
+            this.ButtonState.Name = "ButtonState";
+            this.ButtonState.ReadOnly = true;
             // 
             // MainForm
             // 

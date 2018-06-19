@@ -59,6 +59,9 @@
             this.chkOutputHtml = new System.Windows.Forms.CheckBox();
             this.chkOutputCsv = new System.Windows.Forms.CheckBox();
             this.chkShowEstimates = new System.Windows.Forms.CheckBox();
+            this.chkPhaseParsing = new System.Windows.Forms.CheckBox();
+            this.lblGlobalSettings = new System.Windows.Forms.Label();
+            this.chkOneAtATime = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblDamageGraphSection
@@ -386,12 +389,48 @@
             this.chkShowEstimates.UseVisualStyleBackColor = true;
             this.chkShowEstimates.CheckedChanged += new System.EventHandler(this.ShowEstimates_CheckedChanged);
             // 
+            // chkPhaseParsing
+            // 
+            this.chkPhaseParsing.AutoSize = true;
+            this.chkPhaseParsing.Checked = true;
+            this.chkPhaseParsing.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkPhaseParsing.Location = new System.Drawing.Point(404, 100);
+            this.chkPhaseParsing.Name = "checkPhaseParsing";
+            this.chkPhaseParsing.Size = new System.Drawing.Size(144, 17);
+            this.chkPhaseParsing.TabIndex = 30;
+            this.chkPhaseParsing.Text = "Parse all possible phases";
+            this.chkPhaseParsing.UseVisualStyleBackColor = true;
+            this.chkPhaseParsing.CheckedChanged += new System.EventHandler(this.PhaseParsing_CheckedChanged);
+            // 
+            // lblGlobalSettings
+            // 
+            this.lblGlobalSettings.AutoSize = true;
+            this.lblGlobalSettings.Location = new System.Drawing.Point(385, 84);
+            this.lblGlobalSettings.Name = "label1";
+            this.lblGlobalSettings.Size = new System.Drawing.Size(78, 13);
+            this.lblGlobalSettings.TabIndex = 29;
+            this.lblGlobalSettings.Text = "Global Settings";
+            // 
+            // chkOneAtATime
+            // 
+            this.chkOneAtATime.AutoSize = true;
+            this.chkOneAtATime.Location = new System.Drawing.Point(24, 634);
+            this.chkOneAtATime.Name = "chkOneAtATime";
+            this.chkOneAtATime.Size = new System.Drawing.Size(287, 17);
+            this.chkOneAtATime.TabIndex = 29;
+            this.chkOneAtATime.Text = "Parse logs one at a time (less CPU load, slower parsing)";
+            this.chkOneAtATime.UseVisualStyleBackColor = true;
+            this.chkOneAtATime.CheckedChanged += new System.EventHandler(this.chkOneAtATime_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(577, 368);
+            this.Controls.Add(this.chkPhaseParsing);
+            this.Controls.Add(this.lblGlobalSettings);
+            this.Controls.Add(this.chkOneAtATime);
             this.Controls.Add(this.chkShowEstimates);
             this.Controls.Add(this.chkOutputCsv);
             this.Controls.Add(this.chkOutputHtml);
@@ -463,5 +502,8 @@
         private System.Windows.Forms.CheckBox chkOutputHtml;
         private System.Windows.Forms.CheckBox chkOutputCsv;
         private System.Windows.Forms.CheckBox chkShowEstimates;
+        private System.Windows.Forms.CheckBox chkPhaseParsing;
+        private System.Windows.Forms.Label lblGlobalSettings;
+        private System.Windows.Forms.CheckBox chkOneAtATime;
     }
 }
