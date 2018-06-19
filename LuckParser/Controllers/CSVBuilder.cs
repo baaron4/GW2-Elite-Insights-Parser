@@ -68,7 +68,7 @@ namespace LuckParser.Controllers
             int[] teamStats = { 0, 0, 0 };
             foreach (Player p in p_list)
             {
-                Statistics.FinalDPS dps = statistics.finalDps[p][0];
+                Statistics.FinalDPS dps = statistics.dps[p][0];
                 teamStats[0] += dps.bossDps;
                 teamStats[1] += dps.allDps;
                 teamStats[2] += dps.allDps - dps.bossDps;
@@ -76,7 +76,7 @@ namespace LuckParser.Controllers
 
             foreach (Player p in p_list)
             {
-                Statistics.FinalDPS dps = statistics.finalDps[p][0];
+                Statistics.FinalDPS dps = statistics.dps[p][0];
                 sw.Write(p.getGroup() + delimiter + // group
                         p.getProf() + delimiter +  // class
                         p.getCharacter() + delimiter + // character
@@ -86,7 +86,7 @@ namespace LuckParser.Controllers
                         dps.bossCondiDps + delimiter + // condi
                         dps.allDps + delimiter); // all dps
 
-                Dictionary<int, Statistics.FinalBoonUptime> boons = statistics.finalBoons[p][0];
+                Dictionary<int, Statistics.FinalBoonUptime> boons = statistics.selfBoons[p][0];
                 sw.Write(boons[1187].uptime + delimiter + // Quickness
                          boons[30328].uptime + delimiter + // Alacrity
                          boons[740].uptime + delimiter); // Might

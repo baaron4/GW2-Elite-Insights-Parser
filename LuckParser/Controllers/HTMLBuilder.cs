@@ -674,8 +674,8 @@ namespace LuckParser.Controllers
                 sw.Write("<tbody>");
                 foreach (Player player in p_list)
                 {
-                    Statistics.FinalDPS dps = statistics.finalDps[player][phase_index];
-                    Statistics.FinalStats stats = statistics.finalStats[player][phase_index];
+                    Statistics.FinalDPS dps = statistics.dps[player][phase_index];
+                    Statistics.FinalStats stats = statistics.stats[player][phase_index];
                     //gather data for footer
                     footerList.Add(new string[]
                     {
@@ -804,7 +804,7 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        Statistics.FinalStats stats = statistics.finalStats[player][phase_index];
+                        Statistics.FinalStats stats = statistics.stats[player][phase_index];
 
                         TimeSpan timedead = TimeSpan.FromMilliseconds(stats.died);//dead 
                         
@@ -941,8 +941,8 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        Statistics.FinalDefenses defenses = statistics.finalDefenses[player][phase_index];
-                        Statistics.FinalStats stats = statistics.finalStats[player][phase_index];
+                        Statistics.FinalDefenses defenses = statistics.defenses[player][phase_index];
+                        Statistics.FinalStats stats = statistics.stats[player][phase_index];
 
                         // TODO damageBlocked
 
@@ -1058,7 +1058,7 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        Statistics.FinalSupport support = statistics.finalSupport[player][phase_index];
+                        Statistics.FinalSupport support = statistics.support[player][phase_index];
 
                         //gather data for footer
                         footerList.Add(new string[] {
@@ -1133,7 +1133,7 @@ namespace LuckParser.Controllers
                     foreach (Player player in p_list)
                     {
 
-                        Dictionary<int, Statistics.FinalBoonUptime> boons = statistics.finalBoons[player][phase_index];
+                        Dictionary<int, Statistics.FinalBoonUptime> boons = statistics.selfBoons[player][phase_index];
                         List<string> boonArrayToList = new List<string>();
                         boonArrayToList.Add(player.getGroup());
                         int count = 0;
@@ -1255,7 +1255,7 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in p_list)
                     {
-                        Dictionary<int, Statistics.FinalBoonUptime> uptimes = statistics.finalBoons[player][phase_index];
+                        Dictionary<int, Statistics.FinalBoonUptime> uptimes = statistics.selfBoons[player][phase_index];
 
                         Dictionary<int, string> rates = new Dictionary<int, string>();
                         foreach (Boon boon in Boon.getAllBuffList())
@@ -1313,7 +1313,7 @@ namespace LuckParser.Controllers
                     foreach (Player player in p_list)
                     {
                         Dictionary<int, Statistics.FinalBoonUptime> boons =
-                            statistics.finalGroupBoons[player][phase_index];
+                            statistics.groupBoons[player][phase_index];
 
                         Dictionary<int, string> rates = new Dictionary<int, string>();
                         foreach (Boon boon in Boon.getAllBuffList())
@@ -1369,7 +1369,7 @@ namespace LuckParser.Controllers
                     foreach (Player player in p_list)
                     {
                         Dictionary<int, Statistics.FinalBoonUptime> boons =
-                            statistics.finalOffGroupBoons[player][phase_index];
+                            statistics.offGroupBoons[player][phase_index];
 
                         Dictionary<int, string> rates = new Dictionary<int, string>();
                         foreach (Boon boon in Boon.getAllBuffList())
@@ -1426,7 +1426,7 @@ namespace LuckParser.Controllers
                     foreach (Player player in p_list)
                     {
                         Dictionary<int, Statistics.FinalBoonUptime> boons =
-                            statistics.finalSquadBoons[player][phase_index];
+                            statistics.squadBoons[player][phase_index];
 
                         Dictionary<int, string> rates = new Dictionary<int, string>();
                         foreach (Boon boon in Boon.getAllBuffList())
@@ -2114,7 +2114,7 @@ namespace LuckParser.Controllers
             PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, settings.ParsePhases)[phase_index];
             List<CastLog> casting = p.getCastLogs(boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
             List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(toBoss ? boss_data.getInstid() : 0, boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
-            Statistics.FinalDPS dps = statistics.finalDps[p][phase_index];
+            Statistics.FinalDPS dps = statistics.dps[p][phase_index];
 
             int totalDamage = toBoss ? dps.bossDamage : dps.allDamage;
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
@@ -2148,7 +2148,7 @@ namespace LuckParser.Controllers
             PhaseData phase = boss.getPhases(boss_data, combat_data.getCombatList(), agent_data, settings.ParsePhases)[phase_index];
             List<CastLog> casting = p.getCastLogs(boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
             List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(toBoss ? boss_data.getInstid() : 0, boss_data, combat_data.getCombatList(), agent_data, phase.getStart(), phase.getEnd());
-            Statistics.FinalDPS dps = statistics.finalBossDps[phase_index];
+            Statistics.FinalDPS dps = statistics.bossDps[phase_index];
 
             int totalDamage = toBoss ? dps.bossDamage : dps.allDamage;
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
@@ -2181,7 +2181,7 @@ namespace LuckParser.Controllers
         /// <param name="agent">The minion</param>
         private void CreateDMGDistTable(StreamWriter sw, Player p, Minions minions, bool toBoss, int phase_index)
         {
-            Statistics.FinalDPS dps = statistics.finalDps[p][phase_index];
+            Statistics.FinalDPS dps = statistics.dps[p][phase_index];
 
             int totalDamage = toBoss ? dps.bossDamage : dps.allDamage;
             string tabid = p.getInstid() + "_" + phase_index + "_" + minions.getInstid() + (toBoss ? "_boss" : "");
@@ -2217,7 +2217,7 @@ namespace LuckParser.Controllers
         /// <param name="agent">The minion</param>
         private void CreateDMGBossDistTable(StreamWriter sw, AbstractPlayer p, Minions minions, bool toBoss, int phase_index)
         {
-            Statistics.FinalDPS dps = statistics.finalBossDps[phase_index];
+            Statistics.FinalDPS dps = statistics.bossDps[phase_index];
 
             int totalDamage = toBoss ? dps.bossDamage : dps.allDamage;
             string tabid = p.getInstid() + "_" + phase_index + "_" + minions.getInstid() + (toBoss ? "_boss" : "");

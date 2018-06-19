@@ -41,11 +41,11 @@ namespace LuckParser.Controllers
 
             phases = boss.getPhases(bossData, combatData.getCombatList(), agentData, settings.ParsePhases);
 
-            calculateFinalDPS();
-            calculateFinalStats();
-            calculateFinalDefenses();
-            calculateFinalSupport();
-            calculateFinalBoons();
+            calculateDPS();
+            calculateStats();
+            calculateDefenses();
+            calculateSupport();
+            calculateBoons();
 
             return statistics;
         }
@@ -131,7 +131,7 @@ namespace LuckParser.Controllers
             return final;
         }
 
-        private void calculateFinalDPS()
+        private void calculateDPS()
         {
             foreach (Player player in players)
             {
@@ -141,7 +141,7 @@ namespace LuckParser.Controllers
                     phaseDps[phaseIndex] = getFinalDPS(player,phaseIndex);
                 }
 
-                statistics.finalDps[player] = phaseDps;
+                statistics.dps[player] = phaseDps;
             }
 
             Statistics.FinalDPS[] phaseBossDps = new Statistics.FinalDPS[phases.Count];
@@ -150,10 +150,10 @@ namespace LuckParser.Controllers
                 phaseBossDps[phaseIndex] = getFinalDPS(boss, phaseIndex);
             }
 
-            statistics.finalBossDps = phaseBossDps;
+            statistics.bossDps = phaseBossDps;
         }
 
-        private void calculateFinalStats()
+        private void calculateStats()
         {
             foreach (Player player in players)
             {
@@ -277,11 +277,11 @@ namespace LuckParser.Controllers
 
                     phaseStats[phaseIndex] = final;
                 }
-                statistics.finalStats[player] = phaseStats;
+                statistics.stats[player] = phaseStats;
             }
         }
 
-        private void calculateFinalDefenses()
+        private void calculateDefenses()
         {
             foreach (Player player in players)
             {
@@ -326,12 +326,12 @@ namespace LuckParser.Controllers
 
                     phaseDefense[phaseIndex] = final;
                 }
-                statistics.finalDefenses[player] = phaseDefense;
+                statistics.defenses[player] = phaseDefense;
             }
         }
 
         // TODO ensure it is working correctly
-        private void calculateFinalSupport()
+        private void calculateSupport()
         {
             foreach (Player player in players)
             {
@@ -360,7 +360,7 @@ namespace LuckParser.Controllers
 
                     phaseSupport[phaseIndex] = final;
                 }
-                statistics.finalSupport[player] = phaseSupport;
+                statistics.support[player] = phaseSupport;
             }
         }
 
@@ -419,7 +419,7 @@ namespace LuckParser.Controllers
             return final;
         }
 
-        private void calculateFinalBoons()
+        private void calculateBoons()
         {
             // Player Boons
             foreach (Player player in players)
@@ -463,7 +463,7 @@ namespace LuckParser.Controllers
 
                     phaseBoons[phaseIndex] = final;
                 }
-                statistics.finalBoons[player] = phaseBoons;
+                statistics.selfBoons[player] = phaseBoons;
             }
 
             // Group Boons
@@ -480,7 +480,7 @@ namespace LuckParser.Controllers
 
                     phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, phaseIndex);
                 }
-                statistics.finalGroupBoons[player] = phaseBoons;
+                statistics.groupBoons[player] = phaseBoons;
             }
 
             // Off Group Boons
@@ -497,7 +497,7 @@ namespace LuckParser.Controllers
 
                     phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, phaseIndex);
                 }
-                statistics.finalOffGroupBoons[player] = phaseBoons;
+                statistics.offGroupBoons[player] = phaseBoons;
             }
 
             // Squad Boons
@@ -514,7 +514,7 @@ namespace LuckParser.Controllers
 
                     phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, phaseIndex);
                 }
-                statistics.finalSquadBoons[player] = phaseBoons;
+                statistics.squadBoons[player] = phaseBoons;
             }
         }
     }
