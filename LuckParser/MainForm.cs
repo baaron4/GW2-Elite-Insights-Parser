@@ -169,11 +169,12 @@ namespace LuckParser
                         fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
                     {
                         //Process evtc here
-                        logger(i, "Reading Binary...", 40);
+                        logger(i, "Reading Binary...", 20);
 
                         control.ParseLog(fInfo.FullName);
                         ParsedLog log = control.GetParsedLog();
 
+                        logger(i, "Generating Statistics...", 40);
                         Statistics statistics;
                         if (Properties.Settings.Default.SaveOutHTML)
                         {
