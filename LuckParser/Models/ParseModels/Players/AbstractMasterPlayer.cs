@@ -35,7 +35,7 @@ namespace LuckParser.Models.ParseModels
                 string id = agent.getName();
                 if (!minions.ContainsKey(id))
                 {
-                    minions[id] = new Minions();
+                    minions[id] = new Minions(id.GetHashCode());
                 }
                 minions[id].Add(new Minion(agent.getInstid(), agent));
             }
