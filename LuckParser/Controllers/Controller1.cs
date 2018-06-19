@@ -453,7 +453,7 @@ namespace LuckParser.Controllers
                             // No split
                             break;
                         }
-                        boss.addPhaseData(boss_data.getLastAware());
+                        boss.addPhaseData(NPC.getFirstAware() >= oldAware ? NPC.getFirstAware() : oldAware);
                         boss_data.setLastAware(NPC.getLastAware());
                         //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos_2_instid ).ToList().Sum(x);
                         //int stop = 0;
