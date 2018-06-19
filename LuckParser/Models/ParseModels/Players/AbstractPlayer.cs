@@ -292,12 +292,8 @@ namespace LuckParser.Models.ParseModels
 
                         for (int i = start; i <= end; i++)
                         {
-                            if (i >= 0)
-                            {
-                                toFill[i] = new Point(i, simul.getStack(i));
-                                toFillPresence[i] = new Point(i, simul.getItemDuration() > 0 ? 1 : 0);
-                            }
-                          
+                            toFill[i] = new Point(i, simul.getStack(i));
+                            toFillPresence[i] = new Point(i, simul.getItemDuration() > 0 ? 1 : 0);                     
                         }
                     }
                     // reduce precision to seconds
