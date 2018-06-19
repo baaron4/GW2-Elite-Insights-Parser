@@ -2602,10 +2602,17 @@ namespace LuckParser.Controllers
                     sw.Write("<tr>");
                     {
                         sw.Write("<td>" + boss.getCharacter().ToString() + "</td>");
-                        Dictionary<int, string> boonArray = HTMLHelper.getfinalcondis(boss_data, combat_data, skill_data, agent_data, boss, boss, phase_index);
+                        Dictionary<int, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
                         foreach (Boon boon in Boon.getCondiBoonList())
                         {
-                            sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
+                            if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                            {
+                                sw.Write("<td>" + conditions[boon.getID()].uptime + "%</td>");
+                            }
+                            else
+                            {
+                                sw.Write("<td>" + conditions[boon.getID()].uptime + "</td>");
+                            }
                         }
                     }
                     sw.Write("</tr>");

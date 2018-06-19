@@ -107,5 +107,19 @@ namespace LuckParser.Models.DataModels
         public Dictionary<Player, Dictionary<int, FinalBoonUptime>[]> groupBoons;
         public Dictionary<Player, Dictionary<int, FinalBoonUptime>[]> offGroupBoons;
         public Dictionary<Player, Dictionary<int, FinalBoonUptime>[]> squadBoons;
+
+        public class FinalBossBoon
+        {
+            public FinalBossBoon()
+            {
+                uptime = 0;
+                boonType = Boon.BoonType.Intensity;
+            }
+
+            public double uptime;
+            public Boon.BoonType boonType;
+        }
+
+        public Dictionary<int, FinalBossBoon>[] bossConditions;
     }
 }

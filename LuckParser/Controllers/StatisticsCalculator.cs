@@ -46,6 +46,7 @@ namespace LuckParser.Controllers
             calculateDefenses();
             calculateSupport();
             calculateBoons();
+            calculateConditions();
 
             return statistics;
         }
@@ -515,6 +516,43 @@ namespace LuckParser.Controllers
                     phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, phaseIndex);
                 }
                 statistics.squadBoons[player] = phaseBoons;
+            }
+        }
+
+        public void calculateConditions()
+        {
+            statistics.bossConditions = new Dictionary<int, Statistics.FinalBossBoon>[phases.Count];
+            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+            {
+                List<PhaseData> phases = boss.getPhases(bossData, combatData.getCombatList(), agentData, settings.ParsePhases);
+                BoonDistribution boonDistribution = boss.getBoonDistribution(bossData, skillData, combatData.getCombatList(), phases, phaseIndex);
+                Dictionary<int, Statistics.FinalBossBoon> rates = new Dictionary<int, Statistics.FinalBossBoon>();
+
+                PhaseData phase = phases[phaseIndex];
+                long fightDuration = phase.getDuration();
+
+                foreach (Boon boon in Boon.getCondiBoonList())
+                {
+                    Statistics.FinalBossBoon condition = new Statistics.FinalBossBoon();
+                    rates[boon.getID()] = condition;
+                    if (boonDistribution.ContainsKey(boon.getID()))
+                    {
+                        if (boon.getType() == Boon.BoonType.Duration)
+                        {
+                            condition.boonType = Boon.BoonType.Duration;
+                            condition.uptime = Math.Round(100.0 * boonDistribution.getUptime(boon.getID()) / fightDuration, 1);
+                        }
+                        else if (boon.getType() == Boon.BoonType.Intensity)
+                        {
+                            condition.boonType = Boon.BoonType.Intensity;
+                            condition.uptime = Math.Round((double) boonDistribution.getUptime(boon.getID()) / fightDuration, 1);
+                        }
+
+                        rates[boon.getID()] = condition;
+                    }
+                }
+
+                statistics.bossConditions[phaseIndex] = rates;
             }
         }
     }

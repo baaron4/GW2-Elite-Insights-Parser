@@ -16,34 +16,6 @@ namespace LuckParser.Controllers
 
         public static SettingsContainer settings;
 
-        public static Dictionary<int, string> getfinalcondis(BossData b_data, CombatData c_data, SkillData s_data, AgentData a_data, Boss boss, AbstractPlayer p, int phase_index)
-        {
-            List<PhaseData> phases = boss.getPhases(b_data, c_data.getCombatList(), a_data, settings.ParsePhases);
-            BoonDistribution boon_distrib = p.getBoonDistribution(b_data, s_data, c_data.getCombatList(),phases, phase_index);
-            Dictionary<int, string> rates = new Dictionary<int, string>();
-            PhaseData phase = phases[phase_index];
-            foreach (Boon boon in Boon.getCondiBoonList())
-            {
-                rates[boon.getID()] = "0";
-                if (boon_distrib.ContainsKey(boon.getID()))
-                {
-                    long fight_duration = phase.getDuration();
-                    string rate = "0";
-                    if (boon.getType() == Boon.BoonType.Duration)
-                    {                 
-                        rate = Math.Round(100.0 * boon_distrib.getUptime(boon.getID()) / fight_duration, 1) + "%";
-                    }
-                    else if (boon.getType() == Boon.BoonType.Intensity)
-                    {
-                        rate = Math.Round((double)boon_distrib.getUptime(boon.getID()) / fight_duration, 1).ToString();
-                    }
-
-                    rates[boon.getID()] = rate;
-                }
-            }
-            return rates;
-        }
-
         public static List<Point> getDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index, ushort dstid, GraphMode mode)
         {
             int asked_id = (phase_index + "_" + dstid + "_" + mode).GetHashCode();
