@@ -343,8 +343,58 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName(namesDh[i-1]);
                     }
                     break;
-                default:
+                case 0x427D:
+                case 0x4284:
+                case 0x4234:
+                case 0x44E0:
+                case 0x461D:
+                case 0x455F:
+                    List<CombatItem> invulsBoss = combatList.Where(x => x.getSkillID() == 762 && agent.getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
+                    List<CombatItem> invulsBossFiltered = new List<CombatItem>();
+                    foreach (CombatItem c in invulsBoss)
+                    {
+                        if (invulsBossFiltered.Count > 0)
+                        {
+                            CombatItem last = invulsBossFiltered.Last();
+                            if (last.getTime() != c.getTime())
+                            {
+                                invulsBossFiltered.Add(c);
+                            }
+                        }
+                        else
+                        {
+                            invulsBossFiltered.Add(c);
+                        }
+                    }
+                    for (int i = 0; i < invulsBossFiltered.Count; i++)
+                    {
+                        CombatItem c = invulsBossFiltered[i];
+                        if (c.isBuffremove().getID() == 0)
+                        {
+                            end = c.getTime() - bossData.getFirstAware();
+                            phases.Add(new PhaseData(start, end));
+                            if (i == invulsBossFiltered.Count - 1)
+                            {
+                                cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), new ParseEnums.Activation(0), (int)(fight_dur - end), new ParseEnums.Activation(0)));
+                            }
+                        }
+                        else
+                        {
+                            start = c.getTime() - bossData.getFirstAware();
+                            cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                        }
+                    }
+                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                    {
+                        phases.Add(new PhaseData(start, fight_dur));
+                    }
+                    for (int i = 1; i < phases.Count; i++)
+                    {
+                        phases[i].setName("Phase " + i);
+                    }
                     break;
+                default:
+                    break; ;
             }
         }
 
