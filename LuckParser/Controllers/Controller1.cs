@@ -590,7 +590,7 @@ namespace LuckParser.Controllers
                     string name = skill_data.getName(dLog.getID());
                     if (dLog.getResult().getID() < 3 ) {
 
-                        foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x=>x.GetMechType() == 3))
+                        foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x=>x.GetMechType() == Mechanic.MechType.SkillOnPlayer))
                         {
                             //Prevent multi hit attacks form multi registering
                             if (prevMech != null)
@@ -621,7 +621,7 @@ namespace LuckParser.Controllers
                         {
                             String name = skill_data.getName(c.getSkillID());
                             //buff on player 0
-                            foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == 0))
+                            foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.PlayerBoon))
                             {
                                 if (c.getSkillID() == mech.GetSkill())
                                 {
@@ -631,7 +631,7 @@ namespace LuckParser.Controllers
                                 }
                             }
                             //player on player 7
-                            foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == 7))
+                            foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.PlayerOnPlayer))
                             {
                                 if (c.getSkillID() == mech.GetSkill())
                                 {

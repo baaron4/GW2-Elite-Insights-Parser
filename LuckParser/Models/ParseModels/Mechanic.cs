@@ -2,25 +2,28 @@
 {
     public class Mechanic
     {
+        //X indicates not gathering mechanic in mech logs
+        /// <summary>
+        /// 0 - PlayerBoon 
+        /// 1 - BossBoon X
+        /// 2 - PlayerSkill X
+        /// 3 - SkillOnPlayer
+        /// 4 - EnemyBoonStrip X
+        /// 5 - Spawn X
+        /// 6 - BossCast X
+        /// 7 - PlayerOnPlayer
+        /// </summary>
+        public enum MechType { PlayerBoon, BossBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, BossCast, PlayerOnPlayer }
         // Fields
        
         private int skill_id;
         private string name;
         private string altname;
-        private int mechType;
-        //X indicates not gathering mechanic in mech logs
-        //0 boon on player
-        //1 boon on boss X
-        //2 skill by player X
-        //3 skill on player
-        //4 enemy boon stripped X
-        //5 spawn check X
-        //6 boss cast (check finished) X
-        //7 player on player 
+        private MechType mechType;       
         private ushort bossid;
         private string plotlyShape;
 
-        public Mechanic( int skill_id, string name, int mechtype, ushort bossid, string plotlyShape,string friendlyName)
+        public Mechanic( int skill_id, string name, MechType mechtype, ushort bossid, string plotlyShape,string friendlyName)
         {
             this.skill_id = skill_id;
             this.name = name;
@@ -39,7 +42,7 @@
         {
             return name;
         }
-        public int GetMechType()
+        public MechType GetMechType()
         {
             return mechType;
         }
