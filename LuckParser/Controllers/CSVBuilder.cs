@@ -24,6 +24,14 @@ namespace LuckParser.Controllers
 
         private Statistics statistics;
 
+        public static StatisticsCalculator.Switches GetStatisticSwitches()
+        {
+            StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
+            switches.calculateBoons = true;
+            switches.calculateDPS = true;
+            return switches;
+        }
+
         public CSVBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics)
         {
             boss_data = log.getBossData();

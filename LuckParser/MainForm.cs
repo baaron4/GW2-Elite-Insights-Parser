@@ -173,7 +173,16 @@ namespace LuckParser
 
                         control.ParseLog(fInfo.FullName);
                         ParsedLog log = control.GetParsedLog();
-                        Statistics statistics = statisticsCalculator.calculateStatistics(log);
+
+                        Statistics statistics;
+                        if (Properties.Settings.Default.SaveOutHTML)
+                        {
+                            statistics = statisticsCalculator.calculateStatistics(log, HTMLBuilder.GetStatisticSwitches());
+                        }
+                        else
+                        {
+                            statistics = statisticsCalculator.calculateStatistics(log, CSVBuilder.GetStatisticSwitches());
+                        }
 
                         //Creating File
                         //save location

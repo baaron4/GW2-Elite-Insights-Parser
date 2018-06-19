@@ -11,6 +11,16 @@ namespace LuckParser.Controllers
     /// </summary>
     class StatisticsCalculator
     {
+        public class Switches
+        {
+            public bool calculateDPS = false;
+            public bool calculateStats = false;
+            public bool calculateDefense = false;
+            public bool calculateSupport = false;
+            public bool calculateBoons = false;
+            public bool calculateConditions = false;
+        }
+
         private SettingsContainer settings;
 
         private Statistics statistics;
@@ -35,7 +45,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="log">log to calculate stats from</param>
         /// <returns></returns>
-        public Statistics calculateStatistics(ParsedLog log)
+        public Statistics calculateStatistics(ParsedLog log, Switches switches)
         {
             statistics = new Statistics();
 
@@ -49,12 +59,12 @@ namespace LuckParser.Controllers
 
             phases = boss.getPhases(bossData, combatData.getCombatList(), agentData, settings.ParsePhases);
 
-            calculateDPS();
-            calculateStats();
-            calculateDefenses();
-            calculateSupport();
-            calculateBoons();
-            calculateConditions();
+            if (switches.calculateDPS) calculateDPS();
+            if (switches.calculateStats) calculateStats();
+            if (switches.calculateDefense) calculateDefenses();
+            if (switches.calculateSupport) calculateSupport();
+            if (switches.calculateBoons) calculateBoons();
+            if (switches.calculateConditions) calculateConditions();
 
             return statistics;
         }
