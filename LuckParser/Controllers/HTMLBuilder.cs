@@ -2175,7 +2175,7 @@ namespace LuckParser.Controllers
                             sw.Write("<th>Player</th>");
                             foreach (string mechalt in presMech.Keys)
                             {
-                                sw.Write("<th><span>" + mechalt + "</span></th>");
+                                sw.Write("<th><span data-toggle=\"tooltip\" title=\""+presMech[mechalt].First().GetName() +"\">" + mechalt + "</span></th>");
                             }
                         }
                         sw.Write("</tr>");
