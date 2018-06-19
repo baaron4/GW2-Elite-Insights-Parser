@@ -194,9 +194,10 @@ namespace LuckParser
                         }
 
                         string outputType = Properties.Settings.Default.SaveOutHTML ? "html" : "csv";
+                        string fName = fInfo.Name.Split('.')[0];
                         string outputFile = Path.Combine(
                             saveDirectory.FullName,
-                            $"{fInfo.Name}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.{outputType}"
+                            $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.{outputType}"
                         );
 
                         logger(i, "Creating File...", 60);
