@@ -250,33 +250,27 @@ namespace LuckParser.Properties {
                 this["ParsePhases"] = value;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool Show10s
-        {
-            get
-            {
+        public bool Show10s {
+            get {
                 return ((bool)(this["Show10s"]));
             }
-            set
-            {
+            set {
                 this["Show10s"] = value;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool Show30s
-        {
-            get
-            {
+        public bool Show30s {
+            get {
                 return ((bool)(this["Show30s"]));
             }
-            set
-            {
+            set {
                 this["Show30s"] = value;
             }
         }
