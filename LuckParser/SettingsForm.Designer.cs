@@ -61,6 +61,8 @@
             this.chkShowEstimates = new System.Windows.Forms.CheckBox();
             this.checkPhaseParsing = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.checkShow10s = new System.Windows.Forms.CheckBox();
+            this.checkShow30s = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblDamageGraphSection
@@ -88,7 +90,7 @@
             // lblPlayerSummarySection
             // 
             this.lblPlayerSummarySection.AutoSize = true;
-            this.lblPlayerSummarySection.Location = new System.Drawing.Point(24, 75);
+            this.lblPlayerSummarySection.Location = new System.Drawing.Point(24, 129);
             this.lblPlayerSummarySection.Name = "lblPlayerSummarySection";
             this.lblPlayerSummarySection.Size = new System.Drawing.Size(82, 13);
             this.lblPlayerSummarySection.TabIndex = 2;
@@ -99,7 +101,7 @@
             this.chkTotalDpsPlot.AutoSize = true;
             this.chkTotalDpsPlot.Checked = true;
             this.chkTotalDpsPlot.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkTotalDpsPlot.Location = new System.Drawing.Point(43, 100);
+            this.chkTotalDpsPlot.Location = new System.Drawing.Point(43, 145);
             this.chkTotalDpsPlot.Name = "chkTotalDpsPlot";
             this.chkTotalDpsPlot.Size = new System.Drawing.Size(126, 17);
             this.chkTotalDpsPlot.TabIndex = 3;
@@ -112,7 +114,7 @@
             this.chkBossDpsPlot.AutoSize = true;
             this.chkBossDpsPlot.Checked = true;
             this.chkBossDpsPlot.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkBossDpsPlot.Location = new System.Drawing.Point(43, 123);
+            this.chkBossDpsPlot.Location = new System.Drawing.Point(43, 168);
             this.chkBossDpsPlot.Name = "chkBossDpsPlot";
             this.chkBossDpsPlot.Size = new System.Drawing.Size(125, 17);
             this.chkBossDpsPlot.TabIndex = 4;
@@ -125,7 +127,7 @@
             this.chkUniversalBoons.AutoSize = true;
             this.chkUniversalBoons.Checked = true;
             this.chkUniversalBoons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkUniversalBoons.Location = new System.Drawing.Point(43, 168);
+            this.chkUniversalBoons.Location = new System.Drawing.Point(43, 213);
             this.chkUniversalBoons.Name = "chkUniversalBoons";
             this.chkUniversalBoons.Size = new System.Drawing.Size(133, 17);
             this.chkUniversalBoons.TabIndex = 5;
@@ -136,7 +138,7 @@
             // lblBoonGraphSection
             // 
             this.lblBoonGraphSection.AutoSize = true;
-            this.lblBoonGraphSection.Location = new System.Drawing.Point(40, 152);
+            this.lblBoonGraphSection.Location = new System.Drawing.Point(27, 197);
             this.lblBoonGraphSection.Name = "lblBoonGraphSection";
             this.lblBoonGraphSection.Size = new System.Drawing.Size(69, 13);
             this.lblBoonGraphSection.TabIndex = 6;
@@ -147,7 +149,7 @@
             this.chkImpProfSpecBoons.AutoSize = true;
             this.chkImpProfSpecBoons.Checked = true;
             this.chkImpProfSpecBoons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkImpProfSpecBoons.Location = new System.Drawing.Point(43, 191);
+            this.chkImpProfSpecBoons.Location = new System.Drawing.Point(43, 236);
             this.chkImpProfSpecBoons.Name = "chkImpProfSpecBoons";
             this.chkImpProfSpecBoons.Size = new System.Drawing.Size(224, 17);
             this.chkImpProfSpecBoons.TabIndex = 7;
@@ -158,7 +160,7 @@
             // chkAllProfSpecBoons
             // 
             this.chkAllProfSpecBoons.AutoSize = true;
-            this.chkAllProfSpecBoons.Location = new System.Drawing.Point(43, 214);
+            this.chkAllProfSpecBoons.Location = new System.Drawing.Point(43, 259);
             this.chkAllProfSpecBoons.Name = "chkAllProfSpecBoons";
             this.chkAllProfSpecBoons.Size = new System.Drawing.Size(191, 17);
             this.chkAllProfSpecBoons.TabIndex = 8;
@@ -169,7 +171,7 @@
             // lblRotationGraphSection
             // 
             this.lblRotationGraphSection.AutoSize = true;
-            this.lblRotationGraphSection.Location = new System.Drawing.Point(40, 245);
+            this.lblRotationGraphSection.Location = new System.Drawing.Point(24, 288);
             this.lblRotationGraphSection.Name = "lblRotationGraphSection";
             this.lblRotationGraphSection.Size = new System.Drawing.Size(79, 13);
             this.lblRotationGraphSection.TabIndex = 9;
@@ -180,7 +182,7 @@
             this.chkSkillIcons.AutoSize = true;
             this.chkSkillIcons.Checked = true;
             this.chkSkillIcons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSkillIcons.Location = new System.Drawing.Point(43, 295);
+            this.chkSkillIcons.Location = new System.Drawing.Point(40, 327);
             this.chkSkillIcons.Name = "chkSkillIcons";
             this.chkSkillIcons.Size = new System.Drawing.Size(104, 17);
             this.chkSkillIcons.TabIndex = 10;
@@ -193,7 +195,7 @@
             this.chkRotation.AutoSize = true;
             this.chkRotation.Checked = true;
             this.chkRotation.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkRotation.Location = new System.Drawing.Point(43, 272);
+            this.chkRotation.Location = new System.Drawing.Point(40, 304);
             this.chkRotation.Name = "chkRotation";
             this.chkRotation.Size = new System.Drawing.Size(96, 17);
             this.chkRotation.TabIndex = 11;
@@ -213,7 +215,7 @@
             // lblOutputSection
             // 
             this.lblOutputSection.AutoSize = true;
-            this.lblOutputSection.Location = new System.Drawing.Point(24, 499);
+            this.lblOutputSection.Location = new System.Drawing.Point(21, 531);
             this.lblOutputSection.Name = "lblOutputSection";
             this.lblOutputSection.Size = new System.Drawing.Size(42, 13);
             this.lblOutputSection.TabIndex = 13;
@@ -224,7 +226,7 @@
             this.chkDefaultOutputLoc.AutoSize = true;
             this.chkDefaultOutputLoc.Checked = true;
             this.chkDefaultOutputLoc.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDefaultOutputLoc.Location = new System.Drawing.Point(27, 515);
+            this.chkDefaultOutputLoc.Location = new System.Drawing.Point(24, 547);
             this.chkDefaultOutputLoc.Name = "chkDefaultOutputLoc";
             this.chkDefaultOutputLoc.Size = new System.Drawing.Size(192, 17);
             this.chkDefaultOutputLoc.TabIndex = 14;
@@ -235,7 +237,7 @@
             // txtCustomSaveLoc
             // 
             this.txtCustomSaveLoc.Enabled = false;
-            this.txtCustomSaveLoc.Location = new System.Drawing.Point(24, 552);
+            this.txtCustomSaveLoc.Location = new System.Drawing.Point(21, 584);
             this.txtCustomSaveLoc.Name = "txtCustomSaveLoc";
             this.txtCustomSaveLoc.Size = new System.Drawing.Size(412, 20);
             this.txtCustomSaveLoc.TabIndex = 15;
@@ -244,7 +246,7 @@
             // 
             // btnFolderSelect
             // 
-            this.btnFolderSelect.Location = new System.Drawing.Point(461, 549);
+            this.btnFolderSelect.Location = new System.Drawing.Point(466, 581);
             this.btnFolderSelect.Name = "btnFolderSelect";
             this.btnFolderSelect.Size = new System.Drawing.Size(45, 23);
             this.btnFolderSelect.TabIndex = 16;
@@ -255,7 +257,7 @@
             // lblCustomSaveLoc
             // 
             this.lblCustomSaveLoc.AutoSize = true;
-            this.lblCustomSaveLoc.Location = new System.Drawing.Point(100, 533);
+            this.lblCustomSaveLoc.Location = new System.Drawing.Point(97, 565);
             this.lblCustomSaveLoc.Name = "lblCustomSaveLoc";
             this.lblCustomSaveLoc.Size = new System.Drawing.Size(59, 13);
             this.lblCustomSaveLoc.TabIndex = 17;
@@ -264,7 +266,7 @@
             // chkEventListDbg
             // 
             this.chkEventListDbg.AutoSize = true;
-            this.chkEventListDbg.Location = new System.Drawing.Point(27, 479);
+            this.chkEventListDbg.Location = new System.Drawing.Point(24, 511);
             this.chkEventListDbg.Name = "chkEventListDbg";
             this.chkEventListDbg.Size = new System.Drawing.Size(177, 17);
             this.chkEventListDbg.TabIndex = 18;
@@ -275,7 +277,7 @@
             // lblBossSection
             // 
             this.lblBossSection.AutoSize = true;
-            this.lblBossSection.Location = new System.Drawing.Point(27, 392);
+            this.lblBossSection.Location = new System.Drawing.Point(24, 424);
             this.lblBossSection.Name = "lblBossSection";
             this.lblBossSection.Size = new System.Drawing.Size(30, 13);
             this.lblBossSection.TabIndex = 19;
@@ -286,7 +288,7 @@
             this.checkBossSummary.AutoSize = true;
             this.checkBossSummary.Checked = true;
             this.checkBossSummary.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBossSummary.Location = new System.Drawing.Point(46, 417);
+            this.checkBossSummary.Location = new System.Drawing.Point(43, 449);
             this.checkBossSummary.Name = "checkBossSummary";
             this.checkBossSummary.Size = new System.Drawing.Size(125, 17);
             this.checkBossSummary.TabIndex = 20;
@@ -299,7 +301,7 @@
             this.chkSimpleRotationTab.AutoSize = true;
             this.chkSimpleRotationTab.Checked = true;
             this.chkSimpleRotationTab.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSimpleRotationTab.Location = new System.Drawing.Point(43, 318);
+            this.chkSimpleRotationTab.Location = new System.Drawing.Point(40, 350);
             this.chkSimpleRotationTab.Name = "chkSimpleRotationTab";
             this.chkSimpleRotationTab.Size = new System.Drawing.Size(152, 17);
             this.chkSimpleRotationTab.TabIndex = 21;
@@ -312,7 +314,7 @@
             this.chkShowAutos.AutoSize = true;
             this.chkShowAutos.Checked = true;
             this.chkShowAutos.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowAutos.Location = new System.Drawing.Point(49, 341);
+            this.chkShowAutos.Location = new System.Drawing.Point(46, 373);
             this.chkShowAutos.Name = "chkShowAutos";
             this.chkShowAutos.Size = new System.Drawing.Size(117, 17);
             this.chkShowAutos.TabIndex = 22;
@@ -323,7 +325,7 @@
             // chkLargeSkillIcons
             // 
             this.chkLargeSkillIcons.AutoSize = true;
-            this.chkLargeSkillIcons.Location = new System.Drawing.Point(49, 364);
+            this.chkLargeSkillIcons.Location = new System.Drawing.Point(46, 396);
             this.chkLargeSkillIcons.Name = "chkLargeSkillIcons";
             this.chkLargeSkillIcons.Size = new System.Drawing.Size(104, 17);
             this.chkLargeSkillIcons.TabIndex = 23;
@@ -356,7 +358,7 @@
             this.chkOutputHtml.AutoSize = true;
             this.chkOutputHtml.Checked = true;
             this.chkOutputHtml.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkOutputHtml.Location = new System.Drawing.Point(24, 587);
+            this.chkOutputHtml.Location = new System.Drawing.Point(21, 619);
             this.chkOutputHtml.Name = "chkOutputHtml";
             this.chkOutputHtml.Size = new System.Drawing.Size(105, 17);
             this.chkOutputHtml.TabIndex = 26;
@@ -367,7 +369,7 @@
             // chkOutputCsv
             // 
             this.chkOutputCsv.AutoSize = true;
-            this.chkOutputCsv.Location = new System.Drawing.Point(24, 611);
+            this.chkOutputCsv.Location = new System.Drawing.Point(21, 643);
             this.chkOutputCsv.Name = "chkOutputCsv";
             this.chkOutputCsv.Size = new System.Drawing.Size(96, 17);
             this.chkOutputCsv.TabIndex = 27;
@@ -380,7 +382,7 @@
             this.chkShowEstimates.AutoSize = true;
             this.chkShowEstimates.Checked = true;
             this.chkShowEstimates.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowEstimates.Location = new System.Drawing.Point(30, 440);
+            this.chkShowEstimates.Location = new System.Drawing.Point(27, 472);
             this.chkShowEstimates.Name = "chkShowEstimates";
             this.chkShowEstimates.Size = new System.Drawing.Size(153, 17);
             this.chkShowEstimates.TabIndex = 28;
@@ -410,12 +412,40 @@
             this.label1.TabIndex = 29;
             this.label1.Text = "Global Settings";
             // 
+            // checkShow10s
+            // 
+            this.checkShow10s.AutoSize = true;
+            this.checkShow10s.Checked = true;
+            this.checkShow10s.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkShow10s.Location = new System.Drawing.Point(43, 77);
+            this.checkShow10s.Name = "checkShow10s";
+            this.checkShow10s.Size = new System.Drawing.Size(130, 17);
+            this.checkShow10s.TabIndex = 31;
+            this.checkShow10s.Text = "Show 10s DPS Graph";
+            this.checkShow10s.UseVisualStyleBackColor = true;
+            this.checkShow10s.CheckedChanged += new System.EventHandler(this.checkShow10s_CheckedChanged);
+            // 
+            // checkShow30s
+            // 
+            this.checkShow30s.AutoSize = true;
+            this.checkShow30s.Checked = true;
+            this.checkShow30s.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkShow30s.Location = new System.Drawing.Point(43, 100);
+            this.checkShow30s.Name = "checkShow30s";
+            this.checkShow30s.Size = new System.Drawing.Size(130, 17);
+            this.checkShow30s.TabIndex = 32;
+            this.checkShow30s.Text = "Show 30s DPS Graph";
+            this.checkShow30s.UseVisualStyleBackColor = true;
+            this.checkShow30s.CheckedChanged += new System.EventHandler(this.checkShow30s_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(577, 368);
+            this.ClientSize = new System.Drawing.Size(577, 679);
+            this.Controls.Add(this.checkShow30s);
+            this.Controls.Add(this.checkShow10s);
             this.Controls.Add(this.checkPhaseParsing);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.chkShowEstimates);
@@ -491,5 +521,7 @@
         private System.Windows.Forms.CheckBox chkShowEstimates;
         private System.Windows.Forms.CheckBox checkPhaseParsing;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox checkShow10s;
+        private System.Windows.Forms.CheckBox checkShow30s;
     }
 }
