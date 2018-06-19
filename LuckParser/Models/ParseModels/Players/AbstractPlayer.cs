@@ -325,13 +325,13 @@ namespace LuckParser.Models.ParseModels
 
             foreach (CombatItem c in combatList)
             {
-                if (c.isBuff() != 1 || !boon_map.ContainsKey(c.getSkillID()) || ! (c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware()))
+                if (c.isBuff() != 1 || !boon_map.ContainsKey(c.getSkillID()))
                 {
                     continue;
                 }
                 long time = c.getTime() - time_start;
                 ushort dst = c.isBuffremove().getID() == 0 ? c.getDstInstid() : c.getSrcInstid();
-                if (agent.getInstid() == dst)
+                if (agent.getInstid() == dst && time > 0 && time < bossData.getAwareDuration())
                 {
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                     if (c.isBuffremove().getID() == 0)

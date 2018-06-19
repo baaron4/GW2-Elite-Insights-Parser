@@ -302,7 +302,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         end = invulDei.getTime() - bossData.getFirstAware();
                         phases.Add(new PhaseData(start, end));
-                        start = (phaseData.Count == 1 ? phaseData[0] : fight_dur) - bossData.getFirstAware();
+                        start = (phaseData.Count == 1 ? phaseData[0] - bossData.getFirstAware() : fight_dur) ;
                         cast_logs.Add(new CastLog(end, -6, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
                     }
                     if (fight_dur - start > 5000 && start >= phases.Last().getEnd())

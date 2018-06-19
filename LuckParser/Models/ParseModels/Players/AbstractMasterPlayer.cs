@@ -46,7 +46,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = bossData.getFirstAware();
             foreach (CombatItem c in combatList)
             {
-                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware())
+                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > bossData.getFirstAware() && c.getTime() < bossData.getLastAware())
                 {
                     long time = c.getTime() - time_start;
                     addDamageLog(time, bossData.getInstid(), c, damage_logsFiltered);
@@ -67,7 +67,7 @@ namespace LuckParser.Models.ParseModels
 
             foreach (CombatItem c in combatList)
             {
-                if (! (c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware()))
+                if (! (c.getTime() > bossData.getFirstAware() && c.getTime() < bossData.getLastAware()))
                 {
                     continue;
                 }
