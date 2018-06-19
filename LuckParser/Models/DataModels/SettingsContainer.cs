@@ -24,6 +24,8 @@ namespace LuckParser.Models.DataModels
         public readonly bool LargeRotIcons;//12
         public readonly bool ShowEstimates;//13
         public readonly bool ParsePhases;//14
+        public readonly bool Show30s;//14
+        public readonly bool Show10s;//14
 
         public SettingsContainer(Settings settings)
         {
@@ -42,6 +44,8 @@ namespace LuckParser.Models.DataModels
             this.LargeRotIcons = settings.LargeRotIcons;
             this.ShowEstimates = settings.ShowEstimates;
             this.ParsePhases = settings.ParsePhases;
+            this.Show10s = settings.Show10s;
+            this.Show30s = settings.Show30s;
         }
     }
 }

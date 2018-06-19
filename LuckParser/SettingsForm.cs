@@ -91,6 +91,8 @@ namespace LuckParser
             chkOutputCsv.Checked = Properties.Settings.Default.SaveOutCSV;
             chkShowEstimates.Checked = Properties.Settings.Default.ShowEstimates;
             checkPhaseParsing.Checked = Properties.Settings.Default.ParsePhases;
+            checkShow10s.Checked = Properties.Settings.Default.Show10s;
+            checkShow30s.Checked = Properties.Settings.Default.Show30s;
         }
 
         private void DefaultOutputLocation_CheckedChanged(object sender, EventArgs e)
@@ -177,6 +179,16 @@ namespace LuckParser
         private void checkPhaseParsing_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ParsePhases = checkPhaseParsing.Checked;
+        }
+
+        private void checkShow10s_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Show10s = checkShow10s.Checked;
+        }
+
+        private void checkShow30s_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Show30s = checkShow30s.Checked;
         }
     }
 }

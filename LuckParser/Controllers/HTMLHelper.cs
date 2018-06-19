@@ -12,6 +12,8 @@ namespace LuckParser.Controllers
     class HTMLHelper
     {
 
+        public enum GraphMode { Full, s10, s30};
+
         public static SettingsContainer settings;
 
         public static Dictionary<int, string> getfinalcondis(BossData b_data, CombatData c_data, SkillData s_data, AgentData a_data, Boss boss, AbstractPlayer p, int phase_index)
@@ -42,15 +44,17 @@ namespace LuckParser.Controllers
             return rates;
         }
 
-        public static List<Point> getDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index, ushort dstid)
+        public static List<Point> getDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index, ushort dstid, GraphMode mode)
         {
-            int id = phase_index + dstid;
-            if (p.getDPSGraph(id).Count > 0)
+            int asked_id = (phase_index + "_" + dstid + "_" + mode).GetHashCode();
+            if (p.getDPSGraph(asked_id).Count > 0)
             {
-                return p.getDPSGraph(id);
+                return p.getDPSGraph(asked_id);
             }
 
             List<Point> dmgList = new List<Point>();
+            List<Point> dmgList10s = new List<Point>();
+            List<Point> dmgList30s = new List<Point>();
             PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data, settings.ParsePhases)[phase_index];
             List<DamageLog> damage_logs = p.getDamageLogs(dstid, b_data, c_data.getCombatList(), a_data, phase.getStart(), phase.getEnd());
             // fill the graph, full precision
@@ -66,31 +70,56 @@ namespace LuckParser.Controllers
                 // fill
                 for (; total_time < time; total_time++)
                 {
-                    dmgListFull[total_time] = (1000.0 * total_damage / total_time);
+                    dmgListFull[total_time] = total_damage;
                 }
                 total_damage += log.getDamage();
-                dmgListFull[total_time] = (1000.0 * total_damage / total_time);
+                dmgListFull[total_time] = total_damage;
             }
             // fill
             for (; total_time <= phase.getDuration(); total_time++)
             {
-                dmgListFull[total_time] = (1000.0 * total_damage / total_time);
+                dmgListFull[total_time] = total_damage ;
             }
-            for (int i = 0; i <= phase.getDuration("s"); i++)
+            dmgList.Add(new Point(0, 0));
+            dmgList10s.Add(new Point(0, 0));
+            dmgList30s.Add(new Point(0, 0));
+            for (int i = 1; i <= phase.getDuration("s"); i++)
             {
-                dmgList.Add(new Point(i, (int)Math.Round(dmgListFull[1000 * i])));
+                int limit_id = 0;
+                dmgList.Add(new Point(i, (int)Math.Round((dmgListFull[1000 * i] - dmgListFull[1000 * limit_id]) /(i-limit_id))));
+                if (settings.Show10s)
+                {
+                    limit_id = Math.Max(i - 10, 0);
+                    dmgList10s.Add(new Point(i, (int)Math.Round((dmgListFull[1000 * i] - dmgListFull[1000 * limit_id]) / (i - limit_id))));
+                }
+                if (settings.Show30s)
+                {
+                    limit_id = Math.Max(i - 30, 0);
+                    dmgList30s.Add(new Point(i, (int)Math.Round((dmgListFull[1000 * i] - dmgListFull[1000 * limit_id]) / (i - limit_id))));
+                }
             }
+            int id = (phase_index + "_" + dstid + "_" + GraphMode.Full).GetHashCode();
             p.addDPSGraph(id, dmgList);
-            return dmgList;
+            if (settings.Show10s)
+            {
+                id = (phase_index + "_" + dstid + "_" + GraphMode.s10).GetHashCode();
+                p.addDPSGraph(id, dmgList10s);
+            }
+            if (settings.Show30s)
+            {
+                id = (phase_index + "_" + dstid + "_" + GraphMode.s30).GetHashCode();
+                p.addDPSGraph(id, dmgList30s);
+            }
+            return p.getDPSGraph(asked_id);
         }
         /// <summary>
         /// Gets the points for the boss dps graph for a given player
         /// </summary>
         /// <param name="p">The player</param>
         /// <returns></returns>
-        public static List<Point> getBossDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index)
+        public static List<Point> getBossDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index, GraphMode mode)
         {
-            return getDPSGraph(b_data, c_data, a_data, p, boss, phase_index, b_data.getInstid());
+            return getDPSGraph(b_data, c_data, a_data, p, boss, phase_index, b_data.getInstid(), mode);
         }
        
         /// <summary>
@@ -98,9 +127,9 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="p">The player</param>
         /// <returns></returns>
-        public static List<Point> getTotalDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index)
+        public static List<Point> getTotalDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index, GraphMode mode)
         {
-            return getDPSGraph(b_data, c_data, a_data, p, boss, phase_index, 0);
+            return getDPSGraph(b_data, c_data, a_data, p, boss, phase_index, 0, mode);
         }
 
         public static void writeCastingItem(StreamWriter sw, CastLog cl, SkillData skill_data, long start, long end)
@@ -736,10 +765,14 @@ namespace LuckParser.Controllers
             }
             sw.Write("],");
             sw.Write(" mode: 'lines'," +
-                   "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf() + (name.Contains("Total") ? "-Total" : ""))  + "'}," +
-                   "yaxis: 'y3'," +
-                   // "legendgroup: 'Damage'," +
-                   "name: '"+ name+"'");
+                   "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf() + (name.Contains("Total") ? "-Total" : "")) + "'}," +
+                   "yaxis: 'y3',");
+            if (name.Contains("10s") || name.Contains("30s"))
+            {
+                sw.Write(" visible: 'legendonly',");
+            }
+            // "legendgroup: 'Damage'," +
+            sw.Write("name: '" + name+"'");
         }
 
         public static string GetLink(string name)
