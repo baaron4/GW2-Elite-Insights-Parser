@@ -7,6 +7,9 @@ using LuckParser.Models.ParseModels;
 
 namespace LuckParser.Models.DataModels
 {
+    /// <summary>
+    /// Passes statistical information about dps logs
+    /// </summary>
     public class Statistics
     {
         public Statistics()

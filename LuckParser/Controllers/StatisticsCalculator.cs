@@ -6,6 +6,9 @@ using LuckParser.Models.ParseModels;
 
 namespace LuckParser.Controllers
 {
+    /// <summary>
+    /// Calculates statistical information from a log
+    /// </summary>
     class StatisticsCalculator
     {
         private SettingsContainer settings;
@@ -27,6 +30,11 @@ namespace LuckParser.Controllers
             this.settings = settings;
         }
 
+        /// <summary>
+        /// Calculate a statistic from a log
+        /// </summary>
+        /// <param name="log">log to calculate stats from</param>
+        /// <returns></returns>
         public Statistics calculateStatistics(ParsedLog log)
         {
             statistics = new Statistics();
