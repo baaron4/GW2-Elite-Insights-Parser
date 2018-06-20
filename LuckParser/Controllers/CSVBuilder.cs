@@ -14,13 +14,7 @@ namespace LuckParser.Controllers
         private SettingsContainer settings;
 
         private BossData boss_data;
-        private Boss boss;
-        private CombatData combat_data;
-        private AgentData agent_data;
         private List<Player> p_list;
-        private MechanicData mech_data;
-        private SkillData skill_data;
-        private LogData log_data;
 
         private Statistics statistics;
 
@@ -35,13 +29,7 @@ namespace LuckParser.Controllers
         public CSVBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics)
         {
             boss_data = log.getBossData();
-            boss = log.getBoss();
-            combat_data = log.getCombatData();
-            agent_data = log.getAgentData();
             p_list = log.getPlayerList();
-            mech_data = log.getMechanicData();
-            skill_data = log.getSkillData();
-            log_data = log.getLogData();
 
             this.settings = settings;
             HTMLHelper.settings = settings;
