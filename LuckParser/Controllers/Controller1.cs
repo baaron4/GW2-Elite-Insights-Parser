@@ -305,12 +305,10 @@ namespace LuckParser.Controllers
         private void fillMissingData(MemoryStream stream)
         {
             // Set Agent instid, first_aware and last_aware
-            List<AgentItem> player_list = agent_data.getPlayerAgentList();
-            List<AgentItem> agent_list = agent_data.getAllAgentsList();
             List<CombatItem> combat_list = combat_data.getCombatList();
             foreach (CombatItem c in combat_list)
             {
-                foreach (AgentItem a in agent_list)
+                foreach (AgentItem a in agent_data.getAllAgentsList())
                 {
                     if (a.getInstid() == 0 && a.getAgent() == c.getSrcAgent() && c.isStateChange().getID() == 0)
                     {
@@ -333,10 +331,10 @@ namespace LuckParser.Controllers
             {
                 if (c.getSrcMasterInstid() != 0)
                 {
-                    AgentItem master = agent_list.Find(x => x.getInstid() == c.getSrcMasterInstid() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
+                    AgentItem master = agent_data.getAllAgentsList().Find(x => x.getInstid() == c.getSrcMasterInstid() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
                     if (master != null)
                     {
-                        AgentItem minion = agent_list.Find(x => x.getAgent() == c.getSrcAgent() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
+                        AgentItem minion = agent_data.getAllAgentsList().Find(x => x.getAgent() == c.getSrcAgent() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
                         if (minion != null)
                         {
                             minion.setMasterAgent(master.getAgent());
@@ -378,7 +376,7 @@ namespace LuckParser.Controllers
                 if (c.isStateChange().getID() == 13 && log_data.getPOV() == "N/A")//Point of View
                 {
                     ulong pov_agent = c.getSrcAgent();
-                    foreach (AgentItem p in player_list)
+                    foreach (AgentItem p in agent_data.getPlayerAgentList())
                     {
                         if (pov_agent == p.getAgent())
                         {
@@ -444,9 +442,9 @@ namespace LuckParser.Controllers
             if (boss_data.getID() == 17154)
             {
                 int deimos_2_instid = 0;
-                foreach (AgentItem NPC in NPC_list)
+                foreach (AgentItem NPC in agent_data.getGadgetAgentList())
                 {
-                    if (NPC.getProf().Contains("57069"))
+                    if (NPC.getProf().Contains("08467"))
                     {
                         deimos_2_instid = NPC.getInstid();
                         long oldAware = boss_data.getLastAware();
@@ -455,7 +453,7 @@ namespace LuckParser.Controllers
                             // No split
                             break;
                         }
-                        boss.addPhaseData(boss_data.getLastAware());
+                        boss.addPhaseData(NPC.getFirstAware() >= oldAware ? NPC.getFirstAware() : oldAware);
                         boss_data.setLastAware(NPC.getLastAware());
                         //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos_2_instid ).ToList().Sum(x);
                         //int stop = 0;
@@ -592,7 +590,7 @@ namespace LuckParser.Controllers
                     string name = skill_data.getName(dLog.getID());
                     if (dLog.getResult().getID() < 3 ) {
 
-                        foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x=>x.GetMechType() == 3))
+                        foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x=>x.GetMechType() == Mechanic.MechType.SkillOnPlayer))
                         {
                             //Prevent multi hit attacks form multi registering
                             if (prevMech != null)
@@ -623,7 +621,7 @@ namespace LuckParser.Controllers
                         {
                             String name = skill_data.getName(c.getSkillID());
                             //buff on player 0
-                            foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == 0))
+                            foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.PlayerBoon))
                             {
                                 if (c.getSkillID() == mech.GetSkill())
                                 {
@@ -633,7 +631,7 @@ namespace LuckParser.Controllers
                                 }
                             }
                             //player on player 7
-                            foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == 7))
+                            foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.PlayerOnPlayer))
                             {
                                 if (c.getSkillID() == mech.GetSkill())
                                 {
