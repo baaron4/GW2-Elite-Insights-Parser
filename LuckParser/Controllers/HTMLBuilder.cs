@@ -55,62 +55,7 @@ namespace LuckParser.Controllers
             }
             return filtered;
         }
-
-        //Statistics--------------------------------------------------------------------------------------------------------------------------------------------------------
-        private List<Boon> present_boons = new List<Boon>();//Used only for Boon tables
-        private List<Boon> present_offbuffs = new List<Boon>();//Used only for Off Buff tables
-        private List<Boon> present_defbuffs = new List<Boon>();//Used only for Def Buff tables
-        private Dictionary<int, List<Boon>> present_personnal = new Dictionary<int, List<Boon>>();//Used only for personnal
-        /// <summary>
-        /// Checks the combat data and gets buffs that were present during the fight
-        /// </summary>
-        private void setPresentBoons()
-        {
-            List<SkillItem> s_list = log.getSkillData().getSkillList();
-            if (settings.PlayerBoonsUniversal)
-            {//Main boons
-                foreach (Boon boon in Boon.getBoonList())
-                {
-                    if (s_list.Exists(x => x.getID() == boon.getID()))
-                    {
-                        present_boons.Add(boon);
-                    }
-                }
-            }
-            if (settings.PlayerBoonsImpProf)
-            {//Important Class specefic boons
-                foreach (Boon boon in Boon.getOffensiveTableList())
-                {
-                    if (s_list.Exists(x => x.getID() == boon.getID()))
-                    {
-                        present_offbuffs.Add(boon);
-                    }
-                }
-                foreach (Boon boon in Boon.getDefensiveTableList())
-                {
-                    if (s_list.Exists(x => x.getID() == boon.getID()))
-                    {
-                        present_defbuffs.Add(boon);
-                    }
-                }
-            }
-            if (settings.PlayerBoonsAllProf)
-            {//All class specefic boons
-                List<CombatItem> c_list = log.getCombatData().getCombatList();
-                foreach (Player p in log.getPlayerList())
-                {
-                    present_personnal[p.getInstid()] = new List<Boon>();
-                    foreach (Boon boon in Boon.getRemainingBuffsList(p.getProf()))
-                    {
-                        if (c_list.Exists(x => x.getSkillID() == boon.getID() && x.getDstInstid() == p.getInstid()))
-                        {
-                            present_personnal[p.getInstid()].Add(boon);
-                        }
-                    }
-                }
-            }
-        }
-
+        
         //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
         //Methods that make it easier to create Javascript graphs      
         /// <summary>
@@ -1143,8 +1088,13 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             if (boonTable)
                             {
+                                List<Boon> boon_to_track = new List<Boon>();
+                                boon_to_track.AddRange(statistics.present_boons);
+                                boon_to_track.AddRange(statistics.present_offbuffs);
+                                boon_to_track.AddRange(statistics.present_defbuffs);
+                                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
                                 long fight_duration = phases[phase_index].getDuration();
-                                Dictionary<int, long> boonPresence = player.getBoonPresence(log, phases, phase_index);
+                                Dictionary<int, long> boonPresence = player.getBoonPresence(log, phases, boon_to_track, phase_index);
                                 double avg_boons = 0.0;
                                 foreach (Boon boon in list_to_use)
                                 {
@@ -1589,28 +1539,25 @@ namespace LuckParser.Controllers
                                             HTMLHelper.writeCastingItem(sw, cl, log.getSkillData(), phase.getStart(), phase.getEnd());
                                         }
                                     }
-                                    if (present_boons.Count() > 0)
+                                    if (statistics.present_boons.Count() > 0)
                                     {
                                         List<Boon> parseBoonsList = new List<Boon>();
-                                        parseBoonsList.AddRange(present_boons);
-                                        parseBoonsList.AddRange(present_offbuffs);
-                                        parseBoonsList.AddRange(present_defbuffs);
-                                        if (present_personnal.ContainsKey(p.getInstid()))
+                                        parseBoonsList.AddRange(statistics.present_boons);
+                                        parseBoonsList.AddRange(statistics.present_offbuffs);
+                                        parseBoonsList.AddRange(statistics.present_defbuffs);
+                                        if (statistics.present_personnal.ContainsKey(p.getInstid()))
                                         {
-                                            parseBoonsList.AddRange(present_personnal[p.getInstid()]);
+                                            parseBoonsList.AddRange(statistics.present_personnal[p.getInstid()]);
                                         }
-                                        Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases);
-                                        foreach (int boonid in boonGraphData.Keys.Reverse())
+                                        Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
+                                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
                                         {
-                                            BoonsGraphModel bgm = boonGraphData[boonid];
-                                            if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null || boonid == -2)
+                                            sw.Write("{");
                                             {
-                                                sw.Write("{");
-                                                {
-                                                    HTMLHelper.writeBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
-                                                }
-                                                sw.Write(" },");
+                                                HTMLHelper.writeBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
                                             }
+                                            sw.Write(" },");
+
                                         }
                                     }
                                     if (settings.PlayerGraphTotals)
@@ -2667,18 +2614,15 @@ namespace LuckParser.Controllers
                         parseBoonsList.AddRange(Boon.getCondiBoonList());
                         //Every buffs and boons
                         parseBoonsList.AddRange(Boon.getAllBuffList());
-                        Dictionary<int, BoonsGraphModel> boonGraphData = log.getBoss().getBoonGraphs(log, phases);
-                        foreach (int boonid in boonGraphData.Keys.Reverse())
+                        Dictionary<int, BoonsGraphModel> boonGraphData = log.getBoss().getBoonGraphs(log, phases, parseBoonsList);
+                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
                         {
-                            if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null)
+                            sw.Write("{");
                             {
-                                BoonsGraphModel bgm = boonGraphData[boonid];
-                                sw.Write("{");
-                                {
-                                    HTMLHelper.writeBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
-                                }
-                                sw.Write(" },");
+                                HTMLHelper.writeBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
                             }
+                            sw.Write(" },");
+
                         }
                         //int maxDPS = 0;
                         if (settings.PlayerGraphTotals)
@@ -2824,7 +2768,6 @@ namespace LuckParser.Controllers
                 durationString = duration.ToString("hh") + "h " + durationString;
             }
             string bossname = FilterStringChars(log.getBossData().getName());
-            setPresentBoons();
             List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
             // HTML STARTS
             sw.Write("<!DOCTYPE html><html lang=\"en\">");
@@ -3125,35 +3068,35 @@ namespace LuckParser.Controllers
                                                         {
                                                             sw.Write("<p> Boon Uptime</p>");
                                                             // Html_boons
-                                                            CreateUptimeTable(sw, present_boons, "boons_table", i);
+                                                            CreateUptimeTable(sw, statistics.present_boons, "boons_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSelf" + i + "\">");
                                                         {
                                                             //Html_boonGenSelf
                                                             sw.Write("<p> Boons generated by a character for themselves</p>");
-                                                            CreateGenSelfTable(sw, present_boons, "boongenself_table", i);
+                                                            CreateGenSelfTable(sw, statistics.present_boons, "boongenself_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenGroup" + i + "\">");
                                                         {
                                                             sw.Write("<p> Boons generated by a character for their sub group</p>");
                                                             // Html_boonGenGroup
-                                                            CreateGenGroupTable(sw, present_boons, "boongengroup_table", i);
+                                                            CreateGenGroupTable(sw, statistics.present_boons, "boongengroup_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenOGroup" + i + "\">");
                                                         {
                                                             sw.Write("<p> Boons generated by a character for any subgroup that is not their own</p>");
                                                             // Html_boonGenOGroup
-                                                            CreateGenOGroupTable(sw, present_boons, "boongenogroup_table", i);
+                                                            CreateGenOGroupTable(sw, statistics.present_boons, "boongenogroup_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSquad" + i + "\">");
                                                         {
                                                             sw.Write("<p> Boons generated by a character for the entire squad</p>");
                                                             //  Html_boonGenSquad
-                                                            CreateGenSquadTable(sw, present_boons, "boongensquad_table", i);
+                                                            CreateGenSquadTable(sw, statistics.present_boons, "boongensquad_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                     }
@@ -3175,31 +3118,31 @@ namespace LuckParser.Controllers
                                                         sw.Write("<div class=\"tab-pane fade show active\" id=\"offensiveUptime" + i + "\">");
                                                         {
                                                             sw.Write("<p> Offensive Buffs Uptime</p>");
-                                                            CreateUptimeTable(sw, present_offbuffs, "offensive_table", i);
+                                                            CreateUptimeTable(sw, statistics.present_offbuffs, "offensive_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSelf" + i + "\">");
                                                         {
                                                             sw.Write("<p> Offensive Buffs generated by a character for themselves</p>");
-                                                            CreateGenSelfTable(sw, present_offbuffs, "offensivegenself_table", i);
+                                                            CreateGenSelfTable(sw, statistics.present_offbuffs, "offensivegenself_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenGroup" + i + "\">");
                                                         {
                                                             sw.Write("<p> Offensive Buffs generated by a character for their sub group</p>");
-                                                            CreateGenGroupTable(sw, present_offbuffs, "offensivegengroup_table", i);
+                                                            CreateGenGroupTable(sw, statistics.present_offbuffs, "offensivegengroup_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenOGroup" + i + "\">");
                                                         {
                                                             sw.Write("<p> Offensive Buffs generated by a character for any subgroup that is not their own</p>");
-                                                            CreateGenOGroupTable(sw, present_offbuffs, "offensivegenogroup_table", i);
+                                                            CreateGenOGroupTable(sw, statistics.present_offbuffs, "offensivegenogroup_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSquad" + i + "\">");
                                                         {
                                                             sw.Write("<p> Offensive Buffs generated by a character for the entire squad</p>");
-                                                            CreateGenSquadTable(sw, present_offbuffs, "offensivegensquad_table", i);
+                                                            CreateGenSquadTable(sw, statistics.present_offbuffs, "offensivegensquad_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                     }
@@ -3221,31 +3164,31 @@ namespace LuckParser.Controllers
                                                         sw.Write("<div class=\"tab-pane fade show active\" id=\"defensiveUptime" + i + "\">");
                                                         {
                                                             sw.Write("<p> Defensive Buffs Uptime</p>");
-                                                            CreateUptimeTable(sw, present_defbuffs, "defensive_table", i);
+                                                            CreateUptimeTable(sw, statistics.present_defbuffs, "defensive_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSelf" + i + "\">");
                                                         {
                                                             sw.Write("<p> Defensive Buffs generated by a character for themselves</p>");
-                                                            CreateGenSelfTable(sw, present_defbuffs, "defensivegenself_table", i);
+                                                            CreateGenSelfTable(sw, statistics.present_defbuffs, "defensivegenself_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenGroup" + i + "\">");
                                                         {
                                                             sw.Write("<p> Defensive Buffs generated by a character for their sub group</p>");
-                                                            CreateGenGroupTable(sw, present_defbuffs, "defensivegengroup_table", i);
+                                                            CreateGenGroupTable(sw, statistics.present_defbuffs, "defensivegengroup_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenOGroup" + i + "\">");
                                                         {
                                                             sw.Write("<p> Defensive Buffs generated by a character for any subgroup that is not their own</p>");
-                                                            CreateGenOGroupTable(sw, present_defbuffs, "defensivegenogroup_table", i);
+                                                            CreateGenOGroupTable(sw, statistics.present_defbuffs, "defensivegenogroup_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSquad" + i + "\">");
                                                         {
                                                             sw.Write("<p> Defensive Buffs generated by a character for the entire squad</p>");
-                                                            CreateGenSquadTable(sw, present_defbuffs, "defensivegensquad_table", i);
+                                                            CreateGenSquadTable(sw, statistics.present_defbuffs, "defensivegensquad_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                     }
@@ -3340,28 +3283,24 @@ namespace LuckParser.Controllers
                             HTMLHelper.writeCastingItem(sw, cl, log.getSkillData(), 0, log.getBossData().getAwareDuration());
                         }
                     }
-                    if (present_boons.Count() > 0)
+                    if (statistics.present_boons.Count() > 0)
                     {
                         List<Boon> parseBoonsList = new List<Boon>();
-                        parseBoonsList.AddRange(present_boons);
-                        parseBoonsList.AddRange(present_offbuffs);
-                        parseBoonsList.AddRange(present_defbuffs);
-                        if (present_personnal.ContainsKey(p.getInstid()))
+                        parseBoonsList.AddRange(statistics.present_boons);
+                        parseBoonsList.AddRange(statistics.present_offbuffs);
+                        parseBoonsList.AddRange(statistics.present_defbuffs);
+                        if (statistics.present_personnal.ContainsKey(p.getInstid()))
                         {
-                            parseBoonsList.AddRange(present_personnal[p.getInstid()]);
+                            parseBoonsList.AddRange(statistics.present_personnal[p.getInstid()]);
                         }
-                        Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases);
-                        foreach (int boonid in boonGraphData.Keys.Reverse())
+                        Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
+                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
                         {
-                            if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null)
+                            sw.Write("{");
                             {
-                                BoonsGraphModel bgm = boonGraphData[boonid];
-                                sw.Write("{");
-                                {
-                                    HTMLHelper.writeBoonGraph(sw, bgm, 0, log.getBossData().getAwareDuration());
-                                }
-                                sw.Write(" },");
+                                HTMLHelper.writeBoonGraph(sw, bgm, 0, log.getBossData().getAwareDuration());
                             }
+                            sw.Write(" },");
                         }
                     }
                     int maxDPS = 0;

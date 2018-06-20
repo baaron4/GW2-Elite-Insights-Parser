@@ -51,7 +51,12 @@ namespace LuckParser.Controllers
             if (switches.calculateStats) calculateStats();
             if (switches.calculateDefense) calculateDefenses();
             if (switches.calculateSupport) calculateSupport();
-            if (switches.calculateBoons) calculateBoons();
+            if (switches.calculateBoons)
+            {
+                setPresentBoons();
+                calculateBoons();
+            }
+            
             if (switches.calculateConditions) calculateConditions();
 
             return statistics;
@@ -368,7 +373,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        private Dictionary<int, Statistics.FinalBoonUptime> getBoonsForList(List<Player> playerList, Player player, int phaseIndex)
+        private Dictionary<int, Statistics.FinalBoonUptime> getBoonsForList(List<Player> playerList, Player player, List<Boon> to_track, int phaseIndex)
         {
             PhaseData phase = phases[phaseIndex];
             long fightDuration = phase.getEnd() - phase.getStart();
@@ -376,7 +381,7 @@ namespace LuckParser.Controllers
             Dictionary<Player, BoonDistribution> boonDistributions = new Dictionary<Player, BoonDistribution>();
             foreach (Player p in playerList)
             {
-                boonDistributions[p] = p.getBoonDistribution(log, phases, phaseIndex);
+                boonDistributions[p] = p.getBoonDistribution(log, phases, to_track, phaseIndex);
             }
 
             Dictionary<int, Statistics.FinalBoonUptime> final =
@@ -426,6 +431,11 @@ namespace LuckParser.Controllers
             // Player Boons
             foreach (Player player in log.getPlayerList())
             {
+                List<Boon> boon_to_track = new List<Boon>();
+                boon_to_track.AddRange(statistics.present_boons);
+                boon_to_track.AddRange(statistics.present_offbuffs);
+                boon_to_track.AddRange(statistics.present_defbuffs);
+                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
                 Dictionary<int, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<int, Statistics.FinalBoonUptime>[phases.Count];
                 for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
                 {
@@ -433,7 +443,7 @@ namespace LuckParser.Controllers
 
                     PhaseData phase = phases[phaseIndex];
 
-                    BoonDistribution selfBoons = player.getBoonDistribution(log, phases, phaseIndex);
+                    BoonDistribution selfBoons = player.getBoonDistribution(log, phases, boon_to_track, phaseIndex);
 
                     long fightDuration = phase.getEnd() - phase.getStart();
                     foreach (Boon boon in Boon.getAllBuffList())
@@ -471,6 +481,11 @@ namespace LuckParser.Controllers
             // Group Boons
             foreach (Player player in log.getPlayerList())
             {
+                List<Boon> boon_to_track = new List<Boon>();
+                boon_to_track.AddRange(statistics.present_boons);
+                boon_to_track.AddRange(statistics.present_offbuffs);
+                boon_to_track.AddRange(statistics.present_defbuffs);
+                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
                 List<Player> groupPlayers = new List<Player>();
                 foreach (Player p in log.getPlayerList())
                 {
@@ -479,7 +494,7 @@ namespace LuckParser.Controllers
                 Dictionary<int, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<int, Statistics.FinalBoonUptime>[phases.Count];
                 for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
                 {
-                    phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, phaseIndex);
+                    phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
                 }
                 statistics.groupBoons[player] = phaseBoons;
             }
@@ -487,6 +502,11 @@ namespace LuckParser.Controllers
             // Off Group Boons
             foreach (Player player in log.getPlayerList())
             {
+                List<Boon> boon_to_track = new List<Boon>();
+                boon_to_track.AddRange(statistics.present_boons);
+                boon_to_track.AddRange(statistics.present_offbuffs);
+                boon_to_track.AddRange(statistics.present_defbuffs);
+                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
                 List<Player> groupPlayers = new List<Player>();
                 foreach (Player p in log.getPlayerList())
                 {
@@ -495,7 +515,7 @@ namespace LuckParser.Controllers
                 Dictionary<int, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<int, Statistics.FinalBoonUptime>[phases.Count];
                 for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
                 {                    
-                    phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, phaseIndex);
+                    phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
                 }
                 statistics.offGroupBoons[player] = phaseBoons;
             }
@@ -503,6 +523,11 @@ namespace LuckParser.Controllers
             // Squad Boons
             foreach (Player player in log.getPlayerList())
             {
+                List<Boon> boon_to_track = new List<Boon>();
+                boon_to_track.AddRange(statistics.present_boons);
+                boon_to_track.AddRange(statistics.present_offbuffs);
+                boon_to_track.AddRange(statistics.present_defbuffs);
+                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
                 List<Player> groupPlayers = new List<Player>();
                 foreach (Player p in log.getPlayerList())
                 {
@@ -511,7 +536,7 @@ namespace LuckParser.Controllers
                 Dictionary<int, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<int, Statistics.FinalBoonUptime>[phases.Count];
                 for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
                 {                
-                    phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, phaseIndex);
+                    phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
                 }
                 statistics.squadBoons[player] = phaseBoons;
             }
@@ -520,10 +545,12 @@ namespace LuckParser.Controllers
         public void calculateConditions()
         {
             statistics.bossConditions = new Dictionary<int, Statistics.FinalBossBoon>[phases.Count];
+            List<Boon> boon_to_track = Boon.getCondiBoonList();
+            boon_to_track.AddRange(Boon.getBoonList());
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
                 List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
-                BoonDistribution boonDistribution = log.getBoss().getBoonDistribution(log, phases, phaseIndex);
+                BoonDistribution boonDistribution = log.getBoss().getBoonDistribution(log, phases, boon_to_track, phaseIndex);
                 Dictionary<int, Statistics.FinalBossBoon> rates = new Dictionary<int, Statistics.FinalBossBoon>();
 
                 PhaseData phase = phases[phaseIndex];
@@ -551,6 +578,55 @@ namespace LuckParser.Controllers
                 }
 
                 statistics.bossConditions[phaseIndex] = rates;
+            }
+        }
+        /// <summary>
+        /// Checks the combat data and gets buffs that were present during the fight
+        /// </summary>
+        private void setPresentBoons()
+        {
+            List<SkillItem> s_list = log.getSkillData().getSkillList();
+            if (settings.PlayerBoonsUniversal)
+            {//Main boons
+                foreach (Boon boon in Boon.getBoonList())
+                {
+                    if (s_list.Exists(x => x.getID() == boon.getID()))
+                    {
+                        statistics.present_boons.Add(boon);
+                    }
+                }
+            }
+            if (settings.PlayerBoonsImpProf)
+            {//Important Class specefic boons
+                foreach (Boon boon in Boon.getOffensiveTableList())
+                {
+                    if (s_list.Exists(x => x.getID() == boon.getID()))
+                    {
+                        statistics.present_offbuffs.Add(boon);
+                    }
+                }
+                foreach (Boon boon in Boon.getDefensiveTableList())
+                {
+                    if (s_list.Exists(x => x.getID() == boon.getID()))
+                    {
+                        statistics.present_defbuffs.Add(boon);
+                    }
+                }
+            }
+            List<CombatItem> c_list = log.getCombatData().getCombatList();
+            foreach (Player p in log.getPlayerList())
+            {
+                statistics.present_personnal[p.getInstid()] = new List<Boon>();
+                if (settings.PlayerBoonsAllProf)
+                {//All class specefic boons
+                    foreach (Boon boon in Boon.getRemainingBuffsList())
+                    {
+                        if (c_list.Exists(x => x.getSkillID() == boon.getID() && x.getDstInstid() == p.getInstid()))
+                        {
+                            statistics.present_personnal[p.getInstid()].Add(boon);
+                        }
+                    }
+                }
             }
         }
     }

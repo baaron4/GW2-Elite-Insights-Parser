@@ -217,7 +217,7 @@ namespace LuckParser.Models.ParseModels
         protected override void setDamageLogs(ParsedLog log)
         {
             long time_start = log.getBossData().getFirstAware();
-            foreach (CombatItem c in log.getCombatList())
+            foreach (CombatItem c in log.getDamageData())
             {
                 if (agent.getInstid() == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())//selecting player or minion as caster
                 {
@@ -237,7 +237,7 @@ namespace LuckParser.Models.ParseModels
         }     
         protected override void setDamagetakenLogs(ParsedLog log) {
             long time_start = log.getBossData().getFirstAware();               
-            foreach (CombatItem c in log.getCombatList()) {
+            foreach (CombatItem c in log.getDamageData()) {
                 if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware()) {//selecting player as target
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in log.getAgentData().getNPCAgentList())

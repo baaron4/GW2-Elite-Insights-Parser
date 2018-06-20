@@ -96,27 +96,27 @@ namespace LuckParser.Models.ParseModels
             }
             return damageTaken_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
-        public BoonDistribution getBoonDistribution(ParsedLog log, List<PhaseData> phases, int phase_index)
+        public BoonDistribution getBoonDistribution(ParsedLog log, List<PhaseData> phases, List<Boon> to_track, int phase_index)
         {
             if (boon_distribution.Count == 0)
             {
-                setBoonDistribution(log, phases);
+                setBoonDistribution(log, phases, to_track);
             }
             return boon_distribution[phase_index];
         }
-        public Dictionary<int, BoonsGraphModel> getBoonGraphs(ParsedLog log, List<PhaseData> phases)
+        public Dictionary<int, BoonsGraphModel> getBoonGraphs(ParsedLog log, List<PhaseData> phases, List<Boon> to_track)
         {
             if (boon_distribution.Count == 0)
             {
-                setBoonDistribution(log, phases);
+                setBoonDistribution(log, phases, to_track);
             }
             return boon_points;
         }
-        public Dictionary<int, long> getBoonPresence(ParsedLog log, List<PhaseData> phases, int phase_index)
+        public Dictionary<int, long> getBoonPresence(ParsedLog log, List<PhaseData> phases, List<Boon> to_track, int phase_index)
         {
             if (boon_distribution.Count == 0)
             {
-                setBoonDistribution(log,phases);
+                setBoonDistribution(log,phases, to_track);
             }
             return boon_presence[phase_index];
         }
@@ -149,7 +149,7 @@ namespace LuckParser.Models.ParseModels
             LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
             if (instid == c.getDstInstid() && c.getIFF().getEnum() == "FOE")
             {
-                if (state.getEnum() == "NORMAL" && c.isBuffremove().getID() == 0)
+                if (c.isBuffremove().getID() == 0)
                 {
                     if (c.isBuff() == 1 && c.getBuffDmg() != 0)//condi
                     {
@@ -171,24 +171,18 @@ namespace LuckParser.Models.ParseModels
             LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
             if (instid == c.getSrcInstid())
             {
-                if (state.getID() == 0)
+                if (c.isBuff() == 1 && c.getBuffDmg() != 0)
                 {
-                    if (c.isBuff() == 1 && c.getBuffDmg() != 0)
-                    {
-                        //inco,ing condi dmg not working or just not present?
-                        // damagetaken.Add(c.getBuffDmg());
-                        damageTaken_logs.Add(new DamageLogCondition(time, c));
-                    }
-                    else if (c.isBuff() == 0 && c.getValue() != 0)
-                    {
-                        damageTaken_logs.Add(new DamageLogPower(time, c));
-
-                    }
-                    else if (c.isBuff() == 0 && c.getValue() == 0)
-                    {
-                        damageTaken_logs.Add(new DamageLogPower(time, c));
-                    }
+                    //inco,ing condi dmg not working or just not present?
+                    // damagetaken.Add(c.getBuffDmg());
+                    damageTaken_logs.Add(new DamageLogCondition(time, c));
                 }
+                else if (c.isBuff() == 0 && c.getValue() >= 0)
+                {
+                    damageTaken_logs.Add(new DamageLogPower(time, c));
+
+                }
+
             }
         }
         // Setters
@@ -197,11 +191,9 @@ namespace LuckParser.Models.ParseModels
         protected abstract void setCastLogs(ParsedLog log);
         protected abstract void setDamagetakenLogs(ParsedLog log);
 
-        private void setBoonDistribution(ParsedLog log,List<PhaseData> phases)
+        private void setBoonDistribution(ParsedLog log,List<PhaseData> phases, List<Boon> to_track)
         {
-            BoonMap to_use = getBoonMap(log);
-            List<Boon> boon_to_use = Boon.getAllBuffList();
-            boon_to_use.AddRange(Boon.getCondiBoonList());
+            BoonMap to_use = getBoonMap(log, to_track);
             long dur = log.getBossData().getAwareDuration();
             int fight_duration = (int)(dur) / 1000;
             // Init boon presence points
@@ -215,7 +207,8 @@ namespace LuckParser.Models.ParseModels
                 boon_distribution.Add(new BoonDistribution());
                 boon_presence.Add(new Dictionary<int, long>());
             }
-            foreach (Boon boon in boon_to_use)
+            long death = getDeath(log, 0, dur);
+            foreach (Boon boon in to_track)
             {
                 int boonid = boon.getID();
                 if (to_use.ContainsKey(boonid))
@@ -231,7 +224,6 @@ namespace LuckParser.Models.ParseModels
                     }
                     BoonSimulator simulator = boon.getSimulator();
                     simulator.simulate(logs, dur);
-                    long death = getDeath(log, 0, dur);
                     if (death > 0 && getCastLogs(log, death + 1, fight_duration).Count > 0)
                     {
                         simulator.trim(death - log.getBossData().getFirstAware());
@@ -312,17 +304,16 @@ namespace LuckParser.Models.ParseModels
             boon_points[-2] = boon_presence_points;
         }
         // private getters
-        private BoonMap getBoonMap(ParsedLog log)
+        private BoonMap getBoonMap(ParsedLog log, List<Boon> to_track)
         {
             BoonMap boon_map = new BoonMap();
-            boon_map.add(Boon.getAllBuffList());
-            boon_map.add(Boon.getCondiBoonList());
+            boon_map.add(to_track);
             // Fill in Boon Map
             long time_start = log.getBossData().getFirstAware();
 
-            foreach (CombatItem c in log.getCombatList())
+            foreach (CombatItem c in log.getBoonData())
             {
-                if (c.isBuff() != 1 || !boon_map.ContainsKey(c.getSkillID()))
+                if (!boon_map.ContainsKey(c.getSkillID()))
                 {
                     continue;
                 }

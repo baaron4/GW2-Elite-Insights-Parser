@@ -45,7 +45,7 @@ namespace LuckParser.Models.ParseModels
         protected override void setFilteredLogs(ParsedLog log)
         {
             long time_start = log.getBossData().getFirstAware();
-            foreach (CombatItem c in log.getCombatList())
+            foreach (CombatItem c in log.getDamageData())
             {
                 if (agent.getInstid() == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
                 {

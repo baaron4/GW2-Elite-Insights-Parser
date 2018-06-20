@@ -18,6 +18,10 @@ namespace LuckParser.Models.DataModels
         private List<Player> p_list = new List<Player>();
         private Boss boss;
 
+        // reduced data
+        private List<CombatItem> boon_data;
+        private List<CombatItem> damage_data;
+
         public ParsedLog(LogData log_data, BossData boss_data, AgentData agent_data, SkillData skill_data, 
                 CombatData combat_data, MechanicData mech_data, List<Player> p_list, Boss boss)
         {
@@ -78,9 +82,29 @@ namespace LuckParser.Models.DataModels
 
         public void validateLogData()
         {
+            doReduction();
             doMechData();
         }
 
+
+        private void doReduction()
+        {
+            boon_data = combat_data.getCombatList().Where(x => x.isBuff() == 1 && (x.getBuffDmg() == 0 || x.isBuffremove().getID() > 0)).ToList();
+            damage_data = combat_data.getCombatList().Where(x => x.isStateChange().getID() == 0 &&
+                                        ((x.isBuff() == 1 && x.getBuffDmg() != 0) ||
+                                        (x.isBuff() == 0 && x.getValue() != 0) ||
+                                        (x.getResult().getID() == 5 || x.getResult().getID() == 6 || x.getResult().getID() == 7))).ToList();
+        }
+
+        public List<CombatItem> getBoonData()
+        {
+            return boon_data;
+        }
+
+        public List<CombatItem> getDamageData()
+        {
+            return damage_data;
+        }
 
         private void doMechData()
         {

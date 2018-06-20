@@ -19,7 +19,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = log.getBossData().getFirstAware();
             long min_time = Math.Max(time_start, agent.getFirstAware());
             long max_time = Math.Min(log.getBossData().getLastAware(), agent.getLastAware());
-            foreach (CombatItem c in log.getCombatList())
+            foreach (CombatItem c in log.getDamageData())
             {
                 if (agent.getInstid() == c.getSrcInstid() && c.getTime() > min_time && c.getTime() < max_time)//selecting minion as caster
                 {
@@ -37,7 +37,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = log.getBossData().getFirstAware();
             long min_time = Math.Max(time_start, agent.getFirstAware());
             long max_time = Math.Min(log.getBossData().getLastAware(), agent.getLastAware());
-            foreach (CombatItem c in log.getCombatList())
+            foreach (CombatItem c in log.getDamageData())
             {
                 if (agent.getInstid() == c.getSrcInstid() && c.getTime() > min_time && c.getTime() < max_time)//selecting player
                 {

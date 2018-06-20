@@ -50,7 +50,7 @@ namespace LuckParser.Models.ParseModels
             {
                 case 0x3C4E:
                     // Invul check
-                    List<CombatItem> invulsVG = log.getCombatList().Where(x => x.getSkillID() == 757 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
+                    List<CombatItem> invulsVG = log.getBoonData().Where(x => x.getSkillID() == 757 && getInstid() == x.getDstInstid()).ToList();
                     for (int i = 0; i < invulsVG.Count; i++)
                     {
                         CombatItem c = invulsVG[i];
@@ -98,7 +98,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case 0x3C0F:
                     // Invul check
-                    List<CombatItem> invulsSab = log.getCombatList().Where(x => x.getSkillID() == 757 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
+                    List<CombatItem> invulsSab = log.getBoonData().Where(x => x.getSkillID() == 757 && getInstid() == x.getDstInstid()).ToList();
                     for (int i = 0; i < invulsSab.Count; i++)
                     {
                         CombatItem c = invulsSab[i];
@@ -181,7 +181,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     // add burn phases
                     int offset = phases.Count;
-                    List<CombatItem> orbItems = log.getCombatList().Where(x => x.isBuff() == 1 && x.getDstInstid() == agent.getInstid() && x.getSkillID() == 35096).ToList();
+                    List<CombatItem> orbItems = log.getBoonData().Where(x => x.getDstInstid() == agent.getInstid() && x.getSkillID() == 35096).ToList();
                     // Get number of orbs and filter the list
                     List<CombatItem> orbItemsFiltered = new List<CombatItem>();
                     Dictionary<long, int> orbs = new Dictionary<long, int>();
@@ -252,7 +252,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case 0x4324:
                     // Determined check
-                    List<CombatItem> invulsSam = log.getCombatList().Where(x => x.getSkillID() == 762 && getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
+                    List<CombatItem> invulsSam = log.getBoonData().Where(x => x.getSkillID() == 762 && getInstid() == x.getDstInstid()).ToList();
                     // Samarog receives determined twice and its removed twice, filter it
                     List<CombatItem> invulsSamFiltered = new List<CombatItem>();
                     foreach( CombatItem c in invulsSam)
@@ -298,7 +298,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case 0x4302:
                     // Determined + additional data on inst change
-                    CombatItem invulDei = log.getCombatList().Find(x => x.getSkillID() == 762 && x.isBuff() == 1 && x.isBuffremove().getID() == 0 && x.getDstInstid() == getInstid()); 
+                    CombatItem invulDei = log.getBoonData().Find(x => x.getSkillID() == 762 && x.isBuffremove().getID() == 0 && x.getDstInstid() == getInstid()); 
                     if (invulDei != null)
                     {
                         end = invulDei.getTime() - log.getBossData().getFirstAware();
@@ -316,7 +316,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 case 0x4BFA:
-                    CombatItem invulDhuum = log.getCombatList().Find(x => x.getSkillID() == 762 && x.isBuff() == 1 && x.isBuffremove().getID() > 0 && x.getSrcInstid() == getInstid());
+                    CombatItem invulDhuum = log.getBoonData().Find(x => x.getSkillID() == 762 && x.isBuffremove().getID() > 0 && x.getSrcInstid() == getInstid());
                     if (invulDhuum != null)
                     {
                         end = invulDhuum.getTime() - log.getBossData().getFirstAware();
@@ -350,7 +350,7 @@ namespace LuckParser.Models.ParseModels
                 case 0x44E0:
                 case 0x461D:
                 case 0x455F:
-                    List<CombatItem> invulsBoss = log.getCombatList().Where(x => x.getSkillID() == 762 && agent.getInstid() == x.getDstInstid() && x.isBuff() == 1).ToList();
+                    List<CombatItem> invulsBoss = log.getBoonData().Where(x => x.getSkillID() == 762 && agent.getInstid() == x.getDstInstid()).ToList();
                     List<CombatItem> invulsBossFiltered = new List<CombatItem>();
                     foreach (CombatItem c in invulsBoss)
                     {
@@ -402,7 +402,7 @@ namespace LuckParser.Models.ParseModels
         protected override void setDamageLogs(ParsedLog log)
         {
             long time_start = log.getBossData().getFirstAware();
-            foreach (CombatItem c in log.getCombatList())
+            foreach (CombatItem c in log.getDamageData())
             {
                 if (agent.getInstid() == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())//selecting player or minion as caster
                 {
@@ -423,7 +423,7 @@ namespace LuckParser.Models.ParseModels
         protected override void setDamagetakenLogs(ParsedLog log)
         {
             long time_start = log.getBossData().getFirstAware();
-            foreach (CombatItem c in log.getCombatList())
+            foreach (CombatItem c in log.getDamageData())
             {
                 if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
                 {//selecting player as target

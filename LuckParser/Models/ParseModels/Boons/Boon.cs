@@ -136,7 +136,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Retaliation", 873, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Condition, "https://wiki.guildwars2.com/images/5/53/Retaliation.png", RemoveType.CleanseFoe),
                 // Generic
                 new Boon("Stealth", 13017, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
-                new Boon("Revealed", 890, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
+                new Boon("Revealed", 890, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
                 new Boon("Superspeed", 5974, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, "https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
                 //new Boon("Invulnerability", 801, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, "https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Boon("Unblockable", BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
