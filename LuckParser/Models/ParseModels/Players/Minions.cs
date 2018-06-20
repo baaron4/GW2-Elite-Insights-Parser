@@ -8,8 +8,10 @@ namespace LuckParser.Models.ParseModels
 {
     public class Minions : List<Minion>
     {
-        public Minions() : base()
+        private int instid;
+        public Minions(int instid) : base()
         {
+            this.instid = instid;
         }
 
         public List<DamageLog> getDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)
@@ -32,13 +34,9 @@ namespace LuckParser.Models.ParseModels
             return res;
         }
 
-        public ushort getInstid()
+        public int getInstid()
         {
-            if (Count > 0)
-            {
-                return this[0].getInstid();
-            }
-            return 0;
+            return instid;
         }
 
         public string getCharacter()

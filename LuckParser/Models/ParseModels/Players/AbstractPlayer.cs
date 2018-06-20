@@ -95,27 +95,27 @@ namespace LuckParser.Models.ParseModels
             }
             return damageTaken_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
-        public BoonDistribution getBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList, List<PhaseData> phases, int phase_index)
+        public BoonDistribution getBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList, AgentData agentData, List<PhaseData> phases, int phase_index)
         {
             if (boon_distribution.Count == 0)
             {
-                setBoonDistribution(bossData, skillData, combatList, phases);
+                setBoonDistribution(bossData, skillData, combatList, agentData, phases);
             }
             return boon_distribution[phase_index];
         }
-        public Dictionary<int, BoonsGraphModel> getBoonGraphs(BossData bossData, SkillData skillData, List<CombatItem> combatList, List<PhaseData> phases)
+        public Dictionary<int, BoonsGraphModel> getBoonGraphs(BossData bossData, SkillData skillData, List<CombatItem> combatList, AgentData agentData, List<PhaseData> phases)
         {
             if (boon_distribution.Count == 0)
             {
-                setBoonDistribution(bossData, skillData, combatList, phases);
+                setBoonDistribution(bossData, skillData, combatList, agentData, phases);
             }
             return boon_points;
         }
-        public Dictionary<int, long> getBoonPresence(BossData bossData, SkillData skillData, List<CombatItem> combatList, List<PhaseData> phases, int phase_index)
+        public Dictionary<int, long> getBoonPresence(BossData bossData, SkillData skillData, List<CombatItem> combatList, AgentData agentData, List<PhaseData> phases, int phase_index)
         {
             if (boon_distribution.Count == 0)
             {
-                setBoonDistribution(bossData, skillData, combatList, phases);
+                setBoonDistribution(bossData, skillData, combatList, agentData, phases);
             }
             return boon_presence[phase_index];
         }
@@ -196,7 +196,7 @@ namespace LuckParser.Models.ParseModels
         protected abstract void setCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData);
         protected abstract void setDamagetakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data);
 
-        private void setBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList, List<PhaseData> phases)
+        private void setBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList, AgentData agentData, List<PhaseData> phases)
         {
             BoonMap to_use = getBoonMap(bossData, skillData, combatList, true);
             List<Boon> boon_to_use = Boon.getAllBuffList();
@@ -231,7 +231,7 @@ namespace LuckParser.Models.ParseModels
                     BoonSimulator simulator = boon.getSimulator();
                     simulator.simulate(logs, dur);
                     long death = getDeath(bossData, combatList, 0, dur);
-                    if (death > 0)
+                    if (death > 0 && getCastLogs(bossData,combatList,agentData, death + 1, fight_duration).Count > 0)
                     {
                         simulator.trim(death - bossData.getFirstAware());
                     }
@@ -292,12 +292,8 @@ namespace LuckParser.Models.ParseModels
 
                         for (int i = start; i <= end; i++)
                         {
-                            if (i >= 0)
-                            {
-                                toFill[i] = new Point(i, simul.getStack(i));
-                                toFillPresence[i] = new Point(i, simul.getItemDuration() > 0 ? 1 : 0);
-                            }
-                          
+                            toFill[i] = new Point(i, simul.getStack(i));
+                            toFillPresence[i] = new Point(i, simul.getItemDuration() > 0 ? 1 : 0);                     
                         }
                     }
                     // reduce precision to seconds
@@ -329,13 +325,13 @@ namespace LuckParser.Models.ParseModels
 
             foreach (CombatItem c in combatList)
             {
-                if (c.isBuff() != 1 || !boon_map.ContainsKey(c.getSkillID()) || ! (c.getTime() > agent.getFirstAware() && c.getTime() < agent.getLastAware()))
+                if (c.isBuff() != 1 || !boon_map.ContainsKey(c.getSkillID()))
                 {
                     continue;
                 }
                 long time = c.getTime() - time_start;
                 ushort dst = c.isBuffremove().getID() == 0 ? c.getDstInstid() : c.getSrcInstid();
-                if (agent.getInstid() == dst)
+                if (agent.getInstid() == dst && time > 0 && time < bossData.getAwareDuration())
                 {
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                     if (c.isBuffremove().getID() == 0)

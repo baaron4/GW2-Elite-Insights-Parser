@@ -1158,7 +1158,7 @@ namespace LuckParser.Controllers
                             if (boonTable)
                             {
                                 long fight_duration = phases[phase_index].getDuration();
-                                Dictionary<int, long> boonPresence = player.getBoonPresence(boss_data, skill_data, combat_data.getCombatList(), phases, phase_index);
+                                Dictionary<int, long> boonPresence = player.getBoonPresence(boss_data, skill_data, combat_data.getCombatList(), agent_data, phases, phase_index);
                                 double avg_boons = 0.0;
                                 foreach (Boon boon in list_to_use)
                                 {
@@ -1613,7 +1613,7 @@ namespace LuckParser.Controllers
                                         {
                                             parseBoonsList.AddRange(present_personnal[p.getInstid()]);
                                         }
-                                        Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(boss_data, skill_data, combat_data.getCombatList(), phases);
+                                        Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(boss_data, skill_data, combat_data.getCombatList(), agent_data, phases);
                                         foreach (int boonid in boonGraphData.Keys.Reverse())
                                         {
                                             BoonsGraphModel bgm = boonGraphData[boonid];
@@ -2681,7 +2681,7 @@ namespace LuckParser.Controllers
                         parseBoonsList.AddRange(Boon.getCondiBoonList());
                         //Every buffs and boons
                         parseBoonsList.AddRange(Boon.getAllBuffList());
-                        Dictionary<int, BoonsGraphModel> boonGraphData = boss.getBoonGraphs(boss_data, skill_data, combat_data.getCombatList(), phases);
+                        Dictionary<int, BoonsGraphModel> boonGraphData = boss.getBoonGraphs(boss_data, skill_data, combat_data.getCombatList(), agent_data, phases);
                         foreach (int boonid in boonGraphData.Keys.Reverse())
                         {
                             if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null)
@@ -3364,7 +3364,7 @@ namespace LuckParser.Controllers
                         {
                             parseBoonsList.AddRange(present_personnal[p.getInstid()]);
                         }
-                        Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(boss_data, skill_data, combat_data.getCombatList(), phases);
+                        Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(boss_data, skill_data, combat_data.getCombatList(), agent_data, phases);
                         foreach (int boonid in boonGraphData.Keys.Reverse())
                         {
                             if (parseBoonsList.FirstOrDefault(x => x.getID() == boonid) != null)

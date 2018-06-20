@@ -392,7 +392,7 @@ namespace LuckParser.Controllers
             foreach (Player p in playerList)
             {
                 boonDistributions[p] = p.getBoonDistribution(bossData, skillData, combatData.getCombatList(),
-                    phases, phaseIndex);
+                    agentData, phases, phaseIndex);
             }
 
             Dictionary<int, Statistics.FinalBoonUptime> final =
@@ -450,7 +450,7 @@ namespace LuckParser.Controllers
 
                     PhaseData phase = phases[phaseIndex];
 
-                    BoonDistribution selfBoons = player.getBoonDistribution(bossData, skillData, combatData.getCombatList(), phases, phaseIndex);
+                    BoonDistribution selfBoons = player.getBoonDistribution(bossData, skillData, combatData.getCombatList(), agentData, phases, phaseIndex);
 
                     long fightDuration = phase.getEnd() - phase.getStart();
                     foreach (Boon boon in Boon.getAllBuffList())
@@ -543,7 +543,7 @@ namespace LuckParser.Controllers
             for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
             {
                 List<PhaseData> phases = boss.getPhases(bossData, combatData.getCombatList(), agentData, settings.ParsePhases);
-                BoonDistribution boonDistribution = boss.getBoonDistribution(bossData, skillData, combatData.getCombatList(), phases, phaseIndex);
+                BoonDistribution boonDistribution = boss.getBoonDistribution(bossData, skillData, combatData.getCombatList(), agentData, phases, phaseIndex);
                 Dictionary<int, Statistics.FinalBossBoon> rates = new Dictionary<int, Statistics.FinalBossBoon>();
 
                 PhaseData phase = phases[phaseIndex];
