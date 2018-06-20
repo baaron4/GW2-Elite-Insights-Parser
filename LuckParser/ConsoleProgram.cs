@@ -98,7 +98,7 @@ namespace LuckParser
                             HTMLBuilder builder = new HTMLBuilder(control.GetParsedLog(), settings);
                             builder.CreateHTML(sw);
                         }
-                        else
+                        if (Properties.Settings.Default.SaveOutCSV)
                         {
                             CSVBuilder builder = new CSVBuilder(control.GetParsedLog(), settings);
                             builder.CreateCSV(sw, ",");
