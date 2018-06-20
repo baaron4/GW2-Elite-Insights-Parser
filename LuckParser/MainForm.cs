@@ -158,6 +158,7 @@ namespace LuckParser
                     $"{fInfo.Name}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.{outputType}"
                 );
 
+                rowData.LogLocation = outputFile;
                 bg.UpdateProgress(rowData, "50% - Creating File...", 50);
 
                 using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
@@ -170,7 +171,7 @@ namespace LuckParser
                             HTMLBuilder builder = new HTMLBuilder(control.GetParsedLog(), settings);
                             builder.CreateHTML(sw);
                         }
-                        else
+                        if (Properties.Settings.Default.SaveOutCSV)
                         {
                             CSVBuilder builder = new CSVBuilder(control.GetParsedLog(), settings);
                             builder.CreateCSV(sw, ",");
