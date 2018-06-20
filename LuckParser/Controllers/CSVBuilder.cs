@@ -11,6 +11,8 @@ namespace LuckParser.Controllers
 {
     class CSVBuilder
     {
+        private SettingsContainer settings;
+
         private BossData boss_data;
         private Boss boss;
         private CombatData combat_data;
@@ -20,9 +22,17 @@ namespace LuckParser.Controllers
         private SkillData skill_data;
         private LogData log_data;
 
-        private SettingsContainer settings;
+        private Statistics statistics;
 
-        public CSVBuilder(ParsedLog log, SettingsContainer settings)
+        public static StatisticsCalculator.Switches GetStatisticSwitches()
+        {
+            StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
+            switches.calculateBoons = true;
+            switches.calculateDPS = true;
+            return switches;
+        }
+
+        public CSVBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics)
         {
             boss_data = log.getBossData();
             boss = log.getBoss();
@@ -35,6 +45,8 @@ namespace LuckParser.Controllers
 
             this.settings = settings;
             HTMLHelper.settings = settings;
+
+            this.statistics = statistics;
         }
 
         //Creating CSV---------------------------------------------------------------------------------
@@ -64,33 +76,33 @@ namespace LuckParser.Controllers
             int[] teamStats = { 0, 0, 0 };
             foreach (Player p in p_list)
             {
-                string[] finaldps = HTMLHelper.getFinalDPS(boss_data, combat_data, agent_data, p, boss, 0).Split('|');
-                teamStats[0] += Int32.Parse(finaldps[6]);
-                teamStats[1] += Int32.Parse(finaldps[0]);
-                teamStats[2] += (Int32.Parse(finaldps[0]) - Int32.Parse(finaldps[6]));
+                Statistics.FinalDPS dps = statistics.dps[p][0];
+                teamStats[0] += dps.bossDps;
+                teamStats[1] += dps.allDps;
+                teamStats[2] += dps.allDps - dps.bossDps;
             }
 
             foreach (Player p in p_list)
             {
-                string[] finaldps = HTMLHelper.getFinalDPS(boss_data, combat_data, agent_data, p, boss, 0).Split('|');
+                Statistics.FinalDPS dps = statistics.dps[p][0];
                 sw.Write(p.getGroup() + delimiter + // group
                         p.getProf() + delimiter +  // class
                         p.getCharacter() + delimiter + // character
                         p.getAccount().Substring(1) + delimiter + // account
-                        finaldps[6] + delimiter + // dps
-                        finaldps[8] + delimiter + // physical
-                        finaldps[10] + delimiter + // condi
-                        finaldps[0] + delimiter); // all dps
+                        dps.bossDps + delimiter + // dps
+                        dps.bossPowerDps + delimiter + // physical
+                        dps.bossCondiDps + delimiter + // condi
+                        dps.allDps + delimiter); // all dps
 
-                Dictionary<int, string> boonArray = HTMLHelper.getfinalboons(boss_data, combat_data, skill_data, agent_data, boss, p, 0);
-                sw.Write(boonArray[1187] + delimiter + // Quickness
-                        boonArray[30328] + delimiter + // Alacrity
-                        boonArray[740] + delimiter); // Might
+                Dictionary<int, Statistics.FinalBoonUptime> boons = statistics.selfBoons[p][0];
+                sw.Write(boons[1187].uptime + delimiter + // Quickness
+                         boons[30328].uptime + delimiter + // Alacrity
+                         boons[740].uptime + delimiter); // Might
 
                 sw.Write(teamStats[0] + delimiter  // boss dps
                         + teamStats[1] + delimiter // all
                         + durationString + delimiter + // duration
-                    (Int32.Parse(finaldps[0]) - Int32.Parse(finaldps[6])).ToString() + delimiter // cleave
+                          (dps.allDps - dps.bossDps).ToString() + delimiter // cleave
                         + teamStats[2]); // team cleave
                 sw.Write("\r\n");
             }
