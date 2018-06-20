@@ -12,7 +12,7 @@ using LuckParser.Models.DataModels;
 //recommend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {
-    public class Controller1
+    public class Parser
     {
         private GW2APIController APIController = new GW2APIController();            
 
@@ -573,10 +573,10 @@ namespace LuckParser.Controllers
             }
             // Sort
             p_list = p_list.OrderBy(a => int.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>int.Parse(a.getGroup()) - int.Parse(b.getGroup()))
-            setMechData();
+            parseMechData();
         }
 
-        private void setMechData() {
+        private void parseMechData() {
             List<int> mIDList = new List<int>();
             foreach (Player p in p_list)
             {

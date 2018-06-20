@@ -365,10 +365,6 @@ namespace LuckParser.Controllers
 
                     // List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData());
                     int instid = player.getInstid();
-                    int resurrects = 0;
-                    double restime = 0.0;
-                    int condiCleanse = 0;
-                    double condiCleansetime = 0.0;
 
                     int[] resArray = player.getReses(bossData, combatData.getCombatList(), agentData, phase.getStart(), phase.getEnd());
                     int[] cleanseArray = player.getCleanses(bossData, combatData.getCombatList(), agentData, phase.getStart(), phase.getEnd());

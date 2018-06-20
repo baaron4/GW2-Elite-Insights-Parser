@@ -25,7 +25,6 @@ namespace LuckParser
         //public bool[] settingArray = { true, true, true, true, true, false, true, true };
         bool completedOp = false;
         List<string> _logsFiles;
-        Controller1 controller = new Controller1();
         public MainForm()
         {
             InitializeComponent();
@@ -162,7 +161,7 @@ namespace LuckParser
                     }
 
                     logger(i, "Working...", 20);
-                    Controller1 control = new Controller1();
+                    Parser control = new Parser();
                     StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
 
                     if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
@@ -173,6 +172,7 @@ namespace LuckParser
 
                         control.ParseLog(fInfo.FullName);
                         ParsedLog log = control.GetParsedLog();
+                        log.validateLogData();
 
                         logger(i, "Generating Statistics...", 40);
                         Statistics statistics;

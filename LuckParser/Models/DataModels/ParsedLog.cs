@@ -70,5 +70,10 @@ namespace LuckParser.Models.DataModels
         {
             return log_data;
         }
+
+        public void validateLogData()
+        {
+
+        }
     }
 }
