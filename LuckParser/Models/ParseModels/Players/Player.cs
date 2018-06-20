@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -50,10 +51,10 @@ namespace LuckParser.Models.ParseModels
             return agent.getCondition();
         }
         // Public methods
-        public int[] getCleanses(BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end) {
-            long time_start = bossData.getFirstAware();
+        public int[] getCleanses(ParsedLog log, long start, long end) {
+            long time_start = log.getBossData().getFirstAware();
             int[] cleanse = { 0, 0 };
-            foreach (CombatItem c in combatList.Where(x=>x.isStateChange().getID() == 0 && x.isBuff() == 1 && x.getTime() >= (start + time_start) && x.getTime() <= (end + time_start)))
+            foreach (CombatItem c in log.getCombatList().Where(x=>x.isStateChange().getID() == 0 && x.isBuff() == 1 && x.getTime() >= (start + time_start) && x.getTime() <= (end + time_start)))
             {
                 if (c.isActivation().getID() == 0)
                 {
@@ -73,24 +74,24 @@ namespace LuckParser.Models.ParseModels
             }
             return cleanse;
         }
-        public int[] getReses(BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)
+        public int[] getReses(ParsedLog log, long start, long end)
         {
-            List<CastLog> cls = getCastLogs(bossData, combatList, agentData, start, end);
+            List<CastLog> cls = getCastLogs(log, start, end);
             int[] reses = { 0, 0 };
-            foreach (CastLog log in cls) {
-                if (log.getID() == 1066)
+            foreach (CastLog cl in cls) {
+                if (cl.getID() == 1066)
                 {
                     reses[0]++;
-                    reses[1] += log.getActDur();
+                    reses[1] += cl.getActDur();
                 }
             }
             return reses;
         }
-        public string[] getWeaponsArray(SkillData s_data, CombatData c_data, BossData b_data, AgentData a_data)
+        public string[] getWeaponsArray(ParsedLog log)
         {
             if (weapons_array == null)
             {
-                EstimateWeapons( s_data,  c_data,  b_data,  a_data);
+                EstimateWeapons( log);
             }
             return weapons_array;
         }
@@ -103,20 +104,20 @@ namespace LuckParser.Models.ParseModels
         {
             dcd = value;
         }
-        public List<int[]> getConsumablesList(BossData bossData, SkillData skillData, List<CombatItem> combatList, long start, long end)
+        public List<int[]> getConsumablesList(ParsedLog log, long start, long end)
         {
             if (consumeList.Count() == 0)
             {
-                setConsumablesList( bossData, skillData, combatList);
+                setConsumablesList(log);
             }
             return consumeList.Where(x => x.getTime() >= start && x.getTime() <= end).Select( x => new int[] { x.getSkillID(), (int)x.getTime() }).ToList() ;
         }
         // Private Methods
-        private void EstimateWeapons(SkillData s_data, CombatData c_data, BossData b_data, AgentData a_data)
+        private void EstimateWeapons(ParsedLog log)
         {
             string[] weapons = new string[4];//first 2 for first set next 2 for second set
-            List<SkillItem> s_list = s_data.getSkillList();
-            List<CastLog> casting = getCastLogs(b_data, c_data.getCombatList(), a_data, 0, b_data.getAwareDuration());
+            List<SkillItem> s_list = log.getSkillData().getSkillList();
+            List<CastLog> casting = getCastLogs(log, 0, log.getBossData().getAwareDuration());
             int swapped = 0;//4 for first set and 5 for next
             foreach (CastLog cl in casting)
             {
@@ -213,46 +214,46 @@ namespace LuckParser.Models.ParseModels
             }
             weapons_array = weapons;
         }    
-        protected override void setDamageLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        protected override void setDamageLogs(ParsedLog log)
         {
-            long time_start = bossData.getFirstAware();
-            foreach (CombatItem c in combatList)
+            long time_start = log.getBossData().getFirstAware();
+            foreach (CombatItem c in log.getCombatList())
             {
-                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > bossData.getFirstAware() && c.getTime() < bossData.getLastAware())//selecting player or minion as caster
+                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())//selecting player or minion as caster
                 {
                     long time = c.getTime() - time_start;
-                    foreach (AgentItem item in agentData.getNPCAgentList())
+                    foreach (AgentItem item in log.getAgentData().getNPCAgentList())
                     {//selecting all
                         addDamageLog(time, item.getInstid(), c, damage_logs);
                     }
                 }
             }
-            Dictionary<string, Minions> min_list = getMinions(bossData, combatList, agentData);
+            Dictionary<string, Minions> min_list = getMinions(log);
             foreach (Minions mins in min_list.Values)
             {
-                damage_logs.AddRange(mins.getDamageLogs(0, bossData, combatList, agentData, 0, bossData.getAwareDuration()));
+                damage_logs.AddRange(mins.getDamageLogs(0, log, 0, log.getBossData().getAwareDuration()));
             }
             damage_logs.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
         }     
-        protected override void setDamagetakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData,MechanicData m_data) {
-            long time_start = bossData.getFirstAware();               
-            foreach (CombatItem c in combatList) {
-                if (agent.getInstid() == c.getDstInstid() && c.getTime() > bossData.getFirstAware() && c.getTime() < bossData.getLastAware()) {//selecting player as target
+        protected override void setDamagetakenLogs(ParsedLog log) {
+            long time_start = log.getBossData().getFirstAware();               
+            foreach (CombatItem c in log.getCombatList()) {
+                if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware()) {//selecting player as target
                     long time = c.getTime() - time_start;
-                    foreach (AgentItem item in agentData.getNPCAgentList())
+                    foreach (AgentItem item in log.getAgentData().getNPCAgentList())
                     {//selecting all
                         addDamageTakenLog(time, item.getInstid(), c);
                     }
                 }
             }
         }  
-        private void setConsumablesList(BossData bossData, SkillData skillData, List<CombatItem> combatList)
+        private void setConsumablesList(ParsedLog log)
         {
             List<Boon> foodBoon = Boon.getFoodList();
             List<Boon> utilityBoon = Boon.getUtilityList();
-            long time_start = bossData.getFirstAware();
-            long fight_duration = bossData.getLastAware() - time_start;
-            foreach (CombatItem c in combatList)
+            long time_start = log.getBossData().getFirstAware();
+            long fight_duration = log.getBossData().getLastAware() - time_start;
+            foreach (CombatItem c in log.getCombatList())
             {
                 if ( c.isBuff() != 18 && c.isBuff() != 1)
                 {

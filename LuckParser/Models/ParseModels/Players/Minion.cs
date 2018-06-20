@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,17 +14,17 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        protected override void setDamageLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        protected override void setDamageLogs(ParsedLog log)
         {
-            long time_start = bossData.getFirstAware();
+            long time_start = log.getBossData().getFirstAware();
             long min_time = Math.Max(time_start, agent.getFirstAware());
-            long max_time = Math.Min(bossData.getLastAware(), agent.getLastAware());
-            foreach (CombatItem c in combatList)
+            long max_time = Math.Min(log.getBossData().getLastAware(), agent.getLastAware());
+            foreach (CombatItem c in log.getCombatList())
             {
                 if (agent.getInstid() == c.getSrcInstid() && c.getTime() > min_time && c.getTime() < max_time)//selecting minion as caster
                 {
                     long time = c.getTime() - time_start;
-                    foreach (AgentItem item in agentData.getNPCAgentList())
+                    foreach (AgentItem item in log.getAgentData().getNPCAgentList())
                     {//selecting all
                         addDamageLog(time, item.getInstid(), c, damage_logs);
                     }                
@@ -31,29 +32,29 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void setFilteredLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        protected override void setFilteredLogs(ParsedLog log)
         {
-            long time_start = bossData.getFirstAware();
+            long time_start = log.getBossData().getFirstAware();
             long min_time = Math.Max(time_start, agent.getFirstAware());
-            long max_time = Math.Min(bossData.getLastAware(), agent.getLastAware());
-            foreach (CombatItem c in combatList)
+            long max_time = Math.Min(log.getBossData().getLastAware(), agent.getLastAware());
+            foreach (CombatItem c in log.getCombatList())
             {
                 if (agent.getInstid() == c.getSrcInstid() && c.getTime() > min_time && c.getTime() < max_time)//selecting player
                 {
                     long time = c.getTime() - time_start;
-                    addDamageLog(time, bossData.getInstid(), c, damage_logsFiltered);
+                    addDamageLog(time, log.getBossData().getInstid(), c, damage_logsFiltered);
                 }
             }
         }
 
-        protected override void setCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        protected override void setCastLogs(ParsedLog log)
         {
-            long time_start = bossData.getFirstAware();
+            long time_start = log.getBossData().getFirstAware();
             CastLog curCastLog = null;
 
             long min_time = Math.Max(time_start, agent.getFirstAware());
-            long max_time = Math.Min(bossData.getLastAware(), agent.getLastAware());
-            foreach (CombatItem c in combatList)
+            long max_time = Math.Min(log.getBossData().getLastAware(), agent.getLastAware());
+            foreach (CombatItem c in log.getCombatList())
             {
                 if (!(c.getTime() > min_time && c.getTime() < max_time))
                 {
@@ -89,7 +90,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void setDamagetakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data)
+        protected override void setDamagetakenLogs(ParsedLog log)
         {
             // nothing to do
             return;
