@@ -163,13 +163,27 @@ namespace LuckParser
 
                     logger(i, "Working...", 20);
                     Controller1 control = new Controller1();
+                    StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
 
                     if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
                         fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
                     {
                         //Process evtc here
-                        logger(i, "Reading Binary...", 40);
+                        logger(i, "Reading Binary...", 20);
+
                         control.ParseLog(fInfo.FullName);
+                        ParsedLog log = control.GetParsedLog();
+
+                        logger(i, "Generating Statistics...", 40);
+                        Statistics statistics;
+                        if (Properties.Settings.Default.SaveOutHTML)
+                        {
+                            statistics = statisticsCalculator.calculateStatistics(log, HTMLBuilder.GetStatisticSwitches());
+                        }
+                        else
+                        {
+                            statistics = statisticsCalculator.calculateStatistics(log, CSVBuilder.GetStatisticSwitches());
+                        }
 
                         //Creating File
                         //save location
@@ -208,12 +222,12 @@ namespace LuckParser
                             {
                                 if (Properties.Settings.Default.SaveOutHTML)
                                 {
-                                    HTMLBuilder builder = new HTMLBuilder(control.GetParsedLog(), settings);
+                                    HTMLBuilder builder = new HTMLBuilder(log, settings, statistics);
                                     builder.CreateHTML(sw);
                                 }
                                 else
                                 {
-                                    CSVBuilder builder = new CSVBuilder(control.GetParsedLog(), settings);
+                                    CSVBuilder builder = new CSVBuilder(log, settings, statistics);
                                     builder.CreateCSV(sw, ",");
                                 }
                             }

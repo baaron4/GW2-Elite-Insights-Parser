@@ -78,10 +78,12 @@
     <Compile Include="Controllers\Controller1.cs" />
     <Compile Include="Controllers\CSVBuilder.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
+    <Compile Include="Controllers\GraphHelper.cs" />
     <Compile Include="Controllers\GW2APIController.cs" />
     <Compile Include="Controllers\HTMLBuilder.cs" />
     <Compile Include="Controllers\HTMLHelper.cs" />
     <Compile Include="Controllers\ParseHelper.cs" />
+    <Compile Include="Controllers\StatisticsCalculator.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +92,7 @@
     </Compile>
     <Compile Include="Models\DataModels\ParsedLog.cs" />
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
+    <Compile Include="Models\DataModels\Statistics.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractMasterPlayer.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractPlayer.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonsGraphModel.cs" />
