@@ -1,4 +1,5 @@
 ﻿using LuckParser.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -77,9 +78,37 @@ namespace LuckParser.Models.ParseModels
 
         public void clean()
         {
-            gadget_agent_list = gadget_agent_list.Where(x => x.getInstid() != 0 && x.getLastAware() - x.getFirstAware() > 0).ToList();
-            NPC_agent_list = NPC_agent_list.Where(x => x.getInstid() != 0 && x.getLastAware() - x.getFirstAware() > 0).ToList();
-            all_agents_list = all_agents_list.Where(x => x.getInstid() != 0 && x.getLastAware() - x.getFirstAware() > 0).ToList();
+            gadget_agent_list = gadget_agent_list.Where(x => x.getInstid() != 0 && x.getLastAware() - x.getFirstAware() > 0 && x.getFirstAware() != 0 && x.getLastAware() != long.MaxValue).ToList();
+            NPC_agent_list = NPC_agent_list.Where(x => x.getInstid() != 0 && x.getLastAware() - x.getFirstAware() > 0 && x.getFirstAware() != 0 && x.getLastAware() != long.MaxValue).ToList();
+            all_agents_list = all_agents_list.Where(x => x.getInstid() != 0 && x.getLastAware() - x.getFirstAware() > 0 && x.getFirstAware() != 0 && x.getLastAware() != long.MaxValue).ToList();
+        }
+
+        public void cleanInstid(ushort instid)
+        {
+            List<AgentItem> instances = NPC_agent_list.Where(x => x.getInstid() == instid).ToList();
+            long first_aware = long.MaxValue;
+            long last_aware = 0;
+            if (instances.Count == 0)
+            {
+                return;
+            }
+            string name = instances[0].getName();
+            string prof = instances[0].getProf();
+            ulong agent = instances[0].getAgent();
+            ushort inst = instances[0].getInstid();
+            AgentItem to_add = new AgentItem(agent, name, prof);
+            foreach (AgentItem a in instances)
+            {
+                first_aware = Math.Min(first_aware, a.getFirstAware());
+                last_aware = Math.Max(last_aware, a.getLastAware());
+                all_agents_list.Remove(a);
+                NPC_agent_list.Remove(a);
+            }
+            to_add.setInstid(inst);
+            to_add.setFirstAware(first_aware);
+            to_add.setLastAware(last_aware);
+            all_agents_list.Add(to_add);
+            NPC_agent_list.Add(to_add);
         }
     }
 }

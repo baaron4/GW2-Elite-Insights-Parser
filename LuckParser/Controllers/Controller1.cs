@@ -343,9 +343,11 @@ namespace LuckParser.Controllers
                 }
             }
 
+            agent_data.clean();
 
             // Set Boss data agent, instid, first_aware, last_aware and name
             List<AgentItem> NPC_list = agent_data.getNPCAgentList();
+            HashSet<ulong> multiple_boss = new HashSet<ulong>();
             foreach (AgentItem NPC in NPC_list)
             {
                 if (NPC.getProf().EndsWith(boss_data.getID().ToString()))
@@ -358,9 +360,15 @@ namespace LuckParser.Controllers
                         boss_data.setName(NPC.getName());
                         boss_data.setTough(NPC.getToughness());
                     }
+                    multiple_boss.Add(NPC.getAgent());
                     boss_data.setLastAware(NPC.getLastAware());
                 }
             }
+            if (multiple_boss.Count > 1)
+            {
+                agent_data.cleanInstid(boss_data.getInstid());
+            }
+            
             AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
             boss = new Boss(bossAgent);
             List<Point> bossHealthOverTime = new List<Point>();
@@ -444,7 +452,7 @@ namespace LuckParser.Controllers
                 int deimos_2_instid = 0;
                 foreach (AgentItem NPC in agent_data.getGadgetAgentList())
                 {
-                    if (NPC.getProf().Contains("08467"))
+                    if (NPC.getProf().Contains("08467") || NPC.getProf().Contains("08471"))
                     {
                         deimos_2_instid = NPC.getInstid();
                         long oldAware = boss_data.getLastAware();
@@ -563,7 +571,6 @@ namespace LuckParser.Controllers
                 }
 
             }
-            agent_data.clean();
             // Sort
             p_list = p_list.OrderBy(a => int.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>int.Parse(a.getGroup()) - int.Parse(b.getGroup()))
             setMechData();
