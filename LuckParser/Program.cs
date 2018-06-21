@@ -72,6 +72,11 @@ namespace LuckParser
 
                     parserArgOffset += 2;
                 }
+                else if (args[0] == "-c")
+                {
+                    Console.WriteLine("More arguments required for option -c:");
+                    Console.WriteLine("GuildWars2EliteInsights.exe -c [config path] [logs]");
+                }
 
                 string[] parserArgs = new string[args.Length-parserArgOffset];
                 for (int i = parserArgOffset; i < args.Length; i++)
