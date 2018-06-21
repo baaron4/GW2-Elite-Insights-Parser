@@ -163,7 +163,7 @@ namespace LuckParser
                     statistics = statisticsCalculator.calculateStatistics(control.GetParsedLog(), CSVBuilder.GetStatisticSwitches());
                 }
 
-                bg.UpdateProgress(rowData, "60% - Statistics computed", 30);
+                bg.UpdateProgress(rowData, "60% - Statistics computed", 60);
                 string outputType = Properties.Settings.Default.SaveOutHTML ? "html" : "csv";
                 string fName = fInfo.Name.Split('.')[0];
                 string outputFile = Path.Combine(
