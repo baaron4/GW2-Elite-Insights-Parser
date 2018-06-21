@@ -59,10 +59,11 @@
             this.chkOutputHtml = new System.Windows.Forms.CheckBox();
             this.chkOutputCsv = new System.Windows.Forms.CheckBox();
             this.chkShowEstimates = new System.Windows.Forms.CheckBox();
-            this.checkPhaseParsing = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.checkShow10s = new System.Windows.Forms.CheckBox();
-            this.checkShow30s = new System.Windows.Forms.CheckBox();
+            this.chkPhaseParsing = new System.Windows.Forms.CheckBox();
+            this.chkShow10s = new System.Windows.Forms.CheckBox();
+            this.chkShow30s = new System.Windows.Forms.CheckBox();
+            this.lblGlobalSettings = new System.Windows.Forms.Label();
+            this.chkOneAtATime = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblDamageGraphSection
@@ -390,64 +391,76 @@
             this.chkShowEstimates.UseVisualStyleBackColor = true;
             this.chkShowEstimates.CheckedChanged += new System.EventHandler(this.ShowEstimates_CheckedChanged);
             // 
-            // checkPhaseParsing
+            // chkPhaseParsing
             // 
-            this.checkPhaseParsing.AutoSize = true;
-            this.checkPhaseParsing.Checked = true;
-            this.checkPhaseParsing.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkPhaseParsing.Location = new System.Drawing.Point(404, 100);
-            this.checkPhaseParsing.Name = "checkPhaseParsing";
-            this.checkPhaseParsing.Size = new System.Drawing.Size(144, 17);
-            this.checkPhaseParsing.TabIndex = 30;
-            this.checkPhaseParsing.Text = "Parse all possible phases";
-            this.checkPhaseParsing.UseVisualStyleBackColor = true;
-            this.checkPhaseParsing.CheckedChanged += new System.EventHandler(this.checkPhaseParsing_CheckedChanged);
+            this.chkPhaseParsing.AutoSize = true;
+            this.chkPhaseParsing.Checked = true;
+            this.chkPhaseParsing.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkPhaseParsing.Location = new System.Drawing.Point(404, 100);
+            this.chkPhaseParsing.Name = "chkPhaseParsing";
+            this.chkPhaseParsing.Size = new System.Drawing.Size(144, 17);
+            this.chkPhaseParsing.TabIndex = 30;
+            this.chkPhaseParsing.Text = "Parse all possible phases";
+            this.chkPhaseParsing.UseVisualStyleBackColor = true;
+            this.chkPhaseParsing.CheckedChanged += new System.EventHandler(this.PhaseParsing_CheckedChanged);
             // 
-            // label1
+            // chkShow10s
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(385, 84);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(78, 13);
-            this.label1.TabIndex = 29;
-            this.label1.Text = "Global Settings";
+            this.chkShow10s.AutoSize = true;
+            this.chkShow10s.Checked = true;
+            this.chkShow10s.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkShow10s.Location = new System.Drawing.Point(43, 77);
+            this.chkShow10s.Name = "chkShow10s";
+            this.chkShow10s.Size = new System.Drawing.Size(130, 17);
+            this.chkShow10s.TabIndex = 31;
+            this.chkShow10s.Text = "Show 10s DPS Graph";
+            this.chkShow10s.UseVisualStyleBackColor = true;
+            this.chkShow10s.CheckedChanged += new System.EventHandler(this.Show10s_CheckedChanged);
             // 
-            // checkShow10s
+            // chkShow30s
             // 
-            this.checkShow10s.AutoSize = true;
-            this.checkShow10s.Checked = true;
-            this.checkShow10s.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkShow10s.Location = new System.Drawing.Point(43, 77);
-            this.checkShow10s.Name = "checkShow10s";
-            this.checkShow10s.Size = new System.Drawing.Size(130, 17);
-            this.checkShow10s.TabIndex = 31;
-            this.checkShow10s.Text = "Show 10s DPS Graph";
-            this.checkShow10s.UseVisualStyleBackColor = true;
-            this.checkShow10s.CheckedChanged += new System.EventHandler(this.checkShow10s_CheckedChanged);
+            this.chkShow30s.AutoSize = true;
+            this.chkShow30s.Checked = true;
+            this.chkShow30s.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkShow30s.Location = new System.Drawing.Point(43, 100);
+            this.chkShow30s.Name = "chkShow30s";
+            this.chkShow30s.Size = new System.Drawing.Size(130, 17);
+            this.chkShow30s.TabIndex = 32;
+            this.chkShow30s.Text = "Show 30s DPS Graph";
+            this.chkShow30s.UseVisualStyleBackColor = true;
+            this.chkShow30s.CheckedChanged += new System.EventHandler(this.Show30s_CheckedChanged);
             // 
-            // checkShow30s
+            // lblGlobalSettings
             // 
-            this.checkShow30s.AutoSize = true;
-            this.checkShow30s.Checked = true;
-            this.checkShow30s.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkShow30s.Location = new System.Drawing.Point(43, 100);
-            this.checkShow30s.Name = "checkShow30s";
-            this.checkShow30s.Size = new System.Drawing.Size(130, 17);
-            this.checkShow30s.TabIndex = 32;
-            this.checkShow30s.Text = "Show 30s DPS Graph";
-            this.checkShow30s.UseVisualStyleBackColor = true;
-            this.checkShow30s.CheckedChanged += new System.EventHandler(this.checkShow30s_CheckedChanged);
+            this.lblGlobalSettings.AutoSize = true;
+            this.lblGlobalSettings.Location = new System.Drawing.Point(385, 84);
+            this.lblGlobalSettings.Name = "lblGlobalSettings";
+            this.lblGlobalSettings.Size = new System.Drawing.Size(78, 13);
+            this.lblGlobalSettings.TabIndex = 29;
+            this.lblGlobalSettings.Text = "Global Settings";
+            // 
+            // chkOneAtATime
+            // 
+            this.chkOneAtATime.AutoSize = true;
+            this.chkOneAtATime.Location = new System.Drawing.Point(21, 666);
+            this.chkOneAtATime.Name = "chkOneAtATime";
+            this.chkOneAtATime.Size = new System.Drawing.Size(287, 17);
+            this.chkOneAtATime.TabIndex = 29;
+            this.chkOneAtATime.Text = "Parse logs one at a time (less CPU load, slower parsing)";
+            this.chkOneAtATime.UseVisualStyleBackColor = true;
+            this.chkOneAtATime.CheckedChanged += new System.EventHandler(this.chkOneAtATime_CheckedChanged);
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(577, 679);
-            this.Controls.Add(this.checkShow30s);
-            this.Controls.Add(this.checkShow10s);
-            this.Controls.Add(this.checkPhaseParsing);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(577, 775);
+            this.Controls.Add(this.chkShow30s);
+            this.Controls.Add(this.chkShow10s);
+            this.Controls.Add(this.chkPhaseParsing);
+            this.Controls.Add(this.lblGlobalSettings);
+            this.Controls.Add(this.chkOneAtATime);
             this.Controls.Add(this.chkShowEstimates);
             this.Controls.Add(this.chkOutputCsv);
             this.Controls.Add(this.chkOutputHtml);
@@ -519,9 +532,10 @@
         private System.Windows.Forms.CheckBox chkOutputHtml;
         private System.Windows.Forms.CheckBox chkOutputCsv;
         private System.Windows.Forms.CheckBox chkShowEstimates;
-        private System.Windows.Forms.CheckBox checkPhaseParsing;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox checkShow10s;
-        private System.Windows.Forms.CheckBox checkShow30s;
+        private System.Windows.Forms.CheckBox chkPhaseParsing;
+        private System.Windows.Forms.Label lblGlobalSettings;
+        private System.Windows.Forms.CheckBox chkOneAtATime;
+        private System.Windows.Forms.CheckBox chkShow10s;
+        private System.Windows.Forms.CheckBox chkShow30s;
     }
 }
