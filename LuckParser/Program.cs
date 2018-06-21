@@ -48,7 +48,7 @@ namespace LuckParser
         static int Main(string[] args)
         {
             Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-            if (args.Length == 0)
+            if (args.Length > 0)
             {
                 /*
                  * We need to do this, because the console output is lazy initialized
