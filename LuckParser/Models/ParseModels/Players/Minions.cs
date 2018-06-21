@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,22 +15,22 @@ namespace LuckParser.Models.ParseModels
             this.instid = instid;
         }
 
-        public List<DamageLog> getDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)
+        public List<DamageLog> getDamageLogs(int instidFilter, ParsedLog log, long start, long end)
         {
             List<DamageLog> res = new List<DamageLog>();
             foreach (Minion minion in this)
             {
-                res.AddRange(minion.getDamageLogs(instidFilter, bossData, combatList, agentData, start, end));
+                res.AddRange(minion.getDamageLogs(instidFilter, log, start, end));
             }
             return res;
         }
 
-        public List<CastLog> getCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)
+        public List<CastLog> getCastLogs(ParsedLog log, long start, long end)
         {
             List<CastLog> res = new List<CastLog>();
             foreach (Minion minion in this)
             {
-                res.AddRange(minion.getCastLogs( bossData, combatList, agentData, start, end));
+                res.AddRange(minion.getCastLogs(log, start, end));
             }
             return res;
         }

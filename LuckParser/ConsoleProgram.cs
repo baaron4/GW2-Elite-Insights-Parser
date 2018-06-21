@@ -51,13 +51,15 @@ namespace LuckParser
                 throw new CancellationException(row, new FileNotFoundException("File does not exist", fInfo.FullName));
             }
 
-            Controller1 control = new Controller1();
+            Parser control = new Parser();
 
             if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
                 fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
             {
                 //Process evtc here
                 control.ParseLog(row, fInfo.FullName);
+                ParsedLog log = control.GetParsedLog();
+                log.validateLogData();
                 Console.Write("Log Parsed");
                 //Creating File
                 //save location
@@ -86,11 +88,11 @@ namespace LuckParser
                 StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
                 if (Properties.Settings.Default.SaveOutHTML)
                 {
-                    statistics = statisticsCalculator.calculateStatistics(control.GetParsedLog(), HTMLBuilder.GetStatisticSwitches());
+                    statistics = statisticsCalculator.calculateStatistics(log, HTMLBuilder.GetStatisticSwitches());
                 }
                 else
                 {
-                    statistics = statisticsCalculator.calculateStatistics(control.GetParsedLog(), CSVBuilder.GetStatisticSwitches());
+                    statistics = statisticsCalculator.calculateStatistics(log, CSVBuilder.GetStatisticSwitches());
                 }
                 Console.Write("Statistics Computed");
 
@@ -107,17 +109,17 @@ namespace LuckParser
                     {
                         if (Properties.Settings.Default.SaveOutHTML)
                         {
-                            HTMLBuilder builder = new HTMLBuilder(control.GetParsedLog(), settings, statistics);
+                            HTMLBuilder builder = new HTMLBuilder(log, settings, statistics);
                             builder.CreateHTML(sw);
                         }
                         if (Properties.Settings.Default.SaveOutCSV)
                         {
-                            CSVBuilder builder = new CSVBuilder(control.GetParsedLog(), settings, statistics);
+                            CSVBuilder builder = new CSVBuilder(log, settings, statistics);
                             builder.CreateCSV(sw, ",");
                         }
                     }
                 }
-                Console.Write("Finished");
+                Console.Write("Generation Done");
 
             }
             else

@@ -77,7 +77,7 @@
   <ItemGroup>
     <Compile Include="CancellationException.cs" />
     <Compile Include="ConsoleProgram.cs" />
-    <Compile Include="Controllers\Controller1.cs" />
+    <Compile Include="Controllers\Parser.cs" />
     <Compile Include="Controllers\CSVBuilder.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
     <Compile Include="Controllers\GraphHelper.cs" />

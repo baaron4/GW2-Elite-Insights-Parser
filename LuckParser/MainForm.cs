@@ -13,10 +13,9 @@ namespace LuckParser
     {
         private SettingsForm _settingsForm;
         private List<string> _logsFiles = new List<string>();
-        private Controller1 controller = new Controller1();
+        private Parser controller = new Parser();
         private bool _AnyRunning = false;
         private Queue<GridRow> _logQueue = new Queue<GridRow>();
-
         public MainForm()
         {
             InitializeComponent();
@@ -117,7 +116,7 @@ namespace LuckParser
             }
 
             bg.UpdateProgress(rowData, " Working...", 0);
-            Controller1 control = new Controller1();
+            Parser control = new Parser();
 
             if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
                 fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
@@ -125,6 +124,8 @@ namespace LuckParser
                 //Process evtc here
                 bg.UpdateProgress(rowData, "10% - Reading Binary...", 10);
                 control.ParseLog(rowData, fInfo.FullName);
+                ParsedLog log = control.GetParsedLog();
+                log.validateLogData();
                 bg.ThrowIfCanceled(rowData, "Cancelled");
                 bg.UpdateProgress(rowData, "35% - Data parsed", 35);
 
@@ -156,14 +157,14 @@ namespace LuckParser
                 StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
                 if (Properties.Settings.Default.SaveOutHTML)
                 {
-                    statistics = statisticsCalculator.calculateStatistics(control.GetParsedLog(), HTMLBuilder.GetStatisticSwitches());
+                    statistics = statisticsCalculator.calculateStatistics(log, HTMLBuilder.GetStatisticSwitches());
                 }
                 else
                 {
-                    statistics = statisticsCalculator.calculateStatistics(control.GetParsedLog(), CSVBuilder.GetStatisticSwitches());
+                    statistics = statisticsCalculator.calculateStatistics(log, CSVBuilder.GetStatisticSwitches());
                 }
 
-                bg.UpdateProgress(rowData, "60% - Statistics computed", 60);
+                bg.UpdateProgress(rowData, "85% - Statistics computed", 85);
                 string outputType = Properties.Settings.Default.SaveOutHTML ? "html" : "csv";
                 string fName = fInfo.Name.Split('.')[0];
                 string outputFile = Path.Combine(
@@ -171,20 +172,20 @@ namespace LuckParser
                     $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.{outputType}"
                 );
                 rowData.LogLocation = outputFile;
-                bg.UpdateProgress(rowData, "70% - Creating File...", 50);
+                bg.UpdateProgress(rowData, "90% - Creating File...", 90);
                 using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                 {
-                    bg.UpdateProgress(rowData, $"70% - Writing {outputType.ToUpper()}...", 50);
+                    bg.UpdateProgress(rowData, $"90% - Writing {outputType.ToUpper()}...", 90);
                     using (StreamWriter sw = new StreamWriter(fs))
                     {
                         if (Properties.Settings.Default.SaveOutHTML)
                         {
-                            HTMLBuilder builder = new HTMLBuilder(control.GetParsedLog(), settings, statistics);
+                            HTMLBuilder builder = new HTMLBuilder(log, settings, statistics);
                             builder.CreateHTML(sw);
                         }
                         if (Properties.Settings.Default.SaveOutCSV)
                         {
-                            CSVBuilder builder = new CSVBuilder(control.GetParsedLog(), settings, statistics);
+                            CSVBuilder builder = new CSVBuilder(log, settings, statistics);
                             builder.CreateCSV(sw, ",");
                         }
                     }
