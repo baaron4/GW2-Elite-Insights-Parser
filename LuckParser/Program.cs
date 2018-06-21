@@ -20,10 +20,10 @@ namespace LuckParser
             if (args.Length > 0)
             {
                 AttachConsole(ATTACH_PARENT_PROCESS);
-                foreach (String arg in args)
+                /*foreach (String arg in args)
                 {
                     Console.WriteLine(arg);
-                }
+                }*/
                 // Use the application through console 
                 MainForm myConsoleParser = new MainForm(args);
                 
