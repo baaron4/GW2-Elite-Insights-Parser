@@ -38,7 +38,11 @@ https://github.com/baaron4/GW2-Elite-Insights-Parser/blob/24df62abfec74446a07816
 
 If you would like to have your logs parsed automatically pass the file location of each evtc file as a string. 
 
-Settings can be configured in the GuildWars2EliteInsights.exe.config file. 
+Settings can be configured in the GuildWars2EliteInsights.exe.config file. You can also use a custom config file:
+
+```
+GuildWars2EliteInsights.exe -c [config path] [logs]
+```
 
 Note it may take some time for each file to parse and they will not be ready to open the moment they are created.
 

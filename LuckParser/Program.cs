@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Microsoft.Win32.SafeHandles;
 
 namespace LuckParser
 {
@@ -65,8 +63,29 @@ namespace LuckParser
                     AllocConsole();
                 }
 
+
+                int parserArgOffset = 0; 
+                if (args[0] == "-c" && args.Length > 2)
+                {
+                    // Do not access settings before this, else this will not work
+                    AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", args[1]);
+
+                    parserArgOffset += 2;
+                }
+                else if (args[0] == "-c")
+                {
+                    Console.WriteLine("More arguments required for option -c:");
+                    Console.WriteLine("GuildWars2EliteInsights.exe -c [config path] [logs]");
+                }
+
+                string[] parserArgs = new string[args.Length-parserArgOffset];
+                for (int i = parserArgOffset; i < args.Length; i++)
+                {
+                    parserArgs[i - parserArgOffset] = args[i];
+                }
+
                 // Use the application through console 
-                MainForm myConsoleParser = new MainForm(args);
+                MainForm myConsoleParser = new MainForm(parserArgs);
                 
                 return 0;
             }
