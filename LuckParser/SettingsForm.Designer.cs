@@ -190,11 +190,11 @@
             this.chkSkillIcons.AutoSize = true;
             this.chkSkillIcons.Checked = true;
             this.chkSkillIcons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSkillIcons.Location = new System.Drawing.Point(58, 515);
+            this.chkSkillIcons.Location = new System.Drawing.Point(417, 115);
             this.chkSkillIcons.Name = "chkSkillIcons";
-            this.chkSkillIcons.Size = new System.Drawing.Size(104, 17);
+            this.chkSkillIcons.Size = new System.Drawing.Size(99, 17);
             this.chkSkillIcons.TabIndex = 10;
-            this.chkSkillIcons.Text = "Show Skill Icons";
+            this.chkSkillIcons.Text = "With Skill Icons";
             this.chkSkillIcons.UseVisualStyleBackColor = true;
             this.chkSkillIcons.CheckedChanged += new System.EventHandler(this.SkillIcons_CheckedChanged);
             // 
@@ -301,7 +301,7 @@
             this.chkSimpleRotationTab.AutoSize = true;
             this.chkSimpleRotationTab.Checked = true;
             this.chkSimpleRotationTab.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSimpleRotationTab.Location = new System.Drawing.Point(58, 538);
+            this.chkSimpleRotationTab.Location = new System.Drawing.Point(60, 515);
             this.chkSimpleRotationTab.Name = "chkSimpleRotationTab";
             this.chkSimpleRotationTab.Size = new System.Drawing.Size(152, 17);
             this.chkSimpleRotationTab.TabIndex = 21;
@@ -314,7 +314,7 @@
             this.chkShowAutos.AutoSize = true;
             this.chkShowAutos.Checked = true;
             this.chkShowAutos.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowAutos.Location = new System.Drawing.Point(64, 561);
+            this.chkShowAutos.Location = new System.Drawing.Point(64, 538);
             this.chkShowAutos.Name = "chkShowAutos";
             this.chkShowAutos.Size = new System.Drawing.Size(117, 17);
             this.chkShowAutos.TabIndex = 22;
@@ -325,7 +325,7 @@
             // chkLargeSkillIcons
             // 
             this.chkLargeSkillIcons.AutoSize = true;
-            this.chkLargeSkillIcons.Location = new System.Drawing.Point(64, 584);
+            this.chkLargeSkillIcons.Location = new System.Drawing.Point(64, 561);
             this.chkLargeSkillIcons.Name = "chkLargeSkillIcons";
             this.chkLargeSkillIcons.Size = new System.Drawing.Size(104, 17);
             this.chkLargeSkillIcons.TabIndex = 23;
@@ -495,7 +495,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(579, 605);
+            this.ClientSize = new System.Drawing.Size(579, 584);
             this.Controls.Add(this.lblRotationGraphSection);
             this.Controls.Add(this.csv);
             this.Controls.Add(this.html);

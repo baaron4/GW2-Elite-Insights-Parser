@@ -1617,7 +1617,7 @@ namespace LuckParser.Controllers
                                      );
                                     sw.Write("images: [");
                                     {
-                                        if (settings.PlayerRotIcons)//Display rotation
+                                        if (settings.PlayerRot && settings.PlayerRotIcons)//Display rotation
                                         {
                                             int castCount = 0;
                                             foreach (CastLog cl in casting)
