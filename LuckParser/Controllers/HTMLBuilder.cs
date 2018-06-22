@@ -256,7 +256,7 @@ namespace LuckParser.Controllers
                 int mechcount = 0;
                 foreach (MechanicLog ml in filterdList)
                 {
-                    Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, GraphHelper.GraphMode.Full).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
+                    Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
                     if (mechcount == filterdList.Count - 1)
                     {
                         if (check != null)
@@ -344,7 +344,7 @@ namespace LuckParser.Controllers
                     {
                         foreach (MechanicLog ml in DnDList)
                         {
-                            Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, GraphHelper.GraphMode.Full).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
+                            Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
                             if (mcount == DnDList.Count - 1)
                             {
                                 if (check != null)
