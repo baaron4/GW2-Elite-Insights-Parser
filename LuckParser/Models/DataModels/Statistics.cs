@@ -124,5 +124,11 @@ namespace LuckParser.Models.DataModels
         }
 
         public Dictionary<int, FinalBossBoon>[] bossConditions;
+
+        // present buff
+        public List<Boon> present_boons = new List<Boon>();//Used only for Boon tables
+        public List<Boon> present_offbuffs = new List<Boon>();//Used only for Off Buff tables
+        public List<Boon> present_defbuffs = new List<Boon>();//Used only for Def Buff tables
+        public Dictionary<int, List<Boon>> present_personnal = new Dictionary<int, List<Boon>>();//Used only for personnal
     }
 }

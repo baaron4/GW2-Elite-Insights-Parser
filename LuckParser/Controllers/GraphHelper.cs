@@ -12,7 +12,7 @@ namespace LuckParser.Controllers
 
         public enum GraphMode { Full, s10, s30 };
 
-        public static List<Point> getDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index, ushort dstid, GraphMode mode)
+        public static List<Point> getDPSGraph(ParsedLog log, AbstractPlayer p, int phase_index, ushort dstid, GraphMode mode)
         {
             int asked_id = (phase_index + "_" + dstid + "_" + mode).GetHashCode();
             if (p.getDPSGraph(asked_id).Count > 0)
@@ -23,8 +23,8 @@ namespace LuckParser.Controllers
             List<Point> dmgList = new List<Point>();
             List<Point> dmgList10s = new List<Point>();
             List<Point> dmgList30s = new List<Point>();
-            PhaseData phase = boss.getPhases(b_data, c_data.getCombatList(), a_data, settings.ParsePhases)[phase_index];
-            List<DamageLog> damage_logs = p.getDamageLogs(dstid, b_data, c_data.getCombatList(), a_data, phase.getStart(), phase.getEnd());
+            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            List<DamageLog> damage_logs = p.getDamageLogs(dstid, log, phase.getStart(), phase.getEnd());
             // fill the graph, full precision
             List<double> dmgListFull = new List<double>();
             for (int i = 0; i <= phase.getDuration(); i++)
@@ -33,15 +33,15 @@ namespace LuckParser.Controllers
             }
             int total_time = 1;
             int total_damage = 0;
-            foreach (DamageLog log in damage_logs)
+            foreach (DamageLog dl in damage_logs)
             {
-                int time = (int)(log.getTime() - phase.getStart());
+                int time = (int)(dl.getTime() - phase.getStart());
                 // fill
                 for (; total_time < time; total_time++)
                 {
                     dmgListFull[total_time] = total_damage;
                 }
-                total_damage += log.getDamage();
+                total_damage += dl.getDamage();
                 dmgListFull[total_time] = total_damage;
             }
             // fill
@@ -86,9 +86,9 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="p">The player</param>
         /// <returns></returns>
-        public static List<Point> getBossDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index, GraphMode mode)
+        public static List<Point> getBossDPSGraph(ParsedLog log, AbstractPlayer p, int phase_index, GraphMode mode)
         {
-            return getDPSGraph(b_data, c_data, a_data, p, boss, phase_index, b_data.getInstid(), mode);
+            return getDPSGraph(log, p, phase_index, log.getBossData().getInstid(), mode);
         }
 
         /// <summary>
@@ -96,9 +96,9 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="p">The player</param>
         /// <returns></returns>
-        public static List<Point> getTotalDPSGraph(BossData b_data, CombatData c_data, AgentData a_data, AbstractPlayer p, Boss boss, int phase_index, GraphMode mode)
+        public static List<Point> getTotalDPSGraph(ParsedLog log, AbstractPlayer p, int phase_index, GraphMode mode)
         {
-            return getDPSGraph(b_data, c_data, a_data, p, boss, phase_index, 0, mode);
+            return getDPSGraph(log, p, phase_index, 0, mode);
         }
     }
 }

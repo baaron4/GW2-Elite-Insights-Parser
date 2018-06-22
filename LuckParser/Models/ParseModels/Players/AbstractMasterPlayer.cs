@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,18 +19,18 @@ namespace LuckParser.Models.ParseModels
         }
 
 
-        public Dictionary<string, Minions> getMinions(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        public Dictionary<string, Minions> getMinions(ParsedLog log)
         {
             if (minions.Count == 0)
             {
-                setMinions(bossData, combatList, agentData);
+                setMinions(log);
             }
             return minions;
         }
 
-        private void setMinions(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        private void setMinions(ParsedLog log)
         {
-            List<AgentItem> combatMinion = agentData.getNPCAgentList().Where(x => x.getMasterAgent() == agent.getAgent()).ToList();
+            List<AgentItem> combatMinion = log.getAgentData().getNPCAgentList().Where(x => x.getMasterAgent() == agent.getAgent()).ToList();
             foreach (AgentItem agent in combatMinion)
             {
                 string id = agent.getName();
@@ -41,33 +42,33 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void setFilteredLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        protected override void setFilteredLogs(ParsedLog log)
         {
-            long time_start = bossData.getFirstAware();
-            foreach (CombatItem c in combatList)
+            long time_start = log.getBossData().getFirstAware();
+            foreach (CombatItem c in log.getDamageData())
             {
-                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > bossData.getFirstAware() && c.getTime() < bossData.getLastAware())
+                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
                 {
                     long time = c.getTime() - time_start;
-                    addDamageLog(time, bossData.getInstid(), c, damage_logsFiltered);
+                    addDamageLog(time, log.getBossData().getInstid(), c, damage_logsFiltered);
                 }
             }
-            Dictionary<string, Minions> min_list = getMinions(bossData, combatList, agentData);
+            Dictionary<string, Minions> min_list = getMinions(log);
             foreach (Minions mins in min_list.Values)
             {
-                damage_logsFiltered.AddRange(mins.getDamageLogs(bossData.getInstid(), bossData, combatList, agentData, 0, bossData.getAwareDuration()));
+                damage_logsFiltered.AddRange(mins.getDamageLogs(log.getBossData().getInstid(), log, 0, log.getBossData().getAwareDuration()));
             }
             damage_logsFiltered.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
         }
 
-        protected override void setCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData)
+        protected override void setCastLogs(ParsedLog log)
         {
-            long time_start = bossData.getFirstAware();
+            long time_start = log.getBossData().getFirstAware();
             CastLog curCastLog = null;
 
-            foreach (CombatItem c in combatList)
+            foreach (CombatItem c in log.getCombatList())
             {
-                if (! (c.getTime() > bossData.getFirstAware() && c.getTime() < bossData.getLastAware()))
+                if (! (c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware()))
                 {
                     continue;
                 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
+using LuckParser.Models.DataModels;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -41,10 +42,10 @@ namespace LuckParser.Models.ParseModels
         {
             return agent.getProf();
         }
-        public long getDeath(BossData bossData, List<CombatItem> combatList, long start, long end)
+        public long getDeath(ParsedLog log, long start, long end)
         {
-            long offset = bossData.getFirstAware();
-            CombatItem dead = combatList.FirstOrDefault(x => x.getSrcInstid() == agent.getInstid() && x.isStateChange().getEnum() == "CHANGE_DEAD" && x.getTime() >= start + offset && x.getTime() <= end + offset);
+            long offset = log.getBossData().getFirstAware();
+            CombatItem dead = log.getCombatList().FirstOrDefault(x => x.getSrcInstid() == agent.getInstid() && x.isStateChange().getEnum() == "CHANGE_DEAD" && x.getTime() >= start + offset && x.getTime() <= end + offset);
             if (dead != null && dead.getTime() > 0)
             {
                 return dead.getTime();
@@ -66,17 +67,17 @@ namespace LuckParser.Models.ParseModels
             return new List<Point>();
         }
 
-        public List<DamageLog> getDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)//isntid = 0 gets all logs if specefied sets and returns filterd logs
+        public List<DamageLog> getDamageLogs(int instidFilter, ParsedLog log, long start, long end)//isntid = 0 gets all logs if specefied sets and returns filterd logs
         {
             if (damage_logs.Count == 0)
             {
-                setDamageLogs(bossData, combatList, agentData);
+                setDamageLogs(log);
             }
 
 
             if (damage_logsFiltered.Count == 0)
             {
-                setFilteredLogs(bossData, combatList, agentData);
+                setFilteredLogs(log);
             }
             if (instidFilter == 0)
             {
@@ -87,60 +88,60 @@ namespace LuckParser.Models.ParseModels
                 return damage_logsFiltered.Where( x => x.getTime() >= start && x.getTime() <= end).ToList();
             }
         }
-        public List<DamageLog> getDamageTakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data, long start, long end)
+        public List<DamageLog> getDamageTakenLogs(ParsedLog log, long start, long end)
         {
             if (damageTaken_logs.Count == 0)
             {
-                setDamagetakenLogs(bossData, combatList, agentData, m_data);
+                setDamagetakenLogs(log);
             }
             return damageTaken_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
-        public BoonDistribution getBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList, AgentData agentData, List<PhaseData> phases, int phase_index)
+        public BoonDistribution getBoonDistribution(ParsedLog log, List<PhaseData> phases, List<Boon> to_track, int phase_index)
         {
             if (boon_distribution.Count == 0)
             {
-                setBoonDistribution(bossData, skillData, combatList, agentData, phases);
+                setBoonDistribution(log, phases, to_track);
             }
             return boon_distribution[phase_index];
         }
-        public Dictionary<int, BoonsGraphModel> getBoonGraphs(BossData bossData, SkillData skillData, List<CombatItem> combatList, AgentData agentData, List<PhaseData> phases)
+        public Dictionary<int, BoonsGraphModel> getBoonGraphs(ParsedLog log, List<PhaseData> phases, List<Boon> to_track)
         {
             if (boon_distribution.Count == 0)
             {
-                setBoonDistribution(bossData, skillData, combatList, agentData, phases);
+                setBoonDistribution(log, phases, to_track);
             }
             return boon_points;
         }
-        public Dictionary<int, long> getBoonPresence(BossData bossData, SkillData skillData, List<CombatItem> combatList, AgentData agentData, List<PhaseData> phases, int phase_index)
+        public Dictionary<int, long> getBoonPresence(ParsedLog log, List<PhaseData> phases, List<Boon> to_track, int phase_index)
         {
             if (boon_distribution.Count == 0)
             {
-                setBoonDistribution(bossData, skillData, combatList, agentData, phases);
+                setBoonDistribution(log,phases, to_track);
             }
             return boon_presence[phase_index];
         }
-        public List<CastLog> getCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)
+        public List<CastLog> getCastLogs(ParsedLog log, long start, long end)
         {
             if (cast_logs.Count == 0)
             {
-                setCastLogs(bossData, combatList, agentData);
+                setCastLogs(log);
             }
             return cast_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
 
         }
 
-        public List<CastLog> getCastLogsActDur(BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)
+        public List<CastLog> getCastLogsActDur(ParsedLog log, long start, long end)
         {
             if (cast_logs.Count == 0)
             {
-                setCastLogs(bossData, combatList, agentData);
+                setCastLogs(log);
             }
             return cast_logs.Where(x => x.getTime() + x.getActDur() >= start && x.getTime() <= end).ToList();
 
         }
-        public List<DamageLog> getJustPlayerDamageLogs(int instidFilter, BossData bossData, List<CombatItem> combatList, AgentData agentData, long start, long end)
+        public List<DamageLog> getJustPlayerDamageLogs(int instidFilter, ParsedLog log, long start, long end)
         {
-            return getDamageLogs(instidFilter, bossData, combatList, agentData, start, end).Where(x => x.getInstidt() == agent.getInstid()).ToList();
+            return getDamageLogs(instidFilter, log, start, end).Where(x => x.getInstidt() == agent.getInstid()).ToList();
         }
         // privates
         protected void addDamageLog(long time, ushort instid, CombatItem c, List<DamageLog> toFill)
@@ -148,7 +149,7 @@ namespace LuckParser.Models.ParseModels
             LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
             if (instid == c.getDstInstid() && c.getIFF().getEnum() == "FOE")
             {
-                if (state.getEnum() == "NORMAL" && c.isBuffremove().getID() == 0)
+                if (c.isBuffremove().getID() == 0)
                 {
                     if (c.isBuff() == 1 && c.getBuffDmg() != 0)//condi
                     {
@@ -170,38 +171,30 @@ namespace LuckParser.Models.ParseModels
             LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
             if (instid == c.getSrcInstid())
             {
-                if (state.getID() == 0)
+                if (c.isBuff() == 1 && c.getBuffDmg() != 0)
                 {
-                    if (c.isBuff() == 1 && c.getBuffDmg() != 0)
-                    {
-                        //inco,ing condi dmg not working or just not present?
-                        // damagetaken.Add(c.getBuffDmg());
-                        damageTaken_logs.Add(new DamageLogCondition(time, c));
-                    }
-                    else if (c.isBuff() == 0 && c.getValue() != 0)
-                    {
-                        damageTaken_logs.Add(new DamageLogPower(time, c));
-
-                    }
-                    else if (c.isBuff() == 0 && c.getValue() == 0)
-                    {
-                        damageTaken_logs.Add(new DamageLogPower(time, c));
-                    }
+                    //inco,ing condi dmg not working or just not present?
+                    // damagetaken.Add(c.getBuffDmg());
+                    damageTaken_logs.Add(new DamageLogCondition(time, c));
                 }
+                else if (c.isBuff() == 0 && c.getValue() >= 0)
+                {
+                    damageTaken_logs.Add(new DamageLogPower(time, c));
+
+                }
+
             }
         }
         // Setters
-        protected abstract void setDamageLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData);     
-        protected abstract void setFilteredLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData);
-        protected abstract void setCastLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData);
-        protected abstract void setDamagetakenLogs(BossData bossData, List<CombatItem> combatList, AgentData agentData, MechanicData m_data);
+        protected abstract void setDamageLogs(ParsedLog log);     
+        protected abstract void setFilteredLogs(ParsedLog log);
+        protected abstract void setCastLogs(ParsedLog log);
+        protected abstract void setDamagetakenLogs(ParsedLog log);
 
-        private void setBoonDistribution(BossData bossData, SkillData skillData, List<CombatItem> combatList, AgentData agentData, List<PhaseData> phases)
+        private void setBoonDistribution(ParsedLog log,List<PhaseData> phases, List<Boon> to_track)
         {
-            BoonMap to_use = getBoonMap(bossData, skillData, combatList, true);
-            List<Boon> boon_to_use = Boon.getAllBuffList();
-            boon_to_use.AddRange(Boon.getCondiBoonList());
-            long dur = bossData.getLastAware() - bossData.getFirstAware();
+            BoonMap to_use = getBoonMap(log, to_track);
+            long dur = log.getBossData().getAwareDuration();
             int fight_duration = (int)(dur) / 1000;
             // Init boon presence points
             BoonsGraphModel boon_presence_points = new BoonsGraphModel("Number of Boons");
@@ -214,7 +207,8 @@ namespace LuckParser.Models.ParseModels
                 boon_distribution.Add(new BoonDistribution());
                 boon_presence.Add(new Dictionary<int, long>());
             }
-            foreach (Boon boon in boon_to_use)
+            long death = getDeath(log, 0, dur);
+            foreach (Boon boon in to_track)
             {
                 int boonid = boon.getID();
                 if (to_use.ContainsKey(boonid))
@@ -230,10 +224,9 @@ namespace LuckParser.Models.ParseModels
                     }
                     BoonSimulator simulator = boon.getSimulator();
                     simulator.simulate(logs, dur);
-                    long death = getDeath(bossData, combatList, 0, dur);
-                    if (death > 0 && getCastLogs(bossData,combatList,agentData, death + 1, fight_duration).Count > 0)
+                    if (death > 0 && getCastLogs(log, death + 1, fight_duration).Count > 0)
                     {
-                        simulator.trim(death - bossData.getFirstAware());
+                        simulator.trim(death - log.getBossData().getFirstAware());
                     }
                     else
                     {
@@ -311,27 +304,22 @@ namespace LuckParser.Models.ParseModels
             boon_points[-2] = boon_presence_points;
         }
         // private getters
-        private BoonMap getBoonMap(BossData bossData, SkillData skillData, List<CombatItem> combatList, bool add_condi)
+        private BoonMap getBoonMap(ParsedLog log, List<Boon> to_track)
         {
             BoonMap boon_map = new BoonMap();
-            boon_map.add(Boon.getAllBuffList());
-            // This only happens for bosses
-            if (add_condi)
-            {
-                boon_map.add(Boon.getCondiBoonList());
-            }
+            boon_map.add(to_track);
             // Fill in Boon Map
-            long time_start = bossData.getFirstAware();
+            long time_start = log.getBossData().getFirstAware();
 
-            foreach (CombatItem c in combatList)
+            foreach (CombatItem c in log.getBoonData())
             {
-                if (c.isBuff() != 1 || !boon_map.ContainsKey(c.getSkillID()))
+                if (!boon_map.ContainsKey(c.getSkillID()))
                 {
                     continue;
                 }
                 long time = c.getTime() - time_start;
                 ushort dst = c.isBuffremove().getID() == 0 ? c.getDstInstid() : c.getSrcInstid();
-                if (agent.getInstid() == dst && time > 0 && time < bossData.getAwareDuration())
+                if (agent.getInstid() == dst && time > 0 && time < log.getBossData().getAwareDuration())
                 {
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                     if (c.isBuffremove().getID() == 0)

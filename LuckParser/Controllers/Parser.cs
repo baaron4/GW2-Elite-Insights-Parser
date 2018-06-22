@@ -12,7 +12,7 @@ using LuckParser.Models.DataModels;
 //recommend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {
-    public class Controller1
+    public class Parser
     {
         private GW2APIController APIController = new GW2APIController();            
 
@@ -573,88 +573,7 @@ namespace LuckParser.Controllers
             }
             // Sort
             p_list = p_list.OrderBy(a => int.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>int.Parse(a.getGroup()) - int.Parse(b.getGroup()))
-            setMechData();
         }
 
-        private void setMechData() {
-            List<int> mIDList = new List<int>();
-            foreach (Player p in p_list)
-            {
-                List<CombatItem> down = combat_data.getStates(p.getInstid(), "CHANGE_DOWN", boss_data.getFirstAware(), boss_data.getLastAware());
-                foreach (CombatItem pnt in down) {
-                    mech_data.AddItem(new MechanicLog((long)((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
-                }
-                List<CombatItem> dead = combat_data.getStates(p.getInstid(), "CHANGE_DEAD", boss_data.getFirstAware(), boss_data.getLastAware());
-                foreach (CombatItem pnt in dead)
-                {
-                    mech_data.AddItem(new MechanicLog((long)((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
-                }
-                List<DamageLog> dls = p.getDamageTakenLogs(boss_data, combat_data.getCombatList(), agent_data, mech_data, 0, boss_data.getAwareDuration());
-                //Player hit by skill 3
-                MechanicLog prevMech = null;
-                foreach (DamageLog dLog in dls)
-                {
-                    string name = skill_data.getName(dLog.getID());
-                    if (dLog.getResult().getID() < 3 ) {
-
-                        foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x=>x.GetMechType() == Mechanic.MechType.SkillOnPlayer))
-                        {
-                            //Prevent multi hit attacks form multi registering
-                            if (prevMech != null)
-                            {
-                                if (dLog.getID() == prevMech.GetSkill() && mech.GetName() == prevMech.GetName() && (dLog.getTime() / 1000f) == prevMech.GetTime())
-                                {
-                                    break;
-                                }
-                            }
-                            if (dLog.getID() == mech.GetSkill())
-                            {
-                                
-                                
-                                 prevMech = new MechanicLog((long)(dLog.getTime() / 1000f), dLog.getID(), mech.GetName(), dLog.getDamage(), p, mech.GetPlotly());
-                                
-                                mech_data.AddItem(prevMech);
-                                break;
-                            }
-                        }
-                    }
-                }
-                //Player gain buff 0,7
-                foreach (CombatItem c in combat_data.getCombatList().Where(x=>x.isBuffremove().getID() == 0 &&x.isStateChange().getID() == 0))
-                {
-                    if (p.getInstid() == c.getDstInstid())
-                    {
-                        if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove().getID() == 0 && c.getResult().getID() < 3)
-                        {
-                            String name = skill_data.getName(c.getSkillID());
-                            //buff on player 0
-                            foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.PlayerBoon))
-                            {
-                                if (c.getSkillID() == mech.GetSkill())
-                                {
-                                    //dst player
-                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware())/1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
-                                    break;
-                                }
-                            }
-                            //player on player 7
-                            foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.PlayerOnPlayer))
-                            {
-                                if (c.getSkillID() == mech.GetSkill())
-                                {
-                                    //dst player
-                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
-                                    //src player
-                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p_list.FirstOrDefault(i=>i.getInstid() == c.getSrcInstid()), mech.GetPlotly()));
-                                    break;
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-
-        }
     }
 }
