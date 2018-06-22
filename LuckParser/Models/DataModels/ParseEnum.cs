@@ -54,5 +54,41 @@ namespace LuckParser.Models.DataModels
                     return BuffRemove.None;
             }
         }
+
+        // Result
+        
+        public enum Result { Normal, Crit, Glance, Block , Evade, Interrupt, Absorb, Blind, KillingBlow, Unknown };
+
+        public static Result getResult(byte bt)
+        {
+            switch (bt)
+            {
+                case 0:
+                    return Result.Normal;
+                case 1:
+                    return Result.Crit;
+                case 2:
+                    return Result.Glance;
+                case 3:
+                    return Result.Block;
+                case 4:
+                    return Result.Evade;
+                case 5:
+                    return Result.Interrupt;
+                case 6:
+                    return Result.Absorb;
+                case 7:
+                    return Result.Blind;
+                case 8:
+                    return Result.KillingBlow;
+                default:
+                    return Result.Unknown;
+            }
+        }
+
+        public static bool hit(Result status)
+        {
+            return status == Result.Normal || status == Result.Crit || status == Result.Glance;
+        }
     }
 }

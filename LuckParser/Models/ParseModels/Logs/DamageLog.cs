@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
         protected int damage;
         private int skill_id;
         private int buff;
-        private Result result;
+        private ParseEnum.Result result;
         private ushort is_ninety;
         private ushort is_moving;
         private ushort is_flanking;
@@ -56,7 +56,7 @@ namespace LuckParser.Models.ParseModels
             return buff;
         }
 
-        public Result getResult()
+        public ParseEnum.Result getResult()
         {
             return result;
         }

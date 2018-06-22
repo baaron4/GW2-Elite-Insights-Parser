@@ -93,7 +93,7 @@ namespace LuckParser.Models.DataModels
             damage_data = combat_data.getCombatList().Where(x => x.isStateChange().getID() == 0 &&
                                         ((x.isBuff() == 1 && x.getBuffDmg() != 0) ||
                                         (x.isBuff() == 0 && x.getValue() != 0) ||
-                                        (x.getResult().getID() == 5 || x.getResult().getID() == 6 || x.getResult().getID() == 7))).ToList();
+                                        (x.getResult() == ParseEnum.Result.Interrupt || x.getResult() == ParseEnum.Result.Absorb || x.getResult() == ParseEnum.Result.Blind))).ToList();
         }
 
         public List<CombatItem> getBoonData()
@@ -127,7 +127,7 @@ namespace LuckParser.Models.DataModels
                 foreach (DamageLog dLog in dls)
                 {
                     string name = skill_data.getName(dLog.getID());
-                    if (dLog.getResult().getID() < 3)
+                    if (ParseEnum.hit(dLog.getResult()))
                     {
 
                         foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.SkillOnPlayer))
@@ -157,7 +157,7 @@ namespace LuckParser.Models.DataModels
                 {
                     if (p.getInstid() == c.getDstInstid())
                     {
-                        if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove() == ParseEnum.BuffRemove.None && c.getResult().getID() < 3)
+                        if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove() == ParseEnum.BuffRemove.None && ParseEnum.hit(c.getResult()))
                         {
                             String name = skill_data.getName(c.getSkillID());
                             //buff on player 0

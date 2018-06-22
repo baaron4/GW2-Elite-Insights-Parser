@@ -211,7 +211,7 @@ namespace LuckParser.Controllers
                     {
                         if (log.isCondi() == 0)
                         {
-                            if (log.getResult().getEnum() == "CRIT")
+                            if (log.getResult() == ParseEnum.Result.Crit)
                             {
                                 final.criticalRate++;
                                 final.criticalDmg += log.getDamage();
@@ -226,22 +226,22 @@ namespace LuckParser.Controllers
                             final.movingRate += log.isMoving();
                             final.flankingRate += log.isFlanking();
 
-                            if (log.getResult().getEnum() == "GLANCE")
+                            if (log.getResult() == ParseEnum.Result.Glance)
                             {
                                 final.glanceRate++;
                             }
 
-                            if (log.getResult().getEnum() == "BLIND")
+                            if (log.getResult() == ParseEnum.Result.Blind)
                             {
                                 final.missed++;
                             }
 
-                            if (log.getResult().getEnum() == "INTERRUPT")
+                            if (log.getResult() == ParseEnum.Result.Interrupt)
                             {
                                 final.interupts++;
                             }
 
-                            if (log.getResult().getEnum() == "ABSORB")
+                            if (log.getResult() == ParseEnum.Result.Absorb)
                             {
                                 final.invulned++;
                             }
@@ -324,16 +324,16 @@ namespace LuckParser.Controllers
                     final.damageInvulned = 0;
                     final.evadedCount = 0;
                     final.damageBarrier = 0;
-                    foreach (DamageLog log in damageLogs.Where(x => x.getResult().getEnum() == "BLOCK"))
+                    foreach (DamageLog log in damageLogs.Where(x => x.getResult() == ParseEnum.Result.Block))
                     {
                         final.blockedCount++;
                     }
-                    foreach (DamageLog log in damageLogs.Where(x => x.getResult().getEnum() == "ABSORB"))
+                    foreach (DamageLog log in damageLogs.Where(x => x.getResult() == ParseEnum.Result.Absorb))
                     {
                         final.invulnedCount++;
                         final.damageInvulned += log.getDamage();
                     }
-                    foreach (DamageLog log in damageLogs.Where(x => x.getResult().getEnum() == "EVADE"))
+                    foreach (DamageLog log in damageLogs.Where(x => x.getResult() == ParseEnum.Result.Evade))
                     {
                         final.evadedCount++;
                     }

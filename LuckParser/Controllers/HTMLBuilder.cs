@@ -2243,7 +2243,6 @@ namespace LuckParser.Controllers
                             if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                             if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
                             hits++;
-                            int result = dl.getResult().getID();
 
                         }
                         avgdamage = (int)(totaldamage / (double)hits);
@@ -2285,8 +2284,8 @@ namespace LuckParser.Controllers
                             if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                             if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
                             if (curdmg != 0) { hits++; };
-                            int result = dl.getResult().getID();
-                            if (result == 1) { crit++; } else if (result == 2) { glance++; }
+                            ParseEnum.Result result = dl.getResult();
+                            if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
                             if (dl.isFlanking() == 1) { flank++; }
                         }
                         avgdamage = (int)(totaldamage / (double)hits);

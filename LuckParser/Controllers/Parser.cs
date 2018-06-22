@@ -283,7 +283,7 @@ namespace LuckParser.Controllers
 
                 // 1 byte: result
                 //Result result = Result.getEnum(f.read());
-                Result result = new Result(Convert.ToByte(stream.ReadByte()));
+                ParseEnum.Result result = ParseEnum.getResult(Convert.ToByte(stream.ReadByte()));
 
                 // 1 byte: is_activation
                 //Activation is_activation = Activation.getEnum(f.read());

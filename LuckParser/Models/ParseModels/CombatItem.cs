@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
         private ushort src_master_instid;
         private IFF iff;
         private ushort is_buff;
-        private Result result;
+        private ParseEnum.Result result;
         private ParseEnum.Activation is_activation;
         private ParseEnum.BuffRemove is_buffremove;
         private ushort is_ninety;
@@ -31,7 +31,7 @@ namespace LuckParser.Models.ParseModels
         private ushort is_shields;
         // Constructor
         public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, ushort overstack_value,
-                int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, IFF iff, ushort buff, Result result,
+                int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, IFF iff, ushort buff, ParseEnum.Result result,
                 ParseEnum.Activation is_activation, ParseEnum.BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
                 StateChange is_statechange, ushort is_flanking)
         {
@@ -57,7 +57,7 @@ namespace LuckParser.Models.ParseModels
             this.is_flanking = is_flanking;
         }
         public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, ushort overstack_value,
-               int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, IFF iff, ushort buff, Result result,
+               int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, IFF iff, ushort buff, ParseEnum.Result result,
                ParseEnum.Activation is_activation, ParseEnum.BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
                StateChange is_statechange, ushort is_flanking, ushort is_shields)
         {
@@ -145,7 +145,7 @@ namespace LuckParser.Models.ParseModels
             return is_buff;
         }
 
-        public Result getResult()
+        public ParseEnum.Result getResult()
         {
             return result;
         }

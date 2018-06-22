@@ -159,7 +159,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         toFill.Add(new DamageLogPower(time, c));
                     }
-                    else if (c.getResult().getID() == 5 || c.getResult().getID() == 6 || c.getResult().getID() == 7)
+                    else if (c.getResult() == ParseEnum.Result.Absorb || c.getResult() == ParseEnum.Result.Blind || c.getResult() == ParseEnum.Result.Interrupt)
                     {//Hits that where blinded, invulned, interupts
                         toFill.Add(new DamageLogPower(time, c));
                     }
