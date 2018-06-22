@@ -45,7 +45,7 @@ namespace LuckParser.Models.ParseModels
         public long getDeath(ParsedLog log, long start, long end)
         {
             long offset = log.getBossData().getFirstAware();
-            CombatItem dead = log.getCombatList().FirstOrDefault(x => x.getSrcInstid() == agent.getInstid() && x.isStateChange().getEnum() == "CHANGE_DEAD" && x.getTime() >= start + offset && x.getTime() <= end + offset);
+            CombatItem dead = log.getCombatList().FirstOrDefault(x => x.getSrcInstid() == agent.getInstid() && x.isStateChange() == ParseEnum.StateChange.ChangeDead && x.getTime() >= start + offset && x.getTime() <= end + offset);
             if (dead != null && dead.getTime() > 0)
             {
                 return dead.getTime();
@@ -146,7 +146,6 @@ namespace LuckParser.Models.ParseModels
         // privates
         protected void addDamageLog(long time, ushort instid, CombatItem c, List<DamageLog> toFill)
         {
-            LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
             if (instid == c.getDstInstid() && c.getIFF().getEnum() == "FOE")
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
@@ -168,7 +167,6 @@ namespace LuckParser.Models.ParseModels
         }
         protected void addDamageTakenLog(long time, ushort instid, CombatItem c)
         {
-            LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
             if (instid == c.getSrcInstid())
             {
                 if (c.isBuff() == 1 && c.getBuffDmg() != 0)

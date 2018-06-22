@@ -95,8 +95,8 @@ namespace LuckParser.Models.ParseModels
                 {
                     continue;
                 }
-                LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
-                if (state.getID() == 0)
+                ParseEnum.StateChange state = c.isStateChange();
+                if (state == ParseEnum.StateChange.Normal)
                 {
                     if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {
@@ -122,7 +122,7 @@ namespace LuckParser.Models.ParseModels
                         }
                     }
                 }
-                else if (state.getID() == 11)
+                else if (state == ParseEnum.StateChange.WeaponSwap)
                 {//Weapon swap
                     if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {

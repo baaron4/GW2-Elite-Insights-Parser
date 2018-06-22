@@ -26,14 +26,14 @@ namespace LuckParser.Models.ParseModels
         private ushort is_ninety;
         private ushort is_fifty;
         private ushort is_moving;
-        private StateChange is_statechange;
+        private ParseEnum.StateChange is_statechange;
         private ushort is_flanking;
         private ushort is_shields;
         // Constructor
         public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, ushort overstack_value,
                 int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, IFF iff, ushort buff, ParseEnum.Result result,
                 ParseEnum.Activation is_activation, ParseEnum.BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
-                StateChange is_statechange, ushort is_flanking)
+                ParseEnum.StateChange is_statechange, ushort is_flanking)
         {
             this.time = time;
             this.src_agent = src_agent;
@@ -59,7 +59,7 @@ namespace LuckParser.Models.ParseModels
         public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, ushort overstack_value,
                int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, IFF iff, ushort buff, ParseEnum.Result result,
                ParseEnum.Activation is_activation, ParseEnum.BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
-               StateChange is_statechange, ushort is_flanking, ushort is_shields)
+               ParseEnum.StateChange is_statechange, ushort is_flanking, ushort is_shields)
         {
             this.time = time;
             this.src_agent = src_agent;
@@ -180,7 +180,7 @@ namespace LuckParser.Models.ParseModels
             return is_flanking;
         }
 
-        public StateChange isStateChange()
+        public ParseEnum.StateChange isStateChange()
         {
             return is_statechange;
         }

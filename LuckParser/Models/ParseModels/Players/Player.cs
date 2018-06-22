@@ -54,7 +54,7 @@ namespace LuckParser.Models.ParseModels
         public int[] getCleanses(ParsedLog log, long start, long end) {
             long time_start = log.getBossData().getFirstAware();
             int[] cleanse = { 0, 0 };
-            foreach (CombatItem c in log.getCombatList().Where(x=>x.isStateChange().getID() == 0 && x.isBuff() == 1 && x.getTime() >= (start + time_start) && x.getTime() <= (end + time_start)))
+            foreach (CombatItem c in log.getCombatList().Where(x=>x.isStateChange() == ParseEnum.StateChange.Normal && x.isBuff() == 1 && x.getTime() >= (start + time_start) && x.getTime() <= (end + time_start)))
             {
                 if (c.isActivation() == ParseEnum.Activation.None)
                 {

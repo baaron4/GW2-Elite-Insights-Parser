@@ -427,7 +427,6 @@ namespace LuckParser.Models.ParseModels
             {
                 if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
                 {//selecting player as target
-                    LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in log.getAgentData().getAllAgentsList())
                     {//selecting all

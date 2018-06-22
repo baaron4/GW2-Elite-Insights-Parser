@@ -60,8 +60,8 @@ namespace LuckParser.Models.ParseModels
                 {
                     continue;
                 }
-                LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
-                if (state.getID() == 0)
+                ParseEnum.StateChange state = c.isStateChange();
+                if (state == ParseEnum.StateChange.Normal)
                 {
                     if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {

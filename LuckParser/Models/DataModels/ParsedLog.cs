@@ -90,7 +90,7 @@ namespace LuckParser.Models.DataModels
         private void doReduction()
         {
             boon_data = combat_data.getCombatList().Where(x => x.isBuff() == 1 && (x.getBuffDmg() == 0 || x.isBuffremove() != ParseEnum.BuffRemove.None)).ToList();
-            damage_data = combat_data.getCombatList().Where(x => x.isStateChange().getID() == 0 &&
+            damage_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal &&
                                         ((x.isBuff() == 1 && x.getBuffDmg() != 0) ||
                                         (x.isBuff() == 0 && x.getValue() != 0) ||
                                         (x.getResult() == ParseEnum.Result.Interrupt || x.getResult() == ParseEnum.Result.Absorb || x.getResult() == ParseEnum.Result.Blind))).ToList();
@@ -111,12 +111,12 @@ namespace LuckParser.Models.DataModels
             List<int> mIDList = new List<int>();
             foreach (Player p in p_list)
             {
-                List<CombatItem> down = combat_data.getStates(p.getInstid(), "CHANGE_DOWN", boss_data.getFirstAware(), boss_data.getLastAware());
+                List<CombatItem> down = combat_data.getStates(p.getInstid(), ParseEnum.StateChange.ChangeDown, boss_data.getFirstAware(), boss_data.getLastAware());
                 foreach (CombatItem pnt in down)
                 {
                     mech_data.AddItem(new MechanicLog((long)((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
                 }
-                List<CombatItem> dead = combat_data.getStates(p.getInstid(), "CHANGE_DEAD", boss_data.getFirstAware(), boss_data.getLastAware());
+                List<CombatItem> dead = combat_data.getStates(p.getInstid(), ParseEnum.StateChange.ChangeDead, boss_data.getFirstAware(), boss_data.getLastAware());
                 foreach (CombatItem pnt in dead)
                 {
                     mech_data.AddItem(new MechanicLog((long)((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
@@ -153,7 +153,7 @@ namespace LuckParser.Models.DataModels
                     }
                 }
                 //Player gain buff 0,7
-                foreach (CombatItem c in combat_data.getCombatList().Where(x => x.isBuffremove() == ParseEnum.BuffRemove.None && x.isStateChange().getID() == 0))
+                foreach (CombatItem c in combat_data.getCombatList().Where(x => x.isBuffremove() == ParseEnum.BuffRemove.None && x.isStateChange() == ParseEnum.StateChange.Normal))
                 {
                     if (p.getInstid() == c.getDstInstid())
                     {
