@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,8 +42,8 @@ namespace LuckParser.Models.ParseModels
             {
                 if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
                 {
-                    if(c.isActivation().getID() == 1 || c.isActivation().getID() == 2)
-                    count++;
+                    if (DataModels.ParseEnum.casting(c.isActivation()))
+                        count++;
                 }
             }
             return count;
@@ -54,7 +55,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
                 {
-                    if (c.isBuff() == 1 && c.isBuffremove().getID() == 0 )
+                    if (c.isBuff() == 1 && c.isBuffremove() == ParseEnum.BuffRemove.None)
                         count++;
                 }
             }

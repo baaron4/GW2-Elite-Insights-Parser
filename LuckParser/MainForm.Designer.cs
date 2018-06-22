@@ -189,7 +189,6 @@
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.DataGridView dgvFiles;
         private System.Windows.Forms.BindingSource gridRowBindingSource;
-        private System.Windows.Forms.DataGridViewButtonColumn buttonDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn locationDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn ButtonState;

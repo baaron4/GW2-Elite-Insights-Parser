@@ -9,7 +9,8 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractMasterPlayer : AbstractPlayer
     {
-
+        // Rotation
+        private List<RotationItem> rotation = new List<RotationItem>();
         // Minions
         private Dictionary<string, Minions> minions = new Dictionary<string, Minions>();
 
@@ -26,6 +27,28 @@ namespace LuckParser.Models.ParseModels
                 setMinions(log);
             }
             return minions;
+        }
+
+        public List<RotationItem> getRotation(ParsedLog log, bool icons)
+        {
+            if (rotation.Count == 0)
+            {
+                setRotation(log, icons);
+            }
+            return rotation;
+        }
+
+        private void setRotation(ParsedLog log, bool icons)
+        {
+            List<CastLog> cls = getCastLogs(log, 0, log.getBossData().getAwareDuration());
+            foreach (CastLog cl in cls)
+            {
+                RotationItem rot = new RotationItem();
+                rot.findName(log.getSkillData(), cl.getID());
+                rot.setDuration(cl.getActDur());
+                rot.setEndStatus(cl.endActivation());
+                rot.setStartStatus(cl.startActivation());
+            }
         }
 
         private void setMinions(ParsedLog log)
@@ -77,9 +100,9 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {
-                        if (c.isActivation().getID() > 0)
+                        if (c.isActivation() != ParseEnum.Activation.None)
                         {
-                            if (c.isActivation().getID() < 3)
+                            if (DataModels.ParseEnum.casting(c.isActivation()))
                             {
                                 long time = c.getTime() - time_start;
                                 curCastLog = new CastLog(time, c.getSkillID(), c.getValue(), c.isActivation());

@@ -1,5 +1,6 @@
 ﻿using System;
 using LuckParser.Models.ParseEnums;
+using LuckParser.Models.DataModels;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -20,8 +21,8 @@ namespace LuckParser.Models.ParseModels
         private IFF iff;
         private ushort is_buff;
         private Result result;
-        private Activation is_activation;
-        private BuffRemove is_buffremove;
+        private ParseEnum.Activation is_activation;
+        private ParseEnum.BuffRemove is_buffremove;
         private ushort is_ninety;
         private ushort is_fifty;
         private ushort is_moving;
@@ -31,7 +32,7 @@ namespace LuckParser.Models.ParseModels
         // Constructor
         public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, ushort overstack_value,
                 int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, IFF iff, ushort buff, Result result,
-                Activation is_activation,BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
+                ParseEnum.Activation is_activation, ParseEnum.BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
                 StateChange is_statechange, ushort is_flanking)
         {
             this.time = time;
@@ -57,7 +58,7 @@ namespace LuckParser.Models.ParseModels
         }
         public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, ushort overstack_value,
                int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, IFF iff, ushort buff, Result result,
-               Activation is_activation, BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
+               ParseEnum.Activation is_activation, ParseEnum.BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
                StateChange is_statechange, ushort is_flanking, ushort is_shields)
         {
             this.time = time;
@@ -81,33 +82,6 @@ namespace LuckParser.Models.ParseModels
             this.is_statechange = is_statechange;
             this.is_flanking = is_flanking;
             this.is_shields = is_shields;
-        }
-        // Public Methods
-        public String[] toStringArray()
-        {
-            String[] array = new String[20];
-            array[0] = time.ToString();
-            array[1] = string.Format("{0:X}", src_agent);//Long.toHexString(src_agent);
-            array[2] = string.Format("{0:X}", dst_agent);//Long.toHexString(dst_agent);
-            array[3] = value.ToString();
-            array[4] = buff_dmg.ToString();
-            array[5] = overstack_value.ToString();
-            array[6] = skill_id.ToString();
-            array[7] = src_instid.ToString();
-            array[8] = dst_instid.ToString();
-            array[9] = src_master_instid.ToString();
-            array[10] = iff.getEnum();
-            array[11] = is_buff.ToString();
-            array[12] = result.getEnum(); ;
-           array[13] = is_activation.getEnum();
-           array[14] = is_buffremove.getEnum();
-            array[15] = is_ninety.ToString();
-            array[16] = is_fifty.ToString();
-            array[17] = is_moving.ToString();
-           array[18] = is_statechange.getEnum();
-            array[19] = is_flanking.ToString();
-            array[20] = is_shields.ToString();
-            return array;
         }
 
         // Getters
@@ -176,12 +150,12 @@ namespace LuckParser.Models.ParseModels
             return result;
         }
 
-        public Activation isActivation()
+        public ParseEnum.Activation isActivation()
         {
             return is_activation;
         }
 
-        public BuffRemove isBuffremove()
+        public ParseEnum.BuffRemove isBuffremove()
         {
             return is_buffremove;
         }

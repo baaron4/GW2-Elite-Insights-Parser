@@ -56,9 +56,9 @@ namespace LuckParser.Models.ParseModels
             int[] cleanse = { 0, 0 };
             foreach (CombatItem c in log.getCombatList().Where(x=>x.isStateChange().getID() == 0 && x.isBuff() == 1 && x.getTime() >= (start + time_start) && x.getTime() <= (end + time_start)))
             {
-                if (c.isActivation().getID() == 0)
+                if (c.isActivation() == ParseEnum.Activation.None)
                 {
-                    if (agent.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FRIEND" && (c.isBuffremove().getID() == 1)/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
+                    if (agent.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FRIEND" && (c.isBuffremove() != ParseEnum.BuffRemove.None))
                     {
                         long time = c.getTime() - time_start;
                         if (time > 0)

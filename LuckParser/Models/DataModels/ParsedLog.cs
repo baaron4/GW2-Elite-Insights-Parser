@@ -89,7 +89,7 @@ namespace LuckParser.Models.DataModels
 
         private void doReduction()
         {
-            boon_data = combat_data.getCombatList().Where(x => x.isBuff() == 1 && (x.getBuffDmg() == 0 || x.isBuffremove().getID() > 0)).ToList();
+            boon_data = combat_data.getCombatList().Where(x => x.isBuff() == 1 && (x.getBuffDmg() == 0 || x.isBuffremove() != ParseEnum.BuffRemove.None)).ToList();
             damage_data = combat_data.getCombatList().Where(x => x.isStateChange().getID() == 0 &&
                                         ((x.isBuff() == 1 && x.getBuffDmg() != 0) ||
                                         (x.isBuff() == 0 && x.getValue() != 0) ||
@@ -153,11 +153,11 @@ namespace LuckParser.Models.DataModels
                     }
                 }
                 //Player gain buff 0,7
-                foreach (CombatItem c in combat_data.getCombatList().Where(x => x.isBuffremove().getID() == 0 && x.isStateChange().getID() == 0))
+                foreach (CombatItem c in combat_data.getCombatList().Where(x => x.isBuffremove() == ParseEnum.BuffRemove.None && x.isStateChange().getID() == 0))
                 {
                     if (p.getInstid() == c.getDstInstid())
                     {
-                        if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove().getID() == 0 && c.getResult().getID() < 3)
+                        if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove() == ParseEnum.BuffRemove.None && c.getResult().getID() < 3)
                         {
                             String name = skill_data.getName(c.getSkillID());
                             //buff on player 0

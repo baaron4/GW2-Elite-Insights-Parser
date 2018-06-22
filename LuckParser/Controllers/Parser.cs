@@ -287,11 +287,11 @@ namespace LuckParser.Controllers
 
                 // 1 byte: is_activation
                 //Activation is_activation = Activation.getEnum(f.read());
-                Activation is_activation = new Activation(Convert.ToByte(stream.ReadByte()));
+                ParseEnum.Activation is_activation = ParseEnum.getActivation(Convert.ToByte(stream.ReadByte()));
 
                 // 1 byte: is_buffremove
                 //BuffRemove is_buffremove = BuffRemove.getEnum(f.read());
-                BuffRemove is_buffremoved = new BuffRemove(Convert.ToByte(stream.ReadByte()));
+                ParseEnum.BuffRemove is_buffremoved = ParseEnum.getBuffRemove(Convert.ToByte(stream.ReadByte()));
 
                 // 1 byte: is_ninety
                 ushort is_ninety = (ushort)stream.ReadByte();

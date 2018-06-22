@@ -92,17 +92,15 @@ namespace LuckParser.Controllers
                         "hoverlabel:{namelength:'-1'},");
                 sw.Write("marker: {");
                 {
-                    if (cl.endActivation() != null)
-                    {
-                        if (cl.endActivation().getID() == 3)
+                        if (cl.endActivation() == ParseEnum.Activation.CancelFire)
                         {
                             sw.Write("color: 'rgb(40,40,220)',");
                         }
-                        else if (cl.endActivation().getID() == 4)
+                        else if (cl.endActivation() == ParseEnum.Activation.CancelCancel)
                         {
                             sw.Write("color: 'rgb(220,40,40)',");
                         }
-                        else if (cl.endActivation().getID() == 5)
+                        else if (cl.endActivation() == ParseEnum.Activation.Reset)
                         {
                             sw.Write("color: 'rgb(40,220,40)',");
                         }
@@ -110,25 +108,17 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("color: 'rgb(220,220,0)',");
                         }
-                    }
-                    else
-                    {
-                        sw.Write("color: 'rgb(220,220,0)',");
-                    }
                     sw.Write("width: '5',");
                     sw.Write("line:{");
                     {
-                        if (cl.startActivation() != null)
-                        {
-                            if (cl.startActivation().getID() == 1)
+                            if (cl.startActivation() == ParseEnum.Activation.Normal)
                             {
                                 sw.Write("color: 'rgb(20,20,20)',");
                             }
-                            else if (cl.startActivation().getID() == 2)
+                            else if (cl.startActivation() == ParseEnum.Activation.Quickness)
                             {
                                 sw.Write("color: 'rgb(220,40,220)',");
                             }
-                        }
                         sw.Write("width: '1'");
                     }
                     sw.Write("}");

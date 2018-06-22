@@ -65,9 +65,9 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {
-                        if (c.isActivation().getID() > 0)
+                        if (c.isActivation() != ParseEnum.Activation.None)
                         {
-                            if (c.isActivation().getID() < 3)
+                            if (ParseEnum.casting(c.isActivation()))
                             {
                                 long time = c.getTime() - time_start;
                                 curCastLog = new CastLog(time, c.getSkillID(), c.getValue(), c.isActivation());

@@ -1,4 +1,5 @@
-﻿using LuckParser.Models.ParseEnums;
+﻿using LuckParser.Models.DataModels;
+using LuckParser.Models.ParseEnums;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -13,7 +14,7 @@ namespace LuckParser.Models.ParseModels
         private ushort is_ninety;
         private ushort is_moving;
         private ushort is_flanking;
-        private Activation is_activation;
+        private ParseEnum.Activation is_activation;
         private ushort is_shields;
         private ulong src_agent;
         private ushort src_instid;
@@ -74,7 +75,7 @@ namespace LuckParser.Models.ParseModels
         {
             return is_flanking;
         }
-        public Activation isActivation()
+        public ParseEnum.Activation isActivation()
         {
             return is_activation;
         }

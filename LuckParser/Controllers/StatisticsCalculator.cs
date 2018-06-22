@@ -55,9 +55,17 @@ namespace LuckParser.Controllers
             {
                 setPresentBoons();
                 calculateBoons();
-            }
-            
+            } 
+                      
             if (switches.calculateConditions) calculateConditions();
+            if (settings.PlayerRot)
+            {
+                foreach (Player p in log.getPlayerList())
+                {
+                    p.getRotation(log, settings.PlayerRotIcons);
+                }
+                log.getBoss().getRotation(log, settings.PlayerRotIcons);
+            }
 
             return statistics;
         }
@@ -242,20 +250,17 @@ namespace LuckParser.Controllers
                     }
                     foreach (CastLog cl in castLogs)
                     {
-                        if (cl.endActivation() != null)
+                        if (cl.endActivation() == ParseEnum.Activation.CancelCancel)
                         {
-                            if (cl.endActivation().getID() == 4)
+                            final.wasted++;
+                            final.timeWasted += cl.getActDur();
+                        }
+                        if (cl.endActivation() == ParseEnum.Activation.CancelFire)
+                        {
+                            final.saved++;
+                            if (cl.getActDur() < cl.getExpDur())
                             {
-                                final.wasted++;
-                                final.timeWasted += cl.getActDur();
-                            }
-                            if (cl.endActivation().getID() == 3)
-                            {
-                                final.saved++;
-                                if (cl.getActDur() < cl.getExpDur())
-                                {
-                                    final.timeSaved += cl.getExpDur() - cl.getActDur();
-                                }
+                                final.timeSaved += cl.getExpDur() - cl.getActDur();
                             }
                         }
                     }

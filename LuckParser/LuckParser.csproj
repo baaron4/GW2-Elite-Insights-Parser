@@ -94,6 +94,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\DataModels\ParseEnum.cs" />
     <Compile Include="Models\DataModels\ParsedLog.cs" />
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
     <Compile Include="Models\DataModels\Statistics.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Models\ParseModels\Players\Minion.cs" />
     <Compile Include="Models\ParseModels\Players\Minions.cs" />
     <Compile Include="Models\ParseModels\PhaseData.cs" />
+    <Compile Include="Models\ParseModels\RotationItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Players\Boss.cs" />
     <Compile Include="Models\ParseModels\GW2APISpec.cs" />
@@ -113,8 +115,6 @@
     <Compile Include="Models\ParseModels\GW2APIfacts.cs" />
     <Compile Include="Models\ParseModels\GW2APIfactsDetail.cs" />
     <Compile Include="Models\ParseModels\GW2APISkill.cs" />
-    <Compile Include="Models\ParseEnums\Activation.cs" />
-    <Compile Include="Models\ParseEnums\BuffRemove.cs" />
     <Compile Include="Models\ParseEnums\IFF.cs" />
     <Compile Include="Models\ParseEnums\Result.cs" />
     <Compile Include="Models\ParseEnums\StateChange.cs" />
@@ -128,7 +128,7 @@
     <Compile Include="Models\ParseModels\Logs\BoonLog.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonMap.cs" />
     <Compile Include="Models\ParseModels\BossData.cs" />
-    <Compile Include="Models\ParseModels\CastLog.cs" />
+    <Compile Include="Models\ParseModels\Logs\CastLog.cs" />
     <Compile Include="Models\ParseModels\CombatData.cs" />
     <Compile Include="Models\ParseModels\CombatItem.cs" />
     <Compile Include="Models\ParseModels\Logs\DamageLog.cs" />
