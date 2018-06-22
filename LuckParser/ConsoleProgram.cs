@@ -95,24 +95,32 @@ namespace LuckParser
                     statistics = statisticsCalculator.calculateStatistics(log, CSVBuilder.GetStatisticSwitches());
                 }
                 Console.Write("Statistics Computed");
-
-                string outputType = Properties.Settings.Default.SaveOutHTML ? "html" : "csv";
+                
                 string fName = fInfo.Name.Split('.')[0];
-                string outputFile = Path.Combine(
-                    saveDirectory.FullName,
-                    $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.{outputType}"
-                );
-
-                using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                if (Properties.Settings.Default.SaveOutHTML)
                 {
-                    using (StreamWriter sw = new StreamWriter(fs))
+                    string outputFile = Path.Combine(
+                    saveDirectory.FullName,
+                    $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.html"
+                    );
+                    using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                     {
-                        if (Properties.Settings.Default.SaveOutHTML)
+                        using (StreamWriter sw = new StreamWriter(fs))
                         {
                             HTMLBuilder builder = new HTMLBuilder(log, settings, statistics);
                             builder.CreateHTML(sw);
                         }
-                        if (Properties.Settings.Default.SaveOutCSV)
+                    }
+                }
+                if (Properties.Settings.Default.SaveOutCSV)
+                {
+                    string outputFile = Path.Combine(
+                    saveDirectory.FullName,
+                    $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.csv"
+                    );
+                    using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                    {
+                        using (StreamWriter sw = new StreamWriter(fs))
                         {
                             CSVBuilder builder = new CSVBuilder(log, settings, statistics);
                             builder.CreateCSV(sw, ",");
