@@ -146,7 +146,7 @@ namespace LuckParser.Models.ParseModels
         // privates
         protected void addDamageLog(long time, ushort instid, CombatItem c, List<DamageLog> toFill)
         {
-            if (instid == c.getDstInstid() && c.getIFF().getEnum() == "FOE")
+            if (instid == c.getDstInstid() && c.getIFF() == ParseEnum.IFF.Foe)
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
@@ -324,7 +324,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         boon_map[c.getSkillID()].Add(new BoonLog(time, src, c.getValue(), 0));
                     }
-                    else if (Boon.removePermission(c.getSkillID(), c.isBuffremove(), c.getIFF().getID()))
+                    else if (Boon.removePermission(c.getSkillID(), c.isBuffremove(), c.getIFF()))
                     {
                         if (c.isBuffremove() == ParseEnum.BuffRemove.All)//All
                         {

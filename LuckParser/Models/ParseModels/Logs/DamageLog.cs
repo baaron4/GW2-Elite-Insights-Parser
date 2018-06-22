@@ -1,5 +1,4 @@
 ﻿using LuckParser.Models.DataModels;
-using LuckParser.Models.ParseEnums;
 
 namespace LuckParser.Models.ParseModels
 {

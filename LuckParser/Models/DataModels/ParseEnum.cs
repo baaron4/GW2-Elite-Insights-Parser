@@ -143,5 +143,22 @@ namespace LuckParser.Models.DataModels
             }
         }
 
+        // Friend of for
+
+        public enum IFF { Friend, Foe, Unknown};
+
+        public static IFF getIFF(byte bt)
+        {
+            switch (bt)
+            {
+                case 0:
+                    return IFF.Friend;
+                case 1:
+                    return IFF.Foe;
+                default:
+                    return IFF.Unknown;
+            }
+        }
+
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using LuckParser.Models.ParseEnums;
 using LuckParser.Models.DataModels;
 
 namespace LuckParser.Models.ParseModels
@@ -18,7 +17,7 @@ namespace LuckParser.Models.ParseModels
         private ushort src_instid;
         private ushort dst_instid;
         private ushort src_master_instid;
-        private IFF iff;
+        private ParseEnum.IFF iff;
         private ushort is_buff;
         private ParseEnum.Result result;
         private ParseEnum.Activation is_activation;
@@ -31,7 +30,7 @@ namespace LuckParser.Models.ParseModels
         private ushort is_shields;
         // Constructor
         public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, ushort overstack_value,
-                int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, IFF iff, ushort buff, ParseEnum.Result result,
+                int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, ParseEnum.IFF iff, ushort buff, ParseEnum.Result result,
                 ParseEnum.Activation is_activation, ParseEnum.BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
                 ParseEnum.StateChange is_statechange, ushort is_flanking)
         {
@@ -57,7 +56,7 @@ namespace LuckParser.Models.ParseModels
             this.is_flanking = is_flanking;
         }
         public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, ushort overstack_value,
-               int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, IFF iff, ushort buff, ParseEnum.Result result,
+               int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, ParseEnum.IFF iff, ushort buff, ParseEnum.Result result,
                ParseEnum.Activation is_activation, ParseEnum.BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
                ParseEnum.StateChange is_statechange, ushort is_flanking, ushort is_shields)
         {
@@ -135,7 +134,7 @@ namespace LuckParser.Models.ParseModels
             return src_master_instid;
         }
 
-        public IFF getIFF()
+        public ParseEnum.IFF getIFF()
         {
             return iff;
         }

@@ -491,7 +491,7 @@ namespace LuckParser.Models.ParseModels
         };
 
 
-        public static bool removePermission(int boonid, ParseEnum.BuffRemove buffremove, int iff)
+        public static bool removePermission(int boonid, ParseEnum.BuffRemove buffremove, ParseEnum.IFF iff)
         {
             if (buffremove == 0)
             {
@@ -503,9 +503,9 @@ namespace LuckParser.Models.ParseModels
                 switch (toCheck.remove_type)
                 {
                     case RemoveType.CleanseFriend:
-                        return iff != 1 && (buffremove == ParseEnum.BuffRemove.All || buffremove == ParseEnum.BuffRemove.Single);
+                        return iff != ParseEnum.IFF.Foe && (buffremove == ParseEnum.BuffRemove.All || buffremove == ParseEnum.BuffRemove.Single);
                     case RemoveType.CleanseFoe:
-                        return iff != 0 && (buffremove == ParseEnum.BuffRemove.All || buffremove == ParseEnum.BuffRemove.Single);
+                        return iff != ParseEnum.IFF.Friend && (buffremove == ParseEnum.BuffRemove.All || buffremove == ParseEnum.BuffRemove.Single);
                     case RemoveType.Manual:
                         return buffremove == ParseEnum.BuffRemove.Manual || buffremove == ParseEnum.BuffRemove.All;
                     case RemoveType.All:

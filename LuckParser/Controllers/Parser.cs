@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using LuckParser.Models.ParseModels;
-using LuckParser.Models.ParseEnums;
 using System.Drawing;
 using System.Net;
 using System.IO.Compression;
@@ -276,7 +275,7 @@ namespace LuckParser.Controllers
 
                 // 1 byte: iff
                 //IFF iff = IFF.getEnum(f.read());
-                IFF iff = new IFF(Convert.ToByte(stream.ReadByte())); //Convert.ToByte(stream.ReadByte());
+                ParseEnum.IFF iff = ParseEnum.getIFF(Convert.ToByte(stream.ReadByte())); //Convert.ToByte(stream.ReadByte());
 
                 // 1 byte: buff
                 ushort buff = (ushort)stream.ReadByte();

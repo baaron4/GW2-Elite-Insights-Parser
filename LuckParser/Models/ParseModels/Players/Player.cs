@@ -58,7 +58,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (c.isActivation() == ParseEnum.Activation.None)
                 {
-                    if (agent.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FRIEND" && (c.isBuffremove() != ParseEnum.BuffRemove.None))
+                    if (agent.getInstid() == c.getDstInstid() && c.getIFF() == ParseEnum.IFF.Friend && (c.isBuffremove() != ParseEnum.BuffRemove.None))
                     {
                         long time = c.getTime() - time_start;
                         if (time > 0)
