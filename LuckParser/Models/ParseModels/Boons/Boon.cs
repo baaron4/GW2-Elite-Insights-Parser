@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -490,7 +491,7 @@ namespace LuckParser.Models.ParseModels
         };
 
 
-        public static bool removePermission(int boonid, int buffremove, int iff)
+        public static bool removePermission(int boonid, ParseEnum.BuffRemove buffremove, ParseEnum.IFF iff)
         {
             if (buffremove == 0)
             {
@@ -502,13 +503,13 @@ namespace LuckParser.Models.ParseModels
                 switch (toCheck.remove_type)
                 {
                     case RemoveType.CleanseFriend:
-                        return iff != 1 && (buffremove == 1 || buffremove == 2);
+                        return iff != ParseEnum.IFF.Foe && (buffremove == ParseEnum.BuffRemove.All || buffremove == ParseEnum.BuffRemove.Single);
                     case RemoveType.CleanseFoe:
-                        return iff != 0 && (buffremove == 1 || buffremove == 2);
+                        return iff != ParseEnum.IFF.Friend && (buffremove == ParseEnum.BuffRemove.All || buffremove == ParseEnum.BuffRemove.Single);
                     case RemoveType.Manual:
-                        return buffremove == 3 || buffremove == 1;
+                        return buffremove == ParseEnum.BuffRemove.Manual || buffremove == ParseEnum.BuffRemove.All;
                     case RemoveType.All:
-                        return buffremove == 1 || buffremove == 2 || buffremove == 3;
+                        return buffremove == ParseEnum.BuffRemove.All || buffremove == ParseEnum.BuffRemove.Single || buffremove == ParseEnum.BuffRemove.Manual;
                     default:
                         return false;
                 }

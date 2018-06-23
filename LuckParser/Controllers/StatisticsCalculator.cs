@@ -55,9 +55,18 @@ namespace LuckParser.Controllers
             {
                 setPresentBoons();
                 calculateBoons();
-            }
-            
+            } 
+                      
             if (switches.calculateConditions) calculateConditions();
+            // WIP
+            /*if (settings.PlayerRot)
+            {
+                foreach (Player p in log.getPlayerList())
+                {
+                    p.getRotation(log, settings.PlayerRotIcons);
+                }
+                log.getBoss().getRotation(log, settings.PlayerRotIcons);
+            }*/
 
             return statistics;
         }
@@ -203,7 +212,7 @@ namespace LuckParser.Controllers
                     {
                         if (log.isCondi() == 0)
                         {
-                            if (log.getResult().getEnum() == "CRIT")
+                            if (log.getResult() == ParseEnum.Result.Crit)
                             {
                                 final.criticalRate++;
                                 final.criticalDmg += log.getDamage();
@@ -218,22 +227,22 @@ namespace LuckParser.Controllers
                             final.movingRate += log.isMoving();
                             final.flankingRate += log.isFlanking();
 
-                            if (log.getResult().getEnum() == "GLANCE")
+                            if (log.getResult() == ParseEnum.Result.Glance)
                             {
                                 final.glanceRate++;
                             }
 
-                            if (log.getResult().getEnum() == "BLIND")
+                            if (log.getResult() == ParseEnum.Result.Blind)
                             {
                                 final.missed++;
                             }
 
-                            if (log.getResult().getEnum() == "INTERRUPT")
+                            if (log.getResult() == ParseEnum.Result.Interrupt)
                             {
                                 final.interupts++;
                             }
 
-                            if (log.getResult().getEnum() == "ABSORB")
+                            if (log.getResult() == ParseEnum.Result.Absorb)
                             {
                                 final.invulned++;
                             }
@@ -242,20 +251,17 @@ namespace LuckParser.Controllers
                     }
                     foreach (CastLog cl in castLogs)
                     {
-                        if (cl.endActivation() != null)
+                        if (cl.endActivation() == ParseEnum.Activation.CancelCancel)
                         {
-                            if (cl.endActivation().getID() == 4)
+                            final.wasted++;
+                            final.timeWasted += cl.getActDur();
+                        }
+                        if (cl.endActivation() == ParseEnum.Activation.CancelFire)
+                        {
+                            final.saved++;
+                            if (cl.getActDur() < cl.getExpDur())
                             {
-                                final.wasted++;
-                                final.timeWasted += cl.getActDur();
-                            }
-                            if (cl.endActivation().getID() == 3)
-                            {
-                                final.saved++;
-                                if (cl.getActDur() < cl.getExpDur())
-                                {
-                                    final.timeSaved += cl.getExpDur() - cl.getActDur();
-                                }
+                                final.timeSaved += cl.getExpDur() - cl.getActDur();
                             }
                         }
                     }
@@ -268,20 +274,20 @@ namespace LuckParser.Controllers
 
                     // Counts
                     CombatData combatData = log.getCombatData();
-                    final.swapCount = combatData.getStates(instid, "WEAPON_SWAP", start, end).Count();
-                    final.downCount = combatData.getStates(instid, "CHANGE_DOWN", start, end).Count();
+                    final.swapCount = combatData.getStates(instid, ParseEnum.StateChange.WeaponSwap, start, end).Count();
+                    final.downCount = combatData.getStates(instid, ParseEnum.StateChange.ChangeDown, start, end).Count();
                     final.dodgeCount = combatData.getSkillCount(instid, 65001, start, end) + combatData.getBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
                     final.ressCount = combatData.getSkillCount(instid, 1066, start, end); //Res = 1066
 
                     // R.I.P
-                    List<CombatItem> dead = combatData.getStates(instid, "CHANGE_DEAD", start, end);
+                    List<CombatItem> dead = combatData.getStates(instid, ParseEnum.StateChange.ChangeDead, start, end);
                     final.died = 0.0;
                     if (dead.Count() > 0)
                     {
                         final.died = dead[0].getTime() - start;
                     }
 
-                    List<CombatItem> disconect = combatData.getStates(instid, "DESPAWN", start, end);
+                    List<CombatItem> disconect = combatData.getStates(instid, ParseEnum.StateChange.Despawn, start, end);
                     final.dcd = 0.0;
                     if (disconect.Count() > 0)
                     {
@@ -319,16 +325,16 @@ namespace LuckParser.Controllers
                     final.damageInvulned = 0;
                     final.evadedCount = 0;
                     final.damageBarrier = 0;
-                    foreach (DamageLog log in damageLogs.Where(x => x.getResult().getEnum() == "BLOCK"))
+                    foreach (DamageLog log in damageLogs.Where(x => x.getResult() == ParseEnum.Result.Block))
                     {
                         final.blockedCount++;
                     }
-                    foreach (DamageLog log in damageLogs.Where(x => x.getResult().getEnum() == "ABSORB"))
+                    foreach (DamageLog log in damageLogs.Where(x => x.getResult() == ParseEnum.Result.Absorb))
                     {
                         final.invulnedCount++;
                         final.damageInvulned += log.getDamage();
                     }
-                    foreach (DamageLog log in damageLogs.Where(x => x.getResult().getEnum() == "EVADE"))
+                    foreach (DamageLog log in damageLogs.Where(x => x.getResult() == ParseEnum.Result.Evade))
                     {
                         final.evadedCount++;
                     }

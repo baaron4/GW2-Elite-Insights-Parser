@@ -256,7 +256,7 @@ namespace LuckParser.Controllers
                 int mechcount = 0;
                 foreach (MechanicLog ml in filterdList)
                 {
-                    Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, GraphHelper.GraphMode.Full).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
+                    Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
                     if (mechcount == filterdList.Count - 1)
                     {
                         if (check != null)
@@ -344,7 +344,7 @@ namespace LuckParser.Controllers
                     {
                         foreach (MechanicLog ml in DnDList)
                         {
-                            Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, GraphHelper.GraphMode.Full).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
+                            Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
                             if (mcount == DnDList.Count - 1)
                             {
                                 if (check != null)
@@ -1617,7 +1617,7 @@ namespace LuckParser.Controllers
                                      );
                                     sw.Write("images: [");
                                     {
-                                        if (settings.PlayerRotIcons)//Display rotation
+                                        if (settings.PlayerRot && settings.PlayerRotIcons)//Display rotation
                                         {
                                             int castCount = 0;
                                             foreach (CastLog cl in casting)
@@ -1823,13 +1823,13 @@ namespace LuckParser.Controllers
             List<SkillItem> s_list = log.getSkillData().getSkillList();
             long start = log.getBossData().getFirstAware();
             long end = log.getBossData().getLastAware();
-            List<CombatItem> down = log.getCombatData().getStates(p.getInstid(), "CHANGE_DOWN", start, end);
+            List<CombatItem> down = log.getCombatData().getStates(p.getInstid(), ParseEnum.StateChange.ChangeDown, start, end);
             if (down.Count > 0)
             {
-                List<CombatItem> ups = log.getCombatData().getStates(p.getInstid(), "CHANGE_UP", start, end);
+                List<CombatItem> ups = log.getCombatData().getStates(p.getInstid(), ParseEnum.StateChange.ChangeUp, start, end);
                 down = down.GetRange(ups.Count(), down.Count() - ups.Count());
             }
-            List<CombatItem> dead = log.getCombatData().getStates(p.getInstid(), "CHANGE_DEAD", start, end);
+            List<CombatItem> dead = log.getCombatData().getStates(p.getInstid(), ParseEnum.StateChange.ChangeDead, start, end);
             List<DamageLog> damageToDown = new List<DamageLog>();
             List<DamageLog> damageToKill = new List<DamageLog>();
             if (down.Count > 0)
@@ -2243,7 +2243,6 @@ namespace LuckParser.Controllers
                             if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                             if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
                             hits++;
-                            int result = dl.getResult().getID();
 
                         }
                         avgdamage = (int)(totaldamage / (double)hits);
@@ -2285,8 +2284,8 @@ namespace LuckParser.Controllers
                             if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                             if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
                             if (curdmg != 0) { hits++; };
-                            int result = dl.getResult().getID();
-                            if (result == 1) { crit++; } else if (result == 2) { glance++; }
+                            ParseEnum.Result result = dl.getResult();
+                            if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
                             if (dl.isFlanking() == 1) { flank++; }
                         }
                         avgdamage = (int)(totaldamage / (double)hits);
@@ -2408,86 +2407,86 @@ namespace LuckParser.Controllers
             {
                 foreach (CombatItem c in log.getCombatData().getCombatList())
                 {
-                    if (c.isStateChange().getID() > 0)
+                    if (c.isStateChange() != ParseEnum.StateChange.Normal)
                     {
                         AgentItem agent = log.getAgentData().GetAgent(c.getSrcAgent());
                         if (agent != null)
                         {
-                            switch (c.isStateChange().getID())
+                            switch (c.isStateChange())
                             {
-                                case 1:
+                                case ParseEnum.StateChange.EnterCombat:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                    agent.getName() + " entered combat in" + c.getDstAgent() + "subgroup" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
-                                case 2:
+                                case ParseEnum.StateChange.ExitCombat:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                    agent.getName() + " exited combat" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
-                                case 3:
+                                case ParseEnum.StateChange.ChangeUp:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                    agent.getName() + " is now alive" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
-                                case 4:
+                                case ParseEnum.StateChange.ChangeDead:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                    agent.getName() + " is now dead" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
-                                case 5:
+                                case ParseEnum.StateChange.ChangeDown:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                    agent.getName() + " is now downed" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
-                                case 6:
+                                case ParseEnum.StateChange.Spawn:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                    agent.getName() + " is now in logging range of POV player" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
-                                case 7:
+                                case ParseEnum.StateChange.Despawn:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                    agent.getName() + " is now out of range of logging player" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
-                                case 8:
+                                case ParseEnum.StateChange.HealthUpdate:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                    agent.getName() + " is at " + c.getDstAgent() / 100 + "% health" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
-                                case 9:
+                                case ParseEnum.StateChange.LogStart:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                    " LOG START" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
-                                case 10:
+                                case ParseEnum.StateChange.LogEnd:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                   "LOG END" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
-                                case 11:
+                                case ParseEnum.StateChange.WeaponSwap:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                    agent.getName() + " weapon swapped to " + c.getDstAgent() + "(0/1 water, 4/5 land)" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
-                                case 12:
+                                case ParseEnum.StateChange.MaxHealthUpdate:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                    agent.getName() + " max health changed to  " + c.getDstAgent() +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
-                                case 13:
+                                case ParseEnum.StateChange.PointOfView:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                    agent.getName() + " is recording log " +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
@@ -2615,7 +2614,7 @@ namespace LuckParser.Controllers
                         //Every buffs and boons
                         parseBoonsList.AddRange(Boon.getAllBuffList());
                         Dictionary<int, BoonsGraphModel> boonGraphData = log.getBoss().getBoonGraphs(log, phases, parseBoonsList);
-                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
+                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.getBoonName() != "Number of Boons"))
                         {
                             sw.Write("{");
                             {

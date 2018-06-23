@@ -54,11 +54,11 @@ namespace LuckParser.Models.ParseModels
         public int[] getCleanses(ParsedLog log, long start, long end) {
             long time_start = log.getBossData().getFirstAware();
             int[] cleanse = { 0, 0 };
-            foreach (CombatItem c in log.getCombatList().Where(x=>x.isStateChange().getID() == 0 && x.isBuff() == 1 && x.getTime() >= (start + time_start) && x.getTime() <= (end + time_start)))
+            foreach (CombatItem c in log.getCombatList().Where(x=>x.isStateChange() == ParseEnum.StateChange.Normal && x.isBuff() == 1 && x.getTime() >= (start + time_start) && x.getTime() <= (end + time_start)))
             {
-                if (c.isActivation().getID() == 0)
+                if (c.isActivation() == ParseEnum.Activation.None)
                 {
-                    if (agent.getInstid() == c.getDstInstid() && c.getIFF().getEnum() == "FRIEND" && (c.isBuffremove().getID() == 1)/*|| instid == c.getSrcMasterInstid()*/)//selecting player as remover could be wrong
+                    if (agent.getInstid() == c.getDstInstid() && c.getIFF() == ParseEnum.IFF.Friend && (c.isBuffremove() != ParseEnum.BuffRemove.None))
                     {
                         long time = c.getTime() - time_start;
                         if (time > 0)
@@ -117,8 +117,19 @@ namespace LuckParser.Models.ParseModels
         {
             string[] weapons = new string[4];//first 2 for first set next 2 for second set
             List<SkillItem> s_list = log.getSkillData().getSkillList();
-            List<CastLog> casting = getCastLogs(log, 0, log.getBossData().getAwareDuration());
+            List<CastLog> casting = getCastLogs(log, 0, log.getBossData().getAwareDuration());      
             int swapped = 0;//4 for first set and 5 for next
+            List<CastLog> swaps = casting.Where(x => x.getID() == -2).Take(2).ToList();
+            // If the player never swapped, assume they are on their first set
+            if (swaps.Count == 0)
+            {
+                swapped = 4;
+            }
+            // if the player swapped once, check on which set they started
+            else if (swaps.Count == 1)
+            {
+                swapped = swaps.First().getExpDur() == 4 ? 5 : 4;
+            }
             foreach (CastLog cl in casting)
             {
                 GW2APISkill apiskill = null;
@@ -237,10 +248,10 @@ namespace LuckParser.Models.ParseModels
         }     
         protected override void setDamagetakenLogs(ParsedLog log) {
             long time_start = log.getBossData().getFirstAware();               
-            foreach (CombatItem c in log.getDamageData()) {
+            foreach (CombatItem c in log.getDamageTakenData()) {
                 if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware()) {//selecting player as target
                     long time = c.getTime() - time_start;
-                    foreach (AgentItem item in log.getAgentData().getNPCAgentList())
+                    foreach (AgentItem item in log.getAgentData().getAllAgentsList())
                     {//selecting all
                         addDamageTakenLog(time, item.getInstid(), c);
                     }

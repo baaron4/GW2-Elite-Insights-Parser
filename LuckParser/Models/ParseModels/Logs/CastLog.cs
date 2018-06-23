@@ -1,4 +1,4 @@
-﻿using LuckParser.Models.ParseEnums;
+﻿using LuckParser.Models.DataModels;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -9,12 +9,12 @@ namespace LuckParser.Models.ParseModels
         private int skill_id;
         private int exp_dur;
         private int act_dur;
-        private Activation start_activation;
-        private Activation end_activation;
+        private ParseEnum.Activation start_activation;
+        private ParseEnum.Activation end_activation;
 
 
         // Constructor
-        public CastLog(long time, int skill_id, int exp_dur, Activation start_activation,int act_dur,Activation end_activation)
+        public CastLog(long time, int skill_id, int exp_dur, ParseEnum.Activation start_activation,int act_dur, ParseEnum.Activation end_activation)
         {
             this.time = time;
             this.skill_id = skill_id;
@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
             this.end_activation = end_activation;
         }
         //start cast log
-        public CastLog(long time, int skill_id, int exp_dur, Activation start_activation)
+        public CastLog(long time, int skill_id, int exp_dur, ParseEnum.Activation start_activation)
         {
             this.time = time;
             this.skill_id = skill_id;
@@ -46,7 +46,7 @@ namespace LuckParser.Models.ParseModels
         {
             return exp_dur;
         }
-        public Activation startActivation()
+        public ParseEnum.Activation startActivation()
         {
             return start_activation;
         }
@@ -54,7 +54,7 @@ namespace LuckParser.Models.ParseModels
         {
             return act_dur;
         }
-        public Activation endActivation()
+        public ParseEnum.Activation endActivation()
         {
             return end_activation;
         }

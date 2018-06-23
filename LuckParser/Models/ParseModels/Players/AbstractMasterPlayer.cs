@@ -9,7 +9,8 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractMasterPlayer : AbstractPlayer
     {
-
+        // Rotation
+        private List<RotationItem> rotation = new List<RotationItem>();
         // Minions
         private Dictionary<string, Minions> minions = new Dictionary<string, Minions>();
 
@@ -26,6 +27,28 @@ namespace LuckParser.Models.ParseModels
                 setMinions(log);
             }
             return minions;
+        }
+
+        public List<RotationItem> getRotation(ParsedLog log, bool icons)
+        {
+            if (rotation.Count == 0)
+            {
+                setRotation(log, icons);
+            }
+            return rotation;
+        }
+
+        private void setRotation(ParsedLog log, bool icons)
+        {
+            List<CastLog> cls = getCastLogs(log, 0, log.getBossData().getAwareDuration());
+            foreach (CastLog cl in cls)
+            {
+                RotationItem rot = new RotationItem();
+                rot.findName(log.getSkillData(), cl.getID());
+                rot.setDuration(cl.getActDur());
+                rot.setEndStatus(cl.endActivation());
+                rot.setStartStatus(cl.startActivation());
+            }
         }
 
         private void setMinions(ParsedLog log)
@@ -65,50 +88,46 @@ namespace LuckParser.Models.ParseModels
         {
             long time_start = log.getBossData().getFirstAware();
             CastLog curCastLog = null;
-
-            foreach (CombatItem c in log.getCombatList())
+            foreach (CombatItem c in log.getCastData())
             {
                 if (! (c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware()))
                 {
                     continue;
                 }
-                LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
-                if (state.getID() == 0)
+                ParseEnum.StateChange state = c.isStateChange();
+                if (state == ParseEnum.StateChange.Normal)
                 {
                     if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {
-                        if (c.isActivation().getID() > 0)
+                        if (DataModels.ParseEnum.casting(c.isActivation()))
                         {
-                            if (c.isActivation().getID() < 3)
+                            long time = c.getTime() - time_start;
+                            curCastLog = new CastLog(time, c.getSkillID(), c.getValue(), c.isActivation());
+                        }
+                        else
+                        {
+                            if (curCastLog != null)
                             {
-                                long time = c.getTime() - time_start;
-                                curCastLog = new CastLog(time, c.getSkillID(), c.getValue(), c.isActivation());
-                            }
-                            else
-                            {
-                                if (curCastLog != null)
+                                if (curCastLog.getID() == c.getSkillID())
                                 {
-                                    if (curCastLog.getID() == c.getSkillID())
-                                    {
-                                        curCastLog = new CastLog(curCastLog.getTime(), curCastLog.getID(), curCastLog.getExpDur(), curCastLog.startActivation(), c.getValue(), c.isActivation());
-                                        cast_logs.Add(curCastLog);
-                                        curCastLog = null;
-                                    }
+                                    curCastLog = new CastLog(curCastLog.getTime(), curCastLog.getID(), curCastLog.getExpDur(), curCastLog.startActivation(), c.getValue(), c.isActivation());
+                                    cast_logs.Add(curCastLog);
+                                    curCastLog = null;
                                 }
                             }
                         }
+
                     }
                 }
-                else if (state.getID() == 11)
+                else if (state == ParseEnum.StateChange.WeaponSwap)
                 {//Weapon swap
                     if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {
                         if ((int)c.getDstAgent() == 4 || (int)c.getDstAgent() == 5)
                         {
                             long time = c.getTime() - time_start;
-                            curCastLog = new CastLog(time, -2, (int)c.getDstAgent(), c.isActivation());
-                            cast_logs.Add(curCastLog);
-                            curCastLog = null;
+                            CastLog swapLog = new CastLog(time, -2, (int)c.getDstAgent(), c.isActivation());
+                            cast_logs.Add(swapLog);
                         }
                     }
                 }

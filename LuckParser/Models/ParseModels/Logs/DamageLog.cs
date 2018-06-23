@@ -1,4 +1,4 @@
-﻿using LuckParser.Models.ParseEnums;
+﻿using LuckParser.Models.DataModels;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -9,11 +9,11 @@ namespace LuckParser.Models.ParseModels
         protected int damage;
         private int skill_id;
         private int buff;
-        private Result result;
+        private ParseEnum.Result result;
         private ushort is_ninety;
         private ushort is_moving;
         private ushort is_flanking;
-        private Activation is_activation;
+        private ParseEnum.Activation is_activation;
         private ushort is_shields;
         private ulong src_agent;
         private ushort src_instid;
@@ -55,7 +55,7 @@ namespace LuckParser.Models.ParseModels
             return buff;
         }
 
-        public Result getResult()
+        public ParseEnum.Result getResult()
         {
             return result;
         }
@@ -74,7 +74,7 @@ namespace LuckParser.Models.ParseModels
         {
             return is_flanking;
         }
-        public Activation isActivation()
+        public ParseEnum.Activation isActivation()
         {
             return is_activation;
         }

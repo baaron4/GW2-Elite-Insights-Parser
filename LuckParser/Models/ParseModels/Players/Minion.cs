@@ -54,37 +54,35 @@ namespace LuckParser.Models.ParseModels
 
             long min_time = Math.Max(time_start, agent.getFirstAware());
             long max_time = Math.Min(log.getBossData().getLastAware(), agent.getLastAware());
-            foreach (CombatItem c in log.getCombatList())
+            foreach (CombatItem c in log.getCastData())
             {
                 if (!(c.getTime() > min_time && c.getTime() < max_time))
                 {
                     continue;
                 }
-                LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
-                if (state.getID() == 0)
+                ParseEnum.StateChange state = c.isStateChange();
+                if (state == ParseEnum.StateChange.Normal)
                 {
                     if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {
-                        if (c.isActivation().getID() > 0)
+                        if (ParseEnum.casting(c.isActivation()))
                         {
-                            if (c.isActivation().getID() < 3)
+                            long time = c.getTime() - time_start;
+                            curCastLog = new CastLog(time, c.getSkillID(), c.getValue(), c.isActivation());
+                        }
+                        else
+                        {
+                            if (curCastLog != null)
                             {
-                                long time = c.getTime() - time_start;
-                                curCastLog = new CastLog(time, c.getSkillID(), c.getValue(), c.isActivation());
-                            }
-                            else
-                            {
-                                if (curCastLog != null)
+                                if (curCastLog.getID() == c.getSkillID())
                                 {
-                                    if (curCastLog.getID() == c.getSkillID())
-                                    {
-                                        curCastLog = new CastLog(curCastLog.getTime(), curCastLog.getID(), curCastLog.getExpDur(), curCastLog.startActivation(), c.getValue(), c.isActivation());
-                                        cast_logs.Add(curCastLog);
-                                        curCastLog = null;
-                                    }
+                                    curCastLog = new CastLog(curCastLog.getTime(), curCastLog.getID(), curCastLog.getExpDur(), curCastLog.startActivation(), c.getValue(), c.isActivation());
+                                    cast_logs.Add(curCastLog);
+                                    curCastLog = null;
                                 }
                             }
                         }
+
                     }
                 }
             }

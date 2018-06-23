@@ -21,6 +21,8 @@ namespace LuckParser.Models.DataModels
         // reduced data
         private List<CombatItem> boon_data;
         private List<CombatItem> damage_data;
+        private List<CombatItem> damage_taken_data;
+        private List<CombatItem> cast_data;
 
         public ParsedLog(LogData log_data, BossData boss_data, AgentData agent_data, SkillData skill_data, 
                 CombatData combat_data, MechanicData mech_data, List<Player> p_list, Boss boss)
@@ -89,11 +91,16 @@ namespace LuckParser.Models.DataModels
 
         private void doReduction()
         {
-            boon_data = combat_data.getCombatList().Where(x => x.isBuff() == 1 && (x.getBuffDmg() == 0 || x.isBuffremove().getID() > 0)).ToList();
-            damage_data = combat_data.getCombatList().Where(x => x.isStateChange().getID() == 0 &&
+            boon_data = combat_data.getCombatList().Where(x => x.isBuff() == 1 && (x.getBuffDmg() == 0 || x.isBuffremove() != ParseEnum.BuffRemove.None)).ToList();
+            damage_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Foe && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                         ((x.isBuff() == 1 && x.getBuffDmg() != 0) ||
                                         (x.isBuff() == 0 && x.getValue() != 0) ||
-                                        (x.getResult().getID() == 5 || x.getResult().getID() == 6 || x.getResult().getID() == 7))).ToList();
+                                        (x.getResult() == ParseEnum.Result.Interrupt || x.getResult() == ParseEnum.Result.Absorb || x.getResult() == ParseEnum.Result.Blind))).ToList();
+
+            damage_taken_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && 
+                                            ((x.isBuff() == 1 && x.getBuffDmg() > 0) ||
+                                                x.isBuff() == 0 && x.getValue() >= 0)).ToList();
+            cast_data = combat_data.getCombatList().Where(x => (x.isStateChange() == ParseEnum.StateChange.Normal && x.isActivation() != ParseEnum.Activation.None) || x.isStateChange() == ParseEnum.StateChange.WeaponSwap).ToList();
         }
 
         public List<CombatItem> getBoonData()
@@ -106,17 +113,27 @@ namespace LuckParser.Models.DataModels
             return damage_data;
         }
 
+        public List<CombatItem> getCastData()
+        {
+            return cast_data;
+        }
+
+        public List<CombatItem> getDamageTakenData()
+        {
+            return damage_taken_data;
+        }
+
         private void doMechData()
         {
             List<int> mIDList = new List<int>();
             foreach (Player p in p_list)
             {
-                List<CombatItem> down = combat_data.getStates(p.getInstid(), "CHANGE_DOWN", boss_data.getFirstAware(), boss_data.getLastAware());
+                List<CombatItem> down = combat_data.getStates(p.getInstid(), ParseEnum.StateChange.ChangeDown, boss_data.getFirstAware(), boss_data.getLastAware());
                 foreach (CombatItem pnt in down)
                 {
                     mech_data.AddItem(new MechanicLog((long)((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
                 }
-                List<CombatItem> dead = combat_data.getStates(p.getInstid(), "CHANGE_DEAD", boss_data.getFirstAware(), boss_data.getLastAware());
+                List<CombatItem> dead = combat_data.getStates(p.getInstid(), ParseEnum.StateChange.ChangeDead, boss_data.getFirstAware(), boss_data.getLastAware());
                 foreach (CombatItem pnt in dead)
                 {
                     mech_data.AddItem(new MechanicLog((long)((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
@@ -127,7 +144,7 @@ namespace LuckParser.Models.DataModels
                 foreach (DamageLog dLog in dls)
                 {
                     string name = skill_data.getName(dLog.getID());
-                    if (dLog.getResult().getID() < 3)
+                    if (ParseEnum.hit(dLog.getResult()))
                     {
 
                         foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.SkillOnPlayer))
@@ -153,11 +170,11 @@ namespace LuckParser.Models.DataModels
                     }
                 }
                 //Player gain buff 0,7
-                foreach (CombatItem c in combat_data.getCombatList().Where(x => x.isBuffremove().getID() == 0 && x.isStateChange().getID() == 0))
+                foreach (CombatItem c in combat_data.getCombatList().Where(x => x.isBuffremove() == ParseEnum.BuffRemove.None && x.isStateChange() == ParseEnum.StateChange.Normal))
                 {
                     if (p.getInstid() == c.getDstInstid())
                     {
-                        if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove().getID() == 0 && c.getResult().getID() < 3)
+                        if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove() == ParseEnum.BuffRemove.None && ParseEnum.hit(c.getResult()))
                         {
                             String name = skill_data.getName(c.getSkillID());
                             //buff on player 0

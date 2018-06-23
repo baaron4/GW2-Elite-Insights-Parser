@@ -45,7 +45,7 @@ namespace LuckParser.Models.ParseModels
         public long getDeath(ParsedLog log, long start, long end)
         {
             long offset = log.getBossData().getFirstAware();
-            CombatItem dead = log.getCombatList().FirstOrDefault(x => x.getSrcInstid() == agent.getInstid() && x.isStateChange().getEnum() == "CHANGE_DEAD" && x.getTime() >= start + offset && x.getTime() <= end + offset);
+            CombatItem dead = log.getCombatList().FirstOrDefault(x => x.getSrcInstid() == agent.getInstid() && x.isStateChange() == ParseEnum.StateChange.ChangeDead && x.getTime() >= start + offset && x.getTime() <= end + offset);
             if (dead != null && dead.getTime() > 0)
             {
                 return dead.getTime();
@@ -146,10 +146,9 @@ namespace LuckParser.Models.ParseModels
         // privates
         protected void addDamageLog(long time, ushort instid, CombatItem c, List<DamageLog> toFill)
         {
-            LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
-            if (instid == c.getDstInstid() && c.getIFF().getEnum() == "FOE")
+            if (instid == c.getDstInstid() && c.getIFF() == ParseEnum.IFF.Foe)
             {
-                if (c.isBuffremove().getID() == 0)
+                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
                     if (c.isBuff() == 1 && c.getBuffDmg() != 0)//condi
                     {
@@ -159,7 +158,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         toFill.Add(new DamageLogPower(time, c));
                     }
-                    else if (c.getResult().getID() == 5 || c.getResult().getID() == 6 || c.getResult().getID() == 7)
+                    else if (c.getResult() == ParseEnum.Result.Absorb || c.getResult() == ParseEnum.Result.Blind || c.getResult() == ParseEnum.Result.Interrupt)
                     {//Hits that where blinded, invulned, interupts
                         toFill.Add(new DamageLogPower(time, c));
                     }
@@ -168,7 +167,6 @@ namespace LuckParser.Models.ParseModels
         }
         protected void addDamageTakenLog(long time, ushort instid, CombatItem c)
         {
-            LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
             if (instid == c.getSrcInstid())
             {
                 if (c.isBuff() == 1 && c.getBuffDmg() != 0)
@@ -318,17 +316,17 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 long time = c.getTime() - time_start;
-                ushort dst = c.isBuffremove().getID() == 0 ? c.getDstInstid() : c.getSrcInstid();
+                ushort dst = c.isBuffremove() == ParseEnum.BuffRemove.None ? c.getDstInstid() : c.getSrcInstid();
                 if (agent.getInstid() == dst && time > 0 && time < log.getBossData().getAwareDuration())
                 {
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
-                    if (c.isBuffremove().getID() == 0)
+                    if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                     {
                         boon_map[c.getSkillID()].Add(new BoonLog(time, src, c.getValue(), 0));
                     }
-                    else if (Boon.removePermission(c.getSkillID(), c.isBuffremove().getID(), c.getIFF().getID()))
+                    else if (Boon.removePermission(c.getSkillID(), c.isBuffremove(), c.getIFF()))
                     {
-                        if (c.isBuffremove().getID() == 1)//All
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.All)//All
                         {
                             List<BoonLog> loglist = boon_map[c.getSkillID()];
                             for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)
@@ -344,7 +342,7 @@ namespace LuckParser.Models.ParseModels
                             }
 
                         }
-                        else if (c.isBuffremove().getID() == 2)//Single
+                        else if (c.isBuffremove() == ParseEnum.BuffRemove.Single)//Single
                         {
                             List<BoonLog> loglist = boon_map[c.getSkillID()];
                             int cnt = loglist.Count() - 1;
@@ -357,7 +355,7 @@ namespace LuckParser.Models.ParseModels
                                 loglist[cnt].addOverstack((ushort)subtract);
                             }
                         }
-                        else if (c.isBuffremove().getID() == 3)//Manuel
+                        else if (c.isBuffremove() == ParseEnum.BuffRemove.Manual)//Manuel
                         {
                             List<BoonLog> loglist = boon_map[c.getSkillID()];
                             for (int cnt = loglist.Count() - 1; cnt >= 0; cnt--)

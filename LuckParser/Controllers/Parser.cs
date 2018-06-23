@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using LuckParser.Models.ParseModels;
-using LuckParser.Models.ParseEnums;
 using System.Drawing;
 using System.Net;
 using System.IO.Compression;
+using System.ComponentModel;
+//recomend CTRL+M+O to collapse all
 using LuckParser.Models.DataModels;
 
 //recommend CTRL+M+O to collapse all
@@ -45,45 +46,66 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Parses the given log
         /// </summary>
+        /// <param name="bg">BackgroundWorker handling the log</param>
+        /// <param name="row">GridRow object bound to the UI</param>
         /// <param name="evtc">The path to the log to parse</param>
         /// <returns></returns>
-        public bool ParseLog(string evtc)
+        public void ParseLog(GridRow row, string evtc)
         {
-            MemoryStream stream = new MemoryStream();
-            //used to stream from a database, probably could use better stream now
-            using(var client = new WebClient())
-            using(var origstream = client.OpenRead(evtc))
+            using (MemoryStream stream = new MemoryStream())
             {
-                if(evtc.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+                using (FileStream origstream = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    using(var arch = new ZipArchive(origstream, ZipArchiveMode.Read))
+                    if (evtc.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
                     {
-                        if(arch.Entries.Count != 1)
+                        using (var arch = new ZipArchive(origstream, ZipArchiveMode.Read))
                         {
-                            return false;
-                        }
-                        using(var data = arch.Entries[0].Open())
-                        {
-                            data.CopyTo(stream);
+                            if (arch.Entries.Count != 1)
+                            {
+                                throw new CancellationException(row, new InvalidDataException("Invalid Archive"));
+                            }
+                            using (var data = arch.Entries[0].Open())
+                            {
+                                data.CopyTo(stream);
+                            }
                         }
                     }
-                }
-                else
-                {
-                    origstream.CopyTo(stream);
+                    else
+                    {
+                        origstream.CopyTo(stream);
+                    }
                 }
                 stream.Position = 0;
 
-                parseBossData(stream);
-                parseAgentData(stream);
-                parseSkillData(stream);
-                parseCombatList(stream);
-                fillMissingData(stream);
+                try
+                {
+                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
+                    row.BgWorker.UpdateProgress(row, "15% - Parsing boss data...", 15);
+                    parseBossData(stream);
+                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
+                    row.BgWorker.UpdateProgress(row, "20% - Parsing agent data...", 20);
+                    parseAgentData(stream);
+                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
+                    row.BgWorker.UpdateProgress(row, "25% - Parsing skill data...", 25);
+                    parseSkillData(stream);
+                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
+                    row.BgWorker.UpdateProgress(row, "30% - Parsing combat list...", 30);
+                    parseCombatList(stream);
+                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
+                    row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
+                    fillMissingData(stream);
+                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
+                }
+                catch (Exception ex)
+                {
+                    if (ex is CancellationException)
+                    {
+                        throw ex;
+                    }
 
-                stream.Close();
+                    throw new CancellationException(row, ex);
+                }
             }
-            ////CreateHTML(); is now runnable dont run here
-            return (true);
         }
 
         //sub Parse methods
@@ -253,22 +275,22 @@ namespace LuckParser.Controllers
 
                 // 1 byte: iff
                 //IFF iff = IFF.getEnum(f.read());
-                IFF iff = new IFF(Convert.ToByte(stream.ReadByte())); //Convert.ToByte(stream.ReadByte());
+                ParseEnum.IFF iff = ParseEnum.getIFF(Convert.ToByte(stream.ReadByte())); //Convert.ToByte(stream.ReadByte());
 
                 // 1 byte: buff
                 ushort buff = (ushort)stream.ReadByte();
 
                 // 1 byte: result
                 //Result result = Result.getEnum(f.read());
-                Result result = new Result(Convert.ToByte(stream.ReadByte()));
+                ParseEnum.Result result = ParseEnum.getResult(Convert.ToByte(stream.ReadByte()));
 
                 // 1 byte: is_activation
                 //Activation is_activation = Activation.getEnum(f.read());
-                Activation is_activation = new Activation(Convert.ToByte(stream.ReadByte()));
+                ParseEnum.Activation is_activation = ParseEnum.getActivation(Convert.ToByte(stream.ReadByte()));
 
                 // 1 byte: is_buffremove
                 //BuffRemove is_buffremove = BuffRemove.getEnum(f.read());
-                BuffRemove is_buffremoved = new BuffRemove(Convert.ToByte(stream.ReadByte()));
+                ParseEnum.BuffRemove is_buffremoved = ParseEnum.getBuffRemove(Convert.ToByte(stream.ReadByte()));
 
                 // 1 byte: is_ninety
                 ushort is_ninety = (ushort)stream.ReadByte();
@@ -281,7 +303,7 @@ namespace LuckParser.Controllers
 
                 // 1 byte: is_statechange
                 //StateChange is_statechange = StateChange.getEnum(f.read());
-                StateChange is_statechange = new StateChange(Convert.ToByte(stream.ReadByte()));
+                ParseEnum.StateChange is_statechange = ParseEnum.getStateChange(Convert.ToByte(stream.ReadByte()));
 
                 // 1 byte: is_flanking
                 ushort is_flanking = (ushort)stream.ReadByte();
@@ -310,7 +332,7 @@ namespace LuckParser.Controllers
             {
                 foreach (AgentItem a in agent_data.getAllAgentsList())
                 {
-                    if (a.getInstid() == 0 && a.getAgent() == c.getSrcAgent() && c.isStateChange().getID() == 0)
+                    if (a.getInstid() == 0 && a.getAgent() == c.getSrcAgent() && c.isStateChange() == ParseEnum.StateChange.Normal)
                     {
                         a.setInstid(c.getSrcInstid());
                     }
@@ -376,12 +398,12 @@ namespace LuckParser.Controllers
             // Grab values threw combat data
             foreach (CombatItem c in combat_list)
             {
-                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 12)//max health update
+                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate)//max health update
                 {
                     boss_data.setHealth((int)c.getDstAgent());
 
                 }
-                if (c.isStateChange().getID() == 13 && log_data.getPOV() == "N/A")//Point of View
+                if (c.isStateChange() == ParseEnum.StateChange.PointOfView && log_data.getPOV() == "N/A")//Point of View
                 {
                     ulong pov_agent = c.getSrcAgent();
                     foreach (AgentItem p in agent_data.getPlayerAgentList())
@@ -393,17 +415,17 @@ namespace LuckParser.Controllers
                     }
 
                 }
-                else if (c.isStateChange().getID() == 9)//Log start
+                else if (c.isStateChange() == ParseEnum.StateChange.LogStart)//Log start
                 {
                     log_data.setLogStart(c.getValue());
                 }
-                else if (c.isStateChange().getID() == 10)//log end
+                else if (c.isStateChange() == ParseEnum.StateChange.LogEnd)//log end
                 {
                     log_data.setLogEnd(c.getValue());
 
                 }
                 //set health update
-                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 8)
+                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange() == ParseEnum.StateChange.HealthUpdate)
                 {
                     bossHealthOverTime.Add(new Point ( (int)(c.getTime() - boss_data.getFirstAware()), (int)c.getDstAgent() ));
                 }
@@ -437,7 +459,7 @@ namespace LuckParser.Controllers
                                 c.setDstInstid(boss_data.getInstid());
                             }
                             //set health update
-                            if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 8)
+                            if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange() == ParseEnum.StateChange.HealthUpdate)
                             {
                                 bossHealthOverTime.Add(new Point ( (int)(c.getTime() - boss_data.getFirstAware()), (int)c.getDstAgent() ));
                             }
@@ -491,14 +513,14 @@ namespace LuckParser.Controllers
             foreach (CombatItem c in combat_list)
             {
                 //set boss dead
-                if (c.isStateChange().getEnum() == "REWARD")//got reward
+                if (c.isStateChange() == ParseEnum.StateChange.Reward)//got reward
                 {
                     log_data.setBossKill(true);
                     boss_data.setLastAware(c.getTime());
                     break;
                 }
                 //set boss dead
-                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange().getID() == 4 && !log_data.getBosskill())//change dead
+                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange() == ParseEnum.StateChange.ChangeDead && !log_data.getBosskill())//change dead
                 {
                     log_data.setBossKill(true);
                     boss_data.setLastAware(c.getTime());
@@ -515,7 +537,7 @@ namespace LuckParser.Controllers
 
                 foreach (AgentItem playerAgent in playerAgentList)
                 {
-                    List<CombatItem> lp = combat_data.getStates(playerAgent.getInstid(), "DESPAWN", boss_data.getFirstAware(), boss_data.getLastAware());
+                    List<CombatItem> lp = combat_data.getStates(playerAgent.getInstid(), ParseEnum.StateChange.Despawn, boss_data.getFirstAware(), boss_data.getLastAware());
                     Player player = new Player(playerAgent);
                     bool skip = false;
                     foreach (Player p in p_list)

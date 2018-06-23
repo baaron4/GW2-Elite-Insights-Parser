@@ -54,19 +54,19 @@ namespace LuckParser.Models.ParseModels
                     for (int i = 0; i < invulsVG.Count; i++)
                     {
                         CombatItem c = invulsVG[i];
-                        if (c.isBuffremove().getID() == 0)
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
                             end = c.getTime() - log.getBossData().getFirstAware();
                             phases.Add(new PhaseData(start, end));
                             if (i == invulsVG.Count - 1)
                             {
-                                cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), new ParseEnums.Activation(0), (int)(fight_dur - end), new ParseEnums.Activation(0)));
+                                cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), ParseEnum.Activation.None, (int)(fight_dur - end), ParseEnum.Activation.None));
                             }
                         }
                         else
                         {
                             start = c.getTime() - log.getBossData().getFirstAware();
-                            cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                            cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                         }
                     }
                     if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
@@ -102,19 +102,19 @@ namespace LuckParser.Models.ParseModels
                     for (int i = 0; i < invulsSab.Count; i++)
                     {
                         CombatItem c = invulsSab[i];
-                        if (c.isBuffremove().getID() == 0)
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
                             end = c.getTime() - log.getBossData().getFirstAware();
                             phases.Add(new PhaseData(start, end));
                             if (i == invulsSab.Count - 1)
                             {
-                                cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), new ParseEnums.Activation(0), (int)(fight_dur - end), new ParseEnums.Activation(0)));
+                                cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), ParseEnum.Activation.None, (int)(fight_dur - end), ParseEnum.Activation.None));
                             }
                         }
                         else
                         {
                             start = c.getTime() - log.getBossData().getFirstAware();
-                            cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                            cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                         }
                     }
                     if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
@@ -192,7 +192,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             orbs[time] = 0;
                         }
-                        if (c.isBuffremove().getID() == 0)
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
                             orbs[time] = orbs[time] + 1;
                         }
@@ -212,7 +212,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     foreach (CombatItem c in orbItemsFiltered)
                     {
-                        if (c.isBuffremove().getID() == 0)
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
                             start = c.getTime() - log.getBossData().getFirstAware();
                         } else
@@ -239,7 +239,7 @@ namespace LuckParser.Models.ParseModels
                         end = phaseData[0] - log.getBossData().getFirstAware();
                         phases.Add(new PhaseData(start, end));
                         start = phaseData[1] - log.getBossData().getFirstAware();
-                        cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                        cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                     }
                     if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
                     {
@@ -272,19 +272,19 @@ namespace LuckParser.Models.ParseModels
                     for (int i = 0; i < invulsSamFiltered.Count; i++)
                     {
                         CombatItem c = invulsSamFiltered[i];
-                        if (c.isBuffremove().getID() == 0)
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
                             end = c.getTime() - log.getBossData().getFirstAware();
                             phases.Add(new PhaseData(start, end));
                             if (i == invulsSamFiltered.Count - 1)
                             {
-                                cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), new ParseEnums.Activation(0), (int)(fight_dur - end), new ParseEnums.Activation(0)));
+                                cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), ParseEnum.Activation.None, (int)(fight_dur - end), ParseEnum.Activation.None));
                             }
                         }
                         else
                         {
                             start = c.getTime() - log.getBossData().getFirstAware();
-                            cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                            cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                         }
                     }
                     if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
@@ -298,13 +298,13 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case 0x4302:
                     // Determined + additional data on inst change
-                    CombatItem invulDei = log.getBoonData().Find(x => x.getSkillID() == 762 && x.isBuffremove().getID() == 0 && x.getDstInstid() == getInstid()); 
+                    CombatItem invulDei = log.getBoonData().Find(x => x.getSkillID() == 762 && x.isBuffremove() == ParseEnum.BuffRemove.None && x.getDstInstid() == getInstid()); 
                     if (invulDei != null)
                     {
                         end = invulDei.getTime() - log.getBossData().getFirstAware();
                         phases.Add(new PhaseData(start, end));
                         start = (phaseData.Count == 1 ? phaseData[0] - log.getBossData().getFirstAware() : fight_dur) ;
-                        cast_logs.Add(new CastLog(end, -6, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                        cast_logs.Add(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                     }
                     if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
                     {
@@ -316,7 +316,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 case 0x4BFA:
-                    CombatItem invulDhuum = log.getBoonData().Find(x => x.getSkillID() == 762 && x.isBuffremove().getID() > 0 && x.getSrcInstid() == getInstid());
+                    CombatItem invulDhuum = log.getBoonData().Find(x => x.getSkillID() == 762 && x.isBuffremove() != ParseEnum.BuffRemove.None && x.getSrcInstid() == getInstid());
                     if (invulDhuum != null)
                     {
                         end = invulDhuum.getTime() - log.getBossData().getFirstAware();
@@ -370,19 +370,19 @@ namespace LuckParser.Models.ParseModels
                     for (int i = 0; i < invulsBossFiltered.Count; i++)
                     {
                         CombatItem c = invulsBossFiltered[i];
-                        if (c.isBuffremove().getID() == 0)
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
                             end = c.getTime() - log.getBossData().getFirstAware();
                             phases.Add(new PhaseData(start, end));
                             if (i == invulsBossFiltered.Count - 1)
                             {
-                                cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), new ParseEnums.Activation(0), (int)(fight_dur - end), new ParseEnums.Activation(0)));
+                                cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), ParseEnum.Activation.None, (int)(fight_dur - end), ParseEnum.Activation.None));
                             }
                         }
                         else
                         {
                             start = c.getTime() - log.getBossData().getFirstAware();
-                            cast_logs.Add(new CastLog(end, -5, (int)(start - end), new ParseEnums.Activation(0), (int)(start - end), new ParseEnums.Activation(0)));
+                            cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                         }
                     }
                     if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
@@ -422,19 +422,19 @@ namespace LuckParser.Models.ParseModels
         }
         protected override void setDamagetakenLogs(ParsedLog log)
         {
-            long time_start = log.getBossData().getFirstAware();
-            foreach (CombatItem c in log.getDamageData())
+            // nothing to do
+            /*long time_start = log.getBossData().getFirstAware();
+            foreach (CombatItem c in log.getDamageTakenData())
             {
                 if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
                 {//selecting player as target
-                    LuckParser.Models.ParseEnums.StateChange state = c.isStateChange();
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in log.getAgentData().getAllAgentsList())
                     {//selecting all
                         addDamageTakenLog(time, item.getInstid(), c);
                     }
                 }
-            }
+            }*/
         }
     }
 }

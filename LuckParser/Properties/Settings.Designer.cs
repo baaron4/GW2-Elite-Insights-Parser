@@ -242,6 +242,18 @@ namespace LuckParser.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ParseOneAtATime {
+            get {
+                return ((bool)(this["ParseOneAtATime"]));
+            }
+            set {
+                this["ParseOneAtATime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ParsePhases {
             get {
                 return ((bool)(this["ParsePhases"]));

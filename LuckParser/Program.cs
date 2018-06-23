@@ -63,7 +63,6 @@ namespace LuckParser
                     AllocConsole();
                 }
 
-
                 int parserArgOffset = 0; 
                 if (args[0] == "-c" && args.Length > 2)
                 {
@@ -83,10 +82,8 @@ namespace LuckParser
                 {
                     parserArgs[i - parserArgOffset] = args[i];
                 }
-
                 // Use the application through console 
-                MainForm myConsoleParser = new MainForm(parserArgs);
-                
+                new ConsoleProgram(parserArgs);
                 return 0;
             }
             
