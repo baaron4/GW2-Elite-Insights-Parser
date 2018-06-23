@@ -2642,6 +2642,7 @@ namespace LuckParser.Controllers
                     sw.Write("];");
                     sw.Write("var layout = {");
                     {
+                        sw.Write("barmode:'stack',");
                         sw.Write("yaxis: {" +
                                "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
                                "range: [0, 2]" +
