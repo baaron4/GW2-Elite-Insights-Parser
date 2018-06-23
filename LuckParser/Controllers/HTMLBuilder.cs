@@ -721,26 +721,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<thead>");
                 {
-                    sw.Write("<tr>");
-                    {
-                        sw.Write("<th>Sub</th>");
-                        sw.Write("<th></th>");
-                        sw.Write("<th>Name</th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Crit") + " alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Scholar") + " alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("SwS") + " alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Flank") + " alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Glance") + " alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Blinded") + " alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Interupts") + " alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Invuln") + " alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Wasted") + " alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Saved") + " alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Swap") + " alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
-                    }
-                    sw.Write("</tr>");
+                    HTMLHelper.writeDamageStatsTableHeader(sw);
                 }
                 sw.Write("</thead>");
                 List<string[]> footerList = new List<string[]>();
@@ -768,7 +749,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.criticalRate + " out of " + stats.powerLoopCount + "hits<br> Total Damage Effected by Crits: " + stats.criticalDmg + " \">" + (int)((Double)(stats.criticalRate) / stats.powerLoopCount * 100) + "%</span>" + "</td>");//crit
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.scholarRate+ " out of " + stats.powerLoopCount + " hits <br> Pure Scholar Damage: " + stats.scholarDmg + "<br> Effective Damage Increase: " + Math.Round(stats.scholarDmg / (Double)stats.totalDmg , 3) + "% \">" + (int)((Double)(stats.scholarRate) / stats.powerLoopCount * 100) + "%</span>" + "</td>");//scholar
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.scholarRate+ " out of " + stats.powerLoopCount + " hits <br> Pure Scholar Damage: " + stats.scholarDmg + "<br> Effective Damage Increase: " + Math.Round(100.0 * stats.scholarDmg / (Double)stats.totalDmg , 3) + "% \">" + (int)((Double)(stats.scholarRate) / stats.powerLoopCount * 100) + "%</span>" + "</td>");//scholar
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.movingRate + " out of " + stats.powerLoopCount + "hits \">" + (int)(stats.movingRate / (Double)stats.powerLoopCount * 100) + "%</span>" + "</td>");//sws
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.flankingRate + " out of " + stats.powerLoopCount + "hits \">" + (int)(stats.flankingRate / (Double)stats.powerLoopCount * 100) + "%</span>" + "</td>");//flank
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.glanceRate + " out of " + stats.powerLoopCount + "hits \">" + (int)(stats.glanceRate / (Double)stats.powerLoopCount * 100) + "%</span>" + "</td>");//glance
@@ -797,50 +778,7 @@ namespace LuckParser.Controllers
                 {
                     sw.Write("<tfoot>");
                     {
-                        foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
-                        {
-                            List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
-                            sw.Write("<tr>");
-                            {
-                                sw.Write("<td></td>");
-                                sw.Write("<td></td>");
-                                sw.Write("<td>Group " + groupNum + "</td>");
-                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[7])) + "</td>");
-                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[8])) + "</td>");
-                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[9])) + "</td>");
-                                sw.Write("<td></td>");
-                                sw.Write("<td></td>");
-                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[10])) + "</td>");
-                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[11])) + "</td>");
-                                sw.Write("<td></td>");
-                            }
-                            sw.Write("</tr>");
-                        }
-                        sw.Write("<tr>");
-                        {
-                            sw.Write("<td></td>");
-                            sw.Write("<td></td>");
-                            sw.Write("<td>Total</td>");
-                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[7])) + "</td>");
-                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[8])) + "</td>");
-                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[9])) + "</td>");
-                            sw.Write("<td></td>");
-                            sw.Write("<td></td>");
-                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[10])) + "</td>");
-                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[11])) + "</td>");
-                            sw.Write("<td></td>");
-                        }
-                        sw.Write("</tr>");
+                        HTMLHelper.writeDamageStatsTableFoot(sw, footerList);
                     }
                     sw.Write("</tfoot>");
                 }
@@ -862,26 +800,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<thead>");
                 {
-                    sw.Write("<tr>");
-                    {
-                        sw.Write("<th>Sub</th>");
-                        sw.Write("<th></th>");
-                        sw.Write("<th>Name</th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Crit") + " alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Scholar") + " alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("SwS") + " alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Flank") + " alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Glance") + " alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Blinded") + " alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Interupts") + " alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Invuln") + " alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Wasted") + " alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Saved") + " alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Swap") + " alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
-                    }
-                    sw.Write("</tr>");
+                    HTMLHelper.writeDamageStatsTableHeader(sw);
                 }
                 sw.Write("</thead>");
                 List<string[]> footerList = new List<string[]>();
@@ -909,7 +828,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.criticalRateBoss + " out of " + stats.powerLoopCountBoss + "hits<br> Total Damage Effected by Crits: " + stats.criticalDmgBoss + " \">" + (int)((Double)(stats.criticalRateBoss) / stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//crit
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.scholarRateBoss + " out of " + stats.powerLoopCountBoss + " hits <br> Pure Scholar Damage: " + stats.scholarDmgBoss + "<br> Effective Damage Increase: " + Math.Round(stats.scholarDmgBoss / (Double)stats.totalDmgBoss, 3) + "% \">" + (int)((Double)(stats.scholarRateBoss) / stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//scholar
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.scholarRateBoss + " out of " + stats.powerLoopCountBoss + " hits <br> Pure Scholar Damage: " + stats.scholarDmgBoss + "<br> Effective Damage Increase: " + Math.Round(100.0*stats.scholarDmgBoss / (Double)stats.totalDmgBoss, 3) + "% \">" + (int)((Double)(stats.scholarRateBoss) / stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//scholar
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.movingRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" + (int)(stats.movingRateBoss / (Double)stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//sws
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.flankingRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" + (int)(stats.flankingRateBoss / (Double)stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//flank
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.glanceRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" + (int)(stats.glanceRateBoss / (Double)stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//glance
@@ -938,50 +857,7 @@ namespace LuckParser.Controllers
                 {
                     sw.Write("<tfoot>");
                     {
-                        foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
-                        {
-                            List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
-                            sw.Write("<tr>");
-                            {
-                                sw.Write("<td></td>");
-                                sw.Write("<td></td>");
-                                sw.Write("<td>Group " + groupNum + "</td>");
-                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
-                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[7])) + "</td>");
-                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[8])) + "</td>");
-                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[9])) + "</td>");
-                                sw.Write("<td></td>");
-                                sw.Write("<td></td>");
-                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[10])) + "</td>");
-                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[11])) + "</td>");
-                                sw.Write("<td></td>");
-                            }
-                            sw.Write("</tr>");
-                        }
-                        sw.Write("<tr>");
-                        {
-                            sw.Write("<td></td>");
-                            sw.Write("<td></td>");
-                            sw.Write("<td>Total</td>");
-                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
-                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[7])) + "</td>");
-                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[8])) + "</td>");
-                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[9])) + "</td>");
-                            sw.Write("<td></td>");
-                            sw.Write("<td></td>");
-                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[10])) + "</td>");
-                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[11])) + "</td>");
-                            sw.Write("<td></td>");
-                        }
-                        sw.Write("</tr>");
+                        HTMLHelper.writeDamageStatsTableFoot(sw, footerList);
                     }
                     sw.Write("</tfoot>");
                 }
