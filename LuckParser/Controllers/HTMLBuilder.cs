@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using LuckParser.Models;
 using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
@@ -3407,7 +3408,8 @@ namespace LuckParser.Controllers
                             }
                         }
                         sw.Write("</div>");
-                        sw.Write("<p style=\"margin-top:10px;\"> ARC:" + log.getLogData().getBuildVersion().ToString() + " | Bossid " + log.getBossData().getID().ToString() + " </p> ");
+                        sw.Write("<p style=\"margin-top:10px;\"> ARC:" + log.getLogData().getBuildVersion().ToString() + " | Bossid " + log.getBossData().getID().ToString() + "| EI Version: " +Application.ProductVersion + " </p> ");
+                       
                         sw.Write("<p style=\"margin-top:-15px;\">File recorded by: " + log.getLogData().getPOV() + "</p>");
                     }
                     sw.Write("</div>");
