@@ -744,6 +744,17 @@ namespace LuckParser.Controllers
                     return "dhuum";
 
                 //ID version for multilingual
+                case "16202-icon"://Massive Kitty Golem
+                    return "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
+                case "16177-icon"://Avg Kitty Golem
+                    return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+                case "19676-icon"://Large Kitty Golem
+                    return "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
+                case "19645-icon"://Med Kitty Golem
+                    return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+                case "16199-icon"://Std Kitty Golem
+                    return "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
+
                 case "15438-icon":
                     return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
                 case "15429-icon":
@@ -783,6 +794,16 @@ namespace LuckParser.Controllers
                 case "17759-icon":
                     return "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
 
+                case "16202-ext"://Massive Kitty Golem
+                    return "MassiveGolem";
+                case "16177-ext"://Avg Kitty Golem
+                    return "AvgGolem";
+                case "19676-ext"://Large Kitty Golem
+                    return "LGolem";
+                case "19645-ext"://Med Kitty Golem
+                    return "MedGolem";
+                case "16199-ext"://Std Kitty Golem
+                    return "StdGolem";
                 case "15438-ext":
                     return "vg";
                 case "15429-ext":
