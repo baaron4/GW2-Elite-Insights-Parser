@@ -486,9 +486,9 @@
             this.lblRotationGraphSection.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblRotationGraphSection.Location = new System.Drawing.Point(45, 499);
             this.lblRotationGraphSection.Name = "lblRotationGraphSection";
-            this.lblRotationGraphSection.Size = new System.Drawing.Size(93, 13);
+            this.lblRotationGraphSection.Size = new System.Drawing.Size(81, 13);
             this.lblRotationGraphSection.TabIndex = 37;
-            this.lblRotationGraphSection.Text = "Rotation Graph";
+            this.lblRotationGraphSection.Text = "Rotation Tab";
             // 
             // SettingsForm
             // 
