@@ -22,6 +22,7 @@ namespace LuckParser.Models.DataModels
         private List<CombatItem> boon_data;
         private List<CombatItem> damage_data;
         private List<CombatItem> damage_taken_data;
+        private List<CombatItem> cast_data;
 
         public ParsedLog(LogData log_data, BossData boss_data, AgentData agent_data, SkillData skill_data, 
                 CombatData combat_data, MechanicData mech_data, List<Player> p_list, Boss boss)
@@ -99,6 +100,7 @@ namespace LuckParser.Models.DataModels
             damage_taken_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && 
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0) ||
                                                 x.isBuff() == 0 && x.getValue() >= 0)).ToList();
+            cast_data = combat_data.getCombatList().Where(x => (x.isStateChange() == ParseEnum.StateChange.Normal && x.isActivation() != ParseEnum.Activation.None) || x.isStateChange() == ParseEnum.StateChange.WeaponSwap).ToList();
         }
 
         public List<CombatItem> getBoonData()
@@ -109,6 +111,11 @@ namespace LuckParser.Models.DataModels
         public List<CombatItem> getDamageData()
         {
             return damage_data;
+        }
+
+        public List<CombatItem> getCastData()
+        {
+            return cast_data;
         }
 
         public List<CombatItem> getDamageTakenData()

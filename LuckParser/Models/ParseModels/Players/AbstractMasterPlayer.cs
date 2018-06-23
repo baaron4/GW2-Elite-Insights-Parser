@@ -88,8 +88,7 @@ namespace LuckParser.Models.ParseModels
         {
             long time_start = log.getBossData().getFirstAware();
             CastLog curCastLog = null;
-
-            foreach (CombatItem c in log.getCombatList())
+            foreach (CombatItem c in log.getCastData())
             {
                 if (! (c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware()))
                 {
@@ -100,26 +99,24 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
                     {
-                        if (c.isActivation() != ParseEnum.Activation.None)
+                        if (DataModels.ParseEnum.casting(c.isActivation()))
                         {
-                            if (DataModels.ParseEnum.casting(c.isActivation()))
+                            long time = c.getTime() - time_start;
+                            curCastLog = new CastLog(time, c.getSkillID(), c.getValue(), c.isActivation());
+                        }
+                        else
+                        {
+                            if (curCastLog != null)
                             {
-                                long time = c.getTime() - time_start;
-                                curCastLog = new CastLog(time, c.getSkillID(), c.getValue(), c.isActivation());
-                            }
-                            else
-                            {
-                                if (curCastLog != null)
+                                if (curCastLog.getID() == c.getSkillID())
                                 {
-                                    if (curCastLog.getID() == c.getSkillID())
-                                    {
-                                        curCastLog = new CastLog(curCastLog.getTime(), curCastLog.getID(), curCastLog.getExpDur(), curCastLog.startActivation(), c.getValue(), c.isActivation());
-                                        cast_logs.Add(curCastLog);
-                                        curCastLog = null;
-                                    }
+                                    curCastLog = new CastLog(curCastLog.getTime(), curCastLog.getID(), curCastLog.getExpDur(), curCastLog.startActivation(), c.getValue(), c.isActivation());
+                                    cast_logs.Add(curCastLog);
+                                    curCastLog = null;
                                 }
                             }
                         }
+
                     }
                 }
                 else if (state == ParseEnum.StateChange.WeaponSwap)
@@ -129,9 +126,8 @@ namespace LuckParser.Models.ParseModels
                         if ((int)c.getDstAgent() == 4 || (int)c.getDstAgent() == 5)
                         {
                             long time = c.getTime() - time_start;
-                            curCastLog = new CastLog(time, -2, (int)c.getDstAgent(), c.isActivation());
-                            cast_logs.Add(curCastLog);
-                            curCastLog = null;
+                            CastLog swapLog = new CastLog(time, -2, (int)c.getDstAgent(), c.isActivation());
+                            cast_logs.Add(swapLog);
                         }
                     }
                 }
