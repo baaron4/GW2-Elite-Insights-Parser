@@ -62,8 +62,15 @@ namespace LuckParser.Controllers
             xVal = Math.Min(xVal, (end - cl.getTime()) / 1000f);
             sw.Write("{");
             {
-
-                sw.Write("y: ['1.5'],");
+                if (cl.getID() == -5)
+                {
+                    sw.Write("y: ['1'],");
+                }
+                else
+                {
+                    sw.Write("y: ['1.5'],");
+                }
+              
 
                 sw.Write(
                        "x: ['" + xVal + "']," +
@@ -85,7 +92,7 @@ namespace LuckParser.Controllers
 
                 }
                 else
-                {
+                { 
                     sw.Write("width:'1',");
                 }
                 sw.Write("hoverinfo: 'name'," +
