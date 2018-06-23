@@ -341,6 +341,7 @@ namespace LuckParser.Controllers
             {
                 foreach (AgentItem a in agent_data.getAllAgentsList())
                 {
+                    // a hack for buggy golem logs
                     if (a.getID() == 19603 && golem_mode)
                     {
                         redirection = a.getAgent();
@@ -407,7 +408,7 @@ namespace LuckParser.Controllers
             AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
             boss = new Boss(bossAgent);
             List<Point> bossHealthOverTime = new List<Point>();
-
+            // a hack for buggy golem logs
             if (redirection != 0)
             {
                 foreach (CombatItem c in combat_list)
