@@ -42,6 +42,7 @@
             this.lblProgress = new System.Windows.Forms.Label();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
+            this.Version_Label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -176,12 +177,23 @@
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
             // 
+            // Version_Label
+            // 
+            this.Version_Label.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.Version_Label.AutoSize = true;
+            this.Version_Label.Location = new System.Drawing.Point(28, 357);
+            this.Version_Label.Name = "Version_Label";
+            this.Version_Label.Size = new System.Drawing.Size(29, 13);
+            this.Version_Label.TabIndex = 17;
+            this.Version_Label.Text = "V1.3";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.ClientSize = new System.Drawing.Size(696, 375);
+            this.Controls.Add(this.Version_Label);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnSettings);
             this.Controls.Add(this.lvFileList);
@@ -215,6 +227,7 @@
         private new System.Windows.Forms.ColumnHeader Location;
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.Label Version_Label;
     }
 }
 

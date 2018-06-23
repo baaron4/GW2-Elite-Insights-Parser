@@ -28,6 +28,10 @@ namespace LuckParser
         public MainForm()
         {
             InitializeComponent();
+            //display version
+            string version = Application.ProductVersion;
+            Version_Label.Text = version;
+
 
             _logsFiles = new List<string>();
 
@@ -362,5 +366,7 @@ namespace LuckParser
                 // etc..
             }
         }
+
+      
     }
 }
