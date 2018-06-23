@@ -119,6 +119,7 @@ namespace LuckParser.Models.ParseModels
             List<SkillItem> s_list = log.getSkillData().getSkillList();
             List<CastLog> casting = getCastLogs(log, 0, log.getBossData().getAwareDuration());      
             int swapped = 0;//4 for first set and 5 for next
+            long swappedTime = 0;
             List<CastLog> swaps = casting.Where(x => x.getID() == -2).Take(2).ToList();
             // If the player never swapped, assume they are on their first set
             if (swaps.Count == 0)
@@ -138,9 +139,9 @@ namespace LuckParser.Models.ParseModels
                 {
                     apiskill = skill.GetGW2APISkill();
                 }
-                if (apiskill != null)
+                if (apiskill != null && cl.getTime() > swappedTime)
                 {
-                    if (apiskill.type == "Weapon")
+                    if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && apiskill.categories == null)
                     {
                         if (apiskill.weapon_type == "Greatsword" || apiskill.weapon_type == "Staff" || apiskill.weapon_type == "Rifle" || apiskill.weapon_type == "Longbow" || apiskill.weapon_type == "Shortbow" || apiskill.weapon_type == "Hammer")
                         {
@@ -216,6 +217,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     //wepswap  
                     swapped = cl.getExpDur();
+                    swappedTime = cl.getTime();
                     continue;
                 }
                 if (weapons[0] != null && weapons[1] != null && weapons[2] != null && weapons[3] != null)

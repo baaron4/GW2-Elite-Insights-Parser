@@ -1,4 +1,4 @@
-﻿namespace LuckParser.Models
+﻿namespace LuckParser.Models.ParseModels
 {
     public class GW2APISkill
     {
@@ -11,6 +11,7 @@
         public string weapon_type { get; set; }
         public string[] professions { get; set; }
         public string slot { get; set; }
+        public string[] categories { get; set; }
         //public string[]  facts { get; set; }
 
         // public string attunment { get; set; }
