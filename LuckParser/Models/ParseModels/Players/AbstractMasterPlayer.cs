@@ -103,6 +103,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             long time = c.getTime() - time_start;
                             curCastLog = new CastLog(time, c.getSkillID(), c.getValue(), c.isActivation());
+                            cast_logs.Add(curCastLog);
                         }
                         else
                         {
@@ -110,8 +111,7 @@ namespace LuckParser.Models.ParseModels
                             {
                                 if (curCastLog.getID() == c.getSkillID())
                                 {
-                                    curCastLog = new CastLog(curCastLog.getTime(), curCastLog.getID(), curCastLog.getExpDur(), curCastLog.startActivation(), c.getValue(), c.isActivation());
-                                    cast_logs.Add(curCastLog);
+                                    curCastLog.setEndStatus(c.getValue(), c.isActivation());                               
                                     curCastLog = null;
                                 }
                             }
