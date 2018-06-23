@@ -320,11 +320,10 @@ namespace LuckParser.Controllers
                         is_ninety, is_fifty, is_moving, is_statechange, is_flanking, is_shields));
             }
         }
-
+        
         private bool isGolem(ushort id)
         {
-            return id == 0x3f47 || id == 0x3f31 || id == 0x3f46 || id == 0x3F4A || id == 0x3F32
-                   || id == 0x3f29 || id == 0x3f2e;
+            return id == 16202 || id == 16177 || id == 19676 || id == 19645 || id == 16199;
         }
 
         /// <summary>
