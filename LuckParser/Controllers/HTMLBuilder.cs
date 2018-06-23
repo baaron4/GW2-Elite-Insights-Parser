@@ -906,7 +906,7 @@ namespace LuckParser.Controllers
                         Statistics.FinalDefenses defenses = statistics.defenses[player][phase_index];
                         Statistics.FinalStats stats = statistics.stats[player][phase_index];
 
-                        // TODO damageBlocked
+                        
 
                         TimeSpan timedead = TimeSpan.FromMilliseconds(stats.died);//dead
                                                                                               //gather data for footer

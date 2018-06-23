@@ -374,7 +374,7 @@ namespace LuckParser.Controllers
 
                     int instID = player.getInstid();
 
-                    // TODO damageBlocked and damageEvaded
+                  
 
                     final.damageTaken = damageLogs.Select(x => (long)x.getDamage()).Sum();
                     final.blockedCount = 0;
@@ -406,7 +406,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        // TODO ensure it is working correctly
+       
         private void calculateSupport()
         {
             foreach (Player player in log.getPlayerList())
