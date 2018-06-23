@@ -207,7 +207,7 @@ namespace LuckParser
                     }
                 }
 
-                bg.UpdateProgress(rowData, "100% - Complete", 100);
+                bg.UpdateProgress(rowData, $"100% - Complete_{HTMLHelper.GetLink(bossid + "-ext")}_{result}", 100);
             }
             else
             {
