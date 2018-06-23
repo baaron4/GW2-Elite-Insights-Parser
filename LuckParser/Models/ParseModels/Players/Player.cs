@@ -117,8 +117,19 @@ namespace LuckParser.Models.ParseModels
         {
             string[] weapons = new string[4];//first 2 for first set next 2 for second set
             List<SkillItem> s_list = log.getSkillData().getSkillList();
-            List<CastLog> casting = getCastLogs(log, 0, log.getBossData().getAwareDuration());
+            List<CastLog> casting = getCastLogs(log, 0, log.getBossData().getAwareDuration());      
             int swapped = 0;//4 for first set and 5 for next
+            List<CastLog> swaps = casting.Where(x => x.getID() == -2).Take(2).ToList();
+            // If the player never swapped, assume they are on their first set
+            if (swaps.Count == 0)
+            {
+                swapped = 4;
+            }
+            // if the player swapped once, check on which set they started
+            else if (swaps.Count == 1)
+            {
+                swapped = swaps.First().getExpDur() == 4 ? 5 : 4;
+            }
             foreach (CastLog cl in casting)
             {
                 GW2APISkill apiskill = null;
