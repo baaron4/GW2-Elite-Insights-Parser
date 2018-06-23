@@ -652,6 +652,78 @@ namespace LuckParser.Controllers
             sw.Write("name: '" + name+"'");
         }
 
+        public static void writeDamageStatsTableHeader(StreamWriter sw)
+        {
+            sw.Write("<tr>");
+            {
+                sw.Write("<th>Sub</th>");
+                sw.Write("<th></th>");
+                sw.Write("<th>Name</th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Crit") + " alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Scholar") + " alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("SwS") + " alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Flank") + " alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Glance") + " alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Blinded") + " alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Interupts") + " alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Invuln") + " alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Wasted") + " alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Saved") + " alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Swap") + " alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
+            }
+            sw.Write("</tr>");
+        }
+
+        public static void writeDamageStatsTableFoot(StreamWriter sw, List<string[]> footerList)
+        {
+            foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
+            {
+                List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
+                sw.Write("<tr>");
+                {
+                    sw.Write("<td></td>");
+                    sw.Write("<td></td>");
+                    sw.Write("<td>Group " + groupNum + "</td>");
+                    sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                    sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                    sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                    sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                    sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                    sw.Write("<td>" + groupList.Sum(c => int.Parse(c[7])) + "</td>");
+                    sw.Write("<td>" + groupList.Sum(c => int.Parse(c[8])) + "</td>");
+                    sw.Write("<td>" + groupList.Sum(c => int.Parse(c[9])) + "</td>");
+                    sw.Write("<td></td>");
+                    sw.Write("<td></td>");
+                    sw.Write("<td>" + groupList.Sum(c => int.Parse(c[10])) + "</td>");
+                    sw.Write("<td>" + groupList.Sum(c => int.Parse(c[11])) + "</td>");
+                    sw.Write("<td></td>");
+                }
+                sw.Write("</tr>");
+            }
+            sw.Write("<tr>");
+            {
+                sw.Write("<td></td>");
+                sw.Write("<td></td>");
+                sw.Write("<td>Total</td>");
+                sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                sw.Write("<td>" + footerList.Sum(c => int.Parse(c[7])) + "</td>");
+                sw.Write("<td>" + footerList.Sum(c => int.Parse(c[8])) + "</td>");
+                sw.Write("<td>" + footerList.Sum(c => int.Parse(c[9])) + "</td>");
+                sw.Write("<td></td>");
+                sw.Write("<td></td>");
+                sw.Write("<td>" + footerList.Sum(c => int.Parse(c[10])) + "</td>");
+                sw.Write("<td>" + footerList.Sum(c => int.Parse(c[11])) + "</td>");
+                sw.Write("<td></td>");
+            }
+            sw.Write("</tr>");
+        }
+
         public static string GetLink(string name)
         {
             switch (name)
