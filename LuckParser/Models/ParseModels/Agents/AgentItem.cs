@@ -103,6 +103,15 @@ namespace LuckParser.Models.ParseModels
             return condition;
         }
 
+        public ushort getID()
+        {
+            if (prof.Contains(":"))
+            {
+                return UInt16.Parse(this.prof.Split(':')[1]);
+            }
+            return 0;
+        }
+
         // Setters
         public void setInstid(ushort instid)
         {

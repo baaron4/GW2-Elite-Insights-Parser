@@ -140,7 +140,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 if (apiskill != null)
                 {
-                    if (apiskill.type == "Weapon")
+                    if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0)
                     {
                         if (apiskill.weapon_type == "Greatsword" || apiskill.weapon_type == "Staff" || apiskill.weapon_type == "Rifle" || apiskill.weapon_type == "Longbow" || apiskill.weapon_type == "Shortbow" || apiskill.weapon_type == "Hammer")
                         {
@@ -214,8 +214,13 @@ namespace LuckParser.Models.ParseModels
                 }
                 else if (cl.getID() == -2)
                 {
+                    int oldswap = swapped;
                     //wepswap  
                     swapped = cl.getExpDur();
+                    if (swapped == oldswap)
+                    {
+                        swapped = 0;
+                    }
                     continue;
                 }
                 if (weapons[0] != null && weapons[1] != null && weapons[2] != null && weapons[3] != null)

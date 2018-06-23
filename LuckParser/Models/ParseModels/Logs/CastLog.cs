@@ -33,6 +33,13 @@ namespace LuckParser.Models.ParseModels
             
         }
 
+        // setters
+        public void setEndStatus(int act_dur, ParseEnum.Activation end_activation)
+        {
+            this.act_dur = act_dur;
+            this.end_activation = end_activation;
+        }
+
         // Getters
         public long getTime()
         {
