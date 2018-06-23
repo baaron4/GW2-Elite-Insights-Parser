@@ -188,6 +188,7 @@ namespace LuckParser.Controllers
                     long end = phase.getEnd() + log.getBossData().getFirstAware();
 
                     List<DamageLog> damageLogs = player.getDamageLogs(0, log, phase.getStart(), phase.getEnd());
+                    List<DamageLog> damageLogsBoss = player.getDamageLogs(log.getBoss().getInstid(), log, phase.getStart(), phase.getEnd());
                     List<CastLog> castLogs = player.getCastLogs(log, phase.getStart(), phase.getEnd());
 
                     int instid = player.getInstid();
@@ -207,6 +208,18 @@ namespace LuckParser.Controllers
                     final.timeWasted = 0;
                     final.saved = 0;
                     final.timeSaved = 0;
+
+                    final.powerLoopCountBoss = 0;
+                    final.criticalRateBoss = 0;
+                    final.criticalDmgBoss = 0;
+                    final.scholarRateBoss = 0;
+                    final.scholarDmgBoss = 0;
+                    final.movingRateBoss = 0;
+                    final.flankingRateBoss = 0;
+                    final.glanceRateBoss = 0;
+                    final.missedBoss = 0;
+                    final.interuptsBoss = 0;
+                    final.invulnedBoss = 0;
 
                     foreach (DamageLog log in damageLogs)
                     {
@@ -249,6 +262,47 @@ namespace LuckParser.Controllers
                             final.powerLoopCount++;
                         }
                     }
+                    foreach (DamageLog log in damageLogsBoss)
+                    {
+                        if (log.isCondi() == 0)
+                        {
+                            if (log.getResult() == ParseEnum.Result.Crit)
+                            {
+                                final.criticalRateBoss++;
+                                final.criticalDmgBoss += log.getDamage();
+                            }
+
+                            if (log.isNinety() > 0)
+                            {
+                                final.scholarRateBoss++;
+                                final.scholarDmgBoss += (int)(log.getDamage() / 11.0); //regular+10% damage
+                            }
+
+                            final.movingRateBoss += log.isMoving();
+                            final.flankingRateBoss += log.isFlanking();
+
+                            if (log.getResult() == ParseEnum.Result.Glance)
+                            {
+                                final.glanceRateBoss++;
+                            }
+
+                            if (log.getResult() == ParseEnum.Result.Blind)
+                            {
+                                final.missedBoss++;
+                            }
+
+                            if (log.getResult() == ParseEnum.Result.Interrupt)
+                            {
+                                final.interuptsBoss++;
+                            }
+
+                            if (log.getResult() == ParseEnum.Result.Absorb)
+                            {
+                                final.invulnedBoss++;
+                            }
+                            final.powerLoopCountBoss++;
+                        }
+                    }
                     foreach (CastLog cl in castLogs)
                     {
                         if (cl.endActivation() == ParseEnum.Activation.CancelCancel)
@@ -271,6 +325,9 @@ namespace LuckParser.Controllers
 
                     final.totalDmg = damageLogs.Sum(x => x.getDamage());
                     final.powerLoopCount = final.powerLoopCount == 0 ? 1 : final.powerLoopCount;
+
+                    final.totalDmgBoss = damageLogsBoss.Sum(x => x.getDamage());
+                    final.powerLoopCountBoss = final.powerLoopCountBoss == 0 ? 1 : final.powerLoopCountBoss;
 
                     // Counts
                     CombatData combatData = log.getCombatData();

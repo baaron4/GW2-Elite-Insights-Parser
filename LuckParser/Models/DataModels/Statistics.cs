@@ -64,6 +64,20 @@ namespace LuckParser.Models.DataModels
             public double timeSaved;
             public double avgBoons;
 
+            //Boss only Rates
+            public int powerLoopCountBoss;
+            public int criticalRateBoss;
+            public int criticalDmgBoss;
+            public int scholarRateBoss;
+            public int scholarDmgBoss;
+            public int totalDmgBoss;
+            public int movingRateBoss;
+            public int flankingRateBoss;
+            public int glanceRateBoss;
+            public int missedBoss;
+            public int interuptsBoss;
+            public int invulnedBoss;
+
             // Counts
             public int swapCount;
             public int ressCount;
