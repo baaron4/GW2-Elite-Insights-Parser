@@ -716,7 +716,7 @@ namespace LuckParser.Controllers
         {
             //generate dmgstats table
             PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
-            sw.Write("<script> $(function () { $('#dmgstats_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<script> $(function () { $('#dmgstats_table" + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dmgstats_table" + phase_index + "\">");
             {
                 sw.Write("<thead>");
@@ -795,7 +795,7 @@ namespace LuckParser.Controllers
         {
             //generate dmgstats table
             PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
-            sw.Write("<script> $(function () { $('#dmgstatsBoss_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<script> $(function () { $('#dmgstatsBoss_table" + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dmgstatsBoss_table" + phase_index + "\">");
             {
                 sw.Write("<thead>");
