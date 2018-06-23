@@ -849,6 +849,147 @@ namespace LuckParser.Controllers
 
         }
         /// <summary>
+        /// Creates the damage stats table for hits on just boss
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
+        /// <param name="fight_duration">Duration of the fight</param>
+        private void CreateDMGStatsBossTable(StreamWriter sw, int phase_index)
+        {
+            //generate dmgstats table
+            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            sw.Write("<script> $(function () { $('#dmgstatsBoss_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dmgstatsBoss_table" + phase_index + "\">");
+            {
+                sw.Write("<thead>");
+                {
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<th>Sub</th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th>Name</th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Crit") + " alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Scholar") + " alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("SwS") + " alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Flank") + " alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Glance") + " alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Blinded") + " alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Interupts") + " alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Invuln") + " alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Wasted") + " alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Saved") + " alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Swap") + " alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
+                    }
+                    sw.Write("</tr>");
+                }
+                sw.Write("</thead>");
+                List<string[]> footerList = new List<string[]>();
+                sw.Write("<tbody>");
+                {
+                    foreach (Player player in log.getPlayerList())
+                    {
+                        Statistics.FinalStats stats = statistics.stats[player][phase_index];
+
+                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.died);//dead 
+
+                        //gather data for footer
+                        footerList.Add(new string[] {
+                            player.getGroup().ToString(),
+                            stats.powerLoopCountBoss.ToString(),
+                            stats.criticalRateBoss.ToString(), stats.scholarRateBoss.ToString(),
+                            stats.movingRateBoss.ToString(), stats.flankingRateBoss.ToString(), stats.glanceRateBoss.ToString(),
+                            stats.missedBoss.ToString(), stats.interuptsBoss.ToString(), stats.invulnedBoss.ToString(),
+                            stats.swapCount.ToString(), stats.downCount.ToString()
+                        });
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
+
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.criticalRateBoss + " out of " + stats.powerLoopCountBoss + "hits<br> Total Damage Effected by Crits: " + stats.criticalDmgBoss + " \">" + (int)((Double)(stats.criticalRateBoss) / stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//crit
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.scholarRateBoss + " out of " + stats.powerLoopCountBoss + " hits <br> Pure Scholar Damage: " + stats.scholarDmgBoss + "<br> Effective Damage Increase: " + Math.Round(stats.scholarDmgBoss / (Double)stats.totalDmgBoss, 3) + "% \">" + (int)((Double)(stats.scholarRateBoss) / stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//scholar
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.movingRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" + (int)(stats.movingRateBoss / (Double)stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//sws
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.flankingRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" + (int)(stats.flankingRateBoss / (Double)stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//flank
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.glanceRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" + (int)(stats.glanceRateBoss / (Double)stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//glance
+                            sw.Write("<td>" + stats.missedBoss + "</td>");//misses
+                            sw.Write("<td>" + stats.interuptsBoss + "</td>");//interupts
+                            sw.Write("<td>" + stats.invulnedBoss + "</td>");//dmg invulned
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.wasted + "cancels \">" + stats.timeWasted + "</span>" + "</td>");//time wasted
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.saved + "cancels \">" + stats.timeSaved + "</span>" + "</td>");//timesaved
+                            sw.Write("<td>" + stats.swapCount + "</td>");//w swaps
+                            sw.Write("<td>" + stats.downCount + "</td>");//downs
+                            long fight_duration = phase.getDuration("s");
+                            if (timedead > TimeSpan.Zero)
+                            {
+                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                            }
+                            else
+                            {
+                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </span>" + " </td>");
+                            }
+                        }
+                        sw.Write("</tr>");
+                    }
+                }
+                sw.Write("</tbody>");
+                if (log.getPlayerList().Count() > 1)
+                {
+                    sw.Write("<tfoot>");
+                    {
+                        foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
+                        {
+                            List<string[]> groupList = footerList.Where(x => x[0] == groupNum).ToList();
+                            sw.Write("<tr>");
+                            {
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td>Group " + groupNum + "</td>");
+                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                                sw.Write("<td>" + (int)(100 * groupList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / groupList.Count) + "%</td>");
+                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[7])) + "</td>");
+                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[8])) + "</td>");
+                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[9])) + "</td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td></td>");
+                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[10])) + "</td>");
+                                sw.Write("<td>" + groupList.Sum(c => int.Parse(c[11])) + "</td>");
+                                sw.Write("<td></td>");
+                            }
+                            sw.Write("</tr>");
+                        }
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td></td>");
+                            sw.Write("<td></td>");
+                            sw.Write("<td>Total</td>");
+                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[2]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[3]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[4]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[5]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                            sw.Write("<td>" + (int)(100 * footerList.Sum(c => Double.Parse(c[6]) / Double.Parse(c[1])) / footerList.Count) + "%</td>");
+                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[7])) + "</td>");
+                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[8])) + "</td>");
+                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[9])) + "</td>");
+                            sw.Write("<td></td>");
+                            sw.Write("<td></td>");
+                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[10])) + "</td>");
+                            sw.Write("<td>" + footerList.Sum(c => int.Parse(c[11])) + "</td>");
+                            sw.Write("<td></td>");
+                        }
+                        sw.Write("</tr>");
+                    }
+                    sw.Write("</tfoot>");
+                }
+            }
+            sw.Write("</table>");
+
+        }
+        /// <summary>
         /// Creates the defense table
         /// </summary>
         /// <param name="sw">Stream writer</param>
@@ -2978,10 +3119,31 @@ namespace LuckParser.Controllers
                                                 sw.Write("</div>");
                                                 sw.Write("<div class=\"tab-pane fade \" id=\"offStats" + i + "\">");
                                                 {
-                                                    // HTML_dmgstats 
-                                                    CreateDMGStatsTable(sw, i);
+                                                    sw.Write("<ul class=\"nav nav-tabs\">" +
+                                                       "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#dpsStatsBoss" + i + "\">Boss</a></li>" +
+                                                       "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#dpsStatsAll" + i + "\">All</a></li>" +
+                                                     "</ul>");
+                                                    sw.Write("<div id=\"subtabcontent" + "\" class=\"tab-content\">");
+                                                    {
+                                                        sw.Write("<div class=\"tab-pane fade show active \" id=\"dpsStatsBoss" + i + "\">");
+                                                        {
+                                                            //HTML_dmgstatsBoss
+                                                            CreateDMGStatsBossTable(sw, i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                        sw.Write("<div class=\"tab-pane fade \" id=\"dpsStatsAll" + i + "\">");
+                                                        {
+                                                            // HTML_dmgstats 
+                                                            CreateDMGStatsTable(sw, i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                    }
+                                                    sw.Write("</div>");
                                                 }
                                                 sw.Write("</div>");
+                                               
+
+
                                                 sw.Write("<div class=\"tab-pane fade \" id=\"defStats" + i + "\">");
                                                 {
                                                     // def stats
