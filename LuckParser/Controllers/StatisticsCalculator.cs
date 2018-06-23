@@ -58,14 +58,15 @@ namespace LuckParser.Controllers
             } 
                       
             if (switches.calculateConditions) calculateConditions();
-            if (settings.PlayerRot)
+            // WIP
+            /*if (settings.PlayerRot)
             {
                 foreach (Player p in log.getPlayerList())
                 {
                     p.getRotation(log, settings.PlayerRotIcons);
                 }
                 log.getBoss().getRotation(log, settings.PlayerRotIcons);
-            }
+            }*/
 
             return statistics;
         }
