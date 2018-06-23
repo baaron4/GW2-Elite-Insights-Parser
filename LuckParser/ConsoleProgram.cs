@@ -36,6 +36,9 @@ namespace LuckParser
 
         private void ParseLog(object logFile)
         {
+            System.Globalization.CultureInfo before = System.Threading.Thread.CurrentThread.CurrentCulture;
+            System.Threading.Thread.CurrentThread.CurrentCulture =
+                    new System.Globalization.CultureInfo("en-US");
             GridRow row = new GridRow(logFile as string, "")
             {
                 BgWorker = new System.ComponentModel.BackgroundWorker()
@@ -134,6 +137,7 @@ namespace LuckParser
             {
                 throw new CancellationException(row, new InvalidDataException("Not EVTC"));
             }
+            System.Threading.Thread.CurrentThread.CurrentCulture = before;
         }
     }
 }

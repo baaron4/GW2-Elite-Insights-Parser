@@ -21,6 +21,7 @@ namespace LuckParser.Models.DataModels
         // reduced data
         private List<CombatItem> boon_data;
         private List<CombatItem> damage_data;
+        private List<CombatItem> damage_taken_data;
 
         public ParsedLog(LogData log_data, BossData boss_data, AgentData agent_data, SkillData skill_data, 
                 CombatData combat_data, MechanicData mech_data, List<Player> p_list, Boss boss)
@@ -90,10 +91,14 @@ namespace LuckParser.Models.DataModels
         private void doReduction()
         {
             boon_data = combat_data.getCombatList().Where(x => x.isBuff() == 1 && (x.getBuffDmg() == 0 || x.isBuffremove() != ParseEnum.BuffRemove.None)).ToList();
-            damage_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal &&
+            damage_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Foe && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                         ((x.isBuff() == 1 && x.getBuffDmg() != 0) ||
                                         (x.isBuff() == 0 && x.getValue() != 0) ||
                                         (x.getResult() == ParseEnum.Result.Interrupt || x.getResult() == ParseEnum.Result.Absorb || x.getResult() == ParseEnum.Result.Blind))).ToList();
+
+            damage_taken_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && 
+                                            ((x.isBuff() == 1 && x.getBuffDmg() > 0) ||
+                                                x.isBuff() == 0 && x.getValue() >= 0)).ToList();
         }
 
         public List<CombatItem> getBoonData()
@@ -104,6 +109,11 @@ namespace LuckParser.Models.DataModels
         public List<CombatItem> getDamageData()
         {
             return damage_data;
+        }
+
+        public List<CombatItem> getDamageTakenData()
+        {
+            return damage_taken_data;
         }
 
         private void doMechData()

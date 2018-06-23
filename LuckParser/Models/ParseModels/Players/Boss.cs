@@ -422,8 +422,9 @@ namespace LuckParser.Models.ParseModels
         }
         protected override void setDamagetakenLogs(ParsedLog log)
         {
-            long time_start = log.getBossData().getFirstAware();
-            foreach (CombatItem c in log.getDamageData())
+            // nothing to do
+            /*long time_start = log.getBossData().getFirstAware();
+            foreach (CombatItem c in log.getDamageTakenData())
             {
                 if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
                 {//selecting player as target
@@ -433,7 +434,7 @@ namespace LuckParser.Models.ParseModels
                         addDamageTakenLog(time, item.getInstid(), c);
                     }
                 }
-            }
+            }*/
         }
     }
 }

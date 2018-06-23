@@ -100,6 +100,9 @@ namespace LuckParser
         /// <param name="e"></param>
         private void BgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            System.Globalization.CultureInfo before = System.Threading.Thread.CurrentThread.CurrentCulture;
+            System.Threading.Thread.CurrentThread.CurrentCulture =
+                    new System.Globalization.CultureInfo("en-US");
             BackgroundWorker bg = sender as BackgroundWorker;
             GridRow rowData = e.Argument as GridRow;
 
@@ -208,6 +211,7 @@ namespace LuckParser
                 e.Cancel = true;
                 throw new CancellationException(rowData);
             }
+            System.Threading.Thread.CurrentThread.CurrentCulture = before;
         }
 
         /// <summary>

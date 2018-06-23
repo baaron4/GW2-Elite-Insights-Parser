@@ -2614,7 +2614,7 @@ namespace LuckParser.Controllers
                         //Every buffs and boons
                         parseBoonsList.AddRange(Boon.getAllBuffList());
                         Dictionary<int, BoonsGraphModel> boonGraphData = log.getBoss().getBoonGraphs(log, phases, parseBoonsList);
-                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
+                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.getBoonName() != "Number of Boons"))
                         {
                             sw.Write("{");
                             {
