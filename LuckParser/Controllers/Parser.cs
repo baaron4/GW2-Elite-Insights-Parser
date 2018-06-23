@@ -122,14 +122,14 @@ namespace LuckParser.Controllers
             ParseHelper.safeSkip(stream, 1);
 
             // 2 bytes: boss instance ID
-            ushort instid = ParseHelper.getShort(stream);
+            ushort id = ParseHelper.getShort(stream);
 
             // 1 byte: position
             ParseHelper.safeSkip(stream, 1);
 
             //Save
             // TempData["Debug"] = build_version +" "+ instid.ToString() ;
-            this.boss_data = new BossData(instid);
+            this.boss_data = new BossData(id);
         }
         /// <summary>
         /// Parses agent related data
@@ -321,18 +321,31 @@ namespace LuckParser.Controllers
             }
         }
 
+        private bool isGolem(ushort id)
+        {
+            return id == 0x3f47 || id == 0x3f31 || id == 0x3f46 || id == 0x3F4A || id == 0x3F32
+                   || id == 0x3f29 || id == 0x3f2e;
+        }
+
         /// <summary>
         /// Parses all the data again and link related stuff to each other
         /// </summary>
         private void fillMissingData(MemoryStream stream)
         {
+            bool golem_mode = isGolem(boss_data.getID());
+
             // Set Agent instid, first_aware and last_aware
+            ulong redirection = 0;
             List<CombatItem> combat_list = combat_data.getCombatList();
             foreach (CombatItem c in combat_list)
             {
                 foreach (AgentItem a in agent_data.getAllAgentsList())
                 {
-                    if (a.getInstid() == 0 && a.getAgent() == c.getSrcAgent() && c.isStateChange() == ParseEnum.StateChange.Normal)
+                    if (a.getID() == 19603 && golem_mode)
+                    {
+                        redirection = a.getAgent();
+                    }
+                    if (a.getInstid() == 0 && a.getAgent() == c.getSrcAgent() && (c.isStateChange() == ParseEnum.StateChange.Normal ||(golem_mode && isGolem(a.getID())&& c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate) ))
                     {
                         a.setInstid(c.getSrcInstid());
                     }
@@ -395,6 +408,17 @@ namespace LuckParser.Controllers
             boss = new Boss(bossAgent);
             List<Point> bossHealthOverTime = new List<Point>();
 
+            if (redirection != 0)
+            {
+                foreach (CombatItem c in combat_list)
+                {
+                    if (c.getDstAgent() == 0 && c.getDstInstid() == 0 && c.isStateChange() == ParseEnum.StateChange.Normal && c.getIFF() == ParseEnum.IFF.Foe && c.isActivation() == ParseEnum.Activation.None)
+                    {
+                        c.setDstAgent(bossAgent.getAgent());
+                        c.setDstInstid(bossAgent.getInstid());
+                    }
+                }
+            }
             // Grab values threw combat data
             foreach (CombatItem c in combat_list)
             {
