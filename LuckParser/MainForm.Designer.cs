@@ -43,6 +43,7 @@
             this.ButtonState = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridRowBindingSource)).BeginInit();
+            this.Version_Label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -156,6 +157,15 @@
             this.ButtonState.HeaderText = "";
             this.ButtonState.Name = "ButtonState";
             this.ButtonState.ReadOnly = true;
+            // Version_Label
+            // 
+            this.Version_Label.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.Version_Label.AutoSize = true;
+            this.Version_Label.Location = new System.Drawing.Point(28, 357);
+            this.Version_Label.Name = "Version_Label";
+            this.Version_Label.Size = new System.Drawing.Size(29, 13);
+            this.Version_Label.TabIndex = 17;
+            this.Version_Label.Text = "V1.3";
             // 
             // MainForm
             // 
@@ -164,6 +174,7 @@
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.ClientSize = new System.Drawing.Size(696, 375);
             this.Controls.Add(this.dgvFiles);
+            this.Controls.Add(this.Version_Label);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnSettings);
             this.Controls.Add(this.btnCancel);
@@ -192,6 +203,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn locationDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn ButtonState;
+        private System.Windows.Forms.Label Version_Label;
     }
 }
 

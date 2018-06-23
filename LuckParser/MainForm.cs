@@ -19,6 +19,10 @@ namespace LuckParser
         public MainForm()
         {
             InitializeComponent();
+            //display version
+            string version = Application.ProductVersion;
+            Version_Label.Text = version;
+            _logsFiles = new List<string>();
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
         }
@@ -431,5 +435,7 @@ namespace LuckParser
                 }
             }
         }
+
+      
     }
 }
