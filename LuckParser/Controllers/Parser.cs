@@ -341,7 +341,7 @@ namespace LuckParser.Controllers
                 foreach (AgentItem a in agent_data.getAllAgentsList())
                 {
                     // a hack for buggy golem logs
-                    if (a.getID() == 19603 && golem_mode)
+                    if (golem_mode && a.getID() == 19603)
                     {
                         redirection = a.getAgent();
                     }

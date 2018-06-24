@@ -1225,7 +1225,7 @@ namespace LuckParser.Controllers
                         Dictionary<int, Statistics.FinalBoonUptime> uptimes = statistics.selfBoons[player][phase_index];
 
                         Dictionary<int, string> rates = new Dictionary<int, string>();
-                        foreach (Boon boon in Boon.getAllBuffList())
+                        foreach (Boon boon in list_to_use)
                         {
                             string rate = "0";
 
@@ -1283,7 +1283,7 @@ namespace LuckParser.Controllers
                             statistics.groupBoons[player][phase_index];
 
                         Dictionary<int, string> rates = new Dictionary<int, string>();
-                        foreach (Boon boon in Boon.getAllBuffList())
+                        foreach (Boon boon in list_to_use)
                         {
                             string rate = "0";
 
@@ -1339,7 +1339,7 @@ namespace LuckParser.Controllers
                             statistics.offGroupBoons[player][phase_index];
 
                         Dictionary<int, string> rates = new Dictionary<int, string>();
-                        foreach (Boon boon in Boon.getAllBuffList())
+                        foreach (Boon boon in list_to_use)
                         {
                             string rate = "0";
 
@@ -1396,7 +1396,7 @@ namespace LuckParser.Controllers
                             statistics.squadBoons[player][phase_index];
 
                         Dictionary<int, string> rates = new Dictionary<int, string>();
-                        foreach (Boon boon in Boon.getAllBuffList())
+                        foreach (Boon boon in list_to_use)
                         {
                             string rate = "0";
 

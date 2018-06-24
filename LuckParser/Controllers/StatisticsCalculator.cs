@@ -450,7 +450,7 @@ namespace LuckParser.Controllers
             Dictionary<int, Statistics.FinalBoonUptime> final =
                 new Dictionary<int, Statistics.FinalBoonUptime>();
 
-            foreach (Boon boon in Boon.getAllBuffList())
+            foreach (Boon boon in to_track)
             {
                 long totalGeneration = 0;
                 long totalOverstack = 0;
