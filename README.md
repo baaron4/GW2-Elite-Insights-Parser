@@ -1,6 +1,7 @@
 ## Contact
 For quick Questions, discussions, or other conversation that isnt an issue feel free to join an open discord channel: 
 https://discord.gg/dCDEPXx
+
 # GW2-Elite-Insights-Parser
 ## Set Up:
 
