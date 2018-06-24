@@ -220,7 +220,7 @@ namespace LuckParser.Controllers
                     sw.Write("<th>Name</th>");
                     foreach (Boon boon in list_to_use)
                     {
-                        sw.Write("<th width=\"50px\">" + "<img src=\"http://via.placeholder.com/18x18\" data-src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                        sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                     }
                 }
                 sw.Write("</tr> ");
@@ -234,7 +234,7 @@ namespace LuckParser.Controllers
             sw.Write("<tr>");
             {
                 sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"http://via.placeholder.com/18x18\" data-src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
                 sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
                 foreach (Boon boon in list_to_use)
                 {
@@ -329,7 +329,7 @@ namespace LuckParser.Controllers
                     string condiName = condi.getName();// Boon.getCondiName(condiID);
                     sw.Write("<tr class=\"condi\">");
                     {
-                        sw.Write("<td align=\"left\"><img src=\"http://via.placeholder.com/18x18\" data-src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                        sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
                         sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                         sw.Write("<td>" + totaldamage + "</td>");
                         sw.Write("<td>" + mindamage + "</td>");
@@ -381,7 +381,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\"><img src=\"http://via.placeholder.com/18x18\" data-src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                    sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
                     sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                     sw.Write("<td>" + totaldamage + "</td>");
                     sw.Write("<td>" + mindamage + "</td>");
@@ -423,7 +423,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\"><img src=\"http://via.placeholder.com/18x18\" data-src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                    sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
@@ -659,19 +659,19 @@ namespace LuckParser.Controllers
                 sw.Write("<th>Sub</th>");
                 sw.Write("<th></th>");
                 sw.Write("<th>Name</th>");
-                sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Crit") + " alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Scholar") + " alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("SwS") + " alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Flank") + " alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Glance") + " alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Blinded") + " alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Interupts") + " alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Invuln") + " alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Wasted") + " alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Saved") + " alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Swap") + " alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Crit") + " alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Scholar") + " alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("SwS") + " alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Flank") + " alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Glance") + " alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Blinded") + " alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Interupts") + " alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Invuln") + " alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Wasted") + " alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Saved") + " alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Swap") + " alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=" + HTMLHelper.GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
             }
             sw.Write("</tr>");
         }
