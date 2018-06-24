@@ -608,8 +608,8 @@ namespace LuckParser.Controllers
                         sw.Write("<th>All DPS</th>");
                         sw.Write("<th>Power</th>");
                         sw.Write("<th>Condi</th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
                     }
                     sw.Write("</tr>");
                 }
@@ -635,7 +635,7 @@ namespace LuckParser.Controllers
                     sw.Write("<tr>");
                     {
                         sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                        sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                        sw.Write("<td>" + "<img src=\"http://via.placeholder.com/18x18\" data-src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                         sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
                         sw.Write("<td>" + player.getAccount().TrimStart(':') + "</td>");
                         //Boss dps
@@ -746,7 +746,7 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + "<img src=\"http://via.placeholder.com/18x18\" data-src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.criticalRate + " out of " + stats.powerLoopCount + "hits<br> Total Damage Effected by Crits: " + stats.criticalDmg + " \">" + (int)((Double)(stats.criticalRate) / stats.powerLoopCount * 100) + "%</span>" + "</td>");//crit
@@ -825,7 +825,7 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + "<img src=\"http://via.placeholder.com/18x18\" data-src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.criticalRateBoss + " out of " + stats.powerLoopCountBoss + "hits<br> Total Damage Effected by Crits: " + stats.criticalDmgBoss + " \">" + (int)((Double)(stats.criticalRateBoss) / stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//crit
@@ -891,8 +891,8 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Invulned</th>");
                         sw.Write("<th>Evaded</th>");
                         sw.Write("<th><span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Dodges or Mirage Cloak \">Dodges</span></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
-                        sw.Write("<th><img src=" + HTMLHelper.GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>");
+                        sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Downs") + " alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                        sw.Write("<th><img src=\"http://via.placeholder.com/18x18\" data-src=" + HTMLHelper.GetLink("Dead") + " alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>");
                     }
                     sw.Write("</tr>");
                 }
@@ -921,7 +921,7 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + "<img src=\"http://via.placeholder.com/18x18\" data-src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
                             sw.Write("<td>" + defenses.damageTaken + "</td>");//dmg taken
                             sw.Write("<td>" + defenses.damageBarrier + "</td>");//dmgbarrier
@@ -1031,7 +1031,7 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + "<img src=\"http://via.placeholder.com/18x18\" data-src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.condiCleanseTime + " seconds \">" + support.condiCleanse + "</span>" + "</td>");//condicleanse                                                                                                                                                                   //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.ressurrectTime + " seconds \">" + support.resurrects + "</span>" + "</td>");//res
@@ -1103,7 +1103,7 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + "<img src=\"http://via.placeholder.com/18x18\" data-src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             if (boonTable)
                             {
                                 List<Boon> boon_to_track = new List<Boon>();
@@ -1453,7 +1453,7 @@ namespace LuckParser.Controllers
                 string pid = p.getInstid() + "_" + phase_index;
                 sw.Write("<div class=\"tab-pane fade\" id=\"" + pid + "\">");
                 {
-                    sw.Write("<h1 align=\"center\"> " + charname + "<img src=\"" + HTMLHelper.GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
+                    sw.Write("<h1 align=\"center\"> " + charname + "<img src=\"http://via.placeholder.com/18x18\" data-src=\"" + HTMLHelper.GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</h1>");
                     sw.Write("<ul class=\"nav nav-tabs\">");
                     {
                         sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + pid + "\">" + p.getCharacter() + "</a></li>");
@@ -1506,11 +1506,11 @@ namespace LuckParser.Controllers
                                 sw.Write("<p>Started with ");
                                 if (food != null)
                                 {
-                                    sw.Write(food.getName() + "<img src=\"" + food.getLink() + " \" alt=\"" + food.getName() + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write(food.getName() + "<img src=\"http://via.placeholder.com/18x18\" data-src=\"" + food.getLink() + " \" alt=\"" + food.getName() + "\" height=\"18\" width=\"18\" >");
                                 }
                                 if (utility != null)
                                 {
-                                    sw.Write(utility.getName() + "<img src=\"" + utility.getLink() + " \" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write(utility.getName() + "<img src=\"http://via.placeholder.com/18x18\" data-src=\"" + utility.getLink() + " \" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
                                 }
                                 sw.Write("</p>");
                             }
@@ -1537,11 +1537,11 @@ namespace LuckParser.Controllers
                                 sw.Write("<p>Refreshed ");
                                 if (food != null)
                                 {
-                                    sw.Write(food.getName() + "<img src=\"" + food.getLink() + " \" alt=\"" + food.getName() + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write(food.getName() + "<img src=\"http://via.placeholder.com/18x18\" data-src=\"" + food.getLink() + " \" alt=\"" + food.getName() + "\" height=\"18\" width=\"18\" >");
                                 }
                                 if (utility != null)
                                 {
-                                    sw.Write(utility.getName() + "<img src=\"" + utility.getLink() + " \" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write(utility.getName() + "<img src=\"http://via.placeholder.com/18x18\" data-src=\"" + utility.getLink() + " \" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
                                 }
                                 sw.Write("</p>");
                             }
@@ -1767,10 +1767,10 @@ namespace LuckParser.Controllers
                         {
                             if (autosCount > 0 && settings.ShowAutos)
                             {
-                                sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + autoSkill.icon + "\" data-toggle=\"tooltip\" title= \"" + autoSkill.name + "[Auto Attack] x" + autosCount + " \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
+                                sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"http://via.placeholder.com/18x18\" data-src=\"" + autoSkill.icon + "\" data-toggle=\"tooltip\" title= \"" + autoSkill.name + "[Auto Attack] x" + autosCount + " \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
                                 autosCount = 0;
                             }
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"http://via.placeholder.com/18x18\" data-src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
                         }
                         else
                         {
@@ -1790,7 +1790,7 @@ namespace LuckParser.Controllers
                         {//wepswap
                             skillName = "Weapon Swap";
                             skillLink = HTMLHelper.GetLink("Swap");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"http://via.placeholder.com/18x18\" data-src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
                             sw.Write("<br>");
                             continue;
                         }
@@ -1798,7 +1798,7 @@ namespace LuckParser.Controllers
                         {
                             skillName = "Resurrect";
                             skillLink = HTMLHelper.GetLink("Downs");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"http://via.placeholder.com/18x18\" data-src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
 
                         }
                         else
@@ -1806,7 +1806,7 @@ namespace LuckParser.Controllers
                         {
                             skillName = "Bandage";
                             skillLink = HTMLHelper.GetLink("Bandage");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"http://via.placeholder.com/18x18\" data-src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
 
                         }
                         else
@@ -1814,13 +1814,7 @@ namespace LuckParser.Controllers
                         {
                             skillName = "Dodge";
                             skillLink = HTMLHelper.GetLink("Dodge");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
-
-                        }
-                        else if (skill != null)
-                        {
-
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + HTMLHelper.GetLink("Blank") + "\" data-toggle=\"tooltip\" title= \"" + skill.getName() + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"http://via.placeholder.com/18x18\" data-src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
 
                         }
 
@@ -2269,7 +2263,7 @@ namespace LuckParser.Controllers
                             string condiName = condi.getName();// Boon.getCondiName(condiID);
                             sw.Write("<tr>");
                             {
-                                sw.Write("<td align=\"left\"><img src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                                sw.Write("<td align=\"left\"><img src=\"http://via.placeholder.com/18x18\" data-src=" + condi.getLink() + " alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
                                 sw.Write("<td>" + totaldamage + "</td>");
                                 sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                                 sw.Write("<td>" + hits + "</td>");
@@ -2314,7 +2308,7 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("<tr>");
                                 {
-                                    sw.Write("<td align=\"left\"><img src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                                    sw.Write("<td align=\"left\"><img src=\"http://via.placeholder.com/18x18\" data-src=" + skill.GetGW2APISkill().icon + " alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
                                     sw.Write("<td>" + totaldamage + "</td>");
                                     sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                                     sw.Write("<td>" + hits + "</td>");
@@ -2768,8 +2762,41 @@ namespace LuckParser.Controllers
                 sw.Write("table.dataTable.display tbody tr.condi {background-color: #ff6666;}");
                 sw.Write(".rot-skill{width: " + simpleRotSize + "px;height: " + simpleRotSize + "px;display: inline - block;}");
                 sw.Write(".rot-crop{width : " + simpleRotSize + "px;height: " + simpleRotSize + "px; display: inline-block}");
+                sw.Write("img{opacity:1; transision: opacity 0.3s;}");
+                sw.Write("img[data-src]{opacity:0.1;}");
             }
             sw.Write("</style>");
+        }
+
+        private void CreateCustomScript(StreamWriter sw)
+        {
+            sw.Write("<script> $(document).ready(function(){$('[data-toggle=\"tooltip\"]').tooltip(); });</script >");
+
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {" +
+                    "var lazyImages = [].slice.call(document.querySelectorAll(\"img[data-src]\"));" +
+
+                    "if (\"IntersectionObserver\" in window) {" +
+                        "let lazyImageObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "let lazyImage = entry.target;" +
+                                    "lazyImage.src = lazyImage.dataset.src;" +
+                                    "lazyImage.removeAttribute('data-src');" +
+                                    "lazyImageObserver.unobserve(lazyImage);" +
+                                "}" +
+                            "});" +
+                        "});" +
+
+                        "lazyImages.forEach(function(lazyImage) {" +
+                            "lazyImageObserver.observe(lazyImage);" +
+                        "});" +
+                    "} " +
+                "});");
+            }
+            sw.Write("</script>");
         }
 
         /// <summary>
@@ -2798,7 +2825,7 @@ namespace LuckParser.Controllers
                       "<link href=\"https://fonts.googleapis.com/css?family=Open+Sans \" rel=\"stylesheet\">" +
                       "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css \">" +
                       //JQuery
-                      "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js \"></script> " +
+                      "<script src=\"https://code.jquery.com/jquery-3.3.1.js \"></script> " +
                       //popper
                       "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js \"></script>" +
                       //js
@@ -2930,7 +2957,7 @@ namespace LuckParser.Controllers
                                     {
                                         string charname = p.getCharacter();
                                         Html_playerDropdown += "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#" + p.getInstid() + "_" + i + "\">" + charname +
-                                            "<img src=\"" + HTMLHelper.GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</a>";
+                                            "<img src=\"http://via.placeholder.com/18x18\" data-src=\"" + HTMLHelper.GetLink(p.getProf().ToString()) + " \" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</a>";
                                     }
                                     sw.Write("<ul class=\"nav nav-tabs\">");
                                     {
@@ -3291,7 +3318,7 @@ namespace LuckParser.Controllers
                     sw.Write("</div>");
                 }
                 sw.Write("</body>");
-                sw.Write("<script> $(document).ready(function(){$('[data-toggle=\"tooltip\"]').tooltip(); });</script >");
+                CreateCustomScript(sw);
             }
             //end
             sw.Write("</html>");
