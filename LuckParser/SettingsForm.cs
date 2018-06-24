@@ -90,6 +90,7 @@ namespace LuckParser
             chkShow10s.Checked = Properties.Settings.Default.Show10s;
             chkShow30s.Checked = Properties.Settings.Default.Show30s;
             chkOneAtATime.Checked = Properties.Settings.Default.ParseOneAtATime;
+            chkLightTheme.Checked = Properties.Settings.Default.LightTheme;
         }
 
         private void DefaultOutputLocation_CheckedChanged(object sender, EventArgs e)
@@ -191,6 +192,11 @@ namespace LuckParser
         private void Show30s_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.Show30s = chkShow30s.Checked;
+        }
+
+        private void LightTheme_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.LightTheme = chkLightTheme.Checked;
         }
     }
 }

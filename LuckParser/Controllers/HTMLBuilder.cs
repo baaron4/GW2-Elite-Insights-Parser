@@ -432,21 +432,39 @@ namespace LuckParser.Controllers
             {
                 sw.Write("{}");
             }
-            sw.Write("];" +
-                    "var layout = {" +
-                        "yaxis:{title:'DPS'}," +
-                        "xaxis:{title:'Time(sec)'}," +
-                        //"legend: { traceorder: 'reversed' }," +
-                        "hovermode: 'compare'," +
-                        "legend: {orientation: 'h'}," +
-                        // "yaxis: { title: 'DPS', domain: [0.51, 1] }," +
 
-
-                        "font: { color: '#ffffff' }," +
-                        "paper_bgcolor: 'rgba(0,0,0,0)'," +
-                        "plot_bgcolor: 'rgba(0,0,0,0)'" +
-                    "};" +
-                    "Plotly.newPlot('" + plotID + "', data, layout);");
+            if (settings.LightTheme)
+            {
+                sw.Write("];" +
+                         "var layout = {" +
+                         "yaxis:{title:'DPS'}," +
+                         "xaxis:{title:'Time(sec)'}," +
+                         //"legend: { traceorder: 'reversed' }," +
+                         "hovermode: 'compare'," +
+                         "legend: {orientation: 'h'}," +
+                         // "yaxis: { title: 'DPS', domain: [0.51, 1] }," +
+                         "font: { color: '#000000' }," +
+                         "paper_bgcolor: 'rgba(255,255,255,0)'," +
+                         "plot_bgcolor: 'rgba(255,255,255,0)'" +
+                         "};" +
+                         "Plotly.newPlot('" + plotID + "', data, layout);");
+            }
+            else
+            {
+                sw.Write("];" +
+                         "var layout = {" +
+                         "yaxis:{title:'DPS'}," +
+                         "xaxis:{title:'Time(sec)'}," +
+                         //"legend: { traceorder: 'reversed' }," +
+                         "hovermode: 'compare'," +
+                         "legend: {orientation: 'h'}," +
+                         // "yaxis: { title: 'DPS', domain: [0.51, 1] }," +
+                         "font: { color: '#ffffff' }," +
+                         "paper_bgcolor: 'rgba(0,0,0,0)'," +
+                         "plot_bgcolor: 'rgba(0,0,0,0)'" +
+                         "};" +
+                         "Plotly.newPlot('" + plotID + "', data, layout);");
+            }
             sw.Write("</script> ");
         }
         private void GetRoles()
@@ -1646,9 +1664,18 @@ namespace LuckParser.Controllers
                                         }
                                     }
                                     sw.Write("],");
-                                    sw.Write("font: { color: '#ffffff' }," +
-                                            "paper_bgcolor: 'rgba(0,0,0,0)'," +
-                                            "plot_bgcolor: 'rgba(0,0,0,0)'");
+                                    if (settings.LightTheme)
+                                    {
+                                        sw.Write("font: { color: '#000000' }," +
+                                                 "paper_bgcolor: 'rgba(255, 255, 255, 0)'," +
+                                                 "plot_bgcolor: 'rgba(255, 255, 255, 0)'");
+                                    }
+                                    else
+                                    {
+                                        sw.Write("font: { color: '#ffffff' }," +
+                                                 "paper_bgcolor: 'rgba(0,0,0,0)'," +
+                                                 "plot_bgcolor: 'rgba(0,0,0,0)'");
+                                    }
                                 }
                                 sw.Write("};");
                                 sw.Write("Plotly.newPlot('Graph" + pid + "', data, layout);");
@@ -1993,8 +2020,20 @@ namespace LuckParser.Controllers
 
                 sw.Write("}];");
 
-                sw.Write("var layout = { title: 'Last 30k Damage Taken before death', font: { color: '#ffffff' },width: 1100," +
-                    "paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',showlegend: false,bargap :0.05,yaxis:{title:'Damage'},xaxis:{title:'Time(seconds)',type:'catagory'}};");
+                if (settings.LightTheme)
+                {
+                    sw.Write(
+                        "var layout = { title: 'Last 30k Damage Taken before death', font: { color: '#ffffff' },width: 1100," +
+                        "paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',showlegend: false,bargap :0.05,yaxis:{title:'Damage'},xaxis:{title:'Time(seconds)',type:'catagory'}};");
+                }
+                else
+                {
+                    sw.Write(
+                        "var layout = { title: 'Last 30k Damage Taken before death', font: { color: '#000000' },width: 1100," +
+                        "paper_bgcolor: 'rgba(255,255,255,0)', plot_bgcolor: 'rgba(255,255,255,0)',showlegend: false,bargap :0.05,yaxis:{title:'Damage'},xaxis:{title:'Time(seconds)',type:'catagory'}};");
+
+                }
+
                 sw.Write("Plotly.newPlot('BarDeathRecap" + pid + "', data, layout);");
 
             }
@@ -2681,10 +2720,19 @@ namespace LuckParser.Controllers
                                 }
                             }
                         }
-                        sw.Write("],");
-                        sw.Write("font: { color: '#ffffff' }," +
-                                "paper_bgcolor: 'rgba(0,0,0,0)'," +
-                                "plot_bgcolor: 'rgba(0,0,0,0)'");
+                        sw.Write("],");         
+                        if (settings.LightTheme)
+                        {
+                            sw.Write("font: { color: '#000000' }," +
+                                     "paper_bgcolor: 'rgba(255, 255, 255, 0)'," +
+                                     "plot_bgcolor: 'rgba(255, 255, 255, 0)'");
+                        }
+                        else
+                        {
+                            sw.Write("font: { color: '#ffffff' }," +
+                                     "paper_bgcolor: 'rgba(0,0,0,0)'," +
+                                     "plot_bgcolor: 'rgba(0,0,0,0)'");
+                        }
                     }
                     sw.Write("};");
                     sw.Write("Plotly.newPlot('Graph" + pid + "', data, layout);");
@@ -2750,24 +2798,41 @@ namespace LuckParser.Controllers
         {
             sw.Write("<style>");
             {
-                sw.Write("table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}");
                 sw.Write("td, th {text-align: center; white-space: nowrap;}");
-                sw.Write("table.dataTable  td {color: black;}");
                 sw.Write(".sorting_disabled {padding: 5px !important;}");
-                sw.Write("table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc ");
-                sw.Write("{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}");
-                sw.Write("table.dataTable thead.sorting_asc{color: green;}");
-                sw.Write(".text-left {text-align: left;}");
-                sw.Write("table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }");
-                sw.Write(".rot-table {width: 100%;border-collapse: separate;border-spacing: 5px 0px;}");
-                sw.Write(".rot-table > tbody > tr > td {padding: 1px;text-align: left;}");
-                sw.Write(".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}");
-                sw.Write(".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}");
-                sw.Write("div.dataTables_wrapper { width: 1100px; margin: 0 auto; }");
                 sw.Write("th.dt-left, td.dt-left { text-align: left; }");
-                sw.Write("table.dataTable.display tbody tr.condi {background-color: #ff6666;}");
-                sw.Write(".rot-skill{width: " + simpleRotSize + "px;height: " + simpleRotSize + "px;display: inline - block;}");
-                sw.Write(".rot-crop{width : " + simpleRotSize + "px;height: " + simpleRotSize + "px; display: inline-block}");
+                sw.Write("div.dataTables_wrapper { width: 1100px; margin: 0 auto; }");
+                if (!settings.LightTheme)
+                {
+                    sw.Write("table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}");
+                    sw.Write("table.dataTable  td {color: black;}");
+                    sw.Write("table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc ");
+                    sw.Write("{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}");
+                    sw.Write("table.dataTable thead.sorting_asc{color: green;}");
+                    sw.Write(".text-left {text-align: left;}");
+                    sw.Write("table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }");
+                    sw.Write(".rot-table {width: 100%;border-collapse: separate;border-spacing: 5px 0px;}");
+                    sw.Write(".rot-table > tbody > tr > td {padding: 1px;text-align: left;}");
+                    sw.Write(".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}");
+                    sw.Write(".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}");
+                    sw.Write("table.dataTable.display tbody tr.condi {background-color: #ff6666;}");
+                    sw.Write(".rot-skill{width: " + simpleRotSize + "px;height: " + simpleRotSize + "px;display: inline - block;}");
+                    sw.Write(".rot-crop{width : " + simpleRotSize + "px;height: " + simpleRotSize + "px; display: inline-block}");
+                }
+                else
+                {
+                    sw.Write("table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc ");
+                    sw.Write("{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}");
+                    sw.Write("table.dataTable thead.sorting_asc{color: green;}");
+                    sw.Write(".text-left {text-align: left;}");
+                    sw.Write("table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }");
+                    sw.Write(".rot-table {width: 100%;border-collapse: separate;border-spacing: 5px 0px;}");
+                    sw.Write(".rot-table > tbody > tr > td {padding: 1px;text-align: left;}");
+                    sw.Write(".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}");
+                    sw.Write(".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}");
+                    sw.Write(".rot-skill{width: " + simpleRotSize + "px;height: " + simpleRotSize + "px;display: inline - block;}");
+                    sw.Write(".rot-crop{width : " + simpleRotSize + "px;height: " + simpleRotSize + "px; display: inline-block}");
+                }
             }
             sw.Write("</style>");
         }
@@ -2792,10 +2857,24 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<head>");
                 {
-                    sw.Write("<meta charset=\"utf-8\">" +
-                      "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
-                      "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.css \"  crossorigin=\"anonymous\">" +
-                      "<link href=\"https://fonts.googleapis.com/css?family=Open+Sans \" rel=\"stylesheet\">" +
+                    sw.Write("<meta charset=\"utf-8\">");
+
+                    if (!settings.LightTheme)
+                    {
+                        sw.Write(
+                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
+                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.css \"  crossorigin=\"anonymous\">"
+                        );
+                    }
+                    else
+                    {
+                        sw.Write(
+                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/litera/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
+                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/litera/bootstrap.css \"  crossorigin=\"anonymous\">"
+                        );
+                    }
+
+                    sw.Write("<link href=\"https://fonts.googleapis.com/css?family=Open+Sans \" rel=\"stylesheet\">" +
                       "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css \">" +
                       //JQuery
                       "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js \"></script> " +
@@ -3394,9 +3473,18 @@ namespace LuckParser.Controllers
                         }
                     }
                     sw.Write("],");
-                    sw.Write("font: { color: '#ffffff' }," +
-                            "paper_bgcolor: 'rgba(0,0,0,0)'," +
-                            "plot_bgcolor: 'rgba(0,0,0,0)'");
+                    if (settings.LightTheme)
+                    {
+                        sw.Write("font: { color: '#000000' }," +
+                                 "paper_bgcolor: 'rgba(255,255,255,0)'," +
+                                 "plot_bgcolor: 'rgba(255,255,255,0)'");
+                    }
+                    else
+                    {
+                        sw.Write("font: { color: '#ffffff' }," +
+                                 "paper_bgcolor: 'rgba(0,0,0,0)'," +
+                                 "plot_bgcolor: 'rgba(0,0,0,0)'");
+                    }
                 }
                 sw.Write("};");
                 sw.Write("Plotly.newPlot('Graph" + p.getInstid() + "', data, layout);");
