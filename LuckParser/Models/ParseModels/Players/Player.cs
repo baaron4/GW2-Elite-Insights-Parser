@@ -141,7 +141,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 if (apiskill != null && cl.getTime() > swappedTime)
                 {
-                    if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && apiskill.categories == null)
+                    if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && (apiskill.categories == null || (apiskill.categories.Count() == 1 && apiskill.categories[0] == "Phantasm")))
                     {
                         if (apiskill.weapon_type == "Greatsword" || apiskill.weapon_type == "Staff" || apiskill.weapon_type == "Rifle" || apiskill.weapon_type == "Longbow" || apiskill.weapon_type == "Shortbow" || apiskill.weapon_type == "Hammer")
                         {
