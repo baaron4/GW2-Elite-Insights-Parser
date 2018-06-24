@@ -2802,36 +2802,22 @@ namespace LuckParser.Controllers
                 sw.Write(".sorting_disabled {padding: 5px !important;}");
                 sw.Write("th.dt-left, td.dt-left { text-align: left; }");
                 sw.Write("div.dataTables_wrapper { width: 1100px; margin: 0 auto; }");
+                sw.Write(".text-left {text-align: left;}");
+                sw.Write("table.dataTable thead.sorting_asc{color: green;}");
+                sw.Write(".rot-skill{width: " + simpleRotSize + "px;height: " + simpleRotSize + "px;display: inline - block;}");
+                sw.Write(".rot-crop{width : " + simpleRotSize + "px;height: " + simpleRotSize + "px; display: inline-block}");
+                sw.Write(".rot-table {width: 100%;border-collapse: separate;border-spacing: 5px 0px;}");
+                sw.Write(".rot-table > tbody > tr > td {padding: 1px;text-align: left;}");
+                sw.Write(".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}");
+                sw.Write(".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}");
+                sw.Write("table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc ");
+                sw.Write("{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}");
+                sw.Write("table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }");
                 if (!settings.LightTheme)
                 {
                     sw.Write("table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}");
                     sw.Write("table.dataTable  td {color: black;}");
-                    sw.Write("table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc ");
-                    sw.Write("{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}");
-                    sw.Write("table.dataTable thead.sorting_asc{color: green;}");
-                    sw.Write(".text-left {text-align: left;}");
-                    sw.Write("table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }");
-                    sw.Write(".rot-table {width: 100%;border-collapse: separate;border-spacing: 5px 0px;}");
-                    sw.Write(".rot-table > tbody > tr > td {padding: 1px;text-align: left;}");
-                    sw.Write(".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}");
-                    sw.Write(".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}");
                     sw.Write("table.dataTable.display tbody tr.condi {background-color: #ff6666;}");
-                    sw.Write(".rot-skill{width: " + simpleRotSize + "px;height: " + simpleRotSize + "px;display: inline - block;}");
-                    sw.Write(".rot-crop{width : " + simpleRotSize + "px;height: " + simpleRotSize + "px; display: inline-block}");
-                }
-                else
-                {
-                    sw.Write("table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc ");
-                    sw.Write("{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}");
-                    sw.Write("table.dataTable thead.sorting_asc{color: green;}");
-                    sw.Write(".text-left {text-align: left;}");
-                    sw.Write("table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }");
-                    sw.Write(".rot-table {width: 100%;border-collapse: separate;border-spacing: 5px 0px;}");
-                    sw.Write(".rot-table > tbody > tr > td {padding: 1px;text-align: left;}");
-                    sw.Write(".rot-table > thead {vertical-align: bottom;border-bottom: 2px solid #ddd;}");
-                    sw.Write(".rot-table > thead > tr > th {padding: 10px 1px 9px 1px;line-height: 18px;text-align: left;}");
-                    sw.Write(".rot-skill{width: " + simpleRotSize + "px;height: " + simpleRotSize + "px;display: inline - block;}");
-                    sw.Write(".rot-crop{width : " + simpleRotSize + "px;height: " + simpleRotSize + "px; display: inline-block}");
                 }
             }
             sw.Write("</style>");
@@ -2869,8 +2855,8 @@ namespace LuckParser.Controllers
                     else
                     {
                         sw.Write(
-                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/litera/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
-                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/litera/bootstrap.css \"  crossorigin=\"anonymous\">"
+                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/lumen/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
+                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/lumen/bootstrap.css \"  crossorigin=\"anonymous\">"
                         );
                     }
 
