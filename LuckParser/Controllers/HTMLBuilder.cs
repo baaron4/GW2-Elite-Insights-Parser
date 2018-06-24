@@ -3286,7 +3286,7 @@ namespace LuckParser.Controllers
                         sw.Write("</div>");
                         sw.Write("<p style=\"margin-top:10px;\"> ARC:" + log.getLogData().getBuildVersion().ToString() + " | Bossid " + log.getBossData().getID().ToString() + "| EI Version: " +Application.ProductVersion + " </p> ");
                        
-                        sw.Write("<p style=\"margin-top:-15px;\">File recorded by: " + log.getLogData().getPOV() + "</p>");
+                        sw.Write("<p style=\"margin-top:-15px;\">File recorded by: " + log.getLogData().getPOV().Split(':')[0] + "</p>");
                     }
                     sw.Write("</div>");
                 }
