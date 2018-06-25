@@ -4,18 +4,18 @@ using System.IO;
 using System.Linq;
 using LuckParser.Models.ParseModels;
 using System.Drawing;
-using System.Net;
 using System.IO.Compression;
-using System.ComponentModel;
+
 //recomend CTRL+M+O to collapse all
 using LuckParser.Models.DataModels;
+using System.Globalization;
 
 //recommend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {
     public class Parser
     {
-        private GW2APIController APIController = new GW2APIController();            
+        private GW2APIController APIController = new GW2APIController();
 
         //Main data storage after binary parse
         private LogData log_data;
@@ -52,276 +52,300 @@ namespace LuckParser.Controllers
         /// <returns></returns>
         public void ParseLog(GridRow row, string evtc)
         {
-            using (MemoryStream stream = new MemoryStream())
+            using(var fs = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                using (FileStream origstream = new FileStream(evtc, FileMode.Open, FileAccess.Read, FileShare.Read))
+                if(evtc.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (evtc.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+                    using(var arch = new ZipArchive(fs, ZipArchiveMode.Read))
                     {
-                        using (var arch = new ZipArchive(origstream, ZipArchiveMode.Read))
+                        if(arch.Entries.Count != 1)
                         {
-                            if (arch.Entries.Count != 1)
-                            {
-                                throw new CancellationException(row, new InvalidDataException("Invalid Archive"));
-                            }
-                            using (var data = arch.Entries[0].Open())
-                            {
-                                data.CopyTo(stream);
-                            }
+                            throw new CancellationException(row, new InvalidDataException("Invalid Archive"));
+                        }
+                        using(var data = arch.Entries[0].Open())
+                        {
+                            ParseLog(row, data);
                         }
                     }
-                    else
-                    {
-                        origstream.CopyTo(stream);
-                    }
                 }
-                stream.Position = 0;
-
-                try
+                else
                 {
-                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
-                    row.BgWorker.UpdateProgress(row, "15% - Parsing boss data...", 15);
-                    parseBossData(stream);
-                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
-                    row.BgWorker.UpdateProgress(row, "20% - Parsing agent data...", 20);
-                    parseAgentData(stream);
-                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
-                    row.BgWorker.UpdateProgress(row, "25% - Parsing skill data...", 25);
-                    parseSkillData(stream);
-                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
-                    row.BgWorker.UpdateProgress(row, "30% - Parsing combat list...", 30);
-                    parseCombatList(stream);
-                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
-                    row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
-                    fillMissingData(stream);
-                    row.BgWorker.ThrowIfCanceled(row, "Cancelled");
-                }
-                catch (Exception ex)
-                {
-                    if (ex is CancellationException)
-                    {
-                        throw ex;
-                    }
-
-                    throw new CancellationException(row, ex);
+                    ParseLog(row, fs);
                 }
             }
+        }
+
+        private void ParseLog(GridRow row, Stream stream)
+        {
+            try
+            {
+                row.BgWorker.ThrowIfCanceled(row);
+                row.BgWorker.UpdateProgress(row, "15% - Parsing boss data...", 15);
+                parseBossData(stream);
+                row.BgWorker.ThrowIfCanceled(row);
+                row.BgWorker.UpdateProgress(row, "20% - Parsing agent data...", 20);
+                parseAgentData(stream);
+                row.BgWorker.ThrowIfCanceled(row);
+                row.BgWorker.UpdateProgress(row, "25% - Parsing skill data...", 25);
+                parseSkillData(stream);
+                row.BgWorker.ThrowIfCanceled(row);
+                row.BgWorker.UpdateProgress(row, "30% - Parsing combat list...", 30);
+                parseCombatList(stream);
+                row.BgWorker.ThrowIfCanceled(row);
+                row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
+                fillMissingData();
+                row.BgWorker.ThrowIfCanceled(row);
+            }
+            catch(Exception ex) when (!(ex is CancellationException))
+            {
+                throw new CancellationException(row, ex);
+            }
+        }
+
+        private static BinaryReader CreateReader(Stream stream)
+        {
+            return new BinaryReader(stream, System.Text.Encoding.UTF8, leaveOpen: true);
+        }
+
+        private static bool TryRead(Stream stream, byte[] data)
+        {
+            int offset = 0;
+            int count  = data.Length;
+            while(count > 0)
+            {
+                var bytesRead = stream.Read(data, offset, count);
+                if(bytesRead == 0)
+                {
+                    return false;
+                }
+                offset += bytesRead;
+                count  -= bytesRead;
+            }
+            return true;
         }
 
         //sub Parse methods
         /// <summary>
         /// Parses boss related data
         /// </summary>
-        private void parseBossData(MemoryStream stream)
+        private void parseBossData(Stream stream)
         {
-            // 12 bytes: arc build version
-            String build_version = ParseHelper.getString(stream, 12);
-            this.log_data = new LogData(build_version);
+            using (var reader = CreateReader(stream))
+            {
+                // 12 bytes: arc build version
+                var build_version = ParseHelper.getString(stream, 12);
+                this.log_data = new LogData(build_version);
 
-            // 1 byte: skip
-            ParseHelper.safeSkip(stream, 1);
+                // 1 byte: skip
+                ParseHelper.safeSkip(stream, 1);
 
-            // 2 bytes: boss instance ID
-            ushort id = ParseHelper.getShort(stream);
+                // 2 bytes: boss instance ID
+                ushort id = reader.ReadUInt16();
 
-            // 1 byte: position
-            ParseHelper.safeSkip(stream, 1);
+                // 1 byte: position
+                ParseHelper.safeSkip(stream, 1);
 
-            //Save
-            // TempData["Debug"] = build_version +" "+ instid.ToString() ;
-            this.boss_data = new BossData(id);
+                //Save
+                // TempData["Debug"] = build_version +" "+ instid.ToString() ;
+                this.boss_data = new BossData(id);
+            }
         }
+
         /// <summary>
         /// Parses agent related data
         /// </summary>
-        private void parseAgentData(MemoryStream stream)
+        private void parseAgentData(Stream stream)
         {
-            // 4 bytes: player count
-            int player_count = ParseHelper.getInt(stream);
-
-            // 96 bytes: each player
-            for (int i = 0; i < player_count; i++)
+            using (var reader = CreateReader(stream))
             {
-                // 8 bytes: agent
-                ulong agent = ParseHelper.getULong(stream);
+                // 4 bytes: player count
+                int player_count = reader.ReadInt32();
 
-                // 4 bytes: profession
-                uint prof = ParseHelper.getUInt(stream);
-
-                // 4 bytes: is_elite
-                uint is_elite = ParseHelper.getUInt(stream);
-
-                // 2 bytes: toughness
-                int toughness = ParseHelper.getShort(stream);
-                // skip concentration
-                ParseHelper.safeSkip(stream, 2);
-                // 2 bytes: healing
-                int healing = ParseHelper.getShort(stream);
-                ParseHelper.safeSkip(stream, 2);
-                // 2 bytes: condition
-                int condition = ParseHelper.getShort(stream);
-                ParseHelper.safeSkip(stream, 2);
-                // 68 bytes: name
-                String name = ParseHelper.getString(stream, 68);
-                //Save
-                Agent a = new Agent(agent, name, prof, is_elite);
-                string agent_prof = "";
-                if (a != null)
+                // 96 bytes: each player
+                for (int i = 0; i < player_count; i++)
                 {
-                    agent_prof = a.getProf(this.log_data.getBuildVersion(), APIController);
-                    // NPC
-                    if (agent_prof == "NPC")
+                    // 8 bytes: agent
+                    ulong agent = reader.ReadUInt64();
+
+                    // 4 bytes: profession
+                    uint prof = reader.ReadUInt32();
+
+                    // 4 bytes: is_elite
+                    uint is_elite = reader.ReadUInt32();
+
+                    // 2 bytes: toughness
+                    int toughness = reader.ReadInt16();
+                    // skip concentration
+                    ParseHelper.safeSkip(stream, 2);
+                    // 2 bytes: healing
+                    int healing = reader.ReadInt16();
+                    ParseHelper.safeSkip(stream, 2);
+                    // 2 bytes: condition
+                    int condition = reader.ReadInt16();
+                    ParseHelper.safeSkip(stream, 2);
+                    // 68 bytes: name
+                    String name = ParseHelper.getString(stream, 68, false);
+                    //Save
+                    Agent a = new Agent(agent, name, prof, is_elite);
+                    var agent_prof = a.getProf(this.log_data.getBuildVersion(), APIController);
+                    switch(agent_prof)
                     {
-                        agent_data.addItem( new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0')), agent_prof);//a.getName() + ":" + String.format("%05d", prof)));
+                        case "NPC":
+                            // NPC
+                            agent_data.addItem(new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0')), agent_prof);
+                            break;
+                            // Gadget
+                        case "GDG":
+                            agent_data.addItem(new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0')), agent_prof);
+                            break;
+                        default:
+                            // Player
+                            agent_data.addItem(new AgentItem(agent, name, agent_prof, toughness, healing, condition), agent_prof);
+                            break;
                     }
-                    // Gadget
-                    else if (agent_prof == "GDG")
-                    {
-                        agent_data.addItem( new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0')), agent_prof);//a.getName() + ":" + String.format("%05d", prof & 0x0000ffff)));
-                    }
-                    // Player
-                    else
-                    {
-                        agent_data.addItem( new AgentItem(agent, name, agent_prof, toughness, healing, condition), agent_prof);
-                    }
-                }
-                // Unknown
-                else
-                {
-                    agent_data.addItem( new AgentItem(agent, name, prof.ToString(), toughness, healing, condition), agent_prof);
                 }
             }
-
         }
+
         /// <summary>
         /// Parses skill related data
         /// </summary>
-        private void parseSkillData(MemoryStream stream)
+        private void parseSkillData(Stream stream)
         {
-            GW2APIController apiController = new GW2APIController();
-            // 4 bytes: player count
-            int skill_count = ParseHelper.getInt(stream);
-            //TempData["Debug"] += "Skill Count:" + skill_count.ToString();
-            // 68 bytes: each skill
-            for (int i = 0; i < skill_count; i++)
+            var apiController = new GW2APIController();
+            using (var reader = CreateReader(stream))
             {
-                // 4 bytes: skill ID
-                int skill_id = ParseHelper.getInt(stream);
-
-                // 64 bytes: name
-                String name = ParseHelper.getString(stream, 64);
-                String nameTrim = name.Replace("\0", "");
-                int n;
-                bool isNumeric = int.TryParse(nameTrim, out n);//check to see if name was id
-                if (n == skill_id && skill_id != 0)
+                // 4 bytes: player count
+                int skill_count = reader.ReadInt32();
+                //TempData["Debug"] += "Skill Count:" + skill_count.ToString();
+                // 68 bytes: each skill
+                for(int i = 0; i < skill_count; i++)
                 {
-                    //was it a known boon?
-                    foreach (Boon b in Boon.getBoonList())
+                    // 4 bytes: skill ID
+                    int skill_id = reader.ReadInt32();
+
+                    // 64 bytes: name
+                    var name = ParseHelper.getString(stream, 64);
+                    if(skill_id != 0 && int.TryParse(name, out int n) && n == skill_id)
                     {
-                        if (skill_id == b.getID())
+                        //was it a known boon?
+                        foreach(Boon b in Boon.getBoonList())
                         {
-                            nameTrim = b.getName();
+                            if(skill_id == b.getID())
+                            {
+                                name = b.getName();
+                            }
                         }
                     }
+                    //Save
+
+                    var skill = new SkillItem(skill_id, name);
+
+                    skill.SetGW2APISkill(apiController);
+                    skill_data.addItem(skill);
                 }
-                //Save
-
-                SkillItem skill = new SkillItem(skill_id, nameTrim);
-
-                skill.SetGW2APISkill(apiController);
-                skill_data.addItem(skill);
             }
         }
+
+        private static CombatItem ReadCombatItem(BinaryReader reader)
+        {
+            // 8 bytes: time
+            long time = reader.ReadInt64();
+
+            // 8 bytes: src_agent
+            ulong src_agent = reader.ReadUInt64();
+
+            // 8 bytes: dst_agent
+            ulong dst_agent = reader.ReadUInt64();
+
+            // 4 bytes: value
+            int value = reader.ReadInt32();
+
+            // 4 bytes: buff_dmg
+            int buff_dmg = reader.ReadInt32();
+
+            // 2 bytes: overstack_value
+            ushort overstack_value = reader.ReadUInt16();
+
+            // 2 bytes: skill_id
+            ushort skill_id = reader.ReadUInt16();
+
+            // 2 bytes: src_instid
+            ushort src_instid = reader.ReadUInt16();
+
+            // 2 bytes: dst_instid
+            ushort dst_instid = reader.ReadUInt16();
+
+            // 2 bytes: src_master_instid
+            ushort src_master_instid = reader.ReadUInt16();
+
+            // 9 bytes: garbage
+            ParseHelper.safeSkip(reader.BaseStream, 9);
+
+            // 1 byte: iff
+            ParseEnum.IFF iff = ParseEnum.getIFF(reader.ReadByte());
+
+            // 1 byte: buff
+            ushort buff = (ushort)reader.ReadByte();
+
+            // 1 byte: result
+            ParseEnum.Result result = ParseEnum.getResult(reader.ReadByte());
+
+            // 1 byte: is_activation
+            ParseEnum.Activation is_activation = ParseEnum.getActivation(reader.ReadByte());
+
+            // 1 byte: is_buffremove
+            ParseEnum.BuffRemove is_buffremoved = ParseEnum.getBuffRemove(reader.ReadByte());
+
+            // 1 byte: is_ninety
+            ushort is_ninety = (ushort)reader.ReadByte();
+
+            // 1 byte: is_fifty
+            ushort is_fifty = (ushort)reader.ReadByte();
+
+            // 1 byte: is_moving
+            ushort is_moving = (ushort)reader.ReadByte();
+
+            // 1 byte: is_statechange
+            ParseEnum.StateChange is_statechange = ParseEnum.getStateChange(reader.ReadByte());
+
+            // 1 byte: is_flanking
+            ushort is_flanking = (ushort)reader.ReadByte();
+
+            // 1 byte: is_flanking
+            ushort is_shields = (ushort)reader.ReadByte();
+            // 2 bytes: garbage
+            ParseHelper.safeSkip(reader.BaseStream, 2);
+
+            //save
+            // Add combat
+            return new CombatItem(time, src_agent, dst_agent, value, buff_dmg, overstack_value, skill_id,
+                src_instid, dst_instid, src_master_instid, iff, buff, result, is_activation, is_buffremoved,
+                is_ninety, is_fifty, is_moving, is_statechange, is_flanking, is_shields);
+        }
+
         /// <summary>
         /// Parses combat related data
         /// </summary>
-        private void parseCombatList(MemoryStream stream)
+        private void parseCombatList(Stream stream)
         {
             // 64 bytes: each combat
-            while (stream.Length - stream.Position >= 64)
+            var data = new byte[64];
+            using(var ms     = new MemoryStream(data, writable: false))
+            using(var reader = CreateReader(ms))
             {
-                // 8 bytes: time
-                long time = ParseHelper.getLong(stream);
+                while(true)
+                {
+                    if(!TryRead(stream, data)) break;
+                    ms.Seek(0, SeekOrigin.Begin);
 
-                // 8 bytes: src_agent
-                ulong src_agent = ParseHelper.getULong(stream);
-
-                // 8 bytes: dst_agent
-                ulong dst_agent = ParseHelper.getULong(stream);
-
-                // 4 bytes: value
-                int value = ParseHelper.getInt(stream);
-
-                // 4 bytes: buff_dmg
-                int buff_dmg = ParseHelper.getInt(stream);
-
-                // 2 bytes: overstack_value
-                ushort overstack_value = ParseHelper.getShort(stream);
-
-                // 2 bytes: skill_id
-                ushort skill_id = ParseHelper.getShort(stream);
-
-                // 2 bytes: src_instid
-                ushort src_instid = ParseHelper.getShort(stream);
-
-                // 2 bytes: dst_instid
-                ushort dst_instid = ParseHelper.getShort(stream);
-
-                // 2 bytes: src_master_instid
-                ushort src_master_instid = ParseHelper.getShort(stream);
-
-                // 9 bytes: garbage
-                ParseHelper.safeSkip(stream, 9);
-
-                // 1 byte: iff
-                //IFF iff = IFF.getEnum(f.read());
-                ParseEnum.IFF iff = ParseEnum.getIFF(Convert.ToByte(stream.ReadByte())); //Convert.ToByte(stream.ReadByte());
-
-                // 1 byte: buff
-                ushort buff = (ushort)stream.ReadByte();
-
-                // 1 byte: result
-                //Result result = Result.getEnum(f.read());
-                ParseEnum.Result result = ParseEnum.getResult(Convert.ToByte(stream.ReadByte()));
-
-                // 1 byte: is_activation
-                //Activation is_activation = Activation.getEnum(f.read());
-                ParseEnum.Activation is_activation = ParseEnum.getActivation(Convert.ToByte(stream.ReadByte()));
-
-                // 1 byte: is_buffremove
-                //BuffRemove is_buffremove = BuffRemove.getEnum(f.read());
-                ParseEnum.BuffRemove is_buffremoved = ParseEnum.getBuffRemove(Convert.ToByte(stream.ReadByte()));
-
-                // 1 byte: is_ninety
-                ushort is_ninety = (ushort)stream.ReadByte();
-
-                // 1 byte: is_fifty
-                ushort is_fifty = (ushort)stream.ReadByte();
-
-                // 1 byte: is_moving
-                ushort is_moving = (ushort)stream.ReadByte();
-
-                // 1 byte: is_statechange
-                //StateChange is_statechange = StateChange.getEnum(f.read());
-                ParseEnum.StateChange is_statechange = ParseEnum.getStateChange(Convert.ToByte(stream.ReadByte()));
-
-                // 1 byte: is_flanking
-                ushort is_flanking = (ushort)stream.ReadByte();
-
-                // 1 byte: is_flanking
-                ushort is_shields = (ushort)stream.ReadByte();
-                // 2 bytes: garbage
-                ParseHelper.safeSkip(stream, 2);
-
-                //save
-                // Add combat
-                combat_data.addItem(new CombatItem(time, src_agent, dst_agent, value, buff_dmg, overstack_value, skill_id,
-                        src_instid, dst_instid, src_master_instid, iff, buff, result, is_activation, is_buffremoved,
-                        is_ninety, is_fifty, is_moving, is_statechange, is_flanking, is_shields));
+                    var combatItem = ReadCombatItem(reader);
+                    combat_data.addItem(combatItem);
+                }
             }
         }
         
-        private bool isGolem(ushort id)
+        private static bool isGolem(ushort id)
         {
             return id == 16202 || id == 16177 || id == 19676 || id == 19645 || id == 16199;
         }
@@ -329,32 +353,30 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Parses all the data again and link related stuff to each other
         /// </summary>
-        private void fillMissingData(MemoryStream stream)
+        private void fillMissingData()
         {
+            var agentsLookup = agent_data.getAllAgentsList().ToDictionary(a => a.getAgent());
+
             bool golem_mode = isGolem(boss_data.getID());
 
             // Set Agent instid, first_aware and last_aware
-            ulong redirection = 0;
-            List<CombatItem> combat_list = combat_data.getCombatList();
+            var combat_list = combat_data.getCombatList();
             foreach (CombatItem c in combat_list)
             {
-                foreach (AgentItem a in agent_data.getAllAgentsList())
+                if(agentsLookup.TryGetValue(c.getSrcAgent(), out var a))
                 {
-                    // a hack for buggy golem logs
-                    if (golem_mode && a.getID() == 19603)
-                    {
-                        redirection = a.getAgent();
-                    }
-                    if (a.getInstid() == 0 && a.getAgent() == c.getSrcAgent() && (c.isStateChange() == ParseEnum.StateChange.Normal ||(golem_mode && isGolem(a.getID())&& c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate) ))
+                    if (a.getInstid() == 0 && (c.isStateChange() == ParseEnum.StateChange.Normal ||(golem_mode && isGolem(a.getID()) && c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate) ))
                     {
                         a.setInstid(c.getSrcInstid());
                     }
-                    if (a.getInstid() != 0 && a.getAgent() == c.getSrcAgent())
+                    if (a.getInstid() != 0)
                     {
                         if (a.getFirstAware() == 0)
                         {
                             a.setFirstAware(c.getTime());
-                        } else
+                            a.setLastAware(c.getTime());
+                        }
+                        else
                         {
                             a.setLastAware(c.getTime());
                         }
@@ -366,11 +388,10 @@ namespace LuckParser.Controllers
             {
                 if (c.getSrcMasterInstid() != 0)
                 {
-                    AgentItem master = agent_data.getAllAgentsList().Find(x => x.getInstid() == c.getSrcMasterInstid() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
+                    var master = agent_data.getAllAgentsList().Find(x => x.getInstid() == c.getSrcMasterInstid() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
                     if (master != null)
                     {
-                        AgentItem minion = agent_data.getAllAgentsList().Find(x => x.getAgent() == c.getSrcAgent() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
-                        if (minion != null)
+                        if(agentsLookup.TryGetValue(c.getSrcAgent(), out var minion) && minion.getFirstAware() < c.getTime() && c.getTime() < minion.getLastAware())
                         {
                             minion.setMasterAgent(master.getAgent());
                         }
@@ -408,14 +429,27 @@ namespace LuckParser.Controllers
             boss = new Boss(bossAgent);
             List<Point> bossHealthOverTime = new List<Point>();
             // a hack for buggy golem logs
-            if (redirection != 0)
+            if(golem_mode)
             {
-                foreach (CombatItem c in combat_list)
+                ulong redirection = 0;
+
+                foreach(AgentItem a in agent_data.getAllAgentsList())
                 {
-                    if (c.getDstAgent() == 0 && c.getDstInstid() == 0 && c.isStateChange() == ParseEnum.StateChange.Normal && c.getIFF() == ParseEnum.IFF.Foe && c.isActivation() == ParseEnum.Activation.None)
+                    if(a.getID() == 19603)
                     {
-                        c.setDstAgent(bossAgent.getAgent());
-                        c.setDstInstid(bossAgent.getInstid());
+                        redirection = a.getAgent();
+                    }
+                }
+
+                if(redirection != 0)
+                {
+                    foreach(CombatItem c in combat_list)
+                    {
+                        if(c.getDstAgent() == 0 && c.getDstInstid() == 0 && c.isStateChange() == ParseEnum.StateChange.Normal && c.getIFF() == ParseEnum.IFF.Foe && c.isActivation() == ParseEnum.Activation.None)
+                        {
+                            c.setDstAgent(bossAgent.getAgent());
+                            c.setDstInstid(bossAgent.getInstid());
+                        }
                     }
                 }
             }
@@ -427,38 +461,35 @@ namespace LuckParser.Controllers
                     boss_data.setHealth((int)c.getDstAgent());
 
                 }
-                if (c.isStateChange() == ParseEnum.StateChange.PointOfView && log_data.getPOV() == "N/A")//Point of View
+                switch(c.isStateChange())
                 {
-                    ulong pov_agent = c.getSrcAgent();
-                    foreach (AgentItem p in agent_data.getPlayerAgentList())
-                    {
-                        if (pov_agent == p.getAgent())
+                    case ParseEnum.StateChange.PointOfView:
+                        if (log_data.getPOV() == "N/A")//Point of View
                         {
-                            log_data.setPOV(p.getName());
+                            ulong pov_agent = c.getSrcAgent();
+                            if(agentsLookup.TryGetValue(pov_agent, out var p))
+                            {
+                                log_data.setPOV(p.getName());
+                            }
                         }
-                    }
-
+                        break;
+                    case ParseEnum.StateChange.LogStart:
+                        log_data.setLogStart(c.getValue());
+                        break;
+                    case ParseEnum.StateChange.LogEnd:
+                        log_data.setLogEnd(c.getValue());
+                        break;
+                    case ParseEnum.StateChange.HealthUpdate:
+                        //set health update
+                        if (c.getSrcInstid() == boss_data.getInstid())
+                        {
+                            bossHealthOverTime.Add(new Point ( (int)(c.getTime() - boss_data.getFirstAware()), (int)c.getDstAgent() ));
+                        }
+                        break;
                 }
-                else if (c.isStateChange() == ParseEnum.StateChange.LogStart)//Log start
-                {
-                    log_data.setLogStart(c.getValue());
-                }
-                else if (c.isStateChange() == ParseEnum.StateChange.LogEnd)//log end
-                {
-                    log_data.setLogEnd(c.getValue());
-
-                }
-                //set health update
-                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange() == ParseEnum.StateChange.HealthUpdate)
-                {
-                    bossHealthOverTime.Add(new Point ( (int)(c.getTime() - boss_data.getFirstAware()), (int)c.getDstAgent() ));
-                }
-
             }
 
-
             // Dealing with second half of Xera | ((22611300 * 0.5) + (25560600 * 0.5)
-
             if (boss_data.getID() == 16246)
             {
                 int xera_2_instid = 0;
@@ -549,7 +580,6 @@ namespace LuckParser.Controllers
                     log_data.setBossKill(true);
                     boss_data.setLastAware(c.getTime());
                 }
-
             }
 
             //players
@@ -557,7 +587,7 @@ namespace LuckParser.Controllers
             {
 
                 //Fix Disconected players
-                List<AgentItem> playerAgentList = agent_data.getPlayerAgentList();
+                var playerAgentList = agent_data.getPlayerAgentList();
 
                 foreach (AgentItem playerAgent in playerAgentList)
                 {
@@ -577,16 +607,12 @@ namespace LuckParser.Controllers
                     }
                     if (lp.Count > 0)
                     {
-                        //make all actions of other isntances to original instid
-                        int extra_login_Id = 0;
+                        //make all actions of other instances to original instid
                         foreach (AgentItem extra in NPC_list)
                         {
                             if (extra.getAgent() == playerAgent.getAgent())
                             {
-
-                                extra_login_Id = extra.getInstid();
-
-
+                                var extra_login_Id = extra.getInstid();
                                 foreach (CombatItem c in combat_list)
                                 {
                                     if (c.getSrcInstid() == extra_login_Id)
@@ -597,7 +623,6 @@ namespace LuckParser.Controllers
                                     {
                                         c.setDstInstid(playerAgent.getInstid());
                                     }
-
                                 }
                                 break;
                             }
@@ -618,8 +643,7 @@ namespace LuckParser.Controllers
 
             }
             // Sort
-            p_list = p_list.OrderBy(a => int.Parse(a.getGroup())).ToList();//p_list.Sort((a, b)=>int.Parse(a.getGroup()) - int.Parse(b.getGroup()))
+            p_list = p_list.OrderBy(a => a.getGroup()).ToList();
         }
-
     }
 }

@@ -112,7 +112,7 @@ namespace LuckParser
 
             e.Result = rowData;
 
-            bg.ThrowIfCanceled(rowData, "Cancelled");
+            bg.ThrowIfCanceled(rowData);
 
             FileInfo fInfo = new FileInfo(rowData.Location);
             if (!fInfo.Exists)
@@ -123,17 +123,17 @@ namespace LuckParser
             }
 
             bg.UpdateProgress(rowData, " Working...", 0);
-            Parser control = new Parser();
+            Parser parser = new Parser();
 
             if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
                 fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
             {
                 //Process evtc here
                 bg.UpdateProgress(rowData, "10% - Reading Binary...", 10);
-                control.ParseLog(rowData, fInfo.FullName);
-                ParsedLog log = control.GetParsedLog();
+                parser.ParseLog(rowData, fInfo.FullName);
+                ParsedLog log = parser.GetParsedLog();
                 log.validateLogData();
-                bg.ThrowIfCanceled(rowData, "Cancelled");
+                bg.ThrowIfCanceled(rowData);
                 bg.UpdateProgress(rowData, "35% - Data parsed", 35);
 
                 //Creating File
@@ -150,13 +150,8 @@ namespace LuckParser
                     saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
                 }
 
-                string bossid = control.getBossData().getID().ToString();
-                string result = "fail";
-
-                if (control.getLogData().getBosskill())
-                {
-                    result = "kill";
-                }
+                string bossid = parser.getBossData().getID().ToString();
+                string result = parser.getLogData().getBosskill() ? "kill" : "fail";
 
                 SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
 
@@ -181,13 +176,11 @@ namespace LuckParser
                     $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.html"
                     );
                     rowData.LogLocation = outputFile;
-                    using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                    using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                    using (var sw = new StreamWriter(fs))
                     {
-                        using (StreamWriter sw = new StreamWriter(fs))
-                        {
-                            HTMLBuilder builder = new HTMLBuilder(log, settings, statistics);
-                            builder.CreateHTML(sw);
-                        }
+                        var builder = new HTMLBuilder(log, settings, statistics);
+                        builder.CreateHTML(sw);
                     }
                 }
                 if (Properties.Settings.Default.SaveOutCSV)
@@ -197,13 +190,11 @@ namespace LuckParser
                     $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.csv"
                     );
                     rowData.LogLocation = outputFile;
-                    using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                    using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                    using (var sw = new StreamWriter(fs))
                     {
-                        using (StreamWriter sw = new StreamWriter(fs))
-                        {
-                            CSVBuilder builder = new CSVBuilder(log, settings, statistics);
-                            builder.CreateCSV(sw, ",");
-                        }
+                        var builder = new CSVBuilder(log, settings, statistics);
+                        builder.CreateCSV(sw, ",");
                     }
                 }
 

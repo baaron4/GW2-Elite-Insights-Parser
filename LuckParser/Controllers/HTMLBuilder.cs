@@ -520,7 +520,7 @@ namespace LuckParser.Controllers
             int firstGroup = 11;
             foreach (Player play in log.getPlayerList())
             {
-                int playerGroup = int.Parse(play.getGroup());
+                int playerGroup = play.getGroup();
                 if (playerGroup > groupCount)
                 {
                     groupCount = playerGroup;
@@ -537,7 +537,7 @@ namespace LuckParser.Controllers
                 for (int n = firstGroup; n <= groupCount; n++)
                 {
                     sw.Write("<tr>");
-                    List<Player> sortedList = log.getPlayerList().Where(x => int.Parse(x.getGroup()) == n).ToList();
+                    List<Player> sortedList = log.getPlayerList().Where(x => x.getGroup() == n).ToList();
                     if (sortedList.Count > 0)
                     {
                         foreach (Player gPlay in sortedList)
@@ -1097,7 +1097,7 @@ namespace LuckParser.Controllers
 
                         Dictionary<int, Statistics.FinalBoonUptime> boons = statistics.selfBoons[player][phase_index];
                         List<string> boonArrayToList = new List<string>();
-                        boonArrayToList.Add(player.getGroup());
+                        boonArrayToList.Add(player.getGroup().ToString());
                         int count = 0;
 
                         sw.Write("<tr>");
