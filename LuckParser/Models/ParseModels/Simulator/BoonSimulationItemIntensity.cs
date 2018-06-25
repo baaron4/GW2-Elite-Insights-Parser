@@ -6,7 +6,6 @@ namespace LuckParser.Models.ParseModels
 {
     class BoonSimulationItemIntensity : BoonSimulationItem
     {
-        
         private List<BoonSimulationItemDuration> stacks = new List<BoonSimulationItemDuration>();
 
         public BoonSimulationItemIntensity(List<BoonStackItem> stacks) : base()
@@ -45,7 +44,7 @@ namespace LuckParser.Models.ParseModels
 
         public override int getStack(long end)
         {
-            return stacks.Where(x => x.getEnd() >= end).Count();
+            return stacks.Count(x => x.getEnd() >= end);
         }
 
         public override long getOverstack(ushort src, long start = 0, long end = 0)

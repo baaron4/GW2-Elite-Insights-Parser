@@ -1,6 +1,7 @@
 ﻿using LuckParser.Models.DataModels;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace LuckParser.Models.ParseModels
@@ -9,7 +10,7 @@ namespace LuckParser.Models.ParseModels
     {
         // Fields
         private String account;
-        private String group;
+        private int group;
         private long dcd = 0;//time in ms the player dcd
        
         private List<CombatItem> consumeList = new List<CombatItem>();
@@ -20,7 +21,7 @@ namespace LuckParser.Models.ParseModels
         {
             String[] name = agent.getName().Split('\0');
             account = name[1];
-            group = name[2];
+            group   = int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
         }
 
         // Getters
@@ -30,7 +31,7 @@ namespace LuckParser.Models.ParseModels
             return account;
         }
     
-        public string getGroup()
+        public int getGroup()
         {
             return group;
         }

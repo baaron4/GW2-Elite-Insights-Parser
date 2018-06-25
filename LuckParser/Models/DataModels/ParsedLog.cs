@@ -144,7 +144,7 @@ namespace LuckParser.Models.DataModels
                 foreach (DamageLog dLog in dls)
                 {
                     string name = skill_data.getName(dLog.getID());
-                    if (ParseEnum.hit(dLog.getResult()))
+                    if (dLog.getResult().IsHit())
                     {
 
                         foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.SkillOnPlayer))
@@ -174,7 +174,7 @@ namespace LuckParser.Models.DataModels
                 {
                     if (p.getInstid() == c.getDstInstid())
                     {
-                        if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove() == ParseEnum.BuffRemove.None && ParseEnum.hit(c.getResult()))
+                        if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove() == ParseEnum.BuffRemove.None && c.getResult().IsHit())
                         {
                             String name = skill_data.getName(c.getSkillID());
                             //buff on player 0

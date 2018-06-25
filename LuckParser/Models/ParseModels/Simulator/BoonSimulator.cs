@@ -33,19 +33,22 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Fields
-        protected List<BoonStackItem> boon_stack = new List<BoonStackItem>();
+        protected readonly List<BoonStackItem> boon_stack;
         protected List<BoonSimulationItem> simulation = new List<BoonSimulationItem>();
         protected int capacity;
 
         // Constructor
         public BoonSimulator(int capacity)
         {
-            this.capacity = capacity;
+            this.capacity   = capacity;
+            this.boon_stack = new List<BoonStackItem>(capacity);
         }
+
         public List<BoonSimulationItem> getSimulationResult()
         {
             return new List<BoonSimulationItem>(simulation);
         }
+
         // Abstract Methods
         /// <summary>
         /// Make sure the last element does not overflow the fight
@@ -65,8 +68,9 @@ namespace LuckParser.Models.ParseModels
                     break;
                 }
             }
-            simulation = simulation.Where(x => x.getDuration(0) > 0).ToList();
+            simulation.RemoveAll(x => x.getDuration(0) <= 0);
         }
+
         public void simulate(List<BoonLog> logs, long fight_duration)
         {
             long t_curr = 0;
@@ -79,15 +83,16 @@ namespace LuckParser.Models.ParseModels
                 t_prev = t_curr;
             }
             update(fight_duration - t_prev);
-            simulation = simulation.Where(x => x.getDuration(0) > 0).ToList();
+            simulation.RemoveAll(x => x.getDuration(0) <= 0);
             boon_stack.Clear();
         }
+
         public abstract void update(long time_passed);
         
         // Public Methods
         public void add(long boon_duration, ushort srcinstid, long start, long overstack)
         {
-            BoonStackItem toAdd = new BoonStackItem(start, boon_duration, srcinstid, overstack);
+            var toAdd = new BoonStackItem(start, boon_duration, srcinstid, overstack);
             // Find empty slot
             if (!isFull())
             {
@@ -97,7 +102,7 @@ namespace LuckParser.Models.ParseModels
             // Replace lowest value
             else
             {
-                int index = boon_stack.Count() - 1;
+                int index = boon_stack.Count - 1;
                 if (boon_stack[index].boon_duration < boon_duration)
                 {
                     // added overwritten value as a overstack
@@ -117,15 +122,11 @@ namespace LuckParser.Models.ParseModels
         }
          
         // Protected Methods
-        protected bool isFull()
-        {
-            return boon_stack.Count() >= capacity;
-        }
+        protected bool isFull() => boon_stack.Count >= capacity;
 
         protected void sort()
         {
-            // Collections.sort(boon_stack, Collections.reverseOrder());
-            boon_stack = boon_stack.OrderByDescending(x=>x.boon_duration).ToList();
+            boon_stack.Sort((a, b) => b.boon_duration.CompareTo(a.boon_duration));
         }
     }
 }

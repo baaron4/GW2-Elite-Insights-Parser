@@ -32,7 +32,7 @@ namespace LuckParser
         /// <param name="bg"></param>
         /// <param name="row"></param>
         /// <param name="cancelStatus"></param>
-        public static void ThrowIfCanceled(this BackgroundWorker bg, GridRow row, string cancelStatus)
+        public static void ThrowIfCanceled(this BackgroundWorker bg, GridRow row, string cancelStatus = "Canceled")
         {
             if (bg.CancellationPending)
             {
