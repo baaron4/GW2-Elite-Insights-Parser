@@ -9,23 +9,24 @@ namespace LuckParser.Models.DataModels
 {
     class SettingsContainer
     {
-        public readonly bool DPSGraphTotals;//0
-        public readonly bool PlayerGraphTotals;//1
-        public readonly bool PlayerGraphBoss;//2
-        public readonly bool PlayerBoonsUniversal;//3
-        public readonly bool PlayerBoonsImpProf;//4
-        public readonly bool PlayerBoonsAllProf;//5
-        public readonly bool PlayerRot;//6
-        public readonly bool PlayerRotIcons;//7
-        public readonly bool EventList;//8
-        public readonly bool BossSummary;//9
-        public readonly bool SimpleRotation;//10
-        public readonly bool ShowAutos;//11
-        public readonly bool LargeRotIcons;//12
-        public readonly bool ShowEstimates;//13
-        public readonly bool ParsePhases;//14
-        public readonly bool Show30s;//14
-        public readonly bool Show10s;//14
+        public readonly bool DPSGraphTotals;
+        public readonly bool PlayerGraphTotals;
+        public readonly bool PlayerGraphBoss;
+        public readonly bool PlayerBoonsUniversal;
+        public readonly bool PlayerBoonsImpProf;
+        public readonly bool PlayerBoonsAllProf;
+        public readonly bool PlayerRot;
+        public readonly bool PlayerRotIcons;
+        public readonly bool EventList;
+        public readonly bool BossSummary;
+        public readonly bool SimpleRotation;
+        public readonly bool ShowAutos;
+        public readonly bool LargeRotIcons;
+        public readonly bool ShowEstimates;
+        public readonly bool ParsePhases;
+        public readonly bool Show30s;
+        public readonly bool Show10s;
+        public readonly bool LightTheme;
 
         public SettingsContainer(Settings settings)
         {
@@ -46,6 +47,7 @@ namespace LuckParser.Models.DataModels
             this.ParsePhases = settings.ParsePhases;
             this.Show10s = settings.Show10s;
             this.Show30s = settings.Show30s;
+            this.LightTheme = settings.LightTheme;
         }
     }
 }
