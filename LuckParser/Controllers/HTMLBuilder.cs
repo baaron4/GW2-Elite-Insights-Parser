@@ -600,7 +600,7 @@ namespace LuckParser.Controllers
                             {
                                 build += "<img src=\"https://wiki.guildwars2.com/images/1/12/Toughness.png\" alt=\"Toughness\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Toughness-" + gPlay.getToughness() + "\">";//"<span class=\"badge badge-secondary\">Tough("+ gPlay.getToughness() + ")</span>";
                             }
-                            sw.Write("<td style=\"width: 120px; border:1px solid #EE5F5B;\">");
+                            sw.Write("<td class=\"composition\">");
                             {
                                 sw.Write("<img src=\"" + HTMLHelper.GetLink(gPlay.getProf().ToString()) + " \" alt=\"" + gPlay.getProf().ToString() + "\" height=\"18\" width=\"18\" >");
                                 sw.Write(build);
@@ -2869,6 +2869,14 @@ namespace LuckParser.Controllers
                     sw.Write("table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}");
                     sw.Write("table.dataTable  td {color: black;}");
                     sw.Write("table.dataTable.display tbody tr.condi {background-color: #ff6666;}");
+                    sw.Write(".card {border:1px solid #EE5F5B;}");
+                    sw.Write("td.composition {width: 120px;border:1px solid #EE5F5B;}");
+                }
+                else
+                {
+                    sw.Write(".nav-link {color:#337AB7;}");
+                    sw.Write(".card {border:1px solid #9B0000;}");
+                    sw.Write("td.composition {width: 120px;border:1px solid #9B0000;}");
                 }
             }
             sw.Write("</style>");
@@ -2940,7 +2948,7 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("<div class=\"mr-3\">");
                             {
-                                sw.Write("<div style=\"width: 400px;\" class=\"card border-danger d-flex flex-column\">");
+                                sw.Write("<div style=\"width: 400px;;\" class=\"card d-flex flex-column\">");
                                 {
                                     sw.Write("<h3 class=\"card-header text-center\">" + bossname + "</h3>");
                                     sw.Write("<div class=\"card-body d-flex flex-column align-items-center\">");
@@ -2978,7 +2986,7 @@ namespace LuckParser.Controllers
                                                         }
                                                     }
                                                     sw.Write("</div>");
-                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: "+ (settings.LightTheme ? "#000000" : "#FFF") +";\">" + log.getBossData().getHealth().ToString() + " Health</p>");
+                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: "+ (settings.LightTheme ? "#000" : "#FFF") +";\">" + log.getBossData().getHealth().ToString() + " Health</p>");
                                                     if (log.getLogData().getBosskill())
                                                     {
                                                         sw.Write("<p class='text text-success'> Result: Success</p>");
