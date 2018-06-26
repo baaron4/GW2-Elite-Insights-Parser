@@ -61,7 +61,7 @@ namespace LuckParser.Models.ParseModels
         {
             foreach(CombatItem c in log.getMovementData())
             {
-                if (c.getSrcInstid() != agent.getID())
+                if (c.getSrcInstid() != agent.getInstid())
                 {
                     continue;
                 }
