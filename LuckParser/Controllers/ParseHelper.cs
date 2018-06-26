@@ -3,106 +3,40 @@ using System.IO;
 
 namespace LuckParser.Controllers
 {
-    class ParseHelper
+    static class ParseHelper
     {
-        public static void safeSkip(MemoryStream stream,long bytes_to_skip)
+        public static void safeSkip(Stream stream, long bytesToSkip)
         {
-
-            while (bytes_to_skip > 0)
+            if (stream.CanSeek)
             {
-                int dummyByte = stream.ReadByte();
-                long bytes_actually_skipped = 1;
-                if (bytes_actually_skipped > 0)
+                stream.Seek(bytesToSkip, SeekOrigin.Current);
+            }
+            else
+            {
+                while (bytesToSkip > 0)
                 {
-                    bytes_to_skip -= bytes_actually_skipped;
+                    stream.ReadByte();
+                    --bytesToSkip;
                 }
-                else if (bytes_actually_skipped == 0)
+            }
+        }
+
+        public static string getString(Stream stream, int length, bool nullTerminated = true)
+        {
+            var bytes = new byte[length];
+            stream.Read(bytes, 0, length);
+            if(nullTerminated)
+            {
+                for(int i = 0; i < length; ++i)
                 {
-                    if (stream.ReadByte() == -1)
+                    if(bytes[i] == 0)
                     {
+                        length = i;
                         break;
                     }
-                    else
-                    {
-                        bytes_to_skip--;
-                    }
                 }
             }
-
-            return;
-        }
-        public static ushort getShort(MemoryStream stream)
-        {
-            byte[] bytes = new byte[2];
-            for (int b = 0; b < bytes.Length; b++)
-            {
-                bytes[b] = Convert.ToByte(stream.ReadByte());
-                //stream.Position++;
-            }
-            // return Short.toUnsignedInt(ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getShort());
-            return BitConverter.ToUInt16(bytes, 0);
-        }
-        public static int getInt(MemoryStream stream)
-        {
-            byte[] bytes = new byte[4];
-            for (int b = 0; b < bytes.Length; b++)
-            {
-                bytes[b] = Convert.ToByte(stream.ReadByte());
-                // stream.Position++;
-            }
-            //return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getInt();
-            return BitConverter.ToInt32(bytes, 0);
-        }
-        public static uint getUInt(MemoryStream stream)
-        {
-            byte[] bytes = new byte[4];
-            for (int b = 0; b < bytes.Length; b++)
-            {
-                bytes[b] = Convert.ToByte(stream.ReadByte());
-                // stream.Position++;
-            }
-            //return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getInt();
-            return BitConverter.ToUInt32(bytes, 0);
-        }
-        public static long getLong(MemoryStream stream)
-        {
-            byte[] bytes = new byte[8];
-            for (int b = 0; b < bytes.Length; b++)
-            {
-                bytes[b] = Convert.ToByte(stream.ReadByte());
-                // stream.Position++;
-            }
-
-            // return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getLong();
-            return BitConverter.ToInt64(bytes, 0);
-        }
-        public static ulong getULong(MemoryStream stream)
-        {
-            byte[] bytes = new byte[8];
-            for (int b = 0; b < bytes.Length; b++)
-            {
-                bytes[b] = Convert.ToByte(stream.ReadByte());
-                // stream.Position++;
-            }
-
-            // return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getLong();
-            return BitConverter.ToUInt64(bytes, 0);
-        }
-        public static string getString(MemoryStream stream, int length)
-        {
-            byte[] bytes = new byte[length];
-            for (int b = 0; b < bytes.Length; b++)
-            {
-                bytes[b] = Convert.ToByte(stream.ReadByte());
-                // stream.Position++;
-            }
-
-            string s = new String(System.Text.Encoding.UTF8.GetString(bytes).ToCharArray()).TrimEnd();
-            if (s != null)
-            {
-                return s;
-            }
-            return "UNKNOWN";
+            return System.Text.Encoding.UTF8.GetString(bytes, 0, length);
         }
     }
 }

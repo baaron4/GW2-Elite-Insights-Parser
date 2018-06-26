@@ -637,14 +637,13 @@ namespace LuckParser.Models.ParseModels
             return link;
         }
 
-        public BoonSimulator getSimulator()
+        public BoonSimulator CreateSimulator()
         {
-            if (type == BoonType.Intensity)
+            switch(type)
             {
-                return new BoonSimulatorIntensity(capacity);
-            } else
-            {
-                return new BoonSimulatorDuration(capacity);
+                case BoonType.Intensity: return new BoonSimulatorIntensity(capacity);
+                case BoonType.Duration:  return new BoonSimulatorDuration(capacity);
+                default: throw new InvalidOperationException();
             }
         }
     }

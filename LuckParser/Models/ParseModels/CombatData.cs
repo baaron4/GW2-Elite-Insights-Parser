@@ -42,7 +42,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
                 {
-                    if (DataModels.ParseEnum.casting(c.isActivation()))
+                    if (c.isActivation().IsCasting())
                         count++;
                 }
             }
