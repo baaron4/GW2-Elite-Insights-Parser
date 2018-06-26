@@ -2,11 +2,11 @@
 {
     public class Point3D
     {
-        public long X { get; set; }
-        public long Y { get; set; }
-        public long Z { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
 
-        public Point3D(long X, long Y, long Z)
+        public Point3D(float X, float Y, float Z)
         {
             this.X = X;
             this.Y = Y;
