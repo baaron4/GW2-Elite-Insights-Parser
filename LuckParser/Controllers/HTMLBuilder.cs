@@ -2864,6 +2864,10 @@ namespace LuckParser.Controllers
                 sw.Write("table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc ");
                 sw.Write("{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}");
                 sw.Write("table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }");
+                sw.Write("tr.even{ background-color: #F9F9F9 !important; }");
+                sw.Write("tr.odd{ background-color: #D9D9D9 !important; }");
+                sw.Write("tr.odd>.sorting_1{ background-color: #D0D0D0 !important; }");
+                sw.Write("tr.even>.sorting_1{ background-color: #F0F0F0 !important; }");
                 if (!settings.LightTheme)
                 {
                     sw.Write("table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}");
