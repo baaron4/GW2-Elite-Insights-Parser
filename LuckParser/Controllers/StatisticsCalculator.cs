@@ -19,6 +19,7 @@ namespace LuckParser.Controllers
             public bool calculateSupport = false;
             public bool calculateBoons = false;
             public bool calculateConditions = false;
+            public bool calculateMovements = false;
         }
 
         private SettingsContainer settings;
@@ -58,6 +59,15 @@ namespace LuckParser.Controllers
             } 
                       
             if (switches.calculateConditions) calculateConditions();
+            // we should also put this under settings
+            if (switches.calculateMovements)
+            {
+                foreach(Player p in log.getPlayerList())
+                {
+                    p.getPositionList(log);
+                }
+                log.getBoss().getPositionList(log);
+            }
             // WIP
             /*if (settings.PlayerRot)
             {

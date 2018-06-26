@@ -11,6 +11,9 @@ namespace LuckParser.Models.ParseModels
     {
         // Rotation
         private List<RotationItem> rotation = new List<RotationItem>();
+        //int is time
+        private List<Point3D> positions = new List<Point3D>();
+        private List<Point3D> velocities = new List<Point3D>();
         // Minions
         private Dictionary<string, Minions> minions = new Dictionary<string, Minions>();
 
@@ -27,6 +30,52 @@ namespace LuckParser.Models.ParseModels
                 setMinions(log);
             }
             return minions;
+        }
+
+        public List<Point3D> getPositionList(ParsedLog log)
+        {
+            if (positions.Count == 0)
+            {
+                this.setMovements(log);
+            }
+
+            return positions;
+
+        }
+        public List<Point3D> getVelocityList(ParsedLog log)
+        {
+            if (velocities.Count == 0)
+            {
+                this.setMovements(log);
+            }
+            return velocities;
+
+        }
+
+        private void setMovements(ParsedLog log)
+        {
+            foreach(CombatItem c in log.getMovementData())
+            {
+                if (c.getSrcInstid() != agent.getID())
+                {
+                    continue;
+                }
+                long time = c.getTime() - log.getBossData().getFirstAware();
+                if (time < 0)
+                {
+                    continue;
+                }
+                byte[] xy = BitConverter.GetBytes(c.getDstAgent());
+                float X = BitConverter.ToSingle(xy, 0);
+                float Y = BitConverter.ToSingle(xy, 4);
+                if (c.isStateChange() == ParseEnum.StateChange.Position)
+                {
+                    positions.Add(new Point3D(X, Y, c.getValue(), time));
+                } else
+                {
+                    velocities.Add(new Point3D(X, Y, c.getValue(), time));
+                }
+            }
         }
 
         public List<RotationItem> getRotation(ParsedLog log, bool icons)
