@@ -90,7 +90,8 @@ namespace LuckParser.Models.DataModels
             ShardId         = 16,
             Reward          = 17,
             BuffInitial     = 18,
-
+            Position        = 19,
+            Velocity        = 20,
             Unknown
         };
 

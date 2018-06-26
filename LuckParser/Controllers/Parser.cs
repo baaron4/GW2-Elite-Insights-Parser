@@ -644,6 +644,29 @@ namespace LuckParser.Controllers
             }
             // Sort
             p_list = p_list.OrderBy(a => a.getGroup()).ToList();
+
+            foreach (Player p in p_list)
+            {
+                //set Player Pos
+                List<CombatItem> c_Pos = combat_data.getStates(p.getInstid(), ParseEnum.StateChange.Position, boss_data.getFirstAware(), boss_data.getLastAware());
+                foreach (CombatItem c in c_Pos)
+                {
+                    long X = (long)(c.getDstAgent() >> 32);
+                    long Y = (long)c.getDstAgent();
+                    p.AddPositionPoint(c.getTime(), new Point3D(X,Y, c.getValue()));
+                }
+                //set player velocity
+                List<CombatItem> c_Vel = combat_data.getStates(p.getInstid(), ParseEnum.StateChange.Velocity, boss_data.getFirstAware(), boss_data.getLastAware());
+                foreach (CombatItem c in c_Vel)
+                {
+                    long X = (long)(c.getDstAgent() >> 32);
+                    long Y = (long)c.getDstAgent();
+                    p.AddVelocityPoint(c.getTime(), new Point3D(X,Y, c.getValue()));
+                }
+            }
+            
+           
+            
         }
     }
 }
