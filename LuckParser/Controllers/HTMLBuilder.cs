@@ -2899,15 +2899,15 @@ namespace LuckParser.Controllers
                     if (!settings.LightTheme)
                     {
                         sw.Write(
-                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
-                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.css \"  crossorigin=\"anonymous\">"
+                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/darkly/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
+                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/darkly/bootstrap.css \"  crossorigin=\"anonymous\">"
                         );
                     }
                     else
                     {
                         sw.Write(
-                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/lumen/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
-                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/lumen/bootstrap.css \"  crossorigin=\"anonymous\">"
+                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/cosmo/bootstrap.css \"  crossorigin=\"anonymous\">" +
+                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/cosmo/bootstrap.min.css \"  crossorigin=\"anonymous\">"
                         );
                     }
 
@@ -2916,12 +2916,12 @@ namespace LuckParser.Controllers
                       //JQuery
                       "<script src=\"https://code.jquery.com/jquery-3.3.1.js \"></script> " +
                       //popper
-                      "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js \"></script>" +
+                      "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js \"></script>" +
                       //js
                       "<script src=\"https://cdn.plot.ly/plotly-latest.min.js \"></script>" +
                       "<script src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js \"></script>" +
                       "<script src=\"https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js \"></script>" +
-                      "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js \"></script>");
+                      "<script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js \"></script>");
                     int simpleRotSize = 20;
                     if (this.settings.LargeRotIcons)
                     {
@@ -2978,7 +2978,7 @@ namespace LuckParser.Controllers
                                                         }
                                                     }
                                                     sw.Write("</div>");
-                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: #FFF;\">" + log.getBossData().getHealth().ToString() + " Health</p>");
+                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: "+ (settings.LightTheme ? "#000000" : "#FFF") +";\">" + log.getBossData().getHealth().ToString() + " Health</p>");
                                                     if (log.getLogData().getBosskill())
                                                     {
                                                         sw.Write("<p class='text text-success'> Result: Success</p>");
@@ -3041,6 +3041,8 @@ namespace LuckParser.Controllers
                                     continue;
                                 sw.Write("<div class=\"tab-pane fade " + active + "\" id=\"phase" + i + "\">");
                                 {
+                                    if (phases.Count > 1)
+                                        sw.Write("<h2 align=\"center\">"+ phases[i].getName()+ "</h2>");
                                     string Html_playerDropdown = "";
                                     foreach (Player p in log.getPlayerList())
                                     {
