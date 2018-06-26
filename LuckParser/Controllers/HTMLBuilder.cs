@@ -70,24 +70,87 @@ namespace LuckParser.Controllers
             sw.Write("<div id=\"" + plotID + "\" style=\"height: 600px;width:1200px; display:inline-block \"></div>");
             sw.Write("<script>");
             PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
-            sw.Write("var data = [");
-            int maxDPS = 0;
-            List<Point> totalDpsAllPlayers = new List<Point>();
-            foreach (Player p in log.getPlayerList())
+            sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
             {
-                //Adding dps axis
-
-                int pbdgdCount = 0;
-                if (settings.DPSGraphTotals)
-                {//Turns display on or off
-                    sw.Write("{");
+                sw.Write("var data = [");
+                int maxDPS = 0;
+                List<Point> totalDpsAllPlayers = new List<Point>();
+                foreach (Player p in log.getPlayerList())
+                {
                     //Adding dps axis
-                    List<Point> playertotaldpsgraphdata = GraphHelper.getTotalDPSGraph(log, p, phase_index, mode);
-                    sw.Write("y: [");
-                    pbdgdCount = 0;
-                    foreach (Point dp in playertotaldpsgraphdata)
+
+                    int pbdgdCount = 0;
+                    if (settings.DPSGraphTotals)
+                    {//Turns display on or off
+                        sw.Write("{");
+                        //Adding dps axis
+                        List<Point> playertotaldpsgraphdata = GraphHelper.getTotalDPSGraph(log, p, phase_index, mode);
+                        sw.Write("y: [");
+                        pbdgdCount = 0;
+                        foreach (Point dp in playertotaldpsgraphdata)
+                        {
+                            if (pbdgdCount == playertotaldpsgraphdata.Count - 1)
+                            {
+                                sw.Write("'" + dp.Y + "'");
+                            }
+                            else
+                            {
+                                sw.Write("'" + dp.Y + "',");
+                            }
+                            pbdgdCount++;
+
+                        }
+                        //cuts off extra comma
+                        if (playertotaldpsgraphdata.Count == 0)
+                        {
+                            sw.Write("'0'");
+                        }
+
+                        sw.Write("],");
+                        //add time axis
+                        sw.Write("x: [");
+                        pbdgdCount = 0;
+                        foreach (Point dp in playertotaldpsgraphdata)
+                        {
+                            if (pbdgdCount == playertotaldpsgraphdata.Count - 1)
+                            {
+                                sw.Write("'" + dp.X + "'");
+                            }
+                            else
+                            {
+                                sw.Write("'" + dp.X + "',");
+                            }
+
+                            pbdgdCount++;
+                        }
+                        if (playertotaldpsgraphdata.Count == 0)
+                        {
+                            sw.Write("'0'");
+                        }
+
+                        sw.Write("],");
+                        sw.Write("mode: 'lines'," +
+                                "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf() + "-Total") + "'}," +
+                                "visible:'legendonly'," +
+                                "name: '" + p.getCharacter() + "TDPS'" + "},");
+                    }
+                    List<Point> playerbossdpsgraphdata = GraphHelper.getBossDPSGraph(log, p, phase_index, mode);
+                    if (totalDpsAllPlayers.Count == 0)
                     {
-                        if (pbdgdCount == playertotaldpsgraphdata.Count - 1)
+                        //totalDpsAllPlayers = new List<int[]>(playerbossdpsgraphdata);
+                        foreach (Point point in playerbossdpsgraphdata)
+                        {
+                            int time = point.X;
+                            int dmg = point.Y;
+                            totalDpsAllPlayers.Add(new Point(time, dmg));
+                        }
+                    }
+
+                    sw.Write("{y: [");
+                    pbdgdCount = 0;
+                    foreach (Point dp in playerbossdpsgraphdata)
+                    {
+                        if (pbdgdCount == playerbossdpsgraphdata.Count - 1)
                         {
                             sw.Write("'" + dp.Y + "'");
                         }
@@ -97,9 +160,13 @@ namespace LuckParser.Controllers
                         }
                         pbdgdCount++;
 
+                        if (dp.Y > maxDPS) { maxDPS = dp.Y; }
+                        if (totalDpsAllPlayers.Count != 0)
+                        {
+                            totalDpsAllPlayers[dp.X] = new Point(dp.X, totalDpsAllPlayers[dp.X].Y + dp.Y);
+                        }
                     }
-                    //cuts off extra comma
-                    if (playertotaldpsgraphdata.Count == 0)
+                    if (playerbossdpsgraphdata.Count == 0)
                     {
                         sw.Write("'0'");
                     }
@@ -108,9 +175,9 @@ namespace LuckParser.Controllers
                     //add time axis
                     sw.Write("x: [");
                     pbdgdCount = 0;
-                    foreach (Point dp in playertotaldpsgraphdata)
+                    foreach (Point dp in playerbossdpsgraphdata)
                     {
-                        if (pbdgdCount == playertotaldpsgraphdata.Count - 1)
+                        if (pbdgdCount == playerbossdpsgraphdata.Count - 1)
                         {
                             sw.Write("'" + dp.X + "'");
                         }
@@ -118,37 +185,28 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("'" + dp.X + "',");
                         }
-
                         pbdgdCount++;
                     }
-                    if (playertotaldpsgraphdata.Count == 0)
+                    if (playerbossdpsgraphdata.Count == 0)
                     {
                         sw.Write("'0'");
                     }
 
                     sw.Write("],");
                     sw.Write("mode: 'lines'," +
-                            "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf() + "-Total") + "'}," +
-                            "visible:'legendonly'," +
-                            "name: '" + p.getCharacter() + "TDPS'" + "},");
+                            "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf()) + "'}," +
+                            "name: '" + p.getCharacter() + " DPS'" +
+                            "},");
                 }
-                List<Point> playerbossdpsgraphdata = GraphHelper.getBossDPSGraph(log, p, phase_index, mode);
-                if (totalDpsAllPlayers.Count == 0)
-                {
-                    //totalDpsAllPlayers = new List<int[]>(playerbossdpsgraphdata);
-                    foreach (Point point in playerbossdpsgraphdata)
-                    {
-                        int time = point.X;
-                        int dmg = point.Y;
-                        totalDpsAllPlayers.Add(new Point(time, dmg));
-                    }
-                }
+                //All Player dps
+                sw.Write("{");
+                //Adding dps axis
 
-                sw.Write("{y: [");
-                pbdgdCount = 0;
-                foreach (Point dp in playerbossdpsgraphdata)
+                sw.Write("y: [");
+                int tdalpcount = 0;
+                foreach (Point dp in totalDpsAllPlayers)
                 {
-                    if (pbdgdCount == playerbossdpsgraphdata.Count - 1)
+                    if (tdalpcount == totalDpsAllPlayers.Count - 1)
                     {
                         sw.Write("'" + dp.Y + "'");
                     }
@@ -156,26 +214,16 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("'" + dp.Y + "',");
                     }
-                    pbdgdCount++;
-
-                    if (dp.Y > maxDPS) { maxDPS = dp.Y; }
-                    if (totalDpsAllPlayers.Count != 0)
-                    {
-                        totalDpsAllPlayers[dp.X] = new Point(dp.X, totalDpsAllPlayers[dp.X].Y + dp.Y);
-                    }
-                }
-                if (playerbossdpsgraphdata.Count == 0)
-                {
-                    sw.Write("'0'");
+                    tdalpcount++;
                 }
 
                 sw.Write("],");
                 //add time axis
                 sw.Write("x: [");
-                pbdgdCount = 0;
-                foreach (Point dp in playerbossdpsgraphdata)
+                tdalpcount = 0;
+                foreach (Point dp in totalDpsAllPlayers)
                 {
-                    if (pbdgdCount == playerbossdpsgraphdata.Count - 1)
+                    if (tdalpcount == totalDpsAllPlayers.Count - 1)
                     {
                         sw.Write("'" + dp.X + "'");
                     }
@@ -183,230 +231,92 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("'" + dp.X + "',");
                     }
-                    pbdgdCount++;
-                }
-                if (playerbossdpsgraphdata.Count == 0)
-                {
-                    sw.Write("'0'");
+
+                    tdalpcount++;
                 }
 
                 sw.Write("],");
-                sw.Write("mode: 'lines'," +
-                        "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf()) + "'}," +
-                        "name: '" + p.getCharacter() + " DPS'" +
-                        "},");
-            }
-            //All Player dps
-            sw.Write("{");
-            //Adding dps axis
-
-            sw.Write("y: [");
-            int tdalpcount = 0;
-            foreach (Point dp in totalDpsAllPlayers)
-            {
-                if (tdalpcount == totalDpsAllPlayers.Count - 1)
-                {
-                    sw.Write("'" + dp.Y + "'");
-                }
-                else
-                {
-                    sw.Write("'" + dp.Y + "',");
-                }
-                tdalpcount++;
-            }
-
-            sw.Write("],");
-            //add time axis
-            sw.Write("x: [");
-            tdalpcount = 0;
-            foreach (Point dp in totalDpsAllPlayers)
-            {
-                if (tdalpcount == totalDpsAllPlayers.Count - 1)
-                {
-                    sw.Write("'" + dp.X + "'");
-                }
-                else
-                {
-                    sw.Write("'" + dp.X + "',");
-                }
-
-                tdalpcount++;
-            }
-
-            sw.Write("],");
-            sw.Write(" mode: 'lines'," +
-                    "line: {shape: 'spline'}," +
-                    "visible:'legendonly'," +
-                    "name: 'All Player Dps'");
-            sw.Write("},");
-            List<Mechanic> presMech = log.getMechanicData().GetMechList(log.getBossData().getID());
-            List<string> distMech = presMech.Select(x => x.GetAltName()).Distinct().ToList();
-            foreach (string mechAltString in distMech)
-            {
-                List<Mechanic> mechs = presMech.Where(x => x.GetAltName() == mechAltString).ToList();
-                List<MechanicLog> filterdList = new List<MechanicLog>();
-                foreach (Mechanic me in mechs)
-                {
-                    filterdList.AddRange(log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == me.GetSkill() && phase.inInterval(1000 * x.GetTime())).ToList());
-                }
-                Mechanic mech = mechs[0];
-                //List<MechanicLog> filterdList = mech_data.GetMDataLogs().Where(x => x.GetName() == mech.GetName()).ToList();
-                sw.Write("{");
-                sw.Write("y: [");
-
-                int mechcount = 0;
-                foreach (MechanicLog ml in filterdList)
-                {
-                    Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
-                    if (mechcount == filterdList.Count - 1)
-                    {
-                        if (check != null)
-                        {
-                            sw.Write("'" + check.Y + "'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + 10000 + "'");
-                        }
-
-                    }
-                    else
-                    {
-                        if (check != null)
-                        {
-                            sw.Write("'" + check.Y + "',");
-                        }
-                        else
-                        {
-                            sw.Write("'" + 10000 + "',");
-                        }
-                    }
-
-                    mechcount++;
-                }
-                sw.Write("],");
-                //add time axis
-                sw.Write("x: [");
-                tdalpcount = 0;
-                mechcount = 0;
-                foreach (MechanicLog ml in filterdList)
-                {
-                    if (mechcount == filterdList.Count - 1)
-                    {
-                        sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "',");
-                    }
-
-                    mechcount++;
-                }
-
-                sw.Write("],");
-                sw.Write(" mode: 'markers',");
-                if (mech.GetName() != "DEAD" && mech.GetName() != "DOWN")
-                {
-                    sw.Write("visible:'legendonly',");
-                }
-                sw.Write("type:'scatter'," +
-                        "marker:{" + mech.GetPlotly() + "size: 15" + "}," +
-                        "text:[");
-                foreach (MechanicLog ml in filterdList)
-                {
-                    if (mechcount == filterdList.Count - 1)
-                    {
-                        sw.Write("'" + ml.GetPlayer().getCharacter() + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + ml.GetPlayer().getCharacter() + "',");
-                    }
-
-                    mechcount++;
-                }
-
-                sw.Write("]," +
-                        " name: '" + mech.GetAltName() + "'");
+                sw.Write(" mode: 'lines'," +
+                        "line: {shape: 'spline'}," +
+                        "visible:'legendonly'," +
+                        "name: 'All Player Dps'");
                 sw.Write("},");
-            }
-            //Downs and deaths
-
-            List<String> DnDStringList = new List<string>();
-            DnDStringList.Add("DOWN");
-            DnDStringList.Add("DEAD");
-            foreach (string state in DnDStringList)
-            {
-                int mcount = 0;
-                List<MechanicLog> DnDList = log.getMechanicData().GetMDataLogs().Where(x => x.GetName() == state && phase.inInterval(1000 * x.GetTime())).ToList();
-                sw.Write("{");
+                List<Mechanic> presMech = log.getMechanicData().GetMechList(log.getBossData().getID());
+                List<string> distMech = presMech.Select(x => x.GetAltName()).Distinct().ToList();
+                foreach (string mechAltString in distMech)
                 {
-                    sw.Write("y: [");
+                    List<Mechanic> mechs = presMech.Where(x => x.GetAltName() == mechAltString).ToList();
+                    List<MechanicLog> filterdList = new List<MechanicLog>();
+                    foreach (Mechanic me in mechs)
                     {
-                        foreach (MechanicLog ml in DnDList)
-                        {
-                            Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
-                            if (mcount == DnDList.Count - 1)
-                            {
-                                if (check != null)
-                                {
-                                    sw.Write("'" + check.Y + "'");
-                                }
-                                else
-                                {
-                                    sw.Write("'" + 10000 + "'");
-                                }
+                        filterdList.AddRange(log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == me.GetSkill() && phase.inInterval(1000 * x.GetTime())).ToList());
+                    }
+                    Mechanic mech = mechs[0];
+                    //List<MechanicLog> filterdList = mech_data.GetMDataLogs().Where(x => x.GetName() == mech.GetName()).ToList();
+                    sw.Write("{");
+                    sw.Write("y: [");
 
+                    int mechcount = 0;
+                    foreach (MechanicLog ml in filterdList)
+                    {
+                        Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
+                        if (mechcount == filterdList.Count - 1)
+                        {
+                            if (check != null)
+                            {
+                                sw.Write("'" + check.Y + "'");
                             }
                             else
                             {
-                                if (check != null)
-                                {
-                                    sw.Write("'" + check.Y + "',");
-                                }
-                                else
-                                {
-                                    sw.Write("'" + 10000 + "',");
-                                }
+                                sw.Write("'" + 10000 + "'");
                             }
 
-                            mcount++;
                         }
-                    }
+                        else
+                        {
+                            if (check != null)
+                            {
+                                sw.Write("'" + check.Y + "',");
+                            }
+                            else
+                            {
+                                sw.Write("'" + 10000 + "',");
+                            }
+                        }
 
+                        mechcount++;
+                    }
                     sw.Write("],");
                     //add time axis
                     sw.Write("x: [");
+                    tdalpcount = 0;
+                    mechcount = 0;
+                    foreach (MechanicLog ml in filterdList)
                     {
-                        tdalpcount = 0;
-                        mcount = 0;
-                        foreach (MechanicLog ml in DnDList)
+                        if (mechcount == filterdList.Count - 1)
                         {
-                            if (mcount == DnDList.Count - 1)
-                            {
-                                sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "'");
-                            }
-                            else
-                            {
-                                sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "',");
-                            }
-
-                            mcount++;
+                            sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "'");
                         }
+                        else
+                        {
+                            sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "',");
+                        }
+
+                        mechcount++;
                     }
 
                     sw.Write("],");
                     sw.Write(" mode: 'markers',");
-                    if (state != "DEAD" && state != "DOWN")
+                    if (mech.GetName() != "DEAD" && mech.GetName() != "DOWN")
                     {
                         sw.Write("visible:'legendonly',");
                     }
                     sw.Write("type:'scatter'," +
-                        "marker:{" + log.getMechanicData().GetPLoltyShape(state) + "size: 15" + "},");
-                    sw.Write("text:[");
-                    foreach (MechanicLog ml in DnDList)
+                            "marker:{" + mech.GetPlotly() + "size: 15" + "}," +
+                            "text:[");
+                    foreach (MechanicLog ml in filterdList)
                     {
-                        if (mcount == DnDList.Count - 1)
+                        if (mechcount == filterdList.Count - 1)
                         {
                             sw.Write("'" + ml.GetPlayer().getCharacter() + "'");
                         }
@@ -415,56 +325,163 @@ namespace LuckParser.Controllers
                             sw.Write("'" + ml.GetPlayer().getCharacter() + "',");
                         }
 
-                        mcount++;
+                        mechcount++;
                     }
-                    sw.Write("]," +
-                            " name: '" + state + "'");
-                }
-                sw.Write("},");
-            }
-            if (maxDPS > 0)
-            {
-                sw.Write("{");
-                HTMLHelper.writeBossHealthGraph(sw, maxDPS, phase.getStart(), phase.getEnd(), log.getBossData());
-                sw.Write("}");
-            }
-            else
-            {
-                sw.Write("{}");
-            }
 
-            if (settings.LightTheme)
-            {
-                sw.Write("];" +
-                         "var layout = {" +
-                         "yaxis:{title:'DPS'}," +
-                         "xaxis:{title:'Time(sec)'}," +
-                         //"legend: { traceorder: 'reversed' }," +
-                         "hovermode: 'compare'," +
-                         "legend: {orientation: 'h'}," +
-                         // "yaxis: { title: 'DPS', domain: [0.51, 1] }," +
-                         "font: { color: '#000000' }," +
-                         "paper_bgcolor: 'rgba(255,255,255,0)'," +
-                         "plot_bgcolor: 'rgba(255,255,255,0)'" +
-                         "};" +
-                         "Plotly.newPlot('" + plotID + "', data, layout);");
+                    sw.Write("]," +
+                            " name: '" + mech.GetAltName() + "'");
+                    sw.Write("},");
+                }
+                //Downs and deaths
+
+                List<String> DnDStringList = new List<string>();
+                DnDStringList.Add("DOWN");
+                DnDStringList.Add("DEAD");
+                foreach (string state in DnDStringList)
+                {
+                    int mcount = 0;
+                    List<MechanicLog> DnDList = log.getMechanicData().GetMDataLogs().Where(x => x.GetName() == state && phase.inInterval(1000 * x.GetTime())).ToList();
+                    sw.Write("{");
+                    {
+                        sw.Write("y: [");
+                        {
+                            foreach (MechanicLog ml in DnDList)
+                            {
+                                Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
+                                if (mcount == DnDList.Count - 1)
+                                {
+                                    if (check != null)
+                                    {
+                                        sw.Write("'" + check.Y + "'");
+                                    }
+                                    else
+                                    {
+                                        sw.Write("'" + 10000 + "'");
+                                    }
+
+                                }
+                                else
+                                {
+                                    if (check != null)
+                                    {
+                                        sw.Write("'" + check.Y + "',");
+                                    }
+                                    else
+                                    {
+                                        sw.Write("'" + 10000 + "',");
+                                    }
+                                }
+
+                                mcount++;
+                            }
+                        }
+
+                        sw.Write("],");
+                        //add time axis
+                        sw.Write("x: [");
+                        {
+                            tdalpcount = 0;
+                            mcount = 0;
+                            foreach (MechanicLog ml in DnDList)
+                            {
+                                if (mcount == DnDList.Count - 1)
+                                {
+                                    sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "'");
+                                }
+                                else
+                                {
+                                    sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "',");
+                                }
+
+                                mcount++;
+                            }
+                        }
+
+                        sw.Write("],");
+                        sw.Write(" mode: 'markers',");
+                        if (state != "DEAD" && state != "DOWN")
+                        {
+                            sw.Write("visible:'legendonly',");
+                        }
+                        sw.Write("type:'scatter'," +
+                            "marker:{" + log.getMechanicData().GetPLoltyShape(state) + "size: 15" + "},");
+                        sw.Write("text:[");
+                        foreach (MechanicLog ml in DnDList)
+                        {
+                            if (mcount == DnDList.Count - 1)
+                            {
+                                sw.Write("'" + ml.GetPlayer().getCharacter() + "'");
+                            }
+                            else
+                            {
+                                sw.Write("'" + ml.GetPlayer().getCharacter() + "',");
+                            }
+
+                            mcount++;
+                        }
+                        sw.Write("]," +
+                                " name: '" + state + "'");
+                    }
+                    sw.Write("},");
+                }
+                if (maxDPS > 0)
+                {
+                    sw.Write("{");
+                    HTMLHelper.writeBossHealthGraph(sw, maxDPS, phase.getStart(), phase.getEnd(), log.getBossData());
+                    sw.Write("}");
+                }
+                else
+                {
+                    sw.Write("{}");
+                }
+                if (settings.LightTheme)
+                {
+                    sw.Write("];" +
+                             "var layout = {" +
+                             "yaxis:{title:'DPS'}," +
+                             "xaxis:{title:'Time(sec)'}," +
+                             //"legend: { traceorder: 'reversed' }," +
+                             "hovermode: 'compare'," +
+                             "legend: {orientation: 'h'}," +
+                             // "yaxis: { title: 'DPS', domain: [0.51, 1] }," +
+                             "font: { color: '#000000' }," +
+                             "paper_bgcolor: 'rgba(255,255,255,0)'," +
+                             "plot_bgcolor: 'rgba(255,255,255,0)'" +
+                             "};");
+                }
+                else
+                {
+                    sw.Write("];" +
+                             "var layout = {" +
+                             "yaxis:{title:'DPS'}," +
+                             "xaxis:{title:'Time(sec)'}," +
+                             //"legend: { traceorder: 'reversed' }," +
+                             "hovermode: 'compare'," +
+                             "legend: {orientation: 'h'}," +
+                             // "yaxis: { title: 'DPS', domain: [0.51, 1] }," +
+                             "font: { color: '#ffffff' }," +
+                             "paper_bgcolor: 'rgba(0,0,0,0)'," +
+                             "plot_bgcolor: 'rgba(0,0,0,0)'" +
+                             "};");
+                }
+                sw.Write(
+                        "var lazyplot = document.querySelector(\"#" + plotID + "\");" +
+                        "if ('IntersectionObserver' in window) {" +
+                            "let lazyPlotObserver = new IntersectionObserver(function(entries, observer) {" +
+                                "entries.forEach(function(entry) {" +
+                                    "if (entry.isIntersecting)" +
+                                    "{" +
+                                        "Plotly.newPlot('" + plotID + "', data, layout);" +
+                                        "lazyPlotObserver.unobserve(entry.target);" +
+                                    "}" +
+                                "});" +
+                             "});" +
+                            "lazyPlotObserver.observe(lazyplot);" +
+                        "} else {"+
+                            "Plotly.newPlot('" + plotID + "', data, layout);" +
+                        "}");
             }
-            else
-            {
-                sw.Write("];" +
-                         "var layout = {" +
-                         "yaxis:{title:'DPS'}," +
-                         "xaxis:{title:'Time(sec)'}," +
-                         //"legend: { traceorder: 'reversed' }," +
-                         "hovermode: 'compare'," +
-                         "legend: {orientation: 'h'}," +
-                         // "yaxis: { title: 'DPS', domain: [0.51, 1] }," +
-                         "font: { color: '#ffffff' }," +
-                         "paper_bgcolor: 'rgba(0,0,0,0)'," +
-                         "plot_bgcolor: 'rgba(0,0,0,0)'" +
-                         "};" +
-                         "Plotly.newPlot('" + plotID + "', data, layout);");
-            }
+            sw.Write("});");
             sw.Write("</script> ");
         }
         private void GetRoles()
@@ -583,7 +600,7 @@ namespace LuckParser.Controllers
                             {
                                 build += "<img src=\"https://wiki.guildwars2.com/images/1/12/Toughness.png\" alt=\"Toughness\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Toughness-" + gPlay.getToughness() + "\">";//"<span class=\"badge badge-secondary\">Tough("+ gPlay.getToughness() + ")</span>";
                             }
-                            sw.Write("<td style=\"width: 120px; border:1px solid #EE5F5B;\">");
+                            sw.Write("<td class=\"composition\">");
                             {
                                 sw.Write("<img src=\"" + HTMLHelper.GetLink(gPlay.getProf().ToString()) + " \" alt=\"" + gPlay.getProf().ToString() + "\" height=\"18\" width=\"18\" >");
                                 sw.Write(build);
@@ -1566,119 +1583,139 @@ namespace LuckParser.Controllers
                             sw.Write("<div id=\"Graph" + pid + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>");
                             sw.Write("<script>");
                             {
-                                sw.Write("var data = [");
+                                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
                                 {
-                                    if (settings.PlayerRot)//Display rotation
+                                    sw.Write("var data = [");
                                     {
-                                        foreach (CastLog cl in casting)
+                                        if (settings.PlayerRot)//Display rotation
                                         {
-                                            HTMLHelper.writeCastingItem(sw, cl, log.getSkillData(), phase.getStart(), phase.getEnd());
-                                        }
-                                    }
-                                    if (statistics.present_boons.Count() > 0)
-                                    {
-                                        List<Boon> parseBoonsList = new List<Boon>();
-                                        parseBoonsList.AddRange(statistics.present_boons);
-                                        parseBoonsList.AddRange(statistics.present_offbuffs);
-                                        parseBoonsList.AddRange(statistics.present_defbuffs);
-                                        if (statistics.present_personnal.ContainsKey(p.getInstid()))
-                                        {
-                                            parseBoonsList.AddRange(statistics.present_personnal[p.getInstid()]);
-                                        }
-                                        Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
-                                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
-                                        {
-                                            sw.Write("{");
-                                            {
-                                                HTMLHelper.writeBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
-                                            }
-                                            sw.Write(" },");
-
-                                        }
-                                    }
-                                    if (settings.PlayerGraphTotals)
-                                    {//show total dps plot
-                                        sw.Write("{");
-                                        { //Adding dps axis
-                                            HTMLHelper.writeDPSGraph(sw, "Total DPS", GraphHelper.getTotalDPSGraph(log, p, phase_index, GraphHelper.GraphMode.Full), p);                                         
-                                        }
-                                        sw.Write("},");
-                                        if (settings.Show10s)
-                                        {
-                                            sw.Write("{");
-                                            HTMLHelper.writeDPSGraph(sw, "Total DPS - 10s", GraphHelper.getTotalDPSGraph(log, p, phase_index, GraphHelper.GraphMode.s10), p);
-                                            sw.Write("},");
-                                        }
-                                        if (settings.Show30s)
-                                        {
-                                            sw.Write("{");
-                                            HTMLHelper.writeDPSGraph(sw, "Total DPS - 30s", GraphHelper.getTotalDPSGraph(log, p, phase_index, GraphHelper.GraphMode.s30), p);
-                                            sw.Write("},");
-                                        }
-                                    }
-                                    if (settings.PlayerGraphBoss)
-                                    {//show boss dps plot
-                                     //Adding dps axis
-                                        sw.Write("{");
-                                        {
-                                            HTMLHelper.writeDPSGraph(sw, "Boss DPS", GraphHelper.getBossDPSGraph(log, p, phase_index, GraphHelper.GraphMode.Full), p);
-                                        }
-                                        sw.Write("},");
-                                        if (settings.Show10s)
-                                        {
-                                            sw.Write("{");
-                                            HTMLHelper.writeDPSGraph(sw, "Boss DPS - 10s", GraphHelper.getBossDPSGraph(log, p, phase_index, GraphHelper.GraphMode.s10), p);
-                                            sw.Write("},");
-                                        }
-                                        if (settings.Show30s)
-                                        {
-                                            sw.Write("{");
-                                            HTMLHelper.writeDPSGraph(sw, "Boss DPS - 30s", GraphHelper.getBossDPSGraph(log, p, phase_index, GraphHelper.GraphMode.s30), p);
-                                            sw.Write("},");
-                                        }
-                                    }
-                                }
-                                sw.Write("];");
-                                sw.Write("var layout = {");
-                                {
-                                    sw.Write("barmode:'stack',");
-                                    sw.Write("yaxis: {" +
-                                                 "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
-                                                 "range: [0, 2]" +
-                                             "}," +
-                                             "legend: { traceorder: 'reversed' }," +
-                                             "hovermode: 'compare'," +
-                                             "yaxis2: { title: 'Boons', domain: [0.11, 0.50], fixedrange: true }," +
-                                             "yaxis3: { title: 'DPS', domain: [0.51, 1] },"
-                                     );
-                                    sw.Write("images: [");
-                                    {
-                                        if (settings.PlayerRot && settings.PlayerRotIcons)//Display rotation
-                                        {
-                                            int castCount = 0;
                                             foreach (CastLog cl in casting)
                                             {
-                                                HTMLHelper.writeCastingItemIcon(sw, cl, log.getSkillData(), phase.getStart(), castCount == casting.Count - 1);
-                                                castCount++;
+                                                HTMLHelper.writeCastingItem(sw, cl, log.getSkillData(), phase.getStart(), phase.getEnd());
+                                            }
+                                        }
+                                        if (statistics.present_boons.Count() > 0)
+                                        {
+                                            List<Boon> parseBoonsList = new List<Boon>();
+                                            parseBoonsList.AddRange(statistics.present_boons);
+                                            parseBoonsList.AddRange(statistics.present_offbuffs);
+                                            parseBoonsList.AddRange(statistics.present_defbuffs);
+                                            if (statistics.present_personnal.ContainsKey(p.getInstid()))
+                                            {
+                                                parseBoonsList.AddRange(statistics.present_personnal[p.getInstid()]);
+                                            }
+                                            Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
+                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
+                                            {
+                                                sw.Write("{");
+                                                {
+                                                    HTMLHelper.writeBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
+                                                }
+                                                sw.Write(" },");
+
+                                            }
+                                        }
+                                        if (settings.PlayerGraphTotals)
+                                        {//show total dps plot
+                                            sw.Write("{");
+                                            { //Adding dps axis
+                                                HTMLHelper.writeDPSGraph(sw, "Total DPS", GraphHelper.getTotalDPSGraph(log, p, phase_index, GraphHelper.GraphMode.Full), p);
+                                            }
+                                            sw.Write("},");
+                                            if (settings.Show10s)
+                                            {
+                                                sw.Write("{");
+                                                HTMLHelper.writeDPSGraph(sw, "Total DPS - 10s", GraphHelper.getTotalDPSGraph(log, p, phase_index, GraphHelper.GraphMode.s10), p);
+                                                sw.Write("},");
+                                            }
+                                            if (settings.Show30s)
+                                            {
+                                                sw.Write("{");
+                                                HTMLHelper.writeDPSGraph(sw, "Total DPS - 30s", GraphHelper.getTotalDPSGraph(log, p, phase_index, GraphHelper.GraphMode.s30), p);
+                                                sw.Write("},");
+                                            }
+                                        }
+                                        if (settings.PlayerGraphBoss)
+                                        {//show boss dps plot
+                                         //Adding dps axis
+                                            sw.Write("{");
+                                            {
+                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS", GraphHelper.getBossDPSGraph(log, p, phase_index, GraphHelper.GraphMode.Full), p);
+                                            }
+                                            sw.Write("},");
+                                            if (settings.Show10s)
+                                            {
+                                                sw.Write("{");
+                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS - 10s", GraphHelper.getBossDPSGraph(log, p, phase_index, GraphHelper.GraphMode.s10), p);
+                                                sw.Write("},");
+                                            }
+                                            if (settings.Show30s)
+                                            {
+                                                sw.Write("{");
+                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS - 30s", GraphHelper.getBossDPSGraph(log, p, phase_index, GraphHelper.GraphMode.s30), p);
+                                                sw.Write("},");
                                             }
                                         }
                                     }
-                                    sw.Write("],");
-                                    if (settings.LightTheme)
+                                    sw.Write("];");
+                                    sw.Write("var layout = {");
                                     {
-                                        sw.Write("font: { color: '#000000' }," +
-                                                 "paper_bgcolor: 'rgba(255, 255, 255, 0)'," +
-                                                 "plot_bgcolor: 'rgba(255, 255, 255, 0)'");
+                                        sw.Write("barmode:'stack',");
+                                        sw.Write("yaxis: {" +
+                                                     "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
+                                                     "range: [0, 2]" +
+                                                 "}," +
+                                                 "legend: { traceorder: 'reversed' }," +
+                                                 "hovermode: 'compare'," +
+                                                 "yaxis2: { title: 'Boons', domain: [0.11, 0.50], fixedrange: true }," +
+                                                 "yaxis3: { title: 'DPS', domain: [0.51, 1] },"
+                                         );
+                                        sw.Write("images: [");
+                                        {
+                                            if (settings.PlayerRot && settings.PlayerRotIcons)//Display rotation
+                                            {
+                                                int castCount = 0;
+                                                foreach (CastLog cl in casting)
+                                                {
+                                                    HTMLHelper.writeCastingItemIcon(sw, cl, log.getSkillData(), phase.getStart(), castCount == casting.Count - 1);
+                                                    castCount++;
+                                                }
+                                            }
+                                        }
+                                        sw.Write("],");
+                                        if (settings.LightTheme)
+                                        {
+                                            sw.Write("font: { color: '#000000' }," +
+                                                     "paper_bgcolor: 'rgba(255, 255, 255, 0)'," +
+                                                     "plot_bgcolor: 'rgba(255, 255, 255, 0)'");
+                                        }
+                                        else
+                                        {
+                                            sw.Write("font: { color: '#ffffff' }," +
+                                                     "paper_bgcolor: 'rgba(0,0,0,0)'," +
+                                                     "plot_bgcolor: 'rgba(0,0,0,0)'");
+                                        }
                                     }
-                                    else
-                                    {
-                                        sw.Write("font: { color: '#ffffff' }," +
-                                                 "paper_bgcolor: 'rgba(0,0,0,0)'," +
-                                                 "plot_bgcolor: 'rgba(0,0,0,0)'");
-                                    }
+                                    sw.Write("};");
+                                    sw.Write(
+                                            "var lazyplot = document.querySelector('#Graph" + pid + "');" +
+
+                                            "if ('IntersectionObserver' in window) {" +
+                                                "let lazyPlotObserver = new IntersectionObserver(function(entries, observer) {" +
+                                                    "entries.forEach(function(entry) {" +
+                                                        "if (entry.isIntersecting)" +
+                                                        "{" +
+                                                            "Plotly.newPlot('Graph" + pid + "', data, layout);" +
+                                                            "lazyPlotObserver.unobserve(entry.target);" +
+                                                        "}" +
+                                                    "});" +
+                                                "});" +
+                                                "lazyPlotObserver.observe(lazyplot);" +
+                                            "} else {"+
+                                                "Plotly.newPlot('Graph" + pid + "', data, layout);" +
+                                            "}");
                                 }
-                                sw.Write("};");
-                                sw.Write("Plotly.newPlot('Graph" + pid + "', data, layout);");
+                                sw.Write("});");
                             }
                             sw.Write("</script> ");
                             sw.Write("<ul class=\"nav nav-tabs\">");
@@ -1842,12 +1879,6 @@ namespace LuckParser.Controllers
                             skillName = "Dodge";
                             skillLink = HTMLHelper.GetLink("Dodge");
                             sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
-
-                        }
-                        else if (skill != null)
-                        {
-
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + HTMLHelper.GetLink("Blank") + "\" data-toggle=\"tooltip\" title= \"" + skill.getName() + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
 
                         }
 
@@ -2654,88 +2685,108 @@ namespace LuckParser.Controllers
                 sw.Write("<div id=\"Graph" + pid + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>");
                 sw.Write("<script>");
                 {
-                    sw.Write("var data = [");
+                    sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
                     {
-                        if (settings.PlayerRot)//Display rotation
+                        sw.Write("var data = [");
                         {
+                            if (settings.PlayerRot)//Display rotation
+                            {
 
-                            foreach (CastLog cl in casting)
-                            {
-                                HTMLHelper.writeCastingItem(sw, cl, log.getSkillData(), phase.getStart(), phase.getEnd());
-                            }
-                        }
-                        //============================================
-                        List<Boon> parseBoonsList = new List<Boon>();
-                        //Condis
-                        parseBoonsList.AddRange(Boon.getCondiBoonList());
-                        //Every buffs and boons
-                        parseBoonsList.AddRange(Boon.getAllBuffList());
-                        Dictionary<int, BoonsGraphModel> boonGraphData = log.getBoss().getBoonGraphs(log, phases, parseBoonsList);
-                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.getBoonName() != "Number of Boons"))
-                        {
-                            sw.Write("{");
-                            {
-                                HTMLHelper.writeBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
-                            }
-                            sw.Write(" },");
-
-                        }
-                        //int maxDPS = 0;
-                        if (settings.PlayerGraphTotals)
-                        {//show total dps plot
-                            List<Point> playertotaldpsgraphdata = GraphHelper.getTotalDPSGraph(log, log.getBoss(), phase_index, GraphHelper.GraphMode.Full);
-                            sw.Write("{");
-                            {
-                                //Adding dps axis
-                                HTMLHelper.writeDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, log.getBoss());
-                            }
-                            sw.Write("},");
-                        }
-                        sw.Write("{");
-                        HTMLHelper.writeBossHealthGraph(sw, GraphHelper.getTotalDPSGraph(log, log.getBoss(), phase_index, GraphHelper.GraphMode.Full).Max(x => x.Y), phase.getStart(), phase.getEnd(), log.getBossData(), "y3");
-                        sw.Write("}");
-                    }
-                    sw.Write("];");
-                    sw.Write("var layout = {");
-                    {
-                        sw.Write("barmode:'stack',");
-                        sw.Write("yaxis: {" +
-                               "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
-                               "range: [0, 2]" +
-                           "}," +
-
-                           "legend: { traceorder: 'reversed' }," +
-                           "hovermode: 'compare'," +
-                           "yaxis2: { title: 'Condis/Boons', domain: [0.11, 0.50], fixedrange: true }," +
-                           "yaxis3: { title: 'DPS', domain: [0.51, 1] },");
-                        sw.Write("images: [");
-                        {
-                            if (settings.PlayerRotIcons)//Display rotation
-                            {
-                                int castCount = 0;
                                 foreach (CastLog cl in casting)
                                 {
-                                    HTMLHelper.writeCastingItemIcon(sw, cl, log.getSkillData(), phase.getStart(), castCount == casting.Count - 1);
-                                    castCount++;
+                                    HTMLHelper.writeCastingItem(sw, cl, log.getSkillData(), phase.getStart(), phase.getEnd());
                                 }
                             }
+                            //============================================
+                            List<Boon> parseBoonsList = new List<Boon>();
+                            //Condis
+                            parseBoonsList.AddRange(Boon.getCondiBoonList());
+                            //Every buffs and boons
+                            parseBoonsList.AddRange(Boon.getAllBuffList());
+                            Dictionary<int, BoonsGraphModel> boonGraphData = log.getBoss().getBoonGraphs(log, phases, parseBoonsList);
+                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.getBoonName() != "Number of Boons"))
+                            {
+                                sw.Write("{");
+                                {
+                                    HTMLHelper.writeBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
+                                }
+                                sw.Write(" },");
+
+                            }
+                            //int maxDPS = 0;
+                            if (settings.PlayerGraphTotals)
+                            {//show total dps plot
+                                List<Point> playertotaldpsgraphdata = GraphHelper.getTotalDPSGraph(log, log.getBoss(), phase_index, GraphHelper.GraphMode.Full);
+                                sw.Write("{");
+                                {
+                                    //Adding dps axis
+                                    HTMLHelper.writeDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, log.getBoss());
+                                }
+                                sw.Write("},");
+                            }
+                            sw.Write("{");
+                            HTMLHelper.writeBossHealthGraph(sw, GraphHelper.getTotalDPSGraph(log, log.getBoss(), phase_index, GraphHelper.GraphMode.Full).Max(x => x.Y), phase.getStart(), phase.getEnd(), log.getBossData(), "y3");
+                            sw.Write("}");
                         }
-                        sw.Write("],");         
-                        if (settings.LightTheme)
+                        sw.Write("];");
+                        sw.Write("var layout = {");
                         {
-                            sw.Write("font: { color: '#000000' }," +
-                                     "paper_bgcolor: 'rgba(255, 255, 255, 0)'," +
-                                     "plot_bgcolor: 'rgba(255, 255, 255, 0)'");
+                            sw.Write("barmode:'stack',");
+                            sw.Write("yaxis: {" +
+                                   "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
+                                   "range: [0, 2]" +
+                               "}," +
+
+                               "legend: { traceorder: 'reversed' }," +
+                               "hovermode: 'compare'," +
+                               "yaxis2: { title: 'Condis/Boons', domain: [0.11, 0.50], fixedrange: true }," +
+                               "yaxis3: { title: 'DPS', domain: [0.51, 1] },");
+                            sw.Write("images: [");
+                            {
+                                if (settings.PlayerRotIcons)//Display rotation
+                                {
+                                    int castCount = 0;
+                                    foreach (CastLog cl in casting)
+                                    {
+                                        HTMLHelper.writeCastingItemIcon(sw, cl, log.getSkillData(), phase.getStart(), castCount == casting.Count - 1);
+                                        castCount++;
+                                    }
+                                }
+                            }
+                            sw.Write("],");
+                            if (settings.LightTheme)
+                            {
+                                sw.Write("font: { color: '#000000' }," +
+                                         "paper_bgcolor: 'rgba(255, 255, 255, 0)'," +
+                                         "plot_bgcolor: 'rgba(255, 255, 255, 0)'");
+                            }
+                            else
+                            {
+                                sw.Write("font: { color: '#ffffff' }," +
+                                         "paper_bgcolor: 'rgba(0,0,0,0)'," +
+                                         "plot_bgcolor: 'rgba(0,0,0,0)'");
+                            }
                         }
-                        else
-                        {
-                            sw.Write("font: { color: '#ffffff' }," +
-                                     "paper_bgcolor: 'rgba(0,0,0,0)'," +
-                                     "plot_bgcolor: 'rgba(0,0,0,0)'");
-                        }
+                        sw.Write("};");
+                        sw.Write(
+                                "var lazyplot = document.querySelector('#Graph" + pid + "');" +
+
+                                "if ('IntersectionObserver' in window) {" +
+                                    "let lazyPlotObserver = new IntersectionObserver(function(entries, observer) {" +
+                                        "entries.forEach(function(entry) {" +
+                                            "if (entry.isIntersecting)" +
+                                            "{" +
+                                                "Plotly.newPlot('Graph" + pid + "', data, layout);" +
+                                                "lazyPlotObserver.unobserve(entry.target);" +
+                                            "}" +
+                                        "});" +
+                                    "});" +
+                                    "lazyPlotObserver.observe(lazyplot);" +
+                                "} else {"+
+                                    "Plotly.newPlot('Graph" + pid + "', data, layout);" +
+                                "}");
                     }
-                    sw.Write("};");
-                    sw.Write("Plotly.newPlot('Graph" + pid + "', data, layout);");
+                    sw.Write("});");
                 }
                 sw.Write("</script> ");
                 CreateDMGBossDistTable(sw, log.getBoss(), phase_index);
@@ -2813,11 +2864,23 @@ namespace LuckParser.Controllers
                 sw.Write("table.dataTable.table-condensed.sorting, table.dataTable.table-condensed.sorting_asc, table.dataTable.table-condensed.sorting_desc ");
                 sw.Write("{right: 4px !important;}table.dataTable thead.sorting_desc { color: red;}");
                 sw.Write("table.dataTable.table-condensed > thead > tr > th.sorting { padding-right: 5px !important; }");
+                sw.Write("tr.even{ background-color: #F9F9F9 !important; }");
+                sw.Write("tr.odd{ background-color: #D9D9D9 !important; }");
+                sw.Write("tr.odd>.sorting_1{ background-color: #D0D0D0 !important; }");
+                sw.Write("tr.even>.sorting_1{ background-color: #F0F0F0 !important; }");
                 if (!settings.LightTheme)
                 {
                     sw.Write("table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}");
                     sw.Write("table.dataTable  td {color: black;}");
                     sw.Write("table.dataTable.display tbody tr.condi {background-color: #ff6666;}");
+                    sw.Write(".card {border:1px solid #EE5F5B;}");
+                    sw.Write("td.composition {width: 120px;border:1px solid #EE5F5B;}");
+                }
+                else
+                {
+                    sw.Write(".nav-link {color:#337AB7;}");
+                    sw.Write(".card {border:1px solid #9B0000;}");
+                    sw.Write("td.composition {width: 120px;border:1px solid #9B0000;}");
                 }
             }
             sw.Write("</style>");
@@ -2848,29 +2911,29 @@ namespace LuckParser.Controllers
                     if (!settings.LightTheme)
                     {
                         sw.Write(
-                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
-                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/slate/bootstrap.css \"  crossorigin=\"anonymous\">"
+                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/darkly/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
+                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/darkly/bootstrap.css \"  crossorigin=\"anonymous\">"
                         );
                     }
                     else
                     {
                         sw.Write(
-                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/lumen/bootstrap.min.css \"  crossorigin=\"anonymous\">" +
-                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/lumen/bootstrap.css \"  crossorigin=\"anonymous\">"
+                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/cosmo/bootstrap.css \"  crossorigin=\"anonymous\">" +
+                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/cosmo/bootstrap.min.css \"  crossorigin=\"anonymous\">"
                         );
                     }
 
                     sw.Write("<link href=\"https://fonts.googleapis.com/css?family=Open+Sans \" rel=\"stylesheet\">" +
                       "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css \">" +
                       //JQuery
-                      "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js \"></script> " +
+                      "<script src=\"https://code.jquery.com/jquery-3.3.1.js \"></script> " +
                       //popper
-                      "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js \"></script>" +
+                      "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js \"></script>" +
                       //js
                       "<script src=\"https://cdn.plot.ly/plotly-latest.min.js \"></script>" +
                       "<script src=\"https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js \"></script>" +
                       "<script src=\"https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js \"></script>" +
-                      "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js \"></script>");
+                      "<script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js \"></script>");
                     int simpleRotSize = 20;
                     if (this.settings.LargeRotIcons)
                     {
@@ -2889,7 +2952,7 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("<div class=\"mr-3\">");
                             {
-                                sw.Write("<div style=\"width: 400px;\" class=\"card border-danger d-flex flex-column\">");
+                                sw.Write("<div style=\"width: 400px;;\" class=\"card d-flex flex-column\">");
                                 {
                                     sw.Write("<h3 class=\"card-header text-center\">" + bossname + "</h3>");
                                     sw.Write("<div class=\"card-body d-flex flex-column align-items-center\">");
@@ -2927,7 +2990,7 @@ namespace LuckParser.Controllers
                                                         }
                                                     }
                                                     sw.Write("</div>");
-                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: #FFF;\">" + log.getBossData().getHealth().ToString() + " Health</p>");
+                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: "+ (settings.LightTheme ? "#000" : "#FFF") +";\">" + log.getBossData().getHealth().ToString() + " Health</p>");
                                                     if (log.getLogData().getBosskill())
                                                     {
                                                         sw.Write("<p class='text text-success'> Result: Success</p>");
@@ -2990,6 +3053,8 @@ namespace LuckParser.Controllers
                                     continue;
                                 sw.Write("<div class=\"tab-pane fade " + active + "\" id=\"phase" + i + "\">");
                                 {
+                                    if (phases.Count > 1)
+                                        sw.Write("<h2 align=\"center\">"+ phases[i].getName()+ "</h2>");
                                     string Html_playerDropdown = "";
                                     foreach (Player p in log.getPlayerList())
                                     {
@@ -3378,102 +3443,122 @@ namespace LuckParser.Controllers
             sw.Write("<div id=\"Graph" + p.getInstid() + "\" style=\"height: 800px;width:1000px; display:inline-block \"></div>");
             sw.Write("<script>");
             {
-                sw.Write("var data = [");
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
                 {
-                    if (settings.PlayerRot)//Display rotation
+                    sw.Write("var data = [");
                     {
+                        if (settings.PlayerRot)//Display rotation
+                        {
 
-                        foreach (CastLog cl in casting)
-                        {
-                            HTMLHelper.writeCastingItem(sw, cl, log.getSkillData(), 0, log.getBossData().getAwareDuration());
-                        }
-                    }
-                    if (statistics.present_boons.Count() > 0)
-                    {
-                        List<Boon> parseBoonsList = new List<Boon>();
-                        parseBoonsList.AddRange(statistics.present_boons);
-                        parseBoonsList.AddRange(statistics.present_offbuffs);
-                        parseBoonsList.AddRange(statistics.present_defbuffs);
-                        if (statistics.present_personnal.ContainsKey(p.getInstid()))
-                        {
-                            parseBoonsList.AddRange(statistics.present_personnal[p.getInstid()]);
-                        }
-                        Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
-                        foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
-                        {
-                            sw.Write("{");
-                            {
-                                HTMLHelper.writeBoonGraph(sw, bgm, 0, log.getBossData().getAwareDuration());
-                            }
-                            sw.Write(" },");
-                        }
-                    }
-                    int maxDPS = 0;
-                    if (settings.PlayerGraphTotals)
-                    {//show total dps plot
-                        List<Point> playertotaldpsgraphdata = GraphHelper.getTotalDPSGraph(log, p, 0, GraphHelper.GraphMode.Full);
-                        sw.Write("{");
-                        {
-                            HTMLHelper.writeDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, p);
-                        }
-                        sw.Write("},");
-                    }
-                    if (settings.PlayerGraphBoss)
-                    {//show boss dps plot
-                     //Adding dps axis
-                        List<Point> playerbossdpsgraphdata = GraphHelper.getBossDPSGraph(log, p, 0, GraphHelper.GraphMode.Full);
-                        sw.Write("{");
-                        {
-                            HTMLHelper.writeDPSGraph(sw, "Boss DPS", playerbossdpsgraphdata, p);
-                        }
-                        maxDPS = Math.Max(maxDPS, playerbossdpsgraphdata.Max(x => x.Y));
-                        sw.Write("},");
-                    }
-                    sw.Write("{");
-                    HTMLHelper.writeBossHealthGraph(sw, maxDPS, 0, log.getBossData().getAwareDuration(), log.getBossData(), "y3");
-                    sw.Write("}");
-                }
-                sw.Write("];");
-                sw.Write("var layout = {");
-                {
-                    sw.Write("barmode:'stack',");
-                    sw.Write("yaxis: {" +
-                                 "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
-                                 "range: [0, 2]" +
-                             "}," +
-                             "legend: { traceorder: 'reversed' }," +
-                             "hovermode: 'compare'," +
-                             "yaxis2: { title: 'Boons', domain: [0.11, 0.50], fixedrange: true }," +
-                             "yaxis3: { title: 'DPS', domain: [0.51, 1] },"
-                     );
-                    sw.Write("images: [");
-                    {
-                        if (settings.PlayerRotIcons)//Display rotation
-                        {
-                            int castCount = 0;
                             foreach (CastLog cl in casting)
                             {
-                                HTMLHelper.writeCastingItemIcon(sw, cl, log.getSkillData(), 0, castCount == casting.Count - 1);
-                                castCount++;
+                                HTMLHelper.writeCastingItem(sw, cl, log.getSkillData(), 0, log.getBossData().getAwareDuration());
                             }
                         }
+                        if (statistics.present_boons.Count() > 0)
+                        {
+                            List<Boon> parseBoonsList = new List<Boon>();
+                            parseBoonsList.AddRange(statistics.present_boons);
+                            parseBoonsList.AddRange(statistics.present_offbuffs);
+                            parseBoonsList.AddRange(statistics.present_defbuffs);
+                            if (statistics.present_personnal.ContainsKey(p.getInstid()))
+                            {
+                                parseBoonsList.AddRange(statistics.present_personnal[p.getInstid()]);
+                            }
+                            Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
+                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
+                            {
+                                sw.Write("{");
+                                {
+                                    HTMLHelper.writeBoonGraph(sw, bgm, 0, log.getBossData().getAwareDuration());
+                                }
+                                sw.Write(" },");
+                            }
+                        }
+                        int maxDPS = 0;
+                        if (settings.PlayerGraphTotals)
+                        {//show total dps plot
+                            List<Point> playertotaldpsgraphdata = GraphHelper.getTotalDPSGraph(log, p, 0, GraphHelper.GraphMode.Full);
+                            sw.Write("{");
+                            {
+                                HTMLHelper.writeDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, p);
+                            }
+                            sw.Write("},");
+                        }
+                        if (settings.PlayerGraphBoss)
+                        {//show boss dps plot
+                         //Adding dps axis
+                            List<Point> playerbossdpsgraphdata = GraphHelper.getBossDPSGraph(log, p, 0, GraphHelper.GraphMode.Full);
+                            sw.Write("{");
+                            {
+                                HTMLHelper.writeDPSGraph(sw, "Boss DPS", playerbossdpsgraphdata, p);
+                            }
+                            maxDPS = Math.Max(maxDPS, playerbossdpsgraphdata.Max(x => x.Y));
+                            sw.Write("},");
+                        }
+                        sw.Write("{");
+                        HTMLHelper.writeBossHealthGraph(sw, maxDPS, 0, log.getBossData().getAwareDuration(), log.getBossData(), "y3");
+                        sw.Write("}");
                     }
-                    sw.Write("],");
-                    if (settings.LightTheme)
+                    sw.Write("];");
+                    sw.Write("var layout = {");
                     {
-                        sw.Write("font: { color: '#000000' }," +
-                                 "paper_bgcolor: 'rgba(255,255,255,0)'," +
-                                 "plot_bgcolor: 'rgba(255,255,255,0)'");
+                        sw.Write("barmode:'stack',");
+                        sw.Write("yaxis: {" +
+                                     "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
+                                     "range: [0, 2]" +
+                                 "}," +
+                                 "legend: { traceorder: 'reversed' }," +
+                                 "hovermode: 'compare'," +
+                                 "yaxis2: { title: 'Boons', domain: [0.11, 0.50], fixedrange: true }," +
+                                 "yaxis3: { title: 'DPS', domain: [0.51, 1] },"
+                         );
+                        sw.Write("images: [");
+                        {
+                            if (settings.PlayerRotIcons)//Display rotation
+                            {
+                                int castCount = 0;
+                                foreach (CastLog cl in casting)
+                                {
+                                    HTMLHelper.writeCastingItemIcon(sw, cl, log.getSkillData(), 0, castCount == casting.Count - 1);
+                                    castCount++;
+                                }
+                            }
+                        }
+                        sw.Write("],");
+                        if (settings.LightTheme)
+                        {
+                            sw.Write("font: { color: '#000000' }," +
+                                     "paper_bgcolor: 'rgba(255,255,255,0)'," +
+                                     "plot_bgcolor: 'rgba(255,255,255,0)'");
+                        }
+                        else
+                        {
+                            sw.Write("font: { color: '#ffffff' }," +
+                                     "paper_bgcolor: 'rgba(0,0,0,0)'," +
+                                     "plot_bgcolor: 'rgba(0,0,0,0)'");
+                        }
                     }
-                    else
-                    {
-                        sw.Write("font: { color: '#ffffff' }," +
-                                 "paper_bgcolor: 'rgba(0,0,0,0)'," +
-                                 "plot_bgcolor: 'rgba(0,0,0,0)'");
-                    }
+                    sw.Write("};");
+                    sw.Write(
+                                "var lazyplot = document.querySelector('#Graph" + p.getInstid() + "');" +
+
+                                "if ('IntersectionObserver' in window) {" +
+                                    "let lazyPlotObserver = new IntersectionObserver(function(entries, observer) {" +
+                                        "entries.forEach(function(entry) {" +
+                                            "if (entry.isIntersecting)" +
+                                            "{" +
+                                                "Plotly.newPlot('Graph" + p.getInstid() + "', data, layout);" +
+                                                "lazyPlotObserver.unobserve(entry.target);" +
+                                            "}" +
+                                        "});" +
+                                    "});" +
+                                    "lazyPlotObserver.observe(lazyplot);" +
+                                "} else {" +
+                                    "Plotly.newPlot('Graph" + p.getInstid() + "', data, layout);" +
+                                "}");
                 }
-                sw.Write("};");
-                sw.Write("Plotly.newPlot('Graph" + p.getInstid() + "', data, layout);");
+                sw.Write("});");
             }
             sw.Write("</script> ");
             sw.Write("<ul class=\"nav nav-tabs\">");

@@ -429,29 +429,17 @@ namespace LuckParser.Controllers
             boss = new Boss(bossAgent);
             List<Point> bossHealthOverTime = new List<Point>();
             // a hack for buggy golem logs
-            if(golem_mode)
+            if (golem_mode)
             {
-                ulong redirection = 0;
-
-                foreach(AgentItem a in agent_data.getAllAgentsList())
+                foreach (CombatItem c in combat_list)
                 {
-                    if(a.getID() == 19603)
+                    if (c.getDstAgent() == 0 && c.getDstInstid() == 0 && c.isStateChange() == ParseEnum.StateChange.Normal && c.getIFF() == ParseEnum.IFF.Foe && c.isActivation() == ParseEnum.Activation.None)
                     {
-                        redirection = a.getAgent();
+                        c.setDstAgent(bossAgent.getAgent());
+                        c.setDstInstid(bossAgent.getInstid());
                     }
                 }
 
-                if(redirection != 0)
-                {
-                    foreach(CombatItem c in combat_list)
-                    {
-                        if(c.getDstAgent() == 0 && c.getDstInstid() == 0 && c.isStateChange() == ParseEnum.StateChange.Normal && c.getIFF() == ParseEnum.IFF.Foe && c.isActivation() == ParseEnum.Activation.None)
-                        {
-                            c.setDstAgent(bossAgent.getAgent());
-                            c.setDstInstid(bossAgent.getInstid());
-                        }
-                    }
-                }
             }
             // Grab values threw combat data
             foreach (CombatItem c in combat_list)
