@@ -17,9 +17,6 @@ namespace LuckParser.Models.ParseModels
         private List<CombatItem> consumeList = new List<CombatItem>();
         //weaponslist
         private string[] weapons_array;
-        //int is time
-        private Dictionary<long,Point3D> Position;
-        private Dictionary<long,Point3D> Velocity;
 
         // Constructors
         public Player(AgentItem agent) : base(agent)
@@ -55,17 +52,6 @@ namespace LuckParser.Models.ParseModels
         public int getCondition()
         {
             return agent.getCondition();
-        }
-
-        public Dictionary<long, Point3D> GetPositionList()
-        {
-            return Position;
-
-        }
-        public Dictionary<long, Point3D> GetVelocityList()
-        {
-            return Velocity;
-
         }
         // Public methods
         public int[] getCleanses(ParsedLog log, long start, long end) {
@@ -129,15 +115,7 @@ namespace LuckParser.Models.ParseModels
             }
             return consumeList.Where(x => x.getTime() >= start && x.getTime() <= end).Select( x => new int[] { x.getSkillID(), (int)x.getTime() }).ToList() ;
         }
-
-        public void AddPositionPoint(long time, Point3D pos)
-        {
-            Position.Add(time,pos);
-        }
-        public void AddVelocityPoint(long time, Point3D vel)
-        {
-            Velocity.Add(time, vel);
-        }
+        
         // Private Methods
         private void EstimateWeapons(ParsedLog log)
         {
