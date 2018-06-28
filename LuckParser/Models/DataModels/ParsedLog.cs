@@ -94,8 +94,8 @@ namespace LuckParser.Models.DataModels
         {
             boon_data = combat_data.getCombatList().Where(x => x.isBuff() == 1 && (x.getBuffDmg() == 0 || x.isBuffremove() != ParseEnum.BuffRemove.None)).ToList();
             damage_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Foe && x.isBuffremove() == ParseEnum.BuffRemove.None &&
-                                        ((x.isBuff() == 1 && x.getBuffDmg() != 0) ||
-                                        (x.isBuff() == 0 && x.getValue() != 0) ||
+                                        ((x.isBuff() == 1 && x.getBuffDmg() > 0) ||
+                                        (x.isBuff() == 0 && x.getValue() > 0) ||
                                         (x.getResult() == ParseEnum.Result.Interrupt || x.getResult() == ParseEnum.Result.Absorb || x.getResult() == ParseEnum.Result.Blind))).ToList();
 
             damage_taken_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && 
