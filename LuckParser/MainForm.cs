@@ -114,99 +114,111 @@ namespace LuckParser
 
             bg.ThrowIfCanceled(rowData);
 
-            FileInfo fInfo = new FileInfo(rowData.Location);
-            if (!fInfo.Exists)
+            try
             {
-                bg.UpdateProgress(rowData, "File does not exist", 100);
-                e.Cancel = true;
-                throw new CancellationException(rowData);
-            }
-
-            bg.UpdateProgress(rowData, " Working...", 0);
-            Parser parser = new Parser();
-
-            if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
-                fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
-            {
-                //Process evtc here
-                bg.UpdateProgress(rowData, "10% - Reading Binary...", 10);
-                parser.ParseLog(rowData, fInfo.FullName);
-                ParsedLog log = parser.GetParsedLog();
-                log.validateLogData();
-                bg.ThrowIfCanceled(rowData);
-                bg.UpdateProgress(rowData, "35% - Data parsed", 35);
-
-                //Creating File
-                //save location
-                DirectoryInfo saveDirectory;
-                if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
+                FileInfo fInfo = new FileInfo(rowData.Location);
+                if (!fInfo.Exists)
                 {
-                    //Default save directory
-                    saveDirectory = fInfo.Directory;
+                    bg.UpdateProgress(rowData, "File does not exist", 100);
+                    e.Cancel = true;
+                    throw new CancellationException(rowData);
+                }
+
+                bg.UpdateProgress(rowData, " Working...", 0);
+                Parser parser = new Parser();
+
+                if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
+                    fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
+                {
+                    //Process evtc here
+                    bg.UpdateProgress(rowData, "10% - Reading Binary...", 10);
+                    parser.ParseLog(rowData, fInfo.FullName);
+                    ParsedLog log = parser.GetParsedLog();
+                    log.validateLogData();
+                    bg.ThrowIfCanceled(rowData);
+                    bg.UpdateProgress(rowData, "35% - Data parsed", 35);
+
+                    //Creating File
+                    //save location
+                    DirectoryInfo saveDirectory;
+                    if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
+                    {
+                        //Default save directory
+                        saveDirectory = fInfo.Directory;
+                    }
+                    else
+                    {
+                        //Customised save directory
+                        saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
+                    }
+
+                    string bossid = parser.getBossData().getID().ToString();
+                    string result = parser.getLogData().getBosskill() ? "kill" : "fail";
+
+                    SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
+
+                    Statistics statistics;
+                    StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
+                    if (Properties.Settings.Default.SaveOutHTML)
+                    {
+                        statistics = statisticsCalculator.calculateStatistics(log, HTMLBuilder.GetStatisticSwitches());
+                    }
+                    else
+                    {
+                        statistics = statisticsCalculator.calculateStatistics(log, CSVBuilder.GetStatisticSwitches());
+                    }
+
+                    bg.UpdateProgress(rowData, "85% - Statistics computed", 85);
+                    string fName = fInfo.Name.Split('.')[0];
+                    bg.UpdateProgress(rowData, "90% - Creating File...", 90);
+                    if (Properties.Settings.Default.SaveOutHTML)
+                    {
+                        string outputFile = Path.Combine(
+                        saveDirectory.FullName,
+                        $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.html"
+                        );
+                        rowData.LogLocation = outputFile;
+                        using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                        using (var sw = new StreamWriter(fs))
+                        {
+                            var builder = new HTMLBuilder(log, settings, statistics);
+                            builder.CreateHTML(sw);
+                        }
+                    }
+                    if (Properties.Settings.Default.SaveOutCSV)
+                    {
+                        string outputFile = Path.Combine(
+                        saveDirectory.FullName,
+                        $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.csv"
+                        );
+                        rowData.LogLocation = outputFile;
+                        using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                        using (var sw = new StreamWriter(fs))
+                        {
+                            var builder = new CSVBuilder(log, settings, statistics);
+                            builder.CreateCSV(sw, ",");
+                        }
+                    }
+
+                    bg.UpdateProgress(rowData, $"100% - Complete_{HTMLHelper.GetLink(bossid + "-ext")}_{result}", 100);
                 }
                 else
                 {
-                    //Customised save directory
-                    saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
+                    bg.UpdateProgress(rowData, "Not EVTC", 100);
+                    e.Cancel = true;
+                    throw new CancellationException(rowData);
                 }
 
-                string bossid = parser.getBossData().getID().ToString();
-                string result = parser.getLogData().getBosskill() ? "kill" : "fail";
-
-                SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
-
-                Statistics statistics;
-                StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
-                if (Properties.Settings.Default.SaveOutHTML)
-                {
-                    statistics = statisticsCalculator.calculateStatistics(log, HTMLBuilder.GetStatisticSwitches());
-                }
-                else
-                {
-                    statistics = statisticsCalculator.calculateStatistics(log, CSVBuilder.GetStatisticSwitches());
-                }
-
-                bg.UpdateProgress(rowData, "85% - Statistics computed", 85);
-                string fName = fInfo.Name.Split('.')[0];
-                bg.UpdateProgress(rowData, "90% - Creating File...", 90);
-                if (Properties.Settings.Default.SaveOutHTML)
-                {
-                    string outputFile = Path.Combine(
-                    saveDirectory.FullName,
-                    $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.html"
-                    );
-                    rowData.LogLocation = outputFile;
-                    using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                    using (var sw = new StreamWriter(fs))
-                    {
-                        var builder = new HTMLBuilder(log, settings, statistics);
-                        builder.CreateHTML(sw);
-                    }
-                }
-                if (Properties.Settings.Default.SaveOutCSV)
-                {
-                    string outputFile = Path.Combine(
-                    saveDirectory.FullName,
-                    $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.csv"
-                    );
-                    rowData.LogLocation = outputFile;
-                    using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                    using (var sw = new StreamWriter(fs))
-                    {
-                        var builder = new CSVBuilder(log, settings, statistics);
-                        builder.CreateCSV(sw, ",");
-                    }
-                }
-
-                bg.UpdateProgress(rowData, $"100% - Complete_{HTMLHelper.GetLink(bossid + "-ext")}_{result}", 100);
             }
-            else
+            catch (Exception ex)
             {
-                bg.UpdateProgress(rowData, "Not EVTC", 100);
-                e.Cancel = true;
-                throw new CancellationException(rowData);
+                throw new CancellationException(rowData, ex);
             }
-            System.Threading.Thread.CurrentThread.CurrentCulture = before;
+            finally
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = before;
+            }
+
         }
 
         /// <summary>

@@ -53,91 +53,101 @@ namespace LuckParser
             {
                 throw new CancellationException(row, new FileNotFoundException("File does not exist", fInfo.FullName));
             }
-
-            Parser control = new Parser();
-
-            if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
-                fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
+            try
             {
-                //Process evtc here
-                control.ParseLog(row, fInfo.FullName);
-                ParsedLog log = control.GetParsedLog();
-                log.validateLogData();
-                Console.Write("Log Parsed");
-                //Creating File
-                //save location
-                DirectoryInfo saveDirectory;
-                if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
+                Parser control = new Parser();
+
+                if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
+                    fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
                 {
-                    //Default save directory
-                    saveDirectory = fInfo.Directory;
+                    //Process evtc here
+                    control.ParseLog(row, fInfo.FullName);
+                    ParsedLog log = control.GetParsedLog();
+                    log.validateLogData();
+                    Console.Write("Log Parsed");
+                    //Creating File
+                    //save location
+                    DirectoryInfo saveDirectory;
+                    if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
+                    {
+                        //Default save directory
+                        saveDirectory = fInfo.Directory;
+                    }
+                    else
+                    {
+                        //Customised save directory
+                        saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
+                    }
+
+                    string bossid = control.getBossData().getID().ToString();
+                    string result = "fail";
+
+                    if (control.getLogData().getBosskill())
+                    {
+                        result = "kill";
+                    }
+
+                    SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
+                    Statistics statistics;
+                    StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
+                    if (Properties.Settings.Default.SaveOutHTML)
+                    {
+                        statistics = statisticsCalculator.calculateStatistics(log, HTMLBuilder.GetStatisticSwitches());
+                    }
+                    else
+                    {
+                        statistics = statisticsCalculator.calculateStatistics(log, CSVBuilder.GetStatisticSwitches());
+                    }
+                    Console.Write("Statistics Computed");
+
+                    string fName = fInfo.Name.Split('.')[0];
+                    if (Properties.Settings.Default.SaveOutHTML)
+                    {
+                        string outputFile = Path.Combine(
+                        saveDirectory.FullName,
+                        $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.html"
+                        );
+                        using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                        {
+                            using (StreamWriter sw = new StreamWriter(fs))
+                            {
+                                HTMLBuilder builder = new HTMLBuilder(log, settings, statistics);
+                                builder.CreateHTML(sw);
+                            }
+                        }
+                    }
+                    if (Properties.Settings.Default.SaveOutCSV)
+                    {
+                        string outputFile = Path.Combine(
+                        saveDirectory.FullName,
+                        $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.csv"
+                        );
+                        using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                        {
+                            using (StreamWriter sw = new StreamWriter(fs))
+                            {
+                                CSVBuilder builder = new CSVBuilder(log, settings, statistics);
+                                builder.CreateCSV(sw, ",");
+                            }
+                        }
+                    }
+                    Console.Write("Generation Done");
+
                 }
                 else
                 {
-                    //Customised save directory
-                    saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
+                    throw new CancellationException(row, new InvalidDataException("Not EVTC"));
                 }
-
-                string bossid = control.getBossData().getID().ToString();
-                string result = "fail";
-
-                if (control.getLogData().getBosskill())
-                {
-                    result = "kill";
-                }
-
-                SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
-                Statistics statistics;
-                StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
-                if (Properties.Settings.Default.SaveOutHTML)
-                {
-                    statistics = statisticsCalculator.calculateStatistics(log, HTMLBuilder.GetStatisticSwitches());
-                }
-                else
-                {
-                    statistics = statisticsCalculator.calculateStatistics(log, CSVBuilder.GetStatisticSwitches());
-                }
-                Console.Write("Statistics Computed");
-                
-                string fName = fInfo.Name.Split('.')[0];
-                if (Properties.Settings.Default.SaveOutHTML)
-                {
-                    string outputFile = Path.Combine(
-                    saveDirectory.FullName,
-                    $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.html"
-                    );
-                    using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                    {
-                        using (StreamWriter sw = new StreamWriter(fs))
-                        {
-                            HTMLBuilder builder = new HTMLBuilder(log, settings, statistics);
-                            builder.CreateHTML(sw);
-                        }
-                    }
-                }
-                if (Properties.Settings.Default.SaveOutCSV)
-                {
-                    string outputFile = Path.Combine(
-                    saveDirectory.FullName,
-                    $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.csv"
-                    );
-                    using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                    {
-                        using (StreamWriter sw = new StreamWriter(fs))
-                        {
-                            CSVBuilder builder = new CSVBuilder(log, settings, statistics);
-                            builder.CreateCSV(sw, ",");
-                        }
-                    }
-                }
-                Console.Write("Generation Done");
-
-            }
-            else
+            } 
+            catch (Exception ex)
             {
-                throw new CancellationException(row, new InvalidDataException("Not EVTC"));
+                throw new CancellationException(row, ex);
+            } 
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = before;
             }
-            System.Threading.Thread.CurrentThread.CurrentCulture = before;
+            
         }
     }
 }
