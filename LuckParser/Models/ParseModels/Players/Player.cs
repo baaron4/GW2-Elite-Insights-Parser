@@ -109,7 +109,7 @@ namespace LuckParser.Models.ParseModels
         }
         public List<int[]> getConsumablesList(ParsedLog log, long start, long end)
         {
-            if (consumeList.Count() == 0)
+            if (consumeList.Count == 0)
             {
                 setConsumablesList(log);
             }

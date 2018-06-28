@@ -697,7 +697,7 @@ namespace LuckParser.Controllers
                     sw.Write("</tr>");
                 }
                 sw.Write("</tbody>");
-                if (log.getPlayerList().Count() > 1)
+                if (log.getPlayerList().Count > 1)
                 {
                     sw.Write("<tfoot>");
                     {
@@ -811,7 +811,7 @@ namespace LuckParser.Controllers
                     }
                 }
                 sw.Write("</tbody>");
-                if (log.getPlayerList().Count() > 1)
+                if (log.getPlayerList().Count > 1)
                 {
                     sw.Write("<tfoot>");
                     {
@@ -890,7 +890,7 @@ namespace LuckParser.Controllers
                     }
                 }
                 sw.Write("</tbody>");
-                if (log.getPlayerList().Count() > 1)
+                if (log.getPlayerList().Count > 1)
                 {
                     sw.Write("<tfoot>");
                     {
@@ -980,7 +980,7 @@ namespace LuckParser.Controllers
                     }
                 }
                 sw.Write("</tbody>");
-                if (log.getPlayerList().Count() > 1)
+                if (log.getPlayerList().Count > 1)
                 {
                     sw.Write("<tfoot>");
                     {
@@ -1076,7 +1076,7 @@ namespace LuckParser.Controllers
                     }
                 }
                 sw.Write("</tbody>");
-                if (log.getPlayerList().Count() > 1)
+                if (log.getPlayerList().Count > 1)
                 {
                     sw.Write("<tfoot>");
                     {
@@ -1191,7 +1191,7 @@ namespace LuckParser.Controllers
                 }
 
                 sw.Write("</tbody>");
-                if (log.getPlayerList().Count() > 1)
+                if (log.getPlayerList().Count > 1)
                 {
                     sw.Write("<tfoot>");
                     {
@@ -1519,7 +1519,7 @@ namespace LuckParser.Controllers
                             List<int[]> consume = p.getConsumablesList(log, phase.getStart(), phase.getEnd());
                             List<int[]> initial = consume.Where(x => x[1] == 0).ToList();
                             List<int[]> refreshed = consume.Where(x => x[1] > 0).ToList();
-                            if (initial.Count() > 0)
+                            if (initial.Count > 0)
                             {
                                 Boon food = null;
                                 Boon utility = null;
@@ -1550,7 +1550,7 @@ namespace LuckParser.Controllers
                                 }
                                 sw.Write("</p>");
                             }
-                            if (refreshed.Count() > 0)
+                            if (refreshed.Count > 0)
                             {
                                 Boon food = null;
                                 Boon utility = null;
@@ -1595,7 +1595,7 @@ namespace LuckParser.Controllers
                                                 HTMLHelper.writeCastingItem(sw, cl, log.getSkillData(), phase.getStart(), phase.getEnd());
                                             }
                                         }
-                                        if (statistics.present_boons.Count() > 0)
+                                        if (statistics.present_boons.Count > 0)
                                         {
                                             List<Boon> parseBoonsList = new List<Boon>();
                                             parseBoonsList.AddRange(statistics.present_boons);
@@ -1904,7 +1904,7 @@ namespace LuckParser.Controllers
             if (down.Count > 0)
             {
                 List<CombatItem> ups = log.getCombatData().getStates(p.getInstid(), ParseEnum.StateChange.ChangeUp, start, end);
-                down = down.GetRange(ups.Count(), down.Count() - ups.Count());
+                down = down.GetRange(ups.Count, down.Count - ups.Count);
             }
             List<CombatItem> dead = log.getCombatData().getStates(p.getInstid(), ParseEnum.StateChange.ChangeDead, start, end);
             List<DamageLog> damageToDown = new List<DamageLog>();
@@ -1915,19 +1915,19 @@ namespace LuckParser.Controllers
                 damageToKill = damageLogs.Where(x => x.getTime() > down.Last().getTime() - start && x.getTime() < dead.Last().getTime() - start && x.getDamage() > 0).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
-                for (int i = damageToDown.Count() - 1; i > 0; i--)
+                for (int i = damageToDown.Count - 1; i > 0; i--)
                 {
                     totaldmg += damageToDown[i].getDamage();
                     if (totaldmg > 30000)
                     {
-                        damageToDown = damageToDown.GetRange(i, damageToDown.Count() - i);
+                        damageToDown = damageToDown.GetRange(i, damageToDown.Count - i);
                         break;
                     }
                 }
                 sw.Write("<center>");
                 sw.Write("<p>Took " + damageToDown.Sum(x => x.getDamage()) + " damage in " +
                 ((damageToDown.Last().getTime() - damageToDown.First().getTime()) / 1000f).ToString() + " seconds to enter downstate");
-                if (damageToKill.Count() > 0)
+                if (damageToKill.Count > 0)
                 {
                     sw.Write("<p>Took " + damageToKill.Sum(x => x.getDamage()) + " damage in " +
                        ((damageToKill.Last().getTime() - damageToKill.First().getTime()) / 1000f).ToString() + " seconds to die</p>");
@@ -1943,12 +1943,12 @@ namespace LuckParser.Controllers
                 damageToKill = damageLogs.Where(x => x.getTime() < dead.Last().getTime() && x.getDamage() > 0).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
-                for (int i = damageToKill.Count() - 1; i > 0; i--)
+                for (int i = damageToKill.Count - 1; i > 0; i--)
                 {
                     totaldmg += damageToKill[i].getDamage();
                     if (totaldmg > 30000)
                     {
-                        damageToKill = damageToKill.GetRange(i, damageToKill.Count() - 1 - i);
+                        damageToKill = damageToKill.GetRange(i, damageToKill.Count - 1 - i);
                         break;
                     }
                 }
@@ -1961,18 +1961,18 @@ namespace LuckParser.Controllers
                 sw.Write("var data = [{");
                 //Time on X
                 sw.Write("x : [");
-                if (damageToDown.Count() != 0)
+                if (damageToDown.Count != 0)
                 {
-                    for (int d = 0; d < damageToDown.Count(); d++)
+                    for (int d = 0; d < damageToDown.Count; d++)
                     {
                         sw.Write("'" + damageToDown[d].getTime() / 1000f + "s',");
                     }
                 }
-                for (int d = 0; d < damageToKill.Count(); d++)
+                for (int d = 0; d < damageToKill.Count; d++)
                 {
                     sw.Write("'" + damageToKill[d].getTime() / 1000f + "s'");
 
-                    if (d != damageToKill.Count() - 1)
+                    if (d != damageToKill.Count - 1)
                     {
                         sw.Write(",");
                     }
@@ -1980,18 +1980,18 @@ namespace LuckParser.Controllers
                 sw.Write("],");
                 //damage on Y
                 sw.Write("y : [");
-                if (damageToDown.Count() != 0)
+                if (damageToDown.Count != 0)
                 {
-                    for (int d = 0; d < damageToDown.Count(); d++)
+                    for (int d = 0; d < damageToDown.Count; d++)
                     {
                         sw.Write("'" + damageToDown[d].getDamage() + "',");
                     }
                 }
-                for (int d = 0; d < damageToKill.Count(); d++)
+                for (int d = 0; d < damageToKill.Count; d++)
                 {
                     sw.Write("'" + damageToKill[d].getDamage() + "'");
 
-                    if (d != damageToKill.Count() - 1)
+                    if (d != damageToKill.Count - 1)
                     {
                         sw.Write(",");
                     }
@@ -1999,17 +1999,17 @@ namespace LuckParser.Controllers
                 sw.Write("],");
                 //Color 
                 sw.Write("marker : {color:[");
-                if (damageToDown.Count() != 0)
+                if (damageToDown.Count != 0)
                 {
-                    for (int d = 0; d < damageToDown.Count(); d++)
+                    for (int d = 0; d < damageToDown.Count; d++)
                     {
                         sw.Write("'rgb(0,255,0,1)',");
                     }
                 }
-                for (int d = 0; d < damageToKill.Count(); d++)
+                for (int d = 0; d < damageToKill.Count; d++)
                 {
 
-                    if (down.Count() == 0)
+                    if (down.Count == 0)
                     {
                         //damagetoKill was instant(not in downstate)
                         sw.Write("'rgb(0,255,0,1)'");
@@ -2021,7 +2021,7 @@ namespace LuckParser.Controllers
                     }
 
 
-                    if (d != damageToKill.Count() - 1)
+                    if (d != damageToKill.Count - 1)
                     {
                         sw.Write(",");
                     }
@@ -2029,20 +2029,20 @@ namespace LuckParser.Controllers
                 sw.Write("]},");
                 //text
                 sw.Write("text : [");
-                if (damageToDown.Count() != 0)
+                if (damageToDown.Count != 0)
                 {
-                    for (int d = 0; d < damageToDown.Count(); d++)
+                    for (int d = 0; d < damageToDown.Count; d++)
                     {
                         sw.Write("'" + log.getAgentData().GetAgentWInst(damageToDown[d].getInstidt()).getName().Replace("\0", "").Replace("\'", "\\'") + "<br>" +
                             log.getSkillData().getName(damageToDown[d].getID()).Replace("\'", "\\'") + " hit you for " + damageToDown[d].getDamage() + "',");
                     }
                 }
-                for (int d = 0; d < damageToKill.Count(); d++)
+                for (int d = 0; d < damageToKill.Count; d++)
                 {
                     sw.Write("'" + log.getAgentData().GetAgentWInst(damageToKill[d].getInstidt()).getName().Replace("\0", "").Replace("\'", "\\'") + "<br>" +
                            "hit you with <b>" + log.getSkillData().getName(damageToKill[d].getID()).Replace("\'", "\\'") + "</b> for " + damageToKill[d].getDamage() + "'");
 
-                    if (d != damageToKill.Count() - 1)
+                    if (d != damageToKill.Count - 1)
                     {
                         sw.Write(",");
                     }
@@ -2085,7 +2085,7 @@ namespace LuckParser.Controllers
                 if (skill != null && list_to_use.Count > 0)
                 {
                     List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
-                    int casts = clList.Count();
+                    int casts = clList.Count;
                     double timeswasted = 0;
                     int countwasted = 0;
                     double timessaved = 0;
@@ -2115,7 +2115,7 @@ namespace LuckParser.Controllers
                     if (skill != null)
                     {
                         List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
-                        int casts = clList.Count();
+                        int casts = clList.Count;
                         double timeswasted = 0;
                         int countwasted = 0;
                         double timessaved = 0;
@@ -2441,7 +2441,7 @@ namespace LuckParser.Controllers
                     presMech[item.GetAltName()].Add(item);
                 }
             }
-            if (presMech.Count() > 0)
+            if (presMech.Count > 0)
             {
                 sw.Write("<script> $(function () { $('#mech_table" + phase_index + "').DataTable({ \"order\": [[0, \"desc\"]]});});</script>");
                 sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"mech_table" + phase_index + "\">");
@@ -2473,7 +2473,7 @@ namespace LuckParser.Controllers
                                     foreach (Mechanic mech in mechs)
                                     {
                                         List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= phase.getStart() / 1000 && x.GetTime() <= phase.getEnd() / 1000).ToList();
-                                        count += test.Count();
+                                        count += test.Count;
                                     }
                                     sw.Write("<td>" + count + "</td>");
                                 }
@@ -3020,7 +3020,7 @@ namespace LuckParser.Controllers
                             sw.Write("</div>");
                         }
                         sw.Write("</div>");
-                        //if (p_list.Count() == 1)//Create condensed version of log
+                        //if (p_list.Count == 1)//Create condensed version of log
                         //{
                         //    CreateSoloHTML(sw,settingsSnap);
                         //    return;
@@ -3456,7 +3456,7 @@ namespace LuckParser.Controllers
                                 HTMLHelper.writeCastingItem(sw, cl, log.getSkillData(), 0, log.getBossData().getAwareDuration());
                             }
                         }
-                        if (statistics.present_boons.Count() > 0)
+                        if (statistics.present_boons.Count > 0)
                         {
                             List<Boon> parseBoonsList = new List<Boon>();
                             parseBoonsList.AddRange(statistics.present_boons);
