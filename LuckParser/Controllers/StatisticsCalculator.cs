@@ -341,22 +341,22 @@ namespace LuckParser.Controllers
 
                     // Counts
                     CombatData combatData = log.getCombatData();
-                    final.swapCount = combatData.getStates(instid, ParseEnum.StateChange.WeaponSwap, start, end).Count();
-                    final.downCount = combatData.getStates(instid, ParseEnum.StateChange.ChangeDown, start, end).Count();
+                    final.swapCount = combatData.getStates(instid, ParseEnum.StateChange.WeaponSwap, start, end).Count;
+                    final.downCount = combatData.getStates(instid, ParseEnum.StateChange.ChangeDown, start, end).Count;
                     final.dodgeCount = combatData.getSkillCount(instid, 65001, start, end) + combatData.getBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
                     final.ressCount = combatData.getSkillCount(instid, 1066, start, end); //Res = 1066
 
                     // R.I.P
                     List<CombatItem> dead = combatData.getStates(instid, ParseEnum.StateChange.ChangeDead, start, end);
                     final.died = 0.0;
-                    if (dead.Count() > 0)
+                    if (dead.Count > 0)
                     {
                         final.died = dead[0].getTime() - start;
                     }
 
                     List<CombatItem> disconect = combatData.getStates(instid, ParseEnum.StateChange.Despawn, start, end);
                     final.dcd = 0.0;
-                    if (disconect.Count() > 0)
+                    if (disconect.Count > 0)
                     {
                         final.dcd = disconect[0].getTime() - start;
                     }
