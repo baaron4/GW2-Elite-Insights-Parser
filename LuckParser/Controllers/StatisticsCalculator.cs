@@ -687,18 +687,24 @@ namespace LuckParser.Controllers
                 }
             }
             List<CombatItem> c_list = log.getCombatData().getCombatList();
+
             foreach (Player p in log.getPlayerList())
             {
                 statistics.present_personnal[p.getInstid()] = new List<Boon>();
                 if (settings.PlayerBoonsAllProf)
                 {//All class specefic boons
-                    foreach (Boon boon in Boon.getRemainingBuffsList())
+                    List<Boon> notYetFoundBoons = Boon.getRemainingBuffsList();
+                    c_list.ForEach(item =>
                     {
-                        if (c_list.Exists(x => x.getSkillID() == boon.getID() && x.getDstInstid() == p.getInstid()))
-                        {
-                            statistics.present_personnal[p.getInstid()].Add(boon);
+                        if (item.getDstInstid() == p.getInstid()) {
+                            Boon foundBoon = notYetFoundBoons.Find(boon => boon.getID() == item.getSkillID());
+                            if (foundBoon != null)
+                            {
+                                notYetFoundBoons.Remove(foundBoon);
+                                statistics.present_personnal[p.getInstid()].Add(foundBoon);
+                            }
                         }
-                    }
+                    });
                 }
             }
         }
