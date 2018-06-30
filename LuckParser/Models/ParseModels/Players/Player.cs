@@ -241,6 +241,10 @@ namespace LuckParser.Models.ParseModels
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in log.getAgentData().getNPCAgentList())
                     {//selecting all
+                        if (c.getTime() < item.getFirstAware() || c.getTime() > item.getLastAware())
+                        {
+                            continue;
+                        }
                         addDamageLog(time, item.getInstid(), c, damage_logs);
                     }
                 }
@@ -257,8 +261,12 @@ namespace LuckParser.Models.ParseModels
             foreach (CombatItem c in log.getDamageTakenData()) {
                 if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware()) {//selecting player as target
                     long time = c.getTime() - time_start;
-                    foreach (AgentItem item in log.getAgentData().getAllAgentsList())
+                    foreach (AgentItem item in log.getAgentData().getNPCAgentList())
                     {//selecting all
+                        if (c.getTime() < item.getFirstAware() || c.getTime() > item.getLastAware())
+                        {
+                            continue;
+                        }
                         addDamageTakenLog(time, item.getInstid(), c);
                     }
                 }

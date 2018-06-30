@@ -409,6 +409,10 @@ namespace LuckParser.Models.ParseModels
                     long time = c.getTime() - time_start;
                     foreach (AgentItem item in log.getAgentData().getAllAgentsList())
                     {//selecting all
+                        if (c.getTime() < item.getFirstAware() || c.getTime() > item.getLastAware())
+                        {
+                            continue;
+                        }
                         addDamageLog(time, item.getInstid(), c, damage_logs);
                     }
                 }
