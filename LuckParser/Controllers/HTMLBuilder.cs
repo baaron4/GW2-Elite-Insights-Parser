@@ -2869,11 +2869,11 @@ namespace LuckParser.Controllers
                 sw.Write("tr.odd{ background-color: #D9D9D9 !important; }");
                 sw.Write("tr.odd>.sorting_1{ background-color: #D0D0D0 !important; }");
                 sw.Write("tr.even>.sorting_1{ background-color: #F0F0F0 !important; }");
+                sw.Write("table.dataTable.display tbody tr.condi {background-color: #ff6666 !important;}");
                 if (!settings.LightTheme)
                 {
                     sw.Write("table.dataTable.stripe tfoot tr, table.dataTable.display tfoot tr { background-color: #f9f9f9;}");
                     sw.Write("table.dataTable  td {color: black;}");
-                    sw.Write("table.dataTable.display tbody tr.condi {background-color: #ff6666;}");
                     sw.Write(".card {border:1px solid #EE5F5B;}");
                     sw.Write("td.composition {width: 120px;border:1px solid #EE5F5B;}");
                 }
