@@ -1,11 +1,12 @@
 ﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
     public class Boss : AbstractMasterPlayer
-    {   
+    {
         // Constructors
         public Boss(AgentItem agent) : base(agent)
         {
@@ -14,9 +15,9 @@ namespace LuckParser.Models.ParseModels
         private List<PhaseData> phases = new List<PhaseData>();
         private List<long> phaseData = new List<long>();
 
-        public List<PhaseData> getPhases(ParsedLog log,bool getAllPhases)
+        public List<PhaseData> getPhases(ParsedLog log, bool getAllPhases)
         {
-           
+
             if (phases.Count == 0)
             {
                 if (!getAllPhases)
@@ -35,6 +36,52 @@ namespace LuckParser.Models.ParseModels
         public void addPhaseData(long data)
         {
             phaseData.Add(data);
+        }
+
+        public Tuple<int, int> getMapOffsets(ParsedLog log)
+        {
+            switch (log.getBossData().getID())
+            {
+                case 0x4D37:
+                    return Tuple.Create(155, 150);
+                case 0x4BFA:
+                    return Tuple.Create(1225,175);
+            }
+            return Tuple.Create(0, 0);
+        }
+
+        public Tuple<int, int> getMapSize(ParsedLog log)
+        {
+            switch (log.getBossData().getID())
+            {
+                case 0x4D37:
+                    return Tuple.Create(600, 600);
+                case 0x4BFA:
+                    return Tuple.Create(600, 600);
+            }
+            return Tuple.Create(0, 0);
+        }
+
+        public Tuple<int, int, int, int> getMapApiRect(ParsedLog log)
+        {
+            switch (log.getBossData().getID())
+            {
+                case 0x4D37:
+                case 0x4BFA:
+                    return Tuple.Create(-21504, -12288, 24576, 12288);
+            }
+            return Tuple.Create(0, 0,0,0);
+        }
+
+        public string getMap(ParsedLog log)
+        {
+            switch (log.getBossData().getID())
+            {
+                case 0x4D37:
+                case 0x4BFA:
+                    return "https://wiki.guildwars2.com/images/6/63/Hall_of_Chains_map.jpg";
+            }
+            return "";
         }
 
         // Private Methods

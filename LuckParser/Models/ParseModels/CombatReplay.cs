@@ -10,7 +10,6 @@ namespace LuckParser.Models.ParseModels
     {
         private List<Point3D> positions = new List<Point3D>();
         private List<Point3D> velocities = new List<Point3D>();
-        private HashSet<int> times = new HashSet<int>();
         // dps
         private List<int> dps = new List<int>();
         private List<int> dps10s = new List<int>();
@@ -32,11 +31,7 @@ namespace LuckParser.Models.ParseModels
         {
             this.velocities.Add(vel);
         }
-
-        public void addTime(int time)
-        {
-            this.times.Add(time);
-        }
+        
 
         public void addDPS(int dps)
         {
@@ -62,9 +57,49 @@ namespace LuckParser.Models.ParseModels
             ll.Add(value);
         }
 
-        public HashSet<int> getTimes()
+        public List<int> getTimes()
         {
-            return times;
+            return positions.Select(x => (int)x.time).ToList();
+        }
+        
+
+        public void pollingRate(int rate, long fightDuration)
+        {
+            List<Point3D> interpolatedPositions = new List<Point3D>();
+            int tablePos = 0;
+            for (int i = 0; i < fightDuration; i += rate)
+            {
+                Point3D pt = positions[tablePos];
+                if (i < pt.time)
+                {
+                    interpolatedPositions.Add(new Point3D(pt.X,pt.Y,pt.Z,i));
+                } else
+                {
+                    if (tablePos == positions.Count - 1)
+                    {
+                        interpolatedPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
+                    } else
+                    {
+                        Point3D ptn = positions[tablePos + 1];
+                        if (ptn.time < i)
+                        {
+                            tablePos++;
+                            i -= rate;
+                        } else
+                        {
+                            float ratio = (float)(i - pt.time) / (ptn.time - pt.time);
+                            interpolatedPositions.Add(new Point3D(pt,ptn, ratio, i));
+                        }
+                    }
+                }
+            }
+            positions = interpolatedPositions;
+            velocities = null;
+        }
+
+        public List<Point3D> getPositions()
+        {
+            return positions;
         }
     }
 }

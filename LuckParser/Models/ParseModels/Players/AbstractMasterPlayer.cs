@@ -86,6 +86,7 @@ namespace LuckParser.Models.ParseModels
             {
                 replay = new CombatReplay();
                 setMovements(log);
+                replay.pollingRate(100, log.getBossData().getAwareDuration());
             }
         }
         public CombatReplay getCombatReplay()
@@ -211,14 +212,13 @@ namespace LuckParser.Models.ParseModels
                 byte[] xy = BitConverter.GetBytes(c.getDstAgent());
                 float X = BitConverter.ToSingle(xy, 0);
                 float Y = BitConverter.ToSingle(xy, 4);
-                replay.addTime((int)time);
                 if (c.isStateChange() == ParseEnum.StateChange.Position)
                 {
-                    replay.addPosition(new Point3D(X, Y, c.getValue()));
+                    replay.addPosition(new Point3D(X, Y, c.getValue(), time));
                 }
                 else
                 {
-                    replay.addVelocity(new Point3D(X, Y, c.getValue()));
+                    replay.addVelocity(new Point3D(X, Y, c.getValue(), time));
                 }
             }
         }

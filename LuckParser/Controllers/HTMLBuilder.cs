@@ -603,7 +603,7 @@ namespace LuckParser.Controllers
                             }
                             sw.Write("<td class=\"composition\">");
                             {
-                                sw.Write("<img src=\"" + HTMLHelper.GetLink(gPlay.getProf().ToString()) + " \" alt=\"" + gPlay.getProf().ToString() + "\" height=\"18\" width=\"18\" >");
+                                sw.Write("<img src=\"" + HTMLHelper.GetLink(gPlay.getProf()) + " \" alt=\"" + gPlay.getProf().ToString() + "\" height=\"18\" width=\"18\" >");
                                 sw.Write(build);
                                 PrintWeapons(sw, gPlay);
                                 sw.Write(charName);
@@ -2841,6 +2841,57 @@ namespace LuckParser.Controllers
             }
             sw.Write("</div>");
         }
+        private void CreateReplayTable(StreamWriter sw)
+        {
+            Tuple<int, int> offsets = log.getBoss().getMapOffsets(log);
+            Tuple<int, int, int, int> apiRect = log.getBoss().getMapApiRect(log);
+            
+            sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center\" style=\"width:600px; height:600px\">");
+            {
+                sw.Write("<div id=\"replayimg\" class=\"replay\">");
+                {
+                    foreach (Player p in log.getPlayerList())
+                    {
+                        Point3D firstPos = p.getCombatReplay().getPositions()[0];
+                        int left = (int) (1920 * (firstPos.X - apiRect.Item1)/(apiRect.Item3 - apiRect.Item1)) - offsets.Item1 - 10;
+                        int top = (int)(1024 * (firstPos.Y - apiRect.Item2) / (apiRect.Item4 - apiRect.Item2)) - offsets.Item2 - 10 - 65;
+                        sw.Write("<div style=\"top: "+ top+"px; left:"+ left+"px; background-image: url('" + HTMLHelper.GetLink(p.getProf()) + "');\" class=\"bubble friend id" + p.getInstid() + " g" + p.getGroup() + "\"></div>");
+                        break;
+                    }
+                    Point3D firstPosBoss = log.getBoss().getCombatReplay().getPositions()[0];
+                    int leftBoss = (int)(1920 * (firstPosBoss.X - apiRect.Item1) / (apiRect.Item3 - apiRect.Item1)) - offsets.Item1 - 10;
+                    int topBoss = (int)(1024 * (firstPosBoss.Y - apiRect.Item2) / (apiRect.Item4 - apiRect.Item2)) - offsets.Item2 - 10 - 65;
+                    sw.Write("<div style=\"top: " + topBoss + "px; left:" + leftBoss + "px; background-image: url('" + HTMLHelper.GetLink(log.getBossData().getID() + "-icon") + "');\" class=\"bubble foe id" + log.getBoss().getInstid() + "\"></div>");
+                    sw.Write("<div onclick=\"setInterval(function(){myanimate()},100)\" type=\"button\" class=\"btn btn-dark\">Animate</div>");
+                }
+                sw.Write("</div>");
+            }
+            sw.Write("</div>");
+            sw.Write("<script>");
+            {
+                sw.Write("var testid = " + log.getPlayerList()[0].getInstid() + ";");
+                sw.Write("var i = 0;");
+                sw.Write("var data = [");
+                foreach (Point3D pos in log.getPlayerList()[0].getCombatReplay().getPositions())
+                {
+                    int left = (int)(1920 * (pos.X - apiRect.Item1) / (apiRect.Item3 - apiRect.Item1)) - offsets.Item1 - 10;
+                    int top = (int)(1024 * (pos.Y - apiRect.Item2) / (apiRect.Item4 - apiRect.Item2)) - offsets.Item2 - 10 - 65;
+                    sw.Write(left + ",");
+                    sw.Write(top + ",");
+                }
+                sw.Write(" ];");
+                sw.Write("function myanimate() {");
+                {
+                    sw.Write("var x = document.getElementById('replayimg');");
+                    sw.Write("var div = x.querySelector('.id'+testid);");
+                    sw.Write("div.style.left = data[2*i]+'px';");
+                    sw.Write("div.style.top = data[2*i + 1]+'px';");
+                    sw.Write("i = (i+1) %" + log.getPlayerList()[0].getCombatReplay().getPositions().Count + ";");
+                }
+                sw.Write("}");
+            }
+            sw.Write("</script>");
+        }
         /// <summary>
         /// Creates custom css'
         /// </summary>
@@ -2882,6 +2933,32 @@ namespace LuckParser.Controllers
                     sw.Write(".nav-link {color:#337AB7;}");
                     sw.Write(".card {border:1px solid #9B0000;}");
                     sw.Write("td.composition {width: 120px;border:1px solid #9B0000;}");
+                }
+                if (log.getBoss().getCombatReplay() != null)
+                {
+                    Tuple<int, int> offsets = log.getBoss().getMapOffsets(log);
+                    Tuple<int, int> sizes = log.getBoss().getMapSize(log);
+                    sw.Write("div.replay {" +
+                        "width: "+ sizes.Item1 + "px; height: "+ sizes.Item2 + "px;" +
+                        "border:1px solid #9B0000; " +
+                        "position:relative; " +
+                        "background-size: 50% 50%;" + 
+                        "background: url('" +log.getBoss().getMap(log)+ "') no-repeat; " +
+                        "background-position: left " + -offsets.Item1 + "px top " + -offsets.Item2 + "px;" +
+                        "}");
+                    sw.Write("div.bubble {" +
+                        "width: 20px; height: 20px;" +
+                        "border-radius: 50%;" +
+                        "background-color: #FFFFFF;"+
+                        "position: absolute;"+
+                        "background-size: contain;"+
+                        "}");
+                    sw.Write("div.friend {" + 
+                        "border:1px solid #00AA00;"+
+                         "}");
+                    sw.Write("div.foe {" +
+                        "border:1px solid #AA0000;" +
+                         "}");
                 }
             }
             sw.Write("</style>");
@@ -3025,7 +3102,7 @@ namespace LuckParser.Controllers
                         //    CreateSoloHTML(sw,settingsSnap);
                         //    return;
                         //}
-                        if (phases.Count > 1)
+                        if (phases.Count > 1 || log.getBoss().getCombatReplay() != null)
                         {
                             sw.Write("<ul class=\"nav nav-tabs\">");
                             {
@@ -3038,6 +3115,14 @@ namespace LuckParser.Controllers
                                     sw.Write("<li  class=\"nav-item\">" +
                                             "<a class=\"nav-link " + active + "\" data-toggle=\"tab\" href=\"#phase" + i + "\">" +
                                                 "<span data-toggle=\"tooltip\" title=\"" + phases[i].getDuration("s") + " seconds\">" + name + "</span>" +
+                                            "</a>" +
+                                        "</li>");
+                                }
+                                if (log.getBoss().getCombatReplay() != null)
+                                {
+                                    sw.Write("<li  class=\"nav-item\">" +
+                                            "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#replay\">" +
+                                                "<span>Combat Replay</span>" +
                                             "</a>" +
                                         "</li>");
                                 }
@@ -3412,6 +3497,10 @@ namespace LuckParser.Controllers
                                 }
                                 sw.Write("</div>");
 
+                            }
+                            sw.Write("<div class=\"tab-pane fade\" id=\"replay\">");
+                            {
+                                CreateReplayTable(sw);
                             }
                         }
                         sw.Write("</div>");
