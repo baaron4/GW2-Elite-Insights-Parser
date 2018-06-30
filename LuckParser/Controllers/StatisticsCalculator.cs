@@ -19,7 +19,7 @@ namespace LuckParser.Controllers
             public bool calculateSupport = false;
             public bool calculateBoons = false;
             public bool calculateConditions = false;
-            public bool calculateMovements = false;
+            public bool calculateCombatReplay = false;
         }
 
         private SettingsContainer settings;
@@ -60,13 +60,13 @@ namespace LuckParser.Controllers
                       
             if (switches.calculateConditions) calculateConditions();
             // we should also put this under settings
-            if (switches.calculateMovements)
+            if (switches.calculateCombatReplay)
             {
                 foreach(Player p in log.getPlayerList())
                 {
-                    p.getPositionList(log);
+                    p.initCombatReplay(log);
                 }
-                log.getBoss().getPositionList(log);
+                log.getBoss().initCombatReplay(log);
             }
             // WIP
             /*if (settings.PlayerRot)

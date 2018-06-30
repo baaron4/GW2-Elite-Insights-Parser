@@ -14,7 +14,6 @@ namespace LuckParser.Models.ParseModels
         // DPS
         protected List<DamageLog> damage_logs = new List<DamageLog>();
         protected List<DamageLog> damage_logsFiltered = new List<DamageLog>();
-        private Dictionary<int, List<Point>> dps_graph = new Dictionary<int, List<Point>>();
         // Taken damage
         protected List<DamageLog> damageTaken_logs = new List<DamageLog>();
         // Casts
@@ -48,20 +47,6 @@ namespace LuckParser.Models.ParseModels
                 return dead.getTime();
             }
             return 0;
-        }
-
-        public void addDPSGraph(int id, List<Point> graph)
-        {
-            dps_graph[id] = graph;
-        }
-
-        public List<Point> getDPSGraph(int id)
-        {
-            if (dps_graph.ContainsKey(id))
-            {
-                return dps_graph[id];
-            }
-            return new List<Point>();
         }
 
         public List<DamageLog> getDamageLogs(int instidFilter, ParsedLog log, long start, long end)//isntid = 0 gets all logs if specefied sets and returns filterd logs

@@ -14,19 +14,19 @@ namespace LuckParser.Models.ParseModels
         private List<BoonDistribution> boon_distribution = new List<BoonDistribution>();
         private List<Dictionary<int, long>> boon_presence = new List<Dictionary<int, long>>();
         private Dictionary<int, BoonsGraphModel> boon_points = new Dictionary<int, BoonsGraphModel>();
+        // dps graphs
+        private Dictionary<int, List<Point>> dps_graph = new Dictionary<int, List<Point>>();
         // Rotation
         private List<RotationItem> rotation = new List<RotationItem>();
-        //int is time
-        private List<Point3D> positions = new List<Point3D>();
-        private List<Point3D> velocities = new List<Point3D>();
         // Minions
         private Dictionary<string, Minions> minions = new Dictionary<string, Minions>();
+        // Replay
+        private CombatReplay replay = null;
 
         public AbstractMasterPlayer(AgentItem agent) : base(agent)
         {
 
         }
-
 
         public Dictionary<string, Minions> getMinions(ParsedLog log)
         {
@@ -35,54 +35,19 @@ namespace LuckParser.Models.ParseModels
                 setMinions(log);
             }
             return minions;
-        }
-
-        public List<Point3D> getPositionList(ParsedLog log)
+        }  
+        public void addDPSGraph(int id, List<Point> graph)
         {
-            if (positions.Count == 0)
-            {
-                this.setMovements(log);
-            }
-
-            return positions;
-
+            dps_graph[id] = graph;
         }
-        public List<Point3D> getVelocityList(ParsedLog log)
+        public List<Point> getDPSGraph(int id)
         {
-            if (velocities.Count == 0)
+            if (dps_graph.ContainsKey(id))
             {
-                this.setMovements(log);
+                return dps_graph[id];
             }
-            return velocities;
-
+            return new List<Point>();
         }
-
-        private void setMovements(ParsedLog log)
-        {
-            foreach(CombatItem c in log.getMovementData())
-            {
-                if (c.getSrcInstid() != agent.getInstid())
-                {
-                    continue;
-                }
-                long time = c.getTime() - log.getBossData().getFirstAware();
-                if (time < 0)
-                {
-                    continue;
-                }
-                byte[] xy = BitConverter.GetBytes(c.getDstAgent());
-                float X = BitConverter.ToSingle(xy, 0);
-                float Y = BitConverter.ToSingle(xy, 4);
-                if (c.isStateChange() == ParseEnum.StateChange.Position)
-                {
-                    positions.Add(new Point3D(X, Y, c.getValue(), time));
-                } else
-                {
-                    velocities.Add(new Point3D(X, Y, c.getValue(), time));
-                }
-            }
-        }
-
         public List<RotationItem> getRotation(ParsedLog log, bool icons)
         {
             if (rotation.Count == 0)
@@ -91,8 +56,6 @@ namespace LuckParser.Models.ParseModels
             }
             return rotation;
         }
-
-
         public BoonDistribution getBoonDistribution(ParsedLog log, List<PhaseData> phases, List<Boon> to_track, int phase_index)
         {
             if (boon_distribution.Count == 0)
@@ -117,9 +80,148 @@ namespace LuckParser.Models.ParseModels
             }
             return boon_presence[phase_index];
         }
+        public void initCombatReplay(ParsedLog log)
+        {
+            if (replay == null)
+            {
+                replay = new CombatReplay();
+                setMovements(log);
+            }
+        }
+        public CombatReplay getCombatReplay()
+        {
+            return replay;
+        }
+        // private getters
+        private BoonMap getBoonMap(ParsedLog log, List<Boon> to_track)
+        {
+            BoonMap boon_map = new BoonMap();
+            boon_map.add(to_track);
+            // Fill in Boon Map
+            long time_start = log.getBossData().getFirstAware();
 
+            foreach (CombatItem c in log.getBoonData())
+            {
+                if (!boon_map.ContainsKey(c.getSkillID()))
+                {
+                    continue;
+                }
+                long time = c.getTime() - time_start;
+                ushort dst = c.isBuffremove() == ParseEnum.BuffRemove.None ? c.getDstInstid() : c.getSrcInstid();
+                if (agent.getInstid() == dst && time > 0 && time < log.getBossData().getAwareDuration())
+                {
+                    ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
+                    if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                    {
+                        List<BoonLog> loglist = boon_map[c.getSkillID()];
+                        if (loglist.Count == 0 && c.getOverstackValue() > 0)
+                        {
+                            loglist.Add(new BoonLog(0, src, time, 0));
+                        }
+                        loglist.Add(new BoonLog(time, src, c.getValue(), 0));
+                    }
+                    else if (Boon.removePermission(c.getSkillID(), c.isBuffremove(), c.getIFF()))
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.All)//All
+                        {
+                            List<BoonLog> loglist = boon_map[c.getSkillID()];
+                            if (loglist.Count == 0)
+                            {
+                                loglist.Add(new BoonLog(0, src, time, 0));
+                            }
+                            else
+                            {
+                                for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
+                                {
+                                    BoonLog curBL = loglist[cnt];
+                                    if (curBL.getTime() + curBL.getValue() > time)
+                                    {
+                                        long subtract = (curBL.getTime() + curBL.getValue()) - time;
+                                        loglist[cnt].addValue(-subtract);
+                                        // add removed as overstack
+                                        loglist[cnt].addOverstack((ushort)subtract);
+                                    }
+                                }
+                            }
+                        }
+                        else if (c.isBuffremove() == ParseEnum.BuffRemove.Single)//Single
+                        {
+                            List<BoonLog> loglist = boon_map[c.getSkillID()];
+                            if (loglist.Count == 0)
+                            {
+                                loglist.Add(new BoonLog(0, src, time, 0));
+                            }
+                            else
+                            {
+                                int cnt = loglist.Count - 1;
+                                BoonLog curBL = loglist[cnt];
+                                if (curBL.getTime() + curBL.getValue() > time)
+                                {
+                                    long subtract = (curBL.getTime() + curBL.getValue()) - time;
+                                    loglist[cnt].addValue(-subtract);
+                                    // add removed as overstack
+                                    loglist[cnt].addOverstack((ushort)subtract);
+                                }
+                            }
+                        }
+                        else if (c.isBuffremove() == ParseEnum.BuffRemove.Manual)//Manuel
+                        {
+                            List<BoonLog> loglist = boon_map[c.getSkillID()];
+                            if (loglist.Count == 0)
+                            {
+                                loglist.Add(new BoonLog(0, src, time, 0));
+                            }
+                            else
+                            {
+                                for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
+                                {
+                                    BoonLog curBL = loglist[cnt];
+                                    long ctime = curBL.getTime() + curBL.getValue();
+                                    if (ctime > time)
+                                    {
+                                        long subtract = (curBL.getTime() + curBL.getValue()) - time;
+                                        loglist[cnt].addValue(-subtract);
+                                        // add removed as overstack
+                                        loglist[cnt].addOverstack((ushort)subtract);
+                                        break;
+                                    }
+                                }
+                            }
 
+                        }
+                    }
 
+                }
+            }
+            return boon_map;
+        }
+        private void setMovements(ParsedLog log)
+        {
+            foreach (CombatItem c in log.getMovementData())
+            {
+                if (c.getSrcInstid() != agent.getInstid())
+                {
+                    continue;
+                }
+                long time = c.getTime() - log.getBossData().getFirstAware();
+                if (time < 0)
+                {
+                    continue;
+                }
+                byte[] xy = BitConverter.GetBytes(c.getDstAgent());
+                float X = BitConverter.ToSingle(xy, 0);
+                float Y = BitConverter.ToSingle(xy, 4);
+                replay.addTime((int)time);
+                if (c.isStateChange() == ParseEnum.StateChange.Position)
+                {
+                    replay.addPosition(new Point3D(X, Y, c.getValue()));
+                }
+                else
+                {
+                    replay.addVelocity(new Point3D(X, Y, c.getValue()));
+                }
+            }
+        }
         private void setBoonDistribution(ParsedLog log, List<PhaseData> phases, List<Boon> to_track)
         {
             BoonMap to_use = getBoonMap(log, to_track);
@@ -227,111 +329,6 @@ namespace LuckParser.Models.ParseModels
             }
             boon_points[-2] = boon_presence_points;
         }
-
-        // private getters
-        private BoonMap getBoonMap(ParsedLog log, List<Boon> to_track)
-        {
-            BoonMap boon_map = new BoonMap();
-            boon_map.add(to_track);
-            // Fill in Boon Map
-            long time_start = log.getBossData().getFirstAware();
-
-            foreach (CombatItem c in log.getBoonData())
-            {
-                if (!boon_map.ContainsKey(c.getSkillID()))
-                {
-                    continue;
-                }
-                long time = c.getTime() - time_start;
-                ushort dst = c.isBuffremove() == ParseEnum.BuffRemove.None ? c.getDstInstid() : c.getSrcInstid();
-                if (agent.getInstid() == dst && time > 0 && time < log.getBossData().getAwareDuration())
-                {
-                    ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
-                    if (c.isBuffremove() == ParseEnum.BuffRemove.None)
-                    {
-                        List<BoonLog> loglist = boon_map[c.getSkillID()];
-                        if (loglist.Count == 0 && c.getOverstackValue() > 0)
-                        {
-                            loglist.Add(new BoonLog(0, src, time, 0));
-                        }
-                        loglist.Add(new BoonLog(time, src, c.getValue(), 0));
-                    }
-                    else if (Boon.removePermission(c.getSkillID(), c.isBuffremove(), c.getIFF()))
-                    {
-                        if (c.isBuffremove() == ParseEnum.BuffRemove.All)//All
-                        {
-                            List<BoonLog> loglist = boon_map[c.getSkillID()];
-                            if (loglist.Count == 0)
-                            {
-                                loglist.Add(new BoonLog(0, src, time, 0));
-                            }
-                            else
-                            {
-                                for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
-                                {
-                                    BoonLog curBL = loglist[cnt];
-                                    if (curBL.getTime() + curBL.getValue() > time)
-                                    {
-                                        long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                        loglist[cnt].addValue(-subtract);
-                                        // add removed as overstack
-                                        loglist[cnt].addOverstack((ushort)subtract);
-                                    }
-                                }
-                            }
-                        }
-                        else if (c.isBuffremove() == ParseEnum.BuffRemove.Single)//Single
-                        {
-                            List<BoonLog> loglist = boon_map[c.getSkillID()];
-                            if (loglist.Count == 0)
-                            {
-                                loglist.Add(new BoonLog(0, src, time, 0));
-                            }
-                            else
-                            {
-                                int cnt = loglist.Count - 1;
-                                BoonLog curBL = loglist[cnt];
-                                if (curBL.getTime() + curBL.getValue() > time)
-                                {
-                                    long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                    loglist[cnt].addValue(-subtract);
-                                    // add removed as overstack
-                                    loglist[cnt].addOverstack((ushort)subtract);
-                                }
-                            }
-                        }
-                        else if (c.isBuffremove() == ParseEnum.BuffRemove.Manual)//Manuel
-                        {
-                            List<BoonLog> loglist = boon_map[c.getSkillID()];
-                            if (loglist.Count == 0)
-                            {
-                                loglist.Add(new BoonLog(0, src, time, 0));
-                            }
-                            else
-                            {
-                                for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
-                                {
-                                    BoonLog curBL = loglist[cnt];
-                                    long ctime = curBL.getTime() + curBL.getValue();
-                                    if (ctime > time)
-                                    {
-                                        long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                        loglist[cnt].addValue(-subtract);
-                                        // add removed as overstack
-                                        loglist[cnt].addOverstack((ushort)subtract);
-                                        break;
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-
-                }
-            }
-            return boon_map;
-        }
-
         private void setRotation(ParsedLog log, bool icons)
         {
             List<CastLog> cls = getCastLogs(log, 0, log.getBossData().getAwareDuration());
@@ -344,7 +341,6 @@ namespace LuckParser.Models.ParseModels
                 rot.setStartStatus(cl.startActivation());
             }
         }
-
         private void setMinions(ParsedLog log)
         {
             List<AgentItem> combatMinion = log.getAgentData().getNPCAgentList().Where(x => x.getMasterAgent() == agent.getAgent()).ToList();
@@ -377,7 +373,6 @@ namespace LuckParser.Models.ParseModels
             }
             damage_logsFiltered.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
         }
-
         protected override void setCastLogs(ParsedLog log)
         {
             long time_start = log.getBossData().getFirstAware();
@@ -427,7 +422,6 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-
         private static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
         {
             if (dictionary.TryGetValue(key, out var existing))

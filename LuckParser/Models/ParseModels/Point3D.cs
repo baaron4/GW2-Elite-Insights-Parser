@@ -5,14 +5,12 @@
         public float X { get; }
         public float Y { get; }
         public float Z { get; }
-        public long time { get; }
 
-        public Point3D(float X, float Y, float Z, long time)
+        public Point3D(float X, float Y, float Z)
         {
             this.X = X;
             this.Y = Y;
             this.Z = Z;
-            this.time = time;
         }
     }
 }
