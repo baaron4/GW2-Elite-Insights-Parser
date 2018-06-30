@@ -10,11 +10,13 @@ namespace LuckParser.Models.ParseModels
     {
         private List<Point3D> positions = new List<Point3D>();
         private List<Point3D> velocities = new List<Point3D>();
-        private List<int> times = new List<int>();
+        private HashSet<int> times = new HashSet<int>();
         // dps
         private List<int> dps = new List<int>();
         private List<int> dps10s = new List<int>();
         private List<int> dps30s = new List<int>();
+        // boons
+        private Dictionary<int, List<int>> boons = new Dictionary<int, List<int>>();
 
         public CombatReplay()
         {
@@ -49,7 +51,18 @@ namespace LuckParser.Models.ParseModels
             this.dps30s.Add(dps);
         }
 
-        public List<int> getTimes()
+        public void addBoon(int id, int value)
+        {
+            List<int> ll;
+            if (!boons.TryGetValue(id,out ll))
+            {
+                ll = new List<int>();
+                boons.Add(id, ll);
+            }
+            ll.Add(value);
+        }
+
+        public HashSet<int> getTimes()
         {
             return times;
         }

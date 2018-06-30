@@ -204,7 +204,7 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 long time = c.getTime() - log.getBossData().getFirstAware();
-                if (time < 0)
+                if (time < 0 || time > log.getBossData().getAwareDuration())
                 {
                     continue;
                 }
@@ -316,6 +316,14 @@ namespace LuckParser.Models.ParseModels
                     var reducedPrecision = new List<Point>(capacity: fight_duration + 1);
                     var boonPresence = boon_presence_points.getBoonChart();
                     var updateBoonPresence = Boon.getBoonList().Any(x => x.getID() == boonid);
+                    if (replay != null && (updateBoonPresence || Boon.getDefensiveTableList().Any(x => x.getID() == boonid) || Boon.getOffensiveTableList().Any(x => x.getID() == boonid)))
+                    {
+                        foreach (int time in replay.getTimes())
+                        {
+                            replay.addBoon(boonid, toFill[time].Y);
+                        }
+
+                    }
                     for (int i = 0; i <= fight_duration; i++)
                     {
                         reducedPrecision.Add(new Point(i, toFill[1000 * i].Y));

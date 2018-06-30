@@ -50,21 +50,21 @@ namespace LuckParser.Controllers
                 dmgListFull[total_time] = total_damage;
             }
             CombatReplay replay = p.getCombatReplay();
-            if (replay != null && dstid == 0)
+            if (replay != null && dstid == 0 && phase_index == 0)
             {
                 foreach (int i in replay.getTimes())
                 {
                     int limit_id = 0;
-                    replay.addDPS(1000*(int)Math.Round((dmgListFull[i] - dmgListFull[limit_id]) / (i - limit_id)));
+                    replay.addDPS((int)Math.Round(1000 * (dmgListFull[i] - dmgListFull[limit_id]) / (i - limit_id)));
                     if (settings.Show10s)
                     {
                         limit_id = Math.Max(i - 10000, 0);
-                        replay.addDPS10s(1000 * (int)Math.Round((dmgListFull[i] - dmgListFull[limit_id]) / (i - limit_id)));
+                        replay.addDPS10s((int)Math.Round(1000 * (dmgListFull[i] - dmgListFull[limit_id]) / (i - limit_id)));
                     }
                     if (settings.Show30s)
                     {
                         limit_id = Math.Max(i - 30000, 0);
-                        replay.addDPS30s(1000 * (int)Math.Round((dmgListFull[i] - dmgListFull[limit_id]) / (i - limit_id)));
+                        replay.addDPS30s((int)Math.Round(1000 * (dmgListFull[i] - dmgListFull[limit_id]) / (i - limit_id)));
                     }
                 }
             }

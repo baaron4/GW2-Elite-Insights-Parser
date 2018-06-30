@@ -29,7 +29,7 @@ namespace LuckParser.Controllers
             switches.calculateDefense = true;
             switches.calculateStats = true;
             switches.calculateSupport = true;
-            switches.calculateCombatReplay = false;
+            switches.calculateCombatReplay = true;
             return switches;
         }
 

@@ -47,7 +47,14 @@ namespace LuckParser.Controllers
             this.log = log;
 
             phases = log.getBoss().getPhases(log, settings.ParsePhases);
-
+            if (switches.calculateCombatReplay)
+            {
+                foreach (Player p in log.getPlayerList())
+                {
+                    p.initCombatReplay(log);
+                }
+                log.getBoss().initCombatReplay(log);
+            }
             if (switches.calculateDPS) calculateDPS();
             if (switches.calculateStats) calculateStats();
             if (switches.calculateDefense) calculateDefenses();
@@ -60,14 +67,7 @@ namespace LuckParser.Controllers
                       
             if (switches.calculateConditions) calculateConditions();
             // we should also put this under settings
-            if (switches.calculateCombatReplay)
-            {
-                foreach(Player p in log.getPlayerList())
-                {
-                    p.initCombatReplay(log);
-                }
-                log.getBoss().initCombatReplay(log);
-            }
+            
             // WIP
             /*if (settings.PlayerRot)
             {
