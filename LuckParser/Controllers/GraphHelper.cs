@@ -12,7 +12,7 @@ namespace LuckParser.Controllers
 
         public enum GraphMode { Full, s10, s30 };
 
-        public static List<Point> getDPSGraph(ParsedLog log, AbstractPlayer p, int phase_index, ushort dstid, GraphMode mode)
+        public static List<Point> getDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, ushort dstid, GraphMode mode)
         {
             int asked_id = (phase_index + "_" + dstid + "_" + mode).GetHashCode();
             if (p.getDPSGraph(asked_id).Count > 0)
@@ -48,6 +48,25 @@ namespace LuckParser.Controllers
             for (; total_time <= phase.getDuration(); total_time++)
             {
                 dmgListFull[total_time] = total_damage;
+            }
+            CombatReplay replay = p.getCombatReplay();
+            if (replay != null && dstid == 0 && phase_index == 0)
+            {
+                foreach (int i in replay.getTimes())
+                {
+                    int limit_id = 0;
+                    replay.addDPS((int)Math.Round(1000 * (dmgListFull[i] - dmgListFull[limit_id]) / (i - limit_id)));
+                    if (settings.Show10s)
+                    {
+                        limit_id = Math.Max(i - 10000, 0);
+                        replay.addDPS10s((int)Math.Round(1000 * (dmgListFull[i] - dmgListFull[limit_id]) / (i - limit_id)));
+                    }
+                    if (settings.Show30s)
+                    {
+                        limit_id = Math.Max(i - 30000, 0);
+                        replay.addDPS30s((int)Math.Round(1000 * (dmgListFull[i] - dmgListFull[limit_id]) / (i - limit_id)));
+                    }
+                }
             }
             dmgList.Add(new Point(0, 0));
             dmgList10s.Add(new Point(0, 0));
@@ -86,7 +105,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="p">The player</param>
         /// <returns></returns>
-        public static List<Point> getBossDPSGraph(ParsedLog log, AbstractPlayer p, int phase_index, GraphMode mode)
+        public static List<Point> getBossDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, GraphMode mode)
         {
             return getDPSGraph(log, p, phase_index, log.getBossData().getInstid(), mode);
         }
@@ -96,7 +115,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="p">The player</param>
         /// <returns></returns>
-        public static List<Point> getTotalDPSGraph(ParsedLog log, AbstractPlayer p, int phase_index, GraphMode mode)
+        public static List<Point> getTotalDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, GraphMode mode)
         {
             return getDPSGraph(log, p, phase_index, 0, mode);
         }

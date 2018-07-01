@@ -1,11 +1,12 @@
 ﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
     public class Boss : AbstractMasterPlayer
-    {   
+    {
         // Constructors
         public Boss(AgentItem agent) : base(agent)
         {
@@ -14,9 +15,9 @@ namespace LuckParser.Models.ParseModels
         private List<PhaseData> phases = new List<PhaseData>();
         private List<long> phaseData = new List<long>();
 
-        public List<PhaseData> getPhases(ParsedLog log,bool getAllPhases)
+        public List<PhaseData> getPhases(ParsedLog log, bool getAllPhases)
         {
-           
+
             if (phases.Count == 0)
             {
                 if (!getAllPhases)
@@ -37,7 +38,66 @@ namespace LuckParser.Models.ParseModels
             phaseData.Add(data);
         }
 
+        public Tuple<int, int> getMapOffsets(ParsedLog log)
+        {
+            switch (log.getBossData().getID())
+            {
+                case 0x4D37:
+                    return Tuple.Create(380, 400);
+                case 0x4BFA:
+                    return Tuple.Create(1450,375);
+            }
+            return Tuple.Create(0, 0);
+        }
+
+        public Tuple<int, int> getMapSize(ParsedLog log)
+        {
+            switch (log.getBossData().getID())
+            {
+                case 0x4D37:
+                    return Tuple.Create(150, 150);
+                case 0x4BFA:
+                    return Tuple.Create(200, 200);
+            }
+            return Tuple.Create(0, 0);
+        }
+
+        public Tuple<int, int> getMapCoord(ParsedLog log, float realX, float realY)
+        {
+            Tuple<int, int, int, int> apiRect = getMapApiRect(log);
+            switch (log.getBossData().getID())
+            {
+                case 0x4D37:
+                case 0x4BFA:
+                    return Tuple.Create((int)Math.Round(1920 * (realX - apiRect.Item1) / (apiRect.Item3 - apiRect.Item1)),
+                        (int)Math.Round(1024 * (realY - apiRect.Item2) / (apiRect.Item4 - apiRect.Item2)) - 73);
+            }
+            return Tuple.Create(0, 0);
+        }      
+
+        public string getMap(ParsedLog log)
+        {
+            switch (log.getBossData().getID())
+            {
+                case 0x4D37:
+                case 0x4BFA:
+                    return "https://wiki.guildwars2.com/images/6/63/Hall_of_Chains_map.jpg";
+            }
+            return "";
+        }
+
         // Private Methods
+        private Tuple<int, int, int, int> getMapApiRect(ParsedLog log)
+        {
+            switch (log.getBossData().getID())
+            {
+                case 0x4D37:
+                case 0x4BFA:
+                    return Tuple.Create(-21504, -12288, 24576, 12288);
+            }
+            return Tuple.Create(0, 0,0,0);
+        }
+
         private void setPhases(ParsedLog log)
         {
             long fight_dur = log.getBossData().getAwareDuration();

@@ -98,6 +98,7 @@
     <Compile Include="Models\DataModels\ParsedLog.cs" />
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
     <Compile Include="Models\DataModels\Statistics.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay.cs" />
     <Compile Include="Models\ParseModels\GW2APICategory.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractMasterPlayer.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractPlayer.cs" />

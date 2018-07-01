@@ -27,6 +27,7 @@ namespace LuckParser.Models.DataModels
         public readonly bool Show30s;
         public readonly bool Show10s;
         public readonly bool LightTheme;
+        public readonly bool ParseCombatReplay;
 
         public SettingsContainer(Settings settings)
         {
@@ -48,6 +49,7 @@ namespace LuckParser.Models.DataModels
             this.Show10s = settings.Show10s;
             this.Show30s = settings.Show30s;
             this.LightTheme = settings.LightTheme;
+            this.ParseCombatReplay = settings.ParseCombatReplay;
         }
     }
 }
