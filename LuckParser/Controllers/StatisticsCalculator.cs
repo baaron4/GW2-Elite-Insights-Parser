@@ -47,7 +47,7 @@ namespace LuckParser.Controllers
             this.log = log;
 
             phases = log.getBoss().getPhases(log, settings.ParsePhases);
-            if (switches.calculateCombatReplay)
+            if (switches.calculateCombatReplay && settings.ParseCombatReplay)
             {
                 foreach (Player p in log.getPlayerList())
                 {

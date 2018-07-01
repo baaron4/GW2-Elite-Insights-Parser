@@ -36,7 +36,7 @@ namespace LuckParser.Controllers
         public HTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics)
         {
             this.log = log;
-
+            
             this.settings = settings;
             HTMLHelper.settings = settings;
             GraphHelper.settings = settings;
@@ -3499,9 +3499,12 @@ namespace LuckParser.Controllers
                                 sw.Write("</div>");
 
                             }
-                            sw.Write("<div class=\"tab-pane fade\" id=\"replay\">");
+                            if (settings.ParseCombatReplay)
                             {
-                                CreateReplayTable(sw);
+                                sw.Write("<div class=\"tab-pane fade\" id=\"replay\">");
+                                {
+                                    CreateReplayTable(sw);
+                                }
                             }
                         }
                         sw.Write("</div>");
