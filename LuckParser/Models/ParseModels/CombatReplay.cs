@@ -87,7 +87,7 @@ namespace LuckParser.Models.ParseModels
                         if (ptn.time < i)
                         {
                             tablePos++;
-                            i -= rate;
+                            interpolatedPositions.Add(new Point3D(ptn.X, ptn.Y, ptn.Z, i));
                         }
                         else
                         {
