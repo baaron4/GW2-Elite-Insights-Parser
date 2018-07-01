@@ -551,12 +551,17 @@ namespace LuckParser.Controllers
                 }
             }
             boss_data.setHealthOverTime(bossHealthOverTime);//after xera in case of change
-
-            // Re parse to see if the boss is dead and update last aware
-            foreach (CombatItem c in combat_list)
+            HashSet<int> rewardsIds = new HashSet<int>
             {
-                //set boss dead
-                if (c.isStateChange() == ParseEnum.StateChange.Reward)//got reward
+                60685,
+                55821
+            };
+            // Re parse in reverse to see if the boss is dead and update last aware
+            for (int i = combat_list.Count - 1; i >= 0; i--)
+            {
+                CombatItem c = combat_list[i];
+                //13 is daily chest
+                if (c.isStateChange() == ParseEnum.StateChange.Reward && rewardsIds.Contains(c.getValue()))//got reward
                 {
                     log_data.setBossKill(true);
                     boss_data.setLastAware(c.getTime());
