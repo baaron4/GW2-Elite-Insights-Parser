@@ -2844,51 +2844,72 @@ namespace LuckParser.Controllers
         private void CreateReplayTable(StreamWriter sw)
         {
             Tuple<int, int> offsets = log.getBoss().getMapOffsets(log);
-            Tuple<int, int, int, int> apiRect = log.getBoss().getMapApiRect(log);
-            
-            sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center\" style=\"width:600px; height:600px\">");
+            Tuple<int, int> sizes = log.getBoss().getMapSize(log);
+            float scaleX = 900.0f / sizes.Item1;
+            float scaleY = 900.0f / sizes.Item2;
+            sw.Write("<div class=\"d-flex justify-content-start\">");
             {
-                sw.Write("<div id=\"replayimg\" class=\"replay\">");
-                {
-                    foreach (Player p in log.getPlayerList())
-                    {
-                        Point3D firstPos = p.getCombatReplay().getPositions()[0];
-                        int left = (int) (1920 * (firstPos.X - apiRect.Item1)/(apiRect.Item3 - apiRect.Item1)) - offsets.Item1 - 10;
-                        int top = (int)(1024 * (firstPos.Y - apiRect.Item2) / (apiRect.Item4 - apiRect.Item2)) - offsets.Item2 - 10 - 65;
-                        sw.Write("<div style=\"top: "+ top+"px; left:"+ left+"px; background-image: url('" + HTMLHelper.GetLink(p.getProf()) + "');\" class=\"bubble friend id" + p.getInstid() + " g" + p.getGroup() + "\"></div>");
-                        break;
-                    }
-                    Point3D firstPosBoss = log.getBoss().getCombatReplay().getPositions()[0];
-                    int leftBoss = (int)(1920 * (firstPosBoss.X - apiRect.Item1) / (apiRect.Item3 - apiRect.Item1)) - offsets.Item1 - 10;
-                    int topBoss = (int)(1024 * (firstPosBoss.Y - apiRect.Item2) / (apiRect.Item4 - apiRect.Item2)) - offsets.Item2 - 10 - 65;
-                    sw.Write("<div style=\"top: " + topBoss + "px; left:" + leftBoss + "px; background-image: url('" + HTMLHelper.GetLink(log.getBossData().getID() + "-icon") + "');\" class=\"bubble foe id" + log.getBoss().getInstid() + "\"></div>");
-                    sw.Write("<div onclick=\"setInterval(function(){myanimate()},100)\" type=\"button\" class=\"btn btn-dark\">Animate</div>");
-                }
-                sw.Write("</div>");
+                sw.Write("<div onclick=\"startAnimate()\" type=\"button\" class=\"btn btn-dark\">Animate</div>");
+                sw.Write("<div onclick=\"stopAnimate()\" type=\"button\" class=\"btn btn-dark\">Pause</div>");
+                sw.Write("<div onclick=\"restartAnimate()\" type=\"button\" class=\"btn btn-dark\">Restart</div>");
             }
             sw.Write("</div>");
+            sw.Write("<canvas width=\"900px\" height=\"900px\" id=\"replayCanvas\" class=\"replay\">");
+            sw.Write("</canvas>");
             sw.Write("<script>");
             {
-                sw.Write("var testid = " + log.getPlayerList()[0].getInstid() + ";");
-                sw.Write("var i = 0;");
-                sw.Write("var data = [");
-                foreach (Point3D pos in log.getPlayerList()[0].getCombatReplay().getPositions())
+                sw.Write("var animation = null;");
+                sw.Write("var time = 0;");
+                foreach (Player p in log.getPlayerList())
                 {
-                    int left = (int)(1920 * (pos.X - apiRect.Item1) / (apiRect.Item3 - apiRect.Item1)) - offsets.Item1 - 10;
-                    int top = (int)(1024 * (pos.Y - apiRect.Item2) / (apiRect.Item4 - apiRect.Item2)) - offsets.Item2 - 10 - 65;
-                    sw.Write(left + ",");
-                    sw.Write(top + ",");
+                    sw.Write("var img" + p.getInstid() + " = new Image();");
+                    sw.Write("img" + p.getInstid()+".src = '" + HTMLHelper.GetLink(p.getProf()) + "';");
                 }
-                sw.Write(" ];");
-                sw.Write("function myanimate() {");
+                sw.Write("var img" + log.getBoss().getInstid() + " = new Image();");
+                sw.Write("img" + log.getBoss().getInstid() + ".src = '" + HTMLHelper.GetLink(log.getBossData().getID() + "-icon") + "';");
+                sw.Write("var data = {");
+                foreach (Player p in log.getPlayerList())
                 {
-                    sw.Write("var x = document.getElementById('replayimg');");
-                    sw.Write("var div = x.querySelector('.id'+testid);");
-                    sw.Write("div.style.left = data[2*i]+'px';");
-                    sw.Write("div.style.top = data[2*i + 1]+'px';");
-                    sw.Write("i = (i+1) %" + log.getPlayerList()[0].getCombatReplay().getPositions().Count + ";");
+                    sw.Write("id" + p.getInstid() + ": { pos: [");
+                    foreach (Point3D pos in p.getCombatReplay().getPositions())
+                    {
+                        Tuple<int, int> coord = log.getBoss().getMapCoord(log, pos.X, pos.Y);
+                        sw.Write(scaleX * (coord.Item1 - offsets.Item1) + ",");
+                        sw.Write(scaleY * (sizes.Item2 - (coord.Item2 - offsets.Item2)) + ",");
+                    }
+                    sw.Write("]},");
+                }
+                sw.Write("id" + log.getBoss().getInstid() + ": { pos: [");
+                foreach (Point3D pos in log.getBoss().getCombatReplay().getPositions())
+                {
+                    Tuple<int, int> coord = log.getBoss().getMapCoord(log, pos.X, pos.Y);
+                    sw.Write(scaleX * (coord.Item1 - offsets.Item1) + ",");
+                    sw.Write(scaleY * (sizes.Item2 - (coord.Item2 - offsets.Item2)) + ",");
+                }
+                sw.Write("]}");
+                sw.Write(" };");
+                sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
+                sw.Write("var bgImage = new Image();");
+                sw.Write("function startAnimate() {if (animation === null) {animation = setInterval(function(){myanimate(time++)},16);}}");
+                sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null;}}");
+                sw.Write("function restartAnimate() { time = 0; myanimate(time++);}");
+                sw.Write("function myanimate(time) {");
+                {
+                    sw.Write("ctx.clearRect(0,0,900,900);");
+                    sw.Write("ctx.drawImage(bgImage," + offsets.Item1 + "," + offsets.Item2 + "," + sizes.Item1 + "," + sizes.Item2 + ",0,0,900,900);");
+                    sw.Write("var toUse = null;");
+                    foreach (Player p in log.getPlayerList())
+                    {
+                        sw.Write("toUse = data['id"+p.getInstid()+"'].pos;");
+                        sw.Write("ctx.drawImage(img"+p.getInstid()+",toUse[2*time]-10,toUse[2*time+1]-10,20,20);");
+                    }
+                    sw.Write("toUse = data['id" + log.getBoss().getInstid() + "'].pos;");
+                    sw.Write("ctx.drawImage(img" + log.getBoss().getInstid() + ",toUse[2*time]-15,toUse[2*time+1]-15,30,30);");
+                    sw.Write("if (time === "+(log.getBoss().getCombatReplay().getPositions().Count - 1)+") { stopAnimate(); time = 0;}");
                 }
                 sw.Write("}");
+                sw.Write("bgImage.onload = function() { myanimate(0);};");
+                sw.Write("bgImage.src = '" + log.getBoss().getMap(log) + "';");
             }
             sw.Write("</script>");
         }
@@ -2936,29 +2957,9 @@ namespace LuckParser.Controllers
                 }
                 if (log.getBoss().getCombatReplay() != null)
                 {
-                    Tuple<int, int> offsets = log.getBoss().getMapOffsets(log);
-                    Tuple<int, int> sizes = log.getBoss().getMapSize(log);
-                    sw.Write("div.replay {" +
-                        "width: "+ sizes.Item1 + "px; height: "+ sizes.Item2 + "px;" +
-                        "border:1px solid #9B0000; " +
-                        "position:relative; " +
-                        "background-size: 50% 50%;" + 
-                        "background: url('" +log.getBoss().getMap(log)+ "') no-repeat; " +
-                        "background-position: left " + -offsets.Item1 + "px top " + -offsets.Item2 + "px;" +
+                    sw.Write("canvas.replay {" +
+                        "border:1px solid #9B0000; "+
                         "}");
-                    sw.Write("div.bubble {" +
-                        "width: 20px; height: 20px;" +
-                        "border-radius: 50%;" +
-                        "background-color: #FFFFFF;"+
-                        "position: absolute;"+
-                        "background-size: contain;"+
-                        "}");
-                    sw.Write("div.friend {" + 
-                        "border:1px solid #00AA00;"+
-                         "}");
-                    sw.Write("div.foe {" +
-                        "border:1px solid #AA0000;" +
-                         "}");
                 }
             }
             sw.Write("</style>");

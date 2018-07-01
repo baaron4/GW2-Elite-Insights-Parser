@@ -82,11 +82,16 @@ namespace LuckParser.Models.ParseModels
         }
         public void initCombatReplay(ParsedLog log)
         {
+            if (log.getMovementData().Count == 0)
+            {
+                // no movement data, old arc version
+                return;
+            }
             if (replay == null)
             {
                 replay = new CombatReplay();
                 setMovements(log);
-                replay.pollingRate(100, log.getBossData().getAwareDuration());
+                replay.pollingRate(16, log.getBossData().getAwareDuration());
             }
         }
         public CombatReplay getCombatReplay()

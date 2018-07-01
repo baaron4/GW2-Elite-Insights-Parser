@@ -43,9 +43,9 @@ namespace LuckParser.Models.ParseModels
             switch (log.getBossData().getID())
             {
                 case 0x4D37:
-                    return Tuple.Create(155, 150);
+                    return Tuple.Create(380, 400);
                 case 0x4BFA:
-                    return Tuple.Create(1225,175);
+                    return Tuple.Create(1450,375);
             }
             return Tuple.Create(0, 0);
         }
@@ -55,23 +55,25 @@ namespace LuckParser.Models.ParseModels
             switch (log.getBossData().getID())
             {
                 case 0x4D37:
-                    return Tuple.Create(600, 600);
+                    return Tuple.Create(150, 150);
                 case 0x4BFA:
-                    return Tuple.Create(600, 600);
+                    return Tuple.Create(200, 200);
             }
             return Tuple.Create(0, 0);
         }
 
-        public Tuple<int, int, int, int> getMapApiRect(ParsedLog log)
+        public Tuple<int, int> getMapCoord(ParsedLog log, float realX, float realY)
         {
+            Tuple<int, int, int, int> apiRect = getMapApiRect(log);
             switch (log.getBossData().getID())
             {
                 case 0x4D37:
                 case 0x4BFA:
-                    return Tuple.Create(-21504, -12288, 24576, 12288);
+                    return Tuple.Create((int)Math.Round(1920 * (realX - apiRect.Item1) / (apiRect.Item3 - apiRect.Item1)),
+                        (int)Math.Round(1024 * (realY - apiRect.Item2) / (apiRect.Item4 - apiRect.Item2)) - 73);
             }
-            return Tuple.Create(0, 0,0,0);
-        }
+            return Tuple.Create(0, 0);
+        }      
 
         public string getMap(ParsedLog log)
         {
@@ -85,6 +87,17 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Private Methods
+        private Tuple<int, int, int, int> getMapApiRect(ParsedLog log)
+        {
+            switch (log.getBossData().getID())
+            {
+                case 0x4D37:
+                case 0x4BFA:
+                    return Tuple.Create(-21504, -12288, 24576, 12288);
+            }
+            return Tuple.Create(0, 0,0,0);
+        }
+
         private void setPhases(ParsedLog log)
         {
             long fight_dur = log.getBossData().getAwareDuration();

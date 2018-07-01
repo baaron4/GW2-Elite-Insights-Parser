@@ -61,34 +61,57 @@ namespace LuckParser.Models.ParseModels
         {
             return positions.Select(x => (int)x.time).ToList();
         }
-        
+
 
         public void pollingRate(int rate, long fightDuration)
         {
             List<Point3D> interpolatedPositions = new List<Point3D>();
             int tablePos = 0;
+            Point3D currentVelocity = null;
             for (int i = 0; i < fightDuration; i += rate)
             {
                 Point3D pt = positions[tablePos];
                 if (i < pt.time)
                 {
-                    interpolatedPositions.Add(new Point3D(pt.X,pt.Y,pt.Z,i));
-                } else
+                    interpolatedPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
+                }
+                else
                 {
                     if (tablePos == positions.Count - 1)
                     {
                         interpolatedPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
-                    } else
+                    }
+                    else
                     {
                         Point3D ptn = positions[tablePos + 1];
                         if (ptn.time < i)
                         {
                             tablePos++;
                             i -= rate;
-                        } else
+                        }
+                        else
                         {
-                            float ratio = (float)(i - pt.time) / (ptn.time - pt.time);
-                            interpolatedPositions.Add(new Point3D(pt,ptn, ratio, i));
+                            Point3D last = interpolatedPositions.Last();
+                            Point3D velocity = velocities.Find(x => x.time <= i && x.time > last.time);
+                            currentVelocity = velocity != null ? velocity : currentVelocity;
+                            if (ptn.time - pt.time < 400 || currentVelocity == null)
+                            {
+                                float ratio = (float)(i - pt.time) / (ptn.time - pt.time);
+                                interpolatedPositions.Add(new Point3D(pt, ptn, ratio, i));
+                            }
+                            else
+                            {
+                                if (currentVelocity.X == 0 && currentVelocity.Y == 0)
+                                {
+                                    interpolatedPositions.Add(new Point3D(last.X, last.Y, last.Z, i));
+                                }
+                                else
+                                {
+                                    float ratio = (float)(i - last.time) / (ptn.time - last.time);
+                                    interpolatedPositions.Add(new Point3D(last, ptn, ratio, i));
+                                }
+                            }
+
                         }
                     }
                 }
