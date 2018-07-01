@@ -14,19 +14,19 @@ namespace LuckParser.Models.ParseModels
         private List<BoonDistribution> boon_distribution = new List<BoonDistribution>();
         private List<Dictionary<int, long>> boon_presence = new List<Dictionary<int, long>>();
         private Dictionary<int, BoonsGraphModel> boon_points = new Dictionary<int, BoonsGraphModel>();
+        // dps graphs
+        private Dictionary<int, List<Point>> dps_graph = new Dictionary<int, List<Point>>();
         // Rotation
         private List<RotationItem> rotation = new List<RotationItem>();
-        //int is time
-        private List<Point3D> positions = new List<Point3D>();
-        private List<Point3D> velocities = new List<Point3D>();
         // Minions
         private Dictionary<string, Minions> minions = new Dictionary<string, Minions>();
+        // Replay
+        private CombatReplay replay = null;
 
         public AbstractMasterPlayer(AgentItem agent) : base(agent)
         {
 
         }
-
 
         public Dictionary<string, Minions> getMinions(ParsedLog log)
         {
@@ -35,54 +35,19 @@ namespace LuckParser.Models.ParseModels
                 setMinions(log);
             }
             return minions;
-        }
-
-        public List<Point3D> getPositionList(ParsedLog log)
+        }  
+        public void addDPSGraph(int id, List<Point> graph)
         {
-            if (positions.Count == 0)
-            {
-                this.setMovements(log);
-            }
-
-            return positions;
-
+            dps_graph[id] = graph;
         }
-        public List<Point3D> getVelocityList(ParsedLog log)
+        public List<Point> getDPSGraph(int id)
         {
-            if (velocities.Count == 0)
+            if (dps_graph.ContainsKey(id))
             {
-                this.setMovements(log);
+                return dps_graph[id];
             }
-            return velocities;
-
+            return new List<Point>();
         }
-
-        private void setMovements(ParsedLog log)
-        {
-            foreach(CombatItem c in log.getMovementData())
-            {
-                if (c.getSrcInstid() != agent.getInstid())
-                {
-                    continue;
-                }
-                long time = c.getTime() - log.getBossData().getFirstAware();
-                if (time < 0)
-                {
-                    continue;
-                }
-                byte[] xy = BitConverter.GetBytes(c.getDstAgent());
-                float X = BitConverter.ToSingle(xy, 0);
-                float Y = BitConverter.ToSingle(xy, 4);
-                if (c.isStateChange() == ParseEnum.StateChange.Position)
-                {
-                    positions.Add(new Point3D(X, Y, c.getValue(), time));
-                } else
-                {
-                    velocities.Add(new Point3D(X, Y, c.getValue(), time));
-                }
-            }
-        }
-
         public List<RotationItem> getRotation(ParsedLog log, bool icons)
         {
             if (rotation.Count == 0)
@@ -91,8 +56,6 @@ namespace LuckParser.Models.ParseModels
             }
             return rotation;
         }
-
-
         public BoonDistribution getBoonDistribution(ParsedLog log, List<PhaseData> phases, List<Boon> to_track, int phase_index)
         {
             if (boon_distribution.Count == 0)
@@ -117,117 +80,24 @@ namespace LuckParser.Models.ParseModels
             }
             return boon_presence[phase_index];
         }
-
-
-
-        private void setBoonDistribution(ParsedLog log, List<PhaseData> phases, List<Boon> to_track)
+        public void initCombatReplay(ParsedLog log)
         {
-            BoonMap to_use = getBoonMap(log, to_track);
-            long dur = log.getBossData().getAwareDuration();
-            int fight_duration = (int)(dur) / 1000;
-            // Init boon presence points
-            BoonsGraphModel boon_presence_points = new BoonsGraphModel("Number of Boons");
-            for (int i = 0; i <= fight_duration; i++)
+            if (log.getMovementData().Count == 0)
             {
-                boon_presence_points.getBoonChart().Add(new Point(i, 0));
+                // no movement data, old arc version
+                return;
             }
-            for (int i = 0; i < phases.Count; i++)
+            if (replay == null)
             {
-                boon_distribution.Add(new BoonDistribution());
-                boon_presence.Add(new Dictionary<int, long>());
+                replay = new CombatReplay();
+                setMovements(log);
+                replay.pollingRate(16, log.getBossData().getAwareDuration());
             }
-
-            var toFill = new Point[dur + 1];
-            var toFillPresence = new Point[dur + 1];
-
-            long death = getDeath(log, 0, dur);
-
-            foreach (Boon boon in to_track)
-            {
-                int boonid = boon.getID();
-                if (to_use.TryGetValue(boonid, out var logs) && logs.Count != 0)
-                {
-                    if (boon_distribution[0].ContainsKey(boonid))
-                    {
-                        continue;
-                    }
-                    var simulator = boon.CreateSimulator();
-                    simulator.simulate(logs, dur);
-                    if (death > 0 && getCastLogs(log, death + 1, fight_duration).Count > 0)
-                    {
-                        simulator.trim(death - log.getBossData().getFirstAware());
-                    }
-                    else
-                    {
-                        simulator.trim(dur);
-                    }
-                    var simulation = simulator.getSimulationResult();
-                    foreach (var simul in simulation)
-                    {
-                        for (int i = 0; i < phases.Count; i++)
-                        {
-                            var phase = phases[i];
-                            var presenceDict = boon_presence[i];
-                            if (!boon_distribution[i].TryGetValue(boonid, out var distrib))
-                            {
-                                distrib = new Dictionary<ushort, OverAndValue>();
-                                boon_distribution[i].Add(boonid, distrib);
-                            }
-                            Add(presenceDict, boonid, simul.getItemDuration(phase.getStart(), phase.getEnd()));
-                            foreach (ushort src in simul.getSrc())
-                            {
-                                if (distrib.TryGetValue(src, out var toModify))
-                                {
-                                    toModify.value += simul.getDuration(src, phase.getStart(), phase.getEnd());
-                                    toModify.overstack += simul.getOverstack(src, phase.getStart(), phase.getEnd());
-                                    distrib[src] = toModify;
-                                }
-                                else
-                                {
-                                    distrib.Add(src, new OverAndValue(
-                                        simul.getDuration(src, phase.getStart(), phase.getEnd()),
-                                        simul.getOverstack(src, phase.getStart(), phase.getEnd())));
-                                }
-                            }
-                        }
-                    }
-                    // Graphs
-                    // full precision
-                    for (int i = 0; i <= dur; i++)
-                    {
-                        toFill[i] = new Point(i, 0);
-                        toFillPresence[i] = new Point(i, 0);
-                    }
-                    foreach (var simul in simulation)
-                    {
-                        int start = (int)simul.getStart();
-                        int end = (int)simul.getEnd();
-
-                        bool present = simul.getItemDuration() > 0;
-                        for (int i = start; i <= end; i++)
-                        {
-                            toFill[i] = new Point(i, simul.getStack(i));
-                            toFillPresence[i] = new Point(i, present ? 1 : 0);
-                        }
-                    }
-                    // reduce precision to seconds
-                    var reducedPrecision = new List<Point>(capacity: fight_duration + 1);
-                    var boonPresence = boon_presence_points.getBoonChart();
-                    var updateBoonPresence = Boon.getBoonList().Any(x => x.getID() == boonid);
-                    for (int i = 0; i <= fight_duration; i++)
-                    {
-                        reducedPrecision.Add(new Point(i, toFill[1000 * i].Y));
-                        if (updateBoonPresence)
-                        {
-                            boonPresence[i] = new Point(i, boonPresence[i].Y + toFillPresence[1000 * i].Y);
-                        }
-                    }
-                    boon_points[boonid] = new BoonsGraphModel(boon.getName(), reducedPrecision);
-                }
-            }
-            boon_points[-2] = boon_presence_points;
         }
-
+        public CombatReplay getCombatReplay()
+        {
+            return replay;
+        }
         // private getters
         private BoonMap getBoonMap(ParsedLog log, List<Boon> to_track)
         {
@@ -331,7 +201,147 @@ namespace LuckParser.Models.ParseModels
             }
             return boon_map;
         }
+        private void setMovements(ParsedLog log)
+        {
+            foreach (CombatItem c in log.getMovementData())
+            {
+                if (c.getSrcInstid() != agent.getInstid())
+                {
+                    continue;
+                }
+                long time = c.getTime() - log.getBossData().getFirstAware();
+                if (time < 0 || time > log.getBossData().getAwareDuration())
+                {
+                    continue;
+                }
+                byte[] xy = BitConverter.GetBytes(c.getDstAgent());
+                float X = BitConverter.ToSingle(xy, 0);
+                float Y = BitConverter.ToSingle(xy, 4);
+                if (c.isStateChange() == ParseEnum.StateChange.Position)
+                {
+                    replay.addPosition(new Point3D(X, Y, c.getValue(), time));
+                }
+                else
+                {
+                    replay.addVelocity(new Point3D(X, Y, c.getValue(), time));
+                }
+            }
+        }
+        private void setBoonDistribution(ParsedLog log, List<PhaseData> phases, List<Boon> to_track)
+        {
+            BoonMap to_use = getBoonMap(log, to_track);
+            long dur = log.getBossData().getAwareDuration();
+            int fight_duration = (int)(dur) / 1000;
+            // Init boon presence points
+            BoonsGraphModel boon_presence_points = new BoonsGraphModel("Number of Boons");
+            for (int i = 0; i <= fight_duration; i++)
+            {
+                boon_presence_points.getBoonChart().Add(new Point(i, 0));
+            }
+            for (int i = 0; i < phases.Count; i++)
+            {
+                boon_distribution.Add(new BoonDistribution());
+                boon_presence.Add(new Dictionary<int, long>());
+            }
 
+            var toFill = new Point[dur + 1];
+            var toFillPresence = new Point[dur + 1];
+
+            long death = getDeath(log, 0, dur);
+
+            foreach (Boon boon in to_track)
+            {
+                int boonid = boon.getID();
+                if (to_use.TryGetValue(boonid, out var logs) && logs.Count != 0)
+                {
+                    if (boon_distribution[0].ContainsKey(boonid))
+                    {
+                        continue;
+                    }
+                    var simulator = boon.CreateSimulator();
+                    simulator.simulate(logs, dur);
+                    if (death > 0 && getCastLogs(log, death + 1, fight_duration).Count > 0)
+                    {
+                        simulator.trim(death - log.getBossData().getFirstAware());
+                    }
+                    else
+                    {
+                        simulator.trim(dur);
+                    }
+                    var simulation = simulator.getSimulationResult();
+                    foreach (var simul in simulation)
+                    {
+                        for (int i = 0; i < phases.Count; i++)
+                        {
+                            var phase = phases[i];
+                            var presenceDict = boon_presence[i];
+                            if (!boon_distribution[i].TryGetValue(boonid, out var distrib))
+                            {
+                                distrib = new Dictionary<ushort, OverAndValue>();
+                                boon_distribution[i].Add(boonid, distrib);
+                            }
+                            Add(presenceDict, boonid, simul.getItemDuration(phase.getStart(), phase.getEnd()));
+                            foreach (ushort src in simul.getSrc())
+                            {
+                                if (distrib.TryGetValue(src, out var toModify))
+                                {
+                                    toModify.value += simul.getDuration(src, phase.getStart(), phase.getEnd());
+                                    toModify.overstack += simul.getOverstack(src, phase.getStart(), phase.getEnd());
+                                    distrib[src] = toModify;
+                                }
+                                else
+                                {
+                                    distrib.Add(src, new OverAndValue(
+                                        simul.getDuration(src, phase.getStart(), phase.getEnd()),
+                                        simul.getOverstack(src, phase.getStart(), phase.getEnd())));
+                                }
+                            }
+                        }
+                    }
+                    // Graphs
+                    // full precision
+                    for (int i = 0; i <= dur; i++)
+                    {
+                        toFill[i] = new Point(i, 0);
+                        toFillPresence[i] = new Point(i, 0);
+                    }
+                    foreach (var simul in simulation)
+                    {
+                        int start = (int)simul.getStart();
+                        int end = (int)simul.getEnd();
+
+                        bool present = simul.getItemDuration() > 0;
+                        for (int i = start; i <= end; i++)
+                        {
+                            toFill[i] = new Point(i, simul.getStack(i));
+                            toFillPresence[i] = new Point(i, present ? 1 : 0);
+                        }
+                    }
+                    // reduce precision to seconds
+                    var reducedPrecision = new List<Point>(capacity: fight_duration + 1);
+                    var boonPresence = boon_presence_points.getBoonChart();
+                    var updateBoonPresence = Boon.getBoonList().Any(x => x.getID() == boonid);
+                    if (replay != null && (updateBoonPresence || Boon.getDefensiveTableList().Any(x => x.getID() == boonid) || Boon.getOffensiveTableList().Any(x => x.getID() == boonid)))
+                    {
+                        foreach (int time in replay.getTimes())
+                        {
+                            replay.addBoon(boonid, toFill[time].Y);
+                        }
+
+                    }
+                    for (int i = 0; i <= fight_duration; i++)
+                    {
+                        reducedPrecision.Add(new Point(i, toFill[1000 * i].Y));
+                        if (updateBoonPresence)
+                        {
+                            boonPresence[i] = new Point(i, boonPresence[i].Y + toFillPresence[1000 * i].Y);
+                        }
+                    }
+                    boon_points[boonid] = new BoonsGraphModel(boon.getName(), reducedPrecision);
+                }
+            }
+            boon_points[-2] = boon_presence_points;
+        }
         private void setRotation(ParsedLog log, bool icons)
         {
             List<CastLog> cls = getCastLogs(log, 0, log.getBossData().getAwareDuration());
@@ -344,7 +354,6 @@ namespace LuckParser.Models.ParseModels
                 rot.setStartStatus(cl.startActivation());
             }
         }
-
         private void setMinions(ParsedLog log)
         {
             List<AgentItem> combatMinion = log.getAgentData().getNPCAgentList().Where(x => x.getMasterAgent() == agent.getAgent()).ToList();
@@ -377,7 +386,6 @@ namespace LuckParser.Models.ParseModels
             }
             damage_logsFiltered.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
         }
-
         protected override void setCastLogs(ParsedLog log)
         {
             long time_start = log.getBossData().getFirstAware();
@@ -427,7 +435,6 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-
         private static void Add<T>(Dictionary<T, long> dictionary, T key, long value)
         {
             if (dictionary.TryGetValue(key, out var existing))

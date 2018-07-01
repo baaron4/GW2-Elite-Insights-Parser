@@ -298,5 +298,17 @@ namespace LuckParser.Properties {
                 this["LightTheme"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ParseCombatReplay {
+            get {
+                return ((bool)(this["ParseCombatReplay"]));
+            }
+            set {
+                this["ParseCombatReplay"] = value;
+            }
+        }
     }
 }
