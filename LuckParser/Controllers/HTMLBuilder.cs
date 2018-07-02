@@ -2033,14 +2033,27 @@ namespace LuckParser.Controllers
                 {
                     for (int d = 0; d < damageToDown.Count; d++)
                     {
-                        sw.Write("'" + log.getAgentData().GetAgentWInst(damageToDown[d].getInstidt()).getName().Replace("\0", "").Replace("\'", "\\'") + "<br>" +
-                            log.getSkillData().getName(damageToDown[d].getID()).Replace("\'", "\\'") + " hit you for " + damageToDown[d].getDamage() + "',");
+                        AgentItem ag = log.getAgentData().GetAgentWInst(damageToDown[d].getInstidt());
+                        string name = "UNKNOWN";
+                        if (ag != null)
+                        {
+                            name = ag.getName().Replace("\0", "").Replace("\'", "\\'");
+                        }
+                        string skillname = log.getSkillData().getName(damageToDown[d].getID()).Replace("\'", "\\'");
+                        sw.Write("'" + name + "<br>" + skillname + " hit you for " + damageToDown[d].getDamage() + "',");
                     }
                 }
                 for (int d = 0; d < damageToKill.Count; d++)
                 {
-                    sw.Write("'" + log.getAgentData().GetAgentWInst(damageToKill[d].getInstidt()).getName().Replace("\0", "").Replace("\'", "\\'") + "<br>" +
-                           "hit you with <b>" + log.getSkillData().getName(damageToKill[d].getID()).Replace("\'", "\\'") + "</b> for " + damageToKill[d].getDamage() + "'");
+                    AgentItem ag = log.getAgentData().GetAgentWInst(damageToKill[d].getInstidt());
+                    string name = "UNKNOWN";
+                    if (ag != null )
+                    {
+                        name = ag.getName().Replace("\0", "").Replace("\'", "\\'");
+                    }
+                    string skillname = log.getSkillData().getName(damageToKill[d].getID()).Replace("\'", "\\'");
+                    sw.Write("'" + name + "<br>" +
+                           "hit you with <b>" + skillname + "</b> for " + damageToKill[d].getDamage() + "'");
 
                     if (d != damageToKill.Count - 1)
                     {
@@ -2052,7 +2065,7 @@ namespace LuckParser.Controllers
 
                 sw.Write("}];");
 
-                if (settings.LightTheme)
+                if (!settings.LightTheme)
                 {
                     sw.Write(
                         "var layout = { title: 'Last 30k Damage Taken before death', font: { color: '#ffffff' },width: 1100," +
