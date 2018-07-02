@@ -365,7 +365,7 @@ namespace LuckParser.Controllers
             {
                 if(agentsLookup.TryGetValue(c.getSrcAgent(), out var a))
                 {
-                    if (a.getInstid() == 0 && (c.isStateChange() == ParseEnum.StateChange.Normal ||(golem_mode && isGolem(a.getID()) && c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate) ))
+                    if (a.getInstid() == 0 && (c.isStateChange() == ParseEnum.StateChange.Normal ||(((golem_mode && isGolem(a.getID())) || a.getID() == 0x4BFA) && c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate) ))
                     {
                         a.setInstid(c.getSrcInstid());
                     }
@@ -420,11 +420,16 @@ namespace LuckParser.Controllers
                     boss_data.setLastAware(NPC.getLastAware());
                 }
             }
+            if (boss_data.getAwareDuration() == long.MaxValue || boss_data.getAwareDuration() == 0)
+            {
+                boss_data.setLastAware(combat_data.getCombatList().Find(x => x.isStateChange() == ParseEnum.StateChange.LogEnd).getTime());
+                boss_data.setFirstAware(combat_data.getCombatList().Find(x => x.isStateChange() == ParseEnum.StateChange.LogStart).getTime());
+            }
             if (multiple_boss.Count > 1)
             {
                 agent_data.cleanInstid(boss_data.getInstid());
             }
-            
+
             AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
             boss = new Boss(bossAgent);
             List<Point> bossHealthOverTime = new List<Point>();
