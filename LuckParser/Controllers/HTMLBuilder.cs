@@ -1924,6 +1924,13 @@ namespace LuckParser.Controllers
                         break;
                     }
                 }
+                if (totaldmg == 0)
+                {
+                    sw.Write("<center>");
+                    sw.Write("<p>Something strange happened</p>");
+                    sw.Write("</center>");
+                    return;
+                }
                 sw.Write("<center>");
                 sw.Write("<p>Took " + damageToDown.Sum(x => x.getDamage()) + " damage in " +
                 ((damageToDown.Last().getTime() - damageToDown.First().getTime()) / 1000f).ToString() + " seconds to enter downstate");
