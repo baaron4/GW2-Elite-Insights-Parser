@@ -24,14 +24,7 @@ namespace LuckParser.Models.ParseModels
                 if (agent.getInstid() == c.getSrcInstid() && c.getTime() > min_time && c.getTime() < max_time)//selecting minion as caster
                 {
                     long time = c.getTime() - time_start;
-                    foreach (AgentItem item in log.getAgentData().getNPCAgentList())
-                    {//selecting all
-                        if (c.getTime() < item.getFirstAware() || c.getTime() > item.getLastAware())
-                        {
-                            continue;
-                        }
-                        addDamageLog(time, item.getInstid(), c, damage_logs);
-                    }                
+                    addDamageLog(time, 0, c, damage_logs);
                 }
             }
         }
