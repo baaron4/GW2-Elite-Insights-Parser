@@ -482,13 +482,13 @@ namespace LuckParser.Controllers
                 {
                     uptime.uptime = Math.Round(100.0 * totalUptime / fightDuration / playerList.Count, 1);
                     uptime.generation = Math.Round(100.0f * totalGeneration / fightDuration / playerList.Count, 1);
-                    uptime.overstack = Math.Round(100.0f * totalOverstack / fightDuration / playerList.Count, 1);
+                    uptime.overstack = Math.Round(100.0f * (totalOverstack + totalGeneration)/ fightDuration / playerList.Count, 1);
                 }
                 else if (boon.getType() == Boon.BoonType.Intensity)
                 {
                     uptime.uptime = Math.Round((double)totalUptime / fightDuration / playerList.Count, 1);
                     uptime.generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, 1);
-                    uptime.overstack = Math.Round((double)totalOverstack / fightDuration / playerList.Count, 1);
+                    uptime.overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, 1);
                 }
 
                 uptime.boonType = boon.getType();
