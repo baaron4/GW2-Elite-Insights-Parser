@@ -357,15 +357,42 @@ namespace LuckParser.Models.ParseModels
         private void setMinions(ParsedLog log)
         {
             List<AgentItem> combatMinion = log.getAgentData().getNPCAgentList().Where(x => x.getMasterAgent() == agent.getAgent()).ToList();
+            Dictionary<string, Minions> auxMinions = new Dictionary<string, Minions>();
             foreach (AgentItem agent in combatMinion)
             {
                 string id = agent.getName();
-                if (!minions.ContainsKey(id))
+                if (!auxMinions.ContainsKey(id))
                 {
-                    minions[id] = new Minions(id.GetHashCode());
+                    auxMinions[id] = new Minions(id.GetHashCode());
                 }
-                minions[id].Add(new Minion(agent.getInstid(), agent));
+                auxMinions[id].Add(new Minion(agent.getInstid(), agent));
             }
+            foreach (KeyValuePair<string, Minions> pair in auxMinions)
+            {
+                if (pair.Value.getDamageLogs(0,log,0,log.getBossData().getAwareDuration()).Count > 0)
+                {
+                    minions[pair.Key] = pair.Value;
+                }
+            }
+        }
+
+        protected override void setDamageLogs(ParsedLog log)
+        {
+            long time_start = log.getBossData().getFirstAware();
+            foreach (CombatItem c in log.getDamageData())
+            {
+                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())//selecting player or minion as caster
+                {
+                    long time = c.getTime() - time_start;
+                    addDamageLog(time, 0, c, damage_logs);
+                }
+            }
+            Dictionary<string, Minions> min_list = getMinions(log);
+            foreach (Minions mins in min_list.Values)
+            {
+                damage_logs.AddRange(mins.getDamageLogs(0, log, 0, log.getBossData().getAwareDuration()));
+            }
+            damage_logs.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
         }
 
         protected override void setFilteredLogs(ParsedLog log)

@@ -365,7 +365,7 @@ namespace LuckParser.Controllers
             {
                 if(agentsLookup.TryGetValue(c.getSrcAgent(), out var a))
                 {
-                    if (a.getInstid() == 0 && (c.isStateChange() == ParseEnum.StateChange.Normal ||(golem_mode && isGolem(a.getID()) && c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate) ))
+                    if (a.getInstid() == 0 && (c.isStateChange() == ParseEnum.StateChange.Normal ||(((golem_mode && isGolem(a.getID())) || a.getID() == 0x4BFA) && c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate) ))
                     {
                         a.setInstid(c.getSrcInstid());
                     }
@@ -420,11 +420,16 @@ namespace LuckParser.Controllers
                     boss_data.setLastAware(NPC.getLastAware());
                 }
             }
+            if (boss_data.getAwareDuration() == long.MaxValue || boss_data.getAwareDuration() == 0)
+            {
+                boss_data.setLastAware(combat_data.getCombatList().Find(x => x.isStateChange() == ParseEnum.StateChange.LogEnd).getTime());
+                boss_data.setFirstAware(combat_data.getCombatList().Find(x => x.isStateChange() == ParseEnum.StateChange.LogStart).getTime());
+            }
             if (multiple_boss.Count > 1)
             {
                 agent_data.cleanInstid(boss_data.getInstid());
             }
-            
+
             AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
             boss = new Boss(bossAgent);
             List<Point> bossHealthOverTime = new List<Point>();
@@ -551,12 +556,17 @@ namespace LuckParser.Controllers
                 }
             }
             boss_data.setHealthOverTime(bossHealthOverTime);//after xera in case of change
-
-            // Re parse to see if the boss is dead and update last aware
-            foreach (CombatItem c in combat_list)
+            HashSet<int> rewardsIds = new HashSet<int>
             {
-                //set boss dead
-                if (c.isStateChange() == ParseEnum.StateChange.Reward)//got reward
+                60685,
+                55821
+            };
+            // Re parse in reverse to see if the boss is dead and update last aware
+            for (int i = combat_list.Count - 1; i >= 0; i--)
+            {
+                CombatItem c = combat_list[i];
+                //13 is daily chest
+                if (c.isStateChange() == ParseEnum.StateChange.Reward && rewardsIds.Contains(c.getValue()))//got reward
                 {
                     log_data.setBossKill(true);
                     boss_data.setLastAware(c.getTime());

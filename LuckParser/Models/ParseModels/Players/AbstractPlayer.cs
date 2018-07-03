@@ -104,7 +104,7 @@ namespace LuckParser.Models.ParseModels
         // privates
         protected void addDamageLog(long time, ushort instid, CombatItem c, List<DamageLog> toFill)
         {
-            if (instid == c.getDstInstid() && c.getIFF() == ParseEnum.IFF.Foe)
+            if (instid == c.getDstInstid() || instid == 0)
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
@@ -125,7 +125,7 @@ namespace LuckParser.Models.ParseModels
         }
         protected void addDamageTakenLog(long time, ushort instid, CombatItem c)
         {
-            if (instid == c.getSrcInstid())
+            if (instid == c.getSrcInstid() || instid == 0)
             {
                 if (c.isBuff() == 1 && c.getBuffDmg() != 0)
                 {
