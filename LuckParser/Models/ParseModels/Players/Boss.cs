@@ -91,11 +91,26 @@ namespace LuckParser.Models.ParseModels
         {
             switch (log.getBossData().getID())
             {
-                case 0x4D37:
-                case 0x4BFA:
+                case 15438:
+                case 15429:
+                case 15375:
+                    return Tuple.Create(-15360, -36864, 15360, 39936);
+                case 16123:
+                case 16115:
+                    return Tuple.Create(-12288, -27648, 12288, 27648);
+                case 16235:
+                case 16246:
+                    return Tuple.Create(-12288, -27648, 12288, 27648);
+                case 17194:
+                case 17172:
+                case 17188:
+                case 17154:
+                    return Tuple.Create(-27648, -9216, 27648, 12288);
+                case 19767:
+                case 19450:
                     return Tuple.Create(-21504, -12288, 24576, 12288);
             }
-            return Tuple.Create(0, 0,0,0);
+            return Tuple.Create(0, 0, 0, 0);
         }
 
         private void setPhases(ParsedLog log)
