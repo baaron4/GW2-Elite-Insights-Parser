@@ -3010,15 +3010,13 @@ namespace LuckParser.Controllers
                     if (!settings.LightTheme)
                     {
                         sw.Write(
-                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/darkly/bootstrap.min.css\"  crossorigin=\"anonymous\">" +
-                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/darkly/bootstrap.css\"  crossorigin=\"anonymous\">"
+                            "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/darkly/bootstrap.min.css\"  crossorigin=\"anonymous\">"
                         );
                     }
                     else
                     {
                         sw.Write(
-                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/cosmo/bootstrap.css\"  crossorigin=\"anonymous\">" +
-                            "<link rel=\"stylesheet\" href=\"https://bootswatch.com/4/cosmo/bootstrap.min.css\"  crossorigin=\"anonymous\">"
+                            "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/cosmo/bootstrap.min.css\"  crossorigin=\"anonymous\">"
                         );
                     }
 
