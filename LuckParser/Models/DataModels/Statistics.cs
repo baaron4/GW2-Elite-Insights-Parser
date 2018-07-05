@@ -51,7 +51,6 @@ namespace LuckParser.Models.DataModels
             public int criticalDmg;
             public int scholarRate;
             public int scholarDmg;
-            public int totalDmg;
             public int movingRate;
             public int flankingRate;
             public int glanceRate;
@@ -70,7 +69,6 @@ namespace LuckParser.Models.DataModels
             public int criticalDmgBoss;
             public int scholarRateBoss;
             public int scholarDmgBoss;
-            public int totalDmgBoss;
             public int movingRateBoss;
             public int flankingRateBoss;
             public int glanceRateBoss;

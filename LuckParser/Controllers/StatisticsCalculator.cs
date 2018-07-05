@@ -332,11 +332,9 @@ namespace LuckParser.Controllers
 
                     final.timeSaved = final.timeSaved / 1000f;
                     final.timeWasted = final.timeWasted / 1000f;
-
-                    final.totalDmg = damageLogs.Sum(x => x.getDamage());
+                    
                     final.powerLoopCount = final.powerLoopCount == 0 ? 1 : final.powerLoopCount;
-
-                    final.totalDmgBoss = damageLogsBoss.Sum(x => x.getDamage());
+                    
                     final.powerLoopCountBoss = final.powerLoopCountBoss == 0 ? 1 : final.powerLoopCountBoss;
 
                     // Counts
