@@ -3281,7 +3281,6 @@ namespace LuckParser.Controllers
         }
         private void CreateReplayTable(StreamWriter sw)
         {
-            Tuple<int, int> offsets = log.getBoss().getMapOffsets(log);
             Tuple<int, int> sizes = log.getBoss().getMapSize(log);
             float scaleX = 900.0f / sizes.Item1;
             float scaleY = 900.0f / sizes.Item2;
@@ -3312,8 +3311,8 @@ namespace LuckParser.Controllers
                     foreach (Point3D pos in p.getCombatReplay().getPositions())
                     {
                         Tuple<int, int> coord = log.getBoss().getMapCoord(log, pos.X, pos.Y);
-                        sw.Write(scaleX * (coord.Item1 - offsets.Item1) + ",");
-                        sw.Write(scaleY * (sizes.Item2 - (coord.Item2 - offsets.Item2)) + ",");
+                        sw.Write(scaleX * (coord.Item1) + ",");
+                        sw.Write(scaleY * (sizes.Item2 - coord.Item2) + ",");
                     }
                     sw.Write("]},");
                 }
@@ -3321,28 +3320,28 @@ namespace LuckParser.Controllers
                 foreach (Point3D pos in log.getBoss().getCombatReplay().getPositions())
                 {
                     Tuple<int, int> coord = log.getBoss().getMapCoord(log, pos.X, pos.Y);
-                    sw.Write(scaleX * (coord.Item1 - offsets.Item1) + ",");
-                    sw.Write(scaleY * (sizes.Item2 - (coord.Item2 - offsets.Item2)) + ",");
+                    sw.Write(scaleX * (coord.Item1) + ",");
+                    sw.Write(scaleY * (sizes.Item2 - (coord.Item2)) + ",");
                 }
                 sw.Write("]}");
                 sw.Write(" };");
                 sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
                 sw.Write("var bgImage = new Image();");
-                sw.Write("function startAnimate() {if (animation === null) {animation = setInterval(function(){myanimate(time++)},16);}}");
+                sw.Write("function startAnimate() {if (animation === null) {animation = setInterval(function(){myanimate(time++)},33);}}");
                 sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null;}}");
                 sw.Write("function restartAnimate() { time = 0; myanimate(time++);}");
                 sw.Write("function myanimate(time) {");
                 {
                     sw.Write("ctx.clearRect(0,0,900,900);");
-                    sw.Write("ctx.drawImage(bgImage," + offsets.Item1 + "," + offsets.Item2 + "," + sizes.Item1 + "," + sizes.Item2 + ",0,0,900,900);");
+                    sw.Write("ctx.drawImage(bgImage,0,0,900,900);");
                     sw.Write("var toUse = null;");
                     foreach (Player p in log.getPlayerList())
                     {
                         sw.Write("toUse = data['id"+p.getInstid()+"'].pos;");
-                        sw.Write("ctx.drawImage(img"+p.getInstid()+",toUse[2*time]-10,toUse[2*time+1]-10,20,20);");
+                        sw.Write("ctx.drawImage(img"+p.getInstid()+ ",toUse[2*time]-15,toUse[2*time+1]-15,30,30);");
                     }
                     sw.Write("toUse = data['id" + log.getBoss().getInstid() + "'].pos;");
-                    sw.Write("ctx.drawImage(img" + log.getBoss().getInstid() + ",toUse[2*time]-15,toUse[2*time+1]-15,30,30);");
+                    sw.Write("ctx.drawImage(img" + log.getBoss().getInstid() + ",toUse[2*time]-20,toUse[2*time+1]-20,40,40);");
                     sw.Write("if (time === "+(log.getBoss().getCombatReplay().getPositions().Count - 1)+") { stopAnimate(); time = 0;}");
                 }
                 sw.Write("}");

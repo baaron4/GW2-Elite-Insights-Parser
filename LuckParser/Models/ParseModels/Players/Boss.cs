@@ -38,41 +38,26 @@ namespace LuckParser.Models.ParseModels
             phaseData.Add(data);
         }
 
-        public Tuple<int, int> getMapOffsets(ParsedLog log)
-        {
-            switch (log.getBossData().getID())
-            {
-                case 0x4D37:
-                    return Tuple.Create(380, 400);
-                case 0x4BFA:
-                    return Tuple.Create(1450,375);
-            }
-            return Tuple.Create(0, 0);
-        }
-
         public Tuple<int, int> getMapSize(ParsedLog log)
         {
             switch (log.getBossData().getID())
             {
                 case 0x4D37:
-                    return Tuple.Create(150, 150);
+                    return Tuple.Create(3657, 3657);
                 case 0x4BFA:
-                    return Tuple.Create(200, 200);
+                    return Tuple.Create(3763, 3383);
             }
             return Tuple.Create(0, 0);
         }
 
         public Tuple<int, int> getMapCoord(ParsedLog log, float realX, float realY)
         {
-            Tuple<int, int, int, int> apiRect = getMapApiRect(log);
-            switch (log.getBossData().getID())
-            {
-                case 0x4D37:
-                case 0x4BFA:
-                    return Tuple.Create((int)Math.Round(1920 * (realX - apiRect.Item1) / (apiRect.Item3 - apiRect.Item1)),
-                        (int)Math.Round(1024 * (realY - apiRect.Item2) / (apiRect.Item4 - apiRect.Item2)) - 73);
-            }
-            return Tuple.Create(0, 0);
+            //Tuple<int, int, int, int> apiRect = getMapApiRect(log);
+            Tuple<int, int, int, int> imageRect = getMapImageRect(log);
+            Tuple<int, int> mapSize = getMapSize(log);
+            float x = (Math.Max(Math.Min(realX, imageRect.Item3), imageRect.Item1) - imageRect.Item1) / (imageRect.Item3 - imageRect.Item1) ;
+            float y = (Math.Max(Math.Min(realY, imageRect.Item4), imageRect.Item2) - imageRect.Item2) / (imageRect.Item4 - imageRect.Item2);
+            return Tuple.Create((int)Math.Round(mapSize.Item1 * x), (int)Math.Round(mapSize.Item2 * y));
         }      
 
         public string getMap(ParsedLog log)
@@ -80,13 +65,40 @@ namespace LuckParser.Models.ParseModels
             switch (log.getBossData().getID())
             {
                 case 0x4D37:
+                    return "https://i.imgur.com/A45pVJy.png";
                 case 0x4BFA:
-                    return "https://wiki.guildwars2.com/images/6/63/Hall_of_Chains_map.jpg";
+                    return "https://i.imgur.com/CLTwWBJ.png";
             }
             return "";
         }
 
         // Private Methods
+        private Tuple<int, int, int, int> getMapImageRect(ParsedLog log)
+        {
+            switch (log.getBossData().getID())
+            {
+                case 15438:
+                case 15429:
+                case 15375:
+                    return Tuple.Create(-15360, -36864, 15360, 39936);
+                case 16123:
+                case 16115:
+                    return Tuple.Create(-12288, -27648, 12288, 27648);
+                case 16235:
+                case 16246:
+                    return Tuple.Create(-12288, -27648, 12288, 27648);
+                case 17194:
+                case 17172:
+                case 17188:
+                case 17154:
+                    return Tuple.Create(-27648, -9216, 27648, 12288);
+                case 19767:
+                    return Tuple.Create(-12228, -786, -8937, 2405);
+                case 19450:
+                    return Tuple.Create(13524, -1334, 18039, 2735);
+            }
+            return Tuple.Create(0, 0, 0, 0);
+        }
         private Tuple<int, int, int, int> getMapApiRect(ParsedLog log)
         {
             switch (log.getBossData().getID())
