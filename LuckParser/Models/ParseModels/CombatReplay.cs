@@ -71,7 +71,7 @@ namespace LuckParser.Models.ParseModels
             for (int i = 0; i < fightDuration; i += rate)
             {
                 Point3D pt = positions[tablePos];
-                if (i < pt.time)
+                if (i <= pt.time)
                 {
                     interpolatedPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
                 }

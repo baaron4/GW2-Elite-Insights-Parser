@@ -3321,7 +3321,7 @@ namespace LuckParser.Controllers
                 {
                     Tuple<int, int> coord = log.getBoss().getMapCoord(log, pos.X, pos.Y);
                     sw.Write(scaleX * (coord.Item1) + ",");
-                    sw.Write(scaleY * (sizes.Item2 - (coord.Item2)) + ",");
+                    sw.Write(scaleY * (sizes.Item2 - coord.Item2) + ",");
                 }
                 sw.Write("]}");
                 sw.Write(" };");

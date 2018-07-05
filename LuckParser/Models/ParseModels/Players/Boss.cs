@@ -42,6 +42,12 @@ namespace LuckParser.Models.ParseModels
         {
             switch (log.getBossData().getID())
             {
+                case 15438:
+                    return Tuple.Create(889, 889);
+                case 15429:
+                    return Tuple.Create(1354, 1415);
+                case 15375:
+                    return Tuple.Create(2790, 2763);
                 case 0x4D37:
                     return Tuple.Create(3657, 3657);
                 case 0x4BFA:
@@ -64,6 +70,12 @@ namespace LuckParser.Models.ParseModels
         {
             switch (log.getBossData().getID())
             {
+                case 15438:
+                    return "https://i.imgur.com/W7MocGz.png";
+                case 15429:
+                    return "https://i.imgur.com/Gqpp7B1.png";
+                case 15375:
+                    return "https://i.imgur.com/CQVLeVL.png";
                 case 0x4D37:
                     return "https://i.imgur.com/A45pVJy.png";
                 case 0x4BFA:
@@ -78,9 +90,11 @@ namespace LuckParser.Models.ParseModels
             switch (log.getBossData().getID())
             {
                 case 15438:
+                    return Tuple.Create(-6384, -22248, -3168, -19032);
                 case 15429:
+                    return Tuple.Create(-624, -6744, 3720, -2208);
                 case 15375:
-                    return Tuple.Create(-15360, -36864, 15360, 39936);
+                    return Tuple.Create(-8592, -168, -1608, 6744);
                 case 16123:
                 case 16115:
                     return Tuple.Create(-12288, -27648, 12288, 27648);
