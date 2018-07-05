@@ -687,7 +687,7 @@ namespace LuckParser.Controllers
                         long fight_duration = phase.getDuration("s");
                         if (timedead > TimeSpan.Zero)
                         {
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + Math.Round((timedead.TotalSeconds / fight_duration) * 100,1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
                         }
                         else
                         {
@@ -767,6 +767,7 @@ namespace LuckParser.Controllers
                     foreach (Player player in log.getPlayerList())
                     {
                         Statistics.FinalStats stats = statistics.stats[player][phase_index];
+                        Statistics.FinalDPS dps = statistics.dps[player][phase_index];
 
                         TimeSpan timedead = TimeSpan.FromMilliseconds(stats.died);//dead 
                         
@@ -782,29 +783,49 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + "\" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + "\" alt=\"" 
+                                + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.criticalRate + " out of " + stats.powerLoopCount + "hits<br> Total Damage Effected by Crits: " + stats.criticalDmg + " \">" + (int)((Double)(stats.criticalRate) / stats.powerLoopCount * 100) + "%</span>" + "</td>");//crit
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.scholarRate+ " out of " + stats.powerLoopCount + " hits <br> Pure Scholar Damage: " + stats.scholarDmg + "<br> Effective Damage Increase: " + Math.Round(100.0 * (stats.totalDmg / (Double)(stats.totalDmg - stats.scholarDmg) - 1.0) , 3) + "% \">" + (int)((Double)(stats.scholarRate) / stats.powerLoopCount * 100) + "%</span>" + "</td>");//scholar
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.movingRate + " out of " + stats.powerLoopCount + "hits \">" + (int)(stats.movingRate / (Double)stats.powerLoopCount * 100) + "%</span>" + "</td>");//sws
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.flankingRate + " out of " + stats.powerLoopCount + "hits \">" + (int)(stats.flankingRate / (Double)stats.powerLoopCount * 100) + "%</span>" + "</td>");//flank
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.glanceRate + " out of " + stats.powerLoopCount + "hits \">" + (int)(stats.glanceRate / (Double)stats.powerLoopCount * 100) + "%</span>" + "</td>");//glance
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.criticalRate + " out of " + stats.powerLoopCount 
+                                + " hits<br> Total Damage Effected by Crits: " + stats.criticalDmg 
+                                + " \">" + Math.Round((Double)(stats.criticalRate) / stats.powerLoopCount * 100,1) 
+                                + "%</span>" + "</td>");//crit
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.scholarRate+ " out of " + stats.powerLoopCount + " hits <br> Pure Scholar Damage: " 
+                                + stats.scholarDmg + "<br> Effective Physical Damage Increase: " 
+                                + Math.Round(100.0 * (dps.allPowerDamage / (Double)(dps.allPowerDamage - stats.scholarDmg) - 1.0) , 3) 
+                                + "% \">" + Math.Round((Double)(stats.scholarRate) / stats.powerLoopCount * 100,1) + "%</span>" + "</td>");//scholar
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.movingRate + " out of " + stats.powerLoopCount + "hits \">" 
+                                + Math.Round(stats.movingRate / (Double)stats.powerLoopCount * 100,1) + "%</span>" + "</td>");//sws
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
+                                + stats.flankingRate + " out of " + stats.powerLoopCount + "hits \">" 
+                                + Math.Round(stats.flankingRate / (Double)stats.powerLoopCount * 100,1) + "%</span>" + "</td>");//flank
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.glanceRate + " out of " + stats.powerLoopCount + "hits \">" 
+                                + Math.Round(stats.glanceRate / (Double)stats.powerLoopCount * 100,1) + "%</span>" + "</td>");//glance
                             sw.Write("<td>" + stats.missed + "</td>");//misses
                             sw.Write("<td>" + stats.interupts + "</td>");//interupts
                             sw.Write("<td>" + stats.invulned + "</td>");//dmg invulned
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.wasted + "cancels \">" + stats.timeWasted + "</span>" + "</td>");//time wasted
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.saved + "cancels \">" + stats.timeSaved + "</span>" + "</td>");//timesaved
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.wasted + "cancels \">" + stats.timeWasted + "</span>" + "</td>");//time wasted
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.saved + "cancels \">" + stats.timeSaved + "</span>" + "</td>");//timesaved
                             sw.Write("<td>" + stats.swapCount + "</td>");//w swaps
                             sw.Write("<td>" + stats.downCount + "</td>");//downs
                             long fight_duration = phase.getDuration("s");
                             if (timedead > TimeSpan.Zero)
                             {
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                    + timedead + "(" + Math.Round((timedead.TotalSeconds / fight_duration) * 100,1) + "% Alive) \">" 
+                                    + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
                             }
                             else
                             {
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </span>" + " </td>");
+                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\"" +
+                                    " title=\"Never died\"> </span>" + " </td>");
                             }
                         }
                         sw.Write("</tr>");
@@ -846,6 +867,7 @@ namespace LuckParser.Controllers
                     foreach (Player player in log.getPlayerList())
                     {
                         Statistics.FinalStats stats = statistics.stats[player][phase_index];
+                        Statistics.FinalDPS dps = statistics.dps[player][phase_index];
 
                         TimeSpan timedead = TimeSpan.FromMilliseconds(stats.died);//dead 
 
@@ -861,29 +883,49 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + "\" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + "\" alt=\"" 
+                                + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.criticalRateBoss + " out of " + stats.powerLoopCountBoss + "hits<br> Total Damage Effected by Crits: " + stats.criticalDmgBoss + " \">" + (int)((Double)(stats.criticalRateBoss) / stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//crit
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.scholarRateBoss + " out of " + stats.powerLoopCountBoss + " hits <br> Pure Scholar Damage: " + stats.scholarDmgBoss + "<br> Effective Damage Increase: " + Math.Round(100.0* (stats.totalDmgBoss / (Double)(stats.totalDmgBoss - stats.scholarDmgBoss) - 1.0), 3) + "% \">" + (int)((Double)(stats.scholarRateBoss) / stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//scholar
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.movingRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" + (int)(stats.movingRateBoss / (Double)stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//sws
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.flankingRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" + (int)(stats.flankingRateBoss / (Double)stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//flank
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.glanceRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" + (int)(stats.glanceRateBoss / (Double)stats.powerLoopCountBoss * 100) + "%</span>" + "</td>");//glance
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.criticalRateBoss + " out of " + stats.powerLoopCountBoss 
+                                + "hits<br> Total Damage Effected by Crits: " + stats.criticalDmgBoss 
+                                + " \">" + Math.Round((Double)(stats.criticalRateBoss) / stats.powerLoopCountBoss * 100,1) 
+                                + "%</span>" + "</td>");//crit
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.scholarRateBoss + " out of " + stats.powerLoopCountBoss + " hits <br> Pure Scholar Damage: " 
+                                + stats.scholarDmgBoss + "<br> Effective Physical Damage Increase: " 
+                                + Math.Round(100.0* (dps.bossPowerDamage / (Double)(dps.bossPowerDamage - stats.scholarDmgBoss) - 1.0), 3) 
+                                + "% \">" + Math.Round((Double)(stats.scholarRateBoss) / stats.powerLoopCountBoss * 100,1) + "%</span>" + "</td>");//scholar
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.movingRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" 
+                                + Math.Round(stats.movingRateBoss / (Double)stats.powerLoopCountBoss * 100,1) + "%</span>" + "</td>");//sws
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.flankingRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" 
+                                + Math.Round(stats.flankingRateBoss / (Double)stats.powerLoopCountBoss * 100,1) + "%</span>" + "</td>");//flank
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.glanceRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" 
+                                + Math.Round(stats.glanceRateBoss / (Double)stats.powerLoopCountBoss * 100,1) + "%</span>" + "</td>");//glance
                             sw.Write("<td>" + stats.missedBoss + "</td>");//misses
                             sw.Write("<td>" + stats.interuptsBoss + "</td>");//interupts
                             sw.Write("<td>" + stats.invulnedBoss + "</td>");//dmg invulned
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.wasted + "cancels \">" + stats.timeWasted + "</span>" + "</td>");//time wasted
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats.saved + "cancels \">" + stats.timeSaved + "</span>" + "</td>");//timesaved
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.wasted + "cancels \">" + stats.timeWasted + "</span>" + "</td>");//time wasted
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.saved + "cancels \">" + stats.timeSaved + "</span>" + "</td>");//timesaved
                             sw.Write("<td>" + stats.swapCount + "</td>");//w swaps
                             sw.Write("<td>" + stats.downCount + "</td>");//downs
                             long fight_duration = phase.getDuration("s");
                             if (timedead > TimeSpan.Zero)
                             {
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                    + timedead + "(" + Math.Round((timedead.TotalSeconds / fight_duration) * 100,1) + "% Alive) \">" 
+                                    + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
                             }
                             else
                             {
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </span>" + " </td>");
+                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\"" +
+                                    " title=\"Never died\"> </span>" + " </td>");
                             }
                         }
                         sw.Write("</tr>");
@@ -969,7 +1011,7 @@ namespace LuckParser.Controllers
                             long fight_duration = phase.getDuration("s");
                             if (timedead > TimeSpan.Zero)
                             {
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + (int)((timedead.TotalSeconds / fight_duration) * 100) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + Math.Round((timedead.TotalSeconds / fight_duration) * 100,1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
                             }
                             else
                             {
