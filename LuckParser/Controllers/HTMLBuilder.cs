@@ -3280,10 +3280,7 @@ namespace LuckParser.Controllers
             sw.Write("</div>");
         }
         private void CreateReplayTable(StreamWriter sw)
-        {
-            Tuple<int, int> sizes = log.getBoss().getMapSize(log);
-            float scaleX = 900.0f / sizes.Item1;
-            float scaleY = 900.0f / sizes.Item2;
+        {          
             sw.Write("<div class=\"d-flex justify-content-start\">");
             {
                 sw.Write("<div onclick=\"startAnimate()\" type=\"button\" class=\"btn btn-dark\">Animate</div>");
@@ -3291,7 +3288,21 @@ namespace LuckParser.Controllers
                 sw.Write("<div onclick=\"restartAnimate()\" type=\"button\" class=\"btn btn-dark\">Restart</div>");
             }
             sw.Write("</div>");
-            sw.Write("<canvas width=\"900px\" height=\"900px\" id=\"replayCanvas\" class=\"replay\">");
+            sw.Write("<div class=\"d-flex justify-content-start btn-group btn-group-toggle\" data-toggle=\"buttons\">");
+            {
+                sw.Write("<label onclick=\"normalSpeed()\" class=\"btn btn-dark active\">" +
+                        "<input type=\"radio\" autocomplete=\"off\" checked>1x" +
+                    "</label>");
+                sw.Write("<label onclick=\"twoSpeed()\" class=\"btn btn-dark\">" +
+                         "<input  type=\"radio\" autocomplete=\"off\">2x" +
+                     "</label>");
+                sw.Write("<label onclick=\"fourSpeed()\" class=\"btn btn-dark\">" +
+                         "<input  type=\"radio\" autocomplete=\"off\">4x" +
+                     "</label>");
+            }
+            sw.Write("</div>");
+            Tuple<int, int> canvasSize = log.getBoss().getPixelMapSize(log);
+            sw.Write("<canvas width=\""+canvasSize.Item1+"px\" height=\""+canvasSize.Item2+"px\" id=\"replayCanvas\" class=\"replay\">");
             sw.Write("</canvas>");
             sw.Write("<script>");
             {
@@ -3311,8 +3322,8 @@ namespace LuckParser.Controllers
                     foreach (Point3D pos in p.getCombatReplay().getPositions())
                     {
                         Tuple<int, int> coord = log.getBoss().getMapCoord(log, pos.X, pos.Y);
-                        sw.Write(scaleX * (coord.Item1) + ",");
-                        sw.Write(scaleY * (sizes.Item2 - coord.Item2) + ",");
+                        sw.Write(coord.Item1 + ",");
+                        sw.Write(coord.Item2 + ",");
                     }
                     sw.Write("]},");
                 }
@@ -3320,28 +3331,32 @@ namespace LuckParser.Controllers
                 foreach (Point3D pos in log.getBoss().getCombatReplay().getPositions())
                 {
                     Tuple<int, int> coord = log.getBoss().getMapCoord(log, pos.X, pos.Y);
-                    sw.Write(scaleX * (coord.Item1) + ",");
-                    sw.Write(scaleY * (sizes.Item2 - coord.Item2) + ",");
+                    sw.Write(coord.Item1 + ",");
+                    sw.Write(coord.Item2 + ",");
                 }
                 sw.Write("]}");
                 sw.Write(" };");
                 sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
                 sw.Write("var bgImage = new Image();");
-                sw.Write("function startAnimate() {if (animation === null) {animation = setInterval(function(){myanimate(time++)},33);}}");
+                sw.Write("var speed = 32;");
+                sw.Write("function startAnimate() {if (animation === null) {animation = setInterval(function(){myanimate(time++)},speed);}}");
                 sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null;}}");
                 sw.Write("function restartAnimate() { time = 0; myanimate(time++);}");
+                sw.Write("function normalSpeed(){ speed = 32; if (animation !== null) {window.clearInterval(animation); animation = setInterval(function(){myanimate(time++)},speed);}}");
+                sw.Write("function twoSpeed(){ speed = 16; if (animation !== null) {window.clearInterval(animation); animation = setInterval(function(){myanimate(time++)},speed);}}");
+                sw.Write("function fourSpeed(){ speed = 8; if (animation !== null) {window.clearInterval(animation); animation = setInterval(function(){myanimate(time++)},speed);}}");
                 sw.Write("function myanimate(time) {");
                 {
-                    sw.Write("ctx.clearRect(0,0,900,900);");
-                    sw.Write("ctx.drawImage(bgImage,0,0,900,900);");
+                    sw.Write("ctx.clearRect(0,0,"+ canvasSize.Item1 + ","+ canvasSize.Item2 + ");");
+                    sw.Write("ctx.drawImage(bgImage,0,0,"+ canvasSize.Item1 + ","+ canvasSize.Item2 + ");");
                     sw.Write("var toUse = null;");
                     foreach (Player p in log.getPlayerList())
                     {
                         sw.Write("toUse = data['id"+p.getInstid()+"'].pos;");
-                        sw.Write("ctx.drawImage(img"+p.getInstid()+ ",toUse[2*time]-15,toUse[2*time+1]-15,30,30);");
+                        sw.Write("ctx.drawImage(img"+p.getInstid()+ ",toUse[2*time]-10,toUse[2*time+1]-10,20,20);");
                     }
                     sw.Write("toUse = data['id" + log.getBoss().getInstid() + "'].pos;");
-                    sw.Write("ctx.drawImage(img" + log.getBoss().getInstid() + ",toUse[2*time]-20,toUse[2*time+1]-20,40,40);");
+                    sw.Write("ctx.drawImage(img" + log.getBoss().getInstid() + ",toUse[2*time]-15,toUse[2*time+1]-15,30,30);");
                     sw.Write("if (time === "+(log.getBoss().getCombatReplay().getPositions().Count - 1)+") { stopAnimate(); time = 0;}");
                 }
                 sw.Write("}");

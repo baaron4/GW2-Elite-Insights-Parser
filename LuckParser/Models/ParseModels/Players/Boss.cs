@@ -36,34 +36,36 @@ namespace LuckParser.Models.ParseModels
         public void addPhaseData(long data)
         {
             phaseData.Add(data);
-        }
+        }     
 
-        public Tuple<int, int> getMapSize(ParsedLog log)
+        public Tuple<int,int> getPixelMapSize(ParsedLog log)
         {
-            switch (log.getBossData().getID())
+            Tuple<int, int> sizes = getMapSize(log);
+            float ratio = (float)sizes.Item1 / sizes.Item2;
+            if (ratio > 1.0f)
             {
-                case 15438:
-                    return Tuple.Create(889, 889);
-                case 15429:
-                    return Tuple.Create(1354, 1415);
-                case 15375:
-                    return Tuple.Create(2790, 2763);
-                case 0x4D37:
-                    return Tuple.Create(3657, 3657);
-                case 0x4BFA:
-                    return Tuple.Create(3763, 3383);
+                return new Tuple<int, int>(700, (int)Math.Round(700/ratio));
+            } else if (ratio < 1.0f) 
+            {
+                return new Tuple<int, int>((int)Math.Round(ratio*700), 700);
+            } else
+            {
+                return new Tuple<int, int>(700, 700);
             }
-            return Tuple.Create(0, 0);
         }
 
         public Tuple<int, int> getMapCoord(ParsedLog log, float realX, float realY)
         {
             //Tuple<int, int, int, int> apiRect = getMapApiRect(log);
             Tuple<int, int, int, int> imageRect = getMapImageRect(log);
+            Tuple<int, int> pixelSizes = getPixelMapSize(log);
+            Tuple<int, int> sizes = getMapSize(log);
+            float scaleX = (float)pixelSizes.Item1 / sizes.Item1;
+            float scaleY = (float)pixelSizes.Item2 / sizes.Item2;
             Tuple<int, int> mapSize = getMapSize(log);
             float x = (Math.Max(Math.Min(realX, imageRect.Item3), imageRect.Item1) - imageRect.Item1) / (imageRect.Item3 - imageRect.Item1) ;
             float y = (Math.Max(Math.Min(realY, imageRect.Item4), imageRect.Item2) - imageRect.Item2) / (imageRect.Item4 - imageRect.Item2);
-            return Tuple.Create((int)Math.Round(mapSize.Item1 * x), (int)Math.Round(mapSize.Item2 * y));
+            return Tuple.Create((int)Math.Round(scaleX * mapSize.Item1 * x), (int)Math.Round(scaleY * (sizes.Item2 - mapSize.Item2 * y)));
         }      
 
         public string getMap(ParsedLog log)
@@ -76,6 +78,22 @@ namespace LuckParser.Models.ParseModels
                     return "https://i.imgur.com/Gqpp7B1.png";
                 case 15375:
                     return "https://i.imgur.com/CQVLeVL.png";
+                case 16123:
+                    return "https://i.imgur.com/UTPpMR8.png";
+                case 16115:
+                    return "https://i.imgur.com/3X0YveK.png";
+                case 16235:
+                    return "https://i.imgur.com/sl3Wgi3.png";
+                case 16246:
+                    return "https://i.imgur.com/BoHwwY6.png";
+                case 17194:
+                    return "https://i.imgur.com/NlpsLZa.png";
+                case 17172:
+                    return "https://i.imgur.com/eJH2kIi.png";
+                case 17188:
+                    return "https://i.imgur.com/cNdOrCR.png";
+                case 17154:
+                    return "https://i.imgur.com/9vyE9bj.png";
                 case 0x4D37:
                     return "https://i.imgur.com/A45pVJy.png";
                 case 0x4BFA:
@@ -85,27 +103,65 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Private Methods
+        private Tuple<int, int> getMapSize(ParsedLog log)
+        {
+            switch (log.getBossData().getID())
+            {
+                case 15438:
+                    return Tuple.Create(889, 889);
+                case 15429:
+                    return Tuple.Create(1354, 1415);
+                case 15375:
+                    return Tuple.Create(2790, 2763);
+                case 16123:
+                    return Tuple.Create(1688, 2581);
+                case 16115:
+                    return Tuple.Create(880, 880);
+                case 16235:
+                    return Tuple.Create(1099, 1114);
+                case 16246:
+                    return Tuple.Create(7112, 6377);
+                case 17194:
+                    return Tuple.Create(607, 607);
+                case 17172:
+                    return Tuple.Create(889, 889);
+                case 17188:
+                    return Tuple.Create(1221, 1171);
+                case 17154:
+                    return Tuple.Create(889, 919);
+                case 0x4D37:
+                    return Tuple.Create(3657, 3657);
+                case 0x4BFA:
+                    return Tuple.Create(3763, 3383);
+            }
+            return Tuple.Create(0, 0);
+        }
         private Tuple<int, int, int, int> getMapImageRect(ParsedLog log)
         {
             switch (log.getBossData().getID())
             {
                 case 15438:
-                    return Tuple.Create(-6384, -22248, -3168, -19032);
+                    return Tuple.Create(-6388, -22253, -3173, -19039);
                 case 15429:
-                    return Tuple.Create(-624, -6744, 3720, -2208);
+                    return Tuple.Create(-623, -6754, 3731, -2206);
                 case 15375:
-                    return Tuple.Create(-8592, -168, -1608, 6744);
+                    return Tuple.Create(-8587, -162, -1601, 6753);
                 case 16123:
+                    return Tuple.Create(5822, -3491, 9549, 2205);
                 case 16115:
-                    return Tuple.Create(-12288, -27648, 12288, 27648);
+                    return Tuple.Create(-7253, 4575 , -4630, 7197);
                 case 16235:
+                    return Tuple.Create(-5523, 8063, -2091, 11297);
                 case 16246:
-                    return Tuple.Create(-12288, -27648, 12288, 27648);
+                    return Tuple.Create(-5992, -5992, 69, -522);
                 case 17194:
+                    return Tuple.Create(13021, 642, 15765, 3386);
                 case 17172:
+                    return Tuple.Create(1362, 2833, 4876, 6119);
                 case 17188:
+                    return Tuple.Create(-6517, 1127, -2424, 5046);
                 case 17154:
-                    return Tuple.Create(-27648, -9216, 27648, 12288);
+                    return Tuple.Create(-9542, 1932, -7266, 4292);
                 case 19767:
                     return Tuple.Create(-12228, -786, -8937, 2405);
                 case 19450:

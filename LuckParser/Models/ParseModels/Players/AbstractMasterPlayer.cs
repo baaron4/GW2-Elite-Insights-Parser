@@ -81,7 +81,7 @@ namespace LuckParser.Models.ParseModels
             {
                 replay = new CombatReplay();
                 setMovements(log);
-                replay.pollingRate(100, log.getBossData().getAwareDuration());
+                replay.pollingRate(32, log.getBossData().getAwareDuration());
             }
         }
         public CombatReplay getCombatReplay()
