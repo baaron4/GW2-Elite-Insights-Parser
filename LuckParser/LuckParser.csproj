@@ -108,7 +108,6 @@
     <Compile Include="Models\ParseModels\Players\Minions.cs" />
     <Compile Include="Models\ParseModels\PhaseData.cs" />
     <Compile Include="Models\ParseModels\Point3D.cs" />
-    <Compile Include="Models\ParseModels\RotationItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Players\Boss.cs" />
     <Compile Include="Models\ParseModels\GW2APISpec.cs" />

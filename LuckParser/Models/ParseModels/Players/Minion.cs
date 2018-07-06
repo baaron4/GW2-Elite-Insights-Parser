@@ -48,7 +48,6 @@ namespace LuckParser.Models.ParseModels
         {
             long time_start = log.getBossData().getFirstAware();
             CastLog curCastLog = null;
-
             long min_time = Math.Max(time_start, agent.getFirstAware());
             long max_time = Math.Min(log.getBossData().getLastAware(), agent.getLastAware());
             foreach (CombatItem c in log.getCastData())
@@ -66,6 +65,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             long time = c.getTime() - time_start;
                             curCastLog = new CastLog(time, c.getSkillID(), c.getValue(), c.isActivation());
+                            cast_logs.Add(curCastLog);
                         }
                         else
                         {
@@ -73,8 +73,7 @@ namespace LuckParser.Models.ParseModels
                             {
                                 if (curCastLog.getID() == c.getSkillID())
                                 {
-                                    curCastLog = new CastLog(curCastLog.getTime(), curCastLog.getID(), curCastLog.getExpDur(), curCastLog.startActivation(), c.getValue(), c.isActivation());
-                                    cast_logs.Add(curCastLog);
+                                    curCastLog.setEndStatus(c.getValue(), c.isActivation());
                                     curCastLog = null;
                                 }
                             }
