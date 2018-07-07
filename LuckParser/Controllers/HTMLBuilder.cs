@@ -3280,30 +3280,50 @@ namespace LuckParser.Controllers
             sw.Write("</div>");
         }
         private void CreateReplayTable(StreamWriter sw)
-        {          
-            sw.Write("<div class=\"d-flex justify-content-start\">");
-            {
-                sw.Write("<div onclick=\"startAnimate()\" type=\"button\" class=\"btn btn-dark\">Animate</div>");
-                sw.Write("<div onclick=\"stopAnimate()\" type=\"button\" class=\"btn btn-dark\">Pause</div>");
-                sw.Write("<div onclick=\"restartAnimate()\" type=\"button\" class=\"btn btn-dark\">Restart</div>");
-            }
-            sw.Write("</div>");
-            sw.Write("<div class=\"d-flex justify-content-start btn-group btn-group-toggle\" data-toggle=\"buttons\">");
-            {
-                sw.Write("<label onclick=\"normalSpeed()\" class=\"btn btn-dark active\">" +
-                        "<input type=\"radio\" autocomplete=\"off\" checked>1x" +
-                    "</label>");
-                sw.Write("<label onclick=\"twoSpeed()\" class=\"btn btn-dark\">" +
-                         "<input  type=\"radio\" autocomplete=\"off\">2x" +
-                     "</label>");
-                sw.Write("<label onclick=\"fourSpeed()\" class=\"btn btn-dark\">" +
-                         "<input  type=\"radio\" autocomplete=\"off\">4x" +
-                     "</label>");
-            }
-            sw.Write("</div>");
+        {
             Tuple<int, int> canvasSize = log.getBoss().getPixelMapSize(log);
-            sw.Write("<canvas width=\""+canvasSize.Item1+"px\" height=\""+canvasSize.Item2+"px\" id=\"replayCanvas\" class=\"replay\">");
-            sw.Write("</canvas>");
+            sw.Write("<div class=\"d-flex justify-content-around\">");
+            {
+                sw.Write("<div class=\"d-flex flex-column flex-wrap\">");
+                {
+                    sw.Write("<canvas width=\"" + canvasSize.Item1 + "px\" height=\"" + canvasSize.Item2 + "px\" id=\"replayCanvas\" class=\"replay\">");
+                    sw.Write("</canvas>");
+                    sw.Write("<div class=\"d-flex justify-content-center\">");
+                    {
+                        sw.Write("<div onclick=\"startAnimate()\" type=\"button\" class=\"btn btn-dark\">Animate</div>");
+                        sw.Write("<div onclick=\"stopAnimate()\" type=\"button\" class=\"btn btn-dark\">Pause</div>");
+                        sw.Write("<div onclick=\"restartAnimate()\" type=\"button\" class=\"btn btn-dark\">Restart</div>");
+                    }
+                    sw.Write("</div>");
+                    sw.Write("<div class=\"d-flex justify-content-center btn-group btn-group-toggle\" data-toggle=\"buttons\">");
+                    {
+                        sw.Write("<label onclick=\"normalSpeed()\" class=\"btn btn-dark active\">" +
+                                "<input type=\"radio\" autocomplete=\"off\" checked>1x" +
+                            "</label>");
+                        sw.Write("<label onclick=\"twoSpeed()\" class=\"btn btn-dark\">" +
+                                 "<input  type=\"radio\" autocomplete=\"off\">2x" +
+                             "</label>");
+                        sw.Write("<label onclick=\"fourSpeed()\" class=\"btn btn-dark\">" +
+                                 "<input  type=\"radio\" autocomplete=\"off\">4x" +
+                             "</label>");
+                    }
+                    sw.Write("</div>");
+                }
+                sw.Write("</div>");
+                sw.Write("<div class=\"d-flex justify-content-center align-items-center\">");
+                {
+                    sw.Write("<div class=\"d-flex flex-column align-items-center\">");
+                    {
+                        foreach (Player p in log.getPlayerList())
+                        {
+                            sw.Write("<div style=\"width: 200px;\" onclick=\"selectActor(" + p.getInstid() + ")\" type=\"button\" class=\"btn btn-dark\">" + p.getCharacter() + " <img src=\"" + HTMLHelper.GetLink(p.getProf().ToString()) + "\" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" ></div>");
+                        }
+                    }
+                    sw.Write("</div>");
+                }
+                sw.Write("</div>");
+            }
+            sw.Write("</div>");           
             sw.Write("<script>");
             {
                 sw.Write("var animation = null;");
@@ -3325,7 +3345,8 @@ namespace LuckParser.Controllers
                         sw.Write(coord.Item1 + ",");
                         sw.Write(coord.Item2 + ",");
                     }
-                    sw.Write("]},");
+                    sw.Write("], selected: false, group:"+ p.getGroup() +
+                        "},");
                 }
                 sw.Write("id" + log.getBoss().getInstid() + ": { pos: [");
                 foreach (Point3D pos in log.getBoss().getCombatReplay().getPositions())
@@ -3334,7 +3355,8 @@ namespace LuckParser.Controllers
                     sw.Write(coord.Item1 + ",");
                     sw.Write(coord.Item2 + ",");
                 }
-                sw.Write("]}");
+                sw.Write("], selected: false, group: 11" +
+                    "}");
                 sw.Write(" };");
                 sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
                 sw.Write("var bgImage = new Image();");
@@ -3342,6 +3364,15 @@ namespace LuckParser.Controllers
                 sw.Write("function startAnimate() {if (animation === null) {animation = setInterval(function(){myanimate(time++)},speed);}}");
                 sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null;}}");
                 sw.Write("function restartAnimate() { time = 0; myanimate(time++);}");
+                sw.Write("function selectActor(pId) { " +
+                        "for(var key in data) {" +
+                            "if (data.hasOwnProperty(key)) {" +
+                                "data[key].selected = false;" +
+                            "}" +
+                        "}" +
+                        "data['id' + pId].selected = true;" +
+                        "myanimate(time);" +
+                    "}");
                 sw.Write("function normalSpeed(){ speed = 32; if (animation !== null) {window.clearInterval(animation); animation = setInterval(function(){myanimate(time++)},speed);}}");
                 sw.Write("function twoSpeed(){ speed = 16; if (animation !== null) {window.clearInterval(animation); animation = setInterval(function(){myanimate(time++)},speed);}}");
                 sw.Write("function fourSpeed(){ speed = 8; if (animation !== null) {window.clearInterval(animation); animation = setInterval(function(){myanimate(time++)},speed);}}");
@@ -3353,7 +3384,16 @@ namespace LuckParser.Controllers
                     foreach (Player p in log.getPlayerList())
                     {
                         sw.Write("toUse = data['id"+p.getInstid()+"'].pos;");
+                        sw.Write("if(data['id" + p.getInstid() + "'].selected) " +
+                            "{" +
+                                "ctx.beginPath();" +
+                                "ctx.lineWidth='5';" +
+                                "ctx.strokeStyle='green';" +
+                                "ctx.rect(toUse[2*time]-10,toUse[2*time+1]-10,20,20);" +
+                                "ctx.stroke();" +
+                            "}");
                         sw.Write("ctx.drawImage(img"+p.getInstid()+ ",toUse[2*time]-10,toUse[2*time+1]-10,20,20);");
+                        
                     }
                     sw.Write("toUse = data['id" + log.getBoss().getInstid() + "'].pos;");
                     sw.Write("ctx.drawImage(img" + log.getBoss().getInstid() + ",toUse[2*time]-15,toUse[2*time+1]-15,30,30);");
