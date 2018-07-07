@@ -627,7 +627,30 @@ namespace LuckParser.Controllers
         {
             //generate dps table
             PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
-            sw.Write("<script> $(function () { $('#dps_table" + phase_index + "').DataTable({ \"order\": [[4, \"desc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#dps_table" + phase_index + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#dps_table" + phase_index + "').DataTable({ 'order': [[4, 'desc']]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#dps_table" + phase_index + "').DataTable({ 'order': [[4, 'desc']]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dps_table" + phase_index + "\">");
             {
                 sw.Write("<thead>");
@@ -753,7 +776,30 @@ namespace LuckParser.Controllers
         {
             //generate dmgstats table
             PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
-            sw.Write("<script> $(function () { $('#dmgstats_table" + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#dmgstats_table" + phase_index + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#dmgstats_table" + phase_index + "').DataTable({ 'order': [[0, 'asc']]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#dmgstats_table" + phase_index + "').DataTable({ 'order': [[0, 'asc']]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dmgstats_table" + phase_index + "\">");
             {
                 sw.Write("<thead>");
@@ -853,7 +899,30 @@ namespace LuckParser.Controllers
         {
             //generate dmgstats table
             PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
-            sw.Write("<script> $(function () { $('#dmgstatsBoss_table" + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#dmgstatsBoss_table" + phase_index + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#dmgstatsBoss_table" + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#dmgstatsBoss_table" + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dmgstatsBoss_table" + phase_index + "\">");
             {
                 sw.Write("<thead>");
@@ -953,7 +1022,30 @@ namespace LuckParser.Controllers
         {
             //generate Tankstats table
             PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
-            sw.Write("<script> $(function () { $('#defstats_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#defstats_table" + phase_index + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#defstats_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#defstats_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"defstats_table" + phase_index + "\">");
             {
                 sw.Write("<thead>");
@@ -1080,7 +1172,30 @@ namespace LuckParser.Controllers
         private void CreateSupTable(StreamWriter sw, int phase_index)
         {
             //generate suppstats table
-            sw.Write("<script> $(function () { $('#supstats_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#supstats_table" + phase_index + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#supstats_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#supstats_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"supstats_table" + phase_index + "\">");
             {
                 sw.Write("<thead>");
@@ -1169,7 +1284,30 @@ namespace LuckParser.Controllers
         {
             List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
             //Generate Boon table------------------------------------------------------------------------------------------------
-            sw.Write("<script> $(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#" + table_id + phase_index + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             List<List<string>> footList = new List<List<string>>();
             sw.Write("<table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" id=\"" + table_id + phase_index + "\">");
             {
@@ -1300,7 +1438,30 @@ namespace LuckParser.Controllers
         /// <param name="table_id">id of the table</param>
         private void CreateGenSelfTable(StreamWriter sw, List<Boon> list_to_use, string table_id, int phase_index)
         { //Generate BoonGenSelf table
-            sw.Write("<script> $(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#" + table_id + phase_index + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" width=\"100%\" id=\"" + table_id + phase_index + "\">");
             {
                 HTMLHelper.writeBoonTableHeader(sw, list_to_use);
@@ -1357,7 +1518,30 @@ namespace LuckParser.Controllers
         /// <param name="table_id">id of the table</param>
         private void CreateGenGroupTable(StreamWriter sw, List<Boon> list_to_use, string table_id, int phase_index)
         { //Generate BoonGenGroup table
-            sw.Write("<script> $(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#" + table_id + phase_index + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id + phase_index + "\">");
             {
                 HTMLHelper.writeBoonTableHeader(sw, list_to_use);
@@ -1413,7 +1597,30 @@ namespace LuckParser.Controllers
         /// <param name="table_id">id of the table</param>
         private void CreateGenOGroupTable(StreamWriter sw, List<Boon> list_to_use, string table_id, int phase_index)
         {  //Generate BoonGenOGroup table
-            sw.Write("<script> $(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#" + table_id + phase_index + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id + phase_index + "\">");
             {
                 HTMLHelper.writeBoonTableHeader(sw, list_to_use);
@@ -1470,7 +1677,30 @@ namespace LuckParser.Controllers
         private void CreateGenSquadTable(StreamWriter sw, List<Boon> list_to_use, string table_id, int phase_index)
         {
             //Generate BoonGenSquad table
-            sw.Write("<script> $(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#" + table_id + phase_index + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#" + table_id + phase_index + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + table_id + phase_index + "\">");
             {
                 HTMLHelper.writeBoonTableHeader(sw, list_to_use);
@@ -2229,7 +2459,30 @@ namespace LuckParser.Controllers
                 sw.Write("<div>" + p.getCharacter() + " did " + contribution + "% of its own total " + (toBoss ? "boss " : "") + "dps</div>");
             }
             string tabid = p.getInstid() + "_" + phase_index + (toBoss ? "_boss" : "");
-            sw.Write("<script> $(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#dist_table_" + tabid + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + tabid + "\">");
             {
                 HTMLHelper.writeDamageDistTableHeader(sw);
@@ -2263,7 +2516,30 @@ namespace LuckParser.Controllers
                 sw.Write("<div>" + p.getCharacter() + " did " + contribution + "% of its own total " + "dps</div>");
             }
             string tabid = p.getInstid() + "_" + phase_index;
-            sw.Write("<script> $(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#dist_table_" + tabid + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + tabid + "\">");
             {
                 HTMLHelper.writeDamageDistTableHeader(sw);
@@ -2299,7 +2575,30 @@ namespace LuckParser.Controllers
                 string contribution = String.Format("{0:0.00}", 100.0 * finalTotalDamage / totalDamage);
                 sw.Write("<div>" + minions.getCharacter() + " did " + contribution + "% of " + p.getCharacter() + "'s total " + (toBoss ? "boss " : "") + "dps</div>");
             }
-            sw.Write("<script> $(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#dist_table_" + tabid + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + tabid + "\">");
             {
                 HTMLHelper.writeDamageDistTableHeader(sw);
@@ -2335,7 +2634,30 @@ namespace LuckParser.Controllers
                 string contribution = String.Format("{0:0.00}", 100.0 * finalTotalDamage / totalDamage);
                 sw.Write("<div>" + minions.getCharacter() + " did " + contribution + "% of " + p.getCharacter() + "'s total " + "dps</div>");
             }
-            sw.Write("<script> $(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#dist_table_" + tabid + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + tabid + "\">");
             {
                 HTMLHelper.writeDamageDistTableHeader(sw);
@@ -2361,7 +2683,30 @@ namespace LuckParser.Controllers
             List<SkillItem> s_list = log.getSkillData().getSkillList();
             long finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.getDamage()) : 0;
             string pid = p.getInstid() + "_" + phase_index;
-            sw.Write("<script> $(function () { $('#distTaken_table_" + pid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});</script>");
+            sw.Write("<script>");
+            {
+                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                {
+                    sw.Write("var lazyTable = document.querySelector('#distTaken_table_" + pid + "');" +
+
+                    "if ('IntersectionObserver' in window) {" +
+                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                            "entries.forEach(function(entry) {" +
+                                "if (entry.isIntersecting)" +
+                                "{" +
+                                    "$(function () { $('#distTaken_table_" + pid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});" +
+                                    "lazyTableObserver.unobserve(entry.target);" +
+                                "}" +
+                            "});" +
+                        "});" +
+                    "lazyTableObserver.observe(lazyTable);" +
+                    "} else {" +
+                        "$(function () { $('#distTaken_table_" + pid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});" +
+                    "}");
+                }
+                sw.Write("});");
+            }
+            sw.Write("</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"distTaken_table_" + pid + "\">");
             {
                 sw.Write("<thead>");
@@ -2513,7 +2858,30 @@ namespace LuckParser.Controllers
             }
             if (presMech.Count > 0)
             {
-                sw.Write("<script> $(function () { $('#mech_table" + phase_index + "').DataTable({ \"order\": [[0, \"desc\"]]});});</script>");
+                sw.Write("<script>");
+                {
+                    sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                    {
+                        sw.Write("var lazyTable = document.querySelector('#mech_table" + phase_index + "');" +
+
+                        "if ('IntersectionObserver' in window) {" +
+                            "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                                "entries.forEach(function(entry) {" +
+                                    "if (entry.isIntersecting)" +
+                                    "{" +
+                                        "$(function () { $('#mech_table" + phase_index + "').DataTable({ \"order\": [[0, \"desc\"]]});});" +
+                                        "lazyTableObserver.unobserve(entry.target);" +
+                                    "}" +
+                                "});" +
+                            "});" +
+                        "lazyTableObserver.observe(lazyTable);" +
+                        "} else {" +
+                            "$(function () { $('#mech_table" + phase_index + "').DataTable({ \"order\": [[0, \"desc\"]]});});" +
+                        "}");
+                    }
+                    sw.Write("});");
+                }
+                sw.Write("</script>");
                 sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"mech_table" + phase_index + "\">");
                 {
                     sw.Write("<thead>");
