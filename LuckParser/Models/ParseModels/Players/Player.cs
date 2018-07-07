@@ -57,20 +57,18 @@ namespace LuckParser.Models.ParseModels
         public int[] getCleanses(ParsedLog log, long start, long end) {
             long time_start = log.getBossData().getFirstAware();
             int[] cleanse = { 0, 0 };
-            foreach (CombatItem c in log.getCombatList().Where(x=>x.isStateChange() == ParseEnum.StateChange.Normal && x.isBuff() == 1 && x.getTime() >= (start + time_start) && x.getTime() <= (end + time_start)))
+            int retalId = Boon.getBoonByName("Retaliation")[0].getID();
+            foreach (CombatItem c in log.getBoonData().Where(x => x.getTime() >= (start + time_start) && x.getTime() <= (end + time_start)))
             {
-                if (c.isActivation() == ParseEnum.Activation.None)
+                if (agent.getInstid() == c.getDstInstid() && c.getIFF() == ParseEnum.IFF.Friend && (c.isBuffremove() == ParseEnum.BuffRemove.All))
                 {
-                    if (agent.getInstid() == c.getDstInstid() && c.getIFF() == ParseEnum.IFF.Friend && (c.isBuffremove() != ParseEnum.BuffRemove.None))
+                    long time = c.getTime() - time_start;
+                    if (time > 0)
                     {
-                        long time = c.getTime() - time_start;
-                        if (time > 0)
+                        if (Boon.getCondiBoonList().Exists(x => x.getID() != retalId && x.getID() == c.getSkillID()))
                         {
-                            if (Boon.getCondiBoonList().Exists(x=>x.getID() == c.getSkillID()))
-                            {
-                                cleanse[0]++;
-                                cleanse[1] += c.getBuffDmg();
-                            }
+                            cleanse[0]++;
+                            cleanse[1] += c.getValue();
                         }
                     }
                 }

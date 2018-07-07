@@ -63,20 +63,8 @@ namespace LuckParser.Controllers
             {
                 setPresentBoons();
                 calculateBoons();
-            } 
-                      
+            }                  
             if (switches.calculateConditions) calculateConditions();
-            // we should also put this under settings
-            
-            // WIP
-            /*if (settings.PlayerRot)
-            {
-                foreach (Player p in log.getPlayerList())
-                {
-                    p.getRotation(log, settings.PlayerRotIcons);
-                }
-                log.getBoss().getRotation(log, settings.PlayerRotIcons);
-            }*/
 
             return statistics;
         }
