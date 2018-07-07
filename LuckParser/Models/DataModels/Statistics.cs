@@ -90,6 +90,7 @@ namespace LuckParser.Models.DataModels
 
         public class FinalDefenses
         {
+            //public long allHealReceived;
             public long damageTaken;
             public int blockedCount;
             public int evadedCount;
@@ -102,6 +103,7 @@ namespace LuckParser.Models.DataModels
 
         public class FinalSupport
         {
+            //public long allHeal;
             public int resurrects;
             public float ressurrectTime;
             public int condiCleanse;

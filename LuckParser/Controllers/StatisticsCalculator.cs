@@ -379,12 +379,14 @@ namespace LuckParser.Controllers
                     long end = phase.getEnd() + log.getBossData().getFirstAware();
 
                     List<DamageLog> damageLogs = player.getDamageTakenLogs(log, phase.getStart(), phase.getEnd());
+                    //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
 
                     int instID = player.getInstid();
 
                   
 
-                    final.damageTaken = damageLogs.Select(x => (long)x.getDamage()).Sum();
+                    final.damageTaken = damageLogs.Sum(x => (long)x.getDamage());
+                    //final.allHealReceived = healingLogs.Sum(x => x.getDamage());
                     final.blockedCount = 0;
                     final.invulnedCount = 0;
                     final.damageInvulned = 0;
@@ -433,6 +435,8 @@ namespace LuckParser.Controllers
 
                     int[] resArray = player.getReses(log, phase.getStart(), phase.getEnd());
                     int[] cleanseArray = player.getCleanses(log, phase.getStart(), phase.getEnd());
+                    //List<DamageLog> healingLogs = player.getHealingLogs(log, phase.getStart(), phase.getEnd());
+                    //final.allHeal = healingLogs.Sum(x => x.getDamage());
                     final.resurrects = resArray[0];
                     final.ressurrectTime = resArray[1]/1000f;
                     final.condiCleanse = cleanseArray[0];

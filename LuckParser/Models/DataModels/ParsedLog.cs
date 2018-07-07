@@ -22,6 +22,8 @@ namespace LuckParser.Models.DataModels
         private List<CombatItem> boon_data;
         private List<CombatItem> damage_data;
         private List<CombatItem> damage_taken_data;
+        //private List<CombatItem> healing_data;
+        //private List<CombatItem> healing_received_data;
         private List<CombatItem> cast_data;
         private List<CombatItem> movement_data;
 
@@ -93,6 +95,7 @@ namespace LuckParser.Models.DataModels
         private void doReduction()
         {
             boon_data = combat_data.getCombatList().Where(x => x.isBuff() == 1 && (x.getBuffDmg() == 0 || x.isBuffremove() != ParseEnum.BuffRemove.None)).ToList();
+
             damage_data = combat_data.getCombatList().Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Foe && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                         ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                         (x.isBuff() == 0 && x.getValue() > 0))).ToList();
@@ -100,8 +103,18 @@ namespace LuckParser.Models.DataModels
             damage_taken_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Foe && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                             ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();
+
             cast_data = combat_data.getCombatList().Where(x => (x.isStateChange() == ParseEnum.StateChange.Normal && x.isActivation() != ParseEnum.Activation.None) || x.isStateChange() == ParseEnum.StateChange.WeaponSwap).ToList();
+
             movement_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Position || x.isStateChange() == ParseEnum.StateChange.Velocity).ToList();
+
+            /*healing_data = combat_data.getCombatList().Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
+                                         ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
+                                         (x.isBuff() == 0 && x.getValue() > 0))).ToList();
+
+            healing_received_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
+                                            ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
+                                                (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
         }
 
         public List<CombatItem> getBoonData()
@@ -123,6 +136,16 @@ namespace LuckParser.Models.DataModels
         {
             return damage_taken_data;
         }
+
+        /*public List<CombatItem> getHealingData()
+        {
+            return healing_data;
+        }
+
+        public List<CombatItem> getHealingReceivedData()
+        {
+            return healing_received_data;
+        }*/
 
         public List<CombatItem> getMovementData()
         {

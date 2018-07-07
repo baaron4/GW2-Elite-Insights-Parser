@@ -965,6 +965,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         sw.Write("<th>Dmg Taken</th>");
                         sw.Write("<th>Dmg Barrier</th>");
+                        //sw.Write("<th>Heal Received</th>");
                         sw.Write("<th>Blocked</th>");
                         sw.Write("<th>Invulned</th>");
                         sw.Write("<th>Evaded</th>");
@@ -994,7 +995,7 @@ namespace LuckParser.Controllers
                             defenses.damageTaken.ToString(), defenses.damageBarrier.ToString(),
                             defenses.blockedCount.ToString(), defenses.invulnedCount.ToString(),
                             defenses.evadedCount.ToString(), stats.dodgeCount.ToString(),
-                            stats.downCount.ToString()
+                            stats.downCount.ToString()//, defenses.allHealReceived.ToString()
                         });
                         sw.Write("<tr>");
                         {
@@ -1003,6 +1004,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
                             sw.Write("<td>" + defenses.damageTaken + "</td>");//dmg taken
                             sw.Write("<td>" + defenses.damageBarrier + "</td>");//dmgbarrier
+                            //sw.Write("<td>" + defenses.allHealReceived + "</td>");//dmgbarrier
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + 0 + "Damage \">" + defenses.blockedCount + "</span>" + "</td>");//Blocks  
                             sw.Write("<td>" + defenses.invulnedCount + "</td>");//invulns
                             sw.Write("<td>" + defenses.evadedCount + "</td>");// evades
@@ -1036,6 +1038,7 @@ namespace LuckParser.Controllers
                                 sw.Write("<td>Group " + groupNum + "</td>");
                                 sw.Write("<td>" + groupList.Sum(c => long.Parse(c[1])) + "</td>");
                                 sw.Write("<td>" + groupList.Sum(c => int.Parse(c[2])) + "</td>");
+                                //sw.Write("<td>" + groupList.Sum(c => int.Parse(c[8])) + "</td>");
                                 sw.Write("<td>" + groupList.Sum(c => int.Parse(c[3])) + "</td>");
                                 sw.Write("<td>" + groupList.Sum(c => int.Parse(c[4])) + "</td>");
                                 sw.Write("<td>" + groupList.Sum(c => int.Parse(c[5])) + "</td>");
@@ -1052,6 +1055,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>Total</td>");
                             sw.Write("<td>" + footerList.Sum(c => long.Parse(c[1])) + "</td>");
                             sw.Write("<td>" + footerList.Sum(c => int.Parse(c[2])) + "</td>");
+                            //sw.Write("<td>" + footerList.Sum(c => int.Parse(c[8])) + "</td>");
                             sw.Write("<td>" + footerList.Sum(c => int.Parse(c[3])) + "</td>");
                             sw.Write("<td>" + footerList.Sum(c => int.Parse(c[4])) + "</td>");
                             sw.Write("<td>" + footerList.Sum(c => int.Parse(c[5])) + "</td>");
@@ -1086,6 +1090,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Sub</th>");
                         sw.Write("<th></th>");
                         sw.Write("<th>Name</th>");
+                        //sw.Write("<th>Healing Done</th>");
                         sw.Write("<th>Condi Cleanse</th>");
                         sw.Write("<th>Resurrects</th>");
                     }
@@ -1104,13 +1109,14 @@ namespace LuckParser.Controllers
                         footerList.Add(new string[] {
                             player.getGroup().ToString(),
                             support.condiCleanseTime.ToString(), support.condiCleanse.ToString(),
-                            support.ressurrectTime.ToString(), support.resurrects.ToString()
+                            support.ressurrectTime.ToString(), support.resurrects.ToString()//, support.allHeal.ToString()
                         });
                         sw.Write("<tr>");
                         {
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + " \" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
+                            //sw.Write("<td>" + support.allHeal +"</td>");                                              
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.condiCleanseTime + " seconds \">" + support.condiCleanse + "</span>" + "</td>");//condicleanse                                                                                                                                                                   //HTML_defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.ressurrectTime + " seconds \">" + support.resurrects + "</span>" + "</td>");//res
                         }
@@ -1130,6 +1136,7 @@ namespace LuckParser.Controllers
                                 sw.Write("<td></td>");
                                 sw.Write("<td></td>");
                                 sw.Write("<td>Group " + groupNum + "</td>");
+                                //sw.Write("<td>" + groupList.Sum(c => int.Parse(c[5])).ToString() + "</td>");
                                 sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + groupList.Sum(c => int.Parse(c[2])).ToString() + " condis</span>" + "</td>");
                                 sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + groupList.Sum(c => int.Parse(c[4])) + "</span>" + "</td>");
                             }
@@ -1140,6 +1147,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td></td>");
                             sw.Write("<td></td>");
                             sw.Write("<td>Total</td>");
+                            //sw.Write("<td>" + footerList.Sum(c => int.Parse(c[5])).ToString() + "</td>");
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + footerList.Sum(c => int.Parse(c[2])).ToString() + " condis</span>" + "</td>");
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + footerList.Sum(c => int.Parse(c[4])).ToString() + "</span>" + "</td>");
                         }
