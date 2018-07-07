@@ -260,10 +260,20 @@ namespace LuckParser.Controllers
                     int mechcount = 0;
                     foreach (MechanicLog ml in filterdList)
                     {
-                        Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
+                        Point check = new Point();
+                        if (ml.GetPlayer() != log.getBoss())
+                        {
+                            check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
+                        }
+                        else
+                        {
+                            check = log.getBossData().getHealthOverTime().Where(x => x.X/1000f > ml.GetTime()).ToList()[0]; // boss_data.getHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
+                            check.Y = (int)((float)(check.Y / 10000f) * maxDPS);
+                        }
+                        
                         if (mechcount == filterdList.Count - 1)
                         {
-                            if (check != null)
+                            if (check != Point.Empty)
                             {
                                 sw.Write("'" + check.Y + "'");
                             }
@@ -275,7 +285,7 @@ namespace LuckParser.Controllers
                         }
                         else
                         {
-                            if (check != null)
+                            if (check != Point.Empty)
                             {
                                 sw.Write("'" + check.Y + "',");
                             }
@@ -2844,16 +2854,30 @@ namespace LuckParser.Controllers
         private void CreateMechanicTable(StreamWriter sw, int phase_index)
         {
             Dictionary<string, List<Mechanic>> presMech = new Dictionary<string, List<Mechanic>>();
+            Dictionary<string, List<Mechanic>> presBossMech = new Dictionary<string, List<Mechanic>>();
             PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
             foreach (Mechanic item in log.getMechanicData().GetMechList(log.getBossData().getID()))
             {
-                if (log.getMechanicData().GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill()) != null)
+                MechanicLog first_m_log = log.getMechanicData().GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill());
+                if (first_m_log != null)
                 {
-                    if (!presMech.ContainsKey(item.GetAltName()))
+                    if (first_m_log.GetPlayer() != log.getBoss())
                     {
-                        presMech[item.GetAltName()] = new List<Mechanic>();
+                        if (!presMech.ContainsKey(item.GetAltName()))
+                        {
+                            presMech[item.GetAltName()] = new List<Mechanic>();
+                        }
+                        presMech[item.GetAltName()].Add(item);
                     }
-                    presMech[item.GetAltName()].Add(item);
+                    else
+                    {
+                        if (!presBossMech.ContainsKey(item.GetAltName()))
+                        {
+                            presBossMech[item.GetAltName()] = new List<Mechanic>();
+                        }
+                        presBossMech[item.GetAltName()].Add(item);
+                    }
+                    
                 }
             }
             if (presMech.Count > 0)
@@ -2918,6 +2942,72 @@ namespace LuckParser.Controllers
                             }
                             sw.Write(" </tr>");
                         }
+                    }
+                    sw.Write("</tbody>");
+                }
+                sw.Write("</table>");
+            }
+            if (presBossMech.Count > 0)
+            {
+                sw.Write("<script>");
+                {
+                    sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                    {
+                        sw.Write("var lazyTable = document.querySelector('#mechBoss_table" + phase_index + "');" +
+
+                        "if ('IntersectionObserver' in window) {" +
+                            "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                                "entries.forEach(function(entry) {" +
+                                    "if (entry.isIntersecting)" +
+                                    "{" +
+                                        "$(function () { $('#mechBoss_table" + phase_index + "').DataTable({ \"order\": [[0, \"desc\"]]});});" +
+                                        "lazyTableObserver.unobserve(entry.target);" +
+                                    "}" +
+                                "});" +
+                            "});" +
+                        "lazyTableObserver.observe(lazyTable);" +
+                        "} else {" +
+                            "$(function () { $('#mechBoss_table" + phase_index + "').DataTable({ \"order\": [[0, \"desc\"]]});});" +
+                        "}");
+                    }
+                    sw.Write("});");
+                }
+                sw.Write("</script>");
+                sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"mechBoss_table" + phase_index + "\">");
+                {
+                    sw.Write("<thead>");
+                    {
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<th>Enemy</th>");
+                            foreach (string mechalt in presBossMech.Keys)
+                            {
+                                sw.Write("<th><span data-toggle=\"tooltip\" title=\"" + presBossMech[mechalt].First().GetName() + "\">" + mechalt + "</span></th>");
+                            }
+                        }
+                        sw.Write("</tr>");
+                    }
+
+                    sw.Write("</thead>");
+                    sw.Write("<tbody>");
+                    {
+                        
+                            sw.Write("<tr>");
+                            {
+                                sw.Write("<td>" + log.getBoss().getCharacter() + "</td>");
+                                foreach (List<Mechanic> mechs in presBossMech.Values)
+                                {
+                                    int count = 0;
+                                    foreach (Mechanic mech in mechs)
+                                    {
+                                        List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == log.getBoss() && x.GetTime() >= phase.getStart() / 1000 && x.GetTime() <= phase.getEnd() / 1000).ToList();
+                                        count += test.Count;
+                                    }
+                                    sw.Write("<td>" + count + "</td>");
+                                }
+                            }
+                            sw.Write(" </tr>");
+                        
                     }
                     sw.Write("</tbody>");
                 }

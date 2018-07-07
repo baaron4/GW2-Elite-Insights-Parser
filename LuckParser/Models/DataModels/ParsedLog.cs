@@ -233,6 +233,24 @@ namespace LuckParser.Models.DataModels
                     }
                 }
             }
+            //Boss Mechanics
+            List<Mechanic> bossBoonMechs = mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.BossBoon ).ToList();
+            if (bossBoonMechs.Count > 0)
+            {
+                //boss buff 2
+                List<CombatItem> bossBuffs =  combat_data.getCombatList().Where(x => x.isBuff() == 1 && x.getDstAgent() == boss_data.getAgent() && x.isBuffremove() == 0).ToList();//note is buff remove is actually how some mech work
+                foreach (Mechanic mech in bossBoonMechs)
+                {
+                    List<CombatItem> bossMechBuffs = bossBuffs.Where(x => x.getSkillID() == mech.GetSkill()).ToList();
+                    if (bossMechBuffs.Count > 0)
+                    {
+                        foreach (CombatItem c in bossMechBuffs)
+                        {
+                            mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(),getBoss(), mech.GetPlotly()));
+                        }
+                    }
+                }
+            }
 
         }
 
