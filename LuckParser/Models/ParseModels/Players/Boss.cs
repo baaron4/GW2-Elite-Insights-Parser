@@ -475,5 +475,15 @@ namespace LuckParser.Models.ParseModels
                 }
             }*/
         }
+
+        /*protected override void setHealingLogs(ParsedLog log)
+        {
+            // nothing to do
+        }
+
+        protected override void setHealingReceivedLogs(ParsedLog log)
+        {
+            // nothing to do
+        }*/
     }
 }

@@ -25,6 +25,16 @@ namespace LuckParser.Models.ParseModels
             return res;
         }
 
+        /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)
+        {
+            List<DamageLog> res = new List<DamageLog>();
+            foreach (Minion minion in this)
+            {
+                res.AddRange(minion.getHealingLogs(log, start, end));
+            }
+            return res;
+        }*/
+
         public List<CastLog> getCastLogs(ParsedLog log, long start, long end)
         {
             List<CastLog> res = new List<CastLog>();

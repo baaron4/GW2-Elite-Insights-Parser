@@ -14,6 +14,9 @@ namespace LuckParser.Models.ParseModels
         // DPS
         protected List<DamageLog> damage_logs = new List<DamageLog>();
         protected List<DamageLog> damage_logsFiltered = new List<DamageLog>();
+        // Heal
+        //protected List<DamageLog> healing_logs = new List<DamageLog>();
+        //protected List<DamageLog> healing_received_logs = new List<DamageLog>();
         // Taken damage
         protected List<DamageLog> damageTaken_logs = new List<DamageLog>();
         // Casts
@@ -78,6 +81,22 @@ namespace LuckParser.Models.ParseModels
             }
             return damageTaken_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
+        /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)//isntid = 0 gets all logs if specefied sets and returns filterd logs
+        {
+            if (healing_logs.Count == 0)
+            {
+                setHealingLogs(log);
+            }
+            return healing_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
+        }
+        public List<DamageLog> getHealingReceivedLogs(ParsedLog log, long start, long end)
+        {
+            if (healing_received_logs.Count == 0)
+            {
+                setHealingReceivedLogs(log);
+            }
+            return healing_received_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
+        }*/
         public List<CastLog> getCastLogs(ParsedLog log, long start, long end)
         {
             if (cast_logs.Count == 0)
@@ -141,10 +160,39 @@ namespace LuckParser.Models.ParseModels
 
             }
         }
+        /*protected void addHealingLog(long time, CombatItem c)
+        {
+            if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+            {
+                if (c.isBuff() == 1 && c.getBuffDmg() != 0)//boon
+                {
+                    healing_logs.Add(new DamageLogCondition(time, c));
+                }
+                else if (c.isBuff() == 0 && c.getValue() != 0)//skill
+                {
+                    healing_logs.Add(new DamageLogPower(time, c));
+                }
+            }
+
+        }
+        protected void addHealingReceivedLog(long time, CombatItem c)
+        {
+            if (c.isBuff() == 1 && c.getBuffDmg() != 0)
+            {
+                healing_received_logs.Add(new DamageLogCondition(time, c));
+            }
+            else if (c.isBuff() == 0 && c.getValue() >= 0)
+            {
+                healing_received_logs.Add(new DamageLogPower(time, c));
+
+            }
+        }*/
         // Setters
         protected abstract void setDamageLogs(ParsedLog log);     
         protected abstract void setFilteredLogs(ParsedLog log);
         protected abstract void setCastLogs(ParsedLog log);
         protected abstract void setDamagetakenLogs(ParsedLog log);
+        //protected abstract void setHealingLogs(ParsedLog log);
+        //protected abstract void setHealingReceivedLogs(ParsedLog log);
     }
 }

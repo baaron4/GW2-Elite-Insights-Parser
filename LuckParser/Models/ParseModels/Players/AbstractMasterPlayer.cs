@@ -16,8 +16,6 @@ namespace LuckParser.Models.ParseModels
         private Dictionary<int, BoonsGraphModel> boon_points = new Dictionary<int, BoonsGraphModel>();
         // dps graphs
         private Dictionary<int, List<Point>> dps_graph = new Dictionary<int, List<Point>>();
-        // Rotation
-        private List<RotationItem> rotation = new List<RotationItem>();
         // Minions
         private Dictionary<string, Minions> minions = new Dictionary<string, Minions>();
         // Replay
@@ -47,14 +45,6 @@ namespace LuckParser.Models.ParseModels
                 return dps_graph[id];
             }
             return new List<Point>();
-        }
-        public List<RotationItem> getRotation(ParsedLog log, bool icons)
-        {
-            if (rotation.Count == 0)
-            {
-                setRotation(log, icons);
-            }
-            return rotation;
         }
         public BoonDistribution getBoonDistribution(ParsedLog log, List<PhaseData> phases, List<Boon> to_track, int phase_index)
         {
@@ -342,18 +332,6 @@ namespace LuckParser.Models.ParseModels
             }
             boon_points[-2] = boon_presence_points;
         }
-        private void setRotation(ParsedLog log, bool icons)
-        {
-            List<CastLog> cls = getCastLogs(log, 0, log.getBossData().getAwareDuration());
-            foreach (CastLog cl in cls)
-            {
-                RotationItem rot = new RotationItem();
-                rot.findName(log.getSkillData(), cl.getID());
-                rot.setDuration(cl.getActDur());
-                rot.setEndStatus(cl.endActivation());
-                rot.setStartStatus(cl.startActivation());
-            }
-        }
         private void setMinions(ParsedLog log)
         {
             List<AgentItem> combatMinion = log.getAgentData().getNPCAgentList().Where(x => x.getMasterAgent() == agent.getAgent()).ToList();
@@ -440,8 +418,8 @@ namespace LuckParser.Models.ParseModels
                             {
                                 if (curCastLog.getID() == c.getSkillID())
                                 {
-                                    curCastLog.setEndStatus(c.getValue(), c.isActivation());                               
-                                    curCastLog = null;
+                                    curCastLog.setEndStatus(c.getValue(), c.isActivation());
+                                    curCastLog = null;                      
                                 }
                             }
                         }

@@ -147,8 +147,8 @@ namespace LuckParser.Models.ParseModels
 
                 //dhuum
                 new Mechanic(48172, "Hateful Ephemera", Mechanic.MechType.SkillOnPlayer, 19450, "symbol:'square',color:'rgb(0,150,0)',", "Golem"),//Buff or dmg?
-                new Mechanic(47646, "Arcing Affliction", Mechanic.MechType.PlayerBoon, 19450, "symbol:'hexagon',color:'rgb(250,0,0)',", "Arcing Affliction DMG"),//Buff or dmg?
-                new Mechanic(48121, "Arcing Affliction", Mechanic.MechType.SkillOnPlayer, 19450, "symbol:'circle',color:'rgb(250,0,0)',", "Arcing Affliction"),//Buff or dmg?
+                new Mechanic(48121, "Arcing Affliction", Mechanic.MechType.PlayerBoon, 19450, "symbol:'hexagon',color:'rgb(250,0,0)',", "Arcing Affliction DMG"),//Buff or dmg?
+                new Mechanic(47646 , "Arcing Affliction", Mechanic.MechType.SkillOnPlayer, 19450, "symbol:'circle',color:'rgb(250,0,0)',", "Arcing Affliction"),//Buff or dmg?
                 new Mechanic(47476, "Residual Affliction", Mechanic.MechType.PlayerBoon, 19450, "symbol:'square',color:'rgb(0,0,250)',", "Bomb CD"),
                 new Mechanic(47335, "Soul Shackle", Mechanic.MechType.PlayerOnPlayer, 19450, "symbol:'diamond',color:'rgb(0,0,250)',", "Shackle"),//4 calls probably this one
                 new Mechanic(47561, "Slash", Mechanic.MechType.SkillOnPlayer, 19450, "symbol:'triangle',color:'rgb(0,150,0)',", "Cone boon rip"),

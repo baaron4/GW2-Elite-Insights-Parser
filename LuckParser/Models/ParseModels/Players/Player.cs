@@ -232,7 +232,8 @@ namespace LuckParser.Models.ParseModels
             weapons_array = weapons;
         }    
         
-        protected override void setDamagetakenLogs(ParsedLog log) {
+        protected override void setDamagetakenLogs(ParsedLog log)
+        {
             long time_start = log.getBossData().getFirstAware();               
             foreach (CombatItem c in log.getDamageTakenData()) {
                 if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware()) {//selecting player as target
@@ -265,7 +266,37 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        
-       
+
+        /*protected override void setHealingLogs(ParsedLog log)
+        {
+            long time_start = log.getBossData().getFirstAware();
+            foreach (CombatItem c in log.getHealingData())
+            {
+                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())//selecting player or minion as caster
+                {
+                    long time = c.getTime() - time_start;
+                    addHealingLog(time, c);
+                }
+            }
+            Dictionary<string, Minions> min_list = getMinions(log);
+            foreach (Minions mins in min_list.Values)
+            {
+                healing_logs.AddRange(mins.getHealingLogs(log, 0, log.getBossData().getAwareDuration()));
+            }
+            healing_logs.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
+        }
+
+        protected override void setHealingReceivedLogs(ParsedLog log)
+        {
+            long time_start = log.getBossData().getFirstAware();
+            foreach (CombatItem c in log.getHealingReceivedData())
+            {
+                if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
+                {//selecting player as target
+                    long time = c.getTime() - time_start;
+                    addHealingReceivedLog(time, c);
+                }
+            }
+        }*/
     }
 }
