@@ -8,7 +8,7 @@
         /// 1 - BossBoon 
         /// 2 - PlayerSkill X
         /// 3 - SkillOnPlayer
-        /// 4 - EnemyBoonStrip X
+        /// 4 - EnemyBoonStrip
         /// 5 - Spawn X
         /// 6 - BossCast X
         /// 7 - PlayerOnPlayer

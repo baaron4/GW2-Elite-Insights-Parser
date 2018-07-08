@@ -55,8 +55,8 @@ namespace LuckParser.Models.ParseModels
                 new Mechanic(34416, "Corruption", Mechanic.MechType.PlayerBoon, 16115, "symbol:'circle',color:'rgb(255,0,0)',", "Corruption"),
                 new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoon, 16115, "symbol:'circle',color:'rgb(75,0,130)',", "Sacrifice"),
                 new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerBoon, 16115, "symbol:'square',color:'rgb(75,30,150)',", "Rain Knockdown"),
-                new Mechanic(34422, "Blood Fueled", Mechanic.MechType.EnemyBoon, 16115, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(Bad)"),
-                new Mechanic(34428, "Blood Fueled", Mechanic.MechType.EnemyBoon, 16115, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(Bad)"),
+                new Mechanic(34422, "Blood Fueled", Mechanic.MechType.PlayerBoon, 16115, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(good)"),
+                new Mechanic(34428, "Blood Fueled", Mechanic.MechType.PlayerBoon, 16115, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(good)"),
                 new Mechanic(34376, "Blood Shield", Mechanic.MechType.EnemyBoon, 16115, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble"),
                 new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, 16115, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble"),
 
