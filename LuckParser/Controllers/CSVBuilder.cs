@@ -109,9 +109,28 @@ namespace LuckParser.Controllers
             WriteLine(new string[] { "Duration", durationString });
 
             //DPSStats
+            CreateDPSTable(sw, 0);
+        }
+        private void CreateDPSTable(StreamWriter sw, int phase_index)
+        {
+            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
             WriteLine(new string[] { "Sub Group", "Profession","WepSet1_1","WepSet1_2","WepSet2_1","WepSet2_2","Name","Account",
-                "Boss DPS","Boss DMG","Boss Power DPS","Boss Power DMG","Boss Condi DPS","Boss Condi DMG"});
+                "Boss DPS","Boss DMG","Boss Power DPS","Boss Power DMG","Boss Condi DPS","Boss Condi DMG",
+                "All DPS","All DMG","All Power DPS","All Power DMG","All Condi DPS","All Condi DMG",
+                "Times Downed", "Time Died","Percent Alive"});
+            foreach (Player player in log.getPlayerList())
+            {
+                Statistics.FinalDPS dps = statistics.dps[player][phase_index];
+                Statistics.FinalStats stats = statistics.stats[player][phase_index];
+                TimeSpan timedead = TimeSpan.FromMilliseconds(stats.died);
+                long fight_duration = phase.getDuration("s");
 
+                string[] wep = player.getWeaponsArray(log);
+                WriteLine(new string[] { player.getGroup().ToString(), player.getProf().ToString(),wep[0],wep[1],wep[2],wep[3], player.getCharacter().ToString(), player.getAccount().TrimStart(':') ,
+                dps.bossDps.ToString(),dps.bossDamage.ToString(),dps.bossPowerDps.ToString(),dps.bossPowerDamage.ToString(),dps.bossCondiDps.ToString(),dps.bossCondiDamage.ToString(),
+                dps.allDps.ToString(),dps.allDamage.ToString(),dps.allPowerDps.ToString(),dps.allPowerDamage.ToString(),dps.allCondiDps.ToString(),dps.allCondiDamage.ToString(),
+                stats.downCount.ToString(), timedead.Minutes + " m " + timedead.Seconds + " s",Math.Round((timedead.TotalSeconds / fight_duration) * 100,1) +"%"});
+            }
         }
     }
 }
