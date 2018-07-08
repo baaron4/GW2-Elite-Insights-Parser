@@ -3431,6 +3431,11 @@ namespace LuckParser.Controllers
                 {
                     sw.Write("<canvas width=\"" + canvasSize.Item1 + "px\" height=\"" + canvasSize.Item2 + "px\" id=\"replayCanvas\" class=\"replay\">");
                     sw.Write("</canvas>");
+                    sw.Write("<div class=\"d-flex justify-content-center slidecontainer\">");
+                    {
+                        sw.Write("<input oninput=\"updateTime(this.value)\"type=\"range\" min=\"0\" max=\""+ (log.getBoss().getCombatReplay().getPositions().Count - 1) + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
+                    }
+                    sw.Write("</div>");
                     sw.Write("<div class=\"d-flex justify-content-center\">");
                     {
                         sw.Write("<div onclick=\"startAnimate()\" type=\"button\" class=\"btn btn-dark\">Animate</div>");
@@ -3453,16 +3458,27 @@ namespace LuckParser.Controllers
                     sw.Write("</div>");
                 }
                 sw.Write("</div>");
-                sw.Write("<div class=\"d-flex justify-content-center align-items-center\">");
+                sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center btn-group btn-group-toggle\" data-toggle=\"buttons\">");
                 {
-                    sw.Write("<div class=\"d-flex flex-column align-items-center\">");
+                    List<int> groups = log.getPlayerList().Select(x => x.getGroup()).Distinct().ToList();
+                    foreach (int group in groups)
                     {
-                        foreach (Player p in log.getPlayerList())
+                        sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center mt-5\">");
                         {
-                            sw.Write("<div style=\"width: 200px;\" onclick=\"selectActor(" + p.getInstid() + ")\" type=\"button\" class=\"btn btn-dark\">" + p.getCharacter() + " <img src=\"" + HTMLHelper.GetLink(p.getProf().ToString()) + "\" alt=\"" + p.getProf().ToString() + "\" height=\"18\" width=\"18\" ></div>");
+                            sw.Write("<h3>Group " + group + "</h3>");
+                            foreach (Player p in log.getPlayerList().Where(x => x.getGroup() == group))
+                            {
+                                sw.Write("<label style=\"width: 200px;\" onclick=\"selectActor(" + p.getInstid() + ")\"  class=\"btn btn-dark\">" +
+                                    "<input class=\"invisible\" type=\"radio\" autocomplete=\"off\">" +
+                                    p.getCharacter()
+                                    + " <img src=\"" + HTMLHelper.GetLink(p.getProf().ToString())
+                                        + "\" alt=\"" + p.getProf().ToString()
+                                        + "\" height=\"18\" width=\"18\" >" +
+                                    "</label >");
+                            }
                         }
+                        sw.Write("</div>");
                     }
-                    sw.Write("</div>");
                 }
                 sw.Write("</div>");
             }
@@ -3502,11 +3518,19 @@ namespace LuckParser.Controllers
                     "}");
                 sw.Write(" };");
                 sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
+                sw.Write("var timeSlider = document.getElementById('timeRange');");
                 sw.Write("var bgImage = new Image();");
                 sw.Write("var speed = 32;");
-                sw.Write("function startAnimate() {if (animation === null) {animation = setInterval(function(){myanimate(time++)},speed);}}");
-                sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null;}}");
+                sw.Write("var selectedGroup = -1;");
+                sw.Write("function startAnimate() {if (animation === null) { " +
+                    "if (time ===" + (log.getBoss().getCombatReplay().getPositions().Count - 1)+ ") {" +
+                        "time = 0;" +
+                    "}" +
+                    "animation = setInterval(function(){myanimate(time++)},speed);" +
+                    "}}");
+                sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null; time--;}}");
                 sw.Write("function restartAnimate() { time = 0; myanimate(time++);}");
+                sw.Write("function updateTime(value) { time = value; myanimate(time);}");
                 sw.Write("function selectActor(pId) { " +
                         "for(var key in data) {" +
                             "if (data.hasOwnProperty(key)) {" +
@@ -3514,12 +3538,13 @@ namespace LuckParser.Controllers
                             "}" +
                         "}" +
                         "data['id' + pId].selected = true;" +
+                        "selectedGroup = data['id' + pId].group;" +
                         "myanimate(time);" +
                     "}");
-                sw.Write("function normalSpeed(){ speed = 32; if (animation !== null) {window.clearInterval(animation); animation = setInterval(function(){myanimate(time++)},speed);}}");
-                sw.Write("function twoSpeed(){ speed = 16; if (animation !== null) {window.clearInterval(animation); animation = setInterval(function(){myanimate(time++)},speed);}}");
-                sw.Write("function fourSpeed(){ speed = 8; if (animation !== null) {window.clearInterval(animation); animation = setInterval(function(){myanimate(time++)},speed);}}");
-                sw.Write("function myanimate(time) {");
+                sw.Write("function normalSpeed(){ speed = 32; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}}");
+                sw.Write("function twoSpeed(){ speed = 16; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}}");
+                sw.Write("function fourSpeed(){ speed = 8; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}}");
+                sw.Write("function myanimate(timeToUse) {");
                 {
                     sw.Write("ctx.clearRect(0,0,"+ canvasSize.Item1 + ","+ canvasSize.Item2 + ");");
                     sw.Write("ctx.drawImage(bgImage,0,0,"+ canvasSize.Item1 + ","+ canvasSize.Item2 + ");");
@@ -3532,15 +3557,22 @@ namespace LuckParser.Controllers
                                 "ctx.beginPath();" +
                                 "ctx.lineWidth='5';" +
                                 "ctx.strokeStyle='green';" +
-                                "ctx.rect(toUse[2*time]-10,toUse[2*time+1]-10,20,20);" +
+                                "ctx.rect(toUse[2*timeToUse]-10,toUse[2*timeToUse+1]-10,20,20);" +
+                                "ctx.stroke();" +
+                            "} else if (data['id" + p.getInstid() + "'].group === selectedGroup) {" +
+                                "ctx.beginPath();" +
+                                "ctx.lineWidth='1';" +
+                                "ctx.strokeStyle='blue';" +
+                                "ctx.rect(toUse[2*timeToUse]-10,toUse[2*timeToUse+1]-10,20,20);" +
                                 "ctx.stroke();" +
                             "}");
-                        sw.Write("ctx.drawImage(img"+p.getInstid()+ ",toUse[2*time]-10,toUse[2*time+1]-10,20,20);");
+                        sw.Write("ctx.drawImage(img"+p.getInstid()+ ",toUse[2*timeToUse]-10,toUse[2*timeToUse+1]-10,20,20);");
                         
                     }
                     sw.Write("toUse = data['id" + log.getBoss().getInstid() + "'].pos;");
-                    sw.Write("ctx.drawImage(img" + log.getBoss().getInstid() + ",toUse[2*time]-15,toUse[2*time+1]-15,30,30);");
-                    sw.Write("if (time === "+(log.getBoss().getCombatReplay().getPositions().Count - 1)+") { stopAnimate(); time = 0;}");
+                    sw.Write("ctx.drawImage(img" + log.getBoss().getInstid() + ",toUse[2*timeToUse]-15,toUse[2*timeToUse+1]-15,30,30);");
+                    sw.Write("if (timeToUse === " + (log.getBoss().getCombatReplay().getPositions().Count - 1)+ ") {stopAnimate();}");
+                    sw.Write("timeSlider.value = time;");
                 }
                 sw.Write("}");
                 sw.Write("bgImage.onload = function() { myanimate(0);};");
@@ -3595,6 +3627,12 @@ namespace LuckParser.Controllers
                     sw.Write("canvas.replay {" +
                         "border:1px solid #9B0000; "+
                         "}");
+                    // from W3
+                    sw.Write(".slidecontainer {width: 100%;}");
+                    sw.Write(".slider {width: 100%;appearance: none;height: 25px;background: #F3F3F3;outline: none;opacity: 0.7;-webkit-transition: .2s;transition: opacity .2s;}");
+                    sw.Write(".slider:hover {opacity: 1;}");
+                    sw.Write(".slider::-webkit-slider-thumb {-webkit-appearance: none;appearance: none;width: 25px;height: 25px;background: #4CAF50;cursor: pointer;}");
+                    sw.Write(".slider::-moz-range-thumb {width: 25px;height: 25px;background: #4CAF50;cursor: pointer;}");
                 }
             }
             sw.Write("</style>");

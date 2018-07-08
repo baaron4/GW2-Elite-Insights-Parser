@@ -44,13 +44,13 @@ namespace LuckParser.Models.ParseModels
             float ratio = (float)sizes.Item1 / sizes.Item2;
             if (ratio > 1.0f)
             {
-                return new Tuple<int, int>(700, (int)Math.Round(700/ratio));
+                return new Tuple<int, int>(1000, (int)Math.Round(1000 / ratio));
             } else if (ratio < 1.0f) 
             {
-                return new Tuple<int, int>((int)Math.Round(ratio*700), 700);
+                return new Tuple<int, int>((int)Math.Round(ratio* 1000), 1000);
             } else
             {
-                return new Tuple<int, int>(700, 700);
+                return new Tuple<int, int>(1000, 1000);
             }
         }
 
