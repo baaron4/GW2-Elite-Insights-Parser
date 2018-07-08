@@ -462,7 +462,7 @@ namespace LuckParser.Controllers
                 sw.Write("</tr>");
             }
         }
-
+        
         public static void writeBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, BossData boss_data, string y_axis = "")
         {
             //Boss Health

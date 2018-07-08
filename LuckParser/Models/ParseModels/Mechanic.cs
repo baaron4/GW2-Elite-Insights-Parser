@@ -5,15 +5,15 @@
         //X indicates not gathering mechanic in mech logs
         /// <summary>
         /// 0 - PlayerBoon 
-        /// 1 - BossBoon X
+        /// 1 - BossBoon 
         /// 2 - PlayerSkill X
         /// 3 - SkillOnPlayer
-        /// 4 - EnemyBoonStrip X
+        /// 4 - EnemyBoonStrip
         /// 5 - Spawn X
         /// 6 - BossCast X
         /// 7 - PlayerOnPlayer
         /// </summary>
-        public enum MechType { PlayerBoon, BossBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, BossCast, PlayerOnPlayer }
+        public enum MechType { PlayerBoon, EnemyBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, BossCast, PlayerOnPlayer }
         // Fields
        
         private int skill_id;
