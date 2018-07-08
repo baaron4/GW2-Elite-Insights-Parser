@@ -119,6 +119,10 @@ namespace LuckParser.Controllers
 
             //Defensive Stats
             CreateDefTable(sw, 0);
+
+            //Support Stats
+            CreateSupTable(sw, 0);
+
         }
         private void CreateDPSTable(StreamWriter sw, int phase_index)
         {
@@ -234,6 +238,27 @@ namespace LuckParser.Controllers
 
                 WriteLine(new string[] { player.getGroup().ToString(), player.getProf().ToString(), player.getCharacter().ToString(),
                 defenses.damageTaken.ToString(),defenses.damageBarrier.ToString(),defenses.blockedCount.ToString(),defenses.invulnedCount.ToString(),defenses.evadedCount.ToString(),stats.dodgeCount.ToString() });
+                count++;
+            }
+            while (count < 15)//so each graph has equal spaceing
+            {
+                NewLine();
+                count++;
+            }
+        }
+        private void CreateSupTable(StreamWriter sw, int phase_index)
+        {
+            //generate supstats table
+            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            WriteLine(new string[] { "Sub Group", "Profession", "Name" ,
+                "Condi Cleanse","Condi Cleanse time","Resurrects","Time Resurecting" });
+            int count = 0;
+            foreach (Player player in log.getPlayerList())
+            {
+                Statistics.FinalSupport support = statistics.support[player][phase_index];
+
+                WriteLine(new string[] { player.getGroup().ToString(), player.getProf().ToString(), player.getCharacter().ToString(),
+                support.condiCleanse.ToString(),support.condiCleanseTime.ToString(),support.resurrects.ToString(),support.ressurrectTime.ToString() });
                 count++;
             }
             while (count < 15)//so each graph has equal spaceing
