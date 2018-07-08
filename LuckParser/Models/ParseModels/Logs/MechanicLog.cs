@@ -7,10 +7,10 @@
         private int skill_id;
         private string name;
         private int damage;
-        private Player player;
+        private AbstractMasterPlayer player;
         private string plotlyShape;
 
-        public MechanicLog(long time, int skill_id,string name, int damage, Player p,string plotlyShape) {
+        public MechanicLog(long time, int skill_id,string name, int damage, AbstractMasterPlayer p,string plotlyShape) {
             this.time = time;
             this.skill_id = skill_id;
             this.name = name;
@@ -33,7 +33,7 @@
         {
             return damage;
         }
-        public Player GetPlayer()
+        public AbstractMasterPlayer GetPlayer()
         {
             return player;
         }

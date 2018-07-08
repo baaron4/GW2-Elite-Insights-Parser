@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LuckParser.Models.ParseModels;
+using LuckParser.Models.ParseModels.Players;
 
 namespace LuckParser.Models.DataModels
 {
@@ -229,6 +230,64 @@ namespace LuckParser.Models.DataModels
                                 }
                             }
 
+                        }
+                    }
+                }
+            }
+            //Boon Was applied to Enemy
+            List<Mechanic> enamyBoonMechs = mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon ).ToList();
+            if (enamyBoonMechs.Count > 0)
+            {
+               
+                List<CombatItem> enamyBuffs =  combat_data.getCombatList().Where(x => x.isBuff() == 1/* && x.getDstAgent() == boss_data.getAgent() */&& x.isBuffremove() == 0).ToList();
+                foreach (Mechanic mech in enamyBoonMechs)
+                {
+                    List<CombatItem> enemyMechBuffs = enamyBuffs.Where(x => x.getSkillID() == mech.GetSkill()).ToList();
+                    if (enemyMechBuffs.Count > 0)
+                    {
+                        foreach (CombatItem c in enemyMechBuffs)
+                        {
+                            AbstractMasterPlayer amp = null;
+                            if (c.getDstAgent() == boss_data.getAgent())
+                            {
+                                amp = getBoss();
+                            }
+                            else
+                            {
+                                amp = new Mob(this.getAgentData().GetAgent(c.getDstAgent()));
+                                
+                            
+                            }
+                            mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(),amp, mech.GetPlotly()));
+                        }
+                    }
+                }
+            }
+            //Removed Boon on Enemy
+             enamyBoonMechs = mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoonStrip).ToList();
+            if (enamyBoonMechs.Count > 0)
+            {
+              
+                List<CombatItem> enamyBuffs = combat_data.getCombatList().Where(x => x.isBuff() == 1 && x.isBuffremove() == ParseEnum.BuffRemove.Manual).ToList();
+                foreach (Mechanic mech in enamyBoonMechs)
+                {
+                    List<CombatItem> enemyMechBuffs = enamyBuffs.Where(x => x.getSkillID() == mech.GetSkill()).ToList();
+                    if (enemyMechBuffs.Count > 0)
+                    {
+                        foreach (CombatItem c in enemyMechBuffs)
+                        {
+                            AbstractMasterPlayer amp = null;
+                            if (c.getDstAgent() == boss_data.getAgent())
+                            {
+                                amp = getBoss();
+                            }
+                            else
+                            {
+                                amp = new Mob(this.getAgentData().GetAgent(c.getDstAgent()));
+
+
+                            }
+                            mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), amp, mech.GetPlotly()));
                         }
                     }
                 }
