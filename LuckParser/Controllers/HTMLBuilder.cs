@@ -3468,11 +3468,11 @@ namespace LuckParser.Controllers
                             sw.Write("<h3>Group " + group + "</h3>");
                             foreach (Player p in log.getPlayerList().Where(x => x.getGroup() == group))
                             {
-                                sw.Write("<label style=\"width: 200px;\" onclick=\"selectActor(" + p.getInstid() + ")\"  class=\"btn btn-dark\">" +
+                                sw.Write("<label style=\"width: 150px;\" onclick=\"selectActor(" + p.getInstid() + ")\"  class=\"btn btn-dark\">" +
                                     "<input class=\"invisible\" type=\"radio\" autocomplete=\"off\">" +
-                                    p.getCharacter()
-                                    + " <img src=\"" + HTMLHelper.GetLink(p.getProf().ToString())
-                                        + "\" alt=\"" + p.getProf().ToString()
+                                    p.getCharacter().Substring(0, Math.Min(10, p.getCharacter().Length))
+                                    + " <img src=\"" + HTMLHelper.GetLink(p.getProf())
+                                        + "\" alt=\"" + p.getProf()
                                         + "\" height=\"18\" width=\"18\" >" +
                                     "</label >");
                             }
@@ -3551,27 +3551,37 @@ namespace LuckParser.Controllers
                     sw.Write("var toUse = null;");
                     foreach (Player p in log.getPlayerList())
                     {
-                        sw.Write("toUse = data['id"+p.getInstid()+"'].pos;");
-                        sw.Write("if(data['id" + p.getInstid() + "'].selected) " +
-                            "{" +
+                        sw.Write("toUse = data['id"+p.getInstid()+"'];");
+                        sw.Write("if (toUse.group === selectedGroup) {" +
                                 "ctx.beginPath();" +
-                                "ctx.lineWidth='5';" +
-                                "ctx.strokeStyle='green';" +
-                                "ctx.rect(toUse[2*timeToUse]-10,toUse[2*timeToUse+1]-10,20,20);" +
-                                "ctx.stroke();" +
-                            "} else if (data['id" + p.getInstid() + "'].group === selectedGroup) {" +
-                                "ctx.beginPath();" +
-                                "ctx.lineWidth='1';" +
+                                "ctx.lineWidth='3';" +
                                 "ctx.strokeStyle='blue';" +
-                                "ctx.rect(toUse[2*timeToUse]-10,toUse[2*timeToUse+1]-10,20,20);" +
+                                "ctx.rect(toUse.pos[2*timeToUse]-10,toUse.pos[2*timeToUse+1]-10,20,20);" +
                                 "ctx.stroke();" +
                             "}");
-                        sw.Write("ctx.drawImage(img"+p.getInstid()+ ",toUse[2*timeToUse]-10,toUse[2*timeToUse+1]-10,20,20);");
-                        
+                        sw.Write("if (!toUse.selected) {" +
+                                "ctx.drawImage(img"+p.getInstid()+ "," +
+                                "toUse.pos[2*timeToUse]-10," +
+                                "toUse.pos[2*timeToUse+1]-10,20,20);" +
+                            "}");                      
                     }
                     sw.Write("toUse = data['id" + log.getBoss().getInstid() + "'].pos;");
                     sw.Write("ctx.drawImage(img" + log.getBoss().getInstid() + ",toUse[2*timeToUse]-15,toUse[2*timeToUse+1]-15,30,30);");
                     sw.Write("if (timeToUse === " + (log.getBoss().getCombatReplay().getPositions().Count - 1)+ ") {stopAnimate();}");
+                    foreach (Player p in log.getPlayerList())
+                    {
+                        sw.Write("toUse = data['id" + p.getInstid() + "'];");
+                        sw.Write("if (toUse.selected) " +
+                            "{" +
+                                "ctx.beginPath();" +
+                                "ctx.lineWidth='5';" +
+                                "ctx.strokeStyle='green';" +
+                                "ctx.rect(toUse.pos[2*timeToUse]-10,toUse.pos[2*timeToUse+1]-10,20,20);" +
+                                "ctx.stroke();" +
+                                "ctx.drawImage(img" + p.getInstid() + ",toUse.pos[2*timeToUse]-10," +
+                                "toUse.pos[2*timeToUse+1]-10,20,20);" +
+                           "}");
+                    }
                     sw.Write("timeSlider.value = time;");
                 }
                 sw.Write("}");

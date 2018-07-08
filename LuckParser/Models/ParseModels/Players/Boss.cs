@@ -44,13 +44,13 @@ namespace LuckParser.Models.ParseModels
             float ratio = (float)sizes.Item1 / sizes.Item2;
             if (ratio > 1.0f)
             {
-                return new Tuple<int, int>(1000, (int)Math.Round(1000 / ratio));
+                return new Tuple<int, int>(900, (int)Math.Round(900 / ratio));
             } else if (ratio < 1.0f) 
             {
-                return new Tuple<int, int>((int)Math.Round(ratio* 1000), 1000);
+                return new Tuple<int, int>((int)Math.Round(ratio* 900), 900);
             } else
             {
-                return new Tuple<int, int>(1000, 1000);
+                return new Tuple<int, int>(900, 900);
             }
         }
 
@@ -77,21 +77,21 @@ namespace LuckParser.Models.ParseModels
                 case 15429:
                     return "https://i.imgur.com/Gqpp7B1.png";
                 case 15375:
-                    return "https://i.imgur.com/CQVLeVL.png";
+                    return "https://i.imgur.com/FwpMbYf.png";
                 case 16123:
-                    return "https://i.imgur.com/UTPpMR8.png";
+                    return "https://i.imgur.com/6lrGCPX.png";
                 case 16115:
                     return "https://i.imgur.com/3X0YveK.png";
                 case 16235:
-                    return "https://i.imgur.com/sl3Wgi3.png";
+                    return "https://i.imgur.com/6ZJhPOw.png";
                 case 16246:
                     return "https://i.imgur.com/BoHwwY6.png";
                 case 17194:
                     return "https://i.imgur.com/NlpsLZa.png";
                 case 17172:
-                    return "https://i.imgur.com/eJH2kIi.png";
+                    return "https://i.imgur.com/lT1FW2r.png";
                 case 17188:
-                    return "https://i.imgur.com/cNdOrCR.png";
+                    return "https://i.imgur.com/o2DHN29.png";
                 case 17154:
                     return "https://i.imgur.com/9vyE9bj.png";
                 case 0x4D37:
@@ -151,15 +151,15 @@ namespace LuckParser.Models.ParseModels
                 case 16115:
                     return Tuple.Create(-7253, 4575 , -4630, 7197);
                 case 16235:
-                    return Tuple.Create(-5523, 8063, -2091, 11297);
+                    return Tuple.Create(-5447, 8069, -2262, 11297);
                 case 16246:
                     return Tuple.Create(-5992, -5992, 69, -522);
                 case 17194:
                     return Tuple.Create(13021, 642, 15765, 3386);
                 case 17172:
-                    return Tuple.Create(1362, 2833, 4876, 6119);
+                    return Tuple.Create(1370, 2701, 3921, 5258);
                 case 17188:
-                    return Tuple.Create(-6517, 1127, -2424, 5046);
+                    return Tuple.Create(-6526, 1118, -2423, 5046);
                 case 17154:
                     return Tuple.Create(-9542, 1932, -7266, 4292);
                 case 19767:
