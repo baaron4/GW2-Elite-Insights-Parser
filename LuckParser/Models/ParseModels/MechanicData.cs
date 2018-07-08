@@ -28,7 +28,7 @@ namespace LuckParser.Models.ParseModels
             new Mechanic(31623, "Ghastly Prison", Mechanic.MechType.SkillOnPlayer, 15429, "symbol:'pentagon',color:'rgb(0,0,255)',", "Egg"),
             new Mechanic(31498, "Spectral Darkness", Mechanic.MechType.PlayerBoon, 15429, "symbol:'circle',color:'rgb(0,0,255)',", "Orb Debuff"),
 
-            new Mechanic(31722, "Spirited Fusion", Mechanic.MechType.BossBoon, 15429, "symbol:'square',color:'rgb(0,0,255)',", "Ate Spirit"),
+            new Mechanic(31722, "Spirited Fusion", Mechanic.MechType.EnemyBoon, 15429, "symbol:'square',color:'rgb(0,0,255)',", "Ate Spirit"),
             //sab
             new Mechanic(34108, "Shell-Shocked", Mechanic.MechType.PlayerBoon, 15375, "symbol:'circle',color:'rgb(255,0,0)',", "Canons"),
             new Mechanic(31473, "Sapper Bomb", Mechanic.MechType.PlayerBoon, 15375, "symbol:'circle',color:'rgb(0,128,0)',", "Green Bomb"),
@@ -55,10 +55,10 @@ namespace LuckParser.Models.ParseModels
                 new Mechanic(34416, "Corruption", Mechanic.MechType.PlayerBoon, 16115, "symbol:'circle',color:'rgb(255,0,0)',", "Corruption"),
                 new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoon, 16115, "symbol:'circle',color:'rgb(75,0,130)',", "Sacrifice"),
                 new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerBoon, 16115, "symbol:'square',color:'rgb(75,30,150)',", "Rain Knockdown"),
-                new Mechanic(34422, "Blood Fueled", Mechanic.MechType.BossBoon, 16115, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(Bad)"),
-                new Mechanic(34428, "Blood Fueled", Mechanic.MechType.BossBoon, 16115, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(Bad)"),
-                new Mechanic(34376, "Blood Shield", Mechanic.MechType.BossBoon, 16115, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble"),
-                new Mechanic(34518, "Blood Shield", Mechanic.MechType.BossBoon, 16115, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble"),
+                new Mechanic(34422, "Blood Fueled", Mechanic.MechType.EnemyBoon, 16115, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(Bad)"),
+                new Mechanic(34428, "Blood Fueled", Mechanic.MechType.EnemyBoon, 16115, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(Bad)"),
+                new Mechanic(34376, "Blood Shield", Mechanic.MechType.EnemyBoon, 16115, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble"),
+                new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, 16115, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble"),
 
                 //KC
                 new Mechanic(34912, "Fixate", Mechanic.MechType.PlayerBoon, 16235, "symbol:'star',color:'rgb(0,0,250)',", "Fixate"),

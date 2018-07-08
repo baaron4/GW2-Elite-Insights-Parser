@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LuckParser.Models.ParseModels;
+using LuckParser.Models.ParseModels.Players;
 
 namespace LuckParser.Models.DataModels
 {
@@ -233,20 +234,60 @@ namespace LuckParser.Models.DataModels
                     }
                 }
             }
-            //Boss Mechanics
-            List<Mechanic> bossBoonMechs = mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.BossBoon ).ToList();
-            if (bossBoonMechs.Count > 0)
+            //Boon Was applied to Enemy
+            List<Mechanic> enamyBoonMechs = mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon ).ToList();
+            if (enamyBoonMechs.Count > 0)
             {
-                //boss buff 2
-                List<CombatItem> bossBuffs =  combat_data.getCombatList().Where(x => x.isBuff() == 1 && x.getDstAgent() == boss_data.getAgent() && x.isBuffremove() == 0).ToList();//note is buff remove is actually how some mech work
-                foreach (Mechanic mech in bossBoonMechs)
+               
+                List<CombatItem> enamyBuffs =  combat_data.getCombatList().Where(x => x.isBuff() == 1/* && x.getDstAgent() == boss_data.getAgent() */&& x.isBuffremove() == 0).ToList();
+                foreach (Mechanic mech in enamyBoonMechs)
                 {
-                    List<CombatItem> bossMechBuffs = bossBuffs.Where(x => x.getSkillID() == mech.GetSkill()).ToList();
-                    if (bossMechBuffs.Count > 0)
+                    List<CombatItem> enemyMechBuffs = enamyBuffs.Where(x => x.getSkillID() == mech.GetSkill()).ToList();
+                    if (enemyMechBuffs.Count > 0)
                     {
-                        foreach (CombatItem c in bossMechBuffs)
+                        foreach (CombatItem c in enemyMechBuffs)
                         {
-                            mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(),getBoss(), mech.GetPlotly()));
+                            AbstractMasterPlayer amp = null;
+                            if (c.getDstAgent() == boss_data.getAgent())
+                            {
+                                amp = getBoss();
+                            }
+                            else
+                            {
+                                amp = new Mob(this.getAgentData().GetAgent(c.getDstAgent()));
+                                
+                            
+                            }
+                            mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(),amp, mech.GetPlotly()));
+                        }
+                    }
+                }
+            }
+            //Removed Boon on Enemy
+             enamyBoonMechs = mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoonStrip).ToList();
+            if (enamyBoonMechs.Count > 0)
+            {
+              
+                List<CombatItem> enamyBuffs = combat_data.getCombatList().Where(x => x.isBuff() == 1 && x.isBuffremove() == ParseEnum.BuffRemove.Manual).ToList();
+                foreach (Mechanic mech in enamyBoonMechs)
+                {
+                    List<CombatItem> enemyMechBuffs = enamyBuffs.Where(x => x.getSkillID() == mech.GetSkill()).ToList();
+                    if (enemyMechBuffs.Count > 0)
+                    {
+                        foreach (CombatItem c in enemyMechBuffs)
+                        {
+                            AbstractMasterPlayer amp = null;
+                            if (c.getDstAgent() == boss_data.getAgent())
+                            {
+                                amp = getBoss();
+                            }
+                            else
+                            {
+                                amp = new Mob(this.getAgentData().GetAgent(c.getDstAgent()));
+
+
+                            }
+                            mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), amp, mech.GetPlotly()));
                         }
                     }
                 }

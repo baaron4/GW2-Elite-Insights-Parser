@@ -107,6 +107,7 @@
     <Compile Include="Models\ParseModels\Players\Minion.cs" />
     <Compile Include="Models\ParseModels\Players\Minions.cs" />
     <Compile Include="Models\ParseModels\PhaseData.cs" />
+    <Compile Include="Models\ParseModels\Players\Mob.cs" />
     <Compile Include="Models\ParseModels\Point3D.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Players\Boss.cs" />
