@@ -119,6 +119,10 @@ namespace LuckParser.Controllers
 
             //Defensive Stats
             CreateDefTable(sw, 0);
+
+            //Support Stats
+            CreateSupTable(sw, 0);
+
         }
         private void CreateDPSTable(StreamWriter sw, int phase_index)
         {
@@ -168,7 +172,7 @@ namespace LuckParser.Controllers
                 Statistics.FinalDPS dps = statistics.dps[player][phase_index];
 
                 WriteLine(new string[] { player.getGroup().ToString(), player.getProf().ToString(), player.getCharacter().ToString(),
-                Math.Round((Double)(stats.criticalRateBoss) / stats.powerLoopCountBoss * 100,1).ToString(), stats.criticalRateBoss.ToString(),stats.criticalDmgBoss.ToString(),
+                Math.Round((Double)(stats.criticalRateBoss) / stats.critablePowerLoopCountBoss * 100,1).ToString(), stats.criticalRateBoss.ToString(),stats.criticalDmgBoss.ToString(),
                 Math.Round((Double)(stats.scholarRateBoss) / stats.powerLoopCountBoss * 100,1).ToString(),stats.scholarRateBoss.ToString(),stats.scholarDmgBoss.ToString(),Math.Round(100.0 * (dps.bossPowerDamage / (Double)(dps.bossPowerDamage - stats.scholarDmgBoss) - 1.0), 3).ToString(),
                 Math.Round(stats.movingRateBoss / (Double)stats.powerLoopCountBoss * 100,1).ToString(),stats.movingRateBoss.ToString(),
                 Math.Round(stats.flankingRateBoss / (Double)stats.powerLoopCountBoss * 100,1).ToString(),stats.flankingRateBoss.ToString(),
@@ -204,7 +208,7 @@ namespace LuckParser.Controllers
                 Statistics.FinalDPS dps = statistics.dps[player][phase_index];
 
                 WriteLine(new string[] { player.getGroup().ToString(), player.getProf().ToString(), player.getCharacter().ToString(),
-                Math.Round((Double)(stats.criticalRate) / stats.powerLoopCount * 100,1).ToString(), stats.criticalRate.ToString(),stats.criticalDmg.ToString(),
+                Math.Round((Double)(stats.criticalRate) / stats.critablePowerLoopCount * 100,1).ToString(), stats.criticalRate.ToString(),stats.criticalDmg.ToString(),
                 Math.Round((Double)(stats.scholarRate) / stats.powerLoopCount * 100,1).ToString(),stats.scholarRate.ToString(),stats.scholarDmg.ToString(),Math.Round(100.0 * (dps.allPowerDamage / (Double)(dps.allPowerDamage - stats.scholarDmg) - 1.0), 3).ToString(),
                 Math.Round(stats.movingRate / (Double)stats.powerLoopCount * 100,1).ToString(),stats.movingRate.ToString(),
                 Math.Round(stats.flankingRate / (Double)stats.powerLoopCount * 100,1).ToString(),stats.flankingRate.ToString(),
@@ -234,6 +238,27 @@ namespace LuckParser.Controllers
 
                 WriteLine(new string[] { player.getGroup().ToString(), player.getProf().ToString(), player.getCharacter().ToString(),
                 defenses.damageTaken.ToString(),defenses.damageBarrier.ToString(),defenses.blockedCount.ToString(),defenses.invulnedCount.ToString(),defenses.evadedCount.ToString(),stats.dodgeCount.ToString() });
+                count++;
+            }
+            while (count < 15)//so each graph has equal spaceing
+            {
+                NewLine();
+                count++;
+            }
+        }
+        private void CreateSupTable(StreamWriter sw, int phase_index)
+        {
+            //generate supstats table
+            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            WriteLine(new string[] { "Sub Group", "Profession", "Name" ,
+                "Condi Cleanse","Condi Cleanse time","Resurrects","Time Resurecting" });
+            int count = 0;
+            foreach (Player player in log.getPlayerList())
+            {
+                Statistics.FinalSupport support = statistics.support[player][phase_index];
+
+                WriteLine(new string[] { player.getGroup().ToString(), player.getProf().ToString(), player.getCharacter().ToString(),
+                support.condiCleanse.ToString(),support.condiCleanseTime.ToString(),support.resurrects.ToString(),support.ressurrectTime.ToString() });
                 count++;
             }
             while (count < 15)//so each graph has equal spaceing

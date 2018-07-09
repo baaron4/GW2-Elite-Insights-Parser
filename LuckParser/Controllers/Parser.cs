@@ -420,7 +420,7 @@ namespace LuckParser.Controllers
                     boss_data.setLastAware(NPC.getLastAware());
                 }
             }
-            if (boss_data.getAwareDuration() == long.MaxValue || boss_data.getAwareDuration() == 0)
+            if (boss_data.getAwareDuration() == long.MaxValue || boss_data.getAwareDuration() == 0 || golem_mode)
             {
                 boss_data.setLastAware(combat_data.getCombatList().Find(x => x.isStateChange() == ParseEnum.StateChange.LogEnd).getTime());
                 boss_data.setFirstAware(combat_data.getCombatList().Find(x => x.isStateChange() == ParseEnum.StateChange.LogStart).getTime());
@@ -577,6 +577,11 @@ namespace LuckParser.Controllers
                     log_data.setBossKill(true);
                     boss_data.setLastAware(c.getTime());
                 }
+            }
+
+            if (golem_mode && bossHealthOverTime.Count > 0)
+            {
+                log_data.setBossKill(bossHealthOverTime.Last().Y < 200);
             }
 
             //players
