@@ -47,6 +47,7 @@ namespace LuckParser.Models.DataModels
         {
             // Rates
             public int powerLoopCount;
+            public int critablePowerLoopCount;
             public int criticalRate;
             public int criticalDmg;
             public int scholarRate;
@@ -65,6 +66,7 @@ namespace LuckParser.Models.DataModels
 
             //Boss only Rates
             public int powerLoopCountBoss;
+            public int critablePowerLoopCountBoss;
             public int criticalRateBoss;
             public int criticalDmgBoss;
             public int scholarRateBoss;
