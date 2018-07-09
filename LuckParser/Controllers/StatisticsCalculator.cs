@@ -192,6 +192,7 @@ namespace LuckParser.Controllers
                     int instid = player.getInstid();
 
                     final.powerLoopCount = 0;
+                    final.critablePowerLoopCount = 0;
                     final.criticalRate = 0;
                     final.criticalDmg = 0;
                     final.scholarRate = 0;
@@ -208,6 +209,7 @@ namespace LuckParser.Controllers
                     final.timeSaved = 0;
 
                     final.powerLoopCountBoss = 0;
+                    final.critablePowerLoopCountBoss = 0;
                     final.criticalRateBoss = 0;
                     final.criticalDmgBoss = 0;
                     final.scholarRateBoss = 0;
@@ -218,6 +220,12 @@ namespace LuckParser.Controllers
                     final.missedBoss = 0;
                     final.interuptsBoss = 0;
                     final.invulnedBoss = 0;
+
+                    // Add non critable sigil/rune procs here
+                    HashSet<int> nonCritable = new HashSet<int>
+                    {
+                        9292
+                    };
 
                     foreach (DamageLog log in damageLogs)
                     {
@@ -258,6 +266,10 @@ namespace LuckParser.Controllers
                                 final.invulned++;
                             }
                             final.powerLoopCount++;
+                            if (!nonCritable.Contains(log.getID()))
+                            {
+                                final.critablePowerLoopCount++;
+                            }
                         }
                     }
                     foreach (DamageLog log in damageLogsBoss)
@@ -299,6 +311,10 @@ namespace LuckParser.Controllers
                                 final.invulnedBoss++;
                             }
                             final.powerLoopCountBoss++;
+                            if (!nonCritable.Contains(log.getID()))
+                            {
+                                final.critablePowerLoopCountBoss++;
+                            }
                         }
                     }
                     foreach (CastLog cl in castLogs)

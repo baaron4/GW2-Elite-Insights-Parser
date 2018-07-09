@@ -844,9 +844,9 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                + stats.criticalRate + " out of " + stats.powerLoopCount 
-                                + " hits<br> Total Damage Effected by Crits: " + stats.criticalDmg 
-                                + " \">" + Math.Round((Double)(stats.criticalRate) / stats.powerLoopCount * 100,1) 
+                                + stats.criticalRate + " out of " + stats.critablePowerLoopCount
+                                + " critable hits<br> Total Damage Effected by Crits: " + stats.criticalDmg 
+                                + " \">" + Math.Round((Double)(stats.criticalRate) / stats.critablePowerLoopCount * 100,1) 
                                 + "%</span>" + "</td>");//crit
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.scholarRate+ " out of " + stats.powerLoopCount + " hits <br> Pure Scholar Damage: " 
@@ -854,13 +854,13 @@ namespace LuckParser.Controllers
                                 + Math.Round(100.0 * (dps.allPowerDamage / (Double)(dps.allPowerDamage - stats.scholarDmg) - 1.0) , 3) 
                                 + "% \">" + Math.Round((Double)(stats.scholarRate) / stats.powerLoopCount * 100,1) + "%</span>" + "</td>");//scholar
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                + stats.movingRate + " out of " + stats.powerLoopCount + "hits \">" 
+                                + stats.movingRate + " out of " + stats.powerLoopCount + " hits \">" 
                                 + Math.Round(stats.movingRate / (Double)stats.powerLoopCount * 100,1) + "%</span>" + "</td>");//sws
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
-                                + stats.flankingRate + " out of " + stats.powerLoopCount + "hits \">" 
+                                + stats.flankingRate + " out of " + stats.powerLoopCount + " hits \">" 
                                 + Math.Round(stats.flankingRate / (Double)stats.powerLoopCount * 100,1) + "%</span>" + "</td>");//flank
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                + stats.glanceRate + " out of " + stats.powerLoopCount + "hits \">" 
+                                + stats.glanceRate + " out of " + stats.powerLoopCount + " hits \">" 
                                 + Math.Round(stats.glanceRate / (Double)stats.powerLoopCount * 100,1) + "%</span>" + "</td>");//glance
                             sw.Write("<td>" + stats.missed + "</td>");//misses
                             sw.Write("<td>" + stats.interupts + "</td>");//interupts
@@ -967,9 +967,9 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
 
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                + stats.criticalRateBoss + " out of " + stats.powerLoopCountBoss 
-                                + "hits<br> Total Damage Effected by Crits: " + stats.criticalDmgBoss 
-                                + " \">" + Math.Round((Double)(stats.criticalRateBoss) / stats.powerLoopCountBoss * 100,1) 
+                                + stats.criticalRateBoss + " out of " + stats.critablePowerLoopCountBoss 
+                                + " critable hits<br> Total Damage Effected by Crits: " + stats.criticalDmgBoss 
+                                + " \">" + Math.Round((Double)(stats.criticalRateBoss) / stats.critablePowerLoopCountBoss * 100,1) 
                                 + "%</span>" + "</td>");//crit
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.scholarRateBoss + " out of " + stats.powerLoopCountBoss + " hits <br> Pure Scholar Damage: " 
@@ -977,13 +977,13 @@ namespace LuckParser.Controllers
                                 + Math.Round(100.0* (dps.bossPowerDamage / (Double)(dps.bossPowerDamage - stats.scholarDmgBoss) - 1.0), 3) 
                                 + "% \">" + Math.Round((Double)(stats.scholarRateBoss) / stats.powerLoopCountBoss * 100,1) + "%</span>" + "</td>");//scholar
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                + stats.movingRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" 
+                                + stats.movingRateBoss + " out of " + stats.powerLoopCountBoss + " hits \">" 
                                 + Math.Round(stats.movingRateBoss / (Double)stats.powerLoopCountBoss * 100,1) + "%</span>" + "</td>");//sws
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                + stats.flankingRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" 
+                                + stats.flankingRateBoss + " out of " + stats.powerLoopCountBoss + " hits \">" 
                                 + Math.Round(stats.flankingRateBoss / (Double)stats.powerLoopCountBoss * 100,1) + "%</span>" + "</td>");//flank
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                + stats.glanceRateBoss + " out of " + stats.powerLoopCountBoss + "hits \">" 
+                                + stats.glanceRateBoss + " out of " + stats.powerLoopCountBoss + " hits \">" 
                                 + Math.Round(stats.glanceRateBoss / (Double)stats.powerLoopCountBoss * 100,1) + "%</span>" + "</td>");//glance
                             sw.Write("<td>" + stats.missedBoss + "</td>");//misses
                             sw.Write("<td>" + stats.interuptsBoss + "</td>");//interupts
@@ -2402,18 +2402,21 @@ namespace LuckParser.Controllers
                     int countsaved = 0;
                     foreach (CastLog cl in clList)
                     {
-                        if (cl.getExpDur() < cl.getActDur())
-                        {
-                            countsaved++;
-                            timessaved += ((double)(cl.getExpDur() - cl.getActDur()) / 1000f);
-                        }
-                        else if (cl.getExpDur() > cl.getActDur())
+                        if (cl.endActivation() == ParseEnum.Activation.CancelCancel)
                         {
                             countwasted++;
-                            timeswasted += ((double)(cl.getActDur()) / 1000f);
+                            timeswasted += cl.getActDur();
+                        }
+                        if (cl.endActivation() == ParseEnum.Activation.CancelFire)
+                        {
+                            countsaved++;
+                            if (cl.getActDur() < cl.getExpDur())
+                            {
+                                timessaved += cl.getExpDur() - cl.getActDur();
+                            }
                         }
                     }
-                    HTMLHelper.writeDamageDistTableSkill(sw, skill, list_to_use, finalTotalDamage, casts, timeswasted, timessaved);
+                    HTMLHelper.writeDamageDistTableSkill(sw, skill, list_to_use, finalTotalDamage, casts, timeswasted/1000.0, -timessaved/1000.0);
                 }
             }
             // non damaging stuff
@@ -2432,18 +2435,21 @@ namespace LuckParser.Controllers
                         int countsaved = 0;
                         foreach (CastLog cl in clList)
                         {
-                            if (cl.getExpDur() < cl.getActDur())
-                            {
-                                countsaved++;
-                                timessaved += ((double)(cl.getExpDur() - cl.getActDur()) / 1000f);
-                            }
-                            else if (cl.getExpDur() > cl.getActDur())
+                            if (cl.endActivation() == ParseEnum.Activation.CancelCancel)
                             {
                                 countwasted++;
-                                timeswasted += ((double)(cl.getActDur()) / 1000f);
+                                timeswasted += cl.getActDur();
+                            }
+                            if (cl.endActivation() == ParseEnum.Activation.CancelFire)
+                            {
+                                countsaved++;
+                                if (cl.getActDur() < cl.getExpDur())
+                                {
+                                    timessaved += cl.getExpDur() - cl.getActDur();
+                                }
                             }
                         }
-                        HTMLHelper.writeDamageDistTableSkill(sw, skill, new List<DamageLog>(), finalTotalDamage, casts, timeswasted, timessaved);
+                        HTMLHelper.writeDamageDistTableSkill(sw, skill, new List<DamageLog>(), finalTotalDamage, casts, timeswasted/1000.0, -timessaved/1000.0);
                     }
                 }
             }
@@ -3554,10 +3560,10 @@ namespace LuckParser.Controllers
         {
             double fight_duration = (log.getBossData().getAwareDuration()) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
-            string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
-            if (duration.ToString("hh") != "00")
+            string durationString = duration.Minutes + "m " + duration.Seconds + "s " + duration.Milliseconds + "ms";
+            if (duration.Hours > 0)
             {
-                durationString = duration.ToString("hh") + "h " + durationString;
+                durationString = duration.Hours + "h " + durationString;
             }
             string bossname = FilterStringChars(log.getBossData().getName());
             List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
@@ -3657,7 +3663,7 @@ namespace LuckParser.Controllers
                                                     {
                                                         sw.Write("<p class='text text-warning'> Result: Fail</p>");
                                                     }
-                                                    sw.Write("<p>Duration " + durationString + " </p> ");
+                                                    sw.Write("<p>Duration: " + durationString + " </p> ");
                                                 }
                                                 sw.Write("</div>");
                                             }
