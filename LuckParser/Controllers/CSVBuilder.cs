@@ -105,7 +105,7 @@ namespace LuckParser.Controllers
             WriteLine(new string[] { "Total Boss Health", log.getBossData().getHealth().ToString() });
             int finalBossHealth = log.getBossData().getHealthOverTime()[log.getBossData().getHealthOverTime().Count - 1].Y;
             WriteLine(new string[] { "Final Boss Health",finalBossHealth.ToString() });
-            WriteLine(new string[] { "Final Boss Health %", (100.0 -finalBossHealth * 0.01).ToString() });
+            WriteLine(new string[] { "Boss Health Burned %", (100.0 -finalBossHealth * 0.01).ToString() });
             WriteLine(new string[] { "Duration", durationString });
 
             //DPSStats
@@ -122,6 +122,53 @@ namespace LuckParser.Controllers
 
             //Support Stats
             CreateSupTable(sw, 0);
+
+            // Html_boons
+            CreateUptimeTable(sw, statistics.present_boons, 0);
+
+            //Html_boonGenSelf
+            CreateGenSelfTable(sw, statistics.present_boons,  0);
+
+            // Html_boonGenGroup
+            CreateGenGroupTable(sw, statistics.present_boons,  0);
+
+            // Html_boonGenOGroup
+            CreateGenOGroupTable(sw, statistics.present_boons, 0);
+
+            //  Html_boonGenSquad
+            CreateGenSquadTable(sw, statistics.present_boons,  0);
+
+            //Offensive Buffs stats
+            // Html_boons
+            CreateUptimeTable(sw, statistics.present_offbuffs, 0);
+
+            //Html_boonGenSelf
+            CreateGenSelfTable(sw, statistics.present_offbuffs, 0);
+
+            // Html_boonGenGroup
+            CreateGenGroupTable(sw, statistics.present_offbuffs, 0);
+
+            // Html_boonGenOGroup
+            CreateGenOGroupTable(sw, statistics.present_offbuffs, 0);
+
+            //  Html_boonGenSquad
+            CreateGenSquadTable(sw, statistics.present_offbuffs, 0);
+
+            //Defensive Buffs stats
+            // Html_boons
+            CreateUptimeTable(sw, statistics.present_defbuffs, 0);
+
+            //Html_boonGenSelf
+            CreateGenSelfTable(sw, statistics.present_defbuffs, 0);
+
+            // Html_boonGenGroup
+            CreateGenGroupTable(sw, statistics.present_defbuffs, 0);
+
+            // Html_boonGenOGroup
+            CreateGenOGroupTable(sw, statistics.present_defbuffs, 0);
+
+            //  Html_boonGenSquad
+            CreateGenSquadTable(sw, statistics.present_defbuffs, 0);
 
         }
         private void CreateDPSTable(StreamWriter sw, int phase_index)
@@ -259,6 +306,256 @@ namespace LuckParser.Controllers
 
                 WriteLine(new string[] { player.getGroup().ToString(), player.getProf().ToString(), player.getCharacter().ToString(),
                 support.condiCleanse.ToString(),support.condiCleanseTime.ToString(),support.resurrects.ToString(),support.ressurrectTime.ToString() });
+                count++;
+            }
+            while (count < 15)//so each graph has equal spaceing
+            {
+                NewLine();
+                count++;
+            }
+        }
+        private void CreateUptimeTable(StreamWriter sw, List<Boon> list_to_use, int phase_index)
+        {
+            //generate Uptime Table table
+            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            HashSet<int> intensityBoon = new HashSet<int>();
+
+            WriteCell( "Name" );
+            foreach (Boon boon in list_to_use)
+            {
+                WriteCell(boon.getName());
+            }
+            NewLine();
+
+            int count = 0;
+            foreach (Player player in log.getPlayerList())
+            {
+                Dictionary<int, Statistics.FinalBoonUptime> boons = statistics.selfBoons[player][phase_index];
+               
+
+                WriteCell(player.getCharacter());
+                foreach (Boon boon in list_to_use)
+                {
+                    if (boon.getType() == Boon.BoonType.Intensity)
+                    {
+                        intensityBoon.Add(count);
+                    }
+                    if (boons.ContainsKey(boon.getID()))
+                    {
+                        string toWrite = boons[boon.getID()].uptime + (intensityBoon.Contains(count) ? "" : "%");
+                        WriteCell( toWrite );
+                       
+                    }
+                    else
+                    {
+                        WriteCell("0");
+                    
+                    }
+                }
+                NewLine();
+                count++;
+            }
+            while (count < 15)//so each graph has equal spaceing
+            {
+                NewLine();
+                count++;
+            }
+        }
+        private void CreateGenSelfTable(StreamWriter sw, List<Boon> list_to_use, int phase_index)
+        {
+            //generate Uptime Table table
+            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            HashSet<int> intensityBoon = new HashSet<int>();
+
+            WriteCell("Name");
+            foreach (Boon boon in list_to_use)
+            {
+                WriteCell(boon.getName());
+            }
+            NewLine();
+
+            int count = 0;
+            foreach (Player player in log.getPlayerList())
+            {
+                Dictionary<int, Statistics.FinalBoonUptime> uptimes = statistics.selfBoons[player][phase_index];
+
+                Dictionary<int, string> rates = new Dictionary<int, string>();
+
+
+                WriteCell(player.getCharacter());
+                foreach (Boon boon in list_to_use)
+                {
+                    string rate = "0";
+                    Statistics.FinalBoonUptime uptime = uptimes[boon.getID()];
+                    if (uptime.generation > 0)
+                    {
+                        if (boon.getType() == Boon.BoonType.Duration)
+                        {
+                            rate = uptime.generation.ToString() + "%";
+                               
+                        }
+                        else if (boon.getType() == Boon.BoonType.Intensity)
+                        {
+                            rate = uptime.generation.ToString() ;
+                        }
+
+                    }
+                    WriteCell(rate);
+                }
+                NewLine();
+                count++;
+            }
+            while (count < 15)//so each graph has equal spaceing
+            {
+                NewLine();
+                count++;
+            }
+        }
+        private void CreateGenGroupTable(StreamWriter sw, List<Boon> list_to_use, int phase_index)
+        {
+            //generate Uptime Table table
+            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            HashSet<int> intensityBoon = new HashSet<int>();
+
+            WriteCell("Name");
+            foreach (Boon boon in list_to_use)
+            {
+                WriteCell(boon.getName());
+            }
+            NewLine();
+
+            int count = 0;
+            foreach (Player player in log.getPlayerList())
+            {
+                Dictionary<int, Statistics.FinalBoonUptime> boons =
+                            statistics.groupBoons[player][phase_index];
+
+                Dictionary<int, string> rates = new Dictionary<int, string>();
+
+
+                WriteCell(player.getCharacter());
+                foreach (Boon boon in list_to_use)
+                {
+                    string rate = "0";
+                    Statistics.FinalBoonUptime uptime = boons[boon.getID()];
+                    if (uptime.generation > 0)
+                    {
+                        if (boon.getType() == Boon.BoonType.Duration)
+                        {
+                            rate = uptime.generation.ToString() + "%";
+
+                        }
+                        else if (boon.getType() == Boon.BoonType.Intensity)
+                        {
+                            rate = uptime.generation.ToString();
+                        }
+
+                    }
+                    WriteCell(rate);
+                }
+                NewLine();
+                count++;
+            }
+            while (count < 15)//so each graph has equal spaceing
+            {
+                NewLine();
+                count++;
+            }
+        }
+        private void CreateGenOGroupTable(StreamWriter sw, List<Boon> list_to_use, int phase_index)
+        {
+            //generate Uptime Table table
+            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            HashSet<int> intensityBoon = new HashSet<int>();
+
+            WriteCell("Name");
+            foreach (Boon boon in list_to_use)
+            {
+                WriteCell(boon.getName());
+            }
+            NewLine();
+
+            int count = 0;
+            foreach (Player player in log.getPlayerList())
+            {
+                Dictionary<int, Statistics.FinalBoonUptime> boons =
+                              statistics.offGroupBoons[player][phase_index];
+
+                Dictionary<int, string> rates = new Dictionary<int, string>();
+
+
+                WriteCell(player.getCharacter());
+                foreach (Boon boon in list_to_use)
+                {
+                    string rate = "0";
+                    Statistics.FinalBoonUptime uptime = boons[boon.getID()];
+                    if (uptime.generation > 0)
+                    {
+                        if (boon.getType() == Boon.BoonType.Duration)
+                        {
+                            rate = uptime.generation.ToString() + "%";
+
+                        }
+                        else if (boon.getType() == Boon.BoonType.Intensity)
+                        {
+                            rate = uptime.generation.ToString();
+                        }
+
+                    }
+                    WriteCell(rate);
+                }
+                NewLine();
+                count++;
+            }
+            while (count < 15)//so each graph has equal spaceing
+            {
+                NewLine();
+                count++;
+            }
+        }
+        private void CreateGenSquadTable(StreamWriter sw, List<Boon> list_to_use, int phase_index)
+        {
+            //generate Uptime Table table
+            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            HashSet<int> intensityBoon = new HashSet<int>();
+
+            WriteCell("Name");
+            foreach (Boon boon in list_to_use)
+            {
+                WriteCell(boon.getName());
+            }
+            NewLine();
+
+            int count = 0;
+            foreach (Player player in log.getPlayerList())
+            {
+                Dictionary<int, Statistics.FinalBoonUptime> boons =
+                            statistics.squadBoons[player][phase_index];
+
+                Dictionary<int, string> rates = new Dictionary<int, string>();
+
+
+                WriteCell(player.getCharacter());
+                foreach (Boon boon in list_to_use)
+                {
+                    string rate = "0";
+                    Statistics.FinalBoonUptime uptime = boons[boon.getID()];
+                    if (uptime.generation > 0)
+                    {
+                        if (boon.getType() == Boon.BoonType.Duration)
+                        {
+                            rate = uptime.generation.ToString() + "%";
+
+                        }
+                        else if (boon.getType() == Boon.BoonType.Intensity)
+                        {
+                            rate = uptime.generation.ToString();
+                        }
+
+                    }
+                    WriteCell(rate);
+                }
+                NewLine();
                 count++;
             }
             while (count < 15)//so each graph has equal spaceing
