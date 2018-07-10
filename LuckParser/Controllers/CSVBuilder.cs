@@ -330,7 +330,7 @@ namespace LuckParser.Controllers
             int count = 0;
             foreach (Player player in log.getPlayerList())
             {
-                Dictionary<int, Statistics.FinalBoonUptime> boons = statistics.selfBoons[player][phase_index];
+                Dictionary<long, Statistics.FinalBoonUptime> boons = statistics.selfBoons[player][phase_index];
                
 
                 WriteCell(player.getCharacter());
@@ -377,7 +377,7 @@ namespace LuckParser.Controllers
             int count = 0;
             foreach (Player player in log.getPlayerList())
             {
-                Dictionary<int, Statistics.FinalBoonUptime> uptimes = statistics.selfBoons[player][phase_index];
+                Dictionary<long, Statistics.FinalBoonUptime> uptimes = statistics.selfBoons[player][phase_index];
 
                 Dictionary<int, string> rates = new Dictionary<int, string>();
 
@@ -427,7 +427,7 @@ namespace LuckParser.Controllers
             int count = 0;
             foreach (Player player in log.getPlayerList())
             {
-                Dictionary<int, Statistics.FinalBoonUptime> boons =
+                Dictionary<long, Statistics.FinalBoonUptime> boons =
                             statistics.groupBoons[player][phase_index];
 
                 Dictionary<int, string> rates = new Dictionary<int, string>();
@@ -478,7 +478,7 @@ namespace LuckParser.Controllers
             int count = 0;
             foreach (Player player in log.getPlayerList())
             {
-                Dictionary<int, Statistics.FinalBoonUptime> boons =
+                Dictionary<long, Statistics.FinalBoonUptime> boons =
                               statistics.offGroupBoons[player][phase_index];
 
                 Dictionary<int, string> rates = new Dictionary<int, string>();
@@ -529,7 +529,7 @@ namespace LuckParser.Controllers
             int count = 0;
             foreach (Player player in log.getPlayerList())
             {
-                Dictionary<int, Statistics.FinalBoonUptime> boons =
+                Dictionary<long, Statistics.FinalBoonUptime> boons =
                             statistics.squadBoons[player][phase_index];
 
                 Dictionary<int, string> rates = new Dictionary<int, string>();
