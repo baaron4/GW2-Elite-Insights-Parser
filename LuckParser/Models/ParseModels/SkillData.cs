@@ -7,7 +7,7 @@ namespace LuckParser.Models.ParseModels
     {
         // Fields
         private List<SkillItem> skill_list;
-        private Dictionary<int, string> apiMissingID = new Dictionary<int, string>()
+        private Dictionary<long, string> apiMissingID = new Dictionary<long, string>()
         {
             {1066, "Resurrect"},
             {1175, "Bandage" },
@@ -44,7 +44,7 @@ namespace LuckParser.Models.ParseModels
             skill_list.Add(item);
         }
 
-        public String getName(int ID)
+        public String getName(long ID)
         {
 
             // Custom

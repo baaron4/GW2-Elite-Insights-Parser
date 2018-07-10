@@ -1329,7 +1329,7 @@ namespace LuckParser.Controllers
                     foreach (Player player in log.getPlayerList())
                     {
 
-                        Dictionary<int, Statistics.FinalBoonUptime> boons = statistics.selfBoons[player][phase_index];
+                        Dictionary<long, Statistics.FinalBoonUptime> boons = statistics.selfBoons[player][phase_index];
                         List<string> boonArrayToList = new List<string>();
                         boonArrayToList.Add(player.getGroup().ToString());
                         int count = 0;
@@ -1346,7 +1346,7 @@ namespace LuckParser.Controllers
                                 boon_to_track.AddRange(statistics.present_defbuffs);
                                 boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
                                 long fight_duration = phases[phase_index].getDuration();
-                                Dictionary<int, long> boonPresence = player.getBoonPresence(log, phases, boon_to_track, phase_index);
+                                Dictionary<long, long> boonPresence = player.getBoonPresence(log, phases, boon_to_track, phase_index);
                                 double avg_boons = 0.0;
                                 foreach (Boon boon in list_to_use)
                                 {
@@ -1479,9 +1479,9 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in log.getPlayerList())
                     {
-                        Dictionary<int, Statistics.FinalBoonUptime> uptimes = statistics.selfBoons[player][phase_index];
+                        Dictionary<long, Statistics.FinalBoonUptime> uptimes = statistics.selfBoons[player][phase_index];
 
-                        Dictionary<int, string> rates = new Dictionary<int, string>();
+                        Dictionary<long, string> rates = new Dictionary<long, string>();
                         foreach (Boon boon in list_to_use)
                         {
                             string rate = "0";
@@ -1559,10 +1559,10 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in log.getPlayerList())
                     {
-                        Dictionary<int, Statistics.FinalBoonUptime> boons =
+                        Dictionary<long, Statistics.FinalBoonUptime> boons =
                             statistics.groupBoons[player][phase_index];
 
-                        Dictionary<int, string> rates = new Dictionary<int, string>();
+                        Dictionary<long, string> rates = new Dictionary<long, string>();
                         foreach (Boon boon in list_to_use)
                         {
                             string rate = "0";
@@ -1638,10 +1638,10 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in log.getPlayerList())
                     {
-                        Dictionary<int, Statistics.FinalBoonUptime> boons =
+                        Dictionary<long, Statistics.FinalBoonUptime> boons =
                             statistics.offGroupBoons[player][phase_index];
 
-                        Dictionary<int, string> rates = new Dictionary<int, string>();
+                        Dictionary<long, string> rates = new Dictionary<long, string>();
                         foreach (Boon boon in list_to_use)
                         {
                             string rate = "0";
@@ -1718,10 +1718,10 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in log.getPlayerList())
                     {
-                        Dictionary<int, Statistics.FinalBoonUptime> boons =
+                        Dictionary<long, Statistics.FinalBoonUptime> boons =
                             statistics.squadBoons[player][phase_index];
 
-                        Dictionary<int, string> rates = new Dictionary<int, string>();
+                        Dictionary<long, string> rates = new Dictionary<long, string>();
                         foreach (Boon boon in list_to_use)
                         {
                             string rate = "0";
@@ -1806,14 +1806,14 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
                         {
-                            List<int[]> consume = p.getConsumablesList(log, phase.getStart(), phase.getEnd());
-                            List<int[]> initial = consume.Where(x => x[1] == 0).ToList();
-                            List<int[]> refreshed = consume.Where(x => x[1] > 0).ToList();
+                            List<long[]> consume = p.getConsumablesList(log, phase.getStart(), phase.getEnd());
+                            List<long[]> initial = consume.Where(x => x[1] == 0).ToList();
+                            List<long[]> refreshed = consume.Where(x => x[1] > 0).ToList();
                             if (initial.Count > 0)
                             {
                                 Boon food = null;
                                 Boon utility = null;
-                                foreach (int[] buff in initial)
+                                foreach (long[] buff in initial)
                                 {
 
                                     Boon foodCheck = Boon.getFoodList().FirstOrDefault(x => x.getID() == buff[0]);
@@ -1844,7 +1844,7 @@ namespace LuckParser.Controllers
                             {
                                 Boon food = null;
                                 Boon utility = null;
-                                foreach (int[] buff in refreshed)
+                                foreach (long[] buff in refreshed)
                                 {
 
                                     Boon foodCheck = Boon.getFoodList().FirstOrDefault(x => x.getID() == buff[0]);
@@ -1895,7 +1895,7 @@ namespace LuckParser.Controllers
                                             {
                                                 parseBoonsList.AddRange(statistics.present_personnal[p.getInstid()]);
                                             }
-                                            Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
+                                            Dictionary<long, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
                                             foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
                                             {
                                                 sw.Write("{");
@@ -2384,7 +2384,7 @@ namespace LuckParser.Controllers
 
         private void CreateDMGDistTableBody(StreamWriter sw, bool toBoss, List<CastLog> casting, List<DamageLog> damageLogs, int finalTotalDamage)
         {
-            HashSet<int> usedIDs = new HashSet<int>();
+            HashSet<long> usedIDs = new HashSet<long>();
             List<SkillItem> s_list = log.getSkillData().getSkillList();
             HTMLHelper.writeDamageDistTableCondi(sw, usedIDs, damageLogs, finalTotalDamage);
             foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.getID())).Select(x => x.getID()).Distinct().ToList())
@@ -2745,11 +2745,11 @@ namespace LuckParser.Controllers
                 sw.Write("</thead>");
                 sw.Write("<tbody>");
                 {
-                    HashSet<int> usedIDs = new HashSet<int>();
+                    HashSet<long> usedIDs = new HashSet<long>();
                     List<Boon> condiList = Boon.getCondiBoonList();
                     foreach (Boon condi in condiList)
                     {
-                        int condiID = condi.getID();
+                        long condiID = condi.getID();
                         int totaldamage = 0;
                         int mindamage = 0;
                         int avgdamage = 0;
@@ -3223,7 +3223,7 @@ namespace LuckParser.Controllers
                     sw.Write("<tr>");
                     {
                         sw.Write("<td>" + boss.getCharacter().ToString() + "</td>");
-                        Dictionary<int, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
+                        Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
                         foreach (Boon boon in Boon.getCondiBoonList())
                         {
                             if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
@@ -3291,7 +3291,7 @@ namespace LuckParser.Controllers
                             parseBoonsList.AddRange(Boon.getCondiBoonList());
                             //Every buffs and boons
                             parseBoonsList.AddRange(Boon.getAllBuffList());
-                            Dictionary<int, BoonsGraphModel> boonGraphData = log.getBoss().getBoonGraphs(log, phases, parseBoonsList);
+                            Dictionary<long, BoonsGraphModel> boonGraphData = log.getBoss().getBoonGraphs(log, phases, parseBoonsList);
                             foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.getBoonName() != "Number of Boons"))
                             {
                                 sw.Write("{");
@@ -4246,7 +4246,7 @@ namespace LuckParser.Controllers
                             {
                                 parseBoonsList.AddRange(statistics.present_personnal[p.getInstid()]);
                             }
-                            Dictionary<int, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
+                            Dictionary<long, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
                             foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
                             {
                                 sw.Write("{");
