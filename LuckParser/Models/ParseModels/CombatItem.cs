@@ -12,11 +12,12 @@ namespace LuckParser.Models.ParseModels
         private ulong dst_agent;
         private int value;
         private int buff_dmg;
-        private ushort overstack_value;
-        private int skill_id;
+        private uint overstack_value;
+        private long skill_id;
         private ushort src_instid;
         private ushort dst_instid;
         private ushort src_master_instid;
+        private ushort dst_master_instid;
         private ParseEnum.IFF iff;
         private ushort is_buff;
         private ParseEnum.Result result;
@@ -29,8 +30,8 @@ namespace LuckParser.Models.ParseModels
         private ushort is_flanking;
         private ushort is_shields;
         // Constructor
-        public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, ushort overstack_value,
-                int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, ParseEnum.IFF iff, ushort buff, ParseEnum.Result result,
+        public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, uint overstack_value,
+                long skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, ushort dst_master_instid, ParseEnum.IFF iff, ushort is_buff, ParseEnum.Result result,
                 ParseEnum.Activation is_activation, ParseEnum.BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
                 ParseEnum.StateChange is_statechange, ushort is_flanking)
         {
@@ -44,19 +45,20 @@ namespace LuckParser.Models.ParseModels
             this.src_instid = src_instid;
             this.dst_instid = dst_instid;
             this.src_master_instid = src_master_instid;
+            this.dst_master_instid = dst_master_instid;
             this.iff = iff;
-            this.is_buff = buff;
+            this.is_buff = is_buff;
             this.result = result;
-           this.is_activation = is_activation;
-           this.is_buffremove = is_buffremove;
+            this.is_activation = is_activation;
+            this.is_buffremove = is_buffremove;
             this.is_ninety = is_ninety;
             this.is_fifty = is_fifty;
             this.is_moving = is_moving;
-           this.is_statechange = is_statechange;
+            this.is_statechange = is_statechange;
             this.is_flanking = is_flanking;
         }
-        public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, ushort overstack_value,
-               int skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, ParseEnum.IFF iff, ushort buff, ParseEnum.Result result,
+        public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, uint overstack_value,
+               long skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, ushort dst_master_instid, ParseEnum.IFF iff, ushort is_buff, ParseEnum.Result result,
                ParseEnum.Activation is_activation, ParseEnum.BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
                ParseEnum.StateChange is_statechange, ushort is_flanking, ushort is_shields)
         {
@@ -70,8 +72,9 @@ namespace LuckParser.Models.ParseModels
             this.src_instid = src_instid;
             this.dst_instid = dst_instid;
             this.src_master_instid = src_master_instid;
+            this.dst_master_instid = dst_master_instid;
             this.iff = iff;
-            this.is_buff = buff;
+            this.is_buff = is_buff;
             this.result = result;
             this.is_activation = is_activation;
             this.is_buffremove = is_buffremove;
@@ -109,19 +112,19 @@ namespace LuckParser.Models.ParseModels
             return buff_dmg;
         }
 
-        public ushort getOverstackValue()
+        public uint getOverstackValue()
         {
             return overstack_value;
         }
 
-        public int getSkillID()
+        public long getSkillID()
         {
             return skill_id;
         }
 
         public ushort getSrcInstid()
         {
-            return src_instid; 
+            return src_instid;
         }
 
         public ushort getDstInstid()
@@ -132,6 +135,11 @@ namespace LuckParser.Models.ParseModels
         public ushort getSrcMasterInstid()
         {
             return src_master_instid;
+        }
+
+        public ushort getDstMasterInstid()
+        {
+            return dst_master_instid;
         }
 
         public ParseEnum.IFF getIFF()
@@ -183,7 +191,8 @@ namespace LuckParser.Models.ParseModels
         {
             return is_statechange;
         }
-        public ushort isShields() {
+        public ushort isShields()
+        {
             return is_shields;
         }
         // Setters

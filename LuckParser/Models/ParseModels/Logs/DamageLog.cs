@@ -7,7 +7,7 @@ namespace LuckParser.Models.ParseModels
         // Fields
         private long time;
         protected int damage;
-        private int skill_id;
+        private long skill_id;
         private int buff;
         private ParseEnum.Result result;
         private ushort is_ninety;
@@ -45,7 +45,7 @@ namespace LuckParser.Models.ParseModels
             return damage;
         }
 
-        public int getID()
+        public long getID()
         {
             return skill_id;
         }

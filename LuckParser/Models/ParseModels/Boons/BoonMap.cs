@@ -2,7 +2,7 @@
 
 namespace LuckParser.Models.ParseModels
 {
-    public class BoonMap : Dictionary<int, List<BoonLog>>
+    public class BoonMap : Dictionary<long, List<BoonLog>>
     {
         // Constructors
         public BoonMap() : base()
