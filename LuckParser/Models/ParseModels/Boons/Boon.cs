@@ -289,6 +289,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Pinpoint Distribution", 38333, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable, "https://wiki.guildwars2.com/images/b/bf/Pinpoint_Distribution.png"),
                 new Boon("Heat Therapy",40694, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
                 new Boon("Overheat", 40397, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
+                new Boon("Thermal Vision", 51389, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
                 ///RANGER
                 new Boon("Celestial Avatar", 31508, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
                 new Boon("Counterattack",14509, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual),
