@@ -4,13 +4,13 @@
     {
         // Fields
         private long time;
-        private int skill_id;
+        private long skill_id;
         private string name;
         private int damage;
         private AbstractMasterPlayer player;
         private string plotlyShape;
 
-        public MechanicLog(long time, int skill_id,string name, int damage, AbstractMasterPlayer p,string plotlyShape) {
+        public MechanicLog(long time, long skill_id,string name, int damage, AbstractMasterPlayer p,string plotlyShape) {
             this.time = time;
             this.skill_id = skill_id;
             this.name = name;
@@ -22,7 +22,7 @@
         public long GetTime() {
             return time;
         }
-        public int GetSkill()
+        public long GetSkill()
         {
             return skill_id;
         }

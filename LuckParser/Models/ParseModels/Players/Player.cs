@@ -61,7 +61,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (c.isActivation() == ParseEnum.Activation.None)
                 {
-                    if (agent.getInstid() == c.getDstInstid() && c.getIFF() == ParseEnum.IFF.Friend && (c.isBuffremove() != ParseEnum.BuffRemove.None))
+                    if ((agent.getInstid() == c.getDstInstid() || agent.getInstid() == c.getDstMasterInstid()) && c.getIFF() == ParseEnum.IFF.Friend && (c.isBuffremove() != ParseEnum.BuffRemove.None))
                     {
                         long time = c.getTime() - time_start;
                         if (time > 0)
@@ -107,13 +107,13 @@ namespace LuckParser.Models.ParseModels
         {
             dcd = value;
         }
-        public List<int[]> getConsumablesList(ParsedLog log, long start, long end)
+        public List<long[]> getConsumablesList(ParsedLog log, long start, long end)
         {
             if (consumeList.Count == 0)
             {
                 setConsumablesList(log);
             }
-            return consumeList.Where(x => x.getTime() >= start && x.getTime() <= end).Select( x => new int[] { x.getSkillID(), (int)x.getTime() }).ToList() ;
+            return consumeList.Where(x => x.getTime() >= start && x.getTime() <= end).Select( x => new long[] { x.getSkillID(), x.getTime() }).ToList() ;
         }
         
         // Private Methods

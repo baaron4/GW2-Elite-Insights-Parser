@@ -229,7 +229,7 @@ namespace LuckParser.Controllers
 
         }
 
-        public static void writeBoonGenTableBody(StreamWriter sw, Player player, List<Boon> list_to_use, Dictionary<int, string> boonArray)
+        public static void writeBoonGenTableBody(StreamWriter sw, Player player, List<Boon> list_to_use, Dictionary<long, string> boonArray)
         {
             sw.Write("<tr>");
             {
@@ -303,7 +303,7 @@ namespace LuckParser.Controllers
             sw.Write("</tfoot>");
         }
 
-        public static void writeDamageDistTableCondi(StreamWriter sw, HashSet<int> usedIDs, List<DamageLog> damageLogs, int finalTotalDamage)
+        public static void writeDamageDistTableCondi(StreamWriter sw, HashSet<long> usedIDs, List<DamageLog> damageLogs, int finalTotalDamage)
         {
             foreach (Boon condi in Boon.getCondiBoonList())
             {
@@ -312,7 +312,7 @@ namespace LuckParser.Controllers
                 int avgdamage = 0;
                 int hits = 0;
                 int maxdamage = 0;
-                int condiID = condi.getID();
+                long condiID = condi.getID();
                 usedIDs.Add(condiID);
                 foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
                 {

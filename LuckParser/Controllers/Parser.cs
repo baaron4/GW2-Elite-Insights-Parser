@@ -26,6 +26,7 @@ namespace LuckParser.Controllers
         private MechanicData mech_data = new MechanicData();
         private List<Player> p_list = new List<Player>();
         private Boss boss;
+        private byte revision;
 
         // Public Methods
         public LogData getLogData()
@@ -90,7 +91,7 @@ namespace LuckParser.Controllers
                 parseSkillData(stream);
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "30% - Parsing combat list...", 30);
-                parseCombatList(stream);
+                parseCombatList(stream);                
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
                 fillMissingData();
@@ -137,7 +138,7 @@ namespace LuckParser.Controllers
                 this.log_data = new LogData(build_version);
 
                 // 1 byte: skip
-                ParseHelper.safeSkip(stream, 1);
+                this.revision = reader.ReadByte();
 
                 // 2 bytes: boss instance ID
                 ushort id = reader.ReadUInt16();
@@ -320,7 +321,83 @@ namespace LuckParser.Controllers
             //save
             // Add combat
             return new CombatItem(time, src_agent, dst_agent, value, buff_dmg, overstack_value, skill_id,
-                src_instid, dst_instid, src_master_instid, iff, buff, result, is_activation, is_buffremoved,
+                src_instid, dst_instid, src_master_instid,0, iff, buff, result, is_activation, is_buffremoved,
+                is_ninety, is_fifty, is_moving, is_statechange, is_flanking, is_shields);
+        }
+
+        private static CombatItem ReadCombatItemRev1(BinaryReader reader)
+        {
+            // 8 bytes: time
+            long time = reader.ReadInt64();
+
+            // 8 bytes: src_agent
+            ulong src_agent = reader.ReadUInt64();
+
+            // 8 bytes: dst_agent
+            ulong dst_agent = reader.ReadUInt64();
+
+            // 4 bytes: value
+            int value = reader.ReadInt32();
+
+            // 4 bytes: buff_dmg
+            int buff_dmg = reader.ReadInt32();
+
+            // 2 bytes: overstack_value
+            uint overstack_value = reader.ReadUInt32();
+
+            // 2 bytes: skill_id
+            uint skill_id = reader.ReadUInt32();
+
+            // 2 bytes: src_instid
+            ushort src_instid = reader.ReadUInt16();
+
+            // 2 bytes: dst_instid
+            ushort dst_instid = reader.ReadUInt16();
+
+            // 2 bytes: src_master_instid
+            ushort src_master_instid = reader.ReadUInt16();
+            // 2 bytes: dst_master_instid
+            ushort dst_master_instid = reader.ReadUInt16();
+
+            // 1 byte: iff
+            ParseEnum.IFF iff = ParseEnum.getIFF(reader.ReadByte());
+
+            // 1 byte: buff
+            ushort buff = (ushort)reader.ReadByte();
+
+            // 1 byte: result
+            ParseEnum.Result result = ParseEnum.getResult(reader.ReadByte());
+
+            // 1 byte: is_activation
+            ParseEnum.Activation is_activation = ParseEnum.getActivation(reader.ReadByte());
+
+            // 1 byte: is_buffremove
+            ParseEnum.BuffRemove is_buffremoved = ParseEnum.getBuffRemove(reader.ReadByte());
+
+            // 1 byte: is_ninety
+            ushort is_ninety = (ushort)reader.ReadByte();
+
+            // 1 byte: is_fifty
+            ushort is_fifty = (ushort)reader.ReadByte();
+
+            // 1 byte: is_moving
+            ushort is_moving = (ushort)reader.ReadByte();
+
+            // 1 byte: is_statechange
+            ParseEnum.StateChange is_statechange = ParseEnum.getStateChange(reader.ReadByte());
+
+            // 1 byte: is_flanking
+            ushort is_flanking = (ushort)reader.ReadByte();
+
+            // 1 byte: is_flanking
+            ushort is_shields = (ushort)reader.ReadByte();
+            // 5 bytes: offcycle (?) + garbage
+            ParseHelper.safeSkip(reader.BaseStream, 5);
+
+            //save
+            // Add combat
+            return new CombatItem(time, src_agent, dst_agent, value, buff_dmg, overstack_value, skill_id,
+                src_instid, dst_instid, src_master_instid, dst_master_instid, iff, buff, result, is_activation, is_buffremoved,
                 is_ninety, is_fifty, is_moving, is_statechange, is_flanking, is_shields);
         }
 
@@ -338,9 +415,7 @@ namespace LuckParser.Controllers
                 {
                     if(!TryRead(stream, data)) break;
                     ms.Seek(0, SeekOrigin.Begin);
-
-                    var combatItem = ReadCombatItem(reader);
-                    combat_data.addItem(combatItem);
+                    combat_data.addItem( revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader));
                 }
             }
         }
