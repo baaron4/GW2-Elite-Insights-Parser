@@ -12,8 +12,8 @@ namespace LuckParser.Models.ParseModels
     {
         // Boons
         private List<BoonDistribution> boon_distribution = new List<BoonDistribution>();
-        private List<Dictionary<int, long>> boon_presence = new List<Dictionary<int, long>>();
-        private Dictionary<int, BoonsGraphModel> boon_points = new Dictionary<int, BoonsGraphModel>();
+        private List<Dictionary<long, long>> boon_presence = new List<Dictionary<long, long>>();
+        private Dictionary<long, BoonsGraphModel> boon_points = new Dictionary<long, BoonsGraphModel>();
         // dps graphs
         private Dictionary<int, List<Point>> dps_graph = new Dictionary<int, List<Point>>();
         // Minions
@@ -54,7 +54,7 @@ namespace LuckParser.Models.ParseModels
             }
             return boon_distribution[phase_index];
         }
-        public Dictionary<int, BoonsGraphModel> getBoonGraphs(ParsedLog log, List<PhaseData> phases, List<Boon> to_track)
+        public Dictionary<long, BoonsGraphModel> getBoonGraphs(ParsedLog log, List<PhaseData> phases, List<Boon> to_track)
         {
             if (boon_distribution.Count == 0)
             {
@@ -62,7 +62,7 @@ namespace LuckParser.Models.ParseModels
             }
             return boon_points;
         }
-        public Dictionary<int, long> getBoonPresence(ParsedLog log, List<PhaseData> phases, List<Boon> to_track, int phase_index)
+        public Dictionary<long, long> getBoonPresence(ParsedLog log, List<PhaseData> phases, List<Boon> to_track, int phase_index)
         {
             if (boon_distribution.Count == 0)
             {
@@ -231,7 +231,7 @@ namespace LuckParser.Models.ParseModels
             for (int i = 0; i < phases.Count; i++)
             {
                 boon_distribution.Add(new BoonDistribution());
-                boon_presence.Add(new Dictionary<int, long>());
+                boon_presence.Add(new Dictionary<long, long>());
             }
 
             var toFill = new Point[dur + 1];
@@ -241,7 +241,7 @@ namespace LuckParser.Models.ParseModels
 
             foreach (Boon boon in to_track)
             {
-                int boonid = boon.getID();
+                long boonid = boon.getID();
                 if (to_use.TryGetValue(boonid, out var logs) && logs.Count != 0)
                 {
                     if (boon_distribution[0].ContainsKey(boonid))

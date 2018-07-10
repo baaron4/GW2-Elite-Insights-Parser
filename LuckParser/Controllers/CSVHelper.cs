@@ -57,7 +57,7 @@ namespace LuckParser.Controllers
                         dps.bossCondiDps + delimiter + // condi
                         dps.allDps + delimiter); // all dps
 
-                Dictionary<int, Statistics.FinalBoonUptime> boons = statistics.selfBoons[p][0];
+                Dictionary<long, Statistics.FinalBoonUptime> boons = statistics.selfBoons[p][0];
                 sw.Write(boons[1187].uptime + delimiter + // Quickness
                          boons[30328].uptime + delimiter + // Alacrity
                          boons[740].uptime + delimiter); // Might

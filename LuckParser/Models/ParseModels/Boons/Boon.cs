@@ -59,7 +59,7 @@ namespace LuckParser.Models.ParseModels
 
         // Fields
         private string name;
-        private int id;
+        private long id;
         private BoonEnum nature;
         private BoonSource source;
         private RemoveType remove_type;
@@ -492,7 +492,7 @@ namespace LuckParser.Models.ParseModels
         };
 
 
-        public static bool removePermission(int boonid, ParseEnum.BuffRemove buffremove, ParseEnum.IFF iff)
+        public static bool removePermission(long boonid, ParseEnum.BuffRemove buffremove, ParseEnum.IFF iff)
         {
             if (buffremove == 0)
             {
@@ -614,7 +614,7 @@ namespace LuckParser.Models.ParseModels
         {
             return this.name;
         }
-        public int getID()
+        public long getID()
         {
             return id;
         }

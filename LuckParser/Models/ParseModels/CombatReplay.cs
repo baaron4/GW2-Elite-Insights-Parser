@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
         private List<int> dps10s = new List<int>();
         private List<int> dps30s = new List<int>();
         // boons
-        private Dictionary<int, List<int>> boons = new Dictionary<int, List<int>>();
+        private Dictionary<long, List<int>> boons = new Dictionary<long, List<int>>();
 
         public CombatReplay()
         {
@@ -46,7 +46,7 @@ namespace LuckParser.Models.ParseModels
             this.dps30s.Add(dps);
         }
 
-        public void addBoon(int id, int value)
+        public void addBoon(long id, int value)
         {
             List<int> ll;
             if (!boons.TryGetValue(id,out ll))

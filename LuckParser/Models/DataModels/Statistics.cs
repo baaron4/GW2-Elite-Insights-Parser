@@ -18,10 +18,10 @@ namespace LuckParser.Models.DataModels
             defenses = new Dictionary<Player, FinalDefenses[]>();
             stats = new Dictionary<Player, FinalStats[]>();
             support = new Dictionary<Player, FinalSupport[]>();
-            selfBoons = new Dictionary<Player, Dictionary<int, FinalBoonUptime>[]>();
-            groupBoons = new Dictionary<Player, Dictionary<int, FinalBoonUptime>[]>();
-            offGroupBoons = new Dictionary<Player, Dictionary<int, FinalBoonUptime>[]>();
-            squadBoons = new Dictionary<Player, Dictionary<int, FinalBoonUptime>[]>();
+            selfBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
+            groupBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
+            offGroupBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
+            squadBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
         }
 
         public class FinalDPS
@@ -122,10 +122,10 @@ namespace LuckParser.Models.DataModels
             public Boon.BoonType boonType;
         }
 
-        public Dictionary<Player, Dictionary<int, FinalBoonUptime>[]> selfBoons;
-        public Dictionary<Player, Dictionary<int, FinalBoonUptime>[]> groupBoons;
-        public Dictionary<Player, Dictionary<int, FinalBoonUptime>[]> offGroupBoons;
-        public Dictionary<Player, Dictionary<int, FinalBoonUptime>[]> squadBoons;
+        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> selfBoons;
+        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> groupBoons;
+        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> offGroupBoons;
+        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> squadBoons;
 
         public class FinalBossBoon
         {
@@ -139,12 +139,12 @@ namespace LuckParser.Models.DataModels
             public Boon.BoonType boonType;
         }
 
-        public Dictionary<int, FinalBossBoon>[] bossConditions;
+        public Dictionary<long, FinalBossBoon>[] bossConditions;
 
         // present buff
         public List<Boon> present_boons = new List<Boon>();//Used only for Boon tables
         public List<Boon> present_offbuffs = new List<Boon>();//Used only for Off Buff tables
         public List<Boon> present_defbuffs = new List<Boon>();//Used only for Def Buff tables
-        public Dictionary<int, List<Boon>> present_personnal = new Dictionary<int, List<Boon>>();//Used only for personnal
+        public Dictionary<long, List<Boon>> present_personnal = new Dictionary<long, List<Boon>>();//Used only for personnal
     }
 }
