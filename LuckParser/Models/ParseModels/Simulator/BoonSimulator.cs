@@ -121,12 +121,9 @@ namespace LuckParser.Models.ParseModels
             }
         }
          
-        // Protected Methods
-        protected bool isFull() => boon_stack.Count >= capacity;
+        // Private Methods
+        private bool isFull() => boon_stack.Count >= capacity;
 
-        protected void sort()
-        {
-            boon_stack.Sort((a, b) => b.boon_duration.CompareTo(a.boon_duration));
-        }
+        protected abstract void sort();
     }
 }

@@ -42,5 +42,10 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
+
+        protected override void sort()
+        {
+            boon_stack.Sort((a, b) => b.boon_duration.CompareTo(a.boon_duration));
+        }
     }
 }

@@ -41,5 +41,10 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
+
+        protected override void sort()
+        {
+            // no need to sort intensity based items
+        }
     }
 }
