@@ -30,9 +30,19 @@ namespace LuckParser.Models.ParseModels
         public override long getDuration(ushort src, long start = 0, long end = 0)
         {
             long total = 0;
-            foreach (BoonSimulationItemDuration stack in stacks.Where(x => src == 0 || x.getSrc()[0] == src))
+            if (src == 0)
             {
-                total += stack.getDuration(src, start, end);
+                foreach (BoonSimulationItemDuration stack in stacks)
+                {
+                    total += stack.getDuration(src, start, end);
+                }
+            } else
+            {
+
+                foreach (BoonSimulationItemDuration stack in stacks.Where(x => x.getSrc()[0] == src))
+                {
+                    total += stack.getDuration(src, start, end);
+                }
             }
             return total;
         }
@@ -50,9 +60,20 @@ namespace LuckParser.Models.ParseModels
         public override long getOverstack(ushort src, long start = 0, long end = 0)
         {
             long total = 0;
-            foreach (BoonSimulationItemDuration stack in stacks.Where(x => src == 0 || x.getSrc()[0] == src))
+            if (src == 0)
             {
-                total += stack.getOverstack(src, start, end);
+                foreach (BoonSimulationItemDuration stack in stacks)
+                {
+                    total += stack.getOverstack(src, start, end);
+                }
+            }
+            else
+            {
+
+                foreach (BoonSimulationItemDuration stack in stacks.Where(x => x.getSrc()[0] == src))
+                {
+                    total += stack.getOverstack(src, start, end);
+                }
             }
             return total;
         }
