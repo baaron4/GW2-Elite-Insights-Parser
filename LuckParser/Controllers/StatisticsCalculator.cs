@@ -546,17 +546,18 @@ namespace LuckParser.Controllers
                         uptime.overstack = 0;
                         if (selfBoons.ContainsKey(boon.getID()))
                         {
+                            long generation = selfBoons.getGeneration(boon.getID(), player.getInstid());
                             if (boon.getType() == Boon.BoonType.Duration)
                             {
                                 uptime.uptime = Math.Round(100.0 * selfBoons.getUptime(boon.getID()) / fightDuration, 1);
-                                uptime.generation = Math.Round(100.0f * selfBoons.getGeneration(boon.getID(), player.getInstid()) / fightDuration, 1);
-                                uptime.overstack = Math.Round(100.0f * selfBoons.getOverstack(boon.getID(), player.getInstid()) / fightDuration, 1);
+                                uptime.generation = Math.Round(100.0f * generation / fightDuration, 1);
+                                uptime.overstack = Math.Round(100.0f * (selfBoons.getOverstack(boon.getID(), player.getInstid()) + generation) / fightDuration, 1);
                             }
                             else if (boon.getType() == Boon.BoonType.Intensity)
                             {
                                 uptime.uptime = Math.Round((double)selfBoons.getUptime(boon.getID()) / fightDuration, 1);
-                                uptime.generation = Math.Round((double)selfBoons.getGeneration(boon.getID(), player.getInstid()) / fightDuration, 1);
-                                uptime.overstack = Math.Round((double)selfBoons.getOverstack(boon.getID(), player.getInstid()) / fightDuration, 1);
+                                uptime.generation = Math.Round((double)generation / fightDuration, 1);
+                                uptime.overstack = Math.Round((double)(selfBoons.getOverstack(boon.getID(), player.getInstid()) + generation) / fightDuration, 1);
                             }
 
                             uptime.boonType = boon.getType();
