@@ -44,13 +44,13 @@ namespace LuckParser.Models.ParseModels
             float ratio = (float)sizes.Item1 / sizes.Item2;
             if (ratio > 1.0f)
             {
-                return new Tuple<int, int>(900, (int)Math.Round(900 / ratio));
+                return new Tuple<int, int>(850, (int)Math.Round(850 / ratio));
             } else if (ratio < 1.0f) 
             {
-                return new Tuple<int, int>((int)Math.Round(ratio* 900), 900);
+                return new Tuple<int, int>((int)Math.Round(ratio* 850), 850);
             } else
             {
-                return new Tuple<int, int>(900, 900);
+                return new Tuple<int, int>(850, 850);
             }
         }
 
@@ -72,32 +72,63 @@ namespace LuckParser.Models.ParseModels
         {
             switch (log.getBossData().getID())
             {
+                // VG
                 case 15438:
                     return "https://i.imgur.com/W7MocGz.png";
+                // Gorse
                 case 15429:
                     return "https://i.imgur.com/Gqpp7B1.png";
+                // Sab
                 case 15375:
                     return "https://i.imgur.com/FwpMbYf.png";
+                // Sloth
                 case 16123:
                     return "https://i.imgur.com/6lrGCPX.png";
+                // Matthias
                 case 16115:
                     return "https://i.imgur.com/3X0YveK.png";
+                // KC
                 case 16235:
                     return "https://i.imgur.com/6ZJhPOw.png";
+                // Xera
                 case 16246:
                     return "https://i.imgur.com/BoHwwY6.png";
+                // Cairn
                 case 17194:
                     return "https://i.imgur.com/NlpsLZa.png";
+                // MO
                 case 17172:
                     return "https://i.imgur.com/lT1FW2r.png";
+                // Samarog
                 case 17188:
                     return "https://i.imgur.com/o2DHN29.png";
+                // Deimos
                 case 17154:
                     return "https://i.imgur.com/9vyE9bj.png";
+                // SH
                 case 0x4D37:
                     return "https://i.imgur.com/A45pVJy.png";
+                // Dhuum
                 case 0x4BFA:
                     return "https://i.imgur.com/CLTwWBJ.png";
+                // MAMA
+                case 0x427D:
+                    return "https://i.imgur.com/lFGNKuf.png";
+                // Siax
+                case 0x4284:
+                    return "https://i.imgur.com/UzaQHW9.png";
+                // Ensolyss
+                case 0x4234:
+                    return "https://i.imgur.com/kjelZ4t.png";
+                // Skorvald
+                case 0x44E0:
+                    return "https://i.imgur.com/PO3aoJD.png";
+                // Artsariiv
+                case 0x461D:
+                    return "https://i.imgur.com/4wmuc8B.png";
+                // Arkk
+                case 0x455F:
+                    return "https://i.imgur.com/BIybWJe.png";
             }
             return "";
         }
@@ -107,32 +138,63 @@ namespace LuckParser.Models.ParseModels
         {
             switch (log.getBossData().getID())
             {
+                // VG
                 case 15438:
                     return Tuple.Create(889, 889);
+                // Gorse
                 case 15429:
                     return Tuple.Create(1354, 1415);
+                // Sab
                 case 15375:
                     return Tuple.Create(2790, 2763);
+                // Sloth
                 case 16123:
                     return Tuple.Create(1688, 2581);
+                // Matthias
                 case 16115:
                     return Tuple.Create(880, 880);
+                // KC
                 case 16235:
                     return Tuple.Create(1099, 1114);
+                // Xera
                 case 16246:
                     return Tuple.Create(7112, 6377);
+                // Cairn
                 case 17194:
                     return Tuple.Create(607, 607);
+                // MO
                 case 17172:
                     return Tuple.Create(889, 889);
+                // Samarog
                 case 17188:
                     return Tuple.Create(1221, 1171);
+                // Deimos
                 case 17154:
                     return Tuple.Create(889, 919);
+                // SH
                 case 0x4D37:
                     return Tuple.Create(3657, 3657);
+                // Dhuum
                 case 0x4BFA:
                     return Tuple.Create(3763, 3383);
+                // MAMA
+                case 0x427D:
+                    return Tuple.Create(664, 407);
+                // Siax
+                case 0x4284:
+                    return Tuple.Create(476, 548);
+                // Ensolyss
+                case 0x4234:
+                    return Tuple.Create(366, 366);
+                // Skorvald
+                case 0x44E0:
+                    return Tuple.Create(1759, 1783);
+                // Artsariiv
+                case 0x461D:
+                    return Tuple.Create(914, 914);
+                // Arkk
+                case 0x455F:
+                    return Tuple.Create(914, 914);
             }
             return Tuple.Create(0, 0);
         }
@@ -140,32 +202,63 @@ namespace LuckParser.Models.ParseModels
         {
             switch (log.getBossData().getID())
             {
+                // VG
                 case 15438:
                     return Tuple.Create(-6388, -22253, -3173, -19039);
+                // Gorse
                 case 15429:
                     return Tuple.Create(-623, -6754, 3731, -2206);
+                // Sab
                 case 15375:
                     return Tuple.Create(-8587, -162, -1601, 6753);
+                // Sloth
                 case 16123:
                     return Tuple.Create(5822, -3491, 9549, 2205);
+                // Matthias
                 case 16115:
                     return Tuple.Create(-7253, 4575 , -4630, 7197);
+                // KC
                 case 16235:
                     return Tuple.Create(-5447, 8069, -2262, 11297);
+                // Xera
                 case 16246:
                     return Tuple.Create(-5992, -5992, 69, -522);
+                // Cairn
                 case 17194:
                     return Tuple.Create(13021, 642, 15765, 3386);
+                // MO
                 case 17172:
                     return Tuple.Create(1370, 2701, 3921, 5258);
+                // Samarog
                 case 17188:
                     return Tuple.Create(-6526, 1118, -2423, 5046);
+                // Deimos
                 case 17154:
                     return Tuple.Create(-9542, 1932, -7266, 4292);
+                // SH
                 case 19767:
                     return Tuple.Create(-12228, -786, -8937, 2405);
+                // Dhuum
                 case 19450:
                     return Tuple.Create(13524, -1334, 18039, 2735);
+                // MAMA
+                case 0x427D:
+                    return Tuple.Create(-1392, 4752, 2688, 7392);
+                // Siax
+                case 0x4284:
+                    return Tuple.Create(-2592, -4368, 288, -1248);
+                // Ensolyss
+                case 0x4234:
+                    return Tuple.Create(-2592, -48, 48, 2832);
+                // Skorvald
+                case 0x44E0:
+                    return Tuple.Create(-22267, 14955, -17227, 20735);
+                // Artsariiv
+                case 0x461D:
+                    return Tuple.Create(9001, 507, 11661, 2767);
+                // Arkk
+                case 0x455F:
+                    return Tuple.Create(-19231, -18137, -16591, -15677);
             }
             return Tuple.Create(0, 0, 0, 0);
         }
