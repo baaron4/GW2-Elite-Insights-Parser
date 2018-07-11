@@ -145,7 +145,7 @@ namespace LuckParser.Models.ParseModels
                                         long subtract = (curBL.getTime() + curBL.getValue()) - time;
                                         loglist[cnt].addValue(-subtract);
                                         // add removed as overstack
-                                        loglist[cnt].addOverstack((ushort)subtract);
+                                        loglist[cnt].addOverstack((uint)subtract);
                                     }
                                 }
                             }
@@ -166,7 +166,7 @@ namespace LuckParser.Models.ParseModels
                                     long subtract = (curBL.getTime() + curBL.getValue()) - time;
                                     loglist[cnt].addValue(-subtract);
                                     // add removed as overstack
-                                    loglist[cnt].addOverstack((ushort)subtract);
+                                    loglist[cnt].addOverstack((uint)subtract);
                                 }
                             }
                         }
@@ -188,7 +188,7 @@ namespace LuckParser.Models.ParseModels
                                         long subtract = (curBL.getTime() + curBL.getValue()) - time;
                                         loglist[cnt].addValue(-subtract);
                                         // add removed as overstack
-                                        loglist[cnt].addOverstack((ushort)subtract);
+                                        loglist[cnt].addOverstack((uint)subtract);
                                         break;
                                     }
                                 }

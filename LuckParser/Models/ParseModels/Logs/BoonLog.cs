@@ -5,11 +5,11 @@
         // Fields
         private long time = 0;
         private long value = 0;
-        private ushort overstack = 0;
+        private uint overstack = 0;
         private ushort src_instid = 0;
 
         //Constructor
-        public BoonLog(long time, ushort src_instid, long value, ushort overstack)
+        public BoonLog(long time, ushort src_instid, long value, uint overstack)
         {
             this.time = time;
             this.value = value;
@@ -27,7 +27,7 @@
         {
             return value;
         }
-        public ushort getOverstack() {
+        public uint getOverstack() {
             return overstack;
         }
 
@@ -46,7 +46,7 @@
         {
             this.value += value;
         }
-        public void addOverstack(ushort overstack)
+        public void addOverstack(uint overstack)
         {
             this.overstack += overstack;
         }
