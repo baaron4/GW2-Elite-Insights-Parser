@@ -27,6 +27,7 @@ namespace LuckParser.Controllers
         private List<Player> p_list = new List<Player>();
         private Boss boss;
         private byte revision;
+        private bool noSquad = false;
 
         // Public Methods
         public LogData getLogData()
@@ -142,7 +143,9 @@ namespace LuckParser.Controllers
 
                 // 2 bytes: boss instance ID
                 ushort id = reader.ReadUInt16();
-
+                noSquad = id == 0x427D || id == 0x4284 
+                    || id == 0x4234 || id == 0x44E0 
+                    || id == 0x461D || id == 0x455F;
                 // 1 byte: position
                 ParseHelper.safeSkip(stream, 1);
 
@@ -669,7 +672,7 @@ namespace LuckParser.Controllers
                 foreach (AgentItem playerAgent in playerAgentList)
                 {
                     List<CombatItem> lp = combat_data.getStates(playerAgent.getInstid(), ParseEnum.StateChange.Despawn, boss_data.getFirstAware(), boss_data.getLastAware());
-                    Player player = new Player(playerAgent);
+                    Player player = new Player(playerAgent, noSquad);
                     bool skip = false;
                     foreach (Player p in p_list)
                     {

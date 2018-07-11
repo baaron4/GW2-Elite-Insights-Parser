@@ -19,11 +19,11 @@ namespace LuckParser.Models.ParseModels
         private string[] weapons_array;
 
         // Constructors
-        public Player(AgentItem agent) : base(agent)
+        public Player(AgentItem agent, bool noSquad) : base(agent)
         {
             String[] name = agent.getName().Split('\0');
             account = name[1];
-            group   = int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
+            group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
         }
 
         // Getters
