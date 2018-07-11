@@ -13,6 +13,7 @@ namespace LuckParser.Models.ParseModels
         // Boons
         private List<BoonDistribution> boon_distribution = new List<BoonDistribution>();
         private List<Dictionary<long, long>> boon_presence = new List<Dictionary<long, long>>();
+        private List<Dictionary<long, long>> condi_presence = new List<Dictionary<long, long>>();
         private Dictionary<long, BoonsGraphModel> boon_points = new Dictionary<long, BoonsGraphModel>();
         // dps graphs
         private Dictionary<int, List<Point>> dps_graph = new Dictionary<int, List<Point>>();
@@ -69,6 +70,15 @@ namespace LuckParser.Models.ParseModels
                 setBoonDistribution(log, phases, to_track);
             }
             return boon_presence[phase_index];
+        }
+
+        public Dictionary<long, long> getCondiPresence(ParsedLog log, List<PhaseData> phases, List<Boon> to_track, int phase_index)
+        {
+            if (boon_distribution.Count == 0)
+            {
+                setBoonDistribution(log, phases, to_track);
+            }
+            return condi_presence[phase_index];
         }
         public void initCombatReplay(ParsedLog log)
         {
@@ -222,16 +232,19 @@ namespace LuckParser.Models.ParseModels
             BoonMap to_use = getBoonMap(log, to_track);
             long dur = log.getBossData().getAwareDuration();
             int fight_duration = (int)(dur) / 1000;
-            // Init boon presence points
+            // Init boon/condi presence points
             BoonsGraphModel boon_presence_points = new BoonsGraphModel("Number of Boons");
+            BoonsGraphModel condi_presence_points = new BoonsGraphModel("Number of Conditions");
             for (int i = 0; i <= fight_duration; i++)
             {
                 boon_presence_points.getBoonChart().Add(new Point(i, 0));
+                condi_presence_points.getBoonChart().Add(new Point(i, 0));
             }
             for (int i = 0; i < phases.Count; i++)
             {
                 boon_distribution.Add(new BoonDistribution());
                 boon_presence.Add(new Dictionary<long, long>());
+                condi_presence.Add(new Dictionary<long, long>());
             }
 
             var toFill = new Point[dur + 1];
@@ -259,18 +272,22 @@ namespace LuckParser.Models.ParseModels
                         simulator.trim(dur);
                     }
                     var simulation = simulator.getSimulationResult();
+                    var updateBoonPresence = Boon.getBoonList().Any(x => x.getID() == boonid);
+                    var updateCondiPresence = boonid != 873 && Boon.getCondiBoonList().Any(x => x.getID() == boonid);
                     foreach (var simul in simulation)
                     {
                         for (int i = 0; i < phases.Count; i++)
                         {
                             var phase = phases[i];
-                            var presenceDict = boon_presence[i];
                             if (!boon_distribution[i].TryGetValue(boonid, out var distrib))
                             {
                                 distrib = new Dictionary<ushort, OverAndValue>();
                                 boon_distribution[i].Add(boonid, distrib);
                             }
-                            Add(presenceDict, boonid, simul.getItemDuration(phase.getStart(), phase.getEnd()));
+                            if (updateBoonPresence)
+                                Add(boon_presence[i], boonid, simul.getItemDuration(phase.getStart(), phase.getEnd()));
+                            if (updateCondiPresence)
+                                Add(condi_presence[i], boonid, simul.getItemDuration(phase.getStart(), phase.getEnd()));
                             foreach (ushort src in simul.getSrc())
                             {
                                 if (distrib.TryGetValue(src, out var toModify))
@@ -310,8 +327,8 @@ namespace LuckParser.Models.ParseModels
                     // reduce precision to seconds
                     var reducedPrecision = new List<Point>(capacity: fight_duration + 1);
                     var boonPresence = boon_presence_points.getBoonChart();
-                    var updateBoonPresence = Boon.getBoonList().Any(x => x.getID() == boonid);
-                    if (replay != null && (updateBoonPresence || Boon.getDefensiveTableList().Any(x => x.getID() == boonid) || Boon.getOffensiveTableList().Any(x => x.getID() == boonid)))
+                    var condiPresence = condi_presence_points.getBoonChart();
+                    if (replay != null && (updateCondiPresence || updateBoonPresence || Boon.getDefensiveTableList().Any(x => x.getID() == boonid) || Boon.getOffensiveTableList().Any(x => x.getID() == boonid)))
                     {
                         foreach (int time in replay.getTimes())
                         {
@@ -326,11 +343,16 @@ namespace LuckParser.Models.ParseModels
                         {
                             boonPresence[i] = new Point(i, boonPresence[i].Y + toFillPresence[1000 * i].Y);
                         }
+                        if (updateCondiPresence)
+                        {
+                            condiPresence[i] = new Point(i, condiPresence[i].Y + toFillPresence[1000 * i].Y);
+                        }
                     }
                     boon_points[boonid] = new BoonsGraphModel(boon.getName(), reducedPrecision);
                 }
             }
             boon_points[-2] = boon_presence_points;
+            boon_points[-3] = condi_presence_points;
         }
         private void setMinions(ParsedLog log)
         {

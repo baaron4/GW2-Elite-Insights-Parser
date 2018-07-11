@@ -1348,12 +1348,9 @@ namespace LuckParser.Controllers
                                 long fight_duration = phases[phase_index].getDuration();
                                 Dictionary<long, long> boonPresence = player.getBoonPresence(log, phases, boon_to_track, phase_index);
                                 double avg_boons = 0.0;
-                                foreach (Boon boon in list_to_use)
+                                foreach (long duration in boonPresence.Values)
                                 {
-                                    if (boonPresence.ContainsKey(boon.getID()))
-                                    {
-                                        avg_boons += boonPresence[boon.getID()];
-                                    }
+                                    avg_boons += duration;
                                 }
                                 avg_boons /= fight_duration;
                                 sw.Write("<td data-toggle=\"tooltip\" title=\"Average number of boons: " + Math.Round(avg_boons, 1) + "\">" + player.getCharacter().ToString() + " </td>");
@@ -1896,7 +1893,7 @@ namespace LuckParser.Controllers
                                                 parseBoonsList.AddRange(statistics.present_personnal[p.getInstid()]);
                                             }
                                             Dictionary<long, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
-                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
+                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.getBoonName() != "Number of Conditions"))
                                             {
                                                 sw.Write("{");
                                                 {
@@ -3201,6 +3198,8 @@ namespace LuckParser.Controllers
         /// <param name="boss">The boss</param>
         private void CreateCondiUptimeTable(StreamWriter sw, Boss boss, int phase_index)
         {
+            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
+            long fight_duration = phases[phase_index].getDuration();
             //Generate Boon table------------------------------------------------------------------------------------------------
             sw.Write("<script> $(function () { $('#condi_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"condi_table" + phase_index + "\">");
@@ -3222,7 +3221,16 @@ namespace LuckParser.Controllers
                 {
                     sw.Write("<tr>");
                     {
-                        sw.Write("<td>" + boss.getCharacter().ToString() + "</td>");
+                        List<Boon> boon_to_track = Boon.getCondiBoonList();
+                        boon_to_track.AddRange(Boon.getBoonList());
+                        Dictionary<long, long> condiPresence = boss.getCondiPresence(log, phases, boon_to_track, phase_index);
+                        double avg_condis = 0.0;
+                        foreach (long duration in condiPresence.Values)
+                        {
+                            avg_condis += duration;
+                        }
+                        avg_condis /= fight_duration;
+                        sw.Write("<td data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avg_condis, 1) + "\">" + boss.getCharacter() + " </td>");
                         Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
                         foreach (Boon boon in Boon.getCondiBoonList())
                         {
@@ -4145,7 +4153,7 @@ namespace LuckParser.Controllers
                                 parseBoonsList.AddRange(statistics.present_personnal[p.getInstid()]);
                             }
                             Dictionary<long, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
-                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
+                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.getBoonName() != "Number of Conditions"))
                             {
                                 sw.Write("{");
                                 {
