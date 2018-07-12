@@ -198,7 +198,6 @@ namespace LuckParser.Controllers
                     long end = phase.getEnd() + log.getBossData().getFirstAware();
 
                     List<DamageLog> damageLogs = player.getDamageLogs(0, log, phase.getStart(), phase.getEnd());
-                    List<DamageLog> damageLogsBoss = player.getDamageLogs(log.getBoss().getInstid(), log, phase.getStart(), phase.getEnd());
                     List<CastLog> castLogs = player.getCastLogs(log, phase.getStart(), phase.getEnd());
 
                     int instid = player.getInstid();
@@ -239,93 +238,102 @@ namespace LuckParser.Controllers
                         9292
                     };
 
-                    foreach (DamageLog log in damageLogs)
+                    foreach (DamageLog dl in damageLogs)
                     {
-                        if (log.isCondi() == 0)
+                        if (dl.isCondi() == 0)
                         {
-                            if (log.getResult() == ParseEnum.Result.Crit)
+
+                            if (dl.getDstInstidt() == log.getBossData().getInstid())
+                            {
+                                if (dl.getResult() == ParseEnum.Result.Crit)
+                                {
+                                    final.criticalRateBoss++;
+                                    final.criticalDmgBoss += dl.getDamage();
+                                    if (dl.getInstidt() == player.getInstid())
+                                    {
+                                        final.playerOnlyCritRateBoss++;
+                                        final.playerOnlyCritDamageBoss += dl.getDamage();
+                                    }
+                                }
+
+                                if (dl.isNinety() > 0)
+                                {
+                                    final.scholarRateBoss++;
+                                    final.scholarDmgBoss += (int)(dl.getDamage() / 11.0); //regular+10% damage
+                                }
+
+                                final.movingRateBoss += dl.isMoving();
+                                final.flankingRateBoss += dl.isFlanking();
+
+                                if (dl.getResult() == ParseEnum.Result.Glance)
+                                {
+                                    final.glanceRateBoss++;
+                                }
+
+                                if (dl.getResult() == ParseEnum.Result.Blind)
+                                {
+                                    final.missedBoss++;
+                                }
+
+                                if (dl.getResult() == ParseEnum.Result.Interrupt)
+                                {
+                                    final.interuptsBoss++;
+                                }
+
+                                if (dl.getResult() == ParseEnum.Result.Absorb)
+                                {
+                                    final.invulnedBoss++;
+                                }
+                                final.powerLoopCountBoss++;
+                                if (!nonCritable.Contains(dl.getID()))
+                                {
+                                    final.critablePowerLoopCountBoss++;
+                                }
+                            }
+
+                            if (dl.getResult() == ParseEnum.Result.Crit)
                             {
                                 final.criticalRate++;
-                                final.criticalDmg += log.getDamage();
+                                final.criticalDmg += dl.getDamage();
+                                if (dl.getInstidt() == player.getInstid())
+                                {
+                                    final.playerOnlyCritRate++;
+                                    final.playerOnlyCritDamage += dl.getDamage();
+                                }
                             }
 
-                            if (log.isNinety() > 0)
+                            if (dl.isNinety() > 0)
                             {
                                 final.scholarRate++;
-                                final.scholarDmg += (int)(log.getDamage() / 11.0); //regular+10% damage
+                                final.scholarDmg += (int)(dl.getDamage() / 11.0); //regular+10% damage
                             }
 
-                            final.movingRate += log.isMoving();
-                            final.flankingRate += log.isFlanking();
+                            final.movingRate += dl.isMoving();
+                            final.flankingRate += dl.isFlanking();
 
-                            if (log.getResult() == ParseEnum.Result.Glance)
+                            if (dl.getResult() == ParseEnum.Result.Glance)
                             {
                                 final.glanceRate++;
                             }
 
-                            if (log.getResult() == ParseEnum.Result.Blind)
+                            if (dl.getResult() == ParseEnum.Result.Blind)
                             {
                                 final.missed++;
                             }
 
-                            if (log.getResult() == ParseEnum.Result.Interrupt)
+                            if (dl.getResult() == ParseEnum.Result.Interrupt)
                             {
                                 final.interupts++;
                             }
 
-                            if (log.getResult() == ParseEnum.Result.Absorb)
+                            if (dl.getResult() == ParseEnum.Result.Absorb)
                             {
                                 final.invulned++;
                             }
                             final.powerLoopCount++;
-                            if (!nonCritable.Contains(log.getID()))
+                            if (!nonCritable.Contains(dl.getID()))
                             {
                                 final.critablePowerLoopCount++;
-                            }
-                        }
-                    }
-                    foreach (DamageLog log in damageLogsBoss)
-                    {
-                        if (log.isCondi() == 0)
-                        {
-                            if (log.getResult() == ParseEnum.Result.Crit)
-                            {
-                                final.criticalRateBoss++;
-                                final.criticalDmgBoss += log.getDamage();
-                            }
-
-                            if (log.isNinety() > 0)
-                            {
-                                final.scholarRateBoss++;
-                                final.scholarDmgBoss += (int)(log.getDamage() / 11.0); //regular+10% damage
-                            }
-
-                            final.movingRateBoss += log.isMoving();
-                            final.flankingRateBoss += log.isFlanking();
-
-                            if (log.getResult() == ParseEnum.Result.Glance)
-                            {
-                                final.glanceRateBoss++;
-                            }
-
-                            if (log.getResult() == ParseEnum.Result.Blind)
-                            {
-                                final.missedBoss++;
-                            }
-
-                            if (log.getResult() == ParseEnum.Result.Interrupt)
-                            {
-                                final.interuptsBoss++;
-                            }
-
-                            if (log.getResult() == ParseEnum.Result.Absorb)
-                            {
-                                final.invulnedBoss++;
-                            }
-                            final.powerLoopCountBoss++;
-                            if (!nonCritable.Contains(log.getID()))
-                            {
-                                final.critablePowerLoopCountBoss++;
                             }
                         }
                     }
@@ -398,32 +406,18 @@ namespace LuckParser.Controllers
                     //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
 
                     int instID = player.getInstid();
-
-                  
-
+                 
                     final.damageTaken = damageLogs.Sum(x => (long)x.getDamage());
                     //final.allHealReceived = healingLogs.Sum(x => x.getDamage());
-                    final.blockedCount = 0;
+                    final.blockedCount = damageLogs.Count(x => x.getResult() == ParseEnum.Result.Absorb);
                     final.invulnedCount = 0;
                     final.damageInvulned = 0;
-                    final.evadedCount = 0;
-                    final.damageBarrier = 0;
-                    foreach (DamageLog log in damageLogs.Where(x => x.getResult() == ParseEnum.Result.Block))
-                    {
-                        final.blockedCount++;
-                    }
+                    final.evadedCount = damageLogs.Count(x => x.getResult() == ParseEnum.Result.Evade);
+                    final.damageBarrier = damageLogs.Sum(x => x.isShields() == 1 ? x.getDamage() : 0);
                     foreach (DamageLog log in damageLogs.Where(x => x.getResult() == ParseEnum.Result.Absorb))
                     {
                         final.invulnedCount++;
                         final.damageInvulned += log.getDamage();
-                    }
-                    foreach (DamageLog log in damageLogs.Where(x => x.getResult() == ParseEnum.Result.Evade))
-                    {
-                        final.evadedCount++;
-                    }
-                    foreach (DamageLog log in damageLogs.Where(x => x.isShields() == 1))
-                    {
-                        final.damageBarrier += log.getDamage();
                     }
 
                     phaseDefense[phaseIndex] = final;
