@@ -41,8 +41,8 @@ namespace LuckParser.Models.DataModels
             public int bossPowerDps;
             public int bossPowerDamage;
             // Player only
-            public int playerPowerDps;
-            public int playerBossPowerDps;
+            public int playerPowerDamage;
+            public int playerBossPowerDamage;
         }
 
         public Dictionary<Player, FinalDPS[]> dps;
