@@ -10,6 +10,8 @@ namespace LuckParser.Models.ParseModels
     public class Minions : List<Minion>
     {
         private int instid;
+        private List<DamageLog> damage_logs;
+        private List<CastLog> cast_logs;
         public Minions(int instid) : base()
         {
             this.instid = instid;
@@ -17,12 +19,14 @@ namespace LuckParser.Models.ParseModels
 
         public List<DamageLog> getDamageLogs(int instidFilter, ParsedLog log, long start, long end)
         {
-            List<DamageLog> res = new List<DamageLog>();
-            foreach (Minion minion in this)
+            if (damage_logs.Count == 0)
             {
-                res.AddRange(minion.getDamageLogs(instidFilter, log, start, end));
+                foreach (Minion minion in this)
+                {
+                    damage_logs.AddRange(minion.getDamageLogs(instidFilter, log, start, end));
+                }
             }
-            return res;
+            return damage_logs;
         }
 
         /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)
@@ -37,12 +41,14 @@ namespace LuckParser.Models.ParseModels
 
         public List<CastLog> getCastLogs(ParsedLog log, long start, long end)
         {
-            List<CastLog> res = new List<CastLog>();
-            foreach (Minion minion in this)
+            if (cast_logs.Count == 0)
             {
-                res.AddRange(minion.getCastLogs(log, start, end));
+                foreach (Minion minion in this)
+                {
+                    cast_logs.AddRange(minion.getCastLogs(log, start, end));
+                }
             }
-            return res;
+            return cast_logs;
         }
 
         public int getInstid()
