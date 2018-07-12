@@ -667,12 +667,12 @@ namespace LuckParser.Controllers
         /// </summary>
         private void setPresentBoons()
         {
-            List<SkillItem> s_list = log.getSkillData().getSkillList();
+            List<CombatItem> c_list = log.getCombatData().getCombatList();
             if (settings.PlayerBoonsUniversal)
             {//Main boons
                 foreach (Boon boon in Boon.getBoonList())
                 {
-                    if (s_list.Exists(x => x.getID() == boon.getID()))
+                    if (c_list.Exists(x => x.getSkillID() == boon.getID()))
                     {
                         statistics.present_boons.Add(boon);
                     }
@@ -682,20 +682,19 @@ namespace LuckParser.Controllers
             {//Important Class specefic boons
                 foreach (Boon boon in Boon.getOffensiveTableList())
                 {
-                    if (s_list.Exists(x => x.getID() == boon.getID()))
+                    if (c_list.Exists(x => x.getSkillID() == boon.getID()))
                     {
                         statistics.present_offbuffs.Add(boon);
                     }
                 }
                 foreach (Boon boon in Boon.getDefensiveTableList())
                 {
-                    if (s_list.Exists(x => x.getID() == boon.getID()))
+                    if (c_list.Exists(x => x.getSkillID() == boon.getID()))
                     {
                         statistics.present_defbuffs.Add(boon);
                     }
                 }
             }
-            List<CombatItem> c_list = log.getCombatData().getCombatList();
 
             foreach (Player p in log.getPlayerList())
             {
