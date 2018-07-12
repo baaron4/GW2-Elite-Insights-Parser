@@ -11,6 +11,7 @@ namespace LuckParser.Models.ParseModels
     {
         private int instid;
         private List<DamageLog> damage_logs = new List<DamageLog>();
+        private List<DamageLog> filtered_damage_logs = new List<DamageLog>();
         private List<CastLog> cast_logs = new List<CastLog>();
         public Minions(int instid) : base()
         {
@@ -23,10 +24,18 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (Minion minion in this)
                 {
-                    damage_logs.AddRange(minion.getDamageLogs(instidFilter, log, start, end));
+                    damage_logs.AddRange(minion.getDamageLogs(0, log, 0, log.getBossData().getAwareDuration()));
                 }
             }
-            return damage_logs;
+            if (filtered_damage_logs.Count == 0)
+            {
+                filtered_damage_logs = damage_logs.Where(x => x.getDstInstidt() == log.getBossData().getInstid()).ToList();
+            }
+            if (instidFilter > 0)
+            {
+                return filtered_damage_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
+            }
+            return damage_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
 
         /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)
@@ -45,10 +54,10 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (Minion minion in this)
                 {
-                    cast_logs.AddRange(minion.getCastLogs(log, start, end));
+                    cast_logs.AddRange(minion.getCastLogs(log, 0, log.getBossData().getAwareDuration()));
                 }
             }
-            return cast_logs;
+            return cast_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
 
         public int getInstid()

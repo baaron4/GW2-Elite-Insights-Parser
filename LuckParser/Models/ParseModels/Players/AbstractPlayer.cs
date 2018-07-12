@@ -68,10 +68,7 @@ namespace LuckParser.Models.ParseModels
             {
                 return damage_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
             }
-            else
-            {
-                return damage_logsFiltered.Where( x => x.getTime() >= start && x.getTime() <= end).ToList();
-            }
+            return damage_logsFiltered.Where( x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
         public List<DamageLog> getDamageTakenLogs(ParsedLog log, long start, long end)
         {
