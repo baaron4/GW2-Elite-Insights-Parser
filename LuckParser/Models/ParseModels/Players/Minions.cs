@@ -10,8 +10,8 @@ namespace LuckParser.Models.ParseModels
     public class Minions : List<Minion>
     {
         private int instid;
-        private List<DamageLog> damage_logs;
-        private List<CastLog> cast_logs;
+        private List<DamageLog> damage_logs = new List<DamageLog>();
+        private List<CastLog> cast_logs = new List<CastLog>();
         public Minions(int instid) : base()
         {
             this.instid = instid;
