@@ -384,7 +384,7 @@ namespace LuckParser.Models.ParseModels
                 if (agent.getInstid() == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())//selecting player or minion as caster
                 {
                     long time = c.getTime() - time_start;
-                    addDamageLog(time, 0, c, damage_logs);
+                    addDamageLog(time, c);
                 }
             }
             Dictionary<string, Minions> min_list = getMinions(log);
@@ -393,25 +393,6 @@ namespace LuckParser.Models.ParseModels
                 damage_logs.AddRange(mins.getDamageLogs(0, log, 0, log.getBossData().getAwareDuration()));
             }
             damage_logs.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
-        }
-
-        protected override void setFilteredLogs(ParsedLog log)
-        {
-            long time_start = log.getBossData().getFirstAware();
-            foreach (CombatItem c in log.getDamageData())
-            {
-                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
-                {
-                    long time = c.getTime() - time_start;
-                    addDamageLog(time, log.getBossData().getInstid(), c, damage_logsFiltered);
-                }
-            }
-            Dictionary<string, Minions> min_list = getMinions(log);
-            foreach (Minions mins in min_list.Values)
-            {
-                damage_logsFiltered.AddRange(mins.getDamageLogs(log.getBossData().getInstid(), log, 0, log.getBossData().getAwareDuration()));
-            }
-            damage_logsFiltered.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
         }
         protected override void setCastLogs(ParsedLog log)
         {

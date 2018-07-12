@@ -13,7 +13,7 @@ namespace LuckParser.Models.ParseModels
         private String character;
         // DPS
         protected List<DamageLog> damage_logs = new List<DamageLog>();
-        protected List<DamageLog> damage_logsFiltered = new List<DamageLog>();
+        private List<DamageLog> damage_logsFiltered = new List<DamageLog>();
         // Heal
         //protected List<DamageLog> healing_logs = new List<DamageLog>();
         //protected List<DamageLog> healing_received_logs = new List<DamageLog>();
@@ -62,7 +62,7 @@ namespace LuckParser.Models.ParseModels
 
             if (damage_logsFiltered.Count == 0)
             {
-                setFilteredLogs(log);
+                damage_logsFiltered = damage_logs.Where(x => x.getDstInstidt() == instidFilter).ToList();
             }
             if (instidFilter == 0)
             {
@@ -121,42 +121,36 @@ namespace LuckParser.Models.ParseModels
             return getDamageLogs(instidFilter, log, start, end).Where(x => x.getInstidt() == agent.getInstid()).ToList();
         }
         // privates
-        protected void addDamageLog(long time, ushort instid, CombatItem c, List<DamageLog> toFill)
+        protected void addDamageLog(long time, CombatItem c)
         {
-            if (instid == c.getDstInstid() || instid == 0)
+            if (c.isBuffremove() == ParseEnum.BuffRemove.None)
             {
-                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.isBuff() == 1 && c.getBuffDmg() != 0)//condi
                 {
-                    if (c.isBuff() == 1 && c.getBuffDmg() != 0)//condi
-                    {
-                        toFill.Add(new DamageLogCondition(time, c));
-                    }
-                    else if (c.isBuff() == 0 && c.getValue() != 0)//power
-                    {
-                        toFill.Add(new DamageLogPower(time, c));
-                    }
-                    else if (c.getResult() == ParseEnum.Result.Absorb || c.getResult() == ParseEnum.Result.Blind || c.getResult() == ParseEnum.Result.Interrupt)
-                    {//Hits that where blinded, invulned, interupts
-                        toFill.Add(new DamageLogPower(time, c));
-                    }
+                    damage_logs.Add(new DamageLogCondition(time, c));
+                }
+                else if (c.isBuff() == 0 && c.getValue() != 0)//power
+                {
+                    damage_logs.Add(new DamageLogPower(time, c));
+                }
+                else if (c.getResult() == ParseEnum.Result.Absorb || c.getResult() == ParseEnum.Result.Blind || c.getResult() == ParseEnum.Result.Interrupt)
+                {//Hits that where blinded, invulned, interupts
+                    damage_logs.Add(new DamageLogPower(time, c));
                 }
             }
-        }
-        protected void addDamageTakenLog(long time, ushort instid, CombatItem c)
-        {
-            if (instid == c.getSrcInstid() || instid == 0)
-            {
-                if (c.isBuff() == 1 && c.getBuffDmg() != 0)
-                {
-                    //inco,ing condi dmg not working or just not present?
-                    // damagetaken.Add(c.getBuffDmg());
-                    damageTaken_logs.Add(new DamageLogCondition(time, c));
-                }
-                else if (c.isBuff() == 0 && c.getValue() >= 0)
-                {
-                    damageTaken_logs.Add(new DamageLogPower(time, c));
 
-                }
+        }
+        protected void addDamageTakenLog(long time, CombatItem c)
+        {
+            if (c.isBuff() == 1 && c.getBuffDmg() != 0)
+            {
+                //inco,ing condi dmg not working or just not present?
+                // damagetaken.Add(c.getBuffDmg());
+                damageTaken_logs.Add(new DamageLogCondition(time, c));
+            }
+            else if (c.isBuff() == 0 && c.getValue() >= 0)
+            {
+                damageTaken_logs.Add(new DamageLogPower(time, c));
 
             }
         }
@@ -189,7 +183,6 @@ namespace LuckParser.Models.ParseModels
         }*/
         // Setters
         protected abstract void setDamageLogs(ParsedLog log);     
-        protected abstract void setFilteredLogs(ParsedLog log);
         protected abstract void setCastLogs(ParsedLog log);
         protected abstract void setDamagetakenLogs(ParsedLog log);
         //protected abstract void setHealingLogs(ParsedLog log);

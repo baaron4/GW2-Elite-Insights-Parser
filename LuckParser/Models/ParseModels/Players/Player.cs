@@ -238,7 +238,7 @@ namespace LuckParser.Models.ParseModels
             foreach (CombatItem c in log.getDamageTakenData()) {
                 if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware()) {//selecting player as target
                     long time = c.getTime() - time_start;
-                    addDamageTakenLog(time, 0, c);
+                    addDamageTakenLog(time, c);
                 }
             }
         }  
