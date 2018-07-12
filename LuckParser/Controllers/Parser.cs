@@ -514,11 +514,18 @@ namespace LuckParser.Controllers
             // a hack for buggy golem logs
             if (golem_mode)
             {
+                AgentItem otherGolem = NPC_list.Find(x => x.getID() == 19603);
                 foreach (CombatItem c in combat_list)
                 {
+                    // redirect all attacks to the main golem
                     if (c.getDstAgent() == 0 && c.getDstInstid() == 0 && c.isStateChange() == ParseEnum.StateChange.Normal && c.getIFF() == ParseEnum.IFF.Foe && c.isActivation() == ParseEnum.Activation.None)
                     {
                         c.setDstAgent(bossAgent.getAgent());
+                        c.setDstInstid(bossAgent.getInstid());
+                    }
+                    // redirect buff initial to main golem
+                    if (otherGolem != null && c.isBuff() == 18 && c.getDstInstid() == otherGolem.getInstid())
+                    {
                         c.setDstInstid(bossAgent.getInstid());
                     }
                 }
