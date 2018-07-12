@@ -858,7 +858,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.scholarRate+ " out of " + stats.powerLoopCount + " hits <br> Pure Scholar Damage: " 
                                 + stats.scholarDmg + "<br> Effective Physical Damage Increase: " 
-                                + Math.Round(100.0 * (dps.allPowerDamage / (Double)(dps.allPowerDamage - stats.scholarDmg) - 1.0) , 3) 
+                                + Math.Round(100.0 * (dps.playerPowerDps / (Double)(dps.playerPowerDps - stats.scholarDmg) - 1.0) , 3) 
                                 + "% \">" + Math.Round((Double)(stats.scholarRate) / stats.powerLoopCount * 100,1) + "%</span>" + "</td>");//scholar
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.movingRate + " out of " + stats.powerLoopCount + " hits \">" 
@@ -988,7 +988,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.scholarRateBoss + " out of " + stats.powerLoopCountBoss + " hits <br> Pure Scholar Damage: " 
                                 + stats.scholarDmgBoss + "<br> Effective Physical Damage Increase: " 
-                                + Math.Round(100.0* (dps.bossPowerDamage / (Double)(dps.bossPowerDamage - stats.scholarDmgBoss) - 1.0), 3) 
+                                + Math.Round(100.0* (dps.playerBossPowerDps / (Double)(dps.playerBossPowerDps - stats.scholarDmgBoss) - 1.0), 3) 
                                 + "% \">" + Math.Round((Double)(stats.scholarRateBoss) / stats.powerLoopCountBoss * 100,1) + "%</span>" + "</td>");//scholar
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.movingRateBoss + " out of " + stats.powerLoopCountBoss + " hits \">" 
@@ -2028,14 +2028,14 @@ namespace LuckParser.Controllers
                             sw.Write("</ul>");
                             sw.Write("<div class=\"tab-content\">");
                             {
-                                sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabAll" + pid + "\">");
-                                {
-                                    CreateDMGDistTable(sw, p, false, phase_index);
-                                }
-                                sw.Write("</div>");
                                 sw.Write("<div class=\"tab-pane fade\" id=\"distTabBoss" + pid + "\">");
                                 {
                                     CreateDMGDistTable(sw, p, true, phase_index);
+                                }
+                                sw.Write("</div>");
+                                sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabAll" + pid + "\">");
+                                {
+                                    CreateDMGDistTable(sw, p, false, phase_index);
                                 }
                                 sw.Write("</div>");
                             }
@@ -2055,14 +2055,14 @@ namespace LuckParser.Controllers
                                 sw.Write("</ul>");
                                 sw.Write("<div class=\"tab-content\">");
                                 {
-                                    sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabAll" + id + "\">");
-                                    {
-                                        CreateDMGDistTable(sw, p, pair.Value, false, phase_index);
-                                    }
-                                    sw.Write("</div>");
                                     sw.Write("<div class=\"tab-pane fade\" id=\"distTabBoss" + id + "\">");
                                     {
                                         CreateDMGDistTable(sw, p, pair.Value, true, phase_index);
+                                    }
+                                    sw.Write("</div>");
+                                    sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabAll" + id + "\">");
+                                    {
+                                        CreateDMGDistTable(sw, p, pair.Value, false, phase_index);
                                     }
                                     sw.Write("</div>");
                                 }

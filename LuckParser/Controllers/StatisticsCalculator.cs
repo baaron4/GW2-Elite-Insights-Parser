@@ -159,6 +159,12 @@ namespace LuckParser.Controllers
             final.bossPowerDps = (int)dps;
             final.bossPowerDamage = (int)damage;
 
+            // Player only physical damage
+            final.playerPowerDps = player.getJustPlayerDamageLogs(0, log,
+                phase.getStart(), phase.getEnd()).Where(x => x.isCondi() == 0).Sum(x => x.getDamage());
+            final.playerBossPowerDps = player.getJustPlayerDamageLogs(log.getBossData().getInstid(), log,
+                phase.getStart(), phase.getEnd()).Where(x => x.isCondi() == 0).Sum(x => x.getDamage());
+
             return final;
         }
 
