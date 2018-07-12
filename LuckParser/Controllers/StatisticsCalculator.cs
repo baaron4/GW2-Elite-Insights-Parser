@@ -197,7 +197,7 @@ namespace LuckParser.Controllers
                     long start = phase.getStart() + log.getBossData().getFirstAware();
                     long end = phase.getEnd() + log.getBossData().getFirstAware();
 
-                    List<DamageLog> damageLogs = player.getDamageLogs(0, log, phase.getStart(), phase.getEnd());
+                    List<DamageLog> damageLogs = player.getJustPlayerDamageLogs(0, log, phase.getStart(), phase.getEnd());
                     List<CastLog> castLogs = player.getCastLogs(log, phase.getStart(), phase.getEnd());
 
                     int instid = player.getInstid();
@@ -249,11 +249,6 @@ namespace LuckParser.Controllers
                                 {
                                     final.criticalRateBoss++;
                                     final.criticalDmgBoss += dl.getDamage();
-                                    if (dl.getInstidt() == player.getInstid())
-                                    {
-                                        final.playerOnlyCritRateBoss++;
-                                        final.playerOnlyCritDamageBoss += dl.getDamage();
-                                    }
                                 }
 
                                 if (dl.isNinety() > 0)
@@ -295,11 +290,6 @@ namespace LuckParser.Controllers
                             {
                                 final.criticalRate++;
                                 final.criticalDmg += dl.getDamage();
-                                if (dl.getInstidt() == player.getInstid())
-                                {
-                                    final.playerOnlyCritRate++;
-                                    final.playerOnlyCritDamage += dl.getDamage();
-                                }
                             }
 
                             if (dl.isNinety() > 0)

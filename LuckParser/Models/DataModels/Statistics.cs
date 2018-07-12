@@ -50,8 +50,6 @@ namespace LuckParser.Models.DataModels
             public int critablePowerLoopCount;
             public int criticalRate;
             public int criticalDmg;
-            public int playerOnlyCritRate;
-            public int playerOnlyCritDamage;
             public int scholarRate;
             public int scholarDmg;
             public int movingRate;
@@ -71,8 +69,6 @@ namespace LuckParser.Models.DataModels
             public int critablePowerLoopCountBoss;
             public int criticalRateBoss;
             public int criticalDmgBoss;
-            public int playerOnlyCritRateBoss;
-            public int playerOnlyCritDamageBoss;
             public int scholarRateBoss;
             public int scholarDmgBoss;
             public int movingRateBoss;
