@@ -14,7 +14,7 @@ namespace LuckParser.Models.ParseModels
         private int group;
         private long dcd = 0;//time in ms the player dcd
        
-        private List<CombatItem> consumeList = new List<CombatItem>();
+        private List<long[]> consumeList = new List<long[]>();
         //weaponslist
         private string[] weapons_array;
 
@@ -113,7 +113,7 @@ namespace LuckParser.Models.ParseModels
             {
                 setConsumablesList(log);
             }
-            return consumeList.Where(x => x.getTime() >= start && x.getTime() <= end).Select( x => new long[] { x.getSkillID(), x.getTime() }).ToList() ;
+            return consumeList.Where(x => x[1] >= start && x[1] <= end).ToList() ;
         }
         
         // Private Methods
@@ -262,7 +262,7 @@ namespace LuckParser.Models.ParseModels
                 long time = c.getTime() - time_start;
                 if (agent.getInstid() == c.getDstInstid())
                 {
-                    consumeList.Add(c); 
+                    consumeList.Add(new long[] { c.getSkillID(), Math.Max(time, 0) }); 
                 }
             }
         }
