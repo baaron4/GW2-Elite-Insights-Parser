@@ -15,6 +15,7 @@ namespace LuckParser.Models.ParseModels
         private List<Dictionary<long, long>> boon_presence = new List<Dictionary<long, long>>();
         private List<Dictionary<long, long>> condi_presence = new List<Dictionary<long, long>>();
         private Dictionary<long, BoonsGraphModel> boon_points = new Dictionary<long, BoonsGraphModel>();
+        private Dictionary<long, Dictionary<int, string[]>> boon_extra = new Dictionary<long, Dictionary<int, string[]>>();
         // dps graphs
         private Dictionary<int, List<Point>> dps_graph = new Dictionary<int, List<Point>>();
         // Minions
@@ -70,6 +71,15 @@ namespace LuckParser.Models.ParseModels
                 setBoonDistribution(log, phases, to_track);
             }
             return boon_presence[phase_index];
+        }
+
+        public Dictionary<long ,Dictionary<int, string[]>> getExtraBoonData(ParsedLog log, List<PhaseData> phases, List<Boon> to_track)
+        {
+            if (boon_distribution.Count == 0)
+            {
+                setBoonDistribution(log, phases, to_track);
+            }
+            return boon_extra;
         }
 
         public Dictionary<long, long> getCondiPresence(ParsedLog log, List<PhaseData> phases, List<Boon> to_track, int phase_index)
@@ -227,6 +237,81 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
+
+        private void generateExtraBoonData(ParsedLog log, long boonid, Point[] accurateUptime, List<PhaseData> phases)
+        {
+            
+            switch (boonid)
+            {
+                // Frost Spirit
+                case 50421:
+                    boon_extra[boonid] = new Dictionary<int, string[]>();
+                    for (int i = 0; i < phases.Count; i++)
+                    {
+                        List<DamageLog> dmLogs = getJustPlayerDamageLogs(0, log, phases[i].getStart(), phases[i].getEnd());
+                        int totalDamage = Math.Max(dmLogs.Sum(x => x.getDamage()),1);
+                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.getDstInstidt() == log.getBossData().getInstid()).Sum(x => x.getDamage()),1);
+                        List<DamageLog> effect = dmLogs.Where(x => accurateUptime[(int)x.getTime()].Y > 0 && x.isCondi() == 0).ToList();
+                        List<DamageLog> effectBoss = effect.Where(x => x.getDstInstidt() == log.getBossData().getInstid()).ToList();
+                        int damage = (int)(effect.Sum(x => x.getDamage()) / 21.0);
+                        int bossDamage = (int)(effectBoss.Sum(x => x.getDamage()) / 21.0);
+                        double gain = Math.Round(100.0 * ((double)totalDamage / (totalDamage - damage) - 1.0), 2);
+                        double gainBoss = Math.Round(100.0 * ((double)totalBossDamage / (totalBossDamage - bossDamage) - 1.0), 2);
+                        string gainText = effect.Count + " out of " + dmLogs.Count(x => x.isCondi() == 0) + " hits <br> Pure Frost Spirit Damage: "
+                                + damage + "<br> Effective Damage Increase: " + gain + "%";
+                        string gainBossText = effectBoss.Count + " out of " + dmLogs.Count(x => x.getDstInstidt() == log.getBossData().getInstid() && x.isCondi() == 0) + " hits <br> Pure Frost Spirit Damage: "
+                                + bossDamage + "<br> Effective Damage Increase: " + gainBoss + "%";
+                        boon_extra[boonid][i] = new string[] { gainText, gainBossText };
+                    }
+                    break;
+                // Kalla Elite
+                case 45026:
+                    boon_extra[boonid] = new Dictionary<int, string[]>();
+                    int bossArmor = log.getBossData().getID() == 0x3C4E ? 1910 : 2597;
+                    for (int i = 0; i < phases.Count; i++)
+                    {
+                        List<DamageLog> dmLogs = getJustPlayerDamageLogs(0, log, phases[i].getStart(), phases[i].getEnd());
+                        int totalDamage = Math.Max(dmLogs.Sum(x => x.getDamage()),1);
+                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.getDstInstidt() == log.getBossData().getInstid()).Sum(x => x.getDamage()),1);
+                        int effectCount = dmLogs.Where(x => accurateUptime[(int)x.getTime()].Y > 0 && x.isCondi() == 0).Count();
+                        int effectBossCount = dmLogs.Where(x => accurateUptime[(int)x.getTime()].Y > 0 && x.isCondi() == 0 && x.getDstInstidt() == log.getBossData().getInstid()).Count();
+                        int damage = (int)(effectCount * (325 + 3000 * 0.04));
+                        int bossDamage = (int)(effectBossCount * (325 + 3000 * 0.04));
+                        double gain = Math.Round(100.0 * ((double)(totalDamage+damage) / totalDamage - 1.0), 2);
+                        double gainBoss = Math.Round(100.0 * ((double)(totalBossDamage + bossDamage) /totalBossDamage - 1.0), 2);
+                        string gainText = effectCount + " out of " + dmLogs.Count(x => x.isCondi() == 0) + " hits <br> Estimated Soulcleave Damage: "
+                                + damage + "<br> Estimated Damage Increase: " + gain + "%";
+                        string gainBossText = effectBossCount + " out of " + dmLogs.Count(x => x.getDstInstidt() == log.getBossData().getInstid() && x.isCondi() == 0) + " hits <br> Estimated Soulcleave Damage: "
+                                + bossDamage + "<br> Estimated Damage Increase: " + gainBoss + "%";
+                        boon_extra[boonid][i] = new string[] { gainText, gainBossText };
+                    }
+                    break;
+                // GoE
+                case 31803:
+                    boon_extra[boonid] = new Dictionary<int, string[]>();
+                    for (int i = 0; i < phases.Count; i++)
+                    {
+                        List<DamageLog> dmLogs = getJustPlayerDamageLogs(0, log, phases[i].getStart(), phases[i].getEnd());
+                        int totalDamage = Math.Max(dmLogs.Sum(x => x.getDamage()),1);
+                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.getDstInstidt() == log.getBossData().getInstid()).Sum(x => x.getDamage()),1);
+                        List<DamageLog> effect = dmLogs.Where(x => accurateUptime[(int)x.getTime()].Y > 0 && x.isCondi() == 0).ToList();
+                        List<DamageLog> effectBoss = effect.Where(x => x.getDstInstidt() == log.getBossData().getInstid()).ToList();
+                        int damage = (int)(effect.Sum(x => x.getDamage()) / 11.0);
+                        int bossDamage = (int)(effectBoss.Sum(x => x.getDamage()) / 11.0);
+                        double gain = Math.Round(100.0 * ((double)totalDamage / (totalDamage - damage) - 1.0), 2);
+                        double gainBoss = Math.Round(100.0 * ((double)totalBossDamage / (totalBossDamage - bossDamage) - 1.0), 2);
+                        string gainText = effect.Count + " out of " + dmLogs.Count(x => x.isCondi() == 0) + " hits <br> Pure GoE Damage: "
+                                + damage + "<br> Effective Damage Increase: " + gain + "%";
+                        string gainBossText = effectBoss.Count + " out of " + dmLogs.Count(x => x.getDstInstidt() == log.getBossData().getInstid() && x.isCondi() == 0) + " hits <br> Pure GoE Damage: "
+                                + bossDamage + "<br> Effective Damage Increase: " + gainBoss + "%";
+                        boon_extra[boonid][i] = new string[] { gainText, gainBossText };
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private void setBoonDistribution(ParsedLog log, List<PhaseData> phases, List<Boon> to_track)
         {
             BoonMap to_use = getBoonMap(log, to_track);
@@ -235,6 +320,12 @@ namespace LuckParser.Models.ParseModels
             // Init boon/condi presence points
             BoonsGraphModel boon_presence_points = new BoonsGraphModel("Number of Boons");
             BoonsGraphModel condi_presence_points = new BoonsGraphModel("Number of Conditions");
+            HashSet<long> extraDataID = new HashSet<long>
+            {
+                50421,
+                45026,
+                31803
+            };
             for (int i = 0; i <= fight_duration; i++)
             {
                 boon_presence_points.getBoonChart().Add(new Point(i, 0));
@@ -261,6 +352,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         continue;
                     }
+                    bool requireExtraData = extraDataID.Contains(boonid);
                     var simulator = boon.CreateSimulator();
                     simulator.simulate(logs, dur);
                     if (death > 0 && getCastLogs(log, death + 1, fight_duration).Count > 0)
@@ -310,7 +402,10 @@ namespace LuckParser.Models.ParseModels
                     for (int i = 0; i <= dur; i++)
                     {
                         toFill[i] = new Point(i, 0);
-                        toFillPresence[i] = new Point(i, 0);
+                        if (updateBoonPresence || updateCondiPresence)
+                        {
+                            toFillPresence[i] = new Point(i, 0);
+                        }
                     }
                     foreach (var simul in simulation)
                     {
@@ -321,8 +416,15 @@ namespace LuckParser.Models.ParseModels
                         for (int i = start; i <= end; i++)
                         {
                             toFill[i] = new Point(i, simul.getStack(i));
-                            toFillPresence[i] = new Point(i, present ? 1 : 0);
+                            if (updateBoonPresence || updateCondiPresence)
+                            {
+                                toFillPresence[i] = new Point(i, present ? 1 : 0);
+                            }
                         }
+                    }
+                    if (requireExtraData)
+                    {
+                        generateExtraBoonData(log, boonid, toFill, phases);
                     }
                     // reduce precision to seconds
                     var reducedPrecision = new List<Point>(capacity: fight_duration + 1);

@@ -1344,6 +1344,7 @@ namespace LuckParser.Controllers
                     {
 
                         Dictionary<long, Statistics.FinalBoonUptime> boons = statistics.selfBoons[player][phase_index];
+                        Dictionary<long, Dictionary<int, string[]>> extraBoonData = player.getExtraBoonData(log, phases, list_to_use);
                         List<string> boonArrayToList = new List<string>();
                         boonArrayToList.Add(player.getGroup().ToString());
                         int count = 0;
@@ -1354,13 +1355,9 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + "\" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             if (boonTable)
                             {
-                                List<Boon> boon_to_track = new List<Boon>();
-                                boon_to_track.AddRange(statistics.present_boons);
-                                boon_to_track.AddRange(statistics.present_offbuffs);
-                                boon_to_track.AddRange(statistics.present_defbuffs);
-                                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
+                                
                                 long fight_duration = phases[phase_index].getDuration();
-                                Dictionary<long, long> boonPresence = player.getBoonPresence(log, phases, boon_to_track, phase_index);
+                                Dictionary<long, long> boonPresence = player.getBoonPresence(log, phases, list_to_use, phase_index);
                                 double avg_boons = 0.0;
                                 foreach (long duration in boonPresence.Values)
                                 {
@@ -1379,17 +1376,21 @@ namespace LuckParser.Controllers
                                 {
                                     intensityBoon.Add(count);
                                 }
-                                if (boons.ContainsKey(boon.getID()))
+                                string tooltip = "";
+                                if (extraBoonData.TryGetValue(boon.getID(),out var myDict))
                                 {
-                                    string toWrite = boons[boon.getID()].uptime + (intensityBoon.Contains(count) ? "" : "%");
+                                    string[] tooltips = myDict[phase_index];
+                                    tooltip = " <br> <big><b>Boss</b></big> </br> " + tooltips[1] + " <br> <big><b>All</b></big> </br> " + tooltips[0];
+                                }
+                                string toWrite = boons[boon.getID()].uptime + (intensityBoon.Contains(count) ? "" : "%");
+                                if (tooltip.Length > 0)
+                                {
+                                    sw.Write("<td data-html=\"true\" data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + toWrite + " </td>");
+                                } else
+                                {
                                     sw.Write("<td>" + toWrite + "</td>");
-                                    boonArrayToList.Add(boons[boon.getID()].uptime.ToString());
-                                }
-                                else
-                                {
-                                    sw.Write("<td>" + 0 + "</td>");
-                                    boonArrayToList.Add("0");
-                                }
+                                }                                
+                                boonArrayToList.Add(boons[boon.getID()].uptime.ToString());                        
                                 count++;
                             }
                         }
