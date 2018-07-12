@@ -2029,12 +2029,12 @@ namespace LuckParser.Controllers
                             sw.Write("</ul>");
                             sw.Write("<div class=\"tab-content\">");
                             {
-                                sw.Write("<div class=\"tab-pane fade active\" id=\"distTabBoss" + pid + "\">");
+                                sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabBoss" + pid + "\">");
                                 {
                                     CreateDMGDistTable(sw, p, true, phase_index);
                                 }
                                 sw.Write("</div>");
-                                sw.Write("<div class=\"tab-pane fade show \" id=\"distTabAll" + pid + "\">");
+                                sw.Write("<div class=\"tab-pane fade \" id=\"distTabAll" + pid + "\">");
                                 {
                                     CreateDMGDistTable(sw, p, false, phase_index);
                                 }
@@ -2056,12 +2056,12 @@ namespace LuckParser.Controllers
                                 sw.Write("</ul>");
                                 sw.Write("<div class=\"tab-content\">");
                                 {
-                                    sw.Write("<div class=\"tab-pane fade active\" id=\"distTabBoss" + id + "\">");
+                                    sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabBoss" + id + "\">");
                                     {
                                         CreateDMGDistTable(sw, p, pair.Value, true, phase_index);
                                     }
                                     sw.Write("</div>");
-                                    sw.Write("<div class=\"tab-pane fade show \" id=\"distTabAll" + id + "\">");
+                                    sw.Write("<div class=\"tab-pane fade\" id=\"distTabAll" + id + "\">");
                                     {
                                         CreateDMGDistTable(sw, p, pair.Value, false, phase_index);
                                     }
@@ -4271,12 +4271,12 @@ namespace LuckParser.Controllers
             sw.Write("</ul>");
             sw.Write("<div class=\"tab-content\">");
             {
-                sw.Write("<div class=\"tab-pane fade active\" id=\"distTabBoss" + p.getInstid() + "\">");
+                sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabBoss" + p.getInstid() + "\">");
                 {
                     CreateDMGDistTable(sw, p, true, 0);
                 }
                 sw.Write("</div>");
-                sw.Write("<div class=\"tab-pane fade show \" id=\"distTabAll" + p.getInstid() + "\">");
+                sw.Write("<div class=\"tab-pane fade\" id=\"distTabAll" + p.getInstid() + "\">");
                 {
                     CreateDMGDistTable(sw, p, false, 0);
                 }
