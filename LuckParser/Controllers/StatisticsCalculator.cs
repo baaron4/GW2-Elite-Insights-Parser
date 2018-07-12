@@ -147,7 +147,7 @@ namespace LuckParser.Controllers
             }
 
             final.bossCondiDps = (int)dps;
-            final.bossCondiDamage = (int)dps;
+            final.bossCondiDamage = (int)damage;
 
             // Boss Power DPS
             damage = final.bossDamage - damage;
