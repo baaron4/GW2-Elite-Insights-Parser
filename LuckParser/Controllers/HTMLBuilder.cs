@@ -826,15 +826,22 @@ namespace LuckParser.Controllers
                         Statistics.FinalDPS dps = statistics.dps[player][phase_index];
 
                         TimeSpan timedead = TimeSpan.FromMilliseconds(stats.died);//dead 
-                        
+
                         //gather data for footer
                         footerList.Add(new string[] {
                             player.getGroup().ToString(),
                             stats.powerLoopCount.ToString(),
-                            stats.criticalRate.ToString(), stats.scholarRate.ToString(),
-                            stats.movingRate.ToString(), stats.flankingRate.ToString(), stats.glanceRate.ToString(),
-                            stats.missed.ToString(), stats.interupts.ToString(), stats.invulned.ToString(),
-                            stats.swapCount.ToString(), stats.downCount.ToString()
+                            stats.criticalRate.ToString(),
+                            stats.scholarRate.ToString(),
+                            stats.movingRate.ToString(),
+                            stats.flankingRate.ToString(),
+                            stats.glanceRate.ToString(),
+                            stats.missed.ToString(),
+                            stats.interupts.ToString(),
+                            stats.invulned.ToString(),
+                            stats.swapCount.ToString(),
+                            stats.downCount.ToString(),
+                            stats.critablePowerLoopCount.ToString()
                         });
                         sw.Write("<tr>");
                         {
@@ -954,10 +961,17 @@ namespace LuckParser.Controllers
                         footerList.Add(new string[] {
                             player.getGroup().ToString(),
                             stats.powerLoopCountBoss.ToString(),
-                            stats.criticalRateBoss.ToString(), stats.scholarRateBoss.ToString(),
-                            stats.movingRateBoss.ToString(), stats.flankingRateBoss.ToString(), stats.glanceRateBoss.ToString(),
-                            stats.missedBoss.ToString(), stats.interuptsBoss.ToString(), stats.invulnedBoss.ToString(),
-                            stats.swapCount.ToString(), stats.downCount.ToString()
+                            stats.criticalRateBoss.ToString(),
+                            stats.scholarRateBoss.ToString(),
+                            stats.movingRateBoss.ToString(),
+                            stats.flankingRateBoss.ToString(),
+                            stats.glanceRateBoss.ToString(),
+                            stats.missedBoss.ToString(),
+                            stats.interuptsBoss.ToString(),
+                            stats.invulnedBoss.ToString(),
+                            stats.swapCount.ToString(),
+                            stats.downCount.ToString(),
+                            stats.critablePowerLoopCountBoss.ToString()
                         });
                         sw.Write("<tr>");
                         {
