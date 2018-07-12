@@ -248,7 +248,7 @@ namespace LuckParser.Models.ParseModels
             List<Boon> utilityBoon = Boon.getUtilityList();
             long time_start = log.getBossData().getFirstAware();
             long fight_duration = log.getBossData().getLastAware() - time_start;
-            foreach (CombatItem c in log.getCombatList())
+            foreach (CombatItem c in log.getBoonData())
             {
                 if ( c.isBuff() != 18 && c.isBuff() != 1)
                 {
@@ -260,7 +260,7 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 long time = c.getTime() - time_start;
-                if (agent.getInstid() == c.getDstInstid())
+                if (agent.getInstid() == c.getDstInstid() && time <= fight_duration)
                 {
                     consumeList.Add(new long[] { c.getSkillID(), Math.Max(time, 0) }); 
                 }
