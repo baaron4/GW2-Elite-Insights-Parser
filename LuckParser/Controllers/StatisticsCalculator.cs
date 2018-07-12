@@ -409,7 +409,7 @@ namespace LuckParser.Controllers
                  
                     final.damageTaken = damageLogs.Sum(x => (long)x.getDamage());
                     //final.allHealReceived = healingLogs.Sum(x => x.getDamage());
-                    final.blockedCount = damageLogs.Count(x => x.getResult() == ParseEnum.Result.Absorb);
+                    final.blockedCount = damageLogs.Count(x => x.getResult() == ParseEnum.Result.Block);
                     final.invulnedCount = 0;
                     final.damageInvulned = 0;
                     final.evadedCount = damageLogs.Count(x => x.getResult() == ParseEnum.Result.Evade);
