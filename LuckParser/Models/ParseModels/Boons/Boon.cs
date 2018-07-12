@@ -132,7 +132,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Immobile", 727, BoonSource.Mixed, BoonType.Duration, 3, BoonEnum.Condition, "https://wiki.guildwars2.com/images/thumb/3/32/Immobile.png/20px-Immobile.png", RemoveType.CleanseFriend),
                 new Boon("Slow", 26766, BoonSource.Mixed, BoonType.Duration, 9, BoonEnum.Condition, "https://wiki.guildwars2.com/images/thumb/f/fb/Slow_40px.png/20px-Slow_40px.png", RemoveType.CleanseFriend),
                 new Boon("Weakness", 742, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Condition, "https://wiki.guildwars2.com/images/thumb/f/f9/Weakness.png/20px-Weakness.png", RemoveType.CleanseFriend),
-                new Boon("Taunt", 27705, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Condition, "https://wiki.guildwars2.com/images/thumb/c/cc/Taunt.png/20px-Taunt.png", RemoveType.CleanseFriend),
+                new Boon("Taunt", 46996, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Condition, "https://wiki.guildwars2.com/images/thumb/c/cc/Taunt.png/20px-Taunt.png", RemoveType.CleanseFriend),
                 new Boon("Vulnerability", 738, BoonSource.Mixed, BoonType.Intensity, 25, BoonEnum.Condition, "https://wiki.guildwars2.com/images/thumb/a/af/Vulnerability.png/20px-Vulnerability.png", RemoveType.CleanseFriend),
                 new Boon("Retaliation", 873, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Condition, "https://wiki.guildwars2.com/images/5/53/Retaliation.png", RemoveType.CleanseFoe),
                 // Generic
