@@ -26,18 +26,23 @@ namespace LuckParser.Models.DataModels
 
         public class FinalDPS
         {
+            // Total
             public int allDps;
             public int allDamage;
             public int allCondiDps;
             public int allCondiDamage;
             public int allPowerDps;
             public int allPowerDamage;
+            // Boss
             public int bossDps;
             public int bossDamage;
             public int bossCondiDps;
             public int bossCondiDamage;
             public int bossPowerDps;
             public int bossPowerDamage;
+            // Player only
+            public int playerPowerDamage;
+            public int playerBossPowerDamage;
         }
 
         public Dictionary<Player, FinalDPS[]> dps;

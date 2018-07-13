@@ -826,15 +826,22 @@ namespace LuckParser.Controllers
                         Statistics.FinalDPS dps = statistics.dps[player][phase_index];
 
                         TimeSpan timedead = TimeSpan.FromMilliseconds(stats.died);//dead 
-                        
+
                         //gather data for footer
                         footerList.Add(new string[] {
                             player.getGroup().ToString(),
                             stats.powerLoopCount.ToString(),
-                            stats.criticalRate.ToString(), stats.scholarRate.ToString(),
-                            stats.movingRate.ToString(), stats.flankingRate.ToString(), stats.glanceRate.ToString(),
-                            stats.missed.ToString(), stats.interupts.ToString(), stats.invulned.ToString(),
-                            stats.swapCount.ToString(), stats.downCount.ToString()
+                            stats.criticalRate.ToString(),
+                            stats.scholarRate.ToString(),
+                            stats.movingRate.ToString(),
+                            stats.flankingRate.ToString(),
+                            stats.glanceRate.ToString(),
+                            stats.missed.ToString(),
+                            stats.interupts.ToString(),
+                            stats.invulned.ToString(),
+                            stats.swapCount.ToString(),
+                            stats.downCount.ToString(),
+                            stats.critablePowerLoopCount.ToString()
                         });
                         sw.Write("<tr>");
                         {
@@ -851,7 +858,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.scholarRate+ " out of " + stats.powerLoopCount + " hits <br> Pure Scholar Damage: " 
                                 + stats.scholarDmg + "<br> Effective Physical Damage Increase: " 
-                                + Math.Round(100.0 * (dps.allPowerDamage / (Double)(dps.allPowerDamage - stats.scholarDmg) - 1.0) , 3) 
+                                + Math.Round(100.0 * (dps.playerPowerDamage / (Double)(dps.playerPowerDamage - stats.scholarDmg) - 1.0) , 3) 
                                 + "% \">" + Math.Round((Double)(stats.scholarRate) / stats.powerLoopCount * 100,1) + "%</span>" + "</td>");//scholar
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.movingRate + " out of " + stats.powerLoopCount + " hits \">" 
@@ -954,10 +961,17 @@ namespace LuckParser.Controllers
                         footerList.Add(new string[] {
                             player.getGroup().ToString(),
                             stats.powerLoopCountBoss.ToString(),
-                            stats.criticalRateBoss.ToString(), stats.scholarRateBoss.ToString(),
-                            stats.movingRateBoss.ToString(), stats.flankingRateBoss.ToString(), stats.glanceRateBoss.ToString(),
-                            stats.missedBoss.ToString(), stats.interuptsBoss.ToString(), stats.invulnedBoss.ToString(),
-                            stats.swapCount.ToString(), stats.downCount.ToString()
+                            stats.criticalRateBoss.ToString(),
+                            stats.scholarRateBoss.ToString(),
+                            stats.movingRateBoss.ToString(),
+                            stats.flankingRateBoss.ToString(),
+                            stats.glanceRateBoss.ToString(),
+                            stats.missedBoss.ToString(),
+                            stats.interuptsBoss.ToString(),
+                            stats.invulnedBoss.ToString(),
+                            stats.swapCount.ToString(),
+                            stats.downCount.ToString(),
+                            stats.critablePowerLoopCountBoss.ToString()
                         });
                         sw.Write("<tr>");
                         {
@@ -974,7 +988,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.scholarRateBoss + " out of " + stats.powerLoopCountBoss + " hits <br> Pure Scholar Damage: " 
                                 + stats.scholarDmgBoss + "<br> Effective Physical Damage Increase: " 
-                                + Math.Round(100.0* (dps.bossPowerDamage / (Double)(dps.bossPowerDamage - stats.scholarDmgBoss) - 1.0), 3) 
+                                + Math.Round(100.0* (dps.playerBossPowerDamage / (Double)(dps.playerBossPowerDamage - stats.scholarDmgBoss) - 1.0), 3) 
                                 + "% \">" + Math.Round((Double)(stats.scholarRateBoss) / stats.powerLoopCountBoss * 100,1) + "%</span>" + "</td>");//scholar
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.movingRateBoss + " out of " + stats.powerLoopCountBoss + " hits \">" 
@@ -1330,6 +1344,7 @@ namespace LuckParser.Controllers
                     {
 
                         Dictionary<long, Statistics.FinalBoonUptime> boons = statistics.selfBoons[player][phase_index];
+                        Dictionary<long, Dictionary<int, string[]>> extraBoonData = player.getExtraBoonData(log, phases, list_to_use);
                         List<string> boonArrayToList = new List<string>();
                         boonArrayToList.Add(player.getGroup().ToString());
                         int count = 0;
@@ -1340,20 +1355,13 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + "\" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "</td>");
                             if (boonTable)
                             {
-                                List<Boon> boon_to_track = new List<Boon>();
-                                boon_to_track.AddRange(statistics.present_boons);
-                                boon_to_track.AddRange(statistics.present_offbuffs);
-                                boon_to_track.AddRange(statistics.present_defbuffs);
-                                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
+                                
                                 long fight_duration = phases[phase_index].getDuration();
-                                Dictionary<long, long> boonPresence = player.getBoonPresence(log, phases, boon_to_track, phase_index);
+                                Dictionary<long, long> boonPresence = player.getBoonPresence(log, phases, list_to_use, phase_index);
                                 double avg_boons = 0.0;
-                                foreach (Boon boon in list_to_use)
+                                foreach (long duration in boonPresence.Values)
                                 {
-                                    if (boonPresence.ContainsKey(boon.getID()))
-                                    {
-                                        avg_boons += boonPresence[boon.getID()];
-                                    }
+                                    avg_boons += duration;
                                 }
                                 avg_boons /= fight_duration;
                                 sw.Write("<td data-toggle=\"tooltip\" title=\"Average number of boons: " + Math.Round(avg_boons, 1) + "\">" + player.getCharacter().ToString() + " </td>");
@@ -1368,17 +1376,21 @@ namespace LuckParser.Controllers
                                 {
                                     intensityBoon.Add(count);
                                 }
-                                if (boons.ContainsKey(boon.getID()))
+                                string tooltip = "";
+                                if (extraBoonData.TryGetValue(boon.getID(),out var myDict))
                                 {
-                                    string toWrite = boons[boon.getID()].uptime + (intensityBoon.Contains(count) ? "" : "%");
+                                    string[] tooltips = myDict[phase_index];
+                                    tooltip = " <br> <big><b>Boss</b></big> </br> " + tooltips[1] + " <br> <big><b>All</b></big> </br> " + tooltips[0];
+                                }
+                                string toWrite = boons[boon.getID()].uptime + (intensityBoon.Contains(count) ? "" : "%");
+                                if (tooltip.Length > 0)
+                                {
+                                    sw.Write("<td data-html=\"true\" data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + toWrite + " </td>");
+                                } else
+                                {
                                     sw.Write("<td>" + toWrite + "</td>");
-                                    boonArrayToList.Add(boons[boon.getID()].uptime.ToString());
-                                }
-                                else
-                                {
-                                    sw.Write("<td>" + 0 + "</td>");
-                                    boonArrayToList.Add("0");
-                                }
+                                }                                
+                                boonArrayToList.Add(boons[boon.getID()].uptime.ToString());                        
                                 count++;
                             }
                         }
@@ -1896,7 +1908,7 @@ namespace LuckParser.Controllers
                                                 parseBoonsList.AddRange(statistics.present_personnal[p.getInstid()]);
                                             }
                                             Dictionary<long, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
-                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
+                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.getBoonName() != "Number of Conditions"))
                                             {
                                                 sw.Write("{");
                                                 {
@@ -2011,20 +2023,20 @@ namespace LuckParser.Controllers
                             sw.Write("</script> ");
                             sw.Write("<ul class=\"nav nav-tabs\">");
                             {
-                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabAll" + pid + "\">" + "All" + "</a></li>");
-                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabBoss" + pid + "\">" + "Boss" + "</a></li>");
+                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabBoss" + pid + "\">" + "Boss" + "</a></li>");
+                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabAll" + pid + "\">" + "All" + "</a></li>");
                             }
                             sw.Write("</ul>");
                             sw.Write("<div class=\"tab-content\">");
                             {
-                                sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabAll" + pid + "\">");
-                                {
-                                    CreateDMGDistTable(sw, p, false, phase_index);
-                                }
-                                sw.Write("</div>");
-                                sw.Write("<div class=\"tab-pane fade\" id=\"distTabBoss" + pid + "\">");
+                                sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabBoss" + pid + "\">");
                                 {
                                     CreateDMGDistTable(sw, p, true, phase_index);
+                                }
+                                sw.Write("</div>");
+                                sw.Write("<div class=\"tab-pane fade \" id=\"distTabAll" + pid + "\">");
+                                {
+                                    CreateDMGDistTable(sw, p, false, phase_index);
                                 }
                                 sw.Write("</div>");
                             }
@@ -2038,20 +2050,20 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("<ul class=\"nav nav-tabs\">");
                                 {
-                                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabAll" + id + "\">" + "All" + "</a></li>");
-                                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabBoss" + id + "\">" + "Boss" + "</a></li>");
+                                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabBoss" + id + "\">" + "Boss" + "</a></li>");
+                                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabAll" + id + "\">" + "All" + "</a></li>");
                                 }
                                 sw.Write("</ul>");
                                 sw.Write("<div class=\"tab-content\">");
                                 {
-                                    sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabAll" + id + "\">");
-                                    {
-                                        CreateDMGDistTable(sw, p, pair.Value, false, phase_index);
-                                    }
-                                    sw.Write("</div>");
-                                    sw.Write("<div class=\"tab-pane fade\" id=\"distTabBoss" + id + "\">");
+                                    sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabBoss" + id + "\">");
                                     {
                                         CreateDMGDistTable(sw, p, pair.Value, true, phase_index);
+                                    }
+                                    sw.Write("</div>");
+                                    sw.Write("<div class=\"tab-pane fade\" id=\"distTabAll" + id + "\">");
+                                    {
+                                        CreateDMGDistTable(sw, p, pair.Value, false, phase_index);
                                     }
                                     sw.Write("</div>");
                                 }
@@ -3201,6 +3213,8 @@ namespace LuckParser.Controllers
         /// <param name="boss">The boss</param>
         private void CreateCondiUptimeTable(StreamWriter sw, Boss boss, int phase_index)
         {
+            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
+            long fight_duration = phases[phase_index].getDuration();
             //Generate Boon table------------------------------------------------------------------------------------------------
             sw.Write("<script> $(function () { $('#condi_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"condi_table" + phase_index + "\">");
@@ -3222,7 +3236,16 @@ namespace LuckParser.Controllers
                 {
                     sw.Write("<tr>");
                     {
-                        sw.Write("<td>" + boss.getCharacter().ToString() + "</td>");
+                        List<Boon> boon_to_track = Boon.getCondiBoonList();
+                        boon_to_track.AddRange(Boon.getBoonList());
+                        Dictionary<long, long> condiPresence = boss.getCondiPresence(log, phases, boon_to_track, phase_index);
+                        double avg_condis = 0.0;
+                        foreach (long duration in condiPresence.Values)
+                        {
+                            avg_condis += duration;
+                        }
+                        avg_condis /= fight_duration;
+                        sw.Write("<td data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avg_condis, 1) + "\">" + boss.getCharacter() + " </td>");
                         Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
                         foreach (Boon boon in Boon.getCondiBoonList())
                         {
@@ -4145,7 +4168,7 @@ namespace LuckParser.Controllers
                                 parseBoonsList.AddRange(statistics.present_personnal[p.getInstid()]);
                             }
                             Dictionary<long, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
-                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse())
+                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.getBoonName() != "Number of Conditions"))
                             {
                                 sw.Write("{");
                                 {
@@ -4242,20 +4265,20 @@ namespace LuckParser.Controllers
             sw.Write("</script> ");
             sw.Write("<ul class=\"nav nav-tabs\">");
             {
-                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabAll" + p.getInstid() + "\">" + "All" + "</a></li>");
-                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabBoss" + p.getInstid() + "\">" + "Boss" + "</a></li>");
+                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabBoss" + p.getInstid() + "\">" + "Boss" + "</a></li>");
+                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabAll" + p.getInstid() + "\">" + "All" + "</a></li>");
             }
             sw.Write("</ul>");
             sw.Write("<div class=\"tab-content\">");
             {
-                sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabAll" + p.getInstid() + "\">");
-                {
-                    CreateDMGDistTable(sw, p, false, 0);
-                }
-                sw.Write("</div>");
-                sw.Write("<div class=\"tab-pane fade\" id=\"distTabBoss" + p.getInstid() + "\">");
+                sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabBoss" + p.getInstid() + "\">");
                 {
                     CreateDMGDistTable(sw, p, true, 0);
+                }
+                sw.Write("</div>");
+                sw.Write("<div class=\"tab-pane fade\" id=\"distTabAll" + p.getInstid() + "\">");
+                {
+                    CreateDMGDistTable(sw, p, false, 0);
                 }
                 sw.Write("</div>");
             }

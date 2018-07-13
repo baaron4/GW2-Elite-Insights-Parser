@@ -27,6 +27,7 @@ namespace LuckParser.Controllers
         private List<Player> p_list = new List<Player>();
         private Boss boss;
         private byte revision;
+        private bool noSquad = false;
 
         // Public Methods
         public LogData getLogData()
@@ -142,7 +143,9 @@ namespace LuckParser.Controllers
 
                 // 2 bytes: boss instance ID
                 ushort id = reader.ReadUInt16();
-
+                noSquad = id == 0x427D || id == 0x4284 
+                    || id == 0x4234 || id == 0x44E0 
+                    || id == 0x461D || id == 0x455F;
                 // 1 byte: position
                 ParseHelper.safeSkip(stream, 1);
 
@@ -425,6 +428,14 @@ namespace LuckParser.Controllers
             return id == 16202 || id == 16177 || id == 19676 || id == 19645 || id == 16199;
         }
 
+        private static bool rewardBasedBoss(ushort id)
+        {
+            return id == 15438 || id == 15429 || id == 15375 || id == 16123 || id == 16115 || id == 16235
+                || id == 16246 || id == 17194 || id == 17172 || id == 17188 || id == 17154 || id == 19767
+                || id == 19450 || id == 17021 || id == 17028 || id == 16948 || id == 17632 || id == 17949
+                || id == 17759;
+        }
+
         /// <summary>
         /// Parses all the data again and link related stuff to each other
         /// </summary>
@@ -433,7 +444,7 @@ namespace LuckParser.Controllers
             var agentsLookup = agent_data.getAllAgentsList().ToDictionary(a => a.getAgent());
 
             bool golem_mode = isGolem(boss_data.getID());
-
+            bool reward_mode = rewardBasedBoss(boss_data.getID());
             // Set Agent instid, first_aware and last_aware
             var combat_list = combat_data.getCombatList();
             foreach (CombatItem c in combat_list)
@@ -511,11 +522,18 @@ namespace LuckParser.Controllers
             // a hack for buggy golem logs
             if (golem_mode)
             {
+                AgentItem otherGolem = NPC_list.Find(x => x.getID() == 19603);
                 foreach (CombatItem c in combat_list)
                 {
+                    // redirect all attacks to the main golem
                     if (c.getDstAgent() == 0 && c.getDstInstid() == 0 && c.isStateChange() == ParseEnum.StateChange.Normal && c.getIFF() == ParseEnum.IFF.Foe && c.isActivation() == ParseEnum.Activation.None)
                     {
                         c.setDstAgent(bossAgent.getAgent());
+                        c.setDstInstid(bossAgent.getInstid());
+                    }
+                    // redirect buff initial to main golem
+                    if (otherGolem != null && c.isBuff() == 18 && c.getDstInstid() == otherGolem.getInstid())
+                    {
                         c.setDstInstid(bossAgent.getInstid());
                     }
                 }
@@ -568,7 +586,6 @@ namespace LuckParser.Controllers
                         bossHealthOverTime = new List<Point>();//reset boss health over time
                         xera_2_instid = NPC.getInstid();
                         boss_data.setHealth(24085950);
-                        boss.addPhaseData(boss_data.getLastAware());
                         boss.addPhaseData(NPC.getFirstAware());
                         boss_data.setLastAware(NPC.getLastAware());
                         foreach (CombatItem c in combat_list)
@@ -636,21 +653,21 @@ namespace LuckParser.Controllers
             {
                 13
             };
-            // Re parse in reverse to see if the boss is dead and update last aware
-            foreach(CombatItem c in combat_list)
+            if (reward_mode)
             {
-                //13 is daily chest
-                if (c.isStateChange() == ParseEnum.StateChange.Reward && !notRaidRewardsIds.Contains(c.getValue()))//got reward
+                CombatItem reward = combat_list.Find(x => x.isStateChange() == ParseEnum.StateChange.Reward && !notRaidRewardsIds.Contains(x.getValue()));
+                if (reward != null)
                 {
                     log_data.setBossKill(true);
-                    boss_data.setLastAware(c.getTime());
-                    break;
+                    boss_data.setLastAware(reward.getTime());
                 }
-                //set boss dead
-                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange() == ParseEnum.StateChange.ChangeDead && !log_data.getBosskill())//change dead
+            } else
+            {
+                CombatItem killed = combat_list.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange() == ParseEnum.StateChange.ChangeDead);
+                if (killed != null)
                 {
                     log_data.setBossKill(true);
-                    boss_data.setLastAware(c.getTime());
+                    boss_data.setLastAware(killed.getTime());
                 }
             }
 
@@ -669,7 +686,7 @@ namespace LuckParser.Controllers
                 foreach (AgentItem playerAgent in playerAgentList)
                 {
                     List<CombatItem> lp = combat_data.getStates(playerAgent.getInstid(), ParseEnum.StateChange.Despawn, boss_data.getFirstAware(), boss_data.getLastAware());
-                    Player player = new Player(playerAgent);
+                    Player player = new Player(playerAgent, noSquad);
                     bool skip = false;
                     foreach (Player p in p_list)
                     {

@@ -24,22 +24,7 @@ namespace LuckParser.Models.ParseModels
                 if (agent.getInstid() == c.getSrcInstid() && c.getTime() > min_time && c.getTime() < max_time)//selecting minion as caster
                 {
                     long time = c.getTime() - time_start;
-                    addDamageLog(time, 0, c, damage_logs);
-                }
-            }
-        }
-
-        protected override void setFilteredLogs(ParsedLog log)
-        {
-            long time_start = log.getBossData().getFirstAware();
-            long min_time = Math.Max(time_start, agent.getFirstAware());
-            long max_time = Math.Min(log.getBossData().getLastAware(), agent.getLastAware());
-            foreach (CombatItem c in log.getDamageData())
-            {
-                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > min_time && c.getTime() < max_time)//selecting player
-                {
-                    long time = c.getTime() - time_start;
-                    addDamageLog(time, log.getBossData().getInstid(), c, damage_logsFiltered);
+                    addDamageLog(time, c);
                 }
             }
         }

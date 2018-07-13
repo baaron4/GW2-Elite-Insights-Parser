@@ -14,16 +14,16 @@ namespace LuckParser.Models.ParseModels
         private int group;
         private long dcd = 0;//time in ms the player dcd
        
-        private List<CombatItem> consumeList = new List<CombatItem>();
+        private List<long[]> consumeList = new List<long[]>();
         //weaponslist
         private string[] weapons_array;
 
         // Constructors
-        public Player(AgentItem agent) : base(agent)
+        public Player(AgentItem agent, bool noSquad) : base(agent)
         {
             String[] name = agent.getName().Split('\0');
             account = name[1];
-            group   = int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
+            group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
         }
 
         // Getters
@@ -113,7 +113,7 @@ namespace LuckParser.Models.ParseModels
             {
                 setConsumablesList(log);
             }
-            return consumeList.Where(x => x.getTime() >= start && x.getTime() <= end).Select( x => new long[] { x.getSkillID(), x.getTime() }).ToList() ;
+            return consumeList.Where(x => x[1] >= start && x[1] <= end).ToList() ;
         }
         
         // Private Methods
@@ -238,7 +238,7 @@ namespace LuckParser.Models.ParseModels
             foreach (CombatItem c in log.getDamageTakenData()) {
                 if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware()) {//selecting player as target
                     long time = c.getTime() - time_start;
-                    addDamageTakenLog(time, 0, c);
+                    addDamageTakenLog(time, c);
                 }
             }
         }  
@@ -248,7 +248,7 @@ namespace LuckParser.Models.ParseModels
             List<Boon> utilityBoon = Boon.getUtilityList();
             long time_start = log.getBossData().getFirstAware();
             long fight_duration = log.getBossData().getLastAware() - time_start;
-            foreach (CombatItem c in log.getCombatList())
+            foreach (CombatItem c in log.getBoonData())
             {
                 if ( c.isBuff() != 18 && c.isBuff() != 1)
                 {
@@ -260,9 +260,9 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 long time = c.getTime() - time_start;
-                if (agent.getInstid() == c.getDstInstid())
+                if (agent.getInstid() == c.getDstInstid() && time <= fight_duration)
                 {
-                    consumeList.Add(c); 
+                    consumeList.Add(new long[] { c.getSkillID(), Math.Max(time, 0) }); 
                 }
             }
         }
