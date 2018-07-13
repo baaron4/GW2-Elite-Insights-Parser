@@ -124,6 +124,9 @@ namespace LuckParser.Models.ParseModels
         // Private Methods
         private bool isFull() => boon_stack.Count >= capacity;
 
-        protected abstract void sort();
+        private void sort()
+        {
+            boon_stack.Sort((a, b) => b.boon_duration.CompareTo(a.boon_duration));
+        }
     }
 }
