@@ -294,11 +294,12 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case 0x3F76:
                     // split happened
-                    if (phaseData.Count == 2)
+                    if (phaseData.Count == 1)
                     {
-                        end = phaseData[0] - log.getBossData().getFirstAware();
+                        CombatItem invulXera = log.getBoonData().Find(x => x.getDstInstid() == agent.getInstid() && (x.getSkillID() == 762 || x.getSkillID() == 34113));
+                        end = invulXera.getTime() - log.getBossData().getFirstAware();
                         phases.Add(new PhaseData(start, end));
-                        start = phaseData[1] - log.getBossData().getFirstAware();
+                        start = phaseData[0] - log.getBossData().getFirstAware();
                         cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                     }
                     if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
