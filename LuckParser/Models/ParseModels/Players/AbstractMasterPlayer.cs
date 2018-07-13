@@ -349,7 +349,7 @@ namespace LuckParser.Models.ParseModels
             var toFill = new Point[dur + 1];
             var toFillPresence = new Point[dur + 1];
 
-            long death = getDeath(log, 0, dur);
+            long death = getDeath(log, 0, dur) - log.getBossData().getFirstAware() ;
 
             foreach (Boon boon in to_track)
             {
@@ -363,9 +363,9 @@ namespace LuckParser.Models.ParseModels
                     bool requireExtraData = extraDataID.Contains(boonid);
                     var simulator = boon.CreateSimulator();
                     simulator.simulate(logs, dur);
-                    if (death > 0 && getCastLogs(log, death + 1, fight_duration).Count > 0)
+                    if (death > 0 && getCastLogs(log, death + 5000, fight_duration).Count == 0)
                     {
-                        simulator.trim(death - log.getBossData().getFirstAware());
+                        simulator.trim(death);
                     }
                     else
                     {
