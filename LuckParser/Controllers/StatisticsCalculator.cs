@@ -571,7 +571,7 @@ namespace LuckParser.Controllers
                 List<Player> groupPlayers = new List<Player>();
                 foreach (Player p in log.getPlayerList())
                 {
-                    if (p.getGroup() == player.getGroup()) groupPlayers.Add(p);
+                    if (p.getGroup() == player.getGroup() && player.getInstid() != p.getInstid()) groupPlayers.Add(p);
                 }
                 Dictionary<long, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<long, Statistics.FinalBoonUptime>[phases.Count];
                 for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
@@ -613,7 +613,8 @@ namespace LuckParser.Controllers
                 List<Player> groupPlayers = new List<Player>();
                 foreach (Player p in log.getPlayerList())
                 {
-                    groupPlayers.Add(p);
+                    if (p.getInstid() != player.getInstid())
+                        groupPlayers.Add(p);
                 }
                 Dictionary<long, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<long, Statistics.FinalBoonUptime>[phases.Count];
                 for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
