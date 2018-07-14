@@ -234,7 +234,7 @@ namespace LuckParser.Controllers
             sw.Write("<tr>");
             {
                 sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + "\" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + "\" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "<span style=\"display:none\">" + player.getProf() + "</span>" + "</td>");
                 sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
                 foreach (Boon boon in list_to_use)
                 {
