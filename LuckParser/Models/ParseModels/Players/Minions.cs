@@ -10,6 +10,9 @@ namespace LuckParser.Models.ParseModels
     public class Minions : List<Minion>
     {
         private int instid;
+        private List<DamageLog> damage_logs = new List<DamageLog>();
+        private List<DamageLog> filtered_damage_logs = new List<DamageLog>();
+        private List<CastLog> cast_logs = new List<CastLog>();
         public Minions(int instid) : base()
         {
             this.instid = instid;
@@ -17,12 +20,22 @@ namespace LuckParser.Models.ParseModels
 
         public List<DamageLog> getDamageLogs(int instidFilter, ParsedLog log, long start, long end)
         {
-            List<DamageLog> res = new List<DamageLog>();
-            foreach (Minion minion in this)
+            if (damage_logs.Count == 0)
             {
-                res.AddRange(minion.getDamageLogs(instidFilter, log, start, end));
+                foreach (Minion minion in this)
+                {
+                    damage_logs.AddRange(minion.getDamageLogs(0, log, 0, log.getBossData().getAwareDuration()));
+                }
             }
-            return res;
+            if (filtered_damage_logs.Count == 0)
+            {
+                filtered_damage_logs = damage_logs.Where(x => x.getDstInstidt() == log.getBossData().getInstid()).ToList();
+            }
+            if (instidFilter > 0)
+            {
+                return filtered_damage_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
+            }
+            return damage_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
 
         /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)
@@ -37,12 +50,14 @@ namespace LuckParser.Models.ParseModels
 
         public List<CastLog> getCastLogs(ParsedLog log, long start, long end)
         {
-            List<CastLog> res = new List<CastLog>();
-            foreach (Minion minion in this)
+            if (cast_logs.Count == 0)
             {
-                res.AddRange(minion.getCastLogs(log, start, end));
+                foreach (Minion minion in this)
+                {
+                    cast_logs.AddRange(minion.getCastLogs(log, 0, log.getBossData().getAwareDuration()));
+                }
             }
-            return res;
+            return cast_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
 
         public int getInstid()

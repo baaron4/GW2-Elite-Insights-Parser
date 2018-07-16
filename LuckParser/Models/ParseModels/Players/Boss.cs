@@ -484,11 +484,12 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case 0x3F76:
                     // split happened
-                    if (phaseData.Count == 2)
+                    if (phaseData.Count == 1)
                     {
-                        end = phaseData[0] - log.getBossData().getFirstAware();
+                        CombatItem invulXera = log.getBoonData().Find(x => x.getDstInstid() == agent.getInstid() && (x.getSkillID() == 762 || x.getSkillID() == 34113));
+                        end = invulXera.getTime() - log.getBossData().getFirstAware();
                         phases.Add(new PhaseData(start, end));
-                        start = phaseData[1] - log.getBossData().getFirstAware();
+                        start = phaseData[0] - log.getBossData().getFirstAware();
                         cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                     }
                     if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
@@ -566,12 +567,10 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 case 0x4BFA:
-                    CombatItem invulDhuum = log.getBoonData().Find(x => x.getSkillID() == 762 && x.isBuffremove() != ParseEnum.BuffRemove.None && x.getSrcInstid() == getInstid() && x.getTime() > 115000 + log.getBossData().getFirstAware());
-                    if (invulDhuum != null)
+                    // Sometimes the preevent is not in the evtc
+                    List<CastLog> dhuumCast = getCastLogs(log, 0, 20000);
+                    if (dhuumCast.Count > 0)
                     {
-                        end = invulDhuum.getTime() - log.getBossData().getFirstAware();
-                        phases.Add(new PhaseData(start, end));
-                        start = end + 1;
                         CastLog shield = cast_logs.Find(x => x.getID() == 47396);
                         if (shield != null)
                         {
@@ -583,15 +582,44 @@ namespace LuckParser.Models.ParseModels
                                 phases.Add(new PhaseData(start, fight_dur));
                             }
                         }
-                    }
-                    if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                        if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                        {
+                            phases.Add(new PhaseData(start, fight_dur));
+                        }
+                        string[] namesDh = new string[] { "Main Fight", "Ritual" };
+                        for (int i = 1; i < phases.Count; i++)
+                        {
+                            phases[i].setName(namesDh[i - 1]);
+                        }
+                    } else
                     {
-                        phases.Add(new PhaseData(start, fight_dur));
-                    }
-                    string[] namesDh = new string[] { "Roleplay", "Main Fight", "Ritual" };
-                    for (int i = 1; i < phases.Count; i++)
-                    {
-                        phases[i].setName(namesDh[i-1]);
+                        CombatItem invulDhuum = log.getBoonData().Find(x => x.getSkillID() == 762 && x.isBuffremove() != ParseEnum.BuffRemove.None && x.getSrcInstid() == getInstid() && x.getTime() > 115000 + log.getBossData().getFirstAware());
+                        if (invulDhuum != null)
+                        {
+                            end = invulDhuum.getTime() - log.getBossData().getFirstAware();
+                            phases.Add(new PhaseData(start, end));
+                            start = end + 1;
+                            CastLog shield = cast_logs.Find(x => x.getID() == 47396);
+                            if (shield != null)
+                            {
+                                end = shield.getTime();
+                                phases.Add(new PhaseData(start, end));
+                                start = shield.getTime() + shield.getActDur();
+                                if (start < fight_dur - 5000)
+                                {
+                                    phases.Add(new PhaseData(start, fight_dur));
+                                }
+                            }
+                        }
+                        if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                        {
+                            phases.Add(new PhaseData(start, fight_dur));
+                        }
+                        string[] namesDh = new string[] { "Roleplay", "Main Fight", "Ritual" };
+                        for (int i = 1; i < phases.Count; i++)
+                        {
+                            phases[i].setName(namesDh[i - 1]);
+                        }
                     }
                     break;
                 case 0x427D:

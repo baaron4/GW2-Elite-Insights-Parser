@@ -97,34 +97,48 @@ namespace LuckParser.Models.ParseModels
             if (!isFull())
             {
                 boon_stack.Add(toAdd);
-                sort();
             }
             // Replace lowest value
             else
             {
-                int index = boon_stack.Count - 1;
-                if (boon_stack[index].boon_duration < boon_duration)
+                bool found = false;
+                for (int i = capacity == 1 ? 0 : 1; i < boon_stack.Count; i++)
                 {
-                    // added overwritten value as a overstack
-                    long overstackValue = boon_stack[index].overstack + boon_stack[index].boon_duration;
-                    ushort srcValue = boon_stack[index].src;
-                    for (int i = simulation.Count -1; i >= 0; i--)
+                    if (boon_stack[i].boon_duration < boon_duration)
                     {
-                        if (simulation[i].addOverstack(srcValue,overstackValue))
+                        long overstackValue = boon_stack[i].overstack + boon_stack[i].boon_duration;
+                        ushort srcValue = boon_stack[i].src;
+                        for (int j = simulation.Count - 1; j >= 0; j--)
+                        {
+                            if (simulation[j].addOverstack(srcValue, overstackValue))
+                            {
+                                break;
+                            }
+                        }
+                        boon_stack[i] = toAdd;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    long overstackValue = overstack + boon_duration;
+                    ushort srcValue = srcinstid;
+                    for (int j = simulation.Count - 1; j >= 0; j--)
+                    {
+                        if (simulation[j].addOverstack(srcValue, overstackValue))
                         {
                             break;
                         }
                     }
-                    boon_stack[index] = toAdd;
-                    sort();
                 }
             }
         }
          
-        // Protected Methods
-        protected bool isFull() => boon_stack.Count >= capacity;
+        // Private Methods
+        private bool isFull() => boon_stack.Count >= capacity;
 
-        protected void sort()
+        private void sort()
         {
             boon_stack.Sort((a, b) => b.boon_duration.CompareTo(a.boon_duration));
         }

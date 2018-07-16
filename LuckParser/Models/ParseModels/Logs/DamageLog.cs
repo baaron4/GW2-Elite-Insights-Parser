@@ -17,6 +17,8 @@ namespace LuckParser.Models.ParseModels
         private ushort is_shields;
         private ulong src_agent;
         private ushort src_instid;
+        private ulong dst_agent;
+        private ushort dst_instid;
 
         // Constructor
         public DamageLog(long time, CombatItem c)
@@ -32,6 +34,8 @@ namespace LuckParser.Models.ParseModels
             this.src_agent = c.getSrcAgent();
             this.src_instid = c.getSrcInstid();
             this.is_shields = c.isShields();
+            this.dst_agent = c.getDstAgent();
+            this.dst_instid = c.getDstInstid();
 
         }
         // Getters
@@ -88,6 +92,15 @@ namespace LuckParser.Models.ParseModels
         public ushort getInstidt()
         {
             return src_instid;
+        }
+
+        public ulong getDstAgent()
+        {
+            return dst_agent;
+        }
+        public ushort getDstInstidt()
+        {
+            return dst_instid;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
             new Mechanic(31391, "Distributed Magic", Mechanic.MechType.SkillOnPlayer, 15438, "symbol:'circle',color:'rgb(0,128,0)',", "Green Team"),
             new Mechanic(31529, "Distributed Magic", Mechanic.MechType.SkillOnPlayer, 15438, "symbol:'circle',color:'rgb(0,128,0)',", "Green Team"),
             new Mechanic(31750, "Distributed Magic", Mechanic.MechType.SkillOnPlayer, 15438, "symbol:'circle',color:'rgb(0,128,0)',", "Green Team"),
-            new Mechanic(31886, "Magic Pulse", Mechanic.MechType.SkillOnPlayer, 15438, "symbol:'circle',color:'rgb(255,0,0)',", "Hit by Red"),
+            new Mechanic(31886, "Magic Pulse", Mechanic.MechType.SkillOnPlayer, 15438, "symbol:'circle',color:'rgb(255,0,0)',", "Seeker"),
             new Mechanic(-1, "Pylon Attunement: Red", Mechanic.MechType.PlayerBoon, 15438, "symbol:'square',color:'rgb(255,0,0)',", "Attune:Red"),
             new Mechanic(31317, "Pylon Attunement: Blue", Mechanic.MechType.PlayerBoon, 15438, "symbol:'square',color:'rgb(0,0,255)',", "Attune:Blue"),
             new Mechanic(-1, "Pylon Attunement: Green", Mechanic.MechType.PlayerBoon, 15438, "symbol:'square',color:'rgb(0,128,0)',", "Attune:Green"),
@@ -27,19 +27,17 @@ namespace LuckParser.Models.ParseModels
             new Mechanic(31875, "Spectral Impact", Mechanic.MechType.SkillOnPlayer, 15429, "symbol:'hexagram',color:'rgb(255,0,0)',", "Slam"),
             new Mechanic(31623, "Ghastly Prison", Mechanic.MechType.SkillOnPlayer, 15429, "symbol:'pentagon',color:'rgb(0,0,255)',", "Egg"),
             new Mechanic(31498, "Spectral Darkness", Mechanic.MechType.PlayerBoon, 15429, "symbol:'circle',color:'rgb(0,0,255)',", "Orb Debuff"),
-
             new Mechanic(31722, "Spirited Fusion", Mechanic.MechType.EnemyBoon, 15429, "symbol:'square',color:'rgb(0,0,255)',", "Ate Spirit"),
             //sab
-            new Mechanic(34108, "Shell-Shocked", Mechanic.MechType.PlayerBoon, 15375, "symbol:'circle',color:'rgb(255,0,0)',", "Canons"),
-            new Mechanic(31473, "Sapper Bomb", Mechanic.MechType.PlayerBoon, 15375, "symbol:'circle',color:'rgb(0,128,0)',", "Green Bomb"),
+            new Mechanic(34108, "Shell-Shocked", Mechanic.MechType.PlayerBoon, 15375, "symbol:'circle',color:'rgb(255,0,0)',", "Shell-Shocked"),
+            new Mechanic(31473, "Sapper Bomb", Mechanic.MechType.PlayerBoon, 15375, "symbol:'circle',color:'rgb(0,128,0)',", "Sapper Bomb"),
             new Mechanic(31485, "Time Bomb", Mechanic.MechType.PlayerBoon, 15375, "symbol:'circle',color:'rgb(0,0,255)',", "Time Bomb"),//or 3? buff or hits
             new Mechanic(31332, "Firestorm", Mechanic.MechType.SkillOnPlayer, 15375, "symbol:'square',color:'rgb(255,0,0)',", "Flamewall"),
-            new Mechanic(31544, "Flak Shot", Mechanic.MechType.SkillOnPlayer, 15375, "symbol:'hexagram',color:'rgb(255,0,0)',", "Flak"),
-
+            new Mechanic(31544, "Flak Shot", Mechanic.MechType.SkillOnPlayer, 15375, "symbol:'hexagram',color:'rgb(255,0,0)',", "Flak Shot"),
                 //sloth
                 new Mechanic(34479, "Tantrum", Mechanic.MechType.SkillOnPlayer, 16123, "symbol:'circle',color:'rgb(255,0,0)',", "Tantrum"),
-                new Mechanic(34387, "Volatile Poison", Mechanic.MechType.PlayerBoon, 16123, "symbol:'circle',color:'rgb(0,128,0)',", "Poisin Buff"),
-                new Mechanic(34481, "Volatile Poison", Mechanic.MechType.SkillOnPlayer, 16123, "symbol:'hexagram',color:'rgb(0,128,0)',", "Poisin AOE"),
+                new Mechanic(34387, "Volatile Poison", Mechanic.MechType.PlayerBoon, 16123, "symbol:'circle',color:'rgb(0,128,0)',", "Volatile Poison (Action Key)"),
+                new Mechanic(34481, "Volatile Poison", Mechanic.MechType.SkillOnPlayer, 16123, "symbol:'hexagram',color:'rgb(0,128,0)',", "Volatile Poison (Area Damage)"),
                 new Mechanic(34516, "Halitosis", Mechanic.MechType.SkillOnPlayer, 16123, "symbol:'hexagram',color:'rgb(255,0,0)',", "Flame Breathe"),
                 new Mechanic(34482, "Spore Release", Mechanic.MechType.SkillOnPlayer, 16123, "symbol:'pentagon',color:'rgb(0,128,0)',", "Shake"),
                 new Mechanic(34362, "Magic Transformation", Mechanic.MechType.PlayerBoon, 16123, "symbol:'square',color:'rgb(0,128,0)',", "Slub Transform"),
@@ -51,22 +49,23 @@ namespace LuckParser.Models.ParseModels
                 new Mechanic(34371, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, 16115, "symbol:'hexagram',color:'rgb(0,0,255)',", "Hadouken"),//abom
                 new Mechanic(34404, "Shards of Rage", Mechanic.MechType.SkillOnPlayer, 16115, "symbol:'hexagram',color:'rgb(255,0,0)',", "Backflip Shards"),//human
                 new Mechanic(34411, "Shards of Rage", Mechanic.MechType.SkillOnPlayer, 16115, "symbol:'hexagram',color:'rgb(255,0,0)',", "Backflip Shards"),//abom
-                new Mechanic(34450, "Unstable Blood Magic", Mechanic.MechType.PlayerBoon, 16115, "symbol:'diamond',color:'rgb(255,0,0)',", "Bomb"),
+                new Mechanic(34450, "Unstable Blood Magic", Mechanic.MechType.PlayerBoon, 16115, "symbol:'diamond',color:'rgb(255,0,0)',", "Unstable Blood Magic"),
                 new Mechanic(34416, "Corruption", Mechanic.MechType.PlayerBoon, 16115, "symbol:'circle',color:'rgb(255,0,0)',", "Corruption"),
                 new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoon, 16115, "symbol:'circle',color:'rgb(75,0,130)',", "Sacrifice"),
                 new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerBoon, 16115, "symbol:'square',color:'rgb(75,30,150)',", "Rain Knockdown"),
                 new Mechanic(34422, "Blood Fueled", Mechanic.MechType.PlayerBoon, 16115, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(good)"),//human
                 new Mechanic(34428, "Blood Fueled", Mechanic.MechType.PlayerBoon, 16115, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(good)"),//abom
-                new Mechanic(34376, "Blood Shield", Mechanic.MechType.EnemyBoon, 16115, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble"),
-                new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, 16115, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble"),
+                new Mechanic(34376, "Blood Shield", Mechanic.MechType.EnemyBoon, 16115, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble"),//human
+                new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, 16115, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble"),//abom
 
                 //KC
                 new Mechanic(34912, "Fixate", Mechanic.MechType.PlayerBoon, 16235, "symbol:'star',color:'rgb(0,0,250)',", "Fixate"),
                 new Mechanic(34925, "Fixate", Mechanic.MechType.PlayerBoon, 16235, "symbol:'star',color:'rgb(0,0,250)',", "Fixate"),
                 new Mechanic(35077, "Hail of Fury", Mechanic.MechType.SkillOnPlayer, 16235, "symbol:'hexagram',color:'rgb(0,0,250)',", "Debris"),
+                new Mechanic(35096, "Compromised", Mechanic.MechType.EnemyBoon, 16235, "symbol:'hexagram',color:'rgb(0,0,250)',", "Compromised"),
                 new Mechanic(-1, "Insidious Projection", Mechanic.MechType.Spawn, 16235, "symbol:'octagram',color:'rgb(0,0,250)',", "Merge"),//Spawn check
-                new Mechanic(35137, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, 16235, "symbol:'star',color:'rgb(250,0,0)',", "Bunker and rotate"),
-                new Mechanic(35064, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, 16235, "symbol:'star',color:'rgb(250,0,0)',", "Bunker and rotate"),
+                new Mechanic(35137, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, 16235, "symbol:'star',color:'rgb(250,0,0)',", "Phantasmal Blades"),
+                new Mechanic(35064, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, 16235, "symbol:'star',color:'rgb(250,0,0)',", "Phantasmal Blades"),
                 new Mechanic(35086, "Tower Drop", Mechanic.MechType.SkillOnPlayer, 16235, "symbol:'circle',color:'rgb(250,0,0)',", "Tower Drop"),
                 //hit orb
 
@@ -98,11 +97,11 @@ namespace LuckParser.Models.ParseModels
                 new Mechanic(37631, "Orbital Sweep", Mechanic.MechType.SkillOnPlayer, 17194, "symbol:'circle',color:'rgb(0,0,250)',", "Sweep"),
 
                 //mo
-                new Mechanic(37788, "Jade Explosion", Mechanic.MechType.SkillOnPlayer, 17172, "symbol:'circle',color:'rgb(250,0,0)',", "Jade Dieing"),
+                new Mechanic(37788, "Jade Explosion", Mechanic.MechType.SkillOnPlayer, 17172, "symbol:'circle',color:'rgb(250,0,0)',", "Jade Explosion"),
                 new Mechanic(37779, "Claim", Mechanic.MechType.PlayerBoon, 17172, "symbol:'circle',color:'rgb(0,0,250)',", "Claim"),
                 new Mechanic(37697, "Dispel", Mechanic.MechType.PlayerBoon, 17172, "symbol:'square',color:'rgb(0,0,250)',", "Dispel"),
                 new Mechanic(37813, "Protect", Mechanic.MechType.PlayerBoon, 17172, "symbol:'square',color:'rgb(0,158,0)',", "Protect"),
-                new Mechanic(38155, "Mursaat Overseer's Shield", Mechanic.MechType.PlayerBoon, 17172, "symbol:'circle',color:'rgb(0,158,0)',", "Bubble Invuln"),
+                new Mechanic(38155, "Mursaat Overseer's Shield", Mechanic.MechType.PlayerBoon, 17172, "symbol:'circle',color:'rgb(0,158,0)',", "Protect (Active)"),
                 new Mechanic(38184, "Enemy Tile", Mechanic.MechType.SkillOnPlayer, 17172, "symbol:'square',color:'rgb(255,0,0)',", "Tile Dmg"),
 
                 //sam
@@ -112,16 +111,15 @@ namespace LuckParser.Models.ParseModels
                 new Mechanic(37868, "Fixate: Samarog", Mechanic.MechType.PlayerBoon, 17188, "symbol:'star',color:'rgb(0,0,255)',", "Fixate: Samarog"),
                 new Mechanic(38223, "Fixate: Guldhem", Mechanic.MechType.PlayerBoon, 17188, "symbol:'star',color:'rgb(0,150,0)',", "Fixate: Guldhem"),
                 new Mechanic(37693, "Fixate: Rigom", Mechanic.MechType.PlayerBoon, 17188, "symbol:'star',color:'rgb(255,0,0)',", "Fixate: Rigom"),
-                new Mechanic(37693, "Fixate: Rigom", Mechanic.MechType.PlayerBoon, 17188, "symbol:'star',color:'rgb(255,0,0)',", "Fixate: Rigom"),
                 new Mechanic(37966, "Big Hug", Mechanic.MechType.PlayerBoon, 17188, "symbol:'circle',color:'rgb(0,150,0)',", "Big Green"),
                 new Mechanic(38247, "Small Hug", Mechanic.MechType.PlayerBoon, 17188, "symbol:'octagon',color:'rgb(0,150,0)',", "Small Green"),
-                new Mechanic(38260, "Inevitable Betrayal", Mechanic.MechType.SkillOnPlayer, 17188, "symbol:'triangle-down',color:'rgb(255,0,0)',", "Failed Kissing"),
-                new Mechanic(37851, "Inevitable Betrayal", Mechanic.MechType.SkillOnPlayer, 17188, "symbol:'triangle-down',color:'rgb(255,0,0)',", "Failed Kissing"),
+                new Mechanic(38260, "Inevitable Betrayal", Mechanic.MechType.SkillOnPlayer, 17188, "symbol:'triangle-down',color:'rgb(255,0,0)',", "Failed Green"),
+                new Mechanic(37851, "Inevitable Betrayal", Mechanic.MechType.SkillOnPlayer, 17188, "symbol:'triangle-down',color:'rgb(255,0,0)',", "Failed Green"),
                 new Mechanic(37901, "Effigy Pulse", Mechanic.MechType.SkillOnPlayer, 17188, "symbol:'triangle-nw',color:'rgb(255,0,0)',", "Stood in Spear"),
                 new Mechanic(37816, "Spear Impact", Mechanic.MechType.SkillOnPlayer, 17188, "symbol:'triangle-sw',color:'rgb(255,0,0)',", "Spear Spawned"),
                 //  new Mechanic(37816, "Brutalize", Mechanic.MechType.SkillOnPlayer, 17188, "symbol:'star-square',color:'rgb(255,0,0)',", "CC Target", casted without dmg odd
 
-                //deiimos
+                //Deimos
                 new Mechanic(37716, "Rapid Decay", Mechanic.MechType.SkillOnPlayer, 17154, "symbol:'circle',color:'rgb(0,0,0)',", "Black Oil"),
                 new Mechanic(38208, "Annihilate", Mechanic.MechType.SkillOnPlayer, 17154, "symbol:'circle',color:'rgb(255,0,0)',", "Boss Smash"),
                 new Mechanic(37929, "Annihilate", Mechanic.MechType.SkillOnPlayer, 17154, "symbol:'circle',color:'rgb(255,0,0)',", "Chain Smash"),
@@ -141,7 +139,7 @@ namespace LuckParser.Models.ParseModels
                 new Mechanic(47430, "Soul Rift", Mechanic.MechType.SkillOnPlayer, 19767, "symbol:'circle',color:'rgb(250,140,0)',", "Golem AOE"),
                 new Mechanic(48363, "Quad Slash", Mechanic.MechType.SkillOnPlayer, 19767, "symbol:'trianlge-up',color:'rgb(250,140,0)',", "Slices"),
                 new Mechanic(47915, "Quad Slash", Mechanic.MechType.SkillOnPlayer, 19767, "symbol:'trianlge-up',color:'rgb(250,140,0)',", "Slices"),
-                new Mechanic(47363, "Spinning Slash", Mechanic.MechType.SkillOnPlayer, 19767, "symbol:'trianlge-up',color:'rgb(250,140,0)',", "Sythe"),
+                new Mechanic(47363, "Spinning Slash", Mechanic.MechType.SkillOnPlayer, 19767, "symbol:'trianlge-up',color:'rgb(250,140,0)',", "Scythe"),
                 new Mechanic(47434, "Fixated", Mechanic.MechType.PlayerBoon, 19767, "symbol:'circle',color:'rgb(0,0,250)',", "Fixate"),
                 new Mechanic(47414, "Necrosis", Mechanic.MechType.PlayerBoon, 19767, "symbol:'square',color:'rgb(0,150,0)',", "Necrosis Debuff"),
 
@@ -149,7 +147,7 @@ namespace LuckParser.Models.ParseModels
                 new Mechanic(48172, "Hateful Ephemera", Mechanic.MechType.SkillOnPlayer, 19450, "symbol:'square',color:'rgb(0,150,0)',", "Golem"),//Buff or dmg?
                 new Mechanic(48121, "Arcing Affliction", Mechanic.MechType.PlayerBoon, 19450, "symbol:'hexagon',color:'rgb(250,0,0)',", "Arcing Affliction DMG"),//Buff or dmg?
                 new Mechanic(47646 , "Arcing Affliction", Mechanic.MechType.SkillOnPlayer, 19450, "symbol:'circle',color:'rgb(250,0,0)',", "Arcing Affliction"),//Buff or dmg?
-                new Mechanic(47476, "Residual Affliction", Mechanic.MechType.PlayerBoon, 19450, "symbol:'square',color:'rgb(0,0,250)',", "Bomb CD"),
+                new Mechanic(47476, "Residual Affliction", Mechanic.MechType.PlayerBoon, 19450, "symbol:'square',color:'rgb(0,0,250)',", "Bomb"),
                 new Mechanic(47335, "Soul Shackle", Mechanic.MechType.PlayerOnPlayer, 19450, "symbol:'diamond',color:'rgb(0,0,250)',", "Shackle"),//4 calls probably this one
                 new Mechanic(47561, "Slash", Mechanic.MechType.SkillOnPlayer, 19450, "symbol:'triangle',color:'rgb(0,150,0)',", "Cone boon rip"),
                 new Mechanic(48752, "Cull", Mechanic.MechType.SkillOnPlayer, 19450, "symbol:'diamond',color:'rgb(0,150,0)',", "Crack"),
