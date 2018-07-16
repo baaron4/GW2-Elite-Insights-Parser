@@ -228,10 +228,6 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 long time = c.getTime() - log.getBossData().getFirstAware();
-                if (time < 0 || time > log.getBossData().getAwareDuration())
-                {
-                    continue;
-                }
                 byte[] xy = BitConverter.GetBytes(c.getDstAgent());
                 float X = BitConverter.ToSingle(xy, 0);
                 float Y = BitConverter.ToSingle(xy, 4);

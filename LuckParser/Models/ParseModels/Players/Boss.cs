@@ -204,7 +204,7 @@ namespace LuckParser.Models.ParseModels
             {
                 // VG
                 case 15438:
-                    return Tuple.Create(-6388, -22253, -3173, -19039);
+                    return Tuple.Create(-6365, -22213, -3150, -18999);
                 // Gorse
                 case 15429:
                     return Tuple.Create(-623, -6754, 3731, -2206);
@@ -219,19 +219,19 @@ namespace LuckParser.Models.ParseModels
                     return Tuple.Create(-7253, 4575 , -4630, 7197);
                 // KC
                 case 16235:
-                    return Tuple.Create(-5447, 8069, -2262, 11297);
+                    return Tuple.Create(-5467, 8069, -2282, 11297);
                 // Xera
                 case 16246:
                     return Tuple.Create(-5992, -5992, 69, -522);
                 // Cairn
                 case 17194:
-                    return Tuple.Create(13021, 642, 15765, 3386);
+                    return Tuple.Create(12981, 642, 15725, 3386);
                 // MO
                 case 17172:
-                    return Tuple.Create(1370, 2701, 3921, 5258);
+                    return Tuple.Create(1360, 2701, 3911, 5258);
                 // Samarog
                 case 17188:
-                    return Tuple.Create(-6526, 1118, -2423, 5046);
+                    return Tuple.Create(-6526, 1218, -2423, 5146);
                 // Deimos
                 case 17154:
                     return Tuple.Create(-9542, 1932, -7266, 4292);

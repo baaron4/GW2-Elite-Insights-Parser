@@ -68,11 +68,12 @@ namespace LuckParser.Models.ParseModels
             List<Point3D> interpolatedPositions = new List<Point3D>();
             int tablePos = 0;
             Point3D currentVelocity = null;
-            for (int i = 0; i < fightDuration; i += rate)
+            for (int i = -10000; i < fightDuration; i += rate)
             {
                 Point3D pt = positions[tablePos];
                 if (i <= pt.time)
                 {
+                    currentVelocity = null;
                     interpolatedPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
                 }
                 else
@@ -87,6 +88,7 @@ namespace LuckParser.Models.ParseModels
                         if (ptn.time < i)
                         {
                             tablePos++;
+                            currentVelocity = null;
                             interpolatedPositions.Add(new Point3D(ptn.X, ptn.Y, ptn.Z, i));
                         }
                         else
@@ -94,14 +96,14 @@ namespace LuckParser.Models.ParseModels
                             Point3D last = interpolatedPositions.Last();
                             Point3D velocity = velocities.Find(x => x.time <= i && x.time > last.time);
                             currentVelocity = velocity != null ? velocity : currentVelocity;
-                            if (ptn.time - pt.time < 400 || currentVelocity == null)
+                            if (ptn.time - pt.time < 400)
                             {
                                 float ratio = (float)(i - pt.time) / (ptn.time - pt.time);
                                 interpolatedPositions.Add(new Point3D(pt, ptn, ratio, i));
                             }
                             else
                             {
-                                if (currentVelocity.X == 0 && currentVelocity.Y == 0)
+                                if (currentVelocity == null || (Math.Abs(currentVelocity.X) <= 1e-1 && Math.Abs(currentVelocity.Y) <= 1e-1))
                                 {
                                     interpolatedPositions.Add(new Point3D(last.X, last.Y, last.Z, i));
                                 }
@@ -116,7 +118,7 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-            positions = interpolatedPositions;
+            positions = interpolatedPositions.Where(x => x.time >= 0).ToList();
             velocities = null;
         }
 
