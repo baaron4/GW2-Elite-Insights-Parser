@@ -70,6 +70,7 @@ namespace LuckParser
         private void SettingsForm_Load(object sender, EventArgs e)
         {
             chkPlayerDpsPlot.Checked = Properties.Settings.Default.DPSGraphTotals;
+            chkShowCl.Checked = Properties.Settings.Default.ClDPSGraphTotals;
             chkTotalDpsPlot.Checked = Properties.Settings.Default.PlayerGraphTotals;
             chkBossDpsPlot.Checked = Properties.Settings.Default.PlayerGraphBoss;
             chkUniversalBoons.Checked = Properties.Settings.Default.PlayerBoonsUniversal;
@@ -203,6 +204,11 @@ namespace LuckParser
         private void chk_combatReplay_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ParseCombatReplay = chk_combatReplay.Checked;
+        }
+
+        private void ShowCl_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ClDPSGraphTotals = chkShowCl.Checked;
         }
     }
 }

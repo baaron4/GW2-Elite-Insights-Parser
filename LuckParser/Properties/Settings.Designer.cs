@@ -37,6 +37,18 @@ namespace LuckParser.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ClDPSGraphTotals {
+            get {
+                return ((bool)(this["ClDPSGraphTotals"]));
+            }
+            set {
+                this["ClDPSGraphTotals"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool PlayerGraphTotals {
             get {

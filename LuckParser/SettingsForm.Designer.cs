@@ -69,6 +69,7 @@
             this.lblRotationGraphSection = new System.Windows.Forms.Label();
             this.chkLightTheme = new System.Windows.Forms.CheckBox();
             this.chk_combatReplay = new System.Windows.Forms.CheckBox();
+            this.chkShowCl = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblDamageGraphSection
@@ -303,7 +304,7 @@
             this.chkSimpleRotationTab.AutoSize = true;
             this.chkSimpleRotationTab.Checked = true;
             this.chkSimpleRotationTab.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSimpleRotationTab.Location = new System.Drawing.Point(60, 523);
+            this.chkSimpleRotationTab.Location = new System.Drawing.Point(60, 538);
             this.chkSimpleRotationTab.Name = "chkSimpleRotationTab";
             this.chkSimpleRotationTab.Size = new System.Drawing.Size(152, 17);
             this.chkSimpleRotationTab.TabIndex = 21;
@@ -316,7 +317,7 @@
             this.chkShowAutos.AutoSize = true;
             this.chkShowAutos.Checked = true;
             this.chkShowAutos.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowAutos.Location = new System.Drawing.Point(64, 546);
+            this.chkShowAutos.Location = new System.Drawing.Point(64, 561);
             this.chkShowAutos.Name = "chkShowAutos";
             this.chkShowAutos.Size = new System.Drawing.Size(117, 17);
             this.chkShowAutos.TabIndex = 22;
@@ -327,7 +328,7 @@
             // chkLargeSkillIcons
             // 
             this.chkLargeSkillIcons.AutoSize = true;
-            this.chkLargeSkillIcons.Location = new System.Drawing.Point(64, 569);
+            this.chkLargeSkillIcons.Location = new System.Drawing.Point(64, 584);
             this.chkLargeSkillIcons.Name = "chkLargeSkillIcons";
             this.chkLargeSkillIcons.Size = new System.Drawing.Size(104, 17);
             this.chkLargeSkillIcons.TabIndex = 23;
@@ -486,7 +487,7 @@
             // 
             this.lblRotationGraphSection.AutoSize = true;
             this.lblRotationGraphSection.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRotationGraphSection.Location = new System.Drawing.Point(45, 507);
+            this.lblRotationGraphSection.Location = new System.Drawing.Point(45, 522);
             this.lblRotationGraphSection.Name = "lblRotationGraphSection";
             this.lblRotationGraphSection.Size = new System.Drawing.Size(81, 13);
             this.lblRotationGraphSection.TabIndex = 37;
@@ -516,12 +517,25 @@
             this.chk_combatReplay.UseVisualStyleBackColor = true;
             this.chk_combatReplay.CheckedChanged += new System.EventHandler(this.chk_combatReplay_CheckedChanged);
             // 
+            // chkShowCl
+            // 
+            this.chkShowCl.AutoSize = true;
+            this.chkShowCl.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.chkShowCl.Location = new System.Drawing.Point(60, 502);
+            this.chkShowCl.Name = "chkShowCl";
+            this.chkShowCl.Size = new System.Drawing.Size(145, 17);
+            this.chkShowCl.TabIndex = 41;
+            this.chkShowCl.Text = "Show Cleave Only Graph";
+            this.chkShowCl.UseVisualStyleBackColor = true;
+            this.chkShowCl.CheckedChanged += new System.EventHandler(this.ShowCl_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(579, 389);
+            this.ClientSize = new System.Drawing.Size(579, 612);
+            this.Controls.Add(this.chkShowCl);
             this.Controls.Add(this.chk_combatReplay);
             this.Controls.Add(this.chkLightTheme);
             this.Controls.Add(this.lblRotationGraphSection);
@@ -613,5 +627,6 @@
         private System.Windows.Forms.Label lblRotationGraphSection;
         private System.Windows.Forms.CheckBox chkLightTheme;
         private System.Windows.Forms.CheckBox chk_combatReplay;
+        private System.Windows.Forms.CheckBox chkShowCl;
     }
 }

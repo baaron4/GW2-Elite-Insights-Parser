@@ -10,6 +10,7 @@ namespace LuckParser.Models.DataModels
     class SettingsContainer
     {
         public readonly bool DPSGraphTotals;
+        public readonly bool ClDPSGraphTotals;
         public readonly bool PlayerGraphTotals;
         public readonly bool PlayerGraphBoss;
         public readonly bool PlayerBoonsUniversal;
@@ -32,6 +33,7 @@ namespace LuckParser.Models.DataModels
         public SettingsContainer(Settings settings)
         {
             this.DPSGraphTotals = settings.DPSGraphTotals;
+            this.ClDPSGraphTotals = settings.ClDPSGraphTotals;
             this.PlayerGraphTotals = settings.PlayerGraphTotals;
             this.PlayerGraphBoss = settings.PlayerGraphBoss;
             this.PlayerBoonsUniversal = settings.PlayerBoonsUniversal;

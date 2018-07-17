@@ -5,6 +5,9 @@
     <Setting Name="DPSGraphTotals" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="ClDPSGraphTotals" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
     <Setting Name="PlayerGraphTotals" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
