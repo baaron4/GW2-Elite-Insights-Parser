@@ -599,6 +599,10 @@ namespace LuckParser.Controllers
         public static void writeDPSGraph(StreamWriter sw, string name, List<Point> playerdpsgraphdata, AbstractPlayer p)
         {
             int ptdgCount = 0;
+            bool total = name.Contains("Total");
+            bool cleave = name.Contains("Cleave");
+            bool s10 = name.Contains("10s");
+            bool s30 = name.Contains("30s");
             sw.Write("y: [");
             {
                 foreach (Point dp in playerdpsgraphdata)
@@ -641,16 +645,17 @@ namespace LuckParser.Controllers
                 }
             }
             sw.Write("],");
-            string color = GetLink("Color-" + p.getProf() + (name.Contains("Total") ? "-Total" : (name.Contains("Cleave") ? "-NonBoss": "")));
+            string color = GetLink("Color-" + p.getProf() + ( total? "-Total" : ( cleave? "-NonBoss": "")));
             sw.Write(" mode: 'lines'," +
                    "line: {shape: 'spline',color:'" + color + "'}," +
                    "yaxis: 'y3',");
-            if (name.Contains("10s") || name.Contains("30s"))
+            if (s10 || s30)
             {
                 sw.Write(" visible: 'legendonly',");
             }
             // "legendgroup: 'Damage'," +
-            sw.Write("name: '" + name+"'");
+            sw.Write("name: '" + name+"'," +
+                "legendgroup: '" + p.getCharacter() + (s10 ? "10s" : (s30 ? "30s" : ""))+"'");
         }
 
         public static void writeDamageStatsTableHeader(StreamWriter sw)
