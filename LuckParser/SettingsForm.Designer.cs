@@ -31,9 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.lblDamageGraphSection = new System.Windows.Forms.Label();
             this.chkPlayerDpsPlot = new System.Windows.Forms.CheckBox();
-            this.lblPlayerSummarySection = new System.Windows.Forms.Label();
-            this.chkTotalDpsPlot = new System.Windows.Forms.CheckBox();
-            this.chkBossDpsPlot = new System.Windows.Forms.CheckBox();
             this.chkUniversalBoons = new System.Windows.Forms.CheckBox();
             this.lblBoonGraphSection = new System.Windows.Forms.Label();
             this.chkImpProfSpecBoons = new System.Windows.Forms.CheckBox();
@@ -94,42 +91,6 @@
             this.chkPlayerDpsPlot.Text = "Show Each Players Total DPS plot";
             this.chkPlayerDpsPlot.UseVisualStyleBackColor = true;
             this.chkPlayerDpsPlot.CheckedChanged += new System.EventHandler(this.PlayerDpsPlot_CheckedChanged);
-            // 
-            // lblPlayerSummarySection
-            // 
-            this.lblPlayerSummarySection.AutoSize = true;
-            this.lblPlayerSummarySection.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPlayerSummarySection.Location = new System.Drawing.Point(259, 419);
-            this.lblPlayerSummarySection.Name = "lblPlayerSummarySection";
-            this.lblPlayerSummarySection.Size = new System.Drawing.Size(96, 13);
-            this.lblPlayerSummarySection.TabIndex = 2;
-            this.lblPlayerSummarySection.Text = "Player Summary";
-            // 
-            // chkTotalDpsPlot
-            // 
-            this.chkTotalDpsPlot.AutoSize = true;
-            this.chkTotalDpsPlot.Checked = true;
-            this.chkTotalDpsPlot.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkTotalDpsPlot.Location = new System.Drawing.Point(275, 435);
-            this.chkTotalDpsPlot.Name = "chkTotalDpsPlot";
-            this.chkTotalDpsPlot.Size = new System.Drawing.Size(126, 17);
-            this.chkTotalDpsPlot.TabIndex = 3;
-            this.chkTotalDpsPlot.Text = "Show Total DPS Plot";
-            this.chkTotalDpsPlot.UseVisualStyleBackColor = true;
-            this.chkTotalDpsPlot.CheckedChanged += new System.EventHandler(this.TotalDpsPlot_CheckedChanged);
-            // 
-            // chkBossDpsPlot
-            // 
-            this.chkBossDpsPlot.AutoSize = true;
-            this.chkBossDpsPlot.Checked = true;
-            this.chkBossDpsPlot.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkBossDpsPlot.Location = new System.Drawing.Point(275, 458);
-            this.chkBossDpsPlot.Name = "chkBossDpsPlot";
-            this.chkBossDpsPlot.Size = new System.Drawing.Size(125, 17);
-            this.chkBossDpsPlot.TabIndex = 4;
-            this.chkBossDpsPlot.Text = "Show Boss DPS Plot";
-            this.chkBossDpsPlot.UseVisualStyleBackColor = true;
-            this.chkBossDpsPlot.CheckedChanged += new System.EventHandler(this.BossDpsPlot_CheckedChanged);
             // 
             // chkUniversalBoons
             // 
@@ -304,7 +265,7 @@
             this.chkSimpleRotationTab.AutoSize = true;
             this.chkSimpleRotationTab.Checked = true;
             this.chkSimpleRotationTab.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSimpleRotationTab.Location = new System.Drawing.Point(60, 538);
+            this.chkSimpleRotationTab.Location = new System.Drawing.Point(274, 435);
             this.chkSimpleRotationTab.Name = "chkSimpleRotationTab";
             this.chkSimpleRotationTab.Size = new System.Drawing.Size(152, 17);
             this.chkSimpleRotationTab.TabIndex = 21;
@@ -317,7 +278,7 @@
             this.chkShowAutos.AutoSize = true;
             this.chkShowAutos.Checked = true;
             this.chkShowAutos.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowAutos.Location = new System.Drawing.Point(64, 561);
+            this.chkShowAutos.Location = new System.Drawing.Point(278, 458);
             this.chkShowAutos.Name = "chkShowAutos";
             this.chkShowAutos.Size = new System.Drawing.Size(117, 17);
             this.chkShowAutos.TabIndex = 22;
@@ -328,7 +289,7 @@
             // chkLargeSkillIcons
             // 
             this.chkLargeSkillIcons.AutoSize = true;
-            this.chkLargeSkillIcons.Location = new System.Drawing.Point(64, 584);
+            this.chkLargeSkillIcons.Location = new System.Drawing.Point(278, 481);
             this.chkLargeSkillIcons.Name = "chkLargeSkillIcons";
             this.chkLargeSkillIcons.Size = new System.Drawing.Size(104, 17);
             this.chkLargeSkillIcons.TabIndex = 23;
@@ -487,7 +448,7 @@
             // 
             this.lblRotationGraphSection.AutoSize = true;
             this.lblRotationGraphSection.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRotationGraphSection.Location = new System.Drawing.Point(45, 522);
+            this.lblRotationGraphSection.Location = new System.Drawing.Point(259, 419);
             this.lblRotationGraphSection.Name = "lblRotationGraphSection";
             this.lblRotationGraphSection.Size = new System.Drawing.Size(81, 13);
             this.lblRotationGraphSection.TabIndex = 37;
@@ -534,7 +495,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(579, 612);
+            this.ClientSize = new System.Drawing.Size(579, 524);
             this.Controls.Add(this.chkShowCl);
             this.Controls.Add(this.chk_combatReplay);
             this.Controls.Add(this.chkLightTheme);
@@ -570,9 +531,6 @@
             this.Controls.Add(this.chkImpProfSpecBoons);
             this.Controls.Add(this.lblBoonGraphSection);
             this.Controls.Add(this.chkUniversalBoons);
-            this.Controls.Add(this.chkBossDpsPlot);
-            this.Controls.Add(this.chkTotalDpsPlot);
-            this.Controls.Add(this.lblPlayerSummarySection);
             this.Controls.Add(this.chkPlayerDpsPlot);
             this.Controls.Add(this.lblDamageGraphSection);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -589,9 +547,6 @@
 
         private System.Windows.Forms.Label lblDamageGraphSection;
         private System.Windows.Forms.CheckBox chkPlayerDpsPlot;
-        private System.Windows.Forms.Label lblPlayerSummarySection;
-        private System.Windows.Forms.CheckBox chkTotalDpsPlot;
-        private System.Windows.Forms.CheckBox chkBossDpsPlot;
         private System.Windows.Forms.CheckBox chkUniversalBoons;
         private System.Windows.Forms.Label lblBoonGraphSection;
         private System.Windows.Forms.CheckBox chkImpProfSpecBoons;

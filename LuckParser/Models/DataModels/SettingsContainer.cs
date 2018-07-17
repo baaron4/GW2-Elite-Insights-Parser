@@ -11,8 +11,6 @@ namespace LuckParser.Models.DataModels
     {
         public readonly bool DPSGraphTotals;
         public readonly bool ClDPSGraphTotals;
-        public readonly bool PlayerGraphTotals;
-        public readonly bool PlayerGraphBoss;
         public readonly bool PlayerBoonsUniversal;
         public readonly bool PlayerBoonsImpProf;
         public readonly bool PlayerBoonsAllProf;
@@ -34,8 +32,6 @@ namespace LuckParser.Models.DataModels
         {
             this.DPSGraphTotals = settings.DPSGraphTotals;
             this.ClDPSGraphTotals = settings.ClDPSGraphTotals;
-            this.PlayerGraphTotals = settings.PlayerGraphTotals;
-            this.PlayerGraphBoss = settings.PlayerGraphBoss;
             this.PlayerBoonsUniversal = settings.PlayerBoonsUniversal;
             this.PlayerBoonsImpProf = settings.PlayerBoonsImpProf;
             this.PlayerBoonsAllProf = settings.PlayerBoonsAllProf;

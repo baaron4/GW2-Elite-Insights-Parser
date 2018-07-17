@@ -50,30 +50,6 @@ namespace LuckParser.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool PlayerGraphTotals {
-            get {
-                return ((bool)(this["PlayerGraphTotals"]));
-            }
-            set {
-                this["PlayerGraphTotals"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool PlayerGraphBoss {
-            get {
-                return ((bool)(this["PlayerGraphBoss"]));
-            }
-            set {
-                this["PlayerGraphBoss"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool PlayerBoonsUniversal {
             get {
                 return ((bool)(this["PlayerBoonsUniversal"]));
