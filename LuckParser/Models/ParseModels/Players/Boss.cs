@@ -126,6 +126,7 @@ namespace LuckParser.Models.ParseModels
                         else
                         {
                             start = c.getTime() - log.getBossData().getFirstAware();
+                            phases.Add(new PhaseData(end, start));
                             cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                         }
                     }
@@ -133,27 +134,42 @@ namespace LuckParser.Models.ParseModels
                     {
                         phases.Add(new PhaseData(start, fight_dur));
                     }
+                    string[] namesVG = new string[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
                     for (int i = 1; i < phases.Count; i++)
                     {
-                        phases[i].setName("Phase " + i);
+                        phases[i].setName(namesVG[i - 1]);
                     }
                     break;
                 case 0x3C45:
                     // Ghostly protection check
-                    List<CastLog> clsG = cast_logs.Where(x => x.getID() == 31759).ToList();
-                    foreach (CastLog cl in clsG)
+                    List<CombatItem> invulsGorse = log.getCombatList().Where(x => x.getIFF() == ParseEnum.IFF.Friend && x.getSkillID() == 31790).ToList();
+                    for (int i = 0; i < invulsGorse.Count; i++)
                     {
-                        end = cl.getTime();
-                        phases.Add(new PhaseData(start, end));
-                        start = end + cl.getActDur();
+                        CombatItem c = invulsGorse[i];
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            end = c.getTime() - log.getBossData().getFirstAware();
+                            phases.Add(new PhaseData(start, end));
+                            if (i == invulsGorse.Count - 1)
+                            {
+                                cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), ParseEnum.Activation.None, (int)(fight_dur - end), ParseEnum.Activation.None));
+                            }
+                        }
+                        else
+                        {
+                            start = c.getTime() - log.getBossData().getFirstAware();
+                            phases.Add(new PhaseData(end, start));
+                            cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
+                        }
                     }
                     if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
                     {
                         phases.Add(new PhaseData(start, fight_dur));
                     }
+                    string[] namesGorse = new string[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3"};
                     for (int i = 1; i < phases.Count; i++)
                     {
-                        phases[i].setName("Phase " + i);
+                        phases[i].setName(namesGorse[i - 1]);
                     }
                     break;
                 case 0x3C0F:
@@ -174,6 +190,7 @@ namespace LuckParser.Models.ParseModels
                         else
                         {
                             start = c.getTime() - log.getBossData().getFirstAware();
+                            phases.Add(new PhaseData(end, start));
                             cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                         }
                     }
@@ -181,9 +198,10 @@ namespace LuckParser.Models.ParseModels
                     {
                         phases.Add(new PhaseData(start, fight_dur));
                     }
+                    string[] namesSab = new string[] { "Phase 1", "Kernan", "Phase 2", "Knuckles", "Phase 3", "Karde", "Phase 4" };
                     for (int i = 1; i < phases.Count; i++)
                     {
-                        phases[i].setName("Phase " + i);
+                        phases[i].setName(namesSab[i-1]);
                     }
                     break;
                 case 0x3EF3:
@@ -345,6 +363,7 @@ namespace LuckParser.Models.ParseModels
                         else
                         {
                             start = c.getTime() - log.getBossData().getFirstAware();
+                            phases.Add(new PhaseData(end, start));
                             cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                         }
                     }
@@ -352,9 +371,10 @@ namespace LuckParser.Models.ParseModels
                     {
                         phases.Add(new PhaseData(start, fight_dur));
                     }
+                    string[] namesSam = new string[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
                     for (int i = 1; i < phases.Count; i++)
                     {
-                        phases[i].setName("Phase " + i);
+                        phases[i].setName(namesSam[i - 1]);
                     }
                     break;
                 case 0x4302:
