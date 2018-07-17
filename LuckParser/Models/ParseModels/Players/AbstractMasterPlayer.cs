@@ -129,11 +129,10 @@ namespace LuckParser.Models.ParseModels
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                     if (c.isStateChange() == ParseEnum.StateChange.BuffInitial)
                     {
-                        long offset = Math.Abs(Math.Min(time, 0));
                         List<BoonLog> loglist = boon_map[c.getSkillID()];
-                        loglist.Add(new BoonLog(0, src, (long)c.getDstAgent() - offset, 0));
+                        loglist.Add(new BoonLog(0, src, (long)c.getDstAgent(), 0));
                     }
-                    else if (time > 0 && time < log.getBossData().getAwareDuration())
+                    else if (time >= 0 && time < log.getBossData().getAwareDuration())
                     {
                         if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
