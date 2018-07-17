@@ -129,11 +129,10 @@ namespace LuckParser.Models.ParseModels
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                     if (c.isStateChange() == ParseEnum.StateChange.BuffInitial)
                     {
-                        long offset = Math.Abs(Math.Min(time, 0));
                         List<BoonLog> loglist = boon_map[c.getSkillID()];
-                        loglist.Add(new BoonLog(0, src, (long)c.getDstAgent() - offset, 0));
+                        loglist.Add(new BoonLog(time, src, (long)c.getDstAgent(), 0));
                     }
-                    else if (time > 0 && time < log.getBossData().getAwareDuration())
+                    else if (time < log.getBossData().getAwareDuration())
                     {
                         if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
@@ -417,8 +416,8 @@ namespace LuckParser.Models.ParseModels
                     }
                     foreach (var simul in simulation)
                     {
-                        int start = (int)simul.getStart();
-                        int end = (int)simul.getEnd();
+                        int start = (int)Math.Max(simul.getStart(),0);
+                        int end = (int)Math.Max(simul.getEnd(),0);
 
                         bool present = simul.getItemDuration() > 0;
                         for (int i = start; i <= end; i++)
