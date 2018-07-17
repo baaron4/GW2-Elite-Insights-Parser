@@ -498,18 +498,11 @@ namespace LuckParser.Controllers
                     {
                         boss_data.setAgent(NPC.getAgent());
                         boss_data.setInstid(NPC.getInstid());
-                        boss_data.setFirstAware(NPC.getFirstAware());
                         boss_data.setName(NPC.getName());
                         boss_data.setTough(NPC.getToughness());
                     }
                     multiple_boss.Add(NPC.getAgent());
-                    boss_data.setLastAware(NPC.getLastAware());
                 }
-            }
-            if (boss_data.getAwareDuration() == long.MaxValue || boss_data.getAwareDuration() == 0 || golem_mode)
-            {
-                boss_data.setLastAware(combat_data.getCombatList().Find(x => x.isStateChange() == ParseEnum.StateChange.LogEnd).getTime());
-                boss_data.setFirstAware(combat_data.getCombatList().Find(x => x.isStateChange() == ParseEnum.StateChange.LogStart).getTime());
             }
             if (multiple_boss.Count > 1)
             {
@@ -561,9 +554,11 @@ namespace LuckParser.Controllers
                         break;
                     case ParseEnum.StateChange.LogStart:
                         log_data.setLogStart(c.getValue());
+                        boss_data.setFirstAware(c.getTime());
                         break;
                     case ParseEnum.StateChange.LogEnd:
                         log_data.setLogEnd(c.getValue());
+                        boss_data.setLastAware(c.getTime());
                         break;
                     case ParseEnum.StateChange.HealthUpdate:
                         //set health update
@@ -617,14 +612,13 @@ namespace LuckParser.Controllers
                     if (NPC.getProf().Contains("08467") || NPC.getProf().Contains("08471"))
                     {
                         deimos_2_instid = NPC.getInstid();
-                        long oldAware = boss_data.getLastAware();
-                        if (NPC.getLastAware() < boss_data.getLastAware())
+                        long oldAware = bossAgent.getLastAware();
+                        if (NPC.getLastAware() < oldAware)
                         {
                             // No split
                             break;
                         }
                         boss.addPhaseData(NPC.getFirstAware() >= oldAware ? NPC.getFirstAware() : oldAware);
-                        boss_data.setLastAware(NPC.getLastAware());
                         //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos_2_instid ).ToList().Sum(x);
                         //int stop = 0;
                         foreach (CombatItem c in combat_list)
