@@ -641,8 +641,9 @@ namespace LuckParser.Controllers
                 }
             }
             sw.Write("],");
+            string color = GetLink("Color-" + p.getProf() + (name.Contains("Total") ? "-Total" : (name.Contains("Cleave") ? "-NonBoss": "")));
             sw.Write(" mode: 'lines'," +
-                   "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf() + (name.Contains("Total") ? "-Total" : "")) + "'}," +
+                   "line: {shape: 'spline',color:'" + color + "'}," +
                    "yaxis: 'y3',");
             if (name.Contains("10s") || name.Contains("30s"))
             {
