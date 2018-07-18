@@ -3528,7 +3528,7 @@ namespace LuckParser.Controllers
         private void CreateReplayTable(StreamWriter sw)
         {
             Tuple<int, int> canvasSize = log.getBoss().getPixelMapSize(log);
-            sw.Write("<div class=\"d-flex justify-content-around\">");
+            sw.Write("<div class=\"d-flex justify-content-around align-items-center justify-content-center\">");
             {
                 sw.Write("<div class=\"d-flex flex-column flex-wrap\">");
                 {
@@ -3561,7 +3561,7 @@ namespace LuckParser.Controllers
                     sw.Write("</div>");
                 }
                 sw.Write("</div>");
-                sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center btn-group btn-group-toggle\" data-toggle=\"buttons\">");
+                sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center btn-group btn-group-toggle mb-5\" data-toggle=\"buttons\">");
                 {
                     List<int> groups = log.getPlayerList().Select(x => x.getGroup()).Distinct().ToList();
                     foreach (int group in groups)
