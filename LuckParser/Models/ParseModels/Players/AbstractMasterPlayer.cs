@@ -360,7 +360,7 @@ namespace LuckParser.Models.ParseModels
                         continue;
                     }
                     bool requireExtraData = extraDataID.Contains(boonid);
-                    var simulator = boon.CreateSimulator();
+                    var simulator = boon.CreateSimulator(log);
                     simulator.simulate(logs, dur);
                     if (death > 0 && getCastLogs(log, death + 5000, fight_duration).Count == 0)
                     {
