@@ -9,10 +9,31 @@ namespace LuckParser.Models.ParseModels
 {
     public class HealingLogic : StackingLogic
     {
+        protected struct CompareHealing
+        {
+            private ParsedLog log;
+
+            public CompareHealing(ParsedLog log)
+            {
+                this.log = log;
+            }
+
+            public int compare(BoonSimulator.BoonStackItem x, BoonSimulator.BoonStackItem y)
+            {
+                List<Player> players = log.getPlayerList();
+                Player a = players.Find(p => p.getInstid() == x.src);
+                Player b = players.Find(p => p.getInstid() == y.src);
+                if (a == null || b == null)
+                {
+                    return 0;
+                }
+                return a.getHealing() < b.getHealing() ? 1 : -1;
+            }
+        }
         public override void sort(ParsedLog log, List<BoonSimulator.BoonStackItem> stacks)
         {
-            List<Player> players = log.getPlayerList();
-            stacks.Sort((x, y) => players.Find(p => p.getInstid() == x.src).getHealing() < players.Find(p => p.getInstid() == y.src).getHealing() ? -1 : 1);
+            CompareHealing comparator = new CompareHealing(log);
+            stacks.Sort(comparator.compare);        
         }
 
         public override bool stackEffect(ParsedLog log, BoonSimulator.BoonStackItem toAdd, List<BoonSimulator.BoonStackItem> stacks, List<BoonSimulationItem> simulation)
