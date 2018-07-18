@@ -27,7 +27,6 @@ namespace LuckParser.Controllers
         private List<Player> p_list = new List<Player>();
         private Boss boss;
         private byte revision;
-        private bool noSquad = false;
 
         // Public Methods
         public LogData getLogData()
@@ -143,9 +142,6 @@ namespace LuckParser.Controllers
 
                 // 2 bytes: boss instance ID
                 ushort id = reader.ReadUInt16();
-                noSquad = id == 0x427D || id == 0x4284 
-                    || id == 0x4234 || id == 0x44E0 
-                    || id == 0x461D || id == 0x455F;
                 // 1 byte: position
                 ParseHelper.safeSkip(stream, 1);
 
@@ -428,11 +424,16 @@ namespace LuckParser.Controllers
             return id == 16202 || id == 16177 || id == 19676 || id == 19645 || id == 16199;
         }
 
-        private static bool rewardBasedBoss(ushort id)
+        private static bool raidBoss(ushort id)
         {
             return id == 15438 || id == 15429 || id == 15375 || id == 16123 || id == 16115 || id == 16235
                 || id == 16246 || id == 17194 || id == 17172 || id == 17188 || id == 17154 || id == 19767
-                || id == 19450 || id == 17021 || id == 17028 || id == 16948 || id == 17632 || id == 17949
+                || id == 19450;
+        }
+
+        private static bool fractalBoss(ushort id)
+        {
+            return id == 17021 || id == 17028 || id == 16948 || id == 17632 || id == 17949
                 || id == 17759;
         }
 
@@ -444,7 +445,8 @@ namespace LuckParser.Controllers
             var agentsLookup = agent_data.getAllAgentsList().ToDictionary(a => a.getAgent());
 
             bool golem_mode = isGolem(boss_data.getID());
-            bool reward_mode = rewardBasedBoss(boss_data.getID());
+            bool raid_mode = raidBoss(boss_data.getID());
+            bool fractal_mode = fractalBoss(boss_data.getID());
             // Set Agent instid, first_aware and last_aware
             var combat_list = combat_data.getCombatList();
             foreach (CombatItem c in combat_list)
@@ -647,9 +649,16 @@ namespace LuckParser.Controllers
             {
                 13
             };
-            if (reward_mode)
+            if (raid_mode)
             {
                 CombatItem reward = combat_list.Find(x => x.isStateChange() == ParseEnum.StateChange.Reward && !notRaidRewardsIds.Contains(x.getValue()));
+                if (reward != null)
+                {
+                    log_data.setBossKill(true);
+                    boss_data.setLastAware(reward.getTime());
+                }
+            } else if (fractal_mode) {
+                CombatItem reward = combat_list.Find(x => x.isStateChange() == ParseEnum.StateChange.Reward);
                 if (reward != null)
                 {
                     log_data.setBossKill(true);
@@ -680,7 +689,7 @@ namespace LuckParser.Controllers
                 foreach (AgentItem playerAgent in playerAgentList)
                 {
                     List<CombatItem> lp = combat_data.getStates(playerAgent.getInstid(), ParseEnum.StateChange.Despawn, boss_data.getFirstAware(), boss_data.getLastAware());
-                    Player player = new Player(playerAgent, noSquad);
+                    Player player = new Player(playerAgent, fractal_mode);
                     bool skip = false;
                     foreach (Player p in p_list)
                     {

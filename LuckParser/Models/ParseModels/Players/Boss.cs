@@ -243,19 +243,19 @@ namespace LuckParser.Models.ParseModels
                     return Tuple.Create(13524, -1334, 18039, 2735);
                 // MAMA
                 case 0x427D:
-                    return Tuple.Create(-1392, 4752, 2688, 7392);
+                    return Tuple.Create(1653, 4555, 5733, 7195);
                 // Siax
                 case 0x4284:
-                    return Tuple.Create(-2592, -4368, 288, -1248);
+                    return Tuple.Create(663, -4127, 3515, -997);
                 // Ensolyss
                 case 0x4234:
-                    return Tuple.Create(-2592, -48, 48, 2832);
+                    return Tuple.Create(252, 01, 2892, 2881);
                 // Skorvald
                 case 0x44E0:
                     return Tuple.Create(-22267, 14955, -17227, 20735);
                 // Artsariiv
                 case 0x461D:
-                    return Tuple.Create(9001, 507, 11661, 2767);
+                    return Tuple.Create(8991, 112, 11731, 2812);
                 // Arkk
                 case 0x455F:
                     return Tuple.Create(-19231, -18137, -16591, -15677);
