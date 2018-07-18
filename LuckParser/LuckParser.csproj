@@ -100,6 +100,10 @@
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
     <Compile Include="Models\DataModels\Statistics.cs" />
     <Compile Include="Models\ParseModels\CombatReplay.cs" />
+    <Compile Include="Models\ParseModels\EffectStackingLogic\HealingLogic.cs" />
+    <Compile Include="Models\ParseModels\EffectStackingLogic\OverrideLogic.cs" />
+    <Compile Include="Models\ParseModels\EffectStackingLogic\QueueLogic.cs" />
+    <Compile Include="Models\ParseModels\EffectStackingLogic\StackingLogic.cs" />
     <Compile Include="Models\ParseModels\GW2APICategory.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractMasterPlayer.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractPlayer.cs" />
