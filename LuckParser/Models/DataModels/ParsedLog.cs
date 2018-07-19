@@ -18,6 +18,7 @@ namespace LuckParser.Models.DataModels
         private MechanicData mech_data = new MechanicData();
         private List<Player> p_list = new List<Player>();
         private Boss boss;
+        private bool movement_possible;
 
         // reduced data
         private List<CombatItem> boon_data;
@@ -29,7 +30,7 @@ namespace LuckParser.Models.DataModels
         private List<CombatItem> movement_data;
 
         public ParsedLog(LogData log_data, BossData boss_data, AgentData agent_data, SkillData skill_data, 
-                CombatData combat_data, MechanicData mech_data, List<Player> p_list, Boss boss)
+                CombatData combat_data, MechanicData mech_data, List<Player> p_list, Boss boss, bool movement_possible)
         {
             this.log_data = log_data;
             this.boss_data = boss_data;
@@ -39,6 +40,7 @@ namespace LuckParser.Models.DataModels
             this.mech_data = mech_data;
             this.p_list = p_list;
             this.boss = boss;
+            this.movement_possible = movement_possible;
         }
 
         public BossData getBossData()
@@ -107,7 +109,7 @@ namespace LuckParser.Models.DataModels
 
             cast_data = combat_data.getCombatList().Where(x => (x.isStateChange() == ParseEnum.StateChange.Normal && x.isActivation() != ParseEnum.Activation.None) || x.isStateChange() == ParseEnum.StateChange.WeaponSwap).ToList();
 
-            movement_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Position || x.isStateChange() == ParseEnum.StateChange.Velocity).ToList();
+            movement_data = movement_possible? combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Position || x.isStateChange() == ParseEnum.StateChange.Velocity).ToList() : new List<CombatItem>();
 
             /*healing_data = combat_data.getCombatList().Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                          ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||

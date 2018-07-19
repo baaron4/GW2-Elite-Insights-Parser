@@ -27,6 +27,9 @@ namespace LuckParser.Controllers
         private List<Player> p_list = new List<Player>();
         private Boss boss;
         private byte revision;
+        private bool raid_mode;
+        private bool fractal_mode;
+        private bool golem_mode;
 
         // Public Methods
         public LogData getLogData()
@@ -40,7 +43,7 @@ namespace LuckParser.Controllers
 
         public ParsedLog GetParsedLog()
         {
-            return new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss);
+            return new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss, fractal_mode || raid_mode);
         }
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
@@ -444,9 +447,9 @@ namespace LuckParser.Controllers
         {
             var agentsLookup = agent_data.getAllAgentsList().ToDictionary(a => a.getAgent());
 
-            bool golem_mode = isGolem(boss_data.getID());
-            bool raid_mode = raidBoss(boss_data.getID());
-            bool fractal_mode = fractalBoss(boss_data.getID());
+            golem_mode = isGolem(boss_data.getID());
+            raid_mode = raidBoss(boss_data.getID());
+            fractal_mode = fractalBoss(boss_data.getID());
             // Set Agent instid, first_aware and last_aware
             var combat_list = combat_data.getCombatList();
             foreach (CombatItem c in combat_list)

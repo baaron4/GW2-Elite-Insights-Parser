@@ -65,6 +65,10 @@ namespace LuckParser.Models.ParseModels
 
         public void pollingRate(int rate, long fightDuration)
         {
+            if (positions.Count == 0)
+            {
+                positions.Add(new Point3D(0, 0, 0, 0));
+            }
             List<Point3D> interpolatedPositions = new List<Point3D>();
             int tablePos = 0;
             Point3D currentVelocity = null;
