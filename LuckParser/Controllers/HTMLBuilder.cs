@@ -3289,6 +3289,20 @@ namespace LuckParser.Controllers
         {
             List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
             long fight_duration = phases[phase_index].getDuration();
+            Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
+            bool hasBoons = false;
+            foreach (Boon boon in Boon.getBoonList())
+            {
+                if (boon.getName() == "Retaliation")
+                {
+                    continue;
+                }
+                if (conditions[boon.getID()].uptime > 0.0)
+                {
+                    hasBoons = true;
+                    break;
+                }
+            }
             //Generate Boon table------------------------------------------------------------------------------------------------
             sw.Write("<script> $(function () { $('#condi_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
             sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"condi_table" + phase_index + "\">");
@@ -3300,6 +3314,10 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in Boon.getCondiBoonList())
                         {
+                            if (hasBoons && boon.getName() == "Retaliation")
+                            {
+                                continue;
+                            }
                             sw.Write("<th>" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
@@ -3319,10 +3337,13 @@ namespace LuckParser.Controllers
                             avg_condis += duration;
                         }
                         avg_condis /= fight_duration;
-                        sw.Write("<td data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avg_condis, 1) + "\">" + boss.getCharacter() + " </td>");
-                        Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
+                        sw.Write("<td style=\"width: 300px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avg_condis, 1) + "\">" + boss.getCharacter() + " </td>");
                         foreach (Boon boon in Boon.getCondiBoonList())
                         {
+                            if (hasBoons && boon.getName() == "Retaliation")
+                            {
+                                continue;
+                            }
                             if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
                             {
                                 sw.Write("<td>" + conditions[boon.getID()].uptime + "%</td>");
@@ -3338,6 +3359,48 @@ namespace LuckParser.Controllers
                 sw.Write("</tbody>");
             }
             sw.Write("</table>");
+            if (hasBoons)
+            {
+                sw.Write("<script> $(function () { $('#boss_boon_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+                sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boss_boon_table" + phase_index + "\">");
+                {
+                    sw.Write("<thead>");
+                    {
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<th>Name</th>");
+                            foreach (Boon boon in Boon.getBoonList())
+                            {
+                                sw.Write("<th>" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            }
+                        }
+                        sw.Write("</tr>");
+                    }
+                    sw.Write("</thead>");
+                    sw.Write("<tbody>");
+                    {
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td style=\"width: 300px;\">" + boss.getCharacter() + " </td>");
+                            foreach (Boon boon in Boon.getBoonList())
+                            {
+                                if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                                {
+                                    sw.Write("<td>" + conditions[boon.getID()].uptime + "%</td>");
+                                }
+                                else
+                                {
+                                    sw.Write("<td>" + conditions[boon.getID()].uptime + "</td>");
+                                }
+                            }
+                        }
+                        sw.Write("</tr>");
+                    }
+                    sw.Write("</tbody>");
+                }
+                sw.Write("</table>");
+            }
+            
         }
         /// <summary>
         /// Creates the boss summary tab
