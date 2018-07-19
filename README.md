@@ -47,4 +47,15 @@ GuildWars2EliteInsights.exe -c [config path] [logs]
 
 Note it may take some time for each file to parse and they will not be ready to open the moment they are created.
 
+## Contributor
+### Developpers
+- baaron4
+- EliphasNUIT
+- cordbleibaum
+- QuiCM
+- amgine
+
+### Other stuffs
+- Linus (arena maps for combat replay)
+
 
