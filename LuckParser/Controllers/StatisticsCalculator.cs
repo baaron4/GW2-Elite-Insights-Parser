@@ -480,7 +480,6 @@ namespace LuckParser.Controllers
                     {
                         totalGeneration += boons.getGeneration(boon.getID(), player.getInstid());
                         totalOverstack += boons.getOverstack(boon.getID(), player.getInstid());
-                        totalUptime += boons.getUptime(boon.getID());
                     }
                 }
 
@@ -488,13 +487,11 @@ namespace LuckParser.Controllers
 
                 if (boon.getType() == Boon.BoonType.Duration)
                 {
-                    uptime.uptime = Math.Round(100.0 * totalUptime / fightDuration / playerList.Count, 1);
                     uptime.generation = Math.Round(100.0f * totalGeneration / fightDuration / playerList.Count, 1);
                     uptime.overstack = Math.Round(100.0f * (totalOverstack + totalGeneration)/ fightDuration / playerList.Count, 1);
                 }
                 else if (boon.getType() == Boon.BoonType.Intensity)
                 {
-                    uptime.uptime = Math.Round((double)totalUptime / fightDuration / playerList.Count, 1);
                     uptime.generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, 1);
                     uptime.overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, 1);
                 }
@@ -527,7 +524,7 @@ namespace LuckParser.Controllers
                     BoonDistribution selfBoons = player.getBoonDistribution(log, phases, boon_to_track, phaseIndex);
 
                     long fightDuration = phase.getEnd() - phase.getStart();
-                    foreach (Boon boon in Boon.getAllBuffList())
+                    foreach (Boon boon in boon_to_track)
                     {
                         Statistics.FinalBoonUptime uptime = new Statistics.FinalBoonUptime();
 
@@ -639,7 +636,7 @@ namespace LuckParser.Controllers
                 PhaseData phase = phases[phaseIndex];
                 long fightDuration = phase.getDuration();
 
-                foreach (Boon boon in Boon.getCondiBoonList())
+                foreach (Boon boon in boon_to_track)
                 {
                     Statistics.FinalBossBoon condition = new Statistics.FinalBossBoon();
                     rates[boon.getID()] = condition;
