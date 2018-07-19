@@ -47,7 +47,7 @@ GuildWars2EliteInsights.exe -c [config path] [logs]
 
 Note it may take some time for each file to parse and they will not be ready to open the moment they are created.
 
-## Contributor
+## Contributors
 ### Developpers
 - baaron4
 - EliphasNUIT
