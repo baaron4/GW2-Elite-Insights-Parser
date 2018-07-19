@@ -249,7 +249,7 @@ namespace LuckParser.Models.ParseModels
                     return Tuple.Create(663, -4127, 3515, -997);
                 // Ensolyss
                 case 0x4234:
-                    return Tuple.Create(252, 01, 2892, 2881);
+                    return Tuple.Create(252, 1, 2892, 2881);
                 // Skorvald
                 case 0x44E0:
                     return Tuple.Create(-22267, 14955, -17227, 20735);
