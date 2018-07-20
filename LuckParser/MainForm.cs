@@ -206,6 +206,7 @@ namespace LuckParser
                 {
                     bg.UpdateProgress(rowData, "Not EVTC", 100);
                     e.Cancel = true;
+                    Console.Error.Write("Not EVTC");
                     throw new CancellationException(rowData);
                 }
 
