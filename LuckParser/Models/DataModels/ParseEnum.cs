@@ -92,6 +92,7 @@ namespace LuckParser.Models.DataModels
             BuffInitial     = 18,
             Position        = 19,
             Velocity        = 20,
+            Rotation        = 21,
             Unknown
         };
 
