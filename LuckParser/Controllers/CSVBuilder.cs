@@ -320,13 +320,13 @@ namespace LuckParser.Controllers
             List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
             PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
             HashSet<int> intensityBoon = new HashSet<int>();
-           
+            long fight_duration = phases[phase_index].getDuration();
 
             WriteCells( new string[] { "Name","Avg Boons" });
             foreach (Boon boon in list_to_use)
             {
                 WriteCell(boon.getName());
-                WriteCell(boon.getName() + " Overstack");
+               
             }
             NewLine();
 
@@ -340,6 +340,8 @@ namespace LuckParser.Controllers
                 {
                     avg_boons += duration;
                 }
+                avg_boons /= fight_duration;
+
                 WriteCell(player.getCharacter());
                 WriteCell(Math.Round(avg_boons, 1).ToString());
                 foreach (Boon boon in list_to_use)
@@ -381,6 +383,7 @@ namespace LuckParser.Controllers
             foreach (Boon boon in list_to_use)
             {
                 WriteCell(boon.getName());
+                WriteCell(boon.getName() + " Overstack");
             }
             NewLine();
 
@@ -396,21 +399,24 @@ namespace LuckParser.Controllers
                 foreach (Boon boon in list_to_use)
                 {
                     string rate = "0";
+                    string overstack = "0";
                     Statistics.FinalBoonUptime uptime = uptimes[boon.getID()];
                     if (uptime.generation > 0)
                     {
                         if (boon.getType() == Boon.BoonType.Duration)
                         {
                             rate = uptime.generation.ToString() + "%";
-                               
+                            overstack = uptime.overstack.ToString() + "%";
                         }
                         else if (boon.getType() == Boon.BoonType.Intensity)
                         {
                             rate = uptime.generation.ToString() ;
+                            overstack = uptime.overstack.ToString();
                         }
 
                     }
                     WriteCell(rate);
+                    WriteCell(overstack);
                 }
                 NewLine();
                 count++;
@@ -431,6 +437,7 @@ namespace LuckParser.Controllers
             foreach (Boon boon in list_to_use)
             {
                 WriteCell(boon.getName());
+                WriteCell(boon.getName() + " Overstack");
             }
             NewLine();
 
@@ -447,21 +454,24 @@ namespace LuckParser.Controllers
                 foreach (Boon boon in list_to_use)
                 {
                     string rate = "0";
+                    string overstack = "0";
                     Statistics.FinalBoonUptime uptime = boons[boon.getID()];
                     if (uptime.generation > 0)
                     {
                         if (boon.getType() == Boon.BoonType.Duration)
                         {
                             rate = uptime.generation.ToString() + "%";
-
+                            overstack = uptime.overstack.ToString() + "%";
                         }
                         else if (boon.getType() == Boon.BoonType.Intensity)
                         {
                             rate = uptime.generation.ToString();
+                            overstack = uptime.overstack.ToString();
                         }
 
                     }
                     WriteCell(rate);
+                    WriteCell(overstack);
                 }
                 NewLine();
                 count++;
@@ -482,6 +492,7 @@ namespace LuckParser.Controllers
             foreach (Boon boon in list_to_use)
             {
                 WriteCell(boon.getName());
+                WriteCell(boon.getName() + " Overstack");
             }
             NewLine();
 
@@ -498,21 +509,24 @@ namespace LuckParser.Controllers
                 foreach (Boon boon in list_to_use)
                 {
                     string rate = "0";
+                    string overstack = "0";
                     Statistics.FinalBoonUptime uptime = boons[boon.getID()];
                     if (uptime.generation > 0)
                     {
                         if (boon.getType() == Boon.BoonType.Duration)
                         {
                             rate = uptime.generation.ToString() + "%";
-
+                            overstack = uptime.overstack.ToString() + "%";
                         }
                         else if (boon.getType() == Boon.BoonType.Intensity)
                         {
                             rate = uptime.generation.ToString();
+                            overstack = uptime.overstack.ToString();
                         }
 
                     }
                     WriteCell(rate);
+                    WriteCell(overstack);
                 }
                 NewLine();
                 count++;
@@ -533,6 +547,7 @@ namespace LuckParser.Controllers
             foreach (Boon boon in list_to_use)
             {
                 WriteCell(boon.getName());
+                WriteCell(boon.getName() + " Overstack");
             }
             NewLine();
 
@@ -549,21 +564,24 @@ namespace LuckParser.Controllers
                 foreach (Boon boon in list_to_use)
                 {
                     string rate = "0";
+                    string overstack = "0";
                     Statistics.FinalBoonUptime uptime = boons[boon.getID()];
                     if (uptime.generation > 0)
                     {
                         if (boon.getType() == Boon.BoonType.Duration)
                         {
                             rate = uptime.generation.ToString() + "%";
-
+                            overstack = uptime.overstack.ToString() + "%";
                         }
                         else if (boon.getType() == Boon.BoonType.Intensity)
                         {
                             rate = uptime.generation.ToString();
+                            overstack = uptime.overstack.ToString();
                         }
 
                     }
                     WriteCell(rate);
+                    WriteCell(overstack);
                 }
                 NewLine();
                 count++;
