@@ -317,13 +317,16 @@ namespace LuckParser.Controllers
         private void CreateUptimeTable(StreamWriter sw, List<Boon> list_to_use, int phase_index)
         {
             //generate Uptime Table table
+            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
             PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
             HashSet<int> intensityBoon = new HashSet<int>();
+           
 
-            WriteCell( "Name" );
+            WriteCells( new string[] { "Name","Avg Boons" });
             foreach (Boon boon in list_to_use)
             {
                 WriteCell(boon.getName());
+                WriteCell(boon.getName() + " Overstack");
             }
             NewLine();
 
@@ -331,9 +334,14 @@ namespace LuckParser.Controllers
             foreach (Player player in log.getPlayerList())
             {
                 Dictionary<long, Statistics.FinalBoonUptime> boons = statistics.selfBoons[player][phase_index];
-               
-
+                Dictionary<long, long> boonPresence = player.getBoonPresence(log, phases, list_to_use, phase_index);
+                double avg_boons = 0.0;
+                foreach (long duration in boonPresence.Values)
+                {
+                    avg_boons += duration;
+                }
                 WriteCell(player.getCharacter());
+                WriteCell(Math.Round(avg_boons, 1).ToString());
                 foreach (Boon boon in list_to_use)
                 {
                     if (boon.getType() == Boon.BoonType.Intensity)
@@ -351,6 +359,8 @@ namespace LuckParser.Controllers
                         WriteCell("0");
                     
                     }
+
+
                 }
                 NewLine();
                 count++;
