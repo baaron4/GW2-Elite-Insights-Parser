@@ -17,18 +17,6 @@ namespace LuckParser
             //mainfrm.settingArray[0] = checkBox1.Checked;
         }
 
-        private void TotalDpsPlot_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.PlayerGraphTotals = chkTotalDpsPlot.Checked;
-            //mainfrm.settingArray[1] = checkBox2.Checked;
-        }
-
-        private void BossDpsPlot_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.PlayerGraphBoss = chkBossDpsPlot.Checked;
-           // mainfrm.settingArray[2] = checkBox3.Checked;
-        }
-
         private void UniversalBoons_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerBoonsUniversal = chkUniversalBoons.Checked;
@@ -70,8 +58,7 @@ namespace LuckParser
         private void SettingsForm_Load(object sender, EventArgs e)
         {
             chkPlayerDpsPlot.Checked = Properties.Settings.Default.DPSGraphTotals;
-            chkTotalDpsPlot.Checked = Properties.Settings.Default.PlayerGraphTotals;
-            chkBossDpsPlot.Checked = Properties.Settings.Default.PlayerGraphBoss;
+            chkShowCl.Checked = Properties.Settings.Default.ClDPSGraphTotals;
             chkUniversalBoons.Checked = Properties.Settings.Default.PlayerBoonsUniversal;
             chkImpProfSpecBoons.Checked = Properties.Settings.Default.PlayerBoonsImpProf;
             chkAllProfSpecBoons.Checked = Properties.Settings.Default.PlayerBoonsAllProf;
@@ -203,6 +190,11 @@ namespace LuckParser
         private void chk_combatReplay_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ParseCombatReplay = chk_combatReplay.Checked;
+        }
+
+        private void ShowCl_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ClDPSGraphTotals = chkShowCl.Checked;
         }
     }
 }

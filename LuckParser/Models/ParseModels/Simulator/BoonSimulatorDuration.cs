@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Linq;
 
 namespace LuckParser.Models.ParseModels
@@ -7,7 +8,7 @@ namespace LuckParser.Models.ParseModels
     {
         
         // Constructor
-        public BoonSimulatorDuration(int capacity) : base(capacity)
+        public BoonSimulatorDuration(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
         }
 

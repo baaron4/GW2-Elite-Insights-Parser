@@ -18,6 +18,7 @@ namespace LuckParser.Models.DataModels
         private MechanicData mech_data = new MechanicData();
         private List<Player> p_list = new List<Player>();
         private Boss boss;
+        private bool movement_possible;
 
         // reduced data
         private List<CombatItem> boon_data;
@@ -29,7 +30,7 @@ namespace LuckParser.Models.DataModels
         private List<CombatItem> movement_data;
 
         public ParsedLog(LogData log_data, BossData boss_data, AgentData agent_data, SkillData skill_data, 
-                CombatData combat_data, MechanicData mech_data, List<Player> p_list, Boss boss)
+                CombatData combat_data, MechanicData mech_data, List<Player> p_list, Boss boss, bool movement_possible)
         {
             this.log_data = log_data;
             this.boss_data = boss_data;
@@ -39,6 +40,7 @@ namespace LuckParser.Models.DataModels
             this.mech_data = mech_data;
             this.p_list = p_list;
             this.boss = boss;
+            this.movement_possible = movement_possible;
         }
 
         public BossData getBossData()
@@ -107,7 +109,7 @@ namespace LuckParser.Models.DataModels
 
             cast_data = combat_data.getCombatList().Where(x => (x.isStateChange() == ParseEnum.StateChange.Normal && x.isActivation() != ParseEnum.Activation.None) || x.isStateChange() == ParseEnum.StateChange.WeaponSwap).ToList();
 
-            movement_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Position || x.isStateChange() == ParseEnum.StateChange.Velocity).ToList();
+            movement_data = movement_possible? combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Position || x.isStateChange() == ParseEnum.StateChange.Velocity).ToList() : new List<CombatItem>();
 
             /*healing_data = combat_data.getCombatList().Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                          ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
@@ -161,12 +163,12 @@ namespace LuckParser.Models.DataModels
                 List<CombatItem> down = combat_data.getStates(p.getInstid(), ParseEnum.StateChange.ChangeDown, boss_data.getFirstAware(), boss_data.getLastAware());
                 foreach (CombatItem pnt in down)
                 {
-                    mech_data.AddItem(new MechanicLog((long)((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
+                    mech_data.AddItem(new MechanicLog((long)Math.Round((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
                 }
                 List<CombatItem> dead = combat_data.getStates(p.getInstid(), ParseEnum.StateChange.ChangeDead, boss_data.getFirstAware(), boss_data.getLastAware());
                 foreach (CombatItem pnt in dead)
                 {
-                    mech_data.AddItem(new MechanicLog((long)((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
+                    mech_data.AddItem(new MechanicLog((long)Math.Round((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
                 }
                 List<DamageLog> dls = p.getDamageTakenLogs(this, 0, boss_data.getAwareDuration());
                 //Player hit by skill 3
@@ -182,7 +184,7 @@ namespace LuckParser.Models.DataModels
                             //Prevent multi hit attacks form multi registering
                             if (prevMech != null)
                             {
-                                if (dLog.getID() == prevMech.GetSkill() && mech.GetName() == prevMech.GetName() && (dLog.getTime() / 1000f) == prevMech.GetTime())
+                                if (dLog.getID() == prevMech.GetSkill() && mech.GetName() == prevMech.GetName() && (long)Math.Round(dLog.getTime() / 1000f) == prevMech.GetTime())
                                 {
                                     break;
                                 }
@@ -191,7 +193,7 @@ namespace LuckParser.Models.DataModels
                             {
 
 
-                                prevMech = new MechanicLog((long)(dLog.getTime() / 1000f), dLog.getID(), mech.GetName(), dLog.getDamage(), p, mech.GetPlotly());
+                                prevMech = new MechanicLog((long)Math.Round(dLog.getTime() / 1000f), dLog.getID(), mech.GetName(), dLog.getDamage(), p, mech.GetPlotly());
 
                                 mech_data.AddItem(prevMech);
                                 break;
@@ -213,7 +215,7 @@ namespace LuckParser.Models.DataModels
                                 if (c.getSkillID() == mech.GetSkill())
                                 {
                                     //dst player
-                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
+                                    mech_data.AddItem(new MechanicLog((long)Math.Round((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
                                     break;
                                 }
                             }
@@ -223,9 +225,9 @@ namespace LuckParser.Models.DataModels
                                 if (c.getSkillID() == mech.GetSkill())
                                 {
                                     //dst player
-                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
+                                    mech_data.AddItem(new MechanicLog((long)Math.Round((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
                                     //src player
-                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p_list.FirstOrDefault(i => i.getInstid() == c.getSrcInstid()), mech.GetPlotly()));
+                                    mech_data.AddItem(new MechanicLog((long)Math.Round((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p_list.FirstOrDefault(i => i.getInstid() == c.getSrcInstid()), mech.GetPlotly()));
                                     break;
                                 }
                             }
@@ -258,7 +260,7 @@ namespace LuckParser.Models.DataModels
                                 
                             
                             }
-                            mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(),amp, mech.GetPlotly()));
+                            mech_data.AddItem(new MechanicLog((long)Math.Round((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(),amp, mech.GetPlotly()));
                         }
                     }
                 }
@@ -287,7 +289,7 @@ namespace LuckParser.Models.DataModels
 
 
                             }
-                            mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), amp, mech.GetPlotly()));
+                            mech_data.AddItem(new MechanicLog((long)Math.Round((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), amp, mech.GetPlotly()));
                         }
                     }
                 }

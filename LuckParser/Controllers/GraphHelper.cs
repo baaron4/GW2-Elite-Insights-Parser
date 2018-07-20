@@ -119,5 +119,28 @@ namespace LuckParser.Controllers
         {
             return getDPSGraph(log, p, phase_index, 0, mode);
         }
+
+        /// <summary>
+        /// Gets the points for the cleave dps graph for a given player
+        /// </summary>
+        /// <param name="p">The player</param>
+        /// <returns></returns>
+        public static List<Point> getCleaveDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, GraphMode mode)
+        {           
+            int asked_id = (phase_index + "_" + (-1) + "_" + mode).GetHashCode();
+            if (p.getDPSGraph(asked_id).Count > 0)
+            {
+                return p.getDPSGraph(asked_id);
+            }
+            List<Point> total = getTotalDPSGraph(log, p, phase_index, mode);
+            List<Point> boss = getBossDPSGraph(log, p, phase_index, mode);
+            List<Point> cleave = new List<Point>();
+            for (int i = 0; i < boss.Count; i++)
+            {
+                cleave.Add(new Point(boss[i].X, total[i].Y - boss[i].Y));
+            }
+            p.addDPSGraph(asked_id, cleave);
+            return cleave;
+        }
     }
 }
