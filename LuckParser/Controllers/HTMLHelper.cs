@@ -234,7 +234,7 @@ namespace LuckParser.Controllers
             sw.Write("<tr>");
             {
                 sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + "\" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + "\" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "<span style=\"display:none\">" + player.getProf() + "</span>" + "</td>");
                 sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
                 foreach (Boon boon in list_to_use)
                 {
@@ -599,6 +599,10 @@ namespace LuckParser.Controllers
         public static void writeDPSGraph(StreamWriter sw, string name, List<Point> playerdpsgraphdata, AbstractPlayer p)
         {
             int ptdgCount = 0;
+            bool total = name.Contains("Total");
+            bool cleave = name.Contains("Cleave");
+            bool s10 = name.Contains("10s");
+            bool s30 = name.Contains("30s");
             sw.Write("y: [");
             {
                 foreach (Point dp in playerdpsgraphdata)
@@ -641,15 +645,17 @@ namespace LuckParser.Controllers
                 }
             }
             sw.Write("],");
+            string color = GetLink("Color-" + p.getProf() + ( total? "-Total" : ( cleave? "-NonBoss": "")));
             sw.Write(" mode: 'lines'," +
-                   "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf() + (name.Contains("Total") ? "-Total" : "")) + "'}," +
+                   "line: {shape: 'spline',color:'" + color + "'}," +
                    "yaxis: 'y3',");
-            if (name.Contains("10s") || name.Contains("30s"))
+            if (s10 || s30)
             {
                 sw.Write(" visible: 'legendonly',");
             }
             // "legendgroup: 'Damage'," +
-            sw.Write("name: '" + name+"'");
+            sw.Write("name: '" + name+"'," +
+                "legendgroup: '" + p.getCharacter() + (s10 ? "10s" : (s30 ? "30s" : ""))+"'");
         }
 
         public static void writeDamageStatsTableHeader(StreamWriter sw)
@@ -1000,6 +1006,35 @@ namespace LuckParser.Controllers
                 case "Color-Reaper": return "rgb(82,167,111)";
                 case "Color-Scourge": return "rgb(82,167,111)";
                 case "Color-Boss": return "rgb(82,167,250)";
+
+                case "Color-Warrior-NonBoss": return "rgb(125,109,66)";
+                case "Color-Berserker-NonBoss": return "rgb(125,109,66)";
+                case "Color-Spellbreaker-NonBoss": return "rgb(125,109,66)";
+                case "Color-Guardian-NonBoss": return "rgb(62,101,113)";
+                case "Color-Dragonhunter-NonBoss": return "rgb(62,101,113)";
+                case "Color-Firebrand-NonBoss": return "rgb(62,101,113)";
+                case "Color-Revenant-NonBoss": return "rgb(110,60,50)";
+                case "Color-Herald-NonBoss": return "rgb(110,60,50)";
+                case "Color-Renegade-NonBoss": return "rgb(110,60,50)";
+                case "Color-Engineer-NonBoss": return "rgb(109,83,48)";
+                case "Color-Scrapper-NonBoss": return "rgb(109,83,48)";
+                case "Color-Holosmith-NonBoss": return "rgb(109,83,48)";
+                case "Color-Ranger-NonBoss": return "rgb(75,115,70)";
+                case "Color-Druid-NonBoss": return "rgb(75,115,70)";
+                case "Color-Soulbeast-NonBoss": return "rgb(75,115,70)";
+                case "Color-Thief-NonBoss": return "rgb(101,76,79)";
+                case "Color-Daredevil-NonBoss": return "rgb(101,76,79)";
+                case "Color-Deadeye-NonBoss": return "rgb(101,76,79)";
+                case "Color-Elementalist-NonBoss": return "rgb(127,74,72)";
+                case "Color-Tempest-NonBoss": return "rgb(127,74,72)";
+                case "Color-Weaver-NonBoss": return "rgb(127,74,72)";
+                case "Color-Mesmer-NonBoss": return "rgb(96,60,111)";
+                case "Color-Chronomancer-NonBoss": return "rgb(96,60,111)";
+                case "Color-Mirage-NonBoss": return "rgb(96,60,111)";
+                case "Color-Necromancer-NonBoss": return "rgb(46,88,60)";
+                case "Color-Reaper-NonBoss": return "rgb(46,88,60)";
+                case "Color-Scourge-NonBoss": return "rgb(46,88,60)";
+                case "Color-Boss-NonBoss": return "rgb(92,177,250)";
 
                 case "Color-Warrior-Total": return "rgb(125,109,66)";
                 case "Color-Berserker-Total": return "rgb(125,109,66)";

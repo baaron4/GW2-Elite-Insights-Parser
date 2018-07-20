@@ -38,7 +38,6 @@ namespace LuckParser.Models.ParseModels
             return group;
         }
 
-
         public int getToughness()
         {
             return agent.getToughness();

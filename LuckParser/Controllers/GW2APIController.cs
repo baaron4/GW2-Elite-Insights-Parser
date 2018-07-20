@@ -35,10 +35,10 @@ namespace LuckParser.Controllers
 
                 //skill = response.Content.ReadAsAsync<GW2APISkill>().Result;
                 GW2APISkillCheck skillCheck = response.Content.ReadAsAsync<GW2APISkillCheck>().Result;
-                if (skillCheck.categories != null)
+                /*if (skillCheck.categories != null)
                 {
                     int stop = 0;
-                }
+                }*/
                 if (skillCheck.facts != null)
                 {
                     bool block = true;

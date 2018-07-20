@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -36,13 +37,17 @@ namespace LuckParser.Models.ParseModels
         protected readonly List<BoonStackItem> boon_stack;
         protected List<BoonSimulationItem> simulation = new List<BoonSimulationItem>();
         protected int capacity;
+        private ParsedLog log;
+        private StackingLogic logic;
 
         // Constructor
-        public BoonSimulator(int capacity)
+        public BoonSimulator(int capacity, ParsedLog log, StackingLogic logic)
         {
             this.capacity   = capacity;
             this.boon_stack = new List<BoonStackItem>(capacity);
-        }
+            this.log = log;
+            this.logic = logic;
+        }  
 
         public List<BoonSimulationItem> getSimulationResult()
         {
@@ -94,32 +99,15 @@ namespace LuckParser.Models.ParseModels
         {
             var toAdd = new BoonStackItem(start, boon_duration, srcinstid, overstack);
             // Find empty slot
-            if (!isFull())
+            if (boon_stack.Count < capacity)
             {
                 boon_stack.Add(toAdd);
+                logic.sort(log, boon_stack);
             }
             // Replace lowest value
             else
             {
-                bool found = false;
-                for (int i = capacity == 1 ? 0 : 1; i < boon_stack.Count; i++)
-                {
-                    if (boon_stack[i].boon_duration < boon_duration)
-                    {
-                        long overstackValue = boon_stack[i].overstack + boon_stack[i].boon_duration;
-                        ushort srcValue = boon_stack[i].src;
-                        for (int j = simulation.Count - 1; j >= 0; j--)
-                        {
-                            if (simulation[j].addOverstack(srcValue, overstackValue))
-                            {
-                                break;
-                            }
-                        }
-                        boon_stack[i] = toAdd;
-                        found = true;
-                        break;
-                    }
-                }
+                bool found = logic.stackEffect(log, toAdd, boon_stack, simulation);
                 if (!found)
                 {
                     long overstackValue = overstack + boon_duration;
@@ -133,14 +121,6 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-        }
-         
-        // Private Methods
-        private bool isFull() => boon_stack.Count >= capacity;
-
-        private void sort()
-        {
-            boon_stack.Sort((a, b) => b.boon_duration.CompareTo(a.boon_duration));
         }
     }
 }

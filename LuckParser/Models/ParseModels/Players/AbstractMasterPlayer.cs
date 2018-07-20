@@ -101,7 +101,7 @@ namespace LuckParser.Models.ParseModels
             {
                 replay = new CombatReplay();
                 setMovements(log);
-                replay.pollingRate(16, log.getBossData().getAwareDuration());
+                replay.pollingRate(32, log.getBossData().getAwareDuration());
             }
         }
         public CombatReplay getCombatReplay()
@@ -129,11 +129,10 @@ namespace LuckParser.Models.ParseModels
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                     if (c.isStateChange() == ParseEnum.StateChange.BuffInitial)
                     {
-                        long offset = Math.Abs(Math.Min(time, 0));
                         List<BoonLog> loglist = boon_map[c.getSkillID()];
-                        loglist.Add(new BoonLog(0, src, (long)c.getDstAgent() - offset, 0));
+                        loglist.Add(new BoonLog(0, src, (long)c.getDstAgent(), 0));
                     }
-                    else if (time > 0 && time < log.getBossData().getAwareDuration())
+                    else if (time >= 0 && time < log.getBossData().getAwareDuration())
                     {
                         if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
@@ -228,10 +227,6 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 long time = c.getTime() - log.getBossData().getFirstAware();
-                if (time < 0 || time > log.getBossData().getAwareDuration())
-                {
-                    continue;
-                }
                 byte[] xy = BitConverter.GetBytes(c.getDstAgent());
                 float X = BitConverter.ToSingle(xy, 0);
                 float Y = BitConverter.ToSingle(xy, 4);
@@ -361,7 +356,7 @@ namespace LuckParser.Models.ParseModels
                         continue;
                     }
                     bool requireExtraData = extraDataID.Contains(boonid);
-                    var simulator = boon.CreateSimulator();
+                    var simulator = boon.CreateSimulator(log);
                     simulator.simulate(logs, dur);
                     if (death > 0 && getCastLogs(log, death + 5000, fight_duration).Count == 0)
                     {
