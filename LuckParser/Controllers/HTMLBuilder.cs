@@ -317,36 +317,30 @@ namespace LuckParser.Controllers
                         Point check = new Point();
                         if (ml.GetPlayer() != log.getBoss())
                         {
-                            check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
+                            check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - Math.Round(phase.getStart() / 1000.0));
+                            if (check == Point.Empty)
+                            {
+                                check = new Point(0, GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).Last().Y);
+                            }
                         }
                         else
                         {
-                            check = log.getBossData().getHealthOverTime().Where(x => x.X/1000f > ml.GetTime()).ToList()[0]; // boss_data.getHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
+                            check = log.getBossData().getHealthOverTime().FirstOrDefault(x => x.X/1000f > ml.GetTime()); // boss_data.getHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
+                            if (check == Point.Empty)
+                            {
+                                check = new Point(0, log.getBossData().getHealthOverTime().Last().Y);
+                            }
                             check.Y = (int)((float)(check.Y / 10000f) * maxDPS);
                         }
-                        
+
                         if (mechcount == filterdList.Count - 1)
                         {
-                            if (check != Point.Empty)
-                            {
-                                sw.Write("'" + check.Y + "'");
-                            }
-                            else
-                            {
-                                sw.Write("'" + 10000 + "'");
-                            }
-
+                            sw.Write("'" + check.Y + "'");
                         }
                         else
                         {
-                            if (check != Point.Empty)
-                            {
-                                sw.Write("'" + check.Y + "',");
-                            }
-                            else
-                            {
-                                sw.Write("'" + 10000 + "',");
-                            }
+                            sw.Write("'" + check.Y + "',");
+
                         }
 
                         mechcount++;
@@ -360,11 +354,11 @@ namespace LuckParser.Controllers
                     {
                         if (mechcount == filterdList.Count - 1)
                         {
-                            sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "'");
+                            sw.Write("'" + (ml.GetTime() - Math.Round(phase.getStart() / 1000.0)) + "'");
                         }
                         else
                         {
-                            sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "',");
+                            sw.Write("'" + (ml.GetTime() - Math.Round(phase.getStart() / 1000.0)) + "',");
                         }
 
                         mechcount++;
@@ -412,7 +406,7 @@ namespace LuckParser.Controllers
                         {
                             foreach (MechanicLog ml in DnDList)
                             {
-                                Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - phase.getStart() / 1000);
+                                Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - Math.Round(phase.getStart() / 1000.0));
                                 if (mcount == DnDList.Count - 1)
                                 {
                                     if (check != null)
@@ -421,7 +415,7 @@ namespace LuckParser.Controllers
                                     }
                                     else
                                     {
-                                        sw.Write("'" + 10000 + "'");
+                                        sw.Write("'" + GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).Last().Y + "'");
                                     }
 
                                 }
@@ -433,7 +427,7 @@ namespace LuckParser.Controllers
                                     }
                                     else
                                     {
-                                        sw.Write("'" + 10000 + "',");
+                                        sw.Write("'" + GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).Last().Y + "',");
                                     }
                                 }
 
@@ -451,11 +445,11 @@ namespace LuckParser.Controllers
                             {
                                 if (mcount == DnDList.Count - 1)
                                 {
-                                    sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "'");
+                                    sw.Write("'" + (ml.GetTime() - Math.Round(phase.getStart() / 1000.0)) + "'");
                                 }
                                 else
                                 {
-                                    sw.Write("'" + (ml.GetTime() - phase.getStart() / 1000) + "',");
+                                    sw.Write("'" + (ml.GetTime() - Math.Round(phase.getStart() / 1000.0)) + "',");
                                 }
 
                                 mcount++;
@@ -771,10 +765,10 @@ namespace LuckParser.Controllers
                         sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.allCondiDamage + " dmg \">" + dps.allCondiDps + "</span>" + "</td>");
                         sw.Write("<td>" + stats.downCount + "</td>");
                         TimeSpan timedead = TimeSpan.FromMilliseconds(stats.died);
-                        long fight_duration = phase.getDuration("s");
+                        long fight_duration = phase.getDuration();
                         if (timedead > TimeSpan.Zero)
                         {
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + Math.Round((timedead.TotalSeconds / fight_duration) * 100,1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + Math.Round((timedead.TotalMilliseconds / fight_duration) * 100,1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
                         }
                         else
                         {
@@ -932,11 +926,11 @@ namespace LuckParser.Controllers
                                 + stats.saved + "cancels \">" + stats.timeSaved + "</span>" + "</td>");//timesaved
                             sw.Write("<td>" + stats.swapCount + "</td>");//w swaps
                             sw.Write("<td>" + stats.downCount + "</td>");//downs
-                            long fight_duration = phase.getDuration("s");
+                            long fight_duration = phase.getDuration();
                             if (timedead > TimeSpan.Zero)
                             {
                                 sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                    + timedead + "(" + Math.Round((timedead.TotalSeconds / fight_duration) * 100,1) + "% Alive) \">" 
+                                    + timedead + "(" + Math.Round((timedead.TotalMilliseconds / fight_duration) * 100,1) + "% Alive) \">" 
                                     + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
                             }
                             else
@@ -1062,11 +1056,11 @@ namespace LuckParser.Controllers
                                 + stats.saved + "cancels \">" + stats.timeSaved + "</span>" + "</td>");//timesaved
                             sw.Write("<td>" + stats.swapCount + "</td>");//w swaps
                             sw.Write("<td>" + stats.downCount + "</td>");//downs
-                            long fight_duration = phase.getDuration("s");
+                            long fight_duration = phase.getDuration();
                             if (timedead > TimeSpan.Zero)
                             {
                                 sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                    + timedead + "(" + Math.Round((timedead.TotalSeconds / fight_duration) * 100,1) + "% Alive) \">" 
+                                    + timedead + "(" + Math.Round((timedead.TotalMilliseconds / fight_duration) * 100,1) + "% Alive) \">" 
                                     + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
                             }
                             else
@@ -1183,7 +1177,7 @@ namespace LuckParser.Controllers
                             long fight_duration = phase.getDuration("s");
                             if (timedead > TimeSpan.Zero)
                             {
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + Math.Round((timedead.TotalSeconds / fight_duration) * 100,1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + Math.Round((timedead.TotalMilliseconds / fight_duration) * 100,1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
                             }
                             else
                             {
@@ -3060,7 +3054,7 @@ namespace LuckParser.Controllers
                                     int count = 0;
                                     foreach (Mechanic mech in mechs)
                                     {
-                                        List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= phase.getStart() / 1000 && x.GetTime() <= phase.getEnd() / 1000).ToList();
+                                        List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= Math.Round(phase.getStart() / 1000.0) && x.GetTime() <= Math.Round(phase.getEnd() / 1000.0)).ToList();
                                         count += test.Count;
                                     }
                                     sw.Write("<td>" + count + "</td>");
@@ -3129,7 +3123,7 @@ namespace LuckParser.Controllers
                                     int count = 0;
                                     foreach (Mechanic mech in mechs)
                                     {
-                                        List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer().getInstid() == p.getInstid() && x.GetTime() >= phase.getStart() / 1000 && x.GetTime() <= phase.getEnd() / 1000).ToList();
+                                        List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer().getInstid() == p.getInstid() && x.GetTime() >= Math.Round(phase.getStart() / 1000.0) && x.GetTime() <= Math.Round(phase.getEnd() / 1000.0)).ToList();
                                         count += test.Count;
                                     }
                                     sw.Write("<td>" + count + "</td>");
