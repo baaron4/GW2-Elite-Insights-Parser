@@ -170,11 +170,16 @@ namespace LuckParser.Controllers
             //  Html_boonGenSquad
             CreateGenSquadTable(sw, statistics.present_defbuffs, 0);
 
+            //Mechanics
+            CreateMechanicTable(sw,0);
+
+            //Mech List
+            CreateMechList(sw, 0);
         }
         private void CreateDPSTable(StreamWriter sw, int phase_index)
         {
             PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
-            WriteLine(new string[] { "Sub Group", "Profession","Name","Account","WepSet1_1","WepSet1_2","WepSet2_1","WepSet2_2",
+            WriteLine(new string[] { "Sub Group", "Profession","Role","Name","Account","WepSet1_1","WepSet1_2","WepSet2_1","WepSet2_2",
                 "Boss DPS","Boss DMG","Boss Power DPS","Boss Power DMG","Boss Condi DPS","Boss Condi DMG",
                 "All DPS","All DMG","All Power DPS","All Power DMG","All Condi DPS","All Condi DMG",
                 "Times Downed", "Time Died","Percent Alive"});
@@ -186,8 +191,20 @@ namespace LuckParser.Controllers
                 TimeSpan timedead = TimeSpan.FromMilliseconds(stats.died);
                 long fight_duration = phase.getDuration("s");
                 string[] wep = player.getWeaponsArray(log);
-
-                WriteLine(new string[] { player.getGroup().ToString(), player.getProf().ToString(),player.getCharacter().ToString(), player.getAccount().TrimStart(':') ,wep[0],wep[1],wep[2],wep[3], 
+                string build = "";
+                if (player.getCondition() > 0)
+                {
+                    build += " Condi:"+ player.getCondition();
+                }
+                if (player.getHealing() > 0)
+                {
+                    build += " Healing:"+ player.getHealing();
+                }
+                if (player.getToughness() > 0)
+                {
+                    build += " Toughness:"+ player.getToughness();
+                }
+                WriteLine(new string[] { player.getGroup().ToString(), player.getProf().ToString(),build,player.getCharacter().ToString(), player.getAccount().TrimStart(':') ,wep[0],wep[1],wep[2],wep[3], 
                 dps.bossDps.ToString(),dps.bossDamage.ToString(),dps.bossPowerDps.ToString(),dps.bossPowerDamage.ToString(),dps.bossCondiDps.ToString(),dps.bossCondiDamage.ToString(),
                 dps.allDps.ToString(),dps.allDamage.ToString(),dps.allPowerDps.ToString(),dps.allPowerDamage.ToString(),dps.allCondiDps.ToString(),dps.allCondiDamage.ToString(),
                 stats.downCount.ToString(), timedead.Minutes + " m " + timedead.Seconds + " s",Math.Round((timedead.TotalSeconds / fight_duration) * 100,1) +"%"});
@@ -591,6 +608,129 @@ namespace LuckParser.Controllers
                 NewLine();
                 count++;
             }
+        }
+        private void CreateMechanicTable(StreamWriter sw, int phase_index)
+        {
+            Dictionary<string, List<Mechanic>> presMech = new Dictionary<string, List<Mechanic>>();
+            //Dictionary<string, List<Mechanic>> presBossMech = new Dictionary<string, List<Mechanic>>();
+            //Dictionary<string, List<Mechanic>> presMobMech = new Dictionary<string, List<Mechanic>>();
+            Dictionary<string, List<Mechanic>> presEnemyMech = new Dictionary<string, List<Mechanic>>();
+            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+
+            //create list of enemys that had mechanics
+            List<AbstractMasterPlayer> enemyList = new List<AbstractMasterPlayer>();
+            enemyList.Add(log.getBoss());
+
+            foreach (AbstractMasterPlayer p in log.getMechanicData().GetMDataLogs().Select(x => x.GetPlayer()).Distinct().ToList())
+            {
+                bool enemyNew = true;
+                foreach (AbstractMasterPlayer en in enemyList)
+                {
+                    if (en.getInstid() == p.getInstid())
+                    {
+                        enemyNew = false;
+                        break;
+                    }
+
+                }
+                if (enemyNew)
+                {
+                    enemyList.Add(p);
+                }
+
+            }
+
+            foreach (AbstractMasterPlayer p in log.getPlayerList())
+            {
+                if (enemyList.Contains(p))
+                {
+                    enemyList.Remove(p);
+                }
+            }
+            foreach (Mechanic item in log.getMechanicData().GetMechList(log.getBossData().getID()))
+            {
+                MechanicLog first_m_log = log.getMechanicData().GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill());
+                if (first_m_log != null)
+                {
+                    if (log.getPlayerList().Contains(first_m_log.GetPlayer()))//player mech
+                    {
+                        if (!presMech.ContainsKey(item.GetAltName()))
+                        {
+                            presMech[item.GetAltName()] = new List<Mechanic>();
+                        }
+                        presMech[item.GetAltName()].Add(item);
+                    }
+                    else
+                    {
+                        if (!presEnemyMech.ContainsKey(item.GetAltName()))
+                        {
+                            presEnemyMech[item.GetAltName()] = new List<Mechanic>();
+                        }
+                        presEnemyMech[item.GetAltName()].Add(item);
+                    }
+
+
+                }
+            }
+            int countLines = 0;
+            if (presMech.Count > 0)
+            {
+                WriteCell("Name");
+                foreach (string mechalt in presMech.Keys)
+                {
+                    WriteCell(presMech[mechalt].First().GetName());
+                }
+                NewLine();
+               
+                foreach (Player p in log.getPlayerList())
+                {
+                    WriteCell(p.getCharacter());
+                    foreach (List<Mechanic> mechs in presMech.Values)
+                    {
+                        int count = 0;
+                        foreach (Mechanic mech in mechs)
+                        {
+                            List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= Math.Round(phase.getStart() / 1000.0) && x.GetTime() <= Math.Round(phase.getEnd() / 1000.0)).ToList();
+                            count += test.Count;
+                        }
+                        WriteCell( count.ToString() );
+                    }
+                    NewLine();
+                    countLines++;
+
+                }
+
+            }
+            while (countLines < 15)//so each graph has equal spaceing
+            {
+                NewLine();
+                countLines++;
+            }
+        }
+        private void CreateMechList(StreamWriter sw, int phase_index)
+        {
+            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+
+            List<MechanicLog> m_Logs = log.getMechanicData().GetMDataLogs().OrderByDescending(x=>x.GetTime()).ToList();
+            m_Logs.Reverse();
+            WriteCell("Time");
+            foreach (MechanicLog m in m_Logs)
+            {
+                WriteCell(m.GetTime().ToString());
+            }
+            NewLine();
+            WriteCell("Player");
+            foreach (MechanicLog m in m_Logs)
+            {
+                WriteCell(m.GetPlayer().getCharacter().ToString());
+            }
+            NewLine();
+            WriteCell("Mechanic");
+            foreach (MechanicLog m in m_Logs)
+            {
+                WriteCell(m.GetName().ToString());
+            }
+            NewLine();
         }
     }
 }
