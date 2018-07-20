@@ -3331,7 +3331,7 @@ namespace LuckParser.Controllers
                             avg_condis += duration;
                         }
                         avg_condis /= fight_duration;
-                        sw.Write("<td style=\"width: 300px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avg_condis, 1) + "\">" + boss.getCharacter() + " </td>");
+                        sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avg_condis, 1) + "\">" + boss.getCharacter() + " </td>");
                         foreach (Boon boon in Boon.getCondiBoonList())
                         {
                             if (hasBoons && boon.getName() == "Retaliation")
@@ -3375,7 +3375,7 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<tr>");
                         {
-                            sw.Write("<td style=\"width: 300px;\">" + boss.getCharacter() + " </td>");
+                            sw.Write("<td style=\"width: 275px;\">" + boss.getCharacter() + " </td>");
                             foreach (Boon boon in Boon.getBoonList())
                             {
                                 if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
