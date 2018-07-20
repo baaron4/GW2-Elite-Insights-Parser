@@ -45,31 +45,31 @@ namespace LuckParser.Controllers
         }
         private void WriteCell(string content)
         {
-            sw.Write(content + delimiter);
+            sw.Write(content + delimiter, Encoding.ASCII);
         }
         private void WriteCells(List<string> content )
         {
             foreach (string cont in content)
             {
-                sw.Write(cont + delimiter);
+                sw.Write(cont + delimiter, Encoding.ASCII);
             }
         }
         private void WriteCells(string[] content)
         {
             foreach (string cont in content)
             {
-                sw.Write(cont + delimiter);
+                sw.Write(cont + delimiter, Encoding.ASCII);
             }
         }
         private void NewLine()
         {
-            sw.Write("\r\n");
+            sw.Write("\r\n", Encoding.ASCII);
         }
         private void WriteLine(string[] content)
         {
             foreach (string cont in content)
             {
-                sw.Write(cont + delimiter);
+                sw.Write(cont + delimiter, Encoding.ASCII);
             }
             NewLine();
         }
