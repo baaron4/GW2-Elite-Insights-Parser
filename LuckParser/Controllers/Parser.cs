@@ -666,6 +666,15 @@ namespace LuckParser.Controllers
                 {
                     log_data.setBossKill(true);
                     boss_data.setLastAware(reward.getTime());
+                } else
+                {
+                    // for skorvald, as CM and normal ids are the same
+                    CombatItem killed = combat_list.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange() == ParseEnum.StateChange.ChangeDead);
+                    if (killed != null)
+                    {
+                        log_data.setBossKill(true);
+                        boss_data.setLastAware(killed.getTime());
+                    }
                 }
             } else
             {
