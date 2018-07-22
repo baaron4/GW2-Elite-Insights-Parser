@@ -43,7 +43,7 @@ namespace LuckParser.Controllers
 
         public ParsedLog GetParsedLog()
         {
-            return new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss, fractal_mode || raid_mode);
+            return new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss, fractal_mode || raid_mode, golem_mode);
         }
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------

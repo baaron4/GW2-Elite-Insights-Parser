@@ -115,7 +115,9 @@ namespace LuckParser.Models.ParseModels
             boon_map.add(to_track);
             // Fill in Boon Map
             long time_start = log.getBossData().getFirstAware();
-
+            List<long> tableIds = Boon.getBoonList().Select(x => x.getID()).ToList();
+            tableIds.AddRange(Boon.getOffensiveTableList().Select(x => x.getID()));
+            tableIds.AddRange(Boon.getDefensiveTableList().Select(x => x.getID()));
             foreach (CombatItem c in log.getBoonData())
             {
                 if (!boon_map.ContainsKey(c.getSkillID()))
@@ -127,10 +129,11 @@ namespace LuckParser.Models.ParseModels
                 if (agent.getInstid() == dst)
                 {
                     ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
-                    if (c.isStateChange() == ParseEnum.StateChange.BuffInitial)
+                    // don't add buff initial table boons and buffs in non golem mode, for others overstack is irrevelant
+                    if (c.isStateChange() == ParseEnum.StateChange.BuffInitial && (log.isBenchmarkMode() || !tableIds.Contains(c.getSkillID())))
                     {
                         List<BoonLog> loglist = boon_map[c.getSkillID()];
-                        loglist.Add(new BoonLog(0, src, (long)c.getDstAgent(), 0));
+                        loglist.Add(new BoonLog(0, src, long.MaxValue, 0));
                     }
                     else if (time >= 0 && time < log.getBossData().getAwareDuration())
                     {
@@ -344,7 +347,7 @@ namespace LuckParser.Models.ParseModels
             var toFill = new Point[dur + 1];
             var toFillPresence = new Point[dur + 1];
 
-            long death = getDeath(log, 0, dur) - log.getBossData().getFirstAware() ;
+            long death = getDeath(log, 0, dur) - log.getBossData().getFirstAware();
 
             foreach (Boon boon in to_track)
             {

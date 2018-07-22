@@ -19,6 +19,7 @@ namespace LuckParser.Models.DataModels
         private List<Player> p_list = new List<Player>();
         private Boss boss;
         private bool movement_possible;
+        private bool benchmark_mode;
 
         // reduced data
         private List<CombatItem> boon_data;
@@ -30,7 +31,7 @@ namespace LuckParser.Models.DataModels
         private List<CombatItem> movement_data;
 
         public ParsedLog(LogData log_data, BossData boss_data, AgentData agent_data, SkillData skill_data, 
-                CombatData combat_data, MechanicData mech_data, List<Player> p_list, Boss boss, bool movement_possible)
+                CombatData combat_data, MechanicData mech_data, List<Player> p_list, Boss boss, bool movement_possible, bool benchmark_mode)
         {
             this.log_data = log_data;
             this.boss_data = boss_data;
@@ -41,6 +42,7 @@ namespace LuckParser.Models.DataModels
             this.p_list = p_list;
             this.boss = boss;
             this.movement_possible = movement_possible;
+            this.benchmark_mode = benchmark_mode;
         }
 
         public BossData getBossData()
@@ -138,6 +140,11 @@ namespace LuckParser.Models.DataModels
         public List<CombatItem> getDamageTakenData()
         {
             return damage_taken_data;
+        }
+
+        public bool isBenchmarkMode()
+        {
+            return benchmark_mode;
         }
 
         /*public List<CombatItem> getHealingData()
