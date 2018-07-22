@@ -22,8 +22,9 @@
         private MechType mechType;       
         private ushort bossid;
         private string plotlyShape;
+        private float InternalCoolDown;
 
-        public Mechanic( int skill_id, string name, MechType mechtype, ushort bossid, string plotlyShape,string friendlyName)
+        public Mechanic( int skill_id, string name, MechType mechtype, ushort bossid, string plotlyShape,string friendlyName,float ICD)
         {
             this.skill_id = skill_id;
             this.name = name;
@@ -31,6 +32,7 @@
             this.bossid = bossid;
             this.plotlyShape = plotlyShape;
             this.altname = friendlyName;
+            this.InternalCoolDown = ICD;
         }
         //getters
        
@@ -57,6 +59,10 @@
         public string GetAltName()
         {
             return altname;
+        }
+        public float GetICD()
+        {
+            return InternalCoolDown;
         }
     }
 }

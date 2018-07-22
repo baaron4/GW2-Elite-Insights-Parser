@@ -3060,10 +3060,22 @@ namespace LuckParser.Controllers
                                         count += test.Count;
                                         foreach (MechanicLog ml in test)
                                         {
-                                            if (timeFilter != ml.GetTime())
+                                            if (timeFilter != ml.GetTime())//Check for multihit
                                             {
-                                                timeFilter = ml.GetTime();
-                                                filterCount++;
+                                                if (mech.GetICD() != 0)//ICD check
+                                                {
+                                                    if (ml.GetTime() - timeFilter > mech.GetICD())
+                                                    {
+                                                        timeFilter = ml.GetTime();
+                                                        filterCount++;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    timeFilter = ml.GetTime();
+                                                    filterCount++;
+                                                }
+                                                
 
                                             }
                                         }
