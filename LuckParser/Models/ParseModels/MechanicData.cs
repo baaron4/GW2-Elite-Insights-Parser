@@ -133,6 +133,8 @@ namespace LuckParser.Models.ParseModels
                 new Mechanic(37733, "Tear Instability", Mechanic.MechType.PlayerBoon, 17154, "symbol:'diamond',color:'rgb(0,150,0)',", "Tear",0),
                 new Mechanic(37613, "Mind Crush", Mechanic.MechType.SkillOnPlayer, 17154, "symbol:'square',color:'rgb(250,0,0)',", "Mind Crush",0),
                 new Mechanic(38187, "Weak Minded", Mechanic.MechType.PlayerBoon, 17154, "symbol:'square',color:'rgb(0,0,250)',", "Weak Minded",0),
+                new Mechanic(37730, "Chosen by Eye of Janthir", Mechanic.MechType.PlayerBoon, 17154, "symbol:'circle',color:'rgb(0,250,0)',", "Chosen",0),
+                new Mechanic(38169, "Teleported", Mechanic.MechType.PlayerBoon, 17154, "symbol:'square',color:'rgb(0,150,0)',", "Teleported",0),
                 //mlist.Add("Chosen by Eye of Janthir");
                 //mlist.Add("");//tp from drunkard
                 //mlist.Add("");//bon currupt from thief
