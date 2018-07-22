@@ -79,11 +79,11 @@ namespace LuckParser.Models.ParseModels
                 new Mechanic(35084, "Bending Chaos", Mechanic.MechType.PlayerBoon, 16246, "symbol:'pentagon',color:'rgb(75,30,150)',", "Button 1",0),
                 new Mechanic(35162, "Shifting Chaos", Mechanic.MechType.PlayerBoon, 16246, "symbol:'hexagon',color:'rgb(75,30,150)',", "Button 2",0),
                 new Mechanic(35032, "Twisting Chaos", Mechanic.MechType.PlayerBoon, 16246, "symbol:'octagon',color:'rgb(75,30,150)',", "Button 3",0),
-                 new Mechanic(34956  , "Bubble Action Key", Mechanic.MechType.PlayerBoon, 16246, "symbol:'octagon',color:'rgb(75,30,150)',", "Bubble Action Key",0),
+                 new Mechanic(34956  , "Bubble Action Key", Mechanic.MechType.PlayerBoon, 16246, "symbol:'square',color:'rgb(0,0,150)',", "Bubble Action Key",0),
                 //teleport
-                 new Mechanic(35034 , "Disruption", Mechanic.MechType.SkillOnPlayer, 16246, "symbol:'octagon',color:'rgb(75,30,150)',", "Disruption",0),
-                  new Mechanic(34956  , "Somthing", Mechanic.MechType.PlayerBoon, 16246, "symbol:'octagon',color:'rgb(75,30,150)',", "TP?",0),
-                  new Mechanic(35076, "Hero's Return", Mechanic.MechType.PlayerBoon, 16246, "symbol:'octagon',color:'rgb(75,30,150)',", "TP Back",0),
+                 new Mechanic(35034 , "Disruption", Mechanic.MechType.SkillOnPlayer, 16246, "symbol:'square',color:'rgb(0,150,0)',", "Disruption",0),
+                  //new Mechanic(34956  , "Somthing", Mechanic.MechType.PlayerBoon, 16246, "symbol:'octagon',color:'rgb(75,30,150)',", "TP?",0),
+                  new Mechanic(35076, "Hero's Return", Mechanic.MechType.PlayerBoon, 16246, "symbol:'circle',color:'rgb(0,150,0)',", "TP Back",0),
 
                 //hit move orb
 
