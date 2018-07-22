@@ -328,7 +328,13 @@ namespace LuckParser.Controllers
                             check = log.getBossData().getHealthOverTime().FirstOrDefault(x => x.X/1000f > ml.GetTime()); // boss_data.getHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
                             if (check == Point.Empty)
                             {
-                                check = new Point(0, log.getBossData().getHealthOverTime().Last().Y);
+                                if (log.getBossData().getHealthOverTime().Count == 0)
+                                {
+                                    check = new Point(0, 10000);
+                                } else
+                                {
+                                    check = new Point(0, log.getBossData().getHealthOverTime().Last().Y);
+                                }
                             }
                             check.Y = (int)((float)(check.Y / 10000f) * maxDPS);
                         }
@@ -2274,7 +2280,15 @@ namespace LuckParser.Controllers
             if (down.Count > 0)
             {
                 List<CombatItem> ups = log.getCombatData().getStates(p.getInstid(), ParseEnum.StateChange.ChangeUp, start, end);
-                down = down.GetRange(ups.Count, down.Count - ups.Count);
+                // Surely a consumable in fractals
+                if (ups.Count > down.Count)
+                {
+                    down = new List<CombatItem>();
+                }
+                else
+                {
+                    down = down.GetRange(ups.Count, down.Count - ups.Count);
+                }
             }
             List<CombatItem> dead = log.getCombatData().getStates(p.getInstid(), ParseEnum.StateChange.ChangeDead, start, end);
             List<DamageLog> damageToDown = new List<DamageLog>();

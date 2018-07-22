@@ -83,7 +83,7 @@ namespace LuckParser.Models.ParseModels
                     return "https://i.imgur.com/FwpMbYf.png";
                 // Sloth
                 case 16123:
-                    return "https://i.imgur.com/6lrGCPX.png";
+                    return "https://i.imgur.com/aLHcYSF.png";
                 // Matthias
                 case 16115:
                     return "https://i.imgur.com/3X0YveK.png";
@@ -524,18 +524,18 @@ namespace LuckParser.Models.ParseModels
                     List<CombatItem> invulsSam = log.getBoonData().Where(x => x.getSkillID() == 762 && getInstid() == x.getDstInstid()).ToList();
                     // Samarog receives determined twice and its removed twice, filter it
                     List<CombatItem> invulsSamFiltered = new List<CombatItem>();
+                    bool needApplication = true;
                     foreach( CombatItem c in invulsSam)
                     {
-                        if (invulsSamFiltered.Count > 0)
-                        {
-                            CombatItem last = invulsSamFiltered.Last();
-                            if (last.getTime() != c.getTime())
-                            {
-                                invulsSamFiltered.Add(c);
-                            }
-                        } else
+                        if (needApplication && c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
                             invulsSamFiltered.Add(c);
+                            needApplication = false;
+                        }
+                        else if (!needApplication && c.isBuffremove() != ParseEnum.BuffRemove.None)
+                        {
+                            invulsSamFiltered.Add(c);
+                            needApplication = true;
                         }
                     }
                     for (int i = 0; i < invulsSamFiltered.Count; i++)
