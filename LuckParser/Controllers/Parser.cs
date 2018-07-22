@@ -700,6 +700,26 @@ namespace LuckParser.Controllers
 
                 foreach (AgentItem playerAgent in playerAgentList)
                 {
+                    if (playerAgent.getInstid() == 0)
+                    {
+                        CombatItem tst = combat_list.Find(x => x.getSrcAgent() == playerAgent.getAgent());
+                        if (tst == null)
+                        {
+                            tst = combat_list.Find(x => x.getDstAgent() == playerAgent.getAgent());
+                            if (tst == null)
+                            {
+                                playerAgent.setInstid(ushort.MaxValue);
+                            }
+                            else
+                            {
+                                playerAgent.setInstid(tst.getDstInstid());
+                            }
+                        }
+                        else
+                        {
+                            playerAgent.setInstid(tst.getSrcInstid());
+                        }
+                    }
                     List<CombatItem> lp = combat_data.getStates(playerAgent.getInstid(), ParseEnum.StateChange.Despawn, boss_data.getFirstAware(), boss_data.getLastAware());
                     Player player = new Player(playerAgent, fractal_mode);
                     bool skip = false;
