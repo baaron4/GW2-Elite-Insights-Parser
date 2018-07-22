@@ -82,8 +82,8 @@ namespace LuckParser.Models.ParseModels
                  new Mechanic(34956  , "Bubble Action Key", Mechanic.MechType.PlayerBoon, 16246, "symbol:'square',color:'rgb(0,0,150)',", "Bubble Action Key",0),
                 //teleport
                  new Mechanic(35034 , "Disruption", Mechanic.MechType.SkillOnPlayer, 16246, "symbol:'square',color:'rgb(0,150,0)',", "Disruption",0),
-                  //new Mechanic(34956  , "Somthing", Mechanic.MechType.PlayerBoon, 16246, "symbol:'octagon',color:'rgb(75,30,150)',", "TP?",0),
-                  new Mechanic(35076, "Hero's Return", Mechanic.MechType.PlayerBoon, 16246, "symbol:'circle',color:'rgb(0,150,0)',", "TP Back",0),
+                 new Mechanic(34997 , "Teleport Out", Mechanic.MechType.PlayerBoon, 16246, "symbol:'octagon',color:'rgb(150,0,0)',", "Teleport Out",0),
+                 new Mechanic(35076, "Hero's Return", Mechanic.MechType.PlayerBoon, 16246, "symbol:'circle',color:'rgb(0,150,0)',", "TP Back",0),
 
                 //hit move orb
 

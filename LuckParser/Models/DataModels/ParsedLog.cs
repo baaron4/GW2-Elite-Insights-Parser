@@ -204,11 +204,11 @@ namespace LuckParser.Models.DataModels
                 //Player gain buff 0,7
                 foreach (CombatItem c in combat_data.getCombatList().Where(x => x.isBuffremove() == ParseEnum.BuffRemove.None && x.isStateChange() == ParseEnum.StateChange.Normal))
                 {
-                    if (c.getSkillID() == 34956)
-                    {
-                        int stop = 0;
-                    }
-                        if (p.getInstid() == c.getDstInstid())
+                    //if (c.getSkillID() == 34997)
+                    //{
+                    //    int stop = 0;
+                    //}
+                    if (p.getInstid() == c.getDstInstid())
                     {
                         if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove() == ParseEnum.BuffRemove.None && c.getResult().IsHit())
                         {
