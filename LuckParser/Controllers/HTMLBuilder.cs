@@ -3631,7 +3631,8 @@ namespace LuckParser.Controllers
         }
         private void CreateReplayTable(StreamWriter sw)
         {
-            Tuple<int, int> canvasSize = log.getBoss().getPixelMapSize(log);
+            CombatReplayMap map = log.getBoss().getCombatMap(log);
+            Tuple<int, int> canvasSize = map.getPixelMapSize();
             sw.Write("<div class=\"d-flex justify-content-around align-items-center justify-content-center\">");
             {
                 sw.Write("<div class=\"d-flex flex-column flex-wrap\">");
@@ -3707,7 +3708,7 @@ namespace LuckParser.Controllers
                     sw.Write("id" + p.getInstid() + ": { pos: [");
                     foreach (Point3D pos in p.getCombatReplay().getPositions())
                     {
-                        Tuple<int, int> coord = log.getBoss().getMapCoord(log, pos.X, pos.Y);
+                        Tuple<int, int> coord = map.getMapCoord(pos.X, pos.Y);
                         sw.Write(coord.Item1 + ",");
                         sw.Write(coord.Item2 + ",");
                     }
@@ -3717,7 +3718,7 @@ namespace LuckParser.Controllers
                 sw.Write("id" + log.getBoss().getInstid() + ": { pos: [");
                 foreach (Point3D pos in log.getBoss().getCombatReplay().getPositions())
                 {
-                    Tuple<int, int> coord = log.getBoss().getMapCoord(log, pos.X, pos.Y);
+                    Tuple<int, int> coord = map.getMapCoord(pos.X, pos.Y);
                     sw.Write(coord.Item1 + ",");
                     sw.Write(coord.Item2 + ",");
                 }
@@ -3793,7 +3794,7 @@ namespace LuckParser.Controllers
                 }
                 sw.Write("}");
                 sw.Write("bgImage.onload = function() { myanimate(0);};");
-                sw.Write("bgImage.src = '" + log.getBoss().getMap(log) + "';");
+                sw.Write("bgImage.src = '" + map.getLink() + "';");
             }
             sw.Write("</script>");
         }
