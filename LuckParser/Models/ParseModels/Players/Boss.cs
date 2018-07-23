@@ -504,6 +504,31 @@ namespace LuckParser.Models.ParseModels
                     {
                         phases[i].setName("Phase " + i);
                     }
+                    int offsetDei = phases.Count;
+                    CombatItem teleport = log.getCombatList().First(x => x.getSkillID() == 38169);
+                    int splits = 0;
+                    while (teleport != null && splits < 3)
+                    {
+                        start = teleport.getTime() - log.getBossData().getFirstAware();
+                        CombatItem teleportBack = log.getCombatList().First(x => x.getSkillID() == 38169 && x.getTime() - log.getBossData().getFirstAware() > start + 10000);
+                        if (teleportBack != null)
+                        {
+                            end = teleportBack.getTime() - log.getBossData().getFirstAware();
+                        } else
+                        {
+                            end = fight_dur;
+                        }
+                        phases.Add(new PhaseData(start, end));
+                        splits++;
+                        teleport = log.getCombatList().First(x => x.getSkillID() == 38169 && x.getTime() - log.getBossData().getFirstAware() > end + 10000);
+                    }
+
+                    string[] namesDeiSplit = new string[] { "Thief", "Gambler", "Drunkard"};
+                    for (int i = offsetDei; i < phases.Count; i++)
+                    {
+                        phases[i].setName(namesDeiSplit[i - offsetDei]);
+                    }
+                    phases.Sort((x, y) => (x.getStart() < y.getStart()) ? -1 : 1);
                     break;
                 case 0x4BFA:
                     // Sometimes the preevent is not in the evtc
