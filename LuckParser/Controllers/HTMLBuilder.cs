@@ -3066,12 +3066,45 @@ namespace LuckParser.Controllers
                                 foreach (List<Mechanic> mechs in presMech.Values)
                                 {
                                     int count = 0;
-                                    foreach (Mechanic mech in mechs)
+                                    long timeFilter = 0;
+                                    int filterCount = 0;
+                                    foreach (Mechanic mech in mechs)//Filtering for mechs named the same thing
                                     {
                                         List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= Math.Round(phase.getStart() / 1000.0) && x.GetTime() <= Math.Round(phase.getEnd() / 1000.0)).ToList();
                                         count += test.Count;
+                                        foreach (MechanicLog ml in test)
+                                        {
+                                            if (timeFilter != ml.GetTime())//Check for multihit
+                                            {
+                                                if (mech.GetICD() != 0)//ICD check
+                                                {
+                                                    if (ml.GetTime() - timeFilter > mech.GetICD())
+                                                    {
+                                                        timeFilter = ml.GetTime();
+                                                        filterCount++;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    timeFilter = ml.GetTime();
+                                                    filterCount++;
+                                                }
+                                                
+
+                                            }
+                                        }
                                     }
-                                    sw.Write("<td>" + count + "</td>");
+                                    if (filterCount > 0)
+                                    {
+                                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
+                               + filterCount + " times (filtering multi hits)\">"+count+ "</span>" + "</td>");
+                                       // sw.Write("<td>" + count + "</td>");
+                                    }
+                                    else
+                                    {
+                                        sw.Write("<td>" + count + "</td>");
+                                    }
+                                   
                                 }
                             }
                             sw.Write(" </tr>");

@@ -124,7 +124,7 @@ namespace LuckParser
                         );
                         using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         {
-                            using (StreamWriter sw = new StreamWriter(fs))
+                            using (StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                             {
                                 CSVBuilder builder = new CSVBuilder(log, settings, statistics);
                                 builder.CreateCSV(sw, ",");

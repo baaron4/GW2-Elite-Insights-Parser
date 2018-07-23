@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows.Forms;
 using LuckParser.Controllers;
 using LuckParser.Models.DataModels;
+using System.Text;
 
 namespace LuckParser
 {
@@ -193,7 +194,7 @@ namespace LuckParser
                         );
                         rowData.LogLocation = outputFile;
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                        using (var sw = new StreamWriter(fs))
+                        using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                         {
                             var builder = new CSVBuilder(log, settings, statistics);
                             builder.CreateCSV(sw, ",");
