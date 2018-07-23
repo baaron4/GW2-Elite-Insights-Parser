@@ -129,9 +129,9 @@ namespace LuckParser.Models.ParseModels
                         break;
                     // Deimos
                     case 17154:
-                        map = new CombatReplayMap("https://i.imgur.com/9vyE9bj.png",
-                            Tuple.Create(889, 919),
-                            Tuple.Create(-9542, 1932, -7266, 4292),
+                        map = new CombatReplayMap("https://i.imgur.com/TskIM9i.png",
+                            Tuple.Create(4267, 5770),
+                            Tuple.Create(-9542, 1932, -7078, 5275),
                             Tuple.Create(-27648, -9216, 27648, 12288),
                             Tuple.Create(11774, 4480, 14078, 5376));
                         break;
