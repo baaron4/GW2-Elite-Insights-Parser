@@ -57,6 +57,7 @@ namespace LuckParser.Models.DataModels
             Absorb      = 6,
             Blind       = 7,
             KillingBlow = 8,
+            Downed      = 9,
 
             Unknown
         };
