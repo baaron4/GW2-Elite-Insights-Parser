@@ -198,7 +198,7 @@ namespace LuckParser.Controllers
                 }
                 if (player.getConcentration() > 0)
                 {
-                    build += " Condi:" + player.getCondition();
+                    build += " Concentration:" + player.getConcentration();
                 }
                 if (player.getHealing() > 0)
                 {
