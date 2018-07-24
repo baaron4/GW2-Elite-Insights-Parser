@@ -178,8 +178,8 @@ namespace LuckParser.Controllers
 
                     // 2 bytes: toughness
                     int toughness = reader.ReadInt16();
-                    // skip concentration
-                    ParseHelper.safeSkip(stream, 2);
+                    // 2 bytes: healing
+                    int concentration = reader.ReadInt16();
                     // 2 bytes: healing
                     int healing = reader.ReadInt16();
                     ParseHelper.safeSkip(stream, 2);
@@ -203,7 +203,7 @@ namespace LuckParser.Controllers
                             break;
                         default:
                             // Player
-                            agent_data.addItem(new AgentItem(agent, name, agent_prof, toughness, healing, condition), agent_prof);
+                            agent_data.addItem(new AgentItem(agent, name, agent_prof, toughness, healing, condition,concentration), agent_prof);
                             break;
                     }
                 }
