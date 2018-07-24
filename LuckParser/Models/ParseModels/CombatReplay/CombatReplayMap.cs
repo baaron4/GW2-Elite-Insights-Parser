@@ -56,9 +56,10 @@ namespace LuckParser.Models.ParseModels
             return Tuple.Create((int)Math.Round(scaleX * size.Item1 * x), (int)Math.Round(scaleY * (size.Item2 - size.Item2 * y)));
         }
 
-        public int getInch()
+        public float getInch()
         {
-            return (int)Math.Round(24 * (double)(fullRect.Item3 - fullRect.Item1) / (worldRect.Item3 - worldRect.Item1));
+            float ratio = (float)(rect.Item3 - rect.Item1) / getPixelMapSize().Item1 ;
+            return (float)Math.Round(1.0f/ratio,3);
         }
 
     }
