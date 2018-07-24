@@ -12,6 +12,41 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
+        /* EXTRA IDS TO TRACK
+         Seeker,15426
+Blue Guardian,15431
+Red Guardian,15433
+Green Guardian,15420
+Charged Soul,15434
+Kernan,15372
+Knuckles,15404
+Karde,15430
+Olson the Elder,16244
+Engul the Calculating,16274
+Faerla the Fastidious,16264
+Caulle the Vociferous,16282
+Henley the Tremulous,16236
+Jessica the Benevolent,16278
+Galletta the Persistent,16228
+Ianim the Architect,16248
+Construct Core,16261
+Bloodstone Shard,13864
+Jade Scout,17181
+Guldhem,17208
+Rigom,17124
+Saul (friendly),17126
+Saul (thief),17206
+Saul (gambler),17335
+Saul (false clones),17161
+Saul (drunkard),17163
+Tormented Dead,19422
+Surging Soul (wall),19474
+Spinning Scythe,19396
+Dhuum's Messenger,19807
+Ender's Echo,19628
+Dhuum's Enforcer,19681
+         */
+
         private List<PhaseData> phases = new List<PhaseData>();
         private List<long> phaseData = new List<long>();
         private CombatReplayMap map = null;
@@ -514,7 +549,8 @@ namespace LuckParser.Models.ParseModels
                         if (teleportBack != null)
                         {
                             end = teleportBack.getTime() - log.getBossData().getFirstAware();
-                        } else
+                        }
+                        else
                         {
                             end = fight_dur;
                         }
@@ -523,7 +559,7 @@ namespace LuckParser.Models.ParseModels
                         teleport = log.getCombatList().First(x => x.getSkillID() == 38169 && x.getTime() - log.getBossData().getFirstAware() > end + 10000);
                     }
 
-                    string[] namesDeiSplit = new string[] { "Thief", "Gambler", "Drunkard"};
+                    string[] namesDeiSplit = new string[] { "Thief", "Gambler", "Drunkard" };
                     for (int i = offsetDei; i < phases.Count; i++)
                     {
                         phases[i].setName(namesDeiSplit[i - offsetDei]);
