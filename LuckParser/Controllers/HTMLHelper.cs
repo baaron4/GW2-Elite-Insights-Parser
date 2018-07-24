@@ -766,29 +766,64 @@ namespace LuckParser.Controllers
                     sw.Write("</div>");
                 }
                 sw.Write("</div>");
-                sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center btn-group btn-group-toggle mb-5\" data-toggle=\"buttons\">");
+
+                sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center\">");
                 {
-                    List<int> groups = log.getPlayerList().Select(x => x.getGroup()).Distinct().ToList();
-                    foreach (int group in groups)
+                    sw.Write("<h3>Range Selectors</h3>");
+                    sw.Write("<div style=\"width:200px;\" class=\"d-flex flex-row flex-wrap justify-content-center align-items-center btn-group btn-group-toggle mb-5\" data-toggle=\"buttons\">");
                     {
-                        sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center mt-5\">");
-                        {
-                            sw.Write("<h3>Group " + group + "</h3>");
-                            foreach (Player p in log.getPlayerList().Where(x => x.getGroup() == group))
-                            {
-                                sw.Write("<label id=\"id"+ p.getInstid() + "\" style=\"width: 150px;\" onclick=\"selectActor(" + p.getInstid() + ")\"  class=\"btn btn-dark\">" +
-                                    "<input class=\"invisible\" type=\"radio\" autocomplete=\"off\">" +
-                                    p.getCharacter().Substring(0, Math.Min(10, p.getCharacter().Length))
-                                    + " <img src=\"" + HTMLHelper.GetLink(p.getProf())
-                                        + "\" alt=\"" + p.getProf()
-                                        + "\" height=\"18\" width=\"18\" >" +
-                                    "</label >");
-                            }
-                        }
-                        sw.Write("</div>");
+                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(180);\" class=\"btn btn-dark\">" +
+                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
+                            "180" +
+                            "</label >");
+                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(240);\" class=\"btn btn-dark\">" +
+                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
+                            "240" +
+                            "</label >");
+                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(300);\" class=\"btn btn-dark\">" +
+                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
+                            "300" +
+                            "</label >");
+                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(600);\" class=\"btn btn-dark\">" +
+                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
+                            "600" +
+                            "</label >");
+                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(900);\" class=\"btn btn-dark\">" +
+                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
+                            "900" +
+                            "</label >");
+                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(1200);\" class=\"btn btn-dark\">" +
+                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
+                            "1200" +
+                            "</label >");
                     }
+                    sw.Write("</div>");
+                    sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center btn-group btn-group-toggle mb-5\" data-toggle=\"buttons\">");
+                    {
+                        List<int> groups = log.getPlayerList().Select(x => x.getGroup()).Distinct().ToList();
+                        foreach (int group in groups)
+                        {
+                            sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center mt-2\">");
+                            {
+                                sw.Write("<h3>Group " + group + "</h3>");
+                                foreach (Player p in log.getPlayerList().Where(x => x.getGroup() == group))
+                                {
+                                    sw.Write("<label id=\"id" + p.getInstid() + "\" style=\"width: 150px;\" onclick=\"selectActor(" + p.getInstid() + ")\"  class=\"btn btn-dark\">" +
+                                        "<input class=\"invisible\" type=\"radio\" autocomplete=\"off\">" +
+                                        p.getCharacter().Substring(0, Math.Min(10, p.getCharacter().Length))
+                                        + " <img src=\"" + HTMLHelper.GetLink(p.getProf())
+                                            + "\" alt=\"" + p.getProf()
+                                            + "\" height=\"18\" width=\"18\" >" +
+                                        "</label >");
+                                }
+                            }
+                            sw.Write("</div>");
+                        }
+                    }
+                    sw.Write("</div>");
                 }
                 sw.Write("</div>");
+
             }
             sw.Write("</div>");
         }
@@ -800,6 +835,7 @@ namespace LuckParser.Controllers
                 // globals
                 sw.Write("var animation = null;");
                 sw.Write("var time = 0;");
+                sw.Write("var inch = " + map.getInch()+";");
                 sw.Write("var speed = 32;");
                 sw.Write("var selectedGroup = -1;");
                 // animation control
@@ -822,6 +858,15 @@ namespace LuckParser.Controllers
                 sw.Write("function updateTextInput(val) {" +
                     "timeSliderDisplay.value = Math.round(32.0*val/100.0)/10.0 + ' secs';" +
                 "}");
+                // Range marker control
+                sw.Write("var rangeControl = new Map();" +
+                    "rangeControl.set(180,false);" +
+                    "rangeControl.set(240,false);" +
+                    "rangeControl.set(300,false);" +
+                    "rangeControl.set(600,false);" +
+                    "rangeControl.set(900,false);" +
+                    "rangeControl.set(1200,false);");
+                sw.Write("function toggleRange(radius) {rangeControl.set(radius, !rangeControl.get(radius)); myanimate(time);};");
                 // Players and boss
                 sw.Write("var mainActor = function(group, imgSrc) {" +
                         "this.group = group;" +
@@ -906,6 +951,14 @@ namespace LuckParser.Controllers
                                 "ctx.stroke();" +
                                 "ctx.drawImage(value.img,value.pos[2*timeToUse]-10," +
                                 "value.pos[2*timeToUse+1]-10,20,20);" +
+                                "rangeControl.forEach(function(enabled,radius,map) {" +
+                                    "if (!enabled) return;" +
+                                    "ctx.beginPath();" +
+                                    "ctx.lineWidth='2';" +
+                                    "ctx.strokeStyle='green';" +
+                                    "ctx.arc(value.pos[2*timeToUse],value.pos[2*timeToUse+1],inch * radius,0,2*Math.PI);" +
+                                    "ctx.stroke();" +
+                                "});" +
                             "}" +
                         "});");
                     sw.Write("if (timeToUse === " + (log.getBoss().getCombatReplay().getPositions().Count - 1) + ") {stopAnimate();}");
