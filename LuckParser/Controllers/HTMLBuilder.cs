@@ -657,6 +657,10 @@ namespace LuckParser.Controllers
                             {
                                 build += "<img src=\"https://wiki.guildwars2.com/images/5/54/Condition_Damage.png\" alt=\"Condition Damage\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Condition Damage-" + gPlay.getCondition() + "\">";//"<span class=\"badge badge-warning\">Condi("+ gPlay.getCondition() + ")</span>";
                             }
+                            if (gPlay.getConcentration() > 0)
+                            {
+                                build += "<img src=\"https://wiki.guildwars2.com/images/4/44/Boon_Duration.png\" alt =\"Concentration\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Concentration-" + gPlay.getConcentration() + "\">";//"<span class=\"badge badge-warning\">Condi("+ gPlay.getCondition() + ")</span>";
+                            }
                             if (gPlay.getHealing() > 0)
                             {
                                 build += "<img src=\"https://wiki.guildwars2.com/images/8/81/Healing_Power.png\" alt=\"Healing Power\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Healing Power-" + gPlay.getHealing() + "\">";//"<span class=\"badge badge-success\">Heal("+ gPlay.getHealing() + ")</span>";
@@ -3629,173 +3633,16 @@ namespace LuckParser.Controllers
             }
             sw.Write("</div>");
         }
+        /// <summary>
+        /// Creates the combat replay tab
+        /// </summary>
+        /// <param name="sw">Stream writer</param>
         private void CreateReplayTable(StreamWriter sw)
         {
-            Tuple<int, int> canvasSize = log.getBoss().getPixelMapSize(log);
-            sw.Write("<div class=\"d-flex justify-content-around align-items-center justify-content-center\">");
-            {
-                sw.Write("<div class=\"d-flex flex-column flex-wrap\">");
-                {
-                    sw.Write("<canvas width=\"" + canvasSize.Item1 + "px\" height=\"" + canvasSize.Item2 + "px\" id=\"replayCanvas\" class=\"replay\">");
-                    sw.Write("</canvas>");
-                    sw.Write("<div class=\"d-flex justify-content-center slidecontainer\">");
-                    {
-                        sw.Write("<input oninput=\"updateTime(this.value)\"type=\"range\" min=\"0\" max=\""+ (log.getBoss().getCombatReplay().getPositions().Count - 1) + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
-                    }
-                    sw.Write("</div>");
-                    sw.Write("<div class=\"d-flex justify-content-center\">");
-                    {
-                        sw.Write("<div onclick=\"startAnimate()\" type=\"button\" class=\"btn btn-dark\">Animate</div>");
-                        sw.Write("<div onclick=\"stopAnimate()\" type=\"button\" class=\"btn btn-dark\">Pause</div>");
-                        sw.Write("<div onclick=\"restartAnimate()\" type=\"button\" class=\"btn btn-dark\">Restart</div>");
-                    }
-                    sw.Write("</div>");
-                    sw.Write("<div class=\"d-flex justify-content-center btn-group btn-group-toggle\" data-toggle=\"buttons\">");
-                    {
-                        sw.Write("<label onclick=\"normalSpeed()\" class=\"btn btn-dark active\">" +
-                                "<input type=\"radio\" autocomplete=\"off\" checked>1x" +
-                            "</label>");
-                        sw.Write("<label onclick=\"twoSpeed()\" class=\"btn btn-dark\">" +
-                                 "<input  type=\"radio\" autocomplete=\"off\">2x" +
-                             "</label>");
-                        sw.Write("<label onclick=\"fourSpeed()\" class=\"btn btn-dark\">" +
-                                 "<input  type=\"radio\" autocomplete=\"off\">4x" +
-                             "</label>");
-                    }
-                    sw.Write("</div>");
-                }
-                sw.Write("</div>");
-                sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center btn-group btn-group-toggle mb-5\" data-toggle=\"buttons\">");
-                {
-                    List<int> groups = log.getPlayerList().Select(x => x.getGroup()).Distinct().ToList();
-                    foreach (int group in groups)
-                    {
-                        sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center mt-5\">");
-                        {
-                            sw.Write("<h3>Group " + group + "</h3>");
-                            foreach (Player p in log.getPlayerList().Where(x => x.getGroup() == group))
-                            {
-                                sw.Write("<label style=\"width: 150px;\" onclick=\"selectActor(" + p.getInstid() + ")\"  class=\"btn btn-dark\">" +
-                                    "<input class=\"invisible\" type=\"radio\" autocomplete=\"off\">" +
-                                    p.getCharacter().Substring(0, Math.Min(10, p.getCharacter().Length))
-                                    + " <img src=\"" + HTMLHelper.GetLink(p.getProf())
-                                        + "\" alt=\"" + p.getProf()
-                                        + "\" height=\"18\" width=\"18\" >" +
-                                    "</label >");
-                            }
-                        }
-                        sw.Write("</div>");
-                    }
-                }
-                sw.Write("</div>");
-            }
-            sw.Write("</div>");           
-            sw.Write("<script>");
-            {
-                sw.Write("var animation = null;");
-                sw.Write("var time = 0;");
-                foreach (Player p in log.getPlayerList())
-                {
-                    sw.Write("var img" + p.getInstid() + " = new Image();");
-                    sw.Write("img" + p.getInstid()+".src = '" + HTMLHelper.GetLink(p.getProf()) + "';");
-                }
-                sw.Write("var img" + log.getBoss().getInstid() + " = new Image();");
-                sw.Write("img" + log.getBoss().getInstid() + ".src = '" + HTMLHelper.GetLink(log.getBossData().getID() + "-icon") + "';");
-                sw.Write("var data = {");
-                foreach (Player p in log.getPlayerList())
-                {
-                    sw.Write("id" + p.getInstid() + ": { pos: [");
-                    foreach (Point3D pos in p.getCombatReplay().getPositions())
-                    {
-                        Tuple<int, int> coord = log.getBoss().getMapCoord(log, pos.X, pos.Y);
-                        sw.Write(coord.Item1 + ",");
-                        sw.Write(coord.Item2 + ",");
-                    }
-                    sw.Write("], selected: false, group:"+ p.getGroup() +
-                        "},");
-                }
-                sw.Write("id" + log.getBoss().getInstid() + ": { pos: [");
-                foreach (Point3D pos in log.getBoss().getCombatReplay().getPositions())
-                {
-                    Tuple<int, int> coord = log.getBoss().getMapCoord(log, pos.X, pos.Y);
-                    sw.Write(coord.Item1 + ",");
-                    sw.Write(coord.Item2 + ",");
-                }
-                sw.Write("], selected: false, group: 11" +
-                    "}");
-                sw.Write(" };");
-                sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
-                sw.Write("var timeSlider = document.getElementById('timeRange');");
-                sw.Write("var bgImage = new Image();");
-                sw.Write("var speed = 32;");
-                sw.Write("var selectedGroup = -1;");
-                sw.Write("function startAnimate() {if (animation === null) { " +
-                    "if (time ===" + (log.getBoss().getCombatReplay().getPositions().Count - 1)+ ") {" +
-                        "time = 0;" +
-                    "}" +
-                    "animation = setInterval(function(){myanimate(time++)},speed);" +
-                    "}}");
-                sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null; time--;}}");
-                sw.Write("function restartAnimate() { time = 0; myanimate(time++);}");
-                sw.Write("function updateTime(value) { time = value; myanimate(time);}");
-                sw.Write("function selectActor(pId) { " +
-                        "for(var key in data) {" +
-                            "if (data.hasOwnProperty(key)) {" +
-                                "data[key].selected = false;" +
-                            "}" +
-                        "}" +
-                        "data['id' + pId].selected = true;" +
-                        "selectedGroup = data['id' + pId].group;" +
-                        "myanimate(time);" +
-                    "}");
-                sw.Write("function normalSpeed(){ speed = 32; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}}");
-                sw.Write("function twoSpeed(){ speed = 16; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}}");
-                sw.Write("function fourSpeed(){ speed = 8; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}}");
-                sw.Write("function myanimate(timeToUse) {");
-                {
-                    sw.Write("ctx.clearRect(0,0,"+ canvasSize.Item1 + ","+ canvasSize.Item2 + ");");
-                    sw.Write("ctx.drawImage(bgImage,0,0,"+ canvasSize.Item1 + ","+ canvasSize.Item2 + ");");
-                    sw.Write("var toUse = null;");
-                    foreach (Player p in log.getPlayerList())
-                    {
-                        sw.Write("toUse = data['id"+p.getInstid()+"'];");
-                        sw.Write("if (toUse.group === selectedGroup) {" +
-                                "ctx.beginPath();" +
-                                "ctx.lineWidth='3';" +
-                                "ctx.strokeStyle='blue';" +
-                                "ctx.rect(toUse.pos[2*timeToUse]-10,toUse.pos[2*timeToUse+1]-10,20,20);" +
-                                "ctx.stroke();" +
-                            "}");
-                        sw.Write("if (!toUse.selected) {" +
-                                "ctx.drawImage(img"+p.getInstid()+ "," +
-                                "toUse.pos[2*timeToUse]-10," +
-                                "toUse.pos[2*timeToUse+1]-10,20,20);" +
-                            "}");                      
-                    }
-                    sw.Write("toUse = data['id" + log.getBoss().getInstid() + "'].pos;");
-                    sw.Write("ctx.drawImage(img" + log.getBoss().getInstid() + ",toUse[2*timeToUse]-15,toUse[2*timeToUse+1]-15,30,30);");
-                    sw.Write("if (timeToUse === " + (log.getBoss().getCombatReplay().getPositions().Count - 1)+ ") {stopAnimate();}");
-                    foreach (Player p in log.getPlayerList())
-                    {
-                        sw.Write("toUse = data['id" + p.getInstid() + "'];");
-                        sw.Write("if (toUse.selected) " +
-                            "{" +
-                                "ctx.beginPath();" +
-                                "ctx.lineWidth='5';" +
-                                "ctx.strokeStyle='green';" +
-                                "ctx.rect(toUse.pos[2*timeToUse]-10,toUse.pos[2*timeToUse+1]-10,20,20);" +
-                                "ctx.stroke();" +
-                                "ctx.drawImage(img" + p.getInstid() + ",toUse.pos[2*timeToUse]-10," +
-                                "toUse.pos[2*timeToUse+1]-10,20,20);" +
-                           "}");
-                    }
-                    sw.Write("timeSlider.value = time;");
-                }
-                sw.Write("}");
-                sw.Write("bgImage.onload = function() { myanimate(0);};");
-                sw.Write("bgImage.src = '" + log.getBoss().getMap(log) + "';");
-            }
-            sw.Write("</script>");
+            CombatReplayMap map = log.getBoss().getCombatMap(log);
+            Tuple<int, int> canvasSize = map.getPixelMapSize();
+            HTMLHelper.writeCombatReplayInterface(sw, canvasSize, log);
+            HTMLHelper.writeCombatReplayScript(sw, log, canvasSize, map);
         }
         /// <summary>
         /// Creates custom css'

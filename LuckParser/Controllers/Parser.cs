@@ -43,7 +43,7 @@ namespace LuckParser.Controllers
 
         public ParsedLog GetParsedLog()
         {
-            return new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss, fractal_mode || raid_mode);
+            return new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss, fractal_mode || raid_mode, golem_mode);
         }
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
@@ -178,8 +178,8 @@ namespace LuckParser.Controllers
 
                     // 2 bytes: toughness
                     int toughness = reader.ReadInt16();
-                    // skip concentration
-                    ParseHelper.safeSkip(stream, 2);
+                    // 2 bytes: healing
+                    int concentration = reader.ReadInt16();
                     // 2 bytes: healing
                     int healing = reader.ReadInt16();
                     ParseHelper.safeSkip(stream, 2);
@@ -203,7 +203,7 @@ namespace LuckParser.Controllers
                             break;
                         default:
                             // Player
-                            agent_data.addItem(new AgentItem(agent, name, agent_prof, toughness, healing, condition), agent_prof);
+                            agent_data.addItem(new AgentItem(agent, name, agent_prof, toughness, healing, condition,concentration), agent_prof);
                             break;
                     }
                 }
@@ -700,6 +700,26 @@ namespace LuckParser.Controllers
 
                 foreach (AgentItem playerAgent in playerAgentList)
                 {
+                    if (playerAgent.getInstid() == 0)
+                    {
+                        CombatItem tst = combat_list.Find(x => x.getSrcAgent() == playerAgent.getAgent());
+                        if (tst == null)
+                        {
+                            tst = combat_list.Find(x => x.getDstAgent() == playerAgent.getAgent());
+                            if (tst == null)
+                            {
+                                playerAgent.setInstid(ushort.MaxValue);
+                            }
+                            else
+                            {
+                                playerAgent.setInstid(tst.getDstInstid());
+                            }
+                        }
+                        else
+                        {
+                            playerAgent.setInstid(tst.getSrcInstid());
+                        }
+                    }
                     List<CombatItem> lp = combat_data.getStates(playerAgent.getInstid(), ParseEnum.StateChange.Despawn, boss_data.getFirstAware(), boss_data.getLastAware());
                     Player player = new Player(playerAgent, fractal_mode);
                     bool skip = false;

@@ -99,7 +99,8 @@
     <Compile Include="Models\DataModels\ParsedLog.cs" />
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
     <Compile Include="Models\DataModels\Statistics.cs" />
-    <Compile Include="Models\ParseModels\CombatReplay.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\CombatReplay.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\CombatReplayMap.cs" />
     <Compile Include="Models\ParseModels\EffectStackingLogic\HealingLogic.cs" />
     <Compile Include="Models\ParseModels\EffectStackingLogic\OverrideLogic.cs" />
     <Compile Include="Models\ParseModels\EffectStackingLogic\QueueLogic.cs" />
@@ -113,7 +114,7 @@
     <Compile Include="Models\ParseModels\Players\Minions.cs" />
     <Compile Include="Models\ParseModels\PhaseData.cs" />
     <Compile Include="Models\ParseModels\Players\Mob.cs" />
-    <Compile Include="Models\ParseModels\Point3D.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Point3D.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Players\Boss.cs" />
     <Compile Include="Models\ParseModels\GW2APISpec.cs" />

@@ -52,6 +52,11 @@ namespace LuckParser.Models.ParseModels
         {
             return agent.getCondition();
         }
+
+        public int getConcentration()
+        {
+            return agent.getConcentration();
+        }
         // Public methods
         public int[] getCleanses(ParsedLog log, long start, long end) {
             long time_start = log.getBossData().getFirstAware();

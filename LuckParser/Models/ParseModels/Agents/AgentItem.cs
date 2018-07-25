@@ -15,6 +15,7 @@ namespace LuckParser.Models.ParseModels
         private int toughness = 0;
         private int healing = 0;
         private int condition = 0;
+        private int concentration = 0;
 
         // Constructors
         public AgentItem(ulong agent, String name, String prof)
@@ -24,7 +25,7 @@ namespace LuckParser.Models.ParseModels
             this.prof = prof;
         }
 
-        public AgentItem(ulong agent, String name, String prof, int toughness, int healing, int condition)
+        public AgentItem(ulong agent, String name, String prof, int toughness, int healing, int condition, int concentration)
         {
             this.agent = agent;
             this.name = name;
@@ -32,6 +33,7 @@ namespace LuckParser.Models.ParseModels
             this.toughness = toughness;
             this.healing = healing;
             this.condition = condition;
+            this.concentration = concentration;
         }
 
         // Public Methods
@@ -101,6 +103,11 @@ namespace LuckParser.Models.ParseModels
         public int getCondition()
         {
             return condition;
+        }
+
+        public int getConcentration()
+        {
+            return concentration;
         }
 
         public ushort getID()
