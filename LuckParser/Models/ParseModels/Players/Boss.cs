@@ -663,99 +663,108 @@ namespace LuckParser.Models.ParseModels
             }*/
         }
 
-        /* EXTRA IDS TO TRACK
-Kernan,15372
-Knuckles,15404
-Karde,15430
-Olson the Elder,16244
-Engul the Calculating,16274
-Faerla the Fastidious,16264
-Caulle the Vociferous,16282
-Henley the Tremulous,16236
-Jessica the Benevolent,16278
-Galletta the Persistent,16228
-Ianim the Architect,16248
-Construct Core,16261
-Bloodstone Shard,13864
-Jade Scout,17181
-Guldhem,17208
-Rigom,17124
-Saul (friendly),17126
-Saul (thief),17206
-Saul (gambler),17335
-Saul (false clones),17161
-Saul (drunkard),17163
-Tormented Dead,19422
-Surging Soul (wall),19474
-Spinning Scythe,19396
-Dhuum's Messenger,19807
-Ender's Echo,19628
-Dhuum's Enforcer,19681
-         */
+
+        public enum ThrashIDS : ushort {
+            // VG
+            Seekers         = 15246,
+            RedGuardian     = 15433,
+            BlueGuardian    = 15431,
+            GreenGuardian   = 15420,
+            // Gorse
+            ChargedSoul     = 15434,
+            // Sab
+            Kernan          = 15372,
+            Knuckles        = 15404,
+            Karde           = 15430,
+            // Matthias
+            Spirit          = 16105,
+            BloodStone      = 13864,
+            // KC
+            Olson           = 16244,
+            Engul           = 16274,
+            Faerla          = 16264,
+            Caulle          = 16282,
+            Henley          = 16236,
+            Jessica         = 16278,
+            Galletta        = 16228,
+            Ianim           = 16248,
+            Core            = 16261,
+            // MO
+            Jade            = 17181,
+            // Samarog
+            Guldhem         = 17208,
+            Rigom           = 17124,
+            // Deimos
+            Saul            = 17126,
+            Thief           = 17206,
+            Gambler         = 17335,
+            GamblerClones   = 17161,
+            Drunkard        = 17163,
+            // SH
+            TormentedDead   = 19422,
+            SurgingSoul     = 19474,
+            Scythe          = 19396,
+            // Dhuum
+            Messenger       = 19807,
+            Echo            = 19628,
+            Enforcer        = 19681
+        };
         protected override void setAdditionalCombatReplayData(ParsedLog log)
         {
-            List<CombatItem> cList;
-            List<AgentItem> aList;
+            List<ushort> ids = new List<ushort>();
             switch (log.getBossData().getID())
             {
                 // VG
                 case 15438:
-                    // seekers
-                    aList = log.getAgentData().getNPCAgentList().Where(x => x.getID() == 15426).ToList();
-                    foreach (AgentItem a in aList)
+                    ids = new List<ushort>
                     {
-                        Mob mob = new Mob(a);
-
-                        this.thrashMobs.Add(mob);
-                    }
-                    // red guardian
-                    aList = log.getAgentData().getNPCAgentList().Where(x => x.getID() == 15431).ToList();
-                    foreach (AgentItem a in aList)
-                    {
-                        Mob mob = new Mob(a);
-
-                        this.thrashMobs.Add(mob);
-                    }
-                    // blue guarding
-                    aList = log.getAgentData().getNPCAgentList().Where(x => x.getID() == 15433).ToList();
-                    foreach (AgentItem a in aList)
-                    {
-                        Mob mob = new Mob(a);
-
-                        this.thrashMobs.Add(mob);
-                    }
-
-                    // green guardian
-                    aList = log.getAgentData().getNPCAgentList().Where(x => x.getID() == 15420).ToList();
-                    foreach (AgentItem a in aList)
-                    {
-                        Mob mob = new Mob(a);
-
-                        this.thrashMobs.Add(mob);
-                    }
+                        (ushort)ThrashIDS.Seekers,
+                        (ushort)ThrashIDS.BlueGuardian,
+                        (ushort)ThrashIDS.GreenGuardian,
+                        (ushort)ThrashIDS.RedGuardian
+                    };                  
                     break;
                 // Gorse
                 case 15429:
-                    // charged soul
-                    aList = log.getAgentData().getNPCAgentList().Where(x => x.getID() == 15434).ToList();
-                    foreach (AgentItem a in aList)
+                    ids = new List<ushort>
                     {
-                        Mob mob = new Mob(a);
-
-                        this.thrashMobs.Add(mob);
-                    }
+                        (ushort)ThrashIDS.ChargedSoul
+                    };
                     break;
                 // Sab
                 case 15375:
+                    ids = new List<ushort>
+                    {
+                        (ushort)ThrashIDS.Kernan,
+                        (ushort)ThrashIDS.Knuckles,
+                        (ushort)ThrashIDS.Karde
+                    };
                     break;
                 // Sloth
                 case 16123:
                     break;
                 // Matthias
                 case 16115:
+                    ids = new List<ushort>
+                    {
+                        (ushort)ThrashIDS.BloodStone,
+                        (ushort)ThrashIDS.Spirit
+                    };
                     break;
                 // KC
                 case 16235:
+                    ids = new List<ushort>
+                    {
+                        (ushort)ThrashIDS.Core,
+                        (ushort)ThrashIDS.Jessica,
+                        (ushort)ThrashIDS.Olson,
+                        (ushort)ThrashIDS.Engul,
+                        (ushort)ThrashIDS.Faerla,
+                        (ushort)ThrashIDS.Caulle,
+                        (ushort)ThrashIDS.Henley,
+                        (ushort)ThrashIDS.Galletta,
+                        (ushort)ThrashIDS.Ianim,
+                    };
                     break;
                 // Xera
                 case 16246:
@@ -765,18 +774,47 @@ Dhuum's Enforcer,19681
                     break;
                 // MO
                 case 17172:
+                    ids = new List<ushort>
+                    {
+                        (ushort)ThrashIDS.Jade
+                    };
                     break;
                 // Samarog
                 case 17188:
+                    ids = new List<ushort>
+                    {
+                        (ushort)ThrashIDS.Rigom,
+                        (ushort)ThrashIDS.Guldhem
+                    };
                     break;
                 // Deimos
                 case 17154:
+                    ids = new List<ushort>
+                    {
+                        (ushort)ThrashIDS.Saul,
+                        (ushort)ThrashIDS.Thief,
+                        (ushort)ThrashIDS.Drunkard,
+                        (ushort)ThrashIDS.Gambler,
+                        (ushort)ThrashIDS.GamblerClones
+                    };
                     break;
                 // SH
                 case 0x4D37:
+                    ids = new List<ushort>
+                    {
+                        (ushort)ThrashIDS.Scythe,
+                        (ushort)ThrashIDS.TormentedDead,
+                        (ushort)ThrashIDS.SurgingSoul
+                    };
                     break;
                 // Dhuum
                 case 0x4BFA:
+                    ids = new List<ushort>
+                    {
+                        (ushort)ThrashIDS.Echo,
+                        (ushort)ThrashIDS.Enforcer,
+                        (ushort)ThrashIDS.Messenger
+                    };
                     break;
                 // MAMA
                 case 0x427D:
@@ -796,6 +834,15 @@ Dhuum's Enforcer,19681
                 // Arkk
                 case 0x455F:
                     break;
+            }
+            List<AgentItem> aList = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(x.getID())).ToList();
+            long start = log.getBossData().getFirstAware();
+            foreach (AgentItem a in aList)
+            {
+                Mob mob = new Mob(a);
+                mob.initCombatReplay(log);
+                mob.getCombatReplay().trim(a.getFirstAware() - start, a.getLastAware() - start);
+                thrashMobs.Add(mob);
             }
         }
 
