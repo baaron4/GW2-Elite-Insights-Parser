@@ -497,7 +497,7 @@ namespace LuckParser.Controllers
             HashSet<ulong> multiple_boss = new HashSet<ulong>();
             foreach (AgentItem NPC in NPC_list)
             {
-                if (NPC.getProf().EndsWith(boss_data.getID().ToString()))
+                if (NPC.getID() == boss_data.getID())
                 {
                     if (boss_data.getAgent() == 0)
                     {
@@ -581,7 +581,7 @@ namespace LuckParser.Controllers
                 int xera_2_instid = 0;
                 foreach (AgentItem NPC in NPC_list)
                 {
-                    if (NPC.getProf().Contains("16286"))
+                    if (NPC.getID() == 16286)
                     {
                         bossHealthOverTime = new List<Point>();//reset boss health over time
                         xera_2_instid = NPC.getInstid();
@@ -614,7 +614,7 @@ namespace LuckParser.Controllers
                 int deimos_2_instid = 0;
                 foreach (AgentItem NPC in agent_data.getGadgetAgentList())
                 {
-                    if (NPC.getProf().Contains("08467") || NPC.getProf().Contains("08471"))
+                    if (NPC.getID() == 8467 || NPC.getID() == 8471)
                     {
                         deimos_2_instid = NPC.getInstid();
                         long oldAware = bossAgent.getLastAware();

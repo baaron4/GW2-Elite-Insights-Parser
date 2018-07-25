@@ -6,6 +6,7 @@ namespace LuckParser.Models.ParseModels
     {
         // Fields
         private ulong agent;
+        private ushort id = 0;
         private ulong master_agent = 0;
         private ushort instid = 0;
         private long first_aware = 0;
@@ -23,6 +24,10 @@ namespace LuckParser.Models.ParseModels
             this.agent = agent;
             this.name = name;
             this.prof = prof;
+            if (prof.Contains(":"))
+            {
+                id = UInt16.Parse(this.prof.Split(':')[1]);
+            }
         }
 
         public AgentItem(ulong agent, String name, String prof, int toughness, int healing, int condition, int concentration)
@@ -112,11 +117,7 @@ namespace LuckParser.Models.ParseModels
 
         public ushort getID()
         {
-            if (prof.Contains(":"))
-            {
-                return UInt16.Parse(this.prof.Split(':')[1]);
-            }
-            return 0;
+            return id;
         }
 
         // Setters
