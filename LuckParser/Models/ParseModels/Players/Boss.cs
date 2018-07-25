@@ -508,12 +508,12 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName("Phase " + i);
                     }
                     int offsetDei = phases.Count;
-                    CombatItem teleport = log.getCombatList().First(x => x.getSkillID() == 38169);
+                    CombatItem teleport = log.getCombatList().FirstOrDefault(x => x.getSkillID() == 38169);
                     int splits = 0;
                     while (teleport != null && splits < 3)
                     {
                         start = teleport.getTime() - log.getBossData().getFirstAware();
-                        CombatItem teleportBack = log.getCombatList().First(x => x.getSkillID() == 38169 && x.getTime() - log.getBossData().getFirstAware() > start + 10000);
+                        CombatItem teleportBack = log.getCombatList().FirstOrDefault(x => x.getSkillID() == 38169 && x.getTime() - log.getBossData().getFirstAware() > start + 10000);
                         if (teleportBack != null)
                         {
                             end = teleportBack.getTime() - log.getBossData().getFirstAware();
@@ -524,7 +524,7 @@ namespace LuckParser.Models.ParseModels
                         }
                         phases.Add(new PhaseData(start, end));
                         splits++;
-                        teleport = log.getCombatList().First(x => x.getSkillID() == 38169 && x.getTime() - log.getBossData().getFirstAware() > end + 10000);
+                        teleport = log.getCombatList().FirstOrDefault(x => x.getSkillID() == 38169 && x.getTime() - log.getBossData().getFirstAware() > end + 10000);
                     }
 
                     string[] namesDeiSplit = new string[] { "Thief", "Gambler", "Drunkard" };
