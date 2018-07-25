@@ -10,6 +10,8 @@ namespace LuckParser.Models.ParseModels
     {
         private List<Point3D> positions = new List<Point3D>();
         private List<Point3D> velocities = new List<Point3D>();
+        // icon
+        private string icon;
         // dps
         private List<int> dps = new List<int>();
         private List<int> dps10s = new List<int>();
@@ -20,6 +22,11 @@ namespace LuckParser.Models.ParseModels
         public CombatReplay()
         {
 
+        }
+
+        public void setIcon(string icon)
+        {
+            this.icon = icon;
         }
 
         public void addPosition(Point3D pos)
@@ -46,6 +53,11 @@ namespace LuckParser.Models.ParseModels
             this.dps30s.Add(dps);
         }
 
+        public void trim(int start, int end)
+        {
+            positions.RemoveAll(x => x.time < start && x.time > end);
+        }
+
         public void addBoon(long id, int value)
         {
             List<int> ll;
@@ -62,6 +74,10 @@ namespace LuckParser.Models.ParseModels
             return positions.Select(x => (int)x.time).ToList();
         }
 
+        public string getIcon()
+        {
+            return icon;
+        }
 
         public void pollingRate(int rate, long fightDuration)
         {

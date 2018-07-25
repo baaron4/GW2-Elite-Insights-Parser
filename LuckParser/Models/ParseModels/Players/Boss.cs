@@ -1,4 +1,6 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Controllers;
+using LuckParser.Models.DataModels;
+using LuckParser.Models.ParseModels.Players;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,44 +14,10 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        /* EXTRA IDS TO TRACK
-         Seeker,15426
-Blue Guardian,15431
-Red Guardian,15433
-Green Guardian,15420
-Charged Soul,15434
-Kernan,15372
-Knuckles,15404
-Karde,15430
-Olson the Elder,16244
-Engul the Calculating,16274
-Faerla the Fastidious,16264
-Caulle the Vociferous,16282
-Henley the Tremulous,16236
-Jessica the Benevolent,16278
-Galletta the Persistent,16228
-Ianim the Architect,16248
-Construct Core,16261
-Bloodstone Shard,13864
-Jade Scout,17181
-Guldhem,17208
-Rigom,17124
-Saul (friendly),17126
-Saul (thief),17206
-Saul (gambler),17335
-Saul (false clones),17161
-Saul (drunkard),17163
-Tormented Dead,19422
-Surging Soul (wall),19474
-Spinning Scythe,19396
-Dhuum's Messenger,19807
-Ender's Echo,19628
-Dhuum's Enforcer,19681
-         */
-
         private List<PhaseData> phases = new List<PhaseData>();
         private List<long> phaseData = new List<long>();
         private CombatReplayMap map = null;
+        private List<Mob> thrashMobs = new List<Mob>();
 
         public List<PhaseData> getPhases(ParsedLog log, bool getAllPhases)
         {
@@ -693,6 +661,225 @@ Dhuum's Enforcer,19681
                     }
                 }
             }*/
+        }
+
+        /* EXTRA IDS TO TRACK
+Kernan,15372
+Knuckles,15404
+Karde,15430
+Olson the Elder,16244
+Engul the Calculating,16274
+Faerla the Fastidious,16264
+Caulle the Vociferous,16282
+Henley the Tremulous,16236
+Jessica the Benevolent,16278
+Galletta the Persistent,16228
+Ianim the Architect,16248
+Construct Core,16261
+Bloodstone Shard,13864
+Jade Scout,17181
+Guldhem,17208
+Rigom,17124
+Saul (friendly),17126
+Saul (thief),17206
+Saul (gambler),17335
+Saul (false clones),17161
+Saul (drunkard),17163
+Tormented Dead,19422
+Surging Soul (wall),19474
+Spinning Scythe,19396
+Dhuum's Messenger,19807
+Ender's Echo,19628
+Dhuum's Enforcer,19681
+         */
+        protected override void setAdditionalCombatReplayData(ParsedLog log)
+        {
+            List<CombatItem> cList;
+            List<AgentItem> aList;
+            switch (log.getBossData().getID())
+            {
+                // VG
+                case 15438:
+                    // seekers
+                    aList = log.getAgentData().getNPCAgentList().Where(x => x.getID() == 15426).ToList();
+                    foreach (AgentItem a in aList)
+                    {
+                        Mob mob = new Mob(a);
+
+                        this.thrashMobs.Add(mob);
+                    }
+                    // red guardian
+                    aList = log.getAgentData().getNPCAgentList().Where(x => x.getID() == 15431).ToList();
+                    foreach (AgentItem a in aList)
+                    {
+                        Mob mob = new Mob(a);
+
+                        this.thrashMobs.Add(mob);
+                    }
+                    // blue guarding
+                    aList = log.getAgentData().getNPCAgentList().Where(x => x.getID() == 15433).ToList();
+                    foreach (AgentItem a in aList)
+                    {
+                        Mob mob = new Mob(a);
+
+                        this.thrashMobs.Add(mob);
+                    }
+
+                    // green guardian
+                    aList = log.getAgentData().getNPCAgentList().Where(x => x.getID() == 15420).ToList();
+                    foreach (AgentItem a in aList)
+                    {
+                        Mob mob = new Mob(a);
+
+                        this.thrashMobs.Add(mob);
+                    }
+                    break;
+                // Gorse
+                case 15429:
+                    // charged soul
+                    aList = log.getAgentData().getNPCAgentList().Where(x => x.getID() == 15434).ToList();
+                    foreach (AgentItem a in aList)
+                    {
+                        Mob mob = new Mob(a);
+
+                        this.thrashMobs.Add(mob);
+                    }
+                    break;
+                // Sab
+                case 15375:
+                    break;
+                // Sloth
+                case 16123:
+                    break;
+                // Matthias
+                case 16115:
+                    break;
+                // KC
+                case 16235:
+                    break;
+                // Xera
+                case 16246:
+                    break;
+                // Cairn
+                case 17194:
+                    break;
+                // MO
+                case 17172:
+                    break;
+                // Samarog
+                case 17188:
+                    break;
+                // Deimos
+                case 17154:
+                    break;
+                // SH
+                case 0x4D37:
+                    break;
+                // Dhuum
+                case 0x4BFA:
+                    break;
+                // MAMA
+                case 0x427D:
+                    break;
+                // Siax
+                case 0x4284:
+                    break;
+                // Ensolyss
+                case 0x4234:
+                    break;
+                // Skorvald
+                case 0x44E0:
+                    break;
+                // Artsariiv
+                case 0x461D:
+                    break;
+                // Arkk
+                case 0x455F:
+                    break;
+            }
+        }
+
+        protected override void setCombatReplayIcon(ParsedLog log)
+        {
+            switch (log.getBossData().getID())
+            {
+                // VG
+                case 15438:
+                    replay.setIcon("https://i.imgur.com/MIpP5pK.png");
+                    break;
+                // Gorse
+                case 15429:
+                    replay.setIcon("https://i.imgur.com/5hmMq12.png");
+                    break;
+                // Sab
+                case 15375:
+                    replay.setIcon("https://i.imgur.com/UqbFp9S.png");
+                    break;
+                // Sloth
+                case 16123:
+                    replay.setIcon("https://i.imgur.com/h1xH3ER.png");
+                    break;
+                // Matthias
+                case 16115:
+                    replay.setIcon("https://i.imgur.com/3uMMmTS.png");
+                    break;
+                // KC
+                case 16235:
+                    replay.setIcon("https://i.imgur.com/Kq0kL07.png");
+                    break;
+                // Xera
+                case 16246:
+                    replay.setIcon("https://i.imgur.com/lYwJEyV.png");
+                    break;
+                // Cairn
+                case 17194:
+                    replay.setIcon("https://i.imgur.com/gQY37Tf.png");
+                    break;
+                // MO
+                case 17172:
+                    replay.setIcon("https://i.imgur.com/3uMMmTS.png");
+                    break;
+                // Samarog
+                case 17188:
+                    replay.setIcon("https://i.imgur.com/MPQhKfM.png");
+                    break;
+                // Deimos
+                case 17154:
+                    replay.setIcon("https://i.imgur.com/mWfxBaO.png");
+                    break;
+                // SH
+                case 0x4D37:
+                    replay.setIcon("https://i.imgur.com/jAiRplg.png");
+                    break;
+                // Dhuum
+                case 0x4BFA:
+                    replay.setIcon("https://i.imgur.com/RKaDon5.png");
+                    break;
+                // MAMA
+                case 0x427D:
+                    replay.setIcon("https://i.imgur.com/1h7HOII.png");
+                    break;
+                // Siax
+                case 0x4284:
+                    replay.setIcon("https://i.imgur.com/5C60cQb.png");
+                    break;
+                // Ensolyss
+                case 0x4234:
+                    replay.setIcon("https://i.imgur.com/GUTNuyP.png");
+                    break;
+                // Skorvald
+                case 0x44E0:
+                    replay.setIcon("https://i.imgur.com/IOPAHRE.png");
+                    break;
+                // Artsariiv
+                case 0x461D:
+                    replay.setIcon(HTMLHelper.GetLink(log.getBossData().getID() + "-icon"));
+                    break;
+                // Arkk
+                case 0x455F:
+                    replay.setIcon("https://i.imgur.com/u6vv8cW.png");
+                    break;
+            }
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

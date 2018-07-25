@@ -28,8 +28,15 @@ namespace LuckParser.Models.ParseModels.Players
         {
             return mobName;
         }
-        
-       
-    
+
+        protected override void setAdditionalCombatReplayData(ParsedLog log)
+        {
+            // nothing to do here, thrash mobs don't have additional data
+        }
+
+        protected override void setCombatReplayIcon(ParsedLog log)
+        {
+            // nothing to do here, this will be managed by the boss-parent
+        }
     }
 }

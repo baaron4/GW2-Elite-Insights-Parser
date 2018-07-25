@@ -1,4 +1,5 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Controllers;
+using LuckParser.Models.DataModels;
 using System;
 using System.Collections.Generic;
 
@@ -269,6 +270,16 @@ namespace LuckParser.Models.ParseModels
                     consumeList.Add(new long[] { c.getSkillID(), Math.Max(time, 0) }); 
                 }
             }
+        }
+
+        protected override void setAdditionalCombatReplayData(ParsedLog log)
+        {
+            // TODO
+        }
+
+        protected override void setCombatReplayIcon(ParsedLog log)
+        {
+            replay.setIcon(HTMLHelper.GetLink(getProf()));
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

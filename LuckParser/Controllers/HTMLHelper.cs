@@ -879,7 +879,7 @@ namespace LuckParser.Controllers
                 foreach(Player p in log.getPlayerList())
                 {
                     sw.Write("{");
-                    sw.Write("var p = new mainActor(" + p.getGroup() + ",'" + HTMLHelper.GetLink(p.getProf()) + "');");
+                    sw.Write("var p = new mainActor(" + p.getGroup() + ",'" + p.getCombatReplay().getIcon() + "');");
                     sw.Write("data.set("+p.getInstid()+",p);");
                     sw.Write("p.pos = [");
                     foreach (Point3D pos in p.getCombatReplay().getPositions())
@@ -891,7 +891,7 @@ namespace LuckParser.Controllers
                     sw.Write("];");
                     sw.Write("}");
                 }
-                sw.Write("var boss = new mainActor(-2,'" + HTMLHelper.GetLink(log.getBossData().getID() + "-icon") + "');");
+                sw.Write("var boss = new mainActor(-2,'" + log.getBoss().getCombatReplay().getIcon() + "');");
                 sw.Write("boss.pos = [");
                 foreach (Point3D pos in log.getBoss().getCombatReplay().getPositions())
                 {

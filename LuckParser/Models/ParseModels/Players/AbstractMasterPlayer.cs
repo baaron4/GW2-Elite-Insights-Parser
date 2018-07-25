@@ -21,7 +21,7 @@ namespace LuckParser.Models.ParseModels
         // Minions
         private Dictionary<string, Minions> minions = new Dictionary<string, Minions>();
         // Replay
-        private CombatReplay replay = null;
+        protected CombatReplay replay = null;
 
         public AbstractMasterPlayer(AgentItem agent) : base(agent)
         {
@@ -102,6 +102,8 @@ namespace LuckParser.Models.ParseModels
                 replay = new CombatReplay();
                 setMovements(log);
                 replay.pollingRate(32, log.getBossData().getAwareDuration());
+                setCombatReplayIcon(log);
+                setAdditionalCombatReplayData(log);
             }
         }
         public CombatReplay getCombatReplay()
@@ -243,6 +245,8 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
+        protected abstract void setAdditionalCombatReplayData(ParsedLog log);
+        protected abstract void setCombatReplayIcon(ParsedLog log);
 
         private void generateExtraBoonData(ParsedLog log, long boonid, Point[] accurateUptime, List<PhaseData> phases)
         {
