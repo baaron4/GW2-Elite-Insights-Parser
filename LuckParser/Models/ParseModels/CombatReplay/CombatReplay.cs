@@ -53,7 +53,7 @@ namespace LuckParser.Models.ParseModels
             this.dps30s.Add(dps);
         }
 
-        public void trim(int start, int end)
+        public void trim(long start, long end)
         {
             positions.RemoveAll(x => x.time < start && x.time > end);
         }
