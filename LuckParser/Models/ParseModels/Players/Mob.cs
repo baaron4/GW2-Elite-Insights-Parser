@@ -37,73 +37,73 @@ namespace LuckParser.Models.ParseModels.Players
         protected override void setCombatReplayIcon(ParsedLog log)
         {
             // TODO
-            switch (agent.getID())
+            switch (Boss.getThrashIDS(agent.getID()))
             {
-                case (ushort)Boss.ThrashIDS.Seekers:
+                case Boss.ThrashIDS.Seekers:
                     break;
-                case (ushort)Boss.ThrashIDS.RedGuardian:
+                case Boss.ThrashIDS.RedGuardian:
                     break;
-                case (ushort)Boss.ThrashIDS.BlueGuardian:
+                case Boss.ThrashIDS.BlueGuardian:
                     break;
-                case (ushort)Boss.ThrashIDS.GreenGuardian:
+                case Boss.ThrashIDS.GreenGuardian:
                     break;
-                case (ushort)Boss.ThrashIDS.ChargedSoul:
+                case Boss.ThrashIDS.ChargedSoul:
                     break;
-                case (ushort)Boss.ThrashIDS.Kernan:
+                case Boss.ThrashIDS.Kernan:
                     break;
-                case (ushort)Boss.ThrashIDS.Knuckles:
+                case Boss.ThrashIDS.Knuckles:
                     break;
-                case (ushort)Boss.ThrashIDS.Karde:
+                case Boss.ThrashIDS.Karde:
                     break;
-                case (ushort)Boss.ThrashIDS.Spirit:
+                case Boss.ThrashIDS.Spirit:
                     break;
-                case (ushort)Boss.ThrashIDS.BloodStone:
+                case Boss.ThrashIDS.BloodStone:
                     break;
-                case (ushort)Boss.ThrashIDS.Olson:
+                case Boss.ThrashIDS.Olson:
                     break;
-                case (ushort)Boss.ThrashIDS.Engul:
+                case Boss.ThrashIDS.Engul:
                     break;
-                case (ushort)Boss.ThrashIDS.Faerla:
+                case Boss.ThrashIDS.Faerla:
                     break;
-                case (ushort)Boss.ThrashIDS.Caulle:
+                case Boss.ThrashIDS.Caulle:
                     break;
-                case (ushort)Boss.ThrashIDS.Henley:
+                case Boss.ThrashIDS.Henley:
                     break;
-                case (ushort)Boss.ThrashIDS.Jessica:
+                case Boss.ThrashIDS.Jessica:
                     break;
-                case (ushort)Boss.ThrashIDS.Galletta:
+                case Boss.ThrashIDS.Galletta:
                     break;
-                case (ushort)Boss.ThrashIDS.Ianim:
+                case Boss.ThrashIDS.Ianim:
                     break;
-                case (ushort)Boss.ThrashIDS.Core:
+                case Boss.ThrashIDS.Core:
                     break;
-                case (ushort)Boss.ThrashIDS.Jade:
+                case Boss.ThrashIDS.Jade:
                     break;
-                case (ushort)Boss.ThrashIDS.Guldhem:
+                case Boss.ThrashIDS.Guldhem:
                     break;
-                case (ushort)Boss.ThrashIDS.Rigom:
+                case Boss.ThrashIDS.Rigom:
                     break;
-                case (ushort)Boss.ThrashIDS.Saul:
+                case Boss.ThrashIDS.Saul:
                     break;
-                case (ushort)Boss.ThrashIDS.Thief:
+                case Boss.ThrashIDS.Thief:
                     break;
-                case (ushort)Boss.ThrashIDS.Gambler:
+                case Boss.ThrashIDS.Gambler:
                     break;
-                case (ushort)Boss.ThrashIDS.GamblerClones:
+                case Boss.ThrashIDS.GamblerClones:
                     break;
-                case (ushort)Boss.ThrashIDS.Drunkard:
+                case Boss.ThrashIDS.Drunkard:
                     break;
-                case (ushort)Boss.ThrashIDS.TormentedDead:
+                case Boss.ThrashIDS.TormentedDead:
                     break;
-                case (ushort)Boss.ThrashIDS.SurgingSoul:
+                case Boss.ThrashIDS.SurgingSoul:
                     break;
-                case (ushort)Boss.ThrashIDS.Scythe:
+                case Boss.ThrashIDS.Scythe:
                     break;
-                case (ushort)Boss.ThrashIDS.Messenger:
+                case Boss.ThrashIDS.Messenger:
                     break;
-                case (ushort)Boss.ThrashIDS.Echo:
+                case Boss.ThrashIDS.Echo:
                     break;
-                case (ushort)Boss.ThrashIDS.Enforcer:
+                case Boss.ThrashIDS.Enforcer:
                     break;
             }
         }

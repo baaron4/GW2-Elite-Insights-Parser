@@ -707,37 +707,45 @@ namespace LuckParser.Models.ParseModels
             // Dhuum
             Messenger       = 19807,
             Echo            = 19628,
-            Enforcer        = 19681
+            Enforcer        = 19681,
+            //
+            Unknown
         };
+        public static ThrashIDS getThrashIDS(ushort id)
+        {
+            return Enum.IsDefined(typeof(ThrashIDS),id) ? (ThrashIDS) id : ThrashIDS.Unknown ;
+        }
+
+
         protected override void setAdditionalCombatReplayData(ParsedLog log)
         {
-            List<ushort> ids = new List<ushort>();
+            List<ThrashIDS> ids = new List<ThrashIDS>();
             switch (log.getBossData().getID())
             {
                 // VG
                 case 15438:
-                    ids = new List<ushort>
+                    ids = new List<ThrashIDS>
                     {
-                        (ushort)ThrashIDS.Seekers,
-                        (ushort)ThrashIDS.BlueGuardian,
-                        (ushort)ThrashIDS.GreenGuardian,
-                        (ushort)ThrashIDS.RedGuardian
+                        ThrashIDS.Seekers,
+                        ThrashIDS.BlueGuardian,
+                        ThrashIDS.GreenGuardian,
+                        ThrashIDS.RedGuardian
                     };                  
                     break;
                 // Gorse
                 case 15429:
-                    ids = new List<ushort>
+                    ids = new List<ThrashIDS>
                     {
-                        (ushort)ThrashIDS.ChargedSoul
+                        ThrashIDS.ChargedSoul
                     };
                     break;
                 // Sab
                 case 15375:
-                    ids = new List<ushort>
+                    ids = new List<ThrashIDS>
                     {
-                        (ushort)ThrashIDS.Kernan,
-                        (ushort)ThrashIDS.Knuckles,
-                        (ushort)ThrashIDS.Karde
+                        ThrashIDS.Kernan,
+                        ThrashIDS.Knuckles,
+                        ThrashIDS.Karde
                     };
                     break;
                 // Sloth
@@ -745,25 +753,25 @@ namespace LuckParser.Models.ParseModels
                     break;
                 // Matthias
                 case 16115:
-                    ids = new List<ushort>
+                    ids = new List<ThrashIDS>
                     {
-                        (ushort)ThrashIDS.BloodStone,
-                        (ushort)ThrashIDS.Spirit
+                        ThrashIDS.BloodStone,
+                        ThrashIDS.Spirit
                     };
                     break;
                 // KC
                 case 16235:
-                    ids = new List<ushort>
+                    ids = new List<ThrashIDS>
                     {
-                        (ushort)ThrashIDS.Core,
-                        (ushort)ThrashIDS.Jessica,
-                        (ushort)ThrashIDS.Olson,
-                        (ushort)ThrashIDS.Engul,
-                        (ushort)ThrashIDS.Faerla,
-                        (ushort)ThrashIDS.Caulle,
-                        (ushort)ThrashIDS.Henley,
-                        (ushort)ThrashIDS.Galletta,
-                        (ushort)ThrashIDS.Ianim,
+                        ThrashIDS.Core,
+                        ThrashIDS.Jessica,
+                        ThrashIDS.Olson,
+                        ThrashIDS.Engul,
+                        ThrashIDS.Faerla,
+                        ThrashIDS.Caulle,
+                        ThrashIDS.Henley,
+                        ThrashIDS.Galletta,
+                        ThrashIDS.Ianim,
                     };
                     break;
                 // Xera
@@ -774,46 +782,46 @@ namespace LuckParser.Models.ParseModels
                     break;
                 // MO
                 case 17172:
-                    ids = new List<ushort>
+                    ids = new List<ThrashIDS>
                     {
-                        (ushort)ThrashIDS.Jade
+                        ThrashIDS.Jade
                     };
                     break;
                 // Samarog
                 case 17188:
-                    ids = new List<ushort>
+                    ids = new List<ThrashIDS>
                     {
-                        (ushort)ThrashIDS.Rigom,
-                        (ushort)ThrashIDS.Guldhem
+                        ThrashIDS.Rigom,
+                        ThrashIDS.Guldhem
                     };
                     break;
                 // Deimos
                 case 17154:
-                    ids = new List<ushort>
+                    ids = new List<ThrashIDS>
                     {
-                        (ushort)ThrashIDS.Saul,
-                        (ushort)ThrashIDS.Thief,
-                        (ushort)ThrashIDS.Drunkard,
-                        (ushort)ThrashIDS.Gambler,
-                        (ushort)ThrashIDS.GamblerClones
+                        ThrashIDS.Saul,
+                        ThrashIDS.Thief,
+                        ThrashIDS.Drunkard,
+                        ThrashIDS.Gambler,
+                        ThrashIDS.GamblerClones
                     };
                     break;
                 // SH
                 case 0x4D37:
-                    ids = new List<ushort>
+                    ids = new List<ThrashIDS>
                     {
-                        (ushort)ThrashIDS.Scythe,
-                        (ushort)ThrashIDS.TormentedDead,
-                        (ushort)ThrashIDS.SurgingSoul
+                        ThrashIDS.Scythe,
+                        ThrashIDS.TormentedDead,
+                        ThrashIDS.SurgingSoul
                     };
                     break;
                 // Dhuum
                 case 0x4BFA:
-                    ids = new List<ushort>
+                    ids = new List<ThrashIDS>
                     {
-                        (ushort)ThrashIDS.Echo,
-                        (ushort)ThrashIDS.Enforcer,
-                        (ushort)ThrashIDS.Messenger
+                        ThrashIDS.Echo,
+                        ThrashIDS.Enforcer,
+                        ThrashIDS.Messenger
                     };
                     break;
                 // MAMA
@@ -835,7 +843,7 @@ namespace LuckParser.Models.ParseModels
                 case 0x455F:
                     break;
             }
-            List<AgentItem> aList = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(x.getID())).ToList();
+            List<AgentItem> aList = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(getThrashIDS(x.getID()))).ToList();
             long start = log.getBossData().getFirstAware();
             foreach (AgentItem a in aList)
             {
