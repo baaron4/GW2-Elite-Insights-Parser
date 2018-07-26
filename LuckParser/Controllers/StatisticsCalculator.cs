@@ -215,6 +215,7 @@ namespace LuckParser.Controllers
                     final.scholarRate = 0;
                     final.scholarDmg = 0;
                     final.movingRate = 0;
+                    final.movingDamage = 0;
                     final.flankingRate = 0;
                     final.glanceRate = 0;
                     final.missed = 0;
@@ -232,6 +233,7 @@ namespace LuckParser.Controllers
                     final.scholarRateBoss = 0;
                     final.scholarDmgBoss = 0;
                     final.movingRateBoss = 0;
+                    final.movingDamageBoss = 0;
                     final.flankingRateBoss = 0;
                     final.glanceRateBoss = 0;
                     final.missedBoss = 0;
@@ -263,7 +265,12 @@ namespace LuckParser.Controllers
                                     final.scholarDmgBoss += (int)(dl.getDamage() / 11.0); //regular+10% damage
                                 }
 
-                                final.movingRateBoss += dl.isMoving();
+                                if (dl.isMoving() > 0)
+                                {
+                                    final.movingRateBoss++;
+                                    final.movingDamageBoss += (int)(dl.getDamage() / 21.0);
+                                }
+                                
                                 final.flankingRateBoss += dl.isFlanking();
 
                                 if (dl.getResult() == ParseEnum.Result.Glance)
@@ -304,7 +311,12 @@ namespace LuckParser.Controllers
                                 final.scholarDmg += (int)(dl.getDamage() / 11.0); //regular+10% damage
                             }
 
-                            final.movingRate += dl.isMoving();
+                            if (dl.isMoving() > 0)
+                            {
+                                final.movingRate++;
+                                final.movingDamage += (int)(dl.getDamage() / 21.0);
+                            }
+                            
                             final.flankingRate += dl.isFlanking();
 
                             if (dl.getResult() == ParseEnum.Result.Glance)
@@ -472,7 +484,6 @@ namespace LuckParser.Controllers
             {
                 long totalGeneration = 0;
                 long totalOverstack = 0;
-                long totalUptime = 0;
 
                 foreach (BoonDistribution boons in boonDistributions.Values)
                 {
@@ -638,7 +649,7 @@ namespace LuckParser.Controllers
 
                 foreach (Boon boon in boon_to_track)
                 {
-                    Statistics.FinalBossBoon condition = new Statistics.FinalBossBoon();
+                    Statistics.FinalBossBoon condition = new Statistics.FinalBossBoon(log.getPlayerList());
                     rates[boon.getID()] = condition;
                     if (boonDistribution.ContainsKey(boon.getID()))
                     {
@@ -646,11 +657,19 @@ namespace LuckParser.Controllers
                         {
                             condition.boonType = Boon.BoonType.Duration;
                             condition.uptime = Math.Round(100.0 * boonDistribution.getUptime(boon.getID()) / fightDuration, 1);
+                            foreach(Player p in log.getPlayerList())
+                            {
+                                condition.generated[p] = Math.Round(100.0 * boonDistribution.getGeneration(boon.getID(),p.getInstid()) / fightDuration, 1);
+                            }
                         }
                         else if (boon.getType() == Boon.BoonType.Intensity)
                         {
                             condition.boonType = Boon.BoonType.Intensity;
                             condition.uptime = Math.Round((double) boonDistribution.getUptime(boon.getID()) / fightDuration, 1);
+                            foreach (Player p in log.getPlayerList())
+                            {
+                                condition.generated[p] = Math.Round((double)boonDistribution.getGeneration(boon.getID(), p.getInstid()) / fightDuration, 1);
+                            }
                         }
 
                         rates[boon.getID()] = condition;
