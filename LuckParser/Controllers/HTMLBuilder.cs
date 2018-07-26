@@ -1448,9 +1448,19 @@ namespace LuckParser.Controllers
                                 if (tooltip.Length > 0)
                                 {
                                     sw.Write("<td data-html=\"true\" data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + toWrite + " </td>");
-                                } else
+                                }
+                                else
                                 {
-                                    sw.Write("<td>" + toWrite + "</td>");
+                                    if (boonTable && boon.getType() == Boon.BoonType.Intensity)
+                                    {
+                                        long fight_duration = phases[phase_index].getDuration();
+                                        Dictionary<long, long> boonPresence = player.getBoonPresence(log, phases, list_to_use, phase_index);
+                                        tooltip = "uptime: " + Math.Round(100.0*boonPresence[boon.getID()]/fight_duration,1) + "%";
+                                        sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + toWrite + " </td>");
+                                    } else
+                                    {
+                                        sw.Write("<td>" + toWrite + "</td>");
+                                    }
                                 }                                
                                 boonArrayToList.Add(boons[boon.getID()].uptime.ToString());                        
                                 count++;
@@ -3352,6 +3362,16 @@ namespace LuckParser.Controllers
                     break;
                 }
             }
+            List<Boon> boon_to_track = Boon.getCondiBoonList();
+            boon_to_track.AddRange(Boon.getBoonList());
+            Dictionary<long, long> condiPresence = boss.getCondiPresence(log, phases, boon_to_track, phase_index);
+            Dictionary<long, long> boonPresence = boss.getBoonPresence(log, phases, boon_to_track, phase_index);
+            double avg_condis = 0.0;
+            foreach (long duration in condiPresence.Values)
+            {
+                avg_condis += duration;
+            }
+            avg_condis /= fight_duration;
             //Generate Boon table------------------------------------------------------------------------------------------------
             sw.Write("<h3 align=\"center\"> Condition Uptime </h3>");
             sw.Write("<script> $(function () { $('#condi_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
@@ -3378,15 +3398,7 @@ namespace LuckParser.Controllers
                 {
                     sw.Write("<tr>");
                     {
-                        List<Boon> boon_to_track = Boon.getCondiBoonList();
-                        boon_to_track.AddRange(Boon.getBoonList());
-                        Dictionary<long, long> condiPresence = boss.getCondiPresence(log, phases, boon_to_track, phase_index);
-                        double avg_condis = 0.0;
-                        foreach (long duration in condiPresence.Values)
-                        {
-                            avg_condis += duration;
-                        }
-                        avg_condis /= fight_duration;
+                        
                         sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avg_condis, 1) + "\">" + boss.getCharacter() + " </td>");
                         foreach (Boon boon in Boon.getCondiBoonList())
                         {
@@ -3400,7 +3412,15 @@ namespace LuckParser.Controllers
                             }
                             else
                             {
-                                sw.Write("<td>" + conditions[boon.getID()].uptime + "</td>");
+                                if (condiPresence.TryGetValue(boon.getID(), out long presenceTime))
+                                {
+                                    string tooltip = "uptime: " + Math.Round(100.0 * presenceTime / fight_duration, 1) + "%";
+                                    sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + conditions[boon.getID()].uptime + " </td>");
+                                }
+                                else
+                                {
+                                   sw.Write("<td>" + conditions[boon.getID()].uptime + "</td>");
+                                }
                             }
                         }
                     }
@@ -3442,7 +3462,15 @@ namespace LuckParser.Controllers
                                 }
                                 else
                                 {
-                                    sw.Write("<td>" + conditions[boon.getID()].uptime + "</td>");
+                                    if (boonPresence.TryGetValue(boon.getID(), out long presenceTime))
+                                    {
+                                        string tooltip = "uptime: " + Math.Round(100.0 * presenceTime / fight_duration, 1) + "%";
+                                        sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + conditions[boon.getID()].uptime + " </td>");
+                                    }
+                                    else
+                                    {
+                                        sw.Write("<td>" + conditions[boon.getID()].uptime + "</td>");
+                                    }
                                 }
                             }
                         }
@@ -3497,7 +3525,7 @@ namespace LuckParser.Controllers
                                 }
                                 else
                                 {
-                                    sw.Write("<td>" + conditions[boon.getID()].generated[player] + "</td>");
+                                    sw.Write("<td>" + conditions[boon.getID()].generated[player] + " </td>");
                                 }
                             }
                         }
