@@ -875,6 +875,13 @@ namespace LuckParser.Controllers
                         "this.img = new Image();" +
                         "this.img.src = imgSrc;" +
                     "};");
+                sw.Write("var secondaryActor = function(imgSrc, start, end) {" +
+                        "this.pos = [];" +
+                        "this.start = start;" +
+                        "this.end = end;" +
+                        "this.img = new Image();" +
+                        "this.img.src = imgSrc;" +
+                    "};");
                 sw.Write("data = new Map();");
                 foreach(Player p in log.getPlayerList())
                 {
@@ -900,6 +907,22 @@ namespace LuckParser.Controllers
                     sw.Write(coord.Item2 + ",");
                 }
                 sw.Write("];");
+                sw.Write("secondaryData = new Map();");
+                foreach (Mob mob in log.getBoss().getThrashMobs())
+                {
+                    sw.Write("{");
+                    sw.Write("var p = new secondaryActor('"+mob.getCombatReplay().getIcon() + "',"+ mob.getCombatReplay().getTimeOffsets().Item1/32 + ","+ mob.getCombatReplay().getTimeOffsets().Item2/32 + ");");
+                    sw.Write("secondaryData.set('" + mob.getInstid() +"_"+ mob.getCombatReplay().getTimeOffsets().Item1 / 32 + "_" + mob.getCombatReplay().getTimeOffsets().Item2 / 32 + "',p);");
+                    sw.Write("p.pos = [");
+                    foreach (Point3D pos in mob.getCombatReplay().getPositions())
+                    {
+                        Tuple<int, int> coord = map.getMapCoord(pos.X, pos.Y);
+                        sw.Write(coord.Item1 + ",");
+                        sw.Write(coord.Item2 + ",");
+                    }
+                    sw.Write("];");
+                    sw.Write("}");
+                }
                 // Selection
                 sw.Write("function selectActor(pId) { " +
                         "var actor = data.get(pId);" +
@@ -937,6 +960,14 @@ namespace LuckParser.Controllers
                                 "ctx.drawImage(value.img," +
                                 "value.pos[2*timeToUse]-10," +
                                 "value.pos[2*timeToUse+1]-10,20,20);" +
+                            "}" +
+                        "});");
+                    // draw thrash mobs
+                    sw.Write("secondaryData.forEach(function(value,key,map) {" +
+                            "if (!(value.start > timeToUse || value.end < timeToUse)) {" +
+                                "ctx.drawImage(value.img," +
+                                "value.pos[2*(timeToUse - value.start)]-15," +
+                                "value.pos[2*(timeToUse - value.start)+1]-15,30,30);" +
                             "}" +
                         "});");
                     // draw boss

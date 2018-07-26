@@ -1,6 +1,5 @@
 ﻿using LuckParser.Controllers;
 using LuckParser.Models.DataModels;
-using LuckParser.Models.ParseModels.Players;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -205,6 +204,11 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             return map;
+        }
+
+        public List<Mob> getThrashMobs()
+        {
+            return thrashMobs;
         }
 
         // Private Methods
@@ -642,7 +646,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 default:
-                    break; ;
+                    break;
             }
         }
 
@@ -849,7 +853,15 @@ namespace LuckParser.Models.ParseModels
             {
                 Mob mob = new Mob(a);
                 mob.initCombatReplay(log);
-                mob.getCombatReplay().trim(a.getFirstAware() - start, a.getLastAware() - start);
+                CombatItem test = log.getCombatList().Find(x => x.getSrcAgent() == a.getAgent() && (x.isStateChange() == ParseEnum.StateChange.ChangeDead || x.isStateChange() == ParseEnum.StateChange.Despawn));
+                if (test != null)
+                {
+                    mob.getCombatReplay().trim(a.getFirstAware() - start, test.getTime() - start);
+                }
+                else
+                {
+                    mob.getCombatReplay().trim(a.getFirstAware() - start, a.getLastAware() - start);
+                }
                 thrashMobs.Add(mob);
             }
         }

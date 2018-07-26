@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LuckParser.Models.ParseModels.Players
+namespace LuckParser.Models.ParseModels
 {
     public class Mob : AbstractMasterPlayer
     {
@@ -39,71 +39,76 @@ namespace LuckParser.Models.ParseModels.Players
             // TODO
             switch (Boss.getThrashIDS(agent.getID()))
             {
+                case Boss.ThrashIDS.BloodStone:
                 case Boss.ThrashIDS.Seekers:
+                    replay.setIcon("https://i.imgur.com/FrPoluz.png");
                     break;
                 case Boss.ThrashIDS.RedGuardian:
+                    replay.setIcon("https://i.imgur.com/73Uj4lG.png");
                     break;
                 case Boss.ThrashIDS.BlueGuardian:
+                    replay.setIcon("https://i.imgur.com/6CefnkP.png");
                     break;
                 case Boss.ThrashIDS.GreenGuardian:
-                    break;
-                case Boss.ThrashIDS.ChargedSoul:
-                    break;
-                case Boss.ThrashIDS.Kernan:
-                    break;
-                case Boss.ThrashIDS.Knuckles:
-                    break;
-                case Boss.ThrashIDS.Karde:
+                    replay.setIcon("https://i.imgur.com/nauDVYP.png");
                     break;
                 case Boss.ThrashIDS.Spirit:
+                case Boss.ThrashIDS.ChargedSoul:
+                    replay.setIcon("https://i.imgur.com/sHmksvO.png");
                     break;
-                case Boss.ThrashIDS.BloodStone:
+                case Boss.ThrashIDS.Kernan:
+                    replay.setIcon("https://i.imgur.com/WABRQya.png");
+                    break;
+                case Boss.ThrashIDS.Knuckles:
+                    replay.setIcon("https://i.imgur.com/m1y8nJE.png");
+                    break;
+                case Boss.ThrashIDS.Karde:
+                    replay.setIcon("https://i.imgur.com/3UGyosm.png");
                     break;
                 case Boss.ThrashIDS.Olson:
-                    break;
                 case Boss.ThrashIDS.Engul:
-                    break;
                 case Boss.ThrashIDS.Faerla:
-                    break;
                 case Boss.ThrashIDS.Caulle:
-                    break;
                 case Boss.ThrashIDS.Henley:
-                    break;
                 case Boss.ThrashIDS.Jessica:
-                    break;
                 case Boss.ThrashIDS.Galletta:
-                    break;
                 case Boss.ThrashIDS.Ianim:
+                    replay.setIcon("https://i.imgur.com/qeYT1Bf.png");
                     break;
                 case Boss.ThrashIDS.Core:
+                    replay.setIcon("https://i.imgur.com/yI34iqw.png");
                     break;
                 case Boss.ThrashIDS.Jade:
+                    replay.setIcon("https://i.imgur.com/ivtzbSP.png");
                     break;
                 case Boss.ThrashIDS.Guldhem:
+                    replay.setIcon("https://i.imgur.com/xa7Fefn.png");
                     break;
                 case Boss.ThrashIDS.Rigom:
+                    replay.setIcon("https://i.imgur.com/REcGMBe.png");
                     break;
                 case Boss.ThrashIDS.Saul:
+                    replay.setIcon("https://i.imgur.com/ck2IsoS.png");
                     break;
                 case Boss.ThrashIDS.Thief:
-                    break;
                 case Boss.ThrashIDS.Gambler:
-                    break;
                 case Boss.ThrashIDS.GamblerClones:
-                    break;
                 case Boss.ThrashIDS.Drunkard:
-                    break;
-                case Boss.ThrashIDS.TormentedDead:
-                    break;
-                case Boss.ThrashIDS.SurgingSoul:
-                    break;
-                case Boss.ThrashIDS.Scythe:
+                    replay.setIcon("https://i.imgur.com/xCoypjS.png");
                     break;
                 case Boss.ThrashIDS.Messenger:
+                case Boss.ThrashIDS.TormentedDead:
+                    replay.setIcon("https://i.imgur.com/1J2BTFg.png");
+                    break;
+                case Boss.ThrashIDS.SurgingSoul:
+                    replay.setIcon("https://i.imgur.com/xCoypjS.png");
                     break;
                 case Boss.ThrashIDS.Echo:
+                case Boss.ThrashIDS.Scythe:
+                    replay.setIcon("https://i.imgur.com/lJHVzt9.png");
                     break;
                 case Boss.ThrashIDS.Enforcer:
+                    replay.setIcon("https://i.imgur.com/elHjamF.png");
                     break;
             }
         }

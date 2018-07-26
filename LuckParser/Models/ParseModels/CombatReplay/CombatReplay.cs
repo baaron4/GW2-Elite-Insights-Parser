@@ -10,6 +10,8 @@ namespace LuckParser.Models.ParseModels
     {
         private List<Point3D> positions = new List<Point3D>();
         private List<Point3D> velocities = new List<Point3D>();
+        private long start = 0;
+        private long end = 0;
         // icon
         private string icon;
         // dps
@@ -39,6 +41,10 @@ namespace LuckParser.Models.ParseModels
             this.velocities.Add(vel);
         }
         
+        public Tuple<long,long> getTimeOffsets()
+        {
+            return new Tuple<long, long>(start, end);
+        }
 
         public void addDPS(int dps)
         {
@@ -55,7 +61,9 @@ namespace LuckParser.Models.ParseModels
 
         public void trim(long start, long end)
         {
-            positions.RemoveAll(x => x.time < start && x.time > end);
+            this.start = start;
+            this.end = end;
+            positions.RemoveAll(x => x.time < start || x.time > end);
         }
 
         public void addBoon(long id, int value)
