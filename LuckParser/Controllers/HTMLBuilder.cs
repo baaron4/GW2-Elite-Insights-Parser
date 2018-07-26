@@ -3353,8 +3353,9 @@ namespace LuckParser.Controllers
                 }
             }
             //Generate Boon table------------------------------------------------------------------------------------------------
+            sw.Write("<h3 align=\"center\"> Condition Uptime </h3>");
             sw.Write("<script> $(function () { $('#condi_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"condi_table" + phase_index + "\">");
+            sw.Write("<table class=\"display table table-striped table-hover compact mb-3\"  cellspacing=\"0\" width=\"100%\" id=\"condi_table" + phase_index + "\">");
             {
                 sw.Write("<thead>");
                 {
@@ -3408,10 +3409,12 @@ namespace LuckParser.Controllers
                 sw.Write("</tbody>");
             }
             sw.Write("</table>");
+            // Boon table if applicable
             if (hasBoons)
             {
+                sw.Write("<h3 align=\"center\"> Boon Uptime </h3>");
                 sw.Write("<script> $(function () { $('#boss_boon_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
-                sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boss_boon_table" + phase_index + "\">");
+                sw.Write("<table class=\"display table table-striped table-hover compact mb-3\"  cellspacing=\"0\" width=\"100%\" id=\"boss_boon_table" + phase_index + "\">");
                 {
                     sw.Write("<thead>");
                     {
@@ -3449,6 +3452,63 @@ namespace LuckParser.Controllers
                 }
                 sw.Write("</table>");
             }
+            // Condition generation
+            sw.Write("<h3 align=\"center\"> Condition Generation </h3>");
+            sw.Write("<script> $(function () { $('#condigen_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"condigen_table" + phase_index + "\">");
+            {
+                sw.Write("<thead>");
+                {
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<th>Sub</th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th>Name</th>");
+                        foreach (Boon boon in Boon.getCondiBoonList())
+                        {
+                            if (boon.getName() == "Retaliation")
+                            {
+                                continue;
+                            }
+                            sw.Write("<th>" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                        }
+                    }
+                    sw.Write("</tr>");
+                }
+                sw.Write("</thead>");
+                sw.Write("<tbody>");
+                {
+                    foreach (Player player in log.getPlayerList())
+                    {
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + "\" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.getProf() + "</span>" + "</td>");
+                            sw.Write("<td>" + player.getCharacter() + " </td>");
+                            foreach (Boon boon in Boon.getCondiBoonList())
+                            {
+                                if (boon.getName() == "Retaliation")
+                                {
+                                    continue;
+                                }
+                                if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                                {
+                                    sw.Write("<td>" + conditions[boon.getID()].generated[player] + "%</td>");
+                                }
+                                else
+                                {
+                                    sw.Write("<td>" + conditions[boon.getID()].generated[player] + "</td>");
+                                }
+                            }
+                        }
+                        sw.Write("</tr>");
+                    }
+                    
+                }
+                sw.Write("</tbody>");
+            }
+            sw.Write("</table>");
+           
             
         }
         /// <summary>
