@@ -852,16 +852,15 @@ namespace LuckParser.Models.ParseModels
             foreach (AgentItem a in aList)
             {
                 Mob mob = new Mob(a);
-                mob.initCombatReplay(log);
                 CombatItem test = log.getCombatList().Find(x => x.getSrcAgent() == a.getAgent() && (x.isStateChange() == ParseEnum.StateChange.ChangeDead || x.isStateChange() == ParseEnum.StateChange.Despawn));
                 if (test != null)
                 {
-                    mob.getCombatReplay().trim(a.getFirstAware() - start, test.getTime() - start);
+                    mob.initCombatReplay(log, a.getFirstAware() - start, a.getLastAware() - start);
                 }
                 else
                 {
-                    mob.getCombatReplay().trim(a.getFirstAware() - start, a.getLastAware() - start);
-                }
+                    mob.initCombatReplay(log, a.getFirstAware() - start, a.getLastAware() - start);
+                }             
                 thrashMobs.Add(mob);
             }
         }

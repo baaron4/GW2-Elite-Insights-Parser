@@ -59,13 +59,6 @@ namespace LuckParser.Models.ParseModels
             this.dps30s.Add(dps);
         }
 
-        public void trim(long start, long end)
-        {
-            this.start = start;
-            this.end = end;
-            positions.RemoveAll(x => x.time < start || x.time > end);
-        }
-
         public void addBoon(long id, int value)
         {
             List<int> ll;
@@ -87,8 +80,13 @@ namespace LuckParser.Models.ParseModels
             return icon;
         }
 
-        public void pollingRate(int rate, long fightDuration)
+        public void pollingRate(int rate, long start, long end)
         {
+
+            int pollingStart = (int)(start - start / rate);
+            this.start = start;
+            this.end = end;
+            // Fail check
             if (positions.Count == 0)
             {
                 positions.Add(new Point3D(0, 0, 0, 0));
@@ -96,7 +94,7 @@ namespace LuckParser.Models.ParseModels
             List<Point3D> interpolatedPositions = new List<Point3D>();
             int tablePos = 0;
             Point3D currentVelocity = null;
-            for (int i = 0; i < fightDuration; i += rate)
+            for (int i = pollingStart; i < end; i += rate)
             {
                 Point3D pt = positions[tablePos];
                 if (i <= pt.time)

@@ -31,7 +31,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void setAdditionalCombatReplayData(ParsedLog log)
         {
-            // nothing to do here, thrash mobs don't have additional data
+            // todo
         }
 
         protected override void setCombatReplayIcon(ParsedLog log)
