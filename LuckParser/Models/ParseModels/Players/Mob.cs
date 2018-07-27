@@ -104,8 +104,10 @@ namespace LuckParser.Models.ParseModels
                     replay.setIcon("https://i.imgur.com/xCoypjS.png");
                     break;
                 case Boss.ThrashIDS.Echo:
-                case Boss.ThrashIDS.Scythe:
                     replay.setIcon("https://i.imgur.com/lJHVzt9.png");
+                    break;
+                case Boss.ThrashIDS.Scythe:
+                    replay.setIcon("https://i.imgur.com/INCGLIK.png");
                     break;
                 case Boss.ThrashIDS.Enforcer:
                     replay.setIcon("https://i.imgur.com/elHjamF.png");

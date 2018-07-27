@@ -971,7 +971,7 @@ namespace LuckParser.Controllers
                             "}" +
                         "});");
                     // draw boss
-                    sw.Write("ctx.drawImage(boss.img,boss.pos[2*timeToUse]-15,boss.pos[2*timeToUse+1]-15,30,30);");
+                    sw.Write("ctx.drawImage(boss.img,boss.pos[2*timeToUse]-20,boss.pos[2*timeToUse+1]-20,40,40);");
                     // draw selected player
                     sw.Write("data.forEach(function(value,key,map) {" +
                             "if (value.selected) {" +
