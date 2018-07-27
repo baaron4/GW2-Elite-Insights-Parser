@@ -51,9 +51,9 @@ namespace LuckParser.Controllers
             {
                 foreach (Player p in log.getPlayerList())
                 {
-                    p.initCombatReplay(log, 0, log.getBossData().getAwareDuration());
+                    p.initCombatReplay(log);
                 }
-                log.getBoss().initCombatReplay(log, 0, log.getBossData().getAwareDuration());
+                log.getBoss().initCombatReplay(log);
             }
             if (switches.calculateDPS) calculateDPS();
             if (switches.calculateStats) calculateStats();
