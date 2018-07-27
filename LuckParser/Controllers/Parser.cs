@@ -513,7 +513,6 @@ namespace LuckParser.Controllers
             {
                 agent_data.cleanInstid(boss_data.getInstid());
             }
-
             AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
             boss = new Boss(bossAgent);
             List<Point> bossHealthOverTime = new List<Point>();
@@ -772,7 +771,9 @@ namespace LuckParser.Controllers
 
             }
             // Sort
-            p_list = p_list.OrderBy(a => a.getGroup()).ToList();                              
+            p_list = p_list.OrderBy(a => a.getGroup()).ToList();
+            // Check CM
+            boss_data.setCM(combat_list);
         }
     }
 }
