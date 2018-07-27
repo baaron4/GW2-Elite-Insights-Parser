@@ -64,6 +64,11 @@ namespace LuckParser.Models.ParseModels
             this.start = start;
             this.end = end;
             positions.RemoveAll(x => x.time < start || x.time > end);
+            if (positions.Count == 0)
+            {
+                this.start = -1;
+                this.end = -1;
+            }
         }
 
         public void addBoon(long id, int value)
@@ -91,7 +96,9 @@ namespace LuckParser.Models.ParseModels
         {
             if (positions.Count == 0)
             {
-                positions.Add(new Point3D(0, 0, 0, 0));
+                start = -1;
+                end = -1;
+                return;
             }
             List<Point3D> interpolatedPositions = new List<Point3D>();
             int tablePos = 0;

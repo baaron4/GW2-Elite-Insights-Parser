@@ -456,7 +456,7 @@ namespace LuckParser.Controllers
             {
                 if(agentsLookup.TryGetValue(c.getSrcAgent(), out var a))
                 {
-                    if (a.getInstid() == 0 && (c.isStateChange() == ParseEnum.StateChange.Normal ||(((golem_mode && isGolem(a.getID())) || a.getID() == 0x4BFA) && c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate) ))
+                    if (a.getInstid() == 0 && (c.isStateChange() == ParseEnum.StateChange.Normal || c.isStateChange() == ParseEnum.StateChange.Position || c.isStateChange() == ParseEnum.StateChange.Velocity || c.isStateChange() == ParseEnum.StateChange.Rotation || (((golem_mode && isGolem(a.getID())) || a.getID() == 0x4BFA) && c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate) ))
                     {
                         a.setInstid(c.getSrcInstid());
                     }
