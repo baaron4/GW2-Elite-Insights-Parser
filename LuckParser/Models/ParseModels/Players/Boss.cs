@@ -141,7 +141,7 @@ namespace LuckParser.Models.ParseModels
                     case 0x4D37:
                         map = new CombatReplayMap("https://i.imgur.com/A45pVJy.png",
                             Tuple.Create(3657, 3657),
-                            Tuple.Create(-12228, -786, -8937, 2405),
+                            Tuple.Create(-12223, -771, -8932, 2420),
                             Tuple.Create(-21504, -12288, 24576, 12288),
                             Tuple.Create(19072, 15484, 20992, 16508));
                         break;
