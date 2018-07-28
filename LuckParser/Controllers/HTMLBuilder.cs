@@ -1409,6 +1409,8 @@ namespace LuckParser.Controllers
                         Dictionary<long, Dictionary<int, string[]>> extraBoonData = player.getExtraBoonData(log, phases, list_to_use);
                         List<string> boonArrayToList = new List<string>();
                         boonArrayToList.Add(player.getGroup().ToString());
+                        long fight_duration = phases[phase_index].getDuration();
+                        Dictionary<long, long> boonPresence = player.getBoonPresence(log, phases, list_to_use, phase_index);
                         int count = 0;
 
                         sw.Write("<tr>");
@@ -1416,10 +1418,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + "\" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.getProf() + "</span>" + "</td>");
                             if (boonTable)
-                            {
-                                
-                                long fight_duration = phases[phase_index].getDuration();
-                                Dictionary<long, long> boonPresence = player.getBoonPresence(log, phases, list_to_use, phase_index);
+                            {                        
                                 double avg_boons = 0.0;
                                 foreach (long duration in boonPresence.Values)
                                 {
@@ -1451,11 +1450,9 @@ namespace LuckParser.Controllers
                                 }
                                 else
                                 {
-                                    if (boonTable && boon.getType() == Boon.BoonType.Intensity)
+                                    if (boonTable && boon.getType() == Boon.BoonType.Intensity && boonPresence.TryGetValue(boon.getID(),out long presenceValue))
                                     {
-                                        long fight_duration = phases[phase_index].getDuration();
-                                        Dictionary<long, long> boonPresence = player.getBoonPresence(log, phases, list_to_use, phase_index);
-                                        tooltip = "uptime: " + Math.Round(100.0*boonPresence[boon.getID()]/fight_duration,1) + "%";
+                                        tooltip = "uptime: " + Math.Round(100.0* presenceValue / fight_duration,1) + "%";
                                         sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + toWrite + " </td>");
                                     } else
                                     {
@@ -1471,7 +1468,6 @@ namespace LuckParser.Controllers
                         footList.Add(boonArrayToList);
                     }
                 }
-
                 sw.Write("</tbody>");
                 if (log.getPlayerList().Count > 1)
                 {
@@ -1920,7 +1916,7 @@ namespace LuckParser.Controllers
                                 }
                                 if (utility != null)
                                 {
-                                    sw.Write(utility.getName() + "<img src=\"" + utility.getLink() + "\" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write((food != null ?" and " : "") + utility.getName() + "<img src=\"" + utility.getLink() + "\" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
                                 }
                                 sw.Write("</p>");
                             }
@@ -1951,7 +1947,7 @@ namespace LuckParser.Controllers
                                 }
                                 if (utility != null)
                                 {
-                                    sw.Write(utility.getName() + "<img src=\"" + utility.getLink() + "\" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write((food != null ? " and " : "") + utility.getName() + "<img src=\"" + utility.getLink() + "\" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
                                 }
                                 sw.Write("</p>");
                             }
@@ -3734,7 +3730,7 @@ namespace LuckParser.Controllers
             CombatReplayMap map = log.getBoss().getCombatMap(log);
             Tuple<int, int> canvasSize = map.getPixelMapSize();
             HTMLHelper.writeCombatReplayInterface(sw, canvasSize, log);
-            HTMLHelper.writeCombatReplayScript(sw, log, canvasSize, map);
+            HTMLHelper.writeCombatReplayScript(sw, log, canvasSize, map, settings.PollingRate);
         }
         /// <summary>
         /// Creates custom css'

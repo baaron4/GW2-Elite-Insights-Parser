@@ -14,6 +14,9 @@ namespace LuckParser.Models.ParseModels
         private long end = 0;
         // icon
         private string icon;
+        //status
+        private List<Tuple<long, long>> dead = new List<Tuple<long, long>>();
+        private List<Tuple<long, long>> down = new List<Tuple<long, long>>();
         // dps
         private List<int> dps = new List<int>();
         private List<int> dps10s = new List<int>();
@@ -59,6 +62,12 @@ namespace LuckParser.Models.ParseModels
             dps30s.Add(dps);
         }
 
+        public void setStatus(List<Tuple<long, long>> down, List<Tuple<long, long>> dead)
+        {
+            this.down = down;
+            this.dead = dead;
+        }
+
         public void trim(long start, long end)
         {
             this.start = start;
@@ -69,6 +78,16 @@ namespace LuckParser.Models.ParseModels
                 this.start = -1;
                 this.end = -1;
             }
+        }
+
+        public List<Tuple<long,long>> getDead()
+        {
+            return dead;
+        }
+
+        public List<Tuple<long, long>> getDown()
+        {
+            return down;
         }
 
         public void addBoon(long id, int value)

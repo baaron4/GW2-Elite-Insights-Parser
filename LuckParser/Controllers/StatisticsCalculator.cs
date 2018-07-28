@@ -51,9 +51,9 @@ namespace LuckParser.Controllers
             {
                 foreach (Player p in log.getPlayerList())
                 {
-                    p.initCombatReplay(log);
+                    p.initCombatReplay(log, settings.PollingRate);
                 }
-                log.getBoss().initCombatReplay(log);
+                log.getBoss().initCombatReplay(log, settings.PollingRate);
             }
             if (switches.calculateDPS) calculateDPS();
             if (switches.calculateStats) calculateStats();

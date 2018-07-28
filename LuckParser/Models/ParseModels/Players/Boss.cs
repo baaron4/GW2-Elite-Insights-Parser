@@ -721,7 +721,7 @@ namespace LuckParser.Models.ParseModels
         }
 
 
-        protected override void setAdditionalCombatReplayData(ParsedLog log)
+        protected override void setAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
             List<ThrashIDS> ids = new List<ThrashIDS>();
             switch (log.getBossData().getID())
@@ -852,7 +852,7 @@ namespace LuckParser.Models.ParseModels
             foreach (AgentItem a in aList)
             {
                 Mob mob = new Mob(a);
-                mob.initCombatReplay(log);
+                mob.initCombatReplay(log, pollingRate);
                 CombatItem test = log.getCombatList().FirstOrDefault(x => x.getSrcAgent() == a.getAgent() && (x.isStateChange() == ParseEnum.StateChange.ChangeDead || x.isStateChange() == ParseEnum.StateChange.Despawn));
                 if (test != null)
                 {

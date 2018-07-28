@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
             return mobName;
         }
 
-        protected override void setAdditionalCombatReplayData(ParsedLog log)
+        protected override void setAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
             // todo
         }

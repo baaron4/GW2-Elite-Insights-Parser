@@ -27,6 +27,7 @@ namespace LuckParser.Models.DataModels
         public readonly bool Show10s;
         public readonly bool LightTheme;
         public readonly bool ParseCombatReplay;
+        public readonly int PollingRate = 32;
 
         public SettingsContainer(Settings settings)
         {

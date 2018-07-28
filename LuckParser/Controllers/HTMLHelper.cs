@@ -665,19 +665,19 @@ namespace LuckParser.Controllers
                 sw.Write("<th>Sub</th>");
                 sw.Write("<th></th>");
                 sw.Write("<th>Name</th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Crit") + "\" alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Scholar") + "\" alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("SwS") + "\" alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Flank") + "\" alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Glance") + "\" alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Blinded") + "\" alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Interupts") + "\" alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Invuln") + "\" alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Wasted") + "\" alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Saved") + "\" alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Swap") + "\" alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Downs") + "\" alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Dead") + "\" alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Crit") + "\" alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Scholar") + "\" alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("SwS") + "\" alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Flank") + "\" alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Glance") + "\" alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Blinded") + "\" alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Interupts") + "\" alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Invuln") + "\" alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Wasted") + "\" alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Saved") + "\" alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Swap") + "\" alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Downs") + "\" alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Dead") + "\" alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
             }
             sw.Write("</tr>");
         }
@@ -811,7 +811,7 @@ namespace LuckParser.Controllers
                                     sw.Write("<label id=\"id" + p.getInstid() + "\" style=\"width: 150px;\" onclick=\"selectActor(" + p.getInstid() + ")\"  class=\"btn btn-dark\">" +
                                         "<input class=\"invisible\" type=\"radio\" autocomplete=\"off\">" +
                                         p.getCharacter().Substring(0, Math.Min(10, p.getCharacter().Length))
-                                        + " <img src=\"" + HTMLHelper.GetLink(p.getProf())
+                                        + " <img src=\"" + GetLink(p.getProf())
                                             + "\" alt=\"" + p.getProf()
                                             + "\" height=\"18\" width=\"18\" >" +
                                         "</label >");
@@ -828,7 +828,7 @@ namespace LuckParser.Controllers
             sw.Write("</div>");
         }
 
-        private static void writeCombatReplayControls(StreamWriter sw, ParsedLog log)
+        private static void writeCombatReplayControls(StreamWriter sw, ParsedLog log, int pollingRate)
         {
 
             // animation control
@@ -841,15 +841,15 @@ namespace LuckParser.Controllers
             sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null; time--;}};");
             sw.Write("function restartAnimate() { time = 0; myanimate(time++);};");
             // speed control
-            sw.Write("function normalSpeed(){ speed = 32; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
-            sw.Write("function twoSpeed(){ speed = 16; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
-            sw.Write("function fourSpeed(){ speed = 8; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
+            sw.Write("function normalSpeed(){ speed = " + pollingRate + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
+            sw.Write("function twoSpeed(){ speed = " + pollingRate/2 + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
+            sw.Write("function fourSpeed(){ speed = " + pollingRate/4 + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
             // slider
             sw.Write("var timeSlider = document.getElementById('timeRange');");
             sw.Write("var timeSliderDisplay = document.getElementById('timeRangeDisplay');");
             sw.Write("function updateTime(value) { time = value; myanimate(time); updateTextInput(time)};");
             sw.Write("function updateTextInput(val) {" +
-                "timeSliderDisplay.value = Math.round(32.0*val/100.0)/10.0 + ' secs';" +
+                "timeSliderDisplay.value = Math.round("+pollingRate+"*val/100.0)/10.0 + ' secs';" +
             "}");
             // Range marker control
             sw.Write("var rangeControl = new Map();" +
@@ -882,15 +882,35 @@ namespace LuckParser.Controllers
                 "}");
         }
 
-        private static void writeCombatReplayMainClass(StreamWriter sw, ParsedLog log,CombatReplayMap map)
+        private static void writeCombatReplayMainClass(StreamWriter sw, ParsedLog log,CombatReplayMap map, int pollingRate)
         {
             // Players and boss
             sw.Write("var mainActor = function(group, imgSrc) {" +
                     "this.group = group;" +
                     "this.pos = [];" +
+                    "this.dead = [];" +
+                    "this.down = [];" +
                     "this.selected = false;" +
                     "this.img = new Image();" +
                     "this.img.src = imgSrc;" +
+                "};");
+            sw.Write("mainActor.prototype.died = function(timeToUse) {" +
+                    "for (var i = 0; i < this.dead.length; i++) {" +
+                        "if (!this.dead[i]) continue;" +
+                        "if (this.dead[i][0] <= timeToUse && this.dead[i][1] >= timeToUse) {" +
+                            "return true;" +
+                        "}" +
+                    "}" +
+                    "return false;" +
+                "};");
+            sw.Write("mainActor.prototype.downed = function(timeToUse) {" +
+                    "for (var i = 0; i < this.down.length; i++) {" +
+                        "if (!this.down[i]) continue;"+
+                        "if (this.down[i][0] <= timeToUse && this.down[i][1] >= timeToUse) {" +
+                            "return true;" +
+                        "}" +
+                    "}" +
+                    "return false;" +
                 "};");
             sw.Write("mainActor.prototype.draw = function(ctx,timeToUse, pixelSize) {" +
                     "if (!this.pos.length) {" +
@@ -922,9 +942,19 @@ namespace LuckParser.Controllers
                             "ctx.stroke();" +
                         "});" +
                     "}" +
-                    "ctx.drawImage(this.img," +
-                    "this.pos[2*timeToUse]-halfSize," +
-                    "this.pos[2*timeToUse+1]-halfSize,pixelSize,pixelSize);" +
+                    "if (this.died(timeToUse)) {" +
+                        "ctx.drawImage(deadIcon," +
+                        "this.pos[2*timeToUse]-1.5*halfSize," +
+                        "this.pos[2*timeToUse+1]-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
+                    "} else if (this.downed(timeToUse)) {" +
+                        "ctx.drawImage(downIcon," +
+                        "this.pos[2*timeToUse]-1.5*halfSize," +
+                        "this.pos[2*timeToUse+1]-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
+                    "} else {" +
+                        "ctx.drawImage(this.img," +
+                        "this.pos[2*timeToUse]-halfSize," +
+                        "this.pos[2*timeToUse+1]-halfSize,pixelSize,pixelSize);" +
+                    "}" +
                 "};");
             // create players
             foreach (Player p in log.getPlayerList())
@@ -938,6 +968,20 @@ namespace LuckParser.Controllers
                     Tuple<int, int> coord = map.getMapCoord(pos.X, pos.Y);
                     sw.Write(coord.Item1 + ",");
                     sw.Write(coord.Item2 + ",");
+                }
+                sw.Write("];");
+                sw.Write("p.dead = [");
+                foreach (Tuple<long, long> status in p.getCombatReplay().getDead())
+                {
+                    sw.Write("[" + status.Item1/pollingRate + ",");
+                    sw.Write(status.Item2 / pollingRate + "],");
+                }
+                sw.Write("];");
+                sw.Write("p.down = [");
+                foreach (Tuple<long,long> status in p.getCombatReplay().getDown())
+                {
+                    sw.Write("[" + status.Item1 / pollingRate + ",");
+                    sw.Write(status.Item2 / pollingRate + "],");
                 }
                 sw.Write("];");
                 sw.Write("}");
@@ -954,7 +998,7 @@ namespace LuckParser.Controllers
             sw.Write("];");
         }
 
-        private static void writeCompatReplaySecondaryClass(StreamWriter sw, ParsedLog log, CombatReplayMap map)
+        private static void writeCompatReplaySecondaryClass(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
             // thrash mobs
             sw.Write("var secondaryActor = function(imgSrc, start, end) {" +
@@ -975,8 +1019,8 @@ namespace LuckParser.Controllers
             foreach (Mob mob in log.getBoss().getThrashMobs())
             {
                 sw.Write("{");
-                sw.Write("var p = new secondaryActor('" + mob.getCombatReplay().getIcon() + "'," + mob.getCombatReplay().getTimeOffsets().Item1 / 32 + "," + mob.getCombatReplay().getTimeOffsets().Item2 / 32 + ");");
-                sw.Write("secondaryData.set('" + mob.getInstid() + "_" + mob.getCombatReplay().getTimeOffsets().Item1 / 32 + "_" + mob.getCombatReplay().getTimeOffsets().Item2 / 32 + "',p);");
+                sw.Write("var p = new secondaryActor('" + mob.getCombatReplay().getIcon() + "'," + mob.getCombatReplay().getTimeOffsets().Item1 / pollingRate + "," + mob.getCombatReplay().getTimeOffsets().Item2 / pollingRate + ");");
+                sw.Write("secondaryData.set('" + mob.getInstid() + "_" + mob.getCombatReplay().getTimeOffsets().Item1 / pollingRate + "_" + mob.getCombatReplay().getTimeOffsets().Item2 / pollingRate + "',p);");
                 sw.Write("p.pos = [");
                 foreach (Point3D pos in mob.getCombatReplay().getPositions())
                 {
@@ -989,7 +1033,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        public static void writeCombatReplayScript(StreamWriter sw, ParsedLog log, Tuple<int,int> canvasSize, CombatReplayMap map)
+        public static void writeCombatReplayScript(StreamWriter sw, ParsedLog log, Tuple<int,int> canvasSize, CombatReplayMap map, int pollingRate)
         {
             sw.Write("<script>");
             {
@@ -997,15 +1041,19 @@ namespace LuckParser.Controllers
                 sw.Write("var animation = null;");
                 sw.Write("var time = 0;");
                 sw.Write("var inch = " + map.getInch()+";");
-                sw.Write("var speed = 32;");
+                sw.Write("var speed = "+ pollingRate+";");
                 sw.Write("var selectedGroup = -1;");
                 sw.Write("var selectedPlayer = null;");
                 sw.Write("var data = new Map();");
                 sw.Write("var secondaryData = new Map();");
+                sw.Write("var deadIcon = new Image();" +
+                            "deadIcon.src = '"+GetLink("Dead")+"';");
+                sw.Write("var downIcon = new Image();" +
+                            "downIcon.src = '" + GetLink("Downs") + "';");
                 sw.Write("var boss = null;");
-                writeCombatReplayControls(sw, log);
-                writeCombatReplayMainClass(sw, log, map);
-                writeCompatReplaySecondaryClass(sw, log, map);           
+                writeCombatReplayControls(sw, log, pollingRate);
+                writeCombatReplayMainClass(sw, log, map, pollingRate);
+                writeCompatReplaySecondaryClass(sw, log, map, pollingRate);           
                 // Main loop
                 sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");              
                 sw.Write("function myanimate(timeToUse) {");
@@ -1021,10 +1069,10 @@ namespace LuckParser.Controllers
                         "});");
                     // draw thrash mobs
                     sw.Write("secondaryData.forEach(function(value,key,map) {" +
-                            "value.draw(ctx,timeToUse,30);"+
+                            "value.draw(ctx,timeToUse,25);"+
                         "});");
                     // draw boss
-                    sw.Write("boss.draw(ctx,timeToUse,40);");
+                    sw.Write("boss.draw(ctx,timeToUse,30);");
                     // draw selected player
                     sw.Write("if (selectedPlayer) {" +
                                 "selectedPlayer.draw(ctx,timeToUse,20);"+                              
