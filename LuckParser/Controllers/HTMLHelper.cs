@@ -1055,7 +1055,9 @@ namespace LuckParser.Controllers
                 writeCombatReplayMainClass(sw, log, map, pollingRate);
                 writeCompatReplaySecondaryClass(sw, log, map, pollingRate);           
                 // Main loop
-                sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");              
+                sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
+                sw.Write("ctx.imageSmoothingEnabled = true;");
+                sw.Write("ctx.imageSmoothingQuality = 'high';");
                 sw.Write("function myanimate(timeToUse) {");
                 {
                     sw.Write("ctx.clearRect(0,0," + canvasSize.Item1 + "," + canvasSize.Item2 + ");");
