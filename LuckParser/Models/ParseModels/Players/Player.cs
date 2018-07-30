@@ -1,4 +1,5 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Controllers;
+using LuckParser.Models.DataModels;
 using System;
 using System.Collections.Generic;
 
@@ -153,13 +154,13 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (apiskill.weapon_type == "Greatsword" || apiskill.weapon_type == "Staff" || apiskill.weapon_type == "Rifle" || apiskill.weapon_type == "Longbow" || apiskill.weapon_type == "Shortbow" || apiskill.weapon_type == "Hammer")
                         {
-                            if (swapped == 4 && (weapons[0] == null && weapons[1] == null))
+                            if (swapped == 4)
                             {
                                 weapons[0] = apiskill.weapon_type;
                                 weapons[1] = "2Hand";
                                 continue;
                             }
-                            else if (swapped == 5 && (weapons[2] == null && weapons[3] == null))
+                            else if (swapped == 5)
                             {
                                 weapons[2] = apiskill.weapon_type;
                                 weapons[3] = "2Hand";
@@ -169,13 +170,13 @@ namespace LuckParser.Models.ParseModels
                         }//2 handed
                         if (apiskill.weapon_type == "Focus" || apiskill.weapon_type == "Shield" || apiskill.weapon_type == "Torch" || apiskill.weapon_type == "Warhorn")
                         {
-                            if (swapped == 4 && (weapons[1] == null))
+                            if (swapped == 4)
                             {
 
                                 weapons[1] = apiskill.weapon_type;
                                 continue;
                             }
-                            else if (swapped == 5 && (weapons[3] == null))
+                            else if (swapped == 5)
                             {
 
                                 weapons[3] = apiskill.weapon_type;
@@ -187,13 +188,13 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (apiskill.slot == "Weapon_1" || apiskill.slot == "Weapon_2" || apiskill.slot == "Weapon_3")
                             {
-                                if (swapped == 4 && (weapons[0] == null))
+                                if (swapped == 4)
                                 {
 
                                     weapons[0] = apiskill.weapon_type;
                                     continue;
                                 }
-                                else if (swapped == 5 && (weapons[2] == null))
+                                else if (swapped == 5)
                                 {
 
                                     weapons[2] = apiskill.weapon_type;
@@ -203,13 +204,13 @@ namespace LuckParser.Models.ParseModels
                             }
                             if (apiskill.slot == "Weapon_4" || apiskill.slot == "Weapon_5")
                             {
-                                if (swapped == 4 && (weapons[1] == null))
+                                if (swapped == 4)
                                 {
 
                                     weapons[1] = apiskill.weapon_type;
                                     continue;
                                 }
-                                else if (swapped == 5 && (weapons[3] == null))
+                                else if (swapped == 5)
                                 {
 
                                     weapons[3] = apiskill.weapon_type;
@@ -227,10 +228,6 @@ namespace LuckParser.Models.ParseModels
                     swapped = cl.getExpDur();
                     swappedTime = cl.getTime();
                     continue;
-                }
-                if (weapons[0] != null && weapons[1] != null && weapons[2] != null && weapons[3] != null)
-                {
-                    break;
                 }
             }
             weapons_array = weapons;
@@ -269,6 +266,48 @@ namespace LuckParser.Models.ParseModels
                     consumeList.Add(new long[] { c.getSkillID(), Math.Max(time, 0) }); 
                 }
             }
+        }
+
+        protected override void setAdditionalCombatReplayData(ParsedLog log, int pollingRate)
+        {
+            // Down and deads
+            List<CombatItem> status = log.getCombatData().getStates(getInstid(), ParseEnum.StateChange.ChangeDown, log.getBossData().getFirstAware(), log.getBossData().getLastAware());
+            status.AddRange(log.getCombatData().getStates(getInstid(), ParseEnum.StateChange.ChangeUp, log.getBossData().getFirstAware(), log.getBossData().getLastAware()));
+            status.AddRange(log.getCombatData().getStates(getInstid(), ParseEnum.StateChange.ChangeDead, log.getBossData().getFirstAware(), log.getBossData().getLastAware()));
+            status = status.OrderBy(x => x.getTime()).ToList();
+            List<Tuple<long, long>> dead = new List<Tuple<long, long>>();
+            List<Tuple<long, long>> down = new List<Tuple<long, long>>();
+            for (var i = 0; i < status.Count -1;i++)
+            {
+                CombatItem cur = status[i];
+                CombatItem next = status[i + 1];
+                if (cur.isStateChange() == ParseEnum.StateChange.ChangeDown)
+                {
+                    down.Add(new Tuple<long, long>(cur.getTime() - log.getBossData().getFirstAware(), next.getTime() - log.getBossData().getFirstAware()));
+                } else if (cur.isStateChange() == ParseEnum.StateChange.ChangeDead)
+                {
+                    dead.Add(new Tuple<long, long>(cur.getTime() - log.getBossData().getFirstAware(), next.getTime() - log.getBossData().getFirstAware()));
+                }
+            }
+            // check last value
+            if (status.Count > 0)
+            {
+                CombatItem cur = status.Last();
+                if (cur.isStateChange() == ParseEnum.StateChange.ChangeDown)
+                {
+                    down.Add(new Tuple<long, long>(cur.getTime() - log.getBossData().getFirstAware(), log.getBossData().getAwareDuration()));
+                }
+                else if (cur.isStateChange() == ParseEnum.StateChange.ChangeDead)
+                {
+                    dead.Add(new Tuple<long, long>(cur.getTime() - log.getBossData().getFirstAware(), log.getBossData().getAwareDuration()));
+                }
+            }
+            replay.setStatus(down, dead);
+        }
+
+        protected override void setCombatReplayIcon(ParsedLog log)
+        {
+            replay.setIcon(HTMLHelper.GetLink(getProf()));
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

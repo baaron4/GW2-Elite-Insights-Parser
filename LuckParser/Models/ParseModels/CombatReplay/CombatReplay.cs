@@ -10,6 +10,13 @@ namespace LuckParser.Models.ParseModels
     {
         private List<Point3D> positions = new List<Point3D>();
         private List<Point3D> velocities = new List<Point3D>();
+        private long start = 0;
+        private long end = 0;
+        // icon
+        private string icon;
+        //status
+        private List<Tuple<long, long>> dead = new List<Tuple<long, long>>();
+        private List<Tuple<long, long>> down = new List<Tuple<long, long>>();
         // dps
         private List<int> dps = new List<int>();
         private List<int> dps10s = new List<int>();
@@ -22,16 +29,25 @@ namespace LuckParser.Models.ParseModels
 
         }
 
+        public void setIcon(string icon)
+        {
+            this.icon = icon;
+        }
+
         public void addPosition(Point3D pos)
         {
-            this.positions.Add(pos);
+            positions.Add(pos);
         }
 
         public void addVelocity(Point3D vel)
         {
-            this.velocities.Add(vel);
+            velocities.Add(vel);
         }
         
+        public Tuple<long,long> getTimeOffsets()
+        {
+            return new Tuple<long, long>(start, end);
+        }
 
         public void addDPS(int dps)
         {
@@ -39,11 +55,39 @@ namespace LuckParser.Models.ParseModels
         }
         public void addDPS10s(int dps)
         {
-            this.dps10s.Add(dps);
+            dps10s.Add(dps);
         }
         public void addDPS30s(int dps)
         {
-            this.dps30s.Add(dps);
+            dps30s.Add(dps);
+        }
+
+        public void setStatus(List<Tuple<long, long>> down, List<Tuple<long, long>> dead)
+        {
+            this.down = down;
+            this.dead = dead;
+        }
+
+        public void trim(long start, long end)
+        {
+            this.start = start;
+            this.end = end;
+            positions.RemoveAll(x => x.time < start || x.time > end);
+            if (positions.Count == 0)
+            {
+                this.start = -1;
+                this.end = -1;
+            }
+        }
+
+        public List<Tuple<long,long>> getDead()
+        {
+            return dead;
+        }
+
+        public List<Tuple<long, long>> getDown()
+        {
+            return down;
         }
 
         public void addBoon(long id, int value)
@@ -62,12 +106,18 @@ namespace LuckParser.Models.ParseModels
             return positions.Select(x => (int)x.time).ToList();
         }
 
+        public string getIcon()
+        {
+            return icon;
+        }
 
         public void pollingRate(int rate, long fightDuration)
         {
             if (positions.Count == 0)
             {
-                positions.Add(new Point3D(0, 0, 0, 0));
+                start = -1;
+                end = -1;
+                return;
             }
             List<Point3D> interpolatedPositions = new List<Point3D>();
             int tablePos = 0;

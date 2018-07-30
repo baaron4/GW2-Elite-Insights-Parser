@@ -1,4 +1,5 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Controllers;
+using LuckParser.Models.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,44 +13,10 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        /* EXTRA IDS TO TRACK
-         Seeker,15426
-Blue Guardian,15431
-Red Guardian,15433
-Green Guardian,15420
-Charged Soul,15434
-Kernan,15372
-Knuckles,15404
-Karde,15430
-Olson the Elder,16244
-Engul the Calculating,16274
-Faerla the Fastidious,16264
-Caulle the Vociferous,16282
-Henley the Tremulous,16236
-Jessica the Benevolent,16278
-Galletta the Persistent,16228
-Ianim the Architect,16248
-Construct Core,16261
-Bloodstone Shard,13864
-Jade Scout,17181
-Guldhem,17208
-Rigom,17124
-Saul (friendly),17126
-Saul (thief),17206
-Saul (gambler),17335
-Saul (false clones),17161
-Saul (drunkard),17163
-Tormented Dead,19422
-Surging Soul (wall),19474
-Spinning Scythe,19396
-Dhuum's Messenger,19807
-Ender's Echo,19628
-Dhuum's Enforcer,19681
-         */
-
         private List<PhaseData> phases = new List<PhaseData>();
         private List<long> phaseData = new List<long>();
         private CombatReplayMap map = null;
+        private List<Mob> thrashMobs = new List<Mob>();
 
         public List<PhaseData> getPhases(ParsedLog log, bool getAllPhases)
         {
@@ -174,7 +141,7 @@ Dhuum's Enforcer,19681
                     case 0x4D37:
                         map = new CombatReplayMap("https://i.imgur.com/A45pVJy.png",
                             Tuple.Create(3657, 3657),
-                            Tuple.Create(-12228, -786, -8937, 2405),
+                            Tuple.Create(-12223, -771, -8932, 2420),
                             Tuple.Create(-21504, -12288, 24576, 12288),
                             Tuple.Create(19072, 15484, 20992, 16508));
                         break;
@@ -237,6 +204,11 @@ Dhuum's Enforcer,19681
                 }
             }
             return map;
+        }
+
+        public List<Mob> getThrashMobs()
+        {
+            return thrashMobs;
         }
 
         // Private Methods
@@ -540,12 +512,12 @@ Dhuum's Enforcer,19681
                         phases[i].setName("Phase " + i);
                     }
                     int offsetDei = phases.Count;
-                    CombatItem teleport = log.getCombatList().First(x => x.getSkillID() == 38169);
+                    CombatItem teleport = log.getCombatList().FirstOrDefault(x => x.getSkillID() == 38169);
                     int splits = 0;
                     while (teleport != null && splits < 3)
                     {
                         start = teleport.getTime() - log.getBossData().getFirstAware();
-                        CombatItem teleportBack = log.getCombatList().First(x => x.getSkillID() == 38169 && x.getTime() - log.getBossData().getFirstAware() > start + 10000);
+                        CombatItem teleportBack = log.getCombatList().FirstOrDefault(x => x.getSkillID() == 38169 && x.getTime() - log.getBossData().getFirstAware() > start + 10000);
                         if (teleportBack != null)
                         {
                             end = teleportBack.getTime() - log.getBossData().getFirstAware();
@@ -556,7 +528,7 @@ Dhuum's Enforcer,19681
                         }
                         phases.Add(new PhaseData(start, end));
                         splits++;
-                        teleport = log.getCombatList().First(x => x.getSkillID() == 38169 && x.getTime() - log.getBossData().getFirstAware() > end + 10000);
+                        teleport = log.getCombatList().FirstOrDefault(x => x.getSkillID() == 38169 && x.getTime() - log.getBossData().getFirstAware() > end + 10000);
                     }
 
                     string[] namesDeiSplit = new string[] { "Thief", "Gambler", "Drunkard" };
@@ -674,7 +646,7 @@ Dhuum's Enforcer,19681
                     }
                     break;
                 default:
-                    break; ;
+                    break;
             }
         }
 
@@ -693,6 +665,288 @@ Dhuum's Enforcer,19681
                     }
                 }
             }*/
+        }
+
+
+        public enum ThrashIDS : ushort {
+            // VG
+            Seekers         = 15246,
+            RedGuardian     = 15433,
+            BlueGuardian    = 15431,
+            GreenGuardian   = 15420,
+            // Gorse
+            ChargedSoul     = 15434,
+            // Sab
+            Kernan          = 15372,
+            Knuckles        = 15404,
+            Karde           = 15430,
+            // Matthias
+            Spirit          = 16105,
+            BloodStone      = 13864,
+            // KC
+            Olson           = 16244,
+            Engul           = 16274,
+            Faerla          = 16264,
+            Caulle          = 16282,
+            Henley          = 16236,
+            Jessica         = 16278,
+            Galletta        = 16228,
+            Ianim           = 16248,
+            Core            = 16261,
+            // MO
+            Jade            = 17181,
+            // Samarog
+            Guldhem         = 17208,
+            Rigom           = 17124,
+            // Deimos
+            Saul            = 17126,
+            Thief           = 17206,
+            Gambler         = 17335,
+            GamblerClones   = 17161,
+            Drunkard        = 17163,
+            // SH
+            TormentedDead   = 19422,
+            SurgingSoul     = 19474,
+            Scythe          = 19396,
+            // Dhuum
+            Messenger       = 19807,
+            Echo            = 19628,
+            Enforcer        = 19681,
+            //
+            Unknown
+        };
+        public static ThrashIDS getThrashIDS(ushort id)
+        {
+            return Enum.IsDefined(typeof(ThrashIDS),id) ? (ThrashIDS) id : ThrashIDS.Unknown ;
+        }
+
+
+        protected override void setAdditionalCombatReplayData(ParsedLog log, int pollingRate)
+        {
+            List<ThrashIDS> ids = new List<ThrashIDS>();
+            switch (log.getBossData().getID())
+            {
+                // VG
+                case 15438:
+                    ids = new List<ThrashIDS>
+                    {
+                        ThrashIDS.Seekers,
+                        ThrashIDS.BlueGuardian,
+                        ThrashIDS.GreenGuardian,
+                        ThrashIDS.RedGuardian
+                    };                  
+                    break;
+                // Gorse
+                case 15429:
+                    ids = new List<ThrashIDS>
+                    {
+                        ThrashIDS.ChargedSoul
+                    };
+                    break;
+                // Sab
+                case 15375:
+                    ids = new List<ThrashIDS>
+                    {
+                        ThrashIDS.Kernan,
+                        ThrashIDS.Knuckles,
+                        ThrashIDS.Karde
+                    };
+                    break;
+                // Sloth
+                case 16123:
+                    break;
+                // Matthias
+                case 16115:
+                    ids = new List<ThrashIDS>
+                    {
+                        ThrashIDS.BloodStone,
+                        ThrashIDS.Spirit
+                    };
+                    break;
+                // KC
+                case 16235:
+                    ids = new List<ThrashIDS>
+                    {
+                        ThrashIDS.Core,
+                        ThrashIDS.Jessica,
+                        ThrashIDS.Olson,
+                        ThrashIDS.Engul,
+                        ThrashIDS.Faerla,
+                        ThrashIDS.Caulle,
+                        ThrashIDS.Henley,
+                        ThrashIDS.Galletta,
+                        ThrashIDS.Ianim,
+                    };
+                    break;
+                // Xera
+                case 16246:
+                    break;
+                // Cairn
+                case 17194:
+                    break;
+                // MO
+                case 17172:
+                    ids = new List<ThrashIDS>
+                    {
+                        ThrashIDS.Jade
+                    };
+                    break;
+                // Samarog
+                case 17188:
+                    ids = new List<ThrashIDS>
+                    {
+                        ThrashIDS.Rigom,
+                        ThrashIDS.Guldhem
+                    };
+                    break;
+                // Deimos
+                case 17154:
+                    ids = new List<ThrashIDS>
+                    {
+                        ThrashIDS.Saul,
+                        ThrashIDS.Thief,
+                        ThrashIDS.Drunkard,
+                        ThrashIDS.Gambler,
+                        ThrashIDS.GamblerClones
+                    };
+                    break;
+                // SH
+                case 0x4D37:
+                    ids = new List<ThrashIDS>
+                    {
+                        ThrashIDS.Scythe,
+                        ThrashIDS.TormentedDead,
+                        ThrashIDS.SurgingSoul
+                    };
+                    break;
+                // Dhuum
+                case 0x4BFA:
+                    ids = new List<ThrashIDS>
+                    {
+                        ThrashIDS.Echo,
+                        ThrashIDS.Enforcer,
+                        ThrashIDS.Messenger
+                    };
+                    break;
+                // MAMA
+                case 0x427D:
+                    break;
+                // Siax
+                case 0x4284:
+                    break;
+                // Ensolyss
+                case 0x4234:
+                    break;
+                // Skorvald
+                case 0x44E0:
+                    break;
+                // Artsariiv
+                case 0x461D:
+                    break;
+                // Arkk
+                case 0x455F:
+                    break;
+            }
+            List<AgentItem> aList = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(getThrashIDS(x.getID()))).ToList();
+            long start = log.getBossData().getFirstAware();
+            foreach (AgentItem a in aList)
+            {
+                Mob mob = new Mob(a);
+                mob.initCombatReplay(log, pollingRate);
+                CombatItem test = log.getCombatList().FirstOrDefault(x => x.getSrcAgent() == a.getAgent() && (x.isStateChange() == ParseEnum.StateChange.ChangeDead || x.isStateChange() == ParseEnum.StateChange.Despawn));
+                if (test != null)
+                {
+                    mob.getCombatReplay().trim(a.getFirstAware() - start, test.getTime() - start);
+                }
+                else
+                {
+                    mob.getCombatReplay().trim(a.getFirstAware() - start, a.getLastAware() - start);
+                }
+                thrashMobs.Add(mob);
+            }
+        }
+
+        protected override void setCombatReplayIcon(ParsedLog log)
+        {
+            switch (log.getBossData().getID())
+            {
+                // VG
+                case 15438:
+                    replay.setIcon("https://i.imgur.com/MIpP5pK.png");
+                    break;
+                // Gorse
+                case 15429:
+                    replay.setIcon("https://i.imgur.com/5hmMq12.png");
+                    break;
+                // Sab
+                case 15375:
+                    replay.setIcon("https://i.imgur.com/UqbFp9S.png");
+                    break;
+                // Sloth
+                case 16123:
+                    replay.setIcon("https://i.imgur.com/h1xH3ER.png");
+                    break;
+                // Matthias
+                case 16115:
+                    replay.setIcon("https://i.imgur.com/3uMMmTS.png");
+                    break;
+                // KC
+                case 16235:
+                    replay.setIcon("https://i.imgur.com/Kq0kL07.png");
+                    break;
+                // Xera
+                case 16246:
+                    replay.setIcon("https://i.imgur.com/lYwJEyV.png");
+                    break;
+                // Cairn
+                case 17194:
+                    replay.setIcon("https://i.imgur.com/gQY37Tf.png");
+                    break;
+                // MO
+                case 17172:
+                    replay.setIcon("https://i.imgur.com/3uMMmTS.png");
+                    break;
+                // Samarog
+                case 17188:
+                    replay.setIcon("https://i.imgur.com/MPQhKfM.png");
+                    break;
+                // Deimos
+                case 17154:
+                    replay.setIcon("https://i.imgur.com/mWfxBaO.png");
+                    break;
+                // SH
+                case 0x4D37:
+                    replay.setIcon("https://i.imgur.com/jAiRplg.png");
+                    break;
+                // Dhuum
+                case 0x4BFA:
+                    replay.setIcon("https://i.imgur.com/RKaDon5.png");
+                    break;
+                // MAMA
+                case 0x427D:
+                    replay.setIcon("https://i.imgur.com/1h7HOII.png");
+                    break;
+                // Siax
+                case 0x4284:
+                    replay.setIcon("https://i.imgur.com/5C60cQb.png");
+                    break;
+                // Ensolyss
+                case 0x4234:
+                    replay.setIcon("https://i.imgur.com/GUTNuyP.png");
+                    break;
+                // Skorvald
+                case 0x44E0:
+                    replay.setIcon("https://i.imgur.com/IOPAHRE.png");
+                    break;
+                // Artsariiv
+                case 0x461D:
+                    replay.setIcon(HTMLHelper.GetLink(log.getBossData().getID() + "-icon"));
+                    break;
+                // Arkk
+                case 0x455F:
+                    replay.setIcon("https://i.imgur.com/u6vv8cW.png");
+                    break;
+            }
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

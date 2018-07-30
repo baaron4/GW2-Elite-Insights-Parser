@@ -212,10 +212,10 @@ namespace LuckParser
                 }
 
             }
-            catch (Exception ex)
-            {
-                Console.Error.Write(ex.Message);
-                throw new CancellationException(rowData, ex);
+            catch (Exception ex)	
+            {	
+                Console.Error.Write(ex.Message);	
+                throw new CancellationException(rowData, ex);	
             }
             finally
             {

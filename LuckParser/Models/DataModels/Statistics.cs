@@ -58,6 +58,7 @@ namespace LuckParser.Models.DataModels
             public int scholarRate;
             public int scholarDmg;
             public int movingRate;
+            public int movingDamage;
             public int flankingRate;
             public int glanceRate;
             public int missed;
@@ -77,6 +78,7 @@ namespace LuckParser.Models.DataModels
             public int scholarRateBoss;
             public int scholarDmgBoss;
             public int movingRateBoss;
+            public int movingDamageBoss;
             public int flankingRateBoss;
             public int glanceRateBoss;
             public int missedBoss;
@@ -134,14 +136,20 @@ namespace LuckParser.Models.DataModels
 
         public class FinalBossBoon
         {
-            public FinalBossBoon()
+            public FinalBossBoon(List<Player> plist)
             {
                 uptime = 0;
                 boonType = Boon.BoonType.Intensity;
+                generated = new Dictionary<Player, double>();
+                foreach (Player p in plist)
+                {
+                    generated.Add(p, 0);
+                }
             }
 
             public double uptime;
             public Boon.BoonType boonType;
+            public Dictionary<Player, double> generated;
         }
 
         public Dictionary<long, FinalBossBoon>[] bossConditions;

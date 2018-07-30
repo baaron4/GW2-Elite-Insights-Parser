@@ -918,9 +918,11 @@ namespace LuckParser.Controllers
                                 + stats.scholarDmg + "<br> Effective Physical Damage Increase: " 
                                 + Math.Round(100.0 * (dps.playerPowerDamage / (Double)(dps.playerPowerDamage - stats.scholarDmg) - 1.0) , 3) 
                                 + "% \">" + Math.Round((Double)(stats.scholarRate) / stats.powerLoopCount * 100,1) + "%</span>" + "</td>");//scholar
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                + stats.movingRate + " out of " + stats.powerLoopCount + " hits \">" 
-                                + Math.Round(stats.movingRate / (Double)stats.powerLoopCount * 100,1) + "%</span>" + "</td>");//sws
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
+                                + stats.movingRate + " out of " + stats.powerLoopCount + " hits <br> Pure Seaweed Damage: "
+                                + stats.movingDamage + "<br> Effective Physical Damage Increase: "
+                                + Math.Round(100.0 * (dps.playerPowerDamage / (Double)(dps.playerPowerDamage - stats.movingDamage) - 1.0), 3)
+                                + "% \">" + Math.Round((Double)(stats.movingRate) / stats.powerLoopCount * 100, 1) + "%</span>" + "</td>");//sws
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
                                 + stats.flankingRate + " out of " + stats.powerLoopCount + " hits \">" 
                                 + Math.Round(stats.flankingRate / (Double)stats.powerLoopCount * 100,1) + "%</span>" + "</td>");//flank
@@ -1048,9 +1050,11 @@ namespace LuckParser.Controllers
                                 + stats.scholarDmgBoss + "<br> Effective Physical Damage Increase: " 
                                 + Math.Round(100.0* (dps.playerBossPowerDamage / (Double)(dps.playerBossPowerDamage - stats.scholarDmgBoss) - 1.0), 3) 
                                 + "% \">" + Math.Round((Double)(stats.scholarRateBoss) / stats.powerLoopCountBoss * 100,1) + "%</span>" + "</td>");//scholar
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                + stats.movingRateBoss + " out of " + stats.powerLoopCountBoss + " hits \">" 
-                                + Math.Round(stats.movingRateBoss / (Double)stats.powerLoopCountBoss * 100,1) + "%</span>" + "</td>");//sws
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
+                                + stats.movingRateBoss + " out of " + stats.powerLoopCountBoss + " hits <br> Pure Seaweed Damage: "
+                                + stats.movingDamageBoss + "<br> Effective Physical Damage Increase: "
+                                + Math.Round(100.0 * (dps.playerBossPowerDamage / (Double)(dps.playerBossPowerDamage - stats.movingDamageBoss) - 1.0), 3)
+                                + "% \">" + Math.Round((Double)(stats.movingRateBoss) / stats.powerLoopCountBoss * 100, 1) + "%</span>" + "</td>");//sws
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.flankingRateBoss + " out of " + stats.powerLoopCountBoss + " hits \">" 
                                 + Math.Round(stats.flankingRateBoss / (Double)stats.powerLoopCountBoss * 100,1) + "%</span>" + "</td>");//flank
@@ -1405,6 +1409,8 @@ namespace LuckParser.Controllers
                         Dictionary<long, Dictionary<int, string[]>> extraBoonData = player.getExtraBoonData(log, phases, list_to_use);
                         List<string> boonArrayToList = new List<string>();
                         boonArrayToList.Add(player.getGroup().ToString());
+                        long fight_duration = phases[phase_index].getDuration();
+                        Dictionary<long, long> boonPresence = player.getBoonPresence(log, phases, list_to_use, phase_index);
                         int count = 0;
 
                         sw.Write("<tr>");
@@ -1412,10 +1418,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.getGroup().ToString() + "</td>");
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + "\" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.getProf() + "</span>" + "</td>");
                             if (boonTable)
-                            {
-                                
-                                long fight_duration = phases[phase_index].getDuration();
-                                Dictionary<long, long> boonPresence = player.getBoonPresence(log, phases, list_to_use, phase_index);
+                            {                        
                                 double avg_boons = 0.0;
                                 foreach (long duration in boonPresence.Values)
                                 {
@@ -1444,9 +1447,17 @@ namespace LuckParser.Controllers
                                 if (tooltip.Length > 0)
                                 {
                                     sw.Write("<td data-html=\"true\" data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + toWrite + " </td>");
-                                } else
+                                }
+                                else
                                 {
-                                    sw.Write("<td>" + toWrite + "</td>");
+                                    if (boonTable && boon.getType() == Boon.BoonType.Intensity && boonPresence.TryGetValue(boon.getID(),out long presenceValue))
+                                    {
+                                        tooltip = "uptime: " + Math.Round(100.0* presenceValue / fight_duration,1) + "%";
+                                        sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + toWrite + " </td>");
+                                    } else
+                                    {
+                                        sw.Write("<td>" + toWrite + "</td>");
+                                    }
                                 }                                
                                 boonArrayToList.Add(boons[boon.getID()].uptime.ToString());                        
                                 count++;
@@ -1457,7 +1468,6 @@ namespace LuckParser.Controllers
                         footList.Add(boonArrayToList);
                     }
                 }
-
                 sw.Write("</tbody>");
                 if (log.getPlayerList().Count > 1)
                 {
@@ -1906,7 +1916,7 @@ namespace LuckParser.Controllers
                                 }
                                 if (utility != null)
                                 {
-                                    sw.Write(utility.getName() + "<img src=\"" + utility.getLink() + "\" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write((food != null ?" and " : "") + utility.getName() + "<img src=\"" + utility.getLink() + "\" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
                                 }
                                 sw.Write("</p>");
                             }
@@ -1937,7 +1947,7 @@ namespace LuckParser.Controllers
                                 }
                                 if (utility != null)
                                 {
-                                    sw.Write(utility.getName() + "<img src=\"" + utility.getLink() + "\" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write((food != null ? " and " : "") + utility.getName() + "<img src=\"" + utility.getLink() + "\" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
                                 }
                                 sw.Write("</p>");
                             }
@@ -3348,9 +3358,20 @@ namespace LuckParser.Controllers
                     break;
                 }
             }
+            List<Boon> boon_to_track = Boon.getCondiBoonList();
+            boon_to_track.AddRange(Boon.getBoonList());
+            Dictionary<long, long> condiPresence = boss.getCondiPresence(log, phases, boon_to_track, phase_index);
+            Dictionary<long, long> boonPresence = boss.getBoonPresence(log, phases, boon_to_track, phase_index);
+            double avg_condis = 0.0;
+            foreach (long duration in condiPresence.Values)
+            {
+                avg_condis += duration;
+            }
+            avg_condis /= fight_duration;
             //Generate Boon table------------------------------------------------------------------------------------------------
+            sw.Write("<h3 align=\"center\"> Condition Uptime </h3>");
             sw.Write("<script> $(function () { $('#condi_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"condi_table" + phase_index + "\">");
+            sw.Write("<table class=\"display table table-striped table-hover compact mb-3\"  cellspacing=\"0\" width=\"100%\" id=\"condi_table" + phase_index + "\">");
             {
                 sw.Write("<thead>");
                 {
@@ -3373,15 +3394,7 @@ namespace LuckParser.Controllers
                 {
                     sw.Write("<tr>");
                     {
-                        List<Boon> boon_to_track = Boon.getCondiBoonList();
-                        boon_to_track.AddRange(Boon.getBoonList());
-                        Dictionary<long, long> condiPresence = boss.getCondiPresence(log, phases, boon_to_track, phase_index);
-                        double avg_condis = 0.0;
-                        foreach (long duration in condiPresence.Values)
-                        {
-                            avg_condis += duration;
-                        }
-                        avg_condis /= fight_duration;
+                        
                         sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avg_condis, 1) + "\">" + boss.getCharacter() + " </td>");
                         foreach (Boon boon in Boon.getCondiBoonList())
                         {
@@ -3395,7 +3408,15 @@ namespace LuckParser.Controllers
                             }
                             else
                             {
-                                sw.Write("<td>" + conditions[boon.getID()].uptime + "</td>");
+                                if (condiPresence.TryGetValue(boon.getID(), out long presenceTime))
+                                {
+                                    string tooltip = "uptime: " + Math.Round(100.0 * presenceTime / fight_duration, 1) + "%";
+                                    sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + conditions[boon.getID()].uptime + " </td>");
+                                }
+                                else
+                                {
+                                   sw.Write("<td>" + conditions[boon.getID()].uptime + "</td>");
+                                }
                             }
                         }
                     }
@@ -3404,10 +3425,12 @@ namespace LuckParser.Controllers
                 sw.Write("</tbody>");
             }
             sw.Write("</table>");
+            // Boon table if applicable
             if (hasBoons)
             {
+                sw.Write("<h3 align=\"center\"> Boon Uptime </h3>");
                 sw.Write("<script> $(function () { $('#boss_boon_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
-                sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"boss_boon_table" + phase_index + "\">");
+                sw.Write("<table class=\"display table table-striped table-hover compact mb-3\"  cellspacing=\"0\" width=\"100%\" id=\"boss_boon_table" + phase_index + "\">");
                 {
                     sw.Write("<thead>");
                     {
@@ -3435,7 +3458,15 @@ namespace LuckParser.Controllers
                                 }
                                 else
                                 {
-                                    sw.Write("<td>" + conditions[boon.getID()].uptime + "</td>");
+                                    if (boonPresence.TryGetValue(boon.getID(), out long presenceTime))
+                                    {
+                                        string tooltip = "uptime: " + Math.Round(100.0 * presenceTime / fight_duration, 1) + "%";
+                                        sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + conditions[boon.getID()].uptime + " </td>");
+                                    }
+                                    else
+                                    {
+                                        sw.Write("<td>" + conditions[boon.getID()].uptime + "</td>");
+                                    }
                                 }
                             }
                         }
@@ -3445,6 +3476,63 @@ namespace LuckParser.Controllers
                 }
                 sw.Write("</table>");
             }
+            // Condition generation
+            sw.Write("<h3 align=\"center\"> Condition Generation </h3>");
+            sw.Write("<script> $(function () { $('#condigen_table" + phase_index + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
+            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"condigen_table" + phase_index + "\">");
+            {
+                sw.Write("<thead>");
+                {
+                    sw.Write("<tr>");
+                    {
+                        sw.Write("<th>Sub</th>");
+                        sw.Write("<th></th>");
+                        sw.Write("<th>Name</th>");
+                        foreach (Boon boon in Boon.getCondiBoonList())
+                        {
+                            if (boon.getName() == "Retaliation")
+                            {
+                                continue;
+                            }
+                            sw.Write("<th>" + "<img src=\"" + boon.getLink() + " \" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                        }
+                    }
+                    sw.Write("</tr>");
+                }
+                sw.Write("</thead>");
+                sw.Write("<tbody>");
+                {
+                    foreach (Player player in log.getPlayerList())
+                    {
+                        sw.Write("<tr>");
+                        {
+                            sw.Write("<td>" + player.getGroup().ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.getProf().ToString()) + "\" alt=\"" + player.getProf().ToString() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.getProf() + "</span>" + "</td>");
+                            sw.Write("<td>" + player.getCharacter() + " </td>");
+                            foreach (Boon boon in Boon.getCondiBoonList())
+                            {
+                                if (boon.getName() == "Retaliation")
+                                {
+                                    continue;
+                                }
+                                if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                                {
+                                    sw.Write("<td>" + conditions[boon.getID()].generated[player] + "%</td>");
+                                }
+                                else
+                                {
+                                    sw.Write("<td>" + conditions[boon.getID()].generated[player] + " </td>");
+                                }
+                            }
+                        }
+                        sw.Write("</tr>");
+                    }
+                    
+                }
+                sw.Write("</tbody>");
+            }
+            sw.Write("</table>");
+           
             
         }
         /// <summary>
@@ -3642,7 +3730,7 @@ namespace LuckParser.Controllers
             CombatReplayMap map = log.getBoss().getCombatMap(log);
             Tuple<int, int> canvasSize = map.getPixelMapSize();
             HTMLHelper.writeCombatReplayInterface(sw, canvasSize, log);
-            HTMLHelper.writeCombatReplayScript(sw, log, canvasSize, map);
+            HTMLHelper.writeCombatReplayScript(sw, log, canvasSize, map, settings.PollingRate);
         }
         /// <summary>
         /// Creates custom css'

@@ -456,7 +456,7 @@ namespace LuckParser.Controllers
             {
                 if(agentsLookup.TryGetValue(c.getSrcAgent(), out var a))
                 {
-                    if (a.getInstid() == 0 && (c.isStateChange() == ParseEnum.StateChange.Normal ||(((golem_mode && isGolem(a.getID())) || a.getID() == 0x4BFA) && c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate) ))
+                    if (a.getInstid() == 0 && (c.isStateChange() == ParseEnum.StateChange.Normal || c.isStateChange() == ParseEnum.StateChange.Position || c.isStateChange() == ParseEnum.StateChange.Velocity || c.isStateChange() == ParseEnum.StateChange.Rotation || (((golem_mode && isGolem(a.getID())) || a.getID() == 0x4BFA) && c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate) ))
                     {
                         a.setInstid(c.getSrcInstid());
                     }
@@ -497,7 +497,7 @@ namespace LuckParser.Controllers
             HashSet<ulong> multiple_boss = new HashSet<ulong>();
             foreach (AgentItem NPC in NPC_list)
             {
-                if (NPC.getProf().EndsWith(boss_data.getID().ToString()))
+                if (NPC.getID() == boss_data.getID())
                 {
                     if (boss_data.getAgent() == 0)
                     {
@@ -513,7 +513,6 @@ namespace LuckParser.Controllers
             {
                 agent_data.cleanInstid(boss_data.getInstid());
             }
-
             AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
             boss = new Boss(bossAgent);
             List<Point> bossHealthOverTime = new List<Point>();
@@ -581,7 +580,7 @@ namespace LuckParser.Controllers
                 int xera_2_instid = 0;
                 foreach (AgentItem NPC in NPC_list)
                 {
-                    if (NPC.getProf().Contains("16286"))
+                    if (NPC.getID() == 16286)
                     {
                         bossHealthOverTime = new List<Point>();//reset boss health over time
                         xera_2_instid = NPC.getInstid();
@@ -614,7 +613,7 @@ namespace LuckParser.Controllers
                 int deimos_2_instid = 0;
                 foreach (AgentItem NPC in agent_data.getGadgetAgentList())
                 {
-                    if (NPC.getProf().Contains("08467") || NPC.getProf().Contains("08471"))
+                    if (NPC.getID() == 8467 || NPC.getID() == 8471)
                     {
                         deimos_2_instid = NPC.getInstid();
                         long oldAware = bossAgent.getLastAware();
@@ -772,7 +771,9 @@ namespace LuckParser.Controllers
 
             }
             // Sort
-            p_list = p_list.OrderBy(a => a.getGroup()).ToList();                              
+            p_list = p_list.OrderBy(a => a.getGroup()).ToList();
+            // Check CM
+            boss_data.setCM(combat_list);
         }
     }
 }

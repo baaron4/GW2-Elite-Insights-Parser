@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LuckParser.Models.ParseModels;
-using LuckParser.Models.ParseModels.Players;
 
 namespace LuckParser.Models.DataModels
 {

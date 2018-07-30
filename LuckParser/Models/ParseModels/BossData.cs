@@ -1,6 +1,8 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -121,6 +123,69 @@ namespace LuckParser.Models.ParseModels
         }
         public void setHealthOverTime(List<Point> hot) {
             this.healthOverTime = hot;
+        }
+        public void setCM(List<CombatItem> clist)
+        {
+            bool isCM = false;
+            switch(id)
+            {
+                // Cairn
+                case 17194:
+                    isCM = clist.Exists(x => x.getSkillID() == 38098);
+                    break;
+                // MO
+                case 17172:
+                    isCM = (health > 25e6);
+                    break;
+                // Samarog
+                case 17188:
+                    isCM = (health > 30e6);
+                    break;
+                // Deimos
+                case 17154:
+                    isCM = (health > 40e6);
+                    break;
+                // SH
+                case 0x4D37:
+                    List<CombatItem> necrosis = clist.Where(x => x.getSkillID() == 47414 && x.isBuffremove() == ParseEnum.BuffRemove.None).ToList();
+                    // split necrosis
+                    Dictionary<ushort, List<CombatItem>> splitNecrosis = new Dictionary<ushort, List<CombatItem>>();
+                    foreach (CombatItem c in necrosis)
+                    {
+                        ushort inst = c.getDstInstid();
+                        if (!splitNecrosis.ContainsKey(inst))
+                        {
+                            splitNecrosis.Add(inst, new List<CombatItem>());
+                        }
+                        splitNecrosis[inst].Add(c);
+                    }
+                    List<CombatItem> longestNecrosis = splitNecrosis.Values.First(l => l.Count == splitNecrosis.Values.Max(x => x.Count));
+                    long minDiff = long.MaxValue;
+                    for (int i = 0; i < longestNecrosis.Count - 1; i++)
+                    {
+                        CombatItem cur = longestNecrosis[i];
+                        CombatItem next = longestNecrosis[i + 1];
+                        long timeDiff = next.getTime() - cur.getTime();
+                        if (timeDiff > 1000 && minDiff > timeDiff)
+                        {
+                            minDiff = timeDiff;
+                        }
+                    }
+                    isCM = minDiff < 11000;
+                    break;
+                // Dhuum
+                case 0x4BFA:
+                    isCM = (health > 35e6);
+                    break;
+                // Skorvald
+                case 0x44E0:
+                    isCM = (health == 5551340);
+                    break;
+            }
+            if (isCM)
+            {
+                name += " CM";
+            }
         }
     }
 }
