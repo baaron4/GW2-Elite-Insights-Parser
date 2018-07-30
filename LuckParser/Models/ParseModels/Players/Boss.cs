@@ -85,7 +85,7 @@ namespace LuckParser.Models.ParseModels
                     case 16115:
                         map = new CombatReplayMap("https://i.imgur.com/3X0YveK.png",
                             Tuple.Create(880, 880),
-                            Tuple.Create(-7253, 4575, -4630, 7197),
+                            Tuple.Create(-7248, 4585, -4625, 7207),
                             Tuple.Create(-12288, -27648, 12288, 27648),
                             Tuple.Create(2688, 11906, 3712, 14210));
                         break;
@@ -670,7 +670,7 @@ namespace LuckParser.Models.ParseModels
 
         public enum ThrashIDS : ushort {
             // VG
-            Seekers         = 15246,
+            Seekers         = 15426,
             RedGuardian     = 15433,
             BlueGuardian    = 15431,
             GreenGuardian   = 15420,
@@ -904,7 +904,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 // MO
                 case 17172:
-                    replay.setIcon("https://i.imgur.com/3uMMmTS.png");
+                    replay.setIcon("https://i.imgur.com/5LNiw4Y.png");
                     break;
                 // Samarog
                 case 17188:
