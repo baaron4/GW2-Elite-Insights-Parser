@@ -48,7 +48,7 @@ namespace LuckParser.Models.ParseModels
             return color;
         }
 
-        public abstract string getPosition();
+        public abstract string getPosition(string id, CombatReplayMap map);
 
     }
 }
