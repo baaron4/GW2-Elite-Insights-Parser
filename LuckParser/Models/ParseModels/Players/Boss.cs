@@ -682,7 +682,11 @@ namespace LuckParser.Models.ParseModels
             Karde           = 15430,
             // Matthias
             Spirit          = 16105,
-            BloodStone      = 13864,
+            Spirit2         = 16114,
+            IcePatch        = 16139,
+            Storm           = 16108,
+            Tornado         = 16068,
+            //BloodStone      = 13864,
             // KC
             Olson           = 16244,
             Engul           = 16274,
@@ -703,7 +707,10 @@ namespace LuckParser.Models.ParseModels
             Thief           = 17206,
             Gambler         = 17335,
             GamblerClones   = 17161,
+            GamblerReal     = 17355,
             Drunkard        = 17163,
+            Oil             = 17332,
+            Tear            = 17303,
             // SH
             TormentedDead   = 19422,
             SurgingSoul     = 19474,
@@ -712,6 +719,8 @@ namespace LuckParser.Models.ParseModels
             Messenger       = 19807,
             Echo            = 19628,
             Enforcer        = 19681,
+            // Siax
+            Hallucination   = 17002,
             //
             Unknown
         };
@@ -759,8 +768,11 @@ namespace LuckParser.Models.ParseModels
                 case 16115:
                     ids = new List<ThrashIDS>
                     {
-                        ThrashIDS.BloodStone,
-                        ThrashIDS.Spirit
+                        ThrashIDS.Spirit,
+                        ThrashIDS.Spirit2,
+                        ThrashIDS.IcePatch,
+                        ThrashIDS.Tornado,
+                        ThrashIDS.Storm
                     };
                     break;
                 // KC

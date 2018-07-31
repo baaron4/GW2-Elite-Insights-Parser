@@ -39,7 +39,6 @@ namespace LuckParser.Models.ParseModels
             // TODO
             switch (Boss.getThrashIDS(agent.getID()))
             {
-                case Boss.ThrashIDS.BloodStone:
                 case Boss.ThrashIDS.Seekers:
                     replay.setIcon("https://i.imgur.com/FrPoluz.png");
                     break;
@@ -53,6 +52,7 @@ namespace LuckParser.Models.ParseModels
                     replay.setIcon("https://i.imgur.com/nauDVYP.png");
                     break;
                 case Boss.ThrashIDS.Spirit:
+                case Boss.ThrashIDS.Spirit2:
                 case Boss.ThrashIDS.ChargedSoul:
                     replay.setIcon("https://i.imgur.com/sHmksvO.png");
                     break;
@@ -90,20 +90,11 @@ namespace LuckParser.Models.ParseModels
                 case Boss.ThrashIDS.Saul:
                     replay.setIcon("https://i.imgur.com/ck2IsoS.png");
                     break;
-                case Boss.ThrashIDS.Thief:
-                case Boss.ThrashIDS.Gambler:
-                case Boss.ThrashIDS.GamblerClones:
-                case Boss.ThrashIDS.Drunkard:
-                    replay.setIcon("https://i.imgur.com/xCoypjS.png");
-                    break;
                 case Boss.ThrashIDS.Messenger:
                 case Boss.ThrashIDS.TormentedDead:
                     replay.setIcon("https://i.imgur.com/1J2BTFg.png");
                     break;
                 case Boss.ThrashIDS.SurgingSoul:
-                    replay.setIcon("https://i.imgur.com/xCoypjS.png");
-                    break;
-                case Boss.ThrashIDS.Echo:
                     replay.setIcon("https://i.imgur.com/lJHVzt9.png");
                     break;
                 case Boss.ThrashIDS.Scythe:
@@ -111,6 +102,15 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case Boss.ThrashIDS.Enforcer:
                     replay.setIcon("https://i.imgur.com/elHjamF.png");
+                    break;
+                case Boss.ThrashIDS.Tornado:
+                    break;
+                case Boss.ThrashIDS.Storm:
+                    break;
+                case Boss.ThrashIDS.Tear:
+                    break;
+                default:
+                    replay.setIcon("https://i.imgur.com/xCoypjS.png");
                     break;
             }
         }
