@@ -348,7 +348,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         phases.Add(new PhaseData(start, fight_dur));
                     }
-                    string[] namesMat = new string[] { "Fire Phase", "Ice Phase", "Storm Phase", "Abomination Phase" };
+                    string[] namesMat = new string[] { "Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase" };
                     for (int i = 1; i < phases.Count; i++)
                     {
                         phases[i].setName(namesMat[i - 1]);
