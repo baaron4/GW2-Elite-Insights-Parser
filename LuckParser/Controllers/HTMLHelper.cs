@@ -917,19 +917,21 @@ namespace LuckParser.Controllers
                     "   return;" +
                     "}" +
                     "var halfSize = pixelSize / 2;" +
+                    "var x = this.pos.length > 2 ? this.pos[2*timeToUse] : this.pos[0];" +
+                    "var y = this.pos.length > 2 ? this.pos[2*timeToUse + 1] : this.pos[1];" +
                     // the player is in the selected's player group
                     "if (!this.selected && this.group === selectedGroup) {" +
                         "ctx.beginPath();" +
                         "ctx.lineWidth='2';" +
                         "ctx.strokeStyle='blue';" +
-                        "ctx.rect(this.pos[2*timeToUse]-halfSize,this.pos[2*timeToUse+1]-halfSize,pixelSize,pixelSize);" +
+                        "ctx.rect(x-halfSize,y-halfSize,pixelSize,pixelSize);" +
                         "ctx.stroke();" +
                     "} else if (this.selected){" +
                         // this player is selected
                         "ctx.beginPath();" +
                         "ctx.lineWidth='4';" +
                         "ctx.strokeStyle='green';" +
-                        "ctx.rect(this.pos[2*timeToUse]-halfSize,this.pos[2*timeToUse+1]-halfSize,pixelSize,pixelSize);" +
+                        "ctx.rect(x-halfSize,y-halfSize,pixelSize,pixelSize);" +
                         "ctx.stroke();" +
                         "var _this = this;" +
                         // draw range markers
@@ -938,22 +940,22 @@ namespace LuckParser.Controllers
                             "ctx.beginPath();" +
                             "ctx.lineWidth='2';" +
                             "ctx.strokeStyle='green';" +
-                            "ctx.arc(_this.pos[2*timeToUse],_this.pos[2*timeToUse+1],inch * radius,0,2*Math.PI);" +
+                            "ctx.arc(x,y,inch * radius,0,2*Math.PI);" +
                             "ctx.stroke();" +
                         "});" +
                     "}" +
                     "if (this.died(timeToUse)) {" +
                         "ctx.drawImage(deadIcon," +
-                        "this.pos[2*timeToUse]-1.5*halfSize," +
-                        "this.pos[2*timeToUse+1]-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
+                        "x-1.5*halfSize," +
+                        "y-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
                     "} else if (this.downed(timeToUse)) {" +
                         "ctx.drawImage(downIcon," +
-                        "this.pos[2*timeToUse]-1.5*halfSize," +
-                        "this.pos[2*timeToUse+1]-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
+                        "x-1.5*halfSize," +
+                        "y-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
                     "} else {" +
                         "ctx.drawImage(this.img," +
-                        "this.pos[2*timeToUse]-halfSize," +
-                        "this.pos[2*timeToUse+1]-halfSize,pixelSize,pixelSize);" +
+                        "x-halfSize," +
+                        "y-halfSize,pixelSize,pixelSize);" +
                     "}" +
                 "};");
             // create players
@@ -1010,9 +1012,11 @@ namespace LuckParser.Controllers
                 "};");
             sw.Write("secondaryActor.prototype.draw = function(ctx,timeToUse,pixelSize){" +
                     "if (!(this.start > timeToUse || this.end < timeToUse) && this.pos.length) {" +
+                        "var x = this.pos.length > 2 ? this.pos[2*(timeToUse - this.start)] : this.pos[0];" +
+                        "var y = this.pos.length > 2 ? this.pos[2*(timeToUse - this.start) + 1] : this.pos[1];" +
                         "ctx.drawImage(this.img," +
-                        "this.pos[2*(timeToUse - this.start)]-pixelSize/2," +
-                        "this.pos[2*(timeToUse - this.start)+1]-pixelSize/2,pixelSize,pixelSize);" +
+                        "x-pixelSize/2,y-pixelSize/2," +
+                        "pixelSize,pixelSize);" +
                     "}" +
                 "};");
             // create thrash mobs
@@ -1033,6 +1037,58 @@ namespace LuckParser.Controllers
             }
         }
 
+        public static void writeCombatReplayCircleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
+        {
+            // Circle actors
+            sw.Write("var circleActor = function(radius,fill,growing, color, start, end) {" +
+                    "this.pos = null;" +
+                    "this.start = start;" +
+                    "this.radius = radius;" +
+                    "this.end = end;" +
+                    "this.growing = growing;" +
+                    "this.fill = fill;" +
+                    "this.color = color;" +
+                "};");
+            sw.Write("circleActor.prototype.draw = function(ctx,timeToUse){" +
+                    "if (!(this.start > timeToUse || this.end < timeToUse)) {" +
+                        "var x,y;" +
+                        "if (this.pos.length instanceof Array) {" +
+                            "x = this.pos[0];" +
+                            "y = this.pos[1];" +
+                        "} else {" +
+                            "var master = data.has(this.pos) ? data.get(this.pos) : secondaryData.get(this.pos);" +
+                            "x = master.pos.length > 2 ? master.pos[2*(timeToUse - master.start)] : master.pos[0];" +
+                            "y = master.pos.length > 2 ? master.pos[2*(timeToUse - master.start) + 1] : master.pos[1];" +
+                        "}" +                     
+                        "ctx.beginPath();" +
+                        "ctx.arc(x,y,inch * this.radius,0,2*Math.PI);" +
+                        "if (this.growing) {" +
+                            "var percent = (timeToUse - this.start)/(this.end - this.start);" +
+                            "ctx.arc(x,y,percent*inch * this.radius,0,2*Math.PI);" +
+                        "}" +
+                        "if (this.fill) {" +
+                            "ctx.fillStyle=this.color;" +
+                            "ctx.fill();" +
+                        "} else {" +
+                            "ctx.strokeStyle=this.color;" +
+                            "ctx.stroke();" +
+                        "}" +                      
+                    "}" +
+                "};");
+            foreach (Mob mob in log.getBoss().getThrashMobs())
+            {
+                CombatReplay replay = mob.getCombatReplay();
+                foreach(CircleActor a in replay.getCircleActors())
+                {
+                    sw.Write("{");
+                    sw.Write("var a = new circleActor("+a.getRadius()+","+(a.isFilled() ? "true" : "false") + ","+(a.isGrowing() ? "true": "false")+","+a.getColor()+","+a.getLifespan().Item1/pollingRate+","+ a.getLifespan().Item2 / pollingRate + ");");
+                    sw.Write("circleData.add(a);");
+                    sw.Write("a.pos ="+a.getPosition(mob.getInstid() + "_" + mob.getCombatReplay().getTimeOffsets().Item1 / pollingRate + "_" + mob.getCombatReplay().getTimeOffsets().Item2 / pollingRate, map)+";");
+                    sw.Write("}");
+                }
+            }
+        }
+
         public static void writeCombatReplayScript(StreamWriter sw, ParsedLog log, Tuple<int,int> canvasSize, CombatReplayMap map, int pollingRate)
         {
             sw.Write("<script>");
@@ -1046,6 +1102,7 @@ namespace LuckParser.Controllers
                 sw.Write("var selectedPlayer = null;");
                 sw.Write("var data = new Map();");
                 sw.Write("var secondaryData = new Map();");
+                sw.Write("var circleData = new Set();");
                 sw.Write("var deadIcon = new Image();" +
                             "deadIcon.src = '"+GetLink("Dead")+"';");
                 sw.Write("var downIcon = new Image();" +
@@ -1053,7 +1110,8 @@ namespace LuckParser.Controllers
                 sw.Write("var boss = null;");
                 writeCombatReplayControls(sw, log, pollingRate);
                 writeCombatReplayMainClass(sw, log, map, pollingRate);
-                writeCompatReplaySecondaryClass(sw, log, map, pollingRate);           
+                writeCompatReplaySecondaryClass(sw, log, map, pollingRate);
+                writeCombatReplayCircleActors(sw, log, map, pollingRate);
                 // Main loop
                 sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
                 sw.Write("ctx.imageSmoothingEnabled = true;");
@@ -1063,6 +1121,12 @@ namespace LuckParser.Controllers
                     sw.Write("ctx.clearRect(0,0," + canvasSize.Item1 + "," + canvasSize.Item2 + ");");
                     // draw arena
                     sw.Write("ctx.drawImage(bgImage,0,0," + canvasSize.Item1 + "," + canvasSize.Item2 + ");");
+                    // draw circles
+                    sw.Write("circleData.forEach(function(value,key,map) {" +
+                            "if (!value.selected) {" +
+                                "value.draw(ctx,timeToUse);" +
+                            "}" +
+                        "});");
                     // draw unselected players
                     sw.Write("data.forEach(function(value,key,map) {" +
                             "if (!value.selected) {" +
