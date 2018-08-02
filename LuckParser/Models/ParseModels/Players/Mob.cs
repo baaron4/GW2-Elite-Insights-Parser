@@ -32,11 +32,53 @@ namespace LuckParser.Models.ParseModels
         protected override void setAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
             // todo
+            int start = (int)replay.getTimeOffsets().Item1;
+            int end = (int)replay.getTimeOffsets().Item2;
+            Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
+            switch (Boss.getThrashIDS(agent.getID()))
+            {
+                case Boss.ThrashIDS.Seekers:
+                    replay.addCircleActor(new FollowingCircle(false, false, 180, lifespan, "rgba(255, 0, 0, 0.3)"));
+                    break;
+                case Boss.ThrashIDS.Spirit:
+                case Boss.ThrashIDS.Spirit2:
+                    replay.addCircleActor(new FollowingCircle(true, false, 120, lifespan, "rgba(255, 0, 0, 0.3)"));
+                    break;
+                case Boss.ThrashIDS.Olson:
+                case Boss.ThrashIDS.Engul:
+                case Boss.ThrashIDS.Faerla:
+                case Boss.ThrashIDS.Caulle:
+                case Boss.ThrashIDS.Henley:
+                case Boss.ThrashIDS.Jessica:
+                case Boss.ThrashIDS.Galletta:
+                case Boss.ThrashIDS.Ianim:
+                    replay.addCircleActor(new FollowingCircle(false, false, 450, lifespan, "rgba(255, 0, 0, 0.3)"));
+                    replay.addCircleActor(new FollowingCircle(true, false, 240, lifespan, "rgba(0, 125, 255, 0.3)"));
+                    break;
+                case Boss.ThrashIDS.Messenger:
+                    replay.addCircleActor(new FollowingCircle(true, false, 180, lifespan, "rgba(255, 125, 0, 0.3)"));
+                    break;
+                case Boss.ThrashIDS.Scythe:
+                    replay.addCircleActor(new FollowingCircle(true, false, 80, lifespan, "rgba(255, 0, 0, 0.3)"));
+                    break;
+                case Boss.ThrashIDS.Tornado:
+                    replay.addCircleActor(new FollowingCircle(true, false, 80, lifespan, "rgba(255, 0, 0, 0.3)"));
+                    break;
+                case Boss.ThrashIDS.IcePatch:
+                    replay.addCircleActor(new FollowingCircle(true, false, 180, lifespan, "rgba(0, 0, 255, 0.3)"));
+                    break;
+                case Boss.ThrashIDS.Storm:
+                    replay.addCircleActor(new FollowingCircle(false, false, 240, lifespan, "rgba(0, 80, 255, 0.3)"));
+                    break;
+                case Boss.ThrashIDS.Oil:
+                    replay.addCircleActor(new FollowingCircle(true, false, 240, lifespan, "rgba(0, 0, 0, 0.3)"));
+                    break;
+            }
         }
 
         protected override void setCombatReplayIcon(ParsedLog log)
         {
-            // TODO
+
             switch (Boss.getThrashIDS(agent.getID()))
             {
                 case Boss.ThrashIDS.Seekers:
@@ -94,9 +136,6 @@ namespace LuckParser.Models.ParseModels
                 case Boss.ThrashIDS.TormentedDead:
                     replay.setIcon("https://i.imgur.com/1J2BTFg.png");
                     break;
-                case Boss.ThrashIDS.SurgingSoul:
-                    replay.setIcon("https://i.imgur.com/lJHVzt9.png");
-                    break;
                 case Boss.ThrashIDS.Scythe:
                     replay.setIcon("https://i.imgur.com/INCGLIK.png");
                     break;
@@ -104,10 +143,19 @@ namespace LuckParser.Models.ParseModels
                     replay.setIcon("https://i.imgur.com/elHjamF.png");
                     break;
                 case Boss.ThrashIDS.Tornado:
+                    replay.setIcon("https://i.imgur.com/e10lZMa.png");
+                    break;
+                case Boss.ThrashIDS.IcePatch:
+                    replay.setIcon("https://i.imgur.com/yxKJ5Yc.png");
                     break;
                 case Boss.ThrashIDS.Storm:
+                    replay.setIcon("https://i.imgur.com/9XtNPdw.png");
                     break;
                 case Boss.ThrashIDS.Tear:
+                    replay.setIcon("https://i.imgur.com/N9seps0.png");
+                    break;
+                case Boss.ThrashIDS.Oil:
+                    replay.setIcon("https://i.imgur.com/DZIl49i.png");
                     break;
                 default:
                     replay.setIcon("https://i.imgur.com/xCoypjS.png");
