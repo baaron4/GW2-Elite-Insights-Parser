@@ -90,7 +90,7 @@ namespace LuckParser.Models.ParseModels
             }
             return condi_presence[phase_index];
         }
-        public void initCombatReplay(ParsedLog log, int pollingRate)
+        public void initCombatReplay(ParsedLog log, int pollingRate, bool trim = false)
         {
             if (log.getMovementData().Count == 0)
             {
@@ -103,6 +103,18 @@ namespace LuckParser.Models.ParseModels
                 setMovements(log);
                 replay.pollingRate(pollingRate, log.getBossData().getAwareDuration());
                 setCombatReplayIcon(log);
+                if (trim)
+                {
+                    CombatItem test = log.getCombatList().FirstOrDefault(x => x.getSrcAgent() == agent.getAgent() && (x.isStateChange() == ParseEnum.StateChange.ChangeDead || x.isStateChange() == ParseEnum.StateChange.Despawn));
+                    if (test != null)
+                    {
+                        replay.trim(agent.getFirstAware() - log.getBossData().getFirstAware(), test.getTime() - log.getBossData().getFirstAware());
+                    }
+                    else
+                    {
+                        replay.trim(agent.getFirstAware() - log.getBossData().getFirstAware(), agent.getLastAware() - log.getBossData().getFirstAware());
+                    }
+                }
                 setAdditionalCombatReplayData(log, pollingRate);
             }
         }

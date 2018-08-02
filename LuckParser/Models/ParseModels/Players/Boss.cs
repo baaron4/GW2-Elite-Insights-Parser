@@ -845,6 +845,10 @@ namespace LuckParser.Models.ParseModels
                     break;
                 // Siax
                 case 0x4284:
+                    ids = new List<ThrashIDS>
+                    {
+                        ThrashIDS.Hallucination
+                    };
                     break;
                 // Ensolyss
                 case 0x4234:
@@ -864,16 +868,7 @@ namespace LuckParser.Models.ParseModels
             foreach (AgentItem a in aList)
             {
                 Mob mob = new Mob(a);
-                mob.initCombatReplay(log, pollingRate);
-                CombatItem test = log.getCombatList().FirstOrDefault(x => x.getSrcAgent() == a.getAgent() && (x.isStateChange() == ParseEnum.StateChange.ChangeDead || x.isStateChange() == ParseEnum.StateChange.Despawn));
-                if (test != null)
-                {
-                    mob.getCombatReplay().trim(a.getFirstAware() - start, test.getTime() - start);
-                }
-                else
-                {
-                    mob.getCombatReplay().trim(a.getFirstAware() - start, a.getLastAware() - start);
-                }
+                mob.initCombatReplay(log, pollingRate, true);
                 thrashMobs.Add(mob);
             }
         }
