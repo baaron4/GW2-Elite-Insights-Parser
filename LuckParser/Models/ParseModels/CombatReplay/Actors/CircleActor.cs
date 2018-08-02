@@ -12,9 +12,9 @@ namespace LuckParser.Models.ParseModels
         private bool growing;
         private int radius;
         private Tuple<int, int> lifespan;
-        private int color;
+        private string color;
 
-        public CircleActor(bool fill, bool growing, int radius, Tuple<int,int> lifespan, int color)
+        public CircleActor(bool fill, bool growing, int radius, Tuple<int,int> lifespan, string color)
         {
             this.fill = fill;
             this.growing = growing;
@@ -43,9 +43,9 @@ namespace LuckParser.Models.ParseModels
             return lifespan;
         }
 
-        public int getColor()
+        public string getColor()
         {
-            return color;
+            return "'" + color + "'";
         }
 
         public abstract string getPosition(string id, CombatReplayMap map);
