@@ -257,7 +257,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case 0x3C45:
                     // Ghostly protection check
-                    List<CombatItem> invulsGorse = log.getCombatList().Where(x => x.getIFF() != ParseEnum.IFF.Foe && x.getSkillID() == 31790).ToList();
+                    List<CombatItem> invulsGorse = log.getCombatList().Where(x => x.getIFF() != ParseEnum.IFF.Foe && x.getSkillID() == 31790 && x.isBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
                     for (int i = 0; i < invulsGorse.Count; i++)
                     {
                         CombatItem c = invulsGorse[i];
