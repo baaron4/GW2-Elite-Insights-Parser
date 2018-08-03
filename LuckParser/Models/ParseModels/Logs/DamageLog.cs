@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
             this.result = c.getResult();
             this.is_ninety = c.isNinety();
             this.is_moving = c.isMoving();
-            this.is_flanking = c.isMoving();
+            this.is_flanking = c.isFlanking();
             this.is_activation = c.isActivation();
             this.src_agent = c.getSrcAgent();
             this.src_instid = c.getSrcInstid();
