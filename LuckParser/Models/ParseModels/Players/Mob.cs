@@ -73,6 +73,9 @@ namespace LuckParser.Models.ParseModels
                 case Boss.ThrashIDS.Oil:
                     replay.addCircleActor(new FollowingCircle(true, false, 240, lifespan, "rgba(0, 0, 0, 0.3)"));
                     break;
+                case Boss.ThrashIDS.TormentedDead:
+                    replay.addCircleActor(new ImmobileCircle(true,false,300,new Tuple<int, int>(end,end+60000), "rgba(255, 0, 0, 0.3)",replay.getPositions().Last()));
+                    break;
             }
         }
 
