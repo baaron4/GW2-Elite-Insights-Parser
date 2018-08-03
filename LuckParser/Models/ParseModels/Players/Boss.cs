@@ -748,7 +748,7 @@ namespace LuckParser.Models.ParseModels
                     List<CastLog> magicStorms = cls.Where(x => x.getID() == 31419).ToList();
                     foreach (CastLog c in magicStorms)
                     {
-                        replay.addCircleActor(new FollowingCircle(true, 0, 100, new Tuple<int, int>((int)c.getTime(), (int)c.getTime()+c.getActDur()), "rgba(255, 255, 0, 0.15)"));
+                        replay.addCircleActor(new FollowingCircle(true, 0, 100, new Tuple<int, int>((int)c.getTime(), (int)c.getTime()+c.getActDur()), "rgba(255, 255, 0, 0.5)"));
                     }
                     break;
                 // Gorse
@@ -761,7 +761,10 @@ namespace LuckParser.Models.ParseModels
                     List<CastLog> blooms = cls.Where(x => x.getID() == 31616).ToList();
                     foreach (CastLog c in blooms)
                     {
-                        replay.addCircleActor(new FollowingCircle(true, c.getExpDur()+(int)c.getTime(), 1500, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 125, 0, 0.15)"));
+                        int start = (int)c.getTime();
+                        int end = start + c.getActDur();
+                        replay.addCircleActor(new FollowingCircle(true, c.getExpDur()+(int)c.getTime(), 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
+                        replay.addCircleActor(new FollowingCircle(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
                     }
                     break;
                 // Sab
@@ -780,12 +783,15 @@ namespace LuckParser.Models.ParseModels
                     List<CastLog> sleepy = cls.Where(x => x.getID() == 34515).ToList();
                     foreach (CastLog c in sleepy)
                     {
-                        replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 255, 0, 0.15)"));
+                        replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 255, 0, 0.5)"));
                     }
                     List<CastLog> shakes = cls.Where(x => x.getID() == 34482).ToList();
                     foreach (CastLog c in shakes)
                     {
-                        replay.addCircleActor(new FollowingCircle(true, (int)c.getTime() + c.getActDur() + 64, 600, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 0, 0, 0.3)"));
+                        int start = (int)c.getTime();
+                        int end = start + c.getActDur();
+                        replay.addCircleActor(new FollowingCircle(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                        replay.addCircleActor(new FollowingCircle(true, end, 600, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                     }
                     break;
                 // Matthias
@@ -807,7 +813,7 @@ namespace LuckParser.Models.ParseModels
                         if (i < humanShards.Count)
                         {
                             var shard = humanShards[i];
-                            replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>((int)shield.getTime(), (int)shard.getTime() + shard.getActDur()), "rgba(255, 0, 255, 0.3)"));
+                            replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>((int)shield.getTime(), (int)shard.getTime() + shard.getActDur()), "rgba(255, 0, 255, 0.5)"));
                         }
                     }
                     List<CastLog> aboShield = cls.Where(x => x.getID() == 34510).ToList();
@@ -818,13 +824,16 @@ namespace LuckParser.Models.ParseModels
                         if (i < aboShards.Count)
                         {
                             var shard = aboShards[i];
-                            replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>((int)shield.getTime(), (int)shard.getTime() + shard.getActDur()), "rgba(255, 0, 255, 0.3)"));
+                            replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>((int)shield.getTime(), (int)shard.getTime() + shard.getActDur()), "rgba(255, 0, 255, 0.5)"));
                         }
                     }
                     List<CastLog> rageShards = cls.Where(x => x.getID() == 34404 || x.getID() == 34411).ToList();
                     foreach (CastLog c in rageShards)
                     {
-                        replay.addCircleActor(new FollowingCircle(true, (int)c.getTime() + c.getActDur() + 64, 1200, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 0, 0, 0.15)"));
+                        int start = (int)c.getTime();
+                        int end = start + c.getActDur();
+                        replay.addCircleActor(new FollowingCircle(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                        replay.addCircleActor(new FollowingCircle(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                     }
                     break;
                 // KC
@@ -846,17 +855,24 @@ namespace LuckParser.Models.ParseModels
                     List<CastLog> magicExplose = cls.Where(x => x.getID() == 34894).ToList();
                     for (var i = 0; i < magicCharge.Count; i++)
                     {
-                        var charge = magicCharge[i];
+                        CastLog charge = magicCharge[i];
                         if (i < magicExplose.Count)
                         {
-                            var fire = magicExplose[i];
-                            replay.addCircleActor(new FollowingCircle(true, (int)fire.getTime() + fire.getActDur(), 300, new Tuple<int, int>((int)charge.getTime(), (int)fire.getTime() + fire.getActDur()), "rgba(255, 0, 0, 0.15)"));
+                            CastLog fire = magicExplose[i];
+                            int start = (int)charge.getTime();
+                            int end = (int)fire.getTime() + fire.getActDur();
+                            replay.addCircleActor(new FollowingCircle(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                            replay.addCircleActor(new FollowingCircle(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                         }
                     }
                     List<CastLog> towerDrop = cls.Where(x => x.getID() == 35086).ToList();
                     foreach (CastLog c in towerDrop)
                     {
-                        replay.addCircleActor(new ImmobileCircle(true, 0, 240, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 150, 0, 0.3)",replay.getPositions().FirstOrDefault(x => x.time > (int)c.getTime() + c.getActDur())));
+                        int start = (int)c.getTime();
+                        int end = start + c.getActDur();
+                        Point3D pos = replay.getPositions().FirstOrDefault(x => x.time > end);
+                        replay.addCircleActor(new ImmobileCircle(false, 0, 240, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)",pos));
+                        replay.addCircleActor(new ImmobileCircle(true, end, 240, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)",pos));
                     }
                     break;
                 // Xera
@@ -864,7 +880,7 @@ namespace LuckParser.Models.ParseModels
                     List<CastLog> summon = cls.Where(x => x.getID() == 34887).ToList();
                     foreach (CastLog c in summon)
                     {
-                        replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 255, 0, 0.15)"));
+                        replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 255, 0, 0.5)"));
                     }
                     break;
                 // Cairn
@@ -897,7 +913,7 @@ namespace LuckParser.Models.ParseModels
                         } else
                         {
                             brutEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                            replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>(brutStart, brutEnd), "rgba(255, 255, 0, 0.15)"));
+                            replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>(brutStart, brutEnd), "rgba(255, 255, 0, 0.5)"));
                         }
                     }
                     break;
@@ -917,10 +933,11 @@ namespace LuckParser.Models.ParseModels
                     {
                         int start = (int)c.getTime();
                         int end = start + 5000;
-                        replay.addCircleActor(new FollowingCircle(true, end, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.15)"));
+                        replay.addCircleActor(new FollowingCircle(true, end, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                        replay.addCircleActor(new FollowingCircle(false, 0, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                         if (!log.getBossData().getCM())
                         {
-                            replay.addCircleActor(new ImmobileCircle(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 0, 255, 0.15)", new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216)));
+                            replay.addCircleActor(new ImmobileCircle(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 0, 255, 0.3)", new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216)));
                         }
                     }
                     break;
@@ -936,12 +953,19 @@ namespace LuckParser.Models.ParseModels
                     List<CastLog> howling = cls.Where(x => x.getID() == 48662).ToList();
                     foreach (CastLog c in howling)
                     {
-                        replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 255, 0, 0.15)"));
+                        int start = (int)c.getTime();
+                        int end = start + c.getActDur();
+                        replay.addCircleActor(new FollowingCircle(true, (int)c.getTime() + c.getExpDur(), 180, new Tuple<int, int>(start, end), "rgba(255, 255, 0, 0.5)"));
+                        replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>(start, end), "rgba(255, 255, 0, 0.5)"));
                     }
                     List<CastLog> vortex = cls.Where(x => x.getID() == 47327).ToList();
                     foreach (CastLog c in vortex)
                     {
-                        replay.addCircleActor(new ImmobileCircle(true, (int)c.getTime() + 4000, 300, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + 4000), "rgba(255, 150, 0, 0.3)", replay.getPositions().FirstOrDefault(x => x.time > c.getTime())));
+                        int start = (int)c.getTime();
+                        int end = start + 4000;
+                        Point3D pos = replay.getPositions().FirstOrDefault(x => x.time > start);
+                        replay.addCircleActor(new ImmobileCircle(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                        replay.addCircleActor(new ImmobileCircle(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
                     }
                     break;
                 // Dhuum
@@ -954,14 +978,35 @@ namespace LuckParser.Models.ParseModels
                         ThrashIDS.Messenger
                     };                   
                     List<CastLog> deathmark = cls.Where(x => x.getID() == 48176).ToList();
+                    CastLog majorSplit = cls.Find(x => x.getID() == 47396);
                     foreach (CastLog c in deathmark)
                     {
-                        replay.addCircleActor(new ImmobileCircle(true, 0, 300, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()+120000), "rgba(150, 255, 100, 0.3)", replay.getPositions().FirstOrDefault(x=> x.time > c.getTime() + c.getActDur())));
+                        int start = (int)c.getTime();
+                        int cast_end = start + c.getActDur();
+                        int zone_end = cast_end + 120000;
+                        if (majorSplit != null)
+                        {
+                            cast_end = Math.Min(cast_end, (int)majorSplit.getTime());
+                            zone_end = Math.Min(zone_end, (int)majorSplit.getTime());
+                        }
+                        Point3D pos = replay.getPositions().FirstOrDefault(x => x.time > cast_end);
+                        replay.addCircleActor(new ImmobileCircle(true, cast_end, 300, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
+                        replay.addCircleActor(new ImmobileCircle(false, 0, 300, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
+                        replay.addCircleActor(new ImmobileCircle(true, 0, 300, new Tuple<int, int>(cast_end, zone_end), "rgba(200, 255, 100, 0.5)", pos));
                     }
                     List<CastLog> cataCycle = cls.Where(x => x.getID() == 48398).ToList();
                     foreach (CastLog c in cataCycle)
                     {
-                        replay.addCircleActor(new FollowingCircle(true, (int)c.getTime() + c.getActDur(), 180, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 150, 0, 0.3)"));
+                        int start = (int)c.getTime();
+                        int end = start + c.getActDur();
+                        replay.addCircleActor(new FollowingCircle(true, end , 180, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
+                        replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                    }
+                    if (majorSplit != null)
+                    {
+                        int start = (int)majorSplit.getTime();
+                        int end = (int)log.getBossData().getAwareDuration();
+                        replay.addCircleActor(new FollowingCircle(true, 0, 300, new Tuple<int, int>(start, end), "rgba(0, 0, 255, 0.3)"));
                     }
                     break;
                 // MAMA
