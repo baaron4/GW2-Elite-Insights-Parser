@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
     {
         private Point3D position;
 
-        public ImmobileCircle(bool fill, bool growing, int radius, Tuple<int, int> lifespan, string color, Point3D position) : base(fill, growing, radius,lifespan,color)
+        public ImmobileCircle(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color, Point3D position) : base(fill, growing, radius,lifespan,color)
         {
             this.position = position;
         }

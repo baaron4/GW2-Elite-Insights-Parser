@@ -38,11 +38,11 @@ namespace LuckParser.Models.ParseModels
             switch (Boss.getThrashIDS(agent.getID()))
             {
                 case Boss.ThrashIDS.Seekers:
-                    replay.addCircleActor(new FollowingCircle(false, false, 180, lifespan, "rgba(255, 0, 0, 0.3)"));
+                    replay.addCircleActor(new FollowingCircle(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.3)"));
                     break;
                 case Boss.ThrashIDS.Spirit:
                 case Boss.ThrashIDS.Spirit2:
-                    replay.addCircleActor(new FollowingCircle(true, false, 120, lifespan, "rgba(255, 0, 0, 0.3)"));
+                    replay.addCircleActor(new FollowingCircle(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.3)"));
                     break;
                 case Boss.ThrashIDS.Olson:
                 case Boss.ThrashIDS.Engul:
@@ -52,29 +52,29 @@ namespace LuckParser.Models.ParseModels
                 case Boss.ThrashIDS.Jessica:
                 case Boss.ThrashIDS.Galletta:
                 case Boss.ThrashIDS.Ianim:
-                    replay.addCircleActor(new FollowingCircle(false, false, 450, lifespan, "rgba(255, 0, 0, 0.3)"));
-                    replay.addCircleActor(new FollowingCircle(true, false, 240, lifespan, "rgba(0, 125, 255, 0.3)"));
+                    replay.addCircleActor(new FollowingCircle(false, 0, 450, lifespan, "rgba(255, 0, 0, 0.3)"));
+                    replay.addCircleActor(new FollowingCircle(true, 0, 240, lifespan, "rgba(0, 125, 255, 0.3)"));
                     break;
                 case Boss.ThrashIDS.Messenger:
-                    replay.addCircleActor(new FollowingCircle(true, false, 180, lifespan, "rgba(255, 125, 0, 0.3)"));
+                    replay.addCircleActor(new FollowingCircle(true, 0, 180, lifespan, "rgba(255, 125, 0, 0.3)"));
                     break;
                 case Boss.ThrashIDS.Scythe:
-                    replay.addCircleActor(new FollowingCircle(true, false, 80, lifespan, "rgba(255, 0, 0, 0.3)"));
+                    replay.addCircleActor(new FollowingCircle(true, 0, 80, lifespan, "rgba(255, 0, 0, 0.3)"));
                     break;
                 case Boss.ThrashIDS.Tornado:
-                    replay.addCircleActor(new FollowingCircle(true, false, 80, lifespan, "rgba(255, 0, 0, 0.3)"));
+                    replay.addCircleActor(new FollowingCircle(true, 0, 80, lifespan, "rgba(255, 0, 0, 0.3)"));
                     break;
                 case Boss.ThrashIDS.IcePatch:
-                    replay.addCircleActor(new FollowingCircle(true, false, 180, lifespan, "rgba(0, 0, 255, 0.3)"));
+                    replay.addCircleActor(new FollowingCircle(true, 0, 120, lifespan, "rgba(0, 0, 255, 0.3)"));
                     break;
                 case Boss.ThrashIDS.Storm:
-                    replay.addCircleActor(new FollowingCircle(false, false, 240, lifespan, "rgba(0, 80, 255, 0.3)"));
+                    replay.addCircleActor(new FollowingCircle(false, 0, 180, lifespan, "rgba(0, 80, 255, 0.3)"));
                     break;
                 case Boss.ThrashIDS.Oil:
-                    replay.addCircleActor(new FollowingCircle(true, false, 240, lifespan, "rgba(0, 0, 0, 0.3)"));
+                    replay.addCircleActor(new FollowingCircle(true, 0, 240, lifespan, "rgba(0, 0, 0, 0.3)"));
                     break;
                 case Boss.ThrashIDS.TormentedDead:
-                    replay.addCircleActor(new ImmobileCircle(true,false,300,new Tuple<int, int>(end,end+60000), "rgba(255, 0, 0, 0.3)",replay.getPositions().Last()));
+                    replay.addCircleActor(new ImmobileCircle(true,0,300,new Tuple<int, int>(end,end+60000), "rgba(255, 0, 0, 0.3)",replay.getPositions().Last()));
                     break;
             }
         }

@@ -9,12 +9,12 @@ namespace LuckParser.Models.ParseModels
     public abstract class CircleActor
     {
         private bool fill;
-        private bool growing;
+        private int growing;
         private int radius;
         private Tuple<int, int> lifespan;
         private string color;
 
-        public CircleActor(bool fill, bool growing, int radius, Tuple<int,int> lifespan, string color)
+        public CircleActor(bool fill, int growing, int radius, Tuple<int,int> lifespan, string color)
         {
             this.fill = fill;
             this.growing = growing;
@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
             this.color = color;
         }
 
-        public bool isGrowing()
+        public int getGrowing()
         {
             return growing;
         }

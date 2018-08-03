@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
     public class FollowingCircle : CircleActor
     {
 
-        public FollowingCircle(bool fill, bool growing, int radius, Tuple<int, int> lifespan, string color) : base(fill, growing, radius, lifespan, color)
+        public FollowingCircle(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color) : base(fill, growing, radius, lifespan, color)
         {
 
         }
