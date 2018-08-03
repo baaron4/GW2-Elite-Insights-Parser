@@ -733,6 +733,7 @@ namespace LuckParser.Models.ParseModels
         protected override void setAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
             List<ThrashIDS> ids = new List<ThrashIDS>();
+            List<CastLog> cls = getCastLogs(log, 0, log.getBossData().getAwareDuration());
             switch (log.getBossData().getID())
             {
                 // VG
@@ -743,17 +744,29 @@ namespace LuckParser.Models.ParseModels
                         ThrashIDS.BlueGuardian,
                         ThrashIDS.GreenGuardian,
                         ThrashIDS.RedGuardian
-                    };                  
+                    };
+                    List<CastLog> magicStorms = cls.Where(x => x.getID() == 31419).ToList();
+                    foreach (CastLog c in magicStorms)
+                    {
+                        replay.addCircleActor(new FollowingCircle(true, 0, 100, new Tuple<int, int>((int)c.getTime(), (int)c.getTime()+c.getActDur()), "rgba(255, 255, 0, 0.15)"));
+                    }
                     break;
                 // Gorse
                 case 15429:
+                    // TODO: doughnuts (rampage)
                     ids = new List<ThrashIDS>
                     {
                         ThrashIDS.ChargedSoul
-                    };
+                    }; 
+                    List<CastLog> blooms = cls.Where(x => x.getID() == 31616).ToList();
+                    foreach (CastLog c in blooms)
+                    {
+                        replay.addCircleActor(new FollowingCircle(true, c.getExpDur()+(int)c.getTime(), 1500, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 125, 0, 0.15)"));
+                    }
                     break;
                 // Sab
                 case 15375:
+                    // TODO:facing information (flame wall)
                     ids = new List<ThrashIDS>
                     {
                         ThrashIDS.Kernan,
@@ -763,9 +776,21 @@ namespace LuckParser.Models.ParseModels
                     break;
                 // Sloth
                 case 16123:
+                    // TODO:facing information (breath)
+                    List<CastLog> sleepy = cls.Where(x => x.getID() == 34515).ToList();
+                    foreach (CastLog c in sleepy)
+                    {
+                        replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 255, 0, 0.15)"));
+                    }
+                    List<CastLog> shakes = cls.Where(x => x.getID() == 34482).ToList();
+                    foreach (CastLog c in shakes)
+                    {
+                        replay.addCircleActor(new FollowingCircle(true, (int)c.getTime() + c.getActDur() + 64, 600, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 0, 0, 0.3)"));
+                    }
                     break;
                 // Matthias
                 case 16115:
+                    // TODO: needs facing information for hadouken
                     ids = new List<ThrashIDS>
                     {
                         ThrashIDS.Spirit,
@@ -774,9 +799,37 @@ namespace LuckParser.Models.ParseModels
                         ThrashIDS.Tornado,
                         ThrashIDS.Storm
                     };
+                    List<CastLog> humanShield = cls.Where(x => x.getID() == 34468).ToList();
+                    List<CastLog> humanShards = cls.Where(x => x.getID() == 34480).ToList();
+                    for (var i = 0; i < humanShield.Count; i++)
+                    {
+                        var shield = humanShield[i];
+                        if (i < humanShards.Count)
+                        {
+                            var shard = humanShards[i];
+                            replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>((int)shield.getTime(), (int)shard.getTime() + shard.getActDur()), "rgba(255, 0, 255, 0.3)"));
+                        }
+                    }
+                    List<CastLog> aboShield = cls.Where(x => x.getID() == 34510).ToList();
+                    List<CastLog> aboShards = cls.Where(x => x.getID() == 34440).ToList();
+                    for (var i = 0; i < aboShield.Count; i++)
+                    {
+                        var shield = aboShield[i];
+                        if (i < aboShards.Count)
+                        {
+                            var shard = aboShards[i];
+                            replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>((int)shield.getTime(), (int)shard.getTime() + shard.getActDur()), "rgba(255, 0, 255, 0.3)"));
+                        }
+                    }
+                    List<CastLog> rageShards = cls.Where(x => x.getID() == 34404 || x.getID() == 34411).ToList();
+                    foreach (CastLog c in rageShards)
+                    {
+                        replay.addCircleActor(new FollowingCircle(true, (int)c.getTime() + c.getActDur() + 64, 1200, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 0, 0, 0.15)"));
+                    }
                     break;
                 // KC
                 case 16235:
+                    // TODO: needs arc circles for blades
                     ids = new List<ThrashIDS>
                     {
                         ThrashIDS.Core,
@@ -789,12 +842,34 @@ namespace LuckParser.Models.ParseModels
                         ThrashIDS.Galletta,
                         ThrashIDS.Ianim,
                     };
+                    List<CastLog> magicCharge = cls.Where(x => x.getID() == 35048).ToList();
+                    List<CastLog> magicExplose = cls.Where(x => x.getID() == 34894).ToList();
+                    for (var i = 0; i < magicCharge.Count; i++)
+                    {
+                        var charge = magicCharge[i];
+                        if (i < magicExplose.Count)
+                        {
+                            var fire = magicExplose[i];
+                            replay.addCircleActor(new FollowingCircle(true, (int)fire.getTime() + fire.getActDur(), 300, new Tuple<int, int>((int)charge.getTime(), (int)fire.getTime() + fire.getActDur()), "rgba(255, 0, 0, 0.15)"));
+                        }
+                    }
+                    List<CastLog> towerDrop = cls.Where(x => x.getID() == 35086).ToList();
+                    foreach (CastLog c in towerDrop)
+                    {
+                        replay.addCircleActor(new ImmobileCircle(true, 0, 240, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 150, 0, 0.3)",replay.getPositions().FirstOrDefault(x => x.time > (int)c.getTime() + c.getActDur())));
+                    }
                     break;
                 // Xera
-                case 16246:
+                case 16246:             
+                    List<CastLog> summon = cls.Where(x => x.getID() == 34887).ToList();
+                    foreach (CastLog c in summon)
+                    {
+                        replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 255, 0, 0.15)"));
+                    }
                     break;
                 // Cairn
                 case 17194:
+                    // TODO: needs doughnuts (wave) and facing information (sword)
                     break;
                 // MO
                 case 17172:
@@ -805,14 +880,30 @@ namespace LuckParser.Models.ParseModels
                     break;
                 // Samarog
                 case 17188:
+                    // TODO: facing information (shock wave)
                     ids = new List<ThrashIDS>
                     {
                         ThrashIDS.Rigom,
                         ThrashIDS.Guldhem
                     };
+                    List<CombatItem> brutalize = log.getBoonData().Where(x => x.getSkillID() == 38226 && x.isBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
+                    int brutStart = 0;
+                    int brutEnd = 0;
+                    foreach(CombatItem c in brutalize)
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            brutStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        } else
+                        {
+                            brutEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                            replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>(brutStart, brutEnd), "rgba(255, 255, 0, 0.15)"));
+                        }
+                    }
                     break;
                 // Deimos
                 case 17154:
+                    // TODO: facing information (slam)
                     ids = new List<ThrashIDS>
                     {
                         ThrashIDS.Saul,
@@ -821,24 +912,57 @@ namespace LuckParser.Models.ParseModels
                         ThrashIDS.Gambler,
                         ThrashIDS.GamblerClones
                     };
+                    List<CastLog> mindCrush = cls.Where(x => x.getID() == 37613).ToList();
+                    foreach (CastLog c in mindCrush)
+                    {
+                        int start = (int)c.getTime();
+                        int end = start + 5000;
+                        replay.addCircleActor(new FollowingCircle(true, end, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.15)"));
+                        if (!log.getBossData().getCM())
+                        {
+                            replay.addCircleActor(new ImmobileCircle(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 0, 255, 0.15)", new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216)));
+                        }
+                    }
                     break;
                 // SH
                 case 0x4D37:
+                    // TODO: facing information (slashes) and doughnuts for outer circle attack
                     ids = new List<ThrashIDS>
                     {
                         ThrashIDS.Scythe,
                         ThrashIDS.TormentedDead,
                         ThrashIDS.SurgingSoul
                     };
+                    List<CastLog> howling = cls.Where(x => x.getID() == 48662).ToList();
+                    foreach (CastLog c in howling)
+                    {
+                        replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 255, 0, 0.15)"));
+                    }
+                    List<CastLog> vortex = cls.Where(x => x.getID() == 47327).ToList();
+                    foreach (CastLog c in vortex)
+                    {
+                        replay.addCircleActor(new ImmobileCircle(true, (int)c.getTime() + 4000, 300, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + 4000), "rgba(255, 150, 0, 0.3)", replay.getPositions().FirstOrDefault(x => x.time > c.getTime())));
+                    }
                     break;
                 // Dhuum
                 case 0x4BFA:
+                    // TODO: facing information (pull thingy)
                     ids = new List<ThrashIDS>
                     {
                         ThrashIDS.Echo,
                         ThrashIDS.Enforcer,
                         ThrashIDS.Messenger
-                    };
+                    };                   
+                    List<CastLog> deathmark = cls.Where(x => x.getID() == 48176).ToList();
+                    foreach (CastLog c in deathmark)
+                    {
+                        replay.addCircleActor(new ImmobileCircle(true, 0, 300, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()+120000), "rgba(150, 255, 100, 0.3)", replay.getPositions().FirstOrDefault(x=> x.time > c.getTime() + c.getActDur())));
+                    }
+                    List<CastLog> cataCycle = cls.Where(x => x.getID() == 48398).ToList();
+                    foreach (CastLog c in cataCycle)
+                    {
+                        replay.addCircleActor(new FollowingCircle(true, (int)c.getTime() + c.getActDur(), 180, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 150, 0, 0.3)"));
+                    }
                     break;
                 // MAMA
                 case 0x427D:
@@ -864,7 +988,6 @@ namespace LuckParser.Models.ParseModels
                     break;
             }
             List<AgentItem> aList = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(getThrashIDS(x.getID()))).ToList();
-            long start = log.getBossData().getFirstAware();
             foreach (AgentItem a in aList)
             {
                 Mob mob = new Mob(a);
