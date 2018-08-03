@@ -2524,7 +2524,7 @@ namespace LuckParser.Controllers
                             }
                         }
                     }
-                    HTMLHelper.writeDamageDistTableSkill(sw, skill, list_to_use, finalTotalDamage, casts, timeswasted/1000.0, -timessaved/1000.0);
+                    HTMLHelper.writeDamageDistTableSkill(sw, skill,log.getSkillData(), list_to_use, finalTotalDamage, casts, timeswasted/1000.0, -timessaved/1000.0);
                 }
             }
             // non damaging stuff
@@ -2557,7 +2557,7 @@ namespace LuckParser.Controllers
                                 }
                             }
                         }
-                        HTMLHelper.writeDamageDistTableSkill(sw, skill, new List<DamageLog>(), finalTotalDamage, casts, timeswasted/1000.0, -timessaved/1000.0);
+                        HTMLHelper.writeDamageDistTableSkill(sw, skill,log.getSkillData(), new List<DamageLog>(), finalTotalDamage, casts, timeswasted/1000.0, -timessaved/1000.0);
                     }
                 }
             }

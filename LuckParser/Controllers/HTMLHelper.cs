@@ -349,7 +349,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        public static void writeDamageDistTableSkill(StreamWriter sw, SkillItem skill, List<DamageLog> damageLogs, int finalTotalDamage, int casts = -1, double timeswasted = -1, double timessaved = 1)
+        public static void writeDamageDistTableSkill(StreamWriter sw, SkillItem skill, SkillData skill_data, List<DamageLog> damageLogs, int finalTotalDamage, int casts = -1, double timeswasted = -1, double timessaved = 1)
         {
             int totaldamage = 0;
             int mindamage = 0;
@@ -377,11 +377,12 @@ namespace LuckParser.Controllers
             if (casts > 0) {
                 hpcast = Math.Round(hits / (double)casts, 2);
             }
+            string skillName = (skill.getID().ToString() == skill.getName()) ? skill_data.getName(skill.getID()): skill.getName();
             if (totaldamage != 0 && skill.GetGW2APISkill() != null)
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
                     sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                     sw.Write("<td>" + totaldamage + "</td>");
                     sw.Write("<td>" + mindamage + "</td>");
@@ -402,7 +403,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
+                    sw.Write("<td align=\"left\">" + skillName + "</td>");
                     sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                     sw.Write("<td>" + totaldamage + "</td>");
                     sw.Write("<td>" + mindamage + "</td>");
@@ -423,7 +424,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
@@ -444,7 +445,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
+                    sw.Write("<td align=\"left\">" + skillName + "</td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
@@ -888,6 +889,7 @@ namespace LuckParser.Controllers
             sw.Write("var mainActor = function(group, imgSrc) {" +
                     "this.group = group;" +
                     "this.pos = [];" +
+                    "this.start = 0;" +
                     "this.dead = [];" +
                     "this.down = [];" +
                     "this.selected = false;" +
@@ -1042,6 +1044,7 @@ namespace LuckParser.Controllers
             // Circle actors
             sw.Write("var circleActor = function(radius,fill,growing, color, start, end) {" +
                     "this.pos = null;" +
+                    "this.master = null;" +
                     "this.start = start;" +
                     "this.radius = radius;" +
                     "this.end = end;" +
@@ -1056,23 +1059,36 @@ namespace LuckParser.Controllers
                             "x = this.pos[0];" +
                             "y = this.pos[1];" +
                         "} else {" +
-                            "var master = data.has(this.pos) ? data.get(this.pos) : secondaryData.get(this.pos);" +
-                            "x = master.pos.length > 2 ? master.pos[2*(timeToUse - master.start)] : master.pos[0];" +
-                            "y = master.pos.length > 2 ? master.pos[2*(timeToUse - master.start) + 1] : master.pos[1];" +
-                        "}" +                     
-                        "ctx.beginPath();" +
-                        "ctx.arc(x,y,inch * this.radius,0,2*Math.PI);" +
-                        "if (this.growing) {" +
-                            "var percent = (timeToUse - this.start)/(this.end - this.start);" +
-                            "ctx.arc(x,y,percent*inch * this.radius,0,2*Math.PI);" +
+                            "if (!this.master) {" +
+                                "this.master = data.has(this.pos) ? data.get(this.pos) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);" +
+                            "}" +
+                            "var start = this.master.start ? this.master.start : 0;" +
+                            "x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];" +
+                            "y = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start) + 1] : this.master.pos[1];" +
                         "}" +
-                        "if (this.fill) {" +
-                            "ctx.fillStyle=this.color;" +
-                            "ctx.fill();" +
-                        "} else {" +
-                            "ctx.strokeStyle=this.color;" +
-                            "ctx.stroke();" +
-                        "}" +                      
+                        "if (this.growing == 0 || (this.growing == this.end)) {" +
+                            "ctx.beginPath();" +
+                            "ctx.arc(x,y,inch * this.radius,0,2*Math.PI);" +                  
+                            "if (this.fill) {" +
+                                "ctx.fillStyle=this.color;" +
+                                "ctx.fill();" +
+                            "} else {" +
+                                "ctx.strokeStyle=this.color;" +
+                                "ctx.stroke();" +
+                            "}" +
+                        "}" +
+                        "if (this.growing) {" +
+                            "var percent = (timeToUse - this.start)/(this.growing - this.start);" +
+                            "ctx.beginPath();" +
+                            "ctx.arc(x,y,percent*inch * this.radius,0,2*Math.PI);" +
+                            "if (this.fill) {" +
+                                "ctx.fillStyle=this.color;" +
+                                "ctx.fill();" +
+                            "} else {" +
+                                "ctx.strokeStyle=this.color;" +
+                                "ctx.stroke();" +
+                            "}" +
+                        "}" +
                     "}" +
                 "};");
             foreach (Mob mob in log.getBoss().getThrashMobs())
@@ -1081,11 +1097,20 @@ namespace LuckParser.Controllers
                 foreach(CircleActor a in replay.getCircleActors())
                 {
                     sw.Write("{");
-                    sw.Write("var a = new circleActor("+a.getRadius()+","+(a.isFilled() ? "true" : "false") + ","+(a.isGrowing() ? "true": "false")+","+a.getColor()+","+a.getLifespan().Item1/pollingRate+","+ a.getLifespan().Item2 / pollingRate + ");");
+                    sw.Write("var a = new circleActor("+a.getRadius()+","+(a.isFilled() ? "true" : "false") + ","+a.getGrowing() / pollingRate + ","+a.getColor()+","+a.getLifespan().Item1/pollingRate+","+ a.getLifespan().Item2 / pollingRate + ");");
                     sw.Write("circleData.add(a);");
                     sw.Write("a.pos ="+a.getPosition(mob.getInstid() + "_" + mob.getCombatReplay().getTimeOffsets().Item1 / pollingRate + "_" + mob.getCombatReplay().getTimeOffsets().Item2 / pollingRate, map)+";");
                     sw.Write("}");
                 }
+            }
+            foreach (CircleActor a in log.getBoss().getCombatReplay().getCircleActors())
+            {
+                sw.Write("{");
+                sw.Write("var a = new circleActor(" + a.getRadius() + "," + (a.isFilled() ? "true" : "false") + "," + a.getGrowing() / pollingRate + "," + a.getColor() + "," + a.getLifespan().Item1 / pollingRate + "," + a.getLifespan().Item2 / pollingRate + ");");
+                sw.Write("circleData.add(a);");
+                sw.Write("a.pos =" + a.getPosition(log.getBossData().getInstid().ToString(), map) + ";");
+                sw.Write("}");
+
             }
         }
 
