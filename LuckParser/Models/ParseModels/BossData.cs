@@ -18,6 +18,7 @@ namespace LuckParser.Models.ParseModels
         private int health = -1;
         private int toughness = -1;
         private List<Point> healthOverTime = new List<Point>();
+        private bool isCM = false;
         // Constructors
         public BossData(ushort id)
         {
@@ -124,9 +125,13 @@ namespace LuckParser.Models.ParseModels
         public void setHealthOverTime(List<Point> hot) {
             this.healthOverTime = hot;
         }
+        public bool getCM()
+        {
+            return isCM;
+        }
         public void setCM(List<CombatItem> clist)
         {
-            bool isCM = false;
+            isCM = false;
             switch(id)
             {
                 // Cairn
