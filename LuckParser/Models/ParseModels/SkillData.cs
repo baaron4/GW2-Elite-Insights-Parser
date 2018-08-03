@@ -18,6 +18,10 @@ namespace LuckParser.Models.ParseModels
             {31466,"Ghastly Rampage (Begin)" },
             // Sabetha
             {31372, "Shadow Step" },
+            // Slothasor
+            {34547, "Tantrum Start" },
+            {34515, "Sleeping" },
+            {34340, "Fear Me!" },
             // Matthias
             { 34468, "Shield (Human)"},
             { 34427, "Abomination Transformation"},
