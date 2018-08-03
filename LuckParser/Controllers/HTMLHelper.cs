@@ -1037,7 +1037,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        public static void writeCombatReplayCircleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
+        private static void writeCombatReplayCircleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
             // Circle actors
             sw.Write("var circleActor = function(radius,fill,growing, color, start, end) {" +
@@ -1052,7 +1052,7 @@ namespace LuckParser.Controllers
             sw.Write("circleActor.prototype.draw = function(ctx,timeToUse){" +
                     "if (!(this.start > timeToUse || this.end < timeToUse)) {" +
                         "var x,y;" +
-                        "if (this.pos.length instanceof Array) {" +
+                        "if (this.pos instanceof Array) {" +
                             "x = this.pos[0];" +
                             "y = this.pos[1];" +
                         "} else {" +
@@ -1135,10 +1135,10 @@ namespace LuckParser.Controllers
                         "});");
                     // draw thrash mobs
                     sw.Write("secondaryData.forEach(function(value,key,map) {" +
-                            "value.draw(ctx,timeToUse,25);"+
+                            "value.draw(ctx,timeToUse,28);"+
                         "});");
                     // draw boss
-                    sw.Write("boss.draw(ctx,timeToUse,30);");
+                    sw.Write("boss.draw(ctx,timeToUse,36);");
                     // draw selected player
                     sw.Write("if (selectedPlayer) {" +
                                 "selectedPlayer.draw(ctx,timeToUse,20);"+                              
