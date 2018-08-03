@@ -1066,25 +1066,26 @@ namespace LuckParser.Controllers
                             "x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];" +
                             "y = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start) + 1] : this.master.pos[1];" +
                         "}" +
-                        "if (this.growing == 0 || (this.growing == this.end)) {" +
-                            "ctx.beginPath();" +
-                            "ctx.arc(x,y,inch * this.radius,0,2*Math.PI);" +                  
-                            "if (this.fill) {" +
-                                "ctx.fillStyle=this.color;" +
-                                "ctx.fill();" +
-                            "} else {" +
-                                "ctx.strokeStyle=this.color;" +
-                                "ctx.stroke();" +
-                            "}" +
-                        "}" +
                         "if (this.growing) {" +
-                            "var percent = (timeToUse - this.start)/(this.growing - this.start);" +
+                            "var percent = Math.min((timeToUse - this.start)/(this.growing - this.start),1.0);" +
                             "ctx.beginPath();" +
                             "ctx.arc(x,y,percent*inch * this.radius,0,2*Math.PI);" +
                             "if (this.fill) {" +
                                 "ctx.fillStyle=this.color;" +
                                 "ctx.fill();" +
                             "} else {" +
+                                "ctx.lineWidth='2';" +
+                                "ctx.strokeStyle=this.color;" +
+                                "ctx.stroke();" +
+                            "}" +
+                        "} else {" +
+                            "ctx.beginPath();" +
+                            "ctx.arc(x,y,inch * this.radius,0,2*Math.PI);" +
+                            "if (this.fill) {" +
+                                "ctx.fillStyle=this.color;" +
+                                "ctx.fill();" +
+                            "} else {" +
+                                "ctx.lineWidth='2';" +
                                 "ctx.strokeStyle=this.color;" +
                                 "ctx.stroke();" +
                             "}" +
