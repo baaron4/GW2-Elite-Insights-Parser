@@ -268,6 +268,27 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
+        private static List<CombatItem> getFilteredList(ParsedLog log, long skillID, ushort instid)
+        {
+            bool needStart = true;
+            List<CombatItem> main = log.getBoonData().Where(x => x.getSkillID() == skillID && ((x.getDstInstid() == instid && x.isBuffremove() == ParseEnum.BuffRemove.None) || (x.getSrcInstid() == instid && x.isBuffremove() != ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> filtered = new List<CombatItem>();
+            foreach (CombatItem c in main)
+            {
+                if (needStart && c.isBuffremove() == ParseEnum.BuffRemove.None)
+                {
+                    needStart = false;
+                    filtered.Add(c);
+                }
+                else if (!needStart && c.isBuffremove() != ParseEnum.BuffRemove.None)
+                {
+                    needStart = true;
+                    filtered.Add(c);
+                }
+            }
+            return filtered;
+        }
+
         protected override void setAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
             // Down and deads
@@ -303,6 +324,149 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             replay.setStatus(down, dead);
+            // Boss related stuff
+            switch (log.getBossData().getID())
+            {
+                // VG
+                case 15438:
+                    break;
+                // Gorse
+                case 15429:
+                    break;
+                // Sab
+                case 15375:
+                    // timed bombs
+                    List<CombatItem> timedBombs = log.getBoonData().Where(x => x.getSkillID() == 31485 && (x.getDstInstid() == getInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None)).ToList();
+                    foreach(CombatItem c in timedBombs)
+                    {
+                        int start = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        int end = start + 3000;
+                        replay.addCircleActor(new FollowingCircle(false, 0, 300, new Tuple<int,int>(start,end), "rgba(255, 150, 0, 0.5)"));
+                        replay.addCircleActor(new FollowingCircle(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                    }
+                    // Sapper bombs
+                    List<CombatItem> sapperBombs = getFilteredList(log,31473,getInstid());
+                    int sapperStart = 0;
+                    int sapperEnd = 0;
+                    foreach(CombatItem c in sapperBombs)
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            sapperStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        } else
+                        {
+                            sapperEnd = (int)(c.getTime() - log.getBossData().getFirstAware()); replay.addCircleActor(new FollowingCircle(false, 0, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)"));
+                            replay.addCircleActor(new FollowingCircle(true, sapperStart + 5000, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)"));
+                        }                  
+                    }
+                    break;
+                // Sloth
+                case 16123:
+                    // Poison
+                    List<CombatItem> poisonToDrop = getFilteredList(log,34387,getInstid());
+                    int toDropStart = 0;
+                    int toDropEnd = 0;
+                    foreach (CombatItem c in poisonToDrop)
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            toDropStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        }
+                        else
+                        {
+                            toDropEnd = (int)(c.getTime() - log.getBossData().getFirstAware()); replay.addCircleActor(new FollowingCircle(false, 0, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
+                            replay.addCircleActor(new FollowingCircle(true, toDropStart + 8000, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
+                            Point3D poisonPos = replay.getPositions().FirstOrDefault(x => x.time >= toDropEnd);
+                            replay.addCircleActor(new ImmobileCircle(true, toDropStart + 90000, 900, new Tuple<int, int>(toDropEnd, toDropEnd+90000), "rgba(255, 0, 0, 0.3)", poisonPos));
+                        }
+                    }
+                    // Transformation
+                    List<CombatItem> slubTrans = getFilteredList(log, 34362, getInstid());
+                    int transfoStart = 0;
+                    int transfoEnd = 0;
+                    foreach (CombatItem c in slubTrans)
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            transfoStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        }
+                        else
+                        {
+                            transfoEnd = (int)(c.getTime() - log.getBossData().getFirstAware()); replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
+                        }
+                    }
+                    // fixated
+                    List<CombatItem> fixatedSloth = getFilteredList(log, 34508, getInstid());
+                    int fixatedSlothStart = 0;
+                    int fixatedSlothEnd = 0;
+                    foreach (CombatItem c in fixatedSloth)
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            fixatedSlothStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        }
+                        else
+                        {
+                            fixatedSlothEnd = (int)(c.getTime() - log.getBossData().getFirstAware()); replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>(fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)"));
+                        }
+                    }
+                    break;
+                // Matthias
+                case 16115:
+                    // Corruption
+                    // Well of profane
+                    break;
+                // KC
+                case 16235:
+                    // bombs
+                    break;
+                // Xera
+                case 16246:
+                    break;
+                // Cairn
+                case 17194:
+                    // shared agony
+                    break;
+                // MO
+                case 17172:
+                    break;
+                // Samarog
+                case 17188:
+                    // big bomb
+                    // small bomb
+                    // fixated
+                    break;
+                // Deimos
+                case 17154:
+                    // teleport zone
+                    break;
+                // SH
+                case 0x4D37:
+                    break;
+                // Dhuum
+                case 0x4BFA:
+                    // spirit transform
+                    // bomb
+                    break;
+                // MAMA
+                case 0x427D:
+                    break;
+                // Siax
+                case 0x4284:
+                    break;
+                // Ensolyss
+                case 0x4234:
+                    break;
+                // Skorvald
+                case 0x44E0:
+                    break;
+                // Artsariiv
+                case 0x461D:
+                    break;
+                // Arkk
+                case 0x455F:
+                    break;
+            }
         }
 
         protected override void setCombatReplayIcon(ParsedLog log)
