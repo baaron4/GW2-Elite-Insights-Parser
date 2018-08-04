@@ -1060,7 +1060,8 @@ namespace LuckParser.Controllers
                             "y = this.pos[1];" +
                         "} else {" +
                             "if (!this.master) {" +
-                                "this.master = data.has(this.pos) ? data.get(this.pos) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);" +
+                                "var playerID = parseInt(this.pos);" +
+                                "this.master = data.has(playerID) ? data.get(playerID) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);" +
                             "}" +
                             "var start = this.master.start ? this.master.start : 0;" +
                             "x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];" +
@@ -1101,6 +1102,18 @@ namespace LuckParser.Controllers
                     sw.Write("var a = new circleActor("+a.getRadius()+","+(a.isFilled() ? "true" : "false") + ","+a.getGrowing() / pollingRate + ","+a.getColor()+","+a.getLifespan().Item1/pollingRate+","+ a.getLifespan().Item2 / pollingRate + ");");
                     sw.Write("circleData.add(a);");
                     sw.Write("a.pos ="+a.getPosition(mob.getInstid() + "_" + mob.getCombatReplay().getTimeOffsets().Item1 / pollingRate + "_" + mob.getCombatReplay().getTimeOffsets().Item2 / pollingRate, map)+";");
+                    sw.Write("}");
+                }
+            }
+            foreach (Player player in log.getPlayerList())
+            {
+                CombatReplay replay = player.getCombatReplay();
+                foreach (CircleActor a in replay.getCircleActors())
+                {
+                    sw.Write("{");
+                    sw.Write("var a = new circleActor(" + a.getRadius() + "," + (a.isFilled() ? "true" : "false") + "," + a.getGrowing() / pollingRate + "," + a.getColor() + "," + a.getLifespan().Item1 / pollingRate + "," + a.getLifespan().Item2 / pollingRate + ");");
+                    sw.Write("circleData.add(a);");
+                    sw.Write("a.pos =" + a.getPosition(player.getInstid().ToString(), map) + ";");
                     sw.Write("}");
                 }
             }

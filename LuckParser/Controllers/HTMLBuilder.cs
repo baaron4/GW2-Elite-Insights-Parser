@@ -3776,9 +3776,6 @@ namespace LuckParser.Controllers
                 }
                 if (log.getBoss().getCombatReplay() != null)
                 {
-                    sw.Write("canvas.replay {" +
-                        "border:1px solid #9B0000; "+
-                        "}");
                     // from W3
                     sw.Write(".slidecontainer {width: 100%;}");
                     sw.Write(".slider {width: 100%;appearance: none;height: 25px;background: #F3F3F3;outline: none;opacity: 0.7;-webkit-transition: .2s;transition: opacity .2s;}");
