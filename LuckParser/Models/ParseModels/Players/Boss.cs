@@ -59,7 +59,7 @@ namespace LuckParser.Models.ParseModels
                         break;
                     // Gorse
                     case 15429:
-                        map = new CombatReplayMap("https://i.imgur.com/Gqpp7B1.png",
+                        map = new CombatReplayMap("https://i.imgur.com/nTueZcX.png",
                             Tuple.Create(1354, 1415),
                             Tuple.Create(-623, -6754, 3731, -2206),
                             Tuple.Create(-15360, -36864, 15360, 39936),
@@ -91,7 +91,7 @@ namespace LuckParser.Models.ParseModels
                         break;
                     // KC
                     case 16235:
-                        map = new CombatReplayMap("https://i.imgur.com/6ZJhPOw.png",
+                        map = new CombatReplayMap("https://i.imgur.com/tBAFCEf.png",
                             Tuple.Create(1099, 1114),
                             Tuple.Create(-5467, 8069, -2282, 11297),
                             Tuple.Create(-12288, -27648, 12288, 27648),
@@ -785,13 +785,22 @@ namespace LuckParser.Models.ParseModels
                     {
                         replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 255, 0, 0.5)"));
                     }
+
+                    List<CastLog> tantrum = cls.Where(x => x.getID() == 34547).ToList();
+                    foreach (CastLog c in tantrum)
+                    {
+                        int start = (int)c.getTime();
+                        int end = start + c.getActDur();
+                        replay.addCircleActor(new FollowingCircle(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)"));
+                        replay.addCircleActor(new FollowingCircle(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)"));
+                    }
                     List<CastLog> shakes = cls.Where(x => x.getID() == 34482).ToList();
                     foreach (CastLog c in shakes)
                     {
                         int start = (int)c.getTime();
                         int end = start + c.getActDur();
-                        replay.addCircleActor(new FollowingCircle(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
-                        replay.addCircleActor(new FollowingCircle(true, end, 600, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                        replay.addCircleActor(new FollowingCircle(false, 0, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
+                        replay.addCircleActor(new FollowingCircle(true, end, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
                     }
                     break;
                 // Matthias

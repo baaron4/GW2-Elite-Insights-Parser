@@ -37,8 +37,20 @@ namespace LuckParser.Models.ParseModels
             Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
             switch (Boss.getThrashIDS(agent.getID()))
             {
+                case Boss.ThrashIDS.BlueGuardian:
+                    replay.addCircleActor(new FollowingCircle(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)"));
+                    break;
+                case Boss.ThrashIDS.GreenGuardian:
+                    replay.addCircleActor(new FollowingCircle(false, 0, 1500, lifespan, "rgba(0, 255, 0, 0.5)"));
+                    break;
+                case Boss.ThrashIDS.RedGuardian:
+                    replay.addCircleActor(new FollowingCircle(false, 0, 1500, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    break;
                 case Boss.ThrashIDS.Seekers:
                     replay.addCircleActor(new FollowingCircle(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    break;
+                case Boss.ThrashIDS.ChargedSoul:
+                    replay.addCircleActor(new FollowingCircle(true, 0, 180, lifespan, "rgba(255, 150, 0, 0.5)"));
                     break;
                 case Boss.ThrashIDS.Spirit:
                 case Boss.ThrashIDS.Spirit2:
