@@ -41,16 +41,14 @@ namespace LuckParser.Models.ParseModels
             phaseData.Add(data);
         }
 
-
-
         public CombatReplayMap getCombatMap(ParsedLog log)
         {
             if (map == null)
             {
-                switch (log.getBossData().getID())
+                switch (ParseEnum.getBossIDS(log.getBossData().getID()))
                 {
                     // VG
-                    case 15438:
+                    case ParseEnum.BossIDS.ValeGuardian:
                         map = new CombatReplayMap("https://i.imgur.com/W7MocGz.png",
                             Tuple.Create(889, 889),
                             Tuple.Create(-6365, -22213, -3150, -18999),
@@ -58,7 +56,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(3456, 11012, 4736, 14212));
                         break;
                     // Gorse
-                    case 15429:
+                    case ParseEnum.BossIDS.Gorseval:
                         map = new CombatReplayMap("https://i.imgur.com/nTueZcX.png",
                             Tuple.Create(1354, 1415),
                             Tuple.Create(-623, -6754, 3731, -2206),
@@ -66,7 +64,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(3456, 11012, 4736, 14212));
                         break;
                     // Sab
-                    case 15375:
+                    case ParseEnum.BossIDS.Sabetha:
                         map = new CombatReplayMap("https://i.imgur.com/FwpMbYf.png",
                             Tuple.Create(2790, 2763),
                             Tuple.Create(-8587, -162, -1601, 6753),
@@ -74,7 +72,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(3456, 11012, 4736, 14212));
                         break;
                     // Sloth
-                    case 16123:
+                    case ParseEnum.BossIDS.Slothasor:
                         map = new CombatReplayMap("https://i.imgur.com/aLHcYSF.png",
                             Tuple.Create(1688, 2581),
                             Tuple.Create(5822, -3491, 9549, 2205),
@@ -82,7 +80,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(2688, 11906, 3712, 14210));
                         break;
                     // Matthias
-                    case 16115:
+                    case ParseEnum.BossIDS.Matthias:
                         map = new CombatReplayMap("https://i.imgur.com/3X0YveK.png",
                             Tuple.Create(880, 880),
                             Tuple.Create(-7248, 4585, -4625, 7207),
@@ -90,7 +88,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(2688, 11906, 3712, 14210));
                         break;
                     // KC
-                    case 16235:
+                    case ParseEnum.BossIDS.KeepConstruct:
                         map = new CombatReplayMap("https://i.imgur.com/tBAFCEf.png",
                             Tuple.Create(1099, 1114),
                             Tuple.Create(-5467, 8069, -2282, 11297),
@@ -98,7 +96,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(1920, 12160, 2944, 14464));
                         break;
                     // Xera
-                    case 16246:
+                    case ParseEnum.BossIDS.Xera:
                         map = new CombatReplayMap("https://i.imgur.com/BoHwwY6.png",
                             Tuple.Create(7112, 6377),
                             Tuple.Create(-5992, -5992, 69, -522),
@@ -106,7 +104,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(1920, 12160, 2944, 14464));
                         break;
                     // Cairn
-                    case 17194:
+                    case ParseEnum.BossIDS.Cairn:
                         map = new CombatReplayMap("https://i.imgur.com/NlpsLZa.png",
                             Tuple.Create(607, 607),
                             Tuple.Create(12981, 642, 15725, 3386),
@@ -114,7 +112,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(11774, 4480, 14078, 5376));
                         break;
                     // MO
-                    case 17172:
+                    case ParseEnum.BossIDS.MursaatOverseer:
                         map = new CombatReplayMap("https://i.imgur.com/lT1FW2r.png",
                             Tuple.Create(889, 889),
                             Tuple.Create(1360, 2701, 3911, 5258),
@@ -122,7 +120,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(11774, 4480, 14078, 5376));
                         break;
                     // Samarog
-                    case 17188:
+                    case ParseEnum.BossIDS.Samarog:
                         map = new CombatReplayMap("https://i.imgur.com/o2DHN29.png",
                             Tuple.Create(1221, 1171),
                              Tuple.Create(-6526, 1218, -2423, 5146),
@@ -130,7 +128,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(11774, 4480, 14078, 5376));
                         break;
                     // Deimos
-                    case 17154:
+                    case ParseEnum.BossIDS.Deimos:
                         map = new CombatReplayMap("https://i.imgur.com/TskIM9i.png",
                             Tuple.Create(4267, 5770),
                             Tuple.Create(-9542, 1932, -7078, 5275),
@@ -138,7 +136,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(11774, 4480, 14078, 5376));
                         break;
                     // SH
-                    case 0x4D37:
+                    case ParseEnum.BossIDS.SoullessHorror:
                         map = new CombatReplayMap("https://i.imgur.com/A45pVJy.png",
                             Tuple.Create(3657, 3657),
                             Tuple.Create(-12223, -771, -8932, 2420),
@@ -146,7 +144,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(19072, 15484, 20992, 16508));
                         break;
                     // Dhuum
-                    case 0x4BFA:
+                    case ParseEnum.BossIDS.Dhuum:
                         map = new CombatReplayMap("https://i.imgur.com/CLTwWBJ.png",
                             Tuple.Create(3763, 3383),
                             Tuple.Create(13524, -1334, 18039, 2735),
@@ -154,7 +152,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(19072, 15484, 20992, 16508));
                         break;
                     // MAMA
-                    case 0x427D:
+                    case ParseEnum.BossIDS.MAMA:
                         map = new CombatReplayMap("https://i.imgur.com/lFGNKuf.png",
                             Tuple.Create(664, 407),
                             Tuple.Create(1653, 4555, 5733, 7195),
@@ -162,7 +160,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(11804, 4414, 12444, 5054));
                         break;
                     // Siax
-                    case 0x4284:
+                    case ParseEnum.BossIDS.Siax:
                         map = new CombatReplayMap("https://i.imgur.com/UzaQHW9.png",
                             Tuple.Create(476, 548),
                             Tuple.Create(663, -4127, 3515, -997),
@@ -170,7 +168,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(11804, 4414, 12444, 5054));
                         break;
                     // Ensolyss
-                    case 0x4234:
+                    case ParseEnum.BossIDS.Ensolyss:
                         map = new CombatReplayMap("https://i.imgur.com/kjelZ4t.png",
                             Tuple.Create(366, 366),
                             Tuple.Create(252, 1, 2892, 2881),
@@ -178,7 +176,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(11804, 4414, 12444, 5054));
                         break;
                     // Skorvald
-                    case 0x44E0:
+                    case ParseEnum.BossIDS.Skorvald:
                         map = new CombatReplayMap("https://i.imgur.com/PO3aoJD.png",
                             Tuple.Create(1759, 1783),
                             Tuple.Create(-22267, 14955, -17227, 20735),
@@ -186,7 +184,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(11204, 4414, 13252, 6462));
                         break;
                     // Artsariiv
-                    case 0x461D:
+                    case ParseEnum.BossIDS.Artsariiv:
                         map = new CombatReplayMap("https://i.imgur.com/4wmuc8B.png",
                             Tuple.Create(914, 914),
                             Tuple.Create(8991, 112, 11731, 2812),
@@ -194,7 +192,7 @@ namespace LuckParser.Models.ParseModels
                             Tuple.Create(11204, 4414, 13252, 6462));
                         break;
                     // Arkk
-                    case 0x455F:
+                    case ParseEnum.BossIDS.Arkk:
                         map = new CombatReplayMap("https://i.imgur.com/BIybWJe.png",
                             Tuple.Create(914, 914),
                             Tuple.Create(-19231, -18137, -16591, -15677),
@@ -221,9 +219,9 @@ namespace LuckParser.Models.ParseModels
             long start = 0;
             long end = 0;
             getCastLogs(log, 0, fight_dur);
-            switch (log.getBossData().getID())
+            switch (ParseEnum.getBossIDS(log.getBossData().getID()))
             {
-                case 0x3C4E:
+                case ParseEnum.BossIDS.ValeGuardian:
                     // Invul check
                     List<CombatItem> invulsVG = log.getBoonData().Where(x => x.getSkillID() == 757 && getInstid() == x.getDstInstid()).ToList();
                     for (int i = 0; i < invulsVG.Count; i++)
@@ -255,7 +253,7 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName(namesVG[i - 1]);
                     }
                     break;
-                case 0x3C45:
+                case ParseEnum.BossIDS.Gorseval:
                     // Ghostly protection check
                     List<CombatItem> invulsGorse = log.getCombatList().Where(x => x.getIFF() == ParseEnum.IFF.Friend && x.getSkillID() == 31790).ToList();
                     for (int i = 0; i < invulsGorse.Count; i++)
@@ -287,7 +285,7 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName(namesGorse[i - 1]);
                     }
                     break;
-                case 0x3C0F:
+                case ParseEnum.BossIDS.Sabetha:
                     // Invul check
                     List<CombatItem> invulsSab = log.getBoonData().Where(x => x.getSkillID() == 757 && getInstid() == x.getDstInstid()).ToList();
                     for (int i = 0; i < invulsSab.Count; i++)
@@ -319,7 +317,7 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName(namesSab[i - 1]);
                     }
                     break;
-                case 0x3EF3:
+                case ParseEnum.BossIDS.Matthias:
                     // Special buff cast check
                     CombatItem heat_wave = log.getCombatList().Find(x => x.getSkillID() == 34526);
                     List<long> phase_starts = new List<long>();
@@ -354,7 +352,7 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName(namesMat[i - 1]);
                     }
                     break;
-                case 0x3F6B:
+                case ParseEnum.BossIDS.KeepConstruct:
                     // Main phases
                     List<CastLog> clsKC = cast_logs.Where(x => x.getID() == 35048).ToList();
                     foreach (CastLog cl in clsKC)
@@ -426,7 +424,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     phases.Sort((x, y) => (x.getStart() < y.getStart()) ? -1 : 1);
                     break;
-                case 0x3F76:
+                case ParseEnum.BossIDS.Xera:
                     // split happened
                     if (phaseData.Count == 1)
                     {
@@ -445,7 +443,7 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName("Phase " + i);
                     }
                     break;
-                case 0x4324:
+                case ParseEnum.BossIDS.Samarog:
                     // Determined check
                     List<CombatItem> invulsSam = log.getBoonData().Where(x => x.getSkillID() == 762 && getInstid() == x.getDstInstid()).ToList();
                     // Samarog receives determined twice and its removed twice, filter it
@@ -493,7 +491,7 @@ namespace LuckParser.Models.ParseModels
                         phases[i].setName(namesSam[i - 1]);
                     }
                     break;
-                case 0x4302:
+                case ParseEnum.BossIDS.Deimos:
                     // Determined + additional data on inst change
                     CombatItem invulDei = log.getBoonData().Find(x => x.getSkillID() == 762 && x.isBuffremove() == ParseEnum.BuffRemove.None && x.getDstInstid() == getInstid());
                     if (invulDei != null)
@@ -538,7 +536,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     phases.Sort((x, y) => (x.getStart() < y.getStart()) ? -1 : 1);
                     break;
-                case 0x4BFA:
+                case ParseEnum.BossIDS.Dhuum:
                     // Sometimes the preevent is not in the evtc
                     List<CastLog> dhuumCast = getCastLogs(log, 0, 20000);
                     if (dhuumCast.Count > 0)
@@ -595,12 +593,12 @@ namespace LuckParser.Models.ParseModels
                         }
                     }
                     break;
-                case 0x427D:
-                case 0x4284:
-                case 0x4234:
-                case 0x44E0:
-                case 0x461D:
-                case 0x455F:
+                case ParseEnum.BossIDS.MAMA:
+                case ParseEnum.BossIDS.Siax:
+                case ParseEnum.BossIDS.Ensolyss:
+                case ParseEnum.BossIDS.Skorvald:
+                case ParseEnum.BossIDS.Artsariiv:
+                case ParseEnum.BossIDS.Arkk:
                     List<CombatItem> invulsBoss = log.getBoonData().Where(x => x.getSkillID() == 762 && agent.getInstid() == x.getDstInstid()).ToList();
                     List<CombatItem> invulsBossFiltered = new List<CombatItem>();
                     foreach (CombatItem c in invulsBoss)
@@ -667,83 +665,20 @@ namespace LuckParser.Models.ParseModels
             }*/
         }
 
-
-        public enum ThrashIDS : ushort {
-            // VG
-            Seekers         = 15426,
-            RedGuardian     = 15433,
-            BlueGuardian    = 15431,
-            GreenGuardian   = 15420,
-            // Gorse
-            ChargedSoul     = 15434,
-            // Sab
-            Kernan          = 15372,
-            Knuckles        = 15404,
-            Karde           = 15430,
-            // Matthias
-            Spirit          = 16105,
-            Spirit2         = 16114,
-            IcePatch        = 16139,
-            Storm           = 16108,
-            Tornado         = 16068,
-            //BloodStone      = 13864,
-            // KC
-            Olson           = 16244,
-            Engul           = 16274,
-            Faerla          = 16264,
-            Caulle          = 16282,
-            Henley          = 16236,
-            Jessica         = 16278,
-            Galletta        = 16228,
-            Ianim           = 16248,
-            Core            = 16261,
-            // MO
-            Jade            = 17181,
-            // Samarog
-            Guldhem         = 17208,
-            Rigom           = 17124,
-            // Deimos
-            Saul            = 17126,
-            Thief           = 17206,
-            Gambler         = 17335,
-            GamblerClones   = 17161,
-            GamblerReal     = 17355,
-            Drunkard        = 17163,
-            Oil             = 17332,
-            Tear            = 17303,
-            // SH
-            TormentedDead   = 19422,
-            SurgingSoul     = 19474,
-            Scythe          = 19396,
-            // Dhuum
-            Messenger       = 19807,
-            Echo            = 19628,
-            Enforcer        = 19681,
-            // Siax
-            Hallucination   = 17002,
-            //
-            Unknown
-        };
-        public static ThrashIDS getThrashIDS(ushort id)
-        {
-            return Enum.IsDefined(typeof(ThrashIDS),id) ? (ThrashIDS) id : ThrashIDS.Unknown ;
-        }
-
-
         protected override void setAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
-            List<ThrashIDS> ids = new List<ThrashIDS>();
+            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>();
             List<CastLog> cls = getCastLogs(log, 0, log.getBossData().getAwareDuration());
-            switch (log.getBossData().getID())
+            switch (ParseEnum.getBossIDS(log.getBossData().getID()))
             {
                 // VG
-                case 15438:
-                    ids = new List<ThrashIDS>
+                case ParseEnum.BossIDS.ValeGuardian:
+                    ids = new List<ParseEnum.ThrashIDS>
                     {
-                        ThrashIDS.Seekers,
-                        ThrashIDS.BlueGuardian,
-                        ThrashIDS.GreenGuardian,
-                        ThrashIDS.RedGuardian
+                        ParseEnum.ThrashIDS.Seekers,
+                        ParseEnum.ThrashIDS.BlueGuardian,
+                        ParseEnum.ThrashIDS.GreenGuardian,
+                        ParseEnum.ThrashIDS.RedGuardian
                     };
                     List<CastLog> magicStorms = cls.Where(x => x.getID() == 31419).ToList();
                     foreach (CastLog c in magicStorms)
@@ -752,11 +687,11 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 // Gorse
-                case 15429:
+                case ParseEnum.BossIDS.Gorseval:
                     // TODO: doughnuts (rampage)
-                    ids = new List<ThrashIDS>
+                    ids = new List<ParseEnum.ThrashIDS>
                     {
-                        ThrashIDS.ChargedSoul
+                        ParseEnum.ThrashIDS.ChargedSoul
                     }; 
                     List<CastLog> blooms = cls.Where(x => x.getID() == 31616).ToList();
                     foreach (CastLog c in blooms)
@@ -768,17 +703,17 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 // Sab
-                case 15375:
+                case ParseEnum.BossIDS.Sabetha:
                     // TODO:facing information (flame wall)
-                    ids = new List<ThrashIDS>
+                    ids = new List<ParseEnum.ThrashIDS>
                     {
-                        ThrashIDS.Kernan,
-                        ThrashIDS.Knuckles,
-                        ThrashIDS.Karde
+                        ParseEnum.ThrashIDS.Kernan,
+                        ParseEnum.ThrashIDS.Knuckles,
+                        ParseEnum.ThrashIDS.Karde
                     };
                     break;
                 // Sloth
-                case 16123:
+                case ParseEnum.BossIDS.Slothasor:
                     // TODO:facing information (breath)
                     List<CastLog> sleepy = cls.Where(x => x.getID() == 34515).ToList();
                     foreach (CastLog c in sleepy)
@@ -804,15 +739,15 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 // Matthias
-                case 16115:
+                case ParseEnum.BossIDS.Matthias:
                     // TODO: needs facing information for hadouken
-                    ids = new List<ThrashIDS>
+                    ids = new List<ParseEnum.ThrashIDS>
                     {
-                        ThrashIDS.Spirit,
-                        ThrashIDS.Spirit2,
-                        ThrashIDS.IcePatch,
-                        ThrashIDS.Tornado,
-                        ThrashIDS.Storm
+                        ParseEnum.ThrashIDS.Spirit,
+                        ParseEnum.ThrashIDS.Spirit2,
+                        ParseEnum.ThrashIDS.IcePatch,
+                        ParseEnum.ThrashIDS.Tornado,
+                        ParseEnum.ThrashIDS.Storm
                     };
                     List<CastLog> humanShield = cls.Where(x => x.getID() == 34468).ToList();
                     List<CastLog> humanShards = cls.Where(x => x.getID() == 34480).ToList();
@@ -846,19 +781,19 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 // KC
-                case 16235:
+                case ParseEnum.BossIDS.KeepConstruct:
                     // TODO: needs arc circles for blades
-                    ids = new List<ThrashIDS>
+                    ids = new List<ParseEnum.ThrashIDS>
                     {
-                        ThrashIDS.Core,
-                        ThrashIDS.Jessica,
-                        ThrashIDS.Olson,
-                        ThrashIDS.Engul,
-                        ThrashIDS.Faerla,
-                        ThrashIDS.Caulle,
-                        ThrashIDS.Henley,
-                        ThrashIDS.Galletta,
-                        ThrashIDS.Ianim,
+                        ParseEnum.ThrashIDS.Core,
+                        ParseEnum.ThrashIDS.Jessica,
+                        ParseEnum.ThrashIDS.Olson,
+                        ParseEnum.ThrashIDS.Engul,
+                        ParseEnum.ThrashIDS.Faerla,
+                        ParseEnum.ThrashIDS.Caulle,
+                        ParseEnum.ThrashIDS.Henley,
+                        ParseEnum.ThrashIDS.Galletta,
+                        ParseEnum.ThrashIDS.Ianim,
                     };
                     List<CastLog> magicCharge = cls.Where(x => x.getID() == 35048).ToList();
                     List<CastLog> magicExplose = cls.Where(x => x.getID() == 34894).ToList();
@@ -885,7 +820,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 // Xera
-                case 16246:             
+                case ParseEnum.BossIDS.Xera:             
                     List<CastLog> summon = cls.Where(x => x.getID() == 34887).ToList();
                     foreach (CastLog c in summon)
                     {
@@ -893,23 +828,23 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 // Cairn
-                case 17194:
+                case ParseEnum.BossIDS.Cairn:
                     // TODO: needs doughnuts (wave) and facing information (sword)
                     break;
                 // MO
-                case 17172:
-                    ids = new List<ThrashIDS>
+                case ParseEnum.BossIDS.MursaatOverseer:
+                    ids = new List<ParseEnum.ThrashIDS>
                     {
-                        ThrashIDS.Jade
+                        ParseEnum.ThrashIDS.Jade
                     };
                     break;
                 // Samarog
-                case 17188:
+                case ParseEnum.BossIDS.Samarog:
                     // TODO: facing information (shock wave)
-                    ids = new List<ThrashIDS>
+                    ids = new List<ParseEnum.ThrashIDS>
                     {
-                        ThrashIDS.Rigom,
-                        ThrashIDS.Guldhem
+                        ParseEnum.ThrashIDS.Rigom,
+                        ParseEnum.ThrashIDS.Guldhem
                     };
                     List<CombatItem> brutalize = log.getBoonData().Where(x => x.getSkillID() == 38226 && x.isBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
                     int brutStart = 0;
@@ -927,15 +862,15 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 // Deimos
-                case 17154:
+                case ParseEnum.BossIDS.Deimos:
                     // TODO: facing information (slam)
-                    ids = new List<ThrashIDS>
+                    ids = new List<ParseEnum.ThrashIDS>
                     {
-                        ThrashIDS.Saul,
-                        ThrashIDS.Thief,
-                        ThrashIDS.Drunkard,
-                        ThrashIDS.Gambler,
-                        ThrashIDS.GamblerClones
+                        ParseEnum.ThrashIDS.Saul,
+                        ParseEnum.ThrashIDS.Thief,
+                        ParseEnum.ThrashIDS.Drunkard,
+                        ParseEnum.ThrashIDS.Gambler,
+                        ParseEnum.ThrashIDS.GamblerClones
                     };
                     List<CastLog> mindCrush = cls.Where(x => x.getID() == 37613).ToList();
                     foreach (CastLog c in mindCrush)
@@ -951,13 +886,13 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 // SH
-                case 0x4D37:
+                case ParseEnum.BossIDS.SoullessHorror:
                     // TODO: facing information (slashes) and doughnuts for outer circle attack
-                    ids = new List<ThrashIDS>
+                    ids = new List<ParseEnum.ThrashIDS>
                     {
-                        ThrashIDS.Scythe,
-                        ThrashIDS.TormentedDead,
-                        ThrashIDS.SurgingSoul
+                        ParseEnum.ThrashIDS.Scythe,
+                        ParseEnum.ThrashIDS.TormentedDead,
+                        ParseEnum.ThrashIDS.SurgingSoul
                     };
                     List<CastLog> howling = cls.Where(x => x.getID() == 48662).ToList();
                     foreach (CastLog c in howling)
@@ -978,13 +913,13 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 // Dhuum
-                case 0x4BFA:
+                case ParseEnum.BossIDS.Dhuum:
                     // TODO: facing information (pull thingy)
-                    ids = new List<ThrashIDS>
+                    ids = new List<ParseEnum.ThrashIDS>
                     {
-                        ThrashIDS.Echo,
-                        ThrashIDS.Enforcer,
-                        ThrashIDS.Messenger
+                        ParseEnum.ThrashIDS.Echo,
+                        ParseEnum.ThrashIDS.Enforcer,
+                        ParseEnum.ThrashIDS.Messenger
                     };                   
                     List<CastLog> deathmark = cls.Where(x => x.getID() == 48176).ToList();
                     CastLog majorSplit = cls.Find(x => x.getID() == 47396);
@@ -1019,29 +954,29 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 // MAMA
-                case 0x427D:
+                case ParseEnum.BossIDS.MAMA:
                     break;
                 // Siax
-                case 0x4284:
-                    ids = new List<ThrashIDS>
+                case ParseEnum.BossIDS.Siax:
+                    ids = new List<ParseEnum.ThrashIDS>
                     {
-                        ThrashIDS.Hallucination
+                        ParseEnum.ThrashIDS.Hallucination
                     };
                     break;
                 // Ensolyss
-                case 0x4234:
+                case ParseEnum.BossIDS.Ensolyss:
                     break;
                 // Skorvald
-                case 0x44E0:
+                case ParseEnum.BossIDS.Skorvald:
                     break;
                 // Artsariiv
-                case 0x461D:
+                case ParseEnum.BossIDS.Artsariiv:
                     break;
                 // Arkk
-                case 0x455F:
+                case ParseEnum.BossIDS.Arkk:
                     break;
             }
-            List<AgentItem> aList = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(getThrashIDS(x.getID()))).ToList();
+            List<AgentItem> aList = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
             foreach (AgentItem a in aList)
             {
                 Mob mob = new Mob(a);
@@ -1052,82 +987,63 @@ namespace LuckParser.Models.ParseModels
 
         protected override void setCombatReplayIcon(ParsedLog log)
         {
-            switch (log.getBossData().getID())
+            switch (ParseEnum.getBossIDS(log.getBossData().getID()))
             {
-                // VG
-                case 15438:
+                case ParseEnum.BossIDS.ValeGuardian:
                     replay.setIcon("https://i.imgur.com/MIpP5pK.png");
                     break;
-                // Gorse
-                case 15429:
+                case ParseEnum.BossIDS.Gorseval:
                     replay.setIcon("https://i.imgur.com/5hmMq12.png");
                     break;
-                // Sab
-                case 15375:
+                case ParseEnum.BossIDS.Sabetha:
                     replay.setIcon("https://i.imgur.com/UqbFp9S.png");
                     break;
-                // Sloth
-                case 16123:
+                case ParseEnum.BossIDS.Slothasor:
                     replay.setIcon("https://i.imgur.com/h1xH3ER.png");
                     break;
-                // Matthias
-                case 16115:
+                case ParseEnum.BossIDS.Matthias:
                     replay.setIcon("https://i.imgur.com/3uMMmTS.png");
                     break;
-                // KC
-                case 16235:
+                case ParseEnum.BossIDS.KeepConstruct:
                     replay.setIcon("https://i.imgur.com/Kq0kL07.png");
                     break;
-                // Xera
-                case 16246:
+                case ParseEnum.BossIDS.Xera:
                     replay.setIcon("https://i.imgur.com/lYwJEyV.png");
                     break;
-                // Cairn
-                case 17194:
+                case ParseEnum.BossIDS.Cairn:
                     replay.setIcon("https://i.imgur.com/gQY37Tf.png");
                     break;
-                // MO
-                case 17172:
+                case ParseEnum.BossIDS.MursaatOverseer:
                     replay.setIcon("https://i.imgur.com/5LNiw4Y.png");
                     break;
-                // Samarog
-                case 17188:
+                case ParseEnum.BossIDS.Samarog:
                     replay.setIcon("https://i.imgur.com/MPQhKfM.png");
                     break;
-                // Deimos
-                case 17154:
+                case ParseEnum.BossIDS.Deimos:
                     replay.setIcon("https://i.imgur.com/mWfxBaO.png");
                     break;
-                // SH
-                case 0x4D37:
+                case ParseEnum.BossIDS.SoullessHorror:
                     replay.setIcon("https://i.imgur.com/jAiRplg.png");
                     break;
-                // Dhuum
-                case 0x4BFA:
+                case ParseEnum.BossIDS.Dhuum:
                     replay.setIcon("https://i.imgur.com/RKaDon5.png");
                     break;
-                // MAMA
-                case 0x427D:
+                case ParseEnum.BossIDS.MAMA:
                     replay.setIcon("https://i.imgur.com/1h7HOII.png");
                     break;
-                // Siax
-                case 0x4284:
+                case ParseEnum.BossIDS.Siax:
                     replay.setIcon("https://i.imgur.com/5C60cQb.png");
                     break;
-                // Ensolyss
-                case 0x4234:
+                case ParseEnum.BossIDS.Ensolyss:
                     replay.setIcon("https://i.imgur.com/GUTNuyP.png");
                     break;
-                // Skorvald
-                case 0x44E0:
+                case ParseEnum.BossIDS.Skorvald:
                     replay.setIcon("https://i.imgur.com/IOPAHRE.png");
                     break;
-                // Artsariiv
-                case 0x461D:
+                case ParseEnum.BossIDS.Artsariiv:
                     replay.setIcon(HTMLHelper.GetLink(log.getBossData().getID() + "-icon"));
                     break;
-                // Arkk
-                case 0x455F:
+                case ParseEnum.BossIDS.Arkk:
                     replay.setIcon("https://i.imgur.com/u6vv8cW.png");
                     break;
             }

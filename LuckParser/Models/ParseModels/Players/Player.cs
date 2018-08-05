@@ -325,16 +325,16 @@ namespace LuckParser.Models.ParseModels
             }
             replay.setStatus(down, dead);
             // Boss related stuff
-            switch (log.getBossData().getID())
+            switch (ParseEnum.getBossIDS(log.getBossData().getID()))
             {
                 // VG
-                case 15438:
+                case ParseEnum.BossIDS.ValeGuardian:
                     break;
                 // Gorse
-                case 15429:
+                case ParseEnum.BossIDS.Gorseval:
                     break;
                 // Sab
-                case 15375:
+                case ParseEnum.BossIDS.Sabetha:
                     // timed bombs
                     List<CombatItem> timedBombs = log.getBoonData().Where(x => x.getSkillID() == 31485 && (x.getDstInstid() == getInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None)).ToList();
                     foreach(CombatItem c in timedBombs)
@@ -361,7 +361,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 // Sloth
-                case 16123:
+                case ParseEnum.BossIDS.Slothasor:
                     // Poison
                     List<CombatItem> poisonToDrop = getFilteredList(log,34387,getInstid());
                     int toDropStart = 0;
@@ -412,59 +412,59 @@ namespace LuckParser.Models.ParseModels
                     }
                     break;
                 // Matthias
-                case 16115:
+                case ParseEnum.BossIDS.Matthias:
                     // Corruption
                     // Well of profane
                     break;
                 // KC
-                case 16235:
+                case ParseEnum.BossIDS.KeepConstruct:
                     // bombs
                     break;
                 // Xera
-                case 16246:
+                case ParseEnum.BossIDS.Xera:
                     break;
                 // Cairn
-                case 17194:
+                case ParseEnum.BossIDS.Cairn:
                     // shared agony
                     break;
                 // MO
-                case 17172:
+                case ParseEnum.BossIDS.MursaatOverseer:
                     break;
                 // Samarog
-                case 17188:
+                case ParseEnum.BossIDS.Samarog:
                     // big bomb
                     // small bomb
                     // fixated
                     break;
                 // Deimos
-                case 17154:
+                case ParseEnum.BossIDS.Deimos:
                     // teleport zone
                     break;
                 // SH
-                case 0x4D37:
+                case ParseEnum.BossIDS.SoullessHorror:
                     break;
                 // Dhuum
-                case 0x4BFA:
+                case ParseEnum.BossIDS.Dhuum:
                     // spirit transform
                     // bomb
                     break;
                 // MAMA
-                case 0x427D:
+                case ParseEnum.BossIDS.MAMA:
                     break;
                 // Siax
-                case 0x4284:
+                case ParseEnum.BossIDS.Siax:
                     break;
                 // Ensolyss
-                case 0x4234:
+                case ParseEnum.BossIDS.Ensolyss:
                     break;
                 // Skorvald
-                case 0x44E0:
+                case ParseEnum.BossIDS.Skorvald:
                     break;
                 // Artsariiv
-                case 0x461D:
+                case ParseEnum.BossIDS.Artsariiv:
                     break;
                 // Arkk
-                case 0x455F:
+                case ParseEnum.BossIDS.Arkk:
                     break;
             }
         }

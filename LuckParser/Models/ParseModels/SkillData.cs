@@ -39,7 +39,7 @@ namespace LuckParser.Models.ParseModels
         // Constructors
         public SkillData()
         {
-            this.skill_list = new List<SkillItem>();
+            skill_list = new List<SkillItem>();
         }
 
         // Public Methods
