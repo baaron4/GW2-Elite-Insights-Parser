@@ -29,34 +29,7 @@ namespace LuckParser.Models.ParseModels
         private ParseEnum.StateChange is_statechange;
         private ushort is_flanking;
         private ushort is_shields;
-        // Constructor
-        public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, uint overstack_value,
-                long skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, ushort dst_master_instid, ParseEnum.IFF iff, ushort is_buff, ParseEnum.Result result,
-                ParseEnum.Activation is_activation, ParseEnum.BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
-                ParseEnum.StateChange is_statechange, ushort is_flanking)
-        {
-            this.time = time;
-            this.src_agent = src_agent;
-            this.dst_agent = dst_agent;
-            this.value = value;
-            this.buff_dmg = buff_dmg;
-            this.overstack_value = overstack_value;
-            this.skill_id = skill_id;
-            this.src_instid = src_instid;
-            this.dst_instid = dst_instid;
-            this.src_master_instid = src_master_instid;
-            this.dst_master_instid = dst_master_instid;
-            this.iff = iff;
-            this.is_buff = is_buff;
-            this.result = result;
-            this.is_activation = is_activation;
-            this.is_buffremove = is_buffremove;
-            this.is_ninety = is_ninety;
-            this.is_fifty = is_fifty;
-            this.is_moving = is_moving;
-            this.is_statechange = is_statechange;
-            this.is_flanking = is_flanking;
-        }
+        // Constructor        
         public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, uint overstack_value,
                long skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, ushort dst_master_instid, ParseEnum.IFF iff, ushort is_buff, ParseEnum.Result result,
                ParseEnum.Activation is_activation, ParseEnum.BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,

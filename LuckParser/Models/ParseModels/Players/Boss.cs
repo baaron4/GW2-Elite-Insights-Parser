@@ -255,7 +255,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case ParseEnum.BossIDS.Gorseval:
                     // Ghostly protection check
-                    List<CombatItem> invulsGorse = log.getCombatList().Where(x => x.getIFF() == ParseEnum.IFF.Friend && x.getSkillID() == 31790).ToList();
+                    List<CombatItem> invulsGorse = log.getCombatList().Where(x => x.getIFF() != ParseEnum.IFF.Foe && x.getSkillID() == 31790 && x.isBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
                     for (int i = 0; i < invulsGorse.Count; i++)
                     {
                         CombatItem c = invulsGorse[i];
@@ -346,7 +346,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         phases.Add(new PhaseData(start, fight_dur));
                     }
-                    string[] namesMat = new string[] { "Fire Phase", "Ice Phase", "Storm Phase", "Abomination Phase" };
+                    string[] namesMat = new string[] { "Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase" };
                     for (int i = 1; i < phases.Count; i++)
                     {
                         phases[i].setName(namesMat[i - 1]);
