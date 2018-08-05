@@ -132,26 +132,26 @@ namespace LuckParser.Models.ParseModels
         public void setCM(List<CombatItem> clist)
         {
             isCM = false;
-            switch(id)
+            switch(ParseEnum.getBossIDS(id))
             {
                 // Cairn
-                case 17194:
+                case ParseEnum.BossIDS.Cairn:
                     isCM = clist.Exists(x => x.getSkillID() == 38098);
                     break;
                 // MO
-                case 17172:
+                case ParseEnum.BossIDS.MursaatOverseer:
                     isCM = (health > 25e6);
                     break;
                 // Samarog
-                case 17188:
+                case ParseEnum.BossIDS.Samarog:
                     isCM = (health > 30e6);
                     break;
                 // Deimos
-                case 17154:
+                case ParseEnum.BossIDS.Deimos:
                     isCM = (health > 40e6);
                     break;
                 // SH
-                case 0x4D37:
+                case ParseEnum.BossIDS.SoullessHorror:
                     List<CombatItem> necrosis = clist.Where(x => x.getSkillID() == 47414 && x.isBuffremove() == ParseEnum.BuffRemove.None).ToList();
                     // split necrosis
                     Dictionary<ushort, List<CombatItem>> splitNecrosis = new Dictionary<ushort, List<CombatItem>>();
@@ -179,15 +179,15 @@ namespace LuckParser.Models.ParseModels
                     isCM = minDiff < 11000;
                     break;
                 // Dhuum
-                case 0x4BFA:
+                case ParseEnum.BossIDS.Dhuum:
                     isCM = (health > 35e6);
                     break;
                 // Skorvald
-                case 0x44E0:
+                case ParseEnum.BossIDS.Skorvald:
                     isCM = (health == 5551340);
                     break;
             }
-            if (isCM)
+            if (isCM && !name.Contains("CM"))
             {
                 name += " CM";
             }
