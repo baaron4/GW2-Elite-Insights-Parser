@@ -392,7 +392,8 @@ namespace LuckParser.Models.ParseModels
                         }
                         else
                         {
-                            transfoEnd = (int)(c.getTime() - log.getBossData().getFirstAware()); replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
+                            transfoEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                            replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
                         }
                     }
                     // fixated
@@ -407,14 +408,69 @@ namespace LuckParser.Models.ParseModels
                         }
                         else
                         {
-                            fixatedSlothEnd = (int)(c.getTime() - log.getBossData().getFirstAware()); replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>(fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)"));
+                            fixatedSlothEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                            replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>(fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)"));
                         }
                     }
                     break;
                 // Matthias
                 case ParseEnum.BossIDS.Matthias:
                     // Corruption
+                    List<CombatItem> corruptedMatthias = getFilteredList(log, 34416, getInstid());
+                    corruptedMatthias.AddRange(getFilteredList(log, 34473, getInstid()));
+                    int corruptedMatthiasStart = 0;
+                    int corruptedMatthiasEnd = 0;
+                    foreach (CombatItem c in corruptedMatthias)
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            corruptedMatthiasStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        }
+                        else
+                        {
+                            corruptedMatthiasEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                            replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>(corruptedMatthiasStart, corruptedMatthiasEnd), "rgba(255, 150, 0, 0.5)"));
+                            Point3D wellPosition = replay.getPositions().FirstOrDefault(x => x.time >= corruptedMatthiasEnd);
+                            replay.addCircleActor(new ImmobileCircle(true, 0, 120, new Tuple<int, int>(corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", wellPosition));
+                            replay.addCircleActor(new ImmobileCircle(true, corruptedMatthiasEnd + 100000, 120, new Tuple<int, int>(corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", wellPosition));
+                        }
+                    }
                     // Well of profane
+                    List<CombatItem> wellMatthias = getFilteredList(log, 34450, getInstid());
+                    int wellMatthiasStart = 0;
+                    int wellMatthiasEnd = 0;
+                    foreach (CombatItem c in wellMatthias)
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            wellMatthiasStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        }
+                        else
+                        {
+                            wellMatthiasEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                            replay.addCircleActor(new FollowingCircle(false, 0, 180, new Tuple<int, int>(wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)"));
+                            replay.addCircleActor(new FollowingCircle(true, wellMatthiasStart+9000, 180, new Tuple<int, int>(wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)"));
+                            Point3D wellPosition = replay.getPositions().FirstOrDefault(x => x.time >= wellMatthiasEnd);
+                            replay.addCircleActor(new ImmobileCircle(true, 0, 300, new Tuple<int, int>(wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", wellPosition));
+                        }
+                    }
+                    // Sacrifice
+                    List<CombatItem> sacrificeMatthias = getFilteredList(log, 34442, getInstid());
+                    int sacrificeMatthiasStart = 0;
+                    int sacrificeMatthiasEnd = 0;
+                    foreach (CombatItem c in sacrificeMatthias)
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            sacrificeMatthiasStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        }
+                        else
+                        {
+                            sacrificeMatthiasEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                            replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.5)"));
+                            replay.addCircleActor(new FollowingCircle(true, sacrificeMatthiasStart + 10000, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.5)"));
+                        }
+                    }
                     break;
                 // KC
                 case ParseEnum.BossIDS.KeepConstruct:
@@ -426,6 +482,21 @@ namespace LuckParser.Models.ParseModels
                 // Cairn
                 case ParseEnum.BossIDS.Cairn:
                     // shared agony
+                    List<CombatItem> agony = getFilteredList(log, 38049, getInstid());
+                    int agonyStart = 0;
+                    int agonyEnd = 0;
+                    foreach (CombatItem c in agony)
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            agonyStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        }
+                        else
+                        {
+                            agonyEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                            replay.addCircleActor(new FollowingCircle(false, 0, 180, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)"));
+                        }
+                    }
                     break;
                 // MO
                 case ParseEnum.BossIDS.MursaatOverseer:
@@ -433,12 +504,74 @@ namespace LuckParser.Models.ParseModels
                 // Samarog
                 case ParseEnum.BossIDS.Samarog:
                     // big bomb
+                    List<CombatItem> bigbomb = getFilteredList(log, 37966, getInstid());
+                    int bigStart = 0;
+                    int bigEnd = 0;
+                    foreach (CombatItem c in bigbomb)
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            bigStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        }
+                        else
+                        {
+                            bigEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                            replay.addCircleActor(new FollowingCircle(true, 0, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
+                            replay.addCircleActor(new FollowingCircle(true, bigEnd, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
+                        }
+                    }
                     // small bomb
+                    List<CombatItem> smallbomb = getFilteredList(log, 38247, getInstid());
+                    int smallStart = 0;
+                    int smallEnd = 0;
+                    foreach (CombatItem c in smallbomb)
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            smallStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        }
+                        else
+                        {
+                            smallEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                            replay.addCircleActor(new FollowingCircle(true, 0, 80, new Tuple<int, int>(smallStart, smallEnd), "rgba(80, 150, 0, 0.3)"));
+                        }
+                    }
                     // fixated
+                    List<CombatItem> fixatedSam = getFilteredList(log, 37868, getInstid());
+                    int fixatedSamStart = 0;
+                    int fixatedSamEnd = 0;
+                    foreach (CombatItem c in fixatedSam)
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            fixatedSamStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        }
+                        else
+                        {
+                            fixatedSamEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                            replay.addCircleActor(new FollowingCircle(true, 0, 80, new Tuple<int, int>(fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)"));
+                        }
+                    }
                     break;
                 // Deimos
                 case ParseEnum.BossIDS.Deimos:
                     // teleport zone
+                    List<CombatItem> tpDeimos = getFilteredList(log, 37730, getInstid());
+                    int tpStart = 0;
+                    int tpEnd = 0;
+                    foreach (CombatItem c in tpDeimos)
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            tpStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        }
+                        else
+                        {
+                            tpEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                            replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
+                            replay.addCircleActor(new FollowingCircle(true, tpEnd, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
+                        }
+                    }
                     break;
                 // SH
                 case ParseEnum.BossIDS.SoullessHorror:
@@ -446,7 +579,41 @@ namespace LuckParser.Models.ParseModels
                 // Dhuum
                 case ParseEnum.BossIDS.Dhuum:
                     // spirit transform
+                    List<CombatItem> spiritTransform = log.getBoonData().Where(x => x.getDstInstid() == getInstid() && x.getSkillID() == 46950 && x.isBuffremove() == ParseEnum.BuffRemove.None).ToList();
+                    foreach (CombatItem c in spiritTransform)
+                    {
+                        int duration = 15000;
+                        int start = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        if (log.getBossData().getHealthOverTime().FirstOrDefault(x => x.X > start).Y < 1050)
+                        {
+                            duration = 30000;
+                        }
+                        CombatItem removedBuff = log.getBoonData().FirstOrDefault(x => x.getSrcInstid() == getInstid() && x.getSkillID() == 48281 && x.isBuffremove() == ParseEnum.BuffRemove.All && x.getTime() > c.getTime() && x.getTime() < c.getTime() + duration);
+                        int end = start + duration;
+                        if (removedBuff != null)
+                        {
+                            end = (int)(removedBuff.getTime() - log.getBossData().getFirstAware());
+                        }
+                        replay.addCircleActor(new FollowingCircle(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)"));
+                        replay.addCircleActor(new FollowingCircle(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)"));
+                    }
                     // bomb
+                    List<CombatItem> bombDhuum = getFilteredList(log, 47646, getInstid());
+                    int bombDhuumStart = 0;
+                    int bombDhuumEnd = 0;
+                    foreach (CombatItem c in bombDhuum)
+                    {
+                        if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            bombDhuumStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                        }
+                        else
+                        {
+                            bombDhuumEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                            replay.addCircleActor(new FollowingCircle(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)"));
+                            replay.addCircleActor(new FollowingCircle(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
+                        }
+                    }
                     break;
                 // MAMA
                 case ParseEnum.BossIDS.MAMA:

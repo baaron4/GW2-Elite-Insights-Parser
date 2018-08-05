@@ -683,7 +683,7 @@ namespace LuckParser.Models.ParseModels
                     List<CastLog> magicStorms = cls.Where(x => x.getID() == 31419).ToList();
                     foreach (CastLog c in magicStorms)
                     {
-                        replay.addCircleActor(new FollowingCircle(true, 0, 100, new Tuple<int, int>((int)c.getTime(), (int)c.getTime()+c.getActDur()), "rgba(255, 255, 0, 0.5)"));
+                        replay.addCircleActor(new FollowingCircle(true, 0, 100, new Tuple<int, int>((int)c.getTime(), (int)c.getTime()+c.getActDur()), "rgba(0, 180, 255, 0.3)"));
                     }
                     break;
                 // Gorse
@@ -718,7 +718,7 @@ namespace LuckParser.Models.ParseModels
                     List<CastLog> sleepy = cls.Where(x => x.getID() == 34515).ToList();
                     foreach (CastLog c in sleepy)
                     {
-                        replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 255, 0, 0.5)"));
+                        replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(0, 180, 255, 0.3)"));
                     }
 
                     List<CastLog> tantrum = cls.Where(x => x.getID() == 34547).ToList();
@@ -824,7 +824,7 @@ namespace LuckParser.Models.ParseModels
                     List<CastLog> summon = cls.Where(x => x.getID() == 34887).ToList();
                     foreach (CastLog c in summon)
                     {
-                        replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(255, 255, 0, 0.5)"));
+                        replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(0, 180, 255, 0.3)"));
                     }
                     break;
                 // Cairn
@@ -857,7 +857,7 @@ namespace LuckParser.Models.ParseModels
                         } else
                         {
                             brutEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                            replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>(brutStart, brutEnd), "rgba(255, 255, 0, 0.5)"));
+                            replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>(brutStart, brutEnd), "rgba(0, 180, 255, 0.3)"));
                         }
                     }
                     break;
@@ -899,8 +899,8 @@ namespace LuckParser.Models.ParseModels
                     {
                         int start = (int)c.getTime();
                         int end = start + c.getActDur();
-                        replay.addCircleActor(new FollowingCircle(true, (int)c.getTime() + c.getExpDur(), 180, new Tuple<int, int>(start, end), "rgba(255, 255, 0, 0.5)"));
-                        replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>(start, end), "rgba(255, 255, 0, 0.5)"));
+                        replay.addCircleActor(new FollowingCircle(true, (int)c.getTime() + c.getExpDur(), 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
+                        replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
                     }
                     List<CastLog> vortex = cls.Where(x => x.getID() == 47327).ToList();
                     foreach (CastLog c in vortex)
@@ -950,7 +950,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         int start = (int)majorSplit.getTime();
                         int end = (int)log.getBossData().getAwareDuration();
-                        replay.addCircleActor(new FollowingCircle(true, 0, 300, new Tuple<int, int>(start, end), "rgba(0, 0, 255, 0.3)"));
+                        replay.addCircleActor(new FollowingCircle(true, 0, 300, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
                     }
                     break;
                 // MAMA
