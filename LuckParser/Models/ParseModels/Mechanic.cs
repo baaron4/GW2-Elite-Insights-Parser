@@ -1,4 +1,6 @@
-﻿namespace LuckParser.Models.ParseModels
+﻿using LuckParser.Models.DataModels;
+
+namespace LuckParser.Models.ParseModels
 {
     public class Mechanic
     {
@@ -20,11 +22,11 @@
         private string name;
         private string altname;
         private MechType mechType;       
-        private ushort bossid;
+        private ParseEnum.BossIDS bossid;
         private string plotlyShape;
         private float InternalCoolDown;
 
-        public Mechanic( int skill_id, string name, MechType mechtype, ushort bossid, string plotlyShape,string friendlyName,float ICD)
+        public Mechanic( int skill_id, string name, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string friendlyName,float ICD)
         {
             this.skill_id = skill_id;
             this.name = name;
@@ -48,7 +50,7 @@
         {
             return mechType;
         }
-        public ushort GetBossID() {
+        public ParseEnum.BossIDS GetBossID() {
             return bossid;
         }
 

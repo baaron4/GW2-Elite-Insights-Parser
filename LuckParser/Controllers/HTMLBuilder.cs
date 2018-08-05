@@ -296,7 +296,7 @@ namespace LuckParser.Controllers
                         "visible:'legendonly'," +
                         "name: 'All Player Dps'");
                 sw.Write("},");
-                List<Mechanic> presMech = log.getMechanicData().GetMechList(log.getBossData().getID());
+                List<Mechanic> presMech = log.getMechanicData().GetMechList(ParseEnum.getBossIDS(log.getBossData().getID()));
                 List<string> distMech = presMech.Select(x => x.GetAltName()).Distinct().ToList();
                 foreach (string mechAltString in distMech)
                 {
@@ -3003,7 +3003,7 @@ namespace LuckParser.Controllers
                     enemyList.Remove(p);
                 }
             }
-            foreach (Mechanic item in log.getMechanicData().GetMechList(log.getBossData().getID()))
+            foreach (Mechanic item in log.getMechanicData().GetMechList(ParseEnum.getBossIDS(log.getBossData().getID())))
             {
                 MechanicLog first_m_log = log.getMechanicData().GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill());
                 if (first_m_log != null)

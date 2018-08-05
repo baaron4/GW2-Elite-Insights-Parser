@@ -164,6 +164,7 @@ namespace LuckParser.Models.DataModels
         private void doMechData()
         {
             List<int> mIDList = new List<int>();
+            List<Mechanic> bossMechanics = mech_data.GetMechList(ParseEnum.getBossIDS(boss_data.getID()));
             foreach (Player p in p_list)
             {
                 List<CombatItem> down = combat_data.getStates(p.getInstid(), ParseEnum.StateChange.ChangeDown, boss_data.getFirstAware(), boss_data.getLastAware());
@@ -185,7 +186,7 @@ namespace LuckParser.Models.DataModels
                     if (dLog.getResult().IsHit())
                     {
 
-                        foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.SkillOnPlayer))
+                        foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.SkillOnPlayer))
                         {
                             //Prevent multi hit attacks form multi registering
                             if (prevMech != null)
@@ -220,7 +221,7 @@ namespace LuckParser.Models.DataModels
                         {
                             String name = skill_data.getName(c.getSkillID());
                             //buff on player 0
-                            foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.PlayerBoon))
+                            foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerBoon))
                             {
                                 if (c.getSkillID() == mech.GetSkill())
                                 {
@@ -230,7 +231,7 @@ namespace LuckParser.Models.DataModels
                                 }
                             }
                             //player on player 7
-                            foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.PlayerOnPlayer))
+                            foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerOnPlayer))
                             {
                                 if (c.getSkillID() == mech.GetSkill())
                                 {
@@ -247,7 +248,7 @@ namespace LuckParser.Models.DataModels
                 }
             }
             //Boon Was applied to Enemy
-            List<Mechanic> enamyBoonMechs = mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon ).ToList();
+            List<Mechanic> enamyBoonMechs = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon ).ToList();
             if (enamyBoonMechs.Count > 0)
             {
                
@@ -276,7 +277,7 @@ namespace LuckParser.Models.DataModels
                 }
             }
             //Removed Boon on Enemy
-             enamyBoonMechs = mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoonStrip).ToList();
+             enamyBoonMechs = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoonStrip).ToList();
             if (enamyBoonMechs.Count > 0)
             {
               
