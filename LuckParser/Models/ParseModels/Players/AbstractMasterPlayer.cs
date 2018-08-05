@@ -289,7 +289,6 @@ namespace LuckParser.Models.ParseModels
                 // Kalla Elite
                 case 45026:
                     boon_extra[boonid] = new Dictionary<int, string[]>();
-                    int bossArmor = log.getBossData().getID() == 0x3C4E ? 1910 : 2597;
                     for (int i = 0; i < phases.Count; i++)
                     {
                         List<DamageLog> dmLogs = getJustPlayerDamageLogs(0, log, phases[i].getStart(), phases[i].getEnd());
