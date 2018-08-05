@@ -646,13 +646,14 @@ namespace LuckParser.Controllers
                 }
             }
             boss_data.setHealthOverTime(bossHealthOverTime);//after xera in case of change
-            // Put non reward stuff in this as we find them
-            HashSet<int> notRaidRewardsIds = new HashSet<int>
-            {
-                13
-            };
+
             if (raid_mode)
             {
+                // Put non reward stuff in this as we find them
+                HashSet<int> notRaidRewardsIds = new HashSet<int>
+                {
+                    13
+                };
                 CombatItem reward = combat_list.Find(x => x.isStateChange() == ParseEnum.StateChange.Reward && !notRaidRewardsIds.Contains(x.getValue()));
                 if (reward != null)
                 {
