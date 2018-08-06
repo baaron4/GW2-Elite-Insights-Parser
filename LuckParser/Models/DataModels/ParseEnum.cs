@@ -130,10 +130,20 @@ namespace LuckParser.Models.DataModels
             GreenGuardian = 15420,
             // Gorse
             ChargedSoul = 15434,
+            EnragedSpirit = 16024,
+            AngeredSpirit = 16005,
             // Sab
             Kernan = 15372,
             Knuckles = 15404,
             Karde = 15430,
+            BanditSapper = 15423,
+            BanditThug = 15397,
+            BanditArsonist = 15421,
+            // Slothasor
+            Slubling1 = 16064,
+            Slubling2 = 16071,
+            Slubling3 = 16077,
+            Slubling4 = 16104,
             // Matthias
             Spirit = 16105,
             Spirit2 = 16114,
@@ -151,6 +161,19 @@ namespace LuckParser.Models.DataModels
             Galletta = 16228,
             Ianim = 16248,
             Core = 16261,
+            GreenPhantasm = 16237,
+            InsidiousProjection = 16227,
+            UnstableLeyRift = 16277,
+            RadiantPhantasm = 16259,
+            CrimsonPhantasm = 16257,
+            RetrieverProjection = 16249,
+            // Xera
+            XerasPhantasm = 16225,
+            WhiteMantleSeeker1 = 16238,
+            WhiteMantleSeeker2 = 16283,
+            WhiteMantleKnight = 16251,
+            WhiteMantleBattleMage = 16221,
+            ExquisiteConjunction = 16232,
             // MO
             Jade = 17181,
             // Samarog
@@ -165,6 +188,9 @@ namespace LuckParser.Models.DataModels
             Drunkard = 17163,
             Oil = 17332,
             Tear = 17303,
+            Greed = 17213,
+            Pride = 17233,
+            Hands = 17221,
             // SH
             TormentedDead = 19422,
             SurgingSoul = 19474,
@@ -173,6 +199,7 @@ namespace LuckParser.Models.DataModels
             Messenger = 19807,
             Echo = 19628,
             Enforcer = 19681,
+            Deathling = 19759,
             // Siax
             Hallucination = 17002,
             //
