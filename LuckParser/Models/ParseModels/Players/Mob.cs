@@ -50,7 +50,7 @@ namespace LuckParser.Models.ParseModels
                     replay.addCircleActor(new FollowingCircle(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
                 case ParseEnum.ThrashIDS.ChargedSoul:
-                    replay.addCircleActor(new FollowingCircle(true, 0, 180, lifespan, "rgba(255, 150, 0, 0.5)"));
+                    replay.addCircleActor(new FollowingCircle(false, 0, 180, lifespan, "rgba(255, 150, 0, 0.5)"));
                     break;
                 case ParseEnum.ThrashIDS.Spirit:
                 case ParseEnum.ThrashIDS.Spirit2:
@@ -84,6 +84,9 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case ParseEnum.ThrashIDS.Oil:
                     replay.addCircleActor(new FollowingCircle(true, 0, 240, lifespan, "rgba(0, 0, 0, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.Echo:
+                    replay.addCircleActor(new FollowingCircle(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
                 case ParseEnum.ThrashIDS.TormentedDead:
                     replay.addCircleActor(new ImmobileCircle(true,0,300,new Tuple<int, int>(end,end+60000), "rgba(255, 0, 0, 0.5)",replay.getPositions().Last()));
