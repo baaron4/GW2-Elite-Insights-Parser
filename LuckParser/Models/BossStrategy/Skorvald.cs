@@ -1,0 +1,32 @@
+﻿using LuckParser.Models.DataModels;
+using LuckParser.Models.ParseModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LuckParser.Models
+{
+    public class Skorvald : BossStrategy
+    {
+        public Skorvald() : base()
+        {
+            mode = ParseMode.Fractal;       
+        }
+
+        public override CombatReplayMap getCombatMap()
+        {
+            return new CombatReplayMap("https://i.imgur.com/PO3aoJD.png",
+                            Tuple.Create(1759, 1783),
+                            Tuple.Create(-22267, 14955, -17227, 20735),
+                            Tuple.Create(-24576, -24576, 24576, 24576),
+                            Tuple.Create(11204, 4414, 13252, 6462));
+        }
+        
+        public override string getReplayIcon()
+        {
+            return "https://i.imgur.com/IOPAHRE.png";
+        }
+    }
+}
