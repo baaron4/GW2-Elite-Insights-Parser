@@ -40,7 +40,7 @@ namespace LuckParser.Models
             long fight_dur = log.getBossData().getAwareDuration();
             List<PhaseData> phases = getInitialPhase(log);
             // Ghostly protection check
-            List<CombatItem> invulsGorse = log.getCombatList().Where(x => x.getIFF() != ParseEnum.IFF.Foe && x.getSkillID() == 31790 && x.isBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
+            List<CombatItem> invulsGorse = log.getCombatList().Where(x => x.getSkillID() == 31790 && x.isBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
             for (int i = 0; i < invulsGorse.Count; i++)
             {
                 CombatItem c = invulsGorse[i];
