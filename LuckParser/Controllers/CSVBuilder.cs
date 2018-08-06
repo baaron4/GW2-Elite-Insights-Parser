@@ -651,7 +651,7 @@ namespace LuckParser.Controllers
                     enemyList.Remove(p);
                 }
             }
-            foreach (Mechanic item in log.getMechanicData().GetMechList(log.getBossData().getID()))
+            foreach (Mechanic item in log.getBossData().getBossBehavior().getMechanics())
             {
                 MechanicLog first_m_log = log.getMechanicData().GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill());
                 if (first_m_log != null)

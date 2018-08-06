@@ -303,6 +303,8 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             replay.setStatus(down, dead);
+            // Boss related stuff
+            log.getBossData().getBossBehavior().getAdditionalPlayerData(replay, this, log);
         }
 
         protected override void setCombatReplayIcon(ParsedLog log)

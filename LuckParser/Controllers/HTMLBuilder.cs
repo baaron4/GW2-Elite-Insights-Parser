@@ -296,7 +296,7 @@ namespace LuckParser.Controllers
                         "visible:'legendonly'," +
                         "name: 'All Player Dps'");
                 sw.Write("},");
-                List<Mechanic> presMech = log.getMechanicData().GetMechList(log.getBossData().getID());
+                List<Mechanic> presMech = log.getBossData().getBossBehavior().getMechanics();
                 List<string> distMech = presMech.Select(x => x.GetAltName()).Distinct().ToList();
                 foreach (string mechAltString in distMech)
                 {
@@ -2524,7 +2524,7 @@ namespace LuckParser.Controllers
                             }
                         }
                     }
-                    HTMLHelper.writeDamageDistTableSkill(sw, skill, list_to_use, finalTotalDamage, casts, timeswasted/1000.0, -timessaved/1000.0);
+                    HTMLHelper.writeDamageDistTableSkill(sw, skill,log.getSkillData(), list_to_use, finalTotalDamage, casts, timeswasted/1000.0, -timessaved/1000.0);
                 }
             }
             // non damaging stuff
@@ -2557,7 +2557,7 @@ namespace LuckParser.Controllers
                                 }
                             }
                         }
-                        HTMLHelper.writeDamageDistTableSkill(sw, skill, new List<DamageLog>(), finalTotalDamage, casts, timeswasted/1000.0, -timessaved/1000.0);
+                        HTMLHelper.writeDamageDistTableSkill(sw, skill,log.getSkillData(), new List<DamageLog>(), finalTotalDamage, casts, timeswasted/1000.0, -timessaved/1000.0);
                     }
                 }
             }
@@ -3003,7 +3003,7 @@ namespace LuckParser.Controllers
                     enemyList.Remove(p);
                 }
             }
-            foreach (Mechanic item in log.getMechanicData().GetMechList(log.getBossData().getID()))
+            foreach (Mechanic item in log.getBossData().getBossBehavior().getMechanics())
             {
                 MechanicLog first_m_log = log.getMechanicData().GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill());
                 if (first_m_log != null)
@@ -3776,9 +3776,6 @@ namespace LuckParser.Controllers
                 }
                 if (log.getBoss().getCombatReplay() != null)
                 {
-                    sw.Write("canvas.replay {" +
-                        "border:1px solid #9B0000; "+
-                        "}");
                     // from W3
                     sw.Write(".slidecontainer {width: 100%;}");
                     sw.Write(".slider {width: 100%;appearance: none;height: 25px;background: #F3F3F3;outline: none;opacity: 0.7;-webkit-transition: .2s;transition: opacity .2s;}");

@@ -120,6 +120,130 @@ namespace LuckParser.Models.DataModels
                 ? (IFF)bt
                 : IFF.Unknown;
         }
+
+        public enum ThrashIDS : ushort
+        {
+            // VG
+            Seekers = 15426,
+            RedGuardian = 15433,
+            BlueGuardian = 15431,
+            GreenGuardian = 15420,
+            // Gorse
+            ChargedSoul = 15434,
+            EnragedSpirit = 16024,
+            AngeredSpirit = 16005,
+            // Sab
+            Kernan = 15372,
+            Knuckles = 15404,
+            Karde = 15430,
+            BanditSapper = 15423,
+            BanditThug = 15397,
+            BanditArsonist = 15421,
+            // Slothasor
+            Slubling1 = 16064,
+            Slubling2 = 16071,
+            Slubling3 = 16077,
+            Slubling4 = 16104,
+            // Matthias
+            Spirit = 16105,
+            Spirit2 = 16114,
+            IcePatch = 16139,
+            Storm = 16108,
+            Tornado = 16068,
+            //BloodStone      = 13864,
+            // KC
+            Olson = 16244,
+            Engul = 16274,
+            Faerla = 16264,
+            Caulle = 16282,
+            Henley = 16236,
+            Jessica = 16278,
+            Galletta = 16228,
+            Ianim = 16248,
+            Core = 16261,
+            GreenPhantasm = 16237,
+            InsidiousProjection = 16227,
+            UnstableLeyRift = 16277,
+            RadiantPhantasm = 16259,
+            CrimsonPhantasm = 16257,
+            RetrieverProjection = 16249,
+            // Xera
+            XerasPhantasm = 16225,
+            WhiteMantleSeeker1 = 16238,
+            WhiteMantleSeeker2 = 16283,
+            WhiteMantleKnight = 16251,
+            WhiteMantleBattleMage = 16221,
+            ExquisiteConjunction = 16232,
+            // MO
+            Jade = 17181,
+            // Samarog
+            Guldhem = 17208,
+            Rigom = 17124,
+            // Deimos
+            Saul = 17126,
+            Thief = 17206,
+            Gambler = 17335,
+            GamblerClones = 17161,
+            GamblerReal = 17355,
+            Drunkard = 17163,
+            Oil = 17332,
+            Tear = 17303,
+            Greed = 17213,
+            Pride = 17233,
+            Hands = 17221,
+            // SH
+            TormentedDead = 19422,
+            SurgingSoul = 19474,
+            Scythe = 19396,
+            // Dhuum
+            Messenger = 19807,
+            Echo = 19628,
+            Enforcer = 19681,
+            Deathling = 19759,
+            // Siax
+            Hallucination = 17002,
+            //
+            Unknown
+        };
+        public static ThrashIDS getThrashIDS(ushort id)
+        {
+            return Enum.IsDefined(typeof(ThrashIDS), id) ? (ThrashIDS)id : ThrashIDS.Unknown;
+        }
+
+        public enum BossIDS : ushort
+        {
+            ValeGuardian    = 15438,
+            Gorseval        = 15429,
+            Sabetha         = 15375,
+            Slothasor       = 16123,
+            Matthias        = 16115,
+            KeepConstruct   = 16235,
+            Xera            = 16246,
+            Cairn           = 17194,
+            MursaatOverseer = 17172,
+            Samarog         = 17188,
+            Deimos          = 17154,
+            SoullessHorror  = 19767,
+            Dhuum           = 19450,
+            MAMA            = 17021,
+            Siax            = 17028,
+            Ensolyss        = 16948,
+            Skorvald        = 17632,
+            Artsariiv       = 17949,
+            Arkk            = 17759,
+            Golem1          = 16202,
+            Golem2          = 16177,
+            Golem3          = 19676,
+            Golem4          = 19645,
+            Golem5          = 16199,
+            //
+            Unknown
+        };
+        public static BossIDS getBossIDS(ushort id)
+        {
+            return Enum.IsDefined(typeof(BossIDS), id) ? (BossIDS)id : BossIDS.Unknown;
+        }
+
     }
 
     static class ResultExtensions

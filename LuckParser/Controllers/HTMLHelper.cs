@@ -349,7 +349,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        public static void writeDamageDistTableSkill(StreamWriter sw, SkillItem skill, List<DamageLog> damageLogs, int finalTotalDamage, int casts = -1, double timeswasted = -1, double timessaved = 1)
+        public static void writeDamageDistTableSkill(StreamWriter sw, SkillItem skill, SkillData skill_data, List<DamageLog> damageLogs, int finalTotalDamage, int casts = -1, double timeswasted = -1, double timessaved = 1)
         {
             int totaldamage = 0;
             int mindamage = 0;
@@ -377,11 +377,12 @@ namespace LuckParser.Controllers
             if (casts > 0) {
                 hpcast = Math.Round(hits / (double)casts, 2);
             }
+            string skillName = (skill.getID().ToString() == skill.getName()) ? skill_data.getName(skill.getID()): skill.getName();
             if (totaldamage != 0 && skill.GetGW2APISkill() != null)
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
                     sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                     sw.Write("<td>" + totaldamage + "</td>");
                     sw.Write("<td>" + mindamage + "</td>");
@@ -402,7 +403,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
+                    sw.Write("<td align=\"left\">" + skillName + "</td>");
                     sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                     sw.Write("<td>" + totaldamage + "</td>");
                     sw.Write("<td>" + mindamage + "</td>");
@@ -423,7 +424,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
@@ -444,7 +445,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
+                    sw.Write("<td align=\"left\">" + skillName + "</td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
@@ -732,6 +733,7 @@ namespace LuckParser.Controllers
 
         public static void writeCombatReplayInterface(StreamWriter sw, Tuple<int,int> canvasSize, ParsedLog log)
         {
+            int endTime = log.getPlayerList().Select(x => x.getCombatReplay().getPositions().Count - 1).Max();
             sw.Write("<div class=\"d-flex justify-content-around align-items-center justify-content-center\">");
             {
                 sw.Write("<div class=\"d-flex flex-column flex-wrap\">");
@@ -740,7 +742,7 @@ namespace LuckParser.Controllers
                     sw.Write("</canvas>");
                     sw.Write("<div class=\"d-flex justify-content-center slidecontainer\">");
                     {
-                        sw.Write("<input oninput=\"updateTime(this.value);\"type=\"range\" min=\"0\" max=\"" + (log.getBoss().getCombatReplay().getPositions().Count - 1) + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
+                        sw.Write("<input oninput=\"updateTime(this.value);\"type=\"range\" min=\"0\" max=\"" + endTime + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
                         sw.Write("<input class=\"ml-5\" type=\"text\" id=\"timeRangeDisplay\" disabled value=\"0 secs\">");
                     }
                     sw.Write("</div>");
@@ -830,10 +832,10 @@ namespace LuckParser.Controllers
 
         private static void writeCombatReplayControls(StreamWriter sw, ParsedLog log, int pollingRate)
         {
-
+            int endTime = log.getPlayerList().Select(x => x.getCombatReplay().getPositions().Count - 1).Max();
             // animation control
             sw.Write("function startAnimate() {if (animation === null) { " +
-                "if (time ===" + (log.getBoss().getCombatReplay().getPositions().Count - 1) + ") {" +
+                "if (time ===" + endTime + ") {" +
                     "time = 0;" +
                 "}" +
                 "animation = setInterval(function(){myanimate(time++)},speed);" +
@@ -888,6 +890,7 @@ namespace LuckParser.Controllers
             sw.Write("var mainActor = function(group, imgSrc) {" +
                     "this.group = group;" +
                     "this.pos = [];" +
+                    "this.start = 0;" +
                     "this.dead = [];" +
                     "this.down = [];" +
                     "this.selected = false;" +
@@ -917,19 +920,21 @@ namespace LuckParser.Controllers
                     "   return;" +
                     "}" +
                     "var halfSize = pixelSize / 2;" +
+                    "var x = this.pos.length > 2 ? this.pos[2*timeToUse] : this.pos[0];" +
+                    "var y = this.pos.length > 2 ? this.pos[2*timeToUse + 1] : this.pos[1];" +
                     // the player is in the selected's player group
                     "if (!this.selected && this.group === selectedGroup) {" +
                         "ctx.beginPath();" +
                         "ctx.lineWidth='2';" +
                         "ctx.strokeStyle='blue';" +
-                        "ctx.rect(this.pos[2*timeToUse]-halfSize,this.pos[2*timeToUse+1]-halfSize,pixelSize,pixelSize);" +
+                        "ctx.rect(x-halfSize,y-halfSize,pixelSize,pixelSize);" +
                         "ctx.stroke();" +
                     "} else if (this.selected){" +
                         // this player is selected
                         "ctx.beginPath();" +
                         "ctx.lineWidth='4';" +
                         "ctx.strokeStyle='green';" +
-                        "ctx.rect(this.pos[2*timeToUse]-halfSize,this.pos[2*timeToUse+1]-halfSize,pixelSize,pixelSize);" +
+                        "ctx.rect(x-halfSize,y-halfSize,pixelSize,pixelSize);" +
                         "ctx.stroke();" +
                         "var _this = this;" +
                         // draw range markers
@@ -938,22 +943,22 @@ namespace LuckParser.Controllers
                             "ctx.beginPath();" +
                             "ctx.lineWidth='2';" +
                             "ctx.strokeStyle='green';" +
-                            "ctx.arc(_this.pos[2*timeToUse],_this.pos[2*timeToUse+1],inch * radius,0,2*Math.PI);" +
+                            "ctx.arc(x,y,inch * radius,0,2*Math.PI);" +
                             "ctx.stroke();" +
                         "});" +
                     "}" +
                     "if (this.died(timeToUse)) {" +
                         "ctx.drawImage(deadIcon," +
-                        "this.pos[2*timeToUse]-1.5*halfSize," +
-                        "this.pos[2*timeToUse+1]-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
+                        "x-1.5*halfSize," +
+                        "y-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
                     "} else if (this.downed(timeToUse)) {" +
                         "ctx.drawImage(downIcon," +
-                        "this.pos[2*timeToUse]-1.5*halfSize," +
-                        "this.pos[2*timeToUse+1]-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
+                        "x-1.5*halfSize," +
+                        "y-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
                     "} else {" +
                         "ctx.drawImage(this.img," +
-                        "this.pos[2*timeToUse]-halfSize," +
-                        "this.pos[2*timeToUse+1]-halfSize,pixelSize,pixelSize);" +
+                        "x-halfSize," +
+                        "y-halfSize,pixelSize,pixelSize);" +
                     "}" +
                 "};");
             // create players
@@ -998,7 +1003,7 @@ namespace LuckParser.Controllers
             sw.Write("];");
         }
 
-        private static void writeCompatReplaySecondaryClass(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
+        private static void writeCombatReplaySecondaryClass(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
             // thrash mobs
             sw.Write("var secondaryActor = function(imgSrc, start, end) {" +
@@ -1010,9 +1015,11 @@ namespace LuckParser.Controllers
                 "};");
             sw.Write("secondaryActor.prototype.draw = function(ctx,timeToUse,pixelSize){" +
                     "if (!(this.start > timeToUse || this.end < timeToUse) && this.pos.length) {" +
+                        "var x = this.pos.length > 2 ? this.pos[2*(timeToUse - this.start)] : this.pos[0];" +
+                        "var y = this.pos.length > 2 ? this.pos[2*(timeToUse - this.start) + 1] : this.pos[1];" +
                         "ctx.drawImage(this.img," +
-                        "this.pos[2*(timeToUse - this.start)]-pixelSize/2," +
-                        "this.pos[2*(timeToUse - this.start)+1]-pixelSize/2,pixelSize,pixelSize);" +
+                        "x-pixelSize/2,y-pixelSize/2," +
+                        "pixelSize,pixelSize);" +
                     "}" +
                 "};");
             // create thrash mobs
@@ -1033,8 +1040,99 @@ namespace LuckParser.Controllers
             }
         }
 
+        private static void writeCombatReplayCircleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
+        {
+            // Circle actors
+            sw.Write("var circleActor = function(radius,fill,growing, color, start, end) {" +
+                    "this.pos = null;" +
+                    "this.master = null;" +
+                    "this.start = start;" +
+                    "this.radius = radius;" +
+                    "this.end = end;" +
+                    "this.growing = growing;" +
+                    "this.fill = fill;" +
+                    "this.color = color;" +
+                "};");
+            sw.Write("circleActor.prototype.draw = function(ctx,timeToUse){" +
+                    "if (!(this.start > timeToUse || this.end < timeToUse)) {" +
+                        "var x,y;" +
+                        "if (this.pos instanceof Array) {" +
+                            "x = this.pos[0];" +
+                            "y = this.pos[1];" +
+                        "} else {" +
+                            "if (!this.master) {" +
+                                "var playerID = parseInt(this.pos);" +
+                                "this.master = data.has(playerID) ? data.get(playerID) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);" +
+                            "}" +
+                            "var start = this.master.start ? this.master.start : 0;" +
+                            "x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];" +
+                            "y = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start) + 1] : this.master.pos[1];" +
+                        "}" +
+                        "if (this.growing) {" +
+                            "var percent = Math.min((timeToUse - this.start)/(this.growing - this.start),1.0);" +
+                            "ctx.beginPath();" +
+                            "ctx.arc(x,y,percent*inch * this.radius,0,2*Math.PI);" +
+                            "if (this.fill) {" +
+                                "ctx.fillStyle=this.color;" +
+                                "ctx.fill();" +
+                            "} else {" +
+                                "ctx.lineWidth='2';" +
+                                "ctx.strokeStyle=this.color;" +
+                                "ctx.stroke();" +
+                            "}" +
+                        "} else {" +
+                            "ctx.beginPath();" +
+                            "ctx.arc(x,y,inch * this.radius,0,2*Math.PI);" +
+                            "if (this.fill) {" +
+                                "ctx.fillStyle=this.color;" +
+                                "ctx.fill();" +
+                            "} else {" +
+                                "ctx.lineWidth='2';" +
+                                "ctx.strokeStyle=this.color;" +
+                                "ctx.stroke();" +
+                            "}" +
+                        "}" +
+                    "}" +
+                "};");
+            foreach (Mob mob in log.getBoss().getThrashMobs())
+            {
+                CombatReplay replay = mob.getCombatReplay();
+                foreach(CircleActor a in replay.getCircleActors())
+                {
+                    sw.Write("{");
+                    sw.Write("var a = new circleActor("+a.getRadius()+","+(a.isFilled() ? "true" : "false") + ","+a.getGrowing() / pollingRate + ","+a.getColor()+","+a.getLifespan().Item1/pollingRate+","+ a.getLifespan().Item2 / pollingRate + ");");
+                    sw.Write("circleData.add(a);");
+                    sw.Write("a.pos ="+a.getPosition(mob.getInstid() + "_" + mob.getCombatReplay().getTimeOffsets().Item1 / pollingRate + "_" + mob.getCombatReplay().getTimeOffsets().Item2 / pollingRate, map)+";");
+                    sw.Write("}");
+                }
+            }
+            foreach (Player player in log.getPlayerList())
+            {
+                CombatReplay replay = player.getCombatReplay();
+                foreach (CircleActor a in replay.getCircleActors())
+                {
+                    sw.Write("{");
+                    sw.Write("var a = new circleActor(" + a.getRadius() + "," + (a.isFilled() ? "true" : "false") + "," + a.getGrowing() / pollingRate + "," + a.getColor() + "," + a.getLifespan().Item1 / pollingRate + "," + a.getLifespan().Item2 / pollingRate + ");");
+                    sw.Write("circleData.add(a);");
+                    sw.Write("a.pos =" + a.getPosition(player.getInstid().ToString(), map) + ";");
+                    sw.Write("}");
+                }
+            }
+            foreach (CircleActor a in log.getBoss().getCombatReplay().getCircleActors())
+            {
+                sw.Write("{");
+                sw.Write("var a = new circleActor(" + a.getRadius() + "," + (a.isFilled() ? "true" : "false") + "," + a.getGrowing() / pollingRate + "," + a.getColor() + "," + a.getLifespan().Item1 / pollingRate + "," + a.getLifespan().Item2 / pollingRate + ");");
+                sw.Write("circleData.add(a);");
+                sw.Write("a.pos =" + a.getPosition(log.getBossData().getInstid().ToString(), map) + ";");
+                sw.Write("}");
+
+            }
+        }
+
         public static void writeCombatReplayScript(StreamWriter sw, ParsedLog log, Tuple<int,int> canvasSize, CombatReplayMap map, int pollingRate)
         {
+
+            int endTime = log.getPlayerList().Select(x => x.getCombatReplay().getPositions().Count - 1).Max();
             sw.Write("<script>");
             {
                 // globals
@@ -1046,6 +1144,7 @@ namespace LuckParser.Controllers
                 sw.Write("var selectedPlayer = null;");
                 sw.Write("var data = new Map();");
                 sw.Write("var secondaryData = new Map();");
+                sw.Write("var circleData = new Set();");
                 sw.Write("var deadIcon = new Image();" +
                             "deadIcon.src = '"+GetLink("Dead")+"';");
                 sw.Write("var downIcon = new Image();" +
@@ -1053,7 +1152,8 @@ namespace LuckParser.Controllers
                 sw.Write("var boss = null;");
                 writeCombatReplayControls(sw, log, pollingRate);
                 writeCombatReplayMainClass(sw, log, map, pollingRate);
-                writeCompatReplaySecondaryClass(sw, log, map, pollingRate);           
+                writeCombatReplaySecondaryClass(sw, log, map, pollingRate);
+                writeCombatReplayCircleActors(sw, log, map, pollingRate);
                 // Main loop
                 sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
                 sw.Write("ctx.imageSmoothingEnabled = true;");
@@ -1063,6 +1163,12 @@ namespace LuckParser.Controllers
                     sw.Write("ctx.clearRect(0,0," + canvasSize.Item1 + "," + canvasSize.Item2 + ");");
                     // draw arena
                     sw.Write("ctx.drawImage(bgImage,0,0," + canvasSize.Item1 + "," + canvasSize.Item2 + ");");
+                    // draw circles
+                    sw.Write("circleData.forEach(function(value,key,map) {" +
+                            "if (!value.selected) {" +
+                                "value.draw(ctx,timeToUse);" +
+                            "}" +
+                        "});");
                     // draw unselected players
                     sw.Write("data.forEach(function(value,key,map) {" +
                             "if (!value.selected) {" +
@@ -1071,15 +1177,15 @@ namespace LuckParser.Controllers
                         "});");
                     // draw thrash mobs
                     sw.Write("secondaryData.forEach(function(value,key,map) {" +
-                            "value.draw(ctx,timeToUse,25);"+
+                            "value.draw(ctx,timeToUse,28);"+
                         "});");
                     // draw boss
-                    sw.Write("boss.draw(ctx,timeToUse,30);");
+                    sw.Write("boss.draw(ctx,timeToUse,36);");
                     // draw selected player
                     sw.Write("if (selectedPlayer) {" +
                                 "selectedPlayer.draw(ctx,timeToUse,20);"+                              
                             "}");
-                    sw.Write("if (timeToUse === " + (log.getBoss().getCombatReplay().getPositions().Count - 1) + ") {stopAnimate();}");
+                    sw.Write("if (timeToUse === " + endTime + ") {stopAnimate();}");
                     sw.Write("timeSlider.value = time;");
                     sw.Write("updateTextInput(time);");
                 }

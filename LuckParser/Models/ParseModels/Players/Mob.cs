@@ -32,85 +32,150 @@ namespace LuckParser.Models.ParseModels
         protected override void setAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
             // todo
+            int start = (int)replay.getTimeOffsets().Item1;
+            int end = (int)replay.getTimeOffsets().Item2;
+            Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
+            switch (ParseEnum.getThrashIDS(agent.getID()))
+            {
+                case ParseEnum.ThrashIDS.BlueGuardian:
+                    replay.addCircleActor(new FollowingCircle(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.GreenGuardian:
+                    replay.addCircleActor(new FollowingCircle(false, 0, 1500, lifespan, "rgba(0, 255, 0, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.RedGuardian:
+                    replay.addCircleActor(new FollowingCircle(false, 0, 1500, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.Seekers:
+                    replay.addCircleActor(new FollowingCircle(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.ChargedSoul:
+                    replay.addCircleActor(new FollowingCircle(false, 0, 180, lifespan, "rgba(255, 150, 0, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.Spirit:
+                case ParseEnum.ThrashIDS.Spirit2:
+                    replay.addCircleActor(new FollowingCircle(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.Olson:
+                case ParseEnum.ThrashIDS.Engul:
+                case ParseEnum.ThrashIDS.Faerla:
+                case ParseEnum.ThrashIDS.Caulle:
+                case ParseEnum.ThrashIDS.Henley:
+                case ParseEnum.ThrashIDS.Jessica:
+                case ParseEnum.ThrashIDS.Galletta:
+                case ParseEnum.ThrashIDS.Ianim:
+                    replay.addCircleActor(new FollowingCircle(false, 0, 450, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    replay.addCircleActor(new FollowingCircle(true, 0, 240, lifespan, "rgba(0, 125, 255, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.Messenger:
+                    replay.addCircleActor(new FollowingCircle(true, 0, 180, lifespan, "rgba(255, 125, 0, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.Scythe:
+                    replay.addCircleActor(new FollowingCircle(true, 0, 80, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.Tornado:
+                    replay.addCircleActor(new FollowingCircle(true, 0, 80, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.IcePatch:
+                    replay.addCircleActor(new FollowingCircle(true, 0, 120, lifespan, "rgba(0, 0, 255, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.Storm:
+                    replay.addCircleActor(new FollowingCircle(false, 0, 180, lifespan, "rgba(0, 80, 255, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.Oil:
+                    replay.addCircleActor(new FollowingCircle(true, 0, 240, lifespan, "rgba(0, 0, 0, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.Echo:
+                    replay.addCircleActor(new FollowingCircle(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    break;
+                case ParseEnum.ThrashIDS.TormentedDead:
+                    replay.addCircleActor(new ImmobileCircle(true,0,300,new Tuple<int, int>(end,end+60000), "rgba(255, 0, 0, 0.5)",replay.getPositions().Last()));
+                    break;
+            }
         }
 
         protected override void setCombatReplayIcon(ParsedLog log)
         {
-            // TODO
-            switch (Boss.getThrashIDS(agent.getID()))
+            switch (ParseEnum.getThrashIDS(agent.getID()))
             {
-                case Boss.ThrashIDS.BloodStone:
-                case Boss.ThrashIDS.Seekers:
+                case ParseEnum.ThrashIDS.Seekers:
                     replay.setIcon("https://i.imgur.com/FrPoluz.png");
                     break;
-                case Boss.ThrashIDS.RedGuardian:
+                case ParseEnum.ThrashIDS.RedGuardian:
                     replay.setIcon("https://i.imgur.com/73Uj4lG.png");
                     break;
-                case Boss.ThrashIDS.BlueGuardian:
+                case ParseEnum.ThrashIDS.BlueGuardian:
                     replay.setIcon("https://i.imgur.com/6CefnkP.png");
                     break;
-                case Boss.ThrashIDS.GreenGuardian:
+                case ParseEnum.ThrashIDS.GreenGuardian:
                     replay.setIcon("https://i.imgur.com/nauDVYP.png");
                     break;
-                case Boss.ThrashIDS.Spirit:
-                case Boss.ThrashIDS.ChargedSoul:
+                case ParseEnum.ThrashIDS.Spirit:
+                case ParseEnum.ThrashIDS.Spirit2:
+                case ParseEnum.ThrashIDS.ChargedSoul:
                     replay.setIcon("https://i.imgur.com/sHmksvO.png");
                     break;
-                case Boss.ThrashIDS.Kernan:
+                case ParseEnum.ThrashIDS.Kernan:
                     replay.setIcon("https://i.imgur.com/WABRQya.png");
                     break;
-                case Boss.ThrashIDS.Knuckles:
+                case ParseEnum.ThrashIDS.Knuckles:
                     replay.setIcon("https://i.imgur.com/m1y8nJE.png");
                     break;
-                case Boss.ThrashIDS.Karde:
+                case ParseEnum.ThrashIDS.Karde:
                     replay.setIcon("https://i.imgur.com/3UGyosm.png");
                     break;
-                case Boss.ThrashIDS.Olson:
-                case Boss.ThrashIDS.Engul:
-                case Boss.ThrashIDS.Faerla:
-                case Boss.ThrashIDS.Caulle:
-                case Boss.ThrashIDS.Henley:
-                case Boss.ThrashIDS.Jessica:
-                case Boss.ThrashIDS.Galletta:
-                case Boss.ThrashIDS.Ianim:
+                case ParseEnum.ThrashIDS.Olson:
+                case ParseEnum.ThrashIDS.Engul:
+                case ParseEnum.ThrashIDS.Faerla:
+                case ParseEnum.ThrashIDS.Caulle:
+                case ParseEnum.ThrashIDS.Henley:
+                case ParseEnum.ThrashIDS.Jessica:
+                case ParseEnum.ThrashIDS.Galletta:
+                case ParseEnum.ThrashIDS.Ianim:
                     replay.setIcon("https://i.imgur.com/qeYT1Bf.png");
                     break;
-                case Boss.ThrashIDS.Core:
+                case ParseEnum.ThrashIDS.Core:
                     replay.setIcon("https://i.imgur.com/yI34iqw.png");
                     break;
-                case Boss.ThrashIDS.Jade:
+                case ParseEnum.ThrashIDS.Jade:
                     replay.setIcon("https://i.imgur.com/ivtzbSP.png");
                     break;
-                case Boss.ThrashIDS.Guldhem:
+                case ParseEnum.ThrashIDS.Guldhem:
                     replay.setIcon("https://i.imgur.com/xa7Fefn.png");
                     break;
-                case Boss.ThrashIDS.Rigom:
+                case ParseEnum.ThrashIDS.Rigom:
                     replay.setIcon("https://i.imgur.com/REcGMBe.png");
                     break;
-                case Boss.ThrashIDS.Saul:
+                case ParseEnum.ThrashIDS.Saul:
                     replay.setIcon("https://i.imgur.com/ck2IsoS.png");
                     break;
-                case Boss.ThrashIDS.Thief:
-                case Boss.ThrashIDS.Gambler:
-                case Boss.ThrashIDS.GamblerClones:
-                case Boss.ThrashIDS.Drunkard:
-                    replay.setIcon("https://i.imgur.com/xCoypjS.png");
-                    break;
-                case Boss.ThrashIDS.Messenger:
-                case Boss.ThrashIDS.TormentedDead:
+                case ParseEnum.ThrashIDS.Messenger:
+                case ParseEnum.ThrashIDS.TormentedDead:
                     replay.setIcon("https://i.imgur.com/1J2BTFg.png");
                     break;
-                case Boss.ThrashIDS.SurgingSoul:
-                    replay.setIcon("https://i.imgur.com/xCoypjS.png");
-                    break;
-                case Boss.ThrashIDS.Echo:
-                    replay.setIcon("https://i.imgur.com/lJHVzt9.png");
-                    break;
-                case Boss.ThrashIDS.Scythe:
+                case ParseEnum.ThrashIDS.Scythe:
                     replay.setIcon("https://i.imgur.com/INCGLIK.png");
                     break;
-                case Boss.ThrashIDS.Enforcer:
+                case ParseEnum.ThrashIDS.Enforcer:
                     replay.setIcon("https://i.imgur.com/elHjamF.png");
+                    break;
+                case ParseEnum.ThrashIDS.Tornado:
+                    replay.setIcon("https://i.imgur.com/e10lZMa.png");
+                    break;
+                case ParseEnum.ThrashIDS.IcePatch:
+                    replay.setIcon("https://i.imgur.com/yxKJ5Yc.png");
+                    break;
+                case ParseEnum.ThrashIDS.Storm:
+                    replay.setIcon("https://i.imgur.com/9XtNPdw.png");
+                    break;
+                case ParseEnum.ThrashIDS.Tear:
+                    replay.setIcon("https://i.imgur.com/N9seps0.png");
+                    break;
+                case ParseEnum.ThrashIDS.Oil:
+                    replay.setIcon("https://i.imgur.com/DZIl49i.png");
+                    break;
+                default:
+                    replay.setIcon("https://i.imgur.com/xCoypjS.png");
                     break;
             }
         }
