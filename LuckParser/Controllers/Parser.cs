@@ -9,6 +9,7 @@ using System.IO.Compression;
 //recomend CTRL+M+O to collapse all
 using LuckParser.Models.DataModels;
 using System.Globalization;
+using LuckParser.Models;
 
 //recommend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
@@ -27,9 +28,6 @@ namespace LuckParser.Controllers
         private List<Player> p_list = new List<Player>();
         private Boss boss;
         private byte revision;
-        private bool raid_mode;
-        private bool fractal_mode;
-        private bool golem_mode;
 
         // Public Methods
         public LogData getLogData()
@@ -43,7 +41,7 @@ namespace LuckParser.Controllers
 
         public ParsedLog GetParsedLog()
         {
-            return new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss, fractal_mode || raid_mode, golem_mode);
+            return new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss);
         }
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
@@ -426,30 +424,16 @@ namespace LuckParser.Controllers
         {
             return id == 16202 || id == 16177 || id == 19676 || id == 19645 || id == 16199;
         }
-
-        private static bool raidBoss(ushort id)
-        {
-            return id == 15438 || id == 15429 || id == 15375 || id == 16123 || id == 16115 || id == 16235
-                || id == 16246 || id == 17194 || id == 17172 || id == 17188 || id == 17154 || id == 19767
-                || id == 19450;
-        }
-
-        private static bool fractalBoss(ushort id)
-        {
-            return id == 17021 || id == 17028 || id == 16948 || id == 17632 || id == 17949
-                || id == 17759;
-        }
-
+        
         /// <summary>
         /// Parses all the data again and link related stuff to each other
         /// </summary>
         private void fillMissingData()
         {
             var agentsLookup = agent_data.getAllAgentsList().ToDictionary(a => a.getAgent());
-
-            golem_mode = isGolem(boss_data.getID());
-            raid_mode = raidBoss(boss_data.getID());
-            fractal_mode = fractalBoss(boss_data.getID());
+            bool golem_mode = boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Golem;
+            bool raid_mode = boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Raid;
+            bool fractal_mode = boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Fractal;
             // Set Agent instid, first_aware and last_aware
             var combat_list = combat_data.getCombatList();
             foreach (CombatItem c in combat_list)

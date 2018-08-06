@@ -204,6 +204,11 @@ namespace LuckParser.Models.DataModels
             Skorvald        = 17632,
             Artsariiv       = 17949,
             Arkk            = 17759,
+            Golem1          = 16202,
+            Golem2          = 16177,
+            Golem3          = 19676,
+            Golem4          = 19645,
+            Golem5          = 16199,
             //
             Unknown
         };

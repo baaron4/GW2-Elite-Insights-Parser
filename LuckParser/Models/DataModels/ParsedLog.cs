@@ -17,8 +17,6 @@ namespace LuckParser.Models.DataModels
         private MechanicData mech_data = new MechanicData();
         private List<Player> p_list = new List<Player>();
         private Boss boss;
-        private bool movement_possible;
-        private bool benchmark_mode;
 
         // reduced data
         private List<CombatItem> boon_data;
@@ -30,7 +28,7 @@ namespace LuckParser.Models.DataModels
         private List<CombatItem> movement_data;
 
         public ParsedLog(LogData log_data, BossData boss_data, AgentData agent_data, SkillData skill_data, 
-                CombatData combat_data, MechanicData mech_data, List<Player> p_list, Boss boss, bool movement_possible, bool benchmark_mode)
+                CombatData combat_data, MechanicData mech_data, List<Player> p_list, Boss boss)
         {
             this.log_data = log_data;
             this.boss_data = boss_data;
@@ -40,8 +38,6 @@ namespace LuckParser.Models.DataModels
             this.mech_data = mech_data;
             this.p_list = p_list;
             this.boss = boss;
-            this.movement_possible = movement_possible;
-            this.benchmark_mode = benchmark_mode;
         }
 
         public BossData getBossData()
@@ -110,7 +106,7 @@ namespace LuckParser.Models.DataModels
 
             cast_data = combat_data.getCombatList().Where(x => (x.isStateChange() == ParseEnum.StateChange.Normal && x.isActivation() != ParseEnum.Activation.None) || x.isStateChange() == ParseEnum.StateChange.WeaponSwap).ToList();
 
-            movement_data = movement_possible? combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Position || x.isStateChange() == ParseEnum.StateChange.Velocity).ToList() : new List<CombatItem>();
+            movement_data = (boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Fractal || boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Raid) ? combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Position || x.isStateChange() == ParseEnum.StateChange.Velocity).ToList() : new List<CombatItem>();
 
             /*healing_data = combat_data.getCombatList().Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                          ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
@@ -143,7 +139,7 @@ namespace LuckParser.Models.DataModels
 
         public bool isBenchmarkMode()
         {
-            return benchmark_mode;
+            return boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Golem;
         }
 
         /*public List<CombatItem> getHealingData()
@@ -164,7 +160,7 @@ namespace LuckParser.Models.DataModels
         private void doMechData()
         {
             List<int> mIDList = new List<int>();
-            List<Mechanic> bossMechanics = mech_data.GetMechList(ParseEnum.getBossIDS(boss_data.getID()));
+            List<Mechanic> bossMechanics = boss_data.getBossBehavior().getMechanics();
             foreach (Player p in p_list)
             {
                 List<CombatItem> down = combat_data.getStates(p.getInstid(), ParseEnum.StateChange.ChangeDown, boss_data.getFirstAware(), boss_data.getLastAware());
