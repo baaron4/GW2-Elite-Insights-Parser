@@ -175,6 +175,12 @@ namespace LuckParser.Controllers
 
             //Mech List
             CreateMechList(sw, 0);
+
+            //Condi Uptime
+            CreateCondiUptime(sw, 0);
+
+            //Condi Gen
+            CreateCondiGen(sw, 0);
         }
         private void CreateDPSTable(StreamWriter sw, int phase_index)
         {
@@ -717,24 +723,160 @@ namespace LuckParser.Controllers
 
             List<MechanicLog> m_Logs = log.getMechanicData().GetMDataLogs().OrderByDescending(x=>x.GetTime()).ToList();
             m_Logs.Reverse();
+            int count = 0;
             WriteCell("Time");
             foreach (MechanicLog m in m_Logs)
             {
                 WriteCell(m.GetTime().ToString());
             }
             NewLine();
+            count++;
             WriteCell("Player");
             foreach (MechanicLog m in m_Logs)
             {
                 WriteCell(m.GetPlayer().getCharacter().ToString());
             }
             NewLine();
+            count++;
             WriteCell("Mechanic");
             foreach (MechanicLog m in m_Logs)
             {
                 WriteCell(m.GetName().ToString());
             }
             NewLine();
+            count++;
+            while (count < 15)//so each graph has equal spaceing
+            {
+                NewLine();
+                count++;
+            }
+        }
+        private void CreateCondiUptime(StreamWriter sw,int phase_index) {
+            Boss boss = log.getBoss();
+            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
+            long fight_duration = phases[phase_index].getDuration();
+            Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
+            bool hasBoons = false;
+            foreach (Boon boon in Boon.getBoonList())
+            {
+                if (boon.getName() == "Retaliation")
+                {
+                    continue;
+                }
+                if (conditions[boon.getID()].uptime > 0.0)
+                {
+                    hasBoons = true;
+                    break;
+                }
+            }
+            List<Boon> boon_to_track = Boon.getCondiBoonList();
+            boon_to_track.AddRange(Boon.getBoonList());
+            Dictionary<long, long> condiPresence = boss.getCondiPresence(log, phases, boon_to_track, phase_index);
+            Dictionary<long, long> boonPresence = boss.getBoonPresence(log, phases, boon_to_track, phase_index);
+            double avg_condis = 0.0;
+            foreach (long duration in condiPresence.Values)
+            {
+                avg_condis += duration;
+            }
+            avg_condis /= fight_duration;
+
+
+            WriteCell("Name");
+            WriteCell("Avg");
+            foreach (Boon boon in Boon.getCondiBoonList())
+            {
+                if (hasBoons && boon.getName() == "Retaliation")
+                {
+                    continue;
+                }
+                WriteCell(boon.getName());
+            }
+            
+            NewLine();
+            int count = 0;
+            WriteCell(boss.getCharacter());
+            WriteCell(Math.Round(avg_condis, 1).ToString());
+            foreach (Boon boon in Boon.getCondiBoonList())
+            {
+                if (hasBoons && boon.getName() == "Retaliation")
+                {
+                    continue;
+                }
+                if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                {
+                    WriteCell( conditions[boon.getID()].uptime.ToString());
+                }
+                else
+                {
+                    if (condiPresence.TryGetValue(boon.getID(), out long presenceTime))
+                    {
+                        WriteCell(conditions[boon.getID()].uptime.ToString());
+                    }
+                    else
+                    {
+                        WriteCell(conditions[boon.getID()].uptime.ToString());
+                    }
+                }
+            }
+            count++;
+            
+            while (count < 15)//so each graph has equal spaceing
+            {
+                NewLine();
+                count++;
+            }
+        }
+        private void CreateCondiGen(StreamWriter sw, int phase_index)
+        {
+            Boss boss = log.getBoss();
+            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
+            long fight_duration = phases[phase_index].getDuration();
+            Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
+            bool hasBoons = false;
+            int count = 0;
+            WriteCell("Sub");
+            WriteCell("");
+            WriteCell("Name");
+            foreach (Boon boon in Boon.getCondiBoonList())
+            {
+                if (boon.getName() == "Retaliation")
+                {
+                    continue;
+                }
+                WriteCell( boon.getName() );
+            }
+            NewLine();
+            foreach (Player player in log.getPlayerList())
+            {
+
+                WriteCell( player.getGroup().ToString());
+                WriteCell(player.getProf().ToString());
+                WriteCell( player.getCharacter() );
+                foreach (Boon boon in Boon.getCondiBoonList())
+                {
+                    if (boon.getName() == "Retaliation")
+                    {
+                        continue;
+                    }
+                    if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                    {
+                        WriteCell( conditions[boon.getID()].generated[player].ToString() );
+                    }
+                    else
+                    {
+                        WriteCell( conditions[boon.getID()].generated[player].ToString() );
+                    }
+                }
+                NewLine();
+                count++;
+            }
+           
+
+            while (count < 15)//so each graph has equal spaceing
+            {
+                NewLine();
+                count++;
+            }
         }
     }
 }
