@@ -212,7 +212,7 @@ namespace LuckParser
                 }
 
             }
-            catch (Exception ex)	
+            catch (Exception ex) when (!System.Diagnostics.Debugger.IsAttached)	
             {	
                 Console.Error.Write(ex.Message);	
                 throw new CancellationException(rowData, ex);	
