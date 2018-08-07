@@ -127,9 +127,12 @@ namespace LuckParser.Models
                     zone_end = Math.Min(zone_end, (int)majorSplit.getTime());
                 }
                 Point3D pos = replay.getPositions().FirstOrDefault(x => x.time > cast_end);
-                replay.addCircleActor(new ImmobileCircle(true, cast_end, 300, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
-                replay.addCircleActor(new ImmobileCircle(false, 0, 300, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
-                replay.addCircleActor(new ImmobileCircle(true, 0, 300, new Tuple<int, int>(cast_end, zone_end), "rgba(200, 255, 100, 0.5)", pos));
+                if (pos != null)
+                {
+                    replay.addCircleActor(new ImmobileCircle(true, cast_end, 300, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.addCircleActor(new ImmobileCircle(false, 0, 300, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.addCircleActor(new ImmobileCircle(true, 0, 300, new Tuple<int, int>(cast_end, zone_end), "rgba(200, 255, 100, 0.5)", pos));
+                }
             }
             List<CastLog> cataCycle = cls.Where(x => x.getID() == 48398).ToList();
             foreach (CastLog c in cataCycle)

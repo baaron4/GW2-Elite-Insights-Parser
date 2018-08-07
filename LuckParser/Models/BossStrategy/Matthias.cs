@@ -103,25 +103,32 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Storm
                     };
             List<CastLog> humanShield = cls.Where(x => x.getID() == 34468).ToList();
-            List<CastLog> humanShards = cls.Where(x => x.getID() == 34480).ToList();
+            List<int> humanShieldRemoval = log.getBoonData().Where(x => x.getSkillID() == 34518 && x.isBuffremove() == ParseEnum.BuffRemove.All).Select(x => (int)(x.getTime() - log.getBossData().getFirstAware())).Distinct().ToList();
             for (var i = 0; i < humanShield.Count; i++)
             {
                 var shield = humanShield[i];
-                if (i < humanShards.Count)
+                if (i < humanShieldRemoval.Count)
                 {
-                    var shard = humanShards[i];
-                    replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>((int)shield.getTime(), (int)shard.getTime() + shard.getActDur()), "rgba(255, 0, 255, 0.5)"));
+                    int removal = humanShieldRemoval[i];
+                    replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>((int)shield.getTime(), removal), "rgba(255, 0, 255, 0.5)"));
+                } else
+                {
+                    replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>((int)shield.getTime(), (int)log.getBossData().getAwareDuration()), "rgba(255, 0, 255, 0.5)"));
                 }
             }
             List<CastLog> aboShield = cls.Where(x => x.getID() == 34510).ToList();
-            List<CastLog> aboShards = cls.Where(x => x.getID() == 34440).ToList();
+            List<int> aboShieldRemoval = log.getBoonData().Where(x => x.getSkillID() == 34376 && x.isBuffremove() == ParseEnum.BuffRemove.All).Select(x => (int)(x.getTime() - log.getBossData().getFirstAware())).Distinct().ToList();
             for (var i = 0; i < aboShield.Count; i++)
             {
                 var shield = aboShield[i];
-                if (i < aboShards.Count)
+                if (i < aboShieldRemoval.Count)
                 {
-                    var shard = aboShards[i];
-                    replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>((int)shield.getTime(), (int)shard.getTime() + shard.getActDur()), "rgba(255, 0, 255, 0.5)"));
+                    int removal = aboShieldRemoval[i];
+                    replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>((int)shield.getTime(), removal), "rgba(255, 0, 255, 0.5)"));
+                }
+                else
+                {
+                    replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>((int)shield.getTime(), (int)log.getBossData().getAwareDuration()), "rgba(255, 0, 255, 0.5)"));
                 }
             }
             List<CastLog> rageShards = cls.Where(x => x.getID() == 34404 || x.getID() == 34411).ToList();
@@ -151,10 +158,13 @@ namespace LuckParser.Models
                 else
                 {
                     corruptedMatthiasEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                    replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>(corruptedMatthiasStart, corruptedMatthiasEnd), "rgba(255, 150, 0, 0.5)"));
-                    Point3D wellPosition = replay.getPositions().FirstOrDefault(x => x.time >= corruptedMatthiasEnd);
-                    replay.addCircleActor(new ImmobileCircle(true, 0, 120, new Tuple<int, int>(corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", wellPosition));
-                    replay.addCircleActor(new ImmobileCircle(true, corruptedMatthiasEnd + 100000, 120, new Tuple<int, int>(corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", wellPosition));
+                    replay.addCircleActor(new FollowingCircle(true, 0, 80, new Tuple<int, int>(corruptedMatthiasStart, corruptedMatthiasEnd), "rgba(255, 150, 0, 0.5)"));
+                    Point3D wellPosition = replay.getPositions().FirstOrDefault(x => x.time > corruptedMatthiasEnd);
+                    if (wellPosition != null)
+                    {
+                        replay.addCircleActor(new ImmobileCircle(true, 0, 80, new Tuple<int, int>(corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", wellPosition));
+                        replay.addCircleActor(new ImmobileCircle(true, corruptedMatthiasEnd + 100000, 120, new Tuple<int, int>(corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", wellPosition));
+                    }
                 }
             }
             // Well of profane
@@ -170,10 +180,13 @@ namespace LuckParser.Models
                 else
                 {
                     wellMatthiasEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                    replay.addCircleActor(new FollowingCircle(false, 0, 180, new Tuple<int, int>(wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)"));
-                    replay.addCircleActor(new FollowingCircle(true, wellMatthiasStart + 9000, 180, new Tuple<int, int>(wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)"));
-                    Point3D wellPosition = replay.getPositions().FirstOrDefault(x => x.time >= wellMatthiasEnd);
-                    replay.addCircleActor(new ImmobileCircle(true, 0, 300, new Tuple<int, int>(wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", wellPosition));
+                    replay.addCircleActor(new FollowingCircle(false, 0, 120, new Tuple<int, int>(wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)"));
+                    replay.addCircleActor(new FollowingCircle(true, wellMatthiasStart + 9000, 120, new Tuple<int, int>(wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)"));
+                    Point3D wellPosition = replay.getPositions().FirstOrDefault(x => x.time > wellMatthiasEnd);
+                    if (wellPosition != null)
+                    {
+                        replay.addCircleActor(new ImmobileCircle(true, 0, 300, new Tuple<int, int>(wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", wellPosition));
+                    }
                 }
             }
             // Sacrifice
@@ -189,8 +202,8 @@ namespace LuckParser.Models
                 else
                 {
                     sacrificeMatthiasEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                    replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.5)"));
-                    replay.addCircleActor(new FollowingCircle(true, sacrificeMatthiasStart + 10000, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.5)"));
+                    replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.2)"));
+                    replay.addCircleActor(new FollowingCircle(true, sacrificeMatthiasStart + 10000, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.35)"));
                 }
             }
         }
