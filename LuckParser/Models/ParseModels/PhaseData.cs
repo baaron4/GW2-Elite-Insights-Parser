@@ -1,10 +1,13 @@
-﻿namespace LuckParser.Models.ParseModels
+﻿using System.Collections.Generic;
+
+namespace LuckParser.Models.ParseModels
 {
     public class PhaseData
     {
         private long start;
         private long end;
         private string name;
+        private List<long> redirection = new List<long>();
 
         public PhaseData(long start, long end)
         {
@@ -20,6 +23,16 @@
         public string getName()
         {
             return name;
+        }
+
+        public void addRedirection(long agent)
+        {
+            redirection.Add(agent);
+        }
+
+        public List<long> getRedirection()
+        {
+            return redirection;
         }
 
         public long getDuration(string format = "ms")

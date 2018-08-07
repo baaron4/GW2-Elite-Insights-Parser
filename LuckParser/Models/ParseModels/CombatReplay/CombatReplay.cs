@@ -45,8 +45,8 @@ namespace LuckParser.Models.ParseModels
         {
             velocities.Add(vel);
         }
-        
-        public Tuple<long,long> getTimeOffsets()
+
+        public Tuple<long, long> getTimeOffsets()
         {
             return new Tuple<long, long>(start, end);
         }
@@ -91,7 +91,7 @@ namespace LuckParser.Models.ParseModels
             return circleActors;
         }
 
-        public List<Tuple<long,long>> getDead()
+        public List<Tuple<long, long>> getDead()
         {
             return dead;
         }
@@ -104,7 +104,7 @@ namespace LuckParser.Models.ParseModels
         public void addBoon(long id, int value)
         {
             List<int> ll;
-            if (!boons.TryGetValue(id,out ll))
+            if (!boons.TryGetValue(id, out ll))
             {
                 ll = new List<int>();
                 boons.Add(id, ll);
@@ -129,7 +129,8 @@ namespace LuckParser.Models.ParseModels
                 start = -1;
                 end = -1;
                 return;
-            } else if (positions.Count == 1)
+            }
+            else if (positions.Count == 1)
             {
                 velocities = null;
                 return;
