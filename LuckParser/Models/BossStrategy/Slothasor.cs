@@ -108,7 +108,7 @@ namespace LuckParser.Models
                 else
                 {
                     transfoEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                    replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
+                    replay.addCircleActor(new FollowingCircle(true, 0, 160, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
                 }
             }
             // fixated
