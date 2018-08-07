@@ -2204,8 +2204,8 @@ namespace LuckParser.Controllers
             {
                 PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
                 List<CastLog> casting = p.getCastLogs(log, phase.getStart(), phase.getEnd());
-                GW2APISkill autoSkill = null;
-                int autosCount = 0;
+                //GW2APISkill autoSkill = null;
+                //int autosCount = 0;
                 foreach (CastLog cl in casting)
                 {
                     GW2APISkill apiskill = null;
@@ -2218,7 +2218,16 @@ namespace LuckParser.Controllers
 
                     if (apiskill != null)
                     {
-                        if (apiskill.slot != "Weapon_1")
+                        // we must split the autos if we want to show interrupted skills
+                        if (apiskill.slot == "Weapon_1" && !settings.ShowAutos)
+                        {
+                            continue;
+                        }
+                        string borderSize = simpleRotSize == 30 ? "3px" : "1px";
+                        string style = cl.endActivation() == ParseEnum.Activation.CancelCancel ? "style=\"outline: "+ borderSize + " solid red\"" : "";
+                        int imageSize = simpleRotSize - (style.Length > 0 ? (simpleRotSize == 30 ? 3 : 1) : 0);
+                        sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img " + style + "src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + imageSize + "\" width=\"" + imageSize + "\"></div></span>");
+                        /*if (apiskill.slot != "Weapon_1")
                         {
                             if (autosCount > 0 && settings.ShowAutos)
                             {
@@ -2234,7 +2243,7 @@ namespace LuckParser.Controllers
                                 autoSkill = apiskill;
                             }
                             autosCount++;
-                        }
+                        }*/
                     }
                     else
                     {

@@ -88,8 +88,11 @@ namespace LuckParser.Models
                 {
                     toDropEnd = (int)(c.getTime() - log.getBossData().getFirstAware()); replay.addCircleActor(new FollowingCircle(false, 0, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
                     replay.addCircleActor(new FollowingCircle(true, toDropStart + 8000, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
-                    Point3D poisonPos = replay.getPositions().FirstOrDefault(x => x.time >= toDropEnd);
-                    replay.addCircleActor(new ImmobileCircle(true, toDropStart + 90000, 900, new Tuple<int, int>(toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", poisonPos));
+                    Point3D poisonPos = replay.getPositions().FirstOrDefault(x => x.time > toDropEnd);
+                    if (poisonPos != null)
+                    {
+                        replay.addCircleActor(new ImmobileCircle(true, toDropStart + 90000, 900, new Tuple<int, int>(toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", poisonPos));
+                    }
                 }
             }
             // Transformation
@@ -105,7 +108,7 @@ namespace LuckParser.Models
                 else
                 {
                     transfoEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                    replay.addCircleActor(new FollowingCircle(true, 0, 120, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
+                    replay.addCircleActor(new FollowingCircle(true, 0, 160, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
                 }
             }
             // fixated

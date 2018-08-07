@@ -139,8 +139,8 @@ namespace LuckParser
                     Console.Error.Write("Not EVTC");
                     throw new CancellationException(row, new InvalidDataException("Not EVTC"));
                 }
-            } 
-            catch (Exception ex)
+            }
+            catch (Exception ex) when (!System.Diagnostics.Debugger.IsAttached)
             {
                 Console.Error.Write(ex.Message);
                 throw new CancellationException(row, ex);

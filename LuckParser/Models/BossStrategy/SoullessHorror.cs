@@ -66,8 +66,11 @@ namespace LuckParser.Models
                 int start = (int)c.getTime();
                 int end = start + 4000;
                 Point3D pos = replay.getPositions().FirstOrDefault(x => x.time > start);
-                replay.addCircleActor(new ImmobileCircle(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                replay.addCircleActor(new ImmobileCircle(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                if (pos != null)
+                {
+                    replay.addCircleActor(new ImmobileCircle(false, 0, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.addCircleActor(new ImmobileCircle(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                }
             }
             return ids;
         }

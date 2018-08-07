@@ -127,23 +127,26 @@ namespace LuckParser.Models
                     zone_end = Math.Min(zone_end, (int)majorSplit.getTime());
                 }
                 Point3D pos = replay.getPositions().FirstOrDefault(x => x.time > cast_end);
-                replay.addCircleActor(new ImmobileCircle(true, cast_end, 300, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
-                replay.addCircleActor(new ImmobileCircle(false, 0, 300, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
-                replay.addCircleActor(new ImmobileCircle(true, 0, 300, new Tuple<int, int>(cast_end, zone_end), "rgba(200, 255, 100, 0.5)", pos));
+                if (pos != null)
+                {
+                    replay.addCircleActor(new ImmobileCircle(true, cast_end, 360, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.addCircleActor(new ImmobileCircle(false, 0, 360, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.addCircleActor(new ImmobileCircle(true, 0, 360, new Tuple<int, int>(cast_end, zone_end), "rgba(200, 255, 100, 0.5)", pos));
+                }
             }
             List<CastLog> cataCycle = cls.Where(x => x.getID() == 48398).ToList();
             foreach (CastLog c in cataCycle)
             {
                 int start = (int)c.getTime();
                 int end = start + c.getActDur();
-                replay.addCircleActor(new FollowingCircle(true, end, 180, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
-                replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                replay.addCircleActor(new FollowingCircle(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
+                replay.addCircleActor(new FollowingCircle(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
             }
             if (majorSplit != null)
             {
                 int start = (int)majorSplit.getTime();
                 int end = (int)log.getBossData().getAwareDuration();
-                replay.addCircleActor(new FollowingCircle(true, 0, 300, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
+                replay.addCircleActor(new FollowingCircle(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
             }
             return ids;
         }
