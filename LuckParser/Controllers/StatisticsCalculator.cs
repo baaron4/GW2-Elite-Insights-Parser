@@ -225,7 +225,8 @@ namespace LuckParser.Controllers
                     final.timeWasted = 0;
                     final.saved = 0;
                     final.timeSaved = 0;
-
+                    final.stackDist = 0;
+                    
                     final.powerLoopCountBoss = 0;
                     final.critablePowerLoopCountBoss = 0;
                     final.criticalRateBoss = 0;
@@ -376,6 +377,47 @@ namespace LuckParser.Controllers
                     final.dodgeCount = combatData.getSkillCount(instid, 65001, start, end) + combatData.getBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
                     final.ressCount = combatData.getSkillCount(instid, 1066, start, end); //Res = 1066
 
+                    //Stack Distance
+                     
+                    if (statistics.StackCenterPositions == null)
+                    {
+                        statistics.StackCenterPositions = new List<Point3D>();
+                        List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
+                        foreach (Player p in log.getPlayerList())
+                        {
+                            GroupsPosList.Add(p.getCombatReplay().getPositions());
+                        }
+                        for (int time = 0; time < GroupsPosList[0].Count(); time++)
+                        {
+                            float x = 0;
+                            float y = 0;
+                            float z = 0;
+
+                            for (int play = 0; play < GroupsPosList.Count(); play++)
+                            {
+                                x += GroupsPosList[play][time].X;
+                                y += GroupsPosList[play][time].Y;
+                                z += GroupsPosList[play][time].Z;
+                            }
+                            x = x / GroupsPosList.Count();
+                            y = y / GroupsPosList.Count();
+                            z = z / GroupsPosList.Count();
+                            statistics.StackCenterPositions.Add(new Point3D(x, y, z, time));
+                        }
+                    }
+                    List<Point3D> positions = player.getCombatReplay().getPositions();
+                    List<float> distances = new List<float>();
+                    for (int time = 0; time < positions.Count(); time++)
+                    {
+                        
+                        float deltaX = positions[time].X - statistics.StackCenterPositions[time].X;
+                        float deltaY = positions[time].Y - statistics.StackCenterPositions[time].Y;
+                        //float deltaZ = positions[time].Z - Statistics.StackCenterPositions[time].Z;
+
+
+                        distances.Add((float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY ));
+                    }
+                    final.stackDist = distances.Sum() / distances.Count();
                     // R.I.P
                     List<CombatItem> dead = combatData.getStates(instid, ParseEnum.StateChange.ChangeDead, start, end);
                     final.died = 0.0;
