@@ -72,7 +72,7 @@ namespace LuckParser.Models
                 else
                 {
                     agonyEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                    replay.addCircleActor(new FollowingCircle(false, 0, 220, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)"));
+                    replay.addCircleActor(new CircleActor(false, 0, 220, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)"));
                 }
             }
         }

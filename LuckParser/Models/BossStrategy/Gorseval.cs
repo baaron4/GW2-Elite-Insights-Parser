@@ -84,8 +84,8 @@ namespace LuckParser.Models
             {
                 int start = (int)c.getTime();
                 int end = start + c.getActDur();
-                replay.addCircleActor(new FollowingCircle(true, c.getExpDur() + (int)c.getTime(), 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
-                replay.addCircleActor(new FollowingCircle(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
+                replay.addCircleActor(new CircleActor(true, c.getExpDur() + (int)c.getTime(), 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
+                replay.addCircleActor(new CircleActor(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
             }
             return ids;
         }

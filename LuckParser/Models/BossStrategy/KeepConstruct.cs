@@ -141,8 +141,8 @@ namespace LuckParser.Models
                     CastLog fire = magicExplose[i];
                     int start = (int)charge.getTime();
                     int end = (int)fire.getTime() + fire.getActDur();
-                    replay.addCircleActor(new FollowingCircle(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
-                    replay.addCircleActor(new FollowingCircle(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                    replay.addCircleActor(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                    replay.addCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                 }
             }
             List<CastLog> towerDrop = cls.Where(x => x.getID() == 35086).ToList();
@@ -153,8 +153,8 @@ namespace LuckParser.Models
                 Point3D pos = replay.getPositions().FirstOrDefault(x => x.time > end);
                 if (pos != null)
                 {
-                    replay.addCircleActor(new ImmobileCircle(false, 0, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                    replay.addCircleActor(new ImmobileCircle(true, end, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.addCircleActor(new CircleActor(false, 0, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.addCircleActor(new CircleActor(true, end, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
                 }
             }
             return ids;
@@ -175,8 +175,8 @@ namespace LuckParser.Models
                 else
                 {
                     xeraFuryEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                    replay.addCircleActor(new FollowingCircle(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)"));
-                    replay.addCircleActor(new FollowingCircle(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)"));
+                    replay.addCircleActor(new CircleActor(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)"));
+                    replay.addCircleActor(new CircleActor(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)"));
                 }
 
             }

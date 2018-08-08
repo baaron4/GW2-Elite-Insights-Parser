@@ -12,12 +12,14 @@ namespace LuckParser.Models.ParseModels
         private Tuple<int, int> lifespan;
         private string color;
         private int growing;
+        private Mobility mobility;
 
-        public Actor(bool fill, int growing, Tuple<int, int> lifespan, string color)
+        public Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Mobility mobility)
         {
             this.lifespan = lifespan;
             this.color = color;
             this.fill = fill;
+            this.mobility = mobility;
             this.growing = growing;
         }
 
@@ -29,6 +31,11 @@ namespace LuckParser.Models.ParseModels
         public bool isFilled()
         {
             return fill;
+        }
+
+        public string getPosition(string id, CombatReplayMap map)
+        {
+            return mobility.getPosition(id, map);
         }
 
         public Tuple<int, int> getLifespan()

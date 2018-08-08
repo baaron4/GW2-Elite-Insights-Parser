@@ -57,8 +57,8 @@ namespace LuckParser.Models
             {
                 int start = (int)c.getTime();
                 int end = start + c.getActDur();
-                replay.addCircleActor(new FollowingCircle(true, (int)c.getTime() + c.getExpDur(), 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
-                replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
+                replay.addCircleActor(new CircleActor(true, (int)c.getTime() + c.getExpDur(), 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
+                replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
             }
             List<CastLog> vortex = cls.Where(x => x.getID() == 47327).ToList();
             foreach (CastLog c in vortex)
@@ -68,8 +68,8 @@ namespace LuckParser.Models
                 Point3D pos = replay.getPositions().FirstOrDefault(x => x.time > start);
                 if (pos != null)
                 {
-                    replay.addCircleActor(new ImmobileCircle(false, 0, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                    replay.addCircleActor(new ImmobileCircle(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.addCircleActor(new CircleActor(false, 0, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.addCircleActor(new CircleActor(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
                 }
             }
             return ids;

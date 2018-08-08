@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
-    public abstract class CircleActor : Actor
+    public class CircleActor : Actor
     {
         private int radius;
 
-        public CircleActor(bool fill, int growing, int radius, Tuple<int,int> lifespan, string color) : base(fill, growing,lifespan, color)
+        public CircleActor(bool fill, int growing, int radius, Tuple<int,int> lifespan, string color) : base(fill, growing,lifespan, color, new MobileActor())
+        {
+            this.radius = radius;
+        }
+
+        public CircleActor(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color, Point3D position) : base(fill, growing, lifespan, color, new ImmobileActor(position))
         {
             this.radius = radius;
         }
@@ -19,8 +24,6 @@ namespace LuckParser.Models.ParseModels
         {
             return radius;
         }
-
-        public abstract string getPosition(string id, CombatReplayMap map);
 
     }
 }

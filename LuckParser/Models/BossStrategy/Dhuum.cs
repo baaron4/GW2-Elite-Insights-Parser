@@ -129,9 +129,9 @@ namespace LuckParser.Models
                 Point3D pos = replay.getPositions().FirstOrDefault(x => x.time > cast_end);
                 if (pos != null)
                 {
-                    replay.addCircleActor(new ImmobileCircle(true, cast_end, 450, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
-                    replay.addCircleActor(new ImmobileCircle(false, 0, 450, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
-                    replay.addCircleActor(new ImmobileCircle(true, 0, 450, new Tuple<int, int>(cast_end, zone_end), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.addCircleActor(new CircleActor(true, cast_end, 450, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.addCircleActor(new CircleActor(false, 0, 450, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.addCircleActor(new CircleActor(true, 0, 450, new Tuple<int, int>(cast_end, zone_end), "rgba(200, 255, 100, 0.5)", pos));
                 }
             }
             List<CastLog> cataCycle = cls.Where(x => x.getID() == 48398).ToList();
@@ -139,14 +139,14 @@ namespace LuckParser.Models
             {
                 int start = (int)c.getTime();
                 int end = start + c.getActDur();
-                replay.addCircleActor(new FollowingCircle(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
-                replay.addCircleActor(new FollowingCircle(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                replay.addCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
+                replay.addCircleActor(new CircleActor(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
             }
             if (majorSplit != null)
             {
                 int start = (int)majorSplit.getTime();
                 int end = (int)log.getBossData().getAwareDuration();
-                replay.addCircleActor(new FollowingCircle(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
+                replay.addCircleActor(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
             }
             return ids;
         }
@@ -169,8 +169,8 @@ namespace LuckParser.Models
                 {
                     end = (int)(removedBuff.getTime() - log.getBossData().getFirstAware());
                 }
-                replay.addCircleActor(new FollowingCircle(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)"));
-                replay.addCircleActor(new FollowingCircle(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)"));
+                replay.addCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)"));
+                replay.addCircleActor(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)"));
             }
             // bomb
             List<CombatItem> bombDhuum = getFilteredList(log, 47646, p.getInstid());
@@ -185,8 +185,8 @@ namespace LuckParser.Models
                 else
                 {
                     bombDhuumEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                    replay.addCircleActor(new FollowingCircle(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)"));
-                    replay.addCircleActor(new FollowingCircle(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
+                    replay.addCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)"));
+                    replay.addCircleActor(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
                 }
             }
         }

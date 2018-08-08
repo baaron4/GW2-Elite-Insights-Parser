@@ -122,8 +122,9 @@
     <Compile Include="Models\DataModels\Statistics.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\Actor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\CircleActor.cs" />
-    <Compile Include="Models\ParseModels\CombatReplay\Actors\FollowingCircle.cs" />
-    <Compile Include="Models\ParseModels\CombatReplay\Actors\ImmobileCircle.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\ImmobileActor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\MobileActor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\Mobility.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplay.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplayMap.cs" />
     <Compile Include="Models\ParseModels\EffectStackingLogic\HealingLogic.cs" />
