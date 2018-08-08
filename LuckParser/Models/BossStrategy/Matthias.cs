@@ -206,6 +206,24 @@ namespace LuckParser.Models
                     replay.addCircleActor(new FollowingCircle(true, sacrificeMatthiasStart + 10000, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.35)"));
                 }
             }
+            // Bombs
+            List<CombatItem> zealousBenediction = getFilteredList(log, 34511, p.getInstid());
+            int zealousStart = 0;
+            int zealousEnd = 0;
+            foreach (CombatItem c in zealousBenediction)
+            {
+                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                {
+                    zealousStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                }
+                else
+                {
+                    zealousEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    replay.addCircleActor(new FollowingCircle(true, 0, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)"));
+                    replay.addCircleActor(new FollowingCircle(true, zealousEnd, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)"));
+                }
+
+            }
         }
 
         public override string getReplayIcon()
