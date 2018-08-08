@@ -225,7 +225,8 @@ namespace LuckParser.Controllers
                     final.timeWasted = 0;
                     final.saved = 0;
                     final.timeSaved = 0;
-
+                    final.stackDist = 0;
+                    
                     final.powerLoopCountBoss = 0;
                     final.critablePowerLoopCountBoss = 0;
                     final.criticalRateBoss = 0;
@@ -376,6 +377,91 @@ namespace LuckParser.Controllers
                     final.dodgeCount = combatData.getSkillCount(instid, 65001, start, end) + combatData.getBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
                     final.ressCount = combatData.getSkillCount(instid, 1066, start, end); //Res = 1066
 
+                    //Stack Distance
+                    if (log.getMovementData().Count > 0)
+                    {
+                        if (statistics.StackCenterPositions == null)
+                        {
+                            statistics.StackCenterPositions = new List<Point3D>();
+                            List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
+                            foreach (Player p in log.getPlayerList())
+                            {
+                                List<Point3D> list = p.getCombatReplay().getPositions();
+                                if (list.Count > 1)
+                                {
+                                    List<CombatItem> dead_2 = combatData.getStates(instid, ParseEnum.StateChange.ChangeDead, start, end);
+                                    foreach (CombatItem deadEvent in dead_2)
+                                    {
+                                        for (int strt = (int)deadEvent.getTime(); start <= list.Count; strt++)
+                                        {
+                                            list[strt] = null;
+                                        }
+                                    }
+                                    List<CombatItem> disconect_2 = combatData.getStates(instid, ParseEnum.StateChange.Despawn, start, end);
+                                    foreach (CombatItem dcEvent in disconect_2)
+                                    {
+                                        for (int strt = (int)dcEvent.getTime(); start <= list.Count; strt++)
+                                        {
+                                            list[strt] = null;
+                                        }
+                                    }
+                                    GroupsPosList.Add(list);
+                                }
+                               
+                            }
+                            for (int time = 0; time < GroupsPosList[0].Count(); time++)
+                            {
+                                float x = 0;
+                                float y = 0;
+                                float z = 0;
+                                int active_players = GroupsPosList.Count();
+                                for (int play = 0; play < GroupsPosList.Count(); play++)
+                                {
+                                    Point3D point = GroupsPosList[play][time];
+                                    if (point != null)
+                                    {
+                                        x += point.X;
+                                        y += point.Y;
+                                        z += point.Z;
+                                    }
+                                    else
+                                    {
+                                        active_players--;
+                                    }
+                                   
+                                }
+                                x = x /active_players;
+                                y = y / active_players;
+                                z = z / active_players;
+                                statistics.StackCenterPositions.Add(new Point3D(x, y, z, time));
+                            }
+                        }
+                   
+                    }
+                    if (log.getMovementData().Count > 0)
+                    {
+                        List<Point3D> positions = player.getCombatReplay().getPositions();
+                        if (positions.Count > 1)
+                        {
+                            List<float> distances = new List<float>();
+                            for (int time = 0; time < positions.Count(); time++)
+                            {
+
+                                float deltaX = positions[time].X - statistics.StackCenterPositions[time].X;
+                                float deltaY = positions[time].Y - statistics.StackCenterPositions[time].Y;
+                                //float deltaZ = positions[time].Z - Statistics.StackCenterPositions[time].Z;
+
+
+                                distances.Add((float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
+                            }
+                            final.stackDist = distances.Sum() / distances.Count();
+                        }
+                        else
+                        {
+                            final.stackDist = -1;
+                        }
+                       
+                    }
                     // R.I.P
                     List<CombatItem> dead = combatData.getStates(instid, ParseEnum.StateChange.ChangeDead, start, end);
                     final.died = 0.0;

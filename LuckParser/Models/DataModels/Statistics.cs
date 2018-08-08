@@ -69,7 +69,7 @@ namespace LuckParser.Models.DataModels
             public int saved;
             public double timeSaved;
             public double avgBoons;
-
+            public double stackDist;
             //Boss only Rates
             public int powerLoopCountBoss;
             public int critablePowerLoopCountBoss;
@@ -90,6 +90,8 @@ namespace LuckParser.Models.DataModels
             public int ressCount;
             public int downCount;
             public int dodgeCount;
+
+            
 
             public double died;
             public double dcd;
@@ -159,5 +161,8 @@ namespace LuckParser.Models.DataModels
         public List<Boon> present_offbuffs = new List<Boon>();//Used only for Off Buff tables
         public List<Boon> present_defbuffs = new List<Boon>();//Used only for Def Buff tables
         public Dictionary<long, List<Boon>> present_personnal = new Dictionary<long, List<Boon>>();//Used only for personnal
+
+        //Positions for group
+        public List<Point3D> StackCenterPositions;
     }
 }

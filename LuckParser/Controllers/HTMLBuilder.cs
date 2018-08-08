@@ -937,6 +937,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.saved + "cancels \">" + stats.timeSaved + "</span>" + "</td>");//timesaved
                             sw.Write("<td>" + stats.swapCount + "</td>");//w swaps
+                            sw.Write("<td>" + Math.Round(stats.stackDist, 2) + "</td>");//stack dist
                             sw.Write("<td>" + stats.downCount + "</td>");//downs
                             long fight_duration = phase.getDuration();
                             if (timedead > TimeSpan.Zero)
@@ -1069,6 +1070,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.saved + "cancels \">" + stats.timeSaved + "</span>" + "</td>");//timesaved
                             sw.Write("<td>" + stats.swapCount + "</td>");//w swaps
+                            sw.Write("<td>" + Math.Round(stats.stackDist,2) + "</td>");//stack dist
                             sw.Write("<td>" + stats.downCount + "</td>");//downs
                             long fight_duration = phase.getDuration();
                             if (timedead > TimeSpan.Zero)

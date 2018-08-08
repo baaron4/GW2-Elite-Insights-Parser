@@ -677,6 +677,7 @@ namespace LuckParser.Controllers
                 sw.Write("<th><img src=\"" + GetLink("Wasted") + "\" alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
                 sw.Write("<th><img src=\"" + GetLink("Saved") + "\" alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
                 sw.Write("<th><img src=\"" + GetLink("Swap") + "\" alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Stack") + "\" alt=\"Stack\" title=\"Average Distance from center of group stack\" height=\"18\" width=\"18\"></th>");
                 sw.Write("<th><img src=\"" + GetLink("Downs") + "\" alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
                 sw.Write("<th><img src=\"" + GetLink("Dead") + "\" alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
             }
@@ -704,6 +705,7 @@ namespace LuckParser.Controllers
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td>" + groupList.Sum(c => int.Parse(c[10])) + "</td>");
+                    sw.Write("<td></td>");
                     sw.Write("<td>" + groupList.Sum(c => int.Parse(c[11])) + "</td>");
                     sw.Write("<td></td>");
                 }
@@ -725,6 +727,7 @@ namespace LuckParser.Controllers
                 sw.Write("<td></td>");
                 sw.Write("<td></td>");
                 sw.Write("<td>" + footerList.Sum(c => int.Parse(c[10])) + "</td>");
+                sw.Write("<td></td>");
                 sw.Write("<td>" + footerList.Sum(c => int.Parse(c[11])) + "</td>");
                 sw.Write("<td></td>");
             }
@@ -1567,6 +1570,8 @@ namespace LuckParser.Controllers
                     return "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
                 case "Bandage":
                     return "https://render.guildwars2.com/file/D2D7D11874060D68760BFD519CFC77B6DF14981F/102928.png";
+                case "Stack":
+                    return "https://wiki.guildwars2.com/images/e/ef/Commander_arrow_marker.png";
 
                 case "Color-Aegis": return "rgb(102,255,255)";
                 case "Color-Fury": return "rgb(255,153,0)";
