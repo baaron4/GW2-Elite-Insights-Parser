@@ -86,7 +86,7 @@ namespace LuckParser.Models.ParseModels
             foreach (AgentItem a in aList)
             {
                 Mob mob = new Mob(a);
-                mob.initCombatReplay(log, pollingRate, true);
+                mob.initCombatReplay(log, pollingRate, true, false);
                 thrashMobs.Add(mob);
             }
         }

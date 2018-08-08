@@ -274,9 +274,12 @@ namespace LuckParser.Models.ParseModels
             List<CombatItem> status = log.getCombatData().getStates(getInstid(), ParseEnum.StateChange.ChangeDown, log.getBossData().getFirstAware(), log.getBossData().getLastAware());
             status.AddRange(log.getCombatData().getStates(getInstid(), ParseEnum.StateChange.ChangeUp, log.getBossData().getFirstAware(), log.getBossData().getLastAware()));
             status.AddRange(log.getCombatData().getStates(getInstid(), ParseEnum.StateChange.ChangeDead, log.getBossData().getFirstAware(), log.getBossData().getLastAware()));
+            status.AddRange(log.getCombatData().getStates(getInstid(), ParseEnum.StateChange.Spawn, log.getBossData().getFirstAware(), log.getBossData().getLastAware()));
+            status.AddRange(log.getCombatData().getStates(getInstid(), ParseEnum.StateChange.Despawn, log.getBossData().getFirstAware(), log.getBossData().getLastAware()));
             status = status.OrderBy(x => x.getTime()).ToList();
             List<Tuple<long, long>> dead = new List<Tuple<long, long>>();
             List<Tuple<long, long>> down = new List<Tuple<long, long>>();
+            List<Tuple<long, long>> dc = new List<Tuple<long, long>>();
             for (var i = 0; i < status.Count -1;i++)
             {
                 CombatItem cur = status[i];
@@ -287,6 +290,9 @@ namespace LuckParser.Models.ParseModels
                 } else if (cur.isStateChange() == ParseEnum.StateChange.ChangeDead)
                 {
                     dead.Add(new Tuple<long, long>(cur.getTime() - log.getBossData().getFirstAware(), next.getTime() - log.getBossData().getFirstAware()));
+                } else if (cur.isStateChange() == ParseEnum.StateChange.Despawn)
+                {
+                    dc.Add(new Tuple<long, long>(cur.getTime() - log.getBossData().getFirstAware(), next.getTime() - log.getBossData().getFirstAware()));
                 }
             }
             // check last value
@@ -301,8 +307,12 @@ namespace LuckParser.Models.ParseModels
                 {
                     dead.Add(new Tuple<long, long>(cur.getTime() - log.getBossData().getFirstAware(), log.getBossData().getAwareDuration()));
                 }
+                else if (cur.isStateChange() == ParseEnum.StateChange.Despawn)
+                {
+                    dc.Add(new Tuple<long, long>(cur.getTime() - log.getBossData().getFirstAware(), log.getBossData().getAwareDuration()));
+                }
             }
-            replay.setStatus(down, dead);
+            replay.setStatus(down, dead, dc);
             // Boss related stuff
             log.getBossData().getBossBehavior().getAdditionalPlayerData(replay, this, log);
         }

@@ -90,7 +90,7 @@ namespace LuckParser.Models.ParseModels
             }
             return condi_presence[phase_index];
         }
-        public void initCombatReplay(ParsedLog log, int pollingRate, bool trim = false)
+        public void initCombatReplay(ParsedLog log, int pollingRate, bool trim, bool forceInterpolate)
         {
             if (log.getMovementData().Count == 0)
             {
@@ -101,7 +101,7 @@ namespace LuckParser.Models.ParseModels
             {
                 replay = new CombatReplay();
                 setMovements(log);
-                replay.pollingRate(pollingRate, log.getBossData().getAwareDuration());
+                replay.pollingRate(pollingRate, log.getBossData().getAwareDuration(), forceInterpolate);
                 setCombatReplayIcon(log);
                 if (trim)
                 {

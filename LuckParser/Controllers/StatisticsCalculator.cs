@@ -51,9 +51,9 @@ namespace LuckParser.Controllers
             {
                 foreach (Player p in log.getPlayerList())
                 {
-                    p.initCombatReplay(log, settings.PollingRate);
+                    p.initCombatReplay(log, settings.PollingRate, false, true);
                 }
-                log.getBoss().initCombatReplay(log, settings.PollingRate);
+                log.getBoss().initCombatReplay(log, settings.PollingRate, false, true);
             }
             if (switches.calculateDPS) calculateDPS();
             if (switches.calculateStats) calculateStats();
@@ -378,7 +378,7 @@ namespace LuckParser.Controllers
                     final.ressCount = combatData.getSkillCount(instid, 1066, start, end); //Res = 1066
 
                     //Stack Distance
-                    if (log.getMovementData().Count > 0)
+                    if (settings.ParseCombatReplay && log.getBoss().getCombatReplay() != null)
                     {
                         if (statistics.StackCenterPositions == null)
                         {
@@ -386,36 +386,19 @@ namespace LuckParser.Controllers
                             List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
                             foreach (Player p in log.getPlayerList())
                             {
-                                List<Point3D> list = p.getCombatReplay().getPositions();
+                                List<Point3D> list = p.getCombatReplay().getActivePositions();  
                                 if (list.Count > 1)
                                 {
-                                    List<CombatItem> dead_2 = combatData.getStates(instid, ParseEnum.StateChange.ChangeDead, start, end);
-                                    foreach (CombatItem deadEvent in dead_2)
-                                    {
-                                        for (int strt = (int)deadEvent.getTime(); start <= list.Count; strt++)
-                                        {
-                                            list[strt] = null;
-                                        }
-                                    }
-                                    List<CombatItem> disconect_2 = combatData.getStates(instid, ParseEnum.StateChange.Despawn, start, end);
-                                    foreach (CombatItem dcEvent in disconect_2)
-                                    {
-                                        for (int strt = (int)dcEvent.getTime(); start <= list.Count; strt++)
-                                        {
-                                            list[strt] = null;
-                                        }
-                                    }
                                     GroupsPosList.Add(list);
                                 }
-                               
                             }
+                            int active_players = GroupsPosList.Count();
                             for (int time = 0; time < GroupsPosList[0].Count(); time++)
                             {
                                 float x = 0;
                                 float y = 0;
                                 float z = 0;
-                                int active_players = GroupsPosList.Count();
-                                for (int play = 0; play < GroupsPosList.Count(); play++)
+                                for (int play = 0; play < active_players; play++)
                                 {
                                     Point3D point = GroupsPosList[play][time];
                                     if (point != null)
@@ -436,10 +419,6 @@ namespace LuckParser.Controllers
                                 statistics.StackCenterPositions.Add(new Point3D(x, y, z, time));
                             }
                         }
-                   
-                    }
-                    if (log.getMovementData().Count > 0)
-                    {
                         List<Point3D> positions = player.getCombatReplay().getPositions();
                         if (positions.Count > 1)
                         {
@@ -460,7 +439,6 @@ namespace LuckParser.Controllers
                         {
                             final.stackDist = -1;
                         }
-                       
                     }
                     // R.I.P
                     List<CombatItem> dead = combatData.getStates(instid, ParseEnum.StateChange.ChangeDead, start, end);

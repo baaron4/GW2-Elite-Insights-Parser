@@ -736,7 +736,6 @@ namespace LuckParser.Controllers
 
         public static void writeCombatReplayInterface(StreamWriter sw, Tuple<int,int> canvasSize, ParsedLog log)
         {
-            int endTime = log.getPlayerList().Select(x => x.getCombatReplay().getPositions().Count - 1).Max();
             sw.Write("<div class=\"d-flex justify-content-around align-items-center justify-content-center\">");
             {
                 sw.Write("<div class=\"d-flex flex-column flex-wrap\">");
@@ -745,7 +744,7 @@ namespace LuckParser.Controllers
                     sw.Write("</canvas>");
                     sw.Write("<div class=\"d-flex justify-content-center slidecontainer\">");
                     {
-                        sw.Write("<input oninput=\"updateTime(this.value);\"type=\"range\" min=\"0\" max=\"" + endTime + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
+                        sw.Write("<input oninput=\"updateTime(this.value);\"type=\"range\" min=\"0\" max=\"" + (log.getBoss().getCombatReplay().getPositions().Count - 1) + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
                         sw.Write("<input class=\"ml-5\" type=\"text\" id=\"timeRangeDisplay\" disabled value=\"0 secs\">");
                     }
                     sw.Write("</div>");
@@ -835,10 +834,9 @@ namespace LuckParser.Controllers
 
         private static void writeCombatReplayControls(StreamWriter sw, ParsedLog log, int pollingRate)
         {
-            int endTime = log.getPlayerList().Select(x => x.getCombatReplay().getPositions().Count - 1).Max();
             // animation control
             sw.Write("function startAnimate() {if (animation === null) { " +
-                "if (time ===" + endTime + ") {" +
+                "if (time ===" + (log.getBoss().getCombatReplay().getPositions().Count - 1) + ") {" +
                     "time = 0;" +
                 "}" +
                 "animation = setInterval(function(){myanimate(time++)},speed);" +
@@ -1134,8 +1132,6 @@ namespace LuckParser.Controllers
 
         public static void writeCombatReplayScript(StreamWriter sw, ParsedLog log, Tuple<int,int> canvasSize, CombatReplayMap map, int pollingRate)
         {
-
-            int endTime = log.getPlayerList().Select(x => x.getCombatReplay().getPositions().Count - 1).Max();
             sw.Write("<script>");
             {
                 // globals
@@ -1188,7 +1184,7 @@ namespace LuckParser.Controllers
                     sw.Write("if (selectedPlayer) {" +
                                 "selectedPlayer.draw(ctx,timeToUse,20);"+                              
                             "}");
-                    sw.Write("if (timeToUse === " + endTime + ") {stopAnimate();}");
+                    sw.Write("if (timeToUse === " + (log.getBoss().getCombatReplay().getPositions().Count - 1) + ") {stopAnimate();}");
                     sw.Write("timeSlider.value = time;");
                     sw.Write("updateTextInput(time);");
                 }
