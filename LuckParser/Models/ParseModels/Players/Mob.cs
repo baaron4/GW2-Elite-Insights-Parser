@@ -89,6 +89,10 @@ namespace LuckParser.Models.ParseModels
                     replay.addCircleActor(new CircleActor(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
                 case ParseEnum.ThrashIDS.TormentedDead:
+                    if (replay.getPositions().Count == 0)
+                    {
+                        break;
+                    }
                     replay.addCircleActor(new CircleActor(true,0,400,new Tuple<int, int>(end,end+60000), "rgba(255, 0, 0, 0.5)",replay.getPositions().Last()));
                     break;
             }
