@@ -117,11 +117,11 @@ namespace LuckParser.Models
                         case 1:
                             patterns = new List<string>
                             {
-                                "2+3",
+                                "2+3+5",
                                 "2+3+4",
-                                "1+4",
-                                "1+2",
-                                "1+3",
+                                "1+4+5",
+                                "1+2+5",
+                                "1+3+5",
                                 "Full"
                             };
                             break;
@@ -129,9 +129,9 @@ namespace LuckParser.Models
                             patterns = new List<string>
                             {
                                 "2+3+4",
-                                "1+4",
+                                "1+4+5",
                                 "1+3+4",
-                                "1+2",
+                                "1+2+5",
                                 "1+2+3",
                                 "Full"
                             };
@@ -139,11 +139,11 @@ namespace LuckParser.Models
                         case 5:
                             patterns = new List<string>
                             {
-                                "1+4",
-                                "1+2",
-                                "2+3",
-                                "3+4",
-                                "3+4",
+                                "1+4+5",
+                                "1+2+5",
+                                "2+3+5",
+                                "3+4+5",
+                                "3+4+5",
                                 "Full"
                             };
                             break;
@@ -177,13 +177,18 @@ namespace LuckParser.Models
                             replay.addDoughnutActor(new DoughnutActor(explosion, 900, 1200, new Tuple<int, int>(tickStart, tickEnd), "rgba(0, 0, 0, 0.2)", pos));
                             replay.addDoughnutActor(new DoughnutActor(0, 900, 1200, new Tuple<int, int>(tickStart, tickEnd), "rgba(0, 0, 0, 0.4)", pos));
                         }
+                        if (pattern.Contains("5"))
+                        {
+                            replay.addDoughnutActor(new DoughnutActor(explosion, 1200, 1500, new Tuple<int, int>(tickStart, tickEnd), "rgba(0, 0, 0, 0.2)", pos));
+                            replay.addDoughnutActor(new DoughnutActor(0, 1200, 1500, new Tuple<int, int>(tickStart, tickEnd), "rgba(0, 0, 0, 0.4)", pos));
+                        }
                         if (pattern.Contains("Full"))
                         {
                             tickStart -= 1000;
                             explosion -= 1000;
                             tickEnd -= 1000;
-                            replay.addCircleActor(new CircleActor(true, explosion, 1200, new Tuple<int, int>(tickStart, tickEnd), "rgba(0, 0, 0, 0.2)", pos));
-                            replay.addCircleActor(new CircleActor(true, 0, 1200, new Tuple<int, int>(tickStart, tickEnd), "rgba(0, 0, 0, 0.4)", pos));
+                            replay.addCircleActor(new CircleActor(true, explosion, 1500, new Tuple<int, int>(tickStart, tickEnd), "rgba(0, 0, 0, 0.2)", pos));
+                            replay.addCircleActor(new CircleActor(true, 0, 1500, new Tuple<int, int>(tickStart, tickEnd), "rgba(0, 0, 0, 0.4)", pos));
                         }
                     }
                 }
