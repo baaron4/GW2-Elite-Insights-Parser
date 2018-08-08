@@ -179,8 +179,11 @@ namespace LuckParser.Models
                         }
                         if (pattern.Contains("Full"))
                         {
-                            replay.addCircleActor(new CircleActor(true, explosion, 1500, new Tuple<int, int>(tickStart, tickEnd), "rgba(0, 0, 0, 0.2)", log.getBoss().getCombatReplay().getPositions().First()));
-                            replay.addCircleActor(new CircleActor(true, 0, 1500, new Tuple<int, int>(tickStart, tickEnd), "rgba(0, 0, 0, 0.4)", log.getBoss().getCombatReplay().getPositions().First()));
+                            tickStart -= 1000;
+                            explosion -= 1000;
+                            tickEnd -= 1000;
+                            replay.addCircleActor(new CircleActor(true, explosion, 1200, new Tuple<int, int>(tickStart, tickEnd), "rgba(0, 0, 0, 0.2)", pos));
+                            replay.addCircleActor(new CircleActor(true, 0, 1200, new Tuple<int, int>(tickStart, tickEnd), "rgba(0, 0, 0, 0.4)", pos));
                         }
                     }
                 }
