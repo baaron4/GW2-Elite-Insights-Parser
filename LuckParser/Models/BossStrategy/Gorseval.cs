@@ -150,6 +150,7 @@ namespace LuckParser.Models
                         default:
                             throw new Exception("how the fuck");
                     }
+                    start += 2200;
                     for (int i = 0; i < ticks; i++)
                     {
                         int tickStart = start + 4000 * i;
