@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
     {
         private int radius;
 
-        public CircleActor(bool fill, int growing, int radius, Tuple<int,int> lifespan, string color) : base(fill, growing,lifespan, color, new MobileActor())
+        public CircleActor(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color) : base(fill, growing, lifespan, color, new MobileActor())
         {
             this.radius = radius;
         }

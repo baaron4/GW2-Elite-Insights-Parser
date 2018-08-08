@@ -122,6 +122,7 @@
     <Compile Include="Models\DataModels\Statistics.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\Actor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\CircleActor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\DoughnutActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\ImmobileActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\MobileActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\Mobility.cs" />

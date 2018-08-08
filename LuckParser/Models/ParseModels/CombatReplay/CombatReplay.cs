@@ -26,6 +26,7 @@ namespace LuckParser.Models.ParseModels
         private Dictionary<long, List<int>> boons = new Dictionary<long, List<int>>();
         // actors
         private List<CircleActor> circleActors = new List<CircleActor>();
+        private List<DoughnutActor> doughnutActors = new List<DoughnutActor>();
 
         public CombatReplay()
         {
@@ -68,6 +69,10 @@ namespace LuckParser.Models.ParseModels
         {
             circleActors.Add(circleActor);
         }
+        public void addDoughnutActor(DoughnutActor doughnutActor)
+        {
+            doughnutActors.Add(doughnutActor);
+        }
 
         public void setStatus(List<Tuple<long, long>> down, List<Tuple<long, long>> dead, List<Tuple<long, long>> dc)
         {
@@ -91,6 +96,11 @@ namespace LuckParser.Models.ParseModels
         public List<CircleActor> getCircleActors()
         {
             return circleActors;
+        }
+
+        public List<DoughnutActor> getDoughnutActors()
+        {
+            return doughnutActors;
         }
 
         public List<Tuple<long, long>> getDead()

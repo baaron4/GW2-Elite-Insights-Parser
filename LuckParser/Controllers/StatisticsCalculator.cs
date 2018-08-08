@@ -391,14 +391,14 @@ namespace LuckParser.Controllers
                                 {
                                     GroupsPosList.Add(list);
                                 }
-                            }
-                            int active_players = GroupsPosList.Count();
-                            for (int time = 0; time < GroupsPosList[0].Count(); time++)
+                            }                       
+                            for (int time = 0; time < GroupsPosList[0].Count; time++)
                             {
                                 float x = 0;
                                 float y = 0;
                                 float z = 0;
-                                for (int play = 0; play < active_players; play++)
+                                int active_players = GroupsPosList.Count;
+                                for (int play = 0; play < GroupsPosList.Count; play++)
                                 {
                                     Point3D point = GroupsPosList[play][time];
                                     if (point != null)
@@ -419,21 +419,22 @@ namespace LuckParser.Controllers
                                 statistics.StackCenterPositions.Add(new Point3D(x, y, z, time));
                             }
                         }
-                        List<Point3D> positions = player.getCombatReplay().getPositions();
+                        List<Point3D> positions = player.getCombatReplay().getPositions().Where(x => x.time >= phase.getStart() && x.time <= phase.getEnd()).ToList();
+                        int offset = player.getCombatReplay().getPositions().Count(x => x.time < phase.getStart());
                         if (positions.Count > 1)
                         {
                             List<float> distances = new List<float>();
-                            for (int time = 0; time < positions.Count(); time++)
+                            for (int time = 0; time < positions.Count; time++)
                             {
 
-                                float deltaX = positions[time].X - statistics.StackCenterPositions[time].X;
-                                float deltaY = positions[time].Y - statistics.StackCenterPositions[time].Y;
+                                float deltaX = positions[time].X - statistics.StackCenterPositions[time + offset].X;
+                                float deltaY = positions[time].Y - statistics.StackCenterPositions[time + offset].Y;
                                 //float deltaZ = positions[time].Z - Statistics.StackCenterPositions[time].Z;
 
 
                                 distances.Add((float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
                             }
-                            final.stackDist = distances.Sum() / distances.Count();
+                            final.stackDist = distances.Sum() / distances.Count;
                         }
                         else
                         {
