@@ -12,7 +12,7 @@ namespace LuckParser.Controllers
 
         public enum GraphMode { Full, s10, s30 };
 
-        public static List<Point> getDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, ushort dstid, GraphMode mode)
+        public static List<Point> getDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, PhaseData phase, ushort dstid, GraphMode mode)
         {
             int asked_id = (phase_index + "_" + dstid + "_" + mode).GetHashCode();
             if (p.getDPSGraph(asked_id).Count > 0)
@@ -23,7 +23,6 @@ namespace LuckParser.Controllers
             List<Point> dmgList = new List<Point>();
             List<Point> dmgList10s = new List<Point>();
             List<Point> dmgList30s = new List<Point>();
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
             List<DamageLog> damage_logs = p.getDamageLogs(dstid, log, phase.getStart(), phase.getEnd());
             // fill the graph, full precision
             List<double> dmgListFull = new List<double>();
@@ -105,9 +104,9 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="p">The player</param>
         /// <returns></returns>
-        public static List<Point> getBossDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, GraphMode mode)
+        public static List<Point> getBossDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, PhaseData phase, GraphMode mode)
         {
-            return getDPSGraph(log, p, phase_index, log.getBossData().getInstid(), mode);
+            return getDPSGraph(log, p, phase_index, phase, log.getBossData().getInstid(), mode);
         }
 
         /// <summary>
@@ -115,9 +114,9 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="p">The player</param>
         /// <returns></returns>
-        public static List<Point> getTotalDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, GraphMode mode)
+        public static List<Point> getTotalDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, PhaseData phase, GraphMode mode)
         {
-            return getDPSGraph(log, p, phase_index, 0, mode);
+            return getDPSGraph(log, p, phase_index, phase, 0, mode);
         }
 
         /// <summary>
@@ -125,15 +124,15 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="p">The player</param>
         /// <returns></returns>
-        public static List<Point> getCleaveDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, GraphMode mode)
+        public static List<Point> getCleaveDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, PhaseData phase, GraphMode mode)
         {           
             int asked_id = (phase_index + "_" + (-1) + "_" + mode).GetHashCode();
             if (p.getDPSGraph(asked_id).Count > 0)
             {
                 return p.getDPSGraph(asked_id);
             }
-            List<Point> total = getTotalDPSGraph(log, p, phase_index, mode);
-            List<Point> boss = getBossDPSGraph(log, p, phase_index, mode);
+            List<Point> total = getTotalDPSGraph(log, p, phase_index, phase, mode);
+            List<Point> boss = getBossDPSGraph(log, p, phase_index, phase, mode);
             List<Point> cleave = new List<Point>();
             for (int i = 0; i < boss.Count; i++)
             {

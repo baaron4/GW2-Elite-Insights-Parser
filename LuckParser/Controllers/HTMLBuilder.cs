@@ -70,7 +70,7 @@ namespace LuckParser.Controllers
             string plotID = "DPSGraph" + phase_index + "_" + mode;
             sw.Write("<div id=\"" + plotID + "\" style=\"height: 1000px;width:1200px; display:inline-block \"></div>");
             sw.Write("<script>");
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
             {
                 sw.Write("var data = [");
@@ -85,7 +85,7 @@ namespace LuckParser.Controllers
                     {//Turns display on or off
                         sw.Write("{");
                         //Adding dps axis
-                        List<Point> playertotaldpsgraphdata = GraphHelper.getTotalDPSGraph(log, p, phase_index, mode);
+                        List<Point> playertotaldpsgraphdata = GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, mode);
                         sw.Write("y: [");
                         pbdgdCount = 0;
                         foreach (Point dp in playertotaldpsgraphdata)
@@ -135,7 +135,7 @@ namespace LuckParser.Controllers
                                 "visible:'legendonly'," +
                                 "name: '" + p.getCharacter() + " TDPS'" + "},");
                     }
-                    List<Point> playerbossdpsgraphdata = GraphHelper.getBossDPSGraph(log, p, phase_index, mode);
+                    List<Point> playerbossdpsgraphdata = GraphHelper.getBossDPSGraph(log, p, phase_index, phase, mode);
                     if (totalDpsAllPlayers.Count == 0)
                     {
                         //totalDpsAllPlayers = new List<int[]>(playerbossdpsgraphdata);
@@ -202,7 +202,7 @@ namespace LuckParser.Controllers
                     {//Turns display on or off
                         sw.Write("{");
                         //Adding dps axis
-                        List<Point> playercleavedpsgraphdata = GraphHelper.getCleaveDPSGraph(log, p, phase_index, mode);
+                        List<Point> playercleavedpsgraphdata = GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, mode);
                         sw.Write("y: [");
                         pbdgdCount = 0;
                         foreach (Point dp in playercleavedpsgraphdata)
@@ -317,10 +317,10 @@ namespace LuckParser.Controllers
                         Point check = new Point();
                         if (ml.GetPlayer() != log.getBoss())
                         {
-                            check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - Math.Round(phase.getStart() / 1000.0));
+                            check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).FirstOrDefault(x => x.X == ml.GetTime() - Math.Round(phase.getStart() / 1000.0));
                             if (check == Point.Empty)
                             {
-                                check = new Point(0, GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).Last().Y);
+                                check = new Point(0, GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).Last().Y);
                             }
                         }
                         else
@@ -412,7 +412,7 @@ namespace LuckParser.Controllers
                         {
                             foreach (MechanicLog ml in DnDList)
                             {
-                                Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).FirstOrDefault(x => x.X == ml.GetTime() - Math.Round(phase.getStart() / 1000.0));
+                                Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).FirstOrDefault(x => x.X == ml.GetTime() - Math.Round(phase.getStart() / 1000.0));
                                 if (mcount == DnDList.Count - 1)
                                 {
                                     if (check != null)
@@ -421,7 +421,7 @@ namespace LuckParser.Controllers
                                     }
                                     else
                                     {
-                                        sw.Write("'" + GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).Last().Y + "'");
+                                        sw.Write("'" + GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).Last().Y + "'");
                                     }
 
                                 }
@@ -433,7 +433,7 @@ namespace LuckParser.Controllers
                                     }
                                     else
                                     {
-                                        sw.Write("'" + GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, mode).Last().Y + "',");
+                                        sw.Write("'" + GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).Last().Y + "',");
                                     }
                                 }
 
@@ -694,7 +694,7 @@ namespace LuckParser.Controllers
         private void CreateDPSTable(StreamWriter sw, int phase_index)
         {
             //generate dps table
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             sw.Write("<script>");
             {
                 sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
@@ -843,7 +843,7 @@ namespace LuckParser.Controllers
         private void CreateDMGStatsTable(StreamWriter sw, int phase_index)
         {
             //generate dmgstats table
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             sw.Write("<script>");
             {
                 sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
@@ -976,7 +976,7 @@ namespace LuckParser.Controllers
         private void CreateDMGStatsBossTable(StreamWriter sw, int phase_index)
         {
             //generate dmgstats table
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             sw.Write("<script>");
             {
                 sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
@@ -1109,7 +1109,7 @@ namespace LuckParser.Controllers
         private void CreateDefTable(StreamWriter sw, int phase_index)
         {
             //generate Tankstats table
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             sw.Write("<script>");
             {
                 sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
@@ -1370,7 +1370,7 @@ namespace LuckParser.Controllers
         /// <param name="table_id">id of the table</param>
         private void CreateUptimeTable(StreamWriter sw, List<Boon> list_to_use, string table_id, int phase_index)
         {
-            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
+            List<PhaseData> phases = statistics.phases;
             //Generate Boon table------------------------------------------------------------------------------------------------
             sw.Write("<script>");
             {
@@ -1846,7 +1846,7 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         private void CreatePlayerTab(StreamWriter sw, int phase_index)
         {
-            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
+            List<PhaseData> phases = statistics.phases;
             PhaseData phase = phases[phase_index];
             long start = phase.getStart() + log.getBossData().getFirstAware();
             long end = phase.getEnd() + log.getBossData().getFirstAware();
@@ -1992,38 +1992,38 @@ namespace LuckParser.Controllers
                                         {//show total dps plot
                                             sw.Write("{");
                                             { //Adding dps axis
-                                                HTMLHelper.writeDPSGraph(sw, "Total DPS", GraphHelper.getTotalDPSGraph(log, p, phase_index, GraphHelper.GraphMode.Full), p);
+                                                HTMLHelper.writeDPSGraph(sw, "Total DPS", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
                                             }
                                             sw.Write("},");
                                             if (settings.Show10s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Total DPS - 10s", GraphHelper.getTotalDPSGraph(log, p, phase_index, GraphHelper.GraphMode.s10), p);
+                                                HTMLHelper.writeDPSGraph(sw, "Total DPS - 10s", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
                                                 sw.Write("},");
                                             }
                                             if (settings.Show30s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Total DPS - 30s", GraphHelper.getTotalDPSGraph(log, p, phase_index, GraphHelper.GraphMode.s30), p);
+                                                HTMLHelper.writeDPSGraph(sw, "Total DPS - 30s", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
                                                 sw.Write("},");
                                             }
                                         }
                                          //Adding dps axis
                                             sw.Write("{");
                                             {
-                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS", GraphHelper.getBossDPSGraph(log, p, phase_index, GraphHelper.GraphMode.Full), p);
+                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
                                             }
                                             sw.Write("},");
                                             if (settings.Show10s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS - 10s", GraphHelper.getBossDPSGraph(log, p, phase_index, GraphHelper.GraphMode.s10), p);
+                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS - 10s", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
                                                 sw.Write("},");
                                             }
                                             if (settings.Show30s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS - 30s", GraphHelper.getBossDPSGraph(log, p, phase_index, GraphHelper.GraphMode.s30), p);
+                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS - 30s", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
                                                 sw.Write("},");
                                             }
 
@@ -2032,19 +2032,19 @@ namespace LuckParser.Controllers
                                         {//show total dps plot
                                             sw.Write("{");
                                             { //Adding dps axis
-                                                HTMLHelper.writeDPSGraph(sw, "Cleave DPS", GraphHelper.getCleaveDPSGraph(log, p, phase_index, GraphHelper.GraphMode.Full), p);
+                                                HTMLHelper.writeDPSGraph(sw, "Cleave DPS", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
                                             }
                                             sw.Write("},");
                                             if (settings.Show10s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Cleave DPS - 10s", GraphHelper.getCleaveDPSGraph(log, p, phase_index, GraphHelper.GraphMode.s10), p);
+                                                HTMLHelper.writeDPSGraph(sw, "Cleave DPS - 10s", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
                                                 sw.Write("},");
                                             }
                                             if (settings.Show30s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Cleave DPS - 30s", GraphHelper.getCleaveDPSGraph(log, p, phase_index, GraphHelper.GraphMode.s30), p);
+                                                HTMLHelper.writeDPSGraph(sw, "Cleave DPS - 30s", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
                                                 sw.Write("},");
                                             }
                                         }
@@ -2204,7 +2204,7 @@ namespace LuckParser.Controllers
         {
             if (settings.PlayerRot)//Display rotation
             {
-                PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+                PhaseData phase = statistics.phases[phase_index];
                 List<CastLog> casting = p.getCastLogs(log, phase.getStart(), phase.getEnd());
                 //GW2APISkill autoSkill = null;
                 //int autosCount = 0;
@@ -2581,7 +2581,7 @@ namespace LuckParser.Controllers
         /// <param name="p">The player</param>
         private void CreateDMGDistTable(StreamWriter sw, Player p, bool toBoss, int phase_index)
         {
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             List<CastLog> casting = p.getCastLogs(log, phase.getStart(), phase.getEnd());
             List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(toBoss ? log.getBossData().getInstid() : 0,log, phase.getStart(), phase.getEnd());
             Statistics.FinalDPS dps = statistics.dps[p][phase_index];
@@ -2638,7 +2638,7 @@ namespace LuckParser.Controllers
         /// <param name="p">The player</param>
         private void CreateDMGBossDistTable(StreamWriter sw, AbstractPlayer p, int phase_index)
         {
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             List<CastLog> casting = p.getCastLogs(log, phase.getStart(), phase.getEnd());
             List<DamageLog> damageLogs = p.getJustPlayerDamageLogs(0, log, phase.getStart(), phase.getEnd());
             Statistics.FinalDPS dps = statistics.bossDps[phase_index];
@@ -2701,7 +2701,7 @@ namespace LuckParser.Controllers
 
             int totalDamage = toBoss ? dps.bossDamage : dps.allDamage;
             string tabid = p.getInstid() + "_" + phase_index + "_" + minions.getInstid() + (toBoss ? "_boss" : "");
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             List<CastLog> casting = minions.getCastLogs(log, phase.getStart(), phase.getEnd());
             List<DamageLog> damageLogs = minions.getDamageLogs(toBoss ? log.getBossData().getInstid() : 0, log, phase.getStart(), phase.getEnd());
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
@@ -2760,7 +2760,7 @@ namespace LuckParser.Controllers
 
             int totalDamage =  dps.allDamage;
             string tabid = p.getInstid() + "_" + phase_index + "_" + minions.getInstid();
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             List<CastLog> casting = minions.getCastLogs(log, phase.getStart(), phase.getEnd());
             List<DamageLog> damageLogs = minions.getDamageLogs(0, log, phase.getStart(), phase.getEnd());
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.getDamage()) : 0;
@@ -2813,7 +2813,7 @@ namespace LuckParser.Controllers
         /// <param name="p">The player</param>
         private void CreateDMGTakenDistTable(StreamWriter sw, Player p, int phase_index)
         {
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             List<DamageLog> damageLogs = p.getDamageTakenLogs(log, phase.getStart(), phase.getEnd());
             List<SkillItem> s_list = log.getSkillData().getSkillList();
             long finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.getDamage()) : 0;
@@ -2982,7 +2982,7 @@ namespace LuckParser.Controllers
             //Dictionary<string, List<Mechanic>> presBossMech = new Dictionary<string, List<Mechanic>>();
             //Dictionary<string, List<Mechanic>> presMobMech = new Dictionary<string, List<Mechanic>>();
             Dictionary<string, List<Mechanic>> presEnemyMech = new Dictionary<string, List<Mechanic>>();
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
 
             //create list of enemys that had mechanics
             List<AbstractMasterPlayer> enemyList = new List<AbstractMasterPlayer>();
@@ -3353,7 +3353,7 @@ namespace LuckParser.Controllers
         /// <param name="boss">The boss</param>
         private void CreateCondiUptimeTable(StreamWriter sw, Boss boss, int phase_index)
         {
-            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
+            List<PhaseData> phases = statistics.phases;
             long fight_duration = phases[phase_index].getDuration();
             Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
             bool hasBoons = false;
@@ -3553,7 +3553,7 @@ namespace LuckParser.Controllers
         private void CreateBossSummary(StreamWriter sw, int phase_index)
         {
             //generate Player list Graphs
-            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
+            List<PhaseData> phases = statistics.phases;
             PhaseData phase = phases[phase_index];
             List<CastLog> casting = log.getBoss().getCastLogsActDur(log, phase.getStart(), phase.getEnd());
             List<SkillItem> s_list = log.getSkillData().getSkillList();
@@ -3608,7 +3608,7 @@ namespace LuckParser.Controllers
                             //int maxDPS = 0;
                             if (settings.DPSGraphTotals)
                             {//show total dps plot
-                                List<Point> playertotaldpsgraphdata = GraphHelper.getTotalDPSGraph(log, log.getBoss(), phase_index, GraphHelper.GraphMode.Full);
+                                List<Point> playertotaldpsgraphdata = GraphHelper.getTotalDPSGraph(log, log.getBoss(), phase_index, phase, GraphHelper.GraphMode.Full);
                                 sw.Write("{");
                                 {
                                     //Adding dps axis
@@ -3617,7 +3617,7 @@ namespace LuckParser.Controllers
                                 sw.Write("},");
                             }
                             sw.Write("{");
-                            HTMLHelper.writeBossHealthGraph(sw, GraphHelper.getTotalDPSGraph(log, log.getBoss(), phase_index, GraphHelper.GraphMode.Full).Max(x => x.Y), phase.getStart(), phase.getEnd(), log.getBossData(), "y3");
+                            HTMLHelper.writeBossHealthGraph(sw, GraphHelper.getTotalDPSGraph(log, log.getBoss(), phase_index, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase.getStart(), phase.getEnd(), log.getBossData(), "y3");
                             sw.Write("}");
                         }
                         sw.Write("];");
@@ -3812,7 +3812,7 @@ namespace LuckParser.Controllers
                 durationString = duration.Hours + "h " + durationString;
             }
             string bossname = FilterStringChars(log.getBossData().getName());
-            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
+            List<PhaseData> phases = statistics.phases;
             // HTML STARTS
             sw.Write("<!DOCTYPE html><html lang=\"en\">");
             {
@@ -4354,7 +4354,7 @@ namespace LuckParser.Controllers
         }
         public void CreateSoloHTML(StreamWriter sw)
         {
-            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
+            List<PhaseData> phases = statistics.phases;
             double fight_duration = (log.getBossData().getAwareDuration()) / 1000.0;
             Player p = log.getPlayerList()[0];
             List<CastLog> casting = p.getCastLogsActDur(log, 0, log.getBossData().getAwareDuration());
@@ -4403,7 +4403,7 @@ namespace LuckParser.Controllers
                         int maxDPS = 0;
                         if (settings.DPSGraphTotals)
                         {//show total dps plot
-                            List<Point> playertotaldpsgraphdata = GraphHelper.getTotalDPSGraph(log, p, 0, GraphHelper.GraphMode.Full);
+                            List<Point> playertotaldpsgraphdata = GraphHelper.getTotalDPSGraph(log, p, 0, statistics.phases[0], GraphHelper.GraphMode.Full);
                             sw.Write("{");
                             {
                                 HTMLHelper.writeDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, p);
@@ -4411,7 +4411,7 @@ namespace LuckParser.Controllers
                             sw.Write("},");
                         }
                         //Adding dps axis
-                        List<Point> playerbossdpsgraphdata = GraphHelper.getBossDPSGraph(log, p, 0, GraphHelper.GraphMode.Full);
+                        List<Point> playerbossdpsgraphdata = GraphHelper.getBossDPSGraph(log, p, 0, statistics.phases[0], GraphHelper.GraphMode.Full);
                         sw.Write("{");
                         {
                             HTMLHelper.writeDPSGraph(sw, "Boss DPS", playerbossdpsgraphdata, p);

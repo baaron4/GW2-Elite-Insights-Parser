@@ -87,7 +87,6 @@ namespace LuckParser.Controllers
                 durationString = duration.ToString("hh") + "h " + durationString;
             }
             string bossname = log.getBossData().getName();
-            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
             //header
             WriteLine(new string[] { "Elite Insights Version", Application.ProductVersion });
             WriteLine(new string[] { "ARC Version", log.getLogData().getBuildVersion().ToString() });
@@ -184,7 +183,7 @@ namespace LuckParser.Controllers
         }
         private void CreateDPSTable(StreamWriter sw, int phase_index)
         {
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             WriteLine(new string[] { "Sub Group", "Profession","Role","Name","Account","WepSet1_1","WepSet1_2","WepSet2_1","WepSet2_2",
                 "Boss DPS","Boss DMG","Boss Power DPS","Boss Power DMG","Boss Condi DPS","Boss Condi DMG",
                 "All DPS","All DMG","All Power DPS","All Power DMG","All Condi DPS","All Condi DMG",
@@ -229,7 +228,7 @@ namespace LuckParser.Controllers
         private void CreateBossDMGStatsTable(StreamWriter sw, int phase_index)
         {
             //generate dmgstats table
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             WriteLine(new string[] { "Sub Group", "Profession", "Name" ,
                 "Critical%","Critical hits","Critical DMG",
                 "Scholar%","Scholar hits","Scholar DMG","Scholar % increase",
@@ -265,7 +264,7 @@ namespace LuckParser.Controllers
         private void CreateDMGStatsTable(StreamWriter sw, int phase_index)
         {
             //generate dmgstats table
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             WriteLine(new string[] { "Sub Group", "Profession", "Name" ,
                 "Critical%","Critical hits","Critical DMG",
                 "Scholar%","Scholar hits","Scholar DMG","Scholar % increase",
@@ -301,7 +300,7 @@ namespace LuckParser.Controllers
         private void CreateDefTable(StreamWriter sw, int phase_index)
         {
             //generate deftats table
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             WriteLine(new string[] { "Sub Group", "Profession", "Name" ,
                 "DMG Taken","DMG Barrier","Blocked","Invulned","Evaded","Dodges" });
             int count = 0;
@@ -323,7 +322,7 @@ namespace LuckParser.Controllers
         private void CreateSupTable(StreamWriter sw, int phase_index)
         {
             //generate supstats table
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             WriteLine(new string[] { "Sub Group", "Profession", "Name" ,
                 "Condi Cleanse","Condi Cleanse time","Resurrects","Time Resurecting" });
             int count = 0;
@@ -344,8 +343,8 @@ namespace LuckParser.Controllers
         private void CreateUptimeTable(StreamWriter sw, List<Boon> list_to_use, int phase_index)
         {
             //generate Uptime Table table
-            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            List<PhaseData> phases = statistics.phases;
+            PhaseData phase = statistics.phases[phase_index];
             HashSet<int> intensityBoon = new HashSet<int>();
             long fight_duration = phases[phase_index].getDuration();
 
@@ -403,7 +402,7 @@ namespace LuckParser.Controllers
         private void CreateGenSelfTable(StreamWriter sw, List<Boon> list_to_use, int phase_index)
         {
             //generate Uptime Table table
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             HashSet<int> intensityBoon = new HashSet<int>();
 
             WriteCell("Name");
@@ -457,7 +456,7 @@ namespace LuckParser.Controllers
         private void CreateGenGroupTable(StreamWriter sw, List<Boon> list_to_use, int phase_index)
         {
             //generate Uptime Table table
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             HashSet<int> intensityBoon = new HashSet<int>();
 
             WriteCell("Name");
@@ -512,7 +511,7 @@ namespace LuckParser.Controllers
         private void CreateGenOGroupTable(StreamWriter sw, List<Boon> list_to_use, int phase_index)
         {
             //generate Uptime Table table
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             HashSet<int> intensityBoon = new HashSet<int>();
 
             WriteCell("Name");
@@ -567,7 +566,7 @@ namespace LuckParser.Controllers
         private void CreateGenSquadTable(StreamWriter sw, List<Boon> list_to_use, int phase_index)
         {
             //generate Uptime Table table
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
             HashSet<int> intensityBoon = new HashSet<int>();
 
             WriteCell("Name");
@@ -625,7 +624,7 @@ namespace LuckParser.Controllers
             //Dictionary<string, List<Mechanic>> presBossMech = new Dictionary<string, List<Mechanic>>();
             //Dictionary<string, List<Mechanic>> presMobMech = new Dictionary<string, List<Mechanic>>();
             Dictionary<string, List<Mechanic>> presEnemyMech = new Dictionary<string, List<Mechanic>>();
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
 
             //create list of enemys that had mechanics
             List<AbstractMasterPlayer> enemyList = new List<AbstractMasterPlayer>();
@@ -719,7 +718,7 @@ namespace LuckParser.Controllers
         }
         private void CreateMechList(StreamWriter sw, int phase_index)
         {
-            PhaseData phase = log.getBoss().getPhases(log, settings.ParsePhases)[phase_index];
+            PhaseData phase = statistics.phases[phase_index];
 
             List<MechanicLog> m_Logs = log.getMechanicData().GetMDataLogs().OrderByDescending(x=>x.GetTime()).ToList();
             m_Logs.Reverse();
@@ -753,7 +752,7 @@ namespace LuckParser.Controllers
         }
         private void CreateCondiUptime(StreamWriter sw,int phase_index) {
             Boss boss = log.getBoss();
-            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
+            List<PhaseData> phases = statistics.phases;
             long fight_duration = phases[phase_index].getDuration();
             Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
             bool hasBoons = false;
@@ -829,7 +828,7 @@ namespace LuckParser.Controllers
         private void CreateCondiGen(StreamWriter sw, int phase_index)
         {
             Boss boss = log.getBoss();
-            List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
+            List<PhaseData> phases = statistics.phases;
             long fight_duration = phases[phase_index].getDuration();
             Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
             //bool hasBoons = false;
