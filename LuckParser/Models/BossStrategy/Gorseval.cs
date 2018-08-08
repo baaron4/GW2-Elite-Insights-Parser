@@ -159,28 +159,28 @@ namespace LuckParser.Models
                         string pattern = patterns[i];
                         if (pattern.Contains("1"))
                         {
-                            replay.addCircleActor(new CircleActor(true, explosion, 400, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.addCircleActor(new CircleActor(true,0 , 400, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                            replay.addCircleActor(new CircleActor(true, explosion, 360, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.addCircleActor(new CircleActor(true,0 , 360, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
                         }
                         if (pattern.Contains("2"))
                         {
-                            replay.addDoughnutActor(new DoughnutActor(explosion, 400, 800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.addDoughnutActor(new DoughnutActor(0, 400, 800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                            replay.addDoughnutActor(new DoughnutActor(explosion, 360, 720, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.addDoughnutActor(new DoughnutActor(0, 360, 720, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
                         }
                         if (pattern.Contains("3"))
                         {
-                            replay.addDoughnutActor(new DoughnutActor(explosion, 800, 1200, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.addDoughnutActor(new DoughnutActor(0, 800, 1200, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                            replay.addDoughnutActor(new DoughnutActor(explosion, 720, 1080, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.addDoughnutActor(new DoughnutActor(0, 720, 1080, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
                         }
                         if (pattern.Contains("4"))
                         {
-                            replay.addDoughnutActor(new DoughnutActor(explosion, 1200, 1600, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.addDoughnutActor(new DoughnutActor(0, 1200, 1600, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                            replay.addDoughnutActor(new DoughnutActor(explosion, 1080, 1440, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.addDoughnutActor(new DoughnutActor(0, 1080, 1440, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
                         }
                         if (pattern.Contains("5"))
                         {
-                            replay.addDoughnutActor(new DoughnutActor(explosion, 1600, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.addDoughnutActor(new DoughnutActor(0, 1600, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                            replay.addDoughnutActor(new DoughnutActor(explosion, 1440, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.addDoughnutActor(new DoughnutActor(0, 1440, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
                         }
                         if (pattern.Contains("Full"))
                         {
