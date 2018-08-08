@@ -160,6 +160,28 @@ namespace LuckParser.Models
             return ids;
         }
 
+        public override void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        {
+            // Bombs
+            List<CombatItem> xeraFury = getFilteredList(log, 34511, p.getInstid());
+            int xeraFuryStart = 0;
+            int xeraFuryEnd = 0;
+            foreach (CombatItem c in xeraFury)
+            {
+                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                {
+                    xeraFuryStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                }
+                else
+                {
+                    xeraFuryEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    replay.addCircleActor(new FollowingCircle(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)"));
+                    replay.addCircleActor(new FollowingCircle(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)"));
+                }
+
+            }
+        }
+
         public override string getReplayIcon()
         {
             return "https://i.imgur.com/Kq0kL07.png";
