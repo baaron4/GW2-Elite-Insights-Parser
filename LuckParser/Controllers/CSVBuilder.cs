@@ -832,7 +832,7 @@ namespace LuckParser.Controllers
             List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
             long fight_duration = phases[phase_index].getDuration();
             Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
-            bool hasBoons = false;
+            //bool hasBoons = false;
             int count = 0;
             WriteCell("Sub");
             WriteCell("");
