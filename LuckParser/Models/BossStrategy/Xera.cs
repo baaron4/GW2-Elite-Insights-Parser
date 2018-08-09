@@ -26,7 +26,7 @@ namespace LuckParser.Models
             new Mechanic(35162, "Shifting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hexagon',color:'rgb(200,140,255)',", "Button 2",0),
             new Mechanic(35032, "Twisting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'octagon',color:'rgb(200,140,255)',", "Button 3",0),
             new Mechanic(34956, "Bubble Action Key", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square',color:'rgb(0,0,150)',", "Bubble Action Key",0),
-            new Mechanic(34921, "Gravity Well", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'triangle-se',color:'rgb(255,0,255)',", "Half-platform Gravity Well",4),
+            new Mechanic(34921, "Gravity Well", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'triangle-se',color:'rgb(255,0,255)',", "Half-platform Gravity Well",4000),
             
             //teleport
             new Mechanic(35034, "Disruption", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'square',color:'rgb(0,128,0)',", "Disruption",0),

@@ -18,15 +18,15 @@ namespace LuckParser.Models.ParseModels
         public enum MechType { PlayerBoon, EnemyBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, BossCast, PlayerOnPlayer }
         // Fields
        
-        private int skill_id;
+        private long skill_id;
         private string name;
         private string altname;
         private MechType mechType;       
         private ParseEnum.BossIDS bossid;
         private string plotlyShape;
-        private float InternalCoolDown;
+        private int internalCoolDown;
 
-        public Mechanic( int skill_id, string name, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string friendlyName,float ICD)
+        public Mechanic(long skill_id, string name, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string friendlyName, int ICD)
         {
             this.skill_id = skill_id;
             this.name = name;
@@ -34,11 +34,11 @@ namespace LuckParser.Models.ParseModels
             this.bossid = bossid;
             this.plotlyShape = plotlyShape;
             this.altname = friendlyName;
-            this.InternalCoolDown = ICD;
+            this.internalCoolDown = ICD;
         }
         //getters
        
-        public int GetSkill()
+        public long GetSkill()
         {
             return skill_id;
         }
@@ -62,9 +62,9 @@ namespace LuckParser.Models.ParseModels
         {
             return altname;
         }
-        public float GetICD()
+        public int GetICD()
         {
-            return InternalCoolDown;
+            return internalCoolDown;
         }
     }
 }

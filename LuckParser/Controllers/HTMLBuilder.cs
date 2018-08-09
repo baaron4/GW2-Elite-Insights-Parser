@@ -30,6 +30,7 @@ namespace LuckParser.Controllers
             switches.calculateStats = true;
             switches.calculateSupport = true;
             switches.calculateCombatReplay = true;
+            switches.calculateMechanics = true;
             return switches;
         }
 
@@ -304,7 +305,7 @@ namespace LuckParser.Controllers
                     List<MechanicLog> filterdList = new List<MechanicLog>();
                     foreach (Mechanic me in mechs)
                     {
-                        filterdList.AddRange(log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == me.GetSkill() && phase.inInterval(1000 * x.GetTime())).ToList());
+                        filterdList.AddRange(log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == me.GetSkill() && phase.inInterval(x.GetTime())).ToList());
                     }
                     Mechanic mech = mechs[0];
                     //List<MechanicLog> filterdList = mech_data.GetMDataLogs().Where(x => x.GetName() == mech.GetName()).ToList();
@@ -317,7 +318,7 @@ namespace LuckParser.Controllers
                         Point check = new Point();
                         if (ml.GetPlayer() != log.getBoss())
                         {
-                            check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).FirstOrDefault(x => x.X == ml.GetTime() - Math.Round(phase.getStart() / 1000.0));
+                            check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).FirstOrDefault(x => x.X == Math.Round((ml.GetTime() - phase.getStart()) / 1000.0));
                             if (check == Point.Empty)
                             {
                                 check = new Point(0, GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).Last().Y);
@@ -325,7 +326,7 @@ namespace LuckParser.Controllers
                         }
                         else
                         {
-                            check = log.getBossData().getHealthOverTime().FirstOrDefault(x => x.X/1000f > ml.GetTime()); // boss_data.getHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
+                            check = log.getBossData().getHealthOverTime().FirstOrDefault(x => x.X > ml.GetTime()); // boss_data.getHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
                             if (check == Point.Empty)
                             {
                                 if (log.getBossData().getHealthOverTime().Count == 0)
@@ -336,7 +337,7 @@ namespace LuckParser.Controllers
                                     check = new Point(0, log.getBossData().getHealthOverTime().Last().Y);
                                 }
                             }
-                            check.Y = (int)((float)(check.Y / 10000f) * maxDPS);
+                            check.Y = (int)((check.Y / 10000f) * maxDPS);
                         }
 
                         if (mechcount == filterdList.Count - 1)
@@ -360,11 +361,11 @@ namespace LuckParser.Controllers
                     {
                         if (mechcount == filterdList.Count - 1)
                         {
-                            sw.Write("'" + (ml.GetTime() - Math.Round(phase.getStart() / 1000.0)) + "'");
+                            sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0) + "'");
                         }
                         else
                         {
-                            sw.Write("'" + (ml.GetTime() - Math.Round(phase.getStart() / 1000.0)) + "',");
+                            sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0) + "',");
                         }
 
                         mechcount++;
@@ -405,14 +406,14 @@ namespace LuckParser.Controllers
                 foreach (string state in DnDStringList)
                 {
                     int mcount = 0;
-                    List<MechanicLog> DnDList = log.getMechanicData().GetMDataLogs().Where(x => x.GetName() == state && phase.inInterval(1000 * x.GetTime())).ToList();
+                    List<MechanicLog> DnDList = log.getMechanicData().GetMDataLogs().Where(x => x.GetName() == state && phase.inInterval(x.GetTime())).ToList();
                     sw.Write("{");
                     {
                         sw.Write("y: [");
                         {
                             foreach (MechanicLog ml in DnDList)
                             {
-                                Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).FirstOrDefault(x => x.X == ml.GetTime() - Math.Round(phase.getStart() / 1000.0));
+                                Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).FirstOrDefault(x => x.X == Math.Round((ml.GetTime() - phase.getStart()) / 1000.0));
                                 if (mcount == DnDList.Count - 1)
                                 {
                                     if (check != null)
@@ -451,11 +452,11 @@ namespace LuckParser.Controllers
                             {
                                 if (mcount == DnDList.Count - 1)
                                 {
-                                    sw.Write("'" + (ml.GetTime() - Math.Round(phase.getStart() / 1000.0)) + "'");
+                                    sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0) + "'");
                                 }
                                 else
                                 {
-                                    sw.Write("'" + (ml.GetTime() - Math.Round(phase.getStart() / 1000.0)) + "',");
+                                    sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0) + "',");
                                 }
 
                                 mcount++;
@@ -3095,7 +3096,7 @@ namespace LuckParser.Controllers
                                     int filterCount = 0;
                                     foreach (Mechanic mech in mechs)//Filtering for mechs named the same thing
                                     {
-                                        List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= Math.Round(phase.getStart() / 1000.0) && x.GetTime() <= Math.Round(phase.getEnd() / 1000.0)).ToList();
+                                        List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= phase.getStart() && x.GetTime() <= phase.getEnd()).ToList();
                                         count += test.Count;
                                         foreach (MechanicLog ml in test)
                                         {
@@ -3195,7 +3196,7 @@ namespace LuckParser.Controllers
                                     int count = 0;
                                     foreach (Mechanic mech in mechs)
                                     {
-                                        List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer().getInstid() == p.getInstid() && x.GetTime() >= Math.Round(phase.getStart() / 1000.0) && x.GetTime() <= Math.Round(phase.getEnd() / 1000.0)).ToList();
+                                        List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer().getInstid() == p.getInstid() && x.GetTime() >= phase.getStart()  && x.GetTime() <= phase.getEnd()).ToList();
                                         count += test.Count;
                                     }
                                     sw.Write("<td>" + count + "</td>");
@@ -3203,21 +3204,6 @@ namespace LuckParser.Controllers
                             }
                             sw.Write(" </tr>");
                         }
-                        //sw.Write("<tr>");
-                        //{
-                        //    sw.Write("<td>" + log.getBoss().getCharacter() + "</td>");
-                        //    foreach (List<Mechanic> mechs in presEnemyMech.Values)
-                        //    {
-                        //        int count = 0;
-                        //        foreach (Mechanic mech in mechs)
-                        //        {
-                        //            List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == log.getBoss() && x.GetTime() >= phase.getStart() / 1000 && x.GetTime() <= phase.getEnd() / 1000).ToList();
-                        //            count += test.Count;
-                        //        }
-                        //        sw.Write("<td>" + count + "</td>");
-                        //    }
-                        //}
-                        //sw.Write(" </tr>");
 
                     }
                     sw.Write("</tbody>");

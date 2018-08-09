@@ -190,5 +190,10 @@ namespace LuckParser.Models.ParseModels
                     break;
             }
         }
+
+        public override void addMechanics(ParsedLog log)
+        {
+            // nothing to do, thrash mob mechanics should be managed by the boss
+        }
     }
 }

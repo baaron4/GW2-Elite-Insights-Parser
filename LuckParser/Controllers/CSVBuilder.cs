@@ -31,6 +31,7 @@ namespace LuckParser.Controllers
             switches.calculateStats = true;
             switches.calculateSupport = true;
             switches.calculateCombatReplay = true;
+            switches.calculateMechanics = true;
             return switches;
         }
 
@@ -699,7 +700,7 @@ namespace LuckParser.Controllers
                         int count = 0;
                         foreach (Mechanic mech in mechs)
                         {
-                            List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= Math.Round(phase.getStart() / 1000.0) && x.GetTime() <= Math.Round(phase.getEnd() / 1000.0)).ToList();
+                            List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= phase.getStart() && x.GetTime() <= phase.getEnd()).ToList();
                             count += test.Count;
                         }
                         WriteCell( count.ToString() );
@@ -726,7 +727,7 @@ namespace LuckParser.Controllers
             WriteCell("Time");
             foreach (MechanicLog m in m_Logs)
             {
-                WriteCell(m.GetTime().ToString());
+                WriteCell((m.GetTime()/1000f).ToString());
             }
             NewLine();
             count++;

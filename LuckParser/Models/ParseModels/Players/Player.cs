@@ -322,6 +322,63 @@ namespace LuckParser.Models.ParseModels
             replay.setIcon(HTMLHelper.GetLink(getProf()));
         }
 
+        public override void addMechanics(ParsedLog log)
+        {
+            MechanicData mech_data = log.getMechanicData();
+            BossData boss_data = log.getBossData();
+            CombatData combat_data = log.getCombatData();
+            List<Mechanic> bossMechanics = boss_data.getBossBehavior().getMechanics();
+            SkillData skill_data = log.getSkillData();
+            // downs
+            List<CombatItem> down = combat_data.getStates(getInstid(), ParseEnum.StateChange.ChangeDown, boss_data.getFirstAware(), boss_data.getLastAware());
+            foreach (CombatItem pnt in down)
+            {
+                mech_data.AddItem(new MechanicLog((long)Math.Round((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DOWN", 0, this, mech_data.GetPLoltyShape("DOWN")));
+            }
+            // deads
+            List<CombatItem> dead = combat_data.getStates(getInstid(), ParseEnum.StateChange.ChangeDead, boss_data.getFirstAware(), boss_data.getLastAware());
+            foreach (CombatItem pnt in dead)
+            {
+                mech_data.AddItem(new MechanicLog((long)Math.Round((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, this, mech_data.GetPLoltyShape("DEAD")));
+            }
+            //Player hit
+            List<DamageLog> dls = getDamageTakenLogs(log, 0, boss_data.getAwareDuration());
+            List<Mechanic> skillOnPlayer = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.SkillOnPlayer).ToList();
+            foreach (Mechanic mech in skillOnPlayer)
+            {
+                MechanicLog prevMech = null;
+                foreach (DamageLog dLog in dls)
+                {
+                    string name = skill_data.getName(dLog.getID());
+                    if (dLog.getID() == mech.GetSkill() && dLog.getResult().IsHit())
+                    {
+                        //Prevent multi hit attacks form multi registering
+                        if (prevMech != null && dLog.getTime() == prevMech.GetTime())
+                        {
+                            continue;
+                        }
+                        prevMech = new MechanicLog(dLog.getTime(), dLog.getID(), mech.GetName(), dLog.getDamage(), this, mech.GetPlotly());
+                        mech_data.AddItem(prevMech);
+
+                    }
+                }
+            }
+            // Player boon
+            List<Mechanic> playerBoon = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerBoon).ToList();
+            playerBoon.AddRange(bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerOnPlayer));
+            foreach (Mechanic mech in playerBoon)
+            {
+                foreach (CombatItem c in log.getBoonData())
+                {
+                    if (c.getSkillID() == mech.GetSkill() && c.getValue() > 0 && c.isBuffremove() == ParseEnum.BuffRemove.None && c.getResult().IsHit() && getInstid() == c.getDstInstid())
+                    {
+                        String name = skill_data.getName(c.getSkillID());
+                        mech_data.AddItem(new MechanicLog(c.getTime() - boss_data.getFirstAware(), c.getSkillID(), mech.GetName(), c.getValue(), this, mech.GetPlotly()));
+                    }
+                }
+            }
+        }
+
         /*protected override void setHealingLogs(ParsedLog log)
         {
             long time_start = log.getBossData().getFirstAware();
