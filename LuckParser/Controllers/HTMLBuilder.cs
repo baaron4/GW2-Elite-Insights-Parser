@@ -20,18 +20,16 @@ namespace LuckParser.Controllers
 
         private Statistics statistics;
 
-        public static StatisticsCalculator.Switches GetStatisticSwitches()
+        public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
-            StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
-            switches.calculateBoons = true;
-            switches.calculateDPS = true;
-            switches.calculateConditions = true;
-            switches.calculateDefense = true;
-            switches.calculateStats = true;
-            switches.calculateSupport = true;
-            switches.calculateCombatReplay = true;
-            switches.calculateMechanics = true;
-            return switches;
+            switches.calculateBoons = switches.calculateBoons || true;
+            switches.calculateDPS = switches.calculateDPS || true;
+            switches.calculateConditions = switches.calculateConditions || true;
+            switches.calculateDefense = switches.calculateDefense || true;
+            switches.calculateStats = switches.calculateStats || true;
+            switches.calculateSupport = switches.calculateSupport || true;
+            switches.calculateCombatReplay = switches.calculateCombatReplay || true;
+            switches.calculateMechanics = switches.calculateMechanics || true;
         }
 
         public HTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics)
