@@ -333,13 +333,13 @@ namespace LuckParser.Models.ParseModels
             List<CombatItem> down = combat_data.getStates(getInstid(), ParseEnum.StateChange.ChangeDown, boss_data.getFirstAware(), boss_data.getLastAware());
             foreach (CombatItem pnt in down)
             {
-                mech_data.AddItem(new MechanicLog((long)Math.Round((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DOWN", 0, this, mech_data.GetPLoltyShape("DOWN")));
+                mech_data.AddItem(new MechanicLog(pnt.getTime() - boss_data.getFirstAware(), 0, "DOWN", 0, this, mech_data.GetPLoltyShape("DOWN")));
             }
             // deads
             List<CombatItem> dead = combat_data.getStates(getInstid(), ParseEnum.StateChange.ChangeDead, boss_data.getFirstAware(), boss_data.getLastAware());
             foreach (CombatItem pnt in dead)
             {
-                mech_data.AddItem(new MechanicLog((long)Math.Round((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, this, mech_data.GetPLoltyShape("DEAD")));
+                mech_data.AddItem(new MechanicLog(pnt.getTime() - boss_data.getFirstAware(), 0, "DEAD", 0, this, mech_data.GetPLoltyShape("DEAD")));
             }
             //Player hit
             List<DamageLog> dls = getDamageTakenLogs(log, 0, boss_data.getAwareDuration());
