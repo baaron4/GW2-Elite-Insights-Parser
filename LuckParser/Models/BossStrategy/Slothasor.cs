@@ -46,7 +46,13 @@ namespace LuckParser.Models
         public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO:facing information (breath)
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>();
+            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            {
+                ParseEnum.ThrashIDS.Slubling1,
+                ParseEnum.ThrashIDS.Slubling2,
+                ParseEnum.ThrashIDS.Slubling3,
+                ParseEnum.ThrashIDS.Slubling4
+            };
             List<CastLog> sleepy = cls.Where(x => x.getID() == 34515).ToList();
             foreach (CastLog c in sleepy)
             {

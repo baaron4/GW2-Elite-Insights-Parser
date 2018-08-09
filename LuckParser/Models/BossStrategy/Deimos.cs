@@ -106,7 +106,9 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Thief,
                         ParseEnum.ThrashIDS.Drunkard,
                         ParseEnum.ThrashIDS.Gambler,
-                        ParseEnum.ThrashIDS.GamblerClones
+                        ParseEnum.ThrashIDS.GamblerClones,
+                        ParseEnum.ThrashIDS.Greed,
+                        ParseEnum.ThrashIDS.Pride
                     };
             List<CastLog> mindCrush = cls.Where(x => x.getID() == 37613).ToList();
             foreach (CastLog c in mindCrush)

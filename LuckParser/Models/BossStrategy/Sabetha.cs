@@ -82,7 +82,10 @@ namespace LuckParser.Models
                     {
                         ParseEnum.ThrashIDS.Kernan,
                         ParseEnum.ThrashIDS.Knuckles,
-                        ParseEnum.ThrashIDS.Karde
+                        ParseEnum.ThrashIDS.Karde,
+                        ParseEnum.ThrashIDS.BanditSapper,
+                        ParseEnum.ThrashIDS.BanditThug,
+                        ParseEnum.ThrashIDS.BanditArsonist
                     };
             return ids;
         }

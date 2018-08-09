@@ -172,10 +172,17 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.ThrashIDS.Storm:
                     replay.setIcon("https://i.imgur.com/9XtNPdw.png");
                     break;
+                case ParseEnum.ThrashIDS.UnstableLeyRift:
                 case ParseEnum.ThrashIDS.Tear:
                     replay.setIcon("https://i.imgur.com/N9seps0.png");
                     break;
                 case ParseEnum.ThrashIDS.Oil:
+                    replay.setIcon("https://i.imgur.com/DZIl49i.png");
+                    break;
+                case ParseEnum.ThrashIDS.SurgingSoul:
+                case ParseEnum.ThrashIDS.InsidiousProjection:
+                case ParseEnum.ThrashIDS.Pride:
+                case ParseEnum.ThrashIDS.Echo:
                     replay.setIcon("https://i.imgur.com/DZIl49i.png");
                     break;
                 default:

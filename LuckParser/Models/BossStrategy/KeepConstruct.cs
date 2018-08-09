@@ -130,6 +130,12 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Henley,
                         ParseEnum.ThrashIDS.Galletta,
                         ParseEnum.ThrashIDS.Ianim,
+                        ParseEnum.ThrashIDS.GreenPhantasm,
+                        ParseEnum.ThrashIDS.InsidiousProjection,
+                        ParseEnum.ThrashIDS.UnstableLeyRift,
+                        ParseEnum.ThrashIDS.RadiantPhantasm,
+                        ParseEnum.ThrashIDS.CrimsonPhantasm,
+                        ParseEnum.ThrashIDS.RetrieverProjection
                     };
             List<CastLog> magicCharge = cls.Where(x => x.getID() == 35048).ToList();
             List<CastLog> magicExplose = cls.Where(x => x.getID() == 34894).ToList();

@@ -73,7 +73,14 @@ namespace LuckParser.Models
         public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: needs facing information for hadouken
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>();
+            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            {
+                ParseEnum.ThrashIDS.WhiteMantleSeeker1,
+                ParseEnum.ThrashIDS.WhiteMantleSeeker2,
+                ParseEnum.ThrashIDS.WhiteMantleKnight,
+                ParseEnum.ThrashIDS.WhiteMantleBattleMage,
+                ParseEnum.ThrashIDS.ExquisiteConjunction
+            };
             List<CastLog> summon = cls.Where(x => x.getID() == 34887).ToList();
             foreach (CastLog c in summon)
             {

@@ -77,7 +77,9 @@ namespace LuckParser.Models
             // TODO: doughnuts (rampage)
             List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
                     {
-                        ParseEnum.ThrashIDS.ChargedSoul
+                        ParseEnum.ThrashIDS.ChargedSoul,
+                        ParseEnum.ThrashIDS.EnragedSpirit,
+                        ParseEnum.ThrashIDS.AngeredSpirit
                     };
             List<CastLog> blooms = cls.Where(x => x.getID() == 31616).ToList();
             foreach (CastLog c in blooms)
