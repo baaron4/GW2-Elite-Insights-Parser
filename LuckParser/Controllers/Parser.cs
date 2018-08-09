@@ -755,6 +755,14 @@ namespace LuckParser.Controllers
                 }
 
             }
+            if (boss_data.getFirstAware() == 0)
+            {
+                boss_data.setFirstAware(bossAgent.getFirstAware());
+            }
+            if (boss_data.getLastAware() == long.MaxValue)
+            {
+                boss_data.setLastAware(bossAgent.getLastAware());
+            }
             // Sort
             p_list = p_list.OrderBy(a => a.getGroup()).ToList();
             // Check CM
