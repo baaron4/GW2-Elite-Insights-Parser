@@ -122,6 +122,15 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
+            List<Mechanic> spawnMech = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.Spawn).ToList();
+            foreach (Mechanic m in spawnMech)
+            {
+                foreach (AgentItem a in log.getAgentData().getNPCAgentList().Where(x => x.getID() == m.GetSkill()))
+                {
+                    AbstractMasterPlayer amp = new Mob(a);
+                    mech_data.AddItem(new MechanicLog(a.getFirstAware() - boss_data.getFirstAware(), m.GetSkill(), m.GetName(), 0, amp, m.GetPlotly()));
+                }
+            }
         }
 
         /*protected override void setHealingLogs(ParsedLog log)
