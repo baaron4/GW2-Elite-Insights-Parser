@@ -3100,28 +3100,18 @@ namespace LuckParser.Controllers
                                         {
                                             if (timeFilter != ml.GetTime())//Check for multihit
                                             {
-                                                if (mech.GetICD() != 0)//ICD check
+                                                if (mech.GetICD() != 0 && ml.GetTime() - timeFilter < mech.GetICD())//ICD check
                                                 {
-                                                    if (ml.GetTime() - timeFilter > mech.GetICD())
-                                                    {
-                                                        timeFilter = ml.GetTime();
-                                                        filterCount++;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    timeFilter = ml.GetTime();
                                                     filterCount++;
                                                 }
-                                                
-
+                                                timeFilter = ml.GetTime();
                                             }
                                         }
                                     }
                                     if (filterCount > 0)
                                     {
                                         sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
-                               + filterCount + " times (filtering multi hits)\">"+count+ "</span>" + "</td>");
+                               + count + " times (multi hits)\">"+ (count - filterCount) + "</span>" + "</td>");
                                        // sw.Write("<td>" + count + "</td>");
                                     }
                                     else
