@@ -95,8 +95,8 @@ namespace LuckParser.Models
             {
                 int start = (int)(c.getTime() - log.getBossData().getFirstAware());
                 int end = start + 3000;
-                replay.addCircleActor(new FollowingCircle(false, 0, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
-                replay.addCircleActor(new FollowingCircle(true, end, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                replay.addCircleActor(new CircleActor(false, 0, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                replay.addCircleActor(new CircleActor(true, end, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
             }
             // Sapper bombs
             List<CombatItem> sapperBombs = getFilteredList(log, 31473, p.getInstid());
@@ -110,8 +110,8 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    sapperEnd = (int)(c.getTime() - log.getBossData().getFirstAware()); replay.addCircleActor(new FollowingCircle(false, 0, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)"));
-                    replay.addCircleActor(new FollowingCircle(true, sapperStart + 5000, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)"));
+                    sapperEnd = (int)(c.getTime() - log.getBossData().getFirstAware()); replay.addCircleActor(new CircleActor(false, 0, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)"));
+                    replay.addCircleActor(new CircleActor(true, sapperStart + 5000, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)"));
                 }
             }
         }

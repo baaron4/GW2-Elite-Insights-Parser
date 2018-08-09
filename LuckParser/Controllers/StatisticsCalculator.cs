@@ -28,8 +28,6 @@ namespace LuckParser.Controllers
 
         private ParsedLog log;
 
-        private List<PhaseData> phases;
-
         public StatisticsCalculator(SettingsContainer settings)
         {
             this.settings = settings;
@@ -46,14 +44,14 @@ namespace LuckParser.Controllers
 
             this.log = log;
 
-            phases = log.getBoss().getPhases(log, settings.ParsePhases);
+            statistics.phases = log.getBoss().getPhases(log, settings.ParsePhases);
             if (switches.calculateCombatReplay && settings.ParseCombatReplay)
             {
                 foreach (Player p in log.getPlayerList())
                 {
-                    p.initCombatReplay(log, settings.PollingRate);
+                    p.initCombatReplay(log, settings.PollingRate, false, true);
                 }
-                log.getBoss().initCombatReplay(log, settings.PollingRate);
+                log.getBoss().initCombatReplay(log, settings.PollingRate, false, true);
             }
             if (switches.calculateDPS) calculateDPS();
             if (switches.calculateStats) calculateStats();
@@ -85,7 +83,7 @@ namespace LuckParser.Controllers
         {
             Statistics.FinalDPS final = new Statistics.FinalDPS();
 
-            PhaseData phase = phases[phaseIndex];
+            PhaseData phase = statistics.phases[phaseIndex];
 
             double phaseDuration = (phase.getDuration()) / 1000.0;
 
@@ -172,8 +170,8 @@ namespace LuckParser.Controllers
         {
             foreach (Player player in log.getPlayerList())
             {
-                Statistics.FinalDPS[] phaseDps = new Statistics.FinalDPS[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                Statistics.FinalDPS[] phaseDps = new Statistics.FinalDPS[statistics.phases.Count];
+                for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
                 {
                     phaseDps[phaseIndex] = getFinalDPS(player,phaseIndex);
                 }
@@ -181,8 +179,8 @@ namespace LuckParser.Controllers
                 statistics.dps[player] = phaseDps;
             }
 
-            Statistics.FinalDPS[] phaseBossDps = new Statistics.FinalDPS[phases.Count];
-            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+            Statistics.FinalDPS[] phaseBossDps = new Statistics.FinalDPS[statistics.phases.Count];
+            for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
             {
                 phaseBossDps[phaseIndex] = getFinalDPS(log.getBoss(), phaseIndex);
             }
@@ -194,12 +192,12 @@ namespace LuckParser.Controllers
         {
             foreach (Player player in log.getPlayerList())
             {
-                Statistics.FinalStats[] phaseStats = new Statistics.FinalStats[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                Statistics.FinalStats[] phaseStats = new Statistics.FinalStats[statistics.phases.Count];
+                for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
                 {
                     Statistics.FinalStats final = new Statistics.FinalStats();
 
-                    PhaseData phase = phases[phaseIndex];
+                    PhaseData phase =statistics.phases[phaseIndex];
                     long start = phase.getStart() + log.getBossData().getFirstAware();
                     long end = phase.getEnd() + log.getBossData().getFirstAware();
 
@@ -378,7 +376,7 @@ namespace LuckParser.Controllers
                     final.ressCount = combatData.getSkillCount(instid, 1066, start, end); //Res = 1066
 
                     //Stack Distance
-                    if (log.getMovementData().Count > 0)
+                    if (settings.ParseCombatReplay && log.getBoss().getCombatReplay() != null)
                     {
                         if (statistics.StackCenterPositions == null)
                         {
@@ -386,36 +384,19 @@ namespace LuckParser.Controllers
                             List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
                             foreach (Player p in log.getPlayerList())
                             {
-                                List<Point3D> list = p.getCombatReplay().getPositions();
+                                List<Point3D> list = p.getCombatReplay().getActivePositions();  
                                 if (list.Count > 1)
                                 {
-                                    List<CombatItem> dead_2 = combatData.getStates(instid, ParseEnum.StateChange.ChangeDead, start, end);
-                                    foreach (CombatItem deadEvent in dead_2)
-                                    {
-                                        for (int strt = (int)deadEvent.getTime(); start <= list.Count; strt++)
-                                        {
-                                            list[strt] = null;
-                                        }
-                                    }
-                                    List<CombatItem> disconect_2 = combatData.getStates(instid, ParseEnum.StateChange.Despawn, start, end);
-                                    foreach (CombatItem dcEvent in disconect_2)
-                                    {
-                                        for (int strt = (int)dcEvent.getTime(); start <= list.Count; strt++)
-                                        {
-                                            list[strt] = null;
-                                        }
-                                    }
                                     GroupsPosList.Add(list);
                                 }
-                               
-                            }
-                            for (int time = 0; time < GroupsPosList[0].Count(); time++)
+                            }                       
+                            for (int time = 0; time < GroupsPosList[0].Count; time++)
                             {
                                 float x = 0;
                                 float y = 0;
                                 float z = 0;
-                                int active_players = GroupsPosList.Count();
-                                for (int play = 0; play < GroupsPosList.Count(); play++)
+                                int active_players = GroupsPosList.Count;
+                                for (int play = 0; play < GroupsPosList.Count; play++)
                                 {
                                     Point3D point = GroupsPosList[play][time];
                                     if (point != null)
@@ -436,31 +417,27 @@ namespace LuckParser.Controllers
                                 statistics.StackCenterPositions.Add(new Point3D(x, y, z, time));
                             }
                         }
-                   
-                    }
-                    if (log.getMovementData().Count > 0)
-                    {
-                        List<Point3D> positions = player.getCombatReplay().getPositions();
+                        List<Point3D> positions = player.getCombatReplay().getPositions().Where(x => x.time >= phase.getStart() && x.time <= phase.getEnd()).ToList();
+                        int offset = player.getCombatReplay().getPositions().Count(x => x.time < phase.getStart());
                         if (positions.Count > 1)
                         {
                             List<float> distances = new List<float>();
-                            for (int time = 0; time < positions.Count(); time++)
+                            for (int time = 0; time < positions.Count; time++)
                             {
 
-                                float deltaX = positions[time].X - statistics.StackCenterPositions[time].X;
-                                float deltaY = positions[time].Y - statistics.StackCenterPositions[time].Y;
+                                float deltaX = positions[time].X - statistics.StackCenterPositions[time + offset].X;
+                                float deltaY = positions[time].Y - statistics.StackCenterPositions[time + offset].Y;
                                 //float deltaZ = positions[time].Z - Statistics.StackCenterPositions[time].Z;
 
 
                                 distances.Add((float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
                             }
-                            final.stackDist = distances.Sum() / distances.Count();
+                            final.stackDist = distances.Sum() / distances.Count;
                         }
                         else
                         {
                             final.stackDist = -1;
                         }
-                       
                     }
                     // R.I.P
                     List<CombatItem> dead = combatData.getStates(instid, ParseEnum.StateChange.ChangeDead, start, end);
@@ -487,12 +464,12 @@ namespace LuckParser.Controllers
         {
             foreach (Player player in log.getPlayerList())
             {
-                Statistics.FinalDefenses[] phaseDefense = new Statistics.FinalDefenses[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                Statistics.FinalDefenses[] phaseDefense = new Statistics.FinalDefenses[statistics.phases.Count];
+                for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
                 {
                     Statistics.FinalDefenses final = new Statistics.FinalDefenses();
 
-                    PhaseData phase = phases[phaseIndex];
+                    PhaseData phase =statistics.phases[phaseIndex];
                     long start = phase.getStart() + log.getBossData().getFirstAware();
                     long end = phase.getEnd() + log.getBossData().getFirstAware();
 
@@ -525,12 +502,12 @@ namespace LuckParser.Controllers
         {
             foreach (Player player in log.getPlayerList())
             {
-                Statistics.FinalSupport[] phaseSupport = new Statistics.FinalSupport[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                Statistics.FinalSupport[] phaseSupport = new Statistics.FinalSupport[statistics.phases.Count];
+                for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
                 {
                     Statistics.FinalSupport final = new Statistics.FinalSupport();
 
-                    PhaseData phase = phases[phaseIndex];
+                    PhaseData phase =statistics.phases[phaseIndex];
                     long start = phase.getStart() + log.getBossData().getFirstAware();
                     long end = phase.getEnd() + log.getBossData().getFirstAware();
 
@@ -554,13 +531,13 @@ namespace LuckParser.Controllers
 
         private Dictionary<long, Statistics.FinalBoonUptime> getBoonsForList(List<Player> playerList, Player player, List<Boon> to_track, int phaseIndex)
         {
-            PhaseData phase = phases[phaseIndex];
+            PhaseData phase =statistics.phases[phaseIndex];
             long fightDuration = phase.getEnd() - phase.getStart();
 
             Dictionary<Player, BoonDistribution> boonDistributions = new Dictionary<Player, BoonDistribution>();
             foreach (Player p in playerList)
             {
-                boonDistributions[p] = p.getBoonDistribution(log, phases, to_track, phaseIndex);
+                boonDistributions[p] = p.getBoonDistribution(log,statistics.phases, to_track, phaseIndex);
             }
 
             Dictionary<long, Statistics.FinalBoonUptime> final =
@@ -611,14 +588,14 @@ namespace LuckParser.Controllers
                 boon_to_track.AddRange(statistics.present_offbuffs);
                 boon_to_track.AddRange(statistics.present_defbuffs);
                 boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
-                Dictionary<long, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<long, Statistics.FinalBoonUptime>[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                Dictionary<long, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<long, Statistics.FinalBoonUptime>[statistics.phases.Count];
+                for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
                 {
                     Dictionary<long, Statistics.FinalBoonUptime> final = new Dictionary<long, Statistics.FinalBoonUptime>();
 
-                    PhaseData phase = phases[phaseIndex];
+                    PhaseData phase =statistics.phases[phaseIndex];
 
-                    BoonDistribution selfBoons = player.getBoonDistribution(log, phases, boon_to_track, phaseIndex);
+                    BoonDistribution selfBoons = player.getBoonDistribution(log,statistics.phases, boon_to_track, phaseIndex);
 
                     long fightDuration = phase.getEnd() - phase.getStart();
                     foreach (Boon boon in boon_to_track)
@@ -667,8 +644,8 @@ namespace LuckParser.Controllers
                 {
                     if (p.getGroup() == player.getGroup() && player.getInstid() != p.getInstid()) groupPlayers.Add(p);
                 }
-                Dictionary<long, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<long, Statistics.FinalBoonUptime>[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                Dictionary<long, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<long, Statistics.FinalBoonUptime>[statistics.phases.Count];
+                for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
                 {
                     phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
                 }
@@ -688,8 +665,8 @@ namespace LuckParser.Controllers
                 {
                     if (p.getGroup() != player.getGroup()) groupPlayers.Add(p);
                 }
-                Dictionary<long, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<long, Statistics.FinalBoonUptime>[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                Dictionary<long, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<long, Statistics.FinalBoonUptime>[statistics.phases.Count];
+                for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
                 {                    
                     phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
                 }
@@ -710,8 +687,8 @@ namespace LuckParser.Controllers
                     if (p.getInstid() != player.getInstid())
                         groupPlayers.Add(p);
                 }
-                Dictionary<long, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<long, Statistics.FinalBoonUptime>[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                Dictionary<long, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<long, Statistics.FinalBoonUptime>[statistics.phases.Count];
+                for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
                 {                
                     phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
                 }
@@ -721,16 +698,15 @@ namespace LuckParser.Controllers
 
         public void calculateConditions()
         {
-            statistics.bossConditions = new Dictionary<long, Statistics.FinalBossBoon>[phases.Count];
+            statistics.bossConditions = new Dictionary<long, Statistics.FinalBossBoon>[statistics.phases.Count];
             List<Boon> boon_to_track = Boon.getCondiBoonList();
             boon_to_track.AddRange(Boon.getBoonList());
-            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+            for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
             {
-                List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
-                BoonDistribution boonDistribution = log.getBoss().getBoonDistribution(log, phases, boon_to_track, phaseIndex);
+                BoonDistribution boonDistribution = log.getBoss().getBoonDistribution(log,statistics.phases, boon_to_track, phaseIndex);
                 Dictionary<long, Statistics.FinalBossBoon> rates = new Dictionary<long, Statistics.FinalBossBoon>();
 
-                PhaseData phase = phases[phaseIndex];
+                PhaseData phase =statistics.phases[phaseIndex];
                 long fightDuration = phase.getDuration();
 
                 foreach (Boon boon in boon_to_track)

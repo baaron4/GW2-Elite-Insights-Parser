@@ -17,6 +17,7 @@ namespace LuckParser.Models.ParseModels
         //status
         private List<Tuple<long, long>> dead = new List<Tuple<long, long>>();
         private List<Tuple<long, long>> down = new List<Tuple<long, long>>();
+        private List<Tuple<long, long>> dc = new List<Tuple<long, long>>();
         // dps
         private List<int> dps = new List<int>();
         private List<int> dps10s = new List<int>();
@@ -25,6 +26,7 @@ namespace LuckParser.Models.ParseModels
         private Dictionary<long, List<int>> boons = new Dictionary<long, List<int>>();
         // actors
         private List<CircleActor> circleActors = new List<CircleActor>();
+        private List<DoughnutActor> doughnutActors = new List<DoughnutActor>();
 
         public CombatReplay()
         {
@@ -45,8 +47,8 @@ namespace LuckParser.Models.ParseModels
         {
             velocities.Add(vel);
         }
-        
-        public Tuple<long,long> getTimeOffsets()
+
+        public Tuple<long, long> getTimeOffsets()
         {
             return new Tuple<long, long>(start, end);
         }
@@ -67,11 +69,16 @@ namespace LuckParser.Models.ParseModels
         {
             circleActors.Add(circleActor);
         }
+        public void addDoughnutActor(DoughnutActor doughnutActor)
+        {
+            doughnutActors.Add(doughnutActor);
+        }
 
-        public void setStatus(List<Tuple<long, long>> down, List<Tuple<long, long>> dead)
+        public void setStatus(List<Tuple<long, long>> down, List<Tuple<long, long>> dead, List<Tuple<long, long>> dc)
         {
             this.down = down;
             this.dead = dead;
+            this.dc = dc;
         }
 
         public void trim(long start, long end)
@@ -91,7 +98,12 @@ namespace LuckParser.Models.ParseModels
             return circleActors;
         }
 
-        public List<Tuple<long,long>> getDead()
+        public List<DoughnutActor> getDoughnutActors()
+        {
+            return doughnutActors;
+        }
+
+        public List<Tuple<long, long>> getDead()
         {
             return dead;
         }
@@ -101,10 +113,15 @@ namespace LuckParser.Models.ParseModels
             return down;
         }
 
+        public List<Tuple<long, long>> getDC()
+        {
+            return dc;
+        }
+
         public void addBoon(long id, int value)
         {
             List<int> ll;
-            if (!boons.TryGetValue(id,out ll))
+            if (!boons.TryGetValue(id, out ll))
             {
                 ll = new List<int>();
                 boons.Add(id, ll);
@@ -122,14 +139,15 @@ namespace LuckParser.Models.ParseModels
             return icon;
         }
 
-        public void pollingRate(int rate, long fightDuration)
+        public void pollingRate(int rate, long fightDuration, bool forceInterpolate)
         {
             if (positions.Count == 0)
             {
                 start = -1;
                 end = -1;
                 return;
-            } else if (positions.Count == 1)
+            }
+            else if (positions.Count == 1 && !forceInterpolate)
             {
                 velocities = null;
                 return;
@@ -194,6 +212,30 @@ namespace LuckParser.Models.ParseModels
         public List<Point3D> getPositions()
         {
             return positions;
+        }
+
+        public List<Point3D> getActivePositions()
+        {
+            List<Point3D> activePositions = new List<Point3D>(positions);
+            for (var i = 0; i < activePositions.Count; i++)
+            {
+                Point3D cur = activePositions[i];
+                foreach (Tuple<long, long> status in dead)
+                {
+                    if (cur.time >= status.Item1 && cur.time <= status.Item2)
+                    {
+                        activePositions[i] = null;
+                    }
+                }
+                foreach (Tuple<long, long> status in dc)
+                {
+                    if (cur.time >= status.Item1 && cur.time <= status.Item2)
+                    {
+                        activePositions[i] = null;
+                    }
+                }
+            }        
+            return activePositions;
         }
     }
 }

@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class FollowingCircle : CircleActor
+    public class MobileActor : Mobility
     {
 
-        public FollowingCircle(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color) : base(fill, growing, radius, lifespan, color)
+        public MobileActor() : base()
         {
-
         }
 
         public override string getPosition(string id, CombatReplayMap map)

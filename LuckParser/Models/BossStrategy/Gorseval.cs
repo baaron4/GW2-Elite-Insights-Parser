@@ -20,7 +20,7 @@ namespace LuckParser.Models
             new Mechanic(31498, "Spectral Darkness", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,255)',", "Orb Debuff",0),
             new Mechanic(31722, "Spirited Fusion", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Gorseval, "symbol:'square',color:'rgb(255,140,0)',", "Ate Spirit",0),
             new Mechanic(31720, "Kick", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'triangle-right',color:'rgb(255,0,255)',", "Kicked by Spirit",0)
-            //new Mechanic(738, "Ghastly Rampage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,0)',", "Stood in black",2), //stood in black? Trigger via (25 stacks) vuln (ID 738) application would be possible
+            //new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,0)',", "Stood in black",2), //stood in black? Trigger via (25 stacks) vuln (ID 738) application would be possible
             };
         }
 
@@ -28,7 +28,7 @@ namespace LuckParser.Models
         {
             return new CombatReplayMap("https://i.imgur.com/nTueZcX.png",
                             Tuple.Create(1354, 1415),
-                            Tuple.Create(-623, -6754, 3731, -2206),
+                            Tuple.Create(-653, -6754, 3701, -2206),
                             Tuple.Create(-15360, -36864, 15360, 39936),
                             Tuple.Create(3456, 11012, 4736, 14212));
         }
@@ -84,9 +84,116 @@ namespace LuckParser.Models
             {
                 int start = (int)c.getTime();
                 int end = start + c.getActDur();
-                replay.addCircleActor(new FollowingCircle(true, c.getExpDur() + (int)c.getTime(), 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
-                replay.addCircleActor(new FollowingCircle(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
+                replay.addCircleActor(new CircleActor(true, c.getExpDur() + (int)c.getTime(), 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
+                replay.addCircleActor(new CircleActor(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
             }
+            List<PhaseData> phases = log.getBoss().getPhases(log, true);
+            if (phases.Count > 1)
+            {
+                List<CastLog> rampage = cls.Where(x => x.getID() == 31834).ToList();
+                Point3D pos = log.getBoss().getCombatReplay().getPositions().First();
+                foreach (CastLog c in rampage)
+                {
+                    int start = (int)c.getTime();
+                    int end = start + c.getActDur();
+                    replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 125, 255, 0.3)"));
+                    // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
+                    int ticks = (int)Math.Ceiling(c.getActDur() / 4000.0);
+                    int phaseIndex = 1;
+                    for (phaseIndex = 1; phaseIndex < phases.Count; phaseIndex++)
+                    {
+                        if (phases[phaseIndex].inInterval(start))
+                        {
+                            break;
+                        }
+                    }
+                    if (pos == null)
+                    {
+                        break;
+                    }
+                    List<string> patterns = new List<string>();
+                    switch (phaseIndex)
+                    {
+                        case 1:
+                            patterns = new List<string>
+                            {
+                                "2+3+5",
+                                "2+3+4",
+                                "1+4+5",
+                                "1+2+5",
+                                "1+3+5",
+                                "Full"
+                            };
+                            break;
+                        case 3:
+                            patterns = new List<string>
+                            {
+                                "2+3+4",
+                                "1+4+5",
+                                "1+3+4",
+                                "1+2+5",
+                                "1+2+3",
+                                "Full"
+                            };
+                            break;
+                        case 5:
+                            patterns = new List<string>
+                            {
+                                "1+4+5",
+                                "1+2+5",
+                                "2+3+5",
+                                "3+4+5",
+                                "3+4+5",
+                                "Full"
+                            };
+                            break;
+                        default:
+                            throw new Exception("how the fuck");
+                    }
+                    start += 2200;
+                    for (int i = 0; i < ticks; i++)
+                    {
+                        int tickStart = start + 4000 * i;
+                        int explosion = tickStart + 3000;
+                        int tickEnd = tickStart + 3500;
+                        string pattern = patterns[i];
+                        if (pattern.Contains("1"))
+                        {
+                            replay.addCircleActor(new CircleActor(true, explosion, 360, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.addCircleActor(new CircleActor(true,0 , 360, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                        }
+                        if (pattern.Contains("2"))
+                        {
+                            replay.addDoughnutActor(new DoughnutActor(explosion, 360, 720, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.addDoughnutActor(new DoughnutActor(0, 360, 720, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                        }
+                        if (pattern.Contains("3"))
+                        {
+                            replay.addDoughnutActor(new DoughnutActor(explosion, 720, 1080, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.addDoughnutActor(new DoughnutActor(0, 720, 1080, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                        }
+                        if (pattern.Contains("4"))
+                        {
+                            replay.addDoughnutActor(new DoughnutActor(explosion, 1080, 1440, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.addDoughnutActor(new DoughnutActor(0, 1080, 1440, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                        }
+                        if (pattern.Contains("5"))
+                        {
+                            replay.addDoughnutActor(new DoughnutActor(explosion, 1440, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.addDoughnutActor(new DoughnutActor(0, 1440, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                        }
+                        if (pattern.Contains("Full"))
+                        {
+                            tickStart -= 1000;
+                            explosion -= 1000;
+                            tickEnd -= 1000;
+                            replay.addCircleActor(new CircleActor(true, explosion, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.addCircleActor(new CircleActor(true, 0, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                        }
+                    }
+                }
+            }
+
             return ids;
         }
 

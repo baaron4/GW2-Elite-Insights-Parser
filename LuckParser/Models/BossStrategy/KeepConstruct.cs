@@ -22,7 +22,8 @@ namespace LuckParser.Models
             new Mechanic(-1, "Insidious Projection", Mechanic.MechType.Spawn, ParseEnum.BossIDS.KeepConstruct, "symbol:'bowtie',color:'rgb(255,0,0)',", "Merge",0),//Spawn check; How should this be handled? Species ID is 16227 if that helps. Could check combat events with state_change 'spawn' if it is an insidious projection?
             new Mechanic(35137, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagram-open',color:'rgb(255,0,255)',", "Phantasmal Blades",0),
             new Mechanic(35064, "Phantasmal Blades", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'hexagram-open',color:'rgb(255,0,255)',", "Phantasmal Blades",0),
-            new Mechanic(35086, "Tower Drop", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(255,140,0)',", "Tower Drop",0)
+            new Mechanic(35086, "Tower Drop", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(255,140,0)',", "Tower Drop",0),
+            new Mechanic(35103, "Xera's Fury", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(200,140,0)',", "Xera's Fury (Bombs)",0)
             //hit orb: May need different format since the Skill ID is irrelevant but any combat event with dst_agent of the species ID 16261 (Construct Core) should be shown. Tracking either via the different Construct Core adresses or their instance_id? (every phase it's a new one)
             };
         }
@@ -140,8 +141,8 @@ namespace LuckParser.Models
                     CastLog fire = magicExplose[i];
                     int start = (int)charge.getTime();
                     int end = (int)fire.getTime() + fire.getActDur();
-                    replay.addCircleActor(new FollowingCircle(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
-                    replay.addCircleActor(new FollowingCircle(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                    replay.addCircleActor(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                    replay.addCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                 }
             }
             List<CastLog> towerDrop = cls.Where(x => x.getID() == 35086).ToList();
@@ -152,13 +153,35 @@ namespace LuckParser.Models
                 Point3D pos = replay.getPositions().FirstOrDefault(x => x.time > end);
                 if (pos != null)
                 {
-                    replay.addCircleActor(new ImmobileCircle(false, 0, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                    replay.addCircleActor(new ImmobileCircle(true, end, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.addCircleActor(new CircleActor(false, 0, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.addCircleActor(new CircleActor(true, end, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
                 }
             }
             return ids;
         }
-     
+
+        public override void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        {
+            // Bombs
+            List<CombatItem> xeraFury = getFilteredList(log, 34511, p.getInstid());
+            int xeraFuryStart = 0;
+            int xeraFuryEnd = 0;
+            foreach (CombatItem c in xeraFury)
+            {
+                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                {
+                    xeraFuryStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                }
+                else
+                {
+                    xeraFuryEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    replay.addCircleActor(new CircleActor(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)"));
+                    replay.addCircleActor(new CircleActor(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)"));
+                }
+
+            }
+        }
+
         public override string getReplayIcon()
         {
             return "https://i.imgur.com/Kq0kL07.png";

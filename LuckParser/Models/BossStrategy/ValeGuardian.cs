@@ -93,7 +93,7 @@ namespace LuckParser.Models
             List<CastLog> magicStorms = cls.Where(x => x.getID() == 31419).ToList();
             foreach (CastLog c in magicStorms)
             {
-                replay.addCircleActor(new FollowingCircle(true, 0, 100, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(0, 180, 255, 0.3)"));
+                replay.addCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(0, 180, 255, 0.3)"));
             }
             return ids;
         }

@@ -22,7 +22,10 @@ namespace LuckParser.Models.DataModels
             groupBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
             offGroupBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
             squadBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
+            phases = new List<PhaseData>();
         }
+
+        public List<PhaseData> phases;
 
         public class FinalDPS
         {

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class ImmobileCircle : CircleActor
+    public class ImmobileActor : Mobility
     {
         private Point3D position;
 
-        public ImmobileCircle(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color, Point3D position) : base(fill, growing, radius,lifespan,color)
+        public ImmobileActor(Point3D position) : base()
         {
             this.position = position;
         }
@@ -18,7 +18,7 @@ namespace LuckParser.Models.ParseModels
         public override string getPosition(string id, CombatReplayMap map)
         {
             Tuple<int, int> coord = map.getMapCoord(position.X, position.Y);
-            return "["+coord.Item1+","+coord.Item2+"]";
+            return "[" + coord.Item1 + "," + coord.Item2 + "]";
         }
     }
 }
