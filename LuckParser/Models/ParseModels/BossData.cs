@@ -230,6 +230,10 @@ namespace LuckParser.Models.ParseModels
                 // SH
                 case ParseEnum.BossIDS.SoullessHorror:
                     List<CombatItem> necrosis = clist.Where(x => x.getSkillID() == 47414 && x.isBuffremove() == ParseEnum.BuffRemove.None).ToList();
+                    if (necrosis.Count == 0)
+                    {
+                        break;
+                    }
                     // split necrosis
                     Dictionary<ushort, List<CombatItem>> splitNecrosis = new Dictionary<ushort, List<CombatItem>>();
                     foreach (CombatItem c in necrosis)
