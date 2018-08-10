@@ -110,7 +110,7 @@ namespace LuckParser.Controllers
             final.allCondiDps = (int)dps;
             final.allCondiDamage = (int)damage;
             //Power DPS
-            damage = final.allDamage - final.allCondiDps;
+            damage = final.allDamage - final.allCondiDamage;
             if (phaseDuration > 0)
             {
                 dps = damage / phaseDuration;
