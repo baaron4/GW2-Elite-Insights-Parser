@@ -576,10 +576,12 @@ namespace LuckParser.Controllers
                             if (c.getSrcInstid() == xera_2_instid)
                             {
                                 c.setSrcInstid(boss_data.getInstid());
+                                c.setSrcAgent(boss_data.getAgent());
                             }
                             if (c.getDstInstid() == xera_2_instid)
                             {
                                 c.setDstInstid(boss_data.getInstid());
+                                c.setDstAgent(boss_data.getAgent());
                             }
                             //set health update
                             if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange() == ParseEnum.StateChange.HealthUpdate)
@@ -616,11 +618,13 @@ namespace LuckParser.Controllers
                                 if (c.getSrcInstid() == deimos_2_instid)
                                 {
                                     c.setSrcInstid(boss_data.getInstid());
+                                    c.setSrcAgent(boss_data.getAgent());
 
                                 }
                                 if (c.getDstInstid() == deimos_2_instid)
                                 {
                                     c.setDstInstid(boss_data.getInstid());
+                                    c.setDstAgent(boss_data.getAgent());
                                 }
                             }
 
