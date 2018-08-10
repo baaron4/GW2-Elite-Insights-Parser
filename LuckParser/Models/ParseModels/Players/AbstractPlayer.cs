@@ -72,6 +72,10 @@ namespace LuckParser.Models.ParseModels
         }
         public List<DamageLog> getDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
         {
+            if (redirection.Count == 0)
+            {
+                return getDamageLogs(log.getBossData().getInstid(), log, start, end);
+            }
             List<DamageLog> dls = getDamageLogs(0, log, start, end);
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
@@ -126,6 +130,21 @@ namespace LuckParser.Models.ParseModels
         public List<DamageLog> getJustPlayerDamageLogs(int instidFilter, ParsedLog log, long start, long end)
         {
             return getDamageLogs(instidFilter, log, start, end).Where(x => x.getInstidt() == agent.getInstid()).ToList();
+        }
+
+        public List<DamageLog> getJustPlayerDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
+        {
+            if (redirection.Count == 0)
+            {
+                return getJustPlayerDamageLogs(log.getBossData().getInstid(), log, start, end);
+            }
+            List<DamageLog> dls = getJustPlayerDamageLogs(0, log, start, end);
+            List<DamageLog> res = new List<DamageLog>();
+            foreach (AgentItem a in redirection)
+            {
+                res.AddRange(dls.Where(x => x.getDstInstidt() == a.getInstid() && x.getTime() >= a.getFirstAware() - log.getBossData().getFirstAware() && x.getTime() <= a.getLastAware() - log.getBossData().getFirstAware()));
+            }
+            return res;
         }
         // privates
         protected void addDamageLog(long time, CombatItem c)
