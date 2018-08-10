@@ -82,6 +82,7 @@ namespace LuckParser.Models.ParseModels
             {
                 res.AddRange(dls.Where(x => x.getDstInstidt() == a.getInstid() && x.getTime() >= a.getFirstAware() - log.getBossData().getFirstAware() && x.getTime() <= a.getLastAware() - log.getBossData().getFirstAware()));
             }
+            res.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
             return res;
         }
         public List<DamageLog> getDamageTakenLogs(ParsedLog log, long start, long end)
@@ -144,6 +145,7 @@ namespace LuckParser.Models.ParseModels
             {
                 res.AddRange(dls.Where(x => x.getDstInstidt() == a.getInstid() && x.getTime() >= a.getFirstAware() - log.getBossData().getFirstAware() && x.getTime() <= a.getLastAware() - log.getBossData().getFirstAware()));
             }
+            res.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
             return res;
         }
         // privates
