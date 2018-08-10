@@ -96,6 +96,7 @@ namespace LuckParser.Models
                             phase.addRedirection(a);
                         }
                     }
+                    phase.overrideStart(log.getBossData().getFirstAware());
                 }
             }
             return phases;

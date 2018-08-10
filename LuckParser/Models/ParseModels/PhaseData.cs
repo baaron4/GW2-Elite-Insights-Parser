@@ -55,6 +55,14 @@ namespace LuckParser.Models.ParseModels
             return start <= time - offset && time - offset <= end;
         }
 
+        public void overrideStart(long offset)
+        {
+            if (redirection.Count > 0)
+            {
+                start = redirection[0].getFirstAware() - offset;
+            }
+        }
+
         public long getStart()
         {
             return start;
