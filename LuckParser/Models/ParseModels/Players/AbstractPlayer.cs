@@ -70,6 +70,16 @@ namespace LuckParser.Models.ParseModels
             }
             return damage_logsFiltered.Where( x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
+        public List<DamageLog> getDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
+        {
+            List<DamageLog> dls = getDamageLogs(0, log, start, end);
+            List<DamageLog> res = new List<DamageLog>();
+            foreach (AgentItem a in redirection)
+            {
+                res.AddRange(dls.Where(x => x.getDstInstidt() == a.getInstid() && x.getTime() >= a.getFirstAware() - log.getBossData().getFirstAware() && x.getTime() <= a.getLastAware() - log.getBossData().getFirstAware()));
+            }
+            return res;
+        }
         public List<DamageLog> getDamageTakenLogs(ParsedLog log, long start, long end)
         {
             if (damageTaken_logs.Count == 0)
