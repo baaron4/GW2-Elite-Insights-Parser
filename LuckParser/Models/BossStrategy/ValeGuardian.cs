@@ -76,7 +76,27 @@ namespace LuckParser.Models
             string[] namesVG = new string[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].setName(namesVG[i - 1]);
+                PhaseData phase = phases[i];
+                phase.setName(namesVG[i - 1]);
+                if (i == 2 || i == 4)
+                {
+                    List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+                    {
+                       ParseEnum.ThrashIDS.BlueGuardian,
+                       ParseEnum.ThrashIDS.GreenGuardian,
+                       ParseEnum.ThrashIDS.RedGuardian
+                    };
+                    List<AgentItem> guardians = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
+                    foreach (AgentItem a in guardians)
+                    {
+                        long agentStart = a.getFirstAware() - log.getBossData().getFirstAware();
+                        long agentEnd = a.getLastAware() - log.getBossData().getFirstAware();
+                        if (phase.inInterval(agentStart) || phase.inInterval(agentEnd))
+                        {
+                            phase.addRedirection(a);
+                        }
+                    }
+                }
             }
             return phases;
         }

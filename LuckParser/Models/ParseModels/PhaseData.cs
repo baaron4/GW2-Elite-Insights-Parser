@@ -7,7 +7,7 @@ namespace LuckParser.Models.ParseModels
         private long start;
         private long end;
         private string name;
-        private List<long> redirection = new List<long>();
+        private List<AgentItem> redirection = new List<AgentItem>();
 
         public PhaseData(long start, long end)
         {
@@ -25,12 +25,12 @@ namespace LuckParser.Models.ParseModels
             return name;
         }
 
-        public void addRedirection(long agent)
+        public void addRedirection(AgentItem agent)
         {
             redirection.Add(agent);
         }
 
-        public List<long> getRedirection()
+        public List<AgentItem> getRedirection()
         {
             return redirection;
         }

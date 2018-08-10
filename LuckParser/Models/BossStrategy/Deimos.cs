@@ -91,7 +91,26 @@ namespace LuckParser.Models
             string[] namesDeiSplit = new string[] { "Thief", "Gambler", "Drunkard" };
             for (int i = offsetDei; i < phases.Count; i++)
             {
-                phases[i].setName(namesDeiSplit[i - offsetDei]);
+                PhaseData phase = phases[i];
+                phase.setName(namesDeiSplit[i - offsetDei]);
+                List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+                    {
+                        ParseEnum.ThrashIDS.Thief,
+                        ParseEnum.ThrashIDS.Drunkard,
+                        ParseEnum.ThrashIDS.Gambler,
+                        ParseEnum.ThrashIDS.GamblerClones,
+                    };
+                List<AgentItem> clones = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
+                foreach (AgentItem a in clones)
+                {
+                    long agentStart = a.getFirstAware() - log.getBossData().getFirstAware();
+                    long agentEnd = a.getLastAware() - log.getBossData().getFirstAware();
+                    if (phase.inInterval(agentStart) || phase.inInterval(agentEnd))
+                    {
+                        phase.addRedirection(a);
+                    }
+                }
+
             }
             phases.Sort((x, y) => (x.getStart() < y.getStart()) ? -1 : 1);
             return phases;
