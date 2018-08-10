@@ -183,7 +183,7 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.ThrashIDS.InsidiousProjection:
                 case ParseEnum.ThrashIDS.Pride:
                 case ParseEnum.ThrashIDS.Echo:
-                    replay.setIcon("https://i.imgur.com/DZIl49i.png");
+                    replay.setIcon("https://i.imgur.com/k79t7ZA.png");
                     break;
                 default:
                     replay.setIcon("https://i.imgur.com/xCoypjS.png");
