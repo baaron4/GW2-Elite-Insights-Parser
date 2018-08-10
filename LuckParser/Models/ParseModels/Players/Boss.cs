@@ -110,7 +110,7 @@ namespace LuckParser.Models.ParseModels
                     if (m.GetSkill() == c.getSkillID() && ((m.GetMechType() == Mechanic.MechType.EnemyBoon && c.isBuffremove() == ParseEnum.BuffRemove.None) || (m.GetMechType() == Mechanic.MechType.EnemyBoonStrip && c.isBuffremove() == ParseEnum.BuffRemove.Manual)))
                     {
                         AbstractMasterPlayer amp = null;
-                        if (c.getDstAgent() == boss_data.getAgent())
+                        if (c.getDstInstid() == boss_data.getInstid())
                         {
                             amp = this;
                         }
