@@ -179,11 +179,30 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.ThrashIDS.Oil:
                     replay.setIcon("https://i.imgur.com/DZIl49i.png");
                     break;
-                case ParseEnum.ThrashIDS.SurgingSoul:
                 case ParseEnum.ThrashIDS.InsidiousProjection:
+                    replay.setIcon("https://i.imgur.com/9EdItBS.png");
+                    break;
                 case ParseEnum.ThrashIDS.Pride:
+                case ParseEnum.ThrashIDS.SurgingSoul:
                 case ParseEnum.ThrashIDS.Echo:
                     replay.setIcon("https://i.imgur.com/k79t7ZA.png");
+                    break;
+                case ParseEnum.ThrashIDS.CrimsonPhantasm:
+                    replay.setIcon("https://i.imgur.com/zP7Bvb4.png");
+                    break;
+                case ParseEnum.ThrashIDS.RadiantPhantasm:
+                    replay.setIcon("https://i.imgur.com/O5VWLyY.png");
+                    break;
+                case ParseEnum.ThrashIDS.Gambler:
+                case ParseEnum.ThrashIDS.Thief:
+                case ParseEnum.ThrashIDS.Drunkard:
+                    replay.setIcon("https://i.imgur.com/vINeVU6.png");
+                    break;
+                case ParseEnum.ThrashIDS.GamblerClones:
+                    replay.setIcon("https://i.imgur.com/zMsBWEx.png");
+                    break;
+                case ParseEnum.ThrashIDS.GamblerReal:
+                    replay.setIcon("https://i.imgur.com/J6oMITN.png");
                     break;
                 default:
                     replay.setIcon("https://i.imgur.com/xCoypjS.png");
