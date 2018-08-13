@@ -254,6 +254,14 @@ namespace LuckParser.Models.DataModels
         }
     }
 
+    static class SpanwExtensions
+    {
+        public static bool IsSpawn(this ParseEnum.StateChange state)
+        {
+            return state == ParseEnum.StateChange.Normal || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.Spawn;
+        }
+    }
+
     static class ActivationExtensions
     {
         public static bool IsCasting(this ParseEnum.Activation activation)
