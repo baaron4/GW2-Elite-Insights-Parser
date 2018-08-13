@@ -99,7 +99,7 @@ namespace LuckParser.Models.DataModels
 
             cast_data = combat_data.getCombatList().Where(x => (x.isStateChange() == ParseEnum.StateChange.Normal && x.isActivation() != ParseEnum.Activation.None) || x.isStateChange() == ParseEnum.StateChange.WeaponSwap).ToList();
 
-            movement_data = (boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Fractal || boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Raid) ? combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Position || x.isStateChange() == ParseEnum.StateChange.Velocity).ToList() : new List<CombatItem>();
+            movement_data = (boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Fractal || boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Raid) ? combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Position || x.isStateChange() == ParseEnum.StateChange.Velocity).ToList() : new List<CombatItem>();
 
             /*healing_data = combat_data.getCombatList().Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                          ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
@@ -132,7 +132,7 @@ namespace LuckParser.Models.DataModels
 
         public bool isBenchmarkMode()
         {
-            return boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Golem;
+            return boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Golem;
         }
 
         /*public List<CombatItem> getHealingData()

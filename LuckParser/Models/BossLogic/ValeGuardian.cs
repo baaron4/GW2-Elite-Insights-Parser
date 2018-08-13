@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class ValeGuardian : BossStrategy
+    public class ValeGuardian : BossLogic
     {
         public ValeGuardian() : base()
         {

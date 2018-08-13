@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class MAMA : BossStrategy
+    public class MAMA : BossLogic
     {
         public MAMA() : base()
         {

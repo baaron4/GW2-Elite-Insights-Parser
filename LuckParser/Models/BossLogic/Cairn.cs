@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Cairn : BossStrategy
+    public class Cairn : BossLogic
     {
         public Cairn() : base()
         {
@@ -75,6 +75,11 @@ namespace LuckParser.Models
                     replay.addCircleActor(new CircleActor(false, 0, 220, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)"));
                 }
             }
+        }
+
+        public override int isCM(List<CombatItem> clist, int health)
+        {
+            return clist.Exists(x => x.getSkillID() == 38098) ? 1 : 0;
         }
 
         public override string getReplayIcon()

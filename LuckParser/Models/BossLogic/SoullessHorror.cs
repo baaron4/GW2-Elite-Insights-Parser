@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class SoullessHorror : BossStrategy
+    public class SoullessHorror : BossLogic
     {
         public SoullessHorror() : base()
         {
@@ -74,6 +74,39 @@ namespace LuckParser.Models
                 }
             }
             return ids;
+        }
+
+        public override int isCM(List<CombatItem> clist, int health)
+        {
+            List<CombatItem> necrosis = clist.Where(x => x.getSkillID() == 47414 && x.isBuffremove() == ParseEnum.BuffRemove.None).ToList();
+            if (necrosis.Count == 0)
+            {
+                return 0;
+            }
+            // split necrosis
+            Dictionary<ushort, List<CombatItem>> splitNecrosis = new Dictionary<ushort, List<CombatItem>>();
+            foreach (CombatItem c in necrosis)
+            {
+                ushort inst = c.getDstInstid();
+                if (!splitNecrosis.ContainsKey(inst))
+                {
+                    splitNecrosis.Add(inst, new List<CombatItem>());
+                }
+                splitNecrosis[inst].Add(c);
+            }
+            List<CombatItem> longestNecrosis = splitNecrosis.Values.First(l => l.Count == splitNecrosis.Values.Max(x => x.Count));
+            long minDiff = long.MaxValue;
+            for (int i = 0; i < longestNecrosis.Count - 1; i++)
+            {
+                CombatItem cur = longestNecrosis[i];
+                CombatItem next = longestNecrosis[i + 1];
+                long timeDiff = next.getTime() - cur.getTime();
+                if (timeDiff > 1000 && minDiff > timeDiff)
+                {
+                    minDiff = timeDiff;
+                }
+            }
+            return (minDiff < 11000) ? 1 : 0;
         }
 
         public override string getReplayIcon()

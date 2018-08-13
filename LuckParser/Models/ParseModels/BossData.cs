@@ -11,7 +11,7 @@ namespace LuckParser.Models.ParseModels
         // Fields
         private ulong agent = 0;
         private ushort instid = 0;
-        private BossStrategy strategy;
+        private BossLogic logic;
         private long first_aware = 0;
         private long last_aware = long.MaxValue;
         private ushort id;
@@ -19,7 +19,7 @@ namespace LuckParser.Models.ParseModels
         private int health = -1;
         private int toughness = -1;
         private List<Point> healthOverTime = new List<Point>();
-        private bool isCM = false;
+        private int isCM = -1;
         // Constructors
         public BossData(ushort id)
         {
@@ -27,72 +27,72 @@ namespace LuckParser.Models.ParseModels
             switch (ParseEnum.getBossIDS(id))
             {
                 case ParseEnum.BossIDS.ValeGuardian:
-                    strategy = new ValeGuardian();
+                    logic = new ValeGuardian();
                     break;
                 case ParseEnum.BossIDS.Gorseval:
-                    strategy = new Gorseval();
+                    logic = new Gorseval();
                     break;
                 case ParseEnum.BossIDS.Sabetha:
-                    strategy = new Sabetha();
+                    logic = new Sabetha();
                     break;
                 case ParseEnum.BossIDS.Slothasor:
-                    strategy = new Slothasor();
+                    logic = new Slothasor();
                     break;
                 case ParseEnum.BossIDS.Matthias:
-                    strategy = new Matthias();
+                    logic = new Matthias();
                     break;
                 case ParseEnum.BossIDS.KeepConstruct:
-                    strategy = new KeepConstruct();
+                    logic = new KeepConstruct();
                     break;
                 case ParseEnum.BossIDS.Xera:
-                    strategy = new Xera();
+                    logic = new Xera();
                     break;
                 case ParseEnum.BossIDS.Cairn:
-                    strategy = new Cairn();
+                    logic = new Cairn();
                     break;
                 case ParseEnum.BossIDS.MursaatOverseer:
-                    strategy = new MursaatOverseer();
+                    logic = new MursaatOverseer();
                     break;
                 case ParseEnum.BossIDS.Samarog:
-                    strategy = new Samarog();
+                    logic = new Samarog();
                     break;
                 case ParseEnum.BossIDS.Deimos:
-                    strategy = new Deimos();
+                    logic = new Deimos();
                     break;
                 case ParseEnum.BossIDS.SoullessHorror:
-                    strategy = new SoullessHorror();
+                    logic = new SoullessHorror();
                     break;
                 case ParseEnum.BossIDS.Dhuum:
-                    strategy = new Dhuum();
+                    logic = new Dhuum();
                     break;
                 case ParseEnum.BossIDS.MAMA:
-                    strategy = new MAMA();
+                    logic = new MAMA();
                     break;
                 case ParseEnum.BossIDS.Siax:
-                    strategy = new Siax();
+                    logic = new Siax();
                     break;
                 case ParseEnum.BossIDS.Ensolyss:
-                    strategy = new Ensolyss();
+                    logic = new Ensolyss();
                     break;
                 case ParseEnum.BossIDS.Skorvald:
-                    strategy = new Skorvald();
+                    logic = new Skorvald();
                     break;
                 case ParseEnum.BossIDS.Artsariiv:
-                    strategy = new Artasariiv();
+                    logic = new Artasariiv();
                     break;
                 case ParseEnum.BossIDS.Arkk:
-                    strategy = new Arkk();
+                    logic = new Arkk();
                     break;
                 case ParseEnum.BossIDS.Golem1:
                 case ParseEnum.BossIDS.Golem2:
                 case ParseEnum.BossIDS.Golem3:
                 case ParseEnum.BossIDS.Golem4:
                 case ParseEnum.BossIDS.Golem5:
-                    strategy = new Golem();
+                    logic = new Golem();
                     break;
                 default:
                     // Unknown
-                    strategy = new BossStrategy();
+                    logic = new BossLogic();
                     break;
             }
         }
@@ -116,9 +116,9 @@ namespace LuckParser.Models.ParseModels
             return agent;
         }
 
-        public BossStrategy getBossBehavior()
+        public BossLogic getBossBehavior()
         {
-            return strategy;
+            return logic;
         }
 
         public ushort getInstid()
@@ -204,73 +204,17 @@ namespace LuckParser.Models.ParseModels
         }
         public bool getCM()
         {
-            return isCM;
+            return isCM == 1;
         }
         public void setCM(List<CombatItem> clist)
         {
-            isCM = false;
-            switch(ParseEnum.getBossIDS(id))
+            if (isCM == -1)
             {
-                // Cairn
-                case ParseEnum.BossIDS.Cairn:
-                    isCM = clist.Exists(x => x.getSkillID() == 38098);
-                    break;
-                // MO
-                case ParseEnum.BossIDS.MursaatOverseer:
-                    isCM = (health > 25e6);
-                    break;
-                // Samarog
-                case ParseEnum.BossIDS.Samarog:
-                    isCM = (health > 30e6);
-                    break;
-                // Deimos
-                case ParseEnum.BossIDS.Deimos:
-                    isCM = (health > 40e6);
-                    break;
-                // SH
-                case ParseEnum.BossIDS.SoullessHorror:
-                    List<CombatItem> necrosis = clist.Where(x => x.getSkillID() == 47414 && x.isBuffremove() == ParseEnum.BuffRemove.None).ToList();
-                    if (necrosis.Count == 0)
-                    {
-                        break;
-                    }
-                    // split necrosis
-                    Dictionary<ushort, List<CombatItem>> splitNecrosis = new Dictionary<ushort, List<CombatItem>>();
-                    foreach (CombatItem c in necrosis)
-                    {
-                        ushort inst = c.getDstInstid();
-                        if (!splitNecrosis.ContainsKey(inst))
-                        {
-                            splitNecrosis.Add(inst, new List<CombatItem>());
-                        }
-                        splitNecrosis[inst].Add(c);
-                    }
-                    List<CombatItem> longestNecrosis = splitNecrosis.Values.First(l => l.Count == splitNecrosis.Values.Max(x => x.Count));
-                    long minDiff = long.MaxValue;
-                    for (int i = 0; i < longestNecrosis.Count - 1; i++)
-                    {
-                        CombatItem cur = longestNecrosis[i];
-                        CombatItem next = longestNecrosis[i + 1];
-                        long timeDiff = next.getTime() - cur.getTime();
-                        if (timeDiff > 1000 && minDiff > timeDiff)
-                        {
-                            minDiff = timeDiff;
-                        }
-                    }
-                    isCM = minDiff < 11000;
-                    break;
-                // Dhuum
-                case ParseEnum.BossIDS.Dhuum:
-                    isCM = (health > 35e6);
-                    break;
-                // Skorvald
-                case ParseEnum.BossIDS.Skorvald:
-                    isCM = (health == 5551340);
-                    break;
-            }
-            if (isCM && !name.Contains("CM"))
-            {
-                name += " CM";
+                isCM = logic.isCM(clist, health);
+                if (isCM == 1)
+                {
+                    name += " CM";
+                }
             }
         }
     }

@@ -431,9 +431,9 @@ namespace LuckParser.Controllers
         private void fillMissingData()
         {
             var agentsLookup = agent_data.getAllAgentsList().ToDictionary(a => a.getAgent());
-            bool golem_mode = boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Golem;
-            bool raid_mode = boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Raid;
-            bool fractal_mode = boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Fractal;
+            bool golem_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Golem;
+            bool raid_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Raid;
+            bool fractal_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Fractal;
             // Set Agent instid, first_aware and last_aware
             var combat_list = combat_data.getCombatList();
             foreach (CombatItem c in combat_list)

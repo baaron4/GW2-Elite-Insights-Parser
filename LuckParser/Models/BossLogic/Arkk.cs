@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Arkk : BossStrategy
+    public class Arkk : BossLogic
     {
         public Arkk() : base()
         {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Samarog : BossStrategy
+    public class Samarog : BossLogic
     {
         public Samarog() : base()
         {
@@ -195,6 +195,11 @@ namespace LuckParser.Models
                     replay.addCircleActor(new CircleActor(true, 0, 80, new Tuple<int, int>(fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)"));
                 }
             }
+        }
+
+        public override int isCM(List<CombatItem> clist, int health)
+        {
+            return (health > 30e6) ? 1 : 0;
         }
 
         public override string getReplayIcon()

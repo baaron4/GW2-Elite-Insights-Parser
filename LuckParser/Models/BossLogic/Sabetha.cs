@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Sabetha : BossStrategy
+    public class Sabetha : BossLogic
     {
         public Sabetha() : base()
         {

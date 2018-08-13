@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class BossStrategy
+    public class BossLogic
     {
 
         public enum ParseMode { Raid, Fractal, Golem, Unknown };
         
         protected List<Mechanic> mechanicList = new List<Mechanic>();
         protected ParseMode mode;
-        public BossStrategy()
+        public BossLogic()
         {
             mode = ParseMode.Unknown;
         }
@@ -91,6 +91,11 @@ namespace LuckParser.Models
         {
             List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>();
             return ids;
+        }
+
+        public virtual int isCM(List<CombatItem> clist, int health)
+        {
+            return -1;
         }
 
         public virtual void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)

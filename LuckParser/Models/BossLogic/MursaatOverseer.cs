@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class MursaatOverseer : BossStrategy
+    public class MursaatOverseer : BossLogic
     {
         public MursaatOverseer() : base()
         {
@@ -48,7 +48,12 @@ namespace LuckParser.Models
                     };     
             return ids;
         }
-        
+
+        public override int isCM(List<CombatItem> clist, int health)
+        {
+            return (health > 25e6) ? 1 : 0;
+        }
+
         public override string getReplayIcon()
         {
             return "https://i.imgur.com/5LNiw4Y.png";

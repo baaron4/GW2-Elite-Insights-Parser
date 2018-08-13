@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Gorseval : BossStrategy
+    public class Gorseval : BossLogic
     {
         public Gorseval() : base()
         {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Skorvald : BossStrategy
+    public class Skorvald : BossLogic
     {
         public Skorvald() : base()
         {
@@ -23,7 +23,12 @@ namespace LuckParser.Models
                             Tuple.Create(-24576, -24576, 24576, 24576),
                             Tuple.Create(11204, 4414, 13252, 6462));
         }
-        
+
+        public override int isCM(List<CombatItem> clist, int health)
+        {
+            return (health == 5551340) ? 1 : 0;
+        }
+
         public override string getReplayIcon()
         {
             return "https://i.imgur.com/IOPAHRE.png";

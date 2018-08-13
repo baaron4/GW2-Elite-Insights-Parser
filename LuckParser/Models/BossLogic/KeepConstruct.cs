@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class KeepConstruct : BossStrategy
+    public class KeepConstruct : BossLogic
     {
         public KeepConstruct() : base()
         {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Xera : BossStrategy
+    public class Xera : BossLogic
     {
         public Xera() : base()
         {

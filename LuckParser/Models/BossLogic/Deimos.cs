@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Deimos : BossStrategy
+    public class Deimos : BossLogic
     {
         public Deimos() : base()
         {
@@ -163,6 +163,11 @@ namespace LuckParser.Models
                     replay.addCircleActor(new CircleActor(true, tpEnd, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
                 }
             }
+        }
+
+        public override int isCM(List<CombatItem> clist, int health)
+        {
+            return (health > 40e6) ? 1 : 0;
         }
 
         public override string getReplayIcon()
