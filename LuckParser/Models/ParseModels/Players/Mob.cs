@@ -173,6 +173,8 @@ namespace LuckParser.Models.ParseModels
                     replay.setIcon("https://i.imgur.com/9XtNPdw.png");
                     break;
                 case ParseEnum.ThrashIDS.UnstableLeyRift:
+                    replay.setIcon("https://i.imgur.com/YXM3igs.png");
+                    break;
                 case ParseEnum.ThrashIDS.Tear:
                     replay.setIcon("https://i.imgur.com/N9seps0.png");
                     break;
@@ -183,9 +185,13 @@ namespace LuckParser.Models.ParseModels
                     replay.setIcon("https://i.imgur.com/9EdItBS.png");
                     break;
                 case ParseEnum.ThrashIDS.Pride:
+                    replay.setIcon("https://i.imgur.com/ePTXx23.png");
+                    break;
                 case ParseEnum.ThrashIDS.SurgingSoul:
-                case ParseEnum.ThrashIDS.Echo:
                     replay.setIcon("https://i.imgur.com/k79t7ZA.png");
+                    break;
+                case ParseEnum.ThrashIDS.Echo:
+                    replay.setIcon("https://i.imgur.com/kcN9ECn.png");
                     break;
                 case ParseEnum.ThrashIDS.CrimsonPhantasm:
                     replay.setIcon("https://i.imgur.com/zP7Bvb4.png");
