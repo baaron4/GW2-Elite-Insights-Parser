@@ -418,6 +418,7 @@ namespace LuckParser.Controllers
                     combat_data.addItem( revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader));
                 }
             }
+            combat_data.getCombatList().RemoveAll(x => x.getSrcInstid() == 0 && x.getDstAgent() == 0 && x.getSrcAgent() == 0 && x.getDstInstid() == 0 && x.getIFF() == ParseEnum.IFF.Unknown);
         }
         
         private static bool isGolem(ushort id)
@@ -671,7 +672,6 @@ namespace LuckParser.Controllers
             {
                 log_data.setBossKill(bossHealthOverTime.Last().Y < 200);
             }
-
             //players
             if (p_list.Count == 0)
             {
