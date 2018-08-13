@@ -122,6 +122,9 @@ namespace LuckParser.Models.ParseModels
         {
             return replay;
         }
+
+        public abstract void addMechanics(ParsedLog log);
+
         // private getters
         private BoonMap getBoonMap(ParsedLog log, List<Boon> to_track)
         {

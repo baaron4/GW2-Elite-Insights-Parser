@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Golem : BossStrategy
+    public class Golem : BossLogic
     {
         public Golem() : base()
         {

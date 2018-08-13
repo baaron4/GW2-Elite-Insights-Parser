@@ -172,16 +172,53 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.ThrashIDS.Storm:
                     replay.setIcon("https://i.imgur.com/9XtNPdw.png");
                     break;
+                case ParseEnum.ThrashIDS.UnstableLeyRift:
+                    replay.setIcon("https://i.imgur.com/YXM3igs.png");
+                    break;
                 case ParseEnum.ThrashIDS.Tear:
                     replay.setIcon("https://i.imgur.com/N9seps0.png");
                     break;
                 case ParseEnum.ThrashIDS.Oil:
                     replay.setIcon("https://i.imgur.com/DZIl49i.png");
                     break;
+                case ParseEnum.ThrashIDS.InsidiousProjection:
+                    replay.setIcon("https://i.imgur.com/9EdItBS.png");
+                    break;
+                case ParseEnum.ThrashIDS.Pride:
+                    replay.setIcon("https://i.imgur.com/ePTXx23.png");
+                    break;
+                case ParseEnum.ThrashIDS.SurgingSoul:
+                    replay.setIcon("https://i.imgur.com/k79t7ZA.png");
+                    break;
+                case ParseEnum.ThrashIDS.Echo:
+                    replay.setIcon("https://i.imgur.com/kcN9ECn.png");
+                    break;
+                case ParseEnum.ThrashIDS.CrimsonPhantasm:
+                    replay.setIcon("https://i.imgur.com/zP7Bvb4.png");
+                    break;
+                case ParseEnum.ThrashIDS.RadiantPhantasm:
+                    replay.setIcon("https://i.imgur.com/O5VWLyY.png");
+                    break;
+                case ParseEnum.ThrashIDS.Gambler:
+                case ParseEnum.ThrashIDS.Thief:
+                case ParseEnum.ThrashIDS.Drunkard:
+                    replay.setIcon("https://i.imgur.com/vINeVU6.png");
+                    break;
+                case ParseEnum.ThrashIDS.GamblerClones:
+                    replay.setIcon("https://i.imgur.com/zMsBWEx.png");
+                    break;
+                case ParseEnum.ThrashIDS.GamblerReal:
+                    replay.setIcon("https://i.imgur.com/J6oMITN.png");
+                    break;
                 default:
                     replay.setIcon("https://i.imgur.com/xCoypjS.png");
                     break;
             }
+        }
+
+        public override void addMechanics(ParsedLog log)
+        {
+            // nothing to do, thrash mob mechanics should be managed by the boss
         }
     }
 }

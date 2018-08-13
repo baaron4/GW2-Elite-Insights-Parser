@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Samarog : BossStrategy
+    public class Samarog : BossLogic
     {
         public Samarog() : base()
         {
@@ -93,7 +93,27 @@ namespace LuckParser.Models
             string[] namesSam = new string[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].setName(namesSam[i - 1]);
+                PhaseData phase = phases[i];
+                phase.setName(namesSam[i - 1]);
+                if (i == 2 || i == 4)
+                {
+                    List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+                    {
+                       ParseEnum.ThrashIDS.Rigom,
+                       ParseEnum.ThrashIDS.Guldhem
+                    };
+                    List<AgentItem> slaves = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
+                    foreach (AgentItem a in slaves)
+                    {
+                        long agentStart = a.getFirstAware() - log.getBossData().getFirstAware();
+                        long agentEnd = a.getLastAware() - log.getBossData().getFirstAware();
+                        if (phase.inInterval(agentStart))
+                        {
+                            phase.addRedirection(a);
+                        }
+                    }
+                    phase.overrideStart(log.getBossData().getFirstAware());
+                }
             }
             return phases;
         }
@@ -175,6 +195,11 @@ namespace LuckParser.Models
                     replay.addCircleActor(new CircleActor(true, 0, 80, new Tuple<int, int>(fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)"));
                 }
             }
+        }
+
+        public override int isCM(List<CombatItem> clist, int health)
+        {
+            return (health > 30e6) ? 1 : 0;
         }
 
         public override string getReplayIcon()

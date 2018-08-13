@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Ensolyss : BossStrategy
+    public class Ensolyss : BossLogic
     {
         public Ensolyss() : base()
         {

@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class ValeGuardian : BossStrategy
+    public class ValeGuardian : BossLogic
     {
         public ValeGuardian() : base()
         {
             mode = ParseMode.Raid;
             mechanicList = new List<Mechanic>
             {
-            new Mechanic(31860, "Unstable Magic Spike", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'circle',color:'rgb(0,0,255)',", "Green Teleport blue",0),
-            new Mechanic(31392, "Unstable Magic Spike", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'circle',color:'rgb(0,0,255)',", "Boss Teleport blue",0),
+            new Mechanic(31860, "Unstable Magic Spike", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'circle',color:'rgb(0,0,255)',", "Green Teleport blue",500),
+            new Mechanic(31392, "Unstable Magic Spike", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'circle',color:'rgb(0,0,255)',", "Boss Teleport blue",500),
             new Mechanic(31340, "Distributed Magic", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'circle',color:'rgb(0,128,0)',", "Green Team",0),
             new Mechanic(31391, "Distributed Magic", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'circle',color:'rgb(0,128,0)',", "Green Team",0),
             new Mechanic(31529, "Distributed Magic", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'circle',color:'rgb(0,128,0)',", "Green Team",0),
@@ -76,7 +76,28 @@ namespace LuckParser.Models
             string[] namesVG = new string[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].setName(namesVG[i - 1]);
+                PhaseData phase = phases[i];
+                phase.setName(namesVG[i - 1]);
+                if (i == 2 || i == 4)
+                {
+                    List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+                    {
+                       ParseEnum.ThrashIDS.BlueGuardian,
+                       ParseEnum.ThrashIDS.GreenGuardian,
+                       ParseEnum.ThrashIDS.RedGuardian
+                    };
+                    List<AgentItem> guardians = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
+                    foreach (AgentItem a in guardians)
+                    {
+                        long agentStart = a.getFirstAware() - log.getBossData().getFirstAware();
+                        long agentEnd = a.getLastAware() - log.getBossData().getFirstAware();
+                        if (phase.inInterval(agentStart))
+                        {
+                            phase.addRedirection(a);
+                        }
+                    }
+                    phase.overrideStart(log.getBossData().getFirstAware());
+                }
             }
             return phases;
         }

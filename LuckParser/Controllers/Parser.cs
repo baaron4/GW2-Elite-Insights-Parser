@@ -431,16 +431,16 @@ namespace LuckParser.Controllers
         private void fillMissingData()
         {
             var agentsLookup = agent_data.getAllAgentsList().ToDictionary(a => a.getAgent());
-            bool golem_mode = boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Golem;
-            bool raid_mode = boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Raid;
-            bool fractal_mode = boss_data.getBossBehavior().getMode() == BossStrategy.ParseMode.Fractal;
+            bool golem_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Golem;
+            bool raid_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Raid;
+            bool fractal_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Fractal;
             // Set Agent instid, first_aware and last_aware
             var combat_list = combat_data.getCombatList();
             foreach (CombatItem c in combat_list)
             {
                 if(agentsLookup.TryGetValue(c.getSrcAgent(), out var a))
                 {
-                    if (a.getInstid() == 0 && (c.isStateChange() == ParseEnum.StateChange.Normal || c.isStateChange() == ParseEnum.StateChange.Position || c.isStateChange() == ParseEnum.StateChange.Velocity || c.isStateChange() == ParseEnum.StateChange.Rotation || (((golem_mode && isGolem(a.getID())) || a.getID() == 0x4BFA) && c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate) ))
+                    if (a.getInstid() == 0 && c.isStateChange().IsSpawn())
                     {
                         a.setInstid(c.getSrcInstid());
                     }
@@ -576,10 +576,12 @@ namespace LuckParser.Controllers
                             if (c.getSrcInstid() == xera_2_instid)
                             {
                                 c.setSrcInstid(boss_data.getInstid());
+                                c.setSrcAgent(boss_data.getAgent());
                             }
                             if (c.getDstInstid() == xera_2_instid)
                             {
                                 c.setDstInstid(boss_data.getInstid());
+                                c.setDstAgent(boss_data.getAgent());
                             }
                             //set health update
                             if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange() == ParseEnum.StateChange.HealthUpdate)
@@ -616,11 +618,13 @@ namespace LuckParser.Controllers
                                 if (c.getSrcInstid() == deimos_2_instid)
                                 {
                                     c.setSrcInstid(boss_data.getInstid());
+                                    c.setSrcAgent(boss_data.getAgent());
 
                                 }
                                 if (c.getDstInstid() == deimos_2_instid)
                                 {
                                     c.setDstInstid(boss_data.getInstid());
+                                    c.setDstAgent(boss_data.getAgent());
                                 }
                             }
 
@@ -754,6 +758,14 @@ namespace LuckParser.Controllers
                     }
                 }
 
+            }
+            if (boss_data.getFirstAware() == 0)
+            {
+                boss_data.setFirstAware(bossAgent.getFirstAware());
+            }
+            if (boss_data.getLastAware() == long.MaxValue)
+            {
+                boss_data.setLastAware(bossAgent.getLastAware());
             }
             // Sort
             p_list = p_list.OrderBy(a => a.getGroup()).ToList();

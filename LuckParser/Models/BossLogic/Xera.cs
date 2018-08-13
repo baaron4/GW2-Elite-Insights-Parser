@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Xera : BossStrategy
+    public class Xera : BossLogic
     {
         public Xera() : base()
         {
@@ -18,20 +18,20 @@ namespace LuckParser.Models
 
             new Mechanic(35128, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(255,0,0)',", "Orb",0),
             new Mechanic(34913, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'circle-open',color:'rgb(255,0,0)',", "Orb Aoe",0),
-            new Mechanic(35000, "Intervention", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hourglass',color:'rgb(128,0,128)',", "Bubble",0),
+            /*new Mechanic(35000, "Intervention", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hourglass',color:'rgb(128,0,128)',", "Bubble",0),*/
             new Mechanic(35168, "Bloodstone Protection", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hourglass-open',color:'rgb(128,0,128)',", "In Bubble",0),
             new Mechanic(34887, "Summon Fragment", Mechanic.MechType.BossCast, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(255,0,255)',", "CC Too Long",0),
-            new Mechanic(34965, "Derangement", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square-open',color:'rgb(200,140,255)',", "Derangement (Stacking Debuff)",0),
+            new Mechanic(34965, "Derangement", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square-open',color:'rgb(200,140,255)',", "Derangement",0),
             new Mechanic(35084, "Bending Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'pentagon',color:'rgb(200,140,255)',", "Button 1",0),
             new Mechanic(35162, "Shifting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hexagon',color:'rgb(200,140,255)',", "Button 2",0),
             new Mechanic(35032, "Twisting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'octagon',color:'rgb(200,140,255)',", "Button 3",0),
-            new Mechanic(34956, "Bubble Action Key", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square',color:'rgb(0,0,150)',", "Bubble Action Key",0),
-            new Mechanic(34921, "Gravity Well", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'triangle-se',color:'rgb(255,0,255)',", "Half-platform Gravity Well",4),
+            new Mechanic(34956, "Intervention", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square',color:'rgb(0,0,150)',", "Shield",0),
+            new Mechanic(34921, "Gravity Well", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'triangle-se',color:'rgb(255,0,255)',", "Half-platform Gravity Well",4000),
             
             //teleport
             new Mechanic(35034, "Disruption", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'square',color:'rgb(0,128,0)',", "Disruption",0),
-            new Mechanic(34997, "Teleport Out", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(255,0,255)',", "Teleport Out",0),
-            new Mechanic(35076, "Hero's Return", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(0,128,0)',", "Group TP Back",0)
+            new Mechanic(34997, "Teleport Out", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(255,0,255)',", "TP Out",0),
+            new Mechanic(35076, "Hero's Return", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(0,128,0)',", "TP Back",0)
             };
         }
 
@@ -73,7 +73,14 @@ namespace LuckParser.Models
         public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: needs facing information for hadouken
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>();
+            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            {
+                ParseEnum.ThrashIDS.WhiteMantleSeeker1,
+                ParseEnum.ThrashIDS.WhiteMantleSeeker2,
+                ParseEnum.ThrashIDS.WhiteMantleKnight,
+                ParseEnum.ThrashIDS.WhiteMantleBattleMage,
+                ParseEnum.ThrashIDS.ExquisiteConjunction
+            };
             List<CastLog> summon = cls.Where(x => x.getID() == 34887).ToList();
             foreach (CastLog c in summon)
             {

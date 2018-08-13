@@ -23,7 +23,14 @@ namespace LuckParser.Controllers
             List<Point> dmgList = new List<Point>();
             List<Point> dmgList10s = new List<Point>();
             List<Point> dmgList30s = new List<Point>();
-            List<DamageLog> damage_logs = p.getDamageLogs(dstid, log, phase.getStart(), phase.getEnd());
+            List<DamageLog> damage_logs;
+            if (dstid != 0 && phase.getRedirection().Count > 0)
+            {      
+                damage_logs = p.getDamageLogs(phase.getRedirection(), log, phase.getStart(), phase.getEnd());
+            } else
+            {
+                damage_logs = p.getDamageLogs(dstid, log, phase.getStart(), phase.getEnd());
+            }
             // fill the graph, full precision
             List<double> dmgListFull = new List<double>();
             for (int i = 0; i <= phase.getDuration(); i++)

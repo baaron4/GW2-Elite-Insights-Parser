@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Gorseval : BossStrategy
+    public class Gorseval : BossLogic
     {
         public Gorseval() : base()
         {
             mode = ParseMode.Raid;
             mechanicList = new List<Mechanic>
             {
-            new Mechanic(31875, "Spectral Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'hexagram',color:'rgb(255,0,0)',", "Slam",4),
-            new Mechanic(31623, "Ghastly Prison", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(255,140,0)',", "Egg",0),
+            new Mechanic(31875, "Spectral Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'hexagram',color:'rgb(255,0,0)',", "Slam",4000),
+            new Mechanic(31623, "Ghastly Prison", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(255,140,0)',", "Egg",500),
             new Mechanic(31498, "Spectral Darkness", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,255)',", "Orb Debuff",0),
             new Mechanic(31722, "Spirited Fusion", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Gorseval, "symbol:'square',color:'rgb(255,140,0)',", "Ate Spirit",0),
             new Mechanic(31720, "Kick", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'triangle-right',color:'rgb(255,0,255)',", "Kicked by Spirit",0)
@@ -67,7 +67,22 @@ namespace LuckParser.Models
             string[] namesGorse = new string[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].setName(namesGorse[i - 1]);
+                PhaseData phase = phases[i];
+                phase.setName(namesGorse[i - 1]);
+                if (i == 2 || i == 4)
+                {
+                    List<AgentItem> spirits = log.getAgentData().getNPCAgentList().Where(x => ParseEnum.getThrashIDS(x.getID()) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
+                    foreach (AgentItem a in spirits)
+                    {
+                        long agentStart = a.getFirstAware() - log.getBossData().getFirstAware();
+                        long agentEnd = a.getLastAware() - log.getBossData().getFirstAware();
+                        if (phase.inInterval(agentStart))
+                        {
+                            phase.addRedirection(a);
+                        }
+                    }
+                    phase.overrideStart(log.getBossData().getFirstAware());
+                }
             }
             return phases;
         }
@@ -77,7 +92,9 @@ namespace LuckParser.Models
             // TODO: doughnuts (rampage)
             List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
                     {
-                        ParseEnum.ThrashIDS.ChargedSoul
+                        ParseEnum.ThrashIDS.ChargedSoul,
+                        ParseEnum.ThrashIDS.EnragedSpirit,
+                        ParseEnum.ThrashIDS.AngeredSpirit
                     };
             List<CastLog> blooms = cls.Where(x => x.getID() == 31616).ToList();
             foreach (CastLog c in blooms)

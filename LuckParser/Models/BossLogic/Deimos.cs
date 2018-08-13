@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Deimos : BossStrategy
+    public class Deimos : BossLogic
     {
         public Deimos() : base()
         {
@@ -28,7 +28,7 @@ namespace LuckParser.Models
             new Mechanic(38187, "Weak Minded", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'square-open',color:'rgb(200,140,255)',", "Weak Minded",0), //
             new Mechanic(37730, "Chosen by Eye of Janthir", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'circle',color:'rgb(0,255,0)',", "Chosen",0),
             new Mechanic(38169, "Teleported", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'circle-open',color:'rgb(0,128,0)',", "Teleported",0),
-            new Mechanic(38169, "Unnatural Signet", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Deimos, "symbol:'square-open',color:'rgb(0,255,255)',", "+100% Dmg Buff",0)
+            new Mechanic(38224, "Unnatural Signet", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Deimos, "symbol:'square-open',color:'rgb(0,255,255)',", "+100% Dmg Buff",0)
             //mlist.Add("Chosen by Eye of Janthir");
             //mlist.Add("");//tp from drunkard
             //mlist.Add("");//bon currupt from thief
@@ -91,7 +91,26 @@ namespace LuckParser.Models
             string[] namesDeiSplit = new string[] { "Thief", "Gambler", "Drunkard" };
             for (int i = offsetDei; i < phases.Count; i++)
             {
-                phases[i].setName(namesDeiSplit[i - offsetDei]);
+                PhaseData phase = phases[i];
+                phase.setName(namesDeiSplit[i - offsetDei]);
+                List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+                    {
+                        ParseEnum.ThrashIDS.Thief,
+                        ParseEnum.ThrashIDS.Drunkard,
+                        ParseEnum.ThrashIDS.Gambler,
+                        ParseEnum.ThrashIDS.GamblerClones,
+                    };
+                List<AgentItem> clones = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
+                foreach (AgentItem a in clones)
+                {
+                    long agentStart = a.getFirstAware() - log.getBossData().getFirstAware();
+                    long agentEnd = a.getLastAware() - log.getBossData().getFirstAware();
+                    if (phase.inInterval(agentStart))
+                    {
+                        phase.addRedirection(a);
+                    }
+                }
+
             }
             phases.Sort((x, y) => (x.getStart() < y.getStart()) ? -1 : 1);
             return phases;
@@ -106,7 +125,9 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Thief,
                         ParseEnum.ThrashIDS.Drunkard,
                         ParseEnum.ThrashIDS.Gambler,
-                        ParseEnum.ThrashIDS.GamblerClones
+                        ParseEnum.ThrashIDS.GamblerClones,
+                        ParseEnum.ThrashIDS.Greed,
+                        ParseEnum.ThrashIDS.Pride
                     };
             List<CastLog> mindCrush = cls.Where(x => x.getID() == 37613).ToList();
             foreach (CastLog c in mindCrush)
@@ -142,6 +163,11 @@ namespace LuckParser.Models
                     replay.addCircleActor(new CircleActor(true, tpEnd, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
                 }
             }
+        }
+
+        public override int isCM(List<CombatItem> clist, int health)
+        {
+            return (health > 40e6) ? 1 : 0;
         }
 
         public override string getReplayIcon()

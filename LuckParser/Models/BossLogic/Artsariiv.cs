@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Artasariiv : BossStrategy
+    public class Artasariiv : BossLogic
     {
         public Artasariiv() : base()
         {

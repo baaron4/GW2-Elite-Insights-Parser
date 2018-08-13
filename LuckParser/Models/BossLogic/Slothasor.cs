@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Slothasor : BossStrategy
+    public class Slothasor : BossLogic
     {
         public Slothasor() : base()
         {
@@ -16,15 +16,15 @@ namespace LuckParser.Models
             mechanicList = new List<Mechanic>
             {
             new Mechanic(34479, "Tantrum", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,200,0)',", "Tantrum",0),
-            new Mechanic(34387, "Volatile Poison", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,0,0)',", "Volatile Poison (Action Key)",0),
-            new Mechanic(34481, "Volatile Poison", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'circle',color:'rgb(255,0,0)',", "Volatile Poison (Area Damage)",0),
+            new Mechanic(34387, "Volatile Poison", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,0,0)',", "Poison (Action Key)",0),
+            new Mechanic(34481, "Volatile Poison", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'circle',color:'rgb(255,0,0)',", "Poison (Area Damage)",0),
             new Mechanic(34516, "Halitosis", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'triangle-right',color:'rgb(255,140,0)',", "Flame Breath",0),
             new Mechanic(34482, "Spore Release", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon',color:'rgb(255,0,0)',", "Shake",0),
             new Mechanic(34362, "Magic Transformation", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,255,255)',", "Slub Transform",0),
             //new Mechanic(34496, "Nauseated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall-open',color:'rgb(200,140,255)',", "Slub CD",0), //can be skipped imho, identical person and timestamp as Slub Transform
             new Mechanic(34508, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'star',color:'rgb(255,0,255)',", "Fixated",0),
-            new Mechanic(34565, "Toxic Cloud", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)',", "Floor Poison (Green)",0),
-            new Mechanic(34537, "Toxic Cloud", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)',", "Floor Poison (Green)",0)
+            new Mechanic(34565, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)',", "Floor Poison (Green)",0),
+            new Mechanic(34537, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)',", "Floor Poison (Green)",0)
             };
         }
 
@@ -46,7 +46,13 @@ namespace LuckParser.Models
         public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO:facing information (breath)
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>();
+            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            {
+                ParseEnum.ThrashIDS.Slubling1,
+                ParseEnum.ThrashIDS.Slubling2,
+                ParseEnum.ThrashIDS.Slubling3,
+                ParseEnum.ThrashIDS.Slubling4
+            };
             List<CastLog> sleepy = cls.Where(x => x.getID() == 34515).ToList();
             foreach (CastLog c in sleepy)
             {

@@ -96,6 +96,43 @@ namespace LuckParser.Models.ParseModels
             replay.setIcon(log.getBossData().getBossBehavior().getReplayIcon());
         }
 
+        public override void addMechanics(ParsedLog log)
+        {
+            MechanicData mech_data = log.getMechanicData();
+            BossData boss_data = log.getBossData();
+            List<Mechanic> bossMechanics = boss_data.getBossBehavior().getMechanics();
+            List<Mechanic> enemyBoons = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon).ToList();
+            enemyBoons.AddRange(bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoonStrip));
+            foreach (Mechanic m in enemyBoons)
+            {
+                foreach (CombatItem c in log.getBoonData())
+                {
+                    if (m.GetSkill() == c.getSkillID() && ((m.GetMechType() == Mechanic.MechType.EnemyBoon && c.isBuffremove() == ParseEnum.BuffRemove.None) || (m.GetMechType() == Mechanic.MechType.EnemyBoonStrip && c.isBuffremove() == ParseEnum.BuffRemove.Manual)))
+                    {
+                        AbstractMasterPlayer amp = null;
+                        if (c.getDstInstid() == boss_data.getInstid())
+                        {
+                            amp = this;
+                        }
+                        else
+                        {
+                            amp = new Mob(log.getAgentData().GetAgent(c.getDstAgent()));
+                        }
+                        mech_data.AddItem(new MechanicLog(c.getTime() - boss_data.getFirstAware(), c.getSkillID(), m.GetName(), c.getValue(), amp, m.GetPlotly()));
+                    }
+                }
+            }
+            List<Mechanic> spawnMech = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.Spawn).ToList();
+            foreach (Mechanic m in spawnMech)
+            {
+                foreach (AgentItem a in log.getAgentData().getNPCAgentList().Where(x => x.getID() == m.GetSkill()))
+                {
+                    AbstractMasterPlayer amp = new Mob(a);
+                    mech_data.AddItem(new MechanicLog(a.getFirstAware() - boss_data.getFirstAware(), m.GetSkill(), m.GetName(), 0, amp, m.GetPlotly()));
+                }
+            }
+        }
+
         /*protected override void setHealingLogs(ParsedLog log)
         {
             // nothing to do

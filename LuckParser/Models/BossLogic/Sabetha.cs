@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Sabetha : BossStrategy
+    public class Sabetha : BossLogic
     {
         public Sabetha() : base()
         {
@@ -70,7 +70,28 @@ namespace LuckParser.Models
             string[] namesSab = new string[] { "Phase 1", "Kernan", "Phase 2", "Knuckles", "Phase 3", "Karde", "Phase 4" };
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].setName(namesSab[i - 1]);
+                PhaseData phase = phases[i];
+                phase.setName(namesSab[i - 1]);
+                if (i == 2 || i == 4 || i == 6)
+                {
+                    List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+                    {
+                       ParseEnum.ThrashIDS.Kernan,
+                       ParseEnum.ThrashIDS.Knuckles,
+                       ParseEnum.ThrashIDS.Karde,
+                    };
+                    List<AgentItem> champs = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
+                    foreach (AgentItem a in champs)
+                    {
+                        long agentStart = a.getFirstAware() - log.getBossData().getFirstAware();
+                        long agentEnd = a.getLastAware() - log.getBossData().getFirstAware();
+                        if (phase.inInterval(agentStart))
+                        {
+                            phase.addRedirection(a);
+                        }
+                    }
+                    phase.overrideStart(log.getBossData().getFirstAware());
+                }
             }
             return phases;
         }
@@ -82,7 +103,10 @@ namespace LuckParser.Models
                     {
                         ParseEnum.ThrashIDS.Kernan,
                         ParseEnum.ThrashIDS.Knuckles,
-                        ParseEnum.ThrashIDS.Karde
+                        ParseEnum.ThrashIDS.Karde,
+                        ParseEnum.ThrashIDS.BanditSapper,
+                        ParseEnum.ThrashIDS.BanditThug,
+                        ParseEnum.ThrashIDS.BanditArsonist
                     };
             return ids;
         }

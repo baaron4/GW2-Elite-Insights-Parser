@@ -90,14 +90,16 @@ namespace LuckParser
                     SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
                     Statistics statistics;
                     StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
+                    StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
                     if (Properties.Settings.Default.SaveOutHTML)
                     {
-                        statistics = statisticsCalculator.calculateStatistics(log, HTMLBuilder.GetStatisticSwitches());
+                        HTMLBuilder.UpdateStatisticSwitches(switches);
                     }
-                    else
+                    if (Properties.Settings.Default.SaveOutCSV)
                     {
-                        statistics = statisticsCalculator.calculateStatistics(log, CSVBuilder.GetStatisticSwitches());
+                        CSVBuilder.UpdateStatisticSwitches(switches);
                     }
+                    statistics = statisticsCalculator.calculateStatistics(log, switches);
                     Console.Write("Statistics Computed");
 
                     string fName = fInfo.Name.Split('.')[0];

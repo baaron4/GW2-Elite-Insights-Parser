@@ -20,6 +20,7 @@ namespace LuckParser.Controllers
             public bool calculateBoons = false;
             public bool calculateConditions = false;
             public bool calculateCombatReplay = false;
+            public bool calculateMechanics = false;
         }
 
         private SettingsContainer settings;
@@ -64,22 +65,19 @@ namespace LuckParser.Controllers
             } 
                       
             if (switches.calculateConditions) calculateConditions();
-            // we should also put this under settings
-            
-            // WIP
-            /*if (settings.PlayerRot)
+            if (switches.calculateMechanics)
             {
+                log.getBoss().addMechanics(log);
                 foreach (Player p in log.getPlayerList())
                 {
-                    p.getRotation(log, settings.PlayerRotIcons);
+                    p.addMechanics(log);
                 }
-                log.getBoss().getRotation(log, settings.PlayerRotIcons);
-            }*/
+            }
 
             return statistics;
         }
 
-        private Statistics.FinalDPS getFinalDPS(AbstractPlayer player, int phaseIndex)
+        private Statistics.FinalDPS getFinalDPS(AbstractPlayer player, int phaseIndex, bool checkRedirection)
         {
             Statistics.FinalDPS final = new Statistics.FinalDPS();
 
@@ -90,7 +88,8 @@ namespace LuckParser.Controllers
             double damage = 0.0;
             double dps = 0.0;
 
-            // All DPS
+            ////////// ALL
+            //DPS
             damage = player.getDamageLogs(0, log, phase.getStart(),
                     phase.getEnd())
                 .Sum(x => x.getDamage());
@@ -98,11 +97,9 @@ namespace LuckParser.Controllers
             {
                 dps = damage / phaseDuration;
             }
-
             final.allDps = (int)dps;
             final.allDamage = (int)damage;
-
-            // All Condi DPS
+            //Condi DPS
             damage = player.getDamageLogs(0, log, phase.getStart(),
                     phase.getEnd())
                 .Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
@@ -110,58 +107,70 @@ namespace LuckParser.Controllers
             {
                 dps = damage / phaseDuration;
             }
-
             final.allCondiDps = (int)dps;
             final.allCondiDamage = (int)damage;
-
-            // All Power DPS
-            damage = final.allDamage - damage;
+            //Power DPS
+            damage = final.allDamage - final.allCondiDamage;
             if (phaseDuration > 0)
             {
                 dps = damage / phaseDuration;
             }
-
             final.allPowerDps = (int)dps;
             final.allPowerDamage = (int)damage;
-
-            // Boss DPS
-            damage = player.getDamageLogs(log.getBossData().getInstid(), log,
-                phase.getStart(), phase.getEnd()).Sum(x => x.getDamage());
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-
-            final.bossDps = (int)dps;
-            final.bossDamage = (int)damage;
-
-
-            // Boss Condi DPS
-            damage = player.getDamageLogs(log.getBossData().getInstid(), log,
-                phase.getStart(), phase.getEnd()).Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-
-            final.bossCondiDps = (int)dps;
-            final.bossCondiDamage = (int)damage;
-
-            // Boss Power DPS
-            damage = final.bossDamage - damage;
-            if (phaseDuration > 0)
-            {
-                dps = damage / phaseDuration;
-            }
-
-            final.bossPowerDps = (int)dps;
-            final.bossPowerDamage = (int)damage;
-
-            // Player only physical damage
             final.playerPowerDamage = player.getJustPlayerDamageLogs(0, log,
                 phase.getStart(), phase.getEnd()).Where(x => x.isCondi() == 0).Sum(x => x.getDamage());
-            final.playerBossPowerDamage = player.getJustPlayerDamageLogs(log.getBossData().getInstid(), log,
-                phase.getStart(), phase.getEnd()).Where(x => x.isCondi() == 0).Sum(x => x.getDamage());
+            /////////// BOSS
+            //DPS
+            if (checkRedirection && phase.getRedirection().Count > 0)
+            {
+                damage = player.getDamageLogs(phase.getRedirection(), log,
+                    phase.getStart(), phase.getEnd()).Sum(x => x.getDamage());
+            } else
+            {
+                damage = player.getDamageLogs(log.getBossData().getInstid(), log,
+                    phase.getStart(), phase.getEnd()).Sum(x => x.getDamage());
+            }
+            if (phaseDuration > 0)
+            {
+                dps = damage / phaseDuration;
+            }
+            final.bossDps = (int)dps;
+            final.bossDamage = (int)damage;
+            //Condi DPS
+            if (checkRedirection && phase.getRedirection().Count > 0)
+            {
+                damage = player.getDamageLogs(phase.getRedirection(), log,
+                    phase.getStart(), phase.getEnd()).Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
+            }
+            else
+            {
+                damage = player.getDamageLogs(log.getBossData().getInstid(), log,
+                    phase.getStart(), phase.getEnd()).Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
+            }
+            if (phaseDuration > 0)
+            {
+                dps = damage / phaseDuration;
+            }
+            final.bossCondiDps = (int)dps;
+            final.bossCondiDamage = (int)damage;
+            //Power DPS
+            damage = final.bossDamage - final.bossCondiDamage;
+            if (phaseDuration > 0)
+            {
+                dps = damage / phaseDuration;
+            }
+            final.bossPowerDps = (int)dps;
+            final.bossPowerDamage = (int)damage;
+            if (checkRedirection && phase.getRedirection().Count > 0)
+            {
+                final.playerBossPowerDamage = player.getJustPlayerDamageLogs(phase.getRedirection(), log,
+                    phase.getStart(), phase.getEnd()).Where(x => x.isCondi() == 0).Sum(x => x.getDamage());
+            }
+            else
+            {
+                final.playerBossPowerDamage = player.getJustPlayerDamageLogs(log.getBossData().getInstid(), log,
+                    phase.getStart(), phase.getEnd()).Where(x => x.isCondi() == 0).Sum(x => x.getDamage());
+            }
 
             return final;
         }
@@ -173,7 +182,7 @@ namespace LuckParser.Controllers
                 Statistics.FinalDPS[] phaseDps = new Statistics.FinalDPS[statistics.phases.Count];
                 for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
                 {
-                    phaseDps[phaseIndex] = getFinalDPS(player,phaseIndex);
+                    phaseDps[phaseIndex] = getFinalDPS(player,phaseIndex, true);
                 }
 
                 statistics.dps[player] = phaseDps;
@@ -182,7 +191,7 @@ namespace LuckParser.Controllers
             Statistics.FinalDPS[] phaseBossDps = new Statistics.FinalDPS[statistics.phases.Count];
             for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
             {
-                phaseBossDps[phaseIndex] = getFinalDPS(log.getBoss(), phaseIndex);
+                phaseBossDps[phaseIndex] = getFinalDPS(log.getBoss(), phaseIndex, false);
             }
 
             statistics.bossDps = phaseBossDps;
@@ -197,11 +206,11 @@ namespace LuckParser.Controllers
                 {
                     Statistics.FinalStats final = new Statistics.FinalStats();
 
-                    PhaseData phase =statistics.phases[phaseIndex];
+                    PhaseData phase = statistics.phases[phaseIndex];
                     long start = phase.getStart() + log.getBossData().getFirstAware();
                     long end = phase.getEnd() + log.getBossData().getFirstAware();
 
-                    List<DamageLog> damageLogs = player.getJustPlayerDamageLogs(0, log, phase.getStart(), phase.getEnd());
+                    List<DamageLog> damageLogs  = player.getJustPlayerDamageLogs(0, log, phase.getStart(), phase.getEnd());
                     List<CastLog> castLogs = player.getCastLogs(log, phase.getStart(), phase.getEnd());
 
                     int instid = player.getInstid();
@@ -244,14 +253,32 @@ namespace LuckParser.Controllers
                     {
                         9292
                     };
-
+                    HashSet<long> idsToCheck = new HashSet<long>();
+                    if (phase.getRedirection().Count > 0)
+                    {
+                        foreach (AgentItem a in phase.getRedirection())
+                        {
+                            idsToCheck.Add(a.getInstid());
+                        }
+                    } else
+                    {
+                        idsToCheck.Add(log.getBossData().getInstid());
+                    }
                     foreach (DamageLog dl in damageLogs)
                     {
                         if (dl.isCondi() == 0)
                         {
 
-                            if (dl.getDstInstidt() == log.getBossData().getInstid())
+                            if (idsToCheck.Contains(dl.getDstInstidt()))
                             {
+                                if (idsToCheck.Count > 1)
+                                {
+                                    AgentItem target = phase.getRedirection().Find(x => x.getInstid() == dl.getDstInstidt());
+                                    if (dl.getTime() < target.getFirstAware() - log.getBossData().getFirstAware() || dl.getTime() > target.getLastAware() - log.getBossData().getFirstAware())
+                                    {
+                                        continue;
+                                    }
+                                }
                                 if (dl.getResult() == ParseEnum.Result.Crit)
                                 {
                                     final.criticalRateBoss++;

@@ -21,17 +21,16 @@ namespace LuckParser.Controllers
         private Statistics statistics;
         private StreamWriter sw;
         private string delimiter;
-        public static StatisticsCalculator.Switches GetStatisticSwitches()
+        public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
-            StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
-            switches.calculateBoons = true;
-            switches.calculateDPS = true;
-            switches.calculateConditions = true;
-            switches.calculateDefense = true;
-            switches.calculateStats = true;
-            switches.calculateSupport = true;
-            switches.calculateCombatReplay = true;
-            return switches;
+            switches.calculateBoons = switches.calculateBoons || true;
+            switches.calculateDPS = switches.calculateDPS || true;
+            switches.calculateConditions = switches.calculateConditions || true;
+            switches.calculateDefense = switches.calculateDefense || true;
+            switches.calculateStats = switches.calculateStats || true;
+            switches.calculateSupport = switches.calculateSupport || true;
+            switches.calculateCombatReplay = switches.calculateCombatReplay || true;
+            switches.calculateMechanics = switches.calculateMechanics || true;
         }
 
         public CSVBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics)
@@ -184,10 +183,19 @@ namespace LuckParser.Controllers
         private void CreateDPSTable(StreamWriter sw, int phase_index)
         {
             PhaseData phase = statistics.phases[phase_index];
-            WriteLine(new string[] { "Sub Group", "Profession","Role","Name","Account","WepSet1_1","WepSet1_2","WepSet2_1","WepSet2_2",
+            if (phase.getRedirection().Count > 0)
+            {
+                WriteLine(new string[] { "Sub Group", "Profession","Role","Name","Account","WepSet1_1","WepSet1_2","WepSet2_1","WepSet2_2",
+                "Adds DPS","Adds DMG","Adds Power DPS","Adds Power DMG","Adds Condi DPS","Adds Condi DMG",
+                "All DPS","All DMG","All Power DPS","All Power DMG","All Condi DPS","All Condi DMG",
+                "Times Downed", "Time Died","Percent Alive"});
+            } else
+            {
+                WriteLine(new string[] { "Sub Group", "Profession","Role","Name","Account","WepSet1_1","WepSet1_2","WepSet2_1","WepSet2_2",
                 "Boss DPS","Boss DMG","Boss Power DPS","Boss Power DMG","Boss Condi DPS","Boss Condi DMG",
                 "All DPS","All DMG","All Power DPS","All Power DMG","All Condi DPS","All Condi DMG",
                 "Times Downed", "Time Died","Percent Alive"});
+            }
             int count = 0;
             foreach (Player player in log.getPlayerList())
             {
@@ -699,7 +707,7 @@ namespace LuckParser.Controllers
                         int count = 0;
                         foreach (Mechanic mech in mechs)
                         {
-                            List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= Math.Round(phase.getStart() / 1000.0) && x.GetTime() <= Math.Round(phase.getEnd() / 1000.0)).ToList();
+                            List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= phase.getStart() && x.GetTime() <= phase.getEnd()).ToList();
                             count += test.Count;
                         }
                         WriteCell( count.ToString() );
@@ -726,7 +734,7 @@ namespace LuckParser.Controllers
             WriteCell("Time");
             foreach (MechanicLog m in m_Logs)
             {
-                WriteCell(m.GetTime().ToString());
+                WriteCell((m.GetTime()/1000f).ToString());
             }
             NewLine();
             count++;
