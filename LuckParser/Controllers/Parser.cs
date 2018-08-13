@@ -597,39 +597,32 @@ namespace LuckParser.Controllers
             if (boss_data.getID() == 17154)
             {
                 int deimos_2_instid = 0;
-                foreach (AgentItem NPC in agent_data.getGadgetAgentList())
+                List<AgentItem> deimosGadgets = agent_data.getGadgetAgentList().Where(x => x.getFirstAware() > bossAgent.getLastAware() && x.getName().Contains("Deimos")).OrderBy(x => x.getLastAware()).ToList();
+                if (deimosGadgets.Count > 0)
                 {
-                    if (NPC.getID() == 8467 || NPC.getID() == 8471)
+                    AgentItem NPC = deimosGadgets.Last();
+                    deimos_2_instid = NPC.getInstid();
+                    long oldAware = bossAgent.getLastAware();
+                    boss.addPhaseData(NPC.getFirstAware() >= oldAware ? NPC.getFirstAware() : oldAware);
+                    //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos_2_instid ).ToList().Sum(x);
+                    //int stop = 0;
+                    foreach (CombatItem c in combat_list)
                     {
-                        deimos_2_instid = NPC.getInstid();
-                        long oldAware = bossAgent.getLastAware();
-                        if (NPC.getLastAware() < oldAware)
+                        if (c.getTime() > oldAware)
                         {
-                            // No split
-                            break;
-                        }
-                        boss.addPhaseData(NPC.getFirstAware() >= oldAware ? NPC.getFirstAware() : oldAware);
-                        //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos_2_instid ).ToList().Sum(x);
-                        //int stop = 0;
-                        foreach (CombatItem c in combat_list)
-                        {
-                            if (c.getTime() > oldAware)
+                            if (c.getSrcInstid() == deimos_2_instid)
                             {
-                                if (c.getSrcInstid() == deimos_2_instid)
-                                {
-                                    c.setSrcInstid(boss_data.getInstid());
-                                    c.setSrcAgent(boss_data.getAgent());
+                                c.setSrcInstid(boss_data.getInstid());
+                                c.setSrcAgent(boss_data.getAgent());
 
-                                }
-                                if (c.getDstInstid() == deimos_2_instid)
-                                {
-                                    c.setDstInstid(boss_data.getInstid());
-                                    c.setDstAgent(boss_data.getAgent());
-                                }
                             }
-
+                            if (c.getDstInstid() == deimos_2_instid)
+                            {
+                                c.setDstInstid(boss_data.getInstid());
+                                c.setDstAgent(boss_data.getAgent());
+                            }
                         }
-                        break;
+
                     }
                 }
             }
