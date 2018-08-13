@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -59,7 +60,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (redirection.Count > 0)
             {
-                start = redirection[0].getFirstAware() - offset;
+                start = redirection.Min(x => x.getFirstAware())- offset;
             }
         }
 

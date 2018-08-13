@@ -76,7 +76,7 @@ namespace LuckParser.Models
                     {
                         long agentStart = a.getFirstAware() - log.getBossData().getFirstAware();
                         long agentEnd = a.getLastAware() - log.getBossData().getFirstAware();
-                        if (phase.inInterval(agentStart) || phase.inInterval(agentEnd))
+                        if (phase.inInterval(agentStart))
                         {
                             phase.addRedirection(a);
                         }
