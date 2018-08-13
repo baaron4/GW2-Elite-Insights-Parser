@@ -155,6 +155,7 @@ namespace LuckParser.Models.DataModels
             public double uptime;
             public Boon.BoonType boonType;
             public Dictionary<Player, double> generated;
+            public Dictionary<Player, double> overstacked;
         }
 
         public Dictionary<long, FinalBossBoon>[] bossConditions;

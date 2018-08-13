@@ -758,6 +758,7 @@ namespace LuckParser.Controllers
                             foreach (Player p in log.getPlayerList())
                             {
                                 condition.generated[p] = Math.Round((double)boonDistribution.getGeneration(boon.getID(), p.getInstid()) / fightDuration, 1);
+                                condition.overstacked[p] = Math.Round((double)boonDistribution.getOverstack(boon.getID(), p.getInstid()) / fightDuration, 1);
                             }
                         }
 
