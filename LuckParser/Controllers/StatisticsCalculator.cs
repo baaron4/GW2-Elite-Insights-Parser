@@ -471,14 +471,14 @@ namespace LuckParser.Controllers
                     final.died = 0.0;
                     if (dead.Count > 0)
                     {
-                        final.died = dead[0].getTime() - start;
+                        final.died = dead.Last().getTime() - start;
                     }
 
                     List<CombatItem> disconect = combatData.getStates(instid, ParseEnum.StateChange.Despawn, start, end);
                     final.dcd = 0.0;
                     if (disconect.Count > 0)
                     {
-                        final.dcd = disconect[0].getTime() - start;
+                        final.dcd = disconect.Last().getTime() - start;
                     }
 
                     phaseStats[phaseIndex] = final;
