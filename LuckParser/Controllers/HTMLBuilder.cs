@@ -128,14 +128,32 @@ namespace LuckParser.Controllers
 
                     int mechcount = 0;
                     foreach (MechanicLog ml in filterdList)
-                    {
+                    {                     
                         Point check = new Point();
                         if (ml.GetPlayer() != log.getBoss())
                         {
-                            check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).FirstOrDefault(x => x.X == Math.Round((ml.GetTime() - phase.getStart()) / 1000.0));
+                            double time = (ml.GetTime() - phase.getStart()) / 1000.0;
+                            check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).LastOrDefault(x => x.X <= time);
                             if (check == Point.Empty)
                             {
                                 check = new Point(0, GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).Last().Y);
+                            } else
+                            {
+                                int time1 = check.X;
+                                int Y1 = check.Y;
+                                check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).FirstOrDefault(x => x.X >= time);
+                                if (check == Point.Empty)
+                                {
+                                    check.Y = Y1;
+                                } else
+                                {
+                                    int time2 = check.X;
+                                    int Y2 = check.Y;
+                                    if (time2 - time1 > 0)
+                                    {
+                                        check.Y = (int)Math.Round((time - time1) * (Y2 - Y1) / (time2 - time1) + Y1);
+                                    }
+                                }
                             }
                         }
                         else
