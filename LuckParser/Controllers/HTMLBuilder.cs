@@ -139,7 +139,7 @@ namespace LuckParser.Controllers
                         }
                         else
                         {
-                            check = log.getBossData().getHealthOverTime().FirstOrDefault(x => x.X > ml.GetTime()); // boss_data.getHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
+                            check = log.getBossData().getHealthOverTime().FirstOrDefault(x => x.X > ml.GetTime());
                             if (check == Point.Empty)
                             {
                                 if (log.getBossData().getHealthOverTime().Count == 0)
@@ -173,11 +173,11 @@ namespace LuckParser.Controllers
                     {
                         if (mechcount == filterdList.Count - 1)
                         {
-                            sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0) + "'");
+                            sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0,4) + "'");
                         }
                         else
                         {
-                            sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0) + "',");
+                            sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0,4) + "',");
                         }
 
                         mechcount++;
@@ -185,7 +185,7 @@ namespace LuckParser.Controllers
 
                     sw.Write("],");
                     sw.Write(" mode: 'markers',");
-                    if (mech.GetName() != "DEAD" && mech.GetName() != "DOWN")
+                    if (mech.GetSkill() == -2 || mech.GetSkill() == -3)
                     {
                         sw.Write("visible:'legendonly',");
                     }
@@ -208,97 +208,6 @@ namespace LuckParser.Controllers
 
                     sw.Write("]," +
                             " name: '" + mech.GetAltName() + "'");
-                    sw.Write("},");
-                }
-                //Downs and deaths
-
-                List<String> DnDStringList = new List<string>();
-                DnDStringList.Add("DOWN");
-                DnDStringList.Add("DEAD");
-                foreach (string state in DnDStringList)
-                {
-                    int mcount = 0;
-                    List<MechanicLog> DnDList = log.getMechanicData().GetMDataLogs().Where(x => x.GetName() == state && phase.inInterval(x.GetTime())).ToList();
-                    sw.Write("{");
-                    {
-                        sw.Write("y: [");
-                        {
-                            foreach (MechanicLog ml in DnDList)
-                            {
-                                Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).FirstOrDefault(x => x.X == Math.Round((ml.GetTime() - phase.getStart()) / 1000.0));
-                                if (mcount == DnDList.Count - 1)
-                                {
-                                    if (check != null)
-                                    {
-                                        sw.Write("'" + check.Y + "'");
-                                    }
-                                    else
-                                    {
-                                        sw.Write("'" + GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).Last().Y + "'");
-                                    }
-
-                                }
-                                else
-                                {
-                                    if (check != null)
-                                    {
-                                        sw.Write("'" + check.Y + "',");
-                                    }
-                                    else
-                                    {
-                                        sw.Write("'" + GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).Last().Y + "',");
-                                    }
-                                }
-
-                                mcount++;
-                            }
-                        }
-
-                        sw.Write("],");
-                        //add time axis
-                        sw.Write("x: [");
-                        {
-                            mcount = 0;
-                            foreach (MechanicLog ml in DnDList)
-                            {
-                                if (mcount == DnDList.Count - 1)
-                                {
-                                    sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0) + "'");
-                                }
-                                else
-                                {
-                                    sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0) + "',");
-                                }
-
-                                mcount++;
-                            }
-                        }
-
-                        sw.Write("],");
-                        sw.Write(" mode: 'markers',");
-                        if (state != "DEAD" && state != "DOWN")
-                        {
-                            sw.Write("visible:'legendonly',");
-                        }
-                        sw.Write("type:'scatter'," +
-                            "marker:{" + log.getMechanicData().GetPLoltyShape(state) + "size: 15" + "},");
-                        sw.Write("text:[");
-                        foreach (MechanicLog ml in DnDList)
-                        {
-                            if (mcount == DnDList.Count - 1)
-                            {
-                                sw.Write("'" + ml.GetPlayer().getCharacter() + "'");
-                            }
-                            else
-                            {
-                                sw.Write("'" + ml.GetPlayer().getCharacter() + "',");
-                            }
-
-                            mcount++;
-                        }
-                        sw.Write("]," +
-                                " name: '" + state + "'");
-                    }
                     sw.Write("},");
                 }
                 if (maxDPS > 0)
@@ -2767,7 +2676,7 @@ namespace LuckParser.Controllers
                     enemyList.Remove(p);
                 }
             }
-            foreach (Mechanic item in log.getBossData().getBossBehavior().getMechanics())
+            foreach (Mechanic item in log.getBossData().getBossBehavior().getMechanics().Where(x => x.GetMechType() != Mechanic.MechType.PlayerStatus))
             {
                 MechanicLog first_m_log = log.getMechanicData().GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill());
                 if (first_m_log != null)

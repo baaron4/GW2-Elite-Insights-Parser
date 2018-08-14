@@ -675,7 +675,7 @@ namespace LuckParser.Controllers
                 }
                 if (totalData != null)
                 {
-                    if (i < totalData.Count)
+                    if (i >= totalData.Count)
                     {
                         totalData.Add(new Point(graphdata[i].X, graphdata[i].Y));
                     }

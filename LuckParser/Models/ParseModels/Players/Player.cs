@@ -329,17 +329,29 @@ namespace LuckParser.Models.ParseModels
             CombatData combat_data = log.getCombatData();
             List<Mechanic> bossMechanics = boss_data.getBossBehavior().getMechanics();
             SkillData skill_data = log.getSkillData();
-            // downs
-            List<CombatItem> down = combat_data.getStates(getInstid(), ParseEnum.StateChange.ChangeDown, boss_data.getFirstAware(), boss_data.getLastAware());
-            foreach (CombatItem pnt in down)
+            // Player status
+            List<Mechanic> playerStatus = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerStatus).ToList();
+            foreach (Mechanic mech in playerStatus)
             {
-                mech_data.AddItem(new MechanicLog(pnt.getTime() - boss_data.getFirstAware(), 0, "DOWN", 0, this, mech_data.GetPLoltyShape("DOWN")));
-            }
-            // deads
-            List<CombatItem> dead = combat_data.getStates(getInstid(), ParseEnum.StateChange.ChangeDead, boss_data.getFirstAware(), boss_data.getLastAware());
-            foreach (CombatItem pnt in dead)
-            {
-                mech_data.AddItem(new MechanicLog(pnt.getTime() - boss_data.getFirstAware(), 0, "DEAD", 0, this, mech_data.GetPLoltyShape("DEAD")));
+                List<CombatItem> toUse = new List<CombatItem>();
+                switch (mech.GetSkill()) {
+                    case -2:
+                        toUse = combat_data.getStates(getInstid(), ParseEnum.StateChange.ChangeDead, boss_data.getFirstAware(), boss_data.getLastAware());                 
+                        break;
+                    case -3:
+                        toUse = combat_data.getStates(getInstid(), ParseEnum.StateChange.ChangeDown, boss_data.getFirstAware(), boss_data.getLastAware());
+                        break;
+                    case 1066:
+                        toUse = log.getCastData().Where(x => x.getSkillID() == 1066 && x.getSrcInstid() == getInstid() && x.isActivation().IsCasting()).ToList();
+                        break;
+                    default:
+                        break;
+                }
+                foreach (CombatItem pnt in toUse)
+                {
+                    mech_data.AddItem(new MechanicLog(pnt.getTime() - boss_data.getFirstAware(), mech.GetSkill(), mech.GetName(), 0, this, mech.GetPlotly()));
+                }
+
             }
             //Player hit
             List<DamageLog> dls = getDamageTakenLogs(log, 0, boss_data.getAwareDuration());
