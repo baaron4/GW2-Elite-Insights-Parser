@@ -88,7 +88,8 @@ namespace LuckParser.Controllers
                                 "name: '" + p.getCharacter() + " TDPS'" + "},");
                     }
                     sw.Write("{");
-                    HTMLHelper.writeDPSPlots(sw, GraphHelper.getBossDPSGraph(log, p, phase_index, phase, mode), totalDpsAllPlayers);
+                    maxDPS = Math.Max(maxDPS, HTMLHelper.writeDPSPlots(sw, GraphHelper.getBossDPSGraph(log, p, phase_index, phase, mode), totalDpsAllPlayers));
+                    ;
                     sw.Write("mode: 'lines'," +
                             "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf()) + "'}," +
                             "name: '" + p.getCharacter() + " DPS'" +
@@ -185,7 +186,7 @@ namespace LuckParser.Controllers
 
                     sw.Write("],");
                     sw.Write(" mode: 'markers',");
-                    if (mech.GetSkill() == -2 || mech.GetSkill() == -3)
+                    if (!(mech.GetSkill() == -2 || mech.GetSkill() == -3))
                     {
                         sw.Write("visible:'legendonly',");
                     }

@@ -659,9 +659,10 @@ namespace LuckParser.Controllers
                 "legendgroup: '" + p.getCharacter() + (s10 ? "10s" : (s30 ? "30s" : ""))+"'");
         }
 
-        public static void writeDPSPlots(StreamWriter sw, List<Point> graphdata, List<Point> totalData = null)
-        {           
+        public static int writeDPSPlots(StreamWriter sw, List<Point> graphdata, List<Point> totalData = null)
+        {
             //Adding dps axis
+            int maxDPS = 0;
             sw.Write("y: [");
             for (int i = 0; i < graphdata.Count; i++)
             {
@@ -675,6 +676,7 @@ namespace LuckParser.Controllers
                 }
                 if (totalData != null)
                 {
+                    maxDPS = Math.Max(maxDPS, graphdata[i].Y);
                     if (i >= totalData.Count)
                     {
                         totalData.Add(new Point(graphdata[i].X, graphdata[i].Y));
@@ -711,6 +713,7 @@ namespace LuckParser.Controllers
             }
 
             sw.Write("],");
+            return maxDPS;
         }     
 
         public static void writeDamageStatsTableHeader(StreamWriter sw)
