@@ -16,7 +16,7 @@ namespace LuckParser.Models
         protected List<Mechanic> mechanicList = new List<Mechanic> {
             new Mechanic(-2, "Deads", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'x',color:'rgb(0,0,0)',", "Deads",0),
             new Mechanic(-3, "Downs", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross',color:'rgb(255,0,0)',", "Downs",0),
-            new Mechanic(1066, "Resurrect", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'circle',color:'rgb(0,0,255)',", "Resurrect",0)};
+            new Mechanic(1066, "Resurrect", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'circle-dot',color:'rgb(0,120,180)',", "Resurrect",0)};
         protected ParseMode mode;
         public BossLogic()
         {
