@@ -146,9 +146,11 @@ namespace LuckParser.Models.DataModels
                 uptime = 0;
                 boonType = Boon.BoonType.Intensity;
                 generated = new Dictionary<Player, double>();
+                overstacked = new Dictionary<Player, double>();
                 foreach (Player p in plist)
                 {
                     generated.Add(p, 0);
+                    overstacked.Add(p, 0);
                 }
             }
 
