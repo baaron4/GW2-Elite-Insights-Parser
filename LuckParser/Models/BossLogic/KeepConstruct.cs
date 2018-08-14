@@ -169,7 +169,7 @@ namespace LuckParser.Models
         public override void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // Bombs
-            List<CombatItem> xeraFury = getFilteredList(log, 34511, p.getInstid());
+            List<CombatItem> xeraFury = getFilteredList(log, 35103, p.getInstid());
             int xeraFuryStart = 0;
             int xeraFuryEnd = 0;
             foreach (CombatItem c in xeraFury)
