@@ -659,6 +659,60 @@ namespace LuckParser.Controllers
                 "legendgroup: '" + p.getCharacter() + (s10 ? "10s" : (s30 ? "30s" : ""))+"'");
         }
 
+        public static void writeDPSPlots(StreamWriter sw, List<Point> graphdata, List<Point> totalData = null)
+        {           
+            //Adding dps axis
+            sw.Write("y: [");
+            for (int i = 0; i < graphdata.Count; i++)
+            {
+                if (i == graphdata.Count - 1)
+                {
+                    sw.Write("'" + graphdata[i].Y + "'");
+                }
+                else
+                {
+                    sw.Write("'" + graphdata[i].Y + "',");
+                }
+                if (totalData != null)
+                {
+                    if (i < totalData.Count)
+                    {
+                        totalData.Add(new Point(graphdata[i].X, graphdata[i].Y));
+                    }
+                    else
+                    {
+                        totalData[i] = new Point(graphdata[i].X, graphdata[i].Y + totalData[i].Y);
+                    }
+                }
+            }
+            //cuts off extra comma
+            if (graphdata.Count == 0)
+            {
+                sw.Write("'0'");
+            }
+
+            sw.Write("],");
+            //add time axis
+            sw.Write("x: [");
+            for (int i = 0; i < graphdata.Count; i++)
+            {
+                if (i == graphdata.Count - 1)
+                {
+                    sw.Write("'" + graphdata[i].X + "'");
+                }
+                else
+                {
+                    sw.Write("'" + graphdata[i].X + "',");
+                }
+            }
+            if (graphdata.Count == 0)
+            {
+                sw.Write("'0'");
+            }
+
+            sw.Write("],");
+        }     
+
         public static void writeDamageStatsTableHeader(StreamWriter sw)
         {
             sw.Write("<tr>");
