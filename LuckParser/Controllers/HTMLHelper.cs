@@ -536,7 +536,7 @@ namespace LuckParser.Controllers
             
         }
 
-        public static void writeBoonGraph(StreamWriter sw, BoonsGraphModel bgm, long start, long end)
+        public static void writePlayerTabBoonGraph(StreamWriter sw, BoonsGraphModel bgm, long start, long end)
         {
             List<Point> bChart = bgm.getBoonChart().Where(x => x.X >= start / 1000 && x.X <= end / 1000).ToList();
             int bChartCount = 0;
@@ -597,7 +597,7 @@ namespace LuckParser.Controllers
                  " name: \"" + bgm.getBoonName() + "\"");
         }
 
-        public static void writeDPSGraph(StreamWriter sw, string name, List<Point> playerdpsgraphdata, AbstractPlayer p)
+        public static void writePlayerTabDPSGraph(StreamWriter sw, string name, List<Point> playerdpsgraphdata, AbstractPlayer p)
         {
             int ptdgCount = 0;
             bool total = name.Contains("Total");

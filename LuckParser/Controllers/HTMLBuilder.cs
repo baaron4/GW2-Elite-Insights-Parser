@@ -1987,7 +1987,7 @@ namespace LuckParser.Controllers
                                             {
                                                 sw.Write("{");
                                                 {
-                                                    HTMLHelper.writeBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
+                                                    HTMLHelper.writePlayerTabBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
                                                 }
                                                 sw.Write(" },");
 
@@ -1997,38 +1997,38 @@ namespace LuckParser.Controllers
                                         {//show total dps plot
                                             sw.Write("{");
                                             { //Adding dps axis
-                                                HTMLHelper.writeDPSGraph(sw, "Total DPS", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Total DPS", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
                                             }
                                             sw.Write("},");
                                             if (settings.Show10s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Total DPS - 10s", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Total DPS - 10s", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
                                                 sw.Write("},");
                                             }
                                             if (settings.Show30s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Total DPS - 30s", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Total DPS - 30s", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
                                                 sw.Write("},");
                                             }
                                         }
                                          //Adding dps axis
                                             sw.Write("{");
                                             {
-                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Boss DPS", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
                                             }
                                             sw.Write("},");
                                             if (settings.Show10s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS - 10s", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Boss DPS - 10s", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
                                                 sw.Write("},");
                                             }
                                             if (settings.Show30s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS - 30s", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Boss DPS - 30s", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
                                                 sw.Write("},");
                                             }
 
@@ -2037,19 +2037,19 @@ namespace LuckParser.Controllers
                                         {//show total dps plot
                                             sw.Write("{");
                                             { //Adding dps axis
-                                                HTMLHelper.writeDPSGraph(sw, "Cleave DPS", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Cleave DPS", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
                                             }
                                             sw.Write("},");
                                             if (settings.Show10s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Cleave DPS - 10s", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Cleave DPS - 10s", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
                                                 sw.Write("},");
                                             }
                                             if (settings.Show30s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Cleave DPS - 30s", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Cleave DPS - 30s", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
                                                 sw.Write("},");
                                             }
                                         }
@@ -3522,7 +3522,7 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("{");
                                 {
-                                    HTMLHelper.writeBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
+                                    HTMLHelper.writePlayerTabBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
                                 }
                                 sw.Write(" },");
 
@@ -3534,7 +3534,7 @@ namespace LuckParser.Controllers
                                 sw.Write("{");
                                 {
                                     //Adding dps axis
-                                    HTMLHelper.writeDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, log.getBoss());
+                                    HTMLHelper.writePlayerTabDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, log.getBoss());
                                 }
                                 sw.Write("},");
                             }
