@@ -13,7 +13,7 @@ namespace LuckParser.Models
         public SoullessHorror() : base()
         {
             mode = ParseMode.Raid;
-            mechanicList = new List<Mechanic>
+            mechanicList.AddRange(new List<Mechanic>
             {
 
             new Mechanic(47327, "Vortex Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'circle',color:'rgb(255,140,0)',", "Donut Inner",0),
@@ -25,7 +25,7 @@ namespace LuckParser.Models
             new Mechanic(48500, "Death Bloom", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'octagon',color:'rgb(255,140,0)',", " 8 Slices",0),
             new Mechanic(47434, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.SoullessHorror, "symbol:'star',color:'rgb(255,0,255)',", "Fixate",0),
             new Mechanic(47414, "Necrosis", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.SoullessHorror, "symbol:'square-open',color:'rgb(200,140,255)',", "Necrosis Debuff",0)
-            };
+            });
         }
 
         public override CombatReplayMap getCombatMap()

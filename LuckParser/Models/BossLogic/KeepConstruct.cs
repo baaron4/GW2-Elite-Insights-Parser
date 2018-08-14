@@ -13,7 +13,7 @@ namespace LuckParser.Models
         public KeepConstruct() : base()
         {
             mode = ParseMode.Raid;
-            mechanicList = new List<Mechanic>
+            mechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(34912, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'star',color:'rgb(255,0,255)',", "Fixate",0),
             new Mechanic(34925, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'star',color:'rgb(255,0,255)',", "Fixate",0),
@@ -25,7 +25,7 @@ namespace LuckParser.Models
             new Mechanic(35086, "Tower Drop", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(255,140,0)',", "Tower Drop",0),
             new Mechanic(35103, "Xera's Fury", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(200,140,0)',", "Xera's Fury (Bombs)",0)
             //hit orb: May need different format since the Skill ID is irrelevant but any combat event with dst_agent of the species ID 16261 (Construct Core) should be shown. Tracking either via the different Construct Core adresses or their instance_id? (every phase it's a new one)
-            };
+            });
         }
 
         public override CombatReplayMap getCombatMap()

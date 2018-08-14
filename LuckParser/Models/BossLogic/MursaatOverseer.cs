@@ -13,7 +13,7 @@ namespace LuckParser.Models
         public MursaatOverseer() : base()
         {
             mode = ParseMode.Raid;
-            mechanicList = new List<Mechanic>()
+            mechanicList.AddRange(new List<Mechanic>()
             {
             new Mechanic(37677, "Soldier's Aura", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MursaatOverseer, "symbol:'circle-open',color:'rgb(255,0,0)',", "Jade Aura",0),
             new Mechanic(37788, "Jade Explosion", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MursaatOverseer, "symbol:'circle',color:'rgb(255,0,0)',", "Jade Explosion",0),
@@ -22,7 +22,7 @@ namespace LuckParser.Models
             new Mechanic(37813, "Protect", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, "symbol:'circle',color:'rgb(0,255,255)',", "Protect",0),
             new Mechanic(38155, "Mursaat Overseer's Shield", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, "symbol:'circle-open',color:'rgb(0,255,255)',", "Protect (Active)",0),
             new Mechanic(38184, "Enemy Tile", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MursaatOverseer, "symbol:'square-open',color:'rgb(255,200,0)',", "Tile Dmg",0)
-            };
+            });
         }
 
         public override CombatReplayMap getCombatMap()

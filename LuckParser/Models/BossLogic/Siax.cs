@@ -13,7 +13,7 @@ namespace LuckParser.Models
         public Siax() : base()
         {
             mode = ParseMode.Fractal;
-            mechanicList = new List<Mechanic>
+            mechanicList.AddRange(new List<Mechanic>
             {
 
             new Mechanic(37477, "Vile Spit", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Siax, "symbol:'circle',color:'rgb(150,150,0)',", "Vile Spit",0),
@@ -21,7 +21,7 @@ namespace LuckParser.Models
             new Mechanic(37154, "Lunge", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'circle',color:'rgb(50,150,0)',", "Lunge",0),
             new Mechanic(37278, "First Smash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'circle',color:'rgb(100,150,0)',", "First Smash",0),
             new Mechanic(36962, "Torment Smash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'circle',color:'rgb(150,150,0)',", "Torment Smash",0)
-            };
+            });
         }
 
         public override CombatReplayMap getCombatMap()

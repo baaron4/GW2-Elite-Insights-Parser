@@ -13,15 +13,14 @@ namespace LuckParser.Models
         public Arkk() : base()
         {
             mode = ParseMode.Fractal;
-            mechanicList = new List<Mechanic>
+            mechanicList.AddRange(new List<Mechanic>
             {
-
             new Mechanic(39685, "Horizon Strike 1", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Arkk, "symbol:'circle',color:'rgb(50,0,0)',", "Horizon Strike 1",0),
             new Mechanic(39001, "Horizon Strike 2", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Arkk, "symbol:'circle',color:'rgb(100,0,0)',", "Horizon Strike 2",0),
             new Mechanic(39297, "Horizon Strike Normal", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Arkk, "symbol:'circle',color:'rgb(150,0,0)',", "Horizon Strike Normal",0),
             new Mechanic(38844, "Overhead Smash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Arkk, "symbol:'circle',color:'rgb(200,0,0)',", "Overhead Smash",0),
             new Mechanic(38880, "Corporeal Reassignment", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Arkk, "symbol:'square',color:'rgb(0,128,0)',", "Corporeal Reassignment",0)
-            };
+            });
         }
 
         public override CombatReplayMap getCombatMap()

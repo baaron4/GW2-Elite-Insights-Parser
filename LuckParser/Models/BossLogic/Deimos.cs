@@ -13,7 +13,7 @@ namespace LuckParser.Models
         public Deimos() : base()
         {
             mode = ParseMode.Raid;
-            mechanicList = new List<Mechanic>
+            mechanicList.AddRange(new List<Mechanic>
             {
                 new Mechanic(37716, "Rapid Decay", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'circle',color:'rgb(0,0,0)',", "Black Oil",0),
             //new Mechanic(37844, "Off Balance", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'cross',color:'rgb(255,0,255)',", "Failed Teleport Break",0), Cast by the drunkard Saul, would be logical to be the forced random teleport but not sure when it's successful or not
@@ -33,7 +33,7 @@ namespace LuckParser.Models
             //mlist.Add("");//tp from drunkard
             //mlist.Add("");//bon currupt from thief
             //mlist.Add("Teleport");//to demonic realm
-            };
+            });
         }
 
         public override CombatReplayMap getCombatMap()

@@ -13,7 +13,7 @@ namespace LuckParser.Models
         public Cairn() : base()
         {
             mode = ParseMode.Raid;
-            mechanicList = new List<Mechanic>
+            mechanicList.AddRange(new List<Mechanic>
             {
 
             new Mechanic(38113, "Displacement", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, "symbol:'circle',color:'rgb(0,0,255)',", "Red TP",0),
@@ -32,7 +32,7 @@ namespace LuckParser.Models
             new Mechanic(38060, "Energy Surge", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, "symbol:'triangle-left',color:'rgb(0,128,0)',", "Leap",0),
             new Mechanic(37631, "Orbital Sweep", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, "symbol:'diamond-wide',color:'rgb(255,0,255)',", "Sweep",100), //short cooldown because of multihits. Would still like to register second hit at the end of spin though, thus only 0.1s
             new Mechanic(37910, "Gravity Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, "symbol:'octagon',color:'rgb(255,0,255)',", "Black Wave",0)
-            };
+            });
         }
 
         public override CombatReplayMap getCombatMap()
