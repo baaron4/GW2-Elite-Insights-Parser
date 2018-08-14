@@ -3441,13 +3441,20 @@ namespace LuckParser.Controllers
                                 {
                                     continue;
                                 }
-                                if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                                Statistics.FinalBossBoon toUse = conditions[boon.getID()];
+                                if (toUse.boonType == Boon.BoonType.Duration)
                                 {
-                                    sw.Write("<td>" + conditions[boon.getID()].generated[player] + "%</td>");
+                                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
+                                        + toUse.overstacked[player] + "% with overstack \">"
+                                        + toUse.generated[player]
+                                        + "%</span>" + "</td>");
                                 }
                                 else
                                 {
-                                    sw.Write("<td>" + conditions[boon.getID()].generated[player] + " </td>");
+                                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
+                                        + toUse.overstacked[player] + " with overstack \">"
+                                        + toUse.generated[player]
+                                        + "</span>" + " </td>");
                                 }
                             }
                         }
