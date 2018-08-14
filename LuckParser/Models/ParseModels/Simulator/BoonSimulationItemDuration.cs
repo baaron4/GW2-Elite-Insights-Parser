@@ -46,7 +46,7 @@ namespace LuckParser.Models.ParseModels
 
         public override long getOverstack(ushort src, long start = 0, long end = 0)
         {
-            if (end > 0)
+            if (end > 0 && duration > 0)
             {
                 long dur = getItemDuration(start, end);
                 return (long)Math.Round((double)dur / duration * overstack);

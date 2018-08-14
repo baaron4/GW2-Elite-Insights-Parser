@@ -31,15 +31,9 @@ namespace LuckParser.Models.ParseModels
                 for(int i = boon_stack.Count - 1; i >= 0; i--)
                 {
                     var item = new BoonStackItem(boon_stack[i], time_passed, -time_passed);
-                    if(item.boon_duration <= 0)
-                    {
-                        boon_stack.RemoveAt(i);
-                    }
-                    else
-                    {
-                        boon_stack[i] = item;
-                    }
+                    boon_stack[i] = item;
                 }
+                boon_stack.RemoveAll(x => x.boon_duration < 1);
             }
         }
     }
