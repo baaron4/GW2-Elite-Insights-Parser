@@ -284,13 +284,13 @@ namespace LuckParser.Models.ParseModels
             {
                 CombatItem cur = status[i];
                 CombatItem next = status[i + 1];
-                if (cur.isStateChange() == ParseEnum.StateChange.ChangeDown)
+                if (cur.isStateChange().IsDown())
                 {
                     down.Add(new Tuple<long, long>(cur.getTime() - log.getBossData().getFirstAware(), next.getTime() - log.getBossData().getFirstAware()));
-                } else if (cur.isStateChange() == ParseEnum.StateChange.ChangeDead)
+                } else if (cur.isStateChange().IsDead())
                 {
                     dead.Add(new Tuple<long, long>(cur.getTime() - log.getBossData().getFirstAware(), next.getTime() - log.getBossData().getFirstAware()));
-                } else if (cur.isStateChange() == ParseEnum.StateChange.Despawn)
+                } else if (cur.isStateChange().IsDespawn())
                 {
                     dc.Add(new Tuple<long, long>(cur.getTime() - log.getBossData().getFirstAware(), next.getTime() - log.getBossData().getFirstAware()));
                 }
@@ -299,15 +299,15 @@ namespace LuckParser.Models.ParseModels
             if (status.Count > 0)
             {
                 CombatItem cur = status.Last();
-                if (cur.isStateChange() == ParseEnum.StateChange.ChangeDown)
+                if (cur.isStateChange().IsDown())
                 {
                     down.Add(new Tuple<long, long>(cur.getTime() - log.getBossData().getFirstAware(), log.getBossData().getAwareDuration()));
                 }
-                else if (cur.isStateChange() == ParseEnum.StateChange.ChangeDead)
+                else if (cur.isStateChange().IsDead())
                 {
                     dead.Add(new Tuple<long, long>(cur.getTime() - log.getBossData().getFirstAware(), log.getBossData().getAwareDuration()));
                 }
-                else if (cur.isStateChange() == ParseEnum.StateChange.Despawn)
+                else if (cur.isStateChange().IsDespawn())
                 {
                     dc.Add(new Tuple<long, long>(cur.getTime() - log.getBossData().getFirstAware(), log.getBossData().getAwareDuration()));
                 }

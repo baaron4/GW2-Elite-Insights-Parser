@@ -260,6 +260,26 @@ namespace LuckParser.Models.DataModels
         {
             return state == ParseEnum.StateChange.Normal || state == ParseEnum.StateChange.Position || state == ParseEnum.StateChange.Velocity || state == ParseEnum.StateChange.Rotation || state == ParseEnum.StateChange.MaxHealthUpdate || state == ParseEnum.StateChange.Spawn;
         }
+
+        public static bool IsDead(this ParseEnum.StateChange state)
+        {
+            return state == ParseEnum.StateChange.ChangeDead;
+        }
+
+        public static bool IsDown(this ParseEnum.StateChange state)
+        {
+            return state == ParseEnum.StateChange.ChangeDown;
+        }
+
+        public static bool IsUp(this ParseEnum.StateChange state)
+        {
+            return state == ParseEnum.StateChange.ChangeUp;
+        }
+
+        public static bool IsDespawn(this ParseEnum.StateChange state)
+        {
+            return state == ParseEnum.StateChange.Despawn;
+        }
     }
 
     static class ActivationExtensions

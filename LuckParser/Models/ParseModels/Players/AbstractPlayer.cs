@@ -44,7 +44,7 @@ namespace LuckParser.Models.ParseModels
         public long getDeath(ParsedLog log, long start, long end)
         {
             long offset = log.getBossData().getFirstAware();
-            CombatItem dead = log.getCombatList().LastOrDefault(x => x.getSrcInstid() == agent.getInstid() && x.isStateChange() == ParseEnum.StateChange.ChangeDead && x.getTime() >= start + offset && x.getTime() <= end + offset);
+            CombatItem dead = log.getCombatList().LastOrDefault(x => x.getSrcInstid() == agent.getInstid() && x.isStateChange().IsDead() && x.getTime() >= start + offset && x.getTime() <= end + offset);
             if (dead != null && dead.getTime() > 0)
             {
                 return dead.getTime();

@@ -651,7 +651,7 @@ namespace LuckParser.Controllers
                 } else
                 {
                     // for skorvald, as CM and normal ids are the same
-                    CombatItem killed = combat_list.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange() == ParseEnum.StateChange.ChangeDead);
+                    CombatItem killed = combat_list.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange().IsDead());
                     if (killed != null)
                     {
                         log_data.setBossKill(true);
@@ -660,7 +660,7 @@ namespace LuckParser.Controllers
                 }
             } else
             {
-                CombatItem killed = combat_list.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange() == ParseEnum.StateChange.ChangeDead);
+                CombatItem killed = combat_list.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange().IsDead());
                 if (killed != null)
                 {
                     log_data.setBossKill(true);
