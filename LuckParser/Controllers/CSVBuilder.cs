@@ -175,10 +175,15 @@ namespace LuckParser.Controllers
             CreateMechList(sw, 0);
 
             //Condi Uptime
-            CreateCondiUptime(sw, 0);
-
+            bool hasBoons = CreateCondiUptime(sw, 0);
+            if (hasBoons)
+            {
+                CreateBossBoonUptime(sw, 0);
+            }
             //Condi Gen
             CreateCondiGen(sw, 0);
+            //Condi Overstack
+            CreateCondiOverstack(sw, 0);
         }
         private void CreateDPSTable(StreamWriter sw, int phase_index)
         {
@@ -353,7 +358,6 @@ namespace LuckParser.Controllers
             //generate Uptime Table table
             List<PhaseData> phases = statistics.phases;
             PhaseData phase = statistics.phases[phase_index];
-            HashSet<int> intensityBoon = new HashSet<int>();
             long fight_duration = phases[phase_index].getDuration();
 
             WriteCells( new string[] { "Name","Avg Boons" });
@@ -380,23 +384,24 @@ namespace LuckParser.Controllers
                 WriteCell(Math.Round(avg_boons, 1).ToString());
                 foreach (Boon boon in list_to_use)
                 {
-                    if (boon.getType() == Boon.BoonType.Intensity)
-                    {
-                        intensityBoon.Add(count);
-                    }
                     if (boons.ContainsKey(boon.getID()))
                     {
-                        string toWrite = boons[boon.getID()].uptime + (intensityBoon.Contains(count) ? "" : "%");
-                        WriteCell( toWrite );
-                       
+
+                        if (boon.getType() == Boon.BoonType.Duration)
+                        {
+                            WriteCell(boons[boon.getID()].uptime + "%");
+                        }
+                        else if (boon.getType() == Boon.BoonType.Intensity)
+                        {
+                            WriteCell(boons[boon.getID()].uptime.ToString());
+                        }
+
                     }
                     else
                     {
                         WriteCell("0");
                     
                     }
-
-
                 }
                 NewLine();
                 count++;
@@ -758,7 +763,7 @@ namespace LuckParser.Controllers
                 count++;
             }
         }
-        private void CreateCondiUptime(StreamWriter sw,int phase_index) {
+        private bool CreateCondiUptime(StreamWriter sw,int phase_index) {
             Boss boss = log.getBoss();
             List<PhaseData> phases = statistics.phases;
             long fight_duration = phases[phase_index].getDuration();
@@ -811,22 +816,51 @@ namespace LuckParser.Controllers
                 }
                 if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
                 {
-                    WriteCell( conditions[boon.getID()].uptime.ToString());
+                    WriteCell(conditions[boon.getID()].uptime.ToString()+"%");
                 }
                 else
                 {
-                    if (condiPresence.TryGetValue(boon.getID(), out long presenceTime))
-                    {
-                        WriteCell(conditions[boon.getID()].uptime.ToString());
-                    }
-                    else
-                    {
-                        WriteCell(conditions[boon.getID()].uptime.ToString());
-                    }
+                    WriteCell(conditions[boon.getID()].uptime.ToString());
                 }
             }
             count++;
-            
+
+            while (count < 15)//so each graph has equal spaceing
+            {
+                NewLine();
+                count++;
+            }
+            return hasBoons;
+        }
+        private void CreateBossBoonUptime(StreamWriter sw, int phase_index)
+        {
+            Boss boss = log.getBoss();
+            List<PhaseData> phases = statistics.phases;
+            long fight_duration = phases[phase_index].getDuration();
+            Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
+            WriteCell("Name");
+            WriteCell("Avg");
+            foreach (Boon boon in Boon.getCondiBoonList())
+            {
+                WriteCell(boon.getName());
+            }
+
+            NewLine();
+            int count = 0;
+            WriteCell(boss.getCharacter());
+            foreach (Boon boon in Boon.getBoonList())
+            {
+                if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                {
+                    WriteCell(conditions[boon.getID()].uptime.ToString() + "%");
+                }
+                else
+                {
+                    WriteCell(conditions[boon.getID()].uptime.ToString());
+                }
+            }
+            count++;
+
             while (count < 15)//so each graph has equal spaceing
             {
                 NewLine();
@@ -835,7 +869,6 @@ namespace LuckParser.Controllers
         }
         private void CreateCondiGen(StreamWriter sw, int phase_index)
         {
-            Boss boss = log.getBoss();
             List<PhaseData> phases = statistics.phases;
             long fight_duration = phases[phase_index].getDuration();
             Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
@@ -867,7 +900,7 @@ namespace LuckParser.Controllers
                     }
                     if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
                     {
-                        WriteCell( conditions[boon.getID()].generated[player].ToString() );
+                        WriteCell( conditions[boon.getID()].generated[player].ToString()+"%" );
                     }
                     else
                     {
@@ -878,6 +911,58 @@ namespace LuckParser.Controllers
                 count++;
             }
            
+
+            while (count < 15)//so each graph has equal spaceing
+            {
+                NewLine();
+                count++;
+            }
+        }
+
+        private void CreateCondiOverstack(StreamWriter sw, int phase_index)
+        {
+            List<PhaseData> phases = statistics.phases;
+            long fight_duration = phases[phase_index].getDuration();
+            Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
+            //bool hasBoons = false;
+            int count = 0;
+            WriteCell("Sub");
+            WriteCell("");
+            WriteCell("Name");
+            foreach (Boon boon in Boon.getCondiBoonList())
+            {
+                if (boon.getName() == "Retaliation")
+                {
+                    continue;
+                }
+                WriteCell(boon.getName());
+            }
+            NewLine();
+            foreach (Player player in log.getPlayerList())
+            {
+
+                WriteCell(player.getGroup().ToString());
+                WriteCell(player.getProf().ToString());
+                WriteCell(player.getCharacter());
+                foreach (Boon boon in Boon.getCondiBoonList())
+                {
+                    if (boon.getName() == "Retaliation")
+                    {
+                        continue;
+                    }
+                    if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                    {
+                        WriteCell(conditions[boon.getID()].overstacked[player].ToString()+"%");
+                    }
+                    else
+                    {
+                        WriteCell(conditions[boon.getID()].overstacked[player].ToString());
+                    }
+                }
+                NewLine();
+                count++;
+            }
+
 
             while (count < 15)//so each graph has equal spaceing
             {
