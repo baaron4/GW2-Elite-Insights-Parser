@@ -115,7 +115,7 @@ namespace LuckParser.Models
                     int end = start + c.getActDur();
                     replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 125, 255, 0.3)"));
                     // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
-                    int ticks = (int)Math.Ceiling(c.getActDur() / 4000.0);
+                    int ticks = (int)Math.Min(Math.Ceiling(c.getActDur() / 4000.0),6);
                     int phaseIndex = 1;
                     for (phaseIndex = 1; phaseIndex < phases.Count; phaseIndex++)
                     {
