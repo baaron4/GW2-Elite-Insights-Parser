@@ -89,7 +89,7 @@ namespace LuckParser.Models.ParseModels
         {
             return src_agent;
         }
-        public ushort getInstidt()
+        public ushort getSrcInstidt()
         {
             return src_instid;
         }

@@ -130,7 +130,7 @@ namespace LuckParser.Models.ParseModels
         }
         public List<DamageLog> getJustPlayerDamageLogs(int instidFilter, ParsedLog log, long start, long end)
         {
-            return getDamageLogs(instidFilter, log, start, end).Where(x => x.getInstidt() == agent.getInstid()).ToList();
+            return getDamageLogs(instidFilter, log, start, end).Where(x => x.getSrcInstidt() == agent.getInstid()).ToList();
         }
 
         public List<DamageLog> getJustPlayerDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)

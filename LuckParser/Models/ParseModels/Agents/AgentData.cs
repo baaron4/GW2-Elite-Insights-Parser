@@ -71,6 +71,10 @@ namespace LuckParser.Models.ParseModels
             return new AgentItem(0, "UNKOWN", "UNKNOWN");
 
         }
+        public List<AgentItem> GetAgents(ushort id)
+        {
+            return all_agents_list.Where(x => x.getID() == id).ToList();
+        }
         public AgentItem GetAgentWInst(ushort instid)
         {
             return all_agents_list.FirstOrDefault(x => x.getInstid() == instid);

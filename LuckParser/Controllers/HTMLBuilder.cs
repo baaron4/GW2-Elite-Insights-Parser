@@ -2197,7 +2197,7 @@ namespace LuckParser.Controllers
                 {
                     for (int d = 0; d < damageToDown.Count; d++)
                     {
-                        AgentItem ag = log.getAgentData().GetAgentWInst(damageToDown[d].getInstidt());
+                        AgentItem ag = log.getAgentData().GetAgentWInst(damageToDown[d].getSrcInstidt());
                         string name = "UNKNOWN";
                         if (ag != null)
                         {
@@ -2209,7 +2209,7 @@ namespace LuckParser.Controllers
                 }
                 for (int d = 0; d < damageToKill.Count; d++)
                 {
-                    AgentItem ag = log.getAgentData().GetAgentWInst(damageToKill[d].getInstidt());
+                    AgentItem ag = log.getAgentData().GetAgentWInst(damageToKill[d].getSrcInstidt());
                     string name = "UNKNOWN";
                     if (ag != null )
                     {
