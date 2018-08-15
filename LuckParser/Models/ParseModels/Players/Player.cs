@@ -329,6 +329,8 @@ namespace LuckParser.Models.ParseModels
             CombatData combat_data = log.getCombatData();
             List<Mechanic> bossMechanics = boss_data.getBossBehavior().getMechanics();
             SkillData skill_data = log.getSkillData();
+            long start = boss_data.getFirstAware();
+            long end = boss_data.getLastAware();
             // Player status
             List<Mechanic> playerStatus = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerStatus).ToList();
             foreach (Mechanic mech in playerStatus)
@@ -336,10 +338,10 @@ namespace LuckParser.Models.ParseModels
                 List<CombatItem> toUse = new List<CombatItem>();
                 switch (mech.GetSkill()) {
                     case -2:
-                        toUse = combat_data.getStates(getInstid(), ParseEnum.StateChange.ChangeDead, boss_data.getFirstAware(), boss_data.getLastAware());                 
+                        toUse = combat_data.getStates(getInstid(), ParseEnum.StateChange.ChangeDead, start, end);                 
                         break;
                     case -3:
-                        toUse = combat_data.getStates(getInstid(), ParseEnum.StateChange.ChangeDown, boss_data.getFirstAware(), boss_data.getLastAware());
+                        toUse = combat_data.getStates(getInstid(), ParseEnum.StateChange.ChangeDown, start, end);
                         break;
                     case 1066:
                         toUse = log.getCastData().Where(x => x.getSkillID() == 1066 && x.getSrcInstid() == getInstid() && x.isActivation().IsCasting()).ToList();
@@ -349,7 +351,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 foreach (CombatItem pnt in toUse)
                 {
-                    mech_data.AddItem(new MechanicLog(pnt.getTime() - boss_data.getFirstAware(), mech.GetSkill(), mech.GetName(), 0, this, mech.GetPlotly()));
+                    mech_data.AddItem(new MechanicLog(pnt.getTime() - start, mech.GetSkill(), mech.GetName(), 0, this, mech.GetPlotly()));
                 }
 
             }
@@ -385,7 +387,24 @@ namespace LuckParser.Models.ParseModels
                     if (c.getSkillID() == mech.GetSkill() && c.getValue() > 0 && c.isBuffremove() == ParseEnum.BuffRemove.None && c.getResult().IsHit() && getInstid() == c.getDstInstid())
                     {
                         String name = skill_data.getName(c.getSkillID());
-                        mech_data.AddItem(new MechanicLog(c.getTime() - boss_data.getFirstAware(), c.getSkillID(), mech.GetName(), c.getValue(), this, mech.GetPlotly()));
+                        mech_data.AddItem(new MechanicLog(c.getTime() - start, c.getSkillID(), mech.GetName(), c.getValue(), this, mech.GetPlotly()));
+                    }
+                }
+            }
+            // Hitting enemy
+            List<Mechanic> enemyHit = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.HitOnEnemy).ToList();
+            foreach (Mechanic mech in enemyHit)
+            {
+                List<AgentItem> agents = log.getAgentData().GetAgents((ushort)mech.GetSkill());
+                foreach (AgentItem a in agents)
+                {
+                    foreach (DamageLog dl in getDamageLogs(0,log,0,log.getBossData().getAwareDuration()))
+                    {
+                        if (dl.getDstInstidt() != a.getInstid() || dl.isCondi() > 0 || dl.getTime() < a.getFirstAware() - start || dl.getTime() > a.getLastAware() - start)
+                        {
+                            continue;
+                        }
+                        mech_data.AddItem(new MechanicLog(dl.getTime(), mech.GetSkill(), mech.GetName(), dl.getDamage(), this, mech.GetPlotly()));
                     }
                 }
             }
