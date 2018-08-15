@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
         /// 6 - BossCast X
         /// 7 - PlayerOnPlayer
         /// </summary>
-        public enum MechType { PlayerBoon, EnemyBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, BossCast, PlayerOnPlayer }
+        public enum MechType { PlayerBoon, EnemyBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, BossCast, PlayerOnPlayer, HitOnEnemy, PlayerStatus }
         // Fields
        
         private long skill_id;

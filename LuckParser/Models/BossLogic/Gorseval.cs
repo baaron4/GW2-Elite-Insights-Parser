@@ -13,7 +13,7 @@ namespace LuckParser.Models
         public Gorseval() : base()
         {
             mode = ParseMode.Raid;
-            mechanicList = new List<Mechanic>
+            mechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(31875, "Spectral Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'hexagram',color:'rgb(255,0,0)',", "Slam",4000),
             new Mechanic(31623, "Ghastly Prison", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(255,140,0)',", "Egg",500),
@@ -21,7 +21,7 @@ namespace LuckParser.Models
             new Mechanic(31722, "Spirited Fusion", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Gorseval, "symbol:'square',color:'rgb(255,140,0)',", "Ate Spirit",0),
             new Mechanic(31720, "Kick", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'triangle-right',color:'rgb(255,0,255)',", "Kicked by Spirit",0)
             //new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,0)',", "Stood in black",2), //stood in black? Trigger via (25 stacks) vuln (ID 738) application would be possible
-            };
+            });
         }
 
         public override CombatReplayMap getCombatMap()
@@ -115,7 +115,7 @@ namespace LuckParser.Models
                     int end = start + c.getActDur();
                     replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 125, 255, 0.3)"));
                     // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
-                    int ticks = (int)Math.Ceiling(c.getActDur() / 4000.0);
+                    int ticks = (int)Math.Min(Math.Ceiling(c.getActDur() / 4000.0),6);
                     int phaseIndex = 1;
                     for (phaseIndex = 1; phaseIndex < phases.Count; phaseIndex++)
                     {

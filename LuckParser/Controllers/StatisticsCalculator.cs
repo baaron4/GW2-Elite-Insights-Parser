@@ -471,14 +471,14 @@ namespace LuckParser.Controllers
                     final.died = 0.0;
                     if (dead.Count > 0)
                     {
-                        final.died = dead[0].getTime() - start;
+                        final.died = dead.Last().getTime() - start;
                     }
 
                     List<CombatItem> disconect = combatData.getStates(instid, ParseEnum.StateChange.Despawn, start, end);
                     final.dcd = 0.0;
                     if (disconect.Count > 0)
                     {
-                        final.dcd = disconect[0].getTime() - start;
+                        final.dcd = disconect.Last().getTime() - start;
                     }
 
                     phaseStats[phaseIndex] = final;
@@ -748,7 +748,9 @@ namespace LuckParser.Controllers
                             condition.uptime = Math.Round(100.0 * boonDistribution.getUptime(boon.getID()) / fightDuration, 1);
                             foreach(Player p in log.getPlayerList())
                             {
-                                condition.generated[p] = Math.Round(100.0 * boonDistribution.getGeneration(boon.getID(),p.getInstid()) / fightDuration, 1);
+                                long gen = boonDistribution.getGeneration(boon.getID(), p.getInstid());
+                                condition.generated[p] = Math.Round(100.0 * gen / fightDuration, 1);
+                                condition.overstacked[p] = Math.Round(100.0 * (boonDistribution.getOverstack(boon.getID(), p.getInstid()) + gen) / fightDuration, 1);
                             }
                         }
                         else if (boon.getType() == Boon.BoonType.Intensity)
@@ -757,7 +759,9 @@ namespace LuckParser.Controllers
                             condition.uptime = Math.Round((double) boonDistribution.getUptime(boon.getID()) / fightDuration, 1);
                             foreach (Player p in log.getPlayerList())
                             {
-                                condition.generated[p] = Math.Round((double)boonDistribution.getGeneration(boon.getID(), p.getInstid()) / fightDuration, 1);
+                                long gen = boonDistribution.getGeneration(boon.getID(), p.getInstid());
+                                condition.generated[p] = Math.Round((double) gen / fightDuration, 1);
+                                condition.overstacked[p] = Math.Round((double)(boonDistribution.getOverstack(boon.getID(), p.getInstid())+ gen) / fightDuration, 1);
                             }
                         }
 

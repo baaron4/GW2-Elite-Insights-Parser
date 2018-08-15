@@ -13,7 +13,7 @@ namespace LuckParser.Models
         public MAMA() : base()
         {
             mode = ParseMode.Fractal;
-            mechanicList = new List<Mechanic>
+            mechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(37408, "Blastwave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MAMA, "symbol:'circle',color:'rgb(100,150,0)',", "Blastwave",0),
             new Mechanic(37103, "Blastwave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MAMA, "symbol:'circle',color:'rgb(100,150,0)',", "Blastwave",0),
@@ -21,7 +21,7 @@ namespace LuckParser.Models
             new Mechanic(37577, "Leap", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MAMA, "symbol:'circle',color:'rgb(150,150,0)',", "Leap",0),
             new Mechanic(37437, "Shoot", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MAMA, "symbol:'circle',color:'rgb(200,150,0)',", "Shoot",0),
             new Mechanic(37185, "Explosive Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MAMA, "symbol:'circle',color:'rgb(125,50,0)',", "Explosive Impact",0)
-            };
+            });
         }
 
         public override CombatReplayMap getCombatMap()

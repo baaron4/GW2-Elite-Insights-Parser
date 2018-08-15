@@ -15,7 +15,13 @@ namespace LuckParser.Models.ParseModels
         public Mob(AgentItem agent) : base(agent)
         {
             String[] name = agent.getName().Split('\0');
-            mobName = name[1];
+            if (name.Length > 1)
+            {
+                mobName = name[1];
+            } else
+            {
+                mobName = "UNKNOWN";
+            }
            
         }
 

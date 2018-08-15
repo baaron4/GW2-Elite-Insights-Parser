@@ -536,7 +536,7 @@ namespace LuckParser.Controllers
             
         }
 
-        public static void writeBoonGraph(StreamWriter sw, BoonsGraphModel bgm, long start, long end)
+        public static void writePlayerTabBoonGraph(StreamWriter sw, BoonsGraphModel bgm, long start, long end)
         {
             List<Point> bChart = bgm.getBoonChart().Where(x => x.X >= start / 1000 && x.X <= end / 1000).ToList();
             int bChartCount = 0;
@@ -597,7 +597,7 @@ namespace LuckParser.Controllers
                  " name: \"" + bgm.getBoonName() + "\"");
         }
 
-        public static void writeDPSGraph(StreamWriter sw, string name, List<Point> playerdpsgraphdata, AbstractPlayer p)
+        public static void writePlayerTabDPSGraph(StreamWriter sw, string name, List<Point> playerdpsgraphdata, AbstractPlayer p)
         {
             int ptdgCount = 0;
             bool total = name.Contains("Total");
@@ -658,6 +658,63 @@ namespace LuckParser.Controllers
             sw.Write("name: '" + name+"'," +
                 "legendgroup: '" + p.getCharacter() + (s10 ? "10s" : (s30 ? "30s" : ""))+"'");
         }
+
+        public static int writeDPSPlots(StreamWriter sw, List<Point> graphdata, List<Point> totalData = null)
+        {
+            //Adding dps axis
+            int maxDPS = 0;
+            sw.Write("y: [");
+            for (int i = 0; i < graphdata.Count; i++)
+            {
+                if (i == graphdata.Count - 1)
+                {
+                    sw.Write("'" + graphdata[i].Y + "'");
+                }
+                else
+                {
+                    sw.Write("'" + graphdata[i].Y + "',");
+                }
+                if (totalData != null)
+                {
+                    maxDPS = Math.Max(maxDPS, graphdata[i].Y);
+                    if (i >= totalData.Count)
+                    {
+                        totalData.Add(new Point(graphdata[i].X, graphdata[i].Y));
+                    }
+                    else
+                    {
+                        totalData[i] = new Point(graphdata[i].X, graphdata[i].Y + totalData[i].Y);
+                    }
+                }
+            }
+            //cuts off extra comma
+            if (graphdata.Count == 0)
+            {
+                sw.Write("'0'");
+            }
+
+            sw.Write("],");
+            //add time axis
+            sw.Write("x: [");
+            for (int i = 0; i < graphdata.Count; i++)
+            {
+                if (i == graphdata.Count - 1)
+                {
+                    sw.Write("'" + graphdata[i].X + "'");
+                }
+                else
+                {
+                    sw.Write("'" + graphdata[i].X + "',");
+                }
+            }
+            if (graphdata.Count == 0)
+            {
+                sw.Write("'0'");
+            }
+
+            sw.Write("],");
+            return maxDPS;
+        }     
 
         public static void writeDamageStatsTableHeader(StreamWriter sw)
         {

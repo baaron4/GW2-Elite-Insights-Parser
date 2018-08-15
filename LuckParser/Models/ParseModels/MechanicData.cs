@@ -22,19 +22,6 @@ namespace LuckParser.Models.ParseModels
         {
             return m_Data;
         }
-        public string GetPLoltyShape(string mechName)
-        {
-            switch (mechName)
-            {
-                case "DOWN":
-                    return "symbol:'cross',color:'rgb(255,0,0)',";
-                case "DEAD":
-                    return "symbol:'x',color:'rgb(0,0,0)',";
-                default:
-                    return "";
-            }
-        }
-
 
     }
 }

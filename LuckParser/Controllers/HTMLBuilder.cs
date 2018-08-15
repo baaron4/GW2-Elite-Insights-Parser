@@ -78,121 +78,18 @@ namespace LuckParser.Controllers
                 foreach (Player p in log.getPlayerList())
                 {
                     //Adding dps axis
-
-                    int pbdgdCount = 0;
                     if (settings.DPSGraphTotals)
                     {//Turns display on or off
                         sw.Write("{");
-                        //Adding dps axis
-                        List<Point> playertotaldpsgraphdata = GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, mode);
-                        sw.Write("y: [");
-                        pbdgdCount = 0;
-                        foreach (Point dp in playertotaldpsgraphdata)
-                        {
-                            if (pbdgdCount == playertotaldpsgraphdata.Count - 1)
-                            {
-                                sw.Write("'" + dp.Y + "'");
-                            }
-                            else
-                            {
-                                sw.Write("'" + dp.Y + "',");
-                            }
-                            pbdgdCount++;
-
-                        }
-                        //cuts off extra comma
-                        if (playertotaldpsgraphdata.Count == 0)
-                        {
-                            sw.Write("'0'");
-                        }
-
-                        sw.Write("],");
-                        //add time axis
-                        sw.Write("x: [");
-                        pbdgdCount = 0;
-                        foreach (Point dp in playertotaldpsgraphdata)
-                        {
-                            if (pbdgdCount == playertotaldpsgraphdata.Count - 1)
-                            {
-                                sw.Write("'" + dp.X + "'");
-                            }
-                            else
-                            {
-                                sw.Write("'" + dp.X + "',");
-                            }
-
-                            pbdgdCount++;
-                        }
-                        if (playertotaldpsgraphdata.Count == 0)
-                        {
-                            sw.Write("'0'");
-                        }
-
-                        sw.Write("],");
+                        HTMLHelper.writeDPSPlots(sw, GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, mode));
                         sw.Write("mode: 'lines'," +
                                 "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf() + "-Total") + "'}," +
                                 "visible:'legendonly'," +
                                 "name: '" + p.getCharacter() + " TDPS'" + "},");
                     }
-                    List<Point> playerbossdpsgraphdata = GraphHelper.getBossDPSGraph(log, p, phase_index, phase, mode);
-                    if (totalDpsAllPlayers.Count == 0)
-                    {
-                        //totalDpsAllPlayers = new List<int[]>(playerbossdpsgraphdata);
-                        foreach (Point point in playerbossdpsgraphdata)
-                        {
-                            int time = point.X;
-                            int dmg = point.Y;
-                            totalDpsAllPlayers.Add(new Point(time, dmg));
-                        }
-                    }
-
-                    sw.Write("{y: [");
-                    pbdgdCount = 0;
-                    foreach (Point dp in playerbossdpsgraphdata)
-                    {
-                        if (pbdgdCount == playerbossdpsgraphdata.Count - 1)
-                        {
-                            sw.Write("'" + dp.Y + "'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + dp.Y + "',");
-                        }
-                        pbdgdCount++;
-
-                        if (dp.Y > maxDPS) { maxDPS = dp.Y; }
-                        if (totalDpsAllPlayers.Count != 0)
-                        {
-                            totalDpsAllPlayers[dp.X] = new Point(dp.X, totalDpsAllPlayers[dp.X].Y + dp.Y);
-                        }
-                    }
-                    if (playerbossdpsgraphdata.Count == 0)
-                    {
-                        sw.Write("'0'");
-                    }
-
-                    sw.Write("],");
-                    //add time axis
-                    sw.Write("x: [");
-                    pbdgdCount = 0;
-                    foreach (Point dp in playerbossdpsgraphdata)
-                    {
-                        if (pbdgdCount == playerbossdpsgraphdata.Count - 1)
-                        {
-                            sw.Write("'" + dp.X + "'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + dp.X + "',");
-                        }
-                        pbdgdCount++;
-                    }
-                    if (playerbossdpsgraphdata.Count == 0)
-                    {
-                        sw.Write("'0'");
-                    }
-
-                    sw.Write("],");
+                    sw.Write("{");
+                    maxDPS = Math.Max(maxDPS, HTMLHelper.writeDPSPlots(sw, GraphHelper.getBossDPSGraph(log, p, phase_index, phase, mode), totalDpsAllPlayers));
+                    ;
                     sw.Write("mode: 'lines'," +
                             "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf()) + "'}," +
                             "name: '" + p.getCharacter() + " DPS'" +
@@ -200,96 +97,15 @@ namespace LuckParser.Controllers
                     if (settings.ClDPSGraphTotals)
                     {//Turns display on or off
                         sw.Write("{");
-                        //Adding dps axis
-                        List<Point> playercleavedpsgraphdata = GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, mode);
-                        sw.Write("y: [");
-                        pbdgdCount = 0;
-                        foreach (Point dp in playercleavedpsgraphdata)
-                        {
-                            if (pbdgdCount == playercleavedpsgraphdata.Count - 1)
-                            {
-                                sw.Write("'" + dp.Y + "'");
-                            }
-                            else
-                            {
-                                sw.Write("'" + dp.Y+ "',");
-                            }
-                            pbdgdCount++;
-
-                        }
-                        //cuts off extra comma
-                        if (playercleavedpsgraphdata.Count == 0)
-                        {
-                            sw.Write("'0'");
-                        }
-
-                        sw.Write("],");
-                        //add time axis
-                        sw.Write("x: [");
-                        pbdgdCount = 0;
-                        foreach (Point dp in playercleavedpsgraphdata)
-                        {
-                            if (pbdgdCount == playercleavedpsgraphdata.Count - 1)
-                            {
-                                sw.Write("'" + dp.X + "'");
-                            }
-                            else
-                            {
-                                sw.Write("'" + dp.X + "',");
-                            }
-
-                            pbdgdCount++;
-                        }
-                        if (playercleavedpsgraphdata.Count == 0)
-                        {
-                            sw.Write("'0'");
-                        }
-
-                        sw.Write("],");
+                        HTMLHelper.writeDPSPlots(sw, GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, mode));
                         sw.Write("mode: 'lines'," +
                                 "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.getProf() + "-NonBoss") + "'}," +
                                 "visible:'legendonly'," +
                                 "name: '" + p.getCharacter() + " CleaveDPS'" + "},");
                     }
                 }
-                //All Player dps
                 sw.Write("{");
-                //Adding dps axis
-
-                sw.Write("y: [");
-                int tdalpcount = 0;
-                foreach (Point dp in totalDpsAllPlayers)
-                {
-                    if (tdalpcount == totalDpsAllPlayers.Count - 1)
-                    {
-                        sw.Write("'" + dp.Y + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + dp.Y + "',");
-                    }
-                    tdalpcount++;
-                }
-
-                sw.Write("],");
-                //add time axis
-                sw.Write("x: [");
-                tdalpcount = 0;
-                foreach (Point dp in totalDpsAllPlayers)
-                {
-                    if (tdalpcount == totalDpsAllPlayers.Count - 1)
-                    {
-                        sw.Write("'" + dp.X + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + dp.X + "',");
-                    }
-
-                    tdalpcount++;
-                }
-
-                sw.Write("],");
+                HTMLHelper.writeDPSPlots(sw, totalDpsAllPlayers);
                 sw.Write(" mode: 'lines'," +
                         "line: {shape: 'spline'}," +
                         "visible:'legendonly'," +
@@ -312,19 +128,37 @@ namespace LuckParser.Controllers
 
                     int mechcount = 0;
                     foreach (MechanicLog ml in filterdList)
-                    {
+                    {                     
                         Point check = new Point();
                         if (ml.GetPlayer() != log.getBoss())
                         {
-                            check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).FirstOrDefault(x => x.X == Math.Round((ml.GetTime() - phase.getStart()) / 1000.0));
+                            double time = (ml.GetTime() - phase.getStart()) / 1000.0;
+                            check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).LastOrDefault(x => x.X <= time);
                             if (check == Point.Empty)
                             {
                                 check = new Point(0, GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).Last().Y);
+                            } else
+                            {
+                                int time1 = check.X;
+                                int Y1 = check.Y;
+                                check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).FirstOrDefault(x => x.X >= time);
+                                if (check == Point.Empty)
+                                {
+                                    check.Y = Y1;
+                                } else
+                                {
+                                    int time2 = check.X;
+                                    int Y2 = check.Y;
+                                    if (time2 - time1 > 0)
+                                    {
+                                        check.Y = (int)Math.Round((time - time1) * (Y2 - Y1) / (time2 - time1) + Y1);
+                                    }
+                                }
                             }
                         }
                         else
                         {
-                            check = log.getBossData().getHealthOverTime().FirstOrDefault(x => x.X > ml.GetTime()); // boss_data.getHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
+                            check = log.getBossData().getHealthOverTime().FirstOrDefault(x => x.X > ml.GetTime());
                             if (check == Point.Empty)
                             {
                                 if (log.getBossData().getHealthOverTime().Count == 0)
@@ -353,17 +187,16 @@ namespace LuckParser.Controllers
                     sw.Write("],");
                     //add time axis
                     sw.Write("x: [");
-                    tdalpcount = 0;
                     mechcount = 0;
                     foreach (MechanicLog ml in filterdList)
                     {
                         if (mechcount == filterdList.Count - 1)
                         {
-                            sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0) + "'");
+                            sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0,4) + "'");
                         }
                         else
                         {
-                            sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0) + "',");
+                            sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0,4) + "',");
                         }
 
                         mechcount++;
@@ -371,7 +204,7 @@ namespace LuckParser.Controllers
 
                     sw.Write("],");
                     sw.Write(" mode: 'markers',");
-                    if (mech.GetName() != "DEAD" && mech.GetName() != "DOWN")
+                    if (!(mech.GetSkill() == -2 || mech.GetSkill() == -3))
                     {
                         sw.Write("visible:'legendonly',");
                     }
@@ -394,98 +227,6 @@ namespace LuckParser.Controllers
 
                     sw.Write("]," +
                             " name: '" + mech.GetAltName() + "'");
-                    sw.Write("},");
-                }
-                //Downs and deaths
-
-                List<String> DnDStringList = new List<string>();
-                DnDStringList.Add("DOWN");
-                DnDStringList.Add("DEAD");
-                foreach (string state in DnDStringList)
-                {
-                    int mcount = 0;
-                    List<MechanicLog> DnDList = log.getMechanicData().GetMDataLogs().Where(x => x.GetName() == state && phase.inInterval(x.GetTime())).ToList();
-                    sw.Write("{");
-                    {
-                        sw.Write("y: [");
-                        {
-                            foreach (MechanicLog ml in DnDList)
-                            {
-                                Point check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).FirstOrDefault(x => x.X == Math.Round((ml.GetTime() - phase.getStart()) / 1000.0));
-                                if (mcount == DnDList.Count - 1)
-                                {
-                                    if (check != null)
-                                    {
-                                        sw.Write("'" + check.Y + "'");
-                                    }
-                                    else
-                                    {
-                                        sw.Write("'" + GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).Last().Y + "'");
-                                    }
-
-                                }
-                                else
-                                {
-                                    if (check != null)
-                                    {
-                                        sw.Write("'" + check.Y + "',");
-                                    }
-                                    else
-                                    {
-                                        sw.Write("'" + GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).Last().Y + "',");
-                                    }
-                                }
-
-                                mcount++;
-                            }
-                        }
-
-                        sw.Write("],");
-                        //add time axis
-                        sw.Write("x: [");
-                        {
-                            tdalpcount = 0;
-                            mcount = 0;
-                            foreach (MechanicLog ml in DnDList)
-                            {
-                                if (mcount == DnDList.Count - 1)
-                                {
-                                    sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0) + "'");
-                                }
-                                else
-                                {
-                                    sw.Write("'" + Math.Round((ml.GetTime() - phase.getStart()) / 1000.0) + "',");
-                                }
-
-                                mcount++;
-                            }
-                        }
-
-                        sw.Write("],");
-                        sw.Write(" mode: 'markers',");
-                        if (state != "DEAD" && state != "DOWN")
-                        {
-                            sw.Write("visible:'legendonly',");
-                        }
-                        sw.Write("type:'scatter'," +
-                            "marker:{" + log.getMechanicData().GetPLoltyShape(state) + "size: 15" + "},");
-                        sw.Write("text:[");
-                        foreach (MechanicLog ml in DnDList)
-                        {
-                            if (mcount == DnDList.Count - 1)
-                            {
-                                sw.Write("'" + ml.GetPlayer().getCharacter() + "'");
-                            }
-                            else
-                            {
-                                sw.Write("'" + ml.GetPlayer().getCharacter() + "',");
-                            }
-
-                            mcount++;
-                        }
-                        sw.Write("]," +
-                                " name: '" + state + "'");
-                    }
                     sw.Write("},");
                 }
                 if (maxDPS > 0)
@@ -1987,7 +1728,7 @@ namespace LuckParser.Controllers
                                             {
                                                 sw.Write("{");
                                                 {
-                                                    HTMLHelper.writeBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
+                                                    HTMLHelper.writePlayerTabBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
                                                 }
                                                 sw.Write(" },");
 
@@ -1997,38 +1738,38 @@ namespace LuckParser.Controllers
                                         {//show total dps plot
                                             sw.Write("{");
                                             { //Adding dps axis
-                                                HTMLHelper.writeDPSGraph(sw, "Total DPS", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Total DPS", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
                                             }
                                             sw.Write("},");
                                             if (settings.Show10s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Total DPS - 10s", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Total DPS - 10s", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
                                                 sw.Write("},");
                                             }
                                             if (settings.Show30s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Total DPS - 30s", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Total DPS - 30s", GraphHelper.getTotalDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
                                                 sw.Write("},");
                                             }
                                         }
                                          //Adding dps axis
                                             sw.Write("{");
                                             {
-                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Boss DPS", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
                                             }
                                             sw.Write("},");
                                             if (settings.Show10s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS - 10s", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Boss DPS - 10s", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
                                                 sw.Write("},");
                                             }
                                             if (settings.Show30s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Boss DPS - 30s", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Boss DPS - 30s", GraphHelper.getBossDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
                                                 sw.Write("},");
                                             }
 
@@ -2037,19 +1778,19 @@ namespace LuckParser.Controllers
                                         {//show total dps plot
                                             sw.Write("{");
                                             { //Adding dps axis
-                                                HTMLHelper.writeDPSGraph(sw, "Cleave DPS", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Cleave DPS", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.Full), p);
                                             }
                                             sw.Write("},");
                                             if (settings.Show10s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Cleave DPS - 10s", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Cleave DPS - 10s", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s10), p);
                                                 sw.Write("},");
                                             }
                                             if (settings.Show30s)
                                             {
                                                 sw.Write("{");
-                                                HTMLHelper.writeDPSGraph(sw, "Cleave DPS - 30s", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
+                                                HTMLHelper.writePlayerTabDPSGraph(sw, "Cleave DPS - 30s", GraphHelper.getCleaveDPSGraph(log, p, phase_index, phase, GraphHelper.GraphMode.s30), p);
                                                 sw.Write("},");
                                             }
                                         }
@@ -2456,7 +2197,7 @@ namespace LuckParser.Controllers
                 {
                     for (int d = 0; d < damageToDown.Count; d++)
                     {
-                        AgentItem ag = log.getAgentData().GetAgentWInst(damageToDown[d].getInstidt());
+                        AgentItem ag = log.getAgentData().GetAgentWInst(damageToDown[d].getSrcInstidt());
                         string name = "UNKNOWN";
                         if (ag != null)
                         {
@@ -2468,7 +2209,7 @@ namespace LuckParser.Controllers
                 }
                 for (int d = 0; d < damageToKill.Count; d++)
                 {
-                    AgentItem ag = log.getAgentData().GetAgentWInst(damageToKill[d].getInstidt());
+                    AgentItem ag = log.getAgentData().GetAgentWInst(damageToKill[d].getSrcInstidt());
                     string name = "UNKNOWN";
                     if (ag != null )
                     {
@@ -2954,7 +2695,7 @@ namespace LuckParser.Controllers
                     enemyList.Remove(p);
                 }
             }
-            foreach (Mechanic item in log.getBossData().getBossBehavior().getMechanics())
+            foreach (Mechanic item in log.getBossData().getBossBehavior().getMechanics().Where(x => x.GetMechType() != Mechanic.MechType.PlayerStatus))
             {
                 MechanicLog first_m_log = log.getMechanicData().GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill());
                 if (first_m_log != null)
@@ -3441,13 +3182,20 @@ namespace LuckParser.Controllers
                                 {
                                     continue;
                                 }
-                                if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                                Statistics.FinalBossBoon toUse = conditions[boon.getID()];
+                                if (toUse.boonType == Boon.BoonType.Duration)
                                 {
-                                    sw.Write("<td>" + conditions[boon.getID()].generated[player] + "%</td>");
+                                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
+                                        + toUse.overstacked[player] + "% with overstack \">"
+                                        + toUse.generated[player]
+                                        + "%</span>" + "</td>");
                                 }
                                 else
                                 {
-                                    sw.Write("<td>" + conditions[boon.getID()].generated[player] + " </td>");
+                                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
+                                        + toUse.overstacked[player] + " with overstack \">"
+                                        + toUse.generated[player]
+                                        + "</span>" + " </td>");
                                 }
                             }
                         }
@@ -3515,7 +3263,7 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("{");
                                 {
-                                    HTMLHelper.writeBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
+                                    HTMLHelper.writePlayerTabBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
                                 }
                                 sw.Write(" },");
 
@@ -3527,7 +3275,7 @@ namespace LuckParser.Controllers
                                 sw.Write("{");
                                 {
                                     //Adding dps axis
-                                    HTMLHelper.writeDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, log.getBoss());
+                                    HTMLHelper.writePlayerTabDPSGraph(sw, "Total DPS", playertotaldpsgraphdata, log.getBoss());
                                 }
                                 sw.Write("},");
                             }

@@ -13,7 +13,7 @@ namespace LuckParser.Models
         public Matthias() : base()
         {
             mode = ParseMode.Raid;
-            mechanicList = new List<Mechanic>
+            mechanicList.AddRange(new List<Mechanic>
             {
 
             new Mechanic(34380, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'hexagram',color:'rgb(255,0,0)',", "Hadouken",0),//human
@@ -37,7 +37,7 @@ namespace LuckParser.Models
             new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble",0),//abom
             //Track Zealous Benediction? (Bombs) Application? (ID 34511) Hit? (ID 34528) The hit on allies is not registered since it's percentage based, I think
             new Mechanic(34413, "Surrender", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-cross-open',color:'rgb(0,0,0)',", "Spirit",0)
-            };
+            });
         }
 
         public override CombatReplayMap getCombatMap()

@@ -193,11 +193,11 @@ namespace LuckParser.Controllers
                     {
                         case "NPC":
                             // NPC
-                            agent_data.addItem(new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0')), agent_prof);
+                            agent_data.addItem(new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0'), toughness, healing, condition, concentration), agent_prof);
                             break;
                             // Gadget
                         case "GDG":
-                            agent_data.addItem(new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0')), agent_prof);
+                            agent_data.addItem(new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0'),toughness, healing, condition,concentration), agent_prof);
                             break;
                         default:
                             // Player
@@ -418,6 +418,7 @@ namespace LuckParser.Controllers
                     combat_data.addItem( revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader));
                 }
             }
+            combat_data.getCombatList().RemoveAll(x => x.getSrcInstid() == 0 && x.getDstAgent() == 0 && x.getSrcAgent() == 0 && x.getDstInstid() == 0 && x.getIFF() == ParseEnum.IFF.Unknown);
         }
         
         private static bool isGolem(ushort id)
@@ -650,7 +651,7 @@ namespace LuckParser.Controllers
                 } else
                 {
                     // for skorvald, as CM and normal ids are the same
-                    CombatItem killed = combat_list.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange() == ParseEnum.StateChange.ChangeDead);
+                    CombatItem killed = combat_list.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange().IsDead());
                     if (killed != null)
                     {
                         log_data.setBossKill(true);
@@ -659,7 +660,7 @@ namespace LuckParser.Controllers
                 }
             } else
             {
-                CombatItem killed = combat_list.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange() == ParseEnum.StateChange.ChangeDead);
+                CombatItem killed = combat_list.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange().IsDead());
                 if (killed != null)
                 {
                     log_data.setBossKill(true);
@@ -671,7 +672,6 @@ namespace LuckParser.Controllers
             {
                 log_data.setBossKill(bossHealthOverTime.Last().Y < 200);
             }
-
             //players
             if (p_list.Count == 0)
             {

@@ -105,7 +105,7 @@ namespace LuckParser.Models.ParseModels
                 setCombatReplayIcon(log);
                 if (trim)
                 {
-                    CombatItem test = log.getCombatList().FirstOrDefault(x => x.getSrcAgent() == agent.getAgent() && (x.isStateChange() == ParseEnum.StateChange.ChangeDead || x.isStateChange() == ParseEnum.StateChange.Despawn));
+                    CombatItem test = log.getCombatList().FirstOrDefault(x => x.getSrcAgent() == agent.getAgent() && (x.isStateChange().IsDead() || x.isStateChange().IsDespawn()));
                     if (test != null)
                     {
                         replay.trim(agent.getFirstAware() - log.getBossData().getFirstAware(), test.getTime() - log.getBossData().getFirstAware());

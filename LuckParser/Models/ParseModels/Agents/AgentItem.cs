@@ -19,7 +19,7 @@ namespace LuckParser.Models.ParseModels
         private int concentration = 0;
 
         // Constructors
-        public AgentItem(ulong agent, String name, String prof)
+        public AgentItem(ulong agent, String name, String prof, int toughness, int healing, int condition, int concentration)
         {
             this.agent = agent;
             this.name = name;
@@ -28,13 +28,6 @@ namespace LuckParser.Models.ParseModels
             {
                 id = UInt16.Parse(this.prof.Split(':')[1]);
             }
-        }
-
-        public AgentItem(ulong agent, String name, String prof, int toughness, int healing, int condition, int concentration)
-        {
-            this.agent = agent;
-            this.name = name;
-            this.prof = prof;
             this.toughness = toughness;
             this.healing = healing;
             this.condition = condition;
