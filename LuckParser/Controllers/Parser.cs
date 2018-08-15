@@ -197,7 +197,7 @@ namespace LuckParser.Controllers
                             break;
                             // Gadget
                         case "GDG":
-                            agent_data.addItem(new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0'), toughness, healing, condition, concentration), agent_prof);
+                            agent_data.addItem(new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0'),toughness, healing, condition,concentration), agent_prof);
                             break;
                         default:
                             // Player
