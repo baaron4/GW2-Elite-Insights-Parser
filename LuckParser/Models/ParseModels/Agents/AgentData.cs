@@ -68,7 +68,7 @@ namespace LuckParser.Models.ParseModels
 
             }
 
-            return new AgentItem(0, "UNKOWN", "UNKNOWN");
+            return new AgentItem(0, "UNKOWN", "UNKNOWN",0,0,0,0);
 
         }
         public List<AgentItem> GetAgents(ushort id)
@@ -100,7 +100,7 @@ namespace LuckParser.Models.ParseModels
             string prof = instances[0].getProf();
             ulong agent = instances[0].getAgent();
             ushort inst = instances[0].getInstid();
-            AgentItem to_add = new AgentItem(agent, name, prof);
+            AgentItem to_add = new AgentItem(agent, name, prof, instances[0].getToughness(), instances[0].getHealing(), instances[0].getCondition(), instances[0].getConcentration());
             foreach (AgentItem a in instances)
             {
                 first_aware = Math.Min(first_aware, a.getFirstAware());
