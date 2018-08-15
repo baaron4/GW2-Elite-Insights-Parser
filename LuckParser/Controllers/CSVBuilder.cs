@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
 
         private ParsedLog log;
         //private BossData boss_data;
-      //  private List<Player> p_list;
+        //  private List<Player> p_list;
 
         private Statistics statistics;
         private StreamWriter sw;
@@ -46,7 +46,7 @@ namespace LuckParser.Controllers
         {
             sw.Write(content + delimiter, Encoding.GetEncoding(1252));
         }
-        private void WriteCells(List<string> content )
+        private void WriteCells(List<string> content)
         {
             foreach (string cont in content)
             {
@@ -91,7 +91,7 @@ namespace LuckParser.Controllers
             WriteLine(new string[] { "ARC Version", log.getLogData().getBuildVersion().ToString() });
             WriteLine(new string[] { "Boss ID", log.getBossData().getID().ToString() });
             WriteLine(new string[] { "Recorded By", log.getLogData().getPOV().Split(':')[0] });
-            WriteLine(new string[] { "Time Start", log.getLogData().getLogStart()});
+            WriteLine(new string[] { "Time Start", log.getLogData().getLogStart() });
             WriteLine(new string[] { "Time End", log.getLogData().getLogEnd() });
             NewLine();
             NewLine();
@@ -102,8 +102,8 @@ namespace LuckParser.Controllers
             WriteLine(new string[] { "Success", log.getLogData().getBosskill().ToString() });
             WriteLine(new string[] { "Total Boss Health", log.getBossData().getHealth().ToString() });
             int finalBossHealth = log.getBossData().getHealthOverTime()[log.getBossData().getHealthOverTime().Count - 1].Y;
-            WriteLine(new string[] { "Final Boss Health",finalBossHealth.ToString() });
-            WriteLine(new string[] { "Boss Health Burned %", (100.0 -finalBossHealth * 0.01).ToString() });
+            WriteLine(new string[] { "Final Boss Health", finalBossHealth.ToString() });
+            WriteLine(new string[] { "Boss Health Burned %", (100.0 - finalBossHealth * 0.01).ToString() });
             WriteLine(new string[] { "Duration", durationString });
 
             //DPSStats
@@ -125,16 +125,16 @@ namespace LuckParser.Controllers
             CreateUptimeTable(sw, statistics.present_boons, 0);
 
             //Html_boonGenSelf
-            CreateGenSelfTable(sw, statistics.present_boons,  0);
+            CreateGenSelfTable(sw, statistics.present_boons, 0);
 
             // Html_boonGenGroup
-            CreateGenGroupTable(sw, statistics.present_boons,  0);
+            CreateGenGroupTable(sw, statistics.present_boons, 0);
 
             // Html_boonGenOGroup
             CreateGenOGroupTable(sw, statistics.present_boons, 0);
 
             //  Html_boonGenSquad
-            CreateGenSquadTable(sw, statistics.present_boons,  0);
+            CreateGenSquadTable(sw, statistics.present_boons, 0);
 
             //Offensive Buffs stats
             // Html_boons
@@ -169,7 +169,7 @@ namespace LuckParser.Controllers
             CreateGenSquadTable(sw, statistics.present_defbuffs, 0);
 
             //Mechanics
-            CreateMechanicTable(sw,0);
+            CreateMechanicTable(sw, 0);
 
             //Mech List
             CreateMechList(sw, 0);
@@ -182,8 +182,6 @@ namespace LuckParser.Controllers
             }
             //Condi Gen
             CreateCondiGen(sw, 0);
-            //Condi Overstack
-            CreateCondiOverstack(sw, 0);
         }
         private void CreateDPSTable(StreamWriter sw, int phase_index)
         {
@@ -194,7 +192,8 @@ namespace LuckParser.Controllers
                 "Adds DPS","Adds DMG","Adds Power DPS","Adds Power DMG","Adds Condi DPS","Adds Condi DMG",
                 "All DPS","All DMG","All Power DPS","All Power DMG","All Condi DPS","All Condi DMG",
                 "Times Downed", "Time Died","Percent Alive"});
-            } else
+            }
+            else
             {
                 WriteLine(new string[] { "Sub Group", "Profession","Role","Name","Account","WepSet1_1","WepSet1_2","WepSet2_1","WepSet2_2",
                 "Boss DPS","Boss DMG","Boss Power DPS","Boss Power DMG","Boss Condi DPS","Boss Condi DMG",
@@ -212,7 +211,7 @@ namespace LuckParser.Controllers
                 string build = "";
                 if (player.getCondition() > 0)
                 {
-                    build += " Condi:"+ player.getCondition();
+                    build += " Condi:" + player.getCondition();
                 }
                 if (player.getConcentration() > 0)
                 {
@@ -220,13 +219,13 @@ namespace LuckParser.Controllers
                 }
                 if (player.getHealing() > 0)
                 {
-                    build += " Healing:"+ player.getHealing();
+                    build += " Healing:" + player.getHealing();
                 }
                 if (player.getToughness() > 0)
                 {
-                    build += " Toughness:"+ player.getToughness();
+                    build += " Toughness:" + player.getToughness();
                 }
-                WriteLine(new string[] { player.getGroup().ToString(), player.getProf().ToString(),build,player.getCharacter().ToString(), player.getAccount().TrimStart(':') ,wep[0],wep[1],wep[2],wep[3], 
+                WriteLine(new string[] { player.getGroup().ToString(), player.getProf().ToString(),build,player.getCharacter().ToString(), player.getAccount().TrimStart(':') ,wep[0],wep[1],wep[2],wep[3],
                 dps.bossDps.ToString(),dps.bossDamage.ToString(),dps.bossPowerDps.ToString(),dps.bossPowerDamage.ToString(),dps.bossCondiDps.ToString(),dps.bossCondiDamage.ToString(),
                 dps.allDps.ToString(),dps.allDamage.ToString(),dps.allPowerDps.ToString(),dps.allPowerDamage.ToString(),dps.allCondiDps.ToString(),dps.allCondiDamage.ToString(),
                 stats.downCount.ToString(), timedead.Minutes + " m " + timedead.Seconds + " s",Math.Round((timedead.TotalSeconds / fight_duration) * 100,1) +"%"});
@@ -360,11 +359,11 @@ namespace LuckParser.Controllers
             PhaseData phase = statistics.phases[phase_index];
             long fight_duration = phases[phase_index].getDuration();
 
-            WriteCells( new string[] { "Name","Avg Boons" });
+            WriteCells(new string[] { "Name", "Avg Boons" });
             foreach (Boon boon in list_to_use)
             {
                 WriteCell(boon.getName());
-               
+
             }
             NewLine();
 
@@ -400,7 +399,7 @@ namespace LuckParser.Controllers
                     else
                     {
                         WriteCell("0");
-                    
+
                     }
                 }
                 NewLine();
@@ -416,7 +415,6 @@ namespace LuckParser.Controllers
         {
             //generate Uptime Table table
             PhaseData phase = statistics.phases[phase_index];
-            HashSet<int> intensityBoon = new HashSet<int>();
 
             WriteCell("Name");
             foreach (Boon boon in list_to_use)
@@ -449,7 +447,7 @@ namespace LuckParser.Controllers
                         }
                         else if (boon.getType() == Boon.BoonType.Intensity)
                         {
-                            rate = uptime.generation.ToString() ;
+                            rate = uptime.generation.ToString();
                             overstack = uptime.overstack.ToString();
                         }
 
@@ -470,7 +468,6 @@ namespace LuckParser.Controllers
         {
             //generate Uptime Table table
             PhaseData phase = statistics.phases[phase_index];
-            HashSet<int> intensityBoon = new HashSet<int>();
 
             WriteCell("Name");
             foreach (Boon boon in list_to_use)
@@ -525,7 +522,6 @@ namespace LuckParser.Controllers
         {
             //generate Uptime Table table
             PhaseData phase = statistics.phases[phase_index];
-            HashSet<int> intensityBoon = new HashSet<int>();
 
             WriteCell("Name");
             foreach (Boon boon in list_to_use)
@@ -580,7 +576,6 @@ namespace LuckParser.Controllers
         {
             //generate Uptime Table table
             PhaseData phase = statistics.phases[phase_index];
-            HashSet<int> intensityBoon = new HashSet<int>();
 
             WriteCell("Name");
             foreach (Boon boon in list_to_use)
@@ -703,7 +698,7 @@ namespace LuckParser.Controllers
                     WriteCell(presMech[mechalt].First().GetName());
                 }
                 NewLine();
-               
+
                 foreach (Player p in log.getPlayerList())
                 {
                     WriteCell(p.getCharacter());
@@ -715,7 +710,7 @@ namespace LuckParser.Controllers
                             List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= phase.getStart() && x.GetTime() <= phase.getEnd()).ToList();
                             count += test.Count;
                         }
-                        WriteCell( count.ToString() );
+                        WriteCell(count.ToString());
                     }
                     NewLine();
                     countLines++;
@@ -733,13 +728,13 @@ namespace LuckParser.Controllers
         {
             PhaseData phase = statistics.phases[phase_index];
 
-            List<MechanicLog> m_Logs = log.getMechanicData().GetMDataLogs().OrderByDescending(x=>x.GetTime()).ToList();
+            List<MechanicLog> m_Logs = log.getMechanicData().GetMDataLogs().OrderByDescending(x => x.GetTime()).ToList();
             m_Logs.Reverse();
             int count = 0;
             WriteCell("Time");
             foreach (MechanicLog m in m_Logs)
             {
-                WriteCell((m.GetTime()/1000f).ToString());
+                WriteCell((m.GetTime() / 1000f).ToString());
             }
             NewLine();
             count++;
@@ -763,7 +758,8 @@ namespace LuckParser.Controllers
                 count++;
             }
         }
-        private bool CreateCondiUptime(StreamWriter sw,int phase_index) {
+        private bool CreateCondiUptime(StreamWriter sw, int phase_index)
+        {
             Boss boss = log.getBoss();
             List<PhaseData> phases = statistics.phases;
             long fight_duration = phases[phase_index].getDuration();
@@ -803,7 +799,7 @@ namespace LuckParser.Controllers
                 }
                 WriteCell(boon.getName());
             }
-            
+
             NewLine();
             int count = 0;
             WriteCell(boss.getCharacter());
@@ -816,7 +812,7 @@ namespace LuckParser.Controllers
                 }
                 if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
                 {
-                    WriteCell(conditions[boon.getID()].uptime.ToString()+"%");
+                    WriteCell(conditions[boon.getID()].uptime.ToString() + "%");
                 }
                 else
                 {
@@ -874,60 +870,6 @@ namespace LuckParser.Controllers
             Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
             //bool hasBoons = false;
             int count = 0;
-            WriteCell("Sub");
-            WriteCell("");
-            WriteCell("Name");
-            foreach (Boon boon in Boon.getCondiBoonList())
-            {
-                if (boon.getName() == "Retaliation")
-                {
-                    continue;
-                }
-                WriteCell( boon.getName() );
-            }
-            NewLine();
-            foreach (Player player in log.getPlayerList())
-            {
-
-                WriteCell( player.getGroup().ToString());
-                WriteCell(player.getProf().ToString());
-                WriteCell( player.getCharacter() );
-                foreach (Boon boon in Boon.getCondiBoonList())
-                {
-                    if (boon.getName() == "Retaliation")
-                    {
-                        continue;
-                    }
-                    if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
-                    {
-                        WriteCell( conditions[boon.getID()].generated[player].ToString()+"%" );
-                    }
-                    else
-                    {
-                        WriteCell( conditions[boon.getID()].generated[player].ToString() );
-                    }
-                }
-                NewLine();
-                count++;
-            }
-           
-
-            while (count < 15)//so each graph has equal spaceing
-            {
-                NewLine();
-                count++;
-            }
-        }
-
-        private void CreateCondiOverstack(StreamWriter sw, int phase_index)
-        {
-            List<PhaseData> phases = statistics.phases;
-            long fight_duration = phases[phase_index].getDuration();
-            Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
-            //bool hasBoons = false;
-            int count = 0;
-            WriteCell("Sub");
-            WriteCell("");
             WriteCell("Name");
             foreach (Boon boon in Boon.getCondiBoonList())
             {
@@ -936,13 +878,11 @@ namespace LuckParser.Controllers
                     continue;
                 }
                 WriteCell(boon.getName());
+                WriteCell(boon.getName() + " Overstack");
             }
             NewLine();
             foreach (Player player in log.getPlayerList())
             {
-
-                WriteCell(player.getGroup().ToString());
-                WriteCell(player.getProf().ToString());
                 WriteCell(player.getCharacter());
                 foreach (Boon boon in Boon.getCondiBoonList())
                 {
@@ -952,10 +892,12 @@ namespace LuckParser.Controllers
                     }
                     if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
                     {
-                        WriteCell(conditions[boon.getID()].overstacked[player].ToString()+"%");
+                        WriteCell(conditions[boon.getID()].generated[player].ToString() + "%");
+                        WriteCell(conditions[boon.getID()].overstacked[player].ToString() + "%");
                     }
                     else
                     {
+                        WriteCell(conditions[boon.getID()].generated[player].ToString());
                         WriteCell(conditions[boon.getID()].overstacked[player].ToString());
                     }
                 }
