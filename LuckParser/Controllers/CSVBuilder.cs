@@ -101,8 +101,8 @@ namespace LuckParser.Controllers
             WriteLine(new string[] { "Boss", bossname });
             WriteLine(new string[] { "Success", log.getLogData().getBosskill().ToString() });
             WriteLine(new string[] { "Total Boss Health", log.getBossData().getHealth().ToString() });
-            int finalBossHealth = log.getBossData().getHealthOverTime()[log.getBossData().getHealthOverTime().Count - 1].Y;
-            WriteLine(new string[] { "Final Boss Health", finalBossHealth.ToString() });
+            int finalBossHealth = log.getBossData().getHealthOverTime().Count > 0 ? log.getBossData().getHealthOverTime().Last().Y : 10000;
+            WriteLine(new string[] { "Final Boss Health", (log.getBossData().getHealth() * (100.0 - finalBossHealth * 0.01)).ToString() });
             WriteLine(new string[] { "Boss Health Burned %", (100.0 - finalBossHealth * 0.01).ToString() });
             WriteLine(new string[] { "Duration", durationString });
 
