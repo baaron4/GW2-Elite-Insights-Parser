@@ -142,6 +142,9 @@ namespace LuckParser.Models.ParseModels
                 /// BOSS
                 new Boon("Unnatural Signet",38224, BoonSource.Boss, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Compromised",35096, BoonSource.Boss, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Spirited Fusion",31722, BoonSource.Boss, BoonType.Intensity, 500, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Blood Shield",34376, BoonSource.Boss, BoonType.Intensity, 18, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Blood Shield",34518, BoonSource.Boss, BoonType.Intensity, 18, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 ///REVENANT
                 //skills
                 new Boon("Crystal Hibernation", 28262, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
