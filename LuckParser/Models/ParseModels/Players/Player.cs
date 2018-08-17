@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
         private int group;
         private long dcd = 0;//time in ms the player dcd
        
-        private List<long[]> consumeList = new List<long[]>();
+        private List<Tuple<Boon,long>> consumeList = new List<Tuple<Boon, long>>();
         //weaponslist
         private string[] weapons_array;
 
@@ -112,13 +112,13 @@ namespace LuckParser.Models.ParseModels
         {
             dcd = value;
         }
-        public List<long[]> getConsumablesList(ParsedLog log, long start, long end)
+        public List<Tuple<Boon, long>> getConsumablesList(ParsedLog log, long start, long end)
         {
             if (consumeList.Count == 0)
             {
                 setConsumablesList(log);
             }
-            return consumeList.Where(x => x[1] >= start && x[1] <= end).ToList() ;
+            return consumeList.Where(x => x.Item2 >= start && x.Item2 <= end).ToList() ;
         }
         
         // Private Methods
@@ -251,19 +251,20 @@ namespace LuckParser.Models.ParseModels
             long fight_duration = log.getBossData().getLastAware() - time_start;
             foreach (CombatItem c in log.getBoonData())
             {
-                if ( c.isBuff() != 18 && c.isBuff() != 1)
+                if ( (c.isBuff() != 18 && c.isBuff() != 1) || agent.getInstid() != c.getDstInstid())
                 {
                     continue;
                 }
-                
-                if (foodBoon.FirstOrDefault(x => x.getID() == c.getSkillID()) == null  && utilityBoon.FirstOrDefault(x => x.getID() == c.getSkillID()) == null)
+                var food = foodBoon.FirstOrDefault(x => x.getID() == c.getSkillID());
+                var utility = utilityBoon.FirstOrDefault(x => x.getID() == c.getSkillID());
+                if (food == null && utility == null)
                 {
                     continue;
                 }
                 long time = c.getTime() - time_start;
-                if (agent.getInstid() == c.getDstInstid() && time <= fight_duration)
+                if (time <= fight_duration)
                 {
-                    consumeList.Add(new long[] { c.getSkillID(), Math.Max(time, 0) }); 
+                    consumeList.Add(new Tuple<Boon, long>(food ?? utility, time)); 
                 }
             }
         }

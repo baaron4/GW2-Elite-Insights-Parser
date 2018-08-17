@@ -610,6 +610,10 @@ namespace LuckParser.Models.ParseModels
         {
             return source;
         }
+        public BoonEnum getNature()
+        {
+            return nature;
+        }
 
         public BoonType getType()
         {
