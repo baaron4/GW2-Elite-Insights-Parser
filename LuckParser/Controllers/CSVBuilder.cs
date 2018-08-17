@@ -810,7 +810,7 @@ namespace LuckParser.Controllers
                 {
                     continue;
                 }
-                if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                if (boon.getType() == Boon.BoonType.Duration)
                 {
                     WriteCell(conditions[boon.getID()].uptime.ToString() + "%");
                 }
@@ -846,7 +846,7 @@ namespace LuckParser.Controllers
             WriteCell(boss.getCharacter());
             foreach (Boon boon in Boon.getBoonList())
             {
-                if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                if (boon.getType() == Boon.BoonType.Duration)
                 {
                     WriteCell(conditions[boon.getID()].uptime.ToString() + "%");
                 }
@@ -890,7 +890,7 @@ namespace LuckParser.Controllers
                     {
                         continue;
                     }
-                    if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                    if (boon.getType() == Boon.BoonType.Duration)
                     {
                         WriteCell(conditions[boon.getID()].generated[player].ToString() + "%");
                         WriteCell(conditions[boon.getID()].overstacked[player].ToString() + "%");

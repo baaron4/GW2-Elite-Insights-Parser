@@ -3040,7 +3040,7 @@ namespace LuckParser.Controllers
                             {
                                 continue;
                             }
-                            if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                            if (boon.getType() == Boon.BoonType.Duration)
                             {
                                 sw.Write("<td>" + conditions[boon.getID()].uptime + "%</td>");
                             }
@@ -3090,7 +3090,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td style=\"width: 275px;\">" + boss.getCharacter() + " </td>");
                             foreach (Boon boon in Boon.getBoonList())
                             {
-                                if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                                if (boon.getType() == Boon.BoonType.Duration)
                                 {
                                     sw.Write("<td>" + conditions[boon.getID()].uptime + "%</td>");
                                 }
@@ -3154,7 +3154,7 @@ namespace LuckParser.Controllers
                                     continue;
                                 }
                                 Statistics.FinalBossBoon toUse = conditions[boon.getID()];
-                                if (toUse.boonType == Boon.BoonType.Duration)
+                                if (boon.getType() == Boon.BoonType.Duration)
                                 {
                                     sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
                                         + toUse.overstacked[player] + "% with overstack \">"
