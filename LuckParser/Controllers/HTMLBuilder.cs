@@ -1707,6 +1707,20 @@ namespace LuckParser.Controllers
                                                 sw.Write(" },");
 
                                             }
+                                            parseBoonsList = new List<Boon>();
+                                            parseBoonsList.AddRange(Boon.getCondiBoonList());
+                                            parseBoonsList.AddRange(Boon.getBoonList());
+                                            parseBoonsList.AddRange(Boon.getBossBoonList());
+                                            boonGraphData = log.getBoss().getBoonGraphs(log, phases, parseBoonsList);
+                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.getBoonName() == "Compromised" || x.getBoonName() == "Unnatural Signet"))
+                                            {
+                                                sw.Write("{");
+                                                {
+                                                    HTMLHelper.writePlayerTabBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
+                                                }
+                                                sw.Write(" },");
+
+                                            }
                                         }
                                         if (settings.DPSGraphTotals)
                                         {//show total dps plot
@@ -3225,10 +3239,9 @@ namespace LuckParser.Controllers
                             }
                             //============================================
                             List<Boon> parseBoonsList = new List<Boon>();
-                            //Condis
                             parseBoonsList.AddRange(Boon.getCondiBoonList());
-                            //Every buffs and boons
-                            parseBoonsList.AddRange(Boon.getAllBuffList());
+                            parseBoonsList.AddRange(Boon.getBoonList());
+                            parseBoonsList.AddRange(Boon.getBossBoonList());
                             Dictionary<long, BoonsGraphModel> boonGraphData = log.getBoss().getBoonGraphs(log, phases, parseBoonsList);
                             foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.getBoonName() != "Number of Boons"))
                             {

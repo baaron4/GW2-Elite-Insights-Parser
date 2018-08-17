@@ -141,7 +141,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Charrzooka",43503, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 /// BOSS
                 new Boon("Unnatural Signet",38224, BoonSource.Boss, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-            new Boon("Compromised",35096, BoonSource.Boss, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Compromised",35096, BoonSource.Boss, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 ///REVENANT
                 //skills
                 new Boon("Crystal Hibernation", 28262, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
