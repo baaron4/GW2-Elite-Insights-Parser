@@ -728,6 +728,7 @@ namespace LuckParser.Controllers
             statistics.bossConditions = new Dictionary<long, Statistics.FinalBossBoon>[statistics.phases.Count];
             List<Boon> boon_to_track = Boon.getCondiBoonList();
             boon_to_track.AddRange(Boon.getBoonList());
+            boon_to_track.AddRange(Boon.getBossBoonList());
             for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
             {
                 BoonDistribution boonDistribution = log.getBoss().getBoonDistribution(log,statistics.phases, boon_to_track, phaseIndex);
