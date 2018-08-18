@@ -80,8 +80,9 @@ namespace LuckParser.Models
             bool needStart = true;
             List<CombatItem> main = log.getBoonData().Where(x => x.getSkillID() == skillID && ((x.getDstInstid() == instid && x.isBuffremove() == ParseEnum.BuffRemove.None) || (x.getSrcInstid() == instid && x.isBuffremove() != ParseEnum.BuffRemove.None))).ToList();
             List<CombatItem> filtered = new List<CombatItem>();
-            foreach (CombatItem c in main)
+            for (int i = 0; i < main.Count; i++)
             {
+                CombatItem c = main[i];
                 if (needStart && c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
                     needStart = false;
@@ -89,8 +90,12 @@ namespace LuckParser.Models
                 }
                 else if (!needStart && c.isBuffremove() != ParseEnum.BuffRemove.None)
                 {
-                    needStart = true;
-                    filtered.Add(c);
+                    // consider only last remove event before another application
+                    if ((i == main.Count - 1) || (i < main.Count - 1 && main[i + 1].isBuffremove() == ParseEnum.BuffRemove.None))
+                    {
+                        needStart = true;
+                        filtered.Add(c);
+                    }
                 }
             }
             return filtered;
