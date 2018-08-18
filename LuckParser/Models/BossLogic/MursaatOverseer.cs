@@ -32,13 +32,7 @@ namespace LuckParser.Models
                             Tuple.Create(1360, 2701, 3911, 5258),
                             Tuple.Create(-27648, -9216, 27648, 12288),
                             Tuple.Create(11774, 4480, 14078, 5376));
-        }
-
-        public override List<PhaseData> getPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
-        {
-            List<PhaseData> phases = getInitialPhase(log);     
-            return phases;
-        }
+        }      
 
         public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {

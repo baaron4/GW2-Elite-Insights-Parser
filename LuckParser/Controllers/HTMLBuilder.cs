@@ -1634,27 +1634,21 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
                         {
-                            List<long[]> consume = p.getConsumablesList(log, phase.getStart(), phase.getEnd());
-                            List<long[]> initial = consume.Where(x => x[1] == 0).ToList();
-                            List<long[]> refreshed = consume.Where(x => x[1] > 0).ToList();
+                            List<Tuple<Boon,long>> consume = p.getConsumablesList(log, phase.getStart(), phase.getEnd());
+                            List<Tuple<Boon, long>> initial = consume.Where(x => x.Item2 == 0).ToList();
+                            List<Tuple<Boon, long>> refreshed = consume.Where(x => x.Item2 > 0).ToList();
                             if (initial.Count > 0)
                             {
                                 Boon food = null;
                                 Boon utility = null;
-                                foreach (long[] buff in initial)
+                                foreach (Tuple<Boon, long> buff in initial)
                                 {
-
-                                    Boon foodCheck = Boon.getFoodList().FirstOrDefault(x => x.getID() == buff[0]);
-                                    if (foodCheck != null)
+                                    if (buff.Item1.getNature() == Boon.BoonEnum.Food)
                                     {
-                                        food = foodCheck;
-                                        continue;
-                                    }
-                                    Boon utilCheck = Boon.getUtilityList().FirstOrDefault(x => x.getID() == buff[0]);
-                                    if (utilCheck != null)
+                                        food = buff.Item1;
+                                    } else
                                     {
-                                        utility = utilCheck;
-                                        continue;
+                                        utility = buff.Item1;
                                     }
                                 }
                                 sw.Write("<p>Started with ");
@@ -1670,33 +1664,13 @@ namespace LuckParser.Controllers
                             }
                             if (refreshed.Count > 0)
                             {
-                                Boon food = null;
-                                Boon utility = null;
-                                foreach (long[] buff in refreshed)
+                                sw.Write("<p>Refreshed: ");
+                                sw.Write("<ul>");
+                                foreach (Tuple<Boon, long> buff in refreshed)
                                 {
-
-                                    Boon foodCheck = Boon.getFoodList().FirstOrDefault(x => x.getID() == buff[0]);
-                                    if (foodCheck != null)
-                                    {
-                                        food = foodCheck;
-                                        continue;
-                                    }
-                                    Boon utilCheck = Boon.getUtilityList().FirstOrDefault(x => x.getID() == buff[0]);
-                                    if (utilCheck != null)
-                                    {
-                                        utility = utilCheck;
-                                        continue;
-                                    }
+                                    sw.Write("<li>" + buff.Item1.getName() + "<img src=\"" + buff.Item1.getLink() + "\" alt=\"" + buff.Item1.getName() + "\" height=\"18\" width=\"18\" > at "+ Math.Round(buff.Item2 / 1000.0,3)+"s</li>");
                                 }
-                                sw.Write("<p>Refreshed ");
-                                if (food != null)
-                                {
-                                    sw.Write(food.getName() + "<img src=\"" + food.getLink() + "\" alt=\"" + food.getName() + "\" height=\"18\" width=\"18\" >");
-                                }
-                                if (utility != null)
-                                {
-                                    sw.Write((food != null ? " and " : "") + utility.getName() + "<img src=\"" + utility.getLink() + "\" alt=\"" + utility.getName() + "\" height=\"18\" width=\"18\" >");
-                                }
+                                sw.Write("</ul>");
                                 sw.Write("</p>");
                             }
                             sw.Write("<div id=\"Graph" + pid + "\" style=\"height: 1000px;width:1000px; display:inline-block \"></div>");
@@ -1725,6 +1699,20 @@ namespace LuckParser.Controllers
                                             }
                                             Dictionary<long, BoonsGraphModel> boonGraphData = p.getBoonGraphs(log, phases, parseBoonsList);
                                             foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.getBoonName() != "Number of Conditions"))
+                                            {
+                                                sw.Write("{");
+                                                {
+                                                    HTMLHelper.writePlayerTabBoonGraph(sw, bgm, phase.getStart(), phase.getEnd());
+                                                }
+                                                sw.Write(" },");
+
+                                            }
+                                            parseBoonsList = new List<Boon>();
+                                            parseBoonsList.AddRange(Boon.getCondiBoonList());
+                                            parseBoonsList.AddRange(Boon.getBoonList());
+                                            parseBoonsList.AddRange(Boon.getBossBoonList());
+                                            boonGraphData = log.getBoss().getBoonGraphs(log, phases, parseBoonsList);
+                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.getBoonName() == "Compromised" || x.getBoonName() == "Unnatural Signet"))
                                             {
                                                 sw.Write("{");
                                                 {
@@ -2249,7 +2237,7 @@ namespace LuckParser.Controllers
             sw.Write("</script>");
         }
 
-        private void CreateDMGDistTableBody(StreamWriter sw, bool toBoss, List<CastLog> casting, List<DamageLog> damageLogs, int finalTotalDamage)
+        private void CreateDMGDistTableBody(StreamWriter sw, List<CastLog> casting, List<DamageLog> damageLogs, int finalTotalDamage)
         {
             HashSet<long> usedIDs = new HashSet<long>();
             List<SkillItem> s_list = log.getSkillData().getSkillList();
@@ -2283,43 +2271,40 @@ namespace LuckParser.Controllers
                             }
                         }
                     }
-                    HTMLHelper.writeDamageDistTableSkill(sw, skill,log.getSkillData(), list_to_use, finalTotalDamage, casts, timeswasted/1000.0, -timessaved/1000.0);
+                    HTMLHelper.writeDamageDistTableSkill(sw, skill, log.getSkillData(), list_to_use, finalTotalDamage, casts, timeswasted / 1000.0, -timessaved / 1000.0);
                 }
             }
-            // non damaging stuff
-            if (!toBoss)
+            foreach (int id in casting.Where(x => !usedIDs.Contains(x.getID())).Select(x => x.getID()).Distinct())
             {
-                foreach (int id in casting.Where(x => !usedIDs.Contains(x.getID())).Select(x => x.getID()).Distinct())
+                SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
+                if (skill != null)
                 {
-                    SkillItem skill = s_list.FirstOrDefault(x => x.getID() == id);
-                    if (skill != null)
+                    List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
+                    int casts = clList.Count;
+                    double timeswasted = 0;
+                    int countwasted = 0;
+                    double timessaved = 0;
+                    int countsaved = 0;
+                    foreach (CastLog cl in clList)
                     {
-                        List<CastLog> clList = casting.Where(x => x.getID() == id).ToList();
-                        int casts = clList.Count;
-                        double timeswasted = 0;
-                        int countwasted = 0;
-                        double timessaved = 0;
-                        int countsaved = 0;
-                        foreach (CastLog cl in clList)
+                        if (cl.endActivation() == ParseEnum.Activation.CancelCancel)
                         {
-                            if (cl.endActivation() == ParseEnum.Activation.CancelCancel)
+                            countwasted++;
+                            timeswasted += cl.getActDur();
+                        }
+                        if (cl.endActivation() == ParseEnum.Activation.CancelFire)
+                        {
+                            countsaved++;
+                            if (cl.getActDur() < cl.getExpDur())
                             {
-                                countwasted++;
-                                timeswasted += cl.getActDur();
-                            }
-                            if (cl.endActivation() == ParseEnum.Activation.CancelFire)
-                            {
-                                countsaved++;
-                                if (cl.getActDur() < cl.getExpDur())
-                                {
-                                    timessaved += cl.getExpDur() - cl.getActDur();
-                                }
+                                timessaved += cl.getExpDur() - cl.getActDur();
                             }
                         }
-                        HTMLHelper.writeDamageDistTableSkill(sw, skill,log.getSkillData(), new List<DamageLog>(), finalTotalDamage, casts, timeswasted/1000.0, -timessaved/1000.0);
                     }
+                    HTMLHelper.writeDamageDistTableSkill(sw, skill, log.getSkillData(), new List<DamageLog>(), finalTotalDamage, casts, timeswasted / 1000.0, -timessaved / 1000.0);
                 }
             }
+
         }
 
         private void _CreateDMGDistTable(Statistics.FinalDPS dps, StreamWriter sw, AbstractMasterPlayer p, bool toBoss, int phase_index)
@@ -2372,7 +2357,7 @@ namespace LuckParser.Controllers
                 HTMLHelper.writeDamageDistTableHeader(sw);
                 sw.Write("<tbody>");
                 {
-                    CreateDMGDistTableBody(sw, toBoss, casting, damageLogs, finalTotalDamage);
+                    CreateDMGDistTableBody(sw, casting, damageLogs, finalTotalDamage);
                 }
                 sw.Write("</tbody>");
                 HTMLHelper.writeDamageDistTableFoot(sw, finalTotalDamage);
@@ -2452,7 +2437,7 @@ namespace LuckParser.Controllers
                 HTMLHelper.writeDamageDistTableHeader(sw);
                 sw.Write("<tbody>");
                 {
-                    CreateDMGDistTableBody(sw, toBoss, casting, damageLogs, finalTotalDamage);
+                    CreateDMGDistTableBody(sw, casting, damageLogs, finalTotalDamage);
                 }
                 sw.Write("</tbody>");
                 HTMLHelper.writeDamageDistTableFoot(sw, finalTotalDamage);
@@ -3069,7 +3054,7 @@ namespace LuckParser.Controllers
                             {
                                 continue;
                             }
-                            if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                            if (boon.getType() == Boon.BoonType.Duration)
                             {
                                 sw.Write("<td>" + conditions[boon.getID()].uptime + "%</td>");
                             }
@@ -3119,7 +3104,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td style=\"width: 275px;\">" + boss.getCharacter() + " </td>");
                             foreach (Boon boon in Boon.getBoonList())
                             {
-                                if (conditions[boon.getID()].boonType == Boon.BoonType.Duration)
+                                if (boon.getType() == Boon.BoonType.Duration)
                                 {
                                     sw.Write("<td>" + conditions[boon.getID()].uptime + "%</td>");
                                 }
@@ -3183,7 +3168,7 @@ namespace LuckParser.Controllers
                                     continue;
                                 }
                                 Statistics.FinalBossBoon toUse = conditions[boon.getID()];
-                                if (toUse.boonType == Boon.BoonType.Duration)
+                                if (boon.getType() == Boon.BoonType.Duration)
                                 {
                                     sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
                                         + toUse.overstacked[player] + "% with overstack \">"
@@ -3254,10 +3239,9 @@ namespace LuckParser.Controllers
                             }
                             //============================================
                             List<Boon> parseBoonsList = new List<Boon>();
-                            //Condis
                             parseBoonsList.AddRange(Boon.getCondiBoonList());
-                            //Every buffs and boons
-                            parseBoonsList.AddRange(Boon.getAllBuffList());
+                            parseBoonsList.AddRange(Boon.getBoonList());
+                            parseBoonsList.AddRange(Boon.getBossBoonList());
                             Dictionary<long, BoonsGraphModel> boonGraphData = log.getBoss().getBoonGraphs(log, phases, parseBoonsList);
                             foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.getBoonName() != "Number of Boons"))
                             {

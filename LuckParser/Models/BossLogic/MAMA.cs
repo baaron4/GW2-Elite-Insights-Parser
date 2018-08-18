@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class MAMA : BossLogic
+    public class MAMA : FractalLogic
     {
         public MAMA() : base()
         {
-            mode = ParseMode.Fractal;
             mechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(37408, "Blastwave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MAMA, "symbol:'circle',color:'rgb(100,150,0)',", "Blastwave",0),

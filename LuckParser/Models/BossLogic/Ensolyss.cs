@@ -8,11 +8,16 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Ensolyss : BossLogic
+    public class Ensolyss : FractalLogic
     {
         public Ensolyss() : base()
         {
-            mode = ParseMode.Fractal;      
+            mechanicList.AddRange(new List<Mechanic>
+            {
+            new Mechanic(37154, "Lunge", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'circle',color:'rgb(50,150,0)',", "Lunge",0),
+            new Mechanic(37278, "First Smash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'circle',color:'rgb(100,150,0)',", "First Smash",0),
+            new Mechanic(36962, "Torment Smash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'circle',color:'rgb(150,150,0)',", "Torment Smash",0)
+            });
         }
 
         public override CombatReplayMap getCombatMap()

@@ -596,9 +596,7 @@ namespace LuckParser.Controllers
                     uptime.generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, 1);
                     uptime.overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, 1);
                 }
-
-                uptime.boonType = boon.getType();
-
+                
                 final[boon.getID()] = uptime;
             }
 
@@ -647,8 +645,6 @@ namespace LuckParser.Controllers
                                 uptime.generation = Math.Round((double)generation / fightDuration, 1);
                                 uptime.overstack = Math.Round((double)(selfBoons.getOverstack(boon.getID(), player.getInstid()) + generation) / fightDuration, 1);
                             }
-
-                            uptime.boonType = boon.getType();
                         }
                         final[boon.getID()] = uptime;
                     }
@@ -728,6 +724,7 @@ namespace LuckParser.Controllers
             statistics.bossConditions = new Dictionary<long, Statistics.FinalBossBoon>[statistics.phases.Count];
             List<Boon> boon_to_track = Boon.getCondiBoonList();
             boon_to_track.AddRange(Boon.getBoonList());
+            boon_to_track.AddRange(Boon.getBossBoonList());
             for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
             {
                 BoonDistribution boonDistribution = log.getBoss().getBoonDistribution(log,statistics.phases, boon_to_track, phaseIndex);
@@ -744,7 +741,6 @@ namespace LuckParser.Controllers
                     {
                         if (boon.getType() == Boon.BoonType.Duration)
                         {
-                            condition.boonType = Boon.BoonType.Duration;
                             condition.uptime = Math.Round(100.0 * boonDistribution.getUptime(boon.getID()) / fightDuration, 1);
                             foreach(Player p in log.getPlayerList())
                             {
@@ -755,7 +751,6 @@ namespace LuckParser.Controllers
                         }
                         else if (boon.getType() == Boon.BoonType.Intensity)
                         {
-                            condition.boonType = Boon.BoonType.Intensity;
                             condition.uptime = Math.Round((double) boonDistribution.getUptime(boon.getID()) / fightDuration, 1);
                             foreach (Player p in log.getPlayerList())
                             {

@@ -18,6 +18,7 @@ namespace LuckParser.Models
             new Mechanic(-3, "Downs", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross',color:'rgb(255,0,0)',", "Downs",0),
             new Mechanic(1066, "Resurrect", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'circle-dot',color:'rgb(0,120,180)',", "Resurrect",0)};
         protected ParseMode mode;
+
         public BossLogic()
         {
             mode = ParseMode.Unknown;
@@ -39,54 +40,7 @@ namespace LuckParser.Models
 
         public virtual List<PhaseData> getPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
         {
-            // generic method
-            long start = 0;
-            long end = 0;
-            long fight_dur = log.getBossData().getAwareDuration();
             List<PhaseData> phases = getInitialPhase(log);
-            List<CombatItem> invulsBoss = log.getBoonData().Where(x => x.getSkillID() == 762 && boss.getInstid() == x.getDstInstid()).ToList();
-            List<CombatItem> invulsBossFiltered = new List<CombatItem>();
-            foreach (CombatItem c in invulsBoss)
-            {
-                if (invulsBossFiltered.Count > 0)
-                {
-                    CombatItem last = invulsBossFiltered.Last();
-                    if (last.getTime() != c.getTime())
-                    {
-                        invulsBossFiltered.Add(c);
-                    }
-                }
-                else
-                {
-                    invulsBossFiltered.Add(c);
-                }
-            }
-            for (int i = 0; i < invulsBossFiltered.Count; i++)
-            {
-                CombatItem c = invulsBossFiltered[i];
-                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
-                {
-                    end = c.getTime() - log.getBossData().getFirstAware();
-                    phases.Add(new PhaseData(start, end));
-                    if (i == invulsBossFiltered.Count - 1)
-                    {
-                        cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), ParseEnum.Activation.None, (int)(fight_dur - end), ParseEnum.Activation.None));
-                    }
-                }
-                else
-                {
-                    start = c.getTime() - log.getBossData().getFirstAware();
-                    cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
-                }
-            }
-            if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
-            {
-                phases.Add(new PhaseData(start, fight_dur));
-            }
-            for (int i = 1; i < phases.Count; i++)
-            {
-                phases[i].setName("Phase " + i);
-            }
             return phases;
         }
 
@@ -126,8 +80,9 @@ namespace LuckParser.Models
             bool needStart = true;
             List<CombatItem> main = log.getBoonData().Where(x => x.getSkillID() == skillID && ((x.getDstInstid() == instid && x.isBuffremove() == ParseEnum.BuffRemove.None) || (x.getSrcInstid() == instid && x.isBuffremove() != ParseEnum.BuffRemove.None))).ToList();
             List<CombatItem> filtered = new List<CombatItem>();
-            foreach (CombatItem c in main)
+            for (int i = 0; i < main.Count; i++)
             {
+                CombatItem c = main[i];
                 if (needStart && c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
                     needStart = false;
@@ -135,8 +90,12 @@ namespace LuckParser.Models
                 }
                 else if (!needStart && c.isBuffremove() != ParseEnum.BuffRemove.None)
                 {
-                    needStart = true;
-                    filtered.Add(c);
+                    // consider only last remove event before another application
+                    if ((i == main.Count - 1) || (i < main.Count - 1 && main[i + 1].isBuffremove() == ParseEnum.BuffRemove.None))
+                    {
+                        needStart = true;
+                        filtered.Add(c);
+                    }
                 }
             }
             return filtered;

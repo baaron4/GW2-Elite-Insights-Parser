@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Arkk : BossLogic
+    public class Arkk : FractalLogic
     {
         public Arkk() : base()
         {
-            mode = ParseMode.Fractal;
             mechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(39685, "Horizon Strike 1", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Arkk, "symbol:'circle',color:'rgb(50,0,0)',", "Horizon Strike 1",0),

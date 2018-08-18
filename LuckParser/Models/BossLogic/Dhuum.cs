@@ -75,7 +75,7 @@ namespace LuckParser.Models
             }
             else
             {
-                CombatItem invulDhuum = log.getBoonData().Find(x => x.getSkillID() == 762 && x.isBuffremove() != ParseEnum.BuffRemove.None && x.getSrcInstid() == boss.getInstid() && x.getTime() > 115000 + log.getBossData().getFirstAware());
+                CombatItem invulDhuum = log.getBoonData().FirstOrDefault(x => x.getSkillID() == 762 && x.isBuffremove() != ParseEnum.BuffRemove.None && x.getSrcInstid() == boss.getInstid() && x.getTime() > 115000 + log.getBossData().getFirstAware());
                 if (invulDhuum != null)
                 {
                     end = invulDhuum.getTime() - log.getBossData().getFirstAware();
