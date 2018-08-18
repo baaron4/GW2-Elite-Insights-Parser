@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Skorvald : BossLogic
+    public class Skorvald : FractalLogic
     {
         public Skorvald() : base()
-        {
-            mode = ParseMode.Fractal;       
+        {        
         }
 
         public override CombatReplayMap getCombatMap()
