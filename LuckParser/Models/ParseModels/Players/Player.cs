@@ -389,6 +389,10 @@ namespace LuckParser.Models.ParseModels
                     {
                         String name = skill_data.getName(c.getSkillID());
                         mech_data.AddItem(new MechanicLog(c.getTime() - start, c.getSkillID(), mech.GetName(), c.getValue(), this, mech.GetPlotly()));
+                        if (mech.GetMechType() == Mechanic.MechType.PlayerOnPlayer)
+                        {
+                            mech_data.AddItem(new MechanicLog(c.getTime() - start, c.getSkillID(), mech.GetName(), c.getValue(), log.getPlayerList().FirstOrDefault(x => x.getInstid() == c.getSrcInstid()), mech.GetPlotly()));
+                        }
                     }
                 }
             }
