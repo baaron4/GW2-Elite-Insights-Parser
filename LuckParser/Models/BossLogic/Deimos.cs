@@ -38,9 +38,9 @@ namespace LuckParser.Models
 
         public override CombatReplayMap getCombatMap()
         {
-            return new CombatReplayMap("https://i.imgur.com/TskIM9i.png",
-                            Tuple.Create(4267, 5770),
-                            Tuple.Create(-9542, 1932, -7078, 5275),
+            return new CombatReplayMap("https://i.imgur.com/GCwOVVE.png",
+                            Tuple.Create(4400, 5753),
+                            Tuple.Create(-9542, 1932, -7004, 5250),
                             Tuple.Create(-27648, -9216, 27648, 12288),
                             Tuple.Create(11774, 4480, 14078, 5376));
         }
@@ -99,6 +99,7 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Drunkard,
                         ParseEnum.ThrashIDS.Gambler,
                         ParseEnum.ThrashIDS.GamblerClones,
+                        ParseEnum.ThrashIDS.GamblerReal,
                     };
                 List<AgentItem> clones = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
                 foreach (AgentItem a in clones)
@@ -126,6 +127,7 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Drunkard,
                         ParseEnum.ThrashIDS.Gambler,
                         ParseEnum.ThrashIDS.GamblerClones,
+                        ParseEnum.ThrashIDS.GamblerReal,
                         ParseEnum.ThrashIDS.Greed,
                         ParseEnum.ThrashIDS.Pride
                     };
