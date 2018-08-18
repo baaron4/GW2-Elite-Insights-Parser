@@ -37,12 +37,6 @@ namespace LuckParser.Models
                             Tuple.Create(19072, 15484, 20992, 16508));
         }
 
-        public override List<PhaseData> getPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
-        {
-            List<PhaseData> phases = getInitialPhase(log);           
-            return phases;
-        }
-
         public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: facing information (slashes) and doughnuts for outer circle attack

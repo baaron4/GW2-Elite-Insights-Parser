@@ -9,11 +9,10 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Artsariiv : BossLogic
+    public class Artsariiv : FractalLogic
     {
         public Artsariiv() : base()
         {
-            mode = ParseMode.Fractal;
             mechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(38880, "Corporeal Reassignment", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Artsariiv, "symbol:'square',color:'rgb(0,128,0)',", "Corporeal Reassignment",0),

@@ -43,7 +43,7 @@ namespace LuckParser.Models
             long fight_dur = log.getBossData().getAwareDuration();
             List<PhaseData> phases = getInitialPhase(log);
             // Invul check
-            List<CombatItem> invulsSab = log.getBoonData().Where(x => x.getSkillID() == 757 && boss.getInstid() == x.getDstInstid()).ToList();
+            List<CombatItem> invulsSab = getFilteredList(log, 757, boss.getInstid());
             for (int i = 0; i < invulsSab.Count; i++)
             {
                 CombatItem c = invulsSab[i];
