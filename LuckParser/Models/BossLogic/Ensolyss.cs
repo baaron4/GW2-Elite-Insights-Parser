@@ -12,7 +12,14 @@ namespace LuckParser.Models
     {
         public Ensolyss() : base()
         {
-            mode = ParseMode.Fractal;      
+            mode = ParseMode.Fractal;  
+            mechanicList.AddRange(new List<Mechanic>
+            {
+            new Mechanic(37154, "Lunge", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'circle',color:'rgb(50,150,0)',", "Charge",0),
+            new Mechanic(37278, "Upswing", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'circle',color:'rgb(255,200,0)',", "First Smash",0),
+            new Mechanic(36962, "Upswing", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'circle',color:'rgb(255,200,0)',", "Torment Smash",0),
+            new Mechanic(37466, "Nightmare Miasma", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'circle',color:'rgb(140,0,140)',", "Nightmare Miasma",0),
+            });
         }
 
         public override CombatReplayMap getCombatMap()

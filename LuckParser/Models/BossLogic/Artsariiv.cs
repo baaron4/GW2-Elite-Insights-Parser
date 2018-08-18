@@ -13,7 +13,22 @@ namespace LuckParser.Models
     {
         public Artsariiv() : base()
         {
-            mode = ParseMode.Fractal; 
+            mode = ParseMode.Fractal;
+            mechanicList.AddRange(new List<Mechanic>
+            {
+            new Mechanic(38880, "Corporeal Reassignment", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Artsariiv, "symbol:'square',color:'rgb(0,128,0)',", "Corporeal Reassignment",0),
+            new Mechanic(38977, "Vault", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'triangle-down-open',color:'rgb(255,200,0)',", "Vault (Add)",0),
+            new Mechanic(39925, "Slam", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'circle',color:'rgb(255,140,0)',", "Vault (Arts)",0),
+            new Mechanic(39469, "Teleport Lunge", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'star-triangle-down-open',color:'rgb(255,140,0)',", "Triple Jump",0),
+            new Mechanic(39442, "Blinding Radiance", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'square-open',color:'rgb(255,0,0)',", "Eye (Fear)",0),
+            new Mechanic(39470, "Obliterate", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'circle',color:'rgb(255,0,0)',", "Oneshot Circle",0),
+            new Mechanic(39557, "Mib Ring", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'square',color:'rgb(140,0,140)',", "Purple Goo",0),
+            new Mechanic(39398, "Mib Ring", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'square',color:'rgb(140,0,140)',", "Purple Goo",0),
+            new Mechanic(39035, "Astral Surge", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'circle-open',color:'rgb(255,200,0)',", "1000 Circles",0),
+            new Mechanic(39029, "Red Marble", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'circle',color:'rgb(255,0,0)',", "Red Marble",0),
+            new Mechanic(39863, "Red Marble", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'circle',color:'rgb(255,0,0)',", "Red Marble",0),
+            new Mechanic(39238, "Beaming Smile", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'circle',color:'rgb(255,0,0)',", "Triple Death Rays",0),
+            });
         }
 
         public override CombatReplayMap getCombatMap()
