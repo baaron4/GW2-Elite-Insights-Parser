@@ -22,31 +22,15 @@ namespace LuckParser.Models
             long end = 0;
             long fight_dur = log.getBossData().getAwareDuration();
             List<PhaseData> phases = getInitialPhase(log);
-            List<CombatItem> invulsBoss = log.getBoonData().Where(x => x.getSkillID() == 762 && boss.getInstid() == x.getDstInstid()).ToList();
-            List<CombatItem> invulsBossFiltered = new List<CombatItem>();
-            foreach (CombatItem c in invulsBoss)
+            List<CombatItem> invulsBoss = getFilteredList(log,762,boss.getInstid());        
+            for (int i = 0; i < invulsBoss.Count; i++)
             {
-                if (invulsBossFiltered.Count > 0)
-                {
-                    CombatItem last = invulsBossFiltered.Last();
-                    if (last.getTime() != c.getTime())
-                    {
-                        invulsBossFiltered.Add(c);
-                    }
-                }
-                else
-                {
-                    invulsBossFiltered.Add(c);
-                }
-            }
-            for (int i = 0; i < invulsBossFiltered.Count; i++)
-            {
-                CombatItem c = invulsBossFiltered[i];
+                CombatItem c = invulsBoss[i];
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
                     end = c.getTime() - log.getBossData().getFirstAware();
                     phases.Add(new PhaseData(start, end));
-                    if (i == invulsBossFiltered.Count - 1)
+                    if (i == invulsBoss.Count - 1)
                     {
                         cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), ParseEnum.Activation.None, (int)(fight_dur - end), ParseEnum.Activation.None));
                     }
