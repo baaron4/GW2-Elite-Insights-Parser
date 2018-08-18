@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Artasariiv : BossLogic
+    public class Artsariiv : BossLogic
     {
-        public Artasariiv() : base()
+        public Artsariiv() : base()
         {
-            mode = ParseMode.Fractal;       
+            mode = ParseMode.Fractal; 
         }
 
         public override CombatReplayMap getCombatMap()
