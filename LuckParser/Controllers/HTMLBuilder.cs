@@ -120,7 +120,7 @@ namespace LuckParser.Controllers
                     List<MechanicLog> filterdList = new List<MechanicLog>();
                     foreach (Mechanic me in mechs)
                     {
-                        filterdList.AddRange(log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == me.GetSkill() && phase.inInterval(x.GetTime())).ToList());
+                        filterdList.AddRange(log.getMechanicData().Where(x => x.GetSkill() == me.GetSkill() && phase.inInterval(x.GetTime())).ToList());
                     }
                     Mechanic mech = mechs[0];
                     //List<MechanicLog> filterdList = mech_data.GetMDataLogs().Where(x => x.GetName() == mech.GetName()).ToList();
@@ -2654,28 +2654,24 @@ namespace LuckParser.Controllers
             //create list of enemys that had mechanics
             List<AbstractMasterPlayer> enemyList = new List<AbstractMasterPlayer>();
             enemyList.Add(log.getBoss());
-            
-            foreach (AbstractMasterPlayer p in log.getMechanicData().GetMDataLogs().Select(x => x.GetPlayer()).Distinct().ToList())
+            List<ushort> pIds = log.getPlayerList().Select(x => x.getInstid()).ToList();
+            foreach (AbstractMasterPlayer p in log.getMechanicData().Select(x => x.GetPlayer()).Distinct().ToList())
             {
+                if (pIds.Contains(p.getInstid()))
+                {
+                    continue;
+                }
                 if (enemyList.FirstOrDefault(x => x.getInstid() == p.getInstid()) == null)
                 {
                     enemyList.Add(p);
                 }         
             }
-            
-            foreach (AbstractMasterPlayer p in log.getPlayerList())
-            {
-                if (enemyList.Contains(p))
-                {
-                    enemyList.Remove(p);
-                }
-            }
             foreach (Mechanic item in log.getBossData().getBossBehavior().getMechanics().Where(x => x.GetMechType() != Mechanic.MechType.PlayerStatus))
             {
-                MechanicLog first_m_log = log.getMechanicData().GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill());
+                MechanicLog first_m_log = log.getMechanicData().FirstOrDefault(x => x.GetSkill() == item.GetSkill());
                 if (first_m_log != null)
                 {
-                    if (log.getPlayerList().Contains(first_m_log.GetPlayer()))//player mech
+                    if (pIds.Contains(first_m_log.GetPlayer().getInstid()))//player mech
                     {
                         if (!presMech.ContainsKey(item.GetAltName()))
                         {
@@ -2751,7 +2747,7 @@ namespace LuckParser.Controllers
                                     int filterCount = 0;
                                     foreach (Mechanic mech in mechs)//Filtering for mechs named the same thing
                                     {
-                                        List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= phase.getStart() && x.GetTime() <= phase.getEnd()).ToList();
+                                        List<MechanicLog> test = log.getMechanicData().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= phase.getStart() && x.GetTime() <= phase.getEnd()).ToList();
                                         count += test.Count;
                                         foreach (MechanicLog ml in test)
                                         {
@@ -2839,7 +2835,7 @@ namespace LuckParser.Controllers
                                     int count = 0;
                                     foreach (Mechanic mech in mechs)
                                     {
-                                        List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer().getInstid() == p.getInstid() && x.GetTime() >= phase.getStart()  && x.GetTime() <= phase.getEnd()).ToList();
+                                        List<MechanicLog> test = log.getMechanicData().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer().getInstid() == p.getInstid() && x.GetTime() >= phase.getStart()  && x.GetTime() <= phase.getEnd()).ToList();
                                         count += test.Count;
                                     }
                                     sw.Write("<td>" + count + "</td>");
