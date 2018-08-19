@@ -35,6 +35,8 @@ namespace LuckParser.Models
             //new Mechanic(34428, "Blood Fueled", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(good)",0),//abom
             new Mechanic(34376, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble",0),//human
             new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble",0),//abom
+            new Mechanic(34511, "Zealous Benediction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle',color:'rgb(255,200,0)',", "Bombs",0),
+            new Mechanic(26766, "Icy Patch", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,255)',", "Icy Patch KD",0,10000),
             //Track Zealous Benediction? (Bombs) Application? (ID 34511) Hit? (ID 34528) The hit on allies is not registered since it's percentage based, I think
             new Mechanic(34413, "Surrender", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-cross-open',color:'rgb(0,0,0)',", "Spirit",0)
             });
