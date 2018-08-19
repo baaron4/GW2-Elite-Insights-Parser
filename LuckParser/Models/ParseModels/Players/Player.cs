@@ -364,6 +364,17 @@ namespace LuckParser.Models.ParseModels
                 MechanicLog prevMech = null;
                 foreach (DamageLog dLog in dls)
                 {
+                    long expected = mech.GetExpectedValue();
+                    if (expected >= 0)
+                    {
+                        if (expected == long.MaxValue && dLog.getDamage() == 0)
+                        {
+                            continue;
+                        }  else if (dLog.getDamage() != expected)
+                        {
+                            continue;
+                        }
+                    }
                     string name = skill_data.getName(dLog.getID());
                     if (dLog.getID() == mech.GetSkill() && dLog.getResult().IsHit())
                     {
@@ -385,6 +396,10 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (CombatItem c in log.getBoonData())
                 {
+                    if (mech.GetExpectedValue() >= 0 && c.getValue() != mech.GetExpectedValue())
+                    {
+                        continue;
+                    }
                     if (c.getSkillID() == mech.GetSkill() && c.getValue() > 0 && c.isBuffremove() == ParseEnum.BuffRemove.None && c.getResult().IsHit() && getInstid() == c.getDstInstid())
                     {
                         String name = skill_data.getName(c.getSkillID());
