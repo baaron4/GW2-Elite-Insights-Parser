@@ -113,6 +113,7 @@ namespace LuckParser.Controllers
                 sw.Write("},");
                 List<Mechanic> presMech = log.getBossData().getBossBehavior().getMechanics();
                 List<string> distMech = presMech.Select(x => x.GetAltName()).Distinct().ToList();
+                List<ushort> playersIds = log.getPlayerList().Select(x => x.getInstid()).ToList();
                 foreach (string mechAltString in distMech)
                 {
                     List<Mechanic> mechs = presMech.Where(x => x.GetAltName() == mechAltString).ToList();
@@ -130,7 +131,7 @@ namespace LuckParser.Controllers
                     foreach (MechanicLog ml in filterdList)
                     {                     
                         Point check = new Point();
-                        if (ml.GetPlayer() != log.getBoss())
+                        if (playersIds.Contains(ml.GetPlayer().getInstid()))
                         {
                             double time = (ml.GetTime() - phase.getStart()) / 1000.0;
                             check = GraphHelper.getBossDPSGraph(log, ml.GetPlayer(), phase_index, phase, mode).LastOrDefault(x => x.X <= time);
@@ -2765,14 +2766,12 @@ namespace LuckParser.Controllers
                                         count += test.Count;
                                         foreach (MechanicLog ml in test)
                                         {
-                                            if (timeFilter != ml.GetTime())//Check for multihit
+                                            if (mech.GetICD() != 0 && ml.GetTime() - timeFilter < mech.GetICD())//ICD check
                                             {
-                                                if (mech.GetICD() != 0 && ml.GetTime() - timeFilter < mech.GetICD())//ICD check
-                                                {
-                                                    filterCount++;
-                                                }
-                                                timeFilter = ml.GetTime();
+                                                filterCount++;
                                             }
+                                            timeFilter = ml.GetTime();
+
                                         }
                                     }
                                     if (filterCount > 0)
