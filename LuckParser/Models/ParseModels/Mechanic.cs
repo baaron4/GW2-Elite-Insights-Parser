@@ -18,7 +18,7 @@ namespace LuckParser.Models.ParseModels
         /// EnemyCastStart
         /// EnemyCastEnd -> put skill id the same but negative so that you can also track the Start of the same skill if you want
         /// </summary>
-        public enum MechType { PlayerBoon, EnemyBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, PlayerOnPlayer, HitOnEnemy, PlayerStatus, EnemyCastStart, EnemyCastEnd }
+        public enum MechType { PlayerBoon, PlayerBoonRemove, EnemyBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, PlayerOnPlayer, HitOnEnemy, PlayerStatus, EnemyCastStart, EnemyCastEnd }
 
         public delegate bool SpecialCondition(long value);
         // Fields
