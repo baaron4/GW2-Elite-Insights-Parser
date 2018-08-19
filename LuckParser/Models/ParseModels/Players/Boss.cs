@@ -107,18 +107,35 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (CombatItem c in log.getBoonData())
                 {
-                    if (m.GetSkill() == c.getSkillID() && ((m.GetMechType() == Mechanic.MechType.EnemyBoon && c.isBuffremove() == ParseEnum.BuffRemove.None) || (m.GetMechType() == Mechanic.MechType.EnemyBoonStrip && c.isBuffremove() == ParseEnum.BuffRemove.Manual)))
+                    if (m.GetSkill() == c.getSkillID())
                     {
                         AbstractMasterPlayer amp = null;
-                        if (c.getDstInstid() == boss_data.getInstid())
+                        if (m.GetMechType() == Mechanic.MechType.EnemyBoon && c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
-                            amp = this;
-                        }
-                        else
+                            if (c.getDstInstid() == boss_data.getInstid())
+                            {
+                                amp = this;
+                            }
+                            else
+                            {
+                                amp = new Mob(log.getAgentData().GetAgent(c.getDstAgent()));
+                            }
+                        } else if (m.GetMechType() == Mechanic.MechType.EnemyBoonStrip && c.isBuffremove() == ParseEnum.BuffRemove.Manual)
                         {
-                            amp = new Mob(log.getAgentData().GetAgent(c.getDstAgent()));
+                            if (c.getSrcInstid() == boss_data.getInstid())
+                            {
+                                amp = this;
+                            }
+                            else
+                            {
+                                amp = new Mob(log.getAgentData().GetAgent(c.getSrcAgent()));
+                            }
+
                         }
-                        mech_data.AddItem(new MechanicLog(c.getTime() - boss_data.getFirstAware(), c.getSkillID(), m.GetName(), c.getValue(), amp, m.GetPlotly()));
+                        if (amp != null)
+                        {
+                            mech_data.AddItem(new MechanicLog(c.getTime() - boss_data.getFirstAware(), c.getSkillID(), m.GetName(), c.getValue(), amp, m.GetPlotly()));
+                        }
                     }
                 }
             }
