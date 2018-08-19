@@ -671,6 +671,7 @@ namespace LuckParser.Controllers
             if (golem_mode && bossHealthOverTime.Count > 0)
             {
                 log_data.setBossKill(bossHealthOverTime.Last().Y < 200);
+                boss_data.setLastAware(bossHealthOverTime.Last().X + boss_data.getFirstAware());
             }
             //players
             if (p_list.Count == 0)
