@@ -175,13 +175,11 @@ namespace LuckParser.Controllers
             CreateMechList(sw, 0);
 
             //Condi Uptime
-            bool hasBoons = CreateCondiUptime(sw, 0);
-            if (hasBoons)
-            {
-                CreateBossBoonUptime(sw, 0);
-            }
+            CreateCondiUptime(sw, 0);
             //Condi Gen
             CreateCondiGen(sw, 0);
+            //Boss boons
+            CreateBossBoonUptime(sw, 0);
         }
         private void CreateDPSTable(StreamWriter sw, int phase_index)
         {
@@ -743,25 +741,12 @@ namespace LuckParser.Controllers
                 count++;
             }
         }
-        private bool CreateCondiUptime(StreamWriter sw, int phase_index)
+        private void CreateCondiUptime(StreamWriter sw, int phase_index)
         {
             Boss boss = log.getBoss();
             List<PhaseData> phases = statistics.phases;
             long fight_duration = phases[phase_index].getDuration();
             Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
-            bool hasBoons = false;
-            foreach (Boon boon in Boon.getBoonList())
-            {
-                if (boon.getName() == "Retaliation")
-                {
-                    continue;
-                }
-                if (conditions[boon.getID()].uptime > 0.0)
-                {
-                    hasBoons = true;
-                    break;
-                }
-            }
             List<Boon> boon_to_track = Boon.getCondiBoonList();
             boon_to_track.AddRange(Boon.getBoonList());
             Dictionary<long, long> condiPresence = boss.getCondiPresence(log, phases, boon_to_track, phase_index);
@@ -778,7 +763,7 @@ namespace LuckParser.Controllers
             WriteCell("Avg");
             foreach (Boon boon in Boon.getCondiBoonList())
             {
-                if (hasBoons && boon.getName() == "Retaliation")
+                if (boon.getName() == "Retaliation")
                 {
                     continue;
                 }
@@ -791,7 +776,7 @@ namespace LuckParser.Controllers
             WriteCell(Math.Round(avg_condis, 1).ToString());
             foreach (Boon boon in Boon.getCondiBoonList())
             {
-                if (hasBoons && boon.getName() == "Retaliation")
+                if (boon.getName() == "Retaliation")
                 {
                     continue;
                 }
@@ -811,7 +796,6 @@ namespace LuckParser.Controllers
                 NewLine();
                 count++;
             }
-            return hasBoons;
         }
         private void CreateBossBoonUptime(StreamWriter sw, int phase_index)
         {
@@ -821,7 +805,7 @@ namespace LuckParser.Controllers
             Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
             WriteCell("Name");
             WriteCell("Avg");
-            foreach (Boon boon in Boon.getCondiBoonList())
+            foreach (Boon boon in Boon.getBoonList())
             {
                 WriteCell(boon.getName());
             }

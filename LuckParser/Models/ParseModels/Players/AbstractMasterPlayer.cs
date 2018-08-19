@@ -135,6 +135,7 @@ namespace LuckParser.Models.ParseModels
             List<long> tableIds = Boon.getBoonList().Select(x => x.getID()).ToList();
             tableIds.AddRange(Boon.getOffensiveTableList().Select(x => x.getID()));
             tableIds.AddRange(Boon.getDefensiveTableList().Select(x => x.getID()));
+            tableIds.AddRange(Boon.getCondiBoonList().Select(x => x.getID()));
             foreach (CombatItem c in log.getBoonData())
             {
                 if (!boon_map.ContainsKey(c.getSkillID()))
