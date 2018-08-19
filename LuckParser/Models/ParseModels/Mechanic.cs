@@ -4,18 +4,21 @@ namespace LuckParser.Models.ParseModels
 {
     public class Mechanic
     {
-        //X indicates not gathering mechanic in mech logs
         /// <summary>
-        /// 0 - PlayerBoon 
-        /// 1 - BossBoon 
-        /// 2 - PlayerSkill X
-        /// 3 - SkillOnPlayer
-        /// 4 - EnemyBoonStrip
-        /// 5 - Spawn X
-        /// 6 - BossCast X
-        /// 7 - PlayerOnPlayer
+        /// PlayerBoon 
+        /// BossBoon 
+        /// PlayerSkill
+        /// SkillOnPlayer -> put long.MaxValue in expectedValue to consider only damaging hits
+        /// EnemyBoonStrip
+        /// Spawn
+        /// BossCast
+        /// PlayerOnPlayer
+        /// HitOnEnemy
+        /// PlayerStatus
+        /// EnemyCastStart
+        /// EnemyCastEnd
         /// </summary>
-        public enum MechType { PlayerBoon, EnemyBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, BossCast, PlayerOnPlayer, HitOnEnemy, PlayerStatus }
+        public enum MechType { PlayerBoon, EnemyBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, BossCast, PlayerOnPlayer, HitOnEnemy, PlayerStatus, EnemyCastStart, EnemyCastEnd }
         // Fields
        
         private long skill_id;
@@ -25,8 +28,10 @@ namespace LuckParser.Models.ParseModels
         private ParseEnum.BossIDS bossid;
         private string plotlyShape;
         private int internalCoolDown;
+        private long expectedValue;
 
-        public Mechanic(long skill_id, string name, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string friendlyName, int ICD)
+        
+        public Mechanic(long skill_id, string name, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string friendlyName, int ICD, long expectedValue = -1)
         {
             this.skill_id = skill_id;
             this.name = name;
@@ -35,12 +40,17 @@ namespace LuckParser.Models.ParseModels
             this.plotlyShape = plotlyShape;
             this.altname = friendlyName;
             this.internalCoolDown = ICD;
+            this.expectedValue = expectedValue;
         }
         //getters
        
         public long GetSkill()
         {
             return skill_id;
+        }
+        public long GetExpectedValue()
+        {
+            return expectedValue;
         }
         public string GetName()
         {
