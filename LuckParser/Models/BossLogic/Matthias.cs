@@ -209,22 +209,13 @@ namespace LuckParser.Models
                 }
             }
             // Bombs
-            List<CombatItem> zealousBenediction = getFilteredList(log, 34511, p.getInstid());
-            int zealousStart = 0;
-            int zealousEnd = 0;
+            List<CombatItem> zealousBenediction = log.getBoonData().Where(x => x.getSkillID() == 34511 && ((x.getDstInstid() == p.getInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None))).ToList();
             foreach (CombatItem c in zealousBenediction)
             {
-                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
-                {
-                    zealousStart = (int)(c.getTime() - log.getBossData().getFirstAware());
-                }
-                else
-                {
-                    zealousEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                    replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)"));
-                    replay.addCircleActor(new CircleActor(true, zealousEnd, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)"));
-                }
-
+                int zealousStart = (int)(c.getTime() - log.getBossData().getFirstAware()) ;
+                int zealousEnd = zealousStart + 5000;
+                replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)"));
+                replay.addCircleActor(new CircleActor(true, zealousEnd, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)"));
             }
         }
 
