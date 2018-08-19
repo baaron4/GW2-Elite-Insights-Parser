@@ -145,22 +145,22 @@ namespace LuckParser.Models.ParseModels
                 ushort dst = c.isBuffremove() == ParseEnum.BuffRemove.None ? c.getDstInstid() : c.getSrcInstid();
                 if (agent.getInstid() == dst)
                 {
-                    ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                     // don't add buff initial table boons and buffs in non golem mode, for others overstack is irrevelant
                     if (c.isStateChange() == ParseEnum.StateChange.BuffInitial && (log.isBenchmarkMode() || !tableIds.Contains(c.getSkillID())))
                     {
                         List<BoonLog> loglist = boon_map[c.getSkillID()];
-                        loglist.Add(new BoonLog(0, src, long.MaxValue, 0));
+                        loglist.Add(new BoonLog(0, 0, long.MaxValue, 0));
                     }
                     else if (time >= 0 && time < log.getBossData().getAwareDuration())
                     {
                         if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
+                            ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                             List<BoonLog> loglist = boon_map[c.getSkillID()];
 
                             if (loglist.Count == 0 && c.getOverstackValue() > 0)
                             {
-                                loglist.Add(new BoonLog(0, src, time, 0));
+                                loglist.Add(new BoonLog(0, 0, time, 0));
                             }
                             loglist.Add(new BoonLog(time, src, c.getValue(), 0));
                         }
@@ -171,7 +171,7 @@ namespace LuckParser.Models.ParseModels
                                 List<BoonLog> loglist = boon_map[c.getSkillID()];
                                 if (loglist.Count == 0)
                                 {
-                                    loglist.Add(new BoonLog(0, src, time, 0));
+                                    loglist.Add(new BoonLog(0, 0, time, 0));
                                 }
                                 else
                                 {
@@ -193,7 +193,7 @@ namespace LuckParser.Models.ParseModels
                                 List<BoonLog> loglist = boon_map[c.getSkillID()];
                                 if (loglist.Count == 0)
                                 {
-                                    loglist.Add(new BoonLog(0, src, time, 0));
+                                    loglist.Add(new BoonLog(0, 0, time, 0));
                                 }
                                 else
                                 {
@@ -213,7 +213,7 @@ namespace LuckParser.Models.ParseModels
                                 List<BoonLog> loglist = boon_map[c.getSkillID()];
                                 if (loglist.Count == 0)
                                 {
-                                    loglist.Add(new BoonLog(0, src, time, 0));
+                                    loglist.Add(new BoonLog(0, 0, time, 0));
                                 }
                                 else
                                 {
