@@ -123,6 +123,17 @@ namespace LuckParser.Models.ParseModels
             return replay;
         }
 
+        public long getDeath(ParsedLog log, long start, long end)
+        {
+            long offset = log.getBossData().getFirstAware();
+            CombatItem dead = log.getCombatList().LastOrDefault(x => x.getSrcInstid() == agent.getInstid() && x.isStateChange().IsDead() && x.getTime() >= start + offset && x.getTime() <= end + offset);
+            if (dead != null && dead.getTime() > 0)
+            {
+                return dead.getTime();
+            }
+            return 0;
+        }
+
         public abstract void addMechanics(ParsedLog log);
 
         // private getters
@@ -144,6 +155,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 long time = c.getTime() - time_start;
                 ushort dst = c.isBuffremove() == ParseEnum.BuffRemove.None ? c.getDstInstid() : c.getSrcInstid();
+                ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                 if (agent.getInstid() == dst)
                 {
                     // don't add buff initial table boons and buffs in non golem mode, for others overstack is irrevelant
@@ -156,7 +168,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
-                            ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
+                            
                             List<BoonLog> loglist = boon_map[c.getSkillID()];
 
                             if (loglist.Count == 0 && c.getOverstackValue() > 0)

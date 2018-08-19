@@ -167,7 +167,7 @@ namespace LuckParser.Models.ParseModels
                             }
                             else
                             {
-                                amp = new Mob(log.getAgentData().GetAgent(c.getSrcAgent()));
+                                amp = new DummyPlayer(log.getAgentData().GetAgent(c.getSrcAgent()));
                             }
                         }
                         if (amp != null)
@@ -183,7 +183,7 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (AgentItem a in log.getAgentData().getNPCAgentList().Where(x => x.getID() == m.GetSkill()))
                 {
-                    AbstractMasterPlayer amp = new Mob(a);
+                    AbstractMasterPlayer amp = new DummyPlayer(a);
                     mech_data.Add(new MechanicLog(a.getFirstAware() - boss_data.getFirstAware(), m.GetSkill(), m.GetName(), 0, amp, m.GetPlotly()));
                 }
             }

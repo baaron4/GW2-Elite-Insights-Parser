@@ -138,6 +138,7 @@
     <Compile Include="Models\ParseModels\Players\AbstractPlayer.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonsGraphModel.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonDistribution.cs" />
+    <Compile Include="Models\ParseModels\Players\DummyPlayer.cs" />
     <Compile Include="Models\ParseModels\Players\Minion.cs" />
     <Compile Include="Models\ParseModels\Players\Minions.cs" />
     <Compile Include="Models\ParseModels\PhaseData.cs" />
