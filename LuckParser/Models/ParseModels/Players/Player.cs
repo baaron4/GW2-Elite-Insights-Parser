@@ -361,7 +361,6 @@ namespace LuckParser.Models.ParseModels
             List<Mechanic> skillOnPlayer = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.SkillOnPlayer).ToList();
             foreach (Mechanic mech in skillOnPlayer)
             {
-                MechanicLog prevMech = null;
                 foreach (DamageLog dLog in dls)
                 {
                     long expected = mech.GetExpectedValue();
@@ -378,13 +377,7 @@ namespace LuckParser.Models.ParseModels
                     string name = skill_data.getName(dLog.getID());
                     if (dLog.getID() == mech.GetSkill() && dLog.getResult().IsHit())
                     {
-                        //Prevent multi hit attacks form multi registering
-                        if (prevMech != null && dLog.getTime() == prevMech.GetTime())
-                        {
-                            continue;
-                        }
-                        prevMech = new MechanicLog(dLog.getTime(), dLog.getID(), mech.GetName(), dLog.getDamage(), this, mech.GetPlotly());
-                        mech_data.AddItem(prevMech);
+                        mech_data.AddItem(new MechanicLog(dLog.getTime(), dLog.getID(), mech.GetName(), dLog.getDamage(), this, mech.GetPlotly()));
 
                     }
                 }
