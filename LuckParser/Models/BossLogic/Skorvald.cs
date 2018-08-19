@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Skorvald : BossLogic
+    public class Skorvald : FractalLogic
     {
         public Skorvald() : base()
-        {
-            mode = ParseMode.Fractal;    
+        { 
             mechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(39916, "Combustion Rush", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Skorvald, "symbol:'triangle-left',color:'rgb(255,0,255)',", "Charge",0),

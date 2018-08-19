@@ -50,31 +50,15 @@ namespace LuckParser.Models
             long fight_dur = log.getBossData().getAwareDuration();
             List<PhaseData> phases = getInitialPhase(log);
             // Determined check
-            List<CombatItem> invulsSam = log.getBoonData().Where(x => x.getSkillID() == 762 && boss.getInstid() == x.getDstInstid()).ToList();
-            // Samarog receives determined twice and its removed twice, filter it
-            List<CombatItem> invulsSamFiltered = new List<CombatItem>();
-            bool needApplication = true;
-            foreach (CombatItem c in invulsSam)
+            List<CombatItem> invulsSam = getFilteredList(log, 762, boss.getInstid());         
+            for (int i = 0; i < invulsSam.Count; i++)
             {
-                if (needApplication && c.isBuffremove() == ParseEnum.BuffRemove.None)
-                {
-                    invulsSamFiltered.Add(c);
-                    needApplication = false;
-                }
-                else if (!needApplication && c.isBuffremove() != ParseEnum.BuffRemove.None)
-                {
-                    invulsSamFiltered.Add(c);
-                    needApplication = true;
-                }
-            }
-            for (int i = 0; i < invulsSamFiltered.Count; i++)
-            {
-                CombatItem c = invulsSamFiltered[i];
+                CombatItem c = invulsSam[i];
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
                     end = c.getTime() - log.getBossData().getFirstAware();
                     phases.Add(new PhaseData(start, end));
-                    if (i == invulsSamFiltered.Count - 1)
+                    if (i == invulsSam.Count - 1)
                     {
                         cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), ParseEnum.Activation.None, (int)(fight_dur - end), ParseEnum.Activation.None));
                     }

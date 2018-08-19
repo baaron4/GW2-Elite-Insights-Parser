@@ -391,9 +391,9 @@ namespace LuckParser.Controllers
                     sw.Write("<td>" + (casts != -1 ? casts.ToString() : "") + "</td>");
                     sw.Write("<td>" + hits + "</td>");
                     sw.Write("<td>" + (hpcast != -1 ? hpcast.ToString() : "") + "</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""+ crit+ " out of " + hits + " hits\">" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</span></td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + flank + " out of " + hits + " hits\">" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</span></td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + glance + " out of " + hits + " hits\">" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</span></td>");
                     sw.Write("<td>" + wasted +"</td>");
                     sw.Write("<td>" + saved + "</td>");
                 }
@@ -412,9 +412,9 @@ namespace LuckParser.Controllers
                     sw.Write("<td>" + (casts != -1 ? casts.ToString() : "") + "</td>");
                     sw.Write("<td>" + hits + "</td>");
                     sw.Write("<td>" + (hpcast != -1 ? hpcast.ToString() : "") + "</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + crit + " out of " + hits + " hits\">" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</span></td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + flank + " out of " + hits + " hits\">" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</span></td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + glance + " out of " + hits + " hits\">" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</span></td>");
                     sw.Write("<td>" + wasted + "</td>");
                     sw.Write("<td>" + saved + "</td>");
                 }

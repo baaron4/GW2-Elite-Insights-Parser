@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
-    public class Siax : BossLogic
+    public class Siax : FractalLogic
     {
         public Siax() : base()
         {
-            mode = ParseMode.Fractal;
             mechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(37477, "Vile Spit", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Siax, "symbol:'circle',color:'rgb(150,150,0)',", "Vile Spit",0),

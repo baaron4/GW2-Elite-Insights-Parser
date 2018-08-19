@@ -131,7 +131,6 @@ namespace LuckParser.Models.DataModels
             public double uptime;
             public double generation;
             public double overstack;
-            public Boon.BoonType boonType;
         }
 
         public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> selfBoons;
@@ -144,7 +143,6 @@ namespace LuckParser.Models.DataModels
             public FinalBossBoon(List<Player> plist)
             {
                 uptime = 0;
-                boonType = Boon.BoonType.Intensity;
                 generated = new Dictionary<Player, double>();
                 overstacked = new Dictionary<Player, double>();
                 foreach (Player p in plist)
@@ -155,7 +153,6 @@ namespace LuckParser.Models.DataModels
             }
 
             public double uptime;
-            public Boon.BoonType boonType;
             public Dictionary<Player, double> generated;
             public Dictionary<Player, double> overstacked;
         }

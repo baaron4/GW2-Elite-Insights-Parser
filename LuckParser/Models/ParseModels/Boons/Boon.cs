@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
     {
         // Boon
         public enum BoonEnum { Condition, Boon, OffensiveBuffTable, DefensiveBuffTable, GraphOnlyBuff, Food, Utility };
-        public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item };
+        public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item, Boss };
         public enum RemoveType { CleanseFoe, CleanseFriend, Manual, None, All };
         public enum BoonType { Duration, Intensity };
         private enum Logic { Queue, HealingPower, Override };
@@ -139,6 +139,14 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Power Suit",12326, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Reaper of Grenth", 12366, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Charrzooka",43503, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                /// BOSS
+                new Boon("Unnatural Signet",38224, BoonSource.Boss, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Compromised",35096, BoonSource.Boss, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Spirited Fusion",31722, BoonSource.Boss, BoonType.Intensity, 500, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Blood Shield",34376, BoonSource.Boss, BoonType.Intensity, 18, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Blood Shield",34518, BoonSource.Boss, BoonType.Intensity, 18, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Blood Fueled",34422, BoonSource.Boss, BoonType.Intensity, 20, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Blood Fueled",34428, BoonSource.Boss, BoonType.Intensity, 20, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 ///REVENANT
                 //skills
                 new Boon("Crystal Hibernation", 28262, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -580,6 +588,11 @@ namespace LuckParser.Models.ParseModels
         {
             return allBoons.Where(x => x.nature == BoonEnum.Utility).ToList();
         }
+        // Boss
+        public static List<Boon> getBossBoonList()
+        {
+            return allBoons.Where(x => x.source == BoonSource.Boss).ToList();
+        }
         // All buffs
         public static List<Boon> getAllBuffList()
         {
@@ -618,6 +631,10 @@ namespace LuckParser.Models.ParseModels
         public BoonSource getSource()
         {
             return source;
+        }
+        public BoonEnum getNature()
+        {
+            return nature;
         }
 
         public BoonType getType()
