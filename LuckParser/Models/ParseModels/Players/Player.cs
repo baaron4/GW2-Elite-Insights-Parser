@@ -387,7 +387,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (mech.GetMechType() == Mechanic.MechType.PlayerBoonRemove)
                     {
-                        if (c.getSkillID() == mech.GetSkill() && c.isBuffremove() != ParseEnum.BuffRemove.None && getInstid() == c.getSrcInstid())
+                        if (c.getSkillID() == mech.GetSkill() && c.isBuffremove() == ParseEnum.BuffRemove.Manual && getInstid() == c.getSrcInstid())
                         {
                             mech_data.Add(new MechanicLog(c.getTime() - start, mech.GetSkill(), mech.GetName(), c.getValue(), this, mech.GetPlotly()));
                         }
