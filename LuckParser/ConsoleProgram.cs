@@ -63,7 +63,6 @@ namespace LuckParser
                     //Process evtc here
                     control.ParseLog(row, fInfo.FullName);
                     ParsedLog log = control.GetParsedLog();
-                    log.validateLogData();
                     Console.Write("Log Parsed");
                     //Creating File
                     //save location

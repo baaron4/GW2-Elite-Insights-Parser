@@ -135,7 +135,6 @@ namespace LuckParser
                     bg.UpdateProgress(rowData, "10% - Reading Binary...", 10);
                     parser.ParseLog(rowData, fInfo.FullName);
                     ParsedLog log = parser.GetParsedLog();
-                    log.validateLogData();
                     bg.ThrowIfCanceled(rowData);
                     bg.UpdateProgress(rowData, "35% - Data parsed", 35);
 
