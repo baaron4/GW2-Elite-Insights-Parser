@@ -361,45 +361,39 @@ namespace LuckParser.Models.ParseModels
             List<Mechanic> skillOnPlayer = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.SkillOnPlayer).ToList();
             foreach (Mechanic mech in skillOnPlayer)
             {
+                Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
                 foreach (DamageLog dLog in dls)
                 {
-                    long expected = mech.GetExpectedValue();
-                    if (expected >= 0)
+                    if (condition != null && !condition(dLog.getDamage()))
                     {
-                        if (expected == long.MaxValue && dLog.getDamage() == 0)
-                        {
-                            continue;
-                        }  else if (dLog.getDamage() != expected)
-                        {
-                            continue;
-                        }
+                        continue;
                     }
                     string name = skill_data.getName(dLog.getID());
                     if (dLog.getID() == mech.GetSkill() && dLog.getResult().IsHit())
                     {
-                        mech_data.AddItem(new MechanicLog(dLog.getTime(), dLog.getID(), mech.GetName(), dLog.getDamage(), this, mech.GetPlotly()));
+                        mech_data.AddItem(new MechanicLog(dLog.getTime(), mech.GetSkill(), mech.GetName(), dLog.getDamage(), this, mech.GetPlotly()));
 
                     }
                 }
             }
             // Player boon
-            List<Mechanic> playerBoon = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerBoon).ToList();
-            playerBoon.AddRange(bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerOnPlayer));
+            List<Mechanic> playerBoon = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerBoon || x.GetMechType() == Mechanic.MechType.PlayerOnPlayer).ToList();
             foreach (Mechanic mech in playerBoon)
             {
+                Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
                 foreach (CombatItem c in log.getBoonData())
                 {
-                    if (mech.GetExpectedValue() >= 0 && c.getValue() != mech.GetExpectedValue())
+                    if (condition != null && !condition(c.getValue()))
                     {
                         continue;
                     }
                     if (c.getSkillID() == mech.GetSkill() && c.getValue() > 0 && c.isBuffremove() == ParseEnum.BuffRemove.None && c.getResult().IsHit() && getInstid() == c.getDstInstid())
                     {
                         String name = skill_data.getName(c.getSkillID());
-                        mech_data.AddItem(new MechanicLog(c.getTime() - start, c.getSkillID(), mech.GetName(), c.getValue(), this, mech.GetPlotly()));
+                        mech_data.AddItem(new MechanicLog(c.getTime() - start, mech.GetSkill(), mech.GetName(), c.getValue(), this, mech.GetPlotly()));
                         if (mech.GetMechType() == Mechanic.MechType.PlayerOnPlayer)
                         {
-                            mech_data.AddItem(new MechanicLog(c.getTime() - start, c.getSkillID(), mech.GetName(), c.getValue(), log.getPlayerList().FirstOrDefault(x => x.getInstid() == c.getSrcInstid()), mech.GetPlotly()));
+                            mech_data.AddItem(new MechanicLog(c.getTime() - start, mech.GetSkill(), mech.GetName(), c.getValue(), log.getPlayerList().FirstOrDefault(x => x.getInstid() == c.getSrcInstid()), mech.GetPlotly()));
                         }
                     }
                 }
@@ -408,12 +402,13 @@ namespace LuckParser.Models.ParseModels
             List<Mechanic> enemyHit = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.HitOnEnemy).ToList();
             foreach (Mechanic mech in enemyHit)
             {
+                Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
                 List<AgentItem> agents = log.getAgentData().GetAgents((ushort)mech.GetSkill());
                 foreach (AgentItem a in agents)
                 {
                     foreach (DamageLog dl in getDamageLogs(0,log,0,log.getBossData().getAwareDuration()))
                     {
-                        if (dl.getDstInstidt() != a.getInstid() || dl.isCondi() > 0 || dl.getTime() < a.getFirstAware() - start || dl.getTime() > a.getLastAware() - start)
+                        if (dl.getDstInstidt() != a.getInstid() || dl.isCondi() > 0 || dl.getTime() < a.getFirstAware() - start || dl.getTime() > a.getLastAware() - start || (condition != null && !condition(dl.getDamage())))
                         {
                             continue;
                         }

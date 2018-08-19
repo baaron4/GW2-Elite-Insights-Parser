@@ -216,18 +216,18 @@ namespace LuckParser.Controllers
                     {
                         if (mechcount == filterdList.Count - 1)
                         {
-                            sw.Write("'" + ml.GetPlayer().getCharacter() + "'");
+                            sw.Write("'" + ml.GetPlayer().getCharacter().Replace("'"," ") + "'");
                         }
                         else
                         {
-                            sw.Write("'" + ml.GetPlayer().getCharacter() + "',");
+                            sw.Write("'" + ml.GetPlayer().getCharacter().Replace("'", " ") + "',");
                         }
 
                         mechcount++;
                     }
 
                     sw.Write("]," +
-                            " name: '" + mech.GetAltName() + "'");
+                            " name: '" + mech.GetAltName().Replace("'", " ") + "'");
                     sw.Write("},");
                 }
                 if (maxDPS > 0)
@@ -2657,21 +2657,10 @@ namespace LuckParser.Controllers
             
             foreach (AbstractMasterPlayer p in log.getMechanicData().GetMDataLogs().Select(x => x.GetPlayer()).Distinct().ToList())
             {
-                bool enemyNew = true;
-                foreach (AbstractMasterPlayer en in enemyList)
-                {
-                    if (en.getInstid() == p.getInstid())
-                    {
-                        enemyNew = false;
-                        break;
-                    }
-                    
-                }
-                if (enemyNew)
+                if (enemyList.FirstOrDefault(x => x.getInstid() == p.getInstid()) == null)
                 {
                     enemyList.Add(p);
-                }
-              
+                }         
             }
             
             foreach (AbstractMasterPlayer p in log.getPlayerList())

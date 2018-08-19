@@ -16,11 +16,13 @@ namespace LuckParser.Models.ParseModels
         /// HitOnEnemy
         /// PlayerStatus
         /// EnemyCastStart
-        /// EnemyCastEnd
+        /// EnemyCastEnd -> put skill id the same but negative so that you can also track the Start of the same skill if you want
         /// </summary>
-        public enum MechType { PlayerBoon, EnemyBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, BossCast, PlayerOnPlayer, HitOnEnemy, PlayerStatus, EnemyCastStart, EnemyCastEnd }
+        public enum MechType { PlayerBoon, EnemyBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, PlayerOnPlayer, HitOnEnemy, PlayerStatus, EnemyCastStart, EnemyCastEnd }
+
+        public delegate bool SpecialCondition(long value);
         // Fields
-       
+
         private long skill_id;
         private string name;
         private string altname;
@@ -28,19 +30,19 @@ namespace LuckParser.Models.ParseModels
         private ParseEnum.BossIDS bossid;
         private string plotlyShape;
         private int internalCoolDown;
-        private long expectedValue;
+        private SpecialCondition condition;
 
         
-        public Mechanic(long skill_id, string name, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string friendlyName, int ICD, long expectedValue = -1)
+        public Mechanic(long skill_id, string name, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string altname, int internalCoolDown, SpecialCondition condition = null)
         {
             this.skill_id = skill_id;
             this.name = name;
             this.mechType = mechtype;
             this.bossid = bossid;
             this.plotlyShape = plotlyShape;
-            this.altname = friendlyName;
-            this.internalCoolDown = ICD;
-            this.expectedValue = expectedValue;
+            this.altname = altname;
+            this.internalCoolDown = internalCoolDown;
+            this.condition = condition;
         }
         //getters
        
@@ -48,9 +50,9 @@ namespace LuckParser.Models.ParseModels
         {
             return skill_id;
         }
-        public long GetExpectedValue()
+        public SpecialCondition GetSpecialCondition()
         {
-            return expectedValue;
+            return condition;
         }
         public string GetName()
         {
