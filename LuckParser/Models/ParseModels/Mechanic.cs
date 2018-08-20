@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
         /// PlayerBoon 
         /// BossBoon 
         /// PlayerSkill
-        /// SkillOnPlayer -> put long.MaxValue in expectedValue to consider only damaging hits
+        /// SkillOnPlayer
         /// EnemyBoonStrip
         /// Spawn
         /// BossCast
@@ -77,6 +77,11 @@ namespace LuckParser.Models.ParseModels
         public int GetICD()
         {
             return internalCoolDown;
+        }
+
+        public bool isEnemyMechanic()
+        {
+            return mechType == MechType.EnemyBoon || mechType == MechType.EnemyBoonStrip || mechType == MechType.EnemyCastEnd || mechType == MechType.EnemyCastStart || mechType == MechType.Spawn;
         }
     }
 }
