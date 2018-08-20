@@ -190,12 +190,12 @@ namespace LuckParser.Models.ParseModels
                                     for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
                                     {
                                         BoonLog curBL = loglist[cnt];
-                                        if (curBL.getTime() + curBL.getValue() > time)
+                                        if (curBL.getOverstack() == 0 && curBL.getTime() + curBL.getValue() > time)
                                         {
                                             long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                            loglist[cnt].addValue(-subtract);
+                                            curBL.addValue(-subtract);
                                             // add removed as overstack
-                                            loglist[cnt].addOverstack((uint)subtract);
+                                            curBL.addOverstack((uint)subtract);
                                         }
                                     }
                                 }
@@ -211,12 +211,12 @@ namespace LuckParser.Models.ParseModels
                                 {
                                     int cnt = loglist.Count - 1;
                                     BoonLog curBL = loglist[cnt];
-                                    if (curBL.getTime() + curBL.getValue() > time)
+                                    if (curBL.getOverstack() == 0 && curBL.getTime() + curBL.getValue() > time)
                                     {
                                         long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                        loglist[cnt].addValue(-subtract);
+                                        curBL.addValue(-subtract);
                                         // add removed as overstack
-                                        loglist[cnt].addOverstack((uint)subtract);
+                                        curBL.addOverstack((uint)subtract);
                                     }
                                 }
                             }
@@ -233,12 +233,12 @@ namespace LuckParser.Models.ParseModels
                                     {
                                         BoonLog curBL = loglist[cnt];
                                         long ctime = curBL.getTime() + curBL.getValue();
-                                        if (ctime > time)
+                                        if (curBL.getOverstack() == 0 && ctime > time)
                                         {
                                             long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                            loglist[cnt].addValue(-subtract);
+                                            curBL.addValue(-subtract);
                                             // add removed as overstack
-                                            loglist[cnt].addOverstack((uint)subtract);
+                                            curBL.addOverstack((uint)subtract);
                                             break;
                                         }
                                     }

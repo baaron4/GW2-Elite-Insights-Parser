@@ -30,7 +30,7 @@ namespace LuckParser.Models.ParseModels
                 // Subtract from each
                 for(int i = boon_stack.Count - 1; i >= 0; i--)
                 {
-                    var item = new BoonStackItem(boon_stack[i], time_passed, -time_passed);
+                    var item = new BoonStackItem(boon_stack[i], time_passed, time_passed);
                     boon_stack[i] = item;
                 }
                 boon_stack.RemoveAll(x => x.boon_duration < 1);
