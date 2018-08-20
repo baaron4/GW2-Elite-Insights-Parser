@@ -139,7 +139,7 @@ namespace LuckParser.Models.ParseModels
                         }
                         if (amp != null)
                         {
-                            mech_data.Add(new MechanicLog(c.getTime() - boss_data.getFirstAware(), m.GetSkill(), m.GetName(), c.getValue(), amp, m.GetPlotly()));
+                            mech_data.Add(new MechanicLog(c.getTime() - boss_data.getFirstAware(), m, this));
                         }
                     }
                 }
@@ -172,7 +172,7 @@ namespace LuckParser.Models.ParseModels
                         }
                         if (amp != null)
                         {
-                            mech_data.Add(new MechanicLog(c.getTime() - boss_data.getFirstAware(), m.GetSkill(), m.GetName(), c.getValue(), amp, m.GetPlotly()));
+                            mech_data.Add(new MechanicLog(c.getTime() - boss_data.getFirstAware(), m, this));
                         }
                     }
                 }
@@ -184,7 +184,7 @@ namespace LuckParser.Models.ParseModels
                 foreach (AgentItem a in log.getAgentData().getNPCAgentList().Where(x => x.getID() == m.GetSkill()))
                 {
                     AbstractMasterPlayer amp = new DummyPlayer(a);
-                    mech_data.Add(new MechanicLog(a.getFirstAware() - boss_data.getFirstAware(), m.GetSkill(), m.GetName(), 0, amp, m.GetPlotly()));
+                    mech_data.Add(new MechanicLog(a.getFirstAware() - boss_data.getFirstAware(), m, this));
                 }
             }
         }

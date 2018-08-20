@@ -72,6 +72,7 @@ namespace LuckParser.Controllers
                 {
                     p.addMechanics(log);
                 }
+                log.getMechanicData().computePresentMechanics(log, statistics.phases);
             }
 
             return statistics;

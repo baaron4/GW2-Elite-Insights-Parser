@@ -351,7 +351,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 foreach (CombatItem pnt in toUse)
                 {
-                    mech_data.Add(new MechanicLog(pnt.getTime() - start, mech.GetSkill(), mech.GetName(), 0, this, mech.GetPlotly()));
+                    mech_data.Add(new MechanicLog(pnt.getTime() - start, mech, this));
                 }
 
             }
@@ -369,7 +369,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (dLog.getID() == mech.GetSkill() && dLog.getResult().IsHit())
                     {
-                        mech_data.Add(new MechanicLog(dLog.getTime(), mech.GetSkill(), mech.GetName(), dLog.getDamage(), this, mech.GetPlotly()));
+                        mech_data.Add(new MechanicLog(dLog.getTime(), mech, this));
 
                     }
                 }
@@ -389,17 +389,17 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (c.getSkillID() == mech.GetSkill() && c.isBuffremove() == ParseEnum.BuffRemove.Manual && getInstid() == c.getSrcInstid())
                         {
-                            mech_data.Add(new MechanicLog(c.getTime() - start, mech.GetSkill(), mech.GetName(), c.getValue(), this, mech.GetPlotly()));
+                            mech_data.Add(new MechanicLog(c.getTime() - start, mech, this));
                         }
                     } else
                     {
 
                         if (c.getSkillID() == mech.GetSkill() && c.isBuffremove() == ParseEnum.BuffRemove.None && getInstid() == c.getDstInstid())
                         {
-                            mech_data.Add(new MechanicLog(c.getTime() - start, mech.GetSkill(), mech.GetName(), c.getValue(), this, mech.GetPlotly()));
+                            mech_data.Add(new MechanicLog(c.getTime() - start, mech, this));
                             if (mech.GetMechType() == Mechanic.MechType.PlayerOnPlayer)
                             {
-                                mech_data.Add(new MechanicLog(c.getTime() - start, mech.GetSkill(), mech.GetName(), c.getValue(), log.getPlayerList().FirstOrDefault(x => x.getInstid() == c.getSrcInstid()), mech.GetPlotly()));
+                                mech_data.Add(new MechanicLog(c.getTime() - start, mech, log.getPlayerList().FirstOrDefault(x => x.getInstid() == c.getSrcInstid())));
                             }
                         }
                     }
@@ -419,7 +419,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             continue;
                         }
-                        mech_data.Add(new MechanicLog(dl.getTime(), mech.GetSkill(), mech.GetName(), dl.getDamage(), this, mech.GetPlotly()));
+                        mech_data.Add(new MechanicLog(dl.getTime(), mech, this));
                     }
                 }
             }

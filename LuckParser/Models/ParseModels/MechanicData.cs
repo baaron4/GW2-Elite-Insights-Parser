@@ -12,7 +12,8 @@ namespace LuckParser.Models.ParseModels
 
         private List<Dictionary<string, HashSet<Mechanic>>> presentOnPlayerMechanics = new List<Dictionary<string, HashSet<Mechanic>>>();
         private List<Dictionary<string, HashSet<Mechanic>>> presentOnEnemyMechanics = new List<Dictionary<string, HashSet<Mechanic>>>();
-        private List<AbstractMasterPlayer> enemyList = new List<AbstractMasterPlayer>();
+        private List<HashSet<Mechanic>> presentMechanics = new List<HashSet<Mechanic>>();
+        private List<List<AbstractMasterPlayer>> enemyList = new List<List<AbstractMasterPlayer>>();
 
         public MechanicData()
         {
@@ -25,35 +26,41 @@ namespace LuckParser.Models.ParseModels
             {
                 return;
             }
-            // ready enemy list
             List<ushort> pIds = log.getPlayerList().Select(x => x.getInstid()).ToList();
-            enemyList.Add(log.getBoss());
-            foreach (AbstractMasterPlayer p in this.Select(x => x.GetPlayer()).Distinct().ToList())
-            {
-                if (pIds.Contains(p.getInstid()))
-                {
-                    continue;
-                }
-                if (enemyList.FirstOrDefault(x => x.getInstid() == p.getInstid()) == null)
-                {
-                    enemyList.Add(p);
-                }
-            }
+            this.OrderBy(x => x.GetTime());
             // ready present mechanics
             List<Mechanic> bossMechanics = log.getBossData().getBossBehavior().getMechanics();
             foreach (PhaseData phase in phases)
             {
+                List<AbstractMasterPlayer> toAdd = new List<AbstractMasterPlayer>();
+                enemyList.Add(toAdd);
+                // ready enemy list
+                toAdd.Add(log.getBoss());
+                List<MechanicLog> presentMechanicLogs = this.Where(x => phase.inInterval(x.GetTime())).ToList();
+                foreach (AbstractMasterPlayer p in presentMechanicLogs.Select(x => x.GetPlayer()).Distinct().ToList())
+                {
+                    if (pIds.Contains(p.getInstid()))
+                    {
+                        continue;
+                    }
+                    if (toAdd.FirstOrDefault(x => x.getInstid() == p.getInstid()) == null)
+                    {
+                        toAdd.Add(p);
+                    }
+                }
                 Dictionary<string, HashSet<Mechanic>> toAddPlayer = new Dictionary<string, HashSet<Mechanic>>();
                 Dictionary<string, HashSet<Mechanic>> toAddEnemy = new Dictionary<string, HashSet<Mechanic>>();
+                HashSet<Mechanic> toAddAll = new HashSet<Mechanic>();
                 presentOnPlayerMechanics.Add(toAddPlayer);
                 presentOnEnemyMechanics.Add(toAddEnemy);
-                List<MechanicLog> presentMechanics = this.Where(x => phase.inInterval(x.GetTime())).ToList();
-                foreach (MechanicLog ml in presentMechanics)
+                presentMechanics.Add(toAddAll);
+                foreach (MechanicLog ml in presentMechanicLogs)
                 {
                     Mechanic correspondingMechanic = bossMechanics.Find(x => x.GetSkill() == ml.GetSkill());
                     if (correspondingMechanic != null)
                     {
                         string altName = correspondingMechanic.GetAltName();
+                        toAddAll.Add(correspondingMechanic);
                         if (correspondingMechanic.isEnemyMechanic())
                         {
                             if (!toAddEnemy.ContainsKey(altName))
@@ -75,18 +82,22 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public List<Dictionary<string, HashSet<Mechanic>>> getPresentEnemyMechs()
+        public Dictionary<string, HashSet<Mechanic>> getPresentEnemyMechs(int phase_index = 0)
         {
-            return presentOnEnemyMechanics;
+            return presentOnEnemyMechanics[phase_index];
         }
-        public List<Dictionary<string, HashSet<Mechanic>>> getPresentPlayerMechs()
+        public Dictionary<string, HashSet<Mechanic>> getPresentPlayerMechs(int phase_index = 0)
         {
-            return presentOnPlayerMechanics;
+            return presentOnPlayerMechanics[phase_index];
+        }
+        public HashSet<Mechanic> getPresentMechanics(int phase_index = 0)
+        {
+            return presentMechanics[phase_index];
         }
 
-        public List<AbstractMasterPlayer> getEnemyList()
+        public List<AbstractMasterPlayer> getEnemyList(int phase_index = 0)
         {
-            return enemyList;
+            return enemyList[phase_index];
         }
     }
 }

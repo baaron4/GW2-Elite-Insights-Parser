@@ -111,7 +111,7 @@ namespace LuckParser.Controllers
                         "visible:'legendonly'," +
                         "name: 'All Player Dps'");
                 sw.Write("},");
-                List<Mechanic> presMech = log.getBossData().getBossBehavior().getMechanics();
+                HashSet<Mechanic> presMech = log.getMechanicData().getPresentMechanics(phase_index);
                 List<string> distMech = presMech.Select(x => x.GetAltName()).Distinct().ToList();
                 List<ushort> playersIds = log.getPlayerList().Select(x => x.getInstid()).ToList();
                 foreach (string mechAltString in distMech)
@@ -123,7 +123,6 @@ namespace LuckParser.Controllers
                         filterdList.AddRange(log.getMechanicData().Where(x => x.GetSkill() == me.GetSkill() && phase.inInterval(x.GetTime())).ToList());
                     }
                     Mechanic mech = mechs[0];
-                    //List<MechanicLog> filterdList = mech_data.GetMDataLogs().Where(x => x.GetName() == mech.GetName()).ToList();
                     sw.Write("{");
                     sw.Write("y: [");
 
@@ -2645,52 +2644,10 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         private void CreateMechanicTable(StreamWriter sw, int phase_index)
         {
-            Dictionary<string, List<Mechanic>> presMech = new Dictionary<string, List<Mechanic>>();
-            //Dictionary<string, List<Mechanic>> presBossMech = new Dictionary<string, List<Mechanic>>();
-            //Dictionary<string, List<Mechanic>> presMobMech = new Dictionary<string, List<Mechanic>>();
-            Dictionary<string, List<Mechanic>> presEnemyMech = new Dictionary<string, List<Mechanic>>();
+            Dictionary<string, HashSet<Mechanic>> presMech = log.getMechanicData().getPresentPlayerMechs(phase_index);
+            Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.getMechanicData().getPresentEnemyMechs(phase_index);
             PhaseData phase = statistics.phases[phase_index];
-
-            //create list of enemys that had mechanics
-            List<AbstractMasterPlayer> enemyList = new List<AbstractMasterPlayer>();
-            enemyList.Add(log.getBoss());
-            List<ushort> pIds = log.getPlayerList().Select(x => x.getInstid()).ToList();
-            foreach (AbstractMasterPlayer p in log.getMechanicData().Select(x => x.GetPlayer()).Distinct().ToList())
-            {
-                if (pIds.Contains(p.getInstid()))
-                {
-                    continue;
-                }
-                if (enemyList.FirstOrDefault(x => x.getInstid() == p.getInstid()) == null)
-                {
-                    enemyList.Add(p);
-                }         
-            }
-            foreach (Mechanic item in log.getBossData().getBossBehavior().getMechanics().Where(x => x.GetMechType() != Mechanic.MechType.PlayerStatus))
-            {
-                MechanicLog first_m_log = log.getMechanicData().FirstOrDefault(x => x.GetSkill() == item.GetSkill());
-                if (first_m_log != null)
-                {
-                    if (pIds.Contains(first_m_log.GetPlayer().getInstid()))//player mech
-                    {
-                        if (!presMech.ContainsKey(item.GetAltName()))
-                        {
-                            presMech[item.GetAltName()] = new List<Mechanic>();
-                        }
-                        presMech[item.GetAltName()].Add(item);
-                    }
-                    else 
-                    {
-                        if (!presEnemyMech.ContainsKey(item.GetAltName()))
-                        {
-                            presEnemyMech[item.GetAltName()] = new List<Mechanic>();
-                        }
-                        presEnemyMech[item.GetAltName()].Add(item);
-                    }
-                    
-                    
-                }
-            }
+            List<AbstractMasterPlayer> enemyList = log.getMechanicData().getEnemyList(phase_index);
             if (presMech.Count > 0)
             {
                 sw.Write("<script>");
@@ -2740,7 +2697,7 @@ namespace LuckParser.Controllers
                             sw.Write("<tr>");
                             {
                                 sw.Write("<td>" + p.getCharacter() + "</td>");
-                                foreach (List<Mechanic> mechs in presMech.Values)
+                                foreach (HashSet<Mechanic> mechs in presMech.Values)
                                 {
                                     int count = 0;
                                     long timeFilter = 0;
@@ -2830,7 +2787,7 @@ namespace LuckParser.Controllers
                             sw.Write("<tr>");
                             {
                                 sw.Write("<td>" + p.getCharacter() + "</td>");
-                                foreach (List<Mechanic> mechs in presEnemyMech.Values)
+                                foreach (HashSet<Mechanic> mechs in presEnemyMech.Values)
                                 {
                                     int count = 0;
                                     foreach (Mechanic mech in mechs)
