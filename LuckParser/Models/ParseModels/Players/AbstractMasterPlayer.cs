@@ -176,7 +176,7 @@ namespace LuckParser.Models.ParseModels
                             }
                             loglist.Add(new BoonLog(time, src, c.getValue(), 0));
                         }
-                        else if (Boon.removePermission(c.getSkillID(), c.isBuffremove(), c.getIFF()))
+                        else if (Boon.removePermission(c.getSkillID(), c.isBuffremove(), c.getIFF()) && time < log.getBossData().getAwareDuration() - 50)
                         {
                             if (c.isBuffremove() == ParseEnum.BuffRemove.All)//All
                             {
