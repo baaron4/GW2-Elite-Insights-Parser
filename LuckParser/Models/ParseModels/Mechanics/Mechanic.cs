@@ -22,21 +22,21 @@ namespace LuckParser.Models.ParseModels
 
         public delegate bool SpecialCondition(long value);
         // Fields
-
-        private long skill_id;
+        
         private string name;
         private string altname;
-        private MechType mechType;       
+        private MechType mechType;
+        private long skill_id;
         private ParseEnum.BossIDS bossid;
         private string plotlyShape;
         private int internalCoolDown;
         private SpecialCondition condition;
 
         
-        public Mechanic(long skill_id, string name, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string altname, int internalCoolDown, SpecialCondition condition = null)
+        public Mechanic(long skill_id,string name, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string altname, int internalCoolDown, SpecialCondition condition = null)
         {
-            this.skill_id = skill_id;
             this.name = name;
+            this.skill_id = skill_id;
             this.mechType = mechtype;
             this.bossid = bossid;
             this.plotlyShape = plotlyShape;
@@ -45,11 +45,6 @@ namespace LuckParser.Models.ParseModels
             this.condition = condition;
         }
         //getters
-       
-        public long GetSkill()
-        {
-            return skill_id;
-        }
         public SpecialCondition GetSpecialCondition()
         {
             return condition;
@@ -57,6 +52,10 @@ namespace LuckParser.Models.ParseModels
         public string GetName()
         {
             return name;
+        }
+        public long GetSkill()
+        {
+            return skill_id;
         }
         public MechType GetMechType()
         {
@@ -79,9 +78,9 @@ namespace LuckParser.Models.ParseModels
             return internalCoolDown;
         }
 
-        public bool isEnemyMechanic()
+        public bool IsEnemyMechanic()
         {
             return mechType == MechType.EnemyBoon || mechType == MechType.EnemyBoonStrip || mechType == MechType.EnemyCastEnd || mechType == MechType.EnemyCastStart || mechType == MechType.Spawn;
-        }
+        }      
     }
 }

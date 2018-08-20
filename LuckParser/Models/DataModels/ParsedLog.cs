@@ -14,7 +14,7 @@ namespace LuckParser.Models.DataModels
         private AgentData agent_data = new AgentData();
         private SkillData skill_data = new SkillData();
         private CombatData combat_data = new CombatData();
-        private MechanicData mech_data = new MechanicData();
+        private MechanicData mech_data;
         private List<Player> p_list = new List<Player>();
         private Boss boss;
 
@@ -30,6 +30,7 @@ namespace LuckParser.Models.DataModels
             this.combat_data = combat_data;
             this.p_list = p_list;
             this.boss = boss;
+            this.mech_data = new MechanicData(boss_data);
         }
 
         public BossData getBossData()

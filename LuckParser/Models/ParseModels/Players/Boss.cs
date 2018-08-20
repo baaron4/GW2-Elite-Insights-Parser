@@ -98,7 +98,7 @@ namespace LuckParser.Models.ParseModels
 
         public override void addMechanics(ParsedLog log)
         {
-            List<MechanicLog> mech_data = log.getMechanicData();
+            MechanicData mech_data = log.getMechanicData();
             BossData boss_data = log.getBossData();
             List<Mechanic> bossMechanics = boss_data.getBossBehavior().getMechanics();
             // Boons
@@ -139,7 +139,7 @@ namespace LuckParser.Models.ParseModels
                         }
                         if (amp != null)
                         {
-                            mech_data.Add(new MechanicLog(c.getTime() - boss_data.getFirstAware(), m, this));
+                            mech_data[m].Add(new MechanicLog(c.getTime() - boss_data.getFirstAware(), m, amp));
                         }
                     }
                 }
@@ -151,7 +151,7 @@ namespace LuckParser.Models.ParseModels
                 Mechanic.SpecialCondition condition = m.GetSpecialCondition();
                 foreach (CombatItem c in log.getCastData())
                 {
-                    long skill = m.GetMechType() == Mechanic.MechType.EnemyCastEnd ? -m.GetSkill() : m.GetSkill();
+                    long skill = m.GetSkill();
                     if (skill == c.getSkillID())
                     {
                         if (condition != null && !condition(c.getValue()))
@@ -172,7 +172,7 @@ namespace LuckParser.Models.ParseModels
                         }
                         if (amp != null)
                         {
-                            mech_data.Add(new MechanicLog(c.getTime() - boss_data.getFirstAware(), m, this));
+                            mech_data[m].Add(new MechanicLog(c.getTime() - boss_data.getFirstAware(), m, amp));
                         }
                     }
                 }
@@ -184,7 +184,7 @@ namespace LuckParser.Models.ParseModels
                 foreach (AgentItem a in log.getAgentData().getNPCAgentList().Where(x => x.getID() == m.GetSkill()))
                 {
                     AbstractMasterPlayer amp = new DummyPlayer(a);
-                    mech_data.Add(new MechanicLog(a.getFirstAware() - boss_data.getFirstAware(), m, this));
+                    mech_data[m].Add(new MechanicLog(a.getFirstAware() - boss_data.getFirstAware(), m, amp));
                 }
             }
         }

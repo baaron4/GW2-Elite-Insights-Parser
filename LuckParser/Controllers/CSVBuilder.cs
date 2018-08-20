@@ -626,7 +626,7 @@ namespace LuckParser.Controllers
         }
         private void CreateMechanicTable(StreamWriter sw, int phase_index)
         {
-            Dictionary<string, HashSet<Mechanic>> presMech = log.getMechanicData().getPresentPlayerMechs(phase_index);
+            HashSet<Mechanic> presMech = log.getMechanicData().getPresentPlayerMechs(phase_index);
             //Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.getMechanicData().getPresentEnemyMechs(phase_index);
             PhaseData phase = statistics.phases[phase_index];
             //List<AbstractMasterPlayer> enemyList = log.getMechanicData().getEnemyList(phase_index);
@@ -634,23 +634,18 @@ namespace LuckParser.Controllers
             if (presMech.Count > 0)
             {
                 WriteCell("Name");
-                foreach (string mechalt in presMech.Keys)
+                foreach (Mechanic mech in presMech)
                 {
-                    WriteCell(presMech[mechalt].First().GetName());
+                    WriteCell(mech.GetName());
                 }
                 NewLine();
 
                 foreach (Player p in log.getPlayerList())
                 {
                     WriteCell(p.getCharacter());
-                    foreach (HashSet<Mechanic> mechs in presMech.Values)
+                    foreach (Mechanic mech in presMech)
                     {
-                        int count = 0;
-                        foreach (Mechanic mech in mechs)
-                        {
-                            List<MechanicLog> test = log.getMechanicData().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= phase.getStart() && x.GetTime() <= phase.getEnd()).ToList();
-                            count += test.Count;
-                        }
+                        int count = log.getMechanicData()[mech].Count(x => x.GetPlayer().getInstid() == p.getInstid() && phase.inInterval(x.GetTime()));
                         WriteCell(count.ToString());
                     }
                     NewLine();
@@ -669,7 +664,13 @@ namespace LuckParser.Controllers
         {
             PhaseData phase = statistics.phases[phase_index];
 
-            List<MechanicLog> m_Logs = log.getMechanicData();
+            MechanicData m_Data = log.getMechanicData();
+            List<MechanicLog> m_Logs = new List<MechanicLog>();
+            foreach (List<MechanicLog> mLogs in m_Data.Values)
+            {
+                m_Logs.AddRange(mLogs);
+            }
+            m_Logs.OrderBy(x => x.GetTime());
             int count = 0;
             WriteCell("Time");
             foreach (MechanicLog m in m_Logs)

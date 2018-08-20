@@ -114,15 +114,9 @@ namespace LuckParser.Controllers
                 HashSet<Mechanic> presMech = log.getMechanicData().getPresentMechanics(phase_index);
                 List<string> distMech = presMech.Select(x => x.GetAltName()).Distinct().ToList();
                 List<ushort> playersIds = log.getPlayerList().Select(x => x.getInstid()).ToList();
-                foreach (string mechAltString in distMech)
+                foreach (Mechanic mech in presMech)
                 {
-                    List<Mechanic> mechs = presMech.Where(x => x.GetAltName() == mechAltString).ToList();
-                    List<MechanicLog> filterdList = new List<MechanicLog>();
-                    foreach (Mechanic me in mechs)
-                    {
-                        filterdList.AddRange(log.getMechanicData().Where(x => x.GetSkill() == me.GetSkill() && phase.inInterval(x.GetTime())).ToList());
-                    }
-                    Mechanic mech = mechs[0];
+                    List<MechanicLog> filterdList = log.getMechanicData()[mech];
                     sw.Write("{");
                     sw.Write("y: [");
 
@@ -2644,8 +2638,8 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         private void CreateMechanicTable(StreamWriter sw, int phase_index)
         {
-            Dictionary<string, HashSet<Mechanic>> presMech = log.getMechanicData().getPresentPlayerMechs(phase_index);
-            Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.getMechanicData().getPresentEnemyMechs(phase_index);
+            HashSet<Mechanic> presMech = log.getMechanicData().getPresentPlayerMechs(phase_index);
+            HashSet<Mechanic> presEnemyMech = log.getMechanicData().getPresentEnemyMechs(phase_index);
             PhaseData phase = statistics.phases[phase_index];
             List<AbstractMasterPlayer> enemyList = log.getMechanicData().getEnemyList(phase_index);
             if (presMech.Count > 0)
@@ -2681,9 +2675,9 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<th>Player</th>");
-                            foreach (string mechalt in presMech.Keys)
+                            foreach (Mechanic mech in presMech)
                             {
-                                sw.Write("<th><span data-toggle=\"tooltip\" title=\""+presMech[mechalt].First().GetName() +"\">" + mechalt + "</span></th>");
+                                sw.Write("<th><span data-toggle=\"tooltip\" title=\""+ mech.GetName() +"\">" + mech.GetAltName() + "</span></th>");
                             }
                         }
                         sw.Write("</tr>");
@@ -2697,25 +2691,22 @@ namespace LuckParser.Controllers
                             sw.Write("<tr>");
                             {
                                 sw.Write("<td>" + p.getCharacter() + "</td>");
-                                foreach (HashSet<Mechanic> mechs in presMech.Values)
+                                foreach (Mechanic mech in presMech)
                                 {
-                                    int count = 0;
                                     long timeFilter = 0;
                                     int filterCount = 0;
-                                    foreach (Mechanic mech in mechs)//Filtering for mechs named the same thing
+                                    List<MechanicLog> mls = log.getMechanicData()[mech].Where(x => x.GetPlayer().getInstid() == p.getInstid() && phase.inInterval(x.GetTime())).ToList();
+                                    int count = mls.Count;
+                                    foreach (MechanicLog ml in mls)
                                     {
-                                        List<MechanicLog> test = log.getMechanicData().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= phase.getStart() && x.GetTime() <= phase.getEnd()).ToList();
-                                        count += test.Count;
-                                        foreach (MechanicLog ml in test)
+                                        if (mech.GetICD() != 0 && ml.GetTime() - timeFilter < mech.GetICD())//ICD check
                                         {
-                                            if (mech.GetICD() != 0 && ml.GetTime() - timeFilter < mech.GetICD())//ICD check
-                                            {
-                                                filterCount++;
-                                            }
-                                            timeFilter = ml.GetTime();
-
+                                            filterCount++;
                                         }
+                                        timeFilter = ml.GetTime();
+
                                     }
+
                                     if (filterCount > 0)
                                     {
                                         sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
@@ -2769,9 +2760,9 @@ namespace LuckParser.Controllers
                         sw.Write("<tr>");
                         {
                             sw.Write("<th>Enemy</th>");
-                            foreach (string mechalt in presEnemyMech.Keys)
+                            foreach (Mechanic mech in presEnemyMech)
                             {
-                                sw.Write("<th><span data-toggle=\"tooltip\" title=\"" + presEnemyMech[mechalt].First().GetName() + "\">" + mechalt + "</span></th>");
+                                sw.Write("<th><span data-toggle=\"tooltip\" title=\"" + mech.GetName() + "\">" + mech.GetAltName() + "</span></th>");
                             }
                         }
                         sw.Write("</tr>");
@@ -2779,22 +2770,15 @@ namespace LuckParser.Controllers
 
                     sw.Write("</thead>");
                     sw.Write("<tbody>");
-                    {
-                      
-
+                    {                     
                         foreach (AbstractMasterPlayer p in enemyList)
                         {
                             sw.Write("<tr>");
                             {
                                 sw.Write("<td>" + p.getCharacter() + "</td>");
-                                foreach (HashSet<Mechanic> mechs in presEnemyMech.Values)
+                                foreach (Mechanic mech in presEnemyMech)
                                 {
-                                    int count = 0;
-                                    foreach (Mechanic mech in mechs)
-                                    {
-                                        List<MechanicLog> test = log.getMechanicData().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer().getInstid() == p.getInstid() && x.GetTime() >= phase.getStart()  && x.GetTime() <= phase.getEnd()).ToList();
-                                        count += test.Count;
-                                    }
+                                    int count = log.getMechanicData()[mech].Count(x => x.GetPlayer().getInstid() == p.getInstid() && phase.inInterval(x.GetTime()));
                                     sw.Write("<td>" + count + "</td>");
                                 }
                             }
