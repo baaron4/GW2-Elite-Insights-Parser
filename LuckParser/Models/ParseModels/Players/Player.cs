@@ -125,7 +125,7 @@ namespace LuckParser.Models.ParseModels
         private void EstimateWeapons(ParsedLog log)
         {
             string[] weapons = new string[4];//first 2 for first set next 2 for second set
-            List<SkillItem> s_list = log.getSkillData().getSkillList();
+            SkillData s_list = log.getSkillData();
             List<CastLog> casting = getCastLogs(log, 0, log.getBossData().getAwareDuration());      
             int swapped = 0;//4 for first set and 5 for next
             long swappedTime = 0;

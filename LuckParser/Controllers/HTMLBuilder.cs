@@ -1597,7 +1597,7 @@ namespace LuckParser.Controllers
             PhaseData phase = phases[phase_index];
             long start = phase.getStart() + log.getBossData().getFirstAware();
             long end = phase.getEnd() + log.getBossData().getFirstAware();
-            List<SkillItem> s_list = log.getSkillData().getSkillList();
+            SkillData s_list = log.getSkillData();
             //generate Player list Graphs
             foreach (Player p in log.getPlayerList())
             {
@@ -1948,7 +1948,7 @@ namespace LuckParser.Controllers
                 foreach (CastLog cl in casting)
                 {
                     GW2APISkill apiskill = null;
-                    SkillItem skill = log.getSkillData().getSkillList().FirstOrDefault(x => x.getID() == cl.getID());
+                    SkillItem skill = log.getSkillData().FirstOrDefault(x => x.getID() == cl.getID());
                     if (skill != null)
                     {
                         apiskill = skill.GetGW2APISkill();
@@ -2035,7 +2035,7 @@ namespace LuckParser.Controllers
         private void CreateDeathRecap(StreamWriter sw, Player p)
         {
             List<DamageLog> damageLogs = p.getDamageTakenLogs(log, 0, log.getBossData().getAwareDuration());
-            List<SkillItem> s_list = log.getSkillData().getSkillList();
+            SkillData s_list = log.getSkillData();
             long start = log.getBossData().getFirstAware();
             long end = log.getBossData().getLastAware();
             List<CombatItem> down = log.getCombatData().getStates(p.getInstid(), ParseEnum.StateChange.ChangeDown, start, end);
@@ -2241,7 +2241,7 @@ namespace LuckParser.Controllers
         private void CreateDMGDistTableBody(StreamWriter sw, List<CastLog> casting, List<DamageLog> damageLogs, int finalTotalDamage)
         {
             HashSet<long> usedIDs = new HashSet<long>();
-            List<SkillItem> s_list = log.getSkillData().getSkillList();
+            SkillData s_list = log.getSkillData();
             HTMLHelper.writeDamageDistTableCondi(sw, usedIDs, damageLogs, finalTotalDamage);
             foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.getID())).Select(x => x.getID()).Distinct().ToList())
             {
@@ -2482,7 +2482,7 @@ namespace LuckParser.Controllers
         {
             PhaseData phase = statistics.phases[phase_index];
             List<DamageLog> damageLogs = p.getDamageTakenLogs(log, phase.getStart(), phase.getEnd());
-            List<SkillItem> s_list = log.getSkillData().getSkillList();
+            SkillData s_list = log.getSkillData();
             long finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.getDamage()) : 0;
             string pid = p.getInstid() + "_" + phase_index;
             sw.Write("<script>");
@@ -2962,7 +2962,7 @@ namespace LuckParser.Controllers
         {
             sw.Write("<ul class=\"list-group\">");
             {
-                foreach (SkillItem skill in log.getSkillData().getSkillList())
+                foreach (SkillItem skill in log.getSkillData())
                 {
                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                   skill.getID() + " : " + skill.getName() +
@@ -3188,7 +3188,7 @@ namespace LuckParser.Controllers
             List<PhaseData> phases = statistics.phases;
             PhaseData phase = phases[phase_index];
             List<CastLog> casting = log.getBoss().getCastLogsActDur(log, phase.getStart(), phase.getEnd());
-            List<SkillItem> s_list = log.getSkillData().getSkillList();
+            SkillData s_list = log.getSkillData();
             string charname = log.getBoss().getCharacter();
             string pid = log.getBoss().getInstid() + "_" + phase_index;
             sw.Write("<h1 align=\"center\"> " + charname + "</h1>");

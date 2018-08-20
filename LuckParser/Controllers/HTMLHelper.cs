@@ -13,18 +13,17 @@ namespace LuckParser.Controllers
     {
         public static SettingsContainer settings;
 
-        public static void writeCastingItem(StreamWriter sw, CastLog cl, SkillData skill_data, long start, long end)
+        public static void writeCastingItem(StreamWriter sw, CastLog cl, SkillData s_list, long start, long end)
         {
             string skillName = "";
             GW2APISkill skill = null;
-            List<SkillItem> s_list = skill_data.getSkillList();
             if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
             {
                 skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
             }
             if (skill == null)
             {
-                skillName = skill_data.getName(cl.getID());
+                skillName = s_list.getName(cl.getID());
             }
             else
             {
@@ -136,11 +135,10 @@ namespace LuckParser.Controllers
             sw.Write(" },");
         }
 
-        public static void writeCastingItemIcon(StreamWriter sw, CastLog cl, SkillData skill_data, long start, bool last)
+        public static void writeCastingItemIcon(StreamWriter sw, CastLog cl, SkillData s_list, long start, bool last)
         {
             string skillIcon = "";
             GW2APISkill skill = null;
-            List<SkillItem> s_list = skill_data.getSkillList();
             if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
             {
                 skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
@@ -175,7 +173,7 @@ namespace LuckParser.Controllers
                 }
                 else
                 {
-                    skillName = skill_data.getName(cl.getID());
+                    skillName = s_list.getName(cl.getID());
                 }
 
 

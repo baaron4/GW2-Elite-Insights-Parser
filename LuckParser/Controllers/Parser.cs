@@ -242,7 +242,7 @@ namespace LuckParser.Controllers
                     var skill = new SkillItem(skill_id, name);
 
                     skill.SetGW2APISkill(apiController);
-                    skill_data.addItem(skill);
+                    skill_data.Add(skill);
                 }
             }
         }
