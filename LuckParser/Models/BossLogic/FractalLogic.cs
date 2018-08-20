@@ -15,8 +15,8 @@ namespace LuckParser.Models
             mode = ParseMode.Fractal;
             mechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(37695, "Flux Bomb", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Unknown, "symbol:'circle',color:'rgb(150,0,255)',size:10,", "Flux Bomb",0),
-            new Mechanic(36393, "Flux Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Unknown, "symbol:'circle-open',color:'rgb(150,0,255)',size:10,", "Flux Bomb (dmg)",0),
+            new Mechanic(37695, "Flux Bomb", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Unknown, "symbol:'circle',color:'rgb(150,0,255)',size:10,", "FBmb",0), // Flux Bomb application, Flux Bomb
+            new Mechanic(36393, "Flux Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Unknown, "symbol:'circle-open',color:'rgb(150,0,255)',size:10,", "FB.dmg",0), // Flux Bomb hit, Flux Bomb dmg
             });
         }
 
