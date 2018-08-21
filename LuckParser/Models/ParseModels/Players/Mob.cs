@@ -15,11 +15,11 @@ namespace LuckParser.Models.ParseModels
         }
 
         //setters
-        protected override void setDamagetakenLogs(ParsedLog log)
+        protected override void SetDamagetakenLogs(ParsedLog log)
         {
         }
 
-        protected override void setAdditionalCombatReplayData(ParsedLog log, int pollingRate)
+        protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
             // todo
             int start = (int)replay.getTimeOffsets().Item1;
@@ -88,7 +88,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void setCombatReplayIcon(ParsedLog log)
+        protected override void SetCombatReplayIcon(ParsedLog log)
         {
             switch (ParseEnum.getThrashIDS(agent.getID()))
             {
@@ -206,7 +206,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public override void addMechanics(ParsedLog log)
+        public override void AddMechanics(ParsedLog log)
         {
             // nothing to do, thrash mob mechanics should be managed by the boss
         }

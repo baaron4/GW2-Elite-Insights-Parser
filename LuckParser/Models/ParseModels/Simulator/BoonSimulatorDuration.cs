@@ -14,7 +14,7 @@ namespace LuckParser.Models.ParseModels
 
         // Public Methods
     
-        public override void update(long time_passed)
+        public override void Update(long time_passed)
         {
             if (boon_stack.Count > 0)
             {
@@ -39,7 +39,7 @@ namespace LuckParser.Models.ParseModels
                     // Spend leftover time
                     long leftover = Math.Abs(boon_stack[0].boon_duration);
                     boon_stack.RemoveAt(0);
-                    update(leftover);
+                    Update(leftover);
                 }
             }
         }      

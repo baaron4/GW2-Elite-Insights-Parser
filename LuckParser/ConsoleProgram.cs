@@ -78,10 +78,10 @@ namespace LuckParser
                         saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
                     }
 
-                    string bossid = control.getBossData().getID().ToString();
+                    string bossid = control.GetBossData().getID().ToString();
                     string result = "fail";
 
-                    if (control.getLogData().getBosskill())
+                    if (control.GetLogData().getBosskill())
                     {
                         result = "kill";
                     }
@@ -98,7 +98,7 @@ namespace LuckParser
                     {
                         CSVBuilder.UpdateStatisticSwitches(switches);
                     }
-                    statistics = statisticsCalculator.calculateStatistics(log, switches);
+                    statistics = statisticsCalculator.CalculateStatistics(log, switches);
                     Console.Write("Statistics Computed");
 
                     string fName = fInfo.Name.Split('.')[0];

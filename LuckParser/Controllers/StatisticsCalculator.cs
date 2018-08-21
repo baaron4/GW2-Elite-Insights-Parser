@@ -39,46 +39,46 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="log">log to calculate stats from</param>
         /// <returns></returns>
-        public Statistics calculateStatistics(ParsedLog log, Switches switches)
+        public Statistics CalculateStatistics(ParsedLog log, Switches switches)
         {
             statistics = new Statistics();
 
             this.log = log;
 
-            statistics.phases = log.getBoss().getPhases(log, settings.ParsePhases);
+            statistics.phases = log.GetBoss().getPhases(log, settings.ParsePhases);
             if (switches.calculateCombatReplay && settings.ParseCombatReplay)
             {
-                foreach (Player p in log.getPlayerList())
+                foreach (Player p in log.GetPlayerList())
                 {
-                    p.initCombatReplay(log, settings.PollingRate, false, true);
+                    p.InitCombatReplay(log, settings.PollingRate, false, true);
                 }
-                log.getBoss().initCombatReplay(log, settings.PollingRate, false, true);
+                log.GetBoss().InitCombatReplay(log, settings.PollingRate, false, true);
             }
-            if (switches.calculateDPS) calculateDPS();
-            if (switches.calculateStats) calculateStats();
-            if (switches.calculateDefense) calculateDefenses();
-            if (switches.calculateSupport) calculateSupport();
+            if (switches.calculateDPS) CalculateDPS();
+            if (switches.calculateStats) CalculateStats();
+            if (switches.calculateDefense) CalculateDefenses();
+            if (switches.calculateSupport) CalculateSupport();
             if (switches.calculateBoons)
             {
-                setPresentBoons();
-                calculateBoons();
+                SetPresentBoons();
+                CalculateBoons();
             } 
                       
-            if (switches.calculateConditions) calculateConditions();
+            if (switches.calculateConditions) CalculateConditions();
             if (switches.calculateMechanics)
             {
-                log.getBoss().addMechanics(log);
-                foreach (Player p in log.getPlayerList())
+                log.GetBoss().AddMechanics(log);
+                foreach (Player p in log.GetPlayerList())
                 {
-                    p.addMechanics(log);
+                    p.AddMechanics(log);
                 }
-                log.getMechanicData().computePresentMechanics(log, statistics.phases);
+                log.GetMechanicData().computePresentMechanics(log, statistics.phases);
             }
 
             return statistics;
         }
 
-        private Statistics.FinalDPS getFinalDPS(AbstractPlayer player, int phaseIndex, bool checkRedirection)
+        private Statistics.FinalDPS GetFinalDPS(AbstractPlayer player, int phaseIndex, bool checkRedirection)
         {
             Statistics.FinalDPS final = new Statistics.FinalDPS();
 
@@ -91,7 +91,7 @@ namespace LuckParser.Controllers
 
             ////////// ALL
             //DPS
-            damage = player.getDamageLogs(0, log, phase.getStart(),
+            damage = player.GetDamageLogs(0, log, phase.getStart(),
                     phase.getEnd())
                 .Sum(x => x.getDamage());
             if (phaseDuration > 0)
@@ -101,7 +101,7 @@ namespace LuckParser.Controllers
             final.allDps = (int)dps;
             final.allDamage = (int)damage;
             //Condi DPS
-            damage = player.getDamageLogs(0, log, phase.getStart(),
+            damage = player.GetDamageLogs(0, log, phase.getStart(),
                     phase.getEnd())
                 .Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
             if (phaseDuration > 0)
@@ -118,17 +118,17 @@ namespace LuckParser.Controllers
             }
             final.allPowerDps = (int)dps;
             final.allPowerDamage = (int)damage;
-            final.playerPowerDamage = player.getJustPlayerDamageLogs(0, log,
+            final.playerPowerDamage = player.GetJustPlayerDamageLogs(0, log,
                 phase.getStart(), phase.getEnd()).Where(x => x.isCondi() == 0).Sum(x => x.getDamage());
             /////////// BOSS
             //DPS
             if (checkRedirection && phase.getRedirection().Count > 0)
             {
-                damage = player.getDamageLogs(phase.getRedirection(), log,
+                damage = player.GetDamageLogs(phase.getRedirection(), log,
                     phase.getStart(), phase.getEnd()).Sum(x => x.getDamage());
             } else
             {
-                damage = player.getDamageLogs(log.getBossData().getInstid(), log,
+                damage = player.GetDamageLogs(log.GetBossData().getInstid(), log,
                     phase.getStart(), phase.getEnd()).Sum(x => x.getDamage());
             }
             if (phaseDuration > 0)
@@ -140,12 +140,12 @@ namespace LuckParser.Controllers
             //Condi DPS
             if (checkRedirection && phase.getRedirection().Count > 0)
             {
-                damage = player.getDamageLogs(phase.getRedirection(), log,
+                damage = player.GetDamageLogs(phase.getRedirection(), log,
                     phase.getStart(), phase.getEnd()).Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
             }
             else
             {
-                damage = player.getDamageLogs(log.getBossData().getInstid(), log,
+                damage = player.GetDamageLogs(log.GetBossData().getInstid(), log,
                     phase.getStart(), phase.getEnd()).Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
             }
             if (phaseDuration > 0)
@@ -164,26 +164,26 @@ namespace LuckParser.Controllers
             final.bossPowerDamage = (int)damage;
             if (checkRedirection && phase.getRedirection().Count > 0)
             {
-                final.playerBossPowerDamage = player.getJustPlayerDamageLogs(phase.getRedirection(), log,
+                final.playerBossPowerDamage = player.GetJustPlayerDamageLogs(phase.getRedirection(), log,
                     phase.getStart(), phase.getEnd()).Where(x => x.isCondi() == 0).Sum(x => x.getDamage());
             }
             else
             {
-                final.playerBossPowerDamage = player.getJustPlayerDamageLogs(log.getBossData().getInstid(), log,
+                final.playerBossPowerDamage = player.GetJustPlayerDamageLogs(log.GetBossData().getInstid(), log,
                     phase.getStart(), phase.getEnd()).Where(x => x.isCondi() == 0).Sum(x => x.getDamage());
             }
 
             return final;
         }
 
-        private void calculateDPS()
+        private void CalculateDPS()
         {
-            foreach (Player player in log.getPlayerList())
+            foreach (Player player in log.GetPlayerList())
             {
                 Statistics.FinalDPS[] phaseDps = new Statistics.FinalDPS[statistics.phases.Count];
                 for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
                 {
-                    phaseDps[phaseIndex] = getFinalDPS(player,phaseIndex, true);
+                    phaseDps[phaseIndex] = GetFinalDPS(player,phaseIndex, true);
                 }
 
                 statistics.dps[player] = phaseDps;
@@ -192,15 +192,15 @@ namespace LuckParser.Controllers
             Statistics.FinalDPS[] phaseBossDps = new Statistics.FinalDPS[statistics.phases.Count];
             for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
             {
-                phaseBossDps[phaseIndex] = getFinalDPS(log.getBoss(), phaseIndex, false);
+                phaseBossDps[phaseIndex] = GetFinalDPS(log.GetBoss(), phaseIndex, false);
             }
 
             statistics.bossDps = phaseBossDps;
         }
 
-        private void calculateStats()
+        private void CalculateStats()
         {
-            foreach (Player player in log.getPlayerList())
+            foreach (Player player in log.GetPlayerList())
             {
                 Statistics.FinalStats[] phaseStats = new Statistics.FinalStats[statistics.phases.Count];
                 for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
@@ -208,13 +208,13 @@ namespace LuckParser.Controllers
                     Statistics.FinalStats final = new Statistics.FinalStats();
 
                     PhaseData phase = statistics.phases[phaseIndex];
-                    long start = phase.getStart() + log.getBossData().getFirstAware();
-                    long end = phase.getEnd() + log.getBossData().getFirstAware();
+                    long start = phase.getStart() + log.GetBossData().getFirstAware();
+                    long end = phase.getEnd() + log.GetBossData().getFirstAware();
 
-                    List<DamageLog> damageLogs  = player.getJustPlayerDamageLogs(0, log, phase.getStart(), phase.getEnd());
-                    List<CastLog> castLogs = player.getCastLogs(log, phase.getStart(), phase.getEnd());
+                    List<DamageLog> damageLogs  = player.GetJustPlayerDamageLogs(0, log, phase.getStart(), phase.getEnd());
+                    List<CastLog> castLogs = player.GetCastLogs(log, phase.getStart(), phase.getEnd());
 
-                    int instid = player.getInstid();
+                    int instid = player.GetInstid();
 
                     final.powerLoopCount = 0;
                     final.critablePowerLoopCount = 0;
@@ -263,7 +263,7 @@ namespace LuckParser.Controllers
                         }
                     } else
                     {
-                        idsToCheck.Add(log.getBossData().getInstid());
+                        idsToCheck.Add(log.GetBossData().getInstid());
                     }
                     foreach (DamageLog dl in damageLogs)
                     {
@@ -275,7 +275,7 @@ namespace LuckParser.Controllers
                                 if (idsToCheck.Count > 1)
                                 {
                                     AgentItem target = phase.getRedirection().Find(x => x.getInstid() == dl.getDstInstidt());
-                                    if (dl.getTime() < target.getFirstAware() - log.getBossData().getFirstAware() || dl.getTime() > target.getLastAware() - log.getBossData().getFirstAware())
+                                    if (dl.getTime() < target.getFirstAware() - log.GetBossData().getFirstAware() || dl.getTime() > target.getLastAware() - log.GetBossData().getFirstAware())
                                     {
                                         continue;
                                     }
@@ -397,22 +397,22 @@ namespace LuckParser.Controllers
                     final.powerLoopCountBoss = final.powerLoopCountBoss == 0 ? 1 : final.powerLoopCountBoss;
 
                     // Counts
-                    CombatData combatData = log.getCombatData();
-                    final.swapCount = combatData.getStates(instid, ParseEnum.StateChange.WeaponSwap, start, end).Count;
-                    final.downCount = combatData.getStates(instid, ParseEnum.StateChange.ChangeDown, start, end).Count;
-                    final.dodgeCount = combatData.getSkillCount(instid, 65001, start, end) + combatData.getBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
-                    final.ressCount = combatData.getSkillCount(instid, 1066, start, end); //Res = 1066
+                    CombatData combatData = log.GetCombatData();
+                    final.swapCount = combatData.GetStates(instid, ParseEnum.StateChange.WeaponSwap, start, end).Count;
+                    final.downCount = combatData.GetStates(instid, ParseEnum.StateChange.ChangeDown, start, end).Count;
+                    final.dodgeCount = combatData.GetSkillCount(instid, 65001, start, end) + combatData.GetBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
+                    final.ressCount = combatData.GetSkillCount(instid, 1066, start, end); //Res = 1066
 
                     //Stack Distance
-                    if (settings.ParseCombatReplay && log.getBoss().getCombatReplay() != null)
+                    if (settings.ParseCombatReplay && log.GetBoss().GetCombatReplay() != null)
                     {
                         if (statistics.StackCenterPositions == null)
                         {
                             statistics.StackCenterPositions = new List<Point3D>();
                             List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
-                            foreach (Player p in log.getPlayerList())
+                            foreach (Player p in log.GetPlayerList())
                             {
-                                List<Point3D> list = p.getCombatReplay().getActivePositions();  
+                                List<Point3D> list = p.GetCombatReplay().getActivePositions();  
                                 if (list.Count > 1)
                                 {
                                     GroupsPosList.Add(list);
@@ -445,8 +445,8 @@ namespace LuckParser.Controllers
                                 statistics.StackCenterPositions.Add(new Point3D(x, y, z, time));
                             }
                         }
-                        List<Point3D> positions = player.getCombatReplay().getPositions().Where(x => x.time >= phase.getStart() && x.time <= phase.getEnd()).ToList();
-                        int offset = player.getCombatReplay().getPositions().Count(x => x.time < phase.getStart());
+                        List<Point3D> positions = player.GetCombatReplay().getPositions().Where(x => x.time >= phase.getStart() && x.time <= phase.getEnd()).ToList();
+                        int offset = player.GetCombatReplay().getPositions().Count(x => x.time < phase.getStart());
                         if (positions.Count > 1)
                         {
                             List<float> distances = new List<float>();
@@ -468,14 +468,14 @@ namespace LuckParser.Controllers
                         }
                     }
                     // R.I.P
-                    List<CombatItem> dead = combatData.getStates(instid, ParseEnum.StateChange.ChangeDead, start, end);
+                    List<CombatItem> dead = combatData.GetStates(instid, ParseEnum.StateChange.ChangeDead, start, end);
                     final.died = 0.0;
                     if (dead.Count > 0)
                     {
                         final.died = dead.Last().getTime() - start;
                     }
 
-                    List<CombatItem> disconect = combatData.getStates(instid, ParseEnum.StateChange.Despawn, start, end);
+                    List<CombatItem> disconect = combatData.GetStates(instid, ParseEnum.StateChange.Despawn, start, end);
                     final.dcd = 0.0;
                     if (disconect.Count > 0)
                     {
@@ -488,9 +488,9 @@ namespace LuckParser.Controllers
             }
         }
 
-        private void calculateDefenses()
+        private void CalculateDefenses()
         {
-            foreach (Player player in log.getPlayerList())
+            foreach (Player player in log.GetPlayerList())
             {
                 Statistics.FinalDefenses[] phaseDefense = new Statistics.FinalDefenses[statistics.phases.Count];
                 for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
@@ -498,13 +498,13 @@ namespace LuckParser.Controllers
                     Statistics.FinalDefenses final = new Statistics.FinalDefenses();
 
                     PhaseData phase =statistics.phases[phaseIndex];
-                    long start = phase.getStart() + log.getBossData().getFirstAware();
-                    long end = phase.getEnd() + log.getBossData().getFirstAware();
+                    long start = phase.getStart() + log.GetBossData().getFirstAware();
+                    long end = phase.getEnd() + log.GetBossData().getFirstAware();
 
-                    List<DamageLog> damageLogs = player.getDamageTakenLogs(log, phase.getStart(), phase.getEnd());
+                    List<DamageLog> damageLogs = player.GetDamageTakenLogs(log, phase.getStart(), phase.getEnd());
                     //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
 
-                    int instID = player.getInstid();
+                    int instID = player.GetInstid();
                  
                     final.damageTaken = damageLogs.Sum(x => (long)x.getDamage());
                     //final.allHealReceived = healingLogs.Sum(x => x.getDamage());
@@ -526,9 +526,9 @@ namespace LuckParser.Controllers
         }
 
        
-        private void calculateSupport()
+        private void CalculateSupport()
         {
-            foreach (Player player in log.getPlayerList())
+            foreach (Player player in log.GetPlayerList())
             {
                 Statistics.FinalSupport[] phaseSupport = new Statistics.FinalSupport[statistics.phases.Count];
                 for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
@@ -536,14 +536,14 @@ namespace LuckParser.Controllers
                     Statistics.FinalSupport final = new Statistics.FinalSupport();
 
                     PhaseData phase =statistics.phases[phaseIndex];
-                    long start = phase.getStart() + log.getBossData().getFirstAware();
-                    long end = phase.getEnd() + log.getBossData().getFirstAware();
+                    long start = phase.getStart() + log.GetBossData().getFirstAware();
+                    long end = phase.getEnd() + log.GetBossData().getFirstAware();
 
                     // List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData());
-                    int instid = player.getInstid();
+                    int instid = player.GetInstid();
 
-                    int[] resArray = player.getReses(log, phase.getStart(), phase.getEnd());
-                    int[] cleanseArray = player.getCleanses(log, phase.getStart(), phase.getEnd());
+                    int[] resArray = player.GetReses(log, phase.getStart(), phase.getEnd());
+                    int[] cleanseArray = player.GetCleanses(log, phase.getStart(), phase.getEnd());
                     //List<DamageLog> healingLogs = player.getHealingLogs(log, phase.getStart(), phase.getEnd());
                     //final.allHeal = healingLogs.Sum(x => x.getDamage());
                     final.resurrects = resArray[0];
@@ -557,7 +557,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        private Dictionary<long, Statistics.FinalBoonUptime> getBoonsForList(List<Player> playerList, Player player, List<Boon> to_track, int phaseIndex)
+        private Dictionary<long, Statistics.FinalBoonUptime> GetBoonsForList(List<Player> playerList, Player player, List<Boon> to_track, int phaseIndex)
         {
             PhaseData phase =statistics.phases[phaseIndex];
             long fightDuration = phase.getEnd() - phase.getStart();
@@ -565,7 +565,7 @@ namespace LuckParser.Controllers
             Dictionary<Player, BoonDistribution> boonDistributions = new Dictionary<Player, BoonDistribution>();
             foreach (Player p in playerList)
             {
-                boonDistributions[p] = p.getBoonDistribution(log,statistics.phases, to_track, phaseIndex);
+                boonDistributions[p] = p.GetBoonDistribution(log,statistics.phases, to_track, phaseIndex);
             }
 
             Dictionary<long, Statistics.FinalBoonUptime> final =
@@ -580,8 +580,8 @@ namespace LuckParser.Controllers
                 {
                     if (boons.ContainsKey(boon.getID()))
                     {
-                        totalGeneration += boons.getGeneration(boon.getID(), player.getInstid());
-                        totalOverstack += boons.getOverstack(boon.getID(), player.getInstid());
+                        totalGeneration += boons.getGeneration(boon.getID(), player.GetInstid());
+                        totalOverstack += boons.getOverstack(boon.getID(), player.GetInstid());
                     }
                 }
 
@@ -604,16 +604,16 @@ namespace LuckParser.Controllers
             return final;
         }
 
-        private void calculateBoons()
+        private void CalculateBoons()
         {
             // Player Boons
-            foreach (Player player in log.getPlayerList())
+            foreach (Player player in log.GetPlayerList())
             {
                 List<Boon> boon_to_track = new List<Boon>();
                 boon_to_track.AddRange(statistics.present_boons);
                 boon_to_track.AddRange(statistics.present_offbuffs);
                 boon_to_track.AddRange(statistics.present_defbuffs);
-                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
+                boon_to_track.AddRange(statistics.present_personnal[player.GetInstid()]);
                 Dictionary<long, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<long, Statistics.FinalBoonUptime>[statistics.phases.Count];
                 for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
                 {
@@ -621,30 +621,31 @@ namespace LuckParser.Controllers
 
                     PhaseData phase =statistics.phases[phaseIndex];
 
-                    BoonDistribution selfBoons = player.getBoonDistribution(log,statistics.phases, boon_to_track, phaseIndex);
+                    BoonDistribution selfBoons = player.GetBoonDistribution(log,statistics.phases, boon_to_track, phaseIndex);
 
                     long fightDuration = phase.getEnd() - phase.getStart();
                     foreach (Boon boon in boon_to_track)
                     {
-                        Statistics.FinalBoonUptime uptime = new Statistics.FinalBoonUptime();
-
-                        uptime.uptime = 0;
-                        uptime.generation = 0;
-                        uptime.overstack = 0;
+                        Statistics.FinalBoonUptime uptime = new Statistics.FinalBoonUptime
+                        {
+                            uptime = 0,
+                            generation = 0,
+                            overstack = 0
+                        };
                         if (selfBoons.ContainsKey(boon.getID()))
                         {
-                            long generation = selfBoons.getGeneration(boon.getID(), player.getInstid());
+                            long generation = selfBoons.getGeneration(boon.getID(), player.GetInstid());
                             if (boon.getType() == Boon.BoonType.Duration)
                             {
                                 uptime.uptime = Math.Round(100.0 * selfBoons.getUptime(boon.getID()) / fightDuration, 1);
                                 uptime.generation = Math.Round(100.0f * generation / fightDuration, 1);
-                                uptime.overstack = Math.Round(100.0f * (selfBoons.getOverstack(boon.getID(), player.getInstid()) + generation) / fightDuration, 1);
+                                uptime.overstack = Math.Round(100.0f * (selfBoons.getOverstack(boon.getID(), player.GetInstid()) + generation) / fightDuration, 1);
                             }
                             else if (boon.getType() == Boon.BoonType.Intensity)
                             {
                                 uptime.uptime = Math.Round((double)selfBoons.getUptime(boon.getID()) / fightDuration, 1);
                                 uptime.generation = Math.Round((double)generation / fightDuration, 1);
-                                uptime.overstack = Math.Round((double)(selfBoons.getOverstack(boon.getID(), player.getInstid()) + generation) / fightDuration, 1);
+                                uptime.overstack = Math.Round((double)(selfBoons.getOverstack(boon.getID(), player.GetInstid()) + generation) / fightDuration, 1);
                             }
                         }
                         final[boon.getID()] = uptime;
@@ -656,71 +657,71 @@ namespace LuckParser.Controllers
             }
 
             // Group Boons
-            foreach (Player player in log.getPlayerList())
+            foreach (Player player in log.GetPlayerList())
             {
                 List<Boon> boon_to_track = new List<Boon>();
                 boon_to_track.AddRange(statistics.present_boons);
                 boon_to_track.AddRange(statistics.present_offbuffs);
                 boon_to_track.AddRange(statistics.present_defbuffs);
-                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
+                boon_to_track.AddRange(statistics.present_personnal[player.GetInstid()]);
                 List<Player> groupPlayers = new List<Player>();
-                foreach (Player p in log.getPlayerList())
+                foreach (Player p in log.GetPlayerList())
                 {
-                    if (p.getGroup() == player.getGroup() && player.getInstid() != p.getInstid()) groupPlayers.Add(p);
+                    if (p.GetGroup() == player.GetGroup() && player.GetInstid() != p.GetInstid()) groupPlayers.Add(p);
                 }
                 Dictionary<long, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<long, Statistics.FinalBoonUptime>[statistics.phases.Count];
                 for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
                 {
-                    phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
+                    phaseBoons[phaseIndex] = GetBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
                 }
                 statistics.groupBoons[player] = phaseBoons;
             }
 
             // Off Group Boons
-            foreach (Player player in log.getPlayerList())
+            foreach (Player player in log.GetPlayerList())
             {
                 List<Boon> boon_to_track = new List<Boon>();
                 boon_to_track.AddRange(statistics.present_boons);
                 boon_to_track.AddRange(statistics.present_offbuffs);
                 boon_to_track.AddRange(statistics.present_defbuffs);
-                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
+                boon_to_track.AddRange(statistics.present_personnal[player.GetInstid()]);
                 List<Player> groupPlayers = new List<Player>();
-                foreach (Player p in log.getPlayerList())
+                foreach (Player p in log.GetPlayerList())
                 {
-                    if (p.getGroup() != player.getGroup()) groupPlayers.Add(p);
+                    if (p.GetGroup() != player.GetGroup()) groupPlayers.Add(p);
                 }
                 Dictionary<long, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<long, Statistics.FinalBoonUptime>[statistics.phases.Count];
                 for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
                 {                    
-                    phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
+                    phaseBoons[phaseIndex] = GetBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
                 }
                 statistics.offGroupBoons[player] = phaseBoons;
             }
 
             // Squad Boons
-            foreach (Player player in log.getPlayerList())
+            foreach (Player player in log.GetPlayerList())
             {
                 List<Boon> boon_to_track = new List<Boon>();
                 boon_to_track.AddRange(statistics.present_boons);
                 boon_to_track.AddRange(statistics.present_offbuffs);
                 boon_to_track.AddRange(statistics.present_defbuffs);
-                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
+                boon_to_track.AddRange(statistics.present_personnal[player.GetInstid()]);
                 List<Player> groupPlayers = new List<Player>();
-                foreach (Player p in log.getPlayerList())
+                foreach (Player p in log.GetPlayerList())
                 {
-                    if (p.getInstid() != player.getInstid())
+                    if (p.GetInstid() != player.GetInstid())
                         groupPlayers.Add(p);
                 }
                 Dictionary<long, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<long, Statistics.FinalBoonUptime>[statistics.phases.Count];
                 for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
                 {                
-                    phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
+                    phaseBoons[phaseIndex] = GetBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
                 }
                 statistics.squadBoons[player] = phaseBoons;
             }
         }
 
-        public void calculateConditions()
+        public void CalculateConditions()
         {
             statistics.bossConditions = new Dictionary<long, Statistics.FinalBossBoon>[statistics.phases.Count];
             List<Boon> boon_to_track = Boon.getCondiBoonList();
@@ -728,7 +729,7 @@ namespace LuckParser.Controllers
             boon_to_track.AddRange(Boon.getBossBoonList());
             for (int phaseIndex = 0; phaseIndex <statistics.phases.Count; phaseIndex++)
             {
-                BoonDistribution boonDistribution = log.getBoss().getBoonDistribution(log,statistics.phases, boon_to_track, phaseIndex);
+                BoonDistribution boonDistribution = log.GetBoss().GetBoonDistribution(log,statistics.phases, boon_to_track, phaseIndex);
                 Dictionary<long, Statistics.FinalBossBoon> rates = new Dictionary<long, Statistics.FinalBossBoon>();
 
                 PhaseData phase =statistics.phases[phaseIndex];
@@ -736,28 +737,28 @@ namespace LuckParser.Controllers
 
                 foreach (Boon boon in boon_to_track)
                 {
-                    Statistics.FinalBossBoon condition = new Statistics.FinalBossBoon(log.getPlayerList());
+                    Statistics.FinalBossBoon condition = new Statistics.FinalBossBoon(log.GetPlayerList());
                     rates[boon.getID()] = condition;
                     if (boonDistribution.ContainsKey(boon.getID()))
                     {
                         if (boon.getType() == Boon.BoonType.Duration)
                         {
                             condition.uptime = Math.Round(100.0 * boonDistribution.getUptime(boon.getID()) / fightDuration, 1);
-                            foreach(Player p in log.getPlayerList())
+                            foreach(Player p in log.GetPlayerList())
                             {
-                                long gen = boonDistribution.getGeneration(boon.getID(), p.getInstid());
+                                long gen = boonDistribution.getGeneration(boon.getID(), p.GetInstid());
                                 condition.generated[p] = Math.Round(100.0 * gen / fightDuration, 1);
-                                condition.overstacked[p] = Math.Round(100.0 * (boonDistribution.getOverstack(boon.getID(), p.getInstid()) + gen) / fightDuration, 1);
+                                condition.overstacked[p] = Math.Round(100.0 * (boonDistribution.getOverstack(boon.getID(), p.GetInstid()) + gen) / fightDuration, 1);
                             }
                         }
                         else if (boon.getType() == Boon.BoonType.Intensity)
                         {
                             condition.uptime = Math.Round((double) boonDistribution.getUptime(boon.getID()) / fightDuration, 1);
-                            foreach (Player p in log.getPlayerList())
+                            foreach (Player p in log.GetPlayerList())
                             {
-                                long gen = boonDistribution.getGeneration(boon.getID(), p.getInstid());
+                                long gen = boonDistribution.getGeneration(boon.getID(), p.GetInstid());
                                 condition.generated[p] = Math.Round((double) gen / fightDuration, 1);
-                                condition.overstacked[p] = Math.Round((double)(boonDistribution.getOverstack(boon.getID(), p.getInstid())+ gen) / fightDuration, 1);
+                                condition.overstacked[p] = Math.Round((double)(boonDistribution.getOverstack(boon.getID(), p.GetInstid())+ gen) / fightDuration, 1);
                             }
                         }
 
@@ -771,9 +772,9 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Checks the combat data and gets buffs that were present during the fight
         /// </summary>
-        private void setPresentBoons()
+        private void SetPresentBoons()
         {
-            List<CombatItem> c_list = log.getCombatData();
+            List<CombatItem> c_list = log.GetCombatData();
             if (settings.PlayerBoonsUniversal)
             {//Main boons
                 foreach (Boon boon in Boon.getBoonList())
@@ -802,20 +803,20 @@ namespace LuckParser.Controllers
                 }
             }
 
-            foreach (Player p in log.getPlayerList())
+            foreach (Player p in log.GetPlayerList())
             {
-                statistics.present_personnal[p.getInstid()] = new List<Boon>();
+                statistics.present_personnal[p.GetInstid()] = new List<Boon>();
                 if (settings.PlayerBoonsAllProf)
                 {//All class specefic boons
                     List<Boon> notYetFoundBoons = Boon.getRemainingBuffsList();
                     c_list.ForEach(item =>
                     {
-                        if (item.getDstInstid() == p.getInstid()) {
+                        if (item.getDstInstid() == p.GetInstid()) {
                             Boon foundBoon = notYetFoundBoons.Find(boon => boon.getID() == item.getSkillID());
                             if (foundBoon != null)
                             {
                                 notYetFoundBoons.Remove(foundBoon);
-                                statistics.present_personnal[p.getInstid()].Add(foundBoon);
+                                statistics.present_personnal[p.GetInstid()].Add(foundBoon);
                             }
                         }
                     });

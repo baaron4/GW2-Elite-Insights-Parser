@@ -24,12 +24,12 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (Minion minion in this)
                 {
-                    damage_logs.AddRange(minion.getDamageLogs(0, log, 0, log.getBossData().getAwareDuration()));
+                    damage_logs.AddRange(minion.GetDamageLogs(0, log, 0, log.GetBossData().getAwareDuration()));
                 }
             }
             if (filtered_damage_logs.Count == 0)
             {
-                filtered_damage_logs = damage_logs.Where(x => x.getDstInstidt() == log.getBossData().getInstid()).ToList();
+                filtered_damage_logs = damage_logs.Where(x => x.getDstInstidt() == log.GetBossData().getInstid()).ToList();
             }
             if (instidFilter > 0)
             {
@@ -44,7 +44,7 @@ namespace LuckParser.Models.ParseModels
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
             {
-                res.AddRange(dls.Where(x => x.getDstInstidt() == a.getInstid() && x.getTime() >= a.getFirstAware() - log.getBossData().getFirstAware() && x.getTime() <= a.getLastAware() - log.getBossData().getFirstAware()));
+                res.AddRange(dls.Where(x => x.getDstInstidt() == a.getInstid() && x.getTime() >= a.getFirstAware() - log.GetBossData().getFirstAware() && x.getTime() <= a.getLastAware() - log.GetBossData().getFirstAware()));
             }
             res.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
             return res;
@@ -66,7 +66,7 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (Minion minion in this)
                 {
-                    cast_logs.AddRange(minion.getCastLogs(log, 0, log.getBossData().getAwareDuration()));
+                    cast_logs.AddRange(minion.GetCastLogs(log, 0, log.GetBossData().getAwareDuration()));
                 }
             }
             return cast_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
@@ -81,7 +81,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (Count > 0)
             {
-                return this[0].getCharacter();
+                return this[0].GetCharacter();
             }
             return "";
         }

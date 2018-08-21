@@ -55,18 +55,18 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.getBossData().getAwareDuration();
+            long fight_dur = log.GetBossData().getAwareDuration();
             List<PhaseData> phases = getInitialPhase(log);
             // Special buff cast check
-            CombatItem heat_wave = log.getCombatList().Find(x => x.getSkillID() == 34526);
+            CombatItem heat_wave = log.GetCombatList().Find(x => x.getSkillID() == 34526);
             List<long> phase_starts = new List<long>();
             if (heat_wave != null)
             {
-                phase_starts.Add(heat_wave.getTime() - log.getBossData().getFirstAware());
-                CombatItem down_pour = log.getCombatList().Find(x => x.getSkillID() == 34554);
+                phase_starts.Add(heat_wave.getTime() - log.GetBossData().getFirstAware());
+                CombatItem down_pour = log.GetCombatList().Find(x => x.getSkillID() == 34554);
                 if (down_pour != null)
                 {
-                    phase_starts.Add(down_pour.getTime() - log.getBossData().getFirstAware());
+                    phase_starts.Add(down_pour.getTime() - log.GetBossData().getFirstAware());
                     CastLog abo = cast_logs.Find(x => x.getID() == 34427);
                     if (abo != null)
                     {
@@ -105,7 +105,7 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Storm
                     };
             List<CastLog> humanShield = cls.Where(x => x.getID() == 34468).ToList();
-            List<int> humanShieldRemoval = log.getBoonData().Where(x => x.getSkillID() == 34518 && x.isBuffremove() == ParseEnum.BuffRemove.All).Select(x => (int)(x.getTime() - log.getBossData().getFirstAware())).Distinct().ToList();
+            List<int> humanShieldRemoval = log.GetBoonData().Where(x => x.getSkillID() == 34518 && x.isBuffremove() == ParseEnum.BuffRemove.All).Select(x => (int)(x.getTime() - log.GetBossData().getFirstAware())).Distinct().ToList();
             for (var i = 0; i < humanShield.Count; i++)
             {
                 var shield = humanShield[i];
@@ -115,11 +115,11 @@ namespace LuckParser.Models
                     replay.addCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.getTime(), removal), "rgba(255, 0, 255, 0.5)"));
                 } else
                 {
-                    replay.addCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.getTime(), (int)log.getBossData().getAwareDuration()), "rgba(255, 0, 255, 0.5)"));
+                    replay.addCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.getTime(), (int)log.GetBossData().getAwareDuration()), "rgba(255, 0, 255, 0.5)"));
                 }
             }
             List<CastLog> aboShield = cls.Where(x => x.getID() == 34510).ToList();
-            List<int> aboShieldRemoval = log.getBoonData().Where(x => x.getSkillID() == 34376 && x.isBuffremove() == ParseEnum.BuffRemove.All).Select(x => (int)(x.getTime() - log.getBossData().getFirstAware())).Distinct().ToList();
+            List<int> aboShieldRemoval = log.GetBoonData().Where(x => x.getSkillID() == 34376 && x.isBuffremove() == ParseEnum.BuffRemove.All).Select(x => (int)(x.getTime() - log.GetBossData().getFirstAware())).Distinct().ToList();
             for (var i = 0; i < aboShield.Count; i++)
             {
                 var shield = aboShield[i];
@@ -130,7 +130,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    replay.addCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.getTime(), (int)log.getBossData().getAwareDuration()), "rgba(255, 0, 255, 0.5)"));
+                    replay.addCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.getTime(), (int)log.GetBossData().getAwareDuration()), "rgba(255, 0, 255, 0.5)"));
                 }
             }
             List<CastLog> rageShards = cls.Where(x => x.getID() == 34404 || x.getID() == 34411).ToList();
@@ -147,19 +147,19 @@ namespace LuckParser.Models
         public override void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // Corruption
-            List<CombatItem> corruptedMatthias = getFilteredList(log, 34416, p.getInstid());
-            corruptedMatthias.AddRange(getFilteredList(log, 34473, p.getInstid()));
+            List<CombatItem> corruptedMatthias = getFilteredList(log, 34416, p.GetInstid());
+            corruptedMatthias.AddRange(getFilteredList(log, 34473, p.GetInstid()));
             int corruptedMatthiasStart = 0;
             int corruptedMatthiasEnd = 0;
             foreach (CombatItem c in corruptedMatthias)
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    corruptedMatthiasStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    corruptedMatthiasStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
                 }
                 else
                 {
-                    corruptedMatthiasEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    corruptedMatthiasEnd = (int)(c.getTime() - log.GetBossData().getFirstAware());
                     replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(corruptedMatthiasStart, corruptedMatthiasEnd), "rgba(255, 150, 0, 0.5)"));
                     Point3D wellPosition = replay.getPositions().FirstOrDefault(x => x.time > corruptedMatthiasEnd);
                     if (wellPosition != null)
@@ -170,18 +170,18 @@ namespace LuckParser.Models
                 }
             }
             // Well of profane
-            List<CombatItem> wellMatthias = getFilteredList(log, 34450, p.getInstid());
+            List<CombatItem> wellMatthias = getFilteredList(log, 34450, p.GetInstid());
             int wellMatthiasStart = 0;
             int wellMatthiasEnd = 0;
             foreach (CombatItem c in wellMatthias)
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    wellMatthiasStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    wellMatthiasStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
                 }
                 else
                 {
-                    wellMatthiasEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    wellMatthiasEnd = (int)(c.getTime() - log.GetBossData().getFirstAware());
                     replay.addCircleActor(new CircleActor(false, 0, 120, new Tuple<int, int>(wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)"));
                     replay.addCircleActor(new CircleActor(true, wellMatthiasStart + 9000, 120, new Tuple<int, int>(wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)"));
                     Point3D wellPosition = replay.getPositions().FirstOrDefault(x => x.time > wellMatthiasEnd);
@@ -192,27 +192,27 @@ namespace LuckParser.Models
                 }
             }
             // Sacrifice
-            List<CombatItem> sacrificeMatthias = getFilteredList(log, 34442, p.getInstid());
+            List<CombatItem> sacrificeMatthias = getFilteredList(log, 34442, p.GetInstid());
             int sacrificeMatthiasStart = 0;
             int sacrificeMatthiasEnd = 0;
             foreach (CombatItem c in sacrificeMatthias)
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    sacrificeMatthiasStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    sacrificeMatthiasStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
                 }
                 else
                 {
-                    sacrificeMatthiasEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    sacrificeMatthiasEnd = (int)(c.getTime() - log.GetBossData().getFirstAware());
                     replay.addCircleActor(new CircleActor(true, 0, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.2)"));
                     replay.addCircleActor(new CircleActor(true, sacrificeMatthiasStart + 10000, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.35)"));
                 }
             }
             // Bombs
-            List<CombatItem> zealousBenediction = log.getBoonData().Where(x => x.getSkillID() == 34511 && ((x.getDstInstid() == p.getInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> zealousBenediction = log.GetBoonData().Where(x => x.getSkillID() == 34511 && ((x.getDstInstid() == p.GetInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None))).ToList();
             foreach (CombatItem c in zealousBenediction)
             {
-                int zealousStart = (int)(c.getTime() - log.getBossData().getFirstAware()) ;
+                int zealousStart = (int)(c.getTime() - log.GetBossData().getFirstAware()) ;
                 int zealousEnd = zealousStart + 5000;
                 replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)"));
                 replay.addCircleActor(new CircleActor(true, zealousEnd, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)"));

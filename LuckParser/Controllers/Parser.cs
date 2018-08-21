@@ -29,11 +29,11 @@ namespace LuckParser.Controllers
         private byte revision;
 
         // Public Methods
-        public LogData getLogData()
+        public LogData GetLogData()
         {
             return log_data;
         }
-        public BossData getBossData()
+        public BossData GetBossData()
         {
             return boss_data;
         }
@@ -82,19 +82,19 @@ namespace LuckParser.Controllers
             {
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "15% - Parsing boss data...", 15);
-                parseBossData(stream);
+                ParseBossData(stream);
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "20% - Parsing agent data...", 20);
-                parseAgentData(stream);
+                ParseAgentData(stream);
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "25% - Parsing skill data...", 25);
-                parseSkillData(stream);
+                ParseSkillData(stream);
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "30% - Parsing combat list...", 30);
-                parseCombatList(stream);                
+                ParseCombatList(stream);                
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
-                fillMissingData();
+                FillMissingData();
                 row.BgWorker.ThrowIfCanceled(row);
             }
             catch(Exception ex) when (!(ex is CancellationException))
@@ -129,7 +129,7 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Parses boss related data
         /// </summary>
-        private void parseBossData(Stream stream)
+        private void ParseBossData(Stream stream)
         {
             using (var reader = CreateReader(stream))
             {
@@ -154,7 +154,7 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Parses agent related data
         /// </summary>
-        private void parseAgentData(Stream stream)
+        private void ParseAgentData(Stream stream)
         {
             using (var reader = CreateReader(stream))
             {
@@ -210,7 +210,7 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Parses skill related data
         /// </summary>
-        private void parseSkillData(Stream stream)
+        private void ParseSkillData(Stream stream)
         {
             var apiController = new GW2APIController();
             using (var reader = CreateReader(stream))
@@ -403,7 +403,7 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Parses combat related data
         /// </summary>
-        private void parseCombatList(Stream stream)
+        private void ParseCombatList(Stream stream)
         {
             // 64 bytes: each combat
             var data = new byte[64];
@@ -420,7 +420,7 @@ namespace LuckParser.Controllers
             combat_data.RemoveAll(x => x.getSrcInstid() == 0 && x.getDstAgent() == 0 && x.getSrcAgent() == 0 && x.getDstInstid() == 0 && x.getIFF() == ParseEnum.IFF.Unknown);
         }
         
-        private static bool isGolem(ushort id)
+        private static bool IsGolem(ushort id)
         {
             return id == 16202 || id == 16177 || id == 19676 || id == 19645 || id == 16199;
         }
@@ -428,7 +428,7 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Parses all the data again and link related stuff to each other
         /// </summary>
-        private void fillMissingData()
+        private void FillMissingData()
         {
             var agentsLookup = agent_data.getAllAgentsList().ToDictionary(a => a.getAgent());
             bool golem_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Golem;
@@ -700,12 +700,12 @@ namespace LuckParser.Controllers
                             playerAgent.setInstid(tst.getSrcInstid());
                         }
                     }
-                    List<CombatItem> lp = combat_data.getStates(playerAgent.getInstid(), ParseEnum.StateChange.Despawn, boss_data.getFirstAware(), boss_data.getLastAware());
+                    List<CombatItem> lp = combat_data.GetStates(playerAgent.getInstid(), ParseEnum.StateChange.Despawn, boss_data.getFirstAware(), boss_data.getLastAware());
                     Player player = new Player(playerAgent, fractal_mode);
                     bool skip = false;
                     foreach (Player p in p_list)
                     {
-                        if (p.getAccount() == player.getAccount())//is this a copy of original?
+                        if (p.GetAccount() == player.GetAccount())//is this a copy of original?
                         {
                             skip = true;
                         }
@@ -760,10 +760,10 @@ namespace LuckParser.Controllers
                 boss_data.setLastAware(bossAgent.getLastAware());
             }
             // Sort
-            p_list = p_list.OrderBy(a => a.getGroup()).ToList();
+            p_list = p_list.OrderBy(a => a.GetGroup()).ToList();
             // Check CM
             boss_data.setCM(combat_data);
-            combat_data.validate(boss_data);
+            combat_data.Validate(boss_data);
         }
     }
 }

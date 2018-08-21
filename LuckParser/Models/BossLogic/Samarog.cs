@@ -47,16 +47,16 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.getBossData().getAwareDuration();
+            long fight_dur = log.GetBossData().getAwareDuration();
             List<PhaseData> phases = getInitialPhase(log);
             // Determined check
-            List<CombatItem> invulsSam = getFilteredList(log, 762, boss.getInstid());         
+            List<CombatItem> invulsSam = getFilteredList(log, 762, boss.GetInstid());         
             for (int i = 0; i < invulsSam.Count; i++)
             {
                 CombatItem c = invulsSam[i];
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    end = c.getTime() - log.getBossData().getFirstAware();
+                    end = c.getTime() - log.GetBossData().getFirstAware();
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsSam.Count - 1)
                     {
@@ -65,7 +65,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.getTime() - log.getBossData().getFirstAware();
+                    start = c.getTime() - log.GetBossData().getFirstAware();
                     phases.Add(new PhaseData(end, start));
                     cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
@@ -86,17 +86,17 @@ namespace LuckParser.Models
                        ParseEnum.ThrashIDS.Rigom,
                        ParseEnum.ThrashIDS.Guldhem
                     };
-                    List<AgentItem> slaves = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
+                    List<AgentItem> slaves = log.GetAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
                     foreach (AgentItem a in slaves)
                     {
-                        long agentStart = a.getFirstAware() - log.getBossData().getFirstAware();
-                        long agentEnd = a.getLastAware() - log.getBossData().getFirstAware();
+                        long agentStart = a.getFirstAware() - log.GetBossData().getFirstAware();
+                        long agentEnd = a.getLastAware() - log.GetBossData().getFirstAware();
                         if (phase.inInterval(agentStart))
                         {
                             phase.addRedirection(a);
                         }
                     }
-                    phase.overrideStart(log.getBossData().getFirstAware());
+                    phase.overrideStart(log.GetBossData().getFirstAware());
                 }
             }
             return phases;
@@ -110,18 +110,18 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Rigom,
                         ParseEnum.ThrashIDS.Guldhem
                     };
-            List<CombatItem> brutalize = log.getBoonData().Where(x => x.getSkillID() == 38226 && x.isBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
+            List<CombatItem> brutalize = log.GetBoonData().Where(x => x.getSkillID() == 38226 && x.isBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
             int brutStart = 0;
             int brutEnd = 0;
             foreach (CombatItem c in brutalize)
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    brutStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    brutStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
                 }
                 else
                 {
-                    brutEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    brutEnd = (int)(c.getTime() - log.GetBossData().getFirstAware());
                     replay.addCircleActor(new CircleActor(true, 0, 120, new Tuple<int, int>(brutStart, brutEnd), "rgba(0, 180, 255, 0.3)"));
                 }
             }
@@ -131,35 +131,35 @@ namespace LuckParser.Models
         public override void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // big bomb
-            List<CombatItem> bigbomb = log.getBoonData().Where(x => x.getSkillID() == 37966 && ((x.getDstInstid() == p.getInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> bigbomb = log.GetBoonData().Where(x => x.getSkillID() == 37966 && ((x.getDstInstid() == p.GetInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None))).ToList();
             foreach (CombatItem c in bigbomb)
             {
-                int bigStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                int bigStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
                 int bigEnd = bigStart + 6000;
                 replay.addCircleActor(new CircleActor(true, 0, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
                 replay.addCircleActor(new CircleActor(true, bigEnd, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
             }
             // small bomb
-            List<CombatItem> smallbomb = log.getBoonData().Where(x => x.getSkillID() == 38247 && ((x.getDstInstid() == p.getInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> smallbomb = log.GetBoonData().Where(x => x.getSkillID() == 38247 && ((x.getDstInstid() == p.GetInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None))).ToList();
             foreach (CombatItem c in smallbomb)
             {
-                int smallStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                int smallStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
                 int smallEnd = smallStart + 6000;
                 replay.addCircleActor(new CircleActor(true, 0, 80, new Tuple<int, int>(smallStart, smallEnd), "rgba(80, 150, 0, 0.3)"));
             }
             // fixated
-            List<CombatItem> fixatedSam = getFilteredList(log, 37868, p.getInstid());
+            List<CombatItem> fixatedSam = getFilteredList(log, 37868, p.GetInstid());
             int fixatedSamStart = 0;
             int fixatedSamEnd = 0;
             foreach (CombatItem c in fixatedSam)
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    fixatedSamStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    fixatedSamStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
                 }
                 else
                 {
-                    fixatedSamEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    fixatedSamEnd = (int)(c.getTime() - log.GetBossData().getFirstAware());
                     replay.addCircleActor(new CircleActor(true, 0, 80, new Tuple<int, int>(fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)"));
                 }
             }

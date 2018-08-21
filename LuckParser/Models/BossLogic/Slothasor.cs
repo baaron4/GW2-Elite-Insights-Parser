@@ -75,18 +75,18 @@ namespace LuckParser.Models
         public override void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // Poison
-            List<CombatItem> poisonToDrop = getFilteredList(log, 34387, p.getInstid());
+            List<CombatItem> poisonToDrop = getFilteredList(log, 34387, p.GetInstid());
             int toDropStart = 0;
             int toDropEnd = 0;
             foreach (CombatItem c in poisonToDrop)
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    toDropStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    toDropStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
                 }
                 else
                 {
-                    toDropEnd = (int)(c.getTime() - log.getBossData().getFirstAware()); replay.addCircleActor(new CircleActor(false, 0, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
+                    toDropEnd = (int)(c.getTime() - log.GetBossData().getFirstAware()); replay.addCircleActor(new CircleActor(false, 0, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
                     replay.addCircleActor(new CircleActor(true, toDropStart + 8000, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
                     Point3D poisonPos = replay.getPositions().FirstOrDefault(x => x.time > toDropEnd);
                     if (poisonPos != null)
@@ -96,34 +96,34 @@ namespace LuckParser.Models
                 }
             }
             // Transformation
-            List<CombatItem> slubTrans = getFilteredList(log, 34362, p.getInstid());
+            List<CombatItem> slubTrans = getFilteredList(log, 34362, p.GetInstid());
             int transfoStart = 0;
             int transfoEnd = 0;
             foreach (CombatItem c in slubTrans)
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    transfoStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    transfoStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
                 }
                 else
                 {
-                    transfoEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    transfoEnd = (int)(c.getTime() - log.GetBossData().getFirstAware());
                     replay.addCircleActor(new CircleActor(true, 0, 160, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
                 }
             }
             // fixated
-            List<CombatItem> fixatedSloth = getFilteredList(log, 34508, p.getInstid());
+            List<CombatItem> fixatedSloth = getFilteredList(log, 34508, p.GetInstid());
             int fixatedSlothStart = 0;
             int fixatedSlothEnd = 0;
             foreach (CombatItem c in fixatedSloth)
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    fixatedSlothStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    fixatedSlothStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
                 }
                 else
                 {
-                    fixatedSlothEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    fixatedSlothEnd = (int)(c.getTime() - log.GetBossData().getFirstAware());
                     replay.addCircleActor(new CircleActor(true, 0, 120, new Tuple<int, int>(fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)"));
                 }
             }

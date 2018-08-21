@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
 
         // Public Methods
 
-        public List<CombatItem> getStates(int src_instid, ParseEnum.StateChange change, long start, long end)
+        public List<CombatItem> GetStates(int src_instid, ParseEnum.StateChange change, long start, long end)
         {
             List<CombatItem> states = new List<CombatItem>();
             foreach (CombatItem c in this.Where(x => x.getTime() >= start && x.getTime() <= end))
@@ -36,7 +36,7 @@ namespace LuckParser.Models.ParseModels
             return states;
         }
 
-        public int getSkillCount(int src_instid, int skill_id, long start, long end)
+        public int GetSkillCount(int src_instid, int skill_id, long start, long end)
         {
             int count = 0;
             foreach (CombatItem c in this.Where(x => x.getTime() >= start && x.getTime() <= end))
@@ -49,7 +49,7 @@ namespace LuckParser.Models.ParseModels
             }
             return count;
         }
-        public int getBuffCount(int src_instid, int skill_id, long start, long end)
+        public int GetBuffCount(int src_instid, int skill_id, long start, long end)
         {
             int count = 0;
             foreach (CombatItem c in this.Where(x => x.getTime() >= start && x.getTime() <= end))
@@ -62,7 +62,7 @@ namespace LuckParser.Models.ParseModels
             }
             return count;
         }
-        public void validate(BossData boss_data)
+        public void Validate(BossData boss_data)
         {
             boon_data = this.Where(x => x.isBuff() > 0 && (x.isBuff() == 18 || x.getBuffDmg() == 0 || x.isBuffremove() != ParseEnum.BuffRemove.None)).ToList();
 
@@ -87,22 +87,22 @@ namespace LuckParser.Models.ParseModels
                                                 (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
         }
         // getters
-        public List<CombatItem> getBoonData()
+        public List<CombatItem> GetBoonData()
         {
             return boon_data;
         }
 
-        public List<CombatItem> getDamageData()
+        public List<CombatItem> GetDamageData()
         {
             return damage_data;
         }
 
-        public List<CombatItem> getCastData()
+        public List<CombatItem> GetCastData()
         {
             return cast_data;
         }
 
-        public List<CombatItem> getDamageTakenData()
+        public List<CombatItem> GetDamageTakenData()
         {
             return damage_taken_data;
         }
@@ -117,7 +117,7 @@ namespace LuckParser.Models.ParseModels
             return healing_received_data;
         }*/
 
-        public List<CombatItem> getMovementData()
+        public List<CombatItem> GetMovementData()
         {
             return movement_data;
         }

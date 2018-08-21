@@ -46,10 +46,10 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.getBossData().getAwareDuration();
+            long fight_dur = log.GetBossData().getAwareDuration();
             List<PhaseData> phases = getInitialPhase(log);
             // Sometimes the preevent is not in the evtc
-            List<CastLog> dhuumCast = boss.getCastLogs(log, 0, 20000);
+            List<CastLog> dhuumCast = boss.GetCastLogs(log, 0, 20000);
             if (dhuumCast.Count > 0)
             {
                 CastLog shield = cast_logs.Find(x => x.getID() == 47396);
@@ -75,10 +75,10 @@ namespace LuckParser.Models
             }
             else
             {
-                CombatItem invulDhuum = log.getBoonData().FirstOrDefault(x => x.getSkillID() == 762 && x.isBuffremove() != ParseEnum.BuffRemove.None && x.getSrcInstid() == boss.getInstid() && x.getTime() > 115000 + log.getBossData().getFirstAware());
+                CombatItem invulDhuum = log.GetBoonData().FirstOrDefault(x => x.getSkillID() == 762 && x.isBuffremove() != ParseEnum.BuffRemove.None && x.getSrcInstid() == boss.GetInstid() && x.getTime() > 115000 + log.GetBossData().getFirstAware());
                 if (invulDhuum != null)
                 {
-                    end = invulDhuum.getTime() - log.getBossData().getFirstAware();
+                    end = invulDhuum.getTime() - log.GetBossData().getFirstAware();
                     phases.Add(new PhaseData(start, end));
                     start = end + 1;
                     CastLog shield = cast_logs.Find(x => x.getID() == 47396);
@@ -146,7 +146,7 @@ namespace LuckParser.Models
             if (majorSplit != null)
             {
                 int start = (int)majorSplit.getTime();
-                int end = (int)log.getBossData().getAwareDuration();
+                int end = (int)log.GetBossData().getAwareDuration();
                 replay.addCircleActor(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
             }
             return ids;
@@ -155,37 +155,37 @@ namespace LuckParser.Models
         public override void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // spirit transform
-            List<CombatItem> spiritTransform = log.getBoonData().Where(x => x.getDstInstid() == p.getInstid() && x.getSkillID() == 46950 && x.isBuffremove() == ParseEnum.BuffRemove.None).ToList();
+            List<CombatItem> spiritTransform = log.GetBoonData().Where(x => x.getDstInstid() == p.GetInstid() && x.getSkillID() == 46950 && x.isBuffremove() == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in spiritTransform)
             {
                 int duration = 15000;
-                int start = (int)(c.getTime() - log.getBossData().getFirstAware());
-                if (log.getBossData().getHealthOverTime().FirstOrDefault(x => x.X > start).Y < 1050)
+                int start = (int)(c.getTime() - log.GetBossData().getFirstAware());
+                if (log.GetBossData().getHealthOverTime().FirstOrDefault(x => x.X > start).Y < 1050)
                 {
                     duration = 30000;
                 }
-                CombatItem removedBuff = log.getBoonData().FirstOrDefault(x => x.getSrcInstid() == p.getInstid() && x.getSkillID() == 48281 && x.isBuffremove() == ParseEnum.BuffRemove.All && x.getTime() > c.getTime() && x.getTime() < c.getTime() + duration);
+                CombatItem removedBuff = log.GetBoonData().FirstOrDefault(x => x.getSrcInstid() == p.GetInstid() && x.getSkillID() == 48281 && x.isBuffremove() == ParseEnum.BuffRemove.All && x.getTime() > c.getTime() && x.getTime() < c.getTime() + duration);
                 int end = start + duration;
                 if (removedBuff != null)
                 {
-                    end = (int)(removedBuff.getTime() - log.getBossData().getFirstAware());
+                    end = (int)(removedBuff.getTime() - log.GetBossData().getFirstAware());
                 }
                 replay.addCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)"));
                 replay.addCircleActor(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)"));
             }
             // bomb
-            List<CombatItem> bombDhuum = getFilteredList(log, 47646, p.getInstid());
+            List<CombatItem> bombDhuum = getFilteredList(log, 47646, p.GetInstid());
             int bombDhuumStart = 0;
             int bombDhuumEnd = 0;
             foreach (CombatItem c in bombDhuum)
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    bombDhuumStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    bombDhuumStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
                 }
                 else
                 {
-                    bombDhuumEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    bombDhuumEnd = (int)(c.getTime() - log.GetBossData().getFirstAware());
                     replay.addCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)"));
                     replay.addCircleActor(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
                 }

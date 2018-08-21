@@ -14,28 +14,28 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        protected override void setDamageLogs(ParsedLog log)
+        protected override void SetDamageLogs(ParsedLog log)
         {
-            long time_start = log.getBossData().getFirstAware();
+            long time_start = log.GetBossData().getFirstAware();
             long min_time = Math.Max(time_start, agent.getFirstAware());
-            long max_time = Math.Min(log.getBossData().getLastAware(), agent.getLastAware());
-            foreach (CombatItem c in log.getDamageData())
+            long max_time = Math.Min(log.GetBossData().getLastAware(), agent.getLastAware());
+            foreach (CombatItem c in log.GetDamageData())
             {
                 if (agent.getInstid() == c.getSrcInstid() && c.getTime() > min_time && c.getTime() < max_time)//selecting minion as caster
                 {
                     long time = c.getTime() - time_start;
-                    addDamageLog(time, c);
+                    AddDamageLog(time, c);
                 }
             }
         }
 
-        protected override void setCastLogs(ParsedLog log)
+        protected override void SetCastLogs(ParsedLog log)
         {
-            long time_start = log.getBossData().getFirstAware();
+            long time_start = log.GetBossData().getFirstAware();
             CastLog curCastLog = null;
             long min_time = Math.Max(time_start, agent.getFirstAware());
-            long max_time = Math.Min(log.getBossData().getLastAware(), agent.getLastAware());
-            foreach (CombatItem c in log.getCastData())
+            long max_time = Math.Min(log.GetBossData().getLastAware(), agent.getLastAware());
+            foreach (CombatItem c in log.GetCastData())
             {
                 if (!(c.getTime() > min_time && c.getTime() < max_time))
                 {
@@ -69,7 +69,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void setDamagetakenLogs(ParsedLog log)
+        protected override void SetDamagetakenLogs(ParsedLog log)
         {
             // nothing to do
             return;

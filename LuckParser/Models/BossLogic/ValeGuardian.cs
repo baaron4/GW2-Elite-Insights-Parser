@@ -46,16 +46,16 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.getBossData().getAwareDuration();
+            long fight_dur = log.GetBossData().getAwareDuration();
             List<PhaseData> phases = getInitialPhase(log);
             // Invul check
-            List<CombatItem> invulsVG = getFilteredList(log, 757, boss.getInstid());
+            List<CombatItem> invulsVG = getFilteredList(log, 757, boss.GetInstid());
             for (int i = 0; i < invulsVG.Count; i++)
             {
                 CombatItem c = invulsVG[i];
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    end = c.getTime() - log.getBossData().getFirstAware();
+                    end = c.getTime() - log.GetBossData().getFirstAware();
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsVG.Count - 1)
                     {
@@ -64,7 +64,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.getTime() - log.getBossData().getFirstAware();
+                    start = c.getTime() - log.GetBossData().getFirstAware();
                     phases.Add(new PhaseData(end, start));
                     cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
@@ -86,17 +86,17 @@ namespace LuckParser.Models
                        ParseEnum.ThrashIDS.GreenGuardian,
                        ParseEnum.ThrashIDS.RedGuardian
                     };
-                    List<AgentItem> guardians = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
+                    List<AgentItem> guardians = log.GetAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
                     foreach (AgentItem a in guardians)
                     {
-                        long agentStart = a.getFirstAware() - log.getBossData().getFirstAware();
-                        long agentEnd = a.getLastAware() - log.getBossData().getFirstAware();
+                        long agentStart = a.getFirstAware() - log.GetBossData().getFirstAware();
+                        long agentEnd = a.getLastAware() - log.GetBossData().getFirstAware();
                         if (phase.inInterval(agentStart))
                         {
                             phase.addRedirection(a);
                         }
                     }
-                    phase.overrideStart(log.getBossData().getFirstAware());
+                    phase.overrideStart(log.GetBossData().getFirstAware());
                 }
             }
             return phases;

@@ -15,9 +15,9 @@ namespace LuckParser.Controllers
         public static List<Point> getDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, PhaseData phase, ushort dstid, GraphMode mode)
         {
             int asked_id = (phase_index + "_" + dstid + "_" + mode).GetHashCode();
-            if (p.getDPSGraph(asked_id).Count > 0)
+            if (p.GetDPSGraph(asked_id).Count > 0)
             {
-                return p.getDPSGraph(asked_id);
+                return p.GetDPSGraph(asked_id);
             }
 
             List<Point> dmgList = new List<Point>();
@@ -26,10 +26,10 @@ namespace LuckParser.Controllers
             List<DamageLog> damage_logs;
             if (dstid != 0 && phase.getRedirection().Count > 0)
             {      
-                damage_logs = p.getDamageLogs(phase.getRedirection(), log, phase.getStart(), phase.getEnd());
+                damage_logs = p.GetDamageLogs(phase.getRedirection(), log, phase.getStart(), phase.getEnd());
             } else
             {
-                damage_logs = p.getDamageLogs(dstid, log, phase.getStart(), phase.getEnd());
+                damage_logs = p.GetDamageLogs(dstid, log, phase.getStart(), phase.getEnd());
             }
             // fill the graph, full precision
             List<double> dmgListFull = new List<double>();
@@ -55,7 +55,7 @@ namespace LuckParser.Controllers
             {
                 dmgListFull[total_time] = total_damage;
             }
-            CombatReplay replay = p.getCombatReplay();
+            CombatReplay replay = p.GetCombatReplay();
             if (replay != null && dstid == 0 && phase_index == 0)
             {
                 foreach (int i in replay.getTimes())
@@ -93,18 +93,18 @@ namespace LuckParser.Controllers
                 }
             }
             int id = (phase_index + "_" + dstid + "_" + GraphMode.Full).GetHashCode();
-            p.addDPSGraph(id, dmgList);
+            p.AddDPSGraph(id, dmgList);
             if (settings.Show10s)
             {
                 id = (phase_index + "_" + dstid + "_" + GraphMode.s10).GetHashCode();
-                p.addDPSGraph(id, dmgList10s);
+                p.AddDPSGraph(id, dmgList10s);
             }
             if (settings.Show30s)
             {
                 id = (phase_index + "_" + dstid + "_" + GraphMode.s30).GetHashCode();
-                p.addDPSGraph(id, dmgList30s);
+                p.AddDPSGraph(id, dmgList30s);
             }
-            return p.getDPSGraph(asked_id);
+            return p.GetDPSGraph(asked_id);
         }
         /// <summary>
         /// Gets the points for the boss dps graph for a given player
@@ -113,7 +113,7 @@ namespace LuckParser.Controllers
         /// <returns></returns>
         public static List<Point> getBossDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, PhaseData phase, GraphMode mode)
         {
-            return getDPSGraph(log, p, phase_index, phase, log.getBossData().getInstid(), mode);
+            return getDPSGraph(log, p, phase_index, phase, log.GetBossData().getInstid(), mode);
         }
 
         /// <summary>
@@ -134,9 +134,9 @@ namespace LuckParser.Controllers
         public static List<Point> getCleaveDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phase_index, PhaseData phase, GraphMode mode)
         {           
             int asked_id = (phase_index + "_" + (-1) + "_" + mode).GetHashCode();
-            if (p.getDPSGraph(asked_id).Count > 0)
+            if (p.GetDPSGraph(asked_id).Count > 0)
             {
-                return p.getDPSGraph(asked_id);
+                return p.GetDPSGraph(asked_id);
             }
             List<Point> total = getTotalDPSGraph(log, p, phase_index, phase, mode);
             List<Point> boss = getBossDPSGraph(log, p, phase_index, phase, mode);
@@ -145,7 +145,7 @@ namespace LuckParser.Controllers
             {
                 cleave.Add(new Point(boss[i].X, total[i].Y - boss[i].Y));
             }
-            p.addDPSGraph(asked_id, cleave);
+            p.AddDPSGraph(asked_id, cleave);
             return cleave;
         }
     }

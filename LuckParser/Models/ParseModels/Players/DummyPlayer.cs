@@ -16,32 +16,32 @@ namespace LuckParser.Models.ParseModels
 
         }
 
-        public override void addMechanics(ParsedLog log)
+        public override void AddMechanics(ParsedLog log)
         {
             throw new NotImplementedException();
         }
 
-        protected override void setAdditionalCombatReplayData(ParsedLog log, int pollingRate)
+        protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
             throw new NotImplementedException();
         }
 
-        protected override void setCastLogs(ParsedLog log)
+        protected override void SetCastLogs(ParsedLog log)
         {
             throw new NotImplementedException();
         }
 
-        protected override void setCombatReplayIcon(ParsedLog log)
+        protected override void SetCombatReplayIcon(ParsedLog log)
         {
             throw new NotImplementedException();
         }
 
-        protected override void setDamageLogs(ParsedLog log)
+        protected override void SetDamageLogs(ParsedLog log)
         {
             throw new NotImplementedException();
         }
 
-        protected override void setDamagetakenLogs(ParsedLog log)
+        protected override void SetDamagetakenLogs(ParsedLog log)
         {
             throw new NotImplementedException();
         }

@@ -42,7 +42,7 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.getBossData().getAwareDuration();
+            long fight_dur = log.GetBossData().getAwareDuration();
             List<PhaseData> phases = getInitialPhase(log);
             // Main phases
             List<CastLog> clsKC = cast_logs.Where(x => x.getID() == 35048).ToList();
@@ -63,13 +63,13 @@ namespace LuckParser.Models
             }
             // add burn phases
             int offset = phases.Count;
-            List<CombatItem> orbItems = log.getBoonData().Where(x => x.getDstInstid() == boss.getInstid() && x.getSkillID() == 35096).ToList();
+            List<CombatItem> orbItems = log.GetBoonData().Where(x => x.getDstInstid() == boss.GetInstid() && x.getSkillID() == 35096).ToList();
             // Get number of orbs and filter the list
             List<CombatItem> orbItemsFiltered = new List<CombatItem>();
             Dictionary<long, int> orbs = new Dictionary<long, int>();
             foreach (CombatItem c in orbItems)
             {
-                long time = c.getTime() - log.getBossData().getFirstAware();
+                long time = c.getTime() - log.GetBossData().getFirstAware();
                 if (!orbs.ContainsKey(time))
                 {
                     orbs[time] = 0;
@@ -96,11 +96,11 @@ namespace LuckParser.Models
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    start = c.getTime() - log.getBossData().getFirstAware();
+                    start = c.getTime() - log.GetBossData().getFirstAware();
                 }
                 else
                 {
-                    end = c.getTime() - log.getBossData().getFirstAware();
+                    end = c.getTime() - log.GetBossData().getFirstAware();
                     phases.Add(new PhaseData(start, end));
                 }
             }
@@ -170,18 +170,18 @@ namespace LuckParser.Models
         public override void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // Bombs
-            List<CombatItem> xeraFury = getFilteredList(log, 35103, p.getInstid());
+            List<CombatItem> xeraFury = getFilteredList(log, 35103, p.GetInstid());
             int xeraFuryStart = 0;
             int xeraFuryEnd = 0;
             foreach (CombatItem c in xeraFury)
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    xeraFuryStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    xeraFuryStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
                 }
                 else
                 {
-                    xeraFuryEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    xeraFuryEnd = (int)(c.getTime() - log.GetBossData().getFirstAware());
                     replay.addCircleActor(new CircleActor(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)"));
                     replay.addCircleActor(new CircleActor(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)"));
                 }

@@ -33,72 +33,72 @@ namespace LuckParser.Models.DataModels
             this.mech_data = new MechanicData(boss_data);
         }
 
-        public BossData getBossData()
+        public BossData GetBossData()
         {
             return boss_data;
         }
 
-        public Boss getBoss()
+        public Boss GetBoss()
         {
             return boss;
         }
 
-        public CombatData getCombatData()
+        public CombatData GetCombatData()
         {
             return combat_data;
         }
 
-        public AgentData getAgentData()
+        public AgentData GetAgentData()
         {
             return agent_data;
         }
 
-        public List<Player> getPlayerList()
+        public List<Player> GetPlayerList()
         {
             return p_list;
         }
 
-        public MechanicData getMechanicData()
+        public MechanicData GetMechanicData()
         {
             return mech_data;
         }
 
-        public SkillData getSkillData()
+        public SkillData GetSkillData()
         {
             return skill_data;
         }
 
-        public LogData getLogData()
+        public LogData GetLogData()
         {
             return log_data;
         }
 
-        public CombatData getCombatList()
+        public CombatData GetCombatList()
         {
             return combat_data;
         }
 
-        public List<CombatItem> getBoonData()
+        public List<CombatItem> GetBoonData()
         {
-            return combat_data.getBoonData();
+            return combat_data.GetBoonData();
         }
 
-        public List<CombatItem> getDamageData()
+        public List<CombatItem> GetDamageData()
         {
-            return combat_data.getDamageData();
+            return combat_data.GetDamageData();
         }
 
-        public List<CombatItem> getCastData()
+        public List<CombatItem> GetCastData()
         {
-            return combat_data.getCastData();
+            return combat_data.GetCastData();
         }
 
-        public List<CombatItem> getDamageTakenData()
+        public List<CombatItem> GetDamageTakenData()
         {
-            return combat_data.getDamageTakenData();
+            return combat_data.GetDamageTakenData();
         }
 
-        public bool isBenchmarkMode()
+        public bool IsBenchmarkMode()
         {
             return boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Golem;
         }
@@ -113,9 +113,9 @@ namespace LuckParser.Models.DataModels
             return combat_data.getHealingReceivedData();
         }*/
 
-        public List<CombatItem> getMovementData()
+        public List<CombatItem> GetMovementData()
         {
-            return combat_data.getMovementData();
+            return combat_data.GetMovementData();
         }     
     }
 }

@@ -37,16 +37,16 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.getBossData().getAwareDuration();
+            long fight_dur = log.GetBossData().getAwareDuration();
             List<PhaseData> phases = getInitialPhase(log);
             // Ghostly protection check
-            List<CombatItem> invulsGorse = log.getCombatList().Where(x => x.getSkillID() == 31790 && x.isBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
+            List<CombatItem> invulsGorse = log.GetCombatList().Where(x => x.getSkillID() == 31790 && x.isBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
             for (int i = 0; i < invulsGorse.Count; i++)
             {
                 CombatItem c = invulsGorse[i];
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    end = c.getTime() - log.getBossData().getFirstAware();
+                    end = c.getTime() - log.GetBossData().getFirstAware();
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsGorse.Count - 1)
                     {
@@ -55,7 +55,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.getTime() - log.getBossData().getFirstAware();
+                    start = c.getTime() - log.GetBossData().getFirstAware();
                     phases.Add(new PhaseData(end, start));
                     cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
@@ -71,17 +71,17 @@ namespace LuckParser.Models
                 phase.setName(namesGorse[i - 1]);
                 if (i == 2 || i == 4)
                 {
-                    List<AgentItem> spirits = log.getAgentData().getNPCAgentList().Where(x => ParseEnum.getThrashIDS(x.getID()) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
+                    List<AgentItem> spirits = log.GetAgentData().getNPCAgentList().Where(x => ParseEnum.getThrashIDS(x.getID()) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
                     foreach (AgentItem a in spirits)
                     {
-                        long agentStart = a.getFirstAware() - log.getBossData().getFirstAware();
-                        long agentEnd = a.getLastAware() - log.getBossData().getFirstAware();
+                        long agentStart = a.getFirstAware() - log.GetBossData().getFirstAware();
+                        long agentEnd = a.getLastAware() - log.GetBossData().getFirstAware();
                         if (phase.inInterval(agentStart))
                         {
                             phase.addRedirection(a);
                         }
                     }
-                    phase.overrideStart(log.getBossData().getFirstAware());
+                    phase.overrideStart(log.GetBossData().getFirstAware());
                 }
             }
             return phases;
@@ -104,11 +104,11 @@ namespace LuckParser.Models
                 replay.addCircleActor(new CircleActor(true, c.getExpDur() + (int)c.getTime(), 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
                 replay.addCircleActor(new CircleActor(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
             }
-            List<PhaseData> phases = log.getBoss().getPhases(log, true);
+            List<PhaseData> phases = log.GetBoss().getPhases(log, true);
             if (phases.Count > 1)
             {
                 List<CastLog> rampage = cls.Where(x => x.getID() == 31834).ToList();
-                Point3D pos = log.getBoss().getCombatReplay().getPositions().First();
+                Point3D pos = log.GetBoss().GetCombatReplay().getPositions().First();
                 foreach (CastLog c in rampage)
                 {
                     int start = (int)c.getTime();

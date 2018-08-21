@@ -74,12 +74,12 @@ namespace LuckParser.Models.ParseModels
                 // ready enemy list
                 List<AbstractMasterPlayer> toAdd = new List<AbstractMasterPlayer>();
                 enemyList.Add(toAdd);
-                toAdd.Add(log.getBoss());
+                toAdd.Add(log.GetBoss());
                 foreach(Mechanic m in Keys.Where(x=> x.IsEnemyMechanic()))
                 {
                     foreach (AbstractMasterPlayer p in this[m].Where(x => phase.inInterval(x.GetTime())).Select(x => x.GetPlayer()).Distinct())
                     {
-                        if (toAdd.FirstOrDefault(x => x.getInstid() == p.getInstid()) == null)
+                        if (toAdd.FirstOrDefault(x => x.GetInstid() == p.GetInstid()) == null)
                         {
                             toAdd.Add(p);
                         }

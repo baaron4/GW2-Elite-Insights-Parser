@@ -54,10 +54,10 @@ namespace LuckParser.Models
         public override void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // shared agony
-            List<CombatItem> agony = log.getBoonData().Where(x => x.getSkillID() == 38049 && ((x.getDstInstid() == p.getInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None))).ToList();        
+            List<CombatItem> agony = log.GetBoonData().Where(x => x.getSkillID() == 38049 && ((x.getDstInstid() == p.GetInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None))).ToList();        
             foreach (CombatItem c in agony)
             {
-                int agonyStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                int agonyStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
                 int agonyEnd = agonyStart + 62000;
                 replay.addCircleActor(new CircleActor(false, 0, 220, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)"));
             }

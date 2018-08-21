@@ -49,15 +49,15 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.getBossData().getAwareDuration();
+            long fight_dur = log.GetBossData().getAwareDuration();
             List<PhaseData> phases = getInitialPhase(log);
             // Determined + additional data on inst change
-            CombatItem invulDei = log.getBoonData().Find(x => x.getSkillID() == 762 && x.isBuffremove() == ParseEnum.BuffRemove.None && x.getDstInstid() == boss.getInstid());
+            CombatItem invulDei = log.GetBoonData().Find(x => x.getSkillID() == 762 && x.isBuffremove() == ParseEnum.BuffRemove.None && x.getDstInstid() == boss.GetInstid());
             if (invulDei != null)
             {
-                end = invulDei.getTime() - log.getBossData().getFirstAware();
+                end = invulDei.getTime() - log.GetBossData().getFirstAware();
                 phases.Add(new PhaseData(start, end));
-                start = (boss.getPhaseData().Count == 1 ? boss.getPhaseData()[0] - log.getBossData().getFirstAware() : fight_dur);
+                start = (boss.getPhaseData().Count == 1 ? boss.getPhaseData()[0] - log.GetBossData().getFirstAware() : fight_dur);
                 cast_logs.Add(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
             }
             if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
@@ -69,15 +69,15 @@ namespace LuckParser.Models
                 phases[i].setName("Phase " + i);
             }
             int offsetDei = phases.Count;
-            CombatItem teleport = log.getCombatList().FirstOrDefault(x => x.getSkillID() == 38169);
+            CombatItem teleport = log.GetCombatList().FirstOrDefault(x => x.getSkillID() == 38169);
             int splits = 0;
             while (teleport != null && splits < 3)
             {
-                start = teleport.getTime() - log.getBossData().getFirstAware();
-                CombatItem teleportBack = log.getCombatList().FirstOrDefault(x => x.getSkillID() == 38169 && x.getTime() - log.getBossData().getFirstAware() > start + 10000);
+                start = teleport.getTime() - log.GetBossData().getFirstAware();
+                CombatItem teleportBack = log.GetCombatList().FirstOrDefault(x => x.getSkillID() == 38169 && x.getTime() - log.GetBossData().getFirstAware() > start + 10000);
                 if (teleportBack != null)
                 {
-                    end = teleportBack.getTime() - log.getBossData().getFirstAware();
+                    end = teleportBack.getTime() - log.GetBossData().getFirstAware();
                 }
                 else
                 {
@@ -85,7 +85,7 @@ namespace LuckParser.Models
                 }
                 phases.Add(new PhaseData(start, end));
                 splits++;
-                teleport = log.getCombatList().FirstOrDefault(x => x.getSkillID() == 38169 && x.getTime() - log.getBossData().getFirstAware() > end + 10000);
+                teleport = log.GetCombatList().FirstOrDefault(x => x.getSkillID() == 38169 && x.getTime() - log.GetBossData().getFirstAware() > end + 10000);
             }
 
             string[] namesDeiSplit = new string[] { "Thief", "Gambler", "Drunkard" };
@@ -100,11 +100,11 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Gambler,
                         ParseEnum.ThrashIDS.GamblerClones,
                     };
-                List<AgentItem> clones = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
+                List<AgentItem> clones = log.GetAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
                 foreach (AgentItem a in clones)
                 {
-                    long agentStart = a.getFirstAware() - log.getBossData().getFirstAware();
-                    long agentEnd = a.getLastAware() - log.getBossData().getFirstAware();
+                    long agentStart = a.getFirstAware() - log.GetBossData().getFirstAware();
+                    long agentEnd = a.getLastAware() - log.GetBossData().getFirstAware();
                     if (phase.inInterval(agentStart))
                     {
                         phase.addRedirection(a);
@@ -136,7 +136,7 @@ namespace LuckParser.Models
                 int end = start + 5000;
                 replay.addCircleActor(new CircleActor(true, end, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                 replay.addCircleActor(new CircleActor(false, 0, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
-                if (!log.getBossData().getCM())
+                if (!log.GetBossData().getCM())
                 {
                     replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 0, 255, 0.3)", new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216)));
                 }
@@ -147,18 +147,18 @@ namespace LuckParser.Models
         public override void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // teleport zone
-            List<CombatItem> tpDeimos = getFilteredList(log, 37730, p.getInstid());
+            List<CombatItem> tpDeimos = getFilteredList(log, 37730, p.GetInstid());
             int tpStart = 0;
             int tpEnd = 0;
             foreach (CombatItem c in tpDeimos)
             {
                 if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    tpStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    tpStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
                 }
                 else
                 {
-                    tpEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    tpEnd = (int)(c.getTime() - log.GetBossData().getFirstAware());
                     replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
                     replay.addCircleActor(new CircleActor(true, tpEnd, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
                 }

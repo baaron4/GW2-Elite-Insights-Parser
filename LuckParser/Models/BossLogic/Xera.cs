@@ -49,15 +49,15 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.getBossData().getAwareDuration();
+            long fight_dur = log.GetBossData().getAwareDuration();
             List<PhaseData> phases = getInitialPhase(log);
             // split happened
             if (boss.getPhaseData().Count == 1)
             {
-                CombatItem invulXera = log.getBoonData().Find(x => x.getDstInstid() == boss.getInstid() && (x.getSkillID() == 762 || x.getSkillID() == 34113));
-                end = invulXera.getTime() - log.getBossData().getFirstAware();
+                CombatItem invulXera = log.GetBoonData().Find(x => x.getDstInstid() == boss.GetInstid() && (x.getSkillID() == 762 || x.getSkillID() == 34113));
+                end = invulXera.getTime() - log.GetBossData().getFirstAware();
                 phases.Add(new PhaseData(start, end));
-                start = boss.getPhaseData()[0] - log.getBossData().getFirstAware();
+                start = boss.getPhaseData()[0] - log.GetBossData().getFirstAware();
                 cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
             }
             if (fight_dur - start > 5000 && start >= phases.Last().getEnd())

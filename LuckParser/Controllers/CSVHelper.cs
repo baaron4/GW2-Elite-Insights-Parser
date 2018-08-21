@@ -15,7 +15,7 @@ namespace LuckParser.Controllers
 
         public static void writeOldCSV(StreamWriter sw, string delimiter,ParsedLog log,Statistics statistics)
         {
-            double fight_duration = (log.getBossData().getAwareDuration()) / 1000.0;
+            double fight_duration = (log.GetBossData().getAwareDuration()) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
             String durationString = duration.ToString("mm") + ":" + duration.ToString("ss");
             sw.Write("Group" + delimiter +
@@ -37,7 +37,7 @@ namespace LuckParser.Controllers
             sw.Write("\r\n");
 
             int[] teamStats = { 0, 0, 0 };
-            foreach (Player p in log.getPlayerList())
+            foreach (Player p in log.GetPlayerList())
             {
                 Statistics.FinalDPS dps = statistics.dps[p][0];
                 teamStats[0] += dps.bossDps;
@@ -45,13 +45,13 @@ namespace LuckParser.Controllers
                 teamStats[2] += dps.allDps - dps.bossDps;
             }
 
-            foreach (Player p in log.getPlayerList())
+            foreach (Player p in log.GetPlayerList())
             {
                 Statistics.FinalDPS dps = statistics.dps[p][0];
-                sw.Write(p.getGroup() + delimiter + // group
-                        p.getProf() + delimiter +  // class
-                        p.getCharacter() + delimiter + // character
-                        p.getAccount().Substring(1) + delimiter + // account
+                sw.Write(p.GetGroup() + delimiter + // group
+                        p.GetProf() + delimiter +  // class
+                        p.GetCharacter() + delimiter + // character
+                        p.GetAccount().Substring(1) + delimiter + // account
                         dps.bossDps + delimiter + // dps
                         dps.bossPowerDps + delimiter + // physical
                         dps.bossCondiDps + delimiter + // condi

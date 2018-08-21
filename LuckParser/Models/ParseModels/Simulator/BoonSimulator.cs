@@ -49,7 +49,7 @@ namespace LuckParser.Models.ParseModels
             this.logic = logic;
         }  
 
-        public List<BoonSimulationItem> getSimulationResult()
+        public List<BoonSimulationItem> GetSimulationResult()
         {
             return new List<BoonSimulationItem>(simulation);
         }
@@ -59,7 +59,7 @@ namespace LuckParser.Models.ParseModels
         /// Make sure the last element does not overflow the fight
         /// </summary>
         /// <param name="fight_duration">Duration of the fight</param>
-        public void trim(long fight_duration)
+        public void Trim(long fight_duration)
         {
             for (int i = simulation.Count - 1; i >= 0; i--)
             {
@@ -76,26 +76,26 @@ namespace LuckParser.Models.ParseModels
             simulation.RemoveAll(x => x.getDuration(0) <= 0);
         }
 
-        public void simulate(List<BoonLog> logs, long fight_duration)
+        public void Simulate(List<BoonLog> logs, long fight_duration)
         {
             long t_curr = 0;
             long t_prev = 0;
             foreach (BoonLog log in logs)
             {
                 t_curr = log.getTime();
-                update(t_curr - t_prev);
-                add(log.getValue(), log.getSrcInstid(), t_curr, log.getOverstack());
+                Update(t_curr - t_prev);
+                Add(log.getValue(), log.getSrcInstid(), t_curr, log.getOverstack());
                 t_prev = t_curr;
             }
-            update(fight_duration - t_prev);
+            Update(fight_duration - t_prev);
             simulation.RemoveAll(x => x.getDuration(0) <= 0);
             boon_stack.Clear();
         }
 
-        public abstract void update(long time_passed);
+        public abstract void Update(long time_passed);
         
         // Public Methods
-        public void add(long boon_duration, ushort srcinstid, long start, long overstack)
+        public void Add(long boon_duration, ushort srcinstid, long start, long overstack)
         {
             var toAdd = new BoonStackItem(start, boon_duration, srcinstid, overstack);
             // Find empty slot

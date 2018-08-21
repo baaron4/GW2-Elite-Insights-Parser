@@ -32,7 +32,7 @@ namespace LuckParser.Models
         protected List<PhaseData> getInitialPhase(ParsedLog log)
         {
             List<PhaseData> phases = new List<PhaseData>();
-            long fight_dur = log.getBossData().getAwareDuration();
+            long fight_dur = log.GetBossData().getAwareDuration();
             phases.Add(new PhaseData(0, fight_dur));
             phases[0].setName("Full Fight");
             return phases;
@@ -78,7 +78,7 @@ namespace LuckParser.Models
         protected static List<CombatItem> getFilteredList(ParsedLog log, long skillID, ushort instid)
         {
             bool needStart = true;
-            List<CombatItem> main = log.getBoonData().Where(x => x.getSkillID() == skillID && ((x.getDstInstid() == instid && x.isBuffremove() == ParseEnum.BuffRemove.None) || (x.getSrcInstid() == instid && x.isBuffremove() != ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> main = log.GetBoonData().Where(x => x.getSkillID() == skillID && ((x.getDstInstid() == instid && x.isBuffremove() == ParseEnum.BuffRemove.None) || (x.getSrcInstid() == instid && x.isBuffremove() != ParseEnum.BuffRemove.None))).ToList();
             List<CombatItem> filtered = new List<CombatItem>();
             for (int i = 0; i < main.Count; i++)
             {

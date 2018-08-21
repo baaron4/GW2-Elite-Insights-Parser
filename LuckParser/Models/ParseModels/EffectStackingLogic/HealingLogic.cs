@@ -20,14 +20,14 @@ namespace LuckParser.Models.ParseModels
 
             public int compare(BoonSimulator.BoonStackItem x, BoonSimulator.BoonStackItem y)
             {
-                List<Player> players = log.getPlayerList();
-                Player a = players.Find(p => p.getInstid() == x.src);
-                Player b = players.Find(p => p.getInstid() == y.src);
+                List<Player> players = log.GetPlayerList();
+                Player a = players.Find(p => p.GetInstid() == x.src);
+                Player b = players.Find(p => p.GetInstid() == y.src);
                 if (a == null || b == null)
                 {
                     return 0;
                 }
-                return a.getHealing() < b.getHealing() ? 1 : -1;
+                return a.GetHealing() < b.GetHealing() ? 1 : -1;
             }
         }
         public override void sort(ParsedLog log, List<BoonSimulator.BoonStackItem> stacks)
