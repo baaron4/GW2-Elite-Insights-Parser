@@ -6,7 +6,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public string Icon { get; set; }
-        public string Chat_link { get; set; }
+        public string ChatLink { get; set; }
         public string Type { get; set; }
         public string Weapon_type { get; set; }
         public string[] Professions { get; set; }

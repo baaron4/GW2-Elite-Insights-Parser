@@ -11,18 +11,18 @@ namespace LuckParser.Models.ParseModels
     {
         protected struct CompareHealing
         {
-            private ParsedLog log;
+            private ParsedLog _log;
 
             public CompareHealing(ParsedLog log)
             {
-                this.log = log;
+                _log = log;
             }
 
             public int Compare(BoonSimulator.BoonStackItem x, BoonSimulator.BoonStackItem y)
             {
-                List<Player> players = log.GetPlayerList();
-                Player a = players.Find(p => p.GetInstid() == x.src);
-                Player b = players.Find(p => p.GetInstid() == y.src);
+                List<Player> players = _log.GetPlayerList();
+                Player a = players.Find(p => p.GetInstid() == x.Src);
+                Player b = players.Find(p => p.GetInstid() == y.Src);
                 if (a == null || b == null)
                 {
                     return 0;
@@ -41,10 +41,10 @@ namespace LuckParser.Models.ParseModels
             
             for (int i = 1; i < stacks.Count; i++)
             {
-                if (stacks[i].boon_duration < toAdd.boon_duration)
+                if (stacks[i].BoonDuration < toAdd.BoonDuration)
                 {
-                    long overstackValue = stacks[i].overstack + stacks[i].boon_duration;
-                    ushort srcValue = stacks[i].src;
+                    long overstackValue = stacks[i].Overstack + stacks[i].BoonDuration;
+                    ushort srcValue = stacks[i].Src;
                     for (int j = simulation.Count - 1; j >= 0; j--)
                     {
                         if (simulation[j].AddOverstack(srcValue, overstackValue))

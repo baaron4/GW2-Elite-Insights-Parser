@@ -12,8 +12,8 @@ namespace LuckParser.Models
     {
         public Cairn() : base()
         {
-            mode = ParseMode.Raid;
-            mechanicList.AddRange(new List<Mechanic>
+            Mode = ParseMode.Raid;
+            MechanicList.AddRange(new List<Mechanic>
             {
 
             new Mechanic(38113, "Displacement", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, "symbol:'circle',color:'rgb(0,0,255)',", "Red TP",0),

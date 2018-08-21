@@ -12,8 +12,8 @@ namespace LuckParser.Models
     {
         public MursaatOverseer() : base()
         {
-            mode = ParseMode.Raid;
-            mechanicList.AddRange(new List<Mechanic>()
+            Mode = ParseMode.Raid;
+            MechanicList.AddRange(new List<Mechanic>()
             {
             new Mechanic(37677, "Soldier's Aura", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MursaatOverseer, "symbol:'circle-open',color:'rgb(255,0,0)',", "Jade Aura",0),
             new Mechanic(37788, "Jade Explosion", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MursaatOverseer, "symbol:'circle',color:'rgb(255,0,0)',", "Jade Explosion",0),

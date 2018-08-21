@@ -13,15 +13,15 @@ namespace LuckParser.Models
 
         public enum ParseMode { Raid, Fractal, Golem, Unknown };
 
-        protected List<Mechanic> mechanicList = new List<Mechanic> {
+        protected List<Mechanic> MechanicList = new List<Mechanic> {
             new Mechanic(-2, "Deads", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'x',color:'rgb(0,0,0)',", "Deads",0),
             new Mechanic(-3, "Downs", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross',color:'rgb(255,0,0)',", "Downs",0),
             new Mechanic(1066, "Resurrect", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'circle-dot',color:'rgb(0,120,180)',", "Resurrect",0)};
-        protected ParseMode mode;
+        protected ParseMode Mode;
 
         public BossLogic()
         {
-            mode = ParseMode.Unknown;
+            Mode = ParseMode.Unknown;
         }
 
         public virtual CombatReplayMap GetCombatMap()
@@ -32,13 +32,13 @@ namespace LuckParser.Models
         protected List<PhaseData> GetInitialPhase(ParsedLog log)
         {
             List<PhaseData> phases = new List<PhaseData>();
-            long fight_dur = log.GetBossData().GetAwareDuration();
-            phases.Add(new PhaseData(0, fight_dur));
+            long fightDuration = log.GetBossData().GetAwareDuration();
+            phases.Add(new PhaseData(0, fightDuration));
             phases[0].SetName("Full Fight");
             return phases;
         }
 
-        public virtual List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
+        public virtual List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
         {
             List<PhaseData> phases = GetInitialPhase(log);
             return phases;
@@ -67,12 +67,12 @@ namespace LuckParser.Models
 
         public List<Mechanic> GetMechanics()
         {
-            return mechanicList;
+            return MechanicList;
         }
        
         public ParseMode GetMode()
         {
-            return mode;
+            return Mode;
         }
         //
         protected static List<CombatItem> GetFilteredList(ParsedLog log, long skillID, ushort instid)

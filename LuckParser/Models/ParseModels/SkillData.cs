@@ -6,7 +6,7 @@ namespace LuckParser.Models.ParseModels
     public class SkillData : List<SkillItem>
     {
         // Fields
-        private Dictionary<long, string> apiMissingID = new Dictionary<long, string>()
+        private static Dictionary<long, string> _apiMissingID = new Dictionary<long, string>()
         {
             {1066, "Resurrect"},
             {1175, "Bandage" },
@@ -46,9 +46,9 @@ namespace LuckParser.Models.ParseModels
         {
 
             // Custom
-            if (apiMissingID.ContainsKey(ID))
+            if (_apiMissingID.ContainsKey(ID))
             {
-                return apiMissingID[ID];
+                return _apiMissingID[ID];
             }
 
             // Normal

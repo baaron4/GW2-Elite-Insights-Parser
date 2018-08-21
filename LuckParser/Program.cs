@@ -17,7 +17,7 @@ namespace LuckParser
         [DllImport("user32.dll")]
         private static extern bool SetProcessDPIAware();
 
-        private const int ATTACH_PARENT_PROCESS = -1;
+        private const int _attachParentProcess = -1;
 
         private enum StandardHandle : int
         {
@@ -60,7 +60,7 @@ namespace LuckParser
                     var dummy = Console.Out;
                 }
 
-                if (!AttachConsole(ATTACH_PARENT_PROCESS))
+                if (!AttachConsole(_attachParentProcess))
                 {
                     AllocConsole();
                 }

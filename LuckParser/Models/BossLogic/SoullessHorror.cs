@@ -12,8 +12,8 @@ namespace LuckParser.Models
     {
         public SoullessHorror() : base()
         {
-            mode = ParseMode.Raid;
-            mechanicList.AddRange(new List<Mechanic>
+            Mode = ParseMode.Raid;
+            MechanicList.AddRange(new List<Mechanic>
             {
 
             new Mechanic(47327, "Vortex Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'circle',color:'rgb(255,140,0)',", "Donut Inner",0),

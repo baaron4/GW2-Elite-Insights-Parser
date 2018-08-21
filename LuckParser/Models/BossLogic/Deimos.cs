@@ -12,8 +12,8 @@ namespace LuckParser.Models
     {
         public Deimos() : base()
         {
-            mode = ParseMode.Raid;
-            mechanicList.AddRange(new List<Mechanic>
+            Mode = ParseMode.Raid;
+            MechanicList.AddRange(new List<Mechanic>
             {
                 new Mechanic(37716, "Rapid Decay", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'circle',color:'rgb(0,0,0)',", "Black Oil",0),
             //new Mechanic(37844, "Off Balance", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'cross',color:'rgb(255,0,255)',", "Failed Teleport Break",0), Cast by the drunkard Saul, would be logical to be the forced random teleport but not sure when it's successful or not
@@ -45,11 +45,11 @@ namespace LuckParser.Models
                             Tuple.Create(11774, 4480, 14078, 5376));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
+        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // Determined + additional data on inst change
             CombatItem invulDei = log.GetBoonData().Find(x => x.GetSkillID() == 762 && x.IsBuffremove() == ParseEnum.BuffRemove.None && x.GetDstInstid() == boss.GetInstid());
@@ -57,12 +57,12 @@ namespace LuckParser.Models
             {
                 end = invulDei.GetTime() - log.GetBossData().GetFirstAware();
                 phases.Add(new PhaseData(start, end));
-                start = (boss.GetPhaseData().Count == 1 ? boss.GetPhaseData()[0] - log.GetBossData().GetFirstAware() : fight_dur);
-                cast_logs.Add(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
+                start = (boss.GetPhaseData().Count == 1 ? boss.GetPhaseData()[0] - log.GetBossData().GetFirstAware() : fightDuration);
+                castLogs.Add(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
             }
-            if (fight_dur - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
             {
-                phases.Add(new PhaseData(start, fight_dur));
+                phases.Add(new PhaseData(start, fightDuration));
             }
             for (int i = 1; i < phases.Count; i++)
             {
@@ -81,7 +81,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    end = fight_dur;
+                    end = fightDuration;
                 }
                 phases.Add(new PhaseData(start, end));
                 splits++;

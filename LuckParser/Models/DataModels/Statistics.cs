@@ -14,156 +14,156 @@ namespace LuckParser.Models.DataModels
     {
         public Statistics()
         {
-            dps = new Dictionary<Player, FinalDPS[]>();
-            defenses = new Dictionary<Player, FinalDefenses[]>();
-            stats = new Dictionary<Player, FinalStats[]>();
-            support = new Dictionary<Player, FinalSupport[]>();
-            selfBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
-            groupBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
-            offGroupBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
-            squadBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
-            phases = new List<PhaseData>();
+            Dps = new Dictionary<Player, FinalDPS[]>();
+            Defenses = new Dictionary<Player, FinalDefenses[]>();
+            Stats = new Dictionary<Player, FinalStats[]>();
+            Support = new Dictionary<Player, FinalSupport[]>();
+            SelfBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
+            GroupBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
+            OffGroupBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
+            SquadBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
+            Phases = new List<PhaseData>();
         }
 
-        public List<PhaseData> phases;
+        public List<PhaseData> Phases;
 
         public class FinalDPS
         {
             // Total
-            public int allDps;
-            public int allDamage;
-            public int allCondiDps;
-            public int allCondiDamage;
-            public int allPowerDps;
-            public int allPowerDamage;
+            public int AllDps;
+            public int AllDamage;
+            public int AllCondiDps;
+            public int AllCondiDamage;
+            public int AllPowerDps;
+            public int AllPowerDamage;
             // Boss
-            public int bossDps;
-            public int bossDamage;
-            public int bossCondiDps;
-            public int bossCondiDamage;
-            public int bossPowerDps;
-            public int bossPowerDamage;
+            public int BossDps;
+            public int BossDamage;
+            public int BossCondiDps;
+            public int BossCondiDamage;
+            public int BossPowerDps;
+            public int BossPowerDamage;
             // Player only
-            public int playerPowerDamage;
-            public int playerBossPowerDamage;
+            public int PlayerPowerDamage;
+            public int PlayerBossPowerDamage;
         }
 
-        public Dictionary<Player, FinalDPS[]> dps;
-        public FinalDPS[] bossDps;
+        public Dictionary<Player, FinalDPS[]> Dps;
+        public FinalDPS[] BossDps;
 
         public class FinalStats
         {
             // Rates
-            public int powerLoopCount;
-            public int critablePowerLoopCount;
-            public int criticalRate;
-            public int criticalDmg;
-            public int scholarRate;
-            public int scholarDmg;
-            public int movingRate;
-            public int movingDamage;
-            public int flankingRate;
-            public int glanceRate;
-            public int missed;
-            public int interupts;
-            public int invulned;
-            public int wasted;
-            public double timeWasted;
-            public int saved;
-            public double timeSaved;
-            public double avgBoons;
-            public double stackDist;
+            public int PowerLoopCount;
+            public int CritablePowerLoopCount;
+            public int CriticalRate;
+            public int CriticalDmg;
+            public int ScholarRate;
+            public int ScholarDmg;
+            public int MovingRate;
+            public int MovingDamage;
+            public int FlankingRate;
+            public int GlanceRate;
+            public int Missed;
+            public int Interupts;
+            public int Invulned;
+            public int Wasted;
+            public double TimeWasted;
+            public int Saved;
+            public double TimeSaved;
+            public double AvgBoons;
+            public double StackDist;
             //Boss only Rates
-            public int powerLoopCountBoss;
-            public int critablePowerLoopCountBoss;
-            public int criticalRateBoss;
-            public int criticalDmgBoss;
-            public int scholarRateBoss;
-            public int scholarDmgBoss;
-            public int movingRateBoss;
-            public int movingDamageBoss;
-            public int flankingRateBoss;
-            public int glanceRateBoss;
-            public int missedBoss;
-            public int interuptsBoss;
-            public int invulnedBoss;
+            public int PowerLoopCountBoss;
+            public int CritablePowerLoopCountBoss;
+            public int CriticalRateBoss;
+            public int CriticalDmgBoss;
+            public int ScholarRateBoss;
+            public int ScholarDmgBoss;
+            public int MovingRateBoss;
+            public int MovingDamageBoss;
+            public int FlankingRateBoss;
+            public int GlanceRateBoss;
+            public int MissedBoss;
+            public int InteruptsBoss;
+            public int InvulnedBoss;
 
             // Counts
-            public int swapCount;
-            public int ressCount;
-            public int downCount;
-            public int dodgeCount;
+            public int SwapCount;
+            public int RessCount;
+            public int DownCount;
+            public int DodgeCount;
 
             
 
-            public double died;
-            public double dcd;
+            public double Died;
+            public double Dcd;
         }
 
-        public Dictionary<Player, FinalStats[]> stats;
+        public Dictionary<Player, FinalStats[]> Stats;
 
         public class FinalDefenses
         {
             //public long allHealReceived;
-            public long damageTaken;
-            public int blockedCount;
-            public int evadedCount;
-            public int invulnedCount;
-            public int damageInvulned;
-            public int damageBarrier;
+            public long DamageTaken;
+            public int BlockedCount;
+            public int EvadedCount;
+            public int InvulnedCount;
+            public int DamageInvulned;
+            public int DamageBarrier;
         }
 
-        public Dictionary<Player, FinalDefenses[]> defenses;
+        public Dictionary<Player, FinalDefenses[]> Defenses;
 
         public class FinalSupport
         {
             //public long allHeal;
-            public int resurrects;
-            public float ressurrectTime;
-            public int condiCleanse;
-            public float condiCleanseTime;
+            public int Resurrects;
+            public float RessurrectTime;
+            public int CondiCleanse;
+            public float CondiCleanseTime;
         }
 
-        public Dictionary<Player, FinalSupport[]> support;
+        public Dictionary<Player, FinalSupport[]> Support;
 
         public class FinalBoonUptime
         {
-            public double uptime;
-            public double generation;
-            public double overstack;
+            public double Uptime;
+            public double Generation;
+            public double Overstack;
         }
 
-        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> selfBoons;
-        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> groupBoons;
-        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> offGroupBoons;
-        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> squadBoons;
+        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> SelfBoons;
+        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> GroupBoons;
+        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> OffGroupBoons;
+        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> SquadBoons;
 
         public class FinalBossBoon
         {
             public FinalBossBoon(List<Player> plist)
             {
-                uptime = 0;
-                generated = new Dictionary<Player, double>();
-                overstacked = new Dictionary<Player, double>();
+                Uptime = 0;
+                Generated = new Dictionary<Player, double>();
+                Overstacked = new Dictionary<Player, double>();
                 foreach (Player p in plist)
                 {
-                    generated.Add(p, 0);
-                    overstacked.Add(p, 0);
+                    Generated.Add(p, 0);
+                    Overstacked.Add(p, 0);
                 }
             }
 
-            public double uptime;
-            public Dictionary<Player, double> generated;
-            public Dictionary<Player, double> overstacked;
+            public double Uptime;
+            public Dictionary<Player, double> Generated;
+            public Dictionary<Player, double> Overstacked;
         }
 
-        public Dictionary<long, FinalBossBoon>[] bossConditions;
+        public Dictionary<long, FinalBossBoon>[] BossConditions;
 
         // present buff
-        public List<Boon> present_boons = new List<Boon>();//Used only for Boon tables
-        public List<Boon> present_offbuffs = new List<Boon>();//Used only for Off Buff tables
-        public List<Boon> present_defbuffs = new List<Boon>();//Used only for Def Buff tables
-        public Dictionary<long, List<Boon>> present_personnal = new Dictionary<long, List<Boon>>();//Used only for personnal
+        public List<Boon> PresentBoons = new List<Boon>();//Used only for Boon tables
+        public List<Boon> PresentOffbuffs = new List<Boon>();//Used only for Off Buff tables
+        public List<Boon> PresentDefbuffs = new List<Boon>();//Used only for Def Buff tables
+        public Dictionary<long, List<Boon>> PresentPersonnalBuffs = new Dictionary<long, List<Boon>>();//Used only for personnal
 
         //Positions for group
         public List<Point3D> StackCenterPositions;

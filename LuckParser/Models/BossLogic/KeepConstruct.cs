@@ -12,8 +12,8 @@ namespace LuckParser.Models
     {
         public KeepConstruct() : base()
         {
-            mode = ParseMode.Raid;
-            mechanicList.AddRange(new List<Mechanic>
+            Mode = ParseMode.Raid;
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(34912, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'star',color:'rgb(255,0,255)',", "Fixate",0),
             new Mechanic(34925, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'star',color:'rgb(255,0,255)',", "Fixate",0),
@@ -38,24 +38,24 @@ namespace LuckParser.Models
                             Tuple.Create(1920, 12160, 2944, 14464));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
+        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // Main phases
-            List<CastLog> clsKC = cast_logs.Where(x => x.GetID() == 35048).ToList();
+            List<CastLog> clsKC = castLogs.Where(x => x.GetID() == 35048).ToList();
             foreach (CastLog cl in clsKC)
             {
                 end = cl.GetTime();
                 phases.Add(new PhaseData(start, end));
                 start = end + cl.GetActDur();
             }
-            if (fight_dur - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
             {
-                phases.Add(new PhaseData(start, fight_dur));
-                start = fight_dur;
+                phases.Add(new PhaseData(start, fightDuration));
+                start = fightDuration;
             }
             for (int i = 1; i < phases.Count; i++)
             {
@@ -104,10 +104,10 @@ namespace LuckParser.Models
                     phases.Add(new PhaseData(start, end));
                 }
             }
-            if (fight_dur - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
             {
-                phases.Add(new PhaseData(start, fight_dur));
-                start = fight_dur;
+                phases.Add(new PhaseData(start, fightDuration));
+                start = fightDuration;
             }
             for (int i = offset; i < phases.Count; i++)
             {

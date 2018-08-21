@@ -5,19 +5,19 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class BoonSimulationItem
     {
-        protected long start;
-        protected long duration;
+        protected long Start;
+        protected long Duration;
 
         public BoonSimulationItem()
         {
-            this.start = 0;
-            this.duration = 0;
+            Start = 0;
+            Duration = 0;
         }
 
         public BoonSimulationItem(long start, long duration)
         {
-            this.start = start;
-            this.duration = duration;
+            Start = start;
+            Duration = duration;
         }
 
         public abstract long GetDuration(ushort src, long start = 0, long end = 0);
@@ -25,14 +25,14 @@ namespace LuckParser.Models.ParseModels
 
         public long GetStart()
         {
-            return start;
+            return Start;
         }
 
         public abstract List<ushort> GetSrc();
 
         public long GetEnd()
         {
-            return start + duration;
+            return Start + Duration;
         }
 
         public abstract bool AddOverstack(ushort src, long overstack);
@@ -43,12 +43,12 @@ namespace LuckParser.Models.ParseModels
         {
             if (end > 0)
             {
-                long start_offset = Math.Max(Math.Min(duration, start - this.start),0);
-                long item_end = this.start + duration;
-                long end_offset = Math.Max(Math.Min(duration, item_end - end),0);
-                return duration - start_offset - end_offset;
+                long startoffset = Math.Max(Math.Min(Duration, start - Start),0);
+                long itemEnd = Start + Duration;
+                long endOffset = Math.Max(Math.Min(Duration, itemEnd - end),0);
+                return Duration - startoffset - endOffset;
             }
-            return duration;
+            return Duration;
         }
 
         public abstract void SetEnd(long end);

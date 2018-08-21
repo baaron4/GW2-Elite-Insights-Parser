@@ -1,6 +1,6 @@
-﻿using System;
+﻿using LuckParser.Controllers;
+using System;
 using System.Windows.Forms;
-using LuckParser.Controllers;
 
 namespace LuckParser
 {
@@ -11,41 +11,41 @@ namespace LuckParser
             InitializeComponent();
         }
 
-        private void PlayerDpsPlot_CheckedChanged(object sender, EventArgs e)
+        private void PlayerDpsPlotCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.DPSGraphTotals = chkPlayerDpsPlot.Checked;
             //mainfrm.settingArray[0] = checkBox1.Checked;
         }
 
-        private void UniversalBoons_CheckedChanged(object sender, EventArgs e)
+        private void UniversalBoonsCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerBoonsUniversal = chkUniversalBoons.Checked;
             //mainfrm.settingArray[3] = checkBox4.Checked;
         }
 
-        private void ImportantProfessionSpecificBoons_CheckedChanged(object sender, EventArgs e)
+        private void ImportantProfessionSpecificBoonsCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerBoonsImpProf = chkImpProfSpecBoons.Checked;
            // mainfrm.settingArray[4] = checkBox5.Checked;
         }
-        private void AllProfessionSpecificBoons_CheckedChanged(object sender, EventArgs e)
+        private void AllProfessionSpecificBoonsCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerBoonsAllProf = chkAllProfSpecBoons.Checked;
             //mainfrm.settingArray[5] = checkBox6.Checked;
         }
-        private void Rotation_CheckedChanged(object sender, EventArgs e)
+        private void RotationCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerRot = chkRotation.Checked;
            // mainfrm.settingArray[7] = checkBox8.Checked;
         }
         
-        private void SkillIcons_CheckedChanged(object sender, EventArgs e)
+        private void SkillIconsCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerRotIcons = chkSkillIcons.Checked;
             // mainfrm.settingArray[6] = checkBox7.Checked;
         }
 
-        private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void SettingsFormFormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.Save();
             if (e.CloseReason == CloseReason.UserClosing)
@@ -55,7 +55,7 @@ namespace LuckParser
             }
         }
 
-        private void SettingsForm_Load(object sender, EventArgs e)
+        private void SettingsFormLoad(object sender, EventArgs e)
         {
             chkPlayerDpsPlot.Checked = Properties.Settings.Default.DPSGraphTotals;
             chkShowCl.Checked = Properties.Settings.Default.ClDPSGraphTotals;
@@ -78,15 +78,15 @@ namespace LuckParser
             chkShow30s.Checked = Properties.Settings.Default.Show30s;
             chkOneAtATime.Checked = Properties.Settings.Default.ParseOneAtATime;
             chkLightTheme.Checked = Properties.Settings.Default.LightTheme;
-            chk_combatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
+            chkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
         }
 
-        private void DefaultOutputLocation_CheckedChanged(object sender, EventArgs e)
+        private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveAtOut = chkDefaultOutputLoc.Checked;
         }
 
-        private void BtnFolderSelect_Click(object sender, EventArgs e)
+        private void BtnFolderSelectClick(object sender, EventArgs e)
         {
             using (var fbd = new FolderBrowserDialog())
             {
@@ -103,96 +103,96 @@ namespace LuckParser
             }
         }
 
-        private void EventListDebug_CheckedChanged(object sender, EventArgs e)
+        private void EventListDebugCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.EventList = chkEventListDbg.Checked;
         }
 
-        private void CustomSaveLocation_TextChanged(object sender, EventArgs e)
+        private void CustomSaveLocationTextChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void BossSummary_CheckedChanged(object sender, EventArgs e)
+        private void BossSummaryCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.BossSummary = checkBossSummary.Checked;
         }
 
-        private void SimpleRotationTab_CheckedChanged(object sender, EventArgs e)
+        private void SimpleRotationTabCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SimpleRotation = chkSimpleRotationTab.Checked;
         }
 
-        private void ShowAutos_CheckedChanged(object sender, EventArgs e)
+        private void ShowAutosCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ShowAutos = chkShowAutos.Checked;
         }
 
-        private void LargeSkillIcons_CheckedChanged(object sender, EventArgs e)
+        private void LargeSkillIconsCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.LargeRotIcons = chkLargeSkillIcons.Checked;
         }
 
-        private void ResetSkillList_Click(object sender, EventArgs e)
+        private void ResetSkillListClick(object sender, EventArgs e)
         {
             //Update skill list
             GW2APIController tempcontroller = new GW2APIController();
             tempcontroller.WriteSkillListToFile();
         }
 
-        private void RetrySkillList_Click(object sender, EventArgs e)
+        private void RetrySkillListClick(object sender, EventArgs e)
         {
             //Update skill list
             GW2APIController tempcontroller = new GW2APIController();
             tempcontroller.RetryWriteSkillListtoFile();
         }
 
-        private void OuputHtml_CheckedChanged(object sender, EventArgs e)
+        private void OuputCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutHTML = chkOutputHtml.Checked;
         }
 
-        private void OutputCsv_CheckedChanged(object sender, EventArgs e)
+        private void OutputCsvCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutCSV = chkOutputCsv.Checked;
         }
 
-        private void ShowEstimates_CheckedChanged(object sender, EventArgs e)
+        private void ShowEstimatesCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ShowEstimates = chkShowEstimates.Checked;
         }
 
-        private void ChkOneAtATime_CheckedChanged(object sender, EventArgs e)
+        private void ChkOneAtATimeCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ParseOneAtATime = chkOneAtATime.Checked;
         }
 
-        private void PhaseParsing_CheckedChanged(object sender, EventArgs e)
+        private void PhaseParsingCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ParsePhases = chkPhaseParsing.Checked;
         }
 
-        private void Show10s_CheckedChanged(object sender, EventArgs e)
+        private void Show10sCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.Show10s = chkShow10s.Checked;
         }
 
-        private void Show30s_CheckedChanged(object sender, EventArgs e)
+        private void Show30sCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.Show30s = chkShow30s.Checked;
         }
 
-        private void LightTheme_CheckedChanged(object sender, EventArgs e)
+        private void LightThemeCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.LightTheme = chkLightTheme.Checked;
         }
 
-        private void Chk_combatReplay_CheckedChanged(object sender, EventArgs e)
+        private void ChkCombatReplayCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.ParseCombatReplay = chk_combatReplay.Checked;
+            Properties.Settings.Default.ParseCombatReplay = chkCombatReplay.Checked;
         }
 
-        private void ShowCl_CheckedChanged(object sender, EventArgs e)
+        private void ShowClCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ClDPSGraphTotals = chkShowCl.Checked;
         }

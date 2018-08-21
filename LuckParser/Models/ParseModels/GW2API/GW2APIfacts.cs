@@ -10,16 +10,16 @@
         //Buff
         public string Status { get; set; }
         public string Description { get; set; }
-        public int Apply_count { get; set; }
+        public int ApplyCount { get; set; }
         public int Duration { get; set; }
         //ComboField
-        public string Field_type { get; set; }
+        public string FieldType { get; set; }
         //ComboFinisher
-        public string Finisher_type { get; set; }
+        public string FinisherType { get; set; }
         public float Percent { get; set; }
         //Damage
-        public int Hit_count { get; set; }
-        public float Dmg_multipler { get; set; }
+        public int HitCount { get; set; }
+        public float DmgMultipler { get; set; }
         //Distance
         public int Distance { get; set; }
         //Duration

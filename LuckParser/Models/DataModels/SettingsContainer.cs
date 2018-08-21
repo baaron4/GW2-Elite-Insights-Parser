@@ -31,24 +31,24 @@ namespace LuckParser.Models.DataModels
 
         public SettingsContainer(Settings settings)
         {
-            this.DPSGraphTotals = settings.DPSGraphTotals;
-            this.ClDPSGraphTotals = settings.ClDPSGraphTotals;
-            this.PlayerBoonsUniversal = settings.PlayerBoonsUniversal;
-            this.PlayerBoonsImpProf = settings.PlayerBoonsImpProf;
-            this.PlayerBoonsAllProf = settings.PlayerBoonsAllProf;
-            this.PlayerRot = settings.PlayerRot;
-            this.PlayerRotIcons = settings.PlayerRotIcons;
-            this.EventList = settings.EventList;
-            this.BossSummary = settings.BossSummary;
-            this.SimpleRotation = settings.SimpleRotation;
-            this.ShowAutos = settings.ShowAutos;
-            this.LargeRotIcons = settings.LargeRotIcons;
-            this.ShowEstimates = settings.ShowEstimates;
-            this.ParsePhases = settings.ParsePhases;
-            this.Show10s = settings.Show10s;
-            this.Show30s = settings.Show30s;
-            this.LightTheme = settings.LightTheme;
-            this.ParseCombatReplay = settings.ParseCombatReplay;
+            DPSGraphTotals = settings.DPSGraphTotals;
+            ClDPSGraphTotals = settings.ClDPSGraphTotals;
+            PlayerBoonsUniversal = settings.PlayerBoonsUniversal;
+            PlayerBoonsImpProf = settings.PlayerBoonsImpProf;
+            PlayerBoonsAllProf = settings.PlayerBoonsAllProf;
+            PlayerRot = settings.PlayerRot;
+            PlayerRotIcons = settings.PlayerRotIcons;
+            EventList = settings.EventList;
+            BossSummary = settings.BossSummary;
+            SimpleRotation = settings.SimpleRotation;
+            ShowAutos = settings.ShowAutos;
+            LargeRotIcons = settings.LargeRotIcons;
+            ShowEstimates = settings.ShowEstimates;
+            ParsePhases = settings.ParsePhases;
+            Show10s = settings.Show10s;
+            Show30s = settings.Show30s;
+            LightTheme = settings.LightTheme;
+            ParseCombatReplay = settings.ParseCombatReplay;
         }
     }
 }

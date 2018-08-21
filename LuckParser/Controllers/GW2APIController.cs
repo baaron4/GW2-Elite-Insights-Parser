@@ -111,11 +111,11 @@ namespace LuckParser.Controllers
         }
         private SkillList GetSkillList()
         {
-            if (ListOfSkills.Items.Count == 0)
+            if (_listOfSkills.Items.Count == 0)
             {
                 SetSkillList();
             }
-            return ListOfSkills;
+            return _listOfSkills;
         }
         public List<int> WriteSkillListToFile()
         {
@@ -130,7 +130,7 @@ namespace LuckParser.Controllers
             //Get list from API
             GetAPIClient();
 
-            ListOfSkills = new SkillList();
+            _listOfSkills = new SkillList();
             HttpResponseMessage response = APIClient.GetAsync("/v2/skills").Result;
             int[] idArray;
             List<int> failedList = new List<int>();
@@ -146,7 +146,7 @@ namespace LuckParser.Controllers
                     if (curSkill != null)
                     {
 
-                        ListOfSkills.Items.Add(curSkill);
+                        _listOfSkills.Items.Add(curSkill);
 
                     }
                     else
@@ -161,7 +161,7 @@ namespace LuckParser.Controllers
                 Type[] tyList = { typeof(List<GW2APISkillCheck>), typeof(List<GW2APISkillDetailed>) };
 
                 XmlSerializer xmlSer = new XmlSerializer(typeof(List<GW2APISkill>), tyList);
-                xmlSer.Serialize(stream, ListOfSkills.Items);
+                xmlSer.Serialize(stream, _listOfSkills.Items);
                 stream.Close();
 
             }
@@ -182,7 +182,7 @@ namespace LuckParser.Controllers
 
 
                     XmlSerializer deserializer = new XmlSerializer(typeof(SkillList), tyList);
-                    ListOfSkills = (SkillList)deserializer.Deserialize(reader);
+                    _listOfSkills = (SkillList)deserializer.Deserialize(reader);
 
                     reader.Close();
                 }
@@ -200,14 +200,14 @@ namespace LuckParser.Controllers
 
                 foreach (int id in idArray)
                 {
-                    if (ListOfSkills.Items.FirstOrDefault(x => x.Id == id) == null)
+                    if (_listOfSkills.Items.FirstOrDefault(x => x.Id == id) == null)
                     {
                         GW2APISkill curSkill = new GW2APISkill();
                         curSkill = GetGW2APISKill("/v2/skills/" + id);
                         if (curSkill != null)
                         {
 
-                            ListOfSkills.Items.Add(curSkill);
+                            _listOfSkills.Items.Add(curSkill);
 
                         }
                         else
@@ -222,7 +222,7 @@ namespace LuckParser.Controllers
                 Type[] tyList = { typeof(List<GW2APISkillCheck>), typeof(List<GW2APISkillDetailed>) };
 
                 XmlSerializer xmlSer = new XmlSerializer(typeof(List<GW2APISkill>), tyList);
-                xmlSer.Serialize(stream, ListOfSkills.Items);
+                xmlSer.Serialize(stream, _listOfSkills.Items);
                 stream.Close();
             }
 
@@ -230,7 +230,7 @@ namespace LuckParser.Controllers
         private void SetSkillList()
         {
 
-            if (ListOfSkills.Items.Count == 0)
+            if (_listOfSkills.Items.Count == 0)
             {
 
                 if (new FileInfo(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
@@ -246,7 +246,7 @@ namespace LuckParser.Controllers
 
 
                         XmlSerializer deserializer = new XmlSerializer(typeof(SkillList), tyList);
-                        ListOfSkills = (SkillList)deserializer.Deserialize(reader);
+                        _listOfSkills = (SkillList)deserializer.Deserialize(reader);
 
                         reader.Close();
                     }
@@ -268,7 +268,7 @@ namespace LuckParser.Controllers
         [XmlArray("GW2APISkill")]
         [XmlArrayItem("GW2APISkillCheck", typeof(GW2APISkillCheck))]
         [XmlArrayItem("GW2APISkillDetailed", typeof(GW2APISkillDetailed))]
-        static SkillList ListOfSkills = new SkillList();
+        static SkillList _listOfSkills = new SkillList();
 
         public GW2APISkill GetSkill(int id)
         {
@@ -285,7 +285,7 @@ namespace LuckParser.Controllers
             if (APIClient == null) { GetAPIClient(); }
             System.Threading.Thread.Sleep(100);
             GW2APISpec spec = null;
-            //path = "/v2/specializations/" + is_elite
+            //path = "/v2/specializations/" + isElite
             HttpResponseMessage response = APIClient.GetAsync(path).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -297,11 +297,11 @@ namespace LuckParser.Controllers
 
         private SpecList GetSpecList()
         {
-            if (ListofSpecs.Items.Count == 0)
+            if (_listofSpecs.Items.Count == 0)
             {
                 SetSpecList(); 
             }
-            return ListofSpecs;
+            return _listofSpecs;
         }
         public List<int> WriteSpecListToFile()
         {
@@ -316,7 +316,7 @@ namespace LuckParser.Controllers
             //Get list from API
             GetAPIClient();
 
-            ListofSpecs = new SpecList();
+            _listofSpecs = new SpecList();
             HttpResponseMessage response = APIClient.GetAsync("/v2/specializations").Result;
             int[] idArray;
             List<int> failedList = new List<int>();
@@ -332,7 +332,7 @@ namespace LuckParser.Controllers
                     if (curSpec != null)
                     {
 
-                        ListofSpecs.Items.Add(curSpec);
+                        _listofSpecs.Items.Add(curSpec);
 
                     }
                     else
@@ -347,7 +347,7 @@ namespace LuckParser.Controllers
                 Type[] tyList = { typeof(List<GW2APISpec>) };
 
                 XmlSerializer xmlSer = new XmlSerializer(typeof(List<GW2APISpec>), tyList);
-                xmlSer.Serialize(stream, ListofSpecs.Items);
+                xmlSer.Serialize(stream, _listofSpecs.Items);
                 stream.Close();
 
             }
@@ -357,7 +357,7 @@ namespace LuckParser.Controllers
         private void SetSpecList()
         {
 
-            if (ListofSpecs.Items.Count == 0)
+            if (_listofSpecs.Items.Count == 0)
             {
 
                 if (new FileInfo(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
@@ -373,12 +373,12 @@ namespace LuckParser.Controllers
 
 
                         XmlSerializer deserializer = new XmlSerializer(typeof(SpecList), tyList);
-                        ListofSpecs = (SpecList)deserializer.Deserialize(reader);
+                        _listofSpecs = (SpecList)deserializer.Deserialize(reader);
 
                         reader.Close();
                     }
                 }
-                if (ListofSpecs.Items.Count == 0)//if nothing in file or fail write new file
+                if (_listofSpecs.Items.Count == 0)//if nothing in file or fail write new file
                 {
                     WriteSpecListToFile();
                 }
@@ -399,7 +399,7 @@ namespace LuckParser.Controllers
         [XmlArray("GW2APISpec")]
         [XmlArrayItem("GW2APISpec", typeof(GW2APISpec))]
      
-        static SpecList ListofSpecs = new SpecList();
+        static SpecList _listofSpecs = new SpecList();
 
         public GW2APISpec GetSpec(int id)
         {

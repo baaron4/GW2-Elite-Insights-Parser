@@ -6,19 +6,19 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSimulationItemDuration: BoonSimulationItem
     {
-        private ushort src;
-        private long overstack;
+        private ushort _src;
+        private long _overstack;
 
         public BoonSimulationItemDuration(long start, long duration, ushort src, long overstack) : base(start, duration)
         {
-            this.src = src;
-            this.overstack = overstack;
+            _src = src;
+            _overstack = overstack;
         }
 
-        public BoonSimulationItemDuration(BoonStackItem other) : base(other.start, other.boon_duration)
+        public BoonSimulationItemDuration(BoonStackItem other) : base(other.Start, other.BoonDuration)
         {
-            this.src = other.src;
-            this.overstack = other.overstack;
+            _src = other.Src;
+            _overstack = other.Overstack;
         }
 
         public override long GetDuration(ushort src, long start = 0, long end = 0)
@@ -27,14 +27,14 @@ namespace LuckParser.Models.ParseModels
         }
         public override void SetEnd(long end)
         {
-            this.duration = Math.Min(Math.Max(end - this.start, 0),duration);
+            Duration = Math.Min(Math.Max(end - Start, 0),Duration);
         }
 
         public override List<ushort> GetSrc()
         {
             List<ushort> res = new List<ushort>
             {
-                src
+                _src
             };
             return res;
         }
@@ -46,21 +46,21 @@ namespace LuckParser.Models.ParseModels
 
         public override long GetOverstack(ushort src, long start = 0, long end = 0)
         {
-            if (end > 0 && duration > 0)
+            if (end > 0 && Duration > 0)
             {
                 long dur = GetItemDuration(start, end);
-                return (long)Math.Round((double)dur / duration * overstack);
+                return (long)Math.Round((double)dur / Duration * _overstack);
             }
-            return overstack;
+            return _overstack;
         }
 
         public override bool AddOverstack(ushort src, long overstack)
         {
-            if (this.src != src || duration == 0)
+            if (_src != src || Duration == 0)
             {
                 return false;
             }
-            this.overstack += overstack;
+            _overstack += overstack;
             return true;
         }
     }

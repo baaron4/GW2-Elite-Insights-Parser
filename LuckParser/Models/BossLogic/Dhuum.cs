@@ -12,8 +12,8 @@ namespace LuckParser.Models
     {
         public Dhuum() : base()
         {
-            mode = ParseMode.Raid;
-            mechanicList.AddRange(new List<Mechanic>
+            Mode = ParseMode.Raid;
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(48172, "Hateful Ephemera", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,140,0)',", "Golem Dmg",0),//Buff or dmg? //dmg
             new Mechanic(48121, "Arcing Affliction", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,0,0)',", "Bomb DMG",0),//Buff or dmg? //dmg
@@ -42,30 +42,30 @@ namespace LuckParser.Models
                             Tuple.Create(19072, 15484, 20992, 16508));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
+        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // Sometimes the preevent is not in the evtc
             List<CastLog> dhuumCast = boss.GetCastLogs(log, 0, 20000);
             if (dhuumCast.Count > 0)
             {
-                CastLog shield = cast_logs.Find(x => x.GetID() == 47396);
+                CastLog shield = castLogs.Find(x => x.GetID() == 47396);
                 if (shield != null)
                 {
                     end = shield.GetTime();
                     phases.Add(new PhaseData(start, end));
                     start = shield.GetTime() + shield.GetActDur();
-                    if (start < fight_dur - 5000)
+                    if (start < fightDuration - 5000)
                     {
-                        phases.Add(new PhaseData(start, fight_dur));
+                        phases.Add(new PhaseData(start, fightDuration));
                     }
                 }
-                if (fight_dur - start > 5000 && start >= phases.Last().GetEnd())
+                if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
                 {
-                    phases.Add(new PhaseData(start, fight_dur));
+                    phases.Add(new PhaseData(start, fightDuration));
                 }
                 string[] namesDh = new string[] { "Main Fight", "Ritual" };
                 for (int i = 1; i < phases.Count; i++)
@@ -81,21 +81,21 @@ namespace LuckParser.Models
                     end = invulDhuum.GetTime() - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(start, end));
                     start = end + 1;
-                    CastLog shield = cast_logs.Find(x => x.GetID() == 47396);
+                    CastLog shield = castLogs.Find(x => x.GetID() == 47396);
                     if (shield != null)
                     {
                         end = shield.GetTime();
                         phases.Add(new PhaseData(start, end));
                         start = shield.GetTime() + shield.GetActDur();
-                        if (start < fight_dur - 5000)
+                        if (start < fightDuration - 5000)
                         {
-                            phases.Add(new PhaseData(start, fight_dur));
+                            phases.Add(new PhaseData(start, fightDuration));
                         }
                     }
                 }
-                if (fight_dur - start > 5000 && start >= phases.Last().GetEnd())
+                if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
                 {
-                    phases.Add(new PhaseData(start, fight_dur));
+                    phases.Add(new PhaseData(start, fightDuration));
                 }
                 string[] namesDh = new string[] { "Roleplay", "Main Fight", "Ritual" };
                 for (int i = 1; i < phases.Count; i++)
@@ -120,19 +120,19 @@ namespace LuckParser.Models
             foreach (CastLog c in deathmark)
             {
                 int start = (int)c.GetTime();
-                int cast_end = start + c.GetActDur();
-                int zone_end = cast_end + 120000;
+                int castEnd = start + c.GetActDur();
+                int zoneEnd = castEnd + 120000;
                 if (majorSplit != null)
                 {
-                    cast_end = Math.Min(cast_end, (int)majorSplit.GetTime());
-                    zone_end = Math.Min(zone_end, (int)majorSplit.GetTime());
+                    castEnd = Math.Min(castEnd, (int)majorSplit.GetTime());
+                    zoneEnd = Math.Min(zoneEnd, (int)majorSplit.GetTime());
                 }
-                Point3D pos = replay.GetPositions().FirstOrDefault(x => x.Time > cast_end);
+                Point3D pos = replay.GetPositions().FirstOrDefault(x => x.Time > castEnd);
                 if (pos != null)
                 {
-                    replay.AddCircleActor(new CircleActor(true, cast_end, 450, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
-                    replay.AddCircleActor(new CircleActor(false, 0, 450, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
-                    replay.AddCircleActor(new CircleActor(true, 0, 450, new Tuple<int, int>(cast_end, zone_end), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.AddCircleActor(new CircleActor(true, castEnd, 450, new Tuple<int, int>(start, castEnd), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.AddCircleActor(new CircleActor(false, 0, 450, new Tuple<int, int>(start, castEnd), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.AddCircleActor(new CircleActor(true, 0, 450, new Tuple<int, int>(castEnd, zoneEnd), "rgba(200, 255, 100, 0.5)", pos));
                 }
             }
             List<CastLog> cataCycle = cls.Where(x => x.GetID() == 48398).ToList();

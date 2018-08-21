@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
             this.X = X;
             this.Y = Y;
             this.Z = Z;
-            this.Time = time;
+            Time = time;
         }
 
         public Point3D(Point3D a, Point3D b, float ratio, long time)
@@ -32,7 +32,7 @@ namespace LuckParser.Models.ParseModels
             X = Mix(a.X, b.X, ratio);
             Y = Mix(a.Y, b.Y, ratio);
             Z = Mix(a.Z, b.Z, ratio);
-            this.Time = time;
+            Time = time;
         }
     }
 }

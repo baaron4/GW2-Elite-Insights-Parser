@@ -12,8 +12,8 @@ namespace LuckParser.Models
     {
         public Matthias() : base()
         {
-            mode = ParseMode.Raid;
-            mechanicList.AddRange(new List<Mechanic>
+            Mode = ParseMode.Raid;
+            MechanicList.AddRange(new List<Mechanic>
             {
 
             new Mechanic(34380, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'hexagram',color:'rgb(255,0,0)',", "Hadouken",0),//human
@@ -51,39 +51,39 @@ namespace LuckParser.Models
                             Tuple.Create(2688, 11906, 3712, 14210));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
+        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // Special buff cast check
-            CombatItem heat_wave = log.GetCombatList().Find(x => x.GetSkillID() == 34526);
-            List<long> phase_starts = new List<long>();
-            if (heat_wave != null)
+            CombatItem heatWave = log.GetCombatList().Find(x => x.GetSkillID() == 34526);
+            List<long> phaseStarts = new List<long>();
+            if (heatWave != null)
             {
-                phase_starts.Add(heat_wave.GetTime() - log.GetBossData().GetFirstAware());
-                CombatItem down_pour = log.GetCombatList().Find(x => x.GetSkillID() == 34554);
-                if (down_pour != null)
+                phaseStarts.Add(heatWave.GetTime() - log.GetBossData().GetFirstAware());
+                CombatItem downPour = log.GetCombatList().Find(x => x.GetSkillID() == 34554);
+                if (downPour != null)
                 {
-                    phase_starts.Add(down_pour.GetTime() - log.GetBossData().GetFirstAware());
-                    CastLog abo = cast_logs.Find(x => x.GetID() == 34427);
+                    phaseStarts.Add(downPour.GetTime() - log.GetBossData().GetFirstAware());
+                    CastLog abo = castLogs.Find(x => x.GetID() == 34427);
                     if (abo != null)
                     {
-                        phase_starts.Add(abo.GetTime());
+                        phaseStarts.Add(abo.GetTime());
                     }
                 }
             }
-            foreach (long t in phase_starts)
+            foreach (long t in phaseStarts)
             {
                 end = t;
                 phases.Add(new PhaseData(start, end));
                 // make sure stuff from the precedent phase mix witch each other
                 start = t + 1;
             }
-            if (fight_dur - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
             {
-                phases.Add(new PhaseData(start, fight_dur));
+                phases.Add(new PhaseData(start, fightDuration));
             }
             string[] namesMat = new string[] { "Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase" };
             for (int i = 1; i < phases.Count; i++)

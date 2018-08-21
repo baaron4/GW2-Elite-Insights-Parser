@@ -43,7 +43,7 @@
             this.ButtonState = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridRowBindingSource)).BeginInit();
-            this.Version_Label = new System.Windows.Forms.Label();
+            this.VersionLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -70,7 +70,7 @@
             this.btnParse.TabIndex = 10;
             this.btnParse.Text = "Parse All";
             this.btnParse.UseVisualStyleBackColor = true;
-            this.btnParse.Click += new System.EventHandler(this.BtnParse_Click);
+            this.btnParse.Click += new System.EventHandler(this.BtnParseClick);
             // 
             // btnCancel
             // 
@@ -81,7 +81,7 @@
             this.btnCancel.TabIndex = 11;
             this.btnCancel.Text = "Cancel All";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
+            this.btnCancel.Click += new System.EventHandler(this.BtnCancelClick);
             // 
             // btnSettings
             // 
@@ -92,7 +92,7 @@
             this.btnSettings.TabIndex = 15;
             this.btnSettings.Text = "Settings";
             this.btnSettings.UseVisualStyleBackColor = true;
-            this.btnSettings.Click += new System.EventHandler(this.BtnSettings_Click);
+            this.btnSettings.Click += new System.EventHandler(this.BtnSettingsClick);
             // 
             // btnClear
             // 
@@ -103,7 +103,7 @@
             this.btnClear.TabIndex = 16;
             this.btnClear.Text = "Clear";
             this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
+            this.btnClear.Click += new System.EventHandler(this.BtnClearClick);
             // 
             // dgvFiles
             // 
@@ -127,9 +127,9 @@
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.Size = new System.Drawing.Size(663, 255);
             this.dgvFiles.TabIndex = 17;
-            this.dgvFiles.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvFiles_CellContentClick);
-            this.dgvFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.DgvFiles_DragDrop);
-            this.dgvFiles.DragEnter += new System.Windows.Forms.DragEventHandler(this.DgvFiles_DragEnter);
+            this.dgvFiles.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvFilesCellContentClick);
+            this.dgvFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.DgvFilesDragDrop);
+            this.dgvFiles.DragEnter += new System.Windows.Forms.DragEventHandler(this.DgvFilesDragEnter);
             // 
             // gridRowBindingSource
             // 
@@ -159,13 +159,13 @@
             this.ButtonState.ReadOnly = true;
             // Version_Label
             // 
-            this.Version_Label.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.Version_Label.AutoSize = true;
-            this.Version_Label.Location = new System.Drawing.Point(28, 357);
-            this.Version_Label.Name = "Version_Label";
-            this.Version_Label.Size = new System.Drawing.Size(29, 13);
-            this.Version_Label.TabIndex = 17;
-            this.Version_Label.Text = "V1.3";
+            this.VersionLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.VersionLabel.AutoSize = true;
+            this.VersionLabel.Location = new System.Drawing.Point(28, 357);
+            this.VersionLabel.Name = "Version_Label";
+            this.VersionLabel.Size = new System.Drawing.Size(29, 13);
+            this.VersionLabel.TabIndex = 17;
+            this.VersionLabel.Text = "V1.3";
             // 
             // MainForm
             // 
@@ -174,7 +174,7 @@
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.ClientSize = new System.Drawing.Size(696, 375);
             this.Controls.Add(this.dgvFiles);
-            this.Controls.Add(this.Version_Label);
+            this.Controls.Add(this.VersionLabel);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnSettings);
             this.Controls.Add(this.btnCancel);
@@ -203,7 +203,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn locationDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn ButtonState;
-        private System.Windows.Forms.Label Version_Label;
+        private System.Windows.Forms.Label VersionLabel;
     }
 }
 

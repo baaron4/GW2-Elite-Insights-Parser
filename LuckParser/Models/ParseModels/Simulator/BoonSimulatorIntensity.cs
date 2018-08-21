@@ -13,27 +13,27 @@ namespace LuckParser.Models.ParseModels
 
         // Public Methods
              
-        public override void Update(long time_passed)
+        public override void Update(long timePassed)
         {
-            if (boon_stack.Count > 0)
+            if (BoonStack.Count > 0)
             {
-                var toAdd = new BoonSimulationItemIntensity(boon_stack);
-                if (simulation.Count > 0)
+                var toAdd = new BoonSimulationItemIntensity(BoonStack);
+                if (Simulation.Count > 0)
                 {
-                    BoonSimulationItem last = simulation.Last();
+                    BoonSimulationItem last = Simulation.Last();
                     if (last.GetEnd() > toAdd.GetStart())
                     {
                         last.SetEnd(toAdd.GetStart());
                     }
                 }
-                simulation.Add(toAdd);
+                Simulation.Add(toAdd);
                 // Subtract from each
-                for(int i = boon_stack.Count - 1; i >= 0; i--)
+                for(int i = BoonStack.Count - 1; i >= 0; i--)
                 {
-                    var item = new BoonStackItem(boon_stack[i], time_passed, time_passed);
-                    boon_stack[i] = item;
+                    var item = new BoonStackItem(BoonStack[i], timePassed, timePassed);
+                    BoonStack[i] = item;
                 }
-                boon_stack.RemoveAll(x => x.boon_duration < 1);
+                BoonStack.RemoveAll(x => x.BoonDuration < 1);
             }
         }
     }

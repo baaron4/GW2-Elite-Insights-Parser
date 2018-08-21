@@ -12,8 +12,8 @@ namespace LuckParser.Models
     {
         public Sabetha() : base()
         {
-            mode = ParseMode.Raid;
-            mechanicList.AddRange(new List<Mechanic>
+            Mode = ParseMode.Raid;
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(34108, "Shell-Shocked", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Sabetha, "symbol:'circle-open',color:'rgb(0,128,0)',", "Shell-Shocked",0),
             new Mechanic(31473, "Sapper Bomb", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Sabetha, "symbol:'circle',color:'rgb(0,128,0)',", "Sapper Bomb",0),
@@ -36,11 +36,11 @@ namespace LuckParser.Models
                             Tuple.Create(3456, 11012, 4736, 14212));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
+        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // Invul check
             List<CombatItem> invulsSab = GetFilteredList(log, 757, boss.GetInstid());
@@ -53,19 +53,19 @@ namespace LuckParser.Models
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsSab.Count - 1)
                     {
-                        cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), ParseEnum.Activation.None, (int)(fight_dur - end), ParseEnum.Activation.None));
+                        castLogs.Add(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None));
                     }
                 }
                 else
                 {
                     start = c.GetTime() - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(end, start));
-                    cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
+                    castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
             }
-            if (fight_dur - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
             {
-                phases.Add(new PhaseData(start, fight_dur));
+                phases.Add(new PhaseData(start, fightDuration));
             }
             string[] namesSab = new string[] { "Phase 1", "Kernan", "Phase 2", "Knuckles", "Phase 3", "Karde", "Phase 4" };
             for (int i = 1; i < phases.Count; i++)

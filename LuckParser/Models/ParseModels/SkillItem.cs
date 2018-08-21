@@ -6,37 +6,37 @@ namespace LuckParser.Models.ParseModels
     public class SkillItem
     {
         // Fields
-        private int ID;
-        private String name;
-        private GW2APISkill apiSkill = null;
-        private int cc = 0;
+        private int _id;
+        private String _name;
+        private GW2APISkill _apiSkill = null;
+        private int _cc = 0;
 
         // Constructor
         public SkillItem(int ID, String name)
         {
             name = name.Replace("\0", "");
-            this.ID = ID;
-            this.name = name;
+            _id = ID;
+            _name = name;
         }
 
         // Public Methods
         public String[] ToStringArray()
         {
             String[] array = new String[2];
-            array[0] = ID.ToString();
-            array[1] = name.ToString();
+            array[0] = _id.ToString();
+            array[1] = _name.ToString();
             return array;
         }
         //setter
         public void SetGW2APISkill(GW2APIController apiController)
         {
-            if (apiSkill == null)
+            if (_apiSkill == null)
             {
-                GW2APISkill skillAPI = apiController.GetSkill(ID);
+                GW2APISkill skillAPI = apiController.GetSkill(_id);
 
                 if (skillAPI != null) {
-                    this.apiSkill = skillAPI;
-                    this.name = skillAPI.Name;
+                    _apiSkill = skillAPI;
+                    _name = skillAPI.Name;
                 }
                 
             }
@@ -45,30 +45,30 @@ namespace LuckParser.Models.ParseModels
         // Getters
         public int GetID()
         {
-            return ID;
+            return _id;
         }
 
         public String GetName()
         {
-            if (ID == 1066) {
+            if (_id == 1066) {
                 return "Resurrect";
             }
-            return name;
+            return _name;
         }
 
         public GW2APISkill GetGW2APISkill() {
-            return apiSkill;
+            return _apiSkill;
         }
         public int GetCC() {
-            return cc;
+            return _cc;
         }
         public void SetCCAPI(int cc)//this is 100% off the GW2 API is not a reliable source of finding skill CC
         {
             cc = 0;
-            if (apiSkill != null)
+            if (_apiSkill != null)
             {
-                GW2APISkillDetailed apiskilldet = (GW2APISkillDetailed)this.apiSkill;
-                GW2APISkillCheck apiskillchec = (GW2APISkillCheck)this.apiSkill;
+                GW2APISkillDetailed apiskilldet = (GW2APISkillDetailed)_apiSkill;
+                GW2APISkillCheck apiskillchec = (GW2APISkillCheck)_apiSkill;
                 GW2APIfacts[] factsList;
                 if (apiskilldet != null)
                 {
@@ -193,11 +193,11 @@ namespace LuckParser.Models.ParseModels
 
                 
                 }
-                if (ID == 30725)//toss elixer x
+                if (_id == 30725)//toss elixer x
                 {
                     cc = 300;
                 }
-                if (ID == 29519)//MOA signet
+                if (_id == 29519)//MOA signet
                 {
                     cc = 1000;
                 }

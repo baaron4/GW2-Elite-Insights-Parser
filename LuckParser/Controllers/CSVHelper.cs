@@ -11,12 +11,11 @@ namespace LuckParser.Controllers
 {
     class CSVHelper
     {
-        public static SettingsContainer settings;
 
         public static void WriteOldCSV(StreamWriter sw, string delimiter,ParsedLog log,Statistics statistics)
         {
-            double fight_duration = (log.GetBossData().GetAwareDuration()) / 1000.0;
-            TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
+            double fightDuration = (log.GetBossData().GetAwareDuration()) / 1000.0;
+            TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
             String durationString = duration.ToString("mm") + ":" + duration.ToString("ss");
             sw.Write("Group" + delimiter +
                     "Class" + delimiter +
@@ -39,33 +38,33 @@ namespace LuckParser.Controllers
             int[] teamStats = { 0, 0, 0 };
             foreach (Player p in log.GetPlayerList())
             {
-                Statistics.FinalDPS dps = statistics.dps[p][0];
-                teamStats[0] += dps.bossDps;
-                teamStats[1] += dps.allDps;
-                teamStats[2] += dps.allDps - dps.bossDps;
+                Statistics.FinalDPS dps = statistics.Dps[p][0];
+                teamStats[0] += dps.BossDps;
+                teamStats[1] += dps.AllDps;
+                teamStats[2] += dps.AllDps - dps.BossDps;
             }
 
             foreach (Player p in log.GetPlayerList())
             {
-                Statistics.FinalDPS dps = statistics.dps[p][0];
+                Statistics.FinalDPS dps = statistics.Dps[p][0];
                 sw.Write(p.GetGroup() + delimiter + // group
                         p.GetProf() + delimiter +  // class
                         p.GetCharacter() + delimiter + // character
                         p.GetAccount().Substring(1) + delimiter + // account
-                        dps.bossDps + delimiter + // dps
-                        dps.bossPowerDps + delimiter + // physical
-                        dps.bossCondiDps + delimiter + // condi
-                        dps.allDps + delimiter); // all dps
+                        dps.BossDps + delimiter + // dps
+                        dps.BossPowerDps + delimiter + // physical
+                        dps.BossCondiDps + delimiter + // condi
+                        dps.AllDps + delimiter); // all dps
 
-                Dictionary<long, Statistics.FinalBoonUptime> boons = statistics.selfBoons[p][0];
-                sw.Write(boons[1187].uptime + delimiter + // Quickness
-                         boons[30328].uptime + delimiter + // Alacrity
-                         boons[740].uptime + delimiter); // Might
+                Dictionary<long, Statistics.FinalBoonUptime> boons = statistics.SelfBoons[p][0];
+                sw.Write(boons[1187].Uptime + delimiter + // Quickness
+                         boons[30328].Uptime + delimiter + // Alacrity
+                         boons[740].Uptime + delimiter); // Might
 
                 sw.Write(teamStats[0] + delimiter  // boss dps
                         + teamStats[1] + delimiter // all
                         + durationString + delimiter + // duration
-                          (dps.allDps - dps.bossDps).ToString() + delimiter // cleave
+                          (dps.AllDps - dps.BossDps).ToString() + delimiter // cleave
                         + teamStats[2]); // team cleave
                 sw.Write("\r\n");
             }

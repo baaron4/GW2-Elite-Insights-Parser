@@ -9,56 +9,56 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractPlayer
     {
-        protected AgentItem agent;
-        private String character;
+        protected AgentItem Agent;
+        private String _character;
         // DPS
-        protected List<DamageLog> damage_logs = new List<DamageLog>();
-        private List<DamageLog> damage_logsFiltered = new List<DamageLog>();
+        protected List<DamageLog> DamageLogs = new List<DamageLog>();
+        private List<DamageLog> _damageLogsFiltered = new List<DamageLog>();
         // Heal
-        //protected List<DamageLog> healing_logs = new List<DamageLog>();
-        //protected List<DamageLog> healing_received_logs = new List<DamageLog>();
+        //protected List<DamageLog> HealingLogs = new List<DamageLog>();
+        //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
         // Taken damage
-        protected List<DamageLog> damageTaken_logs = new List<DamageLog>();
+        protected List<DamageLog> DamageTakenLogs = new List<DamageLog>();
         // Casts
-        protected List<CastLog> cast_logs = new List<CastLog>();
+        protected List<CastLog> CastLogs = new List<CastLog>();
         // Constructor
         public AbstractPlayer(AgentItem agent)
         {
             String[] name = agent.GetName().Split('\0');
-            character = name[0];
-            this.agent = agent;
+            _character = name[0];
+            Agent = agent;
         }
         // Getters
         public ushort GetInstid()
         {
-            return agent.GetInstid();
+            return Agent.GetInstid();
         }
         public string GetCharacter()
         {
-            return character;
+            return _character;
         }
         public string GetProf()
         {
-            return agent.GetProf();
+            return Agent.GetProf();
         }
 
         public List<DamageLog> GetDamageLogs(int instidFilter, ParsedLog log, long start, long end)//isntid = 0 gets all logs if specefied sets and returns filterd logs
         {
-            if (damage_logs.Count == 0)
+            if (DamageLogs.Count == 0)
             {
                 SetDamageLogs(log);
             }
 
 
-            if (damage_logsFiltered.Count == 0)
+            if (_damageLogsFiltered.Count == 0)
             {
-                damage_logsFiltered = damage_logs.Where(x => x.GetDstInstidt() == instidFilter).ToList();
+                _damageLogsFiltered = DamageLogs.Where(x => x.GetDstInstidt() == instidFilter).ToList();
             }
             if (instidFilter == 0)
             {
-                return damage_logs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+                return DamageLogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
             }
-            return damage_logsFiltered.Where( x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+            return _damageLogsFiltered.Where( x => x.GetTime() >= start && x.GetTime() <= end).ToList();
         }
         public List<DamageLog> GetDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
         {
@@ -77,50 +77,50 @@ namespace LuckParser.Models.ParseModels
         }
         public List<DamageLog> GetDamageTakenLogs(ParsedLog log, long start, long end)
         {
-            if (damageTaken_logs.Count == 0)
+            if (DamageTakenLogs.Count == 0)
             {
                 SetDamagetakenLogs(log);
             }
-            return damageTaken_logs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+            return DamageTakenLogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
         }
         /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)//isntid = 0 gets all logs if specefied sets and returns filterd logs
         {
-            if (healing_logs.Count == 0)
+            if (healingLogs.Count == 0)
             {
                 setHealingLogs(log);
             }
-            return healing_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
+            return healingLogs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
         public List<DamageLog> getHealingReceivedLogs(ParsedLog log, long start, long end)
         {
-            if (healing_received_logs.Count == 0)
+            if (healingReceivedLogs.Count == 0)
             {
                 setHealingReceivedLogs(log);
             }
-            return healing_received_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
+            return healingReceivedLogs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }*/
         public List<CastLog> GetCastLogs(ParsedLog log, long start, long end)
         {
-            if (cast_logs.Count == 0)
+            if (CastLogs.Count == 0)
             {
                 SetCastLogs(log);
             }
-            return cast_logs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+            return CastLogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
 
         }
 
         public List<CastLog> GetCastLogsActDur(ParsedLog log, long start, long end)
         {
-            if (cast_logs.Count == 0)
+            if (CastLogs.Count == 0)
             {
                 SetCastLogs(log);
             }
-            return cast_logs.Where(x => x.GetTime() + x.GetActDur() >= start && x.GetTime() <= end).ToList();
+            return CastLogs.Where(x => x.GetTime() + x.GetActDur() >= start && x.GetTime() <= end).ToList();
 
         }
         public List<DamageLog> GetJustPlayerDamageLogs(int instidFilter, ParsedLog log, long start, long end)
         {
-            return GetDamageLogs(instidFilter, log, start, end).Where(x => x.GetSrcInstidt() == agent.GetInstid()).ToList();
+            return GetDamageLogs(instidFilter, log, start, end).Where(x => x.GetSrcInstidt() == Agent.GetInstid()).ToList();
         }
 
         public List<DamageLog> GetJustPlayerDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
@@ -145,15 +145,15 @@ namespace LuckParser.Models.ParseModels
             {
                 if (c.IsBuff() == 1 && c.GetBuffDmg() != 0)//condi
                 {
-                    damage_logs.Add(new DamageLogCondition(time, c));
+                    DamageLogs.Add(new DamageLogCondition(time, c));
                 }
                 else if (c.IsBuff() == 0 && c.GetValue() != 0)//power
                 {
-                    damage_logs.Add(new DamageLogPower(time, c));
+                    DamageLogs.Add(new DamageLogPower(time, c));
                 }
                 else if (c.GetResult() == ParseEnum.Result.Absorb || c.GetResult() == ParseEnum.Result.Blind || c.GetResult() == ParseEnum.Result.Interrupt)
                 {//Hits that where blinded, invulned, interupts
-                    damage_logs.Add(new DamageLogPower(time, c));
+                    DamageLogs.Add(new DamageLogPower(time, c));
                 }
             }
 
@@ -164,11 +164,11 @@ namespace LuckParser.Models.ParseModels
             {
                 //inco,ing condi dmg not working or just not present?
                 // damagetaken.Add(c.getBuffDmg());
-                damageTaken_logs.Add(new DamageLogCondition(time, c));
+                DamageTakenLogs.Add(new DamageLogCondition(time, c));
             }
             else if (c.IsBuff() == 0 && c.GetValue() >= 0)
             {
-                damageTaken_logs.Add(new DamageLogPower(time, c));
+                DamageTakenLogs.Add(new DamageLogPower(time, c));
 
             }
         }

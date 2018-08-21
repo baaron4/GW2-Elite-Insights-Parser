@@ -14,15 +14,15 @@ namespace LuckParser
     {
         private SettingsForm _settingsForm;
         private List<string> _logsFiles = new List<string>();
-        private Parser controller = new Parser();
-        private bool _AnyRunning = false;
+        private Parser _controller = new Parser();
+        private bool _anyRunning = false;
         private Queue<GridRow> _logQueue = new Queue<GridRow>();
         public MainForm()
         {
             InitializeComponent();
             //display version
             string version = Application.ProductVersion;
-            Version_Label.Text = version;
+            VersionLabel.Text = version;
             _logsFiles = new List<string>();
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
@@ -49,9 +49,9 @@ namespace LuckParser
                 {
                     BgWorker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true }
                 };
-                gRow.BgWorker.DoWork += BgWorker_DoWork;
-                gRow.BgWorker.ProgressChanged += BgWorker_ProgressChanged;
-                gRow.BgWorker.RunWorkerCompleted += BgWorker_Completed;
+                gRow.BgWorker.DoWork += BgWorkerDoWork;
+                gRow.BgWorker.ProgressChanged += BgWorkerProgressChanged;
+                gRow.BgWorker.RunWorkerCompleted += BgWorkerCompleted;
 
                 gridRowBindingSource.Add(gRow);
             }
@@ -67,7 +67,7 @@ namespace LuckParser
         {
             if (Properties.Settings.Default.ParseOneAtATime)
             {
-                if (_AnyRunning)
+                if (_anyRunning)
                 {
                     _logQueue.Enqueue(row);
                     row.Status = "Queued";
@@ -77,7 +77,7 @@ namespace LuckParser
                 else
                 {
                     row.Run();
-                    _AnyRunning = true;
+                    _anyRunning = true;
                 }
             }
             else
@@ -103,7 +103,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BgWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void BgWorkerDoWork(object sender, DoWorkEventArgs e)
         {
             System.Globalization.CultureInfo before = System.Threading.Thread.CurrentThread.CurrentCulture;
             System.Threading.Thread.CurrentThread.CurrentCulture =
@@ -196,8 +196,8 @@ namespace LuckParser
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                         {
-                            var builder = new CSVBuilder(log, settings, statistics);
-                            builder.CreateCSV(sw, ",");
+                            var builder = new CSVBuilder(sw, ",", log, settings, statistics);
+                            builder.CreateCSV();
                         }
                     }
 
@@ -229,7 +229,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void BgWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             //Redraw rows
             dgvFiles.Invalidate();
@@ -240,9 +240,9 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BgWorker_Completed(object sender, RunWorkerCompletedEventArgs e)
+        private void BgWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            _AnyRunning = false;
+            _anyRunning = false;
 
             GridRow row;
             if (e.Cancelled || e.Error != null)
@@ -294,7 +294,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnParse_Click(object sender, EventArgs e)
+        private void BtnParseClick(object sender, EventArgs e)
         {
             //Clear queue before parsing all
             _logQueue.Clear();
@@ -319,7 +319,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnCancel_Click(object sender, EventArgs e)
+        private void BtnCancelClick(object sender, EventArgs e)
         {
             //Clear queue so queued workers don't get started by any cancellations
             _logQueue.Clear();
@@ -348,7 +348,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnSettings_Click(object sender, EventArgs e)
+        private void BtnSettingsClick(object sender, EventArgs e)
         {
             _settingsForm = new SettingsForm();
             _settingsForm.Show();
@@ -359,7 +359,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnClear_Click(object sender, EventArgs e)
+        private void BtnClearClick(object sender, EventArgs e)
         {
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
@@ -388,7 +388,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DgvFiles_DragDrop(object sender, DragEventArgs e)
+        private void DgvFilesDragDrop(object sender, DragEventArgs e)
         {
             btnParse.Enabled = true;
             string[] filesArray = (string[])e.Data.GetData(DataFormats.FileDrop, false);
@@ -400,7 +400,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DgvFiles_DragEnter(object sender, DragEventArgs e)
+        private void DgvFilesDragEnter(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.All;
         }
@@ -410,7 +410,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DgvFiles_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void DgvFilesCellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 2)
             {

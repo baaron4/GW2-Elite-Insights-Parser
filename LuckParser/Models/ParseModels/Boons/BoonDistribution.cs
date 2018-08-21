@@ -5,13 +5,13 @@ namespace LuckParser.Models.ParseModels
 {
     public struct OverAndValue
     {
-        public long value;
-        public long overstack;
+        public long Value;
+        public long Overstack;
 
         public OverAndValue(long value, long overstack)
         {
-            this.value = value;
-            this.overstack = overstack;
+            Value = value;
+            Overstack = overstack;
         }
     }
 
@@ -27,7 +27,7 @@ namespace LuckParser.Models.ParseModels
             {
                 return 0;
             }
-            return this[boonid].Sum(x => x.Value.value);
+            return this[boonid].Sum(x => x.Value.Value);
         }
 
         public long GetGeneration(long boonid, ushort src)
@@ -36,7 +36,7 @@ namespace LuckParser.Models.ParseModels
             {
                 return 0;
             }
-            return this[boonid].Where( x => src == x.Key).Sum(x => x.Value.value);
+            return this[boonid].Where( x => src == x.Key).Sum(x => x.Value.Value);
         }
 
         public long GetOverstack(long boonid, ushort src)
@@ -45,7 +45,7 @@ namespace LuckParser.Models.ParseModels
             {
                 return 0;
             }
-            return this[boonid].Where(x => src == x.Key).Sum(x => x.Value.overstack);
+            return this[boonid].Where(x => src == x.Key).Sum(x => x.Value.Overstack);
         }
     }
 }

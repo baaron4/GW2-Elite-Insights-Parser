@@ -12,7 +12,7 @@ namespace LuckParser.Models
     {
         public Arkk() : base()
         {
-            mechanicList.AddRange(new List<Mechanic>
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(39685, "Horizon Strike 1", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Arkk, "symbol:'circle',color:'rgb(50,0,0)',", "Horizon Strike 1",0),
             new Mechanic(39001, "Horizon Strike 2", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Arkk, "symbol:'circle',color:'rgb(100,0,0)',", "Horizon Strike 2",0),

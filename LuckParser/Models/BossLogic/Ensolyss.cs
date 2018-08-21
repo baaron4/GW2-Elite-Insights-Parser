@@ -12,7 +12,7 @@ namespace LuckParser.Models
     {
         public Ensolyss() : base()
         {
-            mechanicList.AddRange(new List<Mechanic>
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(37154, "Lunge", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'circle',color:'rgb(50,150,0)',", "Lunge",0),
             new Mechanic(37278, "First Smash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'circle',color:'rgb(100,150,0)',", "First Smash",0),

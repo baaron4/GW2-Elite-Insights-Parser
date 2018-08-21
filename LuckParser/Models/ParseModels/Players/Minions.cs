@@ -9,33 +9,33 @@ namespace LuckParser.Models.ParseModels
 {
     public class Minions : List<Minion>
     {
-        private int instid;
-        private List<DamageLog> damage_logs = new List<DamageLog>();
-        private List<DamageLog> filtered_damage_logs = new List<DamageLog>();
-        private List<CastLog> cast_logs = new List<CastLog>();
+        private int _instid;
+        private List<DamageLog> _damageLogs = new List<DamageLog>();
+        private List<DamageLog> _filteredDamageLogs = new List<DamageLog>();
+        private List<CastLog> _castLogs = new List<CastLog>();
         public Minions(int instid) : base()
         {
-            this.instid = instid;
+            _instid = instid;
         }
 
         public List<DamageLog> GetDamageLogs(int instidFilter, ParsedLog log, long start, long end)
         {
-            if (damage_logs.Count == 0)
+            if (_damageLogs.Count == 0)
             {
                 foreach (Minion minion in this)
                 {
-                    damage_logs.AddRange(minion.GetDamageLogs(0, log, 0, log.GetBossData().GetAwareDuration()));
+                    _damageLogs.AddRange(minion.GetDamageLogs(0, log, 0, log.GetBossData().GetAwareDuration()));
                 }
             }
-            if (filtered_damage_logs.Count == 0)
+            if (_filteredDamageLogs.Count == 0)
             {
-                filtered_damage_logs = damage_logs.Where(x => x.GetDstInstidt() == log.GetBossData().GetInstid()).ToList();
+                _filteredDamageLogs = _damageLogs.Where(x => x.GetDstInstidt() == log.GetBossData().GetInstid()).ToList();
             }
             if (instidFilter > 0)
             {
-                return filtered_damage_logs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+                return _filteredDamageLogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
             }
-            return damage_logs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+            return _damageLogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
         }
 
         public List<DamageLog> GetDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
@@ -62,19 +62,19 @@ namespace LuckParser.Models.ParseModels
 
         public List<CastLog> GetCastLogs(ParsedLog log, long start, long end)
         {
-            if (cast_logs.Count == 0)
+            if (_castLogs.Count == 0)
             {
                 foreach (Minion minion in this)
                 {
-                    cast_logs.AddRange(minion.GetCastLogs(log, 0, log.GetBossData().GetAwareDuration()));
+                    _castLogs.AddRange(minion.GetCastLogs(log, 0, log.GetBossData().GetAwareDuration()));
                 }
             }
-            return cast_logs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+            return _castLogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
         }
 
         public int GetInstid()
         {
-            return instid;
+            return _instid;
         }
 
         public string GetCharacter()

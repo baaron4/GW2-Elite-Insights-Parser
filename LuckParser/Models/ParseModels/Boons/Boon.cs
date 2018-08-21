@@ -59,31 +59,31 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Fields
-        private string name;
-        private long id;
-        private BoonEnum nature;
-        private BoonSource source;
-        private RemoveType remove_type;
-        private BoonType type;
-        private int capacity;
-        private string link;
-        private Logic logic;
+        private string _name;
+        private long _id;
+        private BoonEnum _nature;
+        private BoonSource _source;
+        private RemoveType _removeType;
+        private BoonType _type;
+        private int _capacity;
+        private string _link;
+        private Logic _logic;
 
-        private Boon(string name, int id, BoonSource source, BoonType type, int capacity, BoonEnum nature, RemoveType remove_type, Logic logic, string link = "")
+        private Boon(string name, int id, BoonSource source, BoonType type, int capacity, BoonEnum nature, RemoveType removeType, Logic logic, string link = "")
         {
-            this.name = name;
-            this.id = id;
-            this.source = source;
-            this.type = type;
-            this.capacity = capacity;
-            this.nature = nature;
-            this.link = link;
-            this.remove_type = remove_type;
-            this.logic = logic;
+            _name = name;
+            _id = id;
+            _source = source;
+            _type = type;
+            _capacity = capacity;
+            _nature = nature;
+            _link = link;
+            _removeType = removeType;
+            _logic = logic;
         }
         // Public Methods
 
-        private static List<Boon> allBoons = new List<Boon>
+        private static List<Boon> _allBoons = new List<Boon>
             {
                 //Base boons
                 new Boon("Might", 740, BoonSource.Mixed, BoonType.Intensity, 25, BoonEnum.Boon, RemoveType.CleanseFoe, Logic.Queue, "https://wiki.guildwars2.com/images/7/7c/Might.png"),
@@ -494,10 +494,10 @@ namespace LuckParser.Models.ParseModels
             {
                 return false;
             }
-            Boon toCheck = allBoons.Find(x => x.GetID() == boonid);
+            Boon toCheck = _allBoons.Find(x => x.GetID() == boonid);
             if (toCheck != null)
             {
-                switch (toCheck.remove_type)
+                switch (toCheck._removeType)
                 {
                     case RemoveType.CleanseFriend:
                         return iff != ParseEnum.IFF.Foe && (buffremove == ParseEnum.BuffRemove.All || buffremove == ParseEnum.BuffRemove.Single);
@@ -517,28 +517,28 @@ namespace LuckParser.Models.ParseModels
         // debug
         public static List<Boon> GetBoonByName(string name)
         {
-            return allBoons.Where(x => x.GetName() == name).ToList();
+            return _allBoons.Where(x => x.GetName() == name).ToList();
         }
 
 
         // Conditions
         public static List<Boon> GetCondiBoonList()
         {
-            return allBoons.Where(x => x.nature == BoonEnum.Condition).ToList();
+            return _allBoons.Where(x => x._nature == BoonEnum.Condition).ToList();
         }
         // Boons
         public static List<Boon> GetBoonList()
         {
-            return allBoons.Where(x => x.nature == BoonEnum.Boon).ToList();
+            return _allBoons.Where(x => x._nature == BoonEnum.Boon).ToList();
         }
         // Shareable buffs
         public static List<Boon> GetOffensiveTableList()
         {
-            return allBoons.Where(x => x.nature == BoonEnum.OffensiveBuffTable).ToList();
+            return _allBoons.Where(x => x._nature == BoonEnum.OffensiveBuffTable).ToList();
         }
         private static List<Boon> GetOffensiveTableList(BoonSource source)
         {
-            return GetOffensiveTableList().Where(x => x.source == source).ToList();
+            return GetOffensiveTableList().Where(x => x._source == source).ToList();
         }
         public static List<Boon> GetOffensiveTableList(String source)
         {
@@ -546,11 +546,11 @@ namespace LuckParser.Models.ParseModels
         }
         public static List<Boon> GetDefensiveTableList()
         {
-            return allBoons.Where(x => x.nature == BoonEnum.DefensiveBuffTable).ToList();
+            return _allBoons.Where(x => x._nature == BoonEnum.DefensiveBuffTable).ToList();
         }
         private static List<Boon> GetDefensiveTableList(BoonSource source)
         {
-            return GetDefensiveTableList().Where(x => x.source == source).ToList();
+            return GetDefensiveTableList().Where(x => x._source == source).ToList();
         }
         public static List<Boon> GetDefensiveTableList(String source)
         {
@@ -559,11 +559,11 @@ namespace LuckParser.Models.ParseModels
         // Table + graph
         public static List<Boon> GetTableProfList()
         {
-            return allBoons.Where(x => x.nature == BoonEnum.OffensiveBuffTable || x.nature == BoonEnum.DefensiveBuffTable).ToList();
+            return _allBoons.Where(x => x._nature == BoonEnum.OffensiveBuffTable || x._nature == BoonEnum.DefensiveBuffTable).ToList();
         }
         private static List<Boon> GetTableProfList(BoonSource source)
         {
-            return GetTableProfList().Where(x => x.source == source).ToList();
+            return GetTableProfList().Where(x => x._source == source).ToList();
         }
         public static List<Boon> GetTableProfList(String source)
         {
@@ -572,17 +572,17 @@ namespace LuckParser.Models.ParseModels
         // Foods
         public static List<Boon> GetFoodList()
         {
-            return allBoons.Where(x => x.nature == BoonEnum.Food).ToList();
+            return _allBoons.Where(x => x._nature == BoonEnum.Food).ToList();
         }
         // Utilities
         public static List<Boon> GetUtilityList()
         {
-            return allBoons.Where(x => x.nature == BoonEnum.Utility).ToList();
+            return _allBoons.Where(x => x._nature == BoonEnum.Utility).ToList();
         }
         // Boss
         public static List<Boon> GetBossBoonList()
         {
-            return allBoons.Where(x => x.source == BoonSource.Boss).ToList();
+            return _allBoons.Where(x => x._source == BoonSource.Boss).ToList();
         }
         // All buffs
         public static List<Boon> GetAllBuffList()
@@ -598,11 +598,11 @@ namespace LuckParser.Models.ParseModels
         // Non shareable buffs
         public static List<Boon> GetRemainingBuffsList()
         {
-            return allBoons.Where(x => x.nature == BoonEnum.GraphOnlyBuff).ToList();
+            return _allBoons.Where(x => x._nature == BoonEnum.GraphOnlyBuff).ToList();
         }
         private static List<Boon> GetRemainingBuffsList(BoonSource source)
         {
-            return GetRemainingBuffsList().Where(x => x.source == source).ToList();
+            return GetRemainingBuffsList().Where(x => x._source == source).ToList();
         }
         public static List<Boon> GetRemainingBuffsList(String source)
         {
@@ -613,40 +613,40 @@ namespace LuckParser.Models.ParseModels
         // Getters
         public string GetName()
         {
-            return this.name;
+            return _name;
         }
         public long GetID()
         {
-            return id;
+            return _id;
         }
         public BoonSource GetSource()
         {
-            return source;
+            return _source;
         }
         public BoonEnum GetNature()
         {
-            return nature;
+            return _nature;
         }
 
         public BoonType GetBoonType()
         {
-            return type;
+            return _type;
         }
 
         public int GetCapacity()
         {
-            return capacity;
+            return _capacity;
         }
 
         public string GetLink()
         {
-            return link;
+            return _link;
         }
 
         public BoonSimulator CreateSimulator(ParsedLog log)
         {
             StackingLogic logicToUse;
-            switch (logic)
+            switch (_logic)
             {
                 case Logic.Queue:
                     logicToUse = new QueueLogic();
@@ -659,10 +659,10 @@ namespace LuckParser.Models.ParseModels
                     logicToUse = new OverrideLogic();
                     break;
             }
-            switch (type)
+            switch (_type)
             {
-                case BoonType.Intensity: return new BoonSimulatorIntensity(capacity, log, logicToUse);
-                case BoonType.Duration: return new BoonSimulatorDuration(capacity, log, logicToUse);
+                case BoonType.Intensity: return new BoonSimulatorIntensity(_capacity, log, logicToUse);
+                case BoonType.Duration: return new BoonSimulatorDuration(_capacity, log, logicToUse);
                 default: throw new InvalidOperationException();
             }
         }

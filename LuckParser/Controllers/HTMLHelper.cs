@@ -11,19 +11,19 @@ namespace LuckParser.Controllers
 {
     class HTMLHelper
     {
-        public static SettingsContainer settings;
+        public static SettingsContainer Settings;
 
-        public static void WriteCastingItem(StreamWriter sw, CastLog cl, SkillData s_list, long start, long end)
+        public static void WriteCastingItem(StreamWriter sw, CastLog cl, SkillData skillList, long start, long end)
         {
             string skillName = "";
             GW2APISkill skill = null;
-            if (s_list.FirstOrDefault(x => x.GetID() == cl.GetID()) != null)
+            if (skillList.FirstOrDefault(x => x.GetID() == cl.GetID()) != null)
             {
-                skill = s_list.FirstOrDefault(x => x.GetID() == cl.GetID()).GetGW2APISkill();
+                skill = skillList.FirstOrDefault(x => x.GetID() == cl.GetID()).GetGW2APISkill();
             }
             if (skill == null)
             {
-                skillName = s_list.GetName(cl.GetID());
+                skillName = skillList.GetName(cl.GetID());
             }
             else
             {
@@ -135,13 +135,13 @@ namespace LuckParser.Controllers
             sw.Write(" },");
         }
 
-        public static void WriteCastingItemIcon(StreamWriter sw, CastLog cl, SkillData s_list, long start, bool last)
+        public static void WriteCastingItemIcon(StreamWriter sw, CastLog cl, SkillData skillList, long start, bool last)
         {
             string skillIcon = "";
             GW2APISkill skill = null;
-            if (s_list.FirstOrDefault(x => x.GetID() == cl.GetID()) != null)
+            if (skillList.FirstOrDefault(x => x.GetID() == cl.GetID()) != null)
             {
-                skill = s_list.FirstOrDefault(x => x.GetID() == cl.GetID()).GetGW2APISkill();
+                skill = skillList.FirstOrDefault(x => x.GetID() == cl.GetID()).GetGW2APISkill();
             }
             if (skill != null && cl.GetID() != -2)
             {
@@ -173,7 +173,7 @@ namespace LuckParser.Controllers
                 }
                 else
                 {
-                    skillName = s_list.GetName(cl.GetID());
+                    skillName = skillList.GetName(cl.GetID());
                 }
 
 
@@ -207,7 +207,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        public static void WriteBoonTableHeader(StreamWriter sw, List<Boon> list_to_use)
+        public static void WriteBoonTableHeader(StreamWriter sw, List<Boon> listToUse)
         {
             sw.Write("<thead>");
             {
@@ -216,7 +216,7 @@ namespace LuckParser.Controllers
                     sw.Write("<th width=\"50px\">Sub</th>");
                     sw.Write("<th width=\"50px\"></th>");
                     sw.Write("<th>Name</th>");
-                    foreach (Boon boon in list_to_use)
+                    foreach (Boon boon in listToUse)
                     {
                         sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.GetLink() + "\" alt=\"" + boon.GetName() + "\" title =\" " + boon.GetName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                     }
@@ -227,14 +227,14 @@ namespace LuckParser.Controllers
 
         }
 
-        public static void WriteBoonGenTableBody(StreamWriter sw, Player player, List<Boon> list_to_use, Dictionary<long, string> boonArray)
+        public static void WriteBoonGenTableBody(StreamWriter sw, Player player, List<Boon> listToUse, Dictionary<long, string> boonArray)
         {
             sw.Write("<tr>");
             {
                 sw.Write("<td>" + player.GetGroup().ToString() + "</td>");
                 sw.Write("<td>" + "<img src=\"" + GetLink(player.GetProf().ToString()) + "\" alt=\"" + player.GetProf().ToString() + "\" height=\"20\" width=\"20\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
                 sw.Write("<td>" + player.GetCharacter().ToString() + "</td>");
-                foreach (Boon boon in list_to_use)
+                foreach (Boon boon in listToUse)
                 {
                     if (boonArray.ContainsKey(boon.GetID()))
                     {
@@ -347,7 +347,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        public static void WriteDamageDistTableSkill(StreamWriter sw, SkillItem skill, SkillData skill_data, List<DamageLog> damageLogs, int finalTotalDamage, int casts = -1, double timeswasted = -1, double timessaved = 1)
+        public static void WriteDamageDistTableSkill(StreamWriter sw, SkillItem skill, SkillData skillData, List<DamageLog> damageLogs, int finalTotalDamage, int casts = -1, double timeswasted = -1, double timessaved = 1)
         {
             int totaldamage = 0;
             int mindamage = 0;
@@ -375,7 +375,7 @@ namespace LuckParser.Controllers
             if (casts > 0) {
                 hpcast = Math.Round(hits / (double)casts, 2);
             }
-            string skillName = (skill.GetID().ToString() == skill.GetName()) ? skill_data.GetName(skill.GetID()): skill.GetName();
+            string skillName = (skill.GetID().ToString() == skill.GetName()) ? skillData.GetName(skill.GetID()): skill.GetName();
             if (totaldamage != 0 && skill.GetGW2APISkill() != null)
             {
                 sw.Write("<tr>");
@@ -462,7 +462,7 @@ namespace LuckParser.Controllers
             }
         }
         
-        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, BossData boss_data, string y_axis = "")
+        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, BossData bossData, string y_axis = "")
         {
             //Boss Health
             //Adding dps axis
@@ -472,7 +472,7 @@ namespace LuckParser.Controllers
                 maxDPS = 1000;
             }
             int hotCount = 0;
-            List<Point> BossHOT = boss_data.GetHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
+            List<Point> BossHOT = bossData.GetHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
             foreach (Point dp in BossHOT)
             {
                 if (hotCount == BossHOT.Count - 1)
@@ -491,7 +491,7 @@ namespace LuckParser.Controllers
             //text axis is boss hp in %
             sw.Write("text: [");
 
-            float scaler2 = boss_data.GetHealth() / 100;
+            float scaler2 = bossData.GetHealth() / 100;
             hotCount = 0;
             foreach (Point dp in BossHOT)
             {

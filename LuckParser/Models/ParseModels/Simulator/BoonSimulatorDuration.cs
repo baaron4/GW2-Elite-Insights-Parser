@@ -14,31 +14,31 @@ namespace LuckParser.Models.ParseModels
 
         // Public Methods
     
-        public override void Update(long time_passed)
+        public override void Update(long timePassed)
         {
-            if (boon_stack.Count > 0)
+            if (BoonStack.Count > 0)
             {
-                var toAdd = new BoonSimulationItemDuration(boon_stack[0]);
-                if (simulation.Count > 0)
+                var toAdd = new BoonSimulationItemDuration(BoonStack[0]);
+                if (Simulation.Count > 0)
                 {
-                    var last = simulation.Last();
+                    var last = Simulation.Last();
                     if (last.GetEnd() > toAdd.GetStart())
                     {
                         last.SetEnd(toAdd.GetStart());
                     }
                 }
-                simulation.Add(toAdd);
-                boon_stack[0] = new BoonStackItem(boon_stack[0], time_passed, time_passed);
-                long diff = time_passed - Math.Abs(Math.Min(boon_stack[0].boon_duration, 0));
-                for (int i = 1; i < boon_stack.Count; i++)
+                Simulation.Add(toAdd);
+                BoonStack[0] = new BoonStackItem(BoonStack[0], timePassed, timePassed);
+                long diff = timePassed - Math.Abs(Math.Min(BoonStack[0].BoonDuration, 0));
+                for (int i = 1; i < BoonStack.Count; i++)
                 {
-                    boon_stack[i] = new BoonStackItem(boon_stack[i], diff, 0);
+                    BoonStack[i] = new BoonStackItem(BoonStack[i], diff, 0);
                 }
-                if (boon_stack[0].boon_duration <= 0)
+                if (BoonStack[0].BoonDuration <= 0)
                 {
                     // Spend leftover time
-                    long leftover = Math.Abs(boon_stack[0].boon_duration);
-                    boon_stack.RemoveAt(0);
+                    long leftover = Math.Abs(BoonStack[0].BoonDuration);
+                    BoonStack.RemoveAt(0);
                     Update(leftover);
                 }
             }

@@ -12,7 +12,7 @@ namespace LuckParser.Models
     {
         public MAMA() : base()
         {
-            mechanicList.AddRange(new List<Mechanic>
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(37408, "Blastwave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MAMA, "symbol:'circle',color:'rgb(100,150,0)',", "Blastwave",0),
             new Mechanic(37103, "Blastwave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MAMA, "symbol:'circle',color:'rgb(100,150,0)',", "Blastwave",0),

@@ -12,7 +12,7 @@ namespace LuckParser.Models
     {
         public Siax() : base()
         {
-            mechanicList.AddRange(new List<Mechanic>
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(37477, "Vile Spit", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Siax, "symbol:'circle',color:'rgb(150,150,0)',", "Vile Spit",0),
             });

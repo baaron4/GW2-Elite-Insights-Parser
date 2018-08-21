@@ -9,113 +9,113 @@ namespace LuckParser.Models.DataModels
 {
     public class ParsedLog
     {
-        private LogData log_data;
-        private BossData boss_data;
-        private AgentData agent_data = new AgentData();
-        private SkillData skill_data = new SkillData();
-        private CombatData combat_data = new CombatData();
-        private MechanicData mech_data;
-        private List<Player> p_list = new List<Player>();
-        private Boss boss;
+        private LogData _logData;
+        private BossData _bossData;
+        private AgentData _agentData;
+        private SkillData _skillData;
+        private CombatData _combatData;
+        private MechanicData _mechData;
+        private List<Player> _playerList;
+        private Boss _boss;
 
         
 
-        public ParsedLog(LogData log_data, BossData boss_data, AgentData agent_data, SkillData skill_data, 
-                CombatData combat_data, List<Player> p_list, Boss boss)
+        public ParsedLog(LogData logData, BossData bossData, AgentData agentData, SkillData skillData, 
+                CombatData combatData, List<Player> playerList, Boss boss)
         {
-            this.log_data = log_data;
-            this.boss_data = boss_data;
-            this.agent_data = agent_data;
-            this.skill_data = skill_data;
-            this.combat_data = combat_data;
-            this.p_list = p_list;
-            this.boss = boss;
-            this.mech_data = new MechanicData(boss_data);
+            _logData = logData;
+            _bossData = bossData;
+            _agentData = agentData;
+            _skillData = skillData;
+            _combatData = combatData;
+            _playerList = playerList;
+            _boss = boss;
+            _mechData = new MechanicData(bossData);
         }
 
         public BossData GetBossData()
         {
-            return boss_data;
+            return _bossData;
         }
 
         public Boss GetBoss()
         {
-            return boss;
+            return _boss;
         }
 
         public CombatData GetCombatData()
         {
-            return combat_data;
+            return _combatData;
         }
 
         public AgentData GetAgentData()
         {
-            return agent_data;
+            return _agentData;
         }
 
         public List<Player> GetPlayerList()
         {
-            return p_list;
+            return _playerList;
         }
 
         public MechanicData GetMechanicData()
         {
-            return mech_data;
+            return _mechData;
         }
 
         public SkillData GetSkillData()
         {
-            return skill_data;
+            return _skillData;
         }
 
         public LogData GetLogData()
         {
-            return log_data;
+            return _logData;
         }
 
         public CombatData GetCombatList()
         {
-            return combat_data;
+            return _combatData;
         }
 
         public List<CombatItem> GetBoonData()
         {
-            return combat_data.GetBoonData();
+            return _combatData.GetBoonData();
         }
 
         public List<CombatItem> GetDamageData()
         {
-            return combat_data.GetDamageData();
+            return _combatData.GetDamageData();
         }
 
         public List<CombatItem> GetCastData()
         {
-            return combat_data.GetCastData();
+            return _combatData.GetCastData();
         }
 
         public List<CombatItem> GetDamageTakenData()
         {
-            return combat_data.GetDamageTakenData();
+            return _combatData.GetDamageTakenData();
         }
 
         public bool IsBenchmarkMode()
         {
-            return boss_data.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem;
+            return _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem;
         }
 
         /*public List<CombatItem> getHealingData()
         {
-            return combat_data.getHealingData();
+            return _combatData.getHealingData();
         }
 
         public List<CombatItem> getHealingReceivedData()
         {
-            return combat_data.getHealingReceivedData();
+            return _combatData.getHealingReceivedData();
         }*/
 
         public List<CombatItem> GetMovementData()
         {
-            return combat_data.GetMovementData();
+            return _combatData.GetMovementData();
         }     
     }
 }
