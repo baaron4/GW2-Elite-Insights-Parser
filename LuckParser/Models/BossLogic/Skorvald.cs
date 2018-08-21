@@ -1,4 +1,5 @@
-﻿using LuckParser.Models.ParseModels;
+﻿using LuckParser.Models.DataModels;
+using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +9,7 @@ namespace LuckParser.Models
     {
         public Skorvald()
         { 
-            mechanicList.AddRange(new List<Mechanic>
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(39916, "Combustion Rush", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Skorvald, "symbol:'triangle-left',color:'rgb(255,0,255)',", "Chrg",0), //Combustion Rush (platform charge), Charge
             new Mechanic(39615, "Combustion Rush", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Skorvald, "symbol:'triangle-left',color:'rgb(255,0,255)',", "Chrg",0), //Combustion Rush (platform charge), Charge
