@@ -152,8 +152,8 @@ namespace LuckParser
                         saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
                     }
 
-                    string bossid = parser.GetBossData().getID().ToString();
-                    string result = parser.GetLogData().getBosskill() ? "kill" : "fail";
+                    string bossid = parser.GetBossData().GetID().ToString();
+                    string result = parser.GetLogData().GetBosskill() ? "kill" : "fail";
 
                     SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
 

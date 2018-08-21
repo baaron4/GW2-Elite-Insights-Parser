@@ -23,27 +23,27 @@ namespace LuckParser.Models.ParseModels
             this.growing = growing;
         }
 
-        public int getGrowing()
+        public int GetGrowing()
         {
             return growing;
         }
 
-        public bool isFilled()
+        public bool IsFilled()
         {
             return fill;
         }
 
-        public string getPosition(string id, CombatReplayMap map)
+        public string GetPosition(string id, CombatReplayMap map)
         {
-            return mobility.getPosition(id, map);
+            return mobility.GetPosition(id, map);
         }
 
-        public Tuple<int, int> getLifespan()
+        public Tuple<int, int> GetLifespan()
         {
             return lifespan;
         }
 
-        public string getColor()
+        public string GetColor()
         {
             return "'" + color + "'";
         }

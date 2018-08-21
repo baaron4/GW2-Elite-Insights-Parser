@@ -26,9 +26,9 @@ namespace LuckParser.Models.ParseModels
         public List<CombatItem> GetStates(int src_instid, ParseEnum.StateChange change, long start, long end)
         {
             List<CombatItem> states = new List<CombatItem>();
-            foreach (CombatItem c in this.Where(x => x.getTime() >= start && x.getTime() <= end))
+            foreach (CombatItem c in this.Where(x => x.GetTime() >= start && x.GetTime() <= end))
             {
-                if (c.getSrcInstid() == src_instid && c.isStateChange() == change)
+                if (c.GetSrcInstid() == src_instid && c.IsStateChange() == change)
                 {
                     states.Add(c);
                 }
@@ -39,11 +39,11 @@ namespace LuckParser.Models.ParseModels
         public int GetSkillCount(int src_instid, int skill_id, long start, long end)
         {
             int count = 0;
-            foreach (CombatItem c in this.Where(x => x.getTime() >= start && x.getTime() <= end))
+            foreach (CombatItem c in this.Where(x => x.GetTime() >= start && x.GetTime() <= end))
             {
-                if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
+                if (c.GetSrcInstid() == src_instid && c.GetSkillID() == skill_id)
                 {
-                    if (c.isActivation().IsCasting())
+                    if (c.IsActivation().IsCasting())
                         count++;
                 }
             }
@@ -52,11 +52,11 @@ namespace LuckParser.Models.ParseModels
         public int GetBuffCount(int src_instid, int skill_id, long start, long end)
         {
             int count = 0;
-            foreach (CombatItem c in this.Where(x => x.getTime() >= start && x.getTime() <= end))
+            foreach (CombatItem c in this.Where(x => x.GetTime() >= start && x.GetTime() <= end))
             {
-                if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
+                if (c.GetSrcInstid() == src_instid && c.GetSkillID() == skill_id)
                 {
-                    if (c.isBuff() == 1 && c.isBuffremove() == ParseEnum.BuffRemove.None)
+                    if (c.IsBuff() == 1 && c.IsBuffremove() == ParseEnum.BuffRemove.None)
                         count++;
                 }
             }
@@ -64,19 +64,19 @@ namespace LuckParser.Models.ParseModels
         }
         public void Validate(BossData boss_data)
         {
-            boon_data = this.Where(x => x.isBuff() > 0 && (x.isBuff() == 18 || x.getBuffDmg() == 0 || x.isBuffremove() != ParseEnum.BuffRemove.None)).ToList();
+            boon_data = this.Where(x => x.IsBuff() > 0 && (x.IsBuff() == 18 || x.GetBuffDmg() == 0 || x.IsBuffremove() != ParseEnum.BuffRemove.None)).ToList();
 
-            damage_data = this.Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Foe && x.isBuffremove() == ParseEnum.BuffRemove.None &&
-                                        ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
-                                        (x.isBuff() == 0 && x.getValue() > 0))).ToList();
+            damage_data = this.Where(x => x.GetDstInstid() != 0 && x.IsStateChange() == ParseEnum.StateChange.Normal && x.GetIFF() == ParseEnum.IFF.Foe && x.IsBuffremove() == ParseEnum.BuffRemove.None &&
+                                        ((x.IsBuff() == 1 && x.GetBuffDmg() > 0 && x.GetValue() == 0) ||
+                                        (x.IsBuff() == 0 && x.GetValue() > 0))).ToList();
 
-            damage_taken_data = this.Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.isBuffremove() == ParseEnum.BuffRemove.None &&
-                                            ((x.isBuff() == 1 && x.getBuffDmg() >= 0 && x.getValue() == 0) ||
-                                                (x.isBuff() == 0 && x.getValue() >= 0))).ToList();
+            damage_taken_data = this.Where(x => x.IsStateChange() == ParseEnum.StateChange.Normal && x.IsBuffremove() == ParseEnum.BuffRemove.None &&
+                                            ((x.IsBuff() == 1 && x.GetBuffDmg() >= 0 && x.GetValue() == 0) ||
+                                                (x.IsBuff() == 0 && x.GetValue() >= 0))).ToList();
 
-            cast_data = this.Where(x => (x.isStateChange() == ParseEnum.StateChange.Normal && x.isActivation() != ParseEnum.Activation.None) || x.isStateChange() == ParseEnum.StateChange.WeaponSwap).ToList();
+            cast_data = this.Where(x => (x.IsStateChange() == ParseEnum.StateChange.Normal && x.IsActivation() != ParseEnum.Activation.None) || x.IsStateChange() == ParseEnum.StateChange.WeaponSwap).ToList();
 
-            movement_data = (boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Fractal || boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Raid) ? this.Where(x => x.isStateChange() == ParseEnum.StateChange.Position || x.isStateChange() == ParseEnum.StateChange.Velocity).ToList() : new List<CombatItem>();
+            movement_data = (boss_data.GetBossBehavior().GetMode() == BossLogic.ParseMode.Fractal || boss_data.GetBossBehavior().GetMode() == BossLogic.ParseMode.Raid) ? this.Where(x => x.IsStateChange() == ParseEnum.StateChange.Position || x.IsStateChange() == ParseEnum.StateChange.Velocity).ToList() : new List<CombatItem>();
 
             /*healing_data = this.Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                          ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||

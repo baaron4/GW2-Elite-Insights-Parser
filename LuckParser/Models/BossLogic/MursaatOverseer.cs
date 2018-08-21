@@ -25,7 +25,7 @@ namespace LuckParser.Models
             });
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/lT1FW2r.png",
                             Tuple.Create(889, 889),
@@ -34,7 +34,7 @@ namespace LuckParser.Models
                             Tuple.Create(11774, 4480, 14078, 5376));
         }      
 
-        public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
                     {
@@ -43,12 +43,12 @@ namespace LuckParser.Models
             return ids;
         }
 
-        public override int isCM(List<CombatItem> clist, int health)
+        public override int IsCM(List<CombatItem> clist, int health)
         {
             return (health > 25e6) ? 1 : 0;
         }
 
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://i.imgur.com/5LNiw4Y.png";
         }

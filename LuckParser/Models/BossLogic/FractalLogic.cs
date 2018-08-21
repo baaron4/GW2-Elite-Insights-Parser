@@ -15,20 +15,20 @@ namespace LuckParser.Models
             mode = ParseMode.Fractal;
         }
 
-        public override List<PhaseData> getPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
+        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
         {
             // generic method for fractals
             long start = 0;
             long end = 0;
-            long fight_dur = log.GetBossData().getAwareDuration();
-            List<PhaseData> phases = getInitialPhase(log);
-            List<CombatItem> invulsBoss = getFilteredList(log,762,boss.GetInstid());        
+            long fight_dur = log.GetBossData().GetAwareDuration();
+            List<PhaseData> phases = GetInitialPhase(log);
+            List<CombatItem> invulsBoss = GetFilteredList(log,762,boss.GetInstid());        
             for (int i = 0; i < invulsBoss.Count; i++)
             {
                 CombatItem c = invulsBoss[i];
-                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    end = c.getTime() - log.GetBossData().getFirstAware();
+                    end = c.GetTime() - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsBoss.Count - 1)
                     {
@@ -37,17 +37,17 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.getTime() - log.GetBossData().getFirstAware();
+                    start = c.GetTime() - log.GetBossData().GetFirstAware();
                     cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
             }
-            if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+            if (fight_dur - start > 5000 && start >= phases.Last().GetEnd())
             {
                 phases.Add(new PhaseData(start, fight_dur));
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].setName("Phase " + i);
+                phases[i].SetName("Phase " + i);
             }
             return phases;
         }

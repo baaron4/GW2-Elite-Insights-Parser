@@ -35,7 +35,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Public Methods
-        public String[] toStringArray()
+        public String[] ToStringArray()
         {
             String[] array = new String[9];
             array[0] = string.Format("{0:X}", agent);//Long.toHexString(agent); 
@@ -51,85 +51,85 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Getters
-        public ulong getAgent()
+        public ulong GetAgent()
         {
             return agent;
         }
 
-        public ushort getInstid()
+        public ushort GetInstid()
         {
             return instid;
         }
 
-        public long getFirstAware()
+        public long GetFirstAware()
         {
             return first_aware;
         }
 
-        public long getLastAware()
+        public long GetLastAware()
         {
             return last_aware;
         }
 
-        public String getName()
+        public String GetName()
         {
            // name = name.Replace("\0", "");
             
             return name;
         }
 
-        public String getProf()
+        public String GetProf()
         {
             return prof;
         }
 
-        public ulong getMasterAgent()
+        public ulong GetMasterAgent()
         {
             return master_agent;
         }
 
-        public int getToughness()
+        public int GetToughness()
         {
             return toughness;
         }
 
-        public int getHealing()
+        public int GetHealing()
         {
             return healing;
         }
 
-        public int getCondition()
+        public int GetCondition()
         {
             return condition;
         }
 
-        public int getConcentration()
+        public int GetConcentration()
         {
             return concentration;
         }
 
-        public ushort getID()
+        public ushort GetID()
         {
             return id;
         }
 
         // Setters
-        public void setInstid(ushort instid)
+        public void SetInstid(ushort instid)
         {
             this.instid = instid;
         }
 
-        public void setMasterAgent(ulong master)
+        public void SetMasterAgent(ulong master)
         {
             this.master_agent = master;
         }
 
-        public void setFirstAware(long first_aware)
+        public void SetFirstAware(long first_aware)
         {
             this.first_aware = first_aware;
         }
 
-        public void setLastAware(long last_aware)
+        public void SetLastAware(long last_aware)
         {
             this.last_aware = last_aware;
         }

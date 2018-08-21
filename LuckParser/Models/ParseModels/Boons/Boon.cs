@@ -488,13 +488,13 @@ namespace LuckParser.Models.ParseModels
         };
 
 
-        public static bool removePermission(long boonid, ParseEnum.BuffRemove buffremove, ParseEnum.IFF iff)
+        public static bool RemovePermission(long boonid, ParseEnum.BuffRemove buffremove, ParseEnum.IFF iff)
         {
             if (buffremove == 0)
             {
                 return false;
             }
-            Boon toCheck = allBoons.Find(x => x.getID() == boonid);
+            Boon toCheck = allBoons.Find(x => x.GetID() == boonid);
             if (toCheck != null)
             {
                 switch (toCheck.remove_type)
@@ -515,130 +515,130 @@ namespace LuckParser.Models.ParseModels
         }
 
         // debug
-        public static List<Boon> getBoonByName(string name)
+        public static List<Boon> GetBoonByName(string name)
         {
-            return allBoons.Where(x => x.getName() == name).ToList();
+            return allBoons.Where(x => x.GetName() == name).ToList();
         }
 
 
         // Conditions
-        public static List<Boon> getCondiBoonList()
+        public static List<Boon> GetCondiBoonList()
         {
             return allBoons.Where(x => x.nature == BoonEnum.Condition).ToList();
         }
         // Boons
-        public static List<Boon> getBoonList()
+        public static List<Boon> GetBoonList()
         {
             return allBoons.Where(x => x.nature == BoonEnum.Boon).ToList();
         }
         // Shareable buffs
-        public static List<Boon> getOffensiveTableList()
+        public static List<Boon> GetOffensiveTableList()
         {
             return allBoons.Where(x => x.nature == BoonEnum.OffensiveBuffTable).ToList();
         }
-        private static List<Boon> getOffensiveTableList(BoonSource source)
+        private static List<Boon> GetOffensiveTableList(BoonSource source)
         {
-            return getOffensiveTableList().Where(x => x.source == source).ToList();
+            return GetOffensiveTableList().Where(x => x.source == source).ToList();
         }
-        public static List<Boon> getOffensiveTableList(String source)
+        public static List<Boon> GetOffensiveTableList(String source)
         {
-            return getOffensiveTableList(ProfToEnum(source));
+            return GetOffensiveTableList(ProfToEnum(source));
         }
-        public static List<Boon> getDefensiveTableList()
+        public static List<Boon> GetDefensiveTableList()
         {
             return allBoons.Where(x => x.nature == BoonEnum.DefensiveBuffTable).ToList();
         }
-        private static List<Boon> getDefensiveTableList(BoonSource source)
+        private static List<Boon> GetDefensiveTableList(BoonSource source)
         {
-            return getDefensiveTableList().Where(x => x.source == source).ToList();
+            return GetDefensiveTableList().Where(x => x.source == source).ToList();
         }
-        public static List<Boon> getDefensiveTableList(String source)
+        public static List<Boon> GetDefensiveTableList(String source)
         {
-            return getDefensiveTableList(ProfToEnum(source));
+            return GetDefensiveTableList(ProfToEnum(source));
         }
         // Table + graph
-        public static List<Boon> getTableProfList()
+        public static List<Boon> GetTableProfList()
         {
             return allBoons.Where(x => x.nature == BoonEnum.OffensiveBuffTable || x.nature == BoonEnum.DefensiveBuffTable).ToList();
         }
-        private static List<Boon> getTableProfList(BoonSource source)
+        private static List<Boon> GetTableProfList(BoonSource source)
         {
-            return getTableProfList().Where(x => x.source == source).ToList();
+            return GetTableProfList().Where(x => x.source == source).ToList();
         }
-        public static List<Boon> getTableProfList(String source)
+        public static List<Boon> GetTableProfList(String source)
         {
-            return getTableProfList(ProfToEnum(source));
+            return GetTableProfList(ProfToEnum(source));
         }
         // Foods
-        public static List<Boon> getFoodList()
+        public static List<Boon> GetFoodList()
         {
             return allBoons.Where(x => x.nature == BoonEnum.Food).ToList();
         }
         // Utilities
-        public static List<Boon> getUtilityList()
+        public static List<Boon> GetUtilityList()
         {
             return allBoons.Where(x => x.nature == BoonEnum.Utility).ToList();
         }
         // Boss
-        public static List<Boon> getBossBoonList()
+        public static List<Boon> GetBossBoonList()
         {
             return allBoons.Where(x => x.source == BoonSource.Boss).ToList();
         }
         // All buffs
-        public static List<Boon> getAllBuffList()
+        public static List<Boon> GetAllBuffList()
         {
             List<Boon> res = new List<Boon>();
             // correct order for the boon graph
-            res.AddRange(getBoonList());
-            res.AddRange(getOffensiveTableList());
-            res.AddRange(getDefensiveTableList());
-            res.AddRange(getRemainingBuffsList());
+            res.AddRange(GetBoonList());
+            res.AddRange(GetOffensiveTableList());
+            res.AddRange(GetDefensiveTableList());
+            res.AddRange(GetRemainingBuffsList());
             return res;
         }
         // Non shareable buffs
-        public static List<Boon> getRemainingBuffsList()
+        public static List<Boon> GetRemainingBuffsList()
         {
             return allBoons.Where(x => x.nature == BoonEnum.GraphOnlyBuff).ToList();
         }
-        private static List<Boon> getRemainingBuffsList(BoonSource source)
+        private static List<Boon> GetRemainingBuffsList(BoonSource source)
         {
-            return getRemainingBuffsList().Where(x => x.source == source).ToList();
+            return GetRemainingBuffsList().Where(x => x.source == source).ToList();
         }
-        public static List<Boon> getRemainingBuffsList(String source)
+        public static List<Boon> GetRemainingBuffsList(String source)
         {
-            return getRemainingBuffsList(ProfToEnum(source));
+            return GetRemainingBuffsList(ProfToEnum(source));
         }
 
 
         // Getters
-        public string getName()
+        public string GetName()
         {
             return this.name;
         }
-        public long getID()
+        public long GetID()
         {
             return id;
         }
-        public BoonSource getSource()
+        public BoonSource GetSource()
         {
             return source;
         }
-        public BoonEnum getNature()
+        public BoonEnum GetNature()
         {
             return nature;
         }
 
-        public BoonType getType()
+        public BoonType GetBoonType()
         {
             return type;
         }
 
-        public int getCapacity()
+        public int GetCapacity()
         {
             return capacity;
         }
 
-        public string getLink()
+        public string GetLink()
         {
             return link;
         }

@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
         public BossData(ushort id)
         {
             this.id = id;
-            switch (ParseEnum.getBossIDS(id))
+            switch (ParseEnum.GetBossIDS(id))
             {
                 case ParseEnum.BossIDS.ValeGuardian:
                     logic = new ValeGuardian();
@@ -97,7 +97,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public String[] toStringArray()
+        public String[] ToStringArray()
         {
             String[] array = new String[7];
             array[0] = string.Format("{0:X}", agent); ;
@@ -111,106 +111,106 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Getters
-        public ulong getAgent()
+        public ulong GetAgent()
         {
             return agent;
         }
 
-        public BossLogic getBossBehavior()
+        public BossLogic GetBossBehavior()
         {
             return logic;
         }
 
-        public ushort getInstid()
+        public ushort GetInstid()
         {
             return instid;
         }
 
-        public long getFirstAware()
+        public long GetFirstAware()
         {
             return first_aware;
         }
 
-        public long getLastAware()
+        public long GetLastAware()
         {
             return last_aware;
         }
 
-        public long getAwareDuration()
+        public long GetAwareDuration()
         {
             return last_aware - first_aware;
         }
 
-        public ushort getID()
+        public ushort GetID()
         {
             return id;
         }
 
-        public String getName()
+        public String GetName()
         {
           
             return name;
         }
 
-        public int getHealth()
+        public int GetHealth()
         {
             return health;
         }
-        public int getTough()
+        public int GetTough()
         {
             return toughness;
         }
 
-        public List<Point> getHealthOverTime() {
+        public List<Point> GetHealthOverTime() {
             return healthOverTime;
         }
         // Setters
-        public void setAgent(ulong agent)
+        public void SetAgent(ulong agent)
         {
             this.agent = agent;
         }
 
-        public void setInstid(ushort instid)
+        public void SetInstid(ushort instid)
         {
             this.instid = instid;
         }
 
-        public void setFirstAware(long first_aware)
+        public void SetFirstAware(long first_aware)
         {
             this.first_aware = first_aware;
         }
 
-        public void setLastAware(long last_aware)
+        public void SetLastAware(long last_aware)
         {
             this.last_aware = last_aware;
         }
 
-        public void setName(String name)
+        public void SetName(String name)
         {
             name = name.Replace("\0", "");
             this.name = name;
         }
 
-        public void setHealth(int health)
+        public void SetHealth(int health)
         {
             this.health = health;
         }
-        public void setTough(int tough)
+        public void SetTough(int tough)
         {
             toughness = tough;
         }
-        public void setHealthOverTime(List<Point> hot) {
+        public void SetHealthOverTime(List<Point> hot) {
             healthOverTime = hot;
         }
-        public bool getCM()
+        public bool IsCM()
         {
             return isCM == 1;
         }
-        public void setCM(List<CombatItem> clist)
+        public void SetCM(List<CombatItem> clist)
         {
             if (isCM == -1)
             {
-                isCM = logic.isCM(clist, health);
+                isCM = logic.IsCM(clist, health);
                 if (isCM == 1)
                 {
                     name += " CM";

@@ -8,7 +8,7 @@
         //public string type { get; set; }
         //AttributeAdjust
 
-        public float value { get; set; }
+        public float Value { get; set; }
        
         
         public GW2APIfactsDetail() { }

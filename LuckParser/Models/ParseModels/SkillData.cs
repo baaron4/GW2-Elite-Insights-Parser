@@ -42,7 +42,7 @@ namespace LuckParser.Models.ParseModels
 
         // Public Methods
 
-        public String getName(long ID)
+        public String GetName(long ID)
         {
 
             // Custom
@@ -54,9 +54,9 @@ namespace LuckParser.Models.ParseModels
             // Normal
             foreach (SkillItem s in this)
             {
-                if (s.getID() == ID)
+                if (s.GetID() == ID)
                 {
-                    return s.getName();
+                    return s.GetName();
                 }
             }
 

@@ -402,7 +402,7 @@
             this.chkOneAtATime.TabIndex = 29;
             this.chkOneAtATime.Text = "Parse logs one at a time (less CPU load, slower parsing)";
             this.chkOneAtATime.UseVisualStyleBackColor = true;
-            this.chkOneAtATime.CheckedChanged += new System.EventHandler(this.chkOneAtATime_CheckedChanged);
+            this.chkOneAtATime.CheckedChanged += new System.EventHandler(this.ChkOneAtATime_CheckedChanged);
             // 
             // StatisticsSelection
             // 
@@ -476,7 +476,7 @@
             this.chk_combatReplay.TabIndex = 40;
             this.chk_combatReplay.Text = "Compute Combat Replay";
             this.chk_combatReplay.UseVisualStyleBackColor = true;
-            this.chk_combatReplay.CheckedChanged += new System.EventHandler(this.chk_combatReplay_CheckedChanged);
+            this.chk_combatReplay.CheckedChanged += new System.EventHandler(this.Chk_combatReplay_CheckedChanged);
             // 
             // chkShowCl
             // 

@@ -60,131 +60,131 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Getters
-        public long getTime()
+        public long GetTime()
         {
             return time;
         }
 
-        public ulong getSrcAgent()
+        public ulong GetSrcAgent()
         {
             return src_agent;
         }
 
-        public ulong getDstAgent()
+        public ulong GetDstAgent()
         {
             return dst_agent;
         }
 
-        public int getValue()
+        public int GetValue()
         {
             return value;
         }
 
-        public int getBuffDmg()
+        public int GetBuffDmg()
         {
             return buff_dmg;
         }
 
-        public uint getOverstackValue()
+        public uint GetOverstackValue()
         {
             return overstack_value;
         }
 
-        public long getSkillID()
+        public long GetSkillID()
         {
             return skill_id;
         }
 
-        public ushort getSrcInstid()
+        public ushort GetSrcInstid()
         {
             return src_instid;
         }
 
-        public ushort getDstInstid()
+        public ushort GetDstInstid()
         {
             return dst_instid;
         }
 
-        public ushort getSrcMasterInstid()
+        public ushort GetSrcMasterInstid()
         {
             return src_master_instid;
         }
 
-        public ushort getDstMasterInstid()
+        public ushort GetDstMasterInstid()
         {
             return dst_master_instid;
         }
 
-        public ParseEnum.IFF getIFF()
+        public ParseEnum.IFF GetIFF()
         {
             return iff;
         }
 
-        public ushort isBuff()
+        public ushort IsBuff()
         {
             return is_buff;
         }
 
-        public ParseEnum.Result getResult()
+        public ParseEnum.Result GetResult()
         {
             return result;
         }
 
-        public ParseEnum.Activation isActivation()
+        public ParseEnum.Activation IsActivation()
         {
             return is_activation;
         }
 
-        public ParseEnum.BuffRemove isBuffremove()
+        public ParseEnum.BuffRemove IsBuffremove()
         {
             return is_buffremove;
         }
 
-        public ushort isNinety()
+        public ushort IsNinety()
         {
             return is_ninety;
         }
 
-        public ushort isFifty()
+        public ushort IsFifty()
         {
             return is_fifty;
         }
 
-        public ushort isMoving()
+        public ushort IsMoving()
         {
             return is_moving;
         }
 
-        public ushort isFlanking()
+        public ushort IsFlanking()
         {
             return is_flanking;
         }
 
-        public ParseEnum.StateChange isStateChange()
+        public ParseEnum.StateChange IsStateChange()
         {
             return is_statechange;
         }
-        public ushort isShields()
+        public ushort IsShields()
         {
             return is_shields;
         }
         // Setters
-        public void setSrcAgent(ulong src_agent)
+        public void SetSrcAgent(ulong src_agent)
         {
             this.src_agent = src_agent;
         }
 
-        public void setDstAgent(ulong dst_agent)
+        public void SetDstAgent(ulong dst_agent)
         {
             this.dst_agent = dst_agent;
         }
 
-        public void setSrcInstid(ushort src_instid)
+        public void SetSrcInstid(ushort src_instid)
         {
             this.src_instid = src_instid;
         }
 
-        public void setDstInstid(ushort dst_instid)
+        public void SetDstInstid(ushort dst_instid)
         {
             this.dst_instid = dst_instid;
         }

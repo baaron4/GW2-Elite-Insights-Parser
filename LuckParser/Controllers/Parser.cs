@@ -134,7 +134,7 @@ namespace LuckParser.Controllers
             using (var reader = CreateReader(stream))
             {
                 // 12 bytes: arc build version
-                var build_version = ParseHelper.getString(stream, 12);
+                var build_version = ParseHelper.GetString(stream, 12);
                 this.log_data = new LogData(build_version);
 
                 // 1 byte: skip
@@ -143,7 +143,7 @@ namespace LuckParser.Controllers
                 // 2 bytes: boss instance ID
                 ushort id = reader.ReadUInt16();
                 // 1 byte: position
-                ParseHelper.safeSkip(stream, 1);
+                ParseHelper.SafeSkip(stream, 1);
 
                 //Save
                 // TempData["Debug"] = build_version +" "+ instid.ToString() ;
@@ -179,28 +179,28 @@ namespace LuckParser.Controllers
                     int concentration = reader.ReadInt16();
                     // 2 bytes: healing
                     int healing = reader.ReadInt16();
-                    ParseHelper.safeSkip(stream, 2);
+                    ParseHelper.SafeSkip(stream, 2);
                     // 2 bytes: condition
                     int condition = reader.ReadInt16();
-                    ParseHelper.safeSkip(stream, 2);
+                    ParseHelper.SafeSkip(stream, 2);
                     // 68 bytes: name
-                    String name = ParseHelper.getString(stream, 68, false);
+                    String name = ParseHelper.GetString(stream, 68, false);
                     //Save
                     Agent a = new Agent(agent, name, prof, is_elite);
-                    var agent_prof = a.getProf(this.log_data.getBuildVersion(), APIController);
+                    var agent_prof = a.GetProf(this.log_data.GetBuildVersion(), APIController);
                     switch(agent_prof)
                     {
                         case "NPC":
                             // NPC
-                            agent_data.addItem(new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0'), toughness, healing, condition, concentration), agent_prof);
+                            agent_data.AddItem(new AgentItem(agent, name, a.GetName() + ":" + prof.ToString().PadLeft(5, '0'), toughness, healing, condition, concentration), agent_prof);
                             break;
                             // Gadget
                         case "GDG":
-                            agent_data.addItem(new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0'),toughness, healing, condition,concentration), agent_prof);
+                            agent_data.AddItem(new AgentItem(agent, name, a.GetName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0'),toughness, healing, condition,concentration), agent_prof);
                             break;
                         default:
                             // Player
-                            agent_data.addItem(new AgentItem(agent, name, agent_prof, toughness, healing, condition,concentration), agent_prof);
+                            agent_data.AddItem(new AgentItem(agent, name, agent_prof, toughness, healing, condition,concentration), agent_prof);
                             break;
                     }
                 }
@@ -225,15 +225,15 @@ namespace LuckParser.Controllers
                     int skill_id = reader.ReadInt32();
 
                     // 64 bytes: name
-                    var name = ParseHelper.getString(stream, 64);
+                    var name = ParseHelper.GetString(stream, 64);
                     if(skill_id != 0 && int.TryParse(name, out int n) && n == skill_id)
                     {
                         //was it a known boon?
-                        foreach(Boon b in Boon.getBoonList())
+                        foreach(Boon b in Boon.GetBoonList())
                         {
-                            if(skill_id == b.getID())
+                            if(skill_id == b.GetID())
                             {
-                                name = b.getName();
+                                name = b.GetName();
                             }
                         }
                     }
@@ -280,22 +280,22 @@ namespace LuckParser.Controllers
             ushort src_master_instid = reader.ReadUInt16();
 
             // 9 bytes: garbage
-            ParseHelper.safeSkip(reader.BaseStream, 9);
+            ParseHelper.SafeSkip(reader.BaseStream, 9);
 
             // 1 byte: iff
-            ParseEnum.IFF iff = ParseEnum.getIFF(reader.ReadByte());
+            ParseEnum.IFF iff = ParseEnum.GetIFF(reader.ReadByte());
 
             // 1 byte: buff
             ushort buff = (ushort)reader.ReadByte();
 
             // 1 byte: result
-            ParseEnum.Result result = ParseEnum.getResult(reader.ReadByte());
+            ParseEnum.Result result = ParseEnum.GetResult(reader.ReadByte());
 
             // 1 byte: is_activation
-            ParseEnum.Activation is_activation = ParseEnum.getActivation(reader.ReadByte());
+            ParseEnum.Activation is_activation = ParseEnum.GetActivation(reader.ReadByte());
 
             // 1 byte: is_buffremove
-            ParseEnum.BuffRemove is_buffremoved = ParseEnum.getBuffRemove(reader.ReadByte());
+            ParseEnum.BuffRemove is_buffremoved = ParseEnum.GetBuffRemove(reader.ReadByte());
 
             // 1 byte: is_ninety
             ushort is_ninety = (ushort)reader.ReadByte();
@@ -307,7 +307,7 @@ namespace LuckParser.Controllers
             ushort is_moving = (ushort)reader.ReadByte();
 
             // 1 byte: is_statechange
-            ParseEnum.StateChange is_statechange = ParseEnum.getStateChange(reader.ReadByte());
+            ParseEnum.StateChange is_statechange = ParseEnum.GetStateChange(reader.ReadByte());
 
             // 1 byte: is_flanking
             ushort is_flanking = (ushort)reader.ReadByte();
@@ -315,7 +315,7 @@ namespace LuckParser.Controllers
             // 1 byte: is_flanking
             ushort is_shields = (ushort)reader.ReadByte();
             // 2 bytes: garbage
-            ParseHelper.safeSkip(reader.BaseStream, 2);
+            ParseHelper.SafeSkip(reader.BaseStream, 2);
 
             //save
             // Add combat
@@ -359,19 +359,19 @@ namespace LuckParser.Controllers
             ushort dst_master_instid = reader.ReadUInt16();
 
             // 1 byte: iff
-            ParseEnum.IFF iff = ParseEnum.getIFF(reader.ReadByte());
+            ParseEnum.IFF iff = ParseEnum.GetIFF(reader.ReadByte());
 
             // 1 byte: buff
             ushort buff = (ushort)reader.ReadByte();
 
             // 1 byte: result
-            ParseEnum.Result result = ParseEnum.getResult(reader.ReadByte());
+            ParseEnum.Result result = ParseEnum.GetResult(reader.ReadByte());
 
             // 1 byte: is_activation
-            ParseEnum.Activation is_activation = ParseEnum.getActivation(reader.ReadByte());
+            ParseEnum.Activation is_activation = ParseEnum.GetActivation(reader.ReadByte());
 
             // 1 byte: is_buffremove
-            ParseEnum.BuffRemove is_buffremoved = ParseEnum.getBuffRemove(reader.ReadByte());
+            ParseEnum.BuffRemove is_buffremoved = ParseEnum.GetBuffRemove(reader.ReadByte());
 
             // 1 byte: is_ninety
             ushort is_ninety = (ushort)reader.ReadByte();
@@ -383,7 +383,7 @@ namespace LuckParser.Controllers
             ushort is_moving = (ushort)reader.ReadByte();
 
             // 1 byte: is_statechange
-            ParseEnum.StateChange is_statechange = ParseEnum.getStateChange(reader.ReadByte());
+            ParseEnum.StateChange is_statechange = ParseEnum.GetStateChange(reader.ReadByte());
 
             // 1 byte: is_flanking
             ushort is_flanking = (ushort)reader.ReadByte();
@@ -391,7 +391,7 @@ namespace LuckParser.Controllers
             // 1 byte: is_flanking
             ushort is_shields = (ushort)reader.ReadByte();
             // 5 bytes: offcycle (?) + garbage
-            ParseHelper.safeSkip(reader.BaseStream, 5);
+            ParseHelper.SafeSkip(reader.BaseStream, 5);
 
             //save
             // Add combat
@@ -417,7 +417,7 @@ namespace LuckParser.Controllers
                     combat_data.Add( revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader));
                 }
             }
-            combat_data.RemoveAll(x => x.getSrcInstid() == 0 && x.getDstAgent() == 0 && x.getSrcAgent() == 0 && x.getDstInstid() == 0 && x.getIFF() == ParseEnum.IFF.Unknown);
+            combat_data.RemoveAll(x => x.GetSrcInstid() == 0 && x.GetDstAgent() == 0 && x.GetSrcAgent() == 0 && x.GetDstInstid() == 0 && x.GetIFF() == ParseEnum.IFF.Unknown);
         }
         
         private static bool IsGolem(ushort id)
@@ -430,29 +430,29 @@ namespace LuckParser.Controllers
         /// </summary>
         private void FillMissingData()
         {
-            var agentsLookup = agent_data.getAllAgentsList().ToDictionary(a => a.getAgent());
-            bool golem_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Golem;
-            bool raid_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Raid;
-            bool fractal_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Fractal;
+            var agentsLookup = agent_data.GetAllAgentsList().ToDictionary(a => a.GetAgent());
+            bool golem_mode = boss_data.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem;
+            bool raid_mode = boss_data.GetBossBehavior().GetMode() == BossLogic.ParseMode.Raid;
+            bool fractal_mode = boss_data.GetBossBehavior().GetMode() == BossLogic.ParseMode.Fractal;
             // Set Agent instid, first_aware and last_aware
             foreach (CombatItem c in combat_data)
             {
-                if(agentsLookup.TryGetValue(c.getSrcAgent(), out var a))
+                if(agentsLookup.TryGetValue(c.GetSrcAgent(), out var a))
                 {
-                    if (a.getInstid() == 0 && c.isStateChange().IsSpawn())
+                    if (a.GetInstid() == 0 && c.IsStateChange().IsSpawn())
                     {
-                        a.setInstid(c.getSrcInstid());
+                        a.SetInstid(c.GetSrcInstid());
                     }
-                    if (a.getInstid() != 0)
+                    if (a.GetInstid() != 0)
                     {
-                        if (a.getFirstAware() == 0)
+                        if (a.GetFirstAware() == 0)
                         {
-                            a.setFirstAware(c.getTime());
-                            a.setLastAware(c.getTime());
+                            a.SetFirstAware(c.GetTime());
+                            a.SetLastAware(c.GetTime());
                         }
                         else
                         {
-                            a.setLastAware(c.getTime());
+                            a.SetLastAware(c.GetTime());
                         }
                     }
                 }
@@ -460,61 +460,61 @@ namespace LuckParser.Controllers
 
             foreach (CombatItem c in combat_data)
             {
-                if (c.getSrcMasterInstid() != 0)
+                if (c.GetSrcMasterInstid() != 0)
                 {
-                    var master = agent_data.getAllAgentsList().Find(x => x.getInstid() == c.getSrcMasterInstid() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
+                    var master = agent_data.GetAllAgentsList().Find(x => x.GetInstid() == c.GetSrcMasterInstid() && x.GetFirstAware() < c.GetTime() && c.GetTime() < x.GetLastAware());
                     if (master != null)
                     {
-                        if(agentsLookup.TryGetValue(c.getSrcAgent(), out var minion) && minion.getFirstAware() < c.getTime() && c.getTime() < minion.getLastAware())
+                        if(agentsLookup.TryGetValue(c.GetSrcAgent(), out var minion) && minion.GetFirstAware() < c.GetTime() && c.GetTime() < minion.GetLastAware())
                         {
-                            minion.setMasterAgent(master.getAgent());
+                            minion.SetMasterAgent(master.GetAgent());
                         }
                     }
                 }
             }
 
-            agent_data.clean();
+            agent_data.Clean();
 
             // Set Boss data agent, instid, first_aware, last_aware and name
-            List<AgentItem> NPC_list = agent_data.getNPCAgentList();
+            List<AgentItem> NPC_list = agent_data.GetNPCAgentList();
             HashSet<ulong> multiple_boss = new HashSet<ulong>();
             foreach (AgentItem NPC in NPC_list)
             {
-                if (NPC.getID() == boss_data.getID())
+                if (NPC.GetID() == boss_data.GetID())
                 {
-                    if (boss_data.getAgent() == 0)
+                    if (boss_data.GetAgent() == 0)
                     {
-                        boss_data.setAgent(NPC.getAgent());
-                        boss_data.setInstid(NPC.getInstid());
-                        boss_data.setName(NPC.getName());
-                        boss_data.setTough(NPC.getToughness());
+                        boss_data.SetAgent(NPC.GetAgent());
+                        boss_data.SetInstid(NPC.GetInstid());
+                        boss_data.SetName(NPC.GetName());
+                        boss_data.SetTough(NPC.GetToughness());
                     }
-                    multiple_boss.Add(NPC.getAgent());
+                    multiple_boss.Add(NPC.GetAgent());
                 }
             }
             if (multiple_boss.Count > 1)
             {
-                agent_data.cleanInstid(boss_data.getInstid());
+                agent_data.CleanInstid(boss_data.GetInstid());
             }
-            AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
+            AgentItem bossAgent = agent_data.GetAgent(boss_data.GetAgent());
             boss = new Boss(bossAgent);
             List<Point> bossHealthOverTime = new List<Point>();
             // a hack for buggy golem logs
             if (golem_mode)
             {
-                AgentItem otherGolem = NPC_list.Find(x => x.getID() == 19603);
+                AgentItem otherGolem = NPC_list.Find(x => x.GetID() == 19603);
                 foreach (CombatItem c in combat_data)
                 {
                     // redirect all attacks to the main golem
-                    if (c.getDstAgent() == 0 && c.getDstInstid() == 0 && c.isStateChange() == ParseEnum.StateChange.Normal && c.getIFF() == ParseEnum.IFF.Foe && c.isActivation() == ParseEnum.Activation.None)
+                    if (c.GetDstAgent() == 0 && c.GetDstInstid() == 0 && c.IsStateChange() == ParseEnum.StateChange.Normal && c.GetIFF() == ParseEnum.IFF.Foe && c.IsActivation() == ParseEnum.Activation.None)
                     {
-                        c.setDstAgent(bossAgent.getAgent());
-                        c.setDstInstid(bossAgent.getInstid());
+                        c.SetDstAgent(bossAgent.GetAgent());
+                        c.SetDstInstid(bossAgent.GetInstid());
                     }
                     // redirect buff initial to main golem
-                    if (otherGolem != null && c.isBuff() == 18 && c.getDstInstid() == otherGolem.getInstid())
+                    if (otherGolem != null && c.IsBuff() == 18 && c.GetDstInstid() == otherGolem.GetInstid())
                     {
-                        c.setDstInstid(bossAgent.getInstid());
+                        c.SetDstInstid(bossAgent.GetInstid());
                     }
                 }
 
@@ -522,70 +522,70 @@ namespace LuckParser.Controllers
             // Grab values threw combat data
             foreach (CombatItem c in combat_data)
             {
-                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate)//max health update
+                if (c.GetSrcInstid() == boss_data.GetInstid() && c.IsStateChange() == ParseEnum.StateChange.MaxHealthUpdate)//max health update
                 {
-                    boss_data.setHealth((int)c.getDstAgent());
+                    boss_data.SetHealth((int)c.GetDstAgent());
 
                 }
-                switch(c.isStateChange())
+                switch(c.IsStateChange())
                 {
                     case ParseEnum.StateChange.PointOfView:
-                        if (log_data.getPOV() == "N/A")//Point of View
+                        if (log_data.GetPOV() == "N/A")//Point of View
                         {
-                            ulong pov_agent = c.getSrcAgent();
+                            ulong pov_agent = c.GetSrcAgent();
                             if(agentsLookup.TryGetValue(pov_agent, out var p))
                             {
-                                log_data.setPOV(p.getName());
+                                log_data.SetPOV(p.GetName());
                             }
                         }
                         break;
                     case ParseEnum.StateChange.LogStart:
-                        log_data.setLogStart(c.getValue());
-                        boss_data.setFirstAware(c.getTime());
+                        log_data.SetLogStart(c.GetValue());
+                        boss_data.SetFirstAware(c.GetTime());
                         break;
                     case ParseEnum.StateChange.LogEnd:
-                        log_data.setLogEnd(c.getValue());
-                        boss_data.setLastAware(c.getTime());
+                        log_data.SetLogEnd(c.GetValue());
+                        boss_data.SetLastAware(c.GetTime());
                         break;
                     case ParseEnum.StateChange.HealthUpdate:
                         //set health update
-                        if (c.getSrcInstid() == boss_data.getInstid())
+                        if (c.GetSrcInstid() == boss_data.GetInstid())
                         {
-                            bossHealthOverTime.Add(new Point ( (int)(c.getTime() - boss_data.getFirstAware()), (int)c.getDstAgent() ));
+                            bossHealthOverTime.Add(new Point ( (int)(c.GetTime() - boss_data.GetFirstAware()), (int)c.GetDstAgent() ));
                         }
                         break;
                 }
             }
 
             // Dealing with second half of Xera | ((22611300 * 0.5) + (25560600 * 0.5)
-            if (boss_data.getID() == 16246)
+            if (boss_data.GetID() == 16246)
             {
                 int xera_2_instid = 0;
                 foreach (AgentItem NPC in NPC_list)
                 {
-                    if (NPC.getID() == 16286)
+                    if (NPC.GetID() == 16286)
                     {
                         bossHealthOverTime = new List<Point>();//reset boss health over time
-                        xera_2_instid = NPC.getInstid();
-                        boss_data.setHealth(24085950);
-                        boss.addPhaseData(NPC.getFirstAware());
-                        boss_data.setLastAware(NPC.getLastAware());
+                        xera_2_instid = NPC.GetInstid();
+                        boss_data.SetHealth(24085950);
+                        boss.AddPhaseData(NPC.GetFirstAware());
+                        boss_data.SetLastAware(NPC.GetLastAware());
                         foreach (CombatItem c in combat_data)
                         {
-                            if (c.getSrcInstid() == xera_2_instid)
+                            if (c.GetSrcInstid() == xera_2_instid)
                             {
-                                c.setSrcInstid(boss_data.getInstid());
-                                c.setSrcAgent(boss_data.getAgent());
+                                c.SetSrcInstid(boss_data.GetInstid());
+                                c.SetSrcAgent(boss_data.GetAgent());
                             }
-                            if (c.getDstInstid() == xera_2_instid)
+                            if (c.GetDstInstid() == xera_2_instid)
                             {
-                                c.setDstInstid(boss_data.getInstid());
-                                c.setDstAgent(boss_data.getAgent());
+                                c.SetDstInstid(boss_data.GetInstid());
+                                c.SetDstAgent(boss_data.GetAgent());
                             }
                             //set health update
-                            if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange() == ParseEnum.StateChange.HealthUpdate)
+                            if (c.GetSrcInstid() == boss_data.GetInstid() && c.IsStateChange() == ParseEnum.StateChange.HealthUpdate)
                             {
-                                bossHealthOverTime.Add(new Point ( (int)(c.getTime() - boss_data.getFirstAware()), (int)c.getDstAgent() ));
+                                bossHealthOverTime.Add(new Point ( (int)(c.GetTime() - boss_data.GetFirstAware()), (int)c.GetDstAgent() ));
                             }
                         }
                         break;
@@ -593,39 +593,39 @@ namespace LuckParser.Controllers
                 }
             }
             //Dealing with Deimos split
-            if (boss_data.getID() == 17154)
+            if (boss_data.GetID() == 17154)
             {
                 int deimos_2_instid = 0;
-                List<AgentItem> deimosGadgets = agent_data.getGadgetAgentList().Where(x => x.getFirstAware() > bossAgent.getLastAware() && x.getName().Contains("Deimos")).OrderBy(x => x.getLastAware()).ToList();
+                List<AgentItem> deimosGadgets = agent_data.GetGadgetAgentList().Where(x => x.GetFirstAware() > bossAgent.GetLastAware() && x.GetName().Contains("Deimos")).OrderBy(x => x.GetLastAware()).ToList();
                 if (deimosGadgets.Count > 0)
                 {
                     AgentItem NPC = deimosGadgets.Last();
-                    deimos_2_instid = NPC.getInstid();
-                    long oldAware = bossAgent.getLastAware();
-                    boss.addPhaseData(NPC.getFirstAware() >= oldAware ? NPC.getFirstAware() : oldAware);
+                    deimos_2_instid = NPC.GetInstid();
+                    long oldAware = bossAgent.GetLastAware();
+                    boss.AddPhaseData(NPC.GetFirstAware() >= oldAware ? NPC.GetFirstAware() : oldAware);
                     //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos_2_instid ).ToList().Sum(x);
                     //int stop = 0;
                     foreach (CombatItem c in combat_data)
                     {
-                        if (c.getTime() > oldAware)
+                        if (c.GetTime() > oldAware)
                         {
-                            if (c.getSrcInstid() == deimos_2_instid)
+                            if (c.GetSrcInstid() == deimos_2_instid)
                             {
-                                c.setSrcInstid(boss_data.getInstid());
-                                c.setSrcAgent(boss_data.getAgent());
+                                c.SetSrcInstid(boss_data.GetInstid());
+                                c.SetSrcAgent(boss_data.GetAgent());
 
                             }
-                            if (c.getDstInstid() == deimos_2_instid)
+                            if (c.GetDstInstid() == deimos_2_instid)
                             {
-                                c.setDstInstid(boss_data.getInstid());
-                                c.setDstAgent(boss_data.getAgent());
+                                c.SetDstInstid(boss_data.GetInstid());
+                                c.SetDstAgent(boss_data.GetAgent());
                             }
                         }
 
                     }
                 }
             }
-            boss_data.setHealthOverTime(bossHealthOverTime);//after xera in case of change
+            boss_data.SetHealthOverTime(bossHealthOverTime);//after xera in case of change
 
             if (raid_mode)
             {
@@ -634,73 +634,73 @@ namespace LuckParser.Controllers
                 {
                     13
                 };
-                CombatItem reward = combat_data.Find(x => x.isStateChange() == ParseEnum.StateChange.Reward && !notRaidRewardsIds.Contains(x.getValue()));
+                CombatItem reward = combat_data.Find(x => x.IsStateChange() == ParseEnum.StateChange.Reward && !notRaidRewardsIds.Contains(x.GetValue()));
                 if (reward != null)
                 {
-                    log_data.setBossKill(true);
-                    boss_data.setLastAware(reward.getTime());
+                    log_data.SetBossKill(true);
+                    boss_data.SetLastAware(reward.GetTime());
                 }
             } else if (fractal_mode) {
-                CombatItem reward = combat_data.Find(x => x.isStateChange() == ParseEnum.StateChange.Reward);
+                CombatItem reward = combat_data.Find(x => x.IsStateChange() == ParseEnum.StateChange.Reward);
                 if (reward != null)
                 {
-                    log_data.setBossKill(true);
-                    boss_data.setLastAware(reward.getTime());
+                    log_data.SetBossKill(true);
+                    boss_data.SetLastAware(reward.GetTime());
                 } else
                 {
                     // for skorvald, as CM and normal ids are the same
-                    CombatItem killed = combat_data.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange().IsDead());
+                    CombatItem killed = combat_data.Find(x => x.GetSrcInstid() == boss_data.GetInstid() && x.IsStateChange().IsDead());
                     if (killed != null)
                     {
-                        log_data.setBossKill(true);
-                        boss_data.setLastAware(killed.getTime());
+                        log_data.SetBossKill(true);
+                        boss_data.SetLastAware(killed.GetTime());
                     }
                 }
             } else
             {
-                CombatItem killed = combat_data.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange().IsDead());
+                CombatItem killed = combat_data.Find(x => x.GetSrcInstid() == boss_data.GetInstid() && x.IsStateChange().IsDead());
                 if (killed != null)
                 {
-                    log_data.setBossKill(true);
-                    boss_data.setLastAware(killed.getTime());
+                    log_data.SetBossKill(true);
+                    boss_data.SetLastAware(killed.GetTime());
                 }
             }
 
             if (golem_mode && bossHealthOverTime.Count > 0)
             {
-                log_data.setBossKill(bossHealthOverTime.Last().Y < 200);
-                boss_data.setLastAware(bossHealthOverTime.Last().X + boss_data.getFirstAware());
+                log_data.SetBossKill(bossHealthOverTime.Last().Y < 200);
+                boss_data.SetLastAware(bossHealthOverTime.Last().X + boss_data.GetFirstAware());
             }
             //players
             if (p_list.Count == 0)
             {
 
                 //Fix Disconected players
-                var playerAgentList = agent_data.getPlayerAgentList();
+                var playerAgentList = agent_data.GetPlayerAgentList();
 
                 foreach (AgentItem playerAgent in playerAgentList)
                 {
-                    if (playerAgent.getInstid() == 0)
+                    if (playerAgent.GetInstid() == 0)
                     {
-                        CombatItem tst = combat_data.Find(x => x.getSrcAgent() == playerAgent.getAgent());
+                        CombatItem tst = combat_data.Find(x => x.GetSrcAgent() == playerAgent.GetAgent());
                         if (tst == null)
                         {
-                            tst = combat_data.Find(x => x.getDstAgent() == playerAgent.getAgent());
+                            tst = combat_data.Find(x => x.GetDstAgent() == playerAgent.GetAgent());
                             if (tst == null)
                             {
-                                playerAgent.setInstid(ushort.MaxValue);
+                                playerAgent.SetInstid(ushort.MaxValue);
                             }
                             else
                             {
-                                playerAgent.setInstid(tst.getDstInstid());
+                                playerAgent.SetInstid(tst.GetDstInstid());
                             }
                         }
                         else
                         {
-                            playerAgent.setInstid(tst.getSrcInstid());
+                            playerAgent.SetInstid(tst.GetSrcInstid());
                         }
                     }
-                    List<CombatItem> lp = combat_data.GetStates(playerAgent.getInstid(), ParseEnum.StateChange.Despawn, boss_data.getFirstAware(), boss_data.getLastAware());
+                    List<CombatItem> lp = combat_data.GetStates(playerAgent.GetInstid(), ParseEnum.StateChange.Despawn, boss_data.GetFirstAware(), boss_data.GetLastAware());
                     Player player = new Player(playerAgent, fractal_mode);
                     bool skip = false;
                     foreach (Player p in p_list)
@@ -719,25 +719,25 @@ namespace LuckParser.Controllers
                         //make all actions of other instances to original instid
                         foreach (AgentItem extra in NPC_list)
                         {
-                            if (extra.getAgent() == playerAgent.getAgent())
+                            if (extra.GetAgent() == playerAgent.GetAgent())
                             {
-                                var extra_login_Id = extra.getInstid();
+                                var extra_login_Id = extra.GetInstid();
                                 foreach (CombatItem c in combat_data)
                                 {
-                                    if (c.getSrcInstid() == extra_login_Id)
+                                    if (c.GetSrcInstid() == extra_login_Id)
                                     {
-                                        c.setSrcInstid(playerAgent.getInstid());
+                                        c.SetSrcInstid(playerAgent.GetInstid());
                                     }
-                                    if (c.getDstInstid() == extra_login_Id)
+                                    if (c.GetDstInstid() == extra_login_Id)
                                     {
-                                        c.setDstInstid(playerAgent.getInstid());
+                                        c.SetDstInstid(playerAgent.GetInstid());
                                     }
                                 }
                                 break;
                             }
                         }
 
-                        player.SetDC(lp[0].getTime());
+                        player.SetDC(lp[0].GetTime());
                         p_list.Add(player);
                     }
                     else//didnt dc
@@ -751,18 +751,18 @@ namespace LuckParser.Controllers
                 }
 
             }
-            if (boss_data.getFirstAware() == 0)
+            if (boss_data.GetFirstAware() == 0)
             {
-                boss_data.setFirstAware(bossAgent.getFirstAware());
+                boss_data.SetFirstAware(bossAgent.GetFirstAware());
             }
-            if (boss_data.getLastAware() == long.MaxValue)
+            if (boss_data.GetLastAware() == long.MaxValue)
             {
-                boss_data.setLastAware(bossAgent.getLastAware());
+                boss_data.SetLastAware(bossAgent.GetLastAware());
             }
             // Sort
             p_list = p_list.OrderBy(a => a.GetGroup()).ToList();
             // Check CM
-            boss_data.setCM(combat_data);
+            boss_data.SetCM(combat_data);
             combat_data.Validate(boss_data);
         }
     }

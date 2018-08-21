@@ -15,9 +15,9 @@ namespace LuckParser.Models
             mode = ParseMode.Golem;          
         }
 
-        public override List<PhaseData> getPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
+        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
         {
-            List<PhaseData> phases = getInitialPhase(log);          
+            List<PhaseData> phases = GetInitialPhase(log);          
             return phases;
         }     
     }

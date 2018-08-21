@@ -15,70 +15,70 @@ namespace LuckParser.Models.ParseModels
             {
                 this.stacks.Add(new BoonSimulationItemDuration(stack));
             }
-            this.duration = this.stacks.Max(x => x.getDuration(0));
+            this.duration = this.stacks.Max(x => x.GetDuration(0));
         }
 
-        public override void setEnd(long end)
+        public override void SetEnd(long end)
         {
             foreach (BoonSimulationItemDuration stack in stacks)
             {
-                stack.setEnd(end);
+                stack.SetEnd(end);
             }
-            this.duration = this.stacks.Max(x => x.getDuration(0));
+            this.duration = this.stacks.Max(x => x.GetDuration(0));
         }
 
-        public override long getDuration(ushort src, long start = 0, long end = 0)
+        public override long GetDuration(ushort src, long start = 0, long end = 0)
         {
             long total = 0;
             if (src == 0)
             {
                 foreach (BoonSimulationItemDuration stack in stacks)
                 {
-                    total += stack.getDuration(src, start, end);
+                    total += stack.GetDuration(src, start, end);
                 }
             } else
             {
 
-                foreach (BoonSimulationItemDuration stack in stacks.Where(x => x.getSrc()[0] == src))
+                foreach (BoonSimulationItemDuration stack in stacks.Where(x => x.GetSrc()[0] == src))
                 {
-                    total += stack.getDuration(src, start, end);
+                    total += stack.GetDuration(src, start, end);
                 }
             }
             return total;
         }
         
-        public override List<ushort> getSrc()
+        public override List<ushort> GetSrc()
         {
-            return stacks.Select(x => x.getSrc()[0]).Distinct().ToList();
+            return stacks.Select(x => x.GetSrc()[0]).Distinct().ToList();
         }
 
-        public override int getStack(long end)
+        public override int GetStack(long end)
         {
-            return stacks.Count(x => x.getEnd() >= end);
+            return stacks.Count(x => x.GetEnd() >= end);
         }
 
-        public override long getOverstack(ushort src, long start = 0, long end = 0)
+        public override long GetOverstack(ushort src, long start = 0, long end = 0)
         {
             long total = 0;
             if (src == 0)
             {
                 foreach (BoonSimulationItemDuration stack in stacks)
                 {
-                    total += stack.getOverstack(src, start, end);
+                    total += stack.GetOverstack(src, start, end);
                 }
             }
             else
             {
 
-                foreach (BoonSimulationItemDuration stack in stacks.Where(x => x.getSrc()[0] == src))
+                foreach (BoonSimulationItemDuration stack in stacks.Where(x => x.GetSrc()[0] == src))
                 {
-                    total += stack.getOverstack(src, start, end);
+                    total += stack.GetOverstack(src, start, end);
                 }
             }
             return total;
         }
 
-        public override bool addOverstack(ushort src, long overstack)
+        public override bool AddOverstack(ushort src, long overstack)
         {
             if (duration == 0)
             {
@@ -86,7 +86,7 @@ namespace LuckParser.Models.ParseModels
             }
             foreach(BoonSimulationItemDuration stack in stacks)
             {
-                if (stack.addOverstack(src,overstack))
+                if (stack.AddOverstack(src,overstack))
                 {
                     return true;
                 }

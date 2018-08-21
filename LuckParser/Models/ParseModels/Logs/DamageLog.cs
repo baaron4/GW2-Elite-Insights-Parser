@@ -24,81 +24,81 @@ namespace LuckParser.Models.ParseModels
         public DamageLog(long time, CombatItem c)
         {
             this.time = time;
-            this.skill_id = c.getSkillID();
-            this.buff = c.isBuff();
-            this.result = c.getResult();
-            this.is_ninety = c.isNinety();
-            this.is_moving = c.isMoving();
-            this.is_flanking = c.isFlanking();
-            this.is_activation = c.isActivation();
-            this.src_agent = c.getSrcAgent();
-            this.src_instid = c.getSrcInstid();
-            this.is_shields = c.isShields();
-            this.dst_agent = c.getDstAgent();
-            this.dst_instid = c.getDstInstid();
+            this.skill_id = c.GetSkillID();
+            this.buff = c.IsBuff();
+            this.result = c.GetResult();
+            this.is_ninety = c.IsNinety();
+            this.is_moving = c.IsMoving();
+            this.is_flanking = c.IsFlanking();
+            this.is_activation = c.IsActivation();
+            this.src_agent = c.GetSrcAgent();
+            this.src_instid = c.GetSrcInstid();
+            this.is_shields = c.IsShields();
+            this.dst_agent = c.GetDstAgent();
+            this.dst_instid = c.GetDstInstid();
 
         }
         // Getters
-        public long getTime()
+        public long GetTime()
         {
             return time;
         }
 
-        public int getDamage()
+        public int GetDamage()
         {
             return damage;
         }
 
-        public long getID()
+        public long GetID()
         {
             return skill_id;
         }
 
-        public int isCondi()
+        public int IsCondi()
         {
             return buff;
         }
 
-        public ParseEnum.Result getResult()
+        public ParseEnum.Result GetResult()
         {
             return result;
         }
 
-        public ushort isNinety()
+        public ushort IsNinety()
         {
             return is_ninety;
         }
 
-        public ushort isMoving()
+        public ushort IsMoving()
         {
             return is_moving;
         }
 
-        public ushort isFlanking()
+        public ushort IsFlanking()
         {
             return is_flanking;
         }
-        public ParseEnum.Activation isActivation()
+        public ParseEnum.Activation IsActivation()
         {
             return is_activation;
         }
-        public ushort isShields() {
+        public ushort IsShields() {
             return is_shields;
         }
-        public ulong getSrcAgent()
+        public ulong GetSrcAgent()
         {
             return src_agent;
         }
-        public ushort getSrcInstidt()
+        public ushort GetSrcInstidt()
         {
             return src_instid;
         }
 
-        public ulong getDstAgent()
+        public ulong GetDstAgent()
         {
             return dst_agent;
         }
-        public ushort getDstInstidt()
+        public ushort GetDstInstidt()
         {
             return dst_instid;
         }

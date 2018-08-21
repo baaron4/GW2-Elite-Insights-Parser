@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Public Methods
-        public String[] toStringArray()
+        public String[] ToStringArray()
         {
             String[] array = new String[4];
             array[0] = build_version.ToString();
@@ -31,48 +31,48 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Getters
-        public String getBuildVersion()
+        public String GetBuildVersion()
         {
             return build_version;
         }
 
-        public String getPOV()
+        public String GetPOV()
         {
             return pov;
         }
 
-        public String getLogStart()
+        public String GetLogStart()
         {
             return log_start;
         }
 
-        public String getLogEnd()
+        public String GetLogEnd()
         {
             return log_end;
         }
-        public bool getBosskill() {
+        public bool GetBosskill() {
             return boss_kill;
         }
         // Setters
-        public void setPOV(String pov)
+        public void SetPOV(String pov)
         {
             this.pov = pov.Substring(0, pov.LastIndexOf('\0'));
         }
 
-        public void setLogStart(long unix_seconds)
+        public void SetLogStart(long unix_seconds)
         {
             System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(unix_seconds).ToLocalTime();
             this.log_start = dtDateTime.ToString("yyyy-MM-dd HH:mm:ss z");//sdf.format(new Date(unix_seconds * 1000L));
         }
 
-        public void setLogEnd(long unix_seconds)
+        public void SetLogEnd(long unix_seconds)
         {
             System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(unix_seconds).ToLocalTime();
             this.log_end = dtDateTime.ToString("yyyy-MM-dd HH:mm:ss z"); //sdf.format(new Date(unix_seconds * 1000L));
         }
-        public void setBossKill(bool killed) {
+        public void SetBossKill(bool killed) {
             boss_kill = killed;
         }
     }

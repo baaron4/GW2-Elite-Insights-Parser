@@ -33,59 +33,59 @@ namespace LuckParser.Models.ParseModels
 
         }
 
-        public void setIcon(string icon)
+        public void SetIcon(string icon)
         {
             this.icon = icon;
         }
 
-        public void addPosition(Point3D pos)
+        public void AddPosition(Point3D pos)
         {
             positions.Add(pos);
         }
 
-        public void addVelocity(Point3D vel)
+        public void AddVelocity(Point3D vel)
         {
             velocities.Add(vel);
         }
 
-        public Tuple<long, long> getTimeOffsets()
+        public Tuple<long, long> GetTimeOffsets()
         {
             return new Tuple<long, long>(start, end);
         }
 
-        public void addDPS(int dps)
+        public void AddDPS(int dps)
         {
             this.dps.Add(dps);
         }
-        public void addDPS10s(int dps)
+        public void AddDPS10s(int dps)
         {
             dps10s.Add(dps);
         }
-        public void addDPS30s(int dps)
+        public void AddDPS30s(int dps)
         {
             dps30s.Add(dps);
         }
-        public void addCircleActor(CircleActor circleActor)
+        public void AddCircleActor(CircleActor circleActor)
         {
             circleActors.Add(circleActor);
         }
-        public void addDoughnutActor(DoughnutActor doughnutActor)
+        public void AddDoughnutActor(DoughnutActor doughnutActor)
         {
             doughnutActors.Add(doughnutActor);
         }
 
-        public void setStatus(List<Tuple<long, long>> down, List<Tuple<long, long>> dead, List<Tuple<long, long>> dc)
+        public void SetStatus(List<Tuple<long, long>> down, List<Tuple<long, long>> dead, List<Tuple<long, long>> dc)
         {
             this.down = down;
             this.dead = dead;
             this.dc = dc;
         }
 
-        public void trim(long start, long end)
+        public void Trim(long start, long end)
         {
             this.start = start;
             this.end = end;
-            positions.RemoveAll(x => x.time < start || x.time > end);
+            positions.RemoveAll(x => x.Time < start || x.Time > end);
             if (positions.Count == 0)
             {
                 this.start = -1;
@@ -93,35 +93,34 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public List<CircleActor> getCircleActors()
+        public List<CircleActor> GetCircleActors()
         {
             return circleActors;
         }
 
-        public List<DoughnutActor> getDoughnutActors()
+        public List<DoughnutActor> GetDoughnutActors()
         {
             return doughnutActors;
         }
 
-        public List<Tuple<long, long>> getDead()
+        public List<Tuple<long, long>> GetDead()
         {
             return dead;
         }
 
-        public List<Tuple<long, long>> getDown()
+        public List<Tuple<long, long>> GetDown()
         {
             return down;
         }
 
-        public List<Tuple<long, long>> getDC()
+        public List<Tuple<long, long>> GetDC()
         {
             return dc;
         }
 
-        public void addBoon(long id, int value)
+        public void AddBoon(long id, int value)
         {
-            List<int> ll;
-            if (!boons.TryGetValue(id, out ll))
+            if (!boons.TryGetValue(id, out List<int> ll))
             {
                 ll = new List<int>();
                 boons.Add(id, ll);
@@ -129,17 +128,17 @@ namespace LuckParser.Models.ParseModels
             ll.Add(value);
         }
 
-        public List<int> getTimes()
+        public List<int> GetTimes()
         {
-            return positions.Select(x => (int)x.time).ToList();
+            return positions.Select(x => (int)x.Time).ToList();
         }
 
-        public string getIcon()
+        public string GetIcon()
         {
             return icon;
         }
 
-        public void pollingRate(int rate, long fightDuration, bool forceInterpolate)
+        public void PollingRate(int rate, long fightDuration, bool forceInterpolate)
         {
             if (positions.Count == 0)
             {
@@ -158,7 +157,7 @@ namespace LuckParser.Models.ParseModels
             for (int i = -1000; i < fightDuration; i += rate)
             {
                 Point3D pt = positions[tablePos];
-                if (i <= pt.time)
+                if (i <= pt.Time)
                 {
                     currentVelocity = null;
                     interpolatedPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
@@ -172,7 +171,7 @@ namespace LuckParser.Models.ParseModels
                     else
                     {
                         Point3D ptn = positions[tablePos + 1];
-                        if (ptn.time < i)
+                        if (ptn.Time < i)
                         {
                             tablePos++;
                             currentVelocity = null;
@@ -181,11 +180,11 @@ namespace LuckParser.Models.ParseModels
                         else
                         {
                             Point3D last = interpolatedPositions.Last();
-                            Point3D velocity = velocities.Find(x => x.time <= i && x.time > last.time);
-                            currentVelocity = velocity != null ? velocity : currentVelocity;
-                            if (ptn.time - pt.time < 400)
+                            Point3D velocity = velocities.Find(x => x.Time <= i && x.Time > last.Time);
+                            currentVelocity = velocity ?? currentVelocity;
+                            if (ptn.Time - pt.Time < 400)
                             {
-                                float ratio = (float)(i - pt.time) / (ptn.time - pt.time);
+                                float ratio = (float)(i - pt.Time) / (ptn.Time - pt.Time);
                                 interpolatedPositions.Add(new Point3D(pt, ptn, ratio, i));
                             }
                             else
@@ -196,7 +195,7 @@ namespace LuckParser.Models.ParseModels
                                 }
                                 else
                                 {
-                                    float ratio = (float)(i - last.time) / (ptn.time - last.time);
+                                    float ratio = (float)(i - last.Time) / (ptn.Time - last.Time);
                                     interpolatedPositions.Add(new Point3D(last, ptn, ratio, i));
                                 }
                             }
@@ -205,16 +204,16 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-            positions = interpolatedPositions.Where(x => x.time >= 0).ToList();
+            positions = interpolatedPositions.Where(x => x.Time >= 0).ToList();
             velocities = null;
         }
 
-        public List<Point3D> getPositions()
+        public List<Point3D> GetPositions()
         {
             return positions;
         }
 
-        public List<Point3D> getActivePositions()
+        public List<Point3D> GetActivePositions()
         {
             List<Point3D> activePositions = new List<Point3D>(positions);
             for (var i = 0; i < activePositions.Count; i++)
@@ -222,14 +221,14 @@ namespace LuckParser.Models.ParseModels
                 Point3D cur = activePositions[i];
                 foreach (Tuple<long, long> status in dead)
                 {
-                    if (cur.time >= status.Item1 && cur.time <= status.Item2)
+                    if (cur.Time >= status.Item1 && cur.Time <= status.Item2)
                     {
                         activePositions[i] = null;
                     }
                 }
                 foreach (Tuple<long, long> status in dc)
                 {
-                    if (cur.time >= status.Item1 && cur.time <= status.Item2)
+                    if (cur.Time >= status.Item1 && cur.Time <= status.Item2)
                     {
                         activePositions[i] = null;
                     }

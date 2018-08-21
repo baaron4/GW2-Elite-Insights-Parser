@@ -34,34 +34,34 @@ namespace LuckParser.Models.ParseModels
         }
 
         // setters
-        public void setEndStatus(int act_dur, ParseEnum.Activation end_activation)
+        public void SetEndStatus(int act_dur, ParseEnum.Activation end_activation)
         {
             this.act_dur = act_dur;
             this.end_activation = end_activation;
         }
 
         // Getters
-        public long getTime()
+        public long GetTime()
         {
             return time;
         }
-        public long getID()
+        public long GetID()
         {
             return skill_id;
         }
-        public int getExpDur()
+        public int GetExpDur()
         {
             return exp_dur;
         }
-        public ParseEnum.Activation startActivation()
+        public ParseEnum.Activation StartActivation()
         {
             return start_activation;
         }
-        public int getActDur()
+        public int GetActDur()
         {
             return act_dur;
         }
-        public ParseEnum.Activation endActivation()
+        public ParseEnum.Activation EndActivation()
         {
             return end_activation;
         }

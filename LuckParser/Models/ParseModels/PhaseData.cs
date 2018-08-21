@@ -16,27 +16,27 @@ namespace LuckParser.Models.ParseModels
             this.end = end;
         }
 
-        public void setName(string name)
+        public void SetName(string name)
         {
             this.name = name;
         }
 
-        public string getName()
+        public string GetName()
         {
             return name;
         }
 
-        public void addRedirection(AgentItem agent)
+        public void AddRedirection(AgentItem agent)
         {
             redirection.Add(agent);
         }
 
-        public List<AgentItem> getRedirection()
+        public List<AgentItem> GetRedirection()
         {
             return redirection;
         }
 
-        public long getDuration(string format = "ms")
+        public long GetDuration(string format = "ms")
         {
             switch (format)
             {
@@ -51,25 +51,25 @@ namespace LuckParser.Models.ParseModels
 
         }
 
-        public bool inInterval(long time, long offset = 0)
+        public bool InInterval(long time, long offset = 0)
         {
             return start <= time - offset && time - offset <= end;
         }
 
-        public void overrideStart(long offset)
+        public void OverrideStart(long offset)
         {
             if (redirection.Count > 0)
             {
-                start = redirection.Min(x => x.getFirstAware())- offset;
+                start = redirection.Min(x => x.GetFirstAware())- offset;
             }
         }
 
-        public long getStart()
+        public long GetStart()
         {
             return start;
         }
 
-        public long getEnd()
+        public long GetEnd()
         {
             return end;
         }

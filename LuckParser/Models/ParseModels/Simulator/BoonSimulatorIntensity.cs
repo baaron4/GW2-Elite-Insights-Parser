@@ -21,9 +21,9 @@ namespace LuckParser.Models.ParseModels
                 if (simulation.Count > 0)
                 {
                     BoonSimulationItem last = simulation.Last();
-                    if (last.getEnd() > toAdd.getStart())
+                    if (last.GetEnd() > toAdd.GetStart())
                     {
-                        last.setEnd(toAdd.getStart());
+                        last.SetEnd(toAdd.GetStart());
                     }
                 }
                 simulation.Add(toAdd);

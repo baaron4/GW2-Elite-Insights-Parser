@@ -18,7 +18,7 @@ namespace LuckParser.Models.ParseModels
                 this.log = log;
             }
 
-            public int compare(BoonSimulator.BoonStackItem x, BoonSimulator.BoonStackItem y)
+            public int Compare(BoonSimulator.BoonStackItem x, BoonSimulator.BoonStackItem y)
             {
                 List<Player> players = log.GetPlayerList();
                 Player a = players.Find(p => p.GetInstid() == x.src);
@@ -30,13 +30,13 @@ namespace LuckParser.Models.ParseModels
                 return a.GetHealing() < b.GetHealing() ? 1 : -1;
             }
         }
-        public override void sort(ParsedLog log, List<BoonSimulator.BoonStackItem> stacks)
+        public override void Sort(ParsedLog log, List<BoonSimulator.BoonStackItem> stacks)
         {
             CompareHealing comparator = new CompareHealing(log);
-            stacks.Sort(comparator.compare);        
+            stacks.Sort(comparator.Compare);        
         }
 
-        public override bool stackEffect(ParsedLog log, BoonSimulator.BoonStackItem toAdd, List<BoonSimulator.BoonStackItem> stacks, List<BoonSimulationItem> simulation)
+        public override bool StackEffect(ParsedLog log, BoonSimulator.BoonStackItem toAdd, List<BoonSimulator.BoonStackItem> stacks, List<BoonSimulationItem> simulation)
         {
             
             for (int i = 1; i < stacks.Count; i++)
@@ -47,13 +47,13 @@ namespace LuckParser.Models.ParseModels
                     ushort srcValue = stacks[i].src;
                     for (int j = simulation.Count - 1; j >= 0; j--)
                     {
-                        if (simulation[j].addOverstack(srcValue, overstackValue))
+                        if (simulation[j].AddOverstack(srcValue, overstackValue))
                         {
                             break;
                         }
                     }
                     stacks[i] = toAdd;
-                    sort(log, stacks);
+                    Sort(log, stacks);
                     return true;
                 }
             }

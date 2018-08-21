@@ -18,35 +18,35 @@
         }
 
         // Getters
-        public long getTime()
+        public long GetTime()
         {
             return time;
         }
 
-        public long getValue()
+        public long GetValue()
         {
             return value;
         }
-        public uint getOverstack() {
+        public uint GetOverstack() {
             return overstack;
         }
 
-        public ushort getSrcInstid()
+        public ushort GetSrcInstid()
         {
             return src_instid;
         }
 
         // Add
-        public void addTime(long time)
+        public void AddTime(long time)
         {
             this.time += time;
         }
 
-        public void addValue(long value)
+        public void AddValue(long value)
         {
             this.value += value;
         }
-        public void addOverstack(uint overstack)
+        public void AddOverstack(uint overstack)
         {
             this.overstack += overstack;
         }

@@ -23,7 +23,7 @@ namespace LuckParser.Models
             });
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/lFGNKuf.png",
                             Tuple.Create(664, 407),
@@ -32,7 +32,7 @@ namespace LuckParser.Models
                             Tuple.Create(11804, 4414, 12444, 5054));
         }
 
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://i.imgur.com/1h7HOII.png";
         }

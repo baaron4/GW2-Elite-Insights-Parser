@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
             this.radius = radius;
         }
 
-        public int getRadius()
+        public int GetRadius()
         {
             return radius;
         }

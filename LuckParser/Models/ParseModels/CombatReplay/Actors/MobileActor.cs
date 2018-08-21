@@ -13,7 +13,7 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public override string getPosition(string id, CombatReplayMap map)
+        public override string GetPosition(string id, CombatReplayMap map)
         {
             return "'" + id + "'";
         }

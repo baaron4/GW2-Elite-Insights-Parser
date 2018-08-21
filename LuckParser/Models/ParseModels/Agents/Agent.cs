@@ -45,7 +45,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Public Methods
-        public string getProf(string build, GW2APIController apiController) {
+        public string GetProf(string build, GW2APIController apiController) {
             if (is_elite == 0xFFFFFFFF) {
                 if ((prof & 0xffff0000) == 0xffff0000)
                 {
@@ -169,13 +169,13 @@ namespace LuckParser.Models.ParseModels
                     }
 
                     GW2APISpec spec = apiController.GetSpec((int)is_elite);
-                    if (spec.elite)
+                    if (spec.Elite)
                     {
-                        return spec.name;
+                        return spec.Name;
                     }
                     else
                     {
-                        return spec.profession;
+                        return spec.Profession;
                     }
 
                 }
@@ -188,12 +188,12 @@ namespace LuckParser.Models.ParseModels
         
 
         // Getters
-        public String getName()
+        public String GetName()
         {
             return name;
         }
 
-        public ulong getID()
+        public ulong GetID()
         {
             return ID;
         }

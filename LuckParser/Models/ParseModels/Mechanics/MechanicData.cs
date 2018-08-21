@@ -17,14 +17,14 @@ namespace LuckParser.Models.ParseModels
 
         public MechanicData(BossData b_data)
         {
-            List<Mechanic> bossMechanics = b_data.getBossBehavior().getMechanics();
+            List<Mechanic> bossMechanics = b_data.GetBossBehavior().GetMechanics();
             foreach(Mechanic m in bossMechanics)
             {
                 this.Add(m, new List<MechanicLog>());
             }
         }
 
-        public void computePresentMechanics(ParsedLog log, List<PhaseData> phases)
+        public void ComputePresentMechanics(ParsedLog log, List<PhaseData> phases)
         {
             if (presentOnPlayerMechanics.Count > 0)
             {
@@ -59,7 +59,7 @@ namespace LuckParser.Models.ParseModels
                 presentMechanics.Add(toAddAll);
                 foreach (KeyValuePair<Mechanic, List<MechanicLog>> pair in this)
                 {
-                    if (pair.Value.Count(x => phase.inInterval(x.GetTime())) > 0)
+                    if (pair.Value.Count(x => phase.InInterval(x.GetTime())) > 0)
                     {
                         toAddAll.Add(pair.Key);
                         if (pair.Key.IsEnemyMechanic())
@@ -77,7 +77,7 @@ namespace LuckParser.Models.ParseModels
                 toAdd.Add(log.GetBoss());
                 foreach(Mechanic m in Keys.Where(x=> x.IsEnemyMechanic()))
                 {
-                    foreach (AbstractMasterPlayer p in this[m].Where(x => phase.inInterval(x.GetTime())).Select(x => x.GetPlayer()).Distinct())
+                    foreach (AbstractMasterPlayer p in this[m].Where(x => phase.InInterval(x.GetTime())).Select(x => x.GetPlayer()).Distinct())
                     {
                         if (toAdd.FirstOrDefault(x => x.GetInstid() == p.GetInstid()) == null)
                         {
@@ -93,20 +93,20 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public HashSet<Mechanic> getPresentEnemyMechs(int phase_index = 0)
+        public HashSet<Mechanic> GetPresentEnemyMechs(int phase_index = 0)
         {
             return presentOnEnemyMechanics[phase_index];
         }
-        public HashSet<Mechanic> getPresentPlayerMechs(int phase_index = 0)
+        public HashSet<Mechanic> GetPresentPlayerMechs(int phase_index = 0)
         {
             return presentOnPlayerMechanics[phase_index];
         }
-        public HashSet<Mechanic> getPresentMechanics(int phase_index = 0)
+        public HashSet<Mechanic> GetPresentMechanics(int phase_index = 0)
         {
             return presentMechanics[phase_index];
         }
 
-        public List<AbstractMasterPlayer> getEnemyList(int phase_index = 0)
+        public List<AbstractMasterPlayer> GetEnemyList(int phase_index = 0)
         {
             return enemyList[phase_index];
         }

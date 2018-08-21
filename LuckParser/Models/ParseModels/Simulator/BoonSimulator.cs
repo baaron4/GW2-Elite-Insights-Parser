@@ -64,16 +64,16 @@ namespace LuckParser.Models.ParseModels
             for (int i = simulation.Count - 1; i >= 0; i--)
             {
                 BoonSimulationItem data = simulation[i];
-                if (data.getEnd() > fight_duration)
+                if (data.GetEnd() > fight_duration)
                 {
-                    data.setEnd(fight_duration);
+                    data.SetEnd(fight_duration);
                 }
                 else
                 {
                     break;
                 }
             }
-            simulation.RemoveAll(x => x.getDuration(0) <= 0);
+            simulation.RemoveAll(x => x.GetDuration(0) <= 0);
         }
 
         public void Simulate(List<BoonLog> logs, long fight_duration)
@@ -82,13 +82,13 @@ namespace LuckParser.Models.ParseModels
             long t_prev = 0;
             foreach (BoonLog log in logs)
             {
-                t_curr = log.getTime();
+                t_curr = log.GetTime();
                 Update(t_curr - t_prev);
-                Add(log.getValue(), log.getSrcInstid(), t_curr, log.getOverstack());
+                Add(log.GetValue(), log.GetSrcInstid(), t_curr, log.GetOverstack());
                 t_prev = t_curr;
             }
             Update(fight_duration - t_prev);
-            simulation.RemoveAll(x => x.getDuration(0) <= 0);
+            simulation.RemoveAll(x => x.GetDuration(0) <= 0);
             boon_stack.Clear();
         }
 
@@ -102,19 +102,19 @@ namespace LuckParser.Models.ParseModels
             if (boon_stack.Count < capacity)
             {
                 boon_stack.Add(toAdd);
-                logic.sort(log, boon_stack);
+                logic.Sort(log, boon_stack);
             }
             // Replace lowest value
             else
             {
-                bool found = logic.stackEffect(log, toAdd, boon_stack, simulation);
+                bool found = logic.StackEffect(log, toAdd, boon_stack, simulation);
                 if (!found)
                 {
                     long overstackValue = overstack + boon_duration;
                     ushort srcValue = srcinstid;
                     for (int j = simulation.Count - 1; j >= 0; j--)
                     {
-                        if (simulation[j].addOverstack(srcValue, overstackValue))
+                        if (simulation[j].AddOverstack(srcValue, overstackValue))
                         {
                             break;
                         }

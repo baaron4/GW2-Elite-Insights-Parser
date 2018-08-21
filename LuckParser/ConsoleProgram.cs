@@ -78,10 +78,10 @@ namespace LuckParser
                         saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
                     }
 
-                    string bossid = control.GetBossData().getID().ToString();
+                    string bossid = control.GetBossData().GetID().ToString();
                     string result = "fail";
 
-                    if (control.GetLogData().getBosskill())
+                    if (control.GetLogData().GetBosskill())
                     {
                         result = "kill";
                     }

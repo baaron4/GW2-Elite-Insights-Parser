@@ -21,7 +21,7 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        public long getUptime(long boonid)
+        public long GetUptime(long boonid)
         {
             if (!ContainsKey(boonid))
             {
@@ -30,7 +30,7 @@ namespace LuckParser.Models.ParseModels
             return this[boonid].Sum(x => x.Value.value);
         }
 
-        public long getGeneration(long boonid, ushort src)
+        public long GetGeneration(long boonid, ushort src)
         {
             if (!ContainsKey(boonid) || src == 0)
             {
@@ -39,7 +39,7 @@ namespace LuckParser.Models.ParseModels
             return this[boonid].Where( x => src == x.Key).Sum(x => x.Value.value);
         }
 
-        public long getOverstack(long boonid, ushort src)
+        public long GetOverstack(long boonid, ushort src)
         {
             if (!ContainsKey(boonid) || src == 0)
             {

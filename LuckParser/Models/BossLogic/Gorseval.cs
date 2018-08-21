@@ -24,7 +24,7 @@ namespace LuckParser.Models
             });
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/nTueZcX.png",
                             Tuple.Create(1354, 1415),
@@ -33,20 +33,20 @@ namespace LuckParser.Models
                             Tuple.Create(3456, 11012, 4736, 14212));
         }
 
-        public override List<PhaseData> getPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
+        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.GetBossData().getAwareDuration();
-            List<PhaseData> phases = getInitialPhase(log);
+            long fight_dur = log.GetBossData().GetAwareDuration();
+            List<PhaseData> phases = GetInitialPhase(log);
             // Ghostly protection check
-            List<CombatItem> invulsGorse = log.GetCombatList().Where(x => x.getSkillID() == 31790 && x.isBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
+            List<CombatItem> invulsGorse = log.GetCombatList().Where(x => x.GetSkillID() == 31790 && x.IsBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
             for (int i = 0; i < invulsGorse.Count; i++)
             {
                 CombatItem c = invulsGorse[i];
-                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    end = c.getTime() - log.GetBossData().getFirstAware();
+                    end = c.GetTime() - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsGorse.Count - 1)
                     {
@@ -55,12 +55,12 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.getTime() - log.GetBossData().getFirstAware();
+                    start = c.GetTime() - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(end, start));
                     cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
             }
-            if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+            if (fight_dur - start > 5000 && start >= phases.Last().GetEnd())
             {
                 phases.Add(new PhaseData(start, fight_dur));
             }
@@ -68,26 +68,26 @@ namespace LuckParser.Models
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                phase.setName(namesGorse[i - 1]);
+                phase.SetName(namesGorse[i - 1]);
                 if (i == 2 || i == 4)
                 {
-                    List<AgentItem> spirits = log.GetAgentData().getNPCAgentList().Where(x => ParseEnum.getThrashIDS(x.getID()) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
+                    List<AgentItem> spirits = log.GetAgentData().GetNPCAgentList().Where(x => ParseEnum.GetThrashIDS(x.GetID()) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
                     foreach (AgentItem a in spirits)
                     {
-                        long agentStart = a.getFirstAware() - log.GetBossData().getFirstAware();
-                        long agentEnd = a.getLastAware() - log.GetBossData().getFirstAware();
-                        if (phase.inInterval(agentStart))
+                        long agentStart = a.GetFirstAware() - log.GetBossData().GetFirstAware();
+                        long agentEnd = a.GetLastAware() - log.GetBossData().GetFirstAware();
+                        if (phase.InInterval(agentStart))
                         {
-                            phase.addRedirection(a);
+                            phase.AddRedirection(a);
                         }
                     }
-                    phase.overrideStart(log.GetBossData().getFirstAware());
+                    phase.OverrideStart(log.GetBossData().GetFirstAware());
                 }
             }
             return phases;
         }
 
-        public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: doughnuts (rampage)
             List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
@@ -96,30 +96,30 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.EnragedSpirit,
                         ParseEnum.ThrashIDS.AngeredSpirit
                     };
-            List<CastLog> blooms = cls.Where(x => x.getID() == 31616).ToList();
+            List<CastLog> blooms = cls.Where(x => x.GetID() == 31616).ToList();
             foreach (CastLog c in blooms)
             {
-                int start = (int)c.getTime();
-                int end = start + c.getActDur();
-                replay.addCircleActor(new CircleActor(true, c.getExpDur() + (int)c.getTime(), 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
-                replay.addCircleActor(new CircleActor(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
+                int start = (int)c.GetTime();
+                int end = start + c.GetActDur();
+                replay.AddCircleActor(new CircleActor(true, c.GetExpDur() + (int)c.GetTime(), 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
+                replay.AddCircleActor(new CircleActor(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
             }
-            List<PhaseData> phases = log.GetBoss().getPhases(log, true);
+            List<PhaseData> phases = log.GetBoss().GetPhases(log, true);
             if (phases.Count > 1)
             {
-                List<CastLog> rampage = cls.Where(x => x.getID() == 31834).ToList();
-                Point3D pos = log.GetBoss().GetCombatReplay().getPositions().First();
+                List<CastLog> rampage = cls.Where(x => x.GetID() == 31834).ToList();
+                Point3D pos = log.GetBoss().GetCombatReplay().GetPositions().First();
                 foreach (CastLog c in rampage)
                 {
-                    int start = (int)c.getTime();
-                    int end = start + c.getActDur();
-                    replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 125, 255, 0.3)"));
+                    int start = (int)c.GetTime();
+                    int end = start + c.GetActDur();
+                    replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 125, 255, 0.3)"));
                     // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
-                    int ticks = (int)Math.Min(Math.Ceiling(c.getActDur() / 4000.0),6);
+                    int ticks = (int)Math.Min(Math.Ceiling(c.GetActDur() / 4000.0),6);
                     int phaseIndex = 1;
                     for (phaseIndex = 1; phaseIndex < phases.Count; phaseIndex++)
                     {
-                        if (phases[phaseIndex].inInterval(start))
+                        if (phases[phaseIndex].InInterval(start))
                         {
                             break;
                         }
@@ -176,36 +176,36 @@ namespace LuckParser.Models
                         string pattern = patterns[i];
                         if (pattern.Contains("1"))
                         {
-                            replay.addCircleActor(new CircleActor(true, explosion, 360, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.addCircleActor(new CircleActor(true,0 , 360, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                            replay.AddCircleActor(new CircleActor(true, explosion, 360, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.AddCircleActor(new CircleActor(true,0 , 360, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
                         }
                         if (pattern.Contains("2"))
                         {
-                            replay.addDoughnutActor(new DoughnutActor(explosion, 360, 720, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.addDoughnutActor(new DoughnutActor(0, 360, 720, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                            replay.AddDoughnutActor(new DoughnutActor(explosion, 360, 720, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.AddDoughnutActor(new DoughnutActor(0, 360, 720, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
                         }
                         if (pattern.Contains("3"))
                         {
-                            replay.addDoughnutActor(new DoughnutActor(explosion, 720, 1080, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.addDoughnutActor(new DoughnutActor(0, 720, 1080, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                            replay.AddDoughnutActor(new DoughnutActor(explosion, 720, 1080, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.AddDoughnutActor(new DoughnutActor(0, 720, 1080, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
                         }
                         if (pattern.Contains("4"))
                         {
-                            replay.addDoughnutActor(new DoughnutActor(explosion, 1080, 1440, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.addDoughnutActor(new DoughnutActor(0, 1080, 1440, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                            replay.AddDoughnutActor(new DoughnutActor(explosion, 1080, 1440, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.AddDoughnutActor(new DoughnutActor(0, 1080, 1440, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
                         }
                         if (pattern.Contains("5"))
                         {
-                            replay.addDoughnutActor(new DoughnutActor(explosion, 1440, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.addDoughnutActor(new DoughnutActor(0, 1440, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                            replay.AddDoughnutActor(new DoughnutActor(explosion, 1440, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.AddDoughnutActor(new DoughnutActor(0, 1440, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
                         }
                         if (pattern.Contains("Full"))
                         {
                             tickStart -= 1000;
                             explosion -= 1000;
                             tickEnd -= 1000;
-                            replay.addCircleActor(new CircleActor(true, explosion, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.addCircleActor(new CircleActor(true, 0, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                            replay.AddCircleActor(new CircleActor(true, explosion, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                            replay.AddCircleActor(new CircleActor(true, 0, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
                         }
                     }
                 }
@@ -214,7 +214,7 @@ namespace LuckParser.Models
             return ids;
         }
 
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://i.imgur.com/5hmMq12.png";
         }

@@ -20,26 +20,26 @@ namespace LuckParser.Models.ParseModels
             this.duration = duration;
         }
 
-        public abstract long getDuration(ushort src, long start = 0, long end = 0);
+        public abstract long GetDuration(ushort src, long start = 0, long end = 0);
 
 
-        public long getStart()
+        public long GetStart()
         {
             return start;
         }
 
-        public abstract List<ushort> getSrc();
+        public abstract List<ushort> GetSrc();
 
-        public long getEnd()
+        public long GetEnd()
         {
             return start + duration;
         }
 
-        public abstract bool addOverstack(ushort src, long overstack);
+        public abstract bool AddOverstack(ushort src, long overstack);
 
-        public abstract long getOverstack(ushort src, long start = 0, long end = 0);
+        public abstract long GetOverstack(ushort src, long start = 0, long end = 0);
 
-        public long getItemDuration(long start = 0, long end = 0)
+        public long GetItemDuration(long start = 0, long end = 0)
         {
             if (end > 0)
             {
@@ -51,8 +51,8 @@ namespace LuckParser.Models.ParseModels
             return duration;
         }
 
-        public abstract void setEnd(long end);
+        public abstract void SetEnd(long end);
 
-        public abstract int getStack(long end);
+        public abstract int GetStack(long end);
     }
 }

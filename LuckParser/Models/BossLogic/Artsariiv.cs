@@ -15,7 +15,7 @@ namespace LuckParser.Models
         {   
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/4wmuc8B.png",
                             Tuple.Create(914, 914),
@@ -24,7 +24,7 @@ namespace LuckParser.Models
                             Tuple.Create(11204, 4414, 13252, 6462));
         }
     
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
         }

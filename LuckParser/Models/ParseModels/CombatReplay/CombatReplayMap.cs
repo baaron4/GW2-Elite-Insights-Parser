@@ -23,12 +23,12 @@ namespace LuckParser.Models.ParseModels
             this.worldRect = worldRect;
         }
 
-        public string getLink()
+        public string GetLink()
         {
             return link;
         }
 
-        public Tuple<int, int> getPixelMapSize()
+        public Tuple<int, int> GetPixelMapSize()
         {
             double ratio = (double)size.Item1 / size.Item2;
             const int pixelSize = 900;
@@ -46,10 +46,10 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public Tuple<int, int> getMapCoord(float realX, float realY)
+        public Tuple<int, int> GetMapCoord(float realX, float realY)
         {
             //Tuple<int, int, int, int> apiRect = getMapApiRect(log);
-            Tuple<int, int> pixelSizes = getPixelMapSize();
+            Tuple<int, int> pixelSizes = GetPixelMapSize();
             float scaleX = (float)pixelSizes.Item1 / size.Item1;
             float scaleY = (float)pixelSizes.Item2 / size.Item2;
             float x = (Math.Max(Math.Min(realX, rect.Item3), rect.Item1) - rect.Item1) / (rect.Item3 - rect.Item1);
@@ -57,9 +57,9 @@ namespace LuckParser.Models.ParseModels
             return Tuple.Create((int)Math.Round(scaleX * size.Item1 * x), (int)Math.Round(scaleY * (size.Item2 - size.Item2 * y)));
         }
 
-        public float getInch()
+        public float GetInch()
         {
-            float ratio = (float)(rect.Item3 - rect.Item1) / getPixelMapSize().Item1 ;
+            float ratio = (float)(rect.Item3 - rect.Item1) / GetPixelMapSize().Item1 ;
             return (float)Math.Round(1.0f/ratio,3);
         }
 

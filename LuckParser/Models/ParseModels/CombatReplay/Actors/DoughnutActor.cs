@@ -23,12 +23,12 @@ namespace LuckParser.Models.ParseModels
             this.outerRadius = outerRadius;
         }
 
-        public int getInnerRadius()
+        public int GetInnerRadius()
         {
             return innerRadius;
         }
 
-        public int getOuterRadius()
+        public int GetOuterRadius()
         {
             return outerRadius;
         }

@@ -35,7 +35,7 @@ namespace LuckParser.Models
             });
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/NlpsLZa.png",
                             Tuple.Create(607, 607),
@@ -44,31 +44,31 @@ namespace LuckParser.Models
                             Tuple.Create(11774, 4480, 14078, 5376));
         }
         
-        public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: needs doughnuts (wave) and facing information (sword)
             List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>();
             return ids;
         }
 
-        public override void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // shared agony
-            List<CombatItem> agony = log.GetBoonData().Where(x => x.getSkillID() == 38049 && ((x.getDstInstid() == p.GetInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None))).ToList();        
+            List<CombatItem> agony = log.GetBoonData().Where(x => x.GetSkillID() == 38049 && ((x.GetDstInstid() == p.GetInstid() && x.IsBuffremove() == ParseEnum.BuffRemove.None))).ToList();        
             foreach (CombatItem c in agony)
             {
-                int agonyStart = (int)(c.getTime() - log.GetBossData().getFirstAware());
+                int agonyStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
                 int agonyEnd = agonyStart + 62000;
-                replay.addCircleActor(new CircleActor(false, 0, 220, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)"));
+                replay.AddCircleActor(new CircleActor(false, 0, 220, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)"));
             }
         }
 
-        public override int isCM(List<CombatItem> clist, int health)
+        public override int IsCM(List<CombatItem> clist, int health)
         {
-            return clist.Exists(x => x.getSkillID() == 38098) ? 1 : 0;
+            return clist.Exists(x => x.GetSkillID() == 38098) ? 1 : 0;
         }
 
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://i.imgur.com/gQY37Tf.png";
         }

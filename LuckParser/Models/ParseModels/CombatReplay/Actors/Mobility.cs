@@ -14,6 +14,6 @@ namespace LuckParser.Models.ParseModels
 
         }
 
-        public abstract string getPosition(string id, CombatReplayMap map);
+        public abstract string GetPosition(string id, CombatReplayMap map);
     }
 }

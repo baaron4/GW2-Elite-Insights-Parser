@@ -13,9 +13,9 @@ namespace LuckParser.Controllers
     {
         public static SettingsContainer settings;
 
-        public static void writeOldCSV(StreamWriter sw, string delimiter,ParsedLog log,Statistics statistics)
+        public static void WriteOldCSV(StreamWriter sw, string delimiter,ParsedLog log,Statistics statistics)
         {
-            double fight_duration = (log.GetBossData().getAwareDuration()) / 1000.0;
+            double fight_duration = (log.GetBossData().GetAwareDuration()) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fight_duration);
             String durationString = duration.ToString("mm") + ":" + duration.ToString("ss");
             sw.Write("Group" + delimiter +

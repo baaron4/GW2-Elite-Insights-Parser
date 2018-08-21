@@ -19,10 +19,10 @@ namespace LuckParser.Models.ParseModels
             this.boonChart = boonChart;
         }
         //getters
-        public string getBoonName() {
+        public string GetBoonName() {
             return this.boonname;
         }
-        public List<Point> getBoonChart()
+        public List<Point> GetBoonChart()
         {
             return this.boonChart;
         }

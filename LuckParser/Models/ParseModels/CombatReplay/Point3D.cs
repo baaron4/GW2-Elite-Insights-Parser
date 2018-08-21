@@ -7,7 +7,7 @@ namespace LuckParser.Models.ParseModels
         public float X { get; }
         public float Y { get; }
         public float Z { get; }
-        public long time { get; }
+        public long Time { get; }
 
         private static float Mix(float a, float b, float c)
         {
@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
             this.X = X;
             this.Y = Y;
             this.Z = Z;
-            this.time = time;
+            this.Time = time;
         }
 
         public Point3D(Point3D a, Point3D b, float ratio, long time)
@@ -32,7 +32,7 @@ namespace LuckParser.Models.ParseModels
             X = Mix(a.X, b.X, ratio);
             Y = Mix(a.Y, b.Y, ratio);
             Z = Mix(a.Z, b.Z, ratio);
-            this.time = time;
+            this.Time = time;
         }
     }
 }

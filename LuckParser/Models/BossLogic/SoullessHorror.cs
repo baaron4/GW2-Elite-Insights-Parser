@@ -28,7 +28,7 @@ namespace LuckParser.Models
             });
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/A45pVJy.png",
                             Tuple.Create(3657, 3657),
@@ -37,7 +37,7 @@ namespace LuckParser.Models
                             Tuple.Create(19072, 15484, 20992, 16508));
         }
 
-        public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: facing information (slashes) and doughnuts for outer circle attack
             List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
@@ -46,33 +46,33 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.TormentedDead,
                         ParseEnum.ThrashIDS.SurgingSoul
                     };
-            List<CastLog> howling = cls.Where(x => x.getID() == 48662).ToList();
+            List<CastLog> howling = cls.Where(x => x.GetID() == 48662).ToList();
             foreach (CastLog c in howling)
             {
-                int start = (int)c.getTime();
-                int end = start + c.getActDur();
-                replay.addCircleActor(new CircleActor(true, (int)c.getTime() + c.getExpDur(), 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
-                replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
+                int start = (int)c.GetTime();
+                int end = start + c.GetActDur();
+                replay.AddCircleActor(new CircleActor(true, (int)c.GetTime() + c.GetExpDur(), 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
+                replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
             }
-            List<CastLog> vortex = cls.Where(x => x.getID() == 47327).ToList();
+            List<CastLog> vortex = cls.Where(x => x.GetID() == 47327).ToList();
             foreach (CastLog c in vortex)
             {
-                int start = (int)c.getTime();
+                int start = (int)c.GetTime();
                 int end = start + 4000;
-                Point3D pos = replay.getPositions().FirstOrDefault(x => x.time > start);
+                Point3D pos = replay.GetPositions().FirstOrDefault(x => x.Time > start);
                 if (pos != null)
                 {
-                    replay.addCircleActor(new CircleActor(false, 0, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                    replay.addCircleActor(new CircleActor(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                    replay.addDoughnutActor(new DoughnutActor(0, 380,760, new Tuple<int, int>(end, end+1000), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.AddCircleActor(new CircleActor(false, 0, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.AddCircleActor(new CircleActor(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.AddDoughnutActor(new DoughnutActor(0, 380,760, new Tuple<int, int>(end, end+1000), "rgba(255, 150, 0, 0.5)", pos));
                 }
             }
             return ids;
         }
 
-        public override int isCM(List<CombatItem> clist, int health)
+        public override int IsCM(List<CombatItem> clist, int health)
         {
-            List<CombatItem> necrosis = clist.Where(x => x.getSkillID() == 47414 && x.isBuffremove() == ParseEnum.BuffRemove.None).ToList();
+            List<CombatItem> necrosis = clist.Where(x => x.GetSkillID() == 47414 && x.IsBuffremove() == ParseEnum.BuffRemove.None).ToList();
             if (necrosis.Count == 0)
             {
                 return 0;
@@ -81,7 +81,7 @@ namespace LuckParser.Models
             Dictionary<ushort, List<CombatItem>> splitNecrosis = new Dictionary<ushort, List<CombatItem>>();
             foreach (CombatItem c in necrosis)
             {
-                ushort inst = c.getDstInstid();
+                ushort inst = c.GetDstInstid();
                 if (!splitNecrosis.ContainsKey(inst))
                 {
                     splitNecrosis.Add(inst, new List<CombatItem>());
@@ -94,7 +94,7 @@ namespace LuckParser.Models
             {
                 CombatItem cur = longestNecrosis[i];
                 CombatItem next = longestNecrosis[i + 1];
-                long timeDiff = next.getTime() - cur.getTime();
+                long timeDiff = next.GetTime() - cur.GetTime();
                 if (timeDiff > 1000 && minDiff > timeDiff)
                 {
                     minDiff = timeDiff;
@@ -103,7 +103,7 @@ namespace LuckParser.Models
             return (minDiff < 11000) ? 1 : 0;
         }
 
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://i.imgur.com/jAiRplg.png";
         }

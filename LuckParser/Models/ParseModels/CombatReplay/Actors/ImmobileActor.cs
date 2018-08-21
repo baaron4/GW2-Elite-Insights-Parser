@@ -15,9 +15,9 @@ namespace LuckParser.Models.ParseModels
             this.position = position;
         }
 
-        public override string getPosition(string id, CombatReplayMap map)
+        public override string GetPosition(string id, CombatReplayMap map)
         {
-            Tuple<int, int> coord = map.getMapCoord(position.X, position.Y);
+            Tuple<int, int> coord = map.GetMapCoord(position.X, position.Y);
             return "[" + coord.Item1 + "," + coord.Item2 + "]";
         }
     }

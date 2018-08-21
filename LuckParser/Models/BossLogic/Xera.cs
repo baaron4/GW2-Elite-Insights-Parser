@@ -36,7 +36,7 @@ namespace LuckParser.Models
             });
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/BoHwwY6.png",
                             Tuple.Create(7112, 6377),
@@ -45,33 +45,33 @@ namespace LuckParser.Models
                             Tuple.Create(1920, 12160, 2944, 14464));
         }
 
-        public override List<PhaseData> getPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
+        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.GetBossData().getAwareDuration();
-            List<PhaseData> phases = getInitialPhase(log);
+            long fight_dur = log.GetBossData().GetAwareDuration();
+            List<PhaseData> phases = GetInitialPhase(log);
             // split happened
-            if (boss.getPhaseData().Count == 1)
+            if (boss.GetPhaseData().Count == 1)
             {
-                CombatItem invulXera = log.GetBoonData().Find(x => x.getDstInstid() == boss.GetInstid() && (x.getSkillID() == 762 || x.getSkillID() == 34113));
-                end = invulXera.getTime() - log.GetBossData().getFirstAware();
+                CombatItem invulXera = log.GetBoonData().Find(x => x.GetDstInstid() == boss.GetInstid() && (x.GetSkillID() == 762 || x.GetSkillID() == 34113));
+                end = invulXera.GetTime() - log.GetBossData().GetFirstAware();
                 phases.Add(new PhaseData(start, end));
-                start = boss.getPhaseData()[0] - log.GetBossData().getFirstAware();
+                start = boss.GetPhaseData()[0] - log.GetBossData().GetFirstAware();
                 cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
             }
-            if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+            if (fight_dur - start > 5000 && start >= phases.Last().GetEnd())
             {
                 phases.Add(new PhaseData(start, fight_dur));
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].setName("Phase " + i);
+                phases[i].SetName("Phase " + i);
             }
             return phases;
         }
 
-        public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: needs facing information for hadouken
             List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
@@ -82,15 +82,15 @@ namespace LuckParser.Models
                 ParseEnum.ThrashIDS.WhiteMantleBattleMage,
                 ParseEnum.ThrashIDS.ExquisiteConjunction
             };
-            List<CastLog> summon = cls.Where(x => x.getID() == 34887).ToList();
+            List<CastLog> summon = cls.Where(x => x.GetID() == 34887).ToList();
             foreach (CastLog c in summon)
             {
-                replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(0, 180, 255, 0.3)"));
+                replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.GetTime(), (int)c.GetTime() + c.GetActDur()), "rgba(0, 180, 255, 0.3)"));
             }
             return ids;
         }
 
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://i.imgur.com/lYwJEyV.png";
         }

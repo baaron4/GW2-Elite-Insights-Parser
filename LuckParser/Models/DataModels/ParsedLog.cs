@@ -100,7 +100,7 @@ namespace LuckParser.Models.DataModels
 
         public bool IsBenchmarkMode()
         {
-            return boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Golem;
+            return boss_data.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem;
         }
 
         /*public List<CombatItem> getHealingData()

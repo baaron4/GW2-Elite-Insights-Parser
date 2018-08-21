@@ -21,16 +21,16 @@ namespace LuckParser.Models.ParseModels
             this.overstack = other.overstack;
         }
 
-        public override long getDuration(ushort src, long start = 0, long end = 0)
+        public override long GetDuration(ushort src, long start = 0, long end = 0)
         {
-            return getItemDuration(start, end);
+            return GetItemDuration(start, end);
         }
-        public override void setEnd(long end)
+        public override void SetEnd(long end)
         {
             this.duration = Math.Min(Math.Max(end - this.start, 0),duration);
         }
 
-        public override List<ushort> getSrc()
+        public override List<ushort> GetSrc()
         {
             List<ushort> res = new List<ushort>
             {
@@ -39,22 +39,22 @@ namespace LuckParser.Models.ParseModels
             return res;
         }
 
-        public override int getStack(long end)
+        public override int GetStack(long end)
         {
             return 1;
         }
 
-        public override long getOverstack(ushort src, long start = 0, long end = 0)
+        public override long GetOverstack(ushort src, long start = 0, long end = 0)
         {
             if (end > 0 && duration > 0)
             {
-                long dur = getItemDuration(start, end);
+                long dur = GetItemDuration(start, end);
                 return (long)Math.Round((double)dur / duration * overstack);
             }
             return overstack;
         }
 
-        public override bool addOverstack(ushort src, long overstack)
+        public override bool AddOverstack(ushort src, long overstack)
         {
             if (this.src != src || duration == 0)
             {

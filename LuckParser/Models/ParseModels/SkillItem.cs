@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Public Methods
-        public String[] toStringArray()
+        public String[] ToStringArray()
         {
             String[] array = new String[2];
             array[0] = ID.ToString();
@@ -36,19 +36,19 @@ namespace LuckParser.Models.ParseModels
 
                 if (skillAPI != null) {
                     this.apiSkill = skillAPI;
-                    this.name = skillAPI.name;
+                    this.name = skillAPI.Name;
                 }
                 
             }
             
         }
         // Getters
-        public int getID()
+        public int GetID()
         {
             return ID;
         }
 
-        public String getName()
+        public String GetName()
         {
             if (ID == 1066) {
                 return "Resurrect";
@@ -72,11 +72,11 @@ namespace LuckParser.Models.ParseModels
                 GW2APIfacts[] factsList;
                 if (apiskilldet != null)
                 {
-                    factsList = apiskilldet.facts;
+                    factsList = apiskilldet.Facts;
                 }
                 else
                 {
-                    factsList = apiskillchec.facts;
+                    factsList = apiskillchec.Facts;
                 }
                 bool daze = false;
                 bool stun = false;
@@ -90,15 +90,15 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (daze == false)
                     {
-                        if (fact.text == "Daze" || fact.status == "Daze")
+                        if (fact.Text == "Daze" || fact.Status == "Daze")
                         {
-                            if (fact.duration < 1)
+                            if (fact.Duration < 1)
                             {
                                 cc += 100;
                             }
                             else
                             {
-                                cc += fact.duration * 100;
+                                cc += fact.Duration * 100;
                             }
                             daze = true;
                         }
@@ -106,37 +106,37 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (stun == false)
                     {
-                        if (fact.text == "Stun" || fact.status == "Stun")
+                        if (fact.Text == "Stun" || fact.Status == "Stun")
                         {
-                            if (fact.duration < 1)
+                            if (fact.Duration < 1)
                             {
                                 cc += 100;
                             }
                             else
                             {
-                                cc += fact.duration * 100;
+                                cc += fact.Duration * 100;
                             }
                             stun = true;
                         }
                     }
                     if (knockdown == false)
                     {
-                        if (fact.text == "Knockdown" || fact.status == "Knockdown")
+                        if (fact.Text == "Knockdown" || fact.Status == "Knockdown")
                         {
-                            if (fact.duration < 1)
+                            if (fact.Duration < 1)
                             {
                                 cc += 100;
                             }
                             else
                             {
-                                cc += fact.duration * 100;
+                                cc += fact.Duration * 100;
                             }
                             knockdown = true;
                         }
                     }
                     if (launch == false)
                     {
-                        if (fact.text == "Launch" || fact.status == "Launch")
+                        if (fact.Text == "Launch" || fact.Status == "Launch")
                         {
                             
                                 cc += 232;//Wiki says either 232 or 332 based on duration? launch doesnt provide duration in api however
@@ -146,7 +146,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (knockback == false)
                     {
-                        if (fact.text == "Knockback" || fact.status == "Knockback")
+                        if (fact.Text == "Knockback" || fact.Status == "Knockback")
                         {
 
                             cc += 150;//always 150 unless special case of 232 for ranger pet?
@@ -155,7 +155,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (pull == false)
                     {
-                        if (fact.text == "Pull" || fact.status == "Pull")
+                        if (fact.Text == "Pull" || fact.Status == "Pull")
                         {
 
                             cc += 150;
@@ -165,28 +165,28 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (flaot == false)
                     {
-                        if (fact.text == "Float" || fact.status == "Float")
+                        if (fact.Text == "Float" || fact.Status == "Float")
                         {
-                            if (fact.duration < 1)
+                            if (fact.Duration < 1)
                             {
                                 cc += 100;
                             }
                             else
                             {
-                                cc += fact.duration * 100;
+                                cc += fact.Duration * 100;
                             }
                             flaot = true;
                         }
                     }
-                    if (fact.text == "Stone Duration" || fact.status == "Stone Duration")
+                    if (fact.Text == "Stone Duration" || fact.Status == "Stone Duration")
                     {
-                        if (fact.duration < 1)
+                        if (fact.Duration < 1)
                         {
                             cc += 100;
                         }
                         else
                         {
-                            cc += fact.duration * 100;
+                            cc += fact.Duration * 100;
                         }
                         
                     }

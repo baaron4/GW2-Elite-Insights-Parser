@@ -34,7 +34,7 @@ namespace LuckParser
             Pipe = 0x0003
         }
 
-        private static bool isRedirected(IntPtr handle)
+        private static bool IsRedirected(IntPtr handle)
         {
             FileType fileType = GetFileType(handle);
 
@@ -55,7 +55,7 @@ namespace LuckParser
                  * and if we are redirecting to a file or pipe we want to make sure Console.out points to the correct handle
                  * and doesnt init with the console ignoring existing stdout
                  */
-                if (isRedirected(GetStdHandle(StandardHandle.Output)))
+                if (IsRedirected(GetStdHandle(StandardHandle.Output)))
                 {
                     var dummy = Console.Out;
                 }

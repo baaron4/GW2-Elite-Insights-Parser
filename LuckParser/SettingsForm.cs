@@ -162,7 +162,7 @@ namespace LuckParser
             Properties.Settings.Default.ShowEstimates = chkShowEstimates.Checked;
         }
 
-        private void chkOneAtATime_CheckedChanged(object sender, EventArgs e)
+        private void ChkOneAtATime_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ParseOneAtATime = chkOneAtATime.Checked;
         }
@@ -187,7 +187,7 @@ namespace LuckParser
             Properties.Settings.Default.LightTheme = chkLightTheme.Checked;
         }
 
-        private void chk_combatReplay_CheckedChanged(object sender, EventArgs e)
+        private void Chk_combatReplay_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ParseCombatReplay = chk_combatReplay.Checked;
         }

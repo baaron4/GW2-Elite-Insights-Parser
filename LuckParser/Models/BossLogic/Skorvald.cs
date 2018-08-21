@@ -14,7 +14,7 @@ namespace LuckParser.Models
         {        
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/PO3aoJD.png",
                             Tuple.Create(1759, 1783),
@@ -23,12 +23,12 @@ namespace LuckParser.Models
                             Tuple.Create(11204, 4414, 13252, 6462));
         }
 
-        public override int isCM(List<CombatItem> clist, int health)
+        public override int IsCM(List<CombatItem> clist, int health)
         {
             return (health == 5551340) ? 1 : 0;
         }
 
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://i.imgur.com/IOPAHRE.png";
         }

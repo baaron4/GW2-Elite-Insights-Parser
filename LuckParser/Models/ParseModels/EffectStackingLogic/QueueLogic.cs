@@ -10,12 +10,12 @@ namespace LuckParser.Models.ParseModels
 {
     public class QueueLogic : StackingLogic
     {
-        public override void sort(ParsedLog log, List<BoonStackItem> stacks)
+        public override void Sort(ParsedLog log, List<BoonStackItem> stacks)
         {
             // no sort
         }
 
-        public override bool stackEffect(ParsedLog log, BoonStackItem toAdd, List<BoonStackItem> stacks, List<BoonSimulationItem> simulation)
+        public override bool StackEffect(ParsedLog log, BoonStackItem toAdd, List<BoonStackItem> stacks, List<BoonSimulationItem> simulation)
         {
             for (int i = 1; i < stacks.Count; i++)
             {
@@ -25,7 +25,7 @@ namespace LuckParser.Models.ParseModels
                     ushort srcValue = stacks[i].src;
                     for (int j = simulation.Count - 1; j >= 0; j--)
                     {
-                        if (simulation[j].addOverstack(srcValue, overstackValue))
+                        if (simulation[j].AddOverstack(srcValue, overstackValue))
                         {
                             break;
                         }
