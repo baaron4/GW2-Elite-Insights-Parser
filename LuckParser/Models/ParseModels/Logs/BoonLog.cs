@@ -3,10 +3,10 @@
     public class BoonLog
     {
         // Fields
-        private long _time = 0;
-        private long _value = 0;
-        private uint _overstack = 0;
-        private ushort _srcInstid = 0;
+        private long _time;
+        private long _value;
+        private uint _overstack;
+        private readonly ushort _srcInstid;
 
         //Constructor
         public BoonLog(long time, ushort srcInstid, long value, uint overstack)

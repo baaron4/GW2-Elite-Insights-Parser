@@ -6,11 +6,11 @@ namespace LuckParser.Models.ParseModels
 {
     public class Minions : List<Minion>
     {
-        private int _instid;
-        private List<DamageLog> _damageLogs = new List<DamageLog>();
+        private readonly int _instid;
+        private readonly List<DamageLog> _damageLogs = new List<DamageLog>();
         private List<DamageLog> _filteredDamageLogs = new List<DamageLog>();
-        private List<CastLog> _castLogs = new List<CastLog>();
-        public Minions(int instid) : base()
+        private readonly List<CastLog> _castLogs = new List<CastLog>();
+        public Minions(int instid)
         {
             _instid = instid;
         }

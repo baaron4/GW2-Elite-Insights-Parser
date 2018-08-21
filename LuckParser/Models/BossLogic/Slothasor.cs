@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Slothasor : BossLogic
     {
-        public Slothasor() : base()
+        public Slothasor()
         {
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
@@ -75,7 +75,6 @@ namespace LuckParser.Models
             // Poison
             List<CombatItem> poisonToDrop = GetFilteredList(log, 34387, p.GetInstid());
             int toDropStart = 0;
-            int toDropEnd = 0;
             foreach (CombatItem c in poisonToDrop)
             {
                 if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
@@ -84,7 +83,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    toDropEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware()); replay.AddCircleActor(new CircleActor(false, 0, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
+                    int toDropEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware()); replay.AddCircleActor(new CircleActor(false, 0, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
                     replay.AddCircleActor(new CircleActor(true, toDropStart + 8000, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
                     Point3D poisonPos = replay.GetPositions().FirstOrDefault(x => x.Time > toDropEnd);
                     if (poisonPos != null)
@@ -96,7 +95,6 @@ namespace LuckParser.Models
             // Transformation
             List<CombatItem> slubTrans = GetFilteredList(log, 34362, p.GetInstid());
             int transfoStart = 0;
-            int transfoEnd = 0;
             foreach (CombatItem c in slubTrans)
             {
                 if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
@@ -105,14 +103,13 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    transfoEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int transfoEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 160, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
                 }
             }
             // fixated
             List<CombatItem> fixatedSloth = GetFilteredList(log, 34508, p.GetInstid());
             int fixatedSlothStart = 0;
-            int fixatedSlothEnd = 0;
             foreach (CombatItem c in fixatedSloth)
             {
                 if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
@@ -121,7 +118,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    fixatedSlothEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int fixatedSlothEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 120, new Tuple<int, int>(fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)"));
                 }
             }

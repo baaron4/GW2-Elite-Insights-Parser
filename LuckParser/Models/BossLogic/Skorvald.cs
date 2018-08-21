@@ -6,7 +6,7 @@ namespace LuckParser.Models
 {
     public class Skorvald : FractalLogic
     {
-        public Skorvald() : base()
+        public Skorvald()
         {        
         }
 

@@ -17,11 +17,11 @@
             return (long)((1.0f - c) * a + c * b);
         }
 
-        public Point3D(float X, float Y, float Z, long time)
+        public Point3D(float x, float y, float z, long time)
         {
-            this.X = X;
-            this.Y = Y;
-            this.Z = Z;
+            X = x;
+            Y = y;
+            Z = z;
             Time = time;
         }
 

@@ -17,7 +17,7 @@ namespace LuckParser
         /// <summary>
         /// Whether we're running in the form, or via console
         /// </summary>
-        public bool FromConsole { get; set; } = false;
+        public bool FromConsole { get; set; }
         public RowState State { get; set; }
     }
 

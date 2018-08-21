@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Xera : BossLogic
     {
-        public Xera() : base()
+        public Xera()
         {
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
@@ -19,7 +19,7 @@ namespace LuckParser.Models
             /*new Mechanic(35000, "Intervention", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hourglass',color:'rgb(128,0,128)',", "Bubble",0),*/
             new Mechanic(35168, "Bloodstone Protection", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hourglass-open',color:'rgb(128,0,128)',", "In Bubble",0),
             new Mechanic(34887, "Summon Fragment Start", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(255,0,255)',", "Breakbar",0),
-            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(255,0,255)',", "CC Failed",0,delegate(long value){return value == 11940;}),
+            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(255,0,255)',", "CC Failed",0,(value => value == 11940)),
             new Mechanic(34965, "Derangement", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square-open',color:'rgb(200,140,255)',", "Derangement",0),
             new Mechanic(35084, "Bending Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'pentagon',color:'rgb(200,140,255)',", "Button 1",0),
             new Mechanic(35162, "Shifting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hexagon',color:'rgb(200,140,255)',", "Button 2",0),
@@ -46,14 +46,13 @@ namespace LuckParser.Models
         public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
         {
             long start = 0;
-            long end = 0;
             long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // split happened
             if (boss.GetPhaseData().Count == 1)
             {
                 CombatItem invulXera = log.GetBoonData().Find(x => x.GetDstInstid() == boss.GetInstid() && (x.GetSkillID() == 762 || x.GetSkillID() == 34113));
-                end = invulXera.GetTime() - log.GetBossData().GetFirstAware();
+                long end = invulXera.GetTime() - log.GetBossData().GetFirstAware();
                 phases.Add(new PhaseData(start, end));
                 start = boss.GetPhaseData()[0] - log.GetBossData().GetFirstAware();
                 castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));

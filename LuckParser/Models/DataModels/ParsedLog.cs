@@ -5,14 +5,14 @@ namespace LuckParser.Models.DataModels
 {
     public class ParsedLog
     {
-        private LogData _logData;
-        private BossData _bossData;
-        private AgentData _agentData;
-        private SkillData _skillData;
-        private CombatData _combatData;
-        private MechanicData _mechData;
-        private List<Player> _playerList;
-        private Boss _boss;
+        private readonly LogData _logData;
+        private readonly BossData _bossData;
+        private readonly AgentData _agentData;
+        private readonly SkillData _skillData;
+        private readonly CombatData _combatData;
+        private readonly MechanicData _mechData;
+        private readonly List<Player> _playerList;
+        private readonly Boss _boss;
 
         
 

@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Dhuum : BossLogic
     {
-        public Dhuum() : base()
+        public Dhuum()
         {
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
@@ -65,7 +65,7 @@ namespace LuckParser.Models
                 {
                     phases.Add(new PhaseData(start, fightDuration));
                 }
-                string[] namesDh = new string[] { "Main Fight", "Ritual" };
+                string[] namesDh = new [] { "Main Fight", "Ritual" };
                 for (int i = 1; i < phases.Count; i++)
                 {
                     phases[i].SetName(namesDh[i - 1]);
@@ -95,7 +95,7 @@ namespace LuckParser.Models
                 {
                     phases.Add(new PhaseData(start, fightDuration));
                 }
-                string[] namesDh = new string[] { "Roleplay", "Main Fight", "Ritual" };
+                string[] namesDh = new [] { "Roleplay", "Main Fight", "Ritual" };
                 for (int i = 1; i < phases.Count; i++)
                 {
                     phases[i].SetName(namesDh[i - 1]);
@@ -174,7 +174,6 @@ namespace LuckParser.Models
             // bomb
             List<CombatItem> bombDhuum = GetFilteredList(log, 47646, p.GetInstid());
             int bombDhuumStart = 0;
-            int bombDhuumEnd = 0;
             foreach (CombatItem c in bombDhuum)
             {
                 if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
@@ -183,7 +182,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    bombDhuumEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int bombDhuumEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)"));
                     replay.AddCircleActor(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
                 }

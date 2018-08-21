@@ -44,7 +44,7 @@ namespace LuckParser.Models.DataModels
             public int PlayerBossPowerDamage;
         }
 
-        public Dictionary<Player, FinalDPS[]> Dps;
+        public readonly Dictionary<Player, FinalDPS[]> Dps;
         public FinalDPS[] BossDps;
 
         public class FinalStats
@@ -86,7 +86,6 @@ namespace LuckParser.Models.DataModels
 
             // Counts
             public int SwapCount;
-            public int RessCount;
             public int DownCount;
             public int DodgeCount;
 
@@ -96,7 +95,7 @@ namespace LuckParser.Models.DataModels
             public double Dcd;
         }
 
-        public Dictionary<Player, FinalStats[]> Stats;
+        public readonly Dictionary<Player, FinalStats[]> Stats;
 
         public class FinalDefenses
         {
@@ -109,7 +108,7 @@ namespace LuckParser.Models.DataModels
             public int DamageBarrier;
         }
 
-        public Dictionary<Player, FinalDefenses[]> Defenses;
+        public readonly Dictionary<Player, FinalDefenses[]> Defenses;
 
         public class FinalSupport
         {
@@ -120,7 +119,7 @@ namespace LuckParser.Models.DataModels
             public float CondiCleanseTime;
         }
 
-        public Dictionary<Player, FinalSupport[]> Support;
+        public readonly Dictionary<Player, FinalSupport[]> Support;
 
         public class FinalBoonUptime
         {
@@ -129,10 +128,10 @@ namespace LuckParser.Models.DataModels
             public double Overstack;
         }
 
-        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> SelfBoons;
-        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> GroupBoons;
-        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> OffGroupBoons;
-        public Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> SquadBoons;
+        public readonly Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> SelfBoons;
+        public readonly Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> GroupBoons;
+        public readonly Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> OffGroupBoons;
+        public readonly Dictionary<Player, Dictionary<long, FinalBoonUptime>[]> SquadBoons;
 
         public class FinalBossBoon
         {
@@ -149,17 +148,17 @@ namespace LuckParser.Models.DataModels
             }
 
             public double Uptime;
-            public Dictionary<Player, double> Generated;
-            public Dictionary<Player, double> Overstacked;
+            public readonly Dictionary<Player, double> Generated;
+            public readonly Dictionary<Player, double> Overstacked;
         }
 
         public Dictionary<long, FinalBossBoon>[] BossConditions;
 
         // present buff
-        public List<Boon> PresentBoons = new List<Boon>();//Used only for Boon tables
-        public List<Boon> PresentOffbuffs = new List<Boon>();//Used only for Off Buff tables
-        public List<Boon> PresentDefbuffs = new List<Boon>();//Used only for Def Buff tables
-        public Dictionary<long, List<Boon>> PresentPersonnalBuffs = new Dictionary<long, List<Boon>>();//Used only for personnal
+        public readonly List<Boon> PresentBoons = new List<Boon>();//Used only for Boon tables
+        public readonly List<Boon> PresentOffbuffs = new List<Boon>();//Used only for Off Buff tables
+        public readonly List<Boon> PresentDefbuffs = new List<Boon>();//Used only for Def Buff tables
+        public readonly Dictionary<long, List<Boon>> PresentPersonnalBuffs = new Dictionary<long, List<Boon>>();//Used only for personnal
 
         //Positions for group
         public List<Point3D> StackCenterPositions;

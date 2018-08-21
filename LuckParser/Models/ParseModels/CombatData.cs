@@ -14,12 +14,6 @@ namespace LuckParser.Models.ParseModels
         //private List<CombatItem> _healingReceivedData;
         private List<CombatItem> _castData;
         private List<CombatItem> _movementData;
-
-        // Constructors
-        public CombatData()
-        {
-        }
-
         // Public Methods
 
         public List<CombatItem> GetStates(int srcInstid, ParseEnum.StateChange change, long start, long end)

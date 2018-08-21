@@ -12,10 +12,10 @@ namespace LuckParser
     public partial class MainForm : Form
     {
         private SettingsForm _settingsForm;
-        private List<string> _logsFiles = new List<string>();
+        private readonly List<string> _logsFiles;
         private Parser _controller = new Parser();
-        private bool _anyRunning = false;
-        private Queue<GridRow> _logQueue = new Queue<GridRow>();
+        private bool _anyRunning;
+        private readonly Queue<GridRow> _logQueue = new Queue<GridRow>();
         public MainForm()
         {
             InitializeComponent();
@@ -31,7 +31,6 @@ namespace LuckParser
         /// Adds log files to the bound data source for display in the interface
         /// </summary>
         /// <param name="filesArray"></param>
-        /// <param name="consoleStart"></param>
         private void AddLogFiles(string[] filesArray)
         {
             foreach (string file in filesArray)
@@ -117,7 +116,7 @@ namespace LuckParser
             try
             {
                 FileInfo fInfo = new FileInfo(rowData.Location);
-                if (!fInfo.Exists)
+                if (fInfo == null || !fInfo.Exists)
                 {
                     bg.UpdateProgress(rowData, "File does not exist", 100);
                     e.Cancel = true;
@@ -150,13 +149,15 @@ namespace LuckParser
                         //Customised save directory
                         saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
                     }
-
+                    if (saveDirectory == null)
+                    {
+                        throw new CancellationException(rowData, new Exception("Invalid save directory"));
+                    }
                     string bossid = parser.GetBossData().GetID().ToString();
                     string result = parser.GetLogData().GetBosskill() ? "kill" : "fail";
 
                     SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
-
-                    Statistics statistics;
+                    
                     StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
                     StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
                     if (Properties.Settings.Default.SaveOutHTML)
@@ -167,7 +168,7 @@ namespace LuckParser
                     {
                         CSVBuilder.UpdateStatisticSwitches(switches);
                     }
-                    statistics = statisticsCalculator.CalculateStatistics(log, switches);
+                    Statistics statistics = statisticsCalculator.CalculateStatistics(log, switches);
                     bg.UpdateProgress(rowData, "85% - Statistics computed", 85);
                     string fName = fInfo.Name.Split('.')[0];
                     bg.UpdateProgress(rowData, "90% - Creating File...", 90);
@@ -433,9 +434,6 @@ namespace LuckParser
                         {
                             System.Diagnostics.Process.Start(fileLoc);
                         }
-                        break;
-
-                    default:
                         break;
                 }
             }

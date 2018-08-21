@@ -5,23 +5,23 @@ namespace LuckParser.Models.ParseModels
     public abstract class DamageLog
     {
         // Fields
-        private long _time;
-        protected int _damage;
-        private long _skillId;
-        private int _buff;
-        private ParseEnum.Result _result;
-        private ushort _isNinety;
-        private ushort _isMoving;
-        private ushort _isFlanking;
-        private ParseEnum.Activation _isActivation;
-        private ushort _isShields;
-        private ulong _srcAgent;
-        private ushort _srcInstid;
-        private ulong _dstAgent;
-        private ushort _dstInstid;
+        private readonly long _time;
+        protected int Damage;
+        private readonly long _skillId;
+        private readonly int _buff;
+        private readonly ParseEnum.Result _result;
+        private readonly ushort _isNinety;
+        private readonly ushort _isMoving;
+        private readonly ushort _isFlanking;
+        private readonly ParseEnum.Activation _isActivation;
+        private readonly ushort _isShields;
+        private readonly ulong _srcAgent;
+        private readonly ushort _srcInstid;
+        private readonly ulong _dstAgent;
+        private readonly ushort _dstInstid;
 
         // Constructor
-        public DamageLog(long time, CombatItem c)
+        protected DamageLog(long time, CombatItem c)
         {
             _time = time;
             _skillId = c.GetSkillID();
@@ -46,7 +46,7 @@ namespace LuckParser.Models.ParseModels
 
         public int GetDamage()
         {
-            return _damage;
+            return Damage;
         }
 
         public long GetID()

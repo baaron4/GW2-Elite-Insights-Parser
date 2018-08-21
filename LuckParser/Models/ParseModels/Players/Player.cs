@@ -11,11 +11,11 @@ namespace LuckParser.Models.ParseModels
     public class Player : AbstractMasterPlayer
     {
         // Fields
-        private String _account;
-        private int _group;
-        private long _dcd = 0;//time in ms the player dcd
+        private readonly string _account;
+        private readonly int _group;
+        private long _dcd;//time in ms the player dcd
        
-        private List<Tuple<Boon,long>> _consumeList = new List<Tuple<Boon, long>>();
+        private readonly List<Tuple<Boon,long>> _consumeList = new List<Tuple<Boon, long>>();
         //weaponslist
         private string[] _weaponsArray;
 
@@ -158,33 +158,27 @@ namespace LuckParser.Models.ParseModels
                             {
                                 weapons[0] = apiskill.weapon_type;
                                 weapons[1] = "2Hand";
-                                continue;
                             }
                             else if (swapped == 5)
                             {
                                 weapons[2] = apiskill.weapon_type;
                                 weapons[3] = "2Hand";
-                                continue;
                             }
-                            continue;
                         }//2 handed
-                        if (apiskill.weapon_type == "Focus" || apiskill.weapon_type == "Shield" || apiskill.weapon_type == "Torch" || apiskill.weapon_type == "Warhorn")
+                        else if (apiskill.weapon_type == "Focus" || apiskill.weapon_type == "Shield" || apiskill.weapon_type == "Torch" || apiskill.weapon_type == "Warhorn")
                         {
                             if (swapped == 4)
                             {
 
                                 weapons[1] = apiskill.weapon_type;
-                                continue;
                             }
                             else if (swapped == 5)
                             {
 
                                 weapons[3] = apiskill.weapon_type;
-                                continue;
                             }
-                            continue;
                         }//OffHand
-                        if (apiskill.weapon_type == "Axe" || apiskill.weapon_type == "Dagger" || apiskill.weapon_type == "Mace" || apiskill.weapon_type == "Pistol" || apiskill.weapon_type == "Sword" || apiskill.weapon_type == "Scepter")
+                        else if (apiskill.weapon_type == "Axe" || apiskill.weapon_type == "Dagger" || apiskill.weapon_type == "Mace" || apiskill.weapon_type == "Pistol" || apiskill.weapon_type == "Sword" || apiskill.weapon_type == "Scepter")
                         {
                             if (apiskill.slot == "Weapon_1" || apiskill.slot == "Weapon_2" || apiskill.slot == "Weapon_3")
                             {
@@ -192,15 +186,12 @@ namespace LuckParser.Models.ParseModels
                                 {
 
                                     weapons[0] = apiskill.weapon_type;
-                                    continue;
                                 }
                                 else if (swapped == 5)
                                 {
 
                                     weapons[2] = apiskill.weapon_type;
-                                    continue;
                                 }
-                                continue;
                             }
                             if (apiskill.slot == "Weapon_4" || apiskill.slot == "Weapon_5")
                             {
@@ -208,15 +199,12 @@ namespace LuckParser.Models.ParseModels
                                 {
 
                                     weapons[1] = apiskill.weapon_type;
-                                    continue;
                                 }
                                 else if (swapped == 5)
                                 {
 
                                     weapons[3] = apiskill.weapon_type;
-                                    continue;
                                 }
-                                continue;
                             }
                         }// 1 handed
                     }
@@ -323,7 +311,7 @@ namespace LuckParser.Models.ParseModels
             Replay.SetIcon(HTMLHelper.GetLink(GetProf()));
         }
 
-        public override void AddMechanics(ParsedLog log)
+        public void AddMechanics(ParsedLog log)
         {
             MechanicData mechData = log.GetMechanicData();
             BossData bossData = log.GetBossData();
@@ -345,8 +333,6 @@ namespace LuckParser.Models.ParseModels
                         break;
                     case 1066:
                         toUse = log.GetCastData().Where(x => x.GetSkillID() == 1066 && x.GetSrcInstid() == GetInstid() && x.IsActivation().IsCasting()).ToList();
-                        break;
-                    default:
                         break;
                 }
                 foreach (CombatItem pnt in toUse)

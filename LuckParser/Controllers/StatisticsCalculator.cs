@@ -23,7 +23,7 @@ namespace LuckParser.Controllers
             public bool CalculateMechanics = false;
         }
 
-        private SettingsContainer _settings;
+        private readonly SettingsContainer _settings;
 
         private Statistics _statistics;
 
@@ -37,7 +37,8 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Calculate a statistic from a log
         /// </summary>
-        /// <param name="log">log to calculate stats from</param>
+        /// <param name="log"></param>
+        /// <param name="switches"></param>
         /// <returns></returns>
         public Statistics CalculateStatistics(ParsedLog log, Switches switches)
         {
@@ -86,7 +87,7 @@ namespace LuckParser.Controllers
 
             double phaseDuration = (phase.GetDuration()) / 1000.0;
 
-            double damage = 0.0;
+            double damage;
             double dps = 0.0;
 
             ////////// ALL
@@ -401,7 +402,6 @@ namespace LuckParser.Controllers
                     final.SwapCount = combatData.GetStates(instid, ParseEnum.StateChange.WeaponSwap, start, end).Count;
                     final.DownCount = combatData.GetStates(instid, ParseEnum.StateChange.ChangeDown, start, end).Count;
                     final.DodgeCount = combatData.GetSkillCount(instid, 65001, start, end) + combatData.GetBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
-                    final.RessCount = combatData.GetSkillCount(instid, 1066, start, end); //Res = 1066
 
                     //Stack Distance
                     if (_settings.ParseCombatReplay && _log.GetBoss().GetCombatReplay() != null)
@@ -424,9 +424,9 @@ namespace LuckParser.Controllers
                                 float y = 0;
                                 float z = 0;
                                 int activePlayers = GroupsPosList.Count;
-                                for (int play = 0; play < GroupsPosList.Count; play++)
+                                foreach (List<Point3D> points in GroupsPosList)
                                 {
-                                    Point3D point = GroupsPosList[play][time];
+                                    Point3D point = points[time];
                                     if (point != null)
                                     {
                                         x += point.X;
@@ -498,13 +498,9 @@ namespace LuckParser.Controllers
                     Statistics.FinalDefenses final = new Statistics.FinalDefenses();
 
                     PhaseData phase =_statistics.Phases[phaseIndex];
-                    long start = phase.GetStart() + _log.GetBossData().GetFirstAware();
-                    long end = phase.GetEnd() + _log.GetBossData().GetFirstAware();
 
                     List<DamageLog> damageLogs = player.GetDamageTakenLogs(_log, phase.GetStart(), phase.GetEnd());
                     //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
-
-                    int instID = player.GetInstid();
                  
                     final.DamageTaken = damageLogs.Sum(x => (long)x.GetDamage());
                     //final.allHealReceived = healingLogs.Sum(x => x.getDamage());
@@ -536,10 +532,6 @@ namespace LuckParser.Controllers
                     Statistics.FinalSupport final = new Statistics.FinalSupport();
 
                     PhaseData phase =_statistics.Phases[phaseIndex];
-                    long start = phase.GetStart() + _log.GetBossData().GetFirstAware();
-                    long end = phase.GetEnd() + _log.GetBossData().GetFirstAware();
-
-                    int instid = player.GetInstid();
 
                     int[] resArray = player.GetReses(_log, phase.GetStart(), phase.GetEnd());
                     int[] cleanseArray = player.GetCleanses(_log, phase.GetStart(), phase.GetEnd());
@@ -720,7 +712,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        public void CalculateConditions()
+        private void CalculateConditions()
         {
             _statistics.BossConditions = new Dictionary<long, Statistics.FinalBossBoon>[_statistics.Phases.Count];
             List<Boon> boonToTrack = Boon.GetCondiBoonList();

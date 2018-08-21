@@ -23,14 +23,14 @@ namespace LuckParser.Models.ParseModels
         public delegate bool SpecialCondition(long value);
         // Fields
         
-        private string _name;
-        private string _altname;
-        private MechType _mechType;
-        private long _skillId;
-        private ParseEnum.BossIDS _bossid;
-        private string _plotlyShape;
-        private int _internalCoolDown;
-        private SpecialCondition _condition;
+        private readonly string _name;
+        private readonly string _altname;
+        private readonly MechType _mechType;
+        private readonly long _skillId;
+        private readonly ParseEnum.BossIDS _bossid;
+        private readonly string _plotlyShape;
+        private readonly int _internalCoolDown;
+        private readonly SpecialCondition _condition;
 
         
         public Mechanic(long skillId,string name, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string altname, int internalCoolDown, SpecialCondition condition = null)

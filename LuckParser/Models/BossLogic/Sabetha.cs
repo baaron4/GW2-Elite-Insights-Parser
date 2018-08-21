@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Sabetha : BossLogic
     {
-        public Sabetha() : base()
+        public Sabetha()
         {
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
@@ -65,7 +65,7 @@ namespace LuckParser.Models
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
-            string[] namesSab = new string[] { "Phase 1", "Kernan", "Phase 2", "Knuckles", "Phase 3", "Karde", "Phase 4" };
+            string[] namesSab = new [] { "Phase 1", "Kernan", "Phase 2", "Knuckles", "Phase 3", "Karde", "Phase 4" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -82,7 +82,6 @@ namespace LuckParser.Models
                     foreach (AgentItem a in champs)
                     {
                         long agentStart = a.GetFirstAware() - log.GetBossData().GetFirstAware();
-                        long agentEnd = a.GetLastAware() - log.GetBossData().GetFirstAware();
                         if (phase.InInterval(agentStart))
                         {
                             phase.AddRedirection(a);
@@ -123,7 +122,6 @@ namespace LuckParser.Models
             // Sapper bombs
             List<CombatItem> sapperBombs = GetFilteredList(log, 31473, p.GetInstid());
             int sapperStart = 0;
-            int sapperEnd = 0;
             foreach (CombatItem c in sapperBombs)
             {
                 if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
@@ -132,7 +130,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    sapperEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware()); replay.AddCircleActor(new CircleActor(false, 0, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)"));
+                    int sapperEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware()); replay.AddCircleActor(new CircleActor(false, 0, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)"));
                     replay.AddCircleActor(new CircleActor(true, sapperStart + 5000, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)"));
                 }
             }

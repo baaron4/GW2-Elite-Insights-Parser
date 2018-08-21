@@ -6,9 +6,9 @@ namespace LuckParser.Models.ParseModels
     public class SkillItem
     {
         // Fields
-        private int _id;
+        readonly int _id;
         private String _name;
-        private GW2APISkill _apiSkill = null;
+        private GW2APISkill _apiSkill;
         private int _cc = 0;
 
         // Constructor
@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
         {
             String[] array = new String[2];
             array[0] = _id.ToString();
-            array[1] = _name.ToString();
+            array[1] = _name;
             return array;
         }
         //setter
@@ -62,22 +62,14 @@ namespace LuckParser.Models.ParseModels
         public int GetCC() {
             return _cc;
         }
-        public void SetCCAPI(int cc)//this is 100% off the GW2 API is not a reliable source of finding skill CC
+        public void SetCCAPI()//this is 100% off the GW2 API is not a reliable source of finding skill CC
         {
-            cc = 0;
+            _cc = 0;
             if (_apiSkill != null)
             {
                 GW2APISkillDetailed apiskilldet = (GW2APISkillDetailed)_apiSkill;
                 GW2APISkillCheck apiskillchec = (GW2APISkillCheck)_apiSkill;
-                GW2APIfacts[] factsList;
-                if (apiskilldet != null)
-                {
-                    factsList = apiskilldet.facts;
-                }
-                else
-                {
-                    factsList = apiskillchec.facts;
-                }
+                GW2APIfacts[] factsList = apiskilldet != null ? apiskilldet.facts : apiskillchec.facts;
                 bool daze = false;
                 bool stun = false;
                 bool knockdown = false;
@@ -94,11 +86,11 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (fact.duration < 1)
                             {
-                                cc += 100;
+                                _cc += 100;
                             }
                             else
                             {
-                                cc += fact.duration * 100;
+                                _cc += fact.duration * 100;
                             }
                             daze = true;
                         }
@@ -110,11 +102,11 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (fact.duration < 1)
                             {
-                                cc += 100;
+                                _cc += 100;
                             }
                             else
                             {
-                                cc += fact.duration * 100;
+                                _cc += fact.duration * 100;
                             }
                             stun = true;
                         }
@@ -125,11 +117,11 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (fact.duration < 1)
                             {
-                                cc += 100;
+                                _cc += 100;
                             }
                             else
                             {
-                                cc += fact.duration * 100;
+                                _cc += fact.duration * 100;
                             }
                             knockdown = true;
                         }
@@ -138,8 +130,8 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (fact.text == "Launch" || fact.status == "Launch")
                         {
-                            
-                                cc += 232;//Wiki says either 232 or 332 based on duration? launch doesnt provide duration in api however
+
+                            _cc += 232;//Wiki says either 232 or 332 based on duration? launch doesnt provide duration in api however
                            
                             launch = true;
                         }
@@ -149,7 +141,7 @@ namespace LuckParser.Models.ParseModels
                         if (fact.text == "Knockback" || fact.status == "Knockback")
                         {
 
-                            cc += 150;//always 150 unless special case of 232 for ranger pet?
+                            _cc += 150;//always 150 unless special case of 232 for ranger pet?
                             knockback = true;
                         }
                     }
@@ -158,7 +150,7 @@ namespace LuckParser.Models.ParseModels
                         if (fact.text == "Pull" || fact.status == "Pull")
                         {
 
-                            cc += 150;
+                            _cc += 150;
 
                             pull = true;
                         }
@@ -169,11 +161,11 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (fact.duration < 1)
                             {
-                                cc += 100;
+                                _cc += 100;
                             }
                             else
                             {
-                                cc += fact.duration * 100;
+                                _cc += fact.duration * 100;
                             }
                             flaot = true;
                         }
@@ -182,11 +174,11 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (fact.duration < 1)
                         {
-                            cc += 100;
+                            _cc += 100;
                         }
                         else
                         {
-                            cc += fact.duration * 100;
+                            _cc += fact.duration * 100;
                         }
                         
                     }
@@ -195,11 +187,11 @@ namespace LuckParser.Models.ParseModels
                 }
                 if (_id == 30725)//toss elixer x
                 {
-                    cc = 300;
+                    _cc = 300;
                 }
                 if (_id == 29519)//MOA signet
                 {
-                    cc = 1000;
+                    _cc = 1000;
                 }
                
             }

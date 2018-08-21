@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Cairn : BossLogic
     {
-        public Cairn() : base()
+        public Cairn()
         {
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>

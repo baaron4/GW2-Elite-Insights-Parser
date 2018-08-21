@@ -30,10 +30,10 @@ namespace LuckParser.Models.ParseModels
         //HERALD(18, "Herald");
 
         // Fields
-        private String _name;
-        private ulong _iD;
-        private uint _isElite;
-        private uint _prof;
+        private readonly String _name;
+        private readonly ulong _iD;
+        private readonly uint _isElite;
+        private readonly uint _prof;
 
         // Constructor
         public Agent(ulong ID, String name, uint prof, uint elite)

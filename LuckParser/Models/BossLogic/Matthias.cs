@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Matthias : BossLogic
     {
-        public Matthias() : base()
+        public Matthias()
         {
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
@@ -28,13 +28,13 @@ namespace LuckParser.Models
             new Mechanic(34416, "Corruption", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle',color:'rgb(255,140,0)',", "Corruption",0),
             new Mechanic(34473, "Corruption", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(255,140,0)',", "C.Dmg",0),
             new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle',color:'rgb(128,0,128)',", "Sacrifice",0),
-            new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerBoonRemove, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(200,140,255)',", "Knockdown",5000,delegate(long value){return value > 0;}), //Does this only trigger on actual Knockdown or also when just reaching 10 stacks and letting the debuff time out? Maybe check is_buffremove==3.
+            new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerBoonRemove, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(200,140,255)',", "Knockdown",5000,(value => value > 0)), //Does this only trigger on actual Knockdown or also when just reaching 10 stacks and letting the debuff time out? Maybe check is_buffremove==3.
             //new Mechanic(34422, "Blood Fueled", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(good)",0),//human //Applied at the same time as Backflip Shards since it is the buff applied by them, can be omitted imho
             //new Mechanic(34428, "Blood Fueled", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(good)",0),//abom
             new Mechanic(34376, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble",0),//human
             new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)',", "Bubble",0),//abom
             new Mechanic(34511, "Zealous Benediction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle',color:'rgb(255,200,0)',", "Bombs",0),
-            new Mechanic(26766, "Icy Patch", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,255)',", "Icy KD",0,delegate(long value){return value == 10000;}),
+            new Mechanic(26766, "Icy Patch", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,255)',", "Icy KD",0,(value => value == 10000)),
             //Track Zealous Benediction? (Bombs) Application? (ID 34511) Hit? (ID 34528) The hit on allies is not registered since it's percentage based, I think
             new Mechanic(34413, "Surrender", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-cross-open',color:'rgb(0,0,0)',", "Spirit",0)
             });
@@ -83,7 +83,7 @@ namespace LuckParser.Models
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
-            string[] namesMat = new string[] { "Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase" };
+            string[] namesMat = new [] { "Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase" };
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].SetName(namesMat[i - 1]);
@@ -148,7 +148,6 @@ namespace LuckParser.Models
             List<CombatItem> corruptedMatthias = GetFilteredList(log, 34416, p.GetInstid());
             corruptedMatthias.AddRange(GetFilteredList(log, 34473, p.GetInstid()));
             int corruptedMatthiasStart = 0;
-            int corruptedMatthiasEnd = 0;
             foreach (CombatItem c in corruptedMatthias)
             {
                 if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
@@ -157,7 +156,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    corruptedMatthiasEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int corruptedMatthiasEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(corruptedMatthiasStart, corruptedMatthiasEnd), "rgba(255, 150, 0, 0.5)"));
                     Point3D wellPosition = replay.GetPositions().FirstOrDefault(x => x.Time > corruptedMatthiasEnd);
                     if (wellPosition != null)
@@ -170,7 +169,6 @@ namespace LuckParser.Models
             // Well of profane
             List<CombatItem> wellMatthias = GetFilteredList(log, 34450, p.GetInstid());
             int wellMatthiasStart = 0;
-            int wellMatthiasEnd = 0;
             foreach (CombatItem c in wellMatthias)
             {
                 if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
@@ -179,7 +177,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    wellMatthiasEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int wellMatthiasEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(false, 0, 120, new Tuple<int, int>(wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)"));
                     replay.AddCircleActor(new CircleActor(true, wellMatthiasStart + 9000, 120, new Tuple<int, int>(wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)"));
                     Point3D wellPosition = replay.GetPositions().FirstOrDefault(x => x.Time > wellMatthiasEnd);
@@ -192,7 +190,6 @@ namespace LuckParser.Models
             // Sacrifice
             List<CombatItem> sacrificeMatthias = GetFilteredList(log, 34442, p.GetInstid());
             int sacrificeMatthiasStart = 0;
-            int sacrificeMatthiasEnd = 0;
             foreach (CombatItem c in sacrificeMatthias)
             {
                 if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
@@ -201,7 +198,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    sacrificeMatthiasEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int sacrificeMatthiasEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.2)"));
                     replay.AddCircleActor(new CircleActor(true, sacrificeMatthiasStart + 10000, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.35)"));
                 }

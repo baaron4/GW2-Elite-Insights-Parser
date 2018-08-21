@@ -5,18 +5,18 @@ namespace LuckParser.Models.ParseModels
     public class AgentItem
     {
         // Fields
-        private ulong _agent;
-        private ushort _id = 0;
-        private ulong _masterAgent = 0;
-        private ushort _instid = 0;
-        private long _firstAware = 0;
+        private readonly ulong _agent;
+        private readonly ushort _id;
+        private ulong _masterAgent;
+        private ushort _instid;
+        private long _firstAware;
         private long _lastAware = long.MaxValue;
-        private String _name;
-        private String _prof;
-        private int _toughness = 0;
-        private int _healing = 0;
-        private int _condition = 0;
-        private int _concentration = 0;
+        private readonly String _name;
+        private readonly String _prof;
+        private readonly int _toughness;
+        private readonly int _healing;
+        private readonly int _condition;
+        private readonly int _concentration;
 
         // Constructors
         public AgentItem(ulong agent, String name, String prof, int toughness, int healing, int condition, int concentration)
@@ -38,7 +38,7 @@ namespace LuckParser.Models.ParseModels
         public String[] ToStringArray()
         {
             String[] array = new String[9];
-            array[0] = string.Format("{0:X}", _agent);//Long.toHexString(agent); 
+            array[0] = _agent.ToString(); 
             array[1] = _instid.ToString();
             array[2] = _firstAware.ToString();
             array[3] = _lastAware.ToString();

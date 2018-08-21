@@ -7,7 +7,7 @@ namespace LuckParser.Models
 {
     public abstract class FractalLogic : BossLogic
     {
-        public FractalLogic() : base()
+        protected FractalLogic()
         { 
             Mode = ParseMode.Fractal;
         }

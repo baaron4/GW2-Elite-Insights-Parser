@@ -7,7 +7,7 @@ namespace LuckParser.Models
 {
     public class MAMA : FractalLogic
     {
-        public MAMA() : base()
+        public MAMA()
         {
             MechanicList.AddRange(new List<Mechanic>
             {

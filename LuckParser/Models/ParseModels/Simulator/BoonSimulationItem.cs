@@ -8,13 +8,13 @@ namespace LuckParser.Models.ParseModels
         protected long Start;
         protected long Duration;
 
-        public BoonSimulationItem()
+        protected BoonSimulationItem()
         {
             Start = 0;
             Duration = 0;
         }
 
-        public BoonSimulationItem(long start, long duration)
+        protected BoonSimulationItem(long start, long duration)
         {
             Start = start;
             Duration = duration;

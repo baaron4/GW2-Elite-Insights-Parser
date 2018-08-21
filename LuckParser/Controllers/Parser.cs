@@ -14,14 +14,14 @@ namespace LuckParser.Controllers
 {
     public class Parser
     {
-        private GW2APIController _aPIController = new GW2APIController();
+        private readonly GW2APIController _aPIController = new GW2APIController();
 
         //Main data storage after binary parse
         private LogData _logData;
         private BossData _bossData;
-        private AgentData _agentData = new AgentData();
-        private SkillData _skillData = new SkillData();
-        private CombatData _combatData = new CombatData();
+        private readonly AgentData _agentData = new AgentData();
+        private readonly SkillData _skillData = new SkillData();
+        private readonly CombatData _combatData = new CombatData();
         private List<Player> _playerList = new List<Player>();
         private Boss _boss;
         private byte _revision;
@@ -45,7 +45,6 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Parses the given log
         /// </summary>
-        /// <param name="bg">BackgroundWorker handling the log</param>
         /// <param name="row">GridRow object bound to the UI</param>
         /// <param name="evtc">The path to the log to parse</param>
         /// <returns></returns>
@@ -417,11 +416,6 @@ namespace LuckParser.Controllers
             _combatData.RemoveAll(x => x.GetSrcInstid() == 0 && x.GetDstAgent() == 0 && x.GetSrcAgent() == 0 && x.GetDstInstid() == 0 && x.GetIFF() == ParseEnum.IFF.Unknown);
         }
         
-        private static bool IsGolem(ushort id)
-        {
-            return id == 16202 || id == 16177 || id == 19676 || id == 19645 || id == 16199;
-        }
-        
         /// <summary>
         /// Parses all the data again and link related stuff to each other
         /// </summary>
@@ -557,13 +551,12 @@ namespace LuckParser.Controllers
             // Dealing with second half of Xera | ((22611300 * 0.5) + (25560600 * 0.5)
             if (_bossData.GetID() == 16246)
             {
-                int xera2Instid = 0;
                 foreach (AgentItem NPC in npcList)
                 {
                     if (NPC.GetID() == 16286)
                     {
                         bossHealthOverTime = new List<Point>();//reset boss health over time
-                        xera2Instid = NPC.GetInstid();
+                        int xera2Instid = NPC.GetInstid();
                         _bossData.SetHealth(24085950);
                         _boss.AddPhaseData(NPC.GetFirstAware());
                         _bossData.SetLastAware(NPC.GetLastAware());
@@ -592,12 +585,11 @@ namespace LuckParser.Controllers
             //Dealing with Deimos split
             if (_bossData.GetID() == 17154)
             {
-                int deimos2Instid = 0;
                 List<AgentItem> deimosGadgets = _agentData.GetGadgetAgentList().Where(x => x.GetFirstAware() > bossAgent.GetLastAware() && x.GetName().Contains("Deimos")).OrderBy(x => x.GetLastAware()).ToList();
                 if (deimosGadgets.Count > 0)
                 {
                     AgentItem NPC = deimosGadgets.Last();
-                    deimos2Instid = NPC.GetInstid();
+                    int deimos2Instid = NPC.GetInstid();
                     long oldAware = bossAgent.GetLastAware();
                     _boss.AddPhaseData(NPC.GetFirstAware() >= oldAware ? NPC.GetFirstAware() : oldAware);
                     //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos2Instid ).ToList().Sum(x);
@@ -683,14 +675,7 @@ namespace LuckParser.Controllers
                         if (tst == null)
                         {
                             tst = _combatData.Find(x => x.GetDstAgent() == playerAgent.GetAgent());
-                            if (tst == null)
-                            {
-                                playerAgent.SetInstid(ushort.MaxValue);
-                            }
-                            else
-                            {
-                                playerAgent.SetInstid(tst.GetDstInstid());
-                            }
+                            playerAgent.SetInstid(tst == null ? ushort.MaxValue : tst.GetDstInstid());
                         }
                         else
                         {

@@ -6,7 +6,7 @@ namespace LuckParser.Models.ParseModels
     public class Minion : AbstractPlayer
     {
 
-        public Minion(ushort master, AgentItem agent) : base(agent)
+        public Minion(AgentItem agent) : base(agent)
         {
         }
 
@@ -67,8 +67,6 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetDamagetakenLogs(ParsedLog log)
         {
-            // nothing to do
-            return;
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

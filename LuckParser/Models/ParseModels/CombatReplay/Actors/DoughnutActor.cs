@@ -4,8 +4,8 @@ namespace LuckParser.Models.ParseModels
 {
     public class DoughnutActor : Actor
     {
-        private int _outerRadius;
-        private int _innerRadius;
+        private readonly int _outerRadius;
+        private readonly int _innerRadius;
 
         public DoughnutActor(int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color) : base(true, growing, lifespan, color, new MobileActor())
         {

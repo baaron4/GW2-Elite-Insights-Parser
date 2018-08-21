@@ -5,11 +5,11 @@ namespace LuckParser.Models.ParseModels
     public  class CastLog
     {
         // Fields
-        private long _time;
-        private long _skillId;
-        private int _expectedDuration;
+        private readonly long _time;
+        private readonly long _skillId;
+        private readonly int _expectedDuration;
         private int _actualDuration;
-        private ParseEnum.Activation _startActivation;
+        private readonly ParseEnum.Activation _startActivation;
         private ParseEnum.Activation _endActivation;
 
 

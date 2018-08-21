@@ -7,10 +7,10 @@ namespace LuckParser.Controllers
     {
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool FlashWindowEx(ref FLASHWINFO pwfi);
+        private static extern bool FlashWindowEx(ref FlashwInfo pwfi);
 
         [StructLayout(LayoutKind.Sequential)]
-        private struct FLASHWINFO
+        private struct FlashwInfo
         {
             /// <summary>
             /// The size of the structure in bytes.
@@ -37,7 +37,7 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Stop flashing. The system restores the window to its original stae.
         /// </summary>
-        public const uint FlashWStop = 0;
+        private const uint FlashWStop = 0;
 
         /// <summary>
         /// Flash the window caption.
@@ -53,7 +53,7 @@ namespace LuckParser.Controllers
         /// Flash both the window caption and taskbar button.
         /// This is equivalent to setting the FlashWCaption | FlashWTray flags.
         /// </summary>
-        public const uint FlashHAll = 3;
+        private const uint FlashHAll = 3;
 
         /// <summary>
         /// Flash continuously, until the FlashWStop flag is set.
@@ -63,7 +63,7 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Flash continuously until the window comes to the foreground.
         /// </summary>
-        public const uint FlashWTimerNoCfg = 12;
+        private const uint FlashWTimerNoCfg = 12;
 
 
         /// <summary>
@@ -76,15 +76,15 @@ namespace LuckParser.Controllers
             // Make sure we're running under Windows 2000 or later
             if (Win2000OrLater)
             {
-                FLASHWINFO fi = CreateFlashHInfo(form.Handle, FlashHAll | FlashWTimerNoCfg, uint.MaxValue, 0);
+                FlashwInfo fi = CreateFlashHInfo(form.Handle, FlashHAll | FlashWTimerNoCfg, uint.MaxValue, 0);
                 return FlashWindowEx(ref fi);
             }
             return false;
         }
 
-        private static FLASHWINFO CreateFlashHInfo(IntPtr handle, uint flags, uint count, uint timeout)
+        private static FlashwInfo CreateFlashHInfo(IntPtr handle, uint flags, uint count, uint timeout)
         {
-            FLASHWINFO fi = new FLASHWINFO();
+            FlashwInfo fi = new FlashwInfo();
             fi.CbSize = Convert.ToUInt32(Marshal.SizeOf(fi));
             fi.Hwnd = handle;
             fi.DwFlags = flags;
@@ -103,7 +103,7 @@ namespace LuckParser.Controllers
         {
             if (Win2000OrLater)
             {
-                FLASHWINFO fi = CreateFlashHInfo(form.Handle, FlashHAll, count, 0);
+                FlashwInfo fi = CreateFlashHInfo(form.Handle, FlashHAll, count, 0);
                 return FlashWindowEx(ref fi);
             }
             return false;
@@ -118,7 +118,7 @@ namespace LuckParser.Controllers
         {
             if (Win2000OrLater)
             {
-                FLASHWINFO fi = CreateFlashHInfo(form.Handle, FlashHAll, uint.MaxValue, 0);
+                FlashwInfo fi = CreateFlashHInfo(form.Handle, FlashHAll, uint.MaxValue, 0);
                 return FlashWindowEx(ref fi);
             }
             return false;
@@ -133,7 +133,7 @@ namespace LuckParser.Controllers
         {
             if (Win2000OrLater)
             {
-                FLASHWINFO fi = CreateFlashHInfo(form.Handle, FlashWStop, uint.MaxValue, 0);
+                FlashwInfo fi = CreateFlashHInfo(form.Handle, FlashWStop, uint.MaxValue, 0);
                 return FlashWindowEx(ref fi);
             }
             return false;
@@ -144,7 +144,7 @@ namespace LuckParser.Controllers
         /// </summary>
         private static bool Win2000OrLater
         {
-            get { return System.Environment.OSVersion.Version.Major >= 5; }
+            get { return Environment.OSVersion.Version.Major >= 5; }
         }
     }
 }

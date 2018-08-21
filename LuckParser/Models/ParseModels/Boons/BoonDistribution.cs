@@ -17,10 +17,6 @@ namespace LuckParser.Models.ParseModels
 
     public class BoonDistribution : Dictionary<long, Dictionary<ushort, OverAndValue>>
     {
-        public BoonDistribution() : base()
-        {
-        }
-
         public long GetUptime(long boonid)
         {
             if (!ContainsKey(boonid))

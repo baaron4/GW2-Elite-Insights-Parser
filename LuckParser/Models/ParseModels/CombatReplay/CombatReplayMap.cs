@@ -4,11 +4,11 @@ namespace LuckParser.Models.ParseModels
 {
     public class CombatReplayMap
     {
-        private string _link;
-        private Tuple<int, int> _size;
-        private Tuple<int, int, int, int> _rect;
-        private Tuple<int, int, int, int> _fullRect;
-        private Tuple<int, int, int, int> _worldRect;
+        private readonly string _link;
+        private readonly Tuple<int, int> _size;
+        private readonly Tuple<int, int, int, int> _rect;
+        private readonly Tuple<int, int, int, int> _fullRect;
+        private readonly Tuple<int, int, int, int> _worldRect;
 
         public CombatReplayMap(string link, Tuple<int, int> size, Tuple<int, int, int, int> rect, Tuple<int, int, int, int> fullRect, Tuple<int, int, int, int> worldRect)
         {

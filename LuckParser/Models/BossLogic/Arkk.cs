@@ -7,7 +7,7 @@ namespace LuckParser.Models
 {
     public class Arkk : FractalLogic
     {
-        public Arkk() : base()
+        public Arkk()
         {
             MechanicList.AddRange(new List<Mechanic>
             {

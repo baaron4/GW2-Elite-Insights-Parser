@@ -7,10 +7,10 @@ namespace LuckParser.Models.ParseModels
     public class MechanicData : Dictionary<Mechanic,List<MechanicLog>>
     {
 
-        private List<HashSet<Mechanic>> _presentOnPlayerMechanics = new List<HashSet<Mechanic>>();
-        private List<HashSet<Mechanic>> _presentOnEnemyMechanics = new List<HashSet<Mechanic>>();
-        private List<HashSet<Mechanic>> _presentMechanics = new List<HashSet<Mechanic>>();
-        private List<List<AbstractMasterPlayer>> _enemyList = new List<List<AbstractMasterPlayer>>();
+        private readonly List<HashSet<Mechanic>> _presentOnPlayerMechanics = new List<HashSet<Mechanic>>();
+        private readonly List<HashSet<Mechanic>> _presentOnEnemyMechanics = new List<HashSet<Mechanic>>();
+        private readonly List<HashSet<Mechanic>> _presentMechanics = new List<HashSet<Mechanic>>();
+        private readonly List<List<AbstractMasterPlayer>> _enemyList = new List<List<AbstractMasterPlayer>>();
 
         public MechanicData(BossData bossData)
         {

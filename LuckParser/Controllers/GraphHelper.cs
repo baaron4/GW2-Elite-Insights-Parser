@@ -12,7 +12,7 @@ namespace LuckParser.Controllers
 
         public enum GraphMode { Full, S10, S30 };
 
-        public static List<Point> GetDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, ushort dstid, GraphMode mode)
+        private static List<Point> GetDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, ushort dstid, GraphMode mode)
         {
             int askedId = (phaseIndex + "_" + dstid + "_" + mode).GetHashCode();
             if (p.GetDPSGraph(askedId).Count > 0)
@@ -109,7 +109,11 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Gets the points for the boss dps graph for a given player
         /// </summary>
-        /// <param name="p">The player</param>
+        /// <param name="log"></param>
+        /// <param name="p"></param>
+        /// <param name="phaseIndex"></param>
+        /// <param name="phase"></param>
+        /// <param name="mode"></param>
         /// <returns></returns>
         public static List<Point> GetBossDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, GraphMode mode)
         {
@@ -119,7 +123,11 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Gets the points for the total dps graph for a given player
         /// </summary>
-        /// <param name="p">The player</param>
+        /// <param name="log"></param>
+        /// <param name="p"></param>
+        /// <param name="phaseIndex"></param>
+        /// <param name="phase"></param>
+        /// <param name="mode"></param>
         /// <returns></returns>
         public static List<Point> GetTotalDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, GraphMode mode)
         {
@@ -129,7 +137,11 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Gets the points for the cleave dps graph for a given player
         /// </summary>
-        /// <param name="p">The player</param>
+        /// <param name="log"></param>
+        /// <param name="p"></param>
+        /// <param name="phaseIndex"></param>
+        /// <param name="phase"></param>
+        /// <param name="mode"></param>
         /// <returns></returns>
         public static List<Point> GetCleaveDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, GraphMode mode)
         {           

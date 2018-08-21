@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class KeepConstruct : BossLogic
     {
-        public KeepConstruct() : base()
+        public KeepConstruct()
         {
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
@@ -170,7 +170,6 @@ namespace LuckParser.Models
             // Bombs
             List<CombatItem> xeraFury = GetFilteredList(log, 35103, p.GetInstid());
             int xeraFuryStart = 0;
-            int xeraFuryEnd = 0;
             foreach (CombatItem c in xeraFury)
             {
                 if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
@@ -179,7 +178,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    xeraFuryEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int xeraFuryEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)"));
                     replay.AddCircleActor(new CircleActor(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)"));
                 }

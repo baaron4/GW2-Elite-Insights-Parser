@@ -7,7 +7,7 @@ namespace LuckParser.Models
 {
     public class MursaatOverseer : BossLogic
     {
-        public MursaatOverseer() : base()
+        public MursaatOverseer()
         {
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>()

@@ -5,7 +5,7 @@ namespace LuckParser.Models
 {
     public class Artasariiv : FractalLogic
     {
-        public Artasariiv() : base()
+        public Artasariiv()
         {   
         }
 

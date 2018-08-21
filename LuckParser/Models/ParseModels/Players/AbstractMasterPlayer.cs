@@ -9,19 +9,19 @@ namespace LuckParser.Models.ParseModels
     public abstract class AbstractMasterPlayer : AbstractPlayer
     {
         // Boons
-        private List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
-        private List<Dictionary<long, long>> _boonPresence = new List<Dictionary<long, long>>();
-        private List<Dictionary<long, long>> _condiPresence = new List<Dictionary<long, long>>();
-        private Dictionary<long, BoonsGraphModel> _boonPoints = new Dictionary<long, BoonsGraphModel>();
-        private Dictionary<long, Dictionary<int, string[]>> _boonExtra = new Dictionary<long, Dictionary<int, string[]>>();
+        private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
+        private readonly List<Dictionary<long, long>> _boonPresence = new List<Dictionary<long, long>>();
+        private readonly List<Dictionary<long, long>> _condiPresence = new List<Dictionary<long, long>>();
+        private readonly Dictionary<long, BoonsGraphModel> _boonPoints = new Dictionary<long, BoonsGraphModel>();
+        private readonly Dictionary<long, Dictionary<int, string[]>> _boonExtra = new Dictionary<long, Dictionary<int, string[]>>();
         // dps graphs
-        private Dictionary<int, List<Point>> _dpsGraphs = new Dictionary<int, List<Point>>();
+        private readonly Dictionary<int, List<Point>> _dpsGraphs = new Dictionary<int, List<Point>>();
         // Minions
-        private Dictionary<string, Minions> _minions = new Dictionary<string, Minions>();
+        private readonly Dictionary<string, Minions> _minions = new Dictionary<string, Minions>();
         // Replay
-        protected CombatReplay Replay = null;
+        protected CombatReplay Replay;
 
-        public AbstractMasterPlayer(AgentItem agent) : base(agent)
+        protected AbstractMasterPlayer(AgentItem agent) : base(agent)
         {
 
         }
@@ -131,8 +131,6 @@ namespace LuckParser.Models.ParseModels
             }
             return 0;
         }
-
-        public abstract void AddMechanics(ParsedLog log);
 
         // private getters
         private BoonMap GetBoonMap(ParsedLog log, List<Boon> toTrack)
@@ -260,15 +258,15 @@ namespace LuckParser.Models.ParseModels
                 }
                 long time = c.GetTime() - log.GetBossData().GetFirstAware();
                 byte[] xy = BitConverter.GetBytes(c.GetDstAgent());
-                float X = BitConverter.ToSingle(xy, 0);
-                float Y = BitConverter.ToSingle(xy, 4);
+                float x = BitConverter.ToSingle(xy, 0);
+                float y = BitConverter.ToSingle(xy, 4);
                 if (c.IsStateChange() == ParseEnum.StateChange.Position)
                 {
-                    Replay.AddPosition(new Point3D(X, Y, c.GetValue(), time));
+                    Replay.AddPosition(new Point3D(x, y, c.GetValue(), time));
                 }
                 else
                 {
-                    Replay.AddVelocity(new Point3D(X, Y, c.GetValue(), time));
+                    Replay.AddVelocity(new Point3D(x, y, c.GetValue(), time));
                 }
             }
         }
@@ -298,7 +296,7 @@ namespace LuckParser.Models.ParseModels
                                 + damage + "<br> Effective Damage Increase: " + gain + "%";
                         string gainBossText = effectBoss.Count + " out of " + dmLogs.Count(x => x.GetDstInstidt() == log.GetBossData().GetInstid() && x.IsCondi() == 0) + " hits <br> Pure Frost Spirit Damage: "
                                 + bossDamage + "<br> Effective Damage Increase: " + gainBoss + "%";
-                        _boonExtra[boonid][i] = new string[] { gainText, gainBossText };
+                        _boonExtra[boonid][i] = new [] { gainText, gainBossText };
                     }
                     break;
                 // Kalla Elite
@@ -309,8 +307,8 @@ namespace LuckParser.Models.ParseModels
                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].GetStart(), phases[i].GetEnd());
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
                         int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.GetBossData().GetInstid()).Sum(x => x.GetDamage()), 1);
-                        int effectCount = dmLogs.Where(x => accurateUptime[(int)x.GetTime()].Y > 0 && x.IsCondi() == 0).Count();
-                        int effectBossCount = dmLogs.Where(x => accurateUptime[(int)x.GetTime()].Y > 0 && x.IsCondi() == 0 && x.GetDstInstidt() == log.GetBossData().GetInstid()).Count();
+                        int effectCount = dmLogs.Count(x => accurateUptime[(int)x.GetTime()].Y > 0 && x.IsCondi() == 0);
+                        int effectBossCount = dmLogs.Count(x => accurateUptime[(int)x.GetTime()].Y > 0 && x.IsCondi() == 0 && x.GetDstInstidt() == log.GetBossData().GetInstid());
                         int damage = (int)(effectCount * (325 + 3000 * 0.04));
                         int bossDamage = (int)(effectBossCount * (325 + 3000 * 0.04));
                         double gain = Math.Round(100.0 * ((double)(totalDamage + damage) / totalDamage - 1.0), 2);
@@ -319,7 +317,7 @@ namespace LuckParser.Models.ParseModels
                                 + damage + "<br> Estimated Damage Increase: " + gain + "%";
                         string gainBossText = effectBossCount + " out of " + dmLogs.Count(x => x.GetDstInstidt() == log.GetBossData().GetInstid() && x.IsCondi() == 0) + " hits <br> Estimated Soulcleave Damage: "
                                 + bossDamage + "<br> Estimated Damage Increase: " + gainBoss + "%";
-                        _boonExtra[boonid][i] = new string[] { gainText, gainBossText };
+                        _boonExtra[boonid][i] = new [] { gainText, gainBossText };
                     }
                     break;
                 // GoE
@@ -340,10 +338,8 @@ namespace LuckParser.Models.ParseModels
                                 + damage + "<br> Effective Damage Increase: " + gain + "%";
                         string gainBossText = effectBoss.Count + " out of " + dmLogs.Count(x => x.GetDstInstidt() == log.GetBossData().GetInstid() && x.IsCondi() == 0) + " hits <br> Pure GoE Damage: "
                                 + bossDamage + "<br> Effective Damage Increase: " + gainBoss + "%";
-                        _boonExtra[boonid][i] = new string[] { gainText, gainBossText };
+                        _boonExtra[boonid][i] = new [] { gainText, gainBossText };
                     }
-                    break;
-                default:
                     break;
             }
         }
@@ -503,7 +499,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     auxMinions[id] = new Minions(id.GetHashCode());
                 }
-                auxMinions[id].Add(new Minion(agent.GetInstid(), agent));
+                auxMinions[id].Add(new Minion(agent));
             }
             foreach (KeyValuePair<string, Minions> pair in auxMinions)
             {

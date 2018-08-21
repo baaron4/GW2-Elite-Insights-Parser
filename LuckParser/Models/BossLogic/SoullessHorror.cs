@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class SoullessHorror : BossLogic
     {
-        public SoullessHorror() : base()
+        public SoullessHorror()
         {
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>

@@ -9,10 +9,10 @@ namespace LuckParser.Models.ParseModels
  
         public struct BoonStackItem
         {
-            public long Start;
-            public long BoonDuration;
-            public ushort Src;
-            public long Overstack;
+            public readonly long Start;
+            public readonly long BoonDuration;
+            public readonly ushort Src;
+            public readonly long Overstack;
 
             public BoonStackItem(long start, long boonDuration, ushort srcinstid, long overstack)
             {
@@ -34,13 +34,13 @@ namespace LuckParser.Models.ParseModels
 
         // Fields
         protected readonly List<BoonStackItem> BoonStack;
-        protected List<BoonSimulationItem> Simulation = new List<BoonSimulationItem>();
-        protected int Capacity;
-        private ParsedLog _log;
-        private StackingLogic _logic;
+        protected readonly List<BoonSimulationItem> Simulation = new List<BoonSimulationItem>();
+        private readonly int Capacity;
+        private readonly ParsedLog _log;
+        private readonly StackingLogic _logic;
 
         // Constructor
-        public BoonSimulator(int capacity, ParsedLog log, StackingLogic logic)
+        protected BoonSimulator(int capacity, ParsedLog log, StackingLogic logic)
         {
             Capacity = capacity;
             BoonStack = new List<BoonStackItem>(capacity);
@@ -91,10 +91,9 @@ namespace LuckParser.Models.ParseModels
             BoonStack.Clear();
         }
 
-        public abstract void Update(long timePassed);
+        protected abstract void Update(long timePassed);
         
-        // Public Methods
-        public void Add(long boonDuration, ushort srcinstid, long start, long overstack)
+        private void Add(long boonDuration, ushort srcinstid, long start, long overstack)
         {
             var toAdd = new BoonStackItem(start, boonDuration, srcinstid, overstack);
             // Find empty slot

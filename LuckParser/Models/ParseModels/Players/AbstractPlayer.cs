@@ -7,20 +7,20 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractPlayer
     {
-        protected AgentItem Agent;
-        private String _character;
+        protected readonly AgentItem Agent;
+        private readonly String _character;
         // DPS
-        protected List<DamageLog> DamageLogs = new List<DamageLog>();
+        protected readonly List<DamageLog> DamageLogs = new List<DamageLog>();
         private List<DamageLog> _damageLogsFiltered = new List<DamageLog>();
         // Heal
         //protected List<DamageLog> HealingLogs = new List<DamageLog>();
         //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
         // Taken damage
-        protected List<DamageLog> DamageTakenLogs = new List<DamageLog>();
+        private readonly List<DamageLog> _damageTakenlogs = new List<DamageLog>();
         // Casts
-        protected List<CastLog> CastLogs = new List<CastLog>();
+        protected readonly List<CastLog> CastLogs = new List<CastLog>();
         // Constructor
-        public AbstractPlayer(AgentItem agent)
+        protected AbstractPlayer(AgentItem agent)
         {
             String[] name = agent.GetName().Split('\0');
             _character = name[0];
@@ -75,11 +75,11 @@ namespace LuckParser.Models.ParseModels
         }
         public List<DamageLog> GetDamageTakenLogs(ParsedLog log, long start, long end)
         {
-            if (DamageTakenLogs.Count == 0)
+            if (_damageTakenlogs.Count == 0)
             {
                 SetDamagetakenLogs(log);
             }
-            return DamageTakenLogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+            return _damageTakenlogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
         }
         /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)//isntid = 0 gets all logs if specefied sets and returns filterd logs
         {
@@ -162,11 +162,11 @@ namespace LuckParser.Models.ParseModels
             {
                 //inco,ing condi dmg not working or just not present?
                 // damagetaken.Add(c.getBuffDmg());
-                DamageTakenLogs.Add(new DamageLogCondition(time, c));
+                _damageTakenlogs.Add(new DamageLogCondition(time, c));
             }
             else if (c.IsBuff() == 0 && c.GetValue() >= 0)
             {
-                DamageTakenLogs.Add(new DamageLogPower(time, c));
+                _damageTakenlogs.Add(new DamageLogPower(time, c));
 
             }
         }

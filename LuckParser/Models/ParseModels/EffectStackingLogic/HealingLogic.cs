@@ -5,9 +5,9 @@ namespace LuckParser.Models.ParseModels
 {
     public class HealingLogic : StackingLogic
     {
-        protected struct CompareHealing
+        private struct CompareHealing
         {
-            private ParsedLog _log;
+            private readonly ParsedLog _log;
 
             public CompareHealing(ParsedLog log)
             {

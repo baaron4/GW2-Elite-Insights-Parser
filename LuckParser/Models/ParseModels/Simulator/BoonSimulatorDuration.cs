@@ -14,7 +14,7 @@ namespace LuckParser.Models.ParseModels
 
         // Public Methods
     
-        public override void Update(long timePassed)
+        protected override void Update(long timePassed)
         {
             if (BoonStack.Count > 0)
             {

@@ -12,9 +12,9 @@ namespace LuckParser.Models.ParseModels
         }
 
         private List<PhaseData> _phases = new List<PhaseData>();
-        private List<long> _phaseData = new List<long>();
-        private CombatReplayMap _map = null;
-        private List<Mob> _thrashMobs = new List<Mob>();
+        private readonly List<long> _phaseData = new List<long>();
+        private CombatReplayMap _map;
+        private readonly List<Mob> _thrashMobs = new List<Mob>();
 
         public List<PhaseData> GetPhases(ParsedLog log, bool getAllPhases)
         {
@@ -94,7 +94,7 @@ namespace LuckParser.Models.ParseModels
             Replay.SetIcon(log.GetBossData().GetBossBehavior().GetReplayIcon());
         }
 
-        public override void AddMechanics(ParsedLog log)
+        public void AddMechanics(ParsedLog log)
         {
             MechanicData mechData = log.GetMechanicData();
             BossData bossData = log.GetBossData();

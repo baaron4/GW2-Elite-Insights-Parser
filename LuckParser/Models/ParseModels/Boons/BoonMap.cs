@@ -5,15 +5,15 @@ namespace LuckParser.Models.ParseModels
     public class BoonMap : Dictionary<long, List<BoonLog>>
     {
         // Constructors
-        public BoonMap() : base()
+        public BoonMap()
         {
         }
-        public BoonMap(Boon boon): base()
+        public BoonMap(Boon boon)
         {
             this[boon.GetID()] = new List<BoonLog>();
         }
 
-        public BoonMap(List<Boon> boons) : base()
+        public BoonMap(List<Boon> boons)
         {
             foreach (Boon boon in boons)
             {

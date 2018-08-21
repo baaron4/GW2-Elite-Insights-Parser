@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
         // Boon
         public enum BoonEnum { Condition, Boon, OffensiveBuffTable, DefensiveBuffTable, GraphOnlyBuff, Food, Utility };
         public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item, Boss };
-        public enum RemoveType { CleanseFoe, CleanseFriend, Manual, None, All };
+        private enum RemoveType { CleanseFoe, CleanseFriend, Manual, None, All };
         public enum BoonType { Duration, Intensity };
         private enum Logic { Queue, HealingPower, Override };
 
@@ -59,15 +59,15 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Fields
-        private string _name;
-        private long _id;
-        private BoonEnum _nature;
-        private BoonSource _source;
-        private RemoveType _removeType;
-        private BoonType _type;
-        private int _capacity;
-        private string _link;
-        private Logic _logic;
+        private readonly string _name;
+        private readonly long _id;
+        private readonly BoonEnum _nature;
+        private readonly BoonSource _source;
+        private readonly RemoveType _removeType;
+        private readonly BoonType _type;
+        private readonly int _capacity;
+        private readonly string _link;
+        private readonly Logic _logic;
 
         private Boon(string name, int id, BoonSource source, BoonType type, int capacity, BoonEnum nature, RemoveType removeType, Logic logic, string link = "")
         {
@@ -139,7 +139,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Power Suit",12326, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Reaper of Grenth", 12366, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Charrzooka",43503, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                /// BOSS
+                // BOSS
                 new Boon("Unnatural Signet",38224, BoonSource.Boss, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Compromised",35096, BoonSource.Boss, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Spirited Fusion",31722, BoonSource.Boss, BoonType.Intensity, 500, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -147,7 +147,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Blood Shield",34518, BoonSource.Boss, BoonType.Intensity, 18, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Blood Fueled",34422, BoonSource.Boss, BoonType.Intensity, 20, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Blood Fueled",34428, BoonSource.Boss, BoonType.Intensity, 20, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                ///REVENANT
+                //REVENANT
                 //skills
                 new Boon("Crystal Hibernation", 28262, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Vengeful Hammers", 27273, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -185,7 +185,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Soothing Bastion",34136, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Kalla's Fervor",42883, BoonSource.Revenant, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
                 new Boon("Improved Kalla's Fervor",45614, BoonSource.Revenant, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
-                ///WARRIOR
+                //WARRIOR
                 //skills
                 new Boon("Riposte",14434, BoonSource.Warrior, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Flames of War", 31708, BoonSource.Warrior, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
@@ -220,7 +220,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Always Angry",34099, BoonSource.Warrior, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
                 new Boon("Full Counter",43949, BoonSource.Warrior, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Attacker's Insight",41963, BoonSource.Warrior, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
-                /// GUARDIAN
+                // GUARDIAN
                 //skills
                 new Boon("Zealot's Flame", 9103, BoonSource.Guardian, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Purging Flames",21672, BoonSource.Guardian, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/2/28/Purging_Flames.png"),
@@ -252,7 +252,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Battle Presence", 17046, BoonSource.Guardian, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/2/27/Battle_Presence.png"),
                 //new Boon("Force of Will",29485, BoonSource.Guardian, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),//not sure if intensity
                 new Boon("Quickfire",45123, BoonSource.Guardian, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                ///ENGINEER
+                //ENGINEER
                 //skills
                 new Boon("Static Shield",6055, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
                 new Boon("Absorb",6056, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
@@ -279,7 +279,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Heat Therapy",40694, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Overheat", 40397, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
                 new Boon("Thermal Vision", 51389, BoonSource.Engineer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
-                ///RANGER
+                //RANGER
                 new Boon("Celestial Avatar", 31508, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Counterattack",14509, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 //signets
@@ -328,7 +328,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Stout",40272, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Unstoppable Union",44439, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Twice as Vicious",45600, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                ///THIEF
+                //THIEF
                 //signets
                 new Boon("Signet of Malice",13049, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Assassin's Signet (Passive)",13047, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -360,7 +360,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Lotus Training", 32200, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Unhindered Combatant", 32931, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Bounding Dodger", 33162, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                ///MESMER
+                //MESMER
                 //signets
                 new Boon("Signet of the Ether", 21751, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Signet of Domination",10231, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -383,7 +383,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Compunding Power",49058, BoonSource.Mesmer, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Phantasmal Force", 44691 , BoonSource.Mesmer, BoonType.Intensity, 25, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Mirage Cloak",40408, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                ///NECROMANCER
+                //NECROMANCER
                 //forms
                 new Boon("Lich Form",10631, BoonSource.Necromancer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Death Shroud", 790, BoonSource.Necromancer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -402,7 +402,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Vampiric Aura", 30285, BoonSource.Necromancer, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/d/da/Vampiric_Presence.png"),
                 new Boon("Last Rites",29726, BoonSource.Necromancer, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/1/1a/Last_Rites_%28effect%29.png"),
                 new Boon("Sadistic Searing",43626, BoonSource.Necromancer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                ///ELEMENTALIST
+                //ELEMENTALIST
                 //signets
                 new Boon("Signet of Restoration",739, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Signet of Air",5590, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -445,7 +445,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Lesser Arcane Shield",25579, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Weaver's Prowess",42061, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
                 new Boon("Elements of Rage",42416, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
-                /// FOODS
+                // FOODS
                 new Boon("Plate of Truffle Steak",9769, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/4/4c/Plate_of_Truffle_Steak.png"),
                 new Boon("Bowl of Sweet and Spicy Butternut Squash Soup",17825, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/d/df/Bowl_of_Sweet_and_Spicy_Butternut_Squash_Soup.png"),
                 new Boon("Bowl Curry Butternut Squash Soup",9829, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/1/16/Bowl_of_Curry_Butternut_Squash_Soup.png"),
@@ -466,7 +466,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Spring Roll",26534, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/d/da/Spring_Roll.png"),
                 new Boon("Plate of Beef Rendang",49686, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/d/d0/Plate_of_Beef_Rendang.png"),
                 new Boon("Dragon's Revelry Starcake",19451, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/2/2b/Dragon%27s_Revelry_Starcake.png"),
-                /// UTILITIES 
+                // UTILITIES 
                 // 1h versions have the same ID as 30 min versions 
                 new Boon("Superior Sharpening Stone",9963, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"),
                 new Boon("Potent Superior Sharpening Stone",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"), 
@@ -654,7 +654,6 @@ namespace LuckParser.Models.ParseModels
                 case Logic.HealingPower:
                     logicToUse = new HealingLogic();
                     break;
-                case Logic.Override:
                 default:
                     logicToUse = new OverrideLogic();
                     break;

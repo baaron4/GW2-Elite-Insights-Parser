@@ -7,15 +7,10 @@ namespace LuckParser.Models.ParseModels
     public class AgentData
     {
         // Fields
-        private List<AgentItem> _playerAgentList = new List<AgentItem>();
-        private List<AgentItem> _npcAgentLits = new List<AgentItem>();
-        private List<AgentItem> _gadgetAgentList = new List<AgentItem>();
-        private List<AgentItem> _allAgentList = new List<AgentItem>();
-
-        // Constructors
-        public AgentData()
-        {
-        }
+        private readonly List<AgentItem> _playerAgentList = new List<AgentItem>();
+        private readonly List<AgentItem> _npcAgentLits = new List<AgentItem>();
+        private readonly List<AgentItem> _gadgetAgentList = new List<AgentItem>();
+        private readonly List<AgentItem> _allAgentList = new List<AgentItem>();
 
         // Public Methods
         public void AddItem(AgentItem item, string prof)
@@ -81,9 +76,9 @@ namespace LuckParser.Models.ParseModels
 
         public void Clean()
         {
-            _gadgetAgentList = _gadgetAgentList.Where(x => x.GetInstid() != 0 && x.GetLastAware() - x.GetFirstAware() >= 0 && x.GetFirstAware() != 0 && x.GetLastAware() != long.MaxValue).ToList();
-            _npcAgentLits = _npcAgentLits.Where(x => x.GetInstid() != 0 && x.GetLastAware() - x.GetFirstAware() >= 0 && x.GetFirstAware() != 0 && x.GetLastAware() != long.MaxValue).ToList();
-            _allAgentList = _allAgentList.Where(x => x.GetInstid() != 0 && x.GetLastAware() - x.GetFirstAware() >= 0 && x.GetFirstAware() != 0 && x.GetLastAware() != long.MaxValue).ToList();
+            _gadgetAgentList.RemoveAll(x => !(x.GetInstid() != 0 && x.GetLastAware() - x.GetFirstAware() >= 0 && x.GetFirstAware() != 0 && x.GetLastAware() != long.MaxValue));
+            _npcAgentLits.RemoveAll(x => !(x.GetInstid() != 0 && x.GetLastAware() - x.GetFirstAware() >= 0 && x.GetFirstAware() != 0 && x.GetLastAware() != long.MaxValue));
+            _allAgentList.RemoveAll(x => !(x.GetInstid() != 0 && x.GetLastAware() - x.GetFirstAware() >= 0 && x.GetFirstAware() != 0 && x.GetLastAware() != long.MaxValue));
         }
 
         public void CleanInstid(ushort instid)

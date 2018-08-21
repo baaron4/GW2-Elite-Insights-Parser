@@ -6,28 +6,28 @@ namespace LuckParser.Models.ParseModels
     {
 
         // Fields
-        private long _time;
+        private readonly long _time;
         private ulong _srcAgent;
         private ulong _dstAgent;
-        private int _value;
-        private int _buffDmg;
-        private uint _overstackValue;
-        private long _skillId;
+        private readonly int _value;
+        private readonly int _buffDmg;
+        private readonly uint _overstackValue;
+        private readonly long _skillId;
         private ushort _srcInstid;
         private ushort _dstInstid;
-        private ushort _srcMasterInstid;
-        private ushort _dstMasterInstid;
-        private ParseEnum.IFF _iff;
-        private ushort _isBuff;
-        private ParseEnum.Result _result;
-        private ParseEnum.Activation _isActivation;
-        private ParseEnum.BuffRemove _isBuffRemove;
-        private ushort _isNinety;
-        private ushort _isFifty;
-        private ushort _isMoving;
-        private ParseEnum.StateChange _isStateChange;
-        private ushort _isFlanking;
-        private ushort _isShields;
+        private readonly ushort _srcMasterInstid;
+        private readonly ushort _dstMasterInstid;
+        private readonly ParseEnum.IFF _iff;
+        private readonly ushort _isBuff;
+        private readonly ParseEnum.Result _result;
+        private readonly ParseEnum.Activation _isActivation;
+        private readonly ParseEnum.BuffRemove _isBuffRemove;
+        private readonly ushort _isNinety;
+        private readonly ushort _isFifty;
+        private readonly ushort _isMoving;
+        private readonly ParseEnum.StateChange _isStateChange;
+        private readonly ushort _isFlanking;
+        private readonly ushort _isShields;
         // Constructor        
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
                long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid, ushort dstMasterInstid, ParseEnum.IFF iff, ushort isBuff, ParseEnum.Result result,

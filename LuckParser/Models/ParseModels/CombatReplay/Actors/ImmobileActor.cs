@@ -4,9 +4,9 @@ namespace LuckParser.Models.ParseModels
 {
     public class ImmobileActor : Mobility
     {
-        private Point3D _position;
+        private readonly Point3D _position;
 
-        public ImmobileActor(Point3D position) : base()
+        public ImmobileActor(Point3D position)
         {
             _position = position;
         }

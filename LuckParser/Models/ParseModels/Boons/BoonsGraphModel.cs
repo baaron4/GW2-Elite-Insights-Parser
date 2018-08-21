@@ -5,8 +5,8 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonsGraphModel
     {
-        private string _boonName = null;
-        private List<Point> _boonChart = new List<Point>();
+        private readonly string _boonName;
+        private readonly List<Point> _boonChart = new List<Point>();
 
         // Constructor
         public BoonsGraphModel(string boonName)

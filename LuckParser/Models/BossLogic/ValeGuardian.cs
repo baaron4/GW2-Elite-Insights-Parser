@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class ValeGuardian : BossLogic
     {
-        public ValeGuardian() : base()
+        public ValeGuardian()
         {
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
@@ -71,7 +71,7 @@ namespace LuckParser.Models
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
-            string[] namesVG = new string[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
+            string[] namesVG = new [] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -88,7 +88,6 @@ namespace LuckParser.Models
                     foreach (AgentItem a in guardians)
                     {
                         long agentStart = a.GetFirstAware() - log.GetBossData().GetFirstAware();
-                        long agentEnd = a.GetLastAware() - log.GetBossData().GetFirstAware();
                         if (phase.InInterval(agentStart))
                         {
                             phase.AddRedirection(a);

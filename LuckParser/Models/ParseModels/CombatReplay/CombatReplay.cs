@@ -8,8 +8,8 @@ namespace LuckParser.Models.ParseModels
     {
         private List<Point3D> _positions = new List<Point3D>();
         private List<Point3D> _velocities = new List<Point3D>();
-        private long _start = 0;
-        private long _end = 0;
+        private long _start;
+        private long _end;
         // icon
         private string _icon;
         //status
@@ -21,15 +21,10 @@ namespace LuckParser.Models.ParseModels
         private List<int> _dps10s = new List<int>();
         private List<int> _dps30s = new List<int>();
         // boons
-        private Dictionary<long, List<int>> _boons = new Dictionary<long, List<int>>();
+        private readonly Dictionary<long, List<int>> _boons = new Dictionary<long, List<int>>();
         // actors
-        private List<CircleActor> _circleActors = new List<CircleActor>();
-        private List<DoughnutActor> _doughnutActors = new List<DoughnutActor>();
-
-        public CombatReplay()
-        {
-
-        }
+        private readonly List<CircleActor> _circleActors = new List<CircleActor>();
+        private readonly List<DoughnutActor> _doughnutActors = new List<DoughnutActor>();
 
         public void SetIcon(string icon)
         {

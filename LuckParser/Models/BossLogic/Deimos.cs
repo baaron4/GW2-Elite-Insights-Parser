@@ -8,21 +8,21 @@ namespace LuckParser.Models
 {
     public class Deimos : BossLogic
     {
-        public Deimos() : base()
+        public Deimos()
         {
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
                 new Mechanic(37716, "Rapid Decay", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'circle',color:'rgb(0,0,0)',", "Black Oil",0),
             //new Mechanic(37844, "Off Balance", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'cross',color:'rgb(255,0,255)',", "Failed Teleport Break",0), Cast by the drunkard Saul, would be logical to be the forced random teleport but not sure when it's successful or not
-            new Mechanic(37846, "Off Balance", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Deimos, "symbol:'cross',color:'rgb(255,0,255)',", "Drunkard Teleport",0, delegate(long value){ return value >= 2200; }),
-            new Mechanic(38272, "Boon Thief", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Deimos, "symbol:'x',color:'rgb(255,0,255)',", "Boon Thief",0, delegate(long value){ return value >= 4400; }),
+            new Mechanic(37846, "Off Balance", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Deimos, "symbol:'cross',color:'rgb(255,0,255)',", "Drunkard Teleport",0, (value => value >= 2200)),
+            new Mechanic(38272, "Boon Thief", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Deimos, "symbol:'x',color:'rgb(255,0,255)',", "Boon Thief",0, (value => value >= 4400)),
             new Mechanic(38208, "Annihilate", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'hexagon',color:'rgb(255,200,0)',", "Boss Smash",0),
             new Mechanic(37929, "Annihilate", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'hexagon',color:'rgb(255,200,0)',", "Chain Smash",0),
             new Mechanic(37980, "Demonic Shock Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'circle',color:'rgb(255,0,0)',", "10% Smash",0),
             new Mechanic(37982, "Demonic Shock Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'circle',color:'rgb(255,0,0)',", "10% Smash",0),
             new Mechanic(37733, "Tear Instability", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'diamond',color:'rgb(0,128,0)',", "Tear",0),
-            new Mechanic(37613, "Mind Crush", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'square',color:'rgb(0,0,255)',", "Mind Crush",0,delegate(long value){return value > 0;}),
+            new Mechanic(37613, "Mind Crush", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'square',color:'rgb(0,0,255)',", "Mind Crush",0,(value => value > 0)),
             new Mechanic(38187, "Weak Minded", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'square-open',color:'rgb(200,140,255)',", "Weak Minded",0), //
             new Mechanic(37730, "Chosen by Eye of Janthir", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'circle',color:'rgb(0,255,0)',", "Chosen",0),
             new Mechanic(38169, "Teleported", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'circle-open',color:'rgb(0,128,0)',", "Teleported",0),
@@ -86,7 +86,7 @@ namespace LuckParser.Models
                 teleport = log.GetCombatList().FirstOrDefault(x => x.GetSkillID() == 38169 && x.GetTime() - log.GetBossData().GetFirstAware() > end + 10000);
             }
 
-            string[] namesDeiSplit = new string[] { "Thief", "Gambler", "Drunkard" };
+            string[] namesDeiSplit = new [] { "Thief", "Gambler", "Drunkard" };
             for (int i = offsetDei; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
@@ -102,7 +102,6 @@ namespace LuckParser.Models
                 foreach (AgentItem a in clones)
                 {
                     long agentStart = a.GetFirstAware() - log.GetBossData().GetFirstAware();
-                    long agentEnd = a.GetLastAware() - log.GetBossData().GetFirstAware();
                     if (phase.InInterval(agentStart))
                     {
                         phase.AddRedirection(a);
@@ -147,7 +146,6 @@ namespace LuckParser.Models
             // teleport zone
             List<CombatItem> tpDeimos = GetFilteredList(log, 37730, p.GetInstid());
             int tpStart = 0;
-            int tpEnd = 0;
             foreach (CombatItem c in tpDeimos)
             {
                 if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
@@ -156,7 +154,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    tpEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int tpEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
                     replay.AddCircleActor(new CircleActor(true, tpEnd, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
                 }

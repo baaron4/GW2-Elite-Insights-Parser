@@ -8,12 +8,12 @@ namespace LuckParser.Models.ParseModels
     public class BossData
     {
         // Fields
-        private ulong _agent = 0;
-        private ushort _instid = 0;
-        private BossLogic _logic;
-        private long _firstAware = 0;
+        private ulong _agent;
+        private ushort _instid ;
+        private readonly BossLogic _logic;
+        private long _firstAware;
         private long _lastAware = long.MaxValue;
-        private ushort _id;
+        private readonly ushort _id;
         private string _name = "UNKNOWN";
         private int _health = -1;
         private int _toughness = -1;
@@ -99,11 +99,11 @@ namespace LuckParser.Models.ParseModels
         public String[] ToStringArray()
         {
             String[] array = new String[7];
-            array[0] = string.Format("{0:X}", _agent); ;
-            array[1] =_instid.ToString();
+            array[0] = _agent.ToString();
+            array[1] = _instid.ToString();
             array[2] = _firstAware.ToString();
             array[3] = _lastAware.ToString();
-            array[4] =_id.ToString();
+            array[4] = _id.ToString();
             array[5] = _name;
             array[6] = _health.ToString();
             return array;

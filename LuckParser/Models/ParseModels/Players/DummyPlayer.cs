@@ -12,7 +12,7 @@ namespace LuckParser.Models.ParseModels
 
         }
 
-        public override void AddMechanics(ParsedLog log)
+        public void AddMechanics(ParsedLog log)
         {
             throw new NotImplementedException();
         }

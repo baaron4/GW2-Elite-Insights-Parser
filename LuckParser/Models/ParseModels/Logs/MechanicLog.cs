@@ -3,9 +3,9 @@
     public class MechanicLog
     {
         // Fields
-        private long _time;
-        private Mechanic _mechanic;
-        private AbstractMasterPlayer _player;
+        private readonly long _time;
+        private readonly Mechanic _mechanic;
+        private readonly AbstractMasterPlayer _player;
 
         public MechanicLog(long time, Mechanic mechanic,
         AbstractMasterPlayer player)

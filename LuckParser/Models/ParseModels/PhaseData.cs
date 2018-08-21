@@ -6,9 +6,9 @@ namespace LuckParser.Models.ParseModels
     public class PhaseData
     {
         private long _start;
-        private long _end;
+        private readonly long _end;
         private string _name;
-        private List<AgentItem> _redirection = new List<AgentItem>();
+        private readonly List<AgentItem> _redirection = new List<AgentItem>();
 
         public PhaseData(long start, long end)
         {
@@ -44,7 +44,6 @@ namespace LuckParser.Models.ParseModels
                     return (_end - _start) / 60000;
                 case "s":
                     return (_end - _start) / 1000;
-                case "ms":
                 default:
                     return (_end - _start);
             }
