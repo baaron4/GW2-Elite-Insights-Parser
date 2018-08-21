@@ -1,5 +1,4 @@
-﻿using LuckParser.Models;
-using LuckParser.Models.ParseModels;
+﻿using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -27,7 +26,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                skillName = skill.Name;
+                skillName = skill.name;
             }
             float dur = 0.0f;
             if (skillName == "Dodge")
@@ -80,7 +79,7 @@ namespace LuckParser.Controllers
                        "type: 'bar',");
                 if (skill != null)
                 {
-                    if (skill.Slot == "Weapon_1")
+                    if (skill.slot == "Weapon_1")
                     {
                         sw.Write("width:'0.5',");
                     }
@@ -146,9 +145,9 @@ namespace LuckParser.Controllers
             if (skill != null && cl.GetID() != -2)
             {
                 float offset = (cl.GetTime() - start) / 1000f;
-                if (skill.Slot != "Weapon_1")
+                if (skill.slot != "Weapon_1")
                 {
-                    skillIcon = skill.Icon;
+                    skillIcon = skill.icon;
                     sw.Write("{" +
                                  "source: '" + skillIcon + "'," +
                                  "xref: 'x'," +
@@ -380,7 +379,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().Icon + "\" alt=\"" + skill.GetName() + "\" title=\"" + skill.GetID() + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
+                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.GetName() + "\" title=\"" + skill.GetID() + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
                     sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
                     sw.Write("<td>" + totaldamage + "</td>");
                     sw.Write("<td>" + mindamage + "</td>");
@@ -422,7 +421,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().Icon + "\" alt=\"" + skill.GetName() + "\" title=\"" + skill.GetID() + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
+                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.GetName() + "\" title=\"" + skill.GetID() + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");

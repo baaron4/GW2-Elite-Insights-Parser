@@ -2,26 +2,26 @@
 {
     public class GW2APIfacts
     {
-        public string Text { get; set; }
-        public string Icon { get; set; }
-        public string Type { get; set; }
+        public string text { get; set; }
+        public string icon { get; set; }
+        public string type { get; set; }
 
-        public string Target { get; set; }
+        public string target { get; set; }
         //Buff
-        public string Status { get; set; }
-        public string Description { get; set; }
-        public int ApplyCount { get; set; }
-        public int Duration { get; set; }
+        public string status { get; set; }
+        public string description { get; set; }
+        public int apply_count { get; set; }
+        public int duration { get; set; }
         //ComboField
-        public string FieldType { get; set; }
+        public string field_type { get; set; }
         //ComboFinisher
-        public string FinisherType { get; set; }
-        public float Percent { get; set; }
+        public string finisher_type { get; set; }
+        public float percent { get; set; }
         //Damage
-        public int HitCount { get; set; }
-        public float DmgMultipler { get; set; }
+        public int hit_count { get; set; }
+        public float dmg_multipler { get; set; }
         //Distance
-        public int Distance { get; set; }
+        public int distance { get; set; }
         //Duration
         //public int duration { get; set; }
         //Heal
@@ -33,7 +33,7 @@
         //Percent
         //percent
         //PrefixedBuff
-        public GW2APIfacts Prefix { get; set; }
+        public GW2APIfacts prefix { get; set; }
 
         public GW2APIfacts() { }
     }

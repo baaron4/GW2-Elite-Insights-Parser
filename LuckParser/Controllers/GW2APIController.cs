@@ -41,12 +41,12 @@ namespace LuckParser.Controllers
                 {
                     int stop = 0;
                 }*/
-                if (skillCheck.Facts != null)
+                if (skillCheck.facts != null)
                 {
                     bool block = true;
-                    foreach (GW2APIfacts fact in skillCheck.Facts)
+                    foreach (GW2APIfacts fact in skillCheck.facts)
                     {
-                        if (fact.Type == "Unblockable" || fact.Type == "StunBreak")//Unblockable changeing value from an int to a bool has caused so much chaos
+                        if (fact.type == "Unblockable" || fact.type == "StunBreak")//Unblockable changeing value from an int to a bool has caused so much chaos
                         {
                             skill = skillCheck;
                             block = false;
@@ -77,12 +77,12 @@ namespace LuckParser.Controllers
                 {
                     //skill = response.Content.ReadAsAsync<GW2APISkill>().Result;
                     GW2APISkillCheck skillCheck = response.Content.ReadAsAsync<GW2APISkillCheck>().Result;
-                    if (skillCheck.Facts != null)
+                    if (skillCheck.facts != null)
                     {
                         bool block = true;
-                        foreach (GW2APIfacts fact in skillCheck.Facts)
+                        foreach (GW2APIfacts fact in skillCheck.facts)
                         {
-                            if (fact.Type == "Unblockable" || fact.Type == "StunBreak")//Unblockable changeing value from an int to a bool has caused so much chaos
+                            if (fact.type == "Unblockable" || fact.type == "StunBreak")//Unblockable changeing value from an int to a bool has caused so much chaos
                             {
                                 skill = skillCheck;
                                 block = false;
@@ -200,7 +200,7 @@ namespace LuckParser.Controllers
 
                 foreach (int id in idArray)
                 {
-                    if (_listOfSkills.Items.FirstOrDefault(x => x.Id == id) == null)
+                    if (_listOfSkills.Items.FirstOrDefault(x => x.id == id) == null)
                     {
                         GW2APISkill curSkill = new GW2APISkill();
                         curSkill = GetGW2APISKill("/v2/skills/" + id);
@@ -272,7 +272,7 @@ namespace LuckParser.Controllers
 
         public GW2APISkill GetSkill(int id)
         {
-            GW2APISkill skill = GetSkillList().Items.FirstOrDefault(x => x.Id == id);
+            GW2APISkill skill = GetSkillList().Items.FirstOrDefault(x => x.id == id);
             //if (skill == null) {
             //    string path = "/v2/skills/" + id;
             //    skill = GetGW2APISKill(path);
@@ -403,7 +403,7 @@ namespace LuckParser.Controllers
 
         public GW2APISpec GetSpec(int id)
         {
-            GW2APISpec spec = GetSpecList().Items.FirstOrDefault(x => x.Id == id);
+            GW2APISpec spec = GetSpecList().Items.FirstOrDefault(x => x.id == id);
             
             return spec;
         }

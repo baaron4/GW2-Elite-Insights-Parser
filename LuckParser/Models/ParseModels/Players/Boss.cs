@@ -1,6 +1,4 @@
-﻿using LuckParser.Controllers;
-using LuckParser.Models.DataModels;
-using System;
+﻿using LuckParser.Models.DataModels;
 using System.Collections.Generic;
 using System.Linq;
 

@@ -1,7 +1,6 @@
 ﻿using LuckParser.Models.DataModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {

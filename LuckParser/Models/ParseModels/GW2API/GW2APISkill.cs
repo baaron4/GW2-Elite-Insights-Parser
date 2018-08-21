@@ -2,16 +2,16 @@
 {
     public class GW2APISkill
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Icon { get; set; }
-        public string ChatLink { get; set; }
-        public string Type { get; set; }
-        public string Weapon_type { get; set; }
-        public string[] Professions { get; set; }
-        public string Slot { get; set; }
-        public string[] Categories { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
+        public string icon { get; set; }
+        public string chat_link { get; set; }
+        public string type { get; set; }
+        public string weapon_type { get; set; }
+        public string[] professions { get; set; }
+        public string slot { get; set; }
+        public string[] categories { get; set; }
         //public string[]  facts { get; set; }
 
         // public string attunment { get; set; }
@@ -24,9 +24,9 @@
 
 
         //public int toolbelt_skill { get; set; }
-       
+
 
         public GW2APISkill() { }
     }
-   
+
 }

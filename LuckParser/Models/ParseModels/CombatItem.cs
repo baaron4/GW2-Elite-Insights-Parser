@@ -1,5 +1,4 @@
-﻿using System;
-using LuckParser.Models.DataModels;
+﻿using LuckParser.Models.DataModels;
 
 namespace LuckParser.Models.ParseModels
 {

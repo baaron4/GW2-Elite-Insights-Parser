@@ -36,7 +36,7 @@ namespace LuckParser.Models.ParseModels
 
                 if (skillAPI != null) {
                     _apiSkill = skillAPI;
-                    _name = skillAPI.Name;
+                    _name = skillAPI.name;
                 }
                 
             }
@@ -72,11 +72,11 @@ namespace LuckParser.Models.ParseModels
                 GW2APIfacts[] factsList;
                 if (apiskilldet != null)
                 {
-                    factsList = apiskilldet.Facts;
+                    factsList = apiskilldet.facts;
                 }
                 else
                 {
-                    factsList = apiskillchec.Facts;
+                    factsList = apiskillchec.facts;
                 }
                 bool daze = false;
                 bool stun = false;
@@ -90,15 +90,15 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (daze == false)
                     {
-                        if (fact.Text == "Daze" || fact.Status == "Daze")
+                        if (fact.text == "Daze" || fact.status == "Daze")
                         {
-                            if (fact.Duration < 1)
+                            if (fact.duration < 1)
                             {
                                 cc += 100;
                             }
                             else
                             {
-                                cc += fact.Duration * 100;
+                                cc += fact.duration * 100;
                             }
                             daze = true;
                         }
@@ -106,37 +106,37 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (stun == false)
                     {
-                        if (fact.Text == "Stun" || fact.Status == "Stun")
+                        if (fact.text == "Stun" || fact.status == "Stun")
                         {
-                            if (fact.Duration < 1)
+                            if (fact.duration < 1)
                             {
                                 cc += 100;
                             }
                             else
                             {
-                                cc += fact.Duration * 100;
+                                cc += fact.duration * 100;
                             }
                             stun = true;
                         }
                     }
                     if (knockdown == false)
                     {
-                        if (fact.Text == "Knockdown" || fact.Status == "Knockdown")
+                        if (fact.text == "Knockdown" || fact.status == "Knockdown")
                         {
-                            if (fact.Duration < 1)
+                            if (fact.duration < 1)
                             {
                                 cc += 100;
                             }
                             else
                             {
-                                cc += fact.Duration * 100;
+                                cc += fact.duration * 100;
                             }
                             knockdown = true;
                         }
                     }
                     if (launch == false)
                     {
-                        if (fact.Text == "Launch" || fact.Status == "Launch")
+                        if (fact.text == "Launch" || fact.status == "Launch")
                         {
                             
                                 cc += 232;//Wiki says either 232 or 332 based on duration? launch doesnt provide duration in api however
@@ -146,7 +146,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (knockback == false)
                     {
-                        if (fact.Text == "Knockback" || fact.Status == "Knockback")
+                        if (fact.text == "Knockback" || fact.status == "Knockback")
                         {
 
                             cc += 150;//always 150 unless special case of 232 for ranger pet?
@@ -155,7 +155,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (pull == false)
                     {
-                        if (fact.Text == "Pull" || fact.Status == "Pull")
+                        if (fact.text == "Pull" || fact.status == "Pull")
                         {
 
                             cc += 150;
@@ -165,28 +165,28 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (flaot == false)
                     {
-                        if (fact.Text == "Float" || fact.Status == "Float")
+                        if (fact.text == "Float" || fact.status == "Float")
                         {
-                            if (fact.Duration < 1)
+                            if (fact.duration < 1)
                             {
                                 cc += 100;
                             }
                             else
                             {
-                                cc += fact.Duration * 100;
+                                cc += fact.duration * 100;
                             }
                             flaot = true;
                         }
                     }
-                    if (fact.Text == "Stone Duration" || fact.Status == "Stone Duration")
+                    if (fact.text == "Stone Duration" || fact.status == "Stone Duration")
                     {
-                        if (fact.Duration < 1)
+                        if (fact.duration < 1)
                         {
                             cc += 100;
                         }
                         else
                         {
-                            cc += fact.Duration * 100;
+                            cc += fact.duration * 100;
                         }
                         
                     }

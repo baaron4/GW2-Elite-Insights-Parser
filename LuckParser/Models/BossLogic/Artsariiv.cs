@@ -1,11 +1,5 @@
-﻿using LuckParser.Controllers;
-using LuckParser.Models.DataModels;
-using LuckParser.Models.ParseModels;
+﻿using LuckParser.Models.ParseModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {

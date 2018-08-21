@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LuckParser.Models.ParseModels
+﻿namespace LuckParser.Models.ParseModels
 {
     public class Point3D
     {
