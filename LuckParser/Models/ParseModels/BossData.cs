@@ -77,7 +77,7 @@ namespace LuckParser.Models.ParseModels
                     _logic = new Skorvald();
                     break;
                 case ParseEnum.BossIDS.Artsariiv:
-                    _logic = new Artasariiv();
+                    _logic = new Artsariiv();
                     break;
                 case ParseEnum.BossIDS.Arkk:
                     _logic = new Arkk();
