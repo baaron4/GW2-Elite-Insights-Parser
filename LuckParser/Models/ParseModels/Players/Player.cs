@@ -251,7 +251,7 @@ namespace LuckParser.Models.ParseModels
             long fight_duration = log.getBossData().getLastAware() - time_start;
             foreach (CombatItem c in log.getBoonData())
             {
-                if ( (c.isBuff() != 18 && c.isBuff() != 1) || agent.getInstid() != c.getDstInstid())
+                if ( c.isBuffremove() != ParseEnum.BuffRemove.None || (c.isBuff() != 18 && c.isBuff() != 1) || agent.getInstid() != c.getDstInstid())
                 {
                     continue;
                 }

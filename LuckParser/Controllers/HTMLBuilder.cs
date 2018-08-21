@@ -2582,7 +2582,7 @@ namespace LuckParser.Controllers
                             totaldamage += curdmg;
                             if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                             if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                            if (curdmg != 0) { hits++; };
+                            if (curdmg >= 0) { hits++; };
                             ParseEnum.Result result = dl.getResult();
                             if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
                             if (dl.isFlanking() == 1) { flank++; }
@@ -2591,7 +2591,7 @@ namespace LuckParser.Controllers
 
                         if (skill != null)
                         {
-                            if (totaldamage > 0 && skill.GetGW2APISkill() != null)
+                            if (skill.GetGW2APISkill() != null)
                             {
                                 sw.Write("<tr>");
                                 {
@@ -2608,7 +2608,7 @@ namespace LuckParser.Controllers
                                 }
                                 sw.Write("</tr>");
                             }
-                            else if (totaldamage > 0)
+                            else
                             {
                                 sw.Write("<tr>");
                                 {
