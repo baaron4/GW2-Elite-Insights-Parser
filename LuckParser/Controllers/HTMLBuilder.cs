@@ -116,7 +116,7 @@ namespace LuckParser.Controllers
                 List<ushort> playersIds = log.getPlayerList().Select(x => x.getInstid()).ToList();
                 foreach (Mechanic mech in presMech)
                 {
-                    List<MechanicLog> filterdList = log.getMechanicData()[mech];
+                    List<MechanicLog> filterdList = log.getMechanicData()[mech].Where(x => phase.inInterval(x.GetTime())).ToList();
                     sw.Write("{");
                     sw.Write("y: [");
 
