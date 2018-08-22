@@ -26,7 +26,7 @@ namespace LuckParser.Models.ParseModels
             public BoonStackItem(BoonStackItem other, long start_shift, long duration_shift)
             {
                 this.start = Math.Max(other.start + start_shift, 0);
-                this.boon_duration = other.boon_duration + duration_shift;
+                this.boon_duration = other.boon_duration - duration_shift;
                 // if duration shift > 0 this means the boon ticked, aka already in simulation, we remove the overstack
                 this.overstack = duration_shift > 0 ? 0 : other.overstack;
                 this.src = other.src;

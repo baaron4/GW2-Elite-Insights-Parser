@@ -28,7 +28,7 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
                 simulation.Add(toAdd);
-                boon_stack[0] = new BoonStackItem(boon_stack[0], time_passed, -time_passed);
+                boon_stack[0] = new BoonStackItem(boon_stack[0], time_passed, time_passed);
                 long diff = time_passed - Math.Abs(Math.Min(boon_stack[0].boon_duration, 0));
                 for (int i = 1; i < boon_stack.Count; i++)
                 {

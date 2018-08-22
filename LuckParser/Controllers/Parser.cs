@@ -24,7 +24,6 @@ namespace LuckParser.Controllers
         private AgentData agent_data = new AgentData();
         private SkillData skill_data = new SkillData();
         private CombatData combat_data = new CombatData();
-        private MechanicData mech_data = new MechanicData();
         private List<Player> p_list = new List<Player>();
         private Boss boss;
         private byte revision;
@@ -41,7 +40,7 @@ namespace LuckParser.Controllers
 
         public ParsedLog GetParsedLog()
         {
-            return new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, mech_data, p_list, boss);
+            return new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, p_list, boss);
         }
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
@@ -243,7 +242,7 @@ namespace LuckParser.Controllers
                     var skill = new SkillItem(skill_id, name);
 
                     skill.SetGW2APISkill(apiController);
-                    skill_data.addItem(skill);
+                    skill_data.Add(skill);
                 }
             }
         }
@@ -415,10 +414,10 @@ namespace LuckParser.Controllers
                 {
                     if(!TryRead(stream, data)) break;
                     ms.Seek(0, SeekOrigin.Begin);
-                    combat_data.addItem( revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader));
+                    combat_data.Add( revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader));
                 }
             }
-            combat_data.getCombatList().RemoveAll(x => x.getSrcInstid() == 0 && x.getDstAgent() == 0 && x.getSrcAgent() == 0 && x.getDstInstid() == 0 && x.getIFF() == ParseEnum.IFF.Unknown);
+            combat_data.RemoveAll(x => x.getSrcInstid() == 0 && x.getDstAgent() == 0 && x.getSrcAgent() == 0 && x.getDstInstid() == 0 && x.getIFF() == ParseEnum.IFF.Unknown);
         }
         
         private static bool isGolem(ushort id)
@@ -436,8 +435,7 @@ namespace LuckParser.Controllers
             bool raid_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Raid;
             bool fractal_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Fractal;
             // Set Agent instid, first_aware and last_aware
-            var combat_list = combat_data.getCombatList();
-            foreach (CombatItem c in combat_list)
+            foreach (CombatItem c in combat_data)
             {
                 if(agentsLookup.TryGetValue(c.getSrcAgent(), out var a))
                 {
@@ -460,7 +458,7 @@ namespace LuckParser.Controllers
                 }
             }
 
-            foreach (CombatItem c in combat_list)
+            foreach (CombatItem c in combat_data)
             {
                 if (c.getSrcMasterInstid() != 0)
                 {
@@ -505,7 +503,7 @@ namespace LuckParser.Controllers
             if (golem_mode)
             {
                 AgentItem otherGolem = NPC_list.Find(x => x.getID() == 19603);
-                foreach (CombatItem c in combat_list)
+                foreach (CombatItem c in combat_data)
                 {
                     // redirect all attacks to the main golem
                     if (c.getDstAgent() == 0 && c.getDstInstid() == 0 && c.isStateChange() == ParseEnum.StateChange.Normal && c.getIFF() == ParseEnum.IFF.Foe && c.isActivation() == ParseEnum.Activation.None)
@@ -522,7 +520,7 @@ namespace LuckParser.Controllers
 
             }
             // Grab values threw combat data
-            foreach (CombatItem c in combat_list)
+            foreach (CombatItem c in combat_data)
             {
                 if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate)//max health update
                 {
@@ -572,7 +570,7 @@ namespace LuckParser.Controllers
                         boss_data.setHealth(24085950);
                         boss.addPhaseData(NPC.getFirstAware());
                         boss_data.setLastAware(NPC.getLastAware());
-                        foreach (CombatItem c in combat_list)
+                        foreach (CombatItem c in combat_data)
                         {
                             if (c.getSrcInstid() == xera_2_instid)
                             {
@@ -607,7 +605,7 @@ namespace LuckParser.Controllers
                     boss.addPhaseData(NPC.getFirstAware() >= oldAware ? NPC.getFirstAware() : oldAware);
                     //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos_2_instid ).ToList().Sum(x);
                     //int stop = 0;
-                    foreach (CombatItem c in combat_list)
+                    foreach (CombatItem c in combat_data)
                     {
                         if (c.getTime() > oldAware)
                         {
@@ -636,14 +634,14 @@ namespace LuckParser.Controllers
                 {
                     13
                 };
-                CombatItem reward = combat_list.Find(x => x.isStateChange() == ParseEnum.StateChange.Reward && !notRaidRewardsIds.Contains(x.getValue()));
+                CombatItem reward = combat_data.Find(x => x.isStateChange() == ParseEnum.StateChange.Reward && !notRaidRewardsIds.Contains(x.getValue()));
                 if (reward != null)
                 {
                     log_data.setBossKill(true);
                     boss_data.setLastAware(reward.getTime());
                 }
             } else if (fractal_mode) {
-                CombatItem reward = combat_list.Find(x => x.isStateChange() == ParseEnum.StateChange.Reward);
+                CombatItem reward = combat_data.Find(x => x.isStateChange() == ParseEnum.StateChange.Reward);
                 if (reward != null)
                 {
                     log_data.setBossKill(true);
@@ -651,7 +649,7 @@ namespace LuckParser.Controllers
                 } else
                 {
                     // for skorvald, as CM and normal ids are the same
-                    CombatItem killed = combat_list.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange().IsDead());
+                    CombatItem killed = combat_data.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange().IsDead());
                     if (killed != null)
                     {
                         log_data.setBossKill(true);
@@ -660,7 +658,7 @@ namespace LuckParser.Controllers
                 }
             } else
             {
-                CombatItem killed = combat_list.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange().IsDead());
+                CombatItem killed = combat_data.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange().IsDead());
                 if (killed != null)
                 {
                     log_data.setBossKill(true);
@@ -671,6 +669,7 @@ namespace LuckParser.Controllers
             if (golem_mode && bossHealthOverTime.Count > 0)
             {
                 log_data.setBossKill(bossHealthOverTime.Last().Y < 200);
+                boss_data.setLastAware(bossHealthOverTime.Last().X + boss_data.getFirstAware());
             }
             //players
             if (p_list.Count == 0)
@@ -683,10 +682,10 @@ namespace LuckParser.Controllers
                 {
                     if (playerAgent.getInstid() == 0)
                     {
-                        CombatItem tst = combat_list.Find(x => x.getSrcAgent() == playerAgent.getAgent());
+                        CombatItem tst = combat_data.Find(x => x.getSrcAgent() == playerAgent.getAgent());
                         if (tst == null)
                         {
-                            tst = combat_list.Find(x => x.getDstAgent() == playerAgent.getAgent());
+                            tst = combat_data.Find(x => x.getDstAgent() == playerAgent.getAgent());
                             if (tst == null)
                             {
                                 playerAgent.setInstid(ushort.MaxValue);
@@ -723,7 +722,7 @@ namespace LuckParser.Controllers
                             if (extra.getAgent() == playerAgent.getAgent())
                             {
                                 var extra_login_Id = extra.getInstid();
-                                foreach (CombatItem c in combat_list)
+                                foreach (CombatItem c in combat_data)
                                 {
                                     if (c.getSrcInstid() == extra_login_Id)
                                     {
@@ -763,7 +762,8 @@ namespace LuckParser.Controllers
             // Sort
             p_list = p_list.OrderBy(a => a.getGroup()).ToList();
             // Check CM
-            boss_data.setCM(combat_list);
+            boss_data.setCM(combat_data);
+            combat_data.validate(boss_data);
         }
     }
 }

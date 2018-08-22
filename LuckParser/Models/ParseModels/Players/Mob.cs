@@ -9,30 +9,14 @@ namespace LuckParser.Models.ParseModels
 {
     public class Mob : AbstractMasterPlayer
     {
-        private String mobName;
-
         // Constructors
         public Mob(AgentItem agent) : base(agent)
-        {
-            String[] name = agent.getName().Split('\0');
-            if (name.Length > 1)
-            {
-                mobName = name[1];
-            } else
-            {
-                mobName = "UNKNOWN";
-            }
-           
+        {        
         }
 
         //setters
         protected override void setDamagetakenLogs(ParsedLog log)
         {
-        }
-        //getters
-        public string getMobName()
-        {
-            return mobName;
         }
 
         protected override void setAdditionalCombatReplayData(ParsedLog log, int pollingRate)

@@ -175,13 +175,11 @@ namespace LuckParser.Controllers
             CreateMechList(sw, 0);
 
             //Condi Uptime
-            bool hasBoons = CreateCondiUptime(sw, 0);
-            if (hasBoons)
-            {
-                CreateBossBoonUptime(sw, 0);
-            }
+            CreateCondiUptime(sw, 0);
             //Condi Gen
             CreateCondiGen(sw, 0);
+            //Boss boons
+            CreateBossBoonUptime(sw, 0);
         }
         private void CreateDPSTable(StreamWriter sw, int phase_index)
         {
@@ -628,88 +626,26 @@ namespace LuckParser.Controllers
         }
         private void CreateMechanicTable(StreamWriter sw, int phase_index)
         {
-            Dictionary<string, List<Mechanic>> presMech = new Dictionary<string, List<Mechanic>>();
-            //Dictionary<string, List<Mechanic>> presBossMech = new Dictionary<string, List<Mechanic>>();
-            //Dictionary<string, List<Mechanic>> presMobMech = new Dictionary<string, List<Mechanic>>();
-            Dictionary<string, List<Mechanic>> presEnemyMech = new Dictionary<string, List<Mechanic>>();
+            HashSet<Mechanic> presMech = log.getMechanicData().getPresentPlayerMechs(phase_index);
+            //Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.getMechanicData().getPresentEnemyMechs(phase_index);
             PhaseData phase = statistics.phases[phase_index];
-
-            //create list of enemys that had mechanics
-            List<AbstractMasterPlayer> enemyList = new List<AbstractMasterPlayer>();
-            enemyList.Add(log.getBoss());
-
-            foreach (AbstractMasterPlayer p in log.getMechanicData().GetMDataLogs().Select(x => x.GetPlayer()).Distinct().ToList())
-            {
-                bool enemyNew = true;
-                foreach (AbstractMasterPlayer en in enemyList)
-                {
-                    if (en.getInstid() == p.getInstid())
-                    {
-                        enemyNew = false;
-                        break;
-                    }
-
-                }
-                if (enemyNew)
-                {
-                    enemyList.Add(p);
-                }
-
-            }
-
-            foreach (AbstractMasterPlayer p in log.getPlayerList())
-            {
-                if (enemyList.Contains(p))
-                {
-                    enemyList.Remove(p);
-                }
-            }
-            foreach (Mechanic item in log.getBossData().getBossBehavior().getMechanics().Where(x => x.GetMechType() != Mechanic.MechType.PlayerStatus))
-            {
-                MechanicLog first_m_log = log.getMechanicData().GetMDataLogs().FirstOrDefault(x => x.GetSkill() == item.GetSkill());
-                if (first_m_log != null)
-                {
-                    if (log.getPlayerList().Contains(first_m_log.GetPlayer()))//player mech
-                    {
-                        if (!presMech.ContainsKey(item.GetAltName()))
-                        {
-                            presMech[item.GetAltName()] = new List<Mechanic>();
-                        }
-                        presMech[item.GetAltName()].Add(item);
-                    }
-                    else
-                    {
-                        if (!presEnemyMech.ContainsKey(item.GetAltName()))
-                        {
-                            presEnemyMech[item.GetAltName()] = new List<Mechanic>();
-                        }
-                        presEnemyMech[item.GetAltName()].Add(item);
-                    }
-
-
-                }
-            }
+            //List<AbstractMasterPlayer> enemyList = log.getMechanicData().getEnemyList(phase_index);
             int countLines = 0;
             if (presMech.Count > 0)
             {
                 WriteCell("Name");
-                foreach (string mechalt in presMech.Keys)
+                foreach (Mechanic mech in presMech)
                 {
-                    WriteCell(presMech[mechalt].First().GetName());
+                    WriteCell(mech.GetName());
                 }
                 NewLine();
 
                 foreach (Player p in log.getPlayerList())
                 {
                     WriteCell(p.getCharacter());
-                    foreach (List<Mechanic> mechs in presMech.Values)
+                    foreach (Mechanic mech in presMech)
                     {
-                        int count = 0;
-                        foreach (Mechanic mech in mechs)
-                        {
-                            List<MechanicLog> test = log.getMechanicData().GetMDataLogs().Where(x => x.GetSkill() == mech.GetSkill() && x.GetPlayer() == p && x.GetTime() >= phase.getStart() && x.GetTime() <= phase.getEnd()).ToList();
-                            count += test.Count;
-                        }
+                        int count = log.getMechanicData()[mech].Count(x => x.GetPlayer().getInstid() == p.getInstid() && phase.inInterval(x.GetTime()));
                         WriteCell(count.ToString());
                     }
                     NewLine();
@@ -728,8 +664,13 @@ namespace LuckParser.Controllers
         {
             PhaseData phase = statistics.phases[phase_index];
 
-            List<MechanicLog> m_Logs = log.getMechanicData().GetMDataLogs().OrderByDescending(x => x.GetTime()).ToList();
-            m_Logs.Reverse();
+            MechanicData m_Data = log.getMechanicData();
+            List<MechanicLog> m_Logs = new List<MechanicLog>();
+            foreach (List<MechanicLog> mLogs in m_Data.Values)
+            {
+                m_Logs.AddRange(mLogs);
+            }
+            m_Logs.OrderBy(x => x.GetTime());
             int count = 0;
             WriteCell("Time");
             foreach (MechanicLog m in m_Logs)
@@ -758,25 +699,12 @@ namespace LuckParser.Controllers
                 count++;
             }
         }
-        private bool CreateCondiUptime(StreamWriter sw, int phase_index)
+        private void CreateCondiUptime(StreamWriter sw, int phase_index)
         {
             Boss boss = log.getBoss();
             List<PhaseData> phases = statistics.phases;
             long fight_duration = phases[phase_index].getDuration();
             Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
-            bool hasBoons = false;
-            foreach (Boon boon in Boon.getBoonList())
-            {
-                if (boon.getName() == "Retaliation")
-                {
-                    continue;
-                }
-                if (conditions[boon.getID()].uptime > 0.0)
-                {
-                    hasBoons = true;
-                    break;
-                }
-            }
             List<Boon> boon_to_track = Boon.getCondiBoonList();
             boon_to_track.AddRange(Boon.getBoonList());
             Dictionary<long, long> condiPresence = boss.getCondiPresence(log, phases, boon_to_track, phase_index);
@@ -793,7 +721,7 @@ namespace LuckParser.Controllers
             WriteCell("Avg");
             foreach (Boon boon in Boon.getCondiBoonList())
             {
-                if (hasBoons && boon.getName() == "Retaliation")
+                if (boon.getName() == "Retaliation")
                 {
                     continue;
                 }
@@ -806,7 +734,7 @@ namespace LuckParser.Controllers
             WriteCell(Math.Round(avg_condis, 1).ToString());
             foreach (Boon boon in Boon.getCondiBoonList())
             {
-                if (hasBoons && boon.getName() == "Retaliation")
+                if (boon.getName() == "Retaliation")
                 {
                     continue;
                 }
@@ -826,7 +754,6 @@ namespace LuckParser.Controllers
                 NewLine();
                 count++;
             }
-            return hasBoons;
         }
         private void CreateBossBoonUptime(StreamWriter sw, int phase_index)
         {
@@ -836,7 +763,7 @@ namespace LuckParser.Controllers
             Dictionary<long, Statistics.FinalBossBoon> conditions = statistics.bossConditions[phase_index];
             WriteCell("Name");
             WriteCell("Avg");
-            foreach (Boon boon in Boon.getCondiBoonList())
+            foreach (Boon boon in Boon.getBoonList())
             {
                 WriteCell(boon.getName());
             }

@@ -134,37 +134,21 @@ namespace LuckParser.Models
         public override void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // big bomb
-            List<CombatItem> bigbomb = getFilteredList(log, 37966, p.getInstid());
-            int bigStart = 0;
-            int bigEnd = 0;
+            List<CombatItem> bigbomb = log.getBoonData().Where(x => x.getSkillID() == 37966 && ((x.getDstInstid() == p.getInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None))).ToList();
             foreach (CombatItem c in bigbomb)
             {
-                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
-                {
-                    bigStart = (int)(c.getTime() - log.getBossData().getFirstAware());
-                }
-                else
-                {
-                    bigEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                    replay.addCircleActor(new CircleActor(true, 0, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
-                    replay.addCircleActor(new CircleActor(true, bigEnd, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
-                }
+                int bigStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                int bigEnd = bigStart + 6000;
+                replay.addCircleActor(new CircleActor(true, 0, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
+                replay.addCircleActor(new CircleActor(true, bigEnd, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
             }
             // small bomb
-            List<CombatItem> smallbomb = getFilteredList(log, 38247, p.getInstid());
-            int smallStart = 0;
-            int smallEnd = 0;
+            List<CombatItem> smallbomb = log.getBoonData().Where(x => x.getSkillID() == 38247 && ((x.getDstInstid() == p.getInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None))).ToList();
             foreach (CombatItem c in smallbomb)
             {
-                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
-                {
-                    smallStart = (int)(c.getTime() - log.getBossData().getFirstAware());
-                }
-                else
-                {
-                    smallEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                    replay.addCircleActor(new CircleActor(true, 0, 80, new Tuple<int, int>(smallStart, smallEnd), "rgba(80, 150, 0, 0.3)"));
-                }
+                int smallStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                int smallEnd = smallStart + 6000;
+                replay.addCircleActor(new CircleActor(true, 0, 80, new Tuple<int, int>(smallStart, smallEnd), "rgba(80, 150, 0, 0.3)"));
             }
             // fixated
             List<CombatItem> fixatedSam = getFilteredList(log, 37868, p.getInstid());
