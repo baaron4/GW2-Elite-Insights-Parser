@@ -4,41 +4,36 @@
     {
         // Fields
         private long time;
-        private long skill_id;
-        private string name;
-        private int damage;
+        private Mechanic mechanic;
         private AbstractMasterPlayer player;
-        private string plotlyShape;
 
-        public MechanicLog(long time, long skill_id,string name, int damage, AbstractMasterPlayer player,string plotlyShape) {
+        public MechanicLog(long time, Mechanic mechanic,
+        AbstractMasterPlayer player)
+        {
             this.time = time;
-            this.skill_id = skill_id;
-            this.name = name;
-            this.damage = damage;
+            this.mechanic = mechanic;
             this.player = player;
-            this.plotlyShape = plotlyShape;
         }
         //getters
-        public long GetTime() {
+        public long GetTime()
+        {
             return time;
         }
         public long GetSkill()
         {
-            return skill_id;
-        }
-        public string GetName() {
-            return name;
-        }
-        public int GetDamage()
-        {
-            return damage;
+            return mechanic.GetSkill();
         }
         public AbstractMasterPlayer GetPlayer()
         {
             return player;
         }
-        public string GetPlotly() {
-            return plotlyShape;
+        public string GetName()
+        {
+            return mechanic.GetName();
+        }
+        public string GetPlotly()
+        {
+            return mechanic.GetPlotly();
         }
     }
 }

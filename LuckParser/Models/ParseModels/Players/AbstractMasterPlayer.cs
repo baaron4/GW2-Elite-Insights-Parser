@@ -123,6 +123,17 @@ namespace LuckParser.Models.ParseModels
             return replay;
         }
 
+        public long getDeath(ParsedLog log, long start, long end)
+        {
+            long offset = log.getBossData().getFirstAware();
+            CombatItem dead = log.getCombatList().LastOrDefault(x => x.getSrcInstid() == agent.getInstid() && x.isStateChange().IsDead() && x.getTime() >= start + offset && x.getTime() <= end + offset);
+            if (dead != null && dead.getTime() > 0)
+            {
+                return dead.getTime();
+            }
+            return 0;
+        }
+
         public abstract void addMechanics(ParsedLog log);
 
         // private getters
@@ -135,6 +146,7 @@ namespace LuckParser.Models.ParseModels
             List<long> tableIds = Boon.getBoonList().Select(x => x.getID()).ToList();
             tableIds.AddRange(Boon.getOffensiveTableList().Select(x => x.getID()));
             tableIds.AddRange(Boon.getDefensiveTableList().Select(x => x.getID()));
+            tableIds.AddRange(Boon.getCondiBoonList().Select(x => x.getID()));
             foreach (CombatItem c in log.getBoonData())
             {
                 if (!boon_map.ContainsKey(c.getSkillID()))
@@ -145,45 +157,45 @@ namespace LuckParser.Models.ParseModels
                 ushort dst = c.isBuffremove() == ParseEnum.BuffRemove.None ? c.getDstInstid() : c.getSrcInstid();
                 if (agent.getInstid() == dst)
                 {
-                    ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                     // don't add buff initial table boons and buffs in non golem mode, for others overstack is irrevelant
                     if (c.isStateChange() == ParseEnum.StateChange.BuffInitial && (log.isBenchmarkMode() || !tableIds.Contains(c.getSkillID())))
                     {
                         List<BoonLog> loglist = boon_map[c.getSkillID()];
-                        loglist.Add(new BoonLog(0, src, long.MaxValue, 0));
+                        loglist.Add(new BoonLog(0, 0, long.MaxValue, 0));
                     }
                     else if (time >= 0 && time < log.getBossData().getAwareDuration())
                     {
                         if (c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
+                            ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
                             List<BoonLog> loglist = boon_map[c.getSkillID()];
 
                             if (loglist.Count == 0 && c.getOverstackValue() > 0)
                             {
-                                loglist.Add(new BoonLog(0, src, time, 0));
+                                loglist.Add(new BoonLog(0, 0, time, 0));
                             }
                             loglist.Add(new BoonLog(time, src, c.getValue(), 0));
                         }
-                        else if (Boon.removePermission(c.getSkillID(), c.isBuffremove(), c.getIFF()))
+                        else if (Boon.removePermission(c.getSkillID(), c.isBuffremove(), c.getIFF()) && time < log.getBossData().getAwareDuration() - 50)
                         {
                             if (c.isBuffremove() == ParseEnum.BuffRemove.All)//All
                             {
                                 List<BoonLog> loglist = boon_map[c.getSkillID()];
                                 if (loglist.Count == 0)
                                 {
-                                    loglist.Add(new BoonLog(0, src, time, 0));
+                                    loglist.Add(new BoonLog(0, 0, time, 0));
                                 }
                                 else
                                 {
                                     for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
                                     {
                                         BoonLog curBL = loglist[cnt];
-                                        if (curBL.getTime() + curBL.getValue() > time)
+                                        if (curBL.getOverstack() == 0 && curBL.getTime() + curBL.getValue() > time)
                                         {
                                             long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                            loglist[cnt].addValue(-subtract);
+                                            curBL.addValue(-subtract);
                                             // add removed as overstack
-                                            loglist[cnt].addOverstack((uint)subtract);
+                                            curBL.addOverstack((uint)subtract);
                                         }
                                     }
                                 }
@@ -193,18 +205,18 @@ namespace LuckParser.Models.ParseModels
                                 List<BoonLog> loglist = boon_map[c.getSkillID()];
                                 if (loglist.Count == 0)
                                 {
-                                    loglist.Add(new BoonLog(0, src, time, 0));
+                                    loglist.Add(new BoonLog(0, 0, time, 0));
                                 }
                                 else
                                 {
                                     int cnt = loglist.Count - 1;
                                     BoonLog curBL = loglist[cnt];
-                                    if (curBL.getTime() + curBL.getValue() > time)
+                                    if (curBL.getOverstack() == 0 && curBL.getTime() + curBL.getValue() > time)
                                     {
                                         long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                        loglist[cnt].addValue(-subtract);
+                                        curBL.addValue(-subtract);
                                         // add removed as overstack
-                                        loglist[cnt].addOverstack((uint)subtract);
+                                        curBL.addOverstack((uint)subtract);
                                     }
                                 }
                             }
@@ -213,7 +225,7 @@ namespace LuckParser.Models.ParseModels
                                 List<BoonLog> loglist = boon_map[c.getSkillID()];
                                 if (loglist.Count == 0)
                                 {
-                                    loglist.Add(new BoonLog(0, src, time, 0));
+                                    loglist.Add(new BoonLog(0, 0, time, 0));
                                 }
                                 else
                                 {
@@ -221,12 +233,12 @@ namespace LuckParser.Models.ParseModels
                                     {
                                         BoonLog curBL = loglist[cnt];
                                         long ctime = curBL.getTime() + curBL.getValue();
-                                        if (ctime > time)
+                                        if (curBL.getOverstack() == 0 && ctime > time)
                                         {
                                             long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                            loglist[cnt].addValue(-subtract);
+                                            curBL.addValue(-subtract);
                                             // add removed as overstack
-                                            loglist[cnt].addOverstack((uint)subtract);
+                                            curBL.addOverstack((uint)subtract);
                                             break;
                                         }
                                     }

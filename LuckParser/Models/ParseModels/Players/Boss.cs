@@ -101,34 +101,90 @@ namespace LuckParser.Models.ParseModels
             MechanicData mech_data = log.getMechanicData();
             BossData boss_data = log.getBossData();
             List<Mechanic> bossMechanics = boss_data.getBossBehavior().getMechanics();
-            List<Mechanic> enemyBoons = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon).ToList();
-            enemyBoons.AddRange(bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoonStrip));
+            // Boons
+            List<Mechanic> enemyBoons = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon || x.GetMechType() == Mechanic.MechType.EnemyBoonStrip).ToList();
             foreach (Mechanic m in enemyBoons)
             {
+                Mechanic.SpecialCondition condition = m.GetSpecialCondition();
                 foreach (CombatItem c in log.getBoonData())
                 {
-                    if (m.GetSkill() == c.getSkillID() && ((m.GetMechType() == Mechanic.MechType.EnemyBoon && c.isBuffremove() == ParseEnum.BuffRemove.None) || (m.GetMechType() == Mechanic.MechType.EnemyBoonStrip && c.isBuffremove() == ParseEnum.BuffRemove.Manual)))
+                    if (m.GetSkill() == c.getSkillID())
                     {
+                        if (condition != null && !condition(c.getValue()))
+                        {
+                            continue;
+                        }
                         AbstractMasterPlayer amp = null;
-                        if (c.getDstInstid() == boss_data.getInstid())
+                        if (m.GetMechType() == Mechanic.MechType.EnemyBoon && c.isBuffremove() == ParseEnum.BuffRemove.None)
                         {
-                            amp = this;
-                        }
-                        else
+                            if (c.getDstInstid() == boss_data.getInstid())
+                            {
+                                amp = this;
+                            }
+                            else
+                            {
+                                amp = new Mob(log.getAgentData().GetAgent(c.getDstAgent()));
+                            }
+                        } else if (m.GetMechType() == Mechanic.MechType.EnemyBoonStrip && c.isBuffremove() == ParseEnum.BuffRemove.Manual)
                         {
-                            amp = new Mob(log.getAgentData().GetAgent(c.getDstAgent()));
+                            if (c.getSrcInstid() == boss_data.getInstid())
+                            {
+                                amp = this;
+                            }
+                            else
+                            {
+                                amp = new Mob(log.getAgentData().GetAgent(c.getSrcAgent()));
+                            }
+
                         }
-                        mech_data.AddItem(new MechanicLog(c.getTime() - boss_data.getFirstAware(), c.getSkillID(), m.GetName(), c.getValue(), amp, m.GetPlotly()));
+                        if (amp != null)
+                        {
+                            mech_data[m].Add(new MechanicLog(c.getTime() - boss_data.getFirstAware(), m, amp));
+                        }
                     }
                 }
             }
+            // Casting
+            List<Mechanic> enemyCasts = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyCastEnd || x.GetMechType() == Mechanic.MechType.EnemyCastStart).ToList();
+            foreach (Mechanic m in enemyCasts)
+            {
+                Mechanic.SpecialCondition condition = m.GetSpecialCondition();
+                foreach (CombatItem c in log.getCastData())
+                {
+                    long skill = m.GetSkill();
+                    if (skill == c.getSkillID())
+                    {
+                        if (condition != null && !condition(c.getValue()))
+                        {
+                            continue;
+                        }
+                        AbstractMasterPlayer amp = null;
+                        if ((m.GetMechType() == Mechanic.MechType.EnemyCastStart && c.isActivation().IsCasting()) || (m.GetMechType() == Mechanic.MechType.EnemyCastEnd && !c.isActivation().IsCasting()))
+                        {
+                            if (c.getSrcInstid() == boss_data.getInstid())
+                            {
+                                amp = this;
+                            }
+                            else
+                            {
+                                amp = new DummyPlayer(log.getAgentData().GetAgent(c.getSrcAgent()));
+                            }
+                        }
+                        if (amp != null)
+                        {
+                            mech_data[m].Add(new MechanicLog(c.getTime() - boss_data.getFirstAware(), m, amp));
+                        }
+                    }
+                }
+            }
+            // Spawn
             List<Mechanic> spawnMech = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.Spawn).ToList();
             foreach (Mechanic m in spawnMech)
             {
                 foreach (AgentItem a in log.getAgentData().getNPCAgentList().Where(x => x.getID() == m.GetSkill()))
                 {
-                    AbstractMasterPlayer amp = new Mob(a);
-                    mech_data.AddItem(new MechanicLog(a.getFirstAware() - boss_data.getFirstAware(), m.GetSkill(), m.GetName(), 0, amp, m.GetPlotly()));
+                    AbstractMasterPlayer amp = new DummyPlayer(a);
+                    mech_data[m].Add(new MechanicLog(a.getFirstAware() - boss_data.getFirstAware(), m, amp));
                 }
             }
         }

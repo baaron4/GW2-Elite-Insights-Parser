@@ -3,10 +3,9 @@ using System.Collections.Generic;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class SkillData
+    public class SkillData : List<SkillItem>
     {
         // Fields
-        private List<SkillItem> skill_list;
         private Dictionary<long, string> apiMissingID = new Dictionary<long, string>()
         {
             {1066, "Resurrect"},
@@ -39,14 +38,9 @@ namespace LuckParser.Models.ParseModels
         // Constructors
         public SkillData()
         {
-            skill_list = new List<SkillItem>();
         }
 
         // Public Methods
-        public void addItem(SkillItem item)
-        {
-            skill_list.Add(item);
-        }
 
         public String getName(long ID)
         {
@@ -58,7 +52,7 @@ namespace LuckParser.Models.ParseModels
             }
 
             // Normal
-            foreach (SkillItem s in skill_list)
+            foreach (SkillItem s in this)
             {
                 if (s.getID() == ID)
                 {
@@ -68,12 +62,6 @@ namespace LuckParser.Models.ParseModels
 
             // Unknown
             return "uid: " + ID.ToString();
-        }
-
-        // Getters
-        public List<SkillItem> getSkillList()
-        {
-            return skill_list;
-        }
+        }    
     }
 }

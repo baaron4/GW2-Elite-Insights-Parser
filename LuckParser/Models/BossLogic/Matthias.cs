@@ -30,11 +30,13 @@ namespace LuckParser.Models
             new Mechanic(34416, "Corruption", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle',color:'rgb(255,140,0)',", "Crptn",0), //Corruption Application, Corruption
             new Mechanic(34473, "Corruption", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(255,140,0)',", "C.dmg",0), //Hit by Corruption AoE, Corruption dmg
             new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'diamond-tall',color:'rgb(128,0,128)',", "Scrfc",0), //Sacrifice (Breakbar), Sacrifice
-            new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(200,140,255)',", "KD",0), // Unbalanced (triggered Storm phase Debuff), Knockdown //Does this only trigger on actual Knockdown or also when just reaching 10 stacks and letting the debuff time out? Maybe check is_buffremove==3.
+            new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerBoonRemove, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(200,140,255)',", "KD",5000,delegate(long value){return value > 0;}), // Unbalanced (triggered Storm phase Debuff), Knockdown //Does this only trigger on actual Knockdown or also when just reaching 10 stacks and letting the debuff time out? Maybe check is_buffremove==3.
             //new Mechanic(34422, "Blood Fueled", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(good)",0),//human //Applied at the same time as Backflip Shards since it is the buff applied by them, can be omitted imho
             //new Mechanic(34428, "Blood Fueled", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(good)",0),//abom
             new Mechanic(34376, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)',", "Bble",0),// Blood Shield (protective bubble), Bubble//human
             new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)',", "Bble",0),// Blood Shield (protective bubble), Bubble//abom
+            new Mechanic(34511, "Zealous Benediction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle',color:'rgb(255,200,0)',", "Bombs",0),
+            new Mechanic(26766, "Icy Patch", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,255)',", "Icy KD",0,delegate(long value){return value == 10000;}),
             //Track Zealous Benediction? (Bombs) Application? (ID 34511) Hit? (ID 34528) The hit on allies is not registered since it's percentage based, I think
             new Mechanic(34413, "Surrender", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,0)',", "Sprt",0) //Surrender (hit by walking Spirit), Spirit hit
             });
@@ -207,22 +209,13 @@ namespace LuckParser.Models
                 }
             }
             // Bombs
-            List<CombatItem> zealousBenediction = getFilteredList(log, 34511, p.getInstid());
-            int zealousStart = 0;
-            int zealousEnd = 0;
+            List<CombatItem> zealousBenediction = log.getBoonData().Where(x => x.getSkillID() == 34511 && ((x.getDstInstid() == p.getInstid() && x.isBuffremove() == ParseEnum.BuffRemove.None))).ToList();
             foreach (CombatItem c in zealousBenediction)
             {
-                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
-                {
-                    zealousStart = (int)(c.getTime() - log.getBossData().getFirstAware());
-                }
-                else
-                {
-                    zealousEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                    replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)"));
-                    replay.addCircleActor(new CircleActor(true, zealousEnd, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)"));
-                }
-
+                int zealousStart = (int)(c.getTime() - log.getBossData().getFirstAware()) ;
+                int zealousEnd = zealousStart + 5000;
+                replay.addCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)"));
+                replay.addCircleActor(new CircleActor(true, zealousEnd, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)"));
             }
         }
 

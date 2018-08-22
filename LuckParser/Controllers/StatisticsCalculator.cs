@@ -72,6 +72,7 @@ namespace LuckParser.Controllers
                 {
                     p.addMechanics(log);
                 }
+                log.getMechanicData().computePresentMechanics(log, statistics.phases);
             }
 
             return statistics;
@@ -772,7 +773,7 @@ namespace LuckParser.Controllers
         /// </summary>
         private void setPresentBoons()
         {
-            List<CombatItem> c_list = log.getCombatData().getCombatList();
+            List<CombatItem> c_list = log.getCombatData();
             if (settings.PlayerBoonsUniversal)
             {//Main boons
                 foreach (Boon boon in Boon.getBoonList())

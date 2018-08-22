@@ -14,30 +14,23 @@ namespace LuckParser.Models.DataModels
         private AgentData agent_data = new AgentData();
         private SkillData skill_data = new SkillData();
         private CombatData combat_data = new CombatData();
-        private MechanicData mech_data = new MechanicData();
+        private MechanicData mech_data;
         private List<Player> p_list = new List<Player>();
         private Boss boss;
 
-        // reduced data
-        private List<CombatItem> boon_data;
-        private List<CombatItem> damage_data;
-        private List<CombatItem> damage_taken_data;
-        //private List<CombatItem> healing_data;
-        //private List<CombatItem> healing_received_data;
-        private List<CombatItem> cast_data;
-        private List<CombatItem> movement_data;
+        
 
         public ParsedLog(LogData log_data, BossData boss_data, AgentData agent_data, SkillData skill_data, 
-                CombatData combat_data, MechanicData mech_data, List<Player> p_list, Boss boss)
+                CombatData combat_data, List<Player> p_list, Boss boss)
         {
             this.log_data = log_data;
             this.boss_data = boss_data;
             this.agent_data = agent_data;
             this.skill_data = skill_data;
             this.combat_data = combat_data;
-            this.mech_data = mech_data;
             this.p_list = p_list;
             this.boss = boss;
+            this.mech_data = new MechanicData(boss_data);
         }
 
         public BossData getBossData()
@@ -80,54 +73,29 @@ namespace LuckParser.Models.DataModels
             return log_data;
         }
 
-        public List<CombatItem> getCombatList()
+        public CombatData getCombatList()
         {
-            return combat_data.getCombatList();
-        }
-
-        public void validateLogData()
-        {
-            boon_data = combat_data.getCombatList().Where(x => x.isBuff() > 0 && (x.isBuff() == 18 || x.getBuffDmg() == 0 || x.isBuffremove() != ParseEnum.BuffRemove.None)).ToList();
-
-            damage_data = combat_data.getCombatList().Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Foe && x.isBuffremove() == ParseEnum.BuffRemove.None &&
-                                        ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
-                                        (x.isBuff() == 0 && x.getValue() > 0))).ToList();
-
-            damage_taken_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.isBuffremove() == ParseEnum.BuffRemove.None &&
-                                            ((x.isBuff() == 1 && x.getBuffDmg() >= 0 && x.getValue() == 0) ||
-                                                (x.isBuff() == 0 && x.getValue() >= 0))).ToList();
-
-            cast_data = combat_data.getCombatList().Where(x => (x.isStateChange() == ParseEnum.StateChange.Normal && x.isActivation() != ParseEnum.Activation.None) || x.isStateChange() == ParseEnum.StateChange.WeaponSwap).ToList();
-
-            movement_data = (boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Fractal || boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Raid) ? combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Position || x.isStateChange() == ParseEnum.StateChange.Velocity).ToList() : new List<CombatItem>();
-
-            /*healing_data = combat_data.getCombatList().Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
-                                         ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
-                                         (x.isBuff() == 0 && x.getValue() > 0))).ToList();
-
-            healing_received_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
-                                            ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
-                                                (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
+            return combat_data;
         }
 
         public List<CombatItem> getBoonData()
         {
-            return boon_data;
+            return combat_data.getBoonData();
         }
 
         public List<CombatItem> getDamageData()
         {
-            return damage_data;
+            return combat_data.getDamageData();
         }
 
         public List<CombatItem> getCastData()
         {
-            return cast_data;
+            return combat_data.getCastData();
         }
 
         public List<CombatItem> getDamageTakenData()
         {
-            return damage_taken_data;
+            return combat_data.getDamageTakenData();
         }
 
         public bool isBenchmarkMode()
@@ -137,17 +105,17 @@ namespace LuckParser.Models.DataModels
 
         /*public List<CombatItem> getHealingData()
         {
-            return healing_data;
+            return combat_data.getHealingData();
         }
 
         public List<CombatItem> getHealingReceivedData()
         {
-            return healing_received_data;
+            return combat_data.getHealingReceivedData();
         }*/
 
         public List<CombatItem> getMovementData()
         {
-            return movement_data;
+            return combat_data.getMovementData();
         }     
     }
 }
