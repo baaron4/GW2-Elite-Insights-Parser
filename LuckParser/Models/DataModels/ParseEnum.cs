@@ -150,7 +150,6 @@ namespace LuckParser.Models.DataModels
             IcePatch = 16139,
             Storm = 16108,
             Tornado = 16068,
-            //BloodStone      = 13864,
             // KC
             Olson = 16244,
             Engul = 16274,
@@ -174,6 +173,7 @@ namespace LuckParser.Models.DataModels
             WhiteMantleKnight = 16251,
             WhiteMantleBattleMage = 16221,
             ExquisiteConjunction = 16232,
+            //BloodStone Shard (Gadget)     = 13864,
             // MO
             Jade = 17181,
             // Samarog
@@ -195,13 +195,49 @@ namespace LuckParser.Models.DataModels
             TormentedDead = 19422,
             SurgingSoul = 19474,
             Scythe = 19396,
+            FleshWurm = 19464,
             // Dhuum
             Messenger = 19807,
             Echo = 19628,
             Enforcer = 19681,
             Deathling = 19759,
+            UnderworldReaper = 19831,
+            // Fractals
+            FractalVindicator = 19684, 
+            FractalAvenger = 15960,
+            // MAMA
+            GreenKnight = 16906,
+            RedKnight = 16974, 
+            BlueKnight = 16899,
+            TwistedHorror = 17009,
             // Siax
             Hallucination = 17002,
+            EchoOfTheUnclean = 17068,
+            // Ensolyss
+            NightmareHallucination1 = 16912, // (exploding after jump and charging in last phase)
+            NightmareHallucination2 = 17033, // (small adds, last phase)
+            // Skorvald
+            FluxAnomaly4 = 17673,
+            FluxAnomaly3 = 17851,
+            FluxAnomaly2 = 17770,
+            FluxAnomaly1 = 17599,
+            SolarBloom = 17732,
+            // Artsariiv
+            TemporalAnomaly = 17870,
+            Spark = 17630, 
+            Artsariiv1 = 17811, // tiny adds
+            Artsariiv2 = 17694, // small adds
+            Artsariiv3 = 17937, // big adds
+            // Arkk
+            TemporalAnomaly2 = 17720,
+            Archdiviner = 17893,
+            Fanatic = 11282,
+            SolarBloom2 = 17732,
+            BrazenGladiator = 17730,
+            BLIGHT = 16437,
+            PLINK = 16325,
+            DOC =16657,
+            CHOP =16552,
             //
             Unknown
         };

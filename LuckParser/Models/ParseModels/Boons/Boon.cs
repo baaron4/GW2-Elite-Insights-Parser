@@ -466,6 +466,13 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Spring Roll",26534, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/d/da/Spring_Roll.png"),
                 new Boon("Plate of Beef Rendang",49686, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/d/d0/Plate_of_Beef_Rendang.png"),
                 new Boon("Dragon's Revelry Starcake",19451, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/2/2b/Dragon%27s_Revelry_Starcake.png"),
+                new Boon("Avocado Smoothie",50091, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/8/83/Avocado_Smoothie.png"),
+                new Boon("Carrot Souffle",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/71/Carrot_Souffl%C3%A9.png"), //same as Dragon's_Breath_Bun
+                new Boon("Plate of Truffle Steak Dinner",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/9/92/Plate_of_Truffle_Steak_Dinner.png"), //same as Dragon's Breath Bun
+                new Boon("Dragon's Breath Bun",9750, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/53/Dragon%27s_Breath_Bun.png"),
+                new Boon("Karka Egg Omelet",9756, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/9/9e/Karka_Egg_Omelet.png"),
+                new Boon("Steamed Red Dumpling",26536, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/8/8c/Steamed_Red_Dumpling.png"),
+                new Boon("Saffron Stuffed Mushroom",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Saffron_Stuffed_Mushroom.png"), //same as Karka Egg Omelet
                 /// UTILITIES 
                 // 1h versions have the same ID as 30 min versions 
                 new Boon("Superior Sharpening Stone",9963, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"),
@@ -484,7 +491,9 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Furious Sharpening Stone",25882, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"),
                 new Boon("Bountiful Maintenance Oil",25879, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
                 new Boon("Tin of Fruitcake",34211, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Tin_of_Fruitcake.png"),
-               // new Boon("Hylek Maintenance Oil",9968, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"), when wiki says "same stats" its litteraly the same buff
+                new Boon("Writ of Masterful Malice",33836, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Writ_of_Masterful_Malice.png"),
+                new Boon("Writ of Masterful Strength",33297, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/2/2b/Writ_of_Masterful_Strength.png"),
+                // new Boon("Hylek Maintenance Oil",9968, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"), when wiki says "same stats" its litteraly the same buff
         };
 
 

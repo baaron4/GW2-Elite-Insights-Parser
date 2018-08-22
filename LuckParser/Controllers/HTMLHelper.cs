@@ -1519,7 +1519,7 @@ namespace LuckParser.Controllers
                 case "17632-ext":
                     return "skorv";
                 case "17949-ext":
-                    return "arstra";
+                    return "arts";
                 case "17759-ext":
                     return "arkk";
 
