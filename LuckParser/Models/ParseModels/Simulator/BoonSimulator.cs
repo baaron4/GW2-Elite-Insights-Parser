@@ -49,9 +49,9 @@ namespace LuckParser.Models.ParseModels
             this.logic = logic;
         }  
 
-        public List<BoonSimulationItem> getSimulationResult()
+        public BoonSimulationResult getSimulationResult()
         {
-            return new List<BoonSimulationItem>(simulation);
+            return new BoonSimulationResult(simulation);
         }
 
         // Abstract Methods
