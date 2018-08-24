@@ -340,7 +340,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Skelk Venom",-1, BoonSource.Thief, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
                 new Boon("Ice Drake Venom",13095, BoonSource.Thief, BoonType.Intensity, 4, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
                 new Boon("Devourer Venom", 13094, BoonSource.Thief, BoonType.Intensity, 2, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
-                new Boon("Skale Venom", 13036, BoonSource.Thief, BoonType.Intensity, 4, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
+                new Boon("Skale Venom", 13054, BoonSource.Thief, BoonType.Intensity, 4, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
                 new Boon("Spider Venom",13036, BoonSource.Thief, BoonType.Intensity, 6, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
                 new Boon("Basilisk Venom", 13133, BoonSource.Thief, BoonType.Intensity, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
                 //physical
@@ -440,7 +440,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Obsidian Flesh",5667, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 //traits
                 new Boon("Harmonious Conduit",31353, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
-                new Boon("Fresh Air",31353, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
+                new Boon("Fresh Air",34241, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
                 new Boon("Soothing Mist", 5587, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/f/f7/Soothing_Mist.png"),
                 new Boon("Lesser Arcane Shield",25579, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Weaver's Prowess",42061, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
