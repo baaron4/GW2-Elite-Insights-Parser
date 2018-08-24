@@ -5,6 +5,11 @@ namespace LuckParser.Models.ParseModels
 {
     public class SkillItem
     {
+        public const int ResurrectId = 1066;
+        public const int BandageId = 1175;
+        public const int DodgeId = 65001;
+        public const int WeaponSwapId = -2;
+
         // Fields
         readonly int _id;
         private String _name;
@@ -50,7 +55,7 @@ namespace LuckParser.Models.ParseModels
 
         public String GetName()
         {
-            if (_id == 1066) {
+            if (_id == ResurrectId) {
                 return "Resurrect";
             }
             return _name;

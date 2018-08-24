@@ -3,14 +3,22 @@ using System.Collections.Generic;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class SkillData : List<SkillItem>
+    public class SkillData
     {
+        public ICollection<SkillItem> Values
+        {
+            get
+            {
+                return skills.Values;
+            }
+        }
         // Fields
+        private Dictionary<long, SkillItem> skills = new Dictionary<long, SkillItem>();
         readonly static Dictionary<long, string> _apiMissingID = new Dictionary<long, string>()
         {
-            {1066, "Resurrect"},
-            {1175, "Bandage" },
-            {65001, "Dodge" },
+            {SkillItem.ResurrectId, "Resurrect"},
+            {SkillItem.BandageId, "Bandage" },
+            {SkillItem.DodgeId, "Dodge" },
             // Gorseval
             {31834,"Ghastly Rampage" },
             {31759,"Protective Shadow" },
@@ -37,9 +45,22 @@ namespace LuckParser.Models.ParseModels
         
         // Public Methods
 
+        public SkillItem Get(long ID)
+        {
+            if (skills.TryGetValue(ID, out SkillItem value))
+            {
+                return value;
+            }
+            return null;
+        }
+
+        public void Add(SkillItem skillItem)
+        {
+            skills.Add(skillItem.GetID(), skillItem);
+        }
+
         public String GetName(long ID)
         {
-
             // Custom
             if (_apiMissingID.ContainsKey(ID))
             {
@@ -47,12 +68,10 @@ namespace LuckParser.Models.ParseModels
             }
 
             // Normal
-            foreach (SkillItem s in this)
+            SkillItem skillItem = Get(ID);
+            if (skillItem != null)
             {
-                if (s.GetID() == ID)
-                {
-                    return s.GetName();
-                }
+                return skillItem.GetName();
             }
 
             // Unknown

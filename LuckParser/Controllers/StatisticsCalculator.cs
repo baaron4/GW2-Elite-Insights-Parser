@@ -401,7 +401,7 @@ namespace LuckParser.Controllers
                     CombatData combatData = _log.GetCombatData();
                     final.SwapCount = combatData.GetStates(instid, ParseEnum.StateChange.WeaponSwap, start, end).Count;
                     final.DownCount = combatData.GetStates(instid, ParseEnum.StateChange.ChangeDown, start, end).Count;
-                    final.DodgeCount = combatData.GetSkillCount(instid, 65001, start, end) + combatData.GetBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
+                    final.DodgeCount = combatData.GetSkillCount(instid, SkillItem.DodgeId, start, end) + combatData.GetBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
 
                     //Stack Distance
                     if (_settings.ParseCombatReplay && _log.GetBoss().GetCombatReplay() != null)
