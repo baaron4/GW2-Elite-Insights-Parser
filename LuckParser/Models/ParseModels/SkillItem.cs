@@ -5,7 +5,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class SkillItem
     {
-        public const int ResuccectId = 1066;
+        public const int ResurrectId = 1066;
         public const int BandageId = 1175;
         public const int DodgeId = 65001;
         public const int WeaponSwapId = -2;

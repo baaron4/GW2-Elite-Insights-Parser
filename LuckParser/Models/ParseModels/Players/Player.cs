@@ -87,7 +87,7 @@ namespace LuckParser.Models.ParseModels
             List<CastLog> cls = GetCastLogs(log, start, end);
             int[] reses = { 0, 0 };
             foreach (CastLog cl in cls) {
-                if (cl.GetID() == SkillItem.ResuccectId)
+                if (cl.GetID() == SkillItem.ResurrectId)
                 {
                     reses[0]++;
                     reses[1] += cl.GetActDur();
@@ -326,8 +326,8 @@ namespace LuckParser.Models.ParseModels
                     case -3:
                         toUse = combatData.GetStates(GetInstid(), ParseEnum.StateChange.ChangeDown, start, end);
                         break;
-                    case SkillItem.ResuccectId:
-                        toUse = log.GetCastData().Where(x => x.GetSkillID() == SkillItem.ResuccectId && x.GetSrcInstid() == GetInstid() && x.IsActivation().IsCasting()).ToList();
+                    case SkillItem.ResurrectId:
+                        toUse = log.GetCastData().Where(x => x.GetSkillID() == SkillItem.ResurrectId && x.GetSrcInstid() == GetInstid() && x.IsActivation().IsCasting()).ToList();
                         break;
                 }
                 foreach (CombatItem pnt in toUse)

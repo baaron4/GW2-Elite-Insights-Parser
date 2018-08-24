@@ -1969,7 +1969,7 @@ namespace LuckParser.Controllers
                             sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
                             sw.Write("<br>");
                         }
-                        else if (cl.GetID() == SkillItem.ResuccectId)
+                        else if (cl.GetID() == SkillItem.ResurrectId)
                         {
                             string skillName = "Resurrect";
                             string skillLink = HTMLHelper.GetLink("Downs");
