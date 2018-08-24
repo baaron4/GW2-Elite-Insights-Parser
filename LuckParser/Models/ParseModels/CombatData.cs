@@ -18,15 +18,17 @@ namespace LuckParser.Models.ParseModels
 
         public List<CombatItem> GetStates(int srcInstid, ParseEnum.StateChange change, long start, long end)
         {
-            List<CombatItem> states = new List<CombatItem>();
-            foreach (CombatItem c in this.Where(x => x.GetTime() >= start && x.GetTime() <= end))
+            var list = new List<CombatItem>();
+            foreach (var combatItem in this)
             {
-                if (c.GetSrcInstid() == srcInstid && c.IsStateChange() == change)
+                if (combatItem.GetTime() >= start && combatItem.GetTime() <= end &&
+                    combatItem.GetSrcInstid() == srcInstid && combatItem.IsStateChange() == change)
                 {
-                    states.Add(c);
+                    list.Add(combatItem);
                 }
             }
-            return states;
+
+            return list;
         }
 
         public int GetSkillCount(int srcInstid, int skillId, long start, long end)
