@@ -1929,13 +1929,7 @@ namespace LuckParser.Controllers
                 //int autosCount = 0;
                 foreach (CastLog cl in casting)
                 {
-                    GW2APISkill apiskill = null;
-                    SkillItem skill = _log.GetSkillData().Get(cl.GetID());
-                    if (skill != null)
-                    {
-                        apiskill = skill.GetGW2APISkill();
-                    }
-
+                    GW2APISkill apiskill = _log.GetSkillData().Get(cl.GetID())?.GetGW2APISkill();
 
                     if (apiskill != null)
                     {
@@ -2527,28 +2521,28 @@ namespace LuckParser.Controllers
                     {//foreach casted skill
                         SkillItem skill = skillList.Get(id);
 
-                        int totaldamage = 0;
-                        int mindamage = 0;
-                        int hits = 0;
-                        int maxdamage = 0;
-                        int crit = 0;
-                        int flank = 0;
-                        int glance = 0;
-                        foreach (DamageLog dl in damageLogs.Where(x => x.GetID() == id))
-                        {
-                            int curdmg = dl.GetDamage();
-                            totaldamage += curdmg;
-                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                            if (curdmg >= 0) { hits++; };
-                            ParseEnum.Result result = dl.GetResult();
-                            if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
-                            if (dl.IsFlanking() == 1) { flank++; }
-                        }
-                        int avgdamage = (int)(totaldamage / (double)hits);
-
                         if (skill != null)
                         {
+                            int totaldamage = 0;
+                            int mindamage = 0;
+                            int hits = 0;
+                            int maxdamage = 0;
+                            int crit = 0;
+                            int flank = 0;
+                            int glance = 0;
+                            foreach (DamageLog dl in damageLogs.Where(x => x.GetID() == id))
+                            {
+                                int curdmg = dl.GetDamage();
+                                totaldamage += curdmg;
+                                if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                                if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                                if (curdmg >= 0) { hits++; };
+                                ParseEnum.Result result = dl.GetResult();
+                                if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
+                                if (dl.IsFlanking() == 1) { flank++; }
+                            }
+                            int avgdamage = (int)(totaldamage / (double)hits);
+
                             if (skill.GetGW2APISkill() != null)
                             {
                                 sw.Write("<tr>");

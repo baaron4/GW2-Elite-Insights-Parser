@@ -14,12 +14,7 @@ namespace LuckParser.Controllers
 
         public static void WriteCastingItem(StreamWriter sw, CastLog cl, SkillData skillList, long start, long end)
         {
-            GW2APISkill skill = null;
-            SkillItem skillIt = skillList.Get(cl.GetID());
-            if (skillIt != null)
-            {
-                skill = skillIt.GetGW2APISkill();
-            }
+            GW2APISkill skill = skillList.Get(cl.GetID())?.GetGW2APISkill();
             string skillName = skill == null ? skillList.GetName(cl.GetID()) : skill.name;
             float dur;
             if (skillName == "Dodge")
@@ -107,12 +102,7 @@ namespace LuckParser.Controllers
         public static void WriteCastingItemIcon(StreamWriter sw, CastLog cl, SkillData skillList, long start, bool last)
         {
             string skillIcon = "";
-            GW2APISkill skill = null;
-            SkillItem skillIt = skillList.Get(cl.GetID());
-            if (skillIt != null)
-            {
-                skill = skillIt.GetGW2APISkill();
-            }
+            GW2APISkill skill = skillList.Get(cl.GetID())?.GetGW2APISkill();
             if (skill != null && cl.GetID() != -2)
             {
                 float offset = (cl.GetTime() - start) / 1000f;
