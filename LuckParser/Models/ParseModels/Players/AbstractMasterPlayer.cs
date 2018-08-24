@@ -544,7 +544,7 @@ namespace LuckParser.Models.ParseModels
                         if ((int)c.GetDstAgent() == 4 || (int)c.GetDstAgent() == 5)
                         {
                             long time = c.GetTime() - timeStart;
-                            CastLog swapLog = new CastLog(time, -2, (int)c.GetDstAgent(), c.IsActivation());
+                            CastLog swapLog = new CastLog(time, SkillItem.WeaponSwapId, (int)c.GetDstAgent(), c.IsActivation());
                             CastLogs.Add(swapLog);
                         }
                     }

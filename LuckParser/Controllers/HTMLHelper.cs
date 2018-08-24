@@ -14,19 +14,14 @@ namespace LuckParser.Controllers
 
         public static void WriteCastingItem(StreamWriter sw, CastLog cl, SkillData skillList, long start, long end)
         {
-            GW2APISkill skill = null;
-            SkillItem skillIt = skillList.FirstOrDefault(x => x.GetID() == cl.GetID());
-            if (skillIt != null)
-            {
-                skill = skillIt.GetGW2APISkill();
-            }
+            GW2APISkill skill = skillList.Get(cl.GetID())?.GetGW2APISkill();
             string skillName = skill == null ? skillList.GetName(cl.GetID()) : skill.name;
             float dur;
             if (skillName == "Dodge")
             {
                 dur = 0.5f;
             }
-            else if (cl.GetID() == -2)
+            else if (cl.GetID() == SkillItem.WeaponSwapId)
             {
                 skillName = "Weapon Swap";
                 dur = 0.1f;
@@ -107,12 +102,7 @@ namespace LuckParser.Controllers
         public static void WriteCastingItemIcon(StreamWriter sw, CastLog cl, SkillData skillList, long start, bool last)
         {
             string skillIcon = "";
-            GW2APISkill skill = null;
-            SkillItem skillIt = skillList.FirstOrDefault(x => x.GetID() == cl.GetID());
-            if (skillIt != null)
-            {
-                skill = skillIt.GetGW2APISkill();
-            }
+            GW2APISkill skill = skillList.Get(cl.GetID())?.GetGW2APISkill();
             if (skill != null && cl.GetID() != -2)
             {
                 float offset = (cl.GetTime() - start) / 1000f;
@@ -134,7 +124,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                string skillName = cl.GetID() == -2 ? "Weapon Swap" : skillList.GetName(cl.GetID());
+                string skillName = cl.GetID() == SkillItem.WeaponSwapId ? "Weapon Swap" : skillList.GetName(cl.GetID());
                 if (skillName == "Dodge")
                 {
                     skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
@@ -146,7 +136,7 @@ namespace LuckParser.Controllers
                 else if (skillName == "Bandage")
                 {
                     skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
-                } else if (cl.GetID() == -2)
+                } else if (cl.GetID() == SkillItem.WeaponSwapId)
                 {
                     skillIcon = "https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png";
                 }

@@ -87,7 +87,7 @@ namespace LuckParser.Models.ParseModels
             List<CastLog> cls = GetCastLogs(log, start, end);
             int[] reses = { 0, 0 };
             foreach (CastLog cl in cls) {
-                if (cl.GetID() == 1066)
+                if (cl.GetID() == SkillItem.ResurrectId)
                 {
                     reses[0]++;
                     reses[1] += cl.GetActDur();
@@ -129,7 +129,7 @@ namespace LuckParser.Models.ParseModels
             List<CastLog> casting = GetCastLogs(log, 0, log.GetBossData().GetAwareDuration());      
             int swapped = 0;//4 for first set and 5 for next
             long swappedTime = 0;
-            List<CastLog> swaps = casting.Where(x => x.GetID() == -2).Take(2).ToList();
+            List<CastLog> swaps = casting.Where(x => x.GetID() == SkillItem.WeaponSwapId).Take(2).ToList();
             // If the player never swapped, assume they are on their first set
             if (swaps.Count == 0)
             {
@@ -142,12 +142,7 @@ namespace LuckParser.Models.ParseModels
             }
             foreach (CastLog cl in casting)
             {
-                GW2APISkill apiskill = null;
-                SkillItem skill = skillList.FirstOrDefault(x => x.GetID() == cl.GetID());
-                if (skill != null)
-                {
-                    apiskill = skill.GetGW2APISkill();
-                }
+                GW2APISkill apiskill = skillList.Get(cl.GetID())?.GetGW2APISkill();
                 if (apiskill != null && cl.GetTime() > swappedTime)
                 {
                     if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && (apiskill.categories == null || (apiskill.categories.Count() == 1 && apiskill.categories[0] == "Phantasm")))
@@ -210,7 +205,7 @@ namespace LuckParser.Models.ParseModels
                     }
 
                 }
-                else if (cl.GetID() == -2)
+                else if (cl.GetID() == SkillItem.WeaponSwapId)
                 {
                     //wepswap  
                     swapped = cl.GetExpDur();
@@ -331,8 +326,8 @@ namespace LuckParser.Models.ParseModels
                     case -3:
                         toUse = combatData.GetStates(GetInstid(), ParseEnum.StateChange.ChangeDown, start, end);
                         break;
-                    case 1066:
-                        toUse = log.GetCastData().Where(x => x.GetSkillID() == 1066 && x.GetSrcInstid() == GetInstid() && x.IsActivation().IsCasting()).ToList();
+                    case SkillItem.ResurrectId:
+                        toUse = log.GetCastData().Where(x => x.GetSkillID() == SkillItem.ResurrectId && x.GetSrcInstid() == GetInstid() && x.IsActivation().IsCasting()).ToList();
                         break;
                 }
                 foreach (CombatItem pnt in toUse)
