@@ -1962,27 +1962,27 @@ namespace LuckParser.Controllers
                     }
                     else
                     {
-                        if (cl.GetID() == -2)
+                        if (cl.GetID() == SkillItem.WeaponSwapId)
                         {//wepswap
                             string skillName = "Weapon Swap";
                             string skillLink = HTMLHelper.GetLink("Swap");
                             sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
                             sw.Write("<br>");
                         }
-                        else if (cl.GetID() == 1066)
+                        else if (cl.GetID() == SkillItem.ResuccectId)
                         {
                             string skillName = "Resurrect";
                             string skillLink = HTMLHelper.GetLink("Downs");
                             sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
                         }
-                        else if (cl.GetID() == 1175)
+                        else if (cl.GetID() == SkillItem.BandageId)
                         {
                             string skillName = "Bandage";
                             string skillLink = HTMLHelper.GetLink("Bandage");
                             sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
 
                         }
-                        else if (cl.GetID() == 65001)
+                        else if (cl.GetID() == SkillItem.DodgeId)
                         {
                             string skillName = "Dodge";
                             string skillLink = HTMLHelper.GetLink("Dodge");

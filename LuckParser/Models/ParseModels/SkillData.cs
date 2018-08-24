@@ -16,9 +16,9 @@ namespace LuckParser.Models.ParseModels
         private Dictionary<long, SkillItem> skills = new Dictionary<long, SkillItem>();
         readonly static Dictionary<long, string> _apiMissingID = new Dictionary<long, string>()
         {
-            {1066, "Resurrect"},
-            {1175, "Bandage" },
-            {65001, "Dodge" },
+            {SkillItem.ResuccectId, "Resurrect"},
+            {SkillItem.BandageId, "Bandage" },
+            {SkillItem.DodgeId, "Dodge" },
             // Gorseval
             {31834,"Ghastly Rampage" },
             {31759,"Protective Shadow" },
