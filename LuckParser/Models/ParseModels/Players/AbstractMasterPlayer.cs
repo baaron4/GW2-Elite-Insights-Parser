@@ -273,7 +273,7 @@ namespace LuckParser.Models.ParseModels
         protected abstract void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate);
         protected abstract void SetCombatReplayIcon(ParsedLog log);
 
-        private void GenerateExtraBoonData(ParsedLog log, long boonid, Point[] accurateUptime, List<PhaseData> phases)
+        private void generateExtraBoonData(ParsedLog log, long boonid, BoonSimulationResult boonSimulation, List<PhaseData> phases)
         {
 
             switch (boonid)
@@ -286,7 +286,7 @@ namespace LuckParser.Models.ParseModels
                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].GetStart(), phases[i].GetEnd());
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
                         int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.GetBossData().GetInstid()).Sum(x => x.GetDamage()), 1);
-                        List<DamageLog> effect = dmLogs.Where(x => accurateUptime[(int)x.GetTime()].Y > 0 && x.IsCondi() == 0).ToList();
+                        List<DamageLog> effect = dmLogs.Where(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0).ToList();
                         List<DamageLog> effectBoss = effect.Where(x => x.GetDstInstidt() == log.GetBossData().GetInstid()).ToList();
                         int damage = (int)(effect.Sum(x => x.GetDamage()) / 21.0);
                         int bossDamage = (int)(effectBoss.Sum(x => x.GetDamage()) / 21.0);
@@ -307,8 +307,8 @@ namespace LuckParser.Models.ParseModels
                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].GetStart(), phases[i].GetEnd());
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
                         int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.GetBossData().GetInstid()).Sum(x => x.GetDamage()), 1);
-                        int effectCount = dmLogs.Count(x => accurateUptime[(int)x.GetTime()].Y > 0 && x.IsCondi() == 0);
-                        int effectBossCount = dmLogs.Count(x => accurateUptime[(int)x.GetTime()].Y > 0 && x.IsCondi() == 0 && x.GetDstInstidt() == log.GetBossData().GetInstid());
+                        int effectCount = dmLogs.Count(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0);
+                        int effectBossCount = dmLogs.Count(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0 && x.GetDstInstidt() == log.GetBossData().GetInstid());
                         int damage = (int)(effectCount * (325 + 3000 * 0.04));
                         int bossDamage = (int)(effectBossCount * (325 + 3000 * 0.04));
                         double gain = Math.Round(100.0 * ((double)(totalDamage + damage) / totalDamage - 1.0), 2);
@@ -328,7 +328,7 @@ namespace LuckParser.Models.ParseModels
                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].GetStart(), phases[i].GetEnd());
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
                         int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.GetBossData().GetInstid()).Sum(x => x.GetDamage()), 1);
-                        List<DamageLog> effect = dmLogs.Where(x => accurateUptime[(int)x.GetTime()].Y > 0 && x.IsCondi() == 0).ToList();
+                        List<DamageLog> effect = dmLogs.Where(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0).ToList();
                         List<DamageLog> effectBoss = effect.Where(x => x.GetDstInstidt() == log.GetBossData().GetInstid()).ToList();
                         int damage = (int)(effect.Sum(x => x.GetDamage()) / 11.0);
                         int bossDamage = (int)(effectBoss.Sum(x => x.GetDamage()) / 11.0);
@@ -370,9 +370,6 @@ namespace LuckParser.Models.ParseModels
                 _condiPresence.Add(new Dictionary<long, long>());
             }
 
-            var toFill = new Point[dur + 1];
-            var toFillPresence = new Point[dur + 1];
-
             long death = GetDeath(log, 0, dur) - log.GetBossData().GetFirstAware();
 
             foreach (Boon boon in toTrack)
@@ -398,7 +395,7 @@ namespace LuckParser.Models.ParseModels
                     var simulation = simulator.GetSimulationResult();
                     var updateBoonPresence = Boon.GetBoonList().Any(x => x.GetID() == boonid);
                     var updateCondiPresence = boonid != 873 && Boon.GetCondiBoonList().Any(x => x.GetID() == boonid);
-                    foreach (var simul in simulation)
+                    foreach (var simul in simulation.Items)
                     {
                         for (int i = 0; i < phases.Count; i++)
                         {
@@ -429,60 +426,37 @@ namespace LuckParser.Models.ParseModels
                             }
                         }
                     }
-                    // Graphs
-                    // full precision
-                    for (int i = 0; i <= dur; i++)
-                    {
-                        toFill[i] = new Point(i, 0);
-                        if (updateBoonPresence || updateCondiPresence)
-                        {
-                            toFillPresence[i] = new Point(i, 0);
-                        }
-                    }
-                    foreach (var simul in simulation)
-                    {
-                        int start = (int)simul.GetStart();
-                        int end = (int)simul.GetEnd();
 
-                        bool present = simul.GetItemDuration() > 0;
-                        for (int i = start; i <= end; i++)
-                        {
-                            toFill[i] = new Point(i, simul.GetStack(i));
-                            if (updateBoonPresence || updateCondiPresence)
-                            {
-                                toFillPresence[i] = new Point(i, present ? 1 : 0);
-                            }
-                        }
-                    }
+                    // Graphs
                     if (requireExtraData)
                     {
-                        GenerateExtraBoonData(log, boonid, toFill, phases);
+                        generateExtraBoonData(log, boonid, simulation, phases);
                     }
-                    // reduce precision to seconds
-                    var reducedPrecision = new List<Point>(capacity: fightDuration + 1);
+                    // Precision is reduced to seconds
+                    var graphPoints = new List<Point>(capacity: fightDuration + 1);
                     var boonPresence = boonPresencePoints.GetBoonChart();
                     var condiPresence = condiPresencePoints.GetBoonChart();
                     if (Replay != null && (updateCondiPresence || updateBoonPresence || Boon.GetDefensiveTableList().Any(x => x.GetID() == boonid) || Boon.GetOffensiveTableList().Any(x => x.GetID() == boonid)))
                     {
                         foreach (int time in Replay.GetTimes())
                         {
-                            Replay.AddBoon(boonid, toFill[time].Y);
+                            Replay.AddBoon(boonid, simulation.GetBoonStackCount(time));
                         }
 
                     }
                     for (int i = 0; i <= fightDuration; i++)
                     {
-                        reducedPrecision.Add(new Point(i, toFill[1000 * i].Y));
+                        graphPoints.Add(new Point(i, simulation.GetBoonStackCount(1000 * i)));
                         if (updateBoonPresence)
                         {
-                            boonPresence[i] = new Point(i, boonPresence[i].Y + toFillPresence[1000 * i].Y);
+                            boonPresence[i] = new Point(i, boonPresence[i].Y + (simulation.GetEffectPresence(1000 * i) ? 1 : 0));
                         }
                         if (updateCondiPresence)
                         {
-                            condiPresence[i] = new Point(i, condiPresence[i].Y + toFillPresence[1000 * i].Y);
+                            condiPresence[i] = new Point(i, condiPresence[i].Y + (simulation.GetEffectPresence(1000 * i) ? 1 : 0));
                         }
                     }
-                    _boonPoints[boonid] = new BoonsGraphModel(boon.GetName(), reducedPrecision);
+                    _boonPoints[boonid] = new BoonsGraphModel(boon.GetName(), graphPoints);
                 }
             }
             _boonPoints[-2] = boonPresencePoints;
