@@ -1930,7 +1930,7 @@ namespace LuckParser.Controllers
                 foreach (CastLog cl in casting)
                 {
                     GW2APISkill apiskill = null;
-                    SkillItem skill = _log.GetSkillData().FirstOrDefault(x => x.GetID() == cl.GetID());
+                    SkillItem skill = _log.GetSkillData().Get(cl.GetID());
                     if (skill != null)
                     {
                         apiskill = skill.GetGW2APISkill();
@@ -2201,7 +2201,7 @@ namespace LuckParser.Controllers
             HTMLHelper.WriteDamageDistTableCondi(sw, usedIDs, damageLogs, finalTotalDamage);
             foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.GetID())).Select(x => x.GetID()).Distinct().ToList())
             {
-                SkillItem skill = skillList.FirstOrDefault(x => x.GetID() == id);
+                SkillItem skill = skillList.Get(id);
                 List<DamageLog> listToUse = damageLogs.Where(x => x.GetID() == id).ToList();
                 usedIDs.Add(id);
                 if (skill != null && listToUse.Count > 0)
@@ -2229,7 +2229,7 @@ namespace LuckParser.Controllers
             }
             foreach (int id in casting.Where(x => !usedIDs.Contains(x.GetID())).Select(x => (int)x.GetID()).Distinct())
             {
-                SkillItem skill = skillList.FirstOrDefault(x => x.GetID() == id);
+                SkillItem skill = skillList.Get(id);
                 if (skill != null)
                 {
                     List<CastLog> clList = casting.Where(x => x.GetID() == id).ToList();
@@ -2525,7 +2525,7 @@ namespace LuckParser.Controllers
                     }
                     foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.GetID())).Select(x => (int)x.GetID()).Distinct())
                     {//foreach casted skill
-                        SkillItem skill = skillList.FirstOrDefault(x => x.GetID() == id);
+                        SkillItem skill = skillList.Get(id);
 
                         int totaldamage = 0;
                         int mindamage = 0;
@@ -2860,7 +2860,7 @@ namespace LuckParser.Controllers
         {
             sw.Write("<ul class=\"list-group\">");
             {
-                foreach (SkillItem skill in _log.GetSkillData())
+                foreach (SkillItem skill in _log.GetSkillData().Values)
                 {
                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                   skill.GetID() + " : " + skill.GetName() +

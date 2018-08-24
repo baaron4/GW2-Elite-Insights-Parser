@@ -143,7 +143,7 @@ namespace LuckParser.Models.ParseModels
             foreach (CastLog cl in casting)
             {
                 GW2APISkill apiskill = null;
-                SkillItem skill = skillList.FirstOrDefault(x => x.GetID() == cl.GetID());
+                SkillItem skill = skillList.Get(cl.GetID());
                 if (skill != null)
                 {
                     apiskill = skill.GetGW2APISkill();

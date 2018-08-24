@@ -15,7 +15,7 @@ namespace LuckParser.Controllers
         public static void WriteCastingItem(StreamWriter sw, CastLog cl, SkillData skillList, long start, long end)
         {
             GW2APISkill skill = null;
-            SkillItem skillIt = skillList.FirstOrDefault(x => x.GetID() == cl.GetID());
+            SkillItem skillIt = skillList.Get(cl.GetID());
             if (skillIt != null)
             {
                 skill = skillIt.GetGW2APISkill();
@@ -108,7 +108,7 @@ namespace LuckParser.Controllers
         {
             string skillIcon = "";
             GW2APISkill skill = null;
-            SkillItem skillIt = skillList.FirstOrDefault(x => x.GetID() == cl.GetID());
+            SkillItem skillIt = skillList.Get(cl.GetID());
             if (skillIt != null)
             {
                 skill = skillIt.GetGW2APISkill();
