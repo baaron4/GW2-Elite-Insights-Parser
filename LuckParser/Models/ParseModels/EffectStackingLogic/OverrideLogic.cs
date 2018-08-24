@@ -10,9 +10,9 @@ namespace LuckParser.Models.ParseModels
             stacks.Sort((x, y) => x.BoonDuration < y.BoonDuration ? -1 : 1);
         }
 
-        public override bool StackEffect(ParsedLog log, BoonSimulator.BoonStackItem toAdd, List<BoonSimulator.BoonStackItem> stacks, List<BoonSimulationItem> simulation)
+        public override bool StackEffect(ParsedLog log, BoonSimulator.BoonStackItem stackItem, List<BoonSimulator.BoonStackItem> stacks, List<BoonSimulationItem> simulation)
         {
-            return StackEffect(0, log, toAdd, stacks, simulation);
+            return StackEffect(0, log, stackItem, stacks, simulation);
         }
     }
 }
