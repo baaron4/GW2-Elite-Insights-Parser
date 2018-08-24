@@ -1,5 +1,4 @@
-﻿using LuckParser.Models;
-using LuckParser.Models.ParseModels;
+﻿using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,66 +10,43 @@ namespace LuckParser.Controllers
 {
     class HTMLHelper
     {
-        public static SettingsContainer settings;
+        public static SettingsContainer Settings;
 
-        public static void writeCastingItem(StreamWriter sw, CastLog cl, SkillData s_list, long start, long end)
+        public static void WriteCastingItem(StreamWriter sw, CastLog cl, SkillData skillList, long start, long end)
         {
-            string skillName = "";
             GW2APISkill skill = null;
-            if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
+            SkillItem skillIt = skillList.FirstOrDefault(x => x.GetID() == cl.GetID());
+            if (skillIt != null)
             {
-                skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
+                skill = skillIt.GetGW2APISkill();
             }
-            if (skill == null)
-            {
-                skillName = s_list.getName(cl.getID());
-            }
-            else
-            {
-                skillName = skill.name;
-            }
-            float dur = 0.0f;
+            string skillName = skill == null ? skillList.GetName(cl.GetID()) : skill.name;
+            float dur;
             if (skillName == "Dodge")
             {
                 dur = 0.5f;
             }
-            else if (cl.getID() == -2)
-            {//wepswap
+            else if (cl.GetID() == -2)
+            {
                 skillName = "Weapon Swap";
                 dur = 0.1f;
             }
-            else if (skillName == "Resurrect")
-            {
-                dur = cl.getActDur() / 1000f;
-            }
-            else if (skillName == "Bandage")
-            {
-                dur = cl.getActDur() / 1000f;
-            }
             else
             {
-                dur = cl.getActDur() / 1000f;
+                dur = cl.GetActDur() / 1000f;
             }
             skillName = skillName.Replace("\"", "");
-            float offset = (cl.getTime() - start) / 1000f;
+            float offset = (cl.GetTime() - start) / 1000f;
             float xVal = dur;
             if (offset < 0.0f)
             {
                 xVal += offset;
             }
-            xVal = Math.Min(xVal, (end - cl.getTime()) / 1000f);
+            xVal = Math.Min(xVal, (end - cl.GetTime()) / 1000f);
             sw.Write("{");
             {
-                if (cl.getID() == -5)
-                {
-                    sw.Write("y: ['1'],");
-                }
-                else
-                {
-                    sw.Write("y: ['1.5'],");
-                }
+                sw.Write(cl.GetID() == -5 ? "y: ['1']," : "y: ['1.5'],");
               
-
                 sw.Write(
                        "x: ['" + xVal + "']," +
                        "base:'" + Math.Max(offset,0.0f) + "'," +
@@ -80,14 +56,7 @@ namespace LuckParser.Controllers
                        "type: 'bar',");
                 if (skill != null)
                 {
-                    if (skill.slot == "Weapon_1")
-                    {
-                        sw.Write("width:'0.5',");
-                    }
-                    else
-                    {
-                        sw.Write("width:'1',");
-                    }
+                    sw.Write(skill.slot == "Weapon_1" ? "width:'0.5'," : "width:'1',");
 
                 }
                 else
@@ -98,15 +67,15 @@ namespace LuckParser.Controllers
                         "hoverlabel:{namelength:'-1'},");
                 sw.Write("marker: {");
                 {
-                        if (cl.endActivation() == ParseEnum.Activation.CancelFire)
+                        if (cl.EndActivation() == ParseEnum.Activation.CancelFire)
                         {
                             sw.Write("color: 'rgb(40,40,220)',");
                         }
-                        else if (cl.endActivation() == ParseEnum.Activation.CancelCancel)
+                        else if (cl.EndActivation() == ParseEnum.Activation.CancelCancel)
                         {
                             sw.Write("color: 'rgb(220,40,40)',");
                         }
-                        else if (cl.endActivation() == ParseEnum.Activation.Reset)
+                        else if (cl.EndActivation() == ParseEnum.Activation.Reset)
                         {
                             sw.Write("color: 'rgb(40,220,40)',");
                         }
@@ -117,11 +86,11 @@ namespace LuckParser.Controllers
                     sw.Write("width: '5',");
                     sw.Write("line:{");
                     {
-                            if (cl.startActivation() == ParseEnum.Activation.Normal)
+                            if (cl.StartActivation() == ParseEnum.Activation.Normal)
                             {
                                 sw.Write("color: 'rgb(20,20,20)',");
                             }
-                            else if (cl.startActivation() == ParseEnum.Activation.Quickness)
+                            else if (cl.StartActivation() == ParseEnum.Activation.Quickness)
                             {
                                 sw.Write("color: 'rgb(220,40,220)',");
                             }
@@ -135,17 +104,18 @@ namespace LuckParser.Controllers
             sw.Write(" },");
         }
 
-        public static void writeCastingItemIcon(StreamWriter sw, CastLog cl, SkillData s_list, long start, bool last)
+        public static void WriteCastingItemIcon(StreamWriter sw, CastLog cl, SkillData skillList, long start, bool last)
         {
             string skillIcon = "";
             GW2APISkill skill = null;
-            if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
+            SkillItem skillIt = skillList.FirstOrDefault(x => x.GetID() == cl.GetID());
+            if (skillIt != null)
             {
-                skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
+                skill = skillIt.GetGW2APISkill();
             }
-            if (skill != null && cl.getID() != -2)
+            if (skill != null && cl.GetID() != -2)
             {
-                float offset = (cl.getTime() - start) / 1000f;
+                float offset = (cl.GetTime() - start) / 1000f;
                 if (skill.slot != "Weapon_1")
                 {
                     skillIcon = skill.icon;
@@ -164,36 +134,28 @@ namespace LuckParser.Controllers
             }
             else
             {
-                string skillName = "";
-
-                if (cl.getID() == -2)
-                { //wepswap
-                    skillName = "Weapon Swap";
-                    // skillIcon = "https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png";
-                }
-                else
-                {
-                    skillName = s_list.getName(cl.getID());
-                }
-
-
+                string skillName = cl.GetID() == -2 ? "Weapon Swap" : skillList.GetName(cl.GetID());
                 if (skillName == "Dodge")
                 {
-                    // skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
+                    skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
                 }
                 else if (skillName == "Resurrect")
                 {
-                    //skillIcon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
+                    skillIcon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
                 }
                 else if (skillName == "Bandage")
                 {
-                    // skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
+                    skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
+                } else if (cl.GetID() == -2)
+                {
+                    skillIcon = "https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png";
                 }
+
                 sw.Write("{" +
                               "source: '" + skillIcon + "'," +
                               "xref: 'x'," +
                               "yref: 'y'," +
-                              "x: " + (cl.getTime() - start) / 1000f + "," +
+                              "x: " + (cl.GetTime() - start) / 1000f + "," +
                               "y: 0," +
                               "sizex: 1.1," +
                               "sizey: 1.1," +
@@ -207,7 +169,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        public static void writeBoonTableHeader(StreamWriter sw, List<Boon> list_to_use)
+        public static void WriteBoonTableHeader(StreamWriter sw, List<Boon> listToUse)
         {
             sw.Write("<thead>");
             {
@@ -216,9 +178,9 @@ namespace LuckParser.Controllers
                     sw.Write("<th width=\"50px\">Sub</th>");
                     sw.Write("<th width=\"50px\"></th>");
                     sw.Write("<th>Name</th>");
-                    foreach (Boon boon in list_to_use)
+                    foreach (Boon boon in listToUse)
                     {
-                        sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + "\" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                        sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.GetLink() + "\" alt=\"" + boon.GetName() + "\" title =\" " + boon.GetName() + "\" height=\"18\" width=\"18\" >" + "</th>");
                     }
                 }
                 sw.Write("</tr> ");
@@ -227,18 +189,18 @@ namespace LuckParser.Controllers
 
         }
 
-        public static void writeBoonGenTableBody(StreamWriter sw, Player player, List<Boon> list_to_use, Dictionary<long, string> boonArray)
+        public static void WriteBoonGenTableBody(StreamWriter sw, Player player, List<Boon> listToUse, Dictionary<long, string> boonArray)
         {
             sw.Write("<tr>");
             {
-                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + "\" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "<span style=\"display:none\">" + player.getProf() + "</span>" + "</td>");
-                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-                foreach (Boon boon in list_to_use)
+                sw.Write("<td>" + player.GetGroup() + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.GetProf()) + "\" alt=\"" + player.GetProf() + "\" height=\"20\" width=\"20\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
+                sw.Write("<td>" + player.GetCharacter() + "</td>");
+                foreach (Boon boon in listToUse)
                 {
-                    if (boonArray.ContainsKey(boon.getID()))
+                    if (boonArray.ContainsKey(boon.GetID()))
                     {
-                        sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
+                        sw.Write("<td>" + boonArray[boon.GetID()] + "</td>");
                     }
                     else
                     {
@@ -249,7 +211,7 @@ namespace LuckParser.Controllers
             sw.Write("</tr>");
         }
 
-        public static void writeDamageDistTableHeader(StreamWriter sw)
+        public static void WriteDamageDistTableHeader(StreamWriter sw)
         {
             sw.Write("<thead>");
             {
@@ -275,7 +237,7 @@ namespace LuckParser.Controllers
             sw.Write("</thead>");
         }
 
-        public static void writeDamageDistTableFoot(StreamWriter sw, int finalTotalDamage)
+        public static void WriteDamageDistTableFoot(StreamWriter sw, int finalTotalDamage)
         {
             sw.Write("<tfoot class=\"text-dark\">");
             {
@@ -301,20 +263,20 @@ namespace LuckParser.Controllers
             sw.Write("</tfoot>");
         }
 
-        public static void writeDamageDistTableCondi(StreamWriter sw, HashSet<long> usedIDs, List<DamageLog> damageLogs, int finalTotalDamage)
+        public static void WriteDamageDistTableCondi(StreamWriter sw, HashSet<long> usedIDs, List<DamageLog> damageLogs, int finalTotalDamage)
         {
-            foreach (Boon condi in Boon.getCondiBoonList())
+            foreach (Boon condi in Boon.GetCondiBoonList())
             {
                 int totaldamage = 0;
                 int mindamage = 0;
-                int avgdamage = 0;
+                int avgdamage;
                 int hits = 0;
                 int maxdamage = 0;
-                long condiID = condi.getID();
+                long condiID = condi.GetID();
                 usedIDs.Add(condiID);
-                foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                foreach (DamageLog dl in damageLogs.Where(x => x.GetID() == condiID))
                 {
-                    int curdmg = dl.getDamage();
+                    int curdmg = dl.GetDamage();
                     totaldamage += curdmg;
                     if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                     if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
@@ -324,11 +286,11 @@ namespace LuckParser.Controllers
                 avgdamage = (int)(totaldamage / (double)hits);
                 if (totaldamage != 0)
                 {
-                    string condiName = condi.getName();// Boon.getCondiName(condiID);
+                    string condiName = condi.GetName();// Boon.getCondiName(condiID);
                     sw.Write("<tr class=\"condi\">");
                     {
-                        sw.Write("<td align=\"left\"><img src=\"" + condi.getLink() + "\" alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
-                        sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
+                        sw.Write("<td align=\"left\"><img src=\"" + condi.GetLink() + "\" alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                        sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
                         sw.Write("<td>" + totaldamage + "</td>");
                         sw.Write("<td>" + mindamage + "</td>");
                         sw.Write("<td>" + avgdamage + "</td>");
@@ -347,11 +309,11 @@ namespace LuckParser.Controllers
             }
         }
 
-        public static void writeDamageDistTableSkill(StreamWriter sw, SkillItem skill, SkillData skill_data, List<DamageLog> damageLogs, int finalTotalDamage, int casts = -1, double timeswasted = -1, double timessaved = 1)
+        public static void WriteDamageDistTableSkill(StreamWriter sw, SkillItem skill, SkillData skillData, List<DamageLog> damageLogs, int finalTotalDamage, int casts = -1, double timeswasted = -1, double timessaved = 1)
         {
             int totaldamage = 0;
             int mindamage = 0;
-            int avgdamage = 0;
+            int avgdamage;
             int hits = 0;
             int maxdamage = 0;
             int crit = 0;
@@ -359,14 +321,14 @@ namespace LuckParser.Controllers
             int glance = 0;
             foreach (DamageLog dl in damageLogs)
             {
-                int curdmg = dl.getDamage();
+                int curdmg = dl.GetDamage();
                 totaldamage += curdmg;
                 if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                 if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
                 hits++;
-                ParseEnum.Result result = dl.getResult();
+                ParseEnum.Result result = dl.GetResult();
                 if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
-                if (dl.isFlanking() == 1) { flank++; }
+                if (dl.IsFlanking() == 1) { flank++; }
             }
             avgdamage = (int)(totaldamage / (double)hits);
             string wasted = timeswasted > 0.0 ? Math.Round(timeswasted, 2) + "s" : "";
@@ -375,23 +337,24 @@ namespace LuckParser.Controllers
             if (casts > 0) {
                 hpcast = Math.Round(hits / (double)casts, 2);
             }
-            string skillName = (skill.getID().ToString() == skill.getName()) ? skill_data.getName(skill.getID()): skill.getName();
+            string skillName = (skill.GetID().ToString() == skill.GetName()) ? skillData.GetName(skill.GetID()): skill.GetName();
             if (totaldamage != 0 && skill.GetGW2APISkill() != null)
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
+                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.GetName() + "\" title=\"" + skill.GetID() + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
+                    sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
                     sw.Write("<td>" + totaldamage + "</td>");
                     sw.Write("<td>" + mindamage + "</td>");
                     sw.Write("<td>" + avgdamage + "</td>");
                     sw.Write("<td>" + maxdamage + "</td>");
                     sw.Write("<td>" + (casts != -1 ? casts.ToString() : "") + "</td>");
                     sw.Write("<td>" + hits + "</td>");
-                    sw.Write("<td>" + (hpcast != -1 ? hpcast.ToString() : "") + "</td>");
-                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""+ crit+ " out of " + hits + " hits\">" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</span></td>");
-                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + flank + " out of " + hits + " hits\">" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</span></td>");
-                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + glance + " out of " + hits + " hits\">" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</span></td>");
+                    sw.Write("<td>" + (hpcast < 0 ? hpcast.ToString() : "") + "</td>");
+
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + crit + " out of " + hits + " hits\">" + Math.Round(100 * (double)crit / hits, 2) + "%</span></td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + flank + " out of " + hits + " hits\">" + Math.Round(100 * (double)flank / hits, 2) + "%</span></td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + glance + " out of " + hits + " hits\">" + Math.Round(100 * (double)glance / hits, 2) + "%</span></td>");
                     sw.Write("<td>" + wasted +"</td>");
                     sw.Write("<td>" + saved + "</td>");
                 }
@@ -402,17 +365,17 @@ namespace LuckParser.Controllers
                 sw.Write("<tr>");
                 {
                     sw.Write("<td align=\"left\">" + skillName + "</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
+                    sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
                     sw.Write("<td>" + totaldamage + "</td>");
                     sw.Write("<td>" + mindamage + "</td>");
                     sw.Write("<td>" + avgdamage + "</td>");
                     sw.Write("<td>" + maxdamage + "</td>");
                     sw.Write("<td>" + (casts != -1 ? casts.ToString() : "") + "</td>");
                     sw.Write("<td>" + hits + "</td>");
-                    sw.Write("<td>" + (hpcast != -1 ? hpcast.ToString() : "") + "</td>");
-                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + crit + " out of " + hits + " hits\">" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</span></td>");
-                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + flank + " out of " + hits + " hits\">" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</span></td>");
-                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + glance + " out of " + hits + " hits\">" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</span></td>");
+                    sw.Write("<td>" + (hpcast < 0 ? hpcast.ToString() : "") + "</td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + crit + " out of " + hits + " hits\">" + Math.Round(100 * (double)crit / hits,2) + "%</span></td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + flank + " out of " + hits + " hits\">" + Math.Round(100 * (double)flank / hits,2) + "%</span></td>");
+                    sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + glance + " out of " + hits + " hits\">" + Math.Round(100 * (double)glance / hits,2) + "%</span></td>");
                     sw.Write("<td>" + wasted + "</td>");
                     sw.Write("<td>" + saved + "</td>");
                 }
@@ -422,7 +385,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
+                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.GetName() + "\" title=\"" + skill.GetID() + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
@@ -462,7 +425,7 @@ namespace LuckParser.Controllers
             }
         }
         
-        public static void writeBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, BossData boss_data, string y_axis = "")
+        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, BossData bossData, string yAxis = "")
         {
             //Boss Health
             //Adding dps axis
@@ -472,7 +435,7 @@ namespace LuckParser.Controllers
                 maxDPS = 1000;
             }
             int hotCount = 0;
-            List<Point> BossHOT = boss_data.getHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
+            List<Point> BossHOT = bossData.GetHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
             foreach (Point dp in BossHOT)
             {
                 if (hotCount == BossHOT.Count - 1)
@@ -490,8 +453,7 @@ namespace LuckParser.Controllers
             sw.Write("],");
             //text axis is boss hp in %
             sw.Write("text: [");
-
-            float scaler2 = boss_data.getHealth() / 100;
+            
             hotCount = 0;
             foreach (Point dp in BossHOT)
             {
@@ -528,15 +490,15 @@ namespace LuckParser.Controllers
             sw.Write("],");
             sw.Write(" mode: 'lines'," +
                     " line: {shape: 'spline', dash: 'dashdot'}," +
-                   ( y_axis.Length > 0 ? " yaxis: '"+ y_axis+"',"  : "") +
+                   ( yAxis.Length > 0 ? " yaxis: '"+ yAxis+"',"  : "") +
                     "hoverinfo: 'text'," +
                     " name: 'Boss health'");
             
         }
 
-        public static void writePlayerTabBoonGraph(StreamWriter sw, BoonsGraphModel bgm, long start, long end)
+        public static void WritePlayerTabBoonGraph(StreamWriter sw, BoonsGraphModel bgm, long start, long end)
         {
-            List<Point> bChart = bgm.getBoonChart().Where(x => x.X >= start / 1000 && x.X <= end / 1000).ToList();
+            List<Point> bChart = bgm.GetBoonChart().Where(x => x.X >= start / 1000 && x.X <= end / 1000).ToList();
             int bChartCount = 0;
             sw.Write("y: [");
             {
@@ -552,7 +514,7 @@ namespace LuckParser.Controllers
                     }
                     bChartCount++;
                 }
-                if (bgm.getBoonChart().Count == 0)
+                if (bgm.GetBoonChart().Count == 0)
                 {
                     sw.Write("'0'");
                 }
@@ -573,7 +535,7 @@ namespace LuckParser.Controllers
                     }
                     bChartCount++;
                 }
-                if (bgm.getBoonChart().Count == 0)
+                if (bgm.GetBoonChart().Count == 0)
                 {
                     sw.Write("'0'");
                 }
@@ -582,7 +544,7 @@ namespace LuckParser.Controllers
             sw.Write(" yaxis: 'y2'," +
                  " type: 'scatter',");
             //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
-            if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness")
+            if (bgm.GetBoonName() == "Might" || bgm.GetBoonName() == "Quickness")
             {
 
             }
@@ -590,12 +552,12 @@ namespace LuckParser.Controllers
             {
                 sw.Write(" visible: 'legendonly',");
             }
-            sw.Write(" line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
+            sw.Write(" line: {color:'" + GetLink("Color-" + bgm.GetBoonName()) + "'},");
             sw.Write(" fill: 'tozeroy'," +
-                 " name: \"" + bgm.getBoonName() + "\"");
+                 " name: \"" + bgm.GetBoonName() + "\"");
         }
 
-        public static void writePlayerTabDPSGraph(StreamWriter sw, string name, List<Point> playerdpsgraphdata, AbstractPlayer p)
+        public static void WritePlayerTabDPSGraph(StreamWriter sw, string name, List<Point> playerdpsgraphdata, AbstractPlayer p)
         {
             int ptdgCount = 0;
             bool total = name.Contains("Total");
@@ -644,7 +606,7 @@ namespace LuckParser.Controllers
                 }
             }
             sw.Write("],");
-            string color = GetLink("Color-" + p.getProf() + ( total? "-Total" : ( cleave? "-NonBoss": "")));
+            string color = GetLink("Color-" + p.GetProf() + ( total? "-Total" : ( cleave? "-NonBoss": "")));
             sw.Write(" mode: 'lines'," +
                    "line: {shape: 'spline',color:'" + color + "'}," +
                    "yaxis: 'y3',");
@@ -654,10 +616,10 @@ namespace LuckParser.Controllers
             }
             // "legendgroup: 'Damage'," +
             sw.Write("name: '" + name+"'," +
-                "legendgroup: '" + p.getCharacter() + (s10 ? "10s" : (s30 ? "30s" : ""))+"'");
+                "legendgroup: '" + p.GetCharacter() + (s10 ? "10s" : (s30 ? "30s" : ""))+"'");
         }
 
-        public static int writeDPSPlots(StreamWriter sw, List<Point> graphdata, List<Point> totalData = null)
+        public static int WriteDPSPlots(StreamWriter sw, List<Point> graphdata, List<Point> totalData = null)
         {
             //Adding dps axis
             int maxDPS = 0;
@@ -714,7 +676,7 @@ namespace LuckParser.Controllers
             return maxDPS;
         }     
 
-        public static void writeDamageStatsTableHeader(StreamWriter sw)
+        public static void WriteDamageStatsTableHeader(StreamWriter sw)
         {
             sw.Write("<tr>");
             {
@@ -739,7 +701,7 @@ namespace LuckParser.Controllers
             sw.Write("</tr>");
         }
 
-        public static void writeDamageStatsTableFoot(StreamWriter sw, List<string[]> footerList)
+        public static void WriteDamageStatsTableFoot(StreamWriter sw, List<string[]> footerList)
         {
             foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
             {
@@ -789,7 +751,7 @@ namespace LuckParser.Controllers
             sw.Write("</tr>");
         }
 
-        public static void writeCombatReplayInterface(StreamWriter sw, Tuple<int,int> canvasSize, ParsedLog log)
+        public static void WriteCombatReplayInterface(StreamWriter sw, Tuple<int,int> canvasSize, ParsedLog log)
         {
             sw.Write("<div class=\"d-flex justify-content-around align-items-center justify-content-center\">");
             {
@@ -799,7 +761,7 @@ namespace LuckParser.Controllers
                     sw.Write("</canvas>");
                     sw.Write("<div class=\"d-flex justify-content-center slidecontainer\">");
                     {
-                        sw.Write("<input oninput=\"updateTime(this.value);\"type=\"range\" min=\"0\" max=\"" + (log.getBoss().getCombatReplay().getPositions().Count - 1) + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
+                        sw.Write("<input oninput=\"updateTime(this.value);\"type=\"range\" min=\"0\" max=\"" + (log.GetBoss().GetCombatReplay().GetPositions().Count - 1) + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
                         sw.Write("<input class=\"ml-5\" type=\"text\" id=\"timeRangeDisplay\" disabled value=\"0 secs\">");
                     }
                     sw.Write("</div>");
@@ -859,19 +821,19 @@ namespace LuckParser.Controllers
                     sw.Write("</div>");
                     sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center btn-group btn-group-toggle mb-5\" data-toggle=\"buttons\">");
                     {
-                        List<int> groups = log.getPlayerList().Select(x => x.getGroup()).Distinct().ToList();
+                        List<int> groups = log.GetPlayerList().Select(x => x.GetGroup()).Distinct().ToList();
                         foreach (int group in groups)
                         {
                             sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center mt-2\">");
                             {
                                 sw.Write("<h3>Group " + group + "</h3>");
-                                foreach (Player p in log.getPlayerList().Where(x => x.getGroup() == group))
+                                foreach (Player p in log.GetPlayerList().Where(x => x.GetGroup() == group))
                                 {
-                                    sw.Write("<label id=\"id" + p.getInstid() + "\" style=\"width: 150px;\" onclick=\"selectActor(" + p.getInstid() + ")\"  class=\"btn btn-dark\">" +
+                                    sw.Write("<label id=\"id" + p.GetInstid() + "\" style=\"width: 150px;\" onclick=\"selectActor(" + p.GetInstid() + ")\"  class=\"btn btn-dark\">" +
                                         "<input class=\"invisible\" type=\"radio\" autocomplete=\"off\">" +
-                                        p.getCharacter().Substring(0, Math.Min(10, p.getCharacter().Length))
-                                        + " <img src=\"" + GetLink(p.getProf())
-                                            + "\" alt=\"" + p.getProf()
+                                        p.GetCharacter().Substring(0, Math.Min(10, p.GetCharacter().Length))
+                                        + " <img src=\"" + GetLink(p.GetProf())
+                                            + "\" alt=\"" + p.GetProf()
                                             + "\" height=\"18\" width=\"18\" >" +
                                         "</label >");
                                 }
@@ -887,11 +849,11 @@ namespace LuckParser.Controllers
             sw.Write("</div>");
         }
 
-        private static void writeCombatReplayControls(StreamWriter sw, ParsedLog log, int pollingRate)
+        private static void WriteCombatReplayControls(StreamWriter sw, ParsedLog log, int pollingRate)
         {
             // animation control
             sw.Write("function startAnimate() {if (animation === null) { " +
-                "if (time ===" + (log.getBoss().getCombatReplay().getPositions().Count - 1) + ") {" +
+                "if (time ===" + (log.GetBoss().GetCombatReplay().GetPositions().Count - 1) + ") {" +
                     "time = 0;" +
                 "}" +
                 "animation = setInterval(function(){myanimate(time++)},speed);" +
@@ -940,7 +902,7 @@ namespace LuckParser.Controllers
                 "}");
         }
 
-        private static void writeCombatReplayMainClass(StreamWriter sw, ParsedLog log,CombatReplayMap map, int pollingRate)
+        private static void WriteCombatReplayMainClass(StreamWriter sw, ParsedLog log,CombatReplayMap map, int pollingRate)
         {
             // Players and boss
             sw.Write("var mainActor = function(group, imgSrc) {" +
@@ -1018,28 +980,28 @@ namespace LuckParser.Controllers
                     "}" +
                 "};");
             // create players
-            foreach (Player p in log.getPlayerList())
+            foreach (Player p in log.GetPlayerList())
             {
                 sw.Write("{");
-                sw.Write("var p = new mainActor(" + p.getGroup() + ",'" + p.getCombatReplay().getIcon() + "');");
-                sw.Write("data.set(" + p.getInstid() + ",p);");
+                sw.Write("var p = new mainActor(" + p.GetGroup() + ",'" + p.GetCombatReplay().GetIcon() + "');");
+                sw.Write("data.set(" + p.GetInstid() + ",p);");
                 sw.Write("p.pos = [");
-                foreach (Point3D pos in p.getCombatReplay().getPositions())
+                foreach (Point3D pos in p.GetCombatReplay().GetPositions())
                 {
-                    Tuple<int, int> coord = map.getMapCoord(pos.X, pos.Y);
+                    Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
                     sw.Write(coord.Item1 + ",");
                     sw.Write(coord.Item2 + ",");
                 }
                 sw.Write("];");
                 sw.Write("p.dead = [");
-                foreach (Tuple<long, long> status in p.getCombatReplay().getDead())
+                foreach (Tuple<long, long> status in p.GetCombatReplay().GetDead())
                 {
                     sw.Write("[" + status.Item1/pollingRate + ",");
                     sw.Write(status.Item2 / pollingRate + "],");
                 }
                 sw.Write("];");
                 sw.Write("p.down = [");
-                foreach (Tuple<long,long> status in p.getCombatReplay().getDown())
+                foreach (Tuple<long,long> status in p.GetCombatReplay().GetDown())
                 {
                     sw.Write("[" + status.Item1 / pollingRate + ",");
                     sw.Write(status.Item2 / pollingRate + "],");
@@ -1048,18 +1010,18 @@ namespace LuckParser.Controllers
                 sw.Write("}");
             }
             // create boss
-            sw.Write("boss = new mainActor(-2,'" + log.getBoss().getCombatReplay().getIcon() + "');");
+            sw.Write("boss = new mainActor(-2,'" + log.GetBoss().GetCombatReplay().GetIcon() + "');");
             sw.Write("boss.pos = [");
-            foreach (Point3D pos in log.getBoss().getCombatReplay().getPositions())
+            foreach (Point3D pos in log.GetBoss().GetCombatReplay().GetPositions())
             {
-                Tuple<int, int> coord = map.getMapCoord(pos.X, pos.Y);
+                Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
                 sw.Write(coord.Item1 + ",");
                 sw.Write(coord.Item2 + ",");
             }
             sw.Write("];");
         }
 
-        private static void writeCombatReplaySecondaryClass(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
+        private static void WriteCombatReplaySecondaryClass(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
             // thrash mobs
             sw.Write("var secondaryActor = function(imgSrc, start, end) {" +
@@ -1079,15 +1041,15 @@ namespace LuckParser.Controllers
                     "}" +
                 "};");
             // create thrash mobs
-            foreach (Mob mob in log.getBoss().getThrashMobs())
+            foreach (Mob mob in log.GetBoss().GetThrashMobs())
             {
                 sw.Write("{");
-                sw.Write("var p = new secondaryActor('" + mob.getCombatReplay().getIcon() + "'," + mob.getCombatReplay().getTimeOffsets().Item1 / pollingRate + "," + mob.getCombatReplay().getTimeOffsets().Item2 / pollingRate + ");");
-                sw.Write("secondaryData.set('" + mob.getInstid() + "_" + mob.getCombatReplay().getTimeOffsets().Item1 / pollingRate + "_" + mob.getCombatReplay().getTimeOffsets().Item2 / pollingRate + "',p);");
+                sw.Write("var p = new secondaryActor('" + mob.GetCombatReplay().GetIcon() + "'," + mob.GetCombatReplay().GetTimeOffsets().Item1 / pollingRate + "," + mob.GetCombatReplay().GetTimeOffsets().Item2 / pollingRate + ");");
+                sw.Write("secondaryData.set('" + mob.GetInstid() + "_" + mob.GetCombatReplay().GetTimeOffsets().Item1 / pollingRate + "_" + mob.GetCombatReplay().GetTimeOffsets().Item2 / pollingRate + "',p);");
                 sw.Write("p.pos = [");
-                foreach (Point3D pos in mob.getCombatReplay().getPositions())
+                foreach (Point3D pos in mob.GetCombatReplay().GetPositions())
                 {
-                    Tuple<int, int> coord = map.getMapCoord(pos.X, pos.Y);
+                    Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
                     sw.Write(coord.Item1 + ",");
                     sw.Write(coord.Item2 + ",");
                 }
@@ -1096,7 +1058,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        private static void writeCombatReplayCircleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
+        private static void WriteCombatReplayCircleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
             // Circle actors
             sw.Write("var circleActor = function(radius,fill,growing, color, start, end) {" +
@@ -1150,42 +1112,42 @@ namespace LuckParser.Controllers
                         "}" +
                     "}" +
                 "};");
-            foreach (Mob mob in log.getBoss().getThrashMobs())
+            foreach (Mob mob in log.GetBoss().GetThrashMobs())
             {
-                CombatReplay replay = mob.getCombatReplay();
-                foreach(CircleActor a in replay.getCircleActors())
+                CombatReplay replay = mob.GetCombatReplay();
+                foreach(CircleActor a in replay.GetCircleActors())
                 {
                     sw.Write("{");
-                    sw.Write("var a = new circleActor("+a.getRadius()+","+(a.isFilled() ? "true" : "false") + ","+a.getGrowing() / pollingRate + ","+a.getColor()+","+a.getLifespan().Item1/pollingRate+","+ a.getLifespan().Item2 / pollingRate + ");");
+                    sw.Write("var a = new circleActor("+a.GetRadius()+","+(a.IsFilled() ? "true" : "false") + ","+a.GetGrowing() / pollingRate + ","+a.GetColor()+","+a.GetLifespan().Item1/pollingRate+","+ a.GetLifespan().Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos ="+a.getPosition(mob.getInstid() + "_" + mob.getCombatReplay().getTimeOffsets().Item1 / pollingRate + "_" + mob.getCombatReplay().getTimeOffsets().Item2 / pollingRate, map)+";");
+                    sw.Write("a.pos ="+a.GetPosition(mob.GetInstid() + "_" + mob.GetCombatReplay().GetTimeOffsets().Item1 / pollingRate + "_" + mob.GetCombatReplay().GetTimeOffsets().Item2 / pollingRate, map)+";");
                     sw.Write("}");
                 }
             }
-            foreach (Player player in log.getPlayerList())
+            foreach (Player player in log.GetPlayerList())
             {
-                CombatReplay replay = player.getCombatReplay();
-                foreach (CircleActor a in replay.getCircleActors())
+                CombatReplay replay = player.GetCombatReplay();
+                foreach (CircleActor a in replay.GetCircleActors())
                 {
                     sw.Write("{");
-                    sw.Write("var a = new circleActor(" + a.getRadius() + "," + (a.isFilled() ? "true" : "false") + "," + a.getGrowing() / pollingRate + "," + a.getColor() + "," + a.getLifespan().Item1 / pollingRate + "," + a.getLifespan().Item2 / pollingRate + ");");
+                    sw.Write("var a = new circleActor(" + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.getPosition(player.getInstid().ToString(), map) + ";");
+                    sw.Write("a.pos =" + a.GetPosition(player.GetInstid().ToString(), map) + ";");
                     sw.Write("}");
                 }
             }
-            foreach (CircleActor a in log.getBoss().getCombatReplay().getCircleActors())
+            foreach (CircleActor a in log.GetBoss().GetCombatReplay().GetCircleActors())
             {
                 sw.Write("{");
-                sw.Write("var a = new circleActor(" + a.getRadius() + "," + (a.isFilled() ? "true" : "false") + "," + a.getGrowing() / pollingRate + "," + a.getColor() + "," + a.getLifespan().Item1 / pollingRate + "," + a.getLifespan().Item2 / pollingRate + ");");
+                sw.Write("var a = new circleActor(" + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                 sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.getPosition(log.getBossData().getInstid().ToString(), map) + ";");
+                sw.Write("a.pos =" + a.GetPosition(log.GetBossData().GetInstid().ToString(), map) + ";");
                 sw.Write("}");
 
             }
         }
 
-        private static void writeCombatReplayDoughnutActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
+        private static void WriteCombatReplayDoughnutActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
             // Circle actors
             sw.Write("var doughnutActor = function(innerRadius,outerRadius,growing, color, start, end) {" +
@@ -1231,49 +1193,49 @@ namespace LuckParser.Controllers
                         "}" +
                     "}" +
                 "};");
-            foreach (Mob mob in log.getBoss().getThrashMobs())
+            foreach (Mob mob in log.GetBoss().GetThrashMobs())
             {
-                CombatReplay replay = mob.getCombatReplay();
-                foreach (DoughnutActor a in replay.getDoughnutActors())
+                CombatReplay replay = mob.GetCombatReplay();
+                foreach (DoughnutActor a in replay.GetDoughnutActors())
                 {
                     sw.Write("{");
-                    sw.Write("var a = new doughnutActor(" + a.getInnerRadius() + "," + a.getOuterRadius() + "," + a.getGrowing() / pollingRate + "," + a.getColor() + "," + a.getLifespan().Item1 / pollingRate + "," + a.getLifespan().Item2 / pollingRate + ");");
+                    sw.Write("var a = new doughnutActor(" + a.GetInnerRadius() + "," + a.GetOuterRadius() + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.getPosition(mob.getInstid() + "_" + mob.getCombatReplay().getTimeOffsets().Item1 / pollingRate + "_" + mob.getCombatReplay().getTimeOffsets().Item2 / pollingRate, map) + ";");
+                    sw.Write("a.pos =" + a.GetPosition(mob.GetInstid() + "_" + mob.GetCombatReplay().GetTimeOffsets().Item1 / pollingRate + "_" + mob.GetCombatReplay().GetTimeOffsets().Item2 / pollingRate, map) + ";");
                     sw.Write("}");
                 }
             }
-            foreach (Player player in log.getPlayerList())
+            foreach (Player player in log.GetPlayerList())
             {
-                CombatReplay replay = player.getCombatReplay();
-                foreach (DoughnutActor a in replay.getDoughnutActors())
+                CombatReplay replay = player.GetCombatReplay();
+                foreach (DoughnutActor a in replay.GetDoughnutActors())
                 {
                     sw.Write("{");
-                    sw.Write("var a = new doughnutActor(" + a.getInnerRadius() + "," + a.getOuterRadius() + "," + a.getGrowing() / pollingRate + "," + a.getColor() + "," + a.getLifespan().Item1 / pollingRate + "," + a.getLifespan().Item2 / pollingRate + ");");
+                    sw.Write("var a = new doughnutActor(" + a.GetInnerRadius() + "," + a.GetOuterRadius() + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.getPosition(player.getInstid().ToString(), map) + ";");
+                    sw.Write("a.pos =" + a.GetPosition(player.GetInstid().ToString(), map) + ";");
                     sw.Write("}");
                 }
             }
-            foreach (DoughnutActor a in log.getBoss().getCombatReplay().getDoughnutActors())
+            foreach (DoughnutActor a in log.GetBoss().GetCombatReplay().GetDoughnutActors())
             {
                 sw.Write("{");
-                sw.Write("var a = new doughnutActor(" + a.getInnerRadius() + "," + a.getOuterRadius() + "," + a.getGrowing() / pollingRate + "," + a.getColor() + "," + a.getLifespan().Item1 / pollingRate + "," + a.getLifespan().Item2 / pollingRate + ");");
+                sw.Write("var a = new doughnutActor(" + a.GetInnerRadius() + "," + a.GetOuterRadius() + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                 sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.getPosition(log.getBossData().getInstid().ToString(), map) + ";");
+                sw.Write("a.pos =" + a.GetPosition(log.GetBossData().GetInstid().ToString(), map) + ";");
                 sw.Write("}");
 
             }
         }
 
-        public static void writeCombatReplayScript(StreamWriter sw, ParsedLog log, Tuple<int,int> canvasSize, CombatReplayMap map, int pollingRate)
+        public static void WriteCombatReplayScript(StreamWriter sw, ParsedLog log, Tuple<int,int> canvasSize, CombatReplayMap map, int pollingRate)
         {
             sw.Write("<script>");
             {
                 // globals
                 sw.Write("var animation = null;");
                 sw.Write("var time = 0;");
-                sw.Write("var inch = " + map.getInch()+";");
+                sw.Write("var inch = " + map.GetInch()+";");
                 sw.Write("var speed = "+ pollingRate+";");
                 sw.Write("var selectedGroup = -1;");
                 sw.Write("var selectedPlayer = null;");
@@ -1285,11 +1247,11 @@ namespace LuckParser.Controllers
                 sw.Write("var downIcon = new Image();" +
                             "downIcon.src = '" + GetLink("Downs") + "';");
                 sw.Write("var boss = null;");
-                writeCombatReplayControls(sw, log, pollingRate);
-                writeCombatReplayMainClass(sw, log, map, pollingRate);
-                writeCombatReplaySecondaryClass(sw, log, map, pollingRate);
-                writeCombatReplayCircleActors(sw, log, map, pollingRate);
-                writeCombatReplayDoughnutActors(sw, log, map, pollingRate);
+                WriteCombatReplayControls(sw, log, pollingRate);
+                WriteCombatReplayMainClass(sw, log, map, pollingRate);
+                WriteCombatReplaySecondaryClass(sw, log, map, pollingRate);
+                WriteCombatReplayCircleActors(sw, log, map, pollingRate);
+                WriteCombatReplayDoughnutActors(sw, log, map, pollingRate);
                 // Main loop
                 sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
                 sw.Write("ctx.imageSmoothingEnabled = true;");
@@ -1319,7 +1281,7 @@ namespace LuckParser.Controllers
                     sw.Write("if (selectedPlayer) {" +
                                 "selectedPlayer.draw(ctx,timeToUse,20);"+                              
                             "}");
-                    sw.Write("if (timeToUse === " + (log.getBoss().getCombatReplay().getPositions().Count - 1) + ") {stopAnimate();}");
+                    sw.Write("if (timeToUse === " + (log.GetBoss().GetCombatReplay().GetPositions().Count - 1) + ") {stopAnimate();}");
                     sw.Write("timeSlider.value = time;");
                     sw.Write("updateTextInput(time);");
                 }
@@ -1327,7 +1289,7 @@ namespace LuckParser.Controllers
                 // when background loaded
                 sw.Write("var bgImage = new Image();");
                 sw.Write("bgImage.onload = function() { myanimate(0);};");
-                sw.Write("bgImage.src = '" + map.getLink() + "';");
+                sw.Write("bgImage.src = '" + map.GetLink() + "';");
             }
             sw.Write("</script>");
         }

@@ -6,7 +6,7 @@ namespace LuckParser.Models.ParseModels
     public class SkillData : List<SkillItem>
     {
         // Fields
-        private Dictionary<long, string> apiMissingID = new Dictionary<long, string>()
+        readonly static Dictionary<long, string> _apiMissingID = new Dictionary<long, string>()
         {
             {1066, "Resurrect"},
             {1175, "Bandage" },
@@ -34,29 +34,24 @@ namespace LuckParser.Models.ParseModels
             // Keep Construct
             {35048, "Magic Blast Charge" }
         };
-
-        // Constructors
-        public SkillData()
-        {
-        }
-
+        
         // Public Methods
 
-        public String getName(long ID)
+        public String GetName(long ID)
         {
 
             // Custom
-            if (apiMissingID.ContainsKey(ID))
+            if (_apiMissingID.ContainsKey(ID))
             {
-                return apiMissingID[ID];
+                return _apiMissingID[ID];
             }
 
             // Normal
             foreach (SkillItem s in this)
             {
-                if (s.getID() == ID)
+                if (s.GetID() == ID)
                 {
-                    return s.getName();
+                    return s.GetName();
                 }
             }
 

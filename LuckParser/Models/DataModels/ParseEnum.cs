@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models.DataModels
 {
@@ -21,7 +17,7 @@ namespace LuckParser.Models.DataModels
             Unknown
         };
 
-        public static Activation getActivation(byte bt)
+        public static Activation GetActivation(byte bt)
         {
             return bt < (byte)Activation.Unknown
                 ? (Activation)bt
@@ -37,7 +33,7 @@ namespace LuckParser.Models.DataModels
             Manual = 3,
         };
 
-        public static BuffRemove getBuffRemove(byte bt)
+        public static BuffRemove GetBuffRemove(byte bt)
         {
             return bt <= 3
                 ? (BuffRemove)bt
@@ -62,7 +58,7 @@ namespace LuckParser.Models.DataModels
             Unknown
         };
 
-        public static Result getResult(byte bt)
+        public static Result GetResult(byte bt)
         {
             return bt < (byte)Result.Unknown
                 ? (Result)bt
@@ -97,7 +93,7 @@ namespace LuckParser.Models.DataModels
             Unknown
         };
 
-        public static StateChange getStateChange(byte bt)
+        public static StateChange GetStateChange(byte bt)
         {
             return bt < (byte)StateChange.Unknown
                 ? (StateChange)bt
@@ -114,7 +110,7 @@ namespace LuckParser.Models.DataModels
             Unknown
         };
 
-        public static IFF getIFF(byte bt)
+        public static IFF GetIFF(byte bt)
         {
             return bt < (byte)IFF.Unknown
                 ? (IFF)bt
@@ -241,7 +237,7 @@ namespace LuckParser.Models.DataModels
             //
             Unknown
         };
-        public static ThrashIDS getThrashIDS(ushort id)
+        public static ThrashIDS GetThrashIDS(ushort id)
         {
             return Enum.IsDefined(typeof(ThrashIDS), id) ? (ThrashIDS)id : ThrashIDS.Unknown;
         }
@@ -275,7 +271,7 @@ namespace LuckParser.Models.DataModels
             //
             Unknown
         };
-        public static BossIDS getBossIDS(ushort id)
+        public static BossIDS GetBossIDS(ushort id)
         {
             return Enum.IsDefined(typeof(BossIDS), id) ? (BossIDS)id : BossIDS.Unknown;
         }

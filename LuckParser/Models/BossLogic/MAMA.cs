@@ -2,17 +2,14 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
     public class MAMA : FractalLogic
     {
-        public MAMA() : base()
+        public MAMA()
         {
-            mechanicList.AddRange(new List<Mechanic>
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(37408, "Blastwave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MAMA, "symbol:'circle',color:'rgb(255,200,0)',", "KB",0), //Blastwave (Spinning Knockback), KB Spin
             new Mechanic(37103, "Blastwave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MAMA, "symbol:'circle',color:'rgb(255,200,0)',", "KB",0), //Blastwave (Spinning Knockback), KB Spin
@@ -26,7 +23,7 @@ namespace LuckParser.Models
             });
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/lFGNKuf.png",
                             Tuple.Create(664, 407),
@@ -35,7 +32,7 @@ namespace LuckParser.Models
                             Tuple.Create(11804, 4414, 12444, 5054));
         }
 
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://i.imgur.com/1h7HOII.png";
         }

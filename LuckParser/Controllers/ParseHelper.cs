@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace LuckParser.Controllers
 {
     static class ParseHelper
     {
-        public static void safeSkip(Stream stream, long bytesToSkip)
+        public static void SafeSkip(Stream stream, long bytesToSkip)
         {
             if (stream.CanSeek)
             {
@@ -21,7 +20,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        public static string getString(Stream stream, int length, bool nullTerminated = true)
+        public static string GetString(Stream stream, int length, bool nullTerminated = true)
         {
             var bytes = new byte[length];
             stream.Read(bytes, 0, length);

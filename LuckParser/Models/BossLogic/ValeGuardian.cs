@@ -3,17 +3,15 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
     public class ValeGuardian : BossLogic
     {
-        public ValeGuardian() : base()
+        public ValeGuardian()
         {
-            mode = ParseMode.Raid;
-            mechanicList.AddRange(new List<Mechanic>
+            Mode = ParseMode.Raid;
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(31860, "Unstable Magic Spike", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'circle',color:'rgb(0,0,255)',", "G.TP",500), //Unstable Magic Spike (Green Guard Teleport),Green Guard TP
             new Mechanic(31392, "Unstable Magic Spike", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'circle',color:'rgb(0,0,255)',", "B.TP",500), //Unstable Magic Spike (Boss Teleport), Boss TP
@@ -33,7 +31,7 @@ namespace LuckParser.Models
             });
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/W7MocGz.png",
                             Tuple.Create(889, 889),
@@ -42,42 +40,42 @@ namespace LuckParser.Models
                             Tuple.Create(3456, 11012, 4736, 14212));
         }
 
-        public override List<PhaseData> getPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
+        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.getBossData().getAwareDuration();
-            List<PhaseData> phases = getInitialPhase(log);
+            long fightDuration = log.GetBossData().GetAwareDuration();
+            List<PhaseData> phases = GetInitialPhase(log);
             // Invul check
-            List<CombatItem> invulsVG = getFilteredList(log, 757, boss.getInstid());
+            List<CombatItem> invulsVG = GetFilteredList(log, 757, boss.GetInstid());
             for (int i = 0; i < invulsVG.Count; i++)
             {
                 CombatItem c = invulsVG[i];
-                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
                 {
-                    end = c.getTime() - log.getBossData().getFirstAware();
+                    end = c.GetTime() - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsVG.Count - 1)
                     {
-                        cast_logs.Add(new CastLog(end, -5, (int)(fight_dur - end), ParseEnum.Activation.None, (int)(fight_dur - end), ParseEnum.Activation.None));
+                        castLogs.Add(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None));
                     }
                 }
                 else
                 {
-                    start = c.getTime() - log.getBossData().getFirstAware();
+                    start = c.GetTime() - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(end, start));
-                    cast_logs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
+                    castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
             }
-            if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
             {
-                phases.Add(new PhaseData(start, fight_dur));
+                phases.Add(new PhaseData(start, fightDuration));
             }
-            string[] namesVG = new string[] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
+            string[] namesVG = new [] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                phase.setName(namesVG[i - 1]);
+                phase.SetName(namesVG[i - 1]);
                 if (i == 2 || i == 4)
                 {
                     List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
@@ -86,23 +84,22 @@ namespace LuckParser.Models
                        ParseEnum.ThrashIDS.GreenGuardian,
                        ParseEnum.ThrashIDS.RedGuardian
                     };
-                    List<AgentItem> guardians = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
+                    List<AgentItem> guardians = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.GetID()))).ToList();
                     foreach (AgentItem a in guardians)
                     {
-                        long agentStart = a.getFirstAware() - log.getBossData().getFirstAware();
-                        long agentEnd = a.getLastAware() - log.getBossData().getFirstAware();
-                        if (phase.inInterval(agentStart))
+                        long agentStart = a.GetFirstAware() - log.GetBossData().GetFirstAware();
+                        if (phase.InInterval(agentStart))
                         {
-                            phase.addRedirection(a);
+                            phase.AddRedirection(a);
                         }
                     }
-                    phase.overrideStart(log.getBossData().getFirstAware());
+                    phase.OverrideStart(log.GetBossData().GetFirstAware());
                 }
             }
             return phases;
         }
 
-        public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
             {
@@ -111,15 +108,15 @@ namespace LuckParser.Models
                ParseEnum.ThrashIDS.GreenGuardian,
                ParseEnum.ThrashIDS.RedGuardian
             };
-            List<CastLog> magicStorms = cls.Where(x => x.getID() == 31419).ToList();
+            List<CastLog> magicStorms = cls.Where(x => x.GetID() == 31419).ToList();
             foreach (CastLog c in magicStorms)
             {
-                replay.addCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.getTime(), (int)c.getTime() + c.getActDur()), "rgba(0, 180, 255, 0.3)"));
+                replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.GetTime(), (int)c.GetTime() + c.GetActDur()), "rgba(0, 180, 255, 0.3)"));
             }
             return ids;
         }
 
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://i.imgur.com/MIpP5pK.png";
         }

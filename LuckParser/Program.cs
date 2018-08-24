@@ -17,9 +17,9 @@ namespace LuckParser
         [DllImport("user32.dll")]
         private static extern bool SetProcessDPIAware();
 
-        private const int ATTACH_PARENT_PROCESS = -1;
+        private const int AttachParentProcess = -1;
 
-        private enum StandardHandle : int
+        private enum StandardHandle
         {
             Input =-10,
             Output = -11,
@@ -34,7 +34,7 @@ namespace LuckParser
             Pipe = 0x0003
         }
 
-        private static bool isRedirected(IntPtr handle)
+        private static bool IsRedirected(IntPtr handle)
         {
             FileType fileType = GetFileType(handle);
 
@@ -55,12 +55,12 @@ namespace LuckParser
                  * and if we are redirecting to a file or pipe we want to make sure Console.out points to the correct handle
                  * and doesnt init with the console ignoring existing stdout
                  */
-                if (isRedirected(GetStdHandle(StandardHandle.Output)))
+                if (IsRedirected(GetStdHandle(StandardHandle.Output)))
                 {
                     var dummy = Console.Out;
                 }
 
-                if (!AttachConsole(ATTACH_PARENT_PROCESS))
+                if (!AttachConsole(AttachParentProcess))
                 {
                     AllocConsole();
                 }

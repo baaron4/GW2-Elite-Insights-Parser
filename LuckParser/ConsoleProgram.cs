@@ -3,7 +3,6 @@ using LuckParser.Models.DataModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,8 +35,8 @@ namespace LuckParser
 
         private void ParseLog(object logFile)
         {
-            System.Globalization.CultureInfo before = System.Threading.Thread.CurrentThread.CurrentCulture;
-            System.Threading.Thread.CurrentThread.CurrentCulture =
+            System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
             GridRow row = new GridRow(logFile as string, "")
             {
@@ -78,16 +77,20 @@ namespace LuckParser
                         saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
                     }
 
-                    string bossid = control.getBossData().getID().ToString();
+                    if (saveDirectory == null)
+                    {
+                        throw new CancellationException(row, new InvalidDataException("Save Directory not found"));
+                    }
+
+                    string bossid = control.GetBossData().GetID().ToString();
                     string result = "fail";
 
-                    if (control.getLogData().getBosskill())
+                    if (control.GetLogData().GetBosskill())
                     {
                         result = "kill";
                     }
 
                     SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
-                    Statistics statistics;
                     StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
                     StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
                     if (Properties.Settings.Default.SaveOutHTML)
@@ -98,7 +101,7 @@ namespace LuckParser
                     {
                         CSVBuilder.UpdateStatisticSwitches(switches);
                     }
-                    statistics = statisticsCalculator.calculateStatistics(log, switches);
+                    Statistics statistics = statisticsCalculator.CalculateStatistics(log, switches);
                     Console.Write("Statistics Computed");
 
                     string fName = fInfo.Name.Split('.')[0];
@@ -127,8 +130,8 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                             {
-                                CSVBuilder builder = new CSVBuilder(log, settings, statistics);
-                                builder.CreateCSV(sw, ",");
+                                CSVBuilder builder = new CSVBuilder(sw, ",",log, settings, statistics);
+                                builder.CreateCSV();
                             }
                         }
                     }

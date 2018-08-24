@@ -5,102 +5,102 @@ namespace LuckParser.Models.ParseModels
     public abstract class DamageLog
     {
         // Fields
-        private long time;
-        protected int damage;
-        private long skill_id;
-        private int buff;
-        private ParseEnum.Result result;
-        private ushort is_ninety;
-        private ushort is_moving;
-        private ushort is_flanking;
-        private ParseEnum.Activation is_activation;
-        private ushort is_shields;
-        private ulong src_agent;
-        private ushort src_instid;
-        private ulong dst_agent;
-        private ushort dst_instid;
+        private readonly long _time;
+        protected int Damage;
+        private readonly long _skillId;
+        private readonly int _buff;
+        private readonly ParseEnum.Result _result;
+        private readonly ushort _isNinety;
+        private readonly ushort _isMoving;
+        private readonly ushort _isFlanking;
+        private readonly ParseEnum.Activation _isActivation;
+        private readonly ushort _isShields;
+        private readonly ulong _srcAgent;
+        private readonly ushort _srcInstid;
+        private readonly ulong _dstAgent;
+        private readonly ushort _dstInstid;
 
         // Constructor
-        public DamageLog(long time, CombatItem c)
+        protected DamageLog(long time, CombatItem c)
         {
-            this.time = time;
-            this.skill_id = c.getSkillID();
-            this.buff = c.isBuff();
-            this.result = c.getResult();
-            this.is_ninety = c.isNinety();
-            this.is_moving = c.isMoving();
-            this.is_flanking = c.isFlanking();
-            this.is_activation = c.isActivation();
-            this.src_agent = c.getSrcAgent();
-            this.src_instid = c.getSrcInstid();
-            this.is_shields = c.isShields();
-            this.dst_agent = c.getDstAgent();
-            this.dst_instid = c.getDstInstid();
+            _time = time;
+            _skillId = c.GetSkillID();
+            _buff = c.IsBuff();
+            _result = c.GetResult();
+            _isNinety = c.IsNinety();
+            _isMoving = c.IsMoving();
+            _isFlanking = c.IsFlanking();
+            _isActivation = c.IsActivation();
+            _srcAgent = c.GetSrcAgent();
+            _srcInstid = c.GetSrcInstid();
+            _isShields = c.IsShields();
+            _dstAgent = c.GetDstAgent();
+            _dstInstid = c.GetDstInstid();
 
         }
         // Getters
-        public long getTime()
+        public long GetTime()
         {
-            return time;
+            return _time;
         }
 
-        public int getDamage()
+        public int GetDamage()
         {
-            return damage;
+            return Damage;
         }
 
-        public long getID()
+        public long GetID()
         {
-            return skill_id;
+            return _skillId;
         }
 
-        public int isCondi()
+        public int IsCondi()
         {
-            return buff;
+            return _buff;
         }
 
-        public ParseEnum.Result getResult()
+        public ParseEnum.Result GetResult()
         {
-            return result;
+            return _result;
         }
 
-        public ushort isNinety()
+        public ushort IsNinety()
         {
-            return is_ninety;
+            return _isNinety;
         }
 
-        public ushort isMoving()
+        public ushort IsMoving()
         {
-            return is_moving;
+            return _isMoving;
         }
 
-        public ushort isFlanking()
+        public ushort IsFlanking()
         {
-            return is_flanking;
+            return _isFlanking;
         }
-        public ParseEnum.Activation isActivation()
+        public ParseEnum.Activation IsActivation()
         {
-            return is_activation;
+            return _isActivation;
         }
-        public ushort isShields() {
-            return is_shields;
+        public ushort IsShields() {
+            return _isShields;
         }
-        public ulong getSrcAgent()
+        public ulong GetSrcAgent()
         {
-            return src_agent;
+            return _srcAgent;
         }
-        public ushort getSrcInstidt()
+        public ushort GetSrcInstidt()
         {
-            return src_instid;
+            return _srcInstid;
         }
 
-        public ulong getDstAgent()
+        public ulong GetDstAgent()
         {
-            return dst_agent;
+            return _dstAgent;
         }
-        public ushort getDstInstidt()
+        public ushort GetDstInstidt()
         {
-            return dst_instid;
+            return _dstInstid;
         }
     }
 }

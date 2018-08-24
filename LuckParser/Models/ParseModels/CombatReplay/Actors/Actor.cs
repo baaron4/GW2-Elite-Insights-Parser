@@ -1,51 +1,47 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
     public abstract class Actor
     {
-        private bool fill;
-        private Tuple<int, int> lifespan;
-        private string color;
-        private int growing;
-        private Mobility mobility;
+        private readonly bool _fill;
+        private readonly Tuple<int, int> _lifespan;
+        private readonly string _color;
+        private readonly int _growing;
+        private readonly Mobility _mobility;
 
-        public Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Mobility mobility)
+        protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Mobility mobility)
         {
-            this.lifespan = lifespan;
-            this.color = color;
-            this.fill = fill;
-            this.mobility = mobility;
-            this.growing = growing;
+            _lifespan = lifespan;
+            _color = color;
+            _fill = fill;
+            _mobility = mobility;
+            _growing = growing;
         }
 
-        public int getGrowing()
+        public int GetGrowing()
         {
-            return growing;
+            return _growing;
         }
 
-        public bool isFilled()
+        public bool IsFilled()
         {
-            return fill;
+            return _fill;
         }
 
-        public string getPosition(string id, CombatReplayMap map)
+        public string GetPosition(string id, CombatReplayMap map)
         {
-            return mobility.getPosition(id, map);
+            return _mobility.GetPosition(id, map);
         }
 
-        public Tuple<int, int> getLifespan()
+        public Tuple<int, int> GetLifespan()
         {
-            return lifespan;
+            return _lifespan;
         }
 
-        public string getColor()
+        public string GetColor()
         {
-            return "'" + color + "'";
+            return "'" + _color + "'";
         }
     }
 }

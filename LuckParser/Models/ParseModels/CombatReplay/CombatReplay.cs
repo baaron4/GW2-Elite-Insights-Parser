@@ -1,155 +1,147 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
     public class CombatReplay
     {
-        private List<Point3D> positions = new List<Point3D>();
-        private List<Point3D> velocities = new List<Point3D>();
-        private long start = 0;
-        private long end = 0;
+        private List<Point3D> _positions = new List<Point3D>();
+        private List<Point3D> _velocities = new List<Point3D>();
+        private long _start;
+        private long _end;
         // icon
-        private string icon;
+        private string _icon;
         //status
-        private List<Tuple<long, long>> dead = new List<Tuple<long, long>>();
-        private List<Tuple<long, long>> down = new List<Tuple<long, long>>();
-        private List<Tuple<long, long>> dc = new List<Tuple<long, long>>();
+        private List<Tuple<long, long>> _dead = new List<Tuple<long, long>>();
+        private List<Tuple<long, long>> _down = new List<Tuple<long, long>>();
+        private List<Tuple<long, long>> _dc = new List<Tuple<long, long>>();
         // dps
-        private List<int> dps = new List<int>();
-        private List<int> dps10s = new List<int>();
-        private List<int> dps30s = new List<int>();
+        private List<int> _dps = new List<int>();
+        private List<int> _dps10s = new List<int>();
+        private List<int> _dps30s = new List<int>();
         // boons
-        private Dictionary<long, List<int>> boons = new Dictionary<long, List<int>>();
+        private readonly Dictionary<long, List<int>> _boons = new Dictionary<long, List<int>>();
         // actors
-        private List<CircleActor> circleActors = new List<CircleActor>();
-        private List<DoughnutActor> doughnutActors = new List<DoughnutActor>();
+        private readonly List<CircleActor> _circleActors = new List<CircleActor>();
+        private readonly List<DoughnutActor> _doughnutActors = new List<DoughnutActor>();
 
-        public CombatReplay()
+        public void SetIcon(string icon)
         {
-
-        }
-
-        public void setIcon(string icon)
-        {
-            this.icon = icon;
+            _icon = icon;
         }
 
-        public void addPosition(Point3D pos)
+        public void AddPosition(Point3D pos)
         {
-            positions.Add(pos);
+            _positions.Add(pos);
         }
 
-        public void addVelocity(Point3D vel)
+        public void AddVelocity(Point3D vel)
         {
-            velocities.Add(vel);
+            _velocities.Add(vel);
         }
 
-        public Tuple<long, long> getTimeOffsets()
+        public Tuple<long, long> GetTimeOffsets()
         {
-            return new Tuple<long, long>(start, end);
+            return new Tuple<long, long>(_start, _end);
         }
 
-        public void addDPS(int dps)
+        public void AddDPS(int dps)
         {
-            this.dps.Add(dps);
+            _dps.Add(dps);
         }
-        public void addDPS10s(int dps)
+        public void AddDPS10s(int dps)
         {
-            dps10s.Add(dps);
+            _dps10s.Add(dps);
         }
-        public void addDPS30s(int dps)
+        public void AddDPS30s(int dps)
         {
-            dps30s.Add(dps);
+            _dps30s.Add(dps);
         }
-        public void addCircleActor(CircleActor circleActor)
+        public void AddCircleActor(CircleActor circleActor)
         {
-            circleActors.Add(circleActor);
+            _circleActors.Add(circleActor);
         }
-        public void addDoughnutActor(DoughnutActor doughnutActor)
+        public void AddDoughnutActor(DoughnutActor doughnutActor)
         {
-            doughnutActors.Add(doughnutActor);
-        }
-
-        public void setStatus(List<Tuple<long, long>> down, List<Tuple<long, long>> dead, List<Tuple<long, long>> dc)
-        {
-            this.down = down;
-            this.dead = dead;
-            this.dc = dc;
+            _doughnutActors.Add(doughnutActor);
         }
 
-        public void trim(long start, long end)
+        public void SetStatus(List<Tuple<long, long>> down, List<Tuple<long, long>> dead, List<Tuple<long, long>> dc)
         {
-            this.start = start;
-            this.end = end;
-            positions.RemoveAll(x => x.time < start || x.time > end);
-            if (positions.Count == 0)
+            _down = down;
+            _dead = dead;
+            _dc = dc;
+        }
+
+        public void Trim(long start, long end)
+        {
+            _start = start;
+            _end = end;
+            _positions.RemoveAll(x => x.Time < start || x.Time > end);
+            if (_positions.Count == 0)
             {
-                this.start = -1;
-                this.end = -1;
+                _start = -1;
+                _end = -1;
             }
         }
 
-        public List<CircleActor> getCircleActors()
+        public List<CircleActor> GetCircleActors()
         {
-            return circleActors;
+            return _circleActors;
         }
 
-        public List<DoughnutActor> getDoughnutActors()
+        public List<DoughnutActor> GetDoughnutActors()
         {
-            return doughnutActors;
+            return _doughnutActors;
         }
 
-        public List<Tuple<long, long>> getDead()
+        public List<Tuple<long, long>> GetDead()
         {
-            return dead;
+            return _dead;
         }
 
-        public List<Tuple<long, long>> getDown()
+        public List<Tuple<long, long>> GetDown()
         {
-            return down;
+            return _down;
         }
 
-        public List<Tuple<long, long>> getDC()
+        public List<Tuple<long, long>> GetDC()
         {
-            return dc;
+            return _dc;
         }
 
-        public void addBoon(long id, int value)
+        public void AddBoon(long id, int value)
         {
-            List<int> ll;
-            if (!boons.TryGetValue(id, out ll))
+            if (!_boons.TryGetValue(id, out List<int> ll))
             {
                 ll = new List<int>();
-                boons.Add(id, ll);
+                _boons.Add(id, ll);
             }
             ll.Add(value);
         }
 
-        public List<int> getTimes()
+        public List<int> GetTimes()
         {
-            return positions.Select(x => (int)x.time).ToList();
+            return _positions.Select(x => (int)x.Time).ToList();
         }
 
-        public string getIcon()
+        public string GetIcon()
         {
-            return icon;
+            return _icon;
         }
 
-        public void pollingRate(int rate, long fightDuration, bool forceInterpolate)
+        public void PollingRate(int rate, long fightDuration, bool forceInterpolate)
         {
-            if (positions.Count == 0)
+            if (_positions.Count == 0)
             {
-                start = -1;
-                end = -1;
+                _start = -1;
+                _end = -1;
                 return;
             }
-            else if (positions.Count == 1 && !forceInterpolate)
+            else if (_positions.Count == 1 && !forceInterpolate)
             {
-                velocities = null;
+                _velocities = null;
                 return;
             }
             List<Point3D> interpolatedPositions = new List<Point3D>();
@@ -157,22 +149,22 @@ namespace LuckParser.Models.ParseModels
             Point3D currentVelocity = null;
             for (int i = -1000; i < fightDuration; i += rate)
             {
-                Point3D pt = positions[tablePos];
-                if (i <= pt.time)
+                Point3D pt = _positions[tablePos];
+                if (i <= pt.Time)
                 {
                     currentVelocity = null;
                     interpolatedPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
                 }
                 else
                 {
-                    if (tablePos == positions.Count - 1)
+                    if (tablePos == _positions.Count - 1)
                     {
                         interpolatedPositions.Add(new Point3D(pt.X, pt.Y, pt.Z, i));
                     }
                     else
                     {
-                        Point3D ptn = positions[tablePos + 1];
-                        if (ptn.time < i)
+                        Point3D ptn = _positions[tablePos + 1];
+                        if (ptn.Time < i)
                         {
                             tablePos++;
                             currentVelocity = null;
@@ -181,11 +173,11 @@ namespace LuckParser.Models.ParseModels
                         else
                         {
                             Point3D last = interpolatedPositions.Last();
-                            Point3D velocity = velocities.Find(x => x.time <= i && x.time > last.time);
-                            currentVelocity = velocity != null ? velocity : currentVelocity;
-                            if (ptn.time - pt.time < 400)
+                            Point3D velocity = _velocities.Find(x => x.Time <= i && x.Time > last.Time);
+                            currentVelocity = velocity ?? currentVelocity;
+                            if (ptn.Time - pt.Time < 400)
                             {
-                                float ratio = (float)(i - pt.time) / (ptn.time - pt.time);
+                                float ratio = (float)(i - pt.Time) / (ptn.Time - pt.Time);
                                 interpolatedPositions.Add(new Point3D(pt, ptn, ratio, i));
                             }
                             else
@@ -196,7 +188,7 @@ namespace LuckParser.Models.ParseModels
                                 }
                                 else
                                 {
-                                    float ratio = (float)(i - last.time) / (ptn.time - last.time);
+                                    float ratio = (float)(i - last.Time) / (ptn.Time - last.Time);
                                     interpolatedPositions.Add(new Point3D(last, ptn, ratio, i));
                                 }
                             }
@@ -205,31 +197,31 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-            positions = interpolatedPositions.Where(x => x.time >= 0).ToList();
-            velocities = null;
+            _positions = interpolatedPositions.Where(x => x.Time >= 0).ToList();
+            _velocities = null;
         }
 
-        public List<Point3D> getPositions()
+        public List<Point3D> GetPositions()
         {
-            return positions;
+            return _positions;
         }
 
-        public List<Point3D> getActivePositions()
+        public List<Point3D> GetActivePositions()
         {
-            List<Point3D> activePositions = new List<Point3D>(positions);
+            List<Point3D> activePositions = new List<Point3D>(_positions);
             for (var i = 0; i < activePositions.Count; i++)
             {
                 Point3D cur = activePositions[i];
-                foreach (Tuple<long, long> status in dead)
+                foreach (Tuple<long, long> status in _dead)
                 {
-                    if (cur.time >= status.Item1 && cur.time <= status.Item2)
+                    if (cur.Time >= status.Item1 && cur.Time <= status.Item2)
                     {
                         activePositions[i] = null;
                     }
                 }
-                foreach (Tuple<long, long> status in dc)
+                foreach (Tuple<long, long> status in _dc)
                 {
-                    if (cur.time >= status.Item1 && cur.time <= status.Item2)
+                    if (cur.Time >= status.Item1 && cur.Time <= status.Item2)
                     {
                         activePositions[i] = null;
                     }

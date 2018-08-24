@@ -1,5 +1,4 @@
-﻿using System;
-using LuckParser.Models.DataModels;
+﻿using LuckParser.Models.DataModels;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -7,186 +6,186 @@ namespace LuckParser.Models.ParseModels
     {
 
         // Fields
-        private long time;
-        private ulong src_agent;
-        private ulong dst_agent;
-        private int value;
-        private int buff_dmg;
-        private uint overstack_value;
-        private long skill_id;
-        private ushort src_instid;
-        private ushort dst_instid;
-        private ushort src_master_instid;
-        private ushort dst_master_instid;
-        private ParseEnum.IFF iff;
-        private ushort is_buff;
-        private ParseEnum.Result result;
-        private ParseEnum.Activation is_activation;
-        private ParseEnum.BuffRemove is_buffremove;
-        private ushort is_ninety;
-        private ushort is_fifty;
-        private ushort is_moving;
-        private ParseEnum.StateChange is_statechange;
-        private ushort is_flanking;
-        private ushort is_shields;
+        private readonly long _time;
+        private ulong _srcAgent;
+        private ulong _dstAgent;
+        private readonly int _value;
+        private readonly int _buffDmg;
+        private readonly uint _overstackValue;
+        private readonly long _skillId;
+        private ushort _srcInstid;
+        private ushort _dstInstid;
+        private readonly ushort _srcMasterInstid;
+        private readonly ushort _dstMasterInstid;
+        private readonly ParseEnum.IFF _iff;
+        private readonly ushort _isBuff;
+        private readonly ParseEnum.Result _result;
+        private readonly ParseEnum.Activation _isActivation;
+        private readonly ParseEnum.BuffRemove _isBuffRemove;
+        private readonly ushort _isNinety;
+        private readonly ushort _isFifty;
+        private readonly ushort _isMoving;
+        private readonly ParseEnum.StateChange _isStateChange;
+        private readonly ushort _isFlanking;
+        private readonly ushort _isShields;
         // Constructor        
-        public CombatItem(long time, ulong src_agent, ulong dst_agent, int value, int buff_dmg, uint overstack_value,
-               long skill_id, ushort src_instid, ushort dst_instid, ushort src_master_instid, ushort dst_master_instid, ParseEnum.IFF iff, ushort is_buff, ParseEnum.Result result,
-               ParseEnum.Activation is_activation, ParseEnum.BuffRemove is_buffremove, ushort is_ninety, ushort is_fifty, ushort is_moving,
-               ParseEnum.StateChange is_statechange, ushort is_flanking, ushort is_shields)
+        public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
+               long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid, ushort dstMasterInstid, ParseEnum.IFF iff, ushort isBuff, ParseEnum.Result result,
+               ParseEnum.Activation isActivation, ParseEnum.BuffRemove isBuffRemove, ushort isNinety, ushort isFifty, ushort isMoving,
+               ParseEnum.StateChange isStateChange, ushort isFlanking, ushort isShields)
         {
-            this.time = time;
-            this.src_agent = src_agent;
-            this.dst_agent = dst_agent;
-            this.value = value;
-            this.buff_dmg = buff_dmg;
-            this.overstack_value = overstack_value;
-            this.skill_id = skill_id;
-            this.src_instid = src_instid;
-            this.dst_instid = dst_instid;
-            this.src_master_instid = src_master_instid;
-            this.dst_master_instid = dst_master_instid;
-            this.iff = iff;
-            this.is_buff = is_buff;
-            this.result = result;
-            this.is_activation = is_activation;
-            this.is_buffremove = is_buffremove;
-            this.is_ninety = is_ninety;
-            this.is_fifty = is_fifty;
-            this.is_moving = is_moving;
-            this.is_statechange = is_statechange;
-            this.is_flanking = is_flanking;
-            this.is_shields = is_shields;
+            _time = time;
+            _srcAgent = srcAgent;
+            _dstAgent = dstAgent;
+            _value = value;
+            _buffDmg = buffDmg;
+            _overstackValue = overstackValue;
+            _skillId = skillId;
+            _srcInstid = srcInstid;
+            _dstInstid = dstInstid;
+            _srcMasterInstid = srcMasterInstid;
+            _dstMasterInstid = dstMasterInstid;
+            _iff = iff;
+            _isBuff = isBuff;
+            _result = result;
+            _isActivation = isActivation;
+            _isBuffRemove = isBuffRemove;
+            _isNinety = isNinety;
+            _isFifty = isFifty;
+            _isMoving = isMoving;
+            _isStateChange = isStateChange;
+            _isFlanking = isFlanking;
+            _isShields = isShields;
         }
 
         // Getters
-        public long getTime()
+        public long GetTime()
         {
-            return time;
+            return _time;
         }
 
-        public ulong getSrcAgent()
+        public ulong GetSrcAgent()
         {
-            return src_agent;
+            return _srcAgent;
         }
 
-        public ulong getDstAgent()
+        public ulong GetDstAgent()
         {
-            return dst_agent;
+            return _dstAgent;
         }
 
-        public int getValue()
+        public int GetValue()
         {
-            return value;
+            return _value;
         }
 
-        public int getBuffDmg()
+        public int GetBuffDmg()
         {
-            return buff_dmg;
+            return _buffDmg;
         }
 
-        public uint getOverstackValue()
+        public uint GetOverstackValue()
         {
-            return overstack_value;
+            return _overstackValue;
         }
 
-        public long getSkillID()
+        public long GetSkillID()
         {
-            return skill_id;
+            return _skillId;
         }
 
-        public ushort getSrcInstid()
+        public ushort GetSrcInstid()
         {
-            return src_instid;
+            return _srcInstid;
         }
 
-        public ushort getDstInstid()
+        public ushort GetDstInstid()
         {
-            return dst_instid;
+            return _dstInstid;
         }
 
-        public ushort getSrcMasterInstid()
+        public ushort GetSrcMasterInstid()
         {
-            return src_master_instid;
+            return _srcMasterInstid;
         }
 
-        public ushort getDstMasterInstid()
+        public ushort GetDstMasterInstid()
         {
-            return dst_master_instid;
+            return _dstMasterInstid;
         }
 
-        public ParseEnum.IFF getIFF()
+        public ParseEnum.IFF GetIFF()
         {
-            return iff;
+            return _iff;
         }
 
-        public ushort isBuff()
+        public ushort IsBuff()
         {
-            return is_buff;
+            return _isBuff;
         }
 
-        public ParseEnum.Result getResult()
+        public ParseEnum.Result GetResult()
         {
-            return result;
+            return _result;
         }
 
-        public ParseEnum.Activation isActivation()
+        public ParseEnum.Activation IsActivation()
         {
-            return is_activation;
+            return _isActivation;
         }
 
-        public ParseEnum.BuffRemove isBuffremove()
+        public ParseEnum.BuffRemove IsBuffremove()
         {
-            return is_buffremove;
+            return _isBuffRemove;
         }
 
-        public ushort isNinety()
+        public ushort IsNinety()
         {
-            return is_ninety;
+            return _isNinety;
         }
 
-        public ushort isFifty()
+        public ushort IsFifty()
         {
-            return is_fifty;
+            return _isFifty;
         }
 
-        public ushort isMoving()
+        public ushort IsMoving()
         {
-            return is_moving;
+            return _isMoving;
         }
 
-        public ushort isFlanking()
+        public ushort IsFlanking()
         {
-            return is_flanking;
+            return _isFlanking;
         }
 
-        public ParseEnum.StateChange isStateChange()
+        public ParseEnum.StateChange IsStateChange()
         {
-            return is_statechange;
+            return _isStateChange;
         }
-        public ushort isShields()
+        public ushort IsShields()
         {
-            return is_shields;
+            return _isShields;
         }
         // Setters
-        public void setSrcAgent(ulong src_agent)
+        public void SetSrcAgent(ulong srcAgent)
         {
-            this.src_agent = src_agent;
+            _srcAgent = srcAgent;
         }
 
-        public void setDstAgent(ulong dst_agent)
+        public void SetDstAgent(ulong dstAgent)
         {
-            this.dst_agent = dst_agent;
+            _dstAgent = dstAgent;
         }
 
-        public void setSrcInstid(ushort src_instid)
+        public void SetSrcInstid(ushort srcInstid)
         {
-            this.src_instid = src_instid;
+            _srcInstid = srcInstid;
         }
 
-        public void setDstInstid(ushort dst_instid)
+        public void SetDstInstid(ushort dstInstid)
         {
-            this.dst_instid = dst_instid;
+            _dstInstid = dstInstid;
         }
     }
 }

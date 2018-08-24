@@ -1,121 +1,117 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using LuckParser.Models.ParseModels;
 
 namespace LuckParser.Models.DataModels
 {
     public class ParsedLog
     {
-        private LogData log_data;
-        private BossData boss_data;
-        private AgentData agent_data = new AgentData();
-        private SkillData skill_data = new SkillData();
-        private CombatData combat_data = new CombatData();
-        private MechanicData mech_data;
-        private List<Player> p_list = new List<Player>();
-        private Boss boss;
+        private readonly LogData _logData;
+        private readonly BossData _bossData;
+        private readonly AgentData _agentData;
+        private readonly SkillData _skillData;
+        private readonly CombatData _combatData;
+        private readonly MechanicData _mechData;
+        private readonly List<Player> _playerList;
+        private readonly Boss _boss;
 
         
 
-        public ParsedLog(LogData log_data, BossData boss_data, AgentData agent_data, SkillData skill_data, 
-                CombatData combat_data, List<Player> p_list, Boss boss)
+        public ParsedLog(LogData logData, BossData bossData, AgentData agentData, SkillData skillData, 
+                CombatData combatData, List<Player> playerList, Boss boss)
         {
-            this.log_data = log_data;
-            this.boss_data = boss_data;
-            this.agent_data = agent_data;
-            this.skill_data = skill_data;
-            this.combat_data = combat_data;
-            this.p_list = p_list;
-            this.boss = boss;
-            this.mech_data = new MechanicData(boss_data);
+            _logData = logData;
+            _bossData = bossData;
+            _agentData = agentData;
+            _skillData = skillData;
+            _combatData = combatData;
+            _playerList = playerList;
+            _boss = boss;
+            _mechData = new MechanicData(bossData);
         }
 
-        public BossData getBossData()
+        public BossData GetBossData()
         {
-            return boss_data;
+            return _bossData;
         }
 
-        public Boss getBoss()
+        public Boss GetBoss()
         {
-            return boss;
+            return _boss;
         }
 
-        public CombatData getCombatData()
+        public CombatData GetCombatData()
         {
-            return combat_data;
+            return _combatData;
         }
 
-        public AgentData getAgentData()
+        public AgentData GetAgentData()
         {
-            return agent_data;
+            return _agentData;
         }
 
-        public List<Player> getPlayerList()
+        public List<Player> GetPlayerList()
         {
-            return p_list;
+            return _playerList;
         }
 
-        public MechanicData getMechanicData()
+        public MechanicData GetMechanicData()
         {
-            return mech_data;
+            return _mechData;
         }
 
-        public SkillData getSkillData()
+        public SkillData GetSkillData()
         {
-            return skill_data;
+            return _skillData;
         }
 
-        public LogData getLogData()
+        public LogData GetLogData()
         {
-            return log_data;
+            return _logData;
         }
 
-        public CombatData getCombatList()
+        public CombatData GetCombatList()
         {
-            return combat_data;
+            return _combatData;
         }
 
-        public List<CombatItem> getBoonData()
+        public List<CombatItem> GetBoonData()
         {
-            return combat_data.getBoonData();
+            return _combatData.GetBoonData();
         }
 
-        public List<CombatItem> getDamageData()
+        public List<CombatItem> GetDamageData()
         {
-            return combat_data.getDamageData();
+            return _combatData.GetDamageData();
         }
 
-        public List<CombatItem> getCastData()
+        public List<CombatItem> GetCastData()
         {
-            return combat_data.getCastData();
+            return _combatData.GetCastData();
         }
 
-        public List<CombatItem> getDamageTakenData()
+        public List<CombatItem> GetDamageTakenData()
         {
-            return combat_data.getDamageTakenData();
+            return _combatData.GetDamageTakenData();
         }
 
-        public bool isBenchmarkMode()
+        public bool IsBenchmarkMode()
         {
-            return boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Golem;
+            return _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem;
         }
 
         /*public List<CombatItem> getHealingData()
         {
-            return combat_data.getHealingData();
+            return _combatData.getHealingData();
         }
 
         public List<CombatItem> getHealingReceivedData()
         {
-            return combat_data.getHealingReceivedData();
+            return _combatData.getHealingReceivedData();
         }*/
 
-        public List<CombatItem> getMovementData()
+        public List<CombatItem> GetMovementData()
         {
-            return combat_data.getMovementData();
+            return _combatData.GetMovementData();
         }     
     }
 }

@@ -1,19 +1,15 @@
-﻿using LuckParser.Controllers;
-using LuckParser.Models.DataModels;
+﻿using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
     public class Artsariiv : FractalLogic
     {
-        public Artsariiv() : base()
-        {
-            mechanicList.AddRange(new List<Mechanic>
+        public Artsariiv()
+        {           
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(38880, "Corporeal Reassignment", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Artsariiv, "symbol:'square',color:'rgb(0,128,0)',", "Skull",0), //Exploding Skull mechanic application,Corporeal Reassignment
             new Mechanic(38977, "Vault", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'triangle-down-open',color:'rgb(255,200,0)',", "Vlt",0), //Vault from Big Adds, Vault (Add)
@@ -30,7 +26,7 @@ namespace LuckParser.Models
             });
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/4wmuc8B.png",
                             Tuple.Create(914, 914),
@@ -39,7 +35,7 @@ namespace LuckParser.Models
                             Tuple.Create(11204, 4414, 13252, 6462));
         }
     
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
         }
