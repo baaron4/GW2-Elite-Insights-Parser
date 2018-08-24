@@ -14,8 +14,6 @@ namespace LuckParser
         private static extern IntPtr GetStdHandle(StandardHandle nStdHandle);
         [DllImport("kernel32.dll")]
         private static extern FileType GetFileType(IntPtr handle);
-        [DllImport("user32.dll")]
-        private static extern bool SetProcessDPIAware();
 
         private const int AttachParentProcess = -1;
 
@@ -89,7 +87,6 @@ namespace LuckParser
                 return 0;
             }
 
-            SetProcessDPIAware();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
