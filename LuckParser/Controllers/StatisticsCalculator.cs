@@ -766,51 +766,70 @@ namespace LuckParser.Controllers
         private void SetPresentBoons()
         {
             List<CombatItem> combatList = _log.GetCombatData();
+            var skillIDs = new HashSet<long>(combatList.Select(x => x.SkillID));
             if (_settings.PlayerBoonsUniversal)
-            {//Main boons
+            {
+                // Main boons
                 foreach (Boon boon in Boon.GetBoonList())
                 {
-                    if (combatList.Exists(x => x.SkillID == boon.GetID()))
+                    if (skillIDs.Contains(boon.GetID()))
                     {
                         _statistics.PresentBoons.Add(boon);
                     }
                 }
             }
+
             if (_settings.PlayerBoonsImpProf)
-            {//Important Class specefic boons
+            {
+                // Important class specific boons
                 foreach (Boon boon in Boon.GetOffensiveTableList())
                 {
-                    if (combatList.Exists(x => x.SkillID == boon.GetID()))
+                    if (skillIDs.Contains(boon.GetID()))
                     {
                         _statistics.PresentOffbuffs.Add(boon);
                     }
                 }
+
                 foreach (Boon boon in Boon.GetDefensiveTableList())
                 {
-                    if (combatList.Exists(x => x.SkillID == boon.GetID()))
+                    if (skillIDs.Contains(boon.GetID()))
                     {
                         _statistics.PresentDefbuffs.Add(boon);
                     }
                 }
             }
 
-            foreach (Player p in _log.GetPlayerList())
+            if (_settings.PlayerBoonsAllProf)
             {
-                _statistics.PresentPersonnalBuffs[p.GetInstid()] = new List<Boon>();
-                if (_settings.PlayerBoonsAllProf)
-                {//All class specefic boons
-                    List<Boon> notYetFoundBoons = Boon.GetRemainingBuffsList();
-                    combatList.ForEach(item =>
+                var players = _log.GetPlayerList();
+                var playersById = new Dictionary<ushort, Player>();
+                foreach (var player in players)
+                {
+                    _statistics.PresentPersonnalBuffs[player.GetInstid()] = new List<Boon>();
+                    playersById.Add(player.GetInstid(), player);
+                }
+
+                // All class specific boons
+                var remainingBoons = Boon.GetRemainingBuffsList();
+
+                var classSpecificBoonsById = new Dictionary<long, Boon>();
+                foreach (var boon in remainingBoons)
+                {
+                    if (boon.GetID() == -1) continue;
+
+                    classSpecificBoonsById.Add(boon.GetID(), boon);
+                }
+
+                foreach (var item in combatList)
+                {
+                    if (playersById.TryGetValue(item.DstInstid, out Player player))
                     {
-                        if (item.DstInstid == p.GetInstid()) {
-                            Boon foundBoon = notYetFoundBoons.Find(boon => boon.GetID() == item.SkillID);
-                            if (foundBoon != null)
-                            {
-                                notYetFoundBoons.Remove(foundBoon);
-                                _statistics.PresentPersonnalBuffs[p.GetInstid()].Add(foundBoon);
-                            }
+                        if (classSpecificBoonsById.TryGetValue(item.SkillID, out Boon boon))
+                        {
+                            _statistics.PresentPersonnalBuffs[player.GetInstid()].Add(boon);
+                            classSpecificBoonsById.Remove(item.SkillID);
                         }
-                    });
+                    }
                 }
             }
         }
