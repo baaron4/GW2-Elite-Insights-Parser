@@ -55,7 +55,7 @@ namespace LuckParser.Models.ParseModels
 
         public String GetName()
         {
-            if (_id == Resuccect) {
+            if (_id == ResurrectId) {
                 return "Resurrect";
             }
             return _name;
