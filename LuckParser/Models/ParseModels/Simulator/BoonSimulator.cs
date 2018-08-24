@@ -1,6 +1,6 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -9,124 +9,116 @@ namespace LuckParser.Models.ParseModels
  
         public struct BoonStackItem
         {
-            public long start;
-            public long boon_duration;
-            public ushort src;
-            public long overstack;
+            public readonly long Start;
+            public readonly long BoonDuration;
+            public readonly ushort Src;
+            public readonly long Overstack;
 
-            public BoonStackItem(long start, long boon_duration, ushort srcinstid, long overstack)
+            public BoonStackItem(long start, long boonDuration, ushort srcinstid, long overstack)
             {
-                this.start = start;
-                this.boon_duration = boon_duration;
-                this.src = srcinstid;
-                this.overstack = overstack;
+                Start = start;
+                BoonDuration = boonDuration;
+                Src = srcinstid;
+                Overstack = overstack;
             }
 
-            public BoonStackItem(BoonStackItem other, long start_shift, long duration_shift)
+            public BoonStackItem(BoonStackItem other, long startShift, long durationShift)
             {
-                this.start = Math.Max(other.start + start_shift, 0);
-                this.boon_duration = other.boon_duration + duration_shift;
+                Start = Math.Max(other.Start + startShift, 0);
+                BoonDuration = other.BoonDuration - durationShift;
                 // if duration shift > 0 this means the boon ticked, aka already in simulation, we remove the overstack
-                this.overstack = duration_shift > 0 ? 0 : other.overstack;
-                this.src = other.src;
+                Overstack = durationShift > 0 ? 0 : other.Overstack;
+                Src = other.Src;
             }
         }
 
         // Fields
-        protected readonly List<BoonStackItem> boon_stack;
-        protected List<BoonSimulationItem> simulation = new List<BoonSimulationItem>();
-        protected int capacity;
+        protected readonly List<BoonStackItem> BoonStack;
+        protected readonly List<BoonSimulationItem> Simulation = new List<BoonSimulationItem>();
+        private readonly int Capacity;
+        private readonly ParsedLog _log;
+        private readonly StackingLogic _logic;
 
         // Constructor
-        public BoonSimulator(int capacity)
+        protected BoonSimulator(int capacity, ParsedLog log, StackingLogic logic)
         {
-            this.capacity   = capacity;
-            this.boon_stack = new List<BoonStackItem>(capacity);
-        }
+            Capacity = capacity;
+            BoonStack = new List<BoonStackItem>(capacity);
+            _log = log;
+            _logic = logic;
+        }  
 
-        public List<BoonSimulationItem> getSimulationResult()
+        public BoonSimulationResult GetSimulationResult()
         {
-            return new List<BoonSimulationItem>(simulation);
+            return new BoonSimulationResult(Simulation);
         }
 
         // Abstract Methods
         /// <summary>
         /// Make sure the last element does not overflow the fight
         /// </summary>
-        /// <param name="fight_duration">Duration of the fight</param>
-        public void trim(long fight_duration)
+        /// <param name="fightDuration">Duration of the fight</param>
+        public void Trim(long fightDuration)
         {
-            for (int i = simulation.Count - 1; i >= 0; i--)
+            for (int i = Simulation.Count - 1; i >= 0; i--)
             {
-                BoonSimulationItem data = simulation[i];
-                if (data.getEnd() > fight_duration)
+                BoonSimulationItem data = Simulation[i];
+                if (data.GetEnd() > fightDuration)
                 {
-                    data.setEnd(fight_duration);
+                    data.SetEnd(fightDuration);
                 }
                 else
                 {
                     break;
                 }
             }
-            simulation.RemoveAll(x => x.getDuration(0) <= 0);
+            Simulation.RemoveAll(x => x.GetDuration(0) <= 0);
         }
 
-        public void simulate(List<BoonLog> logs, long fight_duration)
+        public void Simulate(List<BoonLog> logs, long fightDuration)
         {
-            long t_curr = 0;
-            long t_prev = 0;
+            long timeCur = 0;
+            long timePrev = 0;
             foreach (BoonLog log in logs)
             {
-                t_curr = log.getTime();
-                update(t_curr - t_prev);
-                add(log.getValue(), log.getSrcInstid(), t_curr, log.getOverstack());
-                t_prev = t_curr;
+                timeCur = log.GetTime();
+                Update(timeCur - timePrev);
+                Add(log.GetValue(), log.GetSrcInstid(), timeCur, log.GetOverstack());
+                timePrev = timeCur;
             }
-            update(fight_duration - t_prev);
-            simulation.RemoveAll(x => x.getDuration(0) <= 0);
-            boon_stack.Clear();
+            Update(fightDuration - timePrev);
+            Simulation.RemoveAll(x => x.GetDuration(0) <= 0);
+            BoonStack.Clear();
         }
 
-        public abstract void update(long time_passed);
+        protected abstract void Update(long timePassed);
         
-        // Public Methods
-        public void add(long boon_duration, ushort srcinstid, long start, long overstack)
+        private void Add(long boonDuration, ushort srcinstid, long start, long overstack)
         {
-            var toAdd = new BoonStackItem(start, boon_duration, srcinstid, overstack);
+            var toAdd = new BoonStackItem(start, boonDuration, srcinstid, overstack);
             // Find empty slot
-            if (!isFull())
+            if (BoonStack.Count < Capacity)
             {
-                boon_stack.Add(toAdd);
-                sort();
+                BoonStack.Add(toAdd);
+                _logic.Sort(_log, BoonStack);
             }
             // Replace lowest value
             else
             {
-                int index = boon_stack.Count - 1;
-                if (boon_stack[index].boon_duration < boon_duration)
+                bool found = _logic.StackEffect(_log, toAdd, BoonStack, Simulation);
+                if (!found)
                 {
-                    // added overwritten value as a overstack
-                    long overstackValue = boon_stack[index].overstack + boon_stack[index].boon_duration;
-                    ushort srcValue = boon_stack[index].src;
-                    for (int i = simulation.Count -1; i >= 0; i--)
+                    long overstackValue = overstack + boonDuration;
+                    ushort srcValue = srcinstid;
+                    for (int j = Simulation.Count - 1; j >= 0; j--)
                     {
-                        if (simulation[i].addOverstack(srcValue,overstackValue))
+                        if (Simulation[j].AddOverstack(srcValue, overstackValue))
                         {
                             break;
                         }
                     }
-                    boon_stack[index] = toAdd;
-                    sort();
                 }
             }
-        }
-         
-        // Protected Methods
-        protected bool isFull() => boon_stack.Count >= capacity;
-
-        protected void sort()
-        {
-            boon_stack.Sort((a, b) => b.boon_duration.CompareTo(a.boon_duration));
         }
     }
 }

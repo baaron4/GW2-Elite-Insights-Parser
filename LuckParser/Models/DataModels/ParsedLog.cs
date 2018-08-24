@@ -1,299 +1,117 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using LuckParser.Models.ParseModels;
-using LuckParser.Models.ParseModels.Players;
 
 namespace LuckParser.Models.DataModels
 {
     public class ParsedLog
     {
-        private LogData log_data;
-        private BossData boss_data;
-        private AgentData agent_data = new AgentData();
-        private SkillData skill_data = new SkillData();
-        private CombatData combat_data = new CombatData();
-        private MechanicData mech_data = new MechanicData();
-        private List<Player> p_list = new List<Player>();
-        private Boss boss;
+        private readonly LogData _logData;
+        private readonly BossData _bossData;
+        private readonly AgentData _agentData;
+        private readonly SkillData _skillData;
+        private readonly CombatData _combatData;
+        private readonly MechanicData _mechData;
+        private readonly List<Player> _playerList;
+        private readonly Boss _boss;
 
-        // reduced data
-        private List<CombatItem> boon_data;
-        private List<CombatItem> damage_data;
-        private List<CombatItem> damage_taken_data;
-        //private List<CombatItem> healing_data;
-        //private List<CombatItem> healing_received_data;
-        private List<CombatItem> cast_data;
-        private List<CombatItem> movement_data;
+        
 
-        public ParsedLog(LogData log_data, BossData boss_data, AgentData agent_data, SkillData skill_data, 
-                CombatData combat_data, MechanicData mech_data, List<Player> p_list, Boss boss)
+        public ParsedLog(LogData logData, BossData bossData, AgentData agentData, SkillData skillData, 
+                CombatData combatData, List<Player> playerList, Boss boss)
         {
-            this.log_data = log_data;
-            this.boss_data = boss_data;
-            this.agent_data = agent_data;
-            this.skill_data = skill_data;
-            this.combat_data = combat_data;
-            this.mech_data = mech_data;
-            this.p_list = p_list;
-            this.boss = boss;
+            _logData = logData;
+            _bossData = bossData;
+            _agentData = agentData;
+            _skillData = skillData;
+            _combatData = combatData;
+            _playerList = playerList;
+            _boss = boss;
+            _mechData = new MechanicData(bossData);
         }
 
-        public BossData getBossData()
+        public BossData GetBossData()
         {
-            return boss_data;
+            return _bossData;
         }
 
-        public Boss getBoss()
+        public Boss GetBoss()
         {
-            return boss;
+            return _boss;
         }
 
-        public CombatData getCombatData()
+        public CombatData GetCombatData()
         {
-            return combat_data;
+            return _combatData;
         }
 
-        public AgentData getAgentData()
+        public AgentData GetAgentData()
         {
-            return agent_data;
+            return _agentData;
         }
 
-        public List<Player> getPlayerList()
+        public List<Player> GetPlayerList()
         {
-            return p_list;
+            return _playerList;
         }
 
-        public MechanicData getMechanicData()
+        public MechanicData GetMechanicData()
         {
-            return mech_data;
+            return _mechData;
         }
 
-        public SkillData getSkillData()
+        public SkillData GetSkillData()
         {
-            return skill_data;
+            return _skillData;
         }
 
-        public LogData getLogData()
+        public LogData GetLogData()
         {
-            return log_data;
+            return _logData;
         }
 
-        public List<CombatItem> getCombatList()
+        public CombatData GetCombatList()
         {
-            return combat_data.getCombatList();
+            return _combatData;
         }
 
-        public void validateLogData()
+        public List<CombatItem> GetBoonData()
         {
-            doReduction();
-            doMechData();
+            return _combatData.GetBoonData();
         }
 
-
-        private void doReduction()
+        public List<CombatItem> GetDamageData()
         {
-            boon_data = combat_data.getCombatList().Where(x => x.isBuff() == 1 && (x.getBuffDmg() == 0 || x.isBuffremove() != ParseEnum.BuffRemove.None)).ToList();
-
-            damage_data = combat_data.getCombatList().Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Foe && x.isBuffremove() == ParseEnum.BuffRemove.None &&
-                                        ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
-                                        (x.isBuff() == 0 && x.getValue() > 0))).ToList();
-
-            damage_taken_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Foe && x.isBuffremove() == ParseEnum.BuffRemove.None &&
-                                            ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
-                                                (x.isBuff() == 0 && x.getValue() > 0))).ToList();
-
-            cast_data = combat_data.getCombatList().Where(x => (x.isStateChange() == ParseEnum.StateChange.Normal && x.isActivation() != ParseEnum.Activation.None) || x.isStateChange() == ParseEnum.StateChange.WeaponSwap).ToList();
-
-            movement_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Position || x.isStateChange() == ParseEnum.StateChange.Velocity).ToList();
-
-            /*healing_data = combat_data.getCombatList().Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
-                                         ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
-                                         (x.isBuff() == 0 && x.getValue() > 0))).ToList();
-
-            healing_received_data = combat_data.getCombatList().Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
-                                            ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
-                                                (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
+            return _combatData.GetDamageData();
         }
 
-        public List<CombatItem> getBoonData()
+        public List<CombatItem> GetCastData()
         {
-            return boon_data;
+            return _combatData.GetCastData();
         }
 
-        public List<CombatItem> getDamageData()
+        public List<CombatItem> GetDamageTakenData()
         {
-            return damage_data;
+            return _combatData.GetDamageTakenData();
         }
 
-        public List<CombatItem> getCastData()
+        public bool IsBenchmarkMode()
         {
-            return cast_data;
-        }
-
-        public List<CombatItem> getDamageTakenData()
-        {
-            return damage_taken_data;
+            return _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem;
         }
 
         /*public List<CombatItem> getHealingData()
         {
-            return healing_data;
+            return _combatData.getHealingData();
         }
 
         public List<CombatItem> getHealingReceivedData()
         {
-            return healing_received_data;
+            return _combatData.getHealingReceivedData();
         }*/
 
-        public List<CombatItem> getMovementData()
+        public List<CombatItem> GetMovementData()
         {
-            return movement_data;
-        }
-
-        private void doMechData()
-        {
-            List<int> mIDList = new List<int>();
-            foreach (Player p in p_list)
-            {
-                List<CombatItem> down = combat_data.getStates(p.getInstid(), ParseEnum.StateChange.ChangeDown, boss_data.getFirstAware(), boss_data.getLastAware());
-                foreach (CombatItem pnt in down)
-                {
-                    mech_data.AddItem(new MechanicLog((long)((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DOWN", 0, p, mech_data.GetPLoltyShape("DOWN")));
-                }
-                List<CombatItem> dead = combat_data.getStates(p.getInstid(), ParseEnum.StateChange.ChangeDead, boss_data.getFirstAware(), boss_data.getLastAware());
-                foreach (CombatItem pnt in dead)
-                {
-                    mech_data.AddItem(new MechanicLog((long)((pnt.getTime() - boss_data.getFirstAware()) / 1000f), 0, "DEAD", 0, p, mech_data.GetPLoltyShape("DEAD")));
-                }
-                List<DamageLog> dls = p.getDamageTakenLogs(this, 0, boss_data.getAwareDuration());
-                //Player hit by skill 3
-                MechanicLog prevMech = null;
-                foreach (DamageLog dLog in dls)
-                {
-                    string name = skill_data.getName(dLog.getID());
-                    if (dLog.getResult().IsHit())
-                    {
-
-                        foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.SkillOnPlayer))
-                        {
-                            //Prevent multi hit attacks form multi registering
-                            if (prevMech != null)
-                            {
-                                if (dLog.getID() == prevMech.GetSkill() && mech.GetName() == prevMech.GetName() && (dLog.getTime() / 1000f) == prevMech.GetTime())
-                                {
-                                    break;
-                                }
-                            }
-                            if (dLog.getID() == mech.GetSkill())
-                            {
-
-
-                                prevMech = new MechanicLog((long)(dLog.getTime() / 1000f), dLog.getID(), mech.GetName(), dLog.getDamage(), p, mech.GetPlotly());
-
-                                mech_data.AddItem(prevMech);
-                                break;
-                            }
-                        }
-                    }
-                }
-                //Player gain buff 0,7
-                foreach (CombatItem c in combat_data.getCombatList().Where(x => x.isBuffremove() == ParseEnum.BuffRemove.None && x.isStateChange() == ParseEnum.StateChange.Normal))
-                {
-                    if (p.getInstid() == c.getDstInstid())
-                    {
-                        if (c.isBuff() == 1 && c.getValue() > 0 && c.isBuffremove() == ParseEnum.BuffRemove.None && c.getResult().IsHit())
-                        {
-                            String name = skill_data.getName(c.getSkillID());
-                            //buff on player 0
-                            foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.PlayerBoon))
-                            {
-                                if (c.getSkillID() == mech.GetSkill())
-                                {
-                                    //dst player
-                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
-                                    break;
-                                }
-                            }
-                            //player on player 7
-                            foreach (Mechanic mech in mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.PlayerOnPlayer))
-                            {
-                                if (c.getSkillID() == mech.GetSkill())
-                                {
-                                    //dst player
-                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p, mech.GetPlotly()));
-                                    //src player
-                                    mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), p_list.FirstOrDefault(i => i.getInstid() == c.getSrcInstid()), mech.GetPlotly()));
-                                    break;
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-            //Boon Was applied to Enemy
-            List<Mechanic> enamyBoonMechs = mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon ).ToList();
-            if (enamyBoonMechs.Count > 0)
-            {
-               
-                List<CombatItem> enamyBuffs =  combat_data.getCombatList().Where(x => x.isBuff() == 1/* && x.getDstAgent() == boss_data.getAgent() */&& x.isBuffremove() == 0).ToList();
-                foreach (Mechanic mech in enamyBoonMechs)
-                {
-                    List<CombatItem> enemyMechBuffs = enamyBuffs.Where(x => x.getSkillID() == mech.GetSkill()).ToList();
-                    if (enemyMechBuffs.Count > 0)
-                    {
-                        foreach (CombatItem c in enemyMechBuffs)
-                        {
-                            AbstractMasterPlayer amp = null;
-                            if (c.getDstAgent() == boss_data.getAgent())
-                            {
-                                amp = getBoss();
-                            }
-                            else
-                            {
-                                amp = new Mob(this.getAgentData().GetAgent(c.getDstAgent()));
-                                
-                            
-                            }
-                            mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(),amp, mech.GetPlotly()));
-                        }
-                    }
-                }
-            }
-            //Removed Boon on Enemy
-             enamyBoonMechs = mech_data.GetMechList(boss_data.getID()).Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoonStrip).ToList();
-            if (enamyBoonMechs.Count > 0)
-            {
-              
-                List<CombatItem> enamyBuffs = combat_data.getCombatList().Where(x => x.isBuff() == 1 && x.isBuffremove() == ParseEnum.BuffRemove.Manual).ToList();
-                foreach (Mechanic mech in enamyBoonMechs)
-                {
-                    List<CombatItem> enemyMechBuffs = enamyBuffs.Where(x => x.getSkillID() == mech.GetSkill()).ToList();
-                    if (enemyMechBuffs.Count > 0)
-                    {
-                        foreach (CombatItem c in enemyMechBuffs)
-                        {
-                            AbstractMasterPlayer amp = null;
-                            if (c.getDstAgent() == boss_data.getAgent())
-                            {
-                                amp = getBoss();
-                            }
-                            else
-                            {
-                                amp = new Mob(this.getAgentData().GetAgent(c.getDstAgent()));
-
-
-                            }
-                            mech_data.AddItem(new MechanicLog((long)((c.getTime() - boss_data.getFirstAware()) / 1000f), c.getSkillID(), mech.GetName(), c.getValue(), amp, mech.GetPlotly()));
-                        }
-                    }
-                }
-            }
-
-        }
-
+            return _combatData.GetMovementData();
+        }     
     }
 }

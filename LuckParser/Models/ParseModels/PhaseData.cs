@@ -1,55 +1,76 @@
-﻿namespace LuckParser.Models.ParseModels
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace LuckParser.Models.ParseModels
 {
     public class PhaseData
     {
-        private long start;
-        private long end;
-        private string name;
+        private long _start;
+        private readonly long _end;
+        private string _name;
+        private readonly List<AgentItem> _redirection = new List<AgentItem>();
 
         public PhaseData(long start, long end)
         {
-            this.start = start;
-            this.end = end;
+            _start = start;
+            _end = end;
         }
 
-        public void setName(string name)
+        public void SetName(string name)
         {
-            this.name = name;
+            _name = name;
         }
 
-        public string getName()
+        public string GetName()
         {
-            return name;
+            return _name;
         }
 
-        public long getDuration(string format = "ms")
+        public void AddRedirection(AgentItem agent)
+        {
+            _redirection.Add(agent);
+        }
+
+        public List<AgentItem> GetRedirection()
+        {
+            return _redirection;
+        }
+
+        public long GetDuration(string format = "ms")
         {
             switch (format)
             {
                 case "m":
-                    return (end - start) / 60000;
+                    return (_end - _start) / 60000;
                 case "s":
-                    return (end - start) / 1000;
-                case "ms":
+                    return (_end - _start) / 1000;
                 default:
-                    return (end - start);
+                    return (_end - _start);
             }
 
         }
 
-        public bool inInterval(long time, long offset = 0)
+        public bool InInterval(long time, long offset = 0)
         {
-            return start <= time - offset && time - offset <= end;
+            return _start <= time - offset && time - offset <= _end;
         }
 
-        public long getStart()
+        public void OverrideStart(long offset)
         {
-            return start;
+            if (_redirection.Count > 0)
+            {
+                _start = _redirection.Min(x => x.GetFirstAware())- offset;
+            }
         }
 
-        public long getEnd()
+        public long GetStart()
         {
-            return end;
+            return _start;
+        }
+
+        public long GetEnd()
+        {
+            return _end;
         }
     }
 }

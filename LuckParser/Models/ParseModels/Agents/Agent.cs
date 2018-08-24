@@ -30,24 +30,24 @@ namespace LuckParser.Models.ParseModels
         //HERALD(18, "Herald");
 
         // Fields
-        private String name;
-        private ulong ID;
-        private uint is_elite;
-        private uint prof;
+        private readonly String _name;
+        private readonly ulong _iD;
+        private readonly uint _isElite;
+        private readonly uint _prof;
 
         // Constructor
         public Agent(ulong ID, String name, uint prof, uint elite)
         {
-            this.name = name;
-            this.ID = ID;
-            this.prof = prof;
-            this.is_elite = elite;
+            _name = name;
+            _iD = ID;
+            _prof = prof;
+            _isElite = elite;
         }
 
         // Public Methods
-        public string getProf(string build, GW2APIController apiController) {
-            if (is_elite == 0xFFFFFFFF) {
-                if ((prof & 0xffff0000) == 0xffff0000)
+        public string GetProf(string build, GW2APIController apiController) {
+            if (_isElite == 0xFFFFFFFF) {
+                if ((_prof & 0xffff0000) == 0xffff0000)
                 {
                     return "GDG";
                 }
@@ -55,9 +55,9 @@ namespace LuckParser.Models.ParseModels
                 {
                     return "NPC";
                 }
-            } else if (is_elite == 0)
+            } else if (_isElite == 0)
             {
-                switch (prof)
+                switch (_prof)
                 {
                     case 1:
                         return "Guardian";
@@ -85,9 +85,9 @@ namespace LuckParser.Models.ParseModels
             }
             else if (Convert.ToInt32(build.Substring(4, 8)) < 20170914) {
 
-                if (is_elite == 1)
+                if (_isElite == 1)
                 {
-                    switch (prof + 9)
+                    switch (_prof + 9)
                     {
                         case 10:
                             return "Dragonhunter";
@@ -114,9 +114,9 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             else if (Convert.ToInt32(build.Substring(4, 8)) >= 20170914) {
-                if (is_elite == 1)
+                if (_isElite == 1)
                 {
-                    switch (prof + 9)
+                    switch (_prof + 9)
                     {
                         case 10:
                             return "Dragonhunter";
@@ -141,9 +141,9 @@ namespace LuckParser.Models.ParseModels
                     }
 
                 } else
-                if (is_elite > 1)
+                if (_isElite > 1)
                 {
-                    switch (is_elite)
+                    switch (_isElite)
                     {
                         case 55:
                             return "Soulbeast";
@@ -168,7 +168,7 @@ namespace LuckParser.Models.ParseModels
 
                     }
 
-                    GW2APISpec spec = apiController.GetSpec((int)is_elite);
+                    GW2APISpec spec = apiController.GetSpec((int)_isElite);
                     if (spec.elite)
                     {
                         return spec.name;
@@ -188,14 +188,14 @@ namespace LuckParser.Models.ParseModels
         
 
         // Getters
-        public String getName()
+        public String GetName()
         {
-            return name;
+            return _name;
         }
 
-        public ulong getID()
+        public ulong GetID()
         {
-            return ID;
+            return _iD;
         }
 
     }

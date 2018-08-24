@@ -5,54 +5,54 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class BoonSimulationItem
     {
-        protected long start;
-        protected long duration;
+        protected long Start;
+        protected long Duration;
 
-        public BoonSimulationItem()
+        protected BoonSimulationItem()
         {
-            this.start = 0;
-            this.duration = 0;
+            Start = 0;
+            Duration = 0;
         }
 
-        public BoonSimulationItem(long start, long duration)
+        protected BoonSimulationItem(long start, long duration)
         {
-            this.start = start;
-            this.duration = duration;
+            Start = start;
+            Duration = duration;
         }
 
-        public abstract long getDuration(ushort src, long start = 0, long end = 0);
+        public abstract long GetDuration(ushort src, long start = 0, long end = 0);
 
 
-        public long getStart()
+        public long GetStart()
         {
-            return start;
+            return Start;
         }
 
-        public abstract List<ushort> getSrc();
+        public abstract List<ushort> GetSrc();
 
-        public long getEnd()
+        public long GetEnd()
         {
-            return start + duration;
+            return Start + Duration;
         }
 
-        public abstract bool addOverstack(ushort src, long overstack);
+        public abstract bool AddOverstack(ushort src, long overstack);
 
-        public abstract long getOverstack(ushort src, long start = 0, long end = 0);
+        public abstract long GetOverstack(ushort src, long start = 0, long end = 0);
 
-        public long getItemDuration(long start = 0, long end = 0)
+        public long GetItemDuration(long start = 0, long end = 0)
         {
             if (end > 0)
             {
-                long start_offset = Math.Max(Math.Min(duration, start - this.start),0);
-                long item_end = this.start + duration;
-                long end_offset = Math.Max(Math.Min(duration, item_end - end),0);
-                return duration - start_offset - end_offset;
+                long startoffset = Math.Max(Math.Min(Duration, start - Start),0);
+                long itemEnd = Start + Duration;
+                long endOffset = Math.Max(Math.Min(Duration, itemEnd - end),0);
+                return Duration - startoffset - endOffset;
             }
-            return duration;
+            return Duration;
         }
 
-        public abstract void setEnd(long end);
+        public abstract void SetEnd(long end);
 
-        public abstract int getStack(long end);
+        public abstract int GetStack(long end);
     }
 }

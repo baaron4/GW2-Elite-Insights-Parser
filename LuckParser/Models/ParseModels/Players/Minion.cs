@@ -1,79 +1,60 @@
 ﻿using LuckParser.Models.DataModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
     public class Minion : AbstractPlayer
     {
 
-        public Minion(ushort master, AgentItem agent) : base(agent)
+        public Minion(AgentItem agent) : base(agent)
         {
         }
 
-        protected override void setDamageLogs(ParsedLog log)
+        protected override void SetDamageLogs(ParsedLog log)
         {
-            long time_start = log.getBossData().getFirstAware();
-            long min_time = Math.Max(time_start, agent.getFirstAware());
-            long max_time = Math.Min(log.getBossData().getLastAware(), agent.getLastAware());
-            foreach (CombatItem c in log.getDamageData())
+            long timeStart = log.GetBossData().GetFirstAware();
+            long minTime = Math.Max(timeStart, Agent.GetFirstAware());
+            long maxTime = Math.Min(log.GetBossData().GetLastAware(), Agent.GetLastAware());
+            foreach (CombatItem c in log.GetDamageData())
             {
-                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > min_time && c.getTime() < max_time)//selecting minion as caster
+                if (Agent.GetInstid() == c.GetSrcInstid() && c.GetTime() > minTime && c.GetTime() < maxTime)//selecting minion as caster
                 {
-                    long time = c.getTime() - time_start;
-                    addDamageLog(time, 0, c, damage_logs);
+                    long time = c.GetTime() - timeStart;
+                    AddDamageLog(time, c);
                 }
             }
         }
 
-        protected override void setFilteredLogs(ParsedLog log)
+        protected override void SetCastLogs(ParsedLog log)
         {
-            long time_start = log.getBossData().getFirstAware();
-            long min_time = Math.Max(time_start, agent.getFirstAware());
-            long max_time = Math.Min(log.getBossData().getLastAware(), agent.getLastAware());
-            foreach (CombatItem c in log.getDamageData())
-            {
-                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > min_time && c.getTime() < max_time)//selecting player
-                {
-                    long time = c.getTime() - time_start;
-                    addDamageLog(time, log.getBossData().getInstid(), c, damage_logsFiltered);
-                }
-            }
-        }
-
-        protected override void setCastLogs(ParsedLog log)
-        {
-            long time_start = log.getBossData().getFirstAware();
+            long timeStart = log.GetBossData().GetFirstAware();
             CastLog curCastLog = null;
-            long min_time = Math.Max(time_start, agent.getFirstAware());
-            long max_time = Math.Min(log.getBossData().getLastAware(), agent.getLastAware());
-            foreach (CombatItem c in log.getCastData())
+            long minTime = Math.Max(timeStart, Agent.GetFirstAware());
+            long maxTime = Math.Min(log.GetBossData().GetLastAware(), Agent.GetLastAware());
+            foreach (CombatItem c in log.GetCastData())
             {
-                if (!(c.getTime() > min_time && c.getTime() < max_time))
+                if (!(c.GetTime() > minTime && c.GetTime() < maxTime))
                 {
                     continue;
                 }
-                ParseEnum.StateChange state = c.isStateChange();
+                ParseEnum.StateChange state = c.IsStateChange();
                 if (state == ParseEnum.StateChange.Normal)
                 {
-                    if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
+                    if (Agent.GetInstid() == c.GetSrcInstid())//selecting player as caster
                     {
-                        if (c.isActivation().IsCasting())
+                        if (c.IsActivation().IsCasting())
                         {
-                            long time = c.getTime() - time_start;
-                            curCastLog = new CastLog(time, c.getSkillID(), c.getValue(), c.isActivation());
-                            cast_logs.Add(curCastLog);
+                            long time = c.GetTime() - timeStart;
+                            curCastLog = new CastLog(time, c.GetSkillID(), c.GetValue(), c.IsActivation());
+                            CastLogs.Add(curCastLog);
                         }
                         else
                         {
                             if (curCastLog != null)
                             {
-                                if (curCastLog.getID() == c.getSkillID())
+                                if (curCastLog.GetID() == c.GetSkillID())
                                 {
-                                    curCastLog.setEndStatus(c.getValue(), c.isActivation());
+                                    curCastLog.SetEndStatus(c.GetValue(), c.IsActivation());
                                     curCastLog = null;
                                 }
                             }
@@ -84,10 +65,8 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void setDamagetakenLogs(ParsedLog log)
+        protected override void SetDamagetakenLogs(ParsedLog log)
         {
-            // nothing to do
-            return;
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

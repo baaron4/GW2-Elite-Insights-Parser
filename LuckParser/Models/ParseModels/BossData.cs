@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -7,120 +8,213 @@ namespace LuckParser.Models.ParseModels
     public class BossData
     {
         // Fields
-        private ulong agent = 0;
-        private ushort instid = 0;
-        private long first_aware = 0;
-        private long last_aware = long.MaxValue;
-        private ushort id;
-        private String name = "UNKNOWN";
-        private int health = -1;
-        private int toughness = -1;
-        private List<Point> healthOverTime = new List<Point>();
+        private ulong _agent;
+        private ushort _instid ;
+        private readonly BossLogic _logic;
+        private long _firstAware;
+        private long _lastAware = long.MaxValue;
+        private readonly ushort _id;
+        private string _name = "UNKNOWN";
+        private int _health = -1;
+        private int _toughness = -1;
+        private List<Point> _healthOverTime = new List<Point>();
+        private int _isCM = -1;
         // Constructors
         public BossData(ushort id)
         {
-            this.id = id;
+            _id = id;
+            switch (ParseEnum.GetBossIDS(id))
+            {
+                case ParseEnum.BossIDS.ValeGuardian:
+                    _logic = new ValeGuardian();
+                    break;
+                case ParseEnum.BossIDS.Gorseval:
+                    _logic = new Gorseval();
+                    break;
+                case ParseEnum.BossIDS.Sabetha:
+                    _logic = new Sabetha();
+                    break;
+                case ParseEnum.BossIDS.Slothasor:
+                    _logic = new Slothasor();
+                    break;
+                case ParseEnum.BossIDS.Matthias:
+                    _logic = new Matthias();
+                    break;
+                case ParseEnum.BossIDS.KeepConstruct:
+                    _logic = new KeepConstruct();
+                    break;
+                case ParseEnum.BossIDS.Xera:
+                    _logic = new Xera();
+                    break;
+                case ParseEnum.BossIDS.Cairn:
+                    _logic = new Cairn();
+                    break;
+                case ParseEnum.BossIDS.MursaatOverseer:
+                    _logic = new MursaatOverseer();
+                    break;
+                case ParseEnum.BossIDS.Samarog:
+                    _logic = new Samarog();
+                    break;
+                case ParseEnum.BossIDS.Deimos:
+                    _logic = new Deimos();
+                    break;
+                case ParseEnum.BossIDS.SoullessHorror:
+                    _logic = new SoullessHorror();
+                    break;
+                case ParseEnum.BossIDS.Dhuum:
+                    _logic = new Dhuum();
+                    break;
+                case ParseEnum.BossIDS.MAMA:
+                    _logic = new MAMA();
+                    break;
+                case ParseEnum.BossIDS.Siax:
+                    _logic = new Siax();
+                    break;
+                case ParseEnum.BossIDS.Ensolyss:
+                    _logic = new Ensolyss();
+                    break;
+                case ParseEnum.BossIDS.Skorvald:
+                    _logic = new Skorvald();
+                    break;
+                case ParseEnum.BossIDS.Artsariiv:
+                    _logic = new Artsariiv();
+                    break;
+                case ParseEnum.BossIDS.Arkk:
+                    _logic = new Arkk();
+                    break;
+                case ParseEnum.BossIDS.Golem1:
+                case ParseEnum.BossIDS.Golem2:
+                case ParseEnum.BossIDS.Golem3:
+                case ParseEnum.BossIDS.Golem4:
+                case ParseEnum.BossIDS.Golem5:
+                    _logic = new Golem();
+                    break;
+                default:
+                    // Unknown
+                    _logic = new BossLogic();
+                    break;
+            }
         }
 
-        public String[] toStringArray()
+        public String[] ToStringArray()
         {
             String[] array = new String[7];
-            array[0] = string.Format("{0:X}", agent); ;
-            array[1] =instid.ToString();
-            array[2] = first_aware.ToString();
-            array[3] = last_aware.ToString();
-            array[4] =id.ToString();
-            array[5] = name;
-            array[6] = health.ToString();
+            array[0] = _agent.ToString();
+            array[1] = _instid.ToString();
+            array[2] = _firstAware.ToString();
+            array[3] = _lastAware.ToString();
+            array[4] = _id.ToString();
+            array[5] = _name;
+            array[6] = _health.ToString();
             return array;
         }
 
         // Getters
-        public ulong getAgent()
+        public ulong GetAgent()
         {
-            return agent;
+            return _agent;
         }
 
-        public ushort getInstid()
+        public BossLogic GetBossBehavior()
         {
-            return instid;
+            return _logic;
         }
 
-        public long getFirstAware()
+        public ushort GetInstid()
         {
-            return first_aware;
+            return _instid;
         }
 
-        public long getLastAware()
+        public long GetFirstAware()
         {
-            return last_aware;
+            return _firstAware;
         }
 
-        public long getAwareDuration()
+        public long GetLastAware()
         {
-            return last_aware - first_aware;
+            return _lastAware;
         }
 
-        public ushort getID()
+        public long GetAwareDuration()
         {
-            return id;
+            return _lastAware - _firstAware;
         }
 
-        public String getName()
+        public ushort GetID()
+        {
+            return _id;
+        }
+
+        public String GetName()
         {
           
-            return name;
+            return _name;
         }
 
-        public int getHealth()
+        public int GetHealth()
         {
-            return health;
+            return _health;
         }
-        public int getTough()
+        public int GetTough()
         {
-            return toughness;
+            return _toughness;
         }
 
-        public List<Point> getHealthOverTime() {
-            return healthOverTime;
+        public List<Point> GetHealthOverTime() {
+            return _healthOverTime;
         }
         // Setters
-        public void setAgent(ulong agent)
+        public void SetAgent(ulong agent)
         {
-            this.agent = agent;
+            _agent = agent;
         }
 
-        public void setInstid(ushort instid)
+        public void SetInstid(ushort instid)
         {
-            this.instid = instid;
+            _instid = instid;
         }
 
-        public void setFirstAware(long first_aware)
+        public void SetFirstAware(long firstAware)
         {
-            this.first_aware = first_aware;
+            _firstAware = firstAware;
         }
 
-        public void setLastAware(long last_aware)
+        public void SetLastAware(long lastAware)
         {
-            this.last_aware = last_aware;
+            _lastAware = lastAware;
         }
 
-        public void setName(String name)
+        public void SetName(String name)
         {
             name = name.Replace("\0", "");
-            this.name = name;
+            _name = name;
         }
 
-        public void setHealth(int health)
+        public void SetHealth(int health)
         {
-            this.health = health;
+            _health = health;
         }
-        public void setTough(int tough)
+        public void SetTough(int tough)
         {
-            this.toughness = tough;
+            _toughness = tough;
         }
-        public void setHealthOverTime(List<Point> hot) {
-            this.healthOverTime = hot;
+        public void SetHealthOverTime(List<Point> hot) {
+            _healthOverTime = hot;
+        }
+        public bool IsCM()
+        {
+            return _isCM == 1;
+        }
+        public void SetCM(List<CombatItem> clist)
+        {
+            if (_isCM == -1)
+            {
+                _isCM = _logic.IsCM(clist, _health);
+                if (_isCM == 1)
+                {
+                    _name += " CM";
+                }
+            }
         }
     }
 }

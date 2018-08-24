@@ -3,423 +3,534 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractMasterPlayer : AbstractPlayer
     {
         // Boons
-        private List<BoonDistribution> boon_distribution = new List<BoonDistribution>();
-        private List<Dictionary<int, long>> boon_presence = new List<Dictionary<int, long>>();
-        private Dictionary<int, BoonsGraphModel> boon_points = new Dictionary<int, BoonsGraphModel>();
+        private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
+        private readonly List<Dictionary<long, long>> _boonPresence = new List<Dictionary<long, long>>();
+        private readonly List<Dictionary<long, long>> _condiPresence = new List<Dictionary<long, long>>();
+        private readonly Dictionary<long, BoonsGraphModel> _boonPoints = new Dictionary<long, BoonsGraphModel>();
+        private readonly Dictionary<long, Dictionary<int, string[]>> _boonExtra = new Dictionary<long, Dictionary<int, string[]>>();
         // dps graphs
-        private Dictionary<int, List<Point>> dps_graph = new Dictionary<int, List<Point>>();
+        private readonly Dictionary<int, List<Point>> _dpsGraphs = new Dictionary<int, List<Point>>();
         // Minions
-        private Dictionary<string, Minions> minions = new Dictionary<string, Minions>();
+        private readonly Dictionary<string, Minions> _minions = new Dictionary<string, Minions>();
         // Replay
-        private CombatReplay replay = null;
+        protected CombatReplay Replay;
 
-        public AbstractMasterPlayer(AgentItem agent) : base(agent)
+        protected AbstractMasterPlayer(AgentItem agent) : base(agent)
         {
 
         }
 
-        public Dictionary<string, Minions> getMinions(ParsedLog log)
+        public Dictionary<string, Minions> GetMinions(ParsedLog log)
         {
-            if (minions.Count == 0)
+            if (_minions.Count == 0)
             {
-                setMinions(log);
+                SetMinions(log);
             }
-            return minions;
-        }  
-        public void addDPSGraph(int id, List<Point> graph)
-        {
-            dps_graph[id] = graph;
+            return _minions;
         }
-        public List<Point> getDPSGraph(int id)
+        public void AddDPSGraph(int id, List<Point> graph)
         {
-            if (dps_graph.ContainsKey(id))
+            _dpsGraphs[id] = graph;
+        }
+        public List<Point> GetDPSGraph(int id)
+        {
+            if (_dpsGraphs.ContainsKey(id))
             {
-                return dps_graph[id];
+                return _dpsGraphs[id];
             }
             return new List<Point>();
         }
-        public BoonDistribution getBoonDistribution(ParsedLog log, List<PhaseData> phases, List<Boon> to_track, int phase_index)
+        public BoonDistribution GetBoonDistribution(ParsedLog log, List<PhaseData> phases, List<Boon> toTrack, int phaseIndex)
         {
-            if (boon_distribution.Count == 0)
+            if (_boonDistribution.Count == 0)
             {
-                setBoonDistribution(log, phases, to_track);
+                SetBoonDistribution(log, phases, toTrack);
             }
-            return boon_distribution[phase_index];
+            return _boonDistribution[phaseIndex];
         }
-        public Dictionary<int, BoonsGraphModel> getBoonGraphs(ParsedLog log, List<PhaseData> phases, List<Boon> to_track)
+        public Dictionary<long, BoonsGraphModel> GetBoonGraphs(ParsedLog log, List<PhaseData> phases, List<Boon> toTrack)
         {
-            if (boon_distribution.Count == 0)
+            if (_boonDistribution.Count == 0)
             {
-                setBoonDistribution(log, phases, to_track);
+                SetBoonDistribution(log, phases, toTrack);
             }
-            return boon_points;
+            return _boonPoints;
         }
-        public Dictionary<int, long> getBoonPresence(ParsedLog log, List<PhaseData> phases, List<Boon> to_track, int phase_index)
+        public Dictionary<long, long> GetBoonPresence(ParsedLog log, List<PhaseData> phases, List<Boon> toTrack, int phaseIndex)
         {
-            if (boon_distribution.Count == 0)
+            if (_boonDistribution.Count == 0)
             {
-                setBoonDistribution(log, phases, to_track);
+                SetBoonDistribution(log, phases, toTrack);
             }
-            return boon_presence[phase_index];
+            return _boonPresence[phaseIndex];
         }
-        public void initCombatReplay(ParsedLog log)
+
+        public Dictionary<long, Dictionary<int, string[]>> GetExtraBoonData(ParsedLog log, List<PhaseData> phases, List<Boon> toTrack)
         {
-            if (log.getMovementData().Count == 0)
+            if (_boonDistribution.Count == 0)
+            {
+                SetBoonDistribution(log, phases, toTrack);
+            }
+            return _boonExtra;
+        }
+
+        public Dictionary<long, long> GetCondiPresence(ParsedLog log, List<PhaseData> phases, List<Boon> toTrack, int phaseIndex)
+        {
+            if (_boonDistribution.Count == 0)
+            {
+                SetBoonDistribution(log, phases, toTrack);
+            }
+            return _condiPresence[phaseIndex];
+        }
+        public void InitCombatReplay(ParsedLog log, int pollingRate, bool trim, bool forceInterpolate)
+        {
+            if (log.GetMovementData().Count == 0)
             {
                 // no movement data, old arc version
                 return;
             }
-            if (replay == null)
+            if (Replay == null)
             {
-                replay = new CombatReplay();
-                setMovements(log);
-                replay.pollingRate(16, log.getBossData().getAwareDuration());
-            }
-        }
-        public CombatReplay getCombatReplay()
-        {
-            return replay;
-        }
-        // private getters
-        private BoonMap getBoonMap(ParsedLog log, List<Boon> to_track)
-        {
-            BoonMap boon_map = new BoonMap();
-            boon_map.add(to_track);
-            // Fill in Boon Map
-            long time_start = log.getBossData().getFirstAware();
-
-            foreach (CombatItem c in log.getBoonData())
-            {
-                if (!boon_map.ContainsKey(c.getSkillID()))
+                Replay = new CombatReplay();
+                SetMovements(log);
+                Replay.PollingRate(pollingRate, log.GetBossData().GetAwareDuration(), forceInterpolate);
+                SetCombatReplayIcon(log);
+                if (trim)
                 {
-                    continue;
-                }
-                long time = c.getTime() - time_start;
-                ushort dst = c.isBuffremove() == ParseEnum.BuffRemove.None ? c.getDstInstid() : c.getSrcInstid();
-                if (agent.getInstid() == dst && time > 0 && time < log.getBossData().getAwareDuration())
-                {
-                    ushort src = c.getSrcMasterInstid() > 0 ? c.getSrcMasterInstid() : c.getSrcInstid();
-                    if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                    CombatItem test = log.GetCombatList().FirstOrDefault(x => x.GetSrcAgent() == Agent.GetAgent() && (x.IsStateChange().IsDead() || x.IsStateChange().IsDespawn()));
+                    if (test != null)
                     {
-                        List<BoonLog> loglist = boon_map[c.getSkillID()];
-                        if (loglist.Count == 0 && c.getOverstackValue() > 0)
-                        {
-                            loglist.Add(new BoonLog(0, src, time, 0));
-                        }
-                        loglist.Add(new BoonLog(time, src, c.getValue(), 0));
-                    }
-                    else if (Boon.removePermission(c.getSkillID(), c.isBuffremove(), c.getIFF()))
-                    {
-                        if (c.isBuffremove() == ParseEnum.BuffRemove.All)//All
-                        {
-                            List<BoonLog> loglist = boon_map[c.getSkillID()];
-                            if (loglist.Count == 0)
-                            {
-                                loglist.Add(new BoonLog(0, src, time, 0));
-                            }
-                            else
-                            {
-                                for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
-                                {
-                                    BoonLog curBL = loglist[cnt];
-                                    if (curBL.getTime() + curBL.getValue() > time)
-                                    {
-                                        long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                        loglist[cnt].addValue(-subtract);
-                                        // add removed as overstack
-                                        loglist[cnt].addOverstack((ushort)subtract);
-                                    }
-                                }
-                            }
-                        }
-                        else if (c.isBuffremove() == ParseEnum.BuffRemove.Single)//Single
-                        {
-                            List<BoonLog> loglist = boon_map[c.getSkillID()];
-                            if (loglist.Count == 0)
-                            {
-                                loglist.Add(new BoonLog(0, src, time, 0));
-                            }
-                            else
-                            {
-                                int cnt = loglist.Count - 1;
-                                BoonLog curBL = loglist[cnt];
-                                if (curBL.getTime() + curBL.getValue() > time)
-                                {
-                                    long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                    loglist[cnt].addValue(-subtract);
-                                    // add removed as overstack
-                                    loglist[cnt].addOverstack((ushort)subtract);
-                                }
-                            }
-                        }
-                        else if (c.isBuffremove() == ParseEnum.BuffRemove.Manual)//Manuel
-                        {
-                            List<BoonLog> loglist = boon_map[c.getSkillID()];
-                            if (loglist.Count == 0)
-                            {
-                                loglist.Add(new BoonLog(0, src, time, 0));
-                            }
-                            else
-                            {
-                                for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
-                                {
-                                    BoonLog curBL = loglist[cnt];
-                                    long ctime = curBL.getTime() + curBL.getValue();
-                                    if (ctime > time)
-                                    {
-                                        long subtract = (curBL.getTime() + curBL.getValue()) - time;
-                                        loglist[cnt].addValue(-subtract);
-                                        // add removed as overstack
-                                        loglist[cnt].addOverstack((ushort)subtract);
-                                        break;
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-
-                }
-            }
-            return boon_map;
-        }
-        private void setMovements(ParsedLog log)
-        {
-            foreach (CombatItem c in log.getMovementData())
-            {
-                if (c.getSrcInstid() != agent.getInstid())
-                {
-                    continue;
-                }
-                long time = c.getTime() - log.getBossData().getFirstAware();
-                if (time < 0 || time > log.getBossData().getAwareDuration())
-                {
-                    continue;
-                }
-                byte[] xy = BitConverter.GetBytes(c.getDstAgent());
-                float X = BitConverter.ToSingle(xy, 0);
-                float Y = BitConverter.ToSingle(xy, 4);
-                if (c.isStateChange() == ParseEnum.StateChange.Position)
-                {
-                    replay.addPosition(new Point3D(X, Y, c.getValue(), time));
-                }
-                else
-                {
-                    replay.addVelocity(new Point3D(X, Y, c.getValue(), time));
-                }
-            }
-        }
-        private void setBoonDistribution(ParsedLog log, List<PhaseData> phases, List<Boon> to_track)
-        {
-            BoonMap to_use = getBoonMap(log, to_track);
-            long dur = log.getBossData().getAwareDuration();
-            int fight_duration = (int)(dur) / 1000;
-            // Init boon presence points
-            BoonsGraphModel boon_presence_points = new BoonsGraphModel("Number of Boons");
-            for (int i = 0; i <= fight_duration; i++)
-            {
-                boon_presence_points.getBoonChart().Add(new Point(i, 0));
-            }
-            for (int i = 0; i < phases.Count; i++)
-            {
-                boon_distribution.Add(new BoonDistribution());
-                boon_presence.Add(new Dictionary<int, long>());
-            }
-
-            var toFill = new Point[dur + 1];
-            var toFillPresence = new Point[dur + 1];
-
-            long death = getDeath(log, 0, dur);
-
-            foreach (Boon boon in to_track)
-            {
-                int boonid = boon.getID();
-                if (to_use.TryGetValue(boonid, out var logs) && logs.Count != 0)
-                {
-                    if (boon_distribution[0].ContainsKey(boonid))
-                    {
-                        continue;
-                    }
-                    var simulator = boon.CreateSimulator();
-                    simulator.simulate(logs, dur);
-                    if (death > 0 && getCastLogs(log, death + 1, fight_duration).Count > 0)
-                    {
-                        simulator.trim(death - log.getBossData().getFirstAware());
+                        Replay.Trim(Agent.GetFirstAware() - log.GetBossData().GetFirstAware(), test.GetTime() - log.GetBossData().GetFirstAware());
                     }
                     else
                     {
-                        simulator.trim(dur);
+                        Replay.Trim(Agent.GetFirstAware() - log.GetBossData().GetFirstAware(), Agent.GetLastAware() - log.GetBossData().GetFirstAware());
                     }
-                    var simulation = simulator.getSimulationResult();
-                    foreach (var simul in simulation)
+                }
+                SetAdditionalCombatReplayData(log, pollingRate);
+            }
+        }
+        public CombatReplay GetCombatReplay()
+        {
+            return Replay;
+        }
+
+        public long GetDeath(ParsedLog log, long start, long end)
+        {
+            long offset = log.GetBossData().GetFirstAware();
+            CombatItem dead = log.GetCombatList().LastOrDefault(x => x.GetSrcInstid() == Agent.GetInstid() && x.IsStateChange().IsDead() && x.GetTime() >= start + offset && x.GetTime() <= end + offset);
+            if (dead != null && dead.GetTime() > 0)
+            {
+                return dead.GetTime();
+            }
+            return 0;
+        }
+
+        // private getters
+        private BoonMap GetBoonMap(ParsedLog log, List<Boon> toTrack)
+        {
+            BoonMap boonMap = new BoonMap
+            {
+                toTrack
+            };
+            // Fill in Boon Map
+            long timeStart = log.GetBossData().GetFirstAware();
+            List<long> tableIds = Boon.GetBoonList().Select(x => x.GetID()).ToList();
+            tableIds.AddRange(Boon.GetOffensiveTableList().Select(x => x.GetID()));
+            tableIds.AddRange(Boon.GetDefensiveTableList().Select(x => x.GetID()));
+            tableIds.AddRange(Boon.GetCondiBoonList().Select(x => x.GetID()));
+            foreach (CombatItem c in log.GetBoonData())
+            {
+                if (!boonMap.ContainsKey(c.GetSkillID()))
+                {
+                    continue;
+                }
+                long time = c.GetTime() - timeStart;
+                ushort dst = c.IsBuffremove() == ParseEnum.BuffRemove.None ? c.GetDstInstid() : c.GetSrcInstid();
+                if (Agent.GetInstid() == dst)
+                {
+                    // don't add buff initial table boons and buffs in non golem mode, for others overstack is irrevelant
+                    if (c.IsStateChange() == ParseEnum.StateChange.BuffInitial && (log.IsBenchmarkMode() || !tableIds.Contains(c.GetSkillID())))
+                    {
+                        List<BoonLog> loglist = boonMap[c.GetSkillID()];
+                        loglist.Add(new BoonLog(0, 0, long.MaxValue, 0));
+                    }
+                    else if (time >= 0 && time < log.GetBossData().GetAwareDuration())
+                    {
+                        if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                        {
+                            ushort src = c.GetSrcMasterInstid() > 0 ? c.GetSrcMasterInstid() : c.GetSrcInstid();
+                            List<BoonLog> loglist = boonMap[c.GetSkillID()];
+
+                            if (loglist.Count == 0 && c.GetOverstackValue() > 0)
+                            {
+                                loglist.Add(new BoonLog(0, 0, time, 0));
+                            }
+                            loglist.Add(new BoonLog(time, src, c.GetValue(), 0));
+                        }
+                        else if (Boon.RemovePermission(c.GetSkillID(), c.IsBuffremove(), c.GetIFF()) && time < log.GetBossData().GetAwareDuration() - 50)
+                        {
+                            if (c.IsBuffremove() == ParseEnum.BuffRemove.All)//All
+                            {
+                                List<BoonLog> loglist = boonMap[c.GetSkillID()];
+                                if (loglist.Count == 0)
+                                {
+                                    loglist.Add(new BoonLog(0, 0, time, 0));
+                                }
+                                else
+                                {
+                                    for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
+                                    {
+                                        BoonLog curBL = loglist[cnt];
+                                        if (curBL.GetOverstack() == 0 && curBL.GetTime() + curBL.GetValue() > time)
+                                        {
+                                            long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
+                                            curBL.AddValue(-subtract);
+                                            // add removed as overstack
+                                            curBL.AddOverstack((uint)subtract);
+                                        }
+                                    }
+                                }
+                            }
+                            else if (c.IsBuffremove() == ParseEnum.BuffRemove.Single)//Single
+                            {
+                                List<BoonLog> loglist = boonMap[c.GetSkillID()];
+                                if (loglist.Count == 0)
+                                {
+                                    loglist.Add(new BoonLog(0, 0, time, 0));
+                                }
+                                else
+                                {
+                                    int cnt = loglist.Count - 1;
+                                    BoonLog curBL = loglist[cnt];
+                                    if (curBL.GetOverstack() == 0 && curBL.GetTime() + curBL.GetValue() > time)
+                                    {
+                                        long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
+                                        curBL.AddValue(-subtract);
+                                        // add removed as overstack
+                                        curBL.AddOverstack((uint)subtract);
+                                    }
+                                }
+                            }
+                            else if (c.IsBuffremove() == ParseEnum.BuffRemove.Manual)//Manuel
+                            {
+                                List<BoonLog> loglist = boonMap[c.GetSkillID()];
+                                if (loglist.Count == 0)
+                                {
+                                    loglist.Add(new BoonLog(0, 0, time, 0));
+                                }
+                                else
+                                {
+                                    for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
+                                    {
+                                        BoonLog curBL = loglist[cnt];
+                                        long ctime = curBL.GetTime() + curBL.GetValue();
+                                        if (curBL.GetOverstack() == 0 && ctime > time)
+                                        {
+                                            long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
+                                            curBL.AddValue(-subtract);
+                                            // add removed as overstack
+                                            curBL.AddOverstack((uint)subtract);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return boonMap;
+        }
+        private void SetMovements(ParsedLog log)
+        {
+            foreach (CombatItem c in log.GetMovementData())
+            {
+                if (c.GetSrcInstid() != Agent.GetInstid())
+                {
+                    continue;
+                }
+                long time = c.GetTime() - log.GetBossData().GetFirstAware();
+                byte[] xy = BitConverter.GetBytes(c.GetDstAgent());
+                float x = BitConverter.ToSingle(xy, 0);
+                float y = BitConverter.ToSingle(xy, 4);
+                if (c.IsStateChange() == ParseEnum.StateChange.Position)
+                {
+                    Replay.AddPosition(new Point3D(x, y, c.GetValue(), time));
+                }
+                else
+                {
+                    Replay.AddVelocity(new Point3D(x, y, c.GetValue(), time));
+                }
+            }
+        }
+        protected abstract void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate);
+        protected abstract void SetCombatReplayIcon(ParsedLog log);
+
+        private void generateExtraBoonData(ParsedLog log, long boonid, BoonSimulationResult boonSimulation, List<PhaseData> phases)
+        {
+
+            switch (boonid)
+            {
+                // Frost Spirit
+                case 50421:
+                    _boonExtra[boonid] = new Dictionary<int, string[]>();
+                    for (int i = 0; i < phases.Count; i++)
+                    {
+                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].GetStart(), phases[i].GetEnd());
+                        int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
+                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.GetBossData().GetInstid()).Sum(x => x.GetDamage()), 1);
+                        List<DamageLog> effect = dmLogs.Where(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0).ToList();
+                        List<DamageLog> effectBoss = effect.Where(x => x.GetDstInstidt() == log.GetBossData().GetInstid()).ToList();
+                        int damage = (int)(effect.Sum(x => x.GetDamage()) / 21.0);
+                        int bossDamage = (int)(effectBoss.Sum(x => x.GetDamage()) / 21.0);
+                        double gain = Math.Round(100.0 * ((double)totalDamage / (totalDamage - damage) - 1.0), 2);
+                        double gainBoss = Math.Round(100.0 * ((double)totalBossDamage / (totalBossDamage - bossDamage) - 1.0), 2);
+                        string gainText = effect.Count + " out of " + dmLogs.Count(x => x.IsCondi() == 0) + " hits <br> Pure Frost Spirit Damage: "
+                                + damage + "<br> Effective Damage Increase: " + gain + "%";
+                        string gainBossText = effectBoss.Count + " out of " + dmLogs.Count(x => x.GetDstInstidt() == log.GetBossData().GetInstid() && x.IsCondi() == 0) + " hits <br> Pure Frost Spirit Damage: "
+                                + bossDamage + "<br> Effective Damage Increase: " + gainBoss + "%";
+                        _boonExtra[boonid][i] = new [] { gainText, gainBossText };
+                    }
+                    break;
+                // Kalla Elite
+                case 45026:
+                    _boonExtra[boonid] = new Dictionary<int, string[]>();
+                    for (int i = 0; i < phases.Count; i++)
+                    {
+                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].GetStart(), phases[i].GetEnd());
+                        int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
+                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.GetBossData().GetInstid()).Sum(x => x.GetDamage()), 1);
+                        int effectCount = dmLogs.Count(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0);
+                        int effectBossCount = dmLogs.Count(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0 && x.GetDstInstidt() == log.GetBossData().GetInstid());
+                        int damage = (int)(effectCount * (325 + 3000 * 0.04));
+                        int bossDamage = (int)(effectBossCount * (325 + 3000 * 0.04));
+                        double gain = Math.Round(100.0 * ((double)(totalDamage + damage) / totalDamage - 1.0), 2);
+                        double gainBoss = Math.Round(100.0 * ((double)(totalBossDamage + bossDamage) / totalBossDamage - 1.0), 2);
+                        string gainText = effectCount + " out of " + dmLogs.Count(x => x.IsCondi() == 0) + " hits <br> Estimated Soulcleave Damage: "
+                                + damage + "<br> Estimated Damage Increase: " + gain + "%";
+                        string gainBossText = effectBossCount + " out of " + dmLogs.Count(x => x.GetDstInstidt() == log.GetBossData().GetInstid() && x.IsCondi() == 0) + " hits <br> Estimated Soulcleave Damage: "
+                                + bossDamage + "<br> Estimated Damage Increase: " + gainBoss + "%";
+                        _boonExtra[boonid][i] = new [] { gainText, gainBossText };
+                    }
+                    break;
+                // GoE
+                case 31803:
+                    _boonExtra[boonid] = new Dictionary<int, string[]>();
+                    for (int i = 0; i < phases.Count; i++)
+                    {
+                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].GetStart(), phases[i].GetEnd());
+                        int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
+                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.GetBossData().GetInstid()).Sum(x => x.GetDamage()), 1);
+                        List<DamageLog> effect = dmLogs.Where(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0).ToList();
+                        List<DamageLog> effectBoss = effect.Where(x => x.GetDstInstidt() == log.GetBossData().GetInstid()).ToList();
+                        int damage = (int)(effect.Sum(x => x.GetDamage()) / 11.0);
+                        int bossDamage = (int)(effectBoss.Sum(x => x.GetDamage()) / 11.0);
+                        double gain = Math.Round(100.0 * ((double)totalDamage / (totalDamage - damage) - 1.0), 2);
+                        double gainBoss = Math.Round(100.0 * ((double)totalBossDamage / (totalBossDamage - bossDamage) - 1.0), 2);
+                        string gainText = effect.Count + " out of " + dmLogs.Count(x => x.IsCondi() == 0) + " hits <br> Pure GoE Damage: "
+                                + damage + "<br> Effective Damage Increase: " + gain + "%";
+                        string gainBossText = effectBoss.Count + " out of " + dmLogs.Count(x => x.GetDstInstidt() == log.GetBossData().GetInstid() && x.IsCondi() == 0) + " hits <br> Pure GoE Damage: "
+                                + bossDamage + "<br> Effective Damage Increase: " + gainBoss + "%";
+                        _boonExtra[boonid][i] = new [] { gainText, gainBossText };
+                    }
+                    break;
+            }
+        }
+
+        private void SetBoonDistribution(ParsedLog log, List<PhaseData> phases, List<Boon> toTrack)
+        {
+            BoonMap toUse = GetBoonMap(log, toTrack);
+            long dur = log.GetBossData().GetAwareDuration();
+            int fightDuration = (int)(dur) / 1000;
+            // Init boon/condi presence points
+            BoonsGraphModel boonPresencePoints = new BoonsGraphModel("Number of Boons");
+            BoonsGraphModel condiPresencePoints = new BoonsGraphModel("Number of Conditions");
+            HashSet<long> extraDataID = new HashSet<long>
+            {
+                50421,
+                45026,
+                31803
+            };
+            for (int i = 0; i <= fightDuration; i++)
+            {
+                boonPresencePoints.GetBoonChart().Add(new Point(i, 0));
+                condiPresencePoints.GetBoonChart().Add(new Point(i, 0));
+            }
+            for (int i = 0; i < phases.Count; i++)
+            {
+                _boonDistribution.Add(new BoonDistribution());
+                _boonPresence.Add(new Dictionary<long, long>());
+                _condiPresence.Add(new Dictionary<long, long>());
+            }
+
+            long death = GetDeath(log, 0, dur) - log.GetBossData().GetFirstAware();
+
+            foreach (Boon boon in toTrack)
+            {
+                long boonid = boon.GetID();
+                if (toUse.TryGetValue(boonid, out var logs) && logs.Count != 0)
+                {
+                    if (_boonDistribution[0].ContainsKey(boonid))
+                    {
+                        continue;
+                    }
+                    bool requireExtraData = extraDataID.Contains(boonid);
+                    var simulator = boon.CreateSimulator(log);
+                    simulator.Simulate(logs, dur);
+                    if (death > 0 && GetCastLogs(log, death + 5000, fightDuration).Count == 0)
+                    {
+                        simulator.Trim(death);
+                    }
+                    else
+                    {
+                        simulator.Trim(dur);
+                    }
+                    var simulation = simulator.GetSimulationResult();
+                    var updateBoonPresence = Boon.GetBoonList().Any(x => x.GetID() == boonid);
+                    var updateCondiPresence = boonid != 873 && Boon.GetCondiBoonList().Any(x => x.GetID() == boonid);
+                    foreach (var simul in simulation.Items)
                     {
                         for (int i = 0; i < phases.Count; i++)
                         {
                             var phase = phases[i];
-                            var presenceDict = boon_presence[i];
-                            if (!boon_distribution[i].TryGetValue(boonid, out var distrib))
+                            if (!_boonDistribution[i].TryGetValue(boonid, out var distrib))
                             {
                                 distrib = new Dictionary<ushort, OverAndValue>();
-                                boon_distribution[i].Add(boonid, distrib);
+                                _boonDistribution[i].Add(boonid, distrib);
                             }
-                            Add(presenceDict, boonid, simul.getItemDuration(phase.getStart(), phase.getEnd()));
-                            foreach (ushort src in simul.getSrc())
+                            if (updateBoonPresence)
+                                Add(_boonPresence[i], boonid, simul.GetItemDuration(phase.GetStart(), phase.GetEnd()));
+                            if (updateCondiPresence)
+                                Add(_condiPresence[i], boonid, simul.GetItemDuration(phase.GetStart(), phase.GetEnd()));
+                            foreach (ushort src in simul.GetSrc())
                             {
                                 if (distrib.TryGetValue(src, out var toModify))
                                 {
-                                    toModify.value += simul.getDuration(src, phase.getStart(), phase.getEnd());
-                                    toModify.overstack += simul.getOverstack(src, phase.getStart(), phase.getEnd());
+                                    toModify.Value += simul.GetDuration(src, phase.GetStart(), phase.GetEnd());
+                                    toModify.Overstack += simul.GetOverstack(src, phase.GetStart(), phase.GetEnd());
                                     distrib[src] = toModify;
                                 }
                                 else
                                 {
                                     distrib.Add(src, new OverAndValue(
-                                        simul.getDuration(src, phase.getStart(), phase.getEnd()),
-                                        simul.getOverstack(src, phase.getStart(), phase.getEnd())));
+                                        simul.GetDuration(src, phase.GetStart(), phase.GetEnd()),
+                                        simul.GetOverstack(src, phase.GetStart(), phase.GetEnd())));
                                 }
                             }
                         }
                     }
+
                     // Graphs
-                    // full precision
-                    for (int i = 0; i <= dur; i++)
+                    if (requireExtraData)
                     {
-                        toFill[i] = new Point(i, 0);
-                        toFillPresence[i] = new Point(i, 0);
+                        generateExtraBoonData(log, boonid, simulation, phases);
                     }
-                    foreach (var simul in simulation)
+                    // Precision is reduced to seconds
+                    var graphPoints = new List<Point>(capacity: fightDuration + 1);
+                    var boonPresence = boonPresencePoints.GetBoonChart();
+                    var condiPresence = condiPresencePoints.GetBoonChart();
+                    if (Replay != null && (updateCondiPresence || updateBoonPresence || Boon.GetDefensiveTableList().Any(x => x.GetID() == boonid) || Boon.GetOffensiveTableList().Any(x => x.GetID() == boonid)))
                     {
-                        int start = (int)simul.getStart();
-                        int end = (int)simul.getEnd();
-
-                        bool present = simul.getItemDuration() > 0;
-                        for (int i = start; i <= end; i++)
+                        foreach (int time in Replay.GetTimes())
                         {
-                            toFill[i] = new Point(i, simul.getStack(i));
-                            toFillPresence[i] = new Point(i, present ? 1 : 0);
-                        }
-                    }
-                    // reduce precision to seconds
-                    var reducedPrecision = new List<Point>(capacity: fight_duration + 1);
-                    var boonPresence = boon_presence_points.getBoonChart();
-                    var updateBoonPresence = Boon.getBoonList().Any(x => x.getID() == boonid);
-                    if (replay != null && (updateBoonPresence || Boon.getDefensiveTableList().Any(x => x.getID() == boonid) || Boon.getOffensiveTableList().Any(x => x.getID() == boonid)))
-                    {
-                        foreach (int time in replay.getTimes())
-                        {
-                            replay.addBoon(boonid, toFill[time].Y);
+                            Replay.AddBoon(boonid, simulation.GetBoonStackCount(time));
                         }
 
                     }
-                    for (int i = 0; i <= fight_duration; i++)
+                    for (int i = 0; i <= fightDuration; i++)
                     {
-                        reducedPrecision.Add(new Point(i, toFill[1000 * i].Y));
+                        graphPoints.Add(new Point(i, simulation.GetBoonStackCount(1000 * i)));
                         if (updateBoonPresence)
                         {
-                            boonPresence[i] = new Point(i, boonPresence[i].Y + toFillPresence[1000 * i].Y);
+                            boonPresence[i] = new Point(i, boonPresence[i].Y + (simulation.GetEffectPresence(1000 * i) ? 1 : 0));
+                        }
+                        if (updateCondiPresence)
+                        {
+                            condiPresence[i] = new Point(i, condiPresence[i].Y + (simulation.GetEffectPresence(1000 * i) ? 1 : 0));
                         }
                     }
-                    boon_points[boonid] = new BoonsGraphModel(boon.getName(), reducedPrecision);
+                    _boonPoints[boonid] = new BoonsGraphModel(boon.GetName(), graphPoints);
                 }
             }
-            boon_points[-2] = boon_presence_points;
+            _boonPoints[-2] = boonPresencePoints;
+            _boonPoints[-3] = condiPresencePoints;
         }
-        private void setMinions(ParsedLog log)
+        private void SetMinions(ParsedLog log)
         {
-            List<AgentItem> combatMinion = log.getAgentData().getNPCAgentList().Where(x => x.getMasterAgent() == agent.getAgent()).ToList();
+            List<AgentItem> combatMinion = log.GetAgentData().GetNPCAgentList().Where(x => x.GetMasterAgent() == Agent.GetAgent()).ToList();
             Dictionary<string, Minions> auxMinions = new Dictionary<string, Minions>();
             foreach (AgentItem agent in combatMinion)
             {
-                string id = agent.getName();
+                string id = agent.GetName();
                 if (!auxMinions.ContainsKey(id))
                 {
                     auxMinions[id] = new Minions(id.GetHashCode());
                 }
-                auxMinions[id].Add(new Minion(agent.getInstid(), agent));
+                auxMinions[id].Add(new Minion(agent));
             }
             foreach (KeyValuePair<string, Minions> pair in auxMinions)
             {
-                if (pair.Value.getDamageLogs(0,log,0,log.getBossData().getAwareDuration()).Count > 0)
+                if (pair.Value.GetDamageLogs(0, log, 0, log.GetBossData().GetAwareDuration()).Count > 0)
                 {
-                    minions[pair.Key] = pair.Value;
+                    _minions[pair.Key] = pair.Value;
                 }
             }
         }
 
-        protected override void setDamageLogs(ParsedLog log)
+        protected override void SetDamageLogs(ParsedLog log)
         {
-            long time_start = log.getBossData().getFirstAware();
-            foreach (CombatItem c in log.getDamageData())
+            long timeStart = log.GetBossData().GetFirstAware();
+            foreach (CombatItem c in log.GetDamageData())
             {
-                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())//selecting player or minion as caster
+                if (Agent.GetInstid() == c.GetSrcInstid() && c.GetTime() > log.GetBossData().GetFirstAware() && c.GetTime() < log.GetBossData().GetLastAware())//selecting player or minion as caster
                 {
-                    long time = c.getTime() - time_start;
-                    addDamageLog(time, 0, c, damage_logs);
+                    long time = c.GetTime() - timeStart;
+                    AddDamageLog(time, c);
                 }
             }
-            Dictionary<string, Minions> min_list = getMinions(log);
-            foreach (Minions mins in min_list.Values)
+            Dictionary<string, Minions> minionsList = GetMinions(log);
+            foreach (Minions mins in minionsList.Values)
             {
-                damage_logs.AddRange(mins.getDamageLogs(0, log, 0, log.getBossData().getAwareDuration()));
+                DamageLogs.AddRange(mins.GetDamageLogs(0, log, 0, log.GetBossData().GetAwareDuration()));
             }
-            damage_logs.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
+            DamageLogs.Sort((x, y) => x.GetTime() < y.GetTime() ? -1 : 1);
         }
-
-        protected override void setFilteredLogs(ParsedLog log)
+        protected override void SetCastLogs(ParsedLog log)
         {
-            long time_start = log.getBossData().getFirstAware();
-            foreach (CombatItem c in log.getDamageData())
-            {
-                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
-                {
-                    long time = c.getTime() - time_start;
-                    addDamageLog(time, log.getBossData().getInstid(), c, damage_logsFiltered);
-                }
-            }
-            Dictionary<string, Minions> min_list = getMinions(log);
-            foreach (Minions mins in min_list.Values)
-            {
-                damage_logsFiltered.AddRange(mins.getDamageLogs(log.getBossData().getInstid(), log, 0, log.getBossData().getAwareDuration()));
-            }
-            damage_logsFiltered.Sort((x, y) => x.getTime() < y.getTime() ? -1 : 1);
-        }
-        protected override void setCastLogs(ParsedLog log)
-        {
-            long time_start = log.getBossData().getFirstAware();
+            long timeStart = log.GetBossData().GetFirstAware();
             CastLog curCastLog = null;
-            foreach (CombatItem c in log.getCastData())
+            foreach (CombatItem c in log.GetCastData())
             {
-                if (! (c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware()))
+                if (!(c.GetTime() > log.GetBossData().GetFirstAware() && c.GetTime() < log.GetBossData().GetLastAware()))
                 {
                     continue;
                 }
-                ParseEnum.StateChange state = c.isStateChange();
+                ParseEnum.StateChange state = c.IsStateChange();
                 if (state == ParseEnum.StateChange.Normal)
                 {
-                    if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
+                    if (Agent.GetInstid() == c.GetSrcInstid())//selecting player as caster
                     {
-                        if (c.isActivation().IsCasting())
+                        if (c.IsActivation().IsCasting())
                         {
-                            long time = c.getTime() - time_start;
-                            curCastLog = new CastLog(time, c.getSkillID(), c.getValue(), c.isActivation());
-                            cast_logs.Add(curCastLog);
+                            long time = c.GetTime() - timeStart;
+                            curCastLog = new CastLog(time, c.GetSkillID(), c.GetValue(), c.IsActivation());
+                            CastLogs.Add(curCastLog);
                         }
                         else
                         {
                             if (curCastLog != null)
                             {
-                                if (curCastLog.getID() == c.getSkillID())
+                                if (curCastLog.GetID() == c.GetSkillID())
                                 {
-                                    curCastLog.setEndStatus(c.getValue(), c.isActivation());
-                                    curCastLog = null;                      
+                                    curCastLog.SetEndStatus(c.GetValue(), c.IsActivation());
+                                    curCastLog = null;
                                 }
                             }
                         }
@@ -428,13 +539,13 @@ namespace LuckParser.Models.ParseModels
                 }
                 else if (state == ParseEnum.StateChange.WeaponSwap)
                 {//Weapon swap
-                    if (agent.getInstid() == c.getSrcInstid())//selecting player as caster
+                    if (Agent.GetInstid() == c.GetSrcInstid())//selecting player as caster
                     {
-                        if ((int)c.getDstAgent() == 4 || (int)c.getDstAgent() == 5)
+                        if ((int)c.GetDstAgent() == 4 || (int)c.GetDstAgent() == 5)
                         {
-                            long time = c.getTime() - time_start;
-                            CastLog swapLog = new CastLog(time, -2, (int)c.getDstAgent(), c.isActivation());
-                            cast_logs.Add(swapLog);
+                            long time = c.GetTime() - timeStart;
+                            CastLog swapLog = new CastLog(time, -2, (int)c.GetDstAgent(), c.IsActivation());
+                            CastLogs.Add(swapLog);
                         }
                     }
                 }

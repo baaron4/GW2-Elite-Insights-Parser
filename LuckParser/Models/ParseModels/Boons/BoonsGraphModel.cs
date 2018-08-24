@@ -5,26 +5,26 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonsGraphModel
     {
-        private string boonname = null;
-        private List<Point> boonChart = new List<Point>();
+        private readonly string _boonName;
+        private readonly List<Point> _boonChart = new List<Point>();
 
         // Constructor
-        public BoonsGraphModel(string boonname)
+        public BoonsGraphModel(string boonName)
         {
-            this.boonname = boonname;
+            _boonName = boonName;
         }
-        public BoonsGraphModel(string boonname, List<Point> boonChart)
+        public BoonsGraphModel(string boonName, List<Point> boonChart)
         {
-            this.boonname = boonname;
-            this.boonChart = boonChart;
+            _boonName = boonName;
+            _boonChart = boonChart;
         }
         //getters
-        public string getBoonName() {
-            return this.boonname;
+        public string GetBoonName() {
+            return _boonName;
         }
-        public List<Point> getBoonChart()
+        public List<Point> GetBoonChart()
         {
-            return this.boonChart;
+            return _boonChart;
         }
 
     }
