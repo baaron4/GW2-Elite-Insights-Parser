@@ -24,18 +24,18 @@ namespace LuckParser.Models.ParseModels
         protected DamageLog(long time, CombatItem c)
         {
             _time = time;
-            _skillId = c.GetSkillID();
-            _buff = c.IsBuff();
-            _result = c.GetResult();
-            _isNinety = c.IsNinety();
-            _isMoving = c.IsMoving();
-            _isFlanking = c.IsFlanking();
-            _isActivation = c.IsActivation();
-            _srcAgent = c.GetSrcAgent();
-            _srcInstid = c.GetSrcInstid();
-            _isShields = c.IsShields();
-            _dstAgent = c.GetDstAgent();
-            _dstInstid = c.GetDstInstid();
+            _skillId = c.SkillID;
+            _buff = c.IsBuff;
+            _result = c.Result;
+            _isNinety = c.IsNinety;
+            _isMoving = c.IsMoving;
+            _isFlanking = c.IsFlanking;
+            _isActivation = c.IsActivation;
+            _srcAgent = c.SrcAgent;
+            _srcInstid = c.SrcInstid;
+            _isShields = c.IsShields;
+            _dstAgent = c.DstAgent;
+            _dstInstid = c.DstInstid;
 
         }
         // Getters

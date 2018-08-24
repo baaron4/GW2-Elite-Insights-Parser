@@ -2024,8 +2024,8 @@ namespace LuckParser.Controllers
             List<DamageLog> damageToKill = new List<DamageLog>();
             if (down.Count > 0)
             {//went to down state before death
-                damageToDown = damageLogs.Where(x => x.GetTime() < down.Last().GetTime() - start && x.GetDamage() > 0).ToList();
-                damageToKill = damageLogs.Where(x => x.GetTime() > down.Last().GetTime() - start && x.GetTime() < dead.Last().GetTime() - start && x.GetDamage() > 0).ToList();
+                damageToDown = damageLogs.Where(x => x.GetTime() < down.Last().Time - start && x.GetDamage() > 0).ToList();
+                damageToKill = damageLogs.Where(x => x.GetTime() > down.Last().Time - start && x.GetTime() < dead.Last().Time - start && x.GetDamage() > 0).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
                 for (int i = damageToDown.Count - 1; i > 0; i--)
@@ -2060,7 +2060,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damageToKill = damageLogs.Where(x => x.GetTime() < dead.Last().GetTime() && x.GetDamage() > 0).ToList();
+                damageToKill = damageLogs.Where(x => x.GetTime() < dead.Last().Time && x.GetDamage() > 0).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
                 for (int i = damageToKill.Count - 1; i > 0; i--)
@@ -2760,16 +2760,16 @@ namespace LuckParser.Controllers
             {
                 foreach (CombatItem c in _log.GetCombatData())
                 {
-                    if (c.IsStateChange() != ParseEnum.StateChange.Normal)
+                    if (c.IsStateChange != ParseEnum.StateChange.Normal)
                     {
-                        AgentItem agent = _log.GetAgentData().GetAgent(c.GetSrcAgent());
+                        AgentItem agent = _log.GetAgentData().GetAgent(c.SrcAgent);
                         if (agent != null)
                         {
-                            switch (c.IsStateChange())
+                            switch (c.IsStateChange)
                             {
                                 case ParseEnum.StateChange.EnterCombat:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " entered combat in" + c.GetDstAgent() + "subgroup" +
+                                                   agent.GetName() + " entered combat in" + c.DstAgent + "subgroup" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
@@ -2811,7 +2811,7 @@ namespace LuckParser.Controllers
                                     break;
                                 case ParseEnum.StateChange.HealthUpdate:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " is at " + c.GetDstAgent() / 100 + "% health" +
+                                                   agent.GetName() + " is at " + c.DstAgent / 100 + "% health" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
@@ -2829,13 +2829,13 @@ namespace LuckParser.Controllers
                                     break;
                                 case ParseEnum.StateChange.WeaponSwap:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " weapon swapped to " + c.GetDstAgent() + "(0/1 water, 4/5 land)" +
+                                                   agent.GetName() + " weapon swapped to " + c.DstAgent + "(0/1 water, 4/5 land)" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
                                 case ParseEnum.StateChange.MaxHealthUpdate:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " max health changed to  " + c.GetDstAgent() +
+                                                   agent.GetName() + " max health changed to  " + c.DstAgent +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;

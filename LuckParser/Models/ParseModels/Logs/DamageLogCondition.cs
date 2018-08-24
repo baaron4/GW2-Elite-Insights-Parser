@@ -6,7 +6,7 @@
         // Constructor
         public DamageLogCondition(long time, CombatItem c) : base(time, c)
         {
-            Damage = c.GetBuffDmg();
+            Damage = c.BuffDmg;
         }
     }
 }

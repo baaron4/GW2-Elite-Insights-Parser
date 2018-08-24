@@ -73,10 +73,10 @@ namespace LuckParser.Models
             }
             else
             {
-                CombatItem invulDhuum = log.GetBoonData().FirstOrDefault(x => x.GetSkillID() == 762 && x.IsBuffremove() != ParseEnum.BuffRemove.None && x.GetSrcInstid() == boss.GetInstid() && x.GetTime() > 115000 + log.GetBossData().GetFirstAware());
+                CombatItem invulDhuum = log.GetBoonData().FirstOrDefault(x => x.SkillID == 762 && x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == boss.GetInstid() && x.Time > 115000 + log.GetBossData().GetFirstAware());
                 if (invulDhuum != null)
                 {
-                    end = invulDhuum.GetTime() - log.GetBossData().GetFirstAware();
+                    end = invulDhuum.Time - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(start, end));
                     start = end + 1;
                     CastLog shield = castLogs.Find(x => x.GetID() == 47396);
@@ -153,20 +153,20 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // spirit transform
-            List<CombatItem> spiritTransform = log.GetBoonData().Where(x => x.GetDstInstid() == p.GetInstid() && x.GetSkillID() == 46950 && x.IsBuffremove() == ParseEnum.BuffRemove.None).ToList();
+            List<CombatItem> spiritTransform = log.GetBoonData().Where(x => x.DstInstid == p.GetInstid() && x.SkillID == 46950 && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in spiritTransform)
             {
                 int duration = 15000;
-                int start = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                int start = (int)(c.Time - log.GetBossData().GetFirstAware());
                 if (log.GetBossData().GetHealthOverTime().FirstOrDefault(x => x.X > start).Y < 1050)
                 {
                     duration = 30000;
                 }
-                CombatItem removedBuff = log.GetBoonData().FirstOrDefault(x => x.GetSrcInstid() == p.GetInstid() && x.GetSkillID() == 48281 && x.IsBuffremove() == ParseEnum.BuffRemove.All && x.GetTime() > c.GetTime() && x.GetTime() < c.GetTime() + duration);
+                CombatItem removedBuff = log.GetBoonData().FirstOrDefault(x => x.SrcInstid == p.GetInstid() && x.SkillID == 48281 && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
                 int end = start + duration;
                 if (removedBuff != null)
                 {
-                    end = (int)(removedBuff.GetTime() - log.GetBossData().GetFirstAware());
+                    end = (int)(removedBuff.Time - log.GetBossData().GetFirstAware());
                 }
                 replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)"));
                 replay.AddCircleActor(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)"));
@@ -176,13 +176,13 @@ namespace LuckParser.Models
             int bombDhuumStart = 0;
             foreach (CombatItem c in bombDhuum)
             {
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    bombDhuumStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    bombDhuumStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 }
                 else
                 {
-                    int bombDhuumEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int bombDhuumEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)"));
                     replay.AddCircleActor(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
                 }

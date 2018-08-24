@@ -472,14 +472,14 @@ namespace LuckParser.Controllers
                     final.Died = 0.0;
                     if (dead.Count > 0)
                     {
-                        final.Died = dead.Last().GetTime() - start;
+                        final.Died = dead.Last().Time - start;
                     }
 
                     List<CombatItem> disconect = combatData.GetStates(instid, ParseEnum.StateChange.Despawn, start, end);
                     final.Dcd = 0.0;
                     if (disconect.Count > 0)
                     {
-                        final.Dcd = disconect.Last().GetTime() - start;
+                        final.Dcd = disconect.Last().Time - start;
                     }
 
                     phaseStats[phaseIndex] = final;
@@ -770,7 +770,7 @@ namespace LuckParser.Controllers
             {//Main boons
                 foreach (Boon boon in Boon.GetBoonList())
                 {
-                    if (combatList.Exists(x => x.GetSkillID() == boon.GetID()))
+                    if (combatList.Exists(x => x.SkillID == boon.GetID()))
                     {
                         _statistics.PresentBoons.Add(boon);
                     }
@@ -780,14 +780,14 @@ namespace LuckParser.Controllers
             {//Important Class specefic boons
                 foreach (Boon boon in Boon.GetOffensiveTableList())
                 {
-                    if (combatList.Exists(x => x.GetSkillID() == boon.GetID()))
+                    if (combatList.Exists(x => x.SkillID == boon.GetID()))
                     {
                         _statistics.PresentOffbuffs.Add(boon);
                     }
                 }
                 foreach (Boon boon in Boon.GetDefensiveTableList())
                 {
-                    if (combatList.Exists(x => x.GetSkillID() == boon.GetID()))
+                    if (combatList.Exists(x => x.SkillID == boon.GetID()))
                     {
                         _statistics.PresentDefbuffs.Add(boon);
                     }
@@ -802,8 +802,8 @@ namespace LuckParser.Controllers
                     List<Boon> notYetFoundBoons = Boon.GetRemainingBuffsList();
                     combatList.ForEach(item =>
                     {
-                        if (item.GetDstInstid() == p.GetInstid()) {
-                            Boon foundBoon = notYetFoundBoons.Find(boon => boon.GetID() == item.GetSkillID());
+                        if (item.DstInstid == p.GetInstid()) {
+                            Boon foundBoon = notYetFoundBoons.Find(boon => boon.GetID() == item.SkillID);
                             if (foundBoon != null)
                             {
                                 notYetFoundBoons.Remove(foundBoon);

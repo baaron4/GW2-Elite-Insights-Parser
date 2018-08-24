@@ -103,10 +103,10 @@ namespace LuckParser.Models.ParseModels
                 SetCombatReplayIcon(log);
                 if (trim)
                 {
-                    CombatItem test = log.GetCombatList().FirstOrDefault(x => x.GetSrcAgent() == Agent.GetAgent() && (x.IsStateChange().IsDead() || x.IsStateChange().IsDespawn()));
+                    CombatItem test = log.GetCombatList().FirstOrDefault(x => x.SrcAgent == Agent.GetAgent() && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
                     if (test != null)
                     {
-                        Replay.Trim(Agent.GetFirstAware() - log.GetBossData().GetFirstAware(), test.GetTime() - log.GetBossData().GetFirstAware());
+                        Replay.Trim(Agent.GetFirstAware() - log.GetBossData().GetFirstAware(), test.Time - log.GetBossData().GetFirstAware());
                     }
                     else
                     {
@@ -124,10 +124,10 @@ namespace LuckParser.Models.ParseModels
         public long GetDeath(ParsedLog log, long start, long end)
         {
             long offset = log.GetBossData().GetFirstAware();
-            CombatItem dead = log.GetCombatList().LastOrDefault(x => x.GetSrcInstid() == Agent.GetInstid() && x.IsStateChange().IsDead() && x.GetTime() >= start + offset && x.GetTime() <= end + offset);
-            if (dead != null && dead.GetTime() > 0)
+            CombatItem dead = log.GetCombatList().LastOrDefault(x => x.SrcInstid == Agent.GetInstid() && x.IsStateChange.IsDead() && x.Time >= start + offset && x.Time <= end + offset);
+            if (dead != null && dead.Time > 0)
             {
-                return dead.GetTime();
+                return dead.Time;
             }
             return 0;
         }
@@ -147,38 +147,38 @@ namespace LuckParser.Models.ParseModels
             tableIds.AddRange(Boon.GetCondiBoonList().Select(x => x.GetID()));
             foreach (CombatItem c in log.GetBoonData())
             {
-                if (!boonMap.ContainsKey(c.GetSkillID()))
+                if (!boonMap.ContainsKey(c.SkillID))
                 {
                     continue;
                 }
-                long time = c.GetTime() - timeStart;
-                ushort dst = c.IsBuffremove() == ParseEnum.BuffRemove.None ? c.GetDstInstid() : c.GetSrcInstid();
+                long time = c.Time - timeStart;
+                ushort dst = c.IsBuffRemove == ParseEnum.BuffRemove.None ? c.DstInstid : c.SrcInstid;
                 if (Agent.GetInstid() == dst)
                 {
                     // don't add buff initial table boons and buffs in non golem mode, for others overstack is irrevelant
-                    if (c.IsStateChange() == ParseEnum.StateChange.BuffInitial && (log.IsBenchmarkMode() || !tableIds.Contains(c.GetSkillID())))
+                    if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (log.IsBenchmarkMode() || !tableIds.Contains(c.SkillID)))
                     {
-                        List<BoonLog> loglist = boonMap[c.GetSkillID()];
+                        List<BoonLog> loglist = boonMap[c.SkillID];
                         loglist.Add(new BoonLog(0, 0, long.MaxValue, 0));
                     }
                     else if (time >= 0 && time < log.GetBossData().GetAwareDuration())
                     {
-                        if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                         {
-                            ushort src = c.GetSrcMasterInstid() > 0 ? c.GetSrcMasterInstid() : c.GetSrcInstid();
-                            List<BoonLog> loglist = boonMap[c.GetSkillID()];
+                            ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
+                            List<BoonLog> loglist = boonMap[c.SkillID];
 
-                            if (loglist.Count == 0 && c.GetOverstackValue() > 0)
+                            if (loglist.Count == 0 && c.OverstackValue > 0)
                             {
                                 loglist.Add(new BoonLog(0, 0, time, 0));
                             }
-                            loglist.Add(new BoonLog(time, src, c.GetValue(), 0));
+                            loglist.Add(new BoonLog(time, src, c.Value, 0));
                         }
-                        else if (Boon.RemovePermission(c.GetSkillID(), c.IsBuffremove(), c.GetIFF()) && time < log.GetBossData().GetAwareDuration() - 50)
+                        else if (Boon.RemovePermission(c.SkillID, c.IsBuffRemove, c.IFF) && time < log.GetBossData().GetAwareDuration() - 50)
                         {
-                            if (c.IsBuffremove() == ParseEnum.BuffRemove.All)//All
+                            if (c.IsBuffRemove == ParseEnum.BuffRemove.All)//All
                             {
-                                List<BoonLog> loglist = boonMap[c.GetSkillID()];
+                                List<BoonLog> loglist = boonMap[c.SkillID];
                                 if (loglist.Count == 0)
                                 {
                                     loglist.Add(new BoonLog(0, 0, time, 0));
@@ -198,9 +198,9 @@ namespace LuckParser.Models.ParseModels
                                     }
                                 }
                             }
-                            else if (c.IsBuffremove() == ParseEnum.BuffRemove.Single)//Single
+                            else if (c.IsBuffRemove == ParseEnum.BuffRemove.Single)//Single
                             {
-                                List<BoonLog> loglist = boonMap[c.GetSkillID()];
+                                List<BoonLog> loglist = boonMap[c.SkillID];
                                 if (loglist.Count == 0)
                                 {
                                     loglist.Add(new BoonLog(0, 0, time, 0));
@@ -218,9 +218,9 @@ namespace LuckParser.Models.ParseModels
                                     }
                                 }
                             }
-                            else if (c.IsBuffremove() == ParseEnum.BuffRemove.Manual)//Manuel
+                            else if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual)//Manuel
                             {
-                                List<BoonLog> loglist = boonMap[c.GetSkillID()];
+                                List<BoonLog> loglist = boonMap[c.SkillID];
                                 if (loglist.Count == 0)
                                 {
                                     loglist.Add(new BoonLog(0, 0, time, 0));
@@ -252,21 +252,21 @@ namespace LuckParser.Models.ParseModels
         {
             foreach (CombatItem c in log.GetMovementData())
             {
-                if (c.GetSrcInstid() != Agent.GetInstid())
+                if (c.SrcInstid != Agent.GetInstid())
                 {
                     continue;
                 }
-                long time = c.GetTime() - log.GetBossData().GetFirstAware();
-                byte[] xy = BitConverter.GetBytes(c.GetDstAgent());
+                long time = c.Time - log.GetBossData().GetFirstAware();
+                byte[] xy = BitConverter.GetBytes(c.DstAgent);
                 float x = BitConverter.ToSingle(xy, 0);
                 float y = BitConverter.ToSingle(xy, 4);
-                if (c.IsStateChange() == ParseEnum.StateChange.Position)
+                if (c.IsStateChange == ParseEnum.StateChange.Position)
                 {
-                    Replay.AddPosition(new Point3D(x, y, c.GetValue(), time));
+                    Replay.AddPosition(new Point3D(x, y, c.Value, time));
                 }
                 else
                 {
-                    Replay.AddVelocity(new Point3D(x, y, c.GetValue(), time));
+                    Replay.AddVelocity(new Point3D(x, y, c.Value, time));
                 }
             }
         }
@@ -489,9 +489,9 @@ namespace LuckParser.Models.ParseModels
             long timeStart = log.GetBossData().GetFirstAware();
             foreach (CombatItem c in log.GetDamageData())
             {
-                if (Agent.GetInstid() == c.GetSrcInstid() && c.GetTime() > log.GetBossData().GetFirstAware() && c.GetTime() < log.GetBossData().GetLastAware())//selecting player or minion as caster
+                if (Agent.GetInstid() == c.SrcInstid && c.Time > log.GetBossData().GetFirstAware() && c.Time < log.GetBossData().GetLastAware())//selecting player or minion as caster
                 {
-                    long time = c.GetTime() - timeStart;
+                    long time = c.Time - timeStart;
                     AddDamageLog(time, c);
                 }
             }
@@ -508,28 +508,28 @@ namespace LuckParser.Models.ParseModels
             CastLog curCastLog = null;
             foreach (CombatItem c in log.GetCastData())
             {
-                if (!(c.GetTime() > log.GetBossData().GetFirstAware() && c.GetTime() < log.GetBossData().GetLastAware()))
+                if (!(c.Time > log.GetBossData().GetFirstAware() && c.Time < log.GetBossData().GetLastAware()))
                 {
                     continue;
                 }
-                ParseEnum.StateChange state = c.IsStateChange();
+                ParseEnum.StateChange state = c.IsStateChange;
                 if (state == ParseEnum.StateChange.Normal)
                 {
-                    if (Agent.GetInstid() == c.GetSrcInstid())//selecting player as caster
+                    if (Agent.GetInstid() == c.SrcInstid)//selecting player as caster
                     {
-                        if (c.IsActivation().IsCasting())
+                        if (c.IsActivation.IsCasting())
                         {
-                            long time = c.GetTime() - timeStart;
-                            curCastLog = new CastLog(time, c.GetSkillID(), c.GetValue(), c.IsActivation());
+                            long time = c.Time - timeStart;
+                            curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);
                             CastLogs.Add(curCastLog);
                         }
                         else
                         {
                             if (curCastLog != null)
                             {
-                                if (curCastLog.GetID() == c.GetSkillID())
+                                if (curCastLog.GetID() == c.SkillID)
                                 {
-                                    curCastLog.SetEndStatus(c.GetValue(), c.IsActivation());
+                                    curCastLog.SetEndStatus(c.Value, c.IsActivation);
                                     curCastLog = null;
                                 }
                             }
@@ -539,12 +539,12 @@ namespace LuckParser.Models.ParseModels
                 }
                 else if (state == ParseEnum.StateChange.WeaponSwap)
                 {//Weapon swap
-                    if (Agent.GetInstid() == c.GetSrcInstid())//selecting player as caster
+                    if (Agent.GetInstid() == c.SrcInstid)//selecting player as caster
                     {
-                        if ((int)c.GetDstAgent() == 4 || (int)c.GetDstAgent() == 5)
+                        if ((int)c.DstAgent == 4 || (int)c.DstAgent == 5)
                         {
-                            long time = c.GetTime() - timeStart;
-                            CastLog swapLog = new CastLog(time, -2, (int)c.GetDstAgent(), c.IsActivation());
+                            long time = c.Time - timeStart;
+                            CastLog swapLog = new CastLog(time, -2, (int)c.DstAgent, c.IsActivation);
                             CastLogs.Add(swapLog);
                         }
                     }
