@@ -161,7 +161,7 @@ namespace LuckParser.Models.ParseModels
                         List<BoonLog> loglist = boonMap[c.SkillID];
                         loglist.Add(new BoonLog(0, 0, long.MaxValue, 0));
                     }
-                    else if (time >= 0 && time < log.GetBossData().GetAwareDuration())
+                    else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= 0 && time < log.GetBossData().GetAwareDuration())
                     {
                         if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                         {
