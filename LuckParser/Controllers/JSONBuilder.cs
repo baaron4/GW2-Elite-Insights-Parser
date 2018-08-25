@@ -64,6 +64,12 @@ namespace LuckParser.Controllers
                 public string[] weapons;
             }
 
+            public struct Phase
+            {
+                public long duration;
+                public string name;
+            }
+
             public string eliteInsightsVersion;
             public string arcVersion;
             public string recordedBy;
@@ -73,6 +79,7 @@ namespace LuckParser.Controllers
             public bool success;
             public Boss boss;
             public ArrayList players;
+            public ArrayList phases;
         }
 
         //Creating JSON---------------------------------------------------------------------------------
@@ -105,9 +112,21 @@ namespace LuckParser.Controllers
             log.boss.finalHealth = _log.GetBossData().GetHealth() * (100.0 - finalBossHealth * 0.01);
             log.boss.healthPercentBurned = 100.0 - finalBossHealth * 0.01;
 
+            log = SetPlayers(log);
+            log = SetPhases(log);
+
+            JsonSerializer serializer = new JsonSerializer();
+            serializer.NullValueHandling = NullValueHandling.Ignore;
+            JsonWriter writer = new JsonTextWriter(_sw);
+            writer.Formatting = Formatting.Indented;
+            serializer.Serialize(writer, log);
+        }
+
+        private JSONLog SetPlayers(JSONLog log)
+        {
             log.players = new ArrayList();
 
-            foreach (Player player in _log.GetPlayerList())
+            foreach (var player in _log.GetPlayerList())
             {
                 JSONLog.Player currentPlayer = new JSONLog.Player();
 
@@ -123,11 +142,24 @@ namespace LuckParser.Controllers
                 log.players.Add(currentPlayer);
             }
 
-            JsonSerializer serializer = new JsonSerializer();
-            serializer.NullValueHandling = NullValueHandling.Ignore;
-            JsonWriter writer = new JsonTextWriter(_sw);
-            writer.Formatting = Formatting.Indented;
-            serializer.Serialize(writer, log);
+            return log;
+        }
+
+        private JSONLog SetPhases(JSONLog log)
+        {
+            log.phases = new ArrayList();
+
+            foreach (var phase in _statistics.Phases)
+            {
+                JSONLog.Phase currentPhase = new JSONLog.Phase();
+
+                currentPhase.duration = phase.GetDuration();
+                currentPhase.name = phase.GetName();
+
+                log.phases.Add(currentPhase);
+            }
+
+            return log;
         }
     }
 }
