@@ -79,6 +79,7 @@ namespace LuckParser
             chkOneAtATime.Checked = Properties.Settings.Default.ParseOneAtATime;
             chkLightTheme.Checked = Properties.Settings.Default.LightTheme;
             chkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
+            chkOutputJson.Checked = Properties.Settings.Default.SaveOutJSON;
         }
 
         private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)
