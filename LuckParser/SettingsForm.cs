@@ -199,7 +199,7 @@ namespace LuckParser
 
         private void OutputJSONCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.SaveOutJSON = chkOutputJSON.Checked;
+            Properties.Settings.Default.SaveOutJSON = chkOutputJson.Checked;
         }
     }
 }
