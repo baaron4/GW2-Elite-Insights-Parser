@@ -124,7 +124,7 @@
             this.chkImpProfSpecBoons.Name = "chkImpProfSpecBoons";
             this.chkImpProfSpecBoons.Size = new System.Drawing.Size(188, 17);
             this.chkImpProfSpecBoons.TabIndex = 7;
-            this.chkImpProfSpecBoons.Text = "Compute Profession Speficic Buffs";
+            this.chkImpProfSpecBoons.Text = "Compute Profession Specific Buffs";
             this.chkImpProfSpecBoons.UseVisualStyleBackColor = true;
             this.chkImpProfSpecBoons.CheckedChanged += new System.EventHandler(this.ImportantProfessionSpecificBoonsCheckedChanged);
             // 
@@ -465,13 +465,13 @@
             this.chkLightTheme.UseVisualStyleBackColor = true;
             this.chkLightTheme.CheckedChanged += new System.EventHandler(this.LightThemeCheckedChanged);
             // 
-            // chk_combatReplay
+            // chkCombatReplay
             // 
             this.chkCombatReplay.AutoSize = true;
             this.chkCombatReplay.Checked = true;
             this.chkCombatReplay.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCombatReplay.Location = new System.Drawing.Point(410, 138);
-            this.chkCombatReplay.Name = "chk_combatReplay";
+            this.chkCombatReplay.Name = "chkCombatReplay";
             this.chkCombatReplay.Size = new System.Drawing.Size(143, 17);
             this.chkCombatReplay.TabIndex = 40;
             this.chkCombatReplay.Text = "Compute Combat Replay";

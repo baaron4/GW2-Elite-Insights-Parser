@@ -61,25 +61,25 @@ namespace LuckParser.Models
             }
             // add burn phases
             int offset = phases.Count;
-            List<CombatItem> orbItems = log.GetBoonData().Where(x => x.GetDstInstid() == boss.GetInstid() && x.GetSkillID() == 35096).ToList();
+            List<CombatItem> orbItems = log.GetBoonData().Where(x => x.DstInstid == boss.GetInstid() && x.SkillID == 35096).ToList();
             // Get number of orbs and filter the list
             List<CombatItem> orbItemsFiltered = new List<CombatItem>();
             Dictionary<long, int> orbs = new Dictionary<long, int>();
             foreach (CombatItem c in orbItems)
             {
-                long time = c.GetTime() - log.GetBossData().GetFirstAware();
+                long time = c.Time - log.GetBossData().GetFirstAware();
                 if (!orbs.ContainsKey(time))
                 {
                     orbs[time] = 0;
                 }
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
                     orbs[time] = orbs[time] + 1;
                 }
                 if (orbItemsFiltered.Count > 0)
                 {
                     CombatItem last = orbItemsFiltered.Last();
-                    if (last.GetTime() != c.GetTime())
+                    if (last.Time != c.Time)
                     {
                         orbItemsFiltered.Add(c);
                     }
@@ -92,13 +92,13 @@ namespace LuckParser.Models
             }
             foreach (CombatItem c in orbItemsFiltered)
             {
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    start = c.GetTime() - log.GetBossData().GetFirstAware();
+                    start = c.Time - log.GetBossData().GetFirstAware();
                 }
                 else
                 {
-                    end = c.GetTime() - log.GetBossData().GetFirstAware();
+                    end = c.Time - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(start, end));
                 }
             }
@@ -172,13 +172,13 @@ namespace LuckParser.Models
             int xeraFuryStart = 0;
             foreach (CombatItem c in xeraFury)
             {
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    xeraFuryStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    xeraFuryStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 }
                 else
                 {
-                    int xeraFuryEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int xeraFuryEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)"));
                     replay.AddCircleActor(new CircleActor(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)"));
                 }

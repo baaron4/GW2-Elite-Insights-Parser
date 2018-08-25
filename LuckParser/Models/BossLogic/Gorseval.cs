@@ -38,13 +38,13 @@ namespace LuckParser.Models
             long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // Ghostly protection check
-            List<CombatItem> invulsGorse = log.GetCombatList().Where(x => x.GetSkillID() == 31790 && x.IsBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
+            List<CombatItem> invulsGorse = log.GetCombatList().Where(x => x.SkillID == 31790 && x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
             for (int i = 0; i < invulsGorse.Count; i++)
             {
                 CombatItem c = invulsGorse[i];
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.GetTime() - log.GetBossData().GetFirstAware();
+                    end = c.Time - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsGorse.Count - 1)
                     {
@@ -53,7 +53,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.GetTime() - log.GetBossData().GetFirstAware();
+                    start = c.Time - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(end, start));
                     castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }

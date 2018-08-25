@@ -13,7 +13,7 @@ namespace LuckParser.Models
         protected readonly List<Mechanic> MechanicList = new List<Mechanic> {
             new Mechanic(-2, "Deads", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'x',color:'rgb(0,0,0)',", "Deads",0),
             new Mechanic(-3, "Downs", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross',color:'rgb(255,0,0)',", "Downs",0),
-            new Mechanic(1066, "Resurrect", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross-open',color:'rgb(0,255,255)',", "Res",0)}; //Resurrects (start), Resurrect
+            new Mechanic(SkillItem.ResurrectId, "Resurrect", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross-open',color:'rgb(0,255,255)',", "Res",0)}; //Resurrects (start), Resurrect
         protected ParseMode Mode;
 
         public BossLogic()
@@ -74,20 +74,20 @@ namespace LuckParser.Models
         protected static List<CombatItem> GetFilteredList(ParsedLog log, long skillID, ushort instid)
         {
             bool needStart = true;
-            List<CombatItem> main = log.GetBoonData().Where(x => x.GetSkillID() == skillID && ((x.GetDstInstid() == instid && x.IsBuffremove() == ParseEnum.BuffRemove.None) || (x.GetSrcInstid() == instid && x.IsBuffremove() != ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> main = log.GetBoonData().Where(x => x.SkillID == skillID && ((x.DstInstid == instid && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == instid && x.IsBuffRemove != ParseEnum.BuffRemove.None))).ToList();
             List<CombatItem> filtered = new List<CombatItem>();
             for (int i = 0; i < main.Count; i++)
             {
                 CombatItem c = main[i];
-                if (needStart && c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (needStart && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
                     needStart = false;
                     filtered.Add(c);
                 }
-                else if (!needStart && c.IsBuffremove() != ParseEnum.BuffRemove.None)
+                else if (!needStart && c.IsBuffRemove != ParseEnum.BuffRemove.None)
                 {
                     // consider only last remove event before another application
-                    if ((i == main.Count - 1) || (i < main.Count - 1 && main[i + 1].IsBuffremove() == ParseEnum.BuffRemove.None))
+                    if ((i == main.Count - 1) || (i < main.Count - 1 && main[i + 1].IsBuffRemove == ParseEnum.BuffRemove.None))
                     {
                         needStart = true;
                         filtered.Add(c);

@@ -1929,13 +1929,7 @@ namespace LuckParser.Controllers
                 //int autosCount = 0;
                 foreach (CastLog cl in casting)
                 {
-                    GW2APISkill apiskill = null;
-                    SkillItem skill = _log.GetSkillData().FirstOrDefault(x => x.GetID() == cl.GetID());
-                    if (skill != null)
-                    {
-                        apiskill = skill.GetGW2APISkill();
-                    }
-
+                    GW2APISkill apiskill = _log.GetSkillData().Get(cl.GetID())?.GetGW2APISkill();
 
                     if (apiskill != null)
                     {
@@ -1968,27 +1962,27 @@ namespace LuckParser.Controllers
                     }
                     else
                     {
-                        if (cl.GetID() == -2)
+                        if (cl.GetID() == SkillItem.WeaponSwapId)
                         {//wepswap
                             string skillName = "Weapon Swap";
                             string skillLink = HTMLHelper.GetLink("Swap");
                             sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
                             sw.Write("<br>");
                         }
-                        else if (cl.GetID() == 1066)
+                        else if (cl.GetID() == SkillItem.ResurrectId)
                         {
                             string skillName = "Resurrect";
                             string skillLink = HTMLHelper.GetLink("Downs");
                             sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
                         }
-                        else if (cl.GetID() == 1175)
+                        else if (cl.GetID() == SkillItem.BandageId)
                         {
                             string skillName = "Bandage";
                             string skillLink = HTMLHelper.GetLink("Bandage");
                             sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
 
                         }
-                        else if (cl.GetID() == 65001)
+                        else if (cl.GetID() == SkillItem.DodgeId)
                         {
                             string skillName = "Dodge";
                             string skillLink = HTMLHelper.GetLink("Dodge");
@@ -2024,8 +2018,8 @@ namespace LuckParser.Controllers
             List<DamageLog> damageToKill = new List<DamageLog>();
             if (down.Count > 0)
             {//went to down state before death
-                damageToDown = damageLogs.Where(x => x.GetTime() < down.Last().GetTime() - start && x.GetDamage() > 0).ToList();
-                damageToKill = damageLogs.Where(x => x.GetTime() > down.Last().GetTime() - start && x.GetTime() < dead.Last().GetTime() - start && x.GetDamage() > 0).ToList();
+                damageToDown = damageLogs.Where(x => x.GetTime() < down.Last().Time - start && x.GetDamage() > 0).ToList();
+                damageToKill = damageLogs.Where(x => x.GetTime() > down.Last().Time - start && x.GetTime() < dead.Last().Time - start && x.GetDamage() > 0).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
                 for (int i = damageToDown.Count - 1; i > 0; i--)
@@ -2060,7 +2054,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damageToKill = damageLogs.Where(x => x.GetTime() < dead.Last().GetTime() && x.GetDamage() > 0).ToList();
+                damageToKill = damageLogs.Where(x => x.GetTime() < dead.Last().Time && x.GetDamage() > 0).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
                 for (int i = damageToKill.Count - 1; i > 0; i--)
@@ -2201,7 +2195,7 @@ namespace LuckParser.Controllers
             HTMLHelper.WriteDamageDistTableCondi(sw, usedIDs, damageLogs, finalTotalDamage);
             foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.GetID())).Select(x => x.GetID()).Distinct().ToList())
             {
-                SkillItem skill = skillList.FirstOrDefault(x => x.GetID() == id);
+                SkillItem skill = skillList.Get(id);
                 List<DamageLog> listToUse = damageLogs.Where(x => x.GetID() == id).ToList();
                 usedIDs.Add(id);
                 if (skill != null && listToUse.Count > 0)
@@ -2229,7 +2223,7 @@ namespace LuckParser.Controllers
             }
             foreach (int id in casting.Where(x => !usedIDs.Contains(x.GetID())).Select(x => (int)x.GetID()).Distinct())
             {
-                SkillItem skill = skillList.FirstOrDefault(x => x.GetID() == id);
+                SkillItem skill = skillList.Get(id);
                 if (skill != null)
                 {
                     List<CastLog> clList = casting.Where(x => x.GetID() == id).ToList();
@@ -2525,30 +2519,30 @@ namespace LuckParser.Controllers
                     }
                     foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.GetID())).Select(x => (int)x.GetID()).Distinct())
                     {//foreach casted skill
-                        SkillItem skill = skillList.FirstOrDefault(x => x.GetID() == id);
-
-                        int totaldamage = 0;
-                        int mindamage = 0;
-                        int hits = 0;
-                        int maxdamage = 0;
-                        int crit = 0;
-                        int flank = 0;
-                        int glance = 0;
-                        foreach (DamageLog dl in damageLogs.Where(x => x.GetID() == id))
-                        {
-                            int curdmg = dl.GetDamage();
-                            totaldamage += curdmg;
-                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                            if (curdmg >= 0) { hits++; };
-                            ParseEnum.Result result = dl.GetResult();
-                            if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
-                            if (dl.IsFlanking() == 1) { flank++; }
-                        }
-                        int avgdamage = (int)(totaldamage / (double)hits);
+                        SkillItem skill = skillList.Get(id);
 
                         if (skill != null)
                         {
+                            int totaldamage = 0;
+                            int mindamage = 0;
+                            int hits = 0;
+                            int maxdamage = 0;
+                            int crit = 0;
+                            int flank = 0;
+                            int glance = 0;
+                            foreach (DamageLog dl in damageLogs.Where(x => x.GetID() == id))
+                            {
+                                int curdmg = dl.GetDamage();
+                                totaldamage += curdmg;
+                                if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                                if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                                if (curdmg >= 0) { hits++; };
+                                ParseEnum.Result result = dl.GetResult();
+                                if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
+                                if (dl.IsFlanking() == 1) { flank++; }
+                            }
+                            int avgdamage = (int)(totaldamage / (double)hits);
+
                             if (skill.GetGW2APISkill() != null)
                             {
                                 sw.Write("<tr>");
@@ -2760,16 +2754,16 @@ namespace LuckParser.Controllers
             {
                 foreach (CombatItem c in _log.GetCombatData())
                 {
-                    if (c.IsStateChange() != ParseEnum.StateChange.Normal)
+                    if (c.IsStateChange != ParseEnum.StateChange.Normal)
                     {
-                        AgentItem agent = _log.GetAgentData().GetAgent(c.GetSrcAgent());
+                        AgentItem agent = _log.GetAgentData().GetAgent(c.SrcAgent);
                         if (agent != null)
                         {
-                            switch (c.IsStateChange())
+                            switch (c.IsStateChange)
                             {
                                 case ParseEnum.StateChange.EnterCombat:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " entered combat in" + c.GetDstAgent() + "subgroup" +
+                                                   agent.GetName() + " entered combat in" + c.DstAgent + "subgroup" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
@@ -2811,7 +2805,7 @@ namespace LuckParser.Controllers
                                     break;
                                 case ParseEnum.StateChange.HealthUpdate:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " is at " + c.GetDstAgent() / 100 + "% health" +
+                                                   agent.GetName() + " is at " + c.DstAgent / 100 + "% health" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
@@ -2829,13 +2823,13 @@ namespace LuckParser.Controllers
                                     break;
                                 case ParseEnum.StateChange.WeaponSwap:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " weapon swapped to " + c.GetDstAgent() + "(0/1 water, 4/5 land)" +
+                                                   agent.GetName() + " weapon swapped to " + c.DstAgent + "(0/1 water, 4/5 land)" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
                                 case ParseEnum.StateChange.MaxHealthUpdate:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " max health changed to  " + c.GetDstAgent() +
+                                                   agent.GetName() + " max health changed to  " + c.DstAgent +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
@@ -2860,7 +2854,7 @@ namespace LuckParser.Controllers
         {
             sw.Write("<ul class=\"list-group\">");
             {
-                foreach (SkillItem skill in _log.GetSkillData())
+                foreach (SkillItem skill in _log.GetSkillData().Values)
                 {
                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
                                                   skill.GetID() + " : " + skill.GetName() +

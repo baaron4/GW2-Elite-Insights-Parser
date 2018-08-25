@@ -17,9 +17,9 @@ namespace LuckParser.Models.ParseModels
             long maxTime = Math.Min(log.GetBossData().GetLastAware(), Agent.GetLastAware());
             foreach (CombatItem c in log.GetDamageData())
             {
-                if (Agent.GetInstid() == c.GetSrcInstid() && c.GetTime() > minTime && c.GetTime() < maxTime)//selecting minion as caster
+                if (Agent.GetInstid() == c.SrcInstid && c.Time > minTime && c.Time < maxTime)//selecting minion as caster
                 {
-                    long time = c.GetTime() - timeStart;
+                    long time = c.Time - timeStart;
                     AddDamageLog(time, c);
                 }
             }
@@ -33,28 +33,28 @@ namespace LuckParser.Models.ParseModels
             long maxTime = Math.Min(log.GetBossData().GetLastAware(), Agent.GetLastAware());
             foreach (CombatItem c in log.GetCastData())
             {
-                if (!(c.GetTime() > minTime && c.GetTime() < maxTime))
+                if (!(c.Time > minTime && c.Time < maxTime))
                 {
                     continue;
                 }
-                ParseEnum.StateChange state = c.IsStateChange();
+                ParseEnum.StateChange state = c.IsStateChange;
                 if (state == ParseEnum.StateChange.Normal)
                 {
-                    if (Agent.GetInstid() == c.GetSrcInstid())//selecting player as caster
+                    if (Agent.GetInstid() == c.SrcInstid)//selecting player as caster
                     {
-                        if (c.IsActivation().IsCasting())
+                        if (c.IsActivation.IsCasting())
                         {
-                            long time = c.GetTime() - timeStart;
-                            curCastLog = new CastLog(time, c.GetSkillID(), c.GetValue(), c.IsActivation());
+                            long time = c.Time - timeStart;
+                            curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);
                             CastLogs.Add(curCastLog);
                         }
                         else
                         {
                             if (curCastLog != null)
                             {
-                                if (curCastLog.GetID() == c.GetSkillID())
+                                if (curCastLog.GetID() == c.SkillID)
                                 {
-                                    curCastLog.SetEndStatus(c.GetValue(), c.IsActivation());
+                                    curCastLog.SetEndStatus(c.Value, c.IsActivation);
                                     curCastLog = null;
                                 }
                             }

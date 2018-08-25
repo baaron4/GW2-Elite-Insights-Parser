@@ -52,10 +52,10 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // shared agony
-            List<CombatItem> agony = log.GetBoonData().Where(x => x.GetSkillID() == 38049 && ((x.GetDstInstid() == p.GetInstid() && x.IsBuffremove() == ParseEnum.BuffRemove.None))).ToList();        
+            List<CombatItem> agony = log.GetBoonData().Where(x => x.SkillID == 38049 && ((x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None))).ToList();
             foreach (CombatItem c in agony)
             {
-                int agonyStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                int agonyStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 int agonyEnd = agonyStart + 62000;
                 replay.AddCircleActor(new CircleActor(false, 0, 220, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)"));
             }
@@ -63,7 +63,7 @@ namespace LuckParser.Models
 
         public override int IsCM(List<CombatItem> clist, int health)
         {
-            return clist.Exists(x => x.GetSkillID() == 38098) ? 1 : 0;
+            return clist.Exists(x => x.SkillID == 38098) ? 1 : 0;
         }
 
         public override string GetReplayIcon()
