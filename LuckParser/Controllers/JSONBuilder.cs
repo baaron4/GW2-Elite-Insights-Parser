@@ -61,6 +61,8 @@ namespace LuckParser.Controllers
                 public int concentration;
                 public int healing;
                 public int toughness;
+                public int group;
+                public string profession;
                 public string[] weapons;
             }
 
@@ -138,6 +140,8 @@ namespace LuckParser.Controllers
                 currentPlayer.healing = player.GetHealing();
                 currentPlayer.toughness = player.GetToughness();
                 currentPlayer.weapons = player.GetWeaponsArray(_log);
+                currentPlayer.group = player.GetGroup();
+                currentPlayer.profession = player.GetProf();
 
                 log.players.Add(currentPlayer);
             }
