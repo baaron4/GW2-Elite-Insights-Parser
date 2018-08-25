@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LuckParser.Models.DataModels;
+using LuckParser.Models.ParseModels;
 using Newtonsoft.Json;
 
 namespace LuckParser.Controllers
@@ -51,6 +53,17 @@ namespace LuckParser.Controllers
                 public double healthPercentBurned;
             }
 
+            public struct Player
+            {
+                public string character;
+                public string account;
+                public int condition;
+                public int concentration;
+                public int healing;
+                public int toughness;
+                public string[] weapons;
+            }
+
             public string eliteInsightsVersion;
             public string arcVersion;
             public string recordedBy;
@@ -59,6 +72,7 @@ namespace LuckParser.Controllers
             public string duration;
             public bool success;
             public Boss boss;
+            public ArrayList players;
         }
 
         //Creating JSON---------------------------------------------------------------------------------
@@ -85,11 +99,32 @@ namespace LuckParser.Controllers
             log.boss.id = _log.GetBossData().GetID();
             log.boss.name = _log.GetBossData().GetName();
             log.boss.totalHealth = _log.GetBossData().GetHealth();
-            int finalBossHealth = _log.GetBossData().GetHealthOverTime().Count > 0 ? _log.GetBossData().GetHealthOverTime().Last().Y : 10000;
+            int finalBossHealth = _log.GetBossData().GetHealthOverTime().Count > 0
+                ? _log.GetBossData().GetHealthOverTime().Last().Y
+                : 10000;
             log.boss.finalHealth = _log.GetBossData().GetHealth() * (100.0 - finalBossHealth * 0.01);
             log.boss.healthPercentBurned = 100.0 - finalBossHealth * 0.01;
 
+            log.players = new ArrayList();
+
+            foreach (Player player in _log.GetPlayerList())
+            {
+                JSONLog.Player currentPlayer = new JSONLog.Player();
+
+                currentPlayer.character = player.GetCharacter();
+                currentPlayer.account = player.GetAccount();
+
+                currentPlayer.condition = player.GetCondition();
+                currentPlayer.concentration = player.GetConcentration();
+                currentPlayer.healing = player.GetHealing();
+                currentPlayer.toughness = player.GetToughness();
+                currentPlayer.weapons = player.GetWeaponsArray(_log);
+
+                log.players.Add(currentPlayer);
+            }
+
             JsonSerializer serializer = new JsonSerializer();
+            serializer.NullValueHandling = NullValueHandling.Ignore;
             JsonWriter writer = new JsonTextWriter(_sw);
             writer.Formatting = Formatting.Indented;
             serializer.Serialize(writer, log);
