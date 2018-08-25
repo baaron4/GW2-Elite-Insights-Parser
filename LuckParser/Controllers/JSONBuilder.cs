@@ -53,6 +53,24 @@ namespace LuckParser.Controllers
                 public double healthPercentBurned;
             }
 
+            public struct DPS
+            {
+                public int allDps;
+                public int allDamage;
+                public int allCondiDps;
+                public int allCondiDamage;
+                public int allPowerDps;
+                public int allPowerDamage;
+                public int bossDps;
+                public int bossDamage;
+                public int bossCondiDps;
+                public int bossCondiDamage;
+                public int bossPowerDps;
+                public int bossPowerDamage;
+                public int playerPowerDamage;
+                public int playerBossPowerDamage;
+            }
+
             public struct Player
             {
                 public string character;
@@ -64,6 +82,7 @@ namespace LuckParser.Controllers
                 public int group;
                 public string profession;
                 public string[] weapons;
+                public ArrayList dps;
             }
 
             public struct Phase
@@ -87,10 +106,10 @@ namespace LuckParser.Controllers
         //Creating JSON---------------------------------------------------------------------------------
         public void CreateJSON()
         {
-            JSONLog log = new JSONLog();
+            var log = new JSONLog();
 
             double fightDuration = (_log.GetBossData().GetAwareDuration()) / 1000.0;
-            TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
+            var duration = TimeSpan.FromSeconds(fightDuration);
             string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
             if (duration.ToString("hh") != "00")
             {
@@ -117,9 +136,9 @@ namespace LuckParser.Controllers
             log = SetPlayers(log);
             log = SetPhases(log);
 
-            JsonSerializer serializer = new JsonSerializer();
+            var serializer = new JsonSerializer();
             serializer.NullValueHandling = NullValueHandling.Ignore;
-            JsonWriter writer = new JsonTextWriter(_sw);
+            var writer = new JsonTextWriter(_sw);
             writer.Formatting = Formatting.Indented;
             serializer.Serialize(writer, log);
         }
@@ -130,7 +149,7 @@ namespace LuckParser.Controllers
 
             foreach (var player in _log.GetPlayerList())
             {
-                JSONLog.Player currentPlayer = new JSONLog.Player();
+                var currentPlayer = new JSONLog.Player();
 
                 currentPlayer.character = player.GetCharacter();
                 currentPlayer.account = player.GetAccount();
@@ -143,10 +162,45 @@ namespace LuckParser.Controllers
                 currentPlayer.group = player.GetGroup();
                 currentPlayer.profession = player.GetProf();
 
+                currentPlayer = SetDPS(currentPlayer, player);
+
                 log.players.Add(currentPlayer);
             }
 
             return log;
+        }
+
+        private JSONLog.Player SetDPS(JSONLog.Player currentPlayer, Player player)
+        {
+            currentPlayer.dps = new ArrayList();
+
+            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+            {
+                var dps = new JSONLog.DPS();
+
+                var dpsStats = _statistics.Dps[player][phaseIndex];
+
+                dps.allDps = dpsStats.AllDps;
+                dps.allDamage = dpsStats.AllDamage;
+                dps.allCondiDps = dpsStats.AllCondiDps;
+                dps.allCondiDamage = dpsStats.AllCondiDamage;
+                dps.allPowerDps = dpsStats.AllPowerDps;
+                dps.allPowerDamage = dpsStats.AllPowerDamage;
+
+                dps.bossDps = dpsStats.BossDps;
+                dps.bossDamage = dpsStats.BossDamage;
+                dps.bossCondiDps = dpsStats.BossCondiDps;
+                dps.bossCondiDamage = dpsStats.BossCondiDamage;
+                dps.bossPowerDps = dpsStats.BossPowerDps;
+                dps.bossPowerDamage = dpsStats.BossPowerDamage;
+
+                dps.playerBossPowerDamage = dpsStats.PlayerBossPowerDamage;
+                dps.playerPowerDamage = dpsStats.PlayerPowerDamage;
+
+                currentPlayer.dps.Add(dps);
+            }
+
+            return currentPlayer;
         }
 
         private JSONLog SetPhases(JSONLog log)
@@ -155,7 +209,7 @@ namespace LuckParser.Controllers
 
             foreach (var phase in _statistics.Phases)
             {
-                JSONLog.Phase currentPhase = new JSONLog.Phase();
+                var currentPhase = new JSONLog.Phase();
 
                 currentPhase.duration = phase.GetDuration();
                 currentPhase.name = phase.GetName();
