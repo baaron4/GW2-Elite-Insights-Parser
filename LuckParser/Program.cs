@@ -68,9 +68,13 @@ namespace LuckParser
                 else
                 {
                     /*
+                     * Magic for windows:
+                     * - opens a console window if used from a non-console with command line options
+                     * - fixes output on windows cmd (other consoles tested behaved better)(otherwise no console output or piped file output)
+                     *
                      * We need to do this, because the console output is lazy initialized
                      * and if we are redirecting to a file or pipe we want to make sure Console.out points to the correct handle
-                     * and doesnt init with the console ignoring existing stdout
+                     * and doesn't init with the console ignoring existing stdout
                      */
                     if (IsRedirected(GetStdHandle(StandardHandle.Output)))
                     {
