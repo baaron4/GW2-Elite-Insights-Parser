@@ -139,17 +139,17 @@ namespace LuckParser.Models.ParseModels
         // privates
         protected void AddDamageLog(long time, CombatItem c)
         {
-            if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+            if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
             {
-                if (c.IsBuff() == 1 && c.GetBuffDmg() != 0)//condi
+                if (c.IsBuff == 1 && c.BuffDmg != 0)//condi
                 {
                     DamageLogs.Add(new DamageLogCondition(time, c));
                 }
-                else if (c.IsBuff() == 0 && c.GetValue() != 0)//power
+                else if (c.IsBuff == 0 && c.Value != 0)//power
                 {
                     DamageLogs.Add(new DamageLogPower(time, c));
                 }
-                else if (c.GetResult() == ParseEnum.Result.Absorb || c.GetResult() == ParseEnum.Result.Blind || c.GetResult() == ParseEnum.Result.Interrupt)
+                else if (c.Result == ParseEnum.Result.Absorb || c.Result == ParseEnum.Result.Blind || c.Result == ParseEnum.Result.Interrupt)
                 {//Hits that where blinded, invulned, interupts
                     DamageLogs.Add(new DamageLogPower(time, c));
                 }
@@ -158,13 +158,13 @@ namespace LuckParser.Models.ParseModels
         }
         protected void AddDamageTakenLog(long time, CombatItem c)
         {
-            if (c.IsBuff() == 1 && c.GetBuffDmg() != 0)
+            if (c.IsBuff == 1 && c.BuffDmg != 0)
             {
                 //inco,ing condi dmg not working or just not present?
                 // damagetaken.Add(c.getBuffDmg());
                 _damageTakenlogs.Add(new DamageLogCondition(time, c));
             }
-            else if (c.IsBuff() == 0 && c.GetValue() >= 0)
+            else if (c.IsBuff == 0 && c.Value >= 0)
             {
                 _damageTakenlogs.Add(new DamageLogPower(time, c));
 

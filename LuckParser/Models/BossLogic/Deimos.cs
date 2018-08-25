@@ -50,10 +50,10 @@ namespace LuckParser.Models
             long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // Determined + additional data on inst change
-            CombatItem invulDei = log.GetBoonData().Find(x => x.GetSkillID() == 762 && x.IsBuffremove() == ParseEnum.BuffRemove.None && x.GetDstInstid() == boss.GetInstid());
+            CombatItem invulDei = log.GetBoonData().Find(x => x.SkillID == 762 && x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == boss.GetInstid());
             if (invulDei != null)
             {
-                end = invulDei.GetTime() - log.GetBossData().GetFirstAware();
+                end = invulDei.Time - log.GetBossData().GetFirstAware();
                 phases.Add(new PhaseData(start, end));
                 start = (boss.GetPhaseData().Count == 1 ? boss.GetPhaseData()[0] - log.GetBossData().GetFirstAware() : fightDuration);
                 castLogs.Add(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
@@ -67,15 +67,15 @@ namespace LuckParser.Models
                 phases[i].SetName("Phase " + i);
             }
             int offsetDei = phases.Count;
-            CombatItem teleport = log.GetCombatList().FirstOrDefault(x => x.GetSkillID() == 38169);
+            CombatItem teleport = log.GetCombatList().FirstOrDefault(x => x.SkillID == 38169);
             int splits = 0;
             while (teleport != null && splits < 3)
             {
-                start = teleport.GetTime() - log.GetBossData().GetFirstAware();
-                CombatItem teleportBack = log.GetCombatList().FirstOrDefault(x => x.GetSkillID() == 38169 && x.GetTime() - log.GetBossData().GetFirstAware() > start + 10000);
+                start = teleport.Time - log.GetBossData().GetFirstAware();
+                CombatItem teleportBack = log.GetCombatList().FirstOrDefault(x => x.SkillID == 38169 && x.Time - log.GetBossData().GetFirstAware() > start + 10000);
                 if (teleportBack != null)
                 {
-                    end = teleportBack.GetTime() - log.GetBossData().GetFirstAware();
+                    end = teleportBack.Time - log.GetBossData().GetFirstAware();
                 }
                 else
                 {
@@ -83,7 +83,7 @@ namespace LuckParser.Models
                 }
                 phases.Add(new PhaseData(start, end));
                 splits++;
-                teleport = log.GetCombatList().FirstOrDefault(x => x.GetSkillID() == 38169 && x.GetTime() - log.GetBossData().GetFirstAware() > end + 10000);
+                teleport = log.GetCombatList().FirstOrDefault(x => x.SkillID == 38169 && x.Time - log.GetBossData().GetFirstAware() > end + 10000);
             }
 
             string[] namesDeiSplit = new [] { "Thief", "Gambler", "Drunkard" };
@@ -150,13 +150,13 @@ namespace LuckParser.Models
             int tpStart = 0;
             foreach (CombatItem c in tpDeimos)
             {
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    tpStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    tpStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 }
                 else
                 {
-                    int tpEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int tpEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
                     replay.AddCircleActor(new CircleActor(true, tpEnd, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
                 }

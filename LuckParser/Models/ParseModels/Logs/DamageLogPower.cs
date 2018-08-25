@@ -6,7 +6,7 @@
         // Constructor
         public DamageLogPower(long time, CombatItem c) : base(time, c)
         {
-            Damage =  c.GetValue();
+            Damage =  c.Value;
         }
     }
 }

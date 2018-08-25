@@ -55,9 +55,9 @@ namespace LuckParser.Models
             for (int i = 0; i < invulsSam.Count; i++)
             {
                 CombatItem c = invulsSam[i];
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.GetTime() - log.GetBossData().GetFirstAware();
+                    end = c.Time - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsSam.Count - 1)
                     {
@@ -66,7 +66,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.GetTime() - log.GetBossData().GetFirstAware();
+                    start = c.Time - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(end, start));
                     castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
@@ -110,17 +110,17 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Rigom,
                         ParseEnum.ThrashIDS.Guldhem
                     };
-            List<CombatItem> brutalize = log.GetBoonData().Where(x => x.GetSkillID() == 38226 && x.IsBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
+            List<CombatItem> brutalize = log.GetBoonData().Where(x => x.SkillID == 38226 && x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
             int brutStart = 0;
             foreach (CombatItem c in brutalize)
             {
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    brutStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    brutStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 }
                 else
                 {
-                    int brutEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int brutEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 120, new Tuple<int, int>(brutStart, brutEnd), "rgba(0, 180, 255, 0.3)"));
                 }
             }
@@ -130,19 +130,19 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // big bomb
-            List<CombatItem> bigbomb = log.GetBoonData().Where(x => x.GetSkillID() == 37966 && ((x.GetDstInstid() == p.GetInstid() && x.IsBuffremove() == ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> bigbomb = log.GetBoonData().Where(x => x.SkillID == 37966 && ((x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None))).ToList();
             foreach (CombatItem c in bigbomb)
             {
-                int bigStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                int bigStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 int bigEnd = bigStart + 6000;
                 replay.AddCircleActor(new CircleActor(true, 0, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
                 replay.AddCircleActor(new CircleActor(true, bigEnd, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
             }
             // small bomb
-            List<CombatItem> smallbomb = log.GetBoonData().Where(x => x.GetSkillID() == 38247 && ((x.GetDstInstid() == p.GetInstid() && x.IsBuffremove() == ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> smallbomb = log.GetBoonData().Where(x => x.SkillID == 38247 && ((x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None))).ToList();
             foreach (CombatItem c in smallbomb)
             {
-                int smallStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                int smallStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 int smallEnd = smallStart + 6000;
                 replay.AddCircleActor(new CircleActor(true, 0, 80, new Tuple<int, int>(smallStart, smallEnd), "rgba(80, 150, 0, 0.3)"));
             }
@@ -151,13 +151,13 @@ namespace LuckParser.Models
             int fixatedSamStart = 0;
             foreach (CombatItem c in fixatedSam)
             {
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    fixatedSamStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    fixatedSamStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 }
                 else
                 {
-                    int fixatedSamEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int fixatedSamEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 80, new Tuple<int, int>(fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)"));
                 }
             }
