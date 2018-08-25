@@ -529,6 +529,11 @@ namespace LuckParser.Models.ParseModels
             return _allBoons.Where(x => x.GetName() == name).ToList();
         }
 
+        // get everything
+        public static List<Boon> GetAll()
+        {
+            return _allBoons;
+        }
 
         // Conditions
         public static List<Boon> GetCondiBoonList()
