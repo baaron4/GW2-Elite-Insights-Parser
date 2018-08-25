@@ -168,6 +168,10 @@ namespace LuckParser
                     {
                         CSVBuilder.UpdateStatisticSwitches(switches);
                     }
+                    if (Properties.Settings.Default.SaveOutJSON)
+                    {
+                        JSONBuilder.UpdateStatisticSwitches(switches);
+                    }
                     Statistics statistics = statisticsCalculator.CalculateStatistics(log, switches);
                     bg.UpdateProgress(rowData, "85% - Statistics computed", 85);
                     string fName = fInfo.Name.Split('.')[0];
@@ -198,6 +202,20 @@ namespace LuckParser
                         {
                             var builder = new CSVBuilder(sw, ",", log, settings, statistics);
                             builder.CreateCSV();
+                        }
+                    }
+                    if (Properties.Settings.Default.SaveOutJSON)
+                    {
+                        string outputFile = Path.Combine(
+                            saveDirectory.FullName,
+                            $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.json"
+                        );
+                        rowData.LogLocation = outputFile;
+                        using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                        using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
+                        {
+                            var builder = new JSONBuilder(sw, log, settings, statistics);
+                            builder.CreateJSON();
                         }
                     }
 

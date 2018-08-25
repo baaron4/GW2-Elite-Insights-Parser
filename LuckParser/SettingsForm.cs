@@ -196,5 +196,10 @@ namespace LuckParser
         {
             Properties.Settings.Default.ClDPSGraphTotals = chkShowCl.Checked;
         }
+
+        private void OutputJSONCheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveOutJSON = chkOutputJSON.Checked;
+        }
     }
 }

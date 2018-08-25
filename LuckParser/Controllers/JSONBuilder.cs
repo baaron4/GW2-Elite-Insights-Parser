@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LuckParser.Models.DataModels;
+using Newtonsoft.Json;
 
 namespace LuckParser.Controllers
 {
@@ -38,10 +39,19 @@ namespace LuckParser.Controllers
             _statistics = statistics;
         }
 
+        private class JSONLog
+        {
+            
+        }
+
         //Creating JSON---------------------------------------------------------------------------------
         public void CreateJSON()
         {
-            // TODO
+            JSONLog log = new JSONLog();
+
+            JsonSerializer serializer = new JsonSerializer();
+            JsonWriter writer = new JsonTextWriter(_sw);
+            serializer.Serialize(writer, log);
         }
     }
 }
