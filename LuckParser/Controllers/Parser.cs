@@ -630,19 +630,29 @@ namespace LuckParser.Controllers
                     _bossData.SetLastAware(reward.GetTime());
                 }
             } else if (fractalMode) {
-                CombatItem reward = _combatData.Find(x => x.IsStateChange() == ParseEnum.StateChange.Reward);
-                if (reward != null)
+                // check reward
+                CombatItem reward = _combatData.LastOrDefault(x => x.IsStateChange() == ParseEnum.StateChange.Reward);
+                // check last Health update as fractal rewards and daily chests have the same id
+                Point lastHoT = bossHealthOverTime.Count > 0 ? bossHealthOverTime.Last() : new Point(0,int.MaxValue);
+                long lastHoTTime = lastHoT.X + _bossData.GetFirstAware();
+                if (reward != null && lastHoT.X != 0 && Math.Abs(reward.GetTime() - lastHoTTime) < 10000)
                 {
                     _logData.SetBossKill(true);
                     _bossData.SetLastAware(reward.GetTime());
                 } else
                 {
-                    // for skorvald, as CM and normal ids are the same
+                    // check killed
                     CombatItem killed = _combatData.Find(x => x.GetSrcInstid() == _bossData.GetInstid() && x.IsStateChange().IsDead());
                     if (killed != null)
                     {
                         _logData.SetBossKill(true);
                         _bossData.SetLastAware(killed.GetTime());
+                    }
+                    // Threshold for health checking, for subsequent daily runs, the bouncy chest appears once a day, 100 is 1.0% of the total health
+                    else if (lastHoT.Y < 100)
+                    {
+                        _logData.SetBossKill(true);
+                        _bossData.SetLastAware(lastHoTTime);
                     }
                 }
             } else
