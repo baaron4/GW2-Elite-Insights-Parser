@@ -45,6 +45,12 @@ Settings can be configured in the GuildWars2EliteInsights.exe.config file. You c
 GuildWars2EliteInsights.exe -c [config path] [logs]
 ```
 
+To disable windows-specific commandline magic you can use -p:
+
+```
+GuildWars2EliteInsights.exe -p [logs]
+```
+
 Note it may take some time for each file to parse and they will not be ready to open the moment they are created.
 
 ## Contributors

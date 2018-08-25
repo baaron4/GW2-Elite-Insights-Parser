@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -48,33 +49,59 @@ namespace LuckParser
             Application.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
             if (args.Length > 0)
             {
-                /*
-                 * We need to do this, because the console output is lazy initialized
-                 * and if we are redirecting to a file or pipe we want to make sure Console.out points to the correct handle
-                 * and doesnt init with the console ignoring existing stdout
-                 */
-                if (IsRedirected(GetStdHandle(StandardHandle.Output)))
+                int parserArgOffset = 0;
+
+                if (args.Contains("-h"))
                 {
-                    var dummy = Console.Out;
+                    Console.WriteLine("GuildWars2EliteInsights.exe [arguments] [logs...]");
+                    Console.WriteLine("");
+                    Console.WriteLine("-c [config path] : use another config file");
+                    Console.WriteLine("-p : disable windows specific functions");
+                    Console.WriteLine("-h : help");
+                    return 0;
                 }
 
-                if (!AttachConsole(AttachParentProcess))
+                if (args.Contains("-p"))
                 {
-                    AllocConsole();
+                    parserArgOffset += 1;
+                }
+                else
+                {
+                    /*
+                     * We need to do this, because the console output is lazy initialized
+                     * and if we are redirecting to a file or pipe we want to make sure Console.out points to the correct handle
+                     * and doesnt init with the console ignoring existing stdout
+                     */
+                    if (IsRedirected(GetStdHandle(StandardHandle.Output)))
+                    {
+                        var dummy = Console.Out;
+                    }
+
+                    if (!AttachConsole(AttachParentProcess))
+                    {
+                        AllocConsole();
+                    }
+
+                    AttachConsole(AttachParentProcess);
                 }
 
-                int parserArgOffset = 0; 
-                if (args[0] == "-c" && args.Length > 2)
+                if (args.Contains("-c"))
                 {
-                    // Do not access settings before this, else this will not work
-                    AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", args[1]);
+                    if (args.Length - parserArgOffset > 2)
+                    {
+                        // Do not access settings before this, else this will not work
+                        int argPos = Array.IndexOf(args, "-c");
 
-                    parserArgOffset += 2;
-                }
-                else if (args[0] == "-c")
-                {
-                    Console.WriteLine("More arguments required for option -c:");
-                    Console.WriteLine("GuildWars2EliteInsights.exe -c [config path] [logs]");
+                        AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", args[argPos + 1]);
+
+                        parserArgOffset += 2;
+                    }
+                    else
+                    {
+                        Console.WriteLine("More arguments required for option -c:");
+                        Console.WriteLine("GuildWars2EliteInsights.exe -c [config path] [logs]");
+                        return 0;
+                    }
                 }
 
                 string[] parserArgs = new string[args.Length-parserArgOffset];
