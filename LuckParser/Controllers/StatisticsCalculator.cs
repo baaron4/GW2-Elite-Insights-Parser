@@ -548,7 +548,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        private Dictionary<long, Statistics.FinalBoonUptime>[] GetBoonsForPlayers(List<Player> playerList, Player player, List<Boon> toTrack)
+        private Dictionary<long, Statistics.FinalBoonUptime>[] GetBoonsForPlayers(List<Player> playerList, Player player)
         {
             Dictionary<long, Statistics.FinalBoonUptime>[] uptimesByPhase =
                 new Dictionary<long, Statistics.FinalBoonUptime>[_statistics.Phases.Count];
@@ -561,13 +561,13 @@ namespace LuckParser.Controllers
                 Dictionary<Player, BoonDistribution> boonDistributions = new Dictionary<Player, BoonDistribution>();
                 foreach (Player p in playerList)
                 {
-                    boonDistributions[p] = p.GetBoonDistribution(_log, _statistics.Phases, toTrack, phaseIndex);
+                    boonDistributions[p] = p.GetBoonDistribution(_log, _statistics.Phases, phaseIndex);
                 }
 
                 Dictionary<long, Statistics.FinalBoonUptime> final =
                     new Dictionary<long, Statistics.FinalBoonUptime>();
 
-                foreach (Boon boon in toTrack)
+                foreach (Boon boon in player.getBoonToTrack())
                 {
                     long totalGeneration = 0;
                     long totalOverstack = 0;
@@ -607,15 +607,6 @@ namespace LuckParser.Controllers
         {
             foreach (Player player in _log.GetPlayerList())
             {
-                List<Boon> boonToTrack = new List<Boon>();
-                boonToTrack.AddRange(_statistics.PresentBoons);
-                boonToTrack.AddRange(_statistics.PresentOffbuffs);
-                boonToTrack.AddRange(_statistics.PresentDefbuffs);
-                if (_statistics.PresentPersonnalBuffs.ContainsKey(player.GetInstid()))
-                {
-                    boonToTrack.AddRange(_statistics.PresentPersonnalBuffs[player.GetInstid()]);
-                }
-
                 // Boons applied to self
                 Dictionary<long, Statistics.FinalBoonUptime>[] selfUptimesByPhase = new Dictionary<long, Statistics.FinalBoonUptime>[_statistics.Phases.Count];
                 for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
@@ -624,10 +615,10 @@ namespace LuckParser.Controllers
 
                     PhaseData phase =_statistics.Phases[phaseIndex];
 
-                    BoonDistribution selfBoons = player.GetBoonDistribution(_log,_statistics.Phases, boonToTrack, phaseIndex);
+                    BoonDistribution selfBoons = player.GetBoonDistribution(_log,_statistics.Phases, phaseIndex);
 
                     long fightDuration = phase.GetEnd() - phase.GetStart();
-                    foreach (Boon boon in boonToTrack)
+                    foreach (Boon boon in player.getBoonToTrack())
                     {
                         Statistics.FinalBoonUptime uptime = new Statistics.FinalBoonUptime
                         {
@@ -662,33 +653,30 @@ namespace LuckParser.Controllers
                 var otherPlayersInGroup = _log.GetPlayerList()
                     .Where(p => p.GetGroup() == player.GetGroup() && player.GetInstid() != p.GetInstid())
                     .ToList();
-                _statistics.GroupBoons[player] = GetBoonsForPlayers(otherPlayersInGroup, player, boonToTrack);
+                _statistics.GroupBoons[player] = GetBoonsForPlayers(otherPlayersInGroup, player);
 
                 // Boons applied to other groups
                 var offGroupPlayers = _log.GetPlayerList().Where(p => p.GetGroup() != player.GetGroup()).ToList();
-                _statistics.OffGroupBoons[player] = GetBoonsForPlayers(offGroupPlayers, player, boonToTrack);
+                _statistics.OffGroupBoons[player] = GetBoonsForPlayers(offGroupPlayers, player);
 
                 // Boons applied to squad
                 var otherPlayers = _log.GetPlayerList().Where(p => p.GetInstid() != player.GetInstid()).ToList();
-                _statistics.SquadBoons[player] = GetBoonsForPlayers(otherPlayers, player, boonToTrack);
+                _statistics.SquadBoons[player] = GetBoonsForPlayers(otherPlayers, player);
             }
         }
 
         private void CalculateConditions()
         {
             _statistics.BossConditions = new Dictionary<long, Statistics.FinalBossBoon>[_statistics.Phases.Count];
-            List<Boon> boonToTrack = Boon.GetCondiBoonList();
-            boonToTrack.AddRange(Boon.GetBoonList());
-            boonToTrack.AddRange(Boon.GetBossBoonList());
             for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
             {
-                BoonDistribution boonDistribution = _log.GetBoss().GetBoonDistribution(_log,_statistics.Phases, boonToTrack, phaseIndex);
+                BoonDistribution boonDistribution = _log.GetBoss().GetBoonDistribution(_log,_statistics.Phases, phaseIndex);
                 Dictionary<long, Statistics.FinalBossBoon> rates = new Dictionary<long, Statistics.FinalBossBoon>();
 
                 PhaseData phase =_statistics.Phases[phaseIndex];
                 long fightDuration = phase.GetDuration();
 
-                foreach (Boon boon in boonToTrack)
+                foreach (Boon boon in _log.GetBoss().getBoonToTrack())
                 {
                     Statistics.FinalBossBoon condition = new Statistics.FinalBossBoon(_log.GetPlayerList());
                     rates[boon.GetID()] = condition;
@@ -739,6 +727,14 @@ namespace LuckParser.Controllers
                         _statistics.PresentBoons.Add(boon);
                     }
                 }
+                // Main Conditions
+                foreach (Boon boon in Boon.GetCondiBoonList())
+                {
+                    if (skillIDs.Contains(boon.GetID()))
+                    {
+                        _statistics.PresentConditions.Add(boon);
+                    }
+                }
             }
 
             if (_settings.PlayerBoonsImpProf)
@@ -761,16 +757,16 @@ namespace LuckParser.Controllers
                 }
             }
 
+            var players = _log.GetPlayerList();
+            Dictionary<ushort, List<Boon>> presentPersonnalBuffs = new Dictionary<ushort, List<Boon>>();
             if (_settings.PlayerBoonsAllProf)
             {
-                var players = _log.GetPlayerList();
                 var playersById = new Dictionary<ushort, Player>();
                 foreach (var player in players)
                 {
-                    _statistics.PresentPersonnalBuffs[player.GetInstid()] = new List<Boon>();
+                    presentPersonnalBuffs[player.GetInstid()] = new List<Boon>();
                     playersById.Add(player.GetInstid(), player);
                 }
-
                 // All class specific boons
                 var remainingBoons = Boon.GetRemainingBuffsList();
 
@@ -788,12 +784,28 @@ namespace LuckParser.Controllers
                     {
                         if (classSpecificBoonsById.TryGetValue(item.SkillID, out Boon boon))
                         {
-                            _statistics.PresentPersonnalBuffs[player.GetInstid()].Add(boon);
+                            presentPersonnalBuffs[player.GetInstid()].Add(boon);
                             classSpecificBoonsById.Remove(item.SkillID);
                         }
                     }
                 }
             }
+            foreach (Player player in players)
+            {
+                List<List<Boon>> boonListToTrack = new List<List<Boon>>
+                {
+                    _statistics.PresentBoons,
+                    _statistics.PresentOffbuffs,
+                    _statistics.PresentDefbuffs,
+                };
+                if(_settings.PlayerBoonsAllProf)
+                {
+                    boonListToTrack.Add(presentPersonnalBuffs[player.GetInstid()]);
+                }
+                player.SetBoonToTrack(boonListToTrack);
+            }
+            // boss boons
+            _log.GetBoss().SetBoonToTrack(new List<List<Boon>> {_statistics.PresentBoons, _statistics.PresentConditions, Boon.GetBossBoonList()});
         }
     }
 }
