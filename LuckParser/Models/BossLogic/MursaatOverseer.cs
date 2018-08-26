@@ -18,7 +18,7 @@ namespace LuckParser.Models
             new Mechanic(37697, "Dispel", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, "symbol:'circle',color:'rgb(255,200,0)',", "Dspl",0), //Dispel, Dispel
             new Mechanic(37813, "Protect", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, "symbol:'circle',color:'rgb(0,255,255)',", "Prtct",0), //Protect, Protect
             new Mechanic(38155, "Mursaat Overseer's Shield", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.MursaatOverseer, "symbol:'circle-open',color:'rgb(0,255,255)',", "P.Shield",0), // Mursaat Overseer's Shield, Protect (active)
-            new Mechanic(38184, "Enemy Tile", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MursaatOverseer, "symbol:'square-open',color:'rgb(255,200,0)',", "Floor",0) //Enemey Tile damage, Tile dmg
+            new Mechanic(38184, "Enemy Tile", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MursaatOverseer, "symbol:'square-open',color:'rgb(255,200,0)',", "Floor",0) //Enemy Tile damage, Tile dmg
             });
         }
 

@@ -786,7 +786,7 @@ namespace LuckParser.Controllers
                                 + stats.GlanceRateBoss + " out of " + stats.PowerLoopCountBoss + " hits \">" 
                                 + Math.Round(stats.GlanceRateBoss / (Double)stats.PowerLoopCountBoss * 100,1) + "%</span>" + "</td>");//glance
                             sw.Write("<td>" + stats.MissedBoss + "</td>");//misses
-                            sw.Write("<td>" + stats.InteruptsBoss + "</td>");//interupts
+                            sw.Write("<td>" + stats.InteruptsBoss + "</td>");//interrupts
                             sw.Write("<td>" + stats.InvulnedBoss + "</td>");//dmg invulned
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.Wasted + "cancels \">" + stats.TimeWasted + "</span>" + "</td>");//time wasted
@@ -2733,7 +2733,7 @@ namespace LuckParser.Controllers
             }
         }
         /// <summary>
-        /// Creates the event list of the generation. Debbuging only
+        /// Creates the event list of the generation. Debug only
         /// </summary>
         /// <param name="sw">Stream writer</param>
         private void CreateEventList(StreamWriter sw)

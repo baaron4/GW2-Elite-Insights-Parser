@@ -29,7 +29,7 @@ namespace LuckParser.Models
             new Mechanic(38224, "Unnatural Signet", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Deimos, "symbol:'square-open',color:'rgb(0,255,255)',", "DMGDbf",0)//Double Damage Debuff on Deimos, +100% Dmg Buff
             //mlist.Add("Chosen by Eye of Janthir");
             //mlist.Add("");//tp from drunkard
-            //mlist.Add("");//bon currupt from thief
+            //mlist.Add("");//boon corrupt from thief
             //mlist.Add("Teleport");//to demonic realm
             });
         }
