@@ -23,8 +23,10 @@ namespace LuckParser.Models.ParseModels
         public delegate bool SpecialCondition(long value);
         // Fields
         
-        private readonly string _name;
-        private readonly string _altname;
+        private readonly string _inGameName;
+        private readonly string _shortName;
+        private readonly string _fullName;
+        private readonly string _plotlyName;
         private readonly MechType _mechType;
         private readonly long _skillId;
         private readonly ParseEnum.BossIDS _bossid;
@@ -32,15 +34,31 @@ namespace LuckParser.Models.ParseModels
         private readonly int _internalCoolDown;
         private readonly SpecialCondition _condition;
 
-        
-        public Mechanic(long skillId,string name, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string altname, int internalCoolDown, SpecialCondition condition = null)
+
+        public Mechanic(long skillId, string inGameName, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape, string shortName, int internalCoolDown, SpecialCondition condition = null)
         {
-            _name = name;
+            _inGameName = inGameName;
             _skillId = skillId;
             _mechType = mechtype;
             _bossid = bossid;
             _plotlyShape = plotlyShape;
-            _altname = altname;
+            _shortName = shortName;
+            _fullName = null;
+            _plotlyName = null;
+            _internalCoolDown = internalCoolDown;
+            _condition = condition;
+        }
+
+        public Mechanic(long skillId,string inGameName, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string shortName, string fullName, string plotlyName, int internalCoolDown, SpecialCondition condition = null)
+        {
+            _inGameName = inGameName;
+            _skillId = skillId;
+            _mechType = mechtype;
+            _bossid = bossid;
+            _plotlyShape = plotlyShape;
+            _shortName = shortName;
+            _fullName = fullName;
+            _plotlyName = plotlyName;
             _internalCoolDown = internalCoolDown;
             _condition = condition;
         }
@@ -49,9 +67,9 @@ namespace LuckParser.Models.ParseModels
         {
             return _condition;
         }
-        public string GetName()
+        public string GetInGameName()
         {
-            return _name;
+            return _inGameName;
         }
         public long GetSkill()
         {
@@ -69,9 +87,17 @@ namespace LuckParser.Models.ParseModels
         {
             return _plotlyShape;
         }
-        public string GetAltName()
+        public string GetShortName()
         {
-            return _altname;
+            return _shortName;
+        }
+        public string GetFullName()
+        {
+            return _fullName ?? _inGameName;
+        }
+        public string GetPlotlyName()
+        {
+            return _plotlyName ?? _inGameName;
         }
         public int GetICD()
         {

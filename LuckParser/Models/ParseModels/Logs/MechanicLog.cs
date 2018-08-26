@@ -29,7 +29,7 @@
         }
         public string GetName()
         {
-            return _mechanic.GetName();
+            return _mechanic.GetInGameName();
         }
         public string GetPlotly()
         {
