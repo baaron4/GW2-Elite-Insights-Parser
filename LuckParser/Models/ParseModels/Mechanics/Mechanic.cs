@@ -37,12 +37,12 @@ namespace LuckParser.Models.ParseModels
 
         public Mechanic(long skillId, string inGameName, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape, string shortName, int internalCoolDown, SpecialCondition condition = null)
         {
-            _inGameName = inGameName;
+            _inGameName = inGameName.Replace("\""," ").Replace("'"," ");
             _skillId = skillId;
             _mechType = mechtype;
             _bossid = bossid;
             _plotlyShape = plotlyShape;
-            _shortName = shortName;
+            _shortName = shortName.Replace("\"", " ").Replace("'", " ");
             _fullName = null;
             _plotlyName = null;
             _internalCoolDown = internalCoolDown;
@@ -51,14 +51,14 @@ namespace LuckParser.Models.ParseModels
 
         public Mechanic(long skillId,string inGameName, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string shortName, string fullName, string plotlyName, int internalCoolDown, SpecialCondition condition = null)
         {
-            _inGameName = inGameName;
+            _inGameName = inGameName.Replace("\"", " ").Replace("'", " ");
             _skillId = skillId;
             _mechType = mechtype;
             _bossid = bossid;
             _plotlyShape = plotlyShape;
-            _shortName = shortName;
-            _fullName = fullName;
-            _plotlyName = plotlyName;
+            _shortName = shortName.Replace("\"", " ").Replace("'", " ");
+            _fullName = fullName.Replace("\"", " ").Replace("'", " ");
+            _plotlyName = plotlyName.Replace("\"", " ").Replace("'", " ");
             _internalCoolDown = internalCoolDown;
             _condition = condition;
         }
