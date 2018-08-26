@@ -69,6 +69,7 @@ namespace LuckParser.Controllers
                 public ArrayList Dps;
                 public ArrayList Stats;
                 public ArrayList Defenses;
+                public ArrayList Support;
             }
 
             public struct JsonPhase
@@ -166,7 +167,8 @@ namespace LuckParser.Controllers
                     Profession = player.GetProf(),
                     Dps = new ArrayList(),
                     Stats = new ArrayList(),
-                    Defenses = new ArrayList()
+                    Defenses = new ArrayList(),
+                    Support = new ArrayList()
                 };
 
                 for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
@@ -174,6 +176,7 @@ namespace LuckParser.Controllers
                     currentPlayer.Dps.Add(_statistics.Dps[player][phaseIndex]);
                     currentPlayer.Stats.Add(_statistics.Stats[player][phaseIndex]);
                     currentPlayer.Defenses.Add(_statistics.Defenses[player][phaseIndex]);
+                    currentPlayer.Support.Add(_statistics.Support[player][phaseIndex]);
                 }
 
                 log.Players.Add(currentPlayer);
