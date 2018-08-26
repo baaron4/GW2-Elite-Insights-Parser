@@ -172,6 +172,7 @@ namespace LuckParser.Controllers
 
             for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
             {
+                log.boss.dps = new ArrayList();
                 log.boss.dps.Add(BuildDPS(_statistics.BossDps[phaseIndex]));
             }
 
@@ -211,6 +212,7 @@ namespace LuckParser.Controllers
 
             for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
             {
+                currentPlayer.dps = new ArrayList();
                 currentPlayer.dps.Add(BuildDPS(_statistics.Dps[player][phaseIndex]));
             }
 
