@@ -46,7 +46,7 @@ namespace LuckParser.Controllers
                     bool block = true;
                     foreach (GW2APIfacts fact in skillCheck.facts)
                     {
-                        if (fact.type == "Unblockable" || fact.type == "StunBreak")//Unblockable changeing value from an int to a bool has caused so much chaos
+                        if (fact.type == "Unblockable" || fact.type == "StunBreak")//Unblockable changing value from an int to a bool has caused so much chaos
                         {
                             skill = skillCheck;
                             block = false;
@@ -82,7 +82,7 @@ namespace LuckParser.Controllers
                         bool block = true;
                         foreach (GW2APIfacts fact in skillCheck.facts)
                         {
-                            if (fact.type == "Unblockable" || fact.type == "StunBreak")//Unblockable changeing value from an int to a bool has caused so much chaos
+                            if (fact.type == "Unblockable" || fact.type == "StunBreak")//Unblockable changing value from an int to a bool has caused so much chaos
                             {
                                 skill = skillCheck;
                                 block = false;
@@ -119,7 +119,7 @@ namespace LuckParser.Controllers
         }
         public List<int> WriteSkillListToFile()
         {
-            //used for wiritng new XMLs
+            //used for writing new XMLs
             FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
             + "/Content/SkillList.txt", FileMode.Create);
 
@@ -305,7 +305,7 @@ namespace LuckParser.Controllers
         }
         public List<int> WriteSpecListToFile()
         {
-            //used for wiritng new XMLs
+            //used for writing new XMLs
             FileStream fcreate = File.Open(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
             + "/Content/SpecList.txt", FileMode.Create);
 

@@ -1,5 +1,5 @@
 ﻿using LuckParser.Models;
-//recomend CTRL+M+O to collapse all
+//recommend CTRL+M+O to collapse all
 using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
 using System;
@@ -674,7 +674,7 @@ namespace LuckParser.Controllers
             if (_playerList.Count == 0)
             {
 
-                //Fix Disconected players
+                //Fix Disconnected players
                 var playerAgentList = _agentData.GetPlayerAgentList();
 
                 foreach (AgentItem playerAgent in playerAgentList)
@@ -732,7 +732,7 @@ namespace LuckParser.Controllers
                         player.SetDC(lp[0].Time);
                         _playerList.Add(player);
                     }
-                    else//didnt dc
+                    else//didn't dc
                     {
                         if (player.GetDC() == 0)
                         {

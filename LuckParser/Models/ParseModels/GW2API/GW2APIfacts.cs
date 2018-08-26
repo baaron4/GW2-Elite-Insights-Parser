@@ -19,7 +19,7 @@
         public float percent { get; set; }
         //Damage
         public int hit_count { get; set; }
-        public float dmg_multipler { get; set; }
+        public float dmg_multiplier { get; set; }
         //Distance
         public int distance { get; set; }
         //Duration

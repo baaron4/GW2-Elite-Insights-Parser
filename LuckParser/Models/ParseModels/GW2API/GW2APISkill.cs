@@ -14,11 +14,11 @@
         public string[] categories { get; set; }
         //public string[]  facts { get; set; }
 
-        // public string attunment { get; set; }
+        // public string attunement { get; set; }
         //public string cost { get; set; }
         // public string duel_wield { get; set; }
         // public int flip_skill { get; set; }
-        // public int inititiative { get; set; }
+        // public int initiative { get; set; }
         // public int next_chain { get; set; }
         // public int prev_chain { get; set; }
 

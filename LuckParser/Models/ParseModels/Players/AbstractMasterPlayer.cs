@@ -171,7 +171,7 @@ namespace LuckParser.Models.ParseModels
                 ushort dst = c.IsBuffRemove == ParseEnum.BuffRemove.None ? c.DstInstid : c.SrcInstid;
                 if (Agent.GetInstid() == dst)
                 {
-                    // don't add buff initial table boons and buffs in non golem mode, for others overstack is irrevelant
+                    // don't add buff initial table boons and buffs in non golem mode, for others overstack is irrelevant
                     if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (log.IsBenchmarkMode() || !tableIds.Contains(c.SkillID)))
                     {
                         List<BoonLog> loglist = boonMap[c.SkillID];

@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
     {
         // Fields
         private readonly List<AgentItem> _playerAgentList = new List<AgentItem>();
-        private readonly List<AgentItem> _npcAgentLits = new List<AgentItem>();
+        private readonly List<AgentItem> _npcAgentList = new List<AgentItem>();
         private readonly List<AgentItem> _gadgetAgentList = new List<AgentItem>();
         private readonly List<AgentItem> _allAgentList = new List<AgentItem>();
 
@@ -17,7 +17,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (prof == "NPC")
             {
-                _npcAgentLits.Add(item);
+                _npcAgentList.Add(item);
             }
             else if (prof == "GDG")
             {
@@ -38,7 +38,7 @@ namespace LuckParser.Models.ParseModels
 
         public List<AgentItem> GetNPCAgentList()
         {
-            return _npcAgentLits;
+            return _npcAgentList;
         }
 
         public List<AgentItem> GetGadgetAgentList()
@@ -77,13 +77,13 @@ namespace LuckParser.Models.ParseModels
         public void Clean()
         {
             _gadgetAgentList.RemoveAll(x => !(x.GetInstid() != 0 && x.GetLastAware() - x.GetFirstAware() >= 0 && x.GetFirstAware() != 0 && x.GetLastAware() != long.MaxValue));
-            _npcAgentLits.RemoveAll(x => !(x.GetInstid() != 0 && x.GetLastAware() - x.GetFirstAware() >= 0 && x.GetFirstAware() != 0 && x.GetLastAware() != long.MaxValue));
+            _npcAgentList.RemoveAll(x => !(x.GetInstid() != 0 && x.GetLastAware() - x.GetFirstAware() >= 0 && x.GetFirstAware() != 0 && x.GetLastAware() != long.MaxValue));
             _allAgentList.RemoveAll(x => !(x.GetInstid() != 0 && x.GetLastAware() - x.GetFirstAware() >= 0 && x.GetFirstAware() != 0 && x.GetLastAware() != long.MaxValue));
         }
 
         public void CleanInstid(ushort instid)
         {
-            List<AgentItem> instances = _npcAgentLits.Where(x => x.GetInstid() == instid).ToList();
+            List<AgentItem> instances = _npcAgentList.Where(x => x.GetInstid() == instid).ToList();
             long firstAware = long.MaxValue;
             long lastAware = 0;
             if (instances.Count == 0)
@@ -100,13 +100,13 @@ namespace LuckParser.Models.ParseModels
                 firstAware = Math.Min(firstAware, a.GetFirstAware());
                 lastAware = Math.Max(lastAware, a.GetLastAware());
                 _allAgentList.Remove(a);
-                _npcAgentLits.Remove(a);
+                _npcAgentList.Remove(a);
             }
             toAdd.SetInstid(inst);
             toAdd.SetFirstAware(firstAware);
             toAdd.SetLastAware(lastAware);
             _allAgentList.Add(toAdd);
-            _npcAgentLits.Add(toAdd);
+            _npcAgentList.Add(toAdd);
         }
     }
 }

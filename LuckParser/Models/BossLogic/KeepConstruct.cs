@@ -137,13 +137,13 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.RetrieverProjection
                     };
             List<CastLog> magicCharge = cls.Where(x => x.GetID() == 35048).ToList();
-            List<CastLog> magicExplose = cls.Where(x => x.GetID() == 34894).ToList();
+            List<CastLog> magicExplode = cls.Where(x => x.GetID() == 34894).ToList();
             for (var i = 0; i < magicCharge.Count; i++)
             {
                 CastLog charge = magicCharge[i];
-                if (i < magicExplose.Count)
+                if (i < magicExplode.Count)
                 {
-                    CastLog fire = magicExplose[i];
+                    CastLog fire = magicExplode[i];
                     int start = (int)charge.GetTime();
                     int end = (int)fire.GetTime() + fire.GetActDur();
                     replay.AddCircleActor(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
