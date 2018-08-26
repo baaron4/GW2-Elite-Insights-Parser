@@ -114,7 +114,7 @@ namespace LuckParser.Models.DataModels
         {
             //public long allHeal;
             public int Resurrects;
-            public float RessurrectTime;
+            public float ResurrectTime;
             public int CondiCleanse;
             public float CondiCleanseTime;
         }

@@ -12,7 +12,7 @@ namespace LuckParser.Models.ParseModels
         public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item, Boss };
         private enum RemoveType { CleanseFoe, CleanseFriend, Manual, None, All };
         public enum BoonType { Duration, Intensity };
-        private enum Logic { Queue, HealingPower, Override };
+        private enum Logic { Queue, HealingPower, Override, ForceOverride };
 
         private static BoonSource ProfToEnum(string prof)
         {
@@ -115,9 +115,9 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Vulnerability", 738, BoonSource.Mixed, BoonType.Intensity, 25, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Override, "https://wiki.guildwars2.com/images/thumb/a/af/Vulnerability.png/20px-Vulnerability.png"),
                 new Boon("Retaliation", 873, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Condition, RemoveType.CleanseFoe, Logic.Queue, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
                 // Generic
-                new Boon("Stealth", 13017, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Stealth", 13017, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Queue),
                 new Boon("Revealed", 890, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Superspeed", 5974, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
+                new Boon("Superspeed", 5974, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.ForceOverride,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
                 //new Boon("Invulnerability", 801, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, "https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Boon("Unblockable",-1, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
                 // Sigils
@@ -352,7 +352,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Dagger Storm",13134, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Kneeling",42869, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 //traits
-                //new Boon("Deadeyes's Gaze",46333, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
+                //new Boon("Deadeye's Gaze",46333, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
                 //new Boon("Maleficent Seven",43606, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
                 new Boon("Hidden Killer",42720, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Lead Attacks",34659, BoonSource.Thief, BoonType.Intensity, 15, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -409,7 +409,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Signet of Earth",5592, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Signet of Fire",5544, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Signet of Water",5591, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                //attunments
+                //attunements
                 new Boon("Fire Attunement", 5585, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Water Attunement", 5586, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Air Attunement", 5575, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -667,6 +667,9 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case Logic.HealingPower:
                     logicToUse = new HealingLogic();
+                    break;
+                case Logic.ForceOverride:
+                    logicToUse = new ForceOverrideLogic();
                     break;
                 default:
                     logicToUse = new OverrideLogic();
