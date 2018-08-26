@@ -277,7 +277,7 @@ namespace LuckParser.Controllers
         private void GetRoles()
         {
             //tags: tank,healer,dps(power/condi)
-            //Roles:greenteam,green split,cacnoneers,flakkiter,eater,KCpusher,agony,epi,handkiter,golemkiter,orbs
+            //Roles:greenteam,green split,caconeers,flakkiter,eater,KCpusher,agony,epi,handkiter,golemkiter,orbs
         }
         private void PrintWeapons(StreamWriter sw, Player p)
         {
@@ -653,7 +653,7 @@ namespace LuckParser.Controllers
                                 + stats.GlanceRate + " out of " + stats.PowerLoopCount + " hits \">" 
                                 + Math.Round(stats.GlanceRate / (Double)stats.PowerLoopCount * 100,1) + "%</span>" + "</td>");//glance
                             sw.Write("<td>" + stats.Missed + "</td>");//misses
-                            sw.Write("<td>" + stats.Interupts + "</td>");//interupts
+                            sw.Write("<td>" + stats.Interupts + "</td>");//interrupts
                             sw.Write("<td>" + stats.Invulned + "</td>");//dmg invulned
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.Wasted + "cancels \">" + stats.TimeWasted + "</span>" + "</td>");//time wasted
@@ -1410,7 +1410,7 @@ namespace LuckParser.Controllers
             sw.Write("</table>");
         }
         /// <summary>
-        /// Create the off squade buff generation table
+        /// Create the off squad buff generation table
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="listToUse"></param>
