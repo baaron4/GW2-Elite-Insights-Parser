@@ -224,8 +224,8 @@ namespace LuckParser.Controllers
                     var name = ParseHelper.GetString(stream, 64);
                     if(skillId != 0 && int.TryParse(name, out int n) && n == skillId)
                     {
-                        //was it a known boon?
-                        foreach(Boon b in Boon.GetBoonList())
+                        //was it a known buff?
+                        foreach(Boon b in Boon.GetAll())
                         {
                             if(skillId == b.GetID())
                             {
