@@ -475,11 +475,11 @@ namespace LuckParser.Controllers
                         final.Died = dead.Last().Time - start;
                     }
 
-                    List<CombatItem> disconect = combatData.GetStates(instid, ParseEnum.StateChange.Despawn, start, end);
+                    List<CombatItem> disconnect = combatData.GetStates(instid, ParseEnum.StateChange.Despawn, start, end);
                     final.Dcd = 0.0;
-                    if (disconect.Count > 0)
+                    if (disconnect.Count > 0)
                     {
-                        final.Dcd = disconect.Last().Time - start;
+                        final.Dcd = disconnect.Last().Time - start;
                     }
 
                     phaseStats[phaseIndex] = final;
@@ -538,7 +538,7 @@ namespace LuckParser.Controllers
                     //List<DamageLog> healingLogs = player.getHealingLogs(log, phase.getStart(), phase.getEnd());
                     //final.allHeal = healingLogs.Sum(x => x.getDamage());
                     final.Resurrects = resArray[0];
-                    final.RessurrectTime = resArray[1]/1000f;
+                    final.ResurrectTime = resArray[1]/1000f;
                     final.CondiCleanse = cleanseArray[0];
                     final.CondiCleanseTime = cleanseArray[1]/1000f;
 
@@ -758,13 +758,13 @@ namespace LuckParser.Controllers
             }
 
             var players = _log.GetPlayerList();
-            Dictionary<ushort, List<Boon>> presentPersonnalBuffs = new Dictionary<ushort, List<Boon>>();
+            Dictionary<ushort, List<Boon>> presentPersonalBuffs = new Dictionary<ushort, List<Boon>>();
             if (_settings.PlayerBoonsAllProf)
             {
                 var playersById = new Dictionary<ushort, Player>();
                 foreach (var player in players)
                 {
-                    presentPersonnalBuffs[player.GetInstid()] = new List<Boon>();
+                    presentPersonalBuffs[player.GetInstid()] = new List<Boon>();
                     playersById.Add(player.GetInstid(), player);
                 }
                 // All class specific boons
@@ -784,7 +784,7 @@ namespace LuckParser.Controllers
                     {
                         if (classSpecificBoonsById.TryGetValue(item.SkillID, out Boon boon))
                         {
-                            presentPersonnalBuffs[player.GetInstid()].Add(boon);
+                            presentPersonalBuffs[player.GetInstid()].Add(boon);
                             classSpecificBoonsById.Remove(item.SkillID);
                         }
                     }
@@ -800,7 +800,7 @@ namespace LuckParser.Controllers
                 };
                 if(_settings.PlayerBoonsAllProf)
                 {
-                    boonListToTrack.Add(presentPersonnalBuffs[player.GetInstid()]);
+                    boonListToTrack.Add(presentPersonalBuffs[player.GetInstid()]);
                 }
                 player.SetBoonToTrack(boonListToTrack);
             }

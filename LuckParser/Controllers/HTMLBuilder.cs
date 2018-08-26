@@ -1035,7 +1035,7 @@ namespace LuckParser.Controllers
                         footerList.Add(new [] {
                             player.GetGroup().ToString(),
                             support.CondiCleanseTime.ToString(), support.CondiCleanse.ToString(),
-                            support.RessurrectTime.ToString(), support.Resurrects.ToString()//, support.allHeal.ToString()
+                            support.ResurrectTime.ToString(), support.Resurrects.ToString()//, support.allHeal.ToString()
                         });
                         sw.Write("<tr>");
                         {
@@ -1044,7 +1044,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.GetCharacter() + "</td>");
                             //sw.Write("<td>" + support.allHeal +"</td>");                                              
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.CondiCleanseTime + " seconds \">" + support.CondiCleanse + "</span>" + "</td>");//condicleanse                                                                                                                                                                   //defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.RessurrectTime + " seconds \">" + support.Resurrects + "</span>" + "</td>");//res
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.ResurrectTime + " seconds \">" + support.Resurrects + "</span>" + "</td>");//res
                         }
                         sw.Write("</tr>");
                     }

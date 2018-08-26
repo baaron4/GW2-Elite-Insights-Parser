@@ -675,7 +675,7 @@ namespace LuckParser.Controllers
                 sw.Write("<th>Name</th>");
                 sw.Write("<th><img src=\"" + GetLink("Crit") + "\" alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
                 sw.Write("<th><img src=\"" + GetLink("Scholar") + "\" alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + GetLink("SwS") + "\" alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("SwS") + "\" alt=\"SwS\" title=\"Percent time hits while moving\" height=\"18\" width=\"18\"></th>");
                 sw.Write("<th><img src=\"" + GetLink("Flank") + "\" alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
                 sw.Write("<th><img src=\"" + GetLink("Glance") + "\" alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
                 sw.Write("<th><img src=\"" + GetLink("Blinded") + "\" alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");

@@ -331,7 +331,7 @@ namespace LuckParser.Controllers
                 Statistics.FinalSupport support = _statistics.Support[player][phaseIndex];
 
                 WriteLine(new [] { player.GetGroup().ToString(), player.GetProf(), player.GetCharacter(),
-                support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(),support.Resurrects.ToString(),support.RessurrectTime.ToString() });
+                support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(),support.Resurrects.ToString(),support.ResurrectTime.ToString() });
                 count++;
             }
             while (count < 15)//so each graph has equal spacing
