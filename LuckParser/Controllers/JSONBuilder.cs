@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -42,66 +43,51 @@ namespace LuckParser.Controllers
         /*
          * Structs to get serialized into json
          */
-        private struct JSONLog
+        private struct JsonLog
         {
-            public struct Boss
+            public struct JsonBoss
             {
-                public string name;
-                public ushort id;
-                public int totalHealth;
-                public double finalHealth;
-                public double healthPercentBurned;
-                public ArrayList dps;
+                public string Name;
+                public ushort Id;
+                public int TotalHealth;
+                public double FinalHealth;
+                public double HealthPercentBurned;
+                public ArrayList Dps;
             }
 
-            public struct DPS
+            public struct JsonPlayer
             {
-                public int allDps;
-                public int allDamage;
-                public int allCondiDps;
-                public int allCondiDamage;
-                public int allPowerDps;
-                public int allPowerDamage;
-                public int bossDps;
-                public int bossDamage;
-                public int bossCondiDps;
-                public int bossCondiDamage;
-                public int bossPowerDps;
-                public int bossPowerDamage;
-                public int playerPowerDamage;
-                public int playerBossPowerDamage;
+                public string Character;
+                public string Account;
+                public int Condition;
+                public int Concentration;
+                public int Healing;
+                public int Toughness;
+                public int Group;
+                public string Profession;
+                public string[] Weapons;
+                public ArrayList Dps;
+                public ArrayList Stats;
+                public ArrayList Defenses;
             }
 
-            public struct Player
+            public struct JsonPhase
             {
-                public string character;
-                public string account;
-                public int condition;
-                public int concentration;
-                public int healing;
-                public int toughness;
-                public int group;
-                public string profession;
-                public string[] weapons;
-                public ArrayList dps;
+                public long Duration;
+                public string Name;
             }
 
-            public struct Phase
-            {
-                public long duration;
-                public string name;
-            }
-
-            public string eliteInsightsVersion;
-            public string arcVersion;
-            public string recordedBy;
-            public string timeStart;
-            public string timeEnd;
-            public string duration;
-            public bool success;
-            public Boss boss;
-            public ArrayList players;
-            public ArrayList phases;
+            public string EliteInsightsVersion;
+            public string ArcVersion;
+            public string RecordedBy;
+            public string TimeStart;
+            public string TimeEnd;
+            public string Duration;
+            public bool Success;
+            public JsonBoss Boss;
+            public ArrayList Players;
+            public ArrayList Phases;
+            public List<Point3D> StackCenterPositions;
         }
 
         /*
@@ -109,7 +95,7 @@ namespace LuckParser.Controllers
          */
         public void CreateJSON()
         {
-            var log = new JSONLog();
+            var log = new JsonLog();
 
             double fightDuration = _log.GetBossData().GetAwareDuration() / 1000.0;
             var duration = TimeSpan.FromSeconds(fightDuration);
@@ -119,13 +105,14 @@ namespace LuckParser.Controllers
                 durationString = duration.ToString("hh") + "h " + durationString;
             }
 
-            log.eliteInsightsVersion = Application.ProductVersion;
-            log.arcVersion = _log.GetLogData().GetBuildVersion();
-            log.recordedBy = _log.GetLogData().GetPOV().Split(':')[0].TrimEnd('\u0000');
-            log.timeStart = _log.GetLogData().GetLogStart();
-            log.timeEnd = _log.GetLogData().GetLogEnd();
-            log.duration = durationString;
-            log.success = _log.GetLogData().GetBosskill();
+            log.EliteInsightsVersion = Application.ProductVersion;
+            log.ArcVersion = _log.GetLogData().GetBuildVersion();
+            log.RecordedBy = _log.GetLogData().GetPOV().Split(':')[0].TrimEnd('\u0000');
+            log.TimeStart = _log.GetLogData().GetLogStart();
+            log.TimeEnd = _log.GetLogData().GetLogEnd();
+            log.Duration = durationString;
+            log.Success = _log.GetLogData().GetBosskill();
+            log.StackCenterPositions = _statistics.StackCenterPositions;
 
             log = SetBoss(log);
             log = SetPlayers(log);
@@ -138,97 +125,73 @@ namespace LuckParser.Controllers
             serializer.Serialize(writer, log);
         }
 
-        private JSONLog.DPS BuildDPS(Statistics.FinalDPS stats)
-        {
-            return new JSONLog.DPS
-            {
-                allDps = stats.AllDps,
-                allDamage = stats.AllDamage,
-                allCondiDps = stats.AllCondiDps,
-                allCondiDamage = stats.AllCondiDamage,
-                allPowerDps = stats.AllPowerDps,
-                allPowerDamage = stats.AllPowerDamage,
-                bossDps = stats.BossDps,
-                bossDamage = stats.BossDamage,
-                bossCondiDps = stats.BossCondiDps,
-                bossCondiDamage = stats.BossCondiDamage,
-                bossPowerDps = stats.BossPowerDps,
-                bossPowerDamage = stats.BossPowerDamage,
-                playerBossPowerDamage = stats.PlayerBossPowerDamage,
-                playerPowerDamage = stats.PlayerPowerDamage
-            };
-        }
 
-        private JSONLog SetBoss(JSONLog log)
+        private JsonLog SetBoss(JsonLog log)
         {
-            log.boss.id = _log.GetBossData().GetID();
-            log.boss.name = _log.GetBossData().GetName();
-            log.boss.totalHealth = _log.GetBossData().GetHealth();
+            log.Boss.Id = _log.GetBossData().GetID();
+            log.Boss.Name = _log.GetBossData().GetName();
+            log.Boss.TotalHealth = _log.GetBossData().GetHealth();
             int finalBossHealth = _log.GetBossData().GetHealthOverTime().Count > 0
                 ? _log.GetBossData().GetHealthOverTime().Last().Y
                 : 10000;
-            log.boss.finalHealth = _log.GetBossData().GetHealth() * (100.0 - finalBossHealth * 0.01);
-            log.boss.healthPercentBurned = 100.0 - finalBossHealth * 0.01;
+            log.Boss.FinalHealth = _log.GetBossData().GetHealth() * (100.0 - finalBossHealth * 0.01);
+            log.Boss.HealthPercentBurned = 100.0 - finalBossHealth * 0.01;
 
-            log.boss.dps = new ArrayList();
+            log.Boss.Dps = new ArrayList();
 
             for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
             {
-                log.boss.dps.Add(BuildDPS(_statistics.BossDps[phaseIndex]));
+                log.Boss.Dps.Add(_statistics.BossDps[phaseIndex]);
             }
 
             return log;
         }
 
-        private JSONLog SetPlayers(JSONLog log)
+        private JsonLog SetPlayers(JsonLog log)
         {
-            log.players = new ArrayList();
+            log.Players = new ArrayList();
 
             foreach (var player in _log.GetPlayerList())
             {
-                var currentPlayer = new JSONLog.Player
+                var currentPlayer = new JsonLog.JsonPlayer
                 {
-                    character = player.GetCharacter(),
-                    account = player.GetAccount(),
-                    condition = player.GetCondition(),
-                    concentration = player.GetConcentration(),
-                    healing = player.GetHealing(),
-                    toughness = player.GetToughness(),
-                    weapons = player.GetWeaponsArray(_log),
-                    group = player.GetGroup(),
-                    profession = player.GetProf()
+                    Character = player.GetCharacter(),
+                    Account = player.GetAccount(),
+                    Condition = player.GetCondition(),
+                    Concentration = player.GetConcentration(),
+                    Healing = player.GetHealing(),
+                    Toughness = player.GetToughness(),
+                    Weapons = player.GetWeaponsArray(_log),
+                    Group = player.GetGroup(),
+                    Profession = player.GetProf(),
+                    Dps = new ArrayList(),
+                    Stats = new ArrayList(),
+                    Defenses = new ArrayList()
                 };
 
-                currentPlayer = SetDPS(currentPlayer, player);
+                for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+                {
+                    currentPlayer.Dps.Add(_statistics.Dps[player][phaseIndex]);
+                    currentPlayer.Stats.Add(_statistics.Stats[player][phaseIndex]);
+                    currentPlayer.Defenses.Add(_statistics.Defenses[player][phaseIndex]);
+                }
 
-                log.players.Add(currentPlayer);
+                log.Players.Add(currentPlayer);
             }
 
             return log;
         }
 
-        private JSONLog.Player SetDPS(JSONLog.Player currentPlayer, Player player)
+        private JsonLog SetPhases(JsonLog log)
         {
-            currentPlayer.dps = new ArrayList();
-
-            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
-            {
-                currentPlayer.dps.Add(BuildDPS(_statistics.Dps[player][phaseIndex]));
-            }
-
-            return currentPlayer;
-        }
-
-        private JSONLog SetPhases(JSONLog log)
-        {
-            log.phases = new ArrayList();
+            log.Phases = new ArrayList();
 
             foreach (var phase in _statistics.Phases)
             {
-                log.phases.Add(new JSONLog.Phase
+                log.Phases.Add(new JsonLog.JsonPhase
                 {
-                    duration = phase.GetDuration(),
-                    name = phase.GetName()
+                    Duration = phase.GetDuration(),
+                    Name = phase.GetName()
                 });
             }
 
