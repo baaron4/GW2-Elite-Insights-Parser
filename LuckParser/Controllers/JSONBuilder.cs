@@ -39,6 +39,9 @@ namespace LuckParser.Controllers
             _statistics = statistics;
         }
 
+        /*
+         * Structs to get serialized into json
+         */
         private struct JSONLog
         {
             public struct Boss
@@ -100,7 +103,9 @@ namespace LuckParser.Controllers
             public ArrayList phases;
         }
 
-        //Creating JSON---------------------------------------------------------------------------------
+        /*
+         * Creating the JSON
+         */
         public void CreateJSON()
         {
             var log = new JSONLog();
@@ -121,6 +126,19 @@ namespace LuckParser.Controllers
             log.duration = durationString;
             log.success = _log.GetLogData().GetBosskill();
 
+            log = SetBoss(log);
+            log = SetPlayers(log);
+            log = SetPhases(log);
+
+            var serializer = new JsonSerializer();
+            serializer.NullValueHandling = NullValueHandling.Ignore;
+            var writer = new JsonTextWriter(_sw);
+            writer.Formatting = Formatting.Indented;
+            serializer.Serialize(writer, log);
+        }
+
+        private JSONLog SetBoss(JSONLog log)
+        {
             log.boss.id = _log.GetBossData().GetID();
             log.boss.name = _log.GetBossData().GetName();
             log.boss.totalHealth = _log.GetBossData().GetHealth();
@@ -130,14 +148,7 @@ namespace LuckParser.Controllers
             log.boss.finalHealth = _log.GetBossData().GetHealth() * (100.0 - finalBossHealth * 0.01);
             log.boss.healthPercentBurned = 100.0 - finalBossHealth * 0.01;
 
-            log = SetPlayers(log);
-            log = SetPhases(log);
-
-            var serializer = new JsonSerializer();
-            serializer.NullValueHandling = NullValueHandling.Ignore;
-            var writer = new JsonTextWriter(_sw);
-            writer.Formatting = Formatting.Indented;
-            serializer.Serialize(writer, log);
+            return log;
         }
 
         private JSONLog SetPlayers(JSONLog log)
