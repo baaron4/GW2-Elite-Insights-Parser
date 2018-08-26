@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -52,6 +53,7 @@ namespace LuckParser.Controllers
                 public int TotalHealth;
                 public double FinalHealth;
                 public double HealthPercentBurned;
+                public List<Point> HealthOverTime;
                 public Statistics.FinalDPS[] Dps;
             }
 
@@ -142,6 +144,7 @@ namespace LuckParser.Controllers
             log.Boss.FinalHealth = _log.GetBossData().GetHealth() * (100.0 - finalBossHealth * 0.01);
             log.Boss.HealthPercentBurned = 100.0 - finalBossHealth * 0.01;
             log.Boss.Dps = _statistics.BossDps;
+            log.Boss.HealthOverTime = _log.GetBossData().GetHealthOverTime();
 
             return log;
         }
