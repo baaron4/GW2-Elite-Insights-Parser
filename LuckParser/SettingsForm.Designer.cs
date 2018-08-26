@@ -126,7 +126,7 @@
             this.chkImpProfSpecBoons.Name = "chkImpProfSpecBoons";
             this.chkImpProfSpecBoons.Size = new System.Drawing.Size(188, 17);
             this.chkImpProfSpecBoons.TabIndex = 7;
-            this.chkImpProfSpecBoons.Text = "Compute Profession Speficic Buffs";
+            this.chkImpProfSpecBoons.Text = "Compute Profession Specific Buffs";
             this.chkImpProfSpecBoons.UseVisualStyleBackColor = true;
             this.chkImpProfSpecBoons.CheckedChanged += new System.EventHandler(this.ImportantProfessionSpecificBoonsCheckedChanged);
             // 

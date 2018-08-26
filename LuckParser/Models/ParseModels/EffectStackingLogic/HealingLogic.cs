@@ -3,7 +3,7 @@ using LuckParser.Models.DataModels;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class HealingLogic : StackingLogic
+    public class HealingLogic : QueueLogic
     {
         private struct CompareHealing
         {
@@ -30,30 +30,6 @@ namespace LuckParser.Models.ParseModels
         {
             CompareHealing comparator = new CompareHealing(log);
             stacks.Sort(comparator.Compare);        
-        }
-
-        public override bool StackEffect(ParsedLog log, BoonSimulator.BoonStackItem toAdd, List<BoonSimulator.BoonStackItem> stacks, List<BoonSimulationItem> simulation)
-        {
-            
-            for (int i = 1; i < stacks.Count; i++)
-            {
-                if (stacks[i].BoonDuration < toAdd.BoonDuration)
-                {
-                    long overstackValue = stacks[i].Overstack + stacks[i].BoonDuration;
-                    ushort srcValue = stacks[i].Src;
-                    for (int j = simulation.Count - 1; j >= 0; j--)
-                    {
-                        if (simulation[j].AddOverstack(srcValue, overstackValue))
-                        {
-                            break;
-                        }
-                    }
-                    stacks[i] = toAdd;
-                    Sort(log, stacks);
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }

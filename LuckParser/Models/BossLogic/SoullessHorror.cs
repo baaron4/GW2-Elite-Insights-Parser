@@ -70,7 +70,7 @@ namespace LuckParser.Models
 
         public override int IsCM(List<CombatItem> clist, int health)
         {
-            List<CombatItem> necrosis = clist.Where(x => x.GetSkillID() == 47414 && x.IsBuffremove() == ParseEnum.BuffRemove.None).ToList();
+            List<CombatItem> necrosis = clist.Where(x => x.SkillID == 47414 && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             if (necrosis.Count == 0)
             {
                 return 0;
@@ -79,7 +79,7 @@ namespace LuckParser.Models
             Dictionary<ushort, List<CombatItem>> splitNecrosis = new Dictionary<ushort, List<CombatItem>>();
             foreach (CombatItem c in necrosis)
             {
-                ushort inst = c.GetDstInstid();
+                ushort inst = c.DstInstid;
                 if (!splitNecrosis.ContainsKey(inst))
                 {
                     splitNecrosis.Add(inst, new List<CombatItem>());
@@ -92,7 +92,7 @@ namespace LuckParser.Models
             {
                 CombatItem cur = longestNecrosis[i];
                 CombatItem next = longestNecrosis[i + 1];
-                long timeDiff = next.GetTime() - cur.GetTime();
+                long timeDiff = next.Time - cur.Time;
                 if (timeDiff > 1000 && minDiff > timeDiff)
                 {
                     minDiff = timeDiff;
