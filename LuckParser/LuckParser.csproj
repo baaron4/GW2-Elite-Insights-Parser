@@ -133,6 +133,7 @@
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplay.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplayMap.cs" />
     <Compile Include="Models\ParseModels\EffectStackingLogic\HealingLogic.cs" />
+    <Compile Include="Models\ParseModels\EffectStackingLogic\ForceOverrideLogic.cs" />
     <Compile Include="Models\ParseModels\EffectStackingLogic\OverrideLogic.cs" />
     <Compile Include="Models\ParseModels\EffectStackingLogic\QueueLogic.cs" />
     <Compile Include="Models\ParseModels\EffectStackingLogic\StackingLogic.cs" />
