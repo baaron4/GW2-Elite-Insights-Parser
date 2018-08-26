@@ -51,6 +51,7 @@ namespace LuckParser.Controllers
                 public int totalHealth;
                 public double finalHealth;
                 public double healthPercentBurned;
+                public ArrayList dps;
             }
 
             public struct DPS
@@ -147,6 +148,31 @@ namespace LuckParser.Controllers
                 : 10000;
             log.boss.finalHealth = _log.GetBossData().GetHealth() * (100.0 - finalBossHealth * 0.01);
             log.boss.healthPercentBurned = 100.0 - finalBossHealth * 0.01;
+
+            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
+            {
+                var dpsStats = _statistics.BossDps[phaseIndex];
+
+                var dps = new JSONLog.DPS
+                {
+                    allDps = dpsStats.AllDps,
+                    allDamage = dpsStats.AllDamage,
+                    allCondiDps = dpsStats.AllCondiDps,
+                    allCondiDamage = dpsStats.AllCondiDamage,
+                    allPowerDps = dpsStats.AllPowerDps,
+                    allPowerDamage = dpsStats.AllPowerDamage,
+                    bossDps = dpsStats.BossDps,
+                    bossDamage = dpsStats.BossDamage,
+                    bossCondiDps = dpsStats.BossCondiDps,
+                    bossCondiDamage = dpsStats.BossCondiDamage,
+                    bossPowerDps = dpsStats.BossPowerDps,
+                    bossPowerDamage = dpsStats.BossPowerDamage,
+                    playerBossPowerDamage = dpsStats.PlayerBossPowerDamage,
+                    playerPowerDamage = dpsStats.PlayerPowerDamage
+                };
+
+                log.boss.dps.Add(dps);
+            }
 
             return log;
         }
