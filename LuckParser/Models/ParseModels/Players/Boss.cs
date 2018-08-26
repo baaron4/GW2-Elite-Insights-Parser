@@ -196,8 +196,7 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (AgentItem a in log.GetAgentData().GetNPCAgentList().Where(x => x.GetID() == m.GetSkill()))
                 {
-                    AbstractMasterPlayer amp = null;
-                    if (!regroupedMobs.TryGetValue(a.GetID(), out amp))
+                    if (!regroupedMobs.TryGetValue(a.GetID(), out AbstractMasterPlayer amp))
                     {
                         amp = new DummyPlayer(a);
                         regroupedMobs.Add(a.GetID(), amp);
