@@ -52,7 +52,7 @@ namespace LuckParser.Controllers
                 public int TotalHealth;
                 public double FinalHealth;
                 public double HealthPercentBurned;
-                public ArrayList Dps;
+                public Statistics.FinalDPS[] Dps;
             }
 
             public struct JsonPlayer
@@ -66,10 +66,10 @@ namespace LuckParser.Controllers
                 public int Group;
                 public string Profession;
                 public string[] Weapons;
-                public ArrayList Dps;
-                public ArrayList Stats;
-                public ArrayList Defenses;
-                public ArrayList Support;
+                public Statistics.FinalDPS[] Dps;
+                public Statistics.FinalStats[] Stats;
+                public Statistics.FinalDefenses[] Defenses;
+                public Statistics.FinalSupport[] Support;
             }
 
             public struct JsonPhase
@@ -137,13 +137,7 @@ namespace LuckParser.Controllers
                 : 10000;
             log.Boss.FinalHealth = _log.GetBossData().GetHealth() * (100.0 - finalBossHealth * 0.01);
             log.Boss.HealthPercentBurned = 100.0 - finalBossHealth * 0.01;
-
-            log.Boss.Dps = new ArrayList();
-
-            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
-            {
-                log.Boss.Dps.Add(_statistics.BossDps[phaseIndex]);
-            }
+            log.Boss.Dps = _statistics.BossDps;
 
             return log;
         }
@@ -165,18 +159,18 @@ namespace LuckParser.Controllers
                     Weapons = player.GetWeaponsArray(_log),
                     Group = player.GetGroup(),
                     Profession = player.GetProf(),
-                    Dps = new ArrayList(),
-                    Stats = new ArrayList(),
-                    Defenses = new ArrayList(),
-                    Support = new ArrayList()
+                    Dps = new Statistics.FinalDPS[_statistics.Phases.Count],
+                    Stats = new Statistics.FinalStats[_statistics.Phases.Count],
+                    Defenses = new Statistics.FinalDefenses[_statistics.Phases.Count],
+                    Support = new Statistics.FinalSupport[_statistics.Phases.Count]
                 };
 
                 for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
                 {
-                    currentPlayer.Dps.Add(_statistics.Dps[player][phaseIndex]);
-                    currentPlayer.Stats.Add(_statistics.Stats[player][phaseIndex]);
-                    currentPlayer.Defenses.Add(_statistics.Defenses[player][phaseIndex]);
-                    currentPlayer.Support.Add(_statistics.Support[player][phaseIndex]);
+                    currentPlayer.Dps[phaseIndex] = _statistics.Dps[player][phaseIndex];
+                    currentPlayer.Stats[phaseIndex] = _statistics.Stats[player][phaseIndex];
+                    currentPlayer.Defenses[phaseIndex] = _statistics.Defenses[player][phaseIndex];
+                    currentPlayer.Support[phaseIndex] = _statistics.Support[player][phaseIndex];
                 }
 
                 log.Players.Add(currentPlayer);
