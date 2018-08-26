@@ -25,7 +25,7 @@ namespace LuckParser.Models.ParseModels
         
         private readonly string _inGameName;
         private readonly string _shortName;
-        private readonly string _fullName;
+        private readonly string _description;
         private readonly string _plotlyName;
         private readonly MechType _mechType;
         private readonly long _skillId;
@@ -43,13 +43,13 @@ namespace LuckParser.Models.ParseModels
             _bossid = bossid;
             _plotlyShape = plotlyShape;
             _shortName = shortName.Replace("\"", " ").Replace("'", " ");
-            _fullName = null;
+            _description = null;
             _plotlyName = null;
             _internalCoolDown = internalCoolDown;
             _condition = condition;
         }
 
-        public Mechanic(long skillId,string inGameName, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string shortName, string fullName, string plotlyName, int internalCoolDown, SpecialCondition condition = null)
+        public Mechanic(long skillId,string inGameName, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string shortName, string description, string plotlyName, int internalCoolDown, SpecialCondition condition = null)
         {
             _inGameName = inGameName.Replace("\"", " ").Replace("'", " ");
             _skillId = skillId;
@@ -57,7 +57,7 @@ namespace LuckParser.Models.ParseModels
             _bossid = bossid;
             _plotlyShape = plotlyShape;
             _shortName = shortName.Replace("\"", " ").Replace("'", " ");
-            _fullName = fullName.Replace("\"", " ").Replace("'", " ");
+            _description = description.Replace("\"", " ").Replace("'", " ");
             _plotlyName = plotlyName.Replace("\"", " ").Replace("'", " ");
             _internalCoolDown = internalCoolDown;
             _condition = condition;
@@ -91,9 +91,9 @@ namespace LuckParser.Models.ParseModels
         {
             return _shortName;
         }
-        public string GetFullName()
+        public string GetDescription()
         {
-            return _fullName ?? _inGameName;
+            return _description ?? _inGameName;
         }
         public string GetPlotlyName()
         {
