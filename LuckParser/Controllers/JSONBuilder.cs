@@ -70,6 +70,10 @@ namespace LuckParser.Controllers
                 public Statistics.FinalStats[] Stats;
                 public Statistics.FinalDefenses[] Defenses;
                 public Statistics.FinalSupport[] Support;
+                public Dictionary<long, Statistics.FinalBoonUptime>[] SelfBoons;
+                public Dictionary<long, Statistics.FinalBoonUptime>[] GroupBoons;
+                public Dictionary<long, Statistics.FinalBoonUptime>[] OffGroupBoons;
+                public Dictionary<long, Statistics.FinalBoonUptime>[] SquadBoons;
             }
 
             public struct JsonPhase
@@ -162,7 +166,11 @@ namespace LuckParser.Controllers
                     Dps = new Statistics.FinalDPS[_statistics.Phases.Count],
                     Stats = new Statistics.FinalStats[_statistics.Phases.Count],
                     Defenses = new Statistics.FinalDefenses[_statistics.Phases.Count],
-                    Support = new Statistics.FinalSupport[_statistics.Phases.Count]
+                    Support = new Statistics.FinalSupport[_statistics.Phases.Count],
+                    SelfBoons = new Dictionary<long, Statistics.FinalBoonUptime>[_statistics.Phases.Count],
+                    GroupBoons = new Dictionary<long, Statistics.FinalBoonUptime>[_statistics.Phases.Count],
+                    OffGroupBoons = new Dictionary<long, Statistics.FinalBoonUptime>[_statistics.Phases.Count],
+                    SquadBoons = new Dictionary<long, Statistics.FinalBoonUptime>[_statistics.Phases.Count]
                 };
 
                 for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
@@ -171,6 +179,10 @@ namespace LuckParser.Controllers
                     currentPlayer.Stats[phaseIndex] = _statistics.Stats[player][phaseIndex];
                     currentPlayer.Defenses[phaseIndex] = _statistics.Defenses[player][phaseIndex];
                     currentPlayer.Support[phaseIndex] = _statistics.Support[player][phaseIndex];
+                    currentPlayer.SelfBoons[phaseIndex] = _statistics.SelfBoons[player][phaseIndex];
+                    currentPlayer.GroupBoons[phaseIndex] = _statistics.GroupBoons[player][phaseIndex];
+                    currentPlayer.OffGroupBoons[phaseIndex] = _statistics.OffGroupBoons[player][phaseIndex];
+                    currentPlayer.SquadBoons[phaseIndex] = _statistics.SquadBoons[player][phaseIndex];
                 }
 
                 log.Players.Add(currentPlayer);
