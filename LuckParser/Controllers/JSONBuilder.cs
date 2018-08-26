@@ -138,6 +138,27 @@ namespace LuckParser.Controllers
             serializer.Serialize(writer, log);
         }
 
+        private JSONLog.DPS BuildDPS(Statistics.FinalDPS stats)
+        {
+            return new JSONLog.DPS
+            {
+                allDps = stats.AllDps,
+                allDamage = stats.AllDamage,
+                allCondiDps = stats.AllCondiDps,
+                allCondiDamage = stats.AllCondiDamage,
+                allPowerDps = stats.AllPowerDps,
+                allPowerDamage = stats.AllPowerDamage,
+                bossDps = stats.BossDps,
+                bossDamage = stats.BossDamage,
+                bossCondiDps = stats.BossCondiDps,
+                bossCondiDamage = stats.BossCondiDamage,
+                bossPowerDps = stats.BossPowerDps,
+                bossPowerDamage = stats.BossPowerDamage,
+                playerBossPowerDamage = stats.PlayerBossPowerDamage,
+                playerPowerDamage = stats.PlayerPowerDamage
+            };
+        }
+
         private JSONLog SetBoss(JSONLog log)
         {
             log.boss.id = _log.GetBossData().GetID();
@@ -151,27 +172,7 @@ namespace LuckParser.Controllers
 
             for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
             {
-                var dpsStats = _statistics.BossDps[phaseIndex];
-
-                var dps = new JSONLog.DPS
-                {
-                    allDps = dpsStats.AllDps,
-                    allDamage = dpsStats.AllDamage,
-                    allCondiDps = dpsStats.AllCondiDps,
-                    allCondiDamage = dpsStats.AllCondiDamage,
-                    allPowerDps = dpsStats.AllPowerDps,
-                    allPowerDamage = dpsStats.AllPowerDamage,
-                    bossDps = dpsStats.BossDps,
-                    bossDamage = dpsStats.BossDamage,
-                    bossCondiDps = dpsStats.BossCondiDps,
-                    bossCondiDamage = dpsStats.BossCondiDamage,
-                    bossPowerDps = dpsStats.BossPowerDps,
-                    bossPowerDamage = dpsStats.BossPowerDamage,
-                    playerBossPowerDamage = dpsStats.PlayerBossPowerDamage,
-                    playerPowerDamage = dpsStats.PlayerPowerDamage
-                };
-
-                log.boss.dps.Add(dps);
+                log.boss.dps.Add(BuildDPS(_statistics.BossDps[phaseIndex]));
             }
 
             return log;
@@ -210,27 +211,7 @@ namespace LuckParser.Controllers
 
             for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
             {
-                var dpsStats = _statistics.Dps[player][phaseIndex];
-
-                var dps = new JSONLog.DPS
-                {
-                    allDps = dpsStats.AllDps,
-                    allDamage = dpsStats.AllDamage,
-                    allCondiDps = dpsStats.AllCondiDps,
-                    allCondiDamage = dpsStats.AllCondiDamage,
-                    allPowerDps = dpsStats.AllPowerDps,
-                    allPowerDamage = dpsStats.AllPowerDamage,
-                    bossDps = dpsStats.BossDps,
-                    bossDamage = dpsStats.BossDamage,
-                    bossCondiDps = dpsStats.BossCondiDps,
-                    bossCondiDamage = dpsStats.BossCondiDamage,
-                    bossPowerDps = dpsStats.BossPowerDps,
-                    bossPowerDamage = dpsStats.BossPowerDamage,
-                    playerBossPowerDamage = dpsStats.PlayerBossPowerDamage,
-                    playerPowerDamage = dpsStats.PlayerPowerDamage
-                };
-
-                currentPlayer.dps.Add(dps);
+                currentPlayer.dps.Add(BuildDPS(_statistics.Dps[player][phaseIndex]));
             }
 
             return currentPlayer;
