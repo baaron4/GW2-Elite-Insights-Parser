@@ -35,7 +35,7 @@ namespace LuckParser.Controllers
         }
 
         /// <summary>
-        /// Stop flashing. The system restores the window to its original stae.
+        /// Stop flashing. The system restores the window to its original state.
         /// </summary>
         private const uint FlashWStop = 0;
 
@@ -67,7 +67,7 @@ namespace LuckParser.Controllers
 
 
         /// <summary>
-        /// Flash the spacified Window (Form) until it recieves focus.
+        /// Flash the specified Window (Form) until it receives focus.
         /// </summary>
         /// <param name="form">The Form (Window) to Flash.</param>
         /// <returns></returns>
