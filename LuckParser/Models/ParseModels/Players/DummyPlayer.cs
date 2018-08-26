@@ -14,32 +14,32 @@ namespace LuckParser.Models.ParseModels
 
         public void AddMechanics(ParsedLog log)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         protected override void SetCastLogs(ParsedLog log)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         protected override void SetCombatReplayIcon(ParsedLog log)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         protected override void SetDamageLogs(ParsedLog log)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         protected override void SetDamagetakenLogs(ParsedLog log)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
     }
 }
