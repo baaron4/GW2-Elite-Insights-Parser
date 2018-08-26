@@ -23,64 +23,64 @@ namespace LuckParser.Models.ParseModels
         public delegate bool SpecialCondition(long value);
         // Fields
         
-        private string name;
-        private string altname;
-        private MechType mechType;
-        private long skill_id;
-        private ParseEnum.BossIDS bossid;
-        private string plotlyShape;
-        private int internalCoolDown;
-        private SpecialCondition condition;
+        private readonly string _name;
+        private readonly string _altname;
+        private readonly MechType _mechType;
+        private readonly long _skillId;
+        private readonly ParseEnum.BossIDS _bossid;
+        private readonly string _plotlyShape;
+        private readonly int _internalCoolDown;
+        private readonly SpecialCondition _condition;
 
         
-        public Mechanic(long skill_id,string name, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string altname, int internalCoolDown, SpecialCondition condition = null)
+        public Mechanic(long skillId,string name, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string altname, int internalCoolDown, SpecialCondition condition = null)
         {
-            this.name = name;
-            this.skill_id = skill_id;
-            this.mechType = mechtype;
-            this.bossid = bossid;
-            this.plotlyShape = plotlyShape;
-            this.altname = altname;
-            this.internalCoolDown = internalCoolDown;
-            this.condition = condition;
+            _name = name;
+            _skillId = skillId;
+            _mechType = mechtype;
+            _bossid = bossid;
+            _plotlyShape = plotlyShape;
+            _altname = altname;
+            _internalCoolDown = internalCoolDown;
+            _condition = condition;
         }
         //getters
         public SpecialCondition GetSpecialCondition()
         {
-            return condition;
+            return _condition;
         }
         public string GetName()
         {
-            return name;
+            return _name;
         }
         public long GetSkill()
         {
-            return skill_id;
+            return _skillId;
         }
         public MechType GetMechType()
         {
-            return mechType;
+            return _mechType;
         }
         public ParseEnum.BossIDS GetBossID() {
-            return bossid;
+            return _bossid;
         }
 
         public string GetPlotly()
         {
-            return plotlyShape;
+            return _plotlyShape;
         }
         public string GetAltName()
         {
-            return altname;
+            return _altname;
         }
         public int GetICD()
         {
-            return internalCoolDown;
+            return _internalCoolDown;
         }
 
         public bool IsEnemyMechanic()
         {
-            return mechType == MechType.EnemyBoon || mechType == MechType.EnemyBoonStrip || mechType == MechType.EnemyCastEnd || mechType == MechType.EnemyCastStart || mechType == MechType.Spawn;
+            return _mechType == MechType.EnemyBoon || _mechType == MechType.EnemyBoonStrip || _mechType == MechType.EnemyCastEnd || _mechType == MechType.EnemyCastStart || _mechType == MechType.Spawn;
         }      
     }
 }

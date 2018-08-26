@@ -6,61 +6,55 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSimulationItemDuration: BoonSimulationItem
     {
-        private ushort src;
-        private long overstack;
+        private readonly ushort _src;
+        private long _overstack;
 
-        public BoonSimulationItemDuration(long start, long duration, ushort src, long overstack) : base(start, duration)
+        public BoonSimulationItemDuration(BoonStackItem other) : base(other.Start, other.BoonDuration)
         {
-            this.src = src;
-            this.overstack = overstack;
+            _src = other.Src;
+            _overstack = other.Overstack;
         }
 
-        public BoonSimulationItemDuration(BoonStackItem other) : base(other.start, other.boon_duration)
+        public override long GetDuration(ushort src, long start = 0, long end = 0)
         {
-            this.src = other.src;
-            this.overstack = other.overstack;
+            return GetItemDuration(start, end);
+        }
+        public override void SetEnd(long end)
+        {
+            Duration = Math.Min(Math.Max(end - Start, 0),Duration);
         }
 
-        public override long getDuration(ushort src, long start = 0, long end = 0)
-        {
-            return getItemDuration(start, end);
-        }
-        public override void setEnd(long end)
-        {
-            this.duration = Math.Min(Math.Max(end - this.start, 0),duration);
-        }
-
-        public override List<ushort> getSrc()
+        public override List<ushort> GetSrc()
         {
             List<ushort> res = new List<ushort>
             {
-                src
+                _src
             };
             return res;
         }
 
-        public override int getStack(long end)
+        public override int GetStack(long end)
         {
             return 1;
         }
 
-        public override long getOverstack(ushort src, long start = 0, long end = 0)
+        public override long GetOverstack(ushort src, long start = 0, long end = 0)
         {
-            if (end > 0 && duration > 0)
+            if (end > 0 && Duration > 0)
             {
-                long dur = getItemDuration(start, end);
-                return (long)Math.Round((double)dur / duration * overstack);
+                long dur = GetItemDuration(start, end);
+                return (long)Math.Round((double)dur / Duration * _overstack);
             }
-            return overstack;
+            return _overstack;
         }
 
-        public override bool addOverstack(ushort src, long overstack)
+        public override bool AddOverstack(ushort src, long overstack)
         {
-            if (this.src != src || duration == 0)
+            if (_src != src || Duration == 0)
             {
                 return false;
             }
-            this.overstack += overstack;
+            _overstack += overstack;
             return true;
         }
     }

@@ -2,18 +2,15 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
     public class MursaatOverseer : BossLogic
     {
-        public MursaatOverseer() : base()
+        public MursaatOverseer()
         {
-            mode = ParseMode.Raid;
-            mechanicList.AddRange(new List<Mechanic>()
+            Mode = ParseMode.Raid;
+            MechanicList.AddRange(new List<Mechanic>()
             {
             new Mechanic(37677, "Soldier's Aura", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MursaatOverseer, "symbol:'circle-open',color:'rgb(255,0,0)',", "Jade",0), // Jade Soldier's Aura hit, Jade Aura
             new Mechanic(37788, "Jade Explosion", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MursaatOverseer, "symbol:'circle',color:'rgb(255,0,0)',", "JExpl",0), // Jade Soldier's Death Explosion, Jade Explosion
@@ -25,7 +22,7 @@ namespace LuckParser.Models
             });
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/lT1FW2r.png",
                             Tuple.Create(889, 889),
@@ -34,7 +31,7 @@ namespace LuckParser.Models
                             Tuple.Create(11774, 4480, 14078, 5376));
         }      
 
-        public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
                     {
@@ -43,12 +40,12 @@ namespace LuckParser.Models
             return ids;
         }
 
-        public override int isCM(List<CombatItem> clist, int health)
+        public override int IsCM(List<CombatItem> clist, int health)
         {
             return (health > 25e6) ? 1 : 0;
         }
 
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://i.imgur.com/5LNiw4Y.png";
         }

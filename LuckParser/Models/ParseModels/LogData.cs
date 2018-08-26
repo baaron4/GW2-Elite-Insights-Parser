@@ -5,75 +5,75 @@ namespace LuckParser.Models.ParseModels
     public class LogData
     {
         // Fields
-        private String build_version;
-        private String pov = "N/A";
-        private String log_start = "yyyy-MM-dd HH:mm:ss z";
-        private String log_end = "yyyy-MM-dd HH:mm:ss z";
-        private bool boss_kill = false;
+        private readonly String _buildVersion;
+        private String _pov = "N/A";
+        private String _logStart = "yyyy-MM-dd HH:mm:ss z";
+        private String _logEnd = "yyyy-MM-dd HH:mm:ss z";
+        private bool _bossKill;
        // private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
         // Constructors
-        public LogData(String build_version)
+        public LogData(String buildVersion)
         {
-            this.build_version = build_version;
+            _buildVersion = buildVersion;
            // this.sdf.setTimeZone(TimeZone.getDefault());
         }
 
         // Public Methods
-        public String[] toStringArray()
+        public String[] ToStringArray()
         {
             String[] array = new String[4];
-            array[0] = build_version.ToString();
-            array[1] = pov.ToString();
-            array[2] = log_start.ToString();
-            array[3] = log_end.ToString();
+            array[0] = _buildVersion;
+            array[1] = _pov;
+            array[2] = _logStart;
+            array[3] = _logEnd;
             return array;
         }
 
         // Getters
-        public String getBuildVersion()
+        public String GetBuildVersion()
         {
-            return build_version;
+            return _buildVersion;
         }
 
-        public String getPOV()
+        public String GetPOV()
         {
-            return pov;
+            return _pov;
         }
 
-        public String getLogStart()
+        public String GetLogStart()
         {
-            return log_start;
+            return _logStart;
         }
 
-        public String getLogEnd()
+        public String GetLogEnd()
         {
-            return log_end;
+            return _logEnd;
         }
-        public bool getBosskill() {
-            return boss_kill;
+        public bool GetBosskill() {
+            return _bossKill;
         }
         // Setters
-        public void setPOV(String pov)
+        public void SetPOV(String pov)
         {
-            this.pov = pov.Substring(0, pov.LastIndexOf('\0'));
+            _pov = pov.Substring(0, pov.LastIndexOf('\0'));
         }
 
-        public void setLogStart(long unix_seconds)
+        public void SetLogStart(long unixSeconds)
         {
-            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            dtDateTime = dtDateTime.AddSeconds(unix_seconds).ToLocalTime();
-            this.log_start = dtDateTime.ToString("yyyy-MM-dd HH:mm:ss z");//sdf.format(new Date(unix_seconds * 1000L));
+            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixSeconds).ToLocalTime();
+            _logStart = dtDateTime.ToString("yyyy-MM-dd HH:mm:ss z");
         }
 
-        public void setLogEnd(long unix_seconds)
+        public void SetLogEnd(long unixSeconds)
         {
-            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            dtDateTime = dtDateTime.AddSeconds(unix_seconds).ToLocalTime();
-            this.log_end = dtDateTime.ToString("yyyy-MM-dd HH:mm:ss z"); //sdf.format(new Date(unix_seconds * 1000L));
+            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixSeconds).ToLocalTime();
+            _logEnd = dtDateTime.ToString("yyyy-MM-dd HH:mm:ss z");
         }
-        public void setBossKill(bool killed) {
-            boss_kill = killed;
+        public void SetBossKill(bool killed) {
+            _bossKill = killed;
         }
     }
 }

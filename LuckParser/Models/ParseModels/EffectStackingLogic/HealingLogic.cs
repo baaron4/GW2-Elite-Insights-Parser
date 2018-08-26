@@ -1,63 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using LuckParser.Models.DataModels;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class HealingLogic : StackingLogic
+    public class HealingLogic : QueueLogic
     {
-        protected struct CompareHealing
+        private struct CompareHealing
         {
-            private ParsedLog log;
+            private readonly ParsedLog _log;
 
             public CompareHealing(ParsedLog log)
             {
-                this.log = log;
+                _log = log;
             }
 
-            public int compare(BoonSimulator.BoonStackItem x, BoonSimulator.BoonStackItem y)
+            public int Compare(BoonSimulator.BoonStackItem x, BoonSimulator.BoonStackItem y)
             {
-                List<Player> players = log.getPlayerList();
-                Player a = players.Find(p => p.getInstid() == x.src);
-                Player b = players.Find(p => p.getInstid() == y.src);
+                List<Player> players = _log.GetPlayerList();
+                Player a = players.Find(p => p.GetInstid() == x.Src);
+                Player b = players.Find(p => p.GetInstid() == y.Src);
                 if (a == null || b == null)
                 {
                     return 0;
                 }
-                return a.getHealing() < b.getHealing() ? 1 : -1;
+                return a.GetHealing() < b.GetHealing() ? 1 : -1;
             }
         }
-        public override void sort(ParsedLog log, List<BoonSimulator.BoonStackItem> stacks)
+        public override void Sort(ParsedLog log, List<BoonSimulator.BoonStackItem> stacks)
         {
             CompareHealing comparator = new CompareHealing(log);
-            stacks.Sort(comparator.compare);        
-        }
-
-        public override bool stackEffect(ParsedLog log, BoonSimulator.BoonStackItem toAdd, List<BoonSimulator.BoonStackItem> stacks, List<BoonSimulationItem> simulation)
-        {
-            
-            for (int i = 1; i < stacks.Count; i++)
-            {
-                if (stacks[i].boon_duration < toAdd.boon_duration)
-                {
-                    long overstackValue = stacks[i].overstack + stacks[i].boon_duration;
-                    ushort srcValue = stacks[i].src;
-                    for (int j = simulation.Count - 1; j >= 0; j--)
-                    {
-                        if (simulation[j].addOverstack(srcValue, overstackValue))
-                        {
-                            break;
-                        }
-                    }
-                    stacks[i] = toAdd;
-                    sort(log, stacks);
-                    return true;
-                }
-            }
-            return false;
+            stacks.Sort(comparator.Compare);        
         }
     }
 }

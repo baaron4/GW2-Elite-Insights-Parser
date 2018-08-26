@@ -5,42 +5,42 @@ namespace LuckParser.Models.ParseModels
     public class BoonMap : Dictionary<long, List<BoonLog>>
     {
         // Constructors
-        public BoonMap() : base()
+        public BoonMap()
         {
         }
-        public BoonMap(Boon boon): base()
+        public BoonMap(Boon boon)
         {
-            this[boon.getID()] = new List<BoonLog>();
+            this[boon.GetID()] = new List<BoonLog>();
         }
 
-        public BoonMap(List<Boon> boons) : base()
+        public BoonMap(List<Boon> boons)
         {
             foreach (Boon boon in boons)
             {
-                this[boon.getID()] = new List<BoonLog>();
+                this[boon.GetID()] = new List<BoonLog>();
             }
         }
 
 
-        public void add(List<Boon> boons)
+        public void Add(List<Boon> boons)
         {
             foreach (Boon boon in boons)
             {
-                if (ContainsKey(boon.getID()))
+                if (ContainsKey(boon.GetID()))
                 {
                     continue;
                 }
-                this[boon.getID()] = new List<BoonLog>();
+                this[boon.GetID()] = new List<BoonLog>();
             }
         }
 
-        public void add(Boon boon)
+        public void Add(Boon boon)
         {
-            if (ContainsKey(boon.getID()))
+            if (ContainsKey(boon.GetID()))
             {
                 return;
             }
-            this[boon.getID()] = new List<BoonLog>();
+            this[boon.GetID()] = new List<BoonLog>();
         }
         
     }

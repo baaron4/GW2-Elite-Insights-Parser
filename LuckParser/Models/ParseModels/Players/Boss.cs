@@ -1,6 +1,4 @@
-﻿using LuckParser.Controllers;
-using LuckParser.Models.DataModels;
-using System;
+﻿using LuckParser.Models.DataModels;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,56 +11,56 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        private List<PhaseData> phases = new List<PhaseData>();
-        private List<long> phaseData = new List<long>();
-        private CombatReplayMap map = null;
-        private List<Mob> thrashMobs = new List<Mob>();
+        private List<PhaseData> _phases = new List<PhaseData>();
+        private readonly List<long> _phaseData = new List<long>();
+        private CombatReplayMap _map;
+        private readonly List<Mob> _thrashMobs = new List<Mob>();
 
-        public List<PhaseData> getPhases(ParsedLog log, bool getAllPhases)
+        public List<PhaseData> GetPhases(ParsedLog log, bool getAllPhases)
         {
 
-            if (phases.Count == 0)
+            if (_phases.Count == 0)
             {
-                long fight_dur = log.getBossData().getAwareDuration();
+                long fightDuration = log.GetBossData().GetAwareDuration();
                 if (!getAllPhases)
                 {
-                    phases.Add(new PhaseData(0, fight_dur));
-                    phases[0].setName("Full Fight");
-                    return phases;
+                    _phases.Add(new PhaseData(0, fightDuration));
+                    _phases[0].SetName("Full Fight");
+                    return _phases;
                 }
-                getCastLogs(log, 0, fight_dur);
-                phases = log.getBossData().getBossBehavior().getPhases(this, log, cast_logs);
+                GetCastLogs(log, 0, fightDuration);
+                _phases = log.GetBossData().GetBossBehavior().GetPhases(this, log, CastLogs);
             }
-            return phases;
+            return _phases;
         }
 
-        public void addPhaseData(long data)
+        public void AddPhaseData(long data)
         {
-            phaseData.Add(data);
+            _phaseData.Add(data);
         }
 
-        public List<long> getPhaseData()
+        public List<long> GetPhaseData()
         {
-            return phaseData;
+            return _phaseData;
         }
 
-        public CombatReplayMap getCombatMap(ParsedLog log)
+        public CombatReplayMap GetCombatMap(ParsedLog log)
         {
-            if (map == null)
+            if (_map == null)
             {
-                map = log.getBossData().getBossBehavior().getCombatMap();
+                _map = log.GetBossData().GetBossBehavior().GetCombatMap();
             }
-            return map;
+            return _map;
         }
 
-        public List<Mob> getThrashMobs()
+        public List<Mob> GetThrashMobs()
         {
-            return thrashMobs;
+            return _thrashMobs;
         }
 
         // Private Methods
 
-        protected override void setDamagetakenLogs(ParsedLog log)
+        protected override void SetDamagetakenLogs(ParsedLog log)
         {
             // nothing to do
             /*long time_start = log.getBossData().getFirstAware();
@@ -79,67 +77,67 @@ namespace LuckParser.Models.ParseModels
             }*/
         }
 
-        protected override void setAdditionalCombatReplayData(ParsedLog log, int pollingRate)
+        protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
-            List<ParseEnum.ThrashIDS> ids = log.getBossData().getBossBehavior().getAdditionalData(replay, getCastLogs(log, 0, log.getBossData().getAwareDuration()), log);
-            List<AgentItem> aList = log.getAgentData().getNPCAgentList().Where(x => ids.Contains(ParseEnum.getThrashIDS(x.getID()))).ToList();
+            List<ParseEnum.ThrashIDS> ids = log.GetBossData().GetBossBehavior().GetAdditionalData(Replay, GetCastLogs(log, 0, log.GetBossData().GetAwareDuration()), log);
+            List<AgentItem> aList = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.GetID()))).ToList();
             foreach (AgentItem a in aList)
             {
                 Mob mob = new Mob(a);
-                mob.initCombatReplay(log, pollingRate, true, false);
-                thrashMobs.Add(mob);
+                mob.InitCombatReplay(log, pollingRate, true, false);
+                _thrashMobs.Add(mob);
             }
         }
 
-        protected override void setCombatReplayIcon(ParsedLog log)
+        protected override void SetCombatReplayIcon(ParsedLog log)
         {
-            replay.setIcon(log.getBossData().getBossBehavior().getReplayIcon());
+            Replay.SetIcon(log.GetBossData().GetBossBehavior().GetReplayIcon());
         }
 
-        public override void addMechanics(ParsedLog log)
+        public void AddMechanics(ParsedLog log)
         {
-            MechanicData mech_data = log.getMechanicData();
-            BossData boss_data = log.getBossData();
-            List<Mechanic> bossMechanics = boss_data.getBossBehavior().getMechanics();
+            MechanicData mechData = log.GetMechanicData();
+            BossData bossData = log.GetBossData();
+            List<Mechanic> bossMechanics = bossData.GetBossBehavior().GetMechanics();
             // Boons
             List<Mechanic> enemyBoons = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon || x.GetMechType() == Mechanic.MechType.EnemyBoonStrip).ToList();
             foreach (Mechanic m in enemyBoons)
             {
                 Mechanic.SpecialCondition condition = m.GetSpecialCondition();
-                foreach (CombatItem c in log.getBoonData())
+                foreach (CombatItem c in log.GetBoonData())
                 {
-                    if (m.GetSkill() == c.getSkillID())
+                    if (m.GetSkill() == c.SkillID)
                     {
-                        if (condition != null && !condition(c.getValue()))
+                        if (condition != null && !condition(c.Value))
                         {
                             continue;
                         }
                         AbstractMasterPlayer amp = null;
-                        if (m.GetMechType() == Mechanic.MechType.EnemyBoon && c.isBuffremove() == ParseEnum.BuffRemove.None)
+                        if (m.GetMechType() == Mechanic.MechType.EnemyBoon && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                         {
-                            if (c.getDstInstid() == boss_data.getInstid())
+                            if (c.DstInstid == bossData.GetInstid())
                             {
                                 amp = this;
                             }
                             else
                             {
-                                amp = new Mob(log.getAgentData().GetAgent(c.getDstAgent()));
+                                amp = new Mob(log.GetAgentData().GetAgent(c.DstAgent));
                             }
-                        } else if (m.GetMechType() == Mechanic.MechType.EnemyBoonStrip && c.isBuffremove() == ParseEnum.BuffRemove.Manual)
+                        } else if (m.GetMechType() == Mechanic.MechType.EnemyBoonStrip && c.IsBuffRemove == ParseEnum.BuffRemove.Manual)
                         {
-                            if (c.getSrcInstid() == boss_data.getInstid())
+                            if (c.SrcInstid == bossData.GetInstid())
                             {
                                 amp = this;
                             }
                             else
                             {
-                                amp = new Mob(log.getAgentData().GetAgent(c.getSrcAgent()));
+                                amp = new Mob(log.GetAgentData().GetAgent(c.SrcAgent));
                             }
 
                         }
                         if (amp != null)
                         {
-                            mech_data[m].Add(new MechanicLog(c.getTime() - boss_data.getFirstAware(), m, amp));
+                            mechData[m].Add(new MechanicLog(c.Time - bossData.GetFirstAware(), m, amp));
                         }
                     }
                 }
@@ -149,30 +147,30 @@ namespace LuckParser.Models.ParseModels
             foreach (Mechanic m in enemyCasts)
             {
                 Mechanic.SpecialCondition condition = m.GetSpecialCondition();
-                foreach (CombatItem c in log.getCastData())
+                foreach (CombatItem c in log.GetCastData())
                 {
                     long skill = m.GetSkill();
-                    if (skill == c.getSkillID())
+                    if (skill == c.SkillID)
                     {
-                        if (condition != null && !condition(c.getValue()))
+                        if (condition != null && !condition(c.Value))
                         {
                             continue;
                         }
                         AbstractMasterPlayer amp = null;
-                        if ((m.GetMechType() == Mechanic.MechType.EnemyCastStart && c.isActivation().IsCasting()) || (m.GetMechType() == Mechanic.MechType.EnemyCastEnd && !c.isActivation().IsCasting()))
+                        if ((m.GetMechType() == Mechanic.MechType.EnemyCastStart && c.IsActivation.IsCasting()) || (m.GetMechType() == Mechanic.MechType.EnemyCastEnd && !c.IsActivation.IsCasting()))
                         {
-                            if (c.getSrcInstid() == boss_data.getInstid())
+                            if (c.SrcInstid == bossData.GetInstid())
                             {
                                 amp = this;
                             }
                             else
                             {
-                                amp = new DummyPlayer(log.getAgentData().GetAgent(c.getSrcAgent()));
+                                amp = new DummyPlayer(log.GetAgentData().GetAgent(c.SrcAgent));
                             }
                         }
                         if (amp != null)
                         {
-                            mech_data[m].Add(new MechanicLog(c.getTime() - boss_data.getFirstAware(), m, amp));
+                            mechData[m].Add(new MechanicLog(c.Time - bossData.GetFirstAware(), m, amp));
                         }
                     }
                 }
@@ -181,10 +179,10 @@ namespace LuckParser.Models.ParseModels
             List<Mechanic> spawnMech = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.Spawn).ToList();
             foreach (Mechanic m in spawnMech)
             {
-                foreach (AgentItem a in log.getAgentData().getNPCAgentList().Where(x => x.getID() == m.GetSkill()))
+                foreach (AgentItem a in log.GetAgentData().GetNPCAgentList().Where(x => x.GetID() == m.GetSkill()))
                 {
                     AbstractMasterPlayer amp = new DummyPlayer(a);
-                    mech_data[m].Add(new MechanicLog(a.getFirstAware() - boss_data.getFirstAware(), m, amp));
+                    mechData[m].Add(new MechanicLog(a.GetFirstAware() - bossData.GetFirstAware(), m, amp));
                 }
             }
         }

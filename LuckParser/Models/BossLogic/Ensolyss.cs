@@ -2,17 +2,14 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
     public class Ensolyss : FractalLogic
     {
-        public Ensolyss() : base()
+        public Ensolyss()
         {
-            mechanicList.AddRange(new List<Mechanic>
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(37154, "Lunge", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'circle',color:'rgb(50,150,0)',", "Chrg",0), // Lunge (KB charge over arena), Charge
             new Mechanic(37278, "Upswing", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'circle',color:'rgb(255,100,0)',", "Smsh1",0), // High damage Jump hit, First Smash 
@@ -21,7 +18,7 @@ namespace LuckParser.Models
             });
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/kjelZ4t.png",
                             Tuple.Create(366, 366),
@@ -30,7 +27,7 @@ namespace LuckParser.Models
                             Tuple.Create(11804, 4414, 12444, 5054));
         }
   
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://i.imgur.com/GUTNuyP.png";
         }

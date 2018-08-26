@@ -2,17 +2,14 @@ using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
     public class Arkk : FractalLogic
     {
-        public Arkk() : base()
+        public Arkk()
         {
-            mechanicList.AddRange(new List<Mechanic>
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(39685, "Horizon Strike 1", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Arkk, "symbol:'circle',color:'rgb(50,0,0)',", "HS",0), // Horizon Strike (turning pizza slices), Horizon Strike
             new Mechanic(39001, "Horizon Strike 2", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Arkk, "symbol:'circle',color:'rgb(100,0,0)',", "HS2",0), // Horizon Strike 2(turning pizza slices), Horizon Strike 2
@@ -35,7 +32,7 @@ namespace LuckParser.Models
             });
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/BIybWJe.png",
                             Tuple.Create(914, 914),
@@ -44,7 +41,7 @@ namespace LuckParser.Models
                             Tuple.Create(11204, 4414, 13252, 6462));
         }
         
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://i.imgur.com/u6vv8cW.png";
         }

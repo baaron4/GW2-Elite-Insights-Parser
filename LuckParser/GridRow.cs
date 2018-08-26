@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.ComponentModel;
 
 namespace LuckParser
 {
@@ -23,7 +17,7 @@ namespace LuckParser
         /// <summary>
         /// Whether we're running in the form, or via console
         /// </summary>
-        public bool FromConsole { get; set; } = false;
+        public bool FromConsole { get; set; }
         public RowState State { get; set; }
     }
 

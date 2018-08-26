@@ -3,37 +3,37 @@
     public class MechanicLog
     {
         // Fields
-        private long time;
-        private Mechanic mechanic;
-        private AbstractMasterPlayer player;
+        private readonly long _time;
+        private readonly Mechanic _mechanic;
+        private readonly AbstractMasterPlayer _player;
 
         public MechanicLog(long time, Mechanic mechanic,
         AbstractMasterPlayer player)
         {
-            this.time = time;
-            this.mechanic = mechanic;
-            this.player = player;
+            _time = time;
+            _mechanic = mechanic;
+            _player = player;
         }
         //getters
         public long GetTime()
         {
-            return time;
+            return _time;
         }
         public long GetSkill()
         {
-            return mechanic.GetSkill();
+            return _mechanic.GetSkill();
         }
         public AbstractMasterPlayer GetPlayer()
         {
-            return player;
+            return _player;
         }
         public string GetName()
         {
-            return mechanic.GetName();
+            return _mechanic.GetName();
         }
         public string GetPlotly()
         {
-            return mechanic.GetPlotly();
+            return _mechanic.GetPlotly();
         }
     }
 }

@@ -24,9 +24,9 @@
 
 
         //public int toolbelt_skill { get; set; }
-       
+
 
         public GW2APISkill() { }
     }
-   
+
 }

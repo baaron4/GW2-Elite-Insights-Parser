@@ -5,73 +5,72 @@ namespace LuckParser.Models.ParseModels
 {
     public class PhaseData
     {
-        private long start;
-        private long end;
-        private string name;
-        private List<AgentItem> redirection = new List<AgentItem>();
+        private long _start;
+        private readonly long _end;
+        private string _name;
+        private readonly List<AgentItem> _redirection = new List<AgentItem>();
 
         public PhaseData(long start, long end)
         {
-            this.start = start;
-            this.end = end;
+            _start = start;
+            _end = end;
         }
 
-        public void setName(string name)
+        public void SetName(string name)
         {
-            this.name = name;
+            _name = name;
         }
 
-        public string getName()
+        public string GetName()
         {
-            return name;
+            return _name;
         }
 
-        public void addRedirection(AgentItem agent)
+        public void AddRedirection(AgentItem agent)
         {
-            redirection.Add(agent);
+            _redirection.Add(agent);
         }
 
-        public List<AgentItem> getRedirection()
+        public List<AgentItem> GetRedirection()
         {
-            return redirection;
+            return _redirection;
         }
 
-        public long getDuration(string format = "ms")
+        public long GetDuration(string format = "ms")
         {
             switch (format)
             {
                 case "m":
-                    return (end - start) / 60000;
+                    return (_end - _start) / 60000;
                 case "s":
-                    return (end - start) / 1000;
-                case "ms":
+                    return (_end - _start) / 1000;
                 default:
-                    return (end - start);
+                    return (_end - _start);
             }
 
         }
 
-        public bool inInterval(long time, long offset = 0)
+        public bool InInterval(long time, long offset = 0)
         {
-            return start <= time - offset && time - offset <= end;
+            return _start <= time - offset && time - offset <= _end;
         }
 
-        public void overrideStart(long offset)
+        public void OverrideStart(long offset)
         {
-            if (redirection.Count > 0)
+            if (_redirection.Count > 0)
             {
-                start = redirection.Min(x => x.getFirstAware())- offset;
+                _start = _redirection.Min(x => x.GetFirstAware())- offset;
             }
         }
 
-        public long getStart()
+        public long GetStart()
         {
-            return start;
+            return _start;
         }
 
-        public long getEnd()
+        public long GetEnd()
         {
-            return end;
+            return _end;
         }
     }
 }

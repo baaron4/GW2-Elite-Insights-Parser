@@ -3,17 +3,15 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
     public class KeepConstruct : BossLogic
     {
-        public KeepConstruct() : base()
+        public KeepConstruct()
         {
-            mode = ParseMode.Raid;
-            mechanicList.AddRange(new List<Mechanic>
+            Mode = ParseMode.Raid;
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(34912, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'star',color:'rgb(255,0,255)',", "Fixt",0), //Fixated by Statue, Fixated
             new Mechanic(34925, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'star',color:'rgb(255,0,255)',", "Fixt",0), //Fixated by Statue, Fixated
@@ -29,7 +27,7 @@ namespace LuckParser.Models
             });
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/tBAFCEf.png",
                             Tuple.Create(1099, 1114),
@@ -38,50 +36,50 @@ namespace LuckParser.Models
                             Tuple.Create(1920, 12160, 2944, 14464));
         }
 
-        public override List<PhaseData> getPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
+        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.getBossData().getAwareDuration();
-            List<PhaseData> phases = getInitialPhase(log);
+            long fightDuration = log.GetBossData().GetAwareDuration();
+            List<PhaseData> phases = GetInitialPhase(log);
             // Main phases
-            List<CastLog> clsKC = cast_logs.Where(x => x.getID() == 35048).ToList();
+            List<CastLog> clsKC = castLogs.Where(x => x.GetID() == 35048).ToList();
             foreach (CastLog cl in clsKC)
             {
-                end = cl.getTime();
+                end = cl.GetTime();
                 phases.Add(new PhaseData(start, end));
-                start = end + cl.getActDur();
+                start = end + cl.GetActDur();
             }
-            if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
             {
-                phases.Add(new PhaseData(start, fight_dur));
-                start = fight_dur;
+                phases.Add(new PhaseData(start, fightDuration));
+                start = fightDuration;
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].setName("Phase " + i);
+                phases[i].SetName("Phase " + i);
             }
             // add burn phases
             int offset = phases.Count;
-            List<CombatItem> orbItems = log.getBoonData().Where(x => x.getDstInstid() == boss.getInstid() && x.getSkillID() == 35096).ToList();
+            List<CombatItem> orbItems = log.GetBoonData().Where(x => x.DstInstid == boss.GetInstid() && x.SkillID == 35096).ToList();
             // Get number of orbs and filter the list
             List<CombatItem> orbItemsFiltered = new List<CombatItem>();
             Dictionary<long, int> orbs = new Dictionary<long, int>();
             foreach (CombatItem c in orbItems)
             {
-                long time = c.getTime() - log.getBossData().getFirstAware();
+                long time = c.Time - log.GetBossData().GetFirstAware();
                 if (!orbs.ContainsKey(time))
                 {
                     orbs[time] = 0;
                 }
-                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
                     orbs[time] = orbs[time] + 1;
                 }
                 if (orbItemsFiltered.Count > 0)
                 {
                     CombatItem last = orbItemsFiltered.Last();
-                    if (last.getTime() != c.getTime())
+                    if (last.Time != c.Time)
                     {
                         orbItemsFiltered.Add(c);
                     }
@@ -94,30 +92,30 @@ namespace LuckParser.Models
             }
             foreach (CombatItem c in orbItemsFiltered)
             {
-                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    start = c.getTime() - log.getBossData().getFirstAware();
+                    start = c.Time - log.GetBossData().GetFirstAware();
                 }
                 else
                 {
-                    end = c.getTime() - log.getBossData().getFirstAware();
+                    end = c.Time - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(start, end));
                 }
             }
-            if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
             {
-                phases.Add(new PhaseData(start, fight_dur));
-                start = fight_dur;
+                phases.Add(new PhaseData(start, fightDuration));
+                start = fightDuration;
             }
             for (int i = offset; i < phases.Count; i++)
             {
-                phases[i].setName("Burn " + (i - offset + 1) + " (" + orbs[phases[i].getStart()] + " orbs)");
+                phases[i].SetName("Burn " + (i - offset + 1) + " (" + orbs[phases[i].GetStart()] + " orbs)");
             }
-            phases.Sort((x, y) => (x.getStart() < y.getStart()) ? -1 : 1);
+            phases.Sort((x, y) => (x.GetStart() < y.GetStart()) ? -1 : 1);
             return phases;
         }
 
-        public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: needs arc circles for blades
             List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
@@ -138,58 +136,57 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.CrimsonPhantasm,
                         ParseEnum.ThrashIDS.RetrieverProjection
                     };
-            List<CastLog> magicCharge = cls.Where(x => x.getID() == 35048).ToList();
-            List<CastLog> magicExplose = cls.Where(x => x.getID() == 34894).ToList();
+            List<CastLog> magicCharge = cls.Where(x => x.GetID() == 35048).ToList();
+            List<CastLog> magicExplose = cls.Where(x => x.GetID() == 34894).ToList();
             for (var i = 0; i < magicCharge.Count; i++)
             {
                 CastLog charge = magicCharge[i];
                 if (i < magicExplose.Count)
                 {
                     CastLog fire = magicExplose[i];
-                    int start = (int)charge.getTime();
-                    int end = (int)fire.getTime() + fire.getActDur();
-                    replay.addCircleActor(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
-                    replay.addCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                    int start = (int)charge.GetTime();
+                    int end = (int)fire.GetTime() + fire.GetActDur();
+                    replay.AddCircleActor(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                    replay.AddCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                 }
             }
-            List<CastLog> towerDrop = cls.Where(x => x.getID() == 35086).ToList();
+            List<CastLog> towerDrop = cls.Where(x => x.GetID() == 35086).ToList();
             foreach (CastLog c in towerDrop)
             {
-                int start = (int)c.getTime();
-                int end = start + c.getActDur();
-                Point3D pos = replay.getPositions().FirstOrDefault(x => x.time > end);
+                int start = (int)c.GetTime();
+                int end = start + c.GetActDur();
+                Point3D pos = replay.GetPositions().FirstOrDefault(x => x.Time > end);
                 if (pos != null)
                 {
-                    replay.addCircleActor(new CircleActor(false, 0, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                    replay.addCircleActor(new CircleActor(true, end, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.AddCircleActor(new CircleActor(false, 0, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.AddCircleActor(new CircleActor(true, end, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
                 }
             }
             return ids;
         }
 
-        public override void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // Bombs
-            List<CombatItem> xeraFury = getFilteredList(log, 35103, p.getInstid());
+            List<CombatItem> xeraFury = GetFilteredList(log, 35103, p.GetInstid());
             int xeraFuryStart = 0;
-            int xeraFuryEnd = 0;
             foreach (CombatItem c in xeraFury)
             {
-                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    xeraFuryStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    xeraFuryStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 }
                 else
                 {
-                    xeraFuryEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                    replay.addCircleActor(new CircleActor(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)"));
-                    replay.addCircleActor(new CircleActor(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)"));
+                    int xeraFuryEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
+                    replay.AddCircleActor(new CircleActor(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)"));
+                    replay.AddCircleActor(new CircleActor(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)"));
                 }
 
             }
         }
 
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://i.imgur.com/Kq0kL07.png";
         }

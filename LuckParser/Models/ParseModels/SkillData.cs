@@ -3,14 +3,22 @@ using System.Collections.Generic;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class SkillData : List<SkillItem>
+    public class SkillData
     {
-        // Fields
-        private Dictionary<long, string> apiMissingID = new Dictionary<long, string>()
+        public ICollection<SkillItem> Values
         {
-            {1066, "Resurrect"},
-            {1175, "Bandage" },
-            {65001, "Dodge" },
+            get
+            {
+                return skills.Values;
+            }
+        }
+        // Fields
+        private Dictionary<long, SkillItem> skills = new Dictionary<long, SkillItem>();
+        readonly static Dictionary<long, string> _apiMissingID = new Dictionary<long, string>()
+        {
+            {SkillItem.ResurrectId, "Resurrect"},
+            {SkillItem.BandageId, "Bandage" },
+            {SkillItem.DodgeId, "Dodge" },
             // Gorseval
             {31834,"Ghastly Rampage" },
             {31759,"Protective Shadow" },
@@ -34,30 +42,36 @@ namespace LuckParser.Models.ParseModels
             // Keep Construct
             {35048, "Magic Blast Charge" }
         };
-
-        // Constructors
-        public SkillData()
-        {
-        }
-
+        
         // Public Methods
 
-        public String getName(long ID)
+        public SkillItem Get(long ID)
         {
-
-            // Custom
-            if (apiMissingID.ContainsKey(ID))
+            if (skills.TryGetValue(ID, out SkillItem value))
             {
-                return apiMissingID[ID];
+                return value;
+            }
+            return null;
+        }
+
+        public void Add(SkillItem skillItem)
+        {
+            skills.Add(skillItem.GetID(), skillItem);
+        }
+
+        public String GetName(long ID)
+        {
+            // Custom
+            if (_apiMissingID.ContainsKey(ID))
+            {
+                return _apiMissingID[ID];
             }
 
             // Normal
-            foreach (SkillItem s in this)
+            SkillItem skillItem = Get(ID);
+            if (skillItem != null)
             {
-                if (s.getID() == ID)
-                {
-                    return s.getName();
-                }
+                return skillItem.GetName();
             }
 
             // Unknown

@@ -1,23 +1,19 @@
 ﻿using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
     public class Golem : BossLogic
     {
-        public Golem() : base()
+        public Golem()
         {
-            mode = ParseMode.Golem;          
+            Mode = ParseMode.Golem;          
         }
 
-        public override List<PhaseData> getPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
+        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
         {
-            List<PhaseData> phases = getInitialPhase(log);          
+            List<PhaseData> phases = GetInitialPhase(log);          
             return phases;
         }     
     }

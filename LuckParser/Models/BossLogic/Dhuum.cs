@@ -3,17 +3,15 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuckParser.Models
 {
     public class Dhuum : BossLogic
     {
-        public Dhuum() : base()
+        public Dhuum()
         {
-            mode = ParseMode.Raid;
-            mechanicList.AddRange(new List<Mechanic>
+            Mode = ParseMode.Raid;
+            MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(48172, "Hateful Ephemera", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,140,0)',", "Glm.dmg",0),// Hateful Ephemera (Golem AoE dmg), Golem Dmg
             new Mechanic(48121, "Arcing Affliction", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,0,0)',", "B.dmg",0),// Arcing Affliction (Bomb) hit, Bomb dmg
@@ -33,7 +31,7 @@ namespace LuckParser.Models
             });
         }
 
-        public override CombatReplayMap getCombatMap()
+        public override CombatReplayMap GetCombatMap()
         {
             return new CombatReplayMap("https://i.imgur.com/CLTwWBJ.png",
                             Tuple.Create(3763, 3383),
@@ -42,71 +40,71 @@ namespace LuckParser.Models
                             Tuple.Create(19072, 15484, 20992, 16508));
         }
 
-        public override List<PhaseData> getPhases(Boss boss, ParsedLog log, List<CastLog> cast_logs)
+        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
         {
             long start = 0;
             long end = 0;
-            long fight_dur = log.getBossData().getAwareDuration();
-            List<PhaseData> phases = getInitialPhase(log);
+            long fightDuration = log.GetBossData().GetAwareDuration();
+            List<PhaseData> phases = GetInitialPhase(log);
             // Sometimes the preevent is not in the evtc
-            List<CastLog> dhuumCast = boss.getCastLogs(log, 0, 20000);
+            List<CastLog> dhuumCast = boss.GetCastLogs(log, 0, 20000);
             if (dhuumCast.Count > 0)
             {
-                CastLog shield = cast_logs.Find(x => x.getID() == 47396);
+                CastLog shield = castLogs.Find(x => x.GetID() == 47396);
                 if (shield != null)
                 {
-                    end = shield.getTime();
+                    end = shield.GetTime();
                     phases.Add(new PhaseData(start, end));
-                    start = shield.getTime() + shield.getActDur();
-                    if (start < fight_dur - 5000)
+                    start = shield.GetTime() + shield.GetActDur();
+                    if (start < fightDuration - 5000)
                     {
-                        phases.Add(new PhaseData(start, fight_dur));
+                        phases.Add(new PhaseData(start, fightDuration));
                     }
                 }
-                if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
                 {
-                    phases.Add(new PhaseData(start, fight_dur));
+                    phases.Add(new PhaseData(start, fightDuration));
                 }
-                string[] namesDh = new string[] { "Main Fight", "Ritual" };
+                string[] namesDh = new [] { "Main Fight", "Ritual" };
                 for (int i = 1; i < phases.Count; i++)
                 {
-                    phases[i].setName(namesDh[i - 1]);
+                    phases[i].SetName(namesDh[i - 1]);
                 }
             }
             else
             {
-                CombatItem invulDhuum = log.getBoonData().FirstOrDefault(x => x.getSkillID() == 762 && x.isBuffremove() != ParseEnum.BuffRemove.None && x.getSrcInstid() == boss.getInstid() && x.getTime() > 115000 + log.getBossData().getFirstAware());
+                CombatItem invulDhuum = log.GetBoonData().FirstOrDefault(x => x.SkillID == 762 && x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == boss.GetInstid() && x.Time > 115000 + log.GetBossData().GetFirstAware());
                 if (invulDhuum != null)
                 {
-                    end = invulDhuum.getTime() - log.getBossData().getFirstAware();
+                    end = invulDhuum.Time - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(start, end));
                     start = end + 1;
-                    CastLog shield = cast_logs.Find(x => x.getID() == 47396);
+                    CastLog shield = castLogs.Find(x => x.GetID() == 47396);
                     if (shield != null)
                     {
-                        end = shield.getTime();
+                        end = shield.GetTime();
                         phases.Add(new PhaseData(start, end));
-                        start = shield.getTime() + shield.getActDur();
-                        if (start < fight_dur - 5000)
+                        start = shield.GetTime() + shield.GetActDur();
+                        if (start < fightDuration - 5000)
                         {
-                            phases.Add(new PhaseData(start, fight_dur));
+                            phases.Add(new PhaseData(start, fightDuration));
                         }
                     }
                 }
-                if (fight_dur - start > 5000 && start >= phases.Last().getEnd())
+                if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
                 {
-                    phases.Add(new PhaseData(start, fight_dur));
+                    phases.Add(new PhaseData(start, fightDuration));
                 }
-                string[] namesDh = new string[] { "Roleplay", "Main Fight", "Ritual" };
+                string[] namesDh = new [] { "Roleplay", "Main Fight", "Ritual" };
                 for (int i = 1; i < phases.Count; i++)
                 {
-                    phases[i].setName(namesDh[i - 1]);
+                    phases[i].SetName(namesDh[i - 1]);
                 }
             }
             return phases;
         }
 
-        public override List<ParseEnum.ThrashIDS> getAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: facing information (pull thingy)
             List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
@@ -115,89 +113,88 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Enforcer,
                         ParseEnum.ThrashIDS.Messenger
                     };
-            List<CastLog> deathmark = cls.Where(x => x.getID() == 48176).ToList();
-            CastLog majorSplit = cls.Find(x => x.getID() == 47396);
+            List<CastLog> deathmark = cls.Where(x => x.GetID() == 48176).ToList();
+            CastLog majorSplit = cls.Find(x => x.GetID() == 47396);
             foreach (CastLog c in deathmark)
             {
-                int start = (int)c.getTime();
-                int cast_end = start + c.getActDur();
-                int zone_end = cast_end + 120000;
+                int start = (int)c.GetTime();
+                int castEnd = start + c.GetActDur();
+                int zoneEnd = castEnd + 120000;
                 if (majorSplit != null)
                 {
-                    cast_end = Math.Min(cast_end, (int)majorSplit.getTime());
-                    zone_end = Math.Min(zone_end, (int)majorSplit.getTime());
+                    castEnd = Math.Min(castEnd, (int)majorSplit.GetTime());
+                    zoneEnd = Math.Min(zoneEnd, (int)majorSplit.GetTime());
                 }
-                Point3D pos = replay.getPositions().FirstOrDefault(x => x.time > cast_end);
+                Point3D pos = replay.GetPositions().FirstOrDefault(x => x.Time > castEnd);
                 if (pos != null)
                 {
-                    replay.addCircleActor(new CircleActor(true, cast_end, 450, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
-                    replay.addCircleActor(new CircleActor(false, 0, 450, new Tuple<int, int>(start, cast_end), "rgba(200, 255, 100, 0.5)", pos));
-                    replay.addCircleActor(new CircleActor(true, 0, 450, new Tuple<int, int>(cast_end, zone_end), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.AddCircleActor(new CircleActor(true, castEnd, 450, new Tuple<int, int>(start, castEnd), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.AddCircleActor(new CircleActor(false, 0, 450, new Tuple<int, int>(start, castEnd), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.AddCircleActor(new CircleActor(true, 0, 450, new Tuple<int, int>(castEnd, zoneEnd), "rgba(200, 255, 100, 0.5)", pos));
                 }
             }
-            List<CastLog> cataCycle = cls.Where(x => x.getID() == 48398).ToList();
+            List<CastLog> cataCycle = cls.Where(x => x.GetID() == 48398).ToList();
             foreach (CastLog c in cataCycle)
             {
-                int start = (int)c.getTime();
-                int end = start + c.getActDur();
-                replay.addCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
-                replay.addCircleActor(new CircleActor(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                int start = (int)c.GetTime();
+                int end = start + c.GetActDur();
+                replay.AddCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
+                replay.AddCircleActor(new CircleActor(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
             }
             if (majorSplit != null)
             {
-                int start = (int)majorSplit.getTime();
-                int end = (int)log.getBossData().getAwareDuration();
-                replay.addCircleActor(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
+                int start = (int)majorSplit.GetTime();
+                int end = (int)log.GetBossData().GetAwareDuration();
+                replay.AddCircleActor(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
             }
             return ids;
         }
 
-        public override void getAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // spirit transform
-            List<CombatItem> spiritTransform = log.getBoonData().Where(x => x.getDstInstid() == p.getInstid() && x.getSkillID() == 46950 && x.isBuffremove() == ParseEnum.BuffRemove.None).ToList();
+            List<CombatItem> spiritTransform = log.GetBoonData().Where(x => x.DstInstid == p.GetInstid() && x.SkillID == 46950 && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in spiritTransform)
             {
                 int duration = 15000;
-                int start = (int)(c.getTime() - log.getBossData().getFirstAware());
-                if (log.getBossData().getHealthOverTime().FirstOrDefault(x => x.X > start).Y < 1050)
+                int start = (int)(c.Time - log.GetBossData().GetFirstAware());
+                if (log.GetBossData().GetHealthOverTime().FirstOrDefault(x => x.X > start).Y < 1050)
                 {
                     duration = 30000;
                 }
-                CombatItem removedBuff = log.getBoonData().FirstOrDefault(x => x.getSrcInstid() == p.getInstid() && x.getSkillID() == 48281 && x.isBuffremove() == ParseEnum.BuffRemove.All && x.getTime() > c.getTime() && x.getTime() < c.getTime() + duration);
+                CombatItem removedBuff = log.GetBoonData().FirstOrDefault(x => x.SrcInstid == p.GetInstid() && x.SkillID == 48281 && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
                 int end = start + duration;
                 if (removedBuff != null)
                 {
-                    end = (int)(removedBuff.getTime() - log.getBossData().getFirstAware());
+                    end = (int)(removedBuff.Time - log.GetBossData().GetFirstAware());
                 }
-                replay.addCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)"));
-                replay.addCircleActor(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)"));
+                replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)"));
+                replay.AddCircleActor(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)"));
             }
             // bomb
-            List<CombatItem> bombDhuum = getFilteredList(log, 47646, p.getInstid());
+            List<CombatItem> bombDhuum = GetFilteredList(log, 47646, p.GetInstid());
             int bombDhuumStart = 0;
-            int bombDhuumEnd = 0;
             foreach (CombatItem c in bombDhuum)
             {
-                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    bombDhuumStart = (int)(c.getTime() - log.getBossData().getFirstAware());
+                    bombDhuumStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 }
                 else
                 {
-                    bombDhuumEnd = (int)(c.getTime() - log.getBossData().getFirstAware());
-                    replay.addCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)"));
-                    replay.addCircleActor(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
+                    int bombDhuumEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
+                    replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)"));
+                    replay.AddCircleActor(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
                 }
             }
         }
 
-        public override int isCM(List<CombatItem> clist, int health)
+        public override int IsCM(List<CombatItem> clist, int health)
         {
             return (health > 35e6) ? 1 : 0;
         }
 
-        public override string getReplayIcon()
+        public override string GetReplayIcon()
         {
             return "https://i.imgur.com/RKaDon5.png";
         }

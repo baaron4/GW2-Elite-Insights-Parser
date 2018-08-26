@@ -1,53 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using LuckParser.Models.ParseModels;
-using System.Drawing;
-using System.IO.Compression;
-
+﻿using LuckParser.Models;
 //recomend CTRL+M+O to collapse all
 using LuckParser.Models.DataModels;
-using System.Globalization;
-using LuckParser.Models;
+using LuckParser.Models.ParseModels;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
 
 //recommend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {
     public class Parser
     {
-        private GW2APIController APIController = new GW2APIController();
+        private readonly GW2APIController _aPIController = new GW2APIController();
 
         //Main data storage after binary parse
-        private LogData log_data;
-        private BossData boss_data;
-        private AgentData agent_data = new AgentData();
-        private SkillData skill_data = new SkillData();
-        private CombatData combat_data = new CombatData();
-        private List<Player> p_list = new List<Player>();
-        private Boss boss;
-        private byte revision;
+        private LogData _logData;
+        private BossData _bossData;
+        private readonly AgentData _agentData = new AgentData();
+        private readonly SkillData _skillData = new SkillData();
+        private readonly CombatData _combatData = new CombatData();
+        private List<Player> _playerList = new List<Player>();
+        private Boss _boss;
+        private byte _revision;
 
         // Public Methods
-        public LogData getLogData()
+        public LogData GetLogData()
         {
-            return log_data;
+            return _logData;
         }
-        public BossData getBossData()
+        public BossData GetBossData()
         {
-            return boss_data;
+            return _bossData;
         }
 
         public ParsedLog GetParsedLog()
         {
-            return new ParsedLog(log_data, boss_data, agent_data, skill_data, combat_data, p_list, boss);
+            return new ParsedLog(_logData, _bossData, _agentData, _skillData, _combatData, _playerList, _boss);
         }
 
         //Main Parse method------------------------------------------------------------------------------------------------------------------------------------------------
         /// <summary>
         /// Parses the given log
         /// </summary>
-        /// <param name="bg">BackgroundWorker handling the log</param>
         /// <param name="row">GridRow object bound to the UI</param>
         /// <param name="evtc">The path to the log to parse</param>
         /// <returns></returns>
@@ -82,19 +79,19 @@ namespace LuckParser.Controllers
             {
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "15% - Parsing boss data...", 15);
-                parseBossData(stream);
+                ParseBossData(stream);
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "20% - Parsing agent data...", 20);
-                parseAgentData(stream);
+                ParseAgentData(stream);
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "25% - Parsing skill data...", 25);
-                parseSkillData(stream);
+                ParseSkillData(stream);
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "30% - Parsing combat list...", 30);
-                parseCombatList(stream);                
+                ParseCombatList(stream);                
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
-                fillMissingData();
+                FillMissingData();
                 row.BgWorker.ThrowIfCanceled(row);
             }
             catch(Exception ex) when (!(ex is CancellationException))
@@ -129,40 +126,39 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Parses boss related data
         /// </summary>
-        private void parseBossData(Stream stream)
+        private void ParseBossData(Stream stream)
         {
             using (var reader = CreateReader(stream))
             {
                 // 12 bytes: arc build version
-                var build_version = ParseHelper.getString(stream, 12);
-                this.log_data = new LogData(build_version);
+                var buildVersion = ParseHelper.GetString(stream, 12);
+                _logData = new LogData(buildVersion);
 
                 // 1 byte: skip
-                this.revision = reader.ReadByte();
+                _revision = reader.ReadByte();
 
                 // 2 bytes: boss instance ID
                 ushort id = reader.ReadUInt16();
                 // 1 byte: position
-                ParseHelper.safeSkip(stream, 1);
+                ParseHelper.SafeSkip(stream, 1);
 
                 //Save
-                // TempData["Debug"] = build_version +" "+ instid.ToString() ;
-                this.boss_data = new BossData(id);
+                _bossData = new BossData(id);
             }
         }
 
         /// <summary>
         /// Parses agent related data
         /// </summary>
-        private void parseAgentData(Stream stream)
+        private void ParseAgentData(Stream stream)
         {
             using (var reader = CreateReader(stream))
             {
                 // 4 bytes: player count
-                int player_count = reader.ReadInt32();
+                int playerCount = reader.ReadInt32();
 
                 // 96 bytes: each player
-                for (int i = 0; i < player_count; i++)
+                for (int i = 0; i < playerCount; i++)
                 {
                     // 8 bytes: agent
                     ulong agent = reader.ReadUInt64();
@@ -171,7 +167,7 @@ namespace LuckParser.Controllers
                     uint prof = reader.ReadUInt32();
 
                     // 4 bytes: is_elite
-                    uint is_elite = reader.ReadUInt32();
+                    uint isElite = reader.ReadUInt32();
 
                     // 2 bytes: toughness
                     int toughness = reader.ReadInt16();
@@ -179,28 +175,28 @@ namespace LuckParser.Controllers
                     int concentration = reader.ReadInt16();
                     // 2 bytes: healing
                     int healing = reader.ReadInt16();
-                    ParseHelper.safeSkip(stream, 2);
+                    ParseHelper.SafeSkip(stream, 2);
                     // 2 bytes: condition
                     int condition = reader.ReadInt16();
-                    ParseHelper.safeSkip(stream, 2);
+                    ParseHelper.SafeSkip(stream, 2);
                     // 68 bytes: name
-                    String name = ParseHelper.getString(stream, 68, false);
+                    String name = ParseHelper.GetString(stream, 68, false);
                     //Save
-                    Agent a = new Agent(agent, name, prof, is_elite);
-                    var agent_prof = a.getProf(this.log_data.getBuildVersion(), APIController);
-                    switch(agent_prof)
+                    Agent a = new Agent(agent, name, prof, isElite);
+                    var agentProf = a.GetProf(_logData.GetBuildVersion(), _aPIController);
+                    switch(agentProf)
                     {
                         case "NPC":
                             // NPC
-                            agent_data.addItem(new AgentItem(agent, name, a.getName() + ":" + prof.ToString().PadLeft(5, '0'), toughness, healing, condition, concentration), agent_prof);
+                            _agentData.AddItem(new AgentItem(agent, name, a.GetName() + ":" + prof.ToString().PadLeft(5, '0'), toughness, healing, condition, concentration), agentProf);
                             break;
                             // Gadget
                         case "GDG":
-                            agent_data.addItem(new AgentItem(agent, name, a.getName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0'),toughness, healing, condition,concentration), agent_prof);
+                            _agentData.AddItem(new AgentItem(agent, name, a.GetName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0'),toughness, healing, condition,concentration), agentProf);
                             break;
                         default:
                             // Player
-                            agent_data.addItem(new AgentItem(agent, name, agent_prof, toughness, healing, condition,concentration), agent_prof);
+                            _agentData.AddItem(new AgentItem(agent, name, agentProf, toughness, healing, condition,concentration), agentProf);
                             break;
                     }
                 }
@@ -210,39 +206,39 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Parses skill related data
         /// </summary>
-        private void parseSkillData(Stream stream)
+        private void ParseSkillData(Stream stream)
         {
             var apiController = new GW2APIController();
             using (var reader = CreateReader(stream))
             {
                 // 4 bytes: player count
-                int skill_count = reader.ReadInt32();
+                int skillCount = reader.ReadInt32();
                 //TempData["Debug"] += "Skill Count:" + skill_count.ToString();
                 // 68 bytes: each skill
-                for(int i = 0; i < skill_count; i++)
+                for(int i = 0; i < skillCount; i++)
                 {
                     // 4 bytes: skill ID
-                    int skill_id = reader.ReadInt32();
+                    int skillId = reader.ReadInt32();
 
                     // 64 bytes: name
-                    var name = ParseHelper.getString(stream, 64);
-                    if(skill_id != 0 && int.TryParse(name, out int n) && n == skill_id)
+                    var name = ParseHelper.GetString(stream, 64);
+                    if(skillId != 0 && int.TryParse(name, out int n) && n == skillId)
                     {
-                        //was it a known boon?
-                        foreach(Boon b in Boon.getBoonList())
+                        //was it a known buff?
+                        foreach(Boon b in Boon.GetAll())
                         {
-                            if(skill_id == b.getID())
+                            if(skillId == b.GetID())
                             {
-                                name = b.getName();
+                                name = b.GetName();
                             }
                         }
                     }
                     //Save
 
-                    var skill = new SkillItem(skill_id, name);
+                    var skill = new SkillItem(skillId, name);
 
                     skill.SetGW2APISkill(apiController);
-                    skill_data.Add(skill);
+                    _skillData.Add(skill);
                 }
             }
         }
@@ -253,75 +249,75 @@ namespace LuckParser.Controllers
             long time = reader.ReadInt64();
 
             // 8 bytes: src_agent
-            ulong src_agent = reader.ReadUInt64();
+            ulong srcAgent = reader.ReadUInt64();
 
             // 8 bytes: dst_agent
-            ulong dst_agent = reader.ReadUInt64();
+            ulong dstAgent = reader.ReadUInt64();
 
             // 4 bytes: value
             int value = reader.ReadInt32();
 
             // 4 bytes: buff_dmg
-            int buff_dmg = reader.ReadInt32();
+            int buffDmg = reader.ReadInt32();
 
             // 2 bytes: overstack_value
-            ushort overstack_value = reader.ReadUInt16();
+            ushort overstackValue = reader.ReadUInt16();
 
             // 2 bytes: skill_id
-            ushort skill_id = reader.ReadUInt16();
+            ushort skillId = reader.ReadUInt16();
 
             // 2 bytes: src_instid
-            ushort src_instid = reader.ReadUInt16();
+            ushort srcInstid = reader.ReadUInt16();
 
             // 2 bytes: dst_instid
-            ushort dst_instid = reader.ReadUInt16();
+            ushort dstInstid = reader.ReadUInt16();
 
             // 2 bytes: src_master_instid
-            ushort src_master_instid = reader.ReadUInt16();
+            ushort srcMasterInstid = reader.ReadUInt16();
 
             // 9 bytes: garbage
-            ParseHelper.safeSkip(reader.BaseStream, 9);
+            ParseHelper.SafeSkip(reader.BaseStream, 9);
 
             // 1 byte: iff
-            ParseEnum.IFF iff = ParseEnum.getIFF(reader.ReadByte());
+            ParseEnum.IFF iff = ParseEnum.GetIFF(reader.ReadByte());
 
             // 1 byte: buff
-            ushort buff = (ushort)reader.ReadByte();
+            ushort buff = reader.ReadByte();
 
             // 1 byte: result
-            ParseEnum.Result result = ParseEnum.getResult(reader.ReadByte());
+            ParseEnum.Result result = ParseEnum.GetResult(reader.ReadByte());
 
             // 1 byte: is_activation
-            ParseEnum.Activation is_activation = ParseEnum.getActivation(reader.ReadByte());
+            ParseEnum.Activation isActivation = ParseEnum.GetActivation(reader.ReadByte());
 
             // 1 byte: is_buffremove
-            ParseEnum.BuffRemove is_buffremoved = ParseEnum.getBuffRemove(reader.ReadByte());
+            ParseEnum.BuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
 
             // 1 byte: is_ninety
-            ushort is_ninety = (ushort)reader.ReadByte();
+            ushort isNinety = reader.ReadByte();
 
             // 1 byte: is_fifty
-            ushort is_fifty = (ushort)reader.ReadByte();
+            ushort isFifty = reader.ReadByte();
 
             // 1 byte: is_moving
-            ushort is_moving = (ushort)reader.ReadByte();
+            ushort isMoving = reader.ReadByte();
 
             // 1 byte: is_statechange
-            ParseEnum.StateChange is_statechange = ParseEnum.getStateChange(reader.ReadByte());
+            ParseEnum.StateChange isStateChange = ParseEnum.GetStateChange(reader.ReadByte());
 
             // 1 byte: is_flanking
-            ushort is_flanking = (ushort)reader.ReadByte();
+            ushort isFlanking = reader.ReadByte();
 
             // 1 byte: is_flanking
-            ushort is_shields = (ushort)reader.ReadByte();
+            ushort isShields = reader.ReadByte();
             // 2 bytes: garbage
-            ParseHelper.safeSkip(reader.BaseStream, 2);
+            ParseHelper.SafeSkip(reader.BaseStream, 2);
 
             //save
             // Add combat
-            return new CombatItem(time, src_agent, dst_agent, value, buff_dmg, overstack_value, skill_id,
-                src_instid, dst_instid, src_master_instid,0, iff, buff, result, is_activation, is_buffremoved,
-                is_ninety, is_fifty, is_moving, is_statechange, is_flanking, is_shields);
+            return new CombatItem(time, srcAgent, dstAgent, value, buffDmg, overstackValue, skillId,
+                srcInstid, dstInstid, srcMasterInstid,0, iff, buff, result, isActivation, isBuffRemove,
+                isNinety, isFifty, isMoving, isStateChange, isFlanking, isShields);
         }
 
         private static CombatItem ReadCombatItemRev1(BinaryReader reader)
@@ -330,80 +326,80 @@ namespace LuckParser.Controllers
             long time = reader.ReadInt64();
 
             // 8 bytes: src_agent
-            ulong src_agent = reader.ReadUInt64();
+            ulong srcAgent = reader.ReadUInt64();
 
             // 8 bytes: dst_agent
-            ulong dst_agent = reader.ReadUInt64();
+            ulong dstAgent = reader.ReadUInt64();
 
             // 4 bytes: value
             int value = reader.ReadInt32();
 
             // 4 bytes: buff_dmg
-            int buff_dmg = reader.ReadInt32();
+            int buffDmg = reader.ReadInt32();
 
             // 2 bytes: overstack_value
-            uint overstack_value = reader.ReadUInt32();
+            uint overstackValue = reader.ReadUInt32();
 
             // 2 bytes: skill_id
-            uint skill_id = reader.ReadUInt32();
+            uint skillId = reader.ReadUInt32();
 
             // 2 bytes: src_instid
-            ushort src_instid = reader.ReadUInt16();
+            ushort srcInstid = reader.ReadUInt16();
 
             // 2 bytes: dst_instid
-            ushort dst_instid = reader.ReadUInt16();
+            ushort dstInstid = reader.ReadUInt16();
 
             // 2 bytes: src_master_instid
-            ushort src_master_instid = reader.ReadUInt16();
+            ushort srcMasterInstid = reader.ReadUInt16();
             // 2 bytes: dst_master_instid
-            ushort dst_master_instid = reader.ReadUInt16();
+            ushort dstmasterInstid = reader.ReadUInt16();
 
             // 1 byte: iff
-            ParseEnum.IFF iff = ParseEnum.getIFF(reader.ReadByte());
+            ParseEnum.IFF iff = ParseEnum.GetIFF(reader.ReadByte());
 
             // 1 byte: buff
-            ushort buff = (ushort)reader.ReadByte();
+            ushort buff = reader.ReadByte();
 
             // 1 byte: result
-            ParseEnum.Result result = ParseEnum.getResult(reader.ReadByte());
+            ParseEnum.Result result = ParseEnum.GetResult(reader.ReadByte());
 
             // 1 byte: is_activation
-            ParseEnum.Activation is_activation = ParseEnum.getActivation(reader.ReadByte());
+            ParseEnum.Activation isActivation = ParseEnum.GetActivation(reader.ReadByte());
 
             // 1 byte: is_buffremove
-            ParseEnum.BuffRemove is_buffremoved = ParseEnum.getBuffRemove(reader.ReadByte());
+            ParseEnum.BuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
 
             // 1 byte: is_ninety
-            ushort is_ninety = (ushort)reader.ReadByte();
+            ushort isNinety = reader.ReadByte();
 
             // 1 byte: is_fifty
-            ushort is_fifty = (ushort)reader.ReadByte();
+            ushort isFifty = reader.ReadByte();
 
             // 1 byte: is_moving
-            ushort is_moving = (ushort)reader.ReadByte();
+            ushort isMoving = reader.ReadByte();
 
             // 1 byte: is_statechange
-            ParseEnum.StateChange is_statechange = ParseEnum.getStateChange(reader.ReadByte());
+            ParseEnum.StateChange isStateChange = ParseEnum.GetStateChange(reader.ReadByte());
 
             // 1 byte: is_flanking
-            ushort is_flanking = (ushort)reader.ReadByte();
+            ushort isFlanking = reader.ReadByte();
 
             // 1 byte: is_flanking
-            ushort is_shields = (ushort)reader.ReadByte();
+            ushort IsShields = reader.ReadByte();
             // 5 bytes: offcycle (?) + garbage
-            ParseHelper.safeSkip(reader.BaseStream, 5);
+            ParseHelper.SafeSkip(reader.BaseStream, 5);
 
             //save
             // Add combat
-            return new CombatItem(time, src_agent, dst_agent, value, buff_dmg, overstack_value, skill_id,
-                src_instid, dst_instid, src_master_instid, dst_master_instid, iff, buff, result, is_activation, is_buffremoved,
-                is_ninety, is_fifty, is_moving, is_statechange, is_flanking, is_shields);
+            return new CombatItem(time, srcAgent, dstAgent, value, buffDmg, overstackValue, skillId,
+                srcInstid, dstInstid, srcMasterInstid, dstmasterInstid, iff, buff, result, isActivation, isBuffRemove,
+                isNinety, isFifty, isMoving, isStateChange, isFlanking, IsShields);
         }
 
         /// <summary>
         /// Parses combat related data
         /// </summary>
-        private void parseCombatList(Stream stream)
+        private void ParseCombatList(Stream stream)
         {
             // 64 bytes: each combat
             var data = new byte[64];
@@ -414,178 +410,172 @@ namespace LuckParser.Controllers
                 {
                     if(!TryRead(stream, data)) break;
                     ms.Seek(0, SeekOrigin.Begin);
-                    combat_data.Add( revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader));
+                    _combatData.Add( _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader));
                 }
             }
-            combat_data.RemoveAll(x => x.getSrcInstid() == 0 && x.getDstAgent() == 0 && x.getSrcAgent() == 0 && x.getDstInstid() == 0 && x.getIFF() == ParseEnum.IFF.Unknown);
-        }
-        
-        private static bool isGolem(ushort id)
-        {
-            return id == 16202 || id == 16177 || id == 19676 || id == 19645 || id == 16199;
+            _combatData.RemoveAll(x => x.SrcInstid == 0 && x.DstAgent == 0 && x.SrcAgent == 0 && x.DstInstid == 0 && x.IFF == ParseEnum.IFF.Unknown);
         }
         
         /// <summary>
         /// Parses all the data again and link related stuff to each other
         /// </summary>
-        private void fillMissingData()
+        private void FillMissingData()
         {
-            var agentsLookup = agent_data.getAllAgentsList().ToDictionary(a => a.getAgent());
-            bool golem_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Golem;
-            bool raid_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Raid;
-            bool fractal_mode = boss_data.getBossBehavior().getMode() == BossLogic.ParseMode.Fractal;
-            // Set Agent instid, first_aware and last_aware
-            foreach (CombatItem c in combat_data)
+            var agentsLookup = _agentData.GetAllAgentsList().ToDictionary(a => a.GetAgent());
+            bool golemMode = _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem;
+            bool raidMode = _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Raid;
+            bool fractalMode = _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Fractal;
+            // Set Agent instid, firstAware and lastAware
+            foreach (CombatItem c in _combatData)
             {
-                if(agentsLookup.TryGetValue(c.getSrcAgent(), out var a))
+                if(agentsLookup.TryGetValue(c.SrcAgent, out var a))
                 {
-                    if (a.getInstid() == 0 && c.isStateChange().IsSpawn())
+                    if (a.GetInstid() == 0 && c.IsStateChange.IsSpawn())
                     {
-                        a.setInstid(c.getSrcInstid());
+                        a.SetInstid(c.SrcInstid);
                     }
-                    if (a.getInstid() != 0)
+                    if (a.GetInstid() != 0)
                     {
-                        if (a.getFirstAware() == 0)
+                        if (a.GetFirstAware() == 0)
                         {
-                            a.setFirstAware(c.getTime());
-                            a.setLastAware(c.getTime());
+                            a.SetFirstAware(c.Time);
+                            a.SetLastAware(c.Time);
                         }
                         else
                         {
-                            a.setLastAware(c.getTime());
+                            a.SetLastAware(c.Time);
                         }
                     }
                 }
             }
 
-            foreach (CombatItem c in combat_data)
+            foreach (CombatItem c in _combatData)
             {
-                if (c.getSrcMasterInstid() != 0)
+                if (c.SrcMasterInstid != 0)
                 {
-                    var master = agent_data.getAllAgentsList().Find(x => x.getInstid() == c.getSrcMasterInstid() && x.getFirstAware() < c.getTime() && c.getTime() < x.getLastAware());
+                    var master = _agentData.GetAllAgentsList().Find(x => x.GetInstid() == c.SrcMasterInstid && x.GetFirstAware() < c.Time && c.Time < x.GetLastAware());
                     if (master != null)
                     {
-                        if(agentsLookup.TryGetValue(c.getSrcAgent(), out var minion) && minion.getFirstAware() < c.getTime() && c.getTime() < minion.getLastAware())
+                        if(agentsLookup.TryGetValue(c.SrcAgent, out var minion) && minion.GetFirstAware() < c.Time && c.Time < minion.GetLastAware())
                         {
-                            minion.setMasterAgent(master.getAgent());
+                            minion.SetMasterAgent(master.GetAgent());
                         }
                     }
                 }
             }
 
-            agent_data.clean();
+            _agentData.Clean();
 
-            // Set Boss data agent, instid, first_aware, last_aware and name
-            List<AgentItem> NPC_list = agent_data.getNPCAgentList();
-            HashSet<ulong> multiple_boss = new HashSet<ulong>();
-            foreach (AgentItem NPC in NPC_list)
+            // Set Boss data agent, instid, firstAware, lastAware and name
+            List<AgentItem> npcList = _agentData.GetNPCAgentList();
+            HashSet<ulong> multipleBoss = new HashSet<ulong>();
+            foreach (AgentItem NPC in npcList)
             {
-                if (NPC.getID() == boss_data.getID())
+                if (NPC.GetID() == _bossData.GetID())
                 {
-                    if (boss_data.getAgent() == 0)
+                    if (_bossData.GetAgent() == 0)
                     {
-                        boss_data.setAgent(NPC.getAgent());
-                        boss_data.setInstid(NPC.getInstid());
-                        boss_data.setName(NPC.getName());
-                        boss_data.setTough(NPC.getToughness());
+                        _bossData.SetAgent(NPC.GetAgent());
+                        _bossData.SetInstid(NPC.GetInstid());
+                        _bossData.SetName(NPC.GetName());
+                        _bossData.SetTough(NPC.GetToughness());
                     }
-                    multiple_boss.Add(NPC.getAgent());
+                    multipleBoss.Add(NPC.GetAgent());
                 }
             }
-            if (multiple_boss.Count > 1)
+            if (multipleBoss.Count > 1)
             {
-                agent_data.cleanInstid(boss_data.getInstid());
+                _agentData.CleanInstid(_bossData.GetInstid());
             }
-            AgentItem bossAgent = agent_data.GetAgent(boss_data.getAgent());
-            boss = new Boss(bossAgent);
+            AgentItem bossAgent = _agentData.GetAgent(_bossData.GetAgent());
+            _boss = new Boss(bossAgent);
             List<Point> bossHealthOverTime = new List<Point>();
             // a hack for buggy golem logs
-            if (golem_mode)
+            if (golemMode)
             {
-                AgentItem otherGolem = NPC_list.Find(x => x.getID() == 19603);
-                foreach (CombatItem c in combat_data)
+                AgentItem otherGolem = npcList.Find(x => x.GetID() == 19603);
+                foreach (CombatItem c in _combatData)
                 {
                     // redirect all attacks to the main golem
-                    if (c.getDstAgent() == 0 && c.getDstInstid() == 0 && c.isStateChange() == ParseEnum.StateChange.Normal && c.getIFF() == ParseEnum.IFF.Foe && c.isActivation() == ParseEnum.Activation.None)
+                    if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.Normal && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None)
                     {
-                        c.setDstAgent(bossAgent.getAgent());
-                        c.setDstInstid(bossAgent.getInstid());
+                        c.DstAgent = bossAgent.GetAgent();
+                        c.DstInstid = bossAgent.GetInstid();
                     }
                     // redirect buff initial to main golem
-                    if (otherGolem != null && c.isBuff() == 18 && c.getDstInstid() == otherGolem.getInstid())
+                    if (otherGolem != null && c.IsBuff == 18 && c.DstInstid == otherGolem.GetInstid())
                     {
-                        c.setDstInstid(bossAgent.getInstid());
+                        c.DstInstid = bossAgent.GetInstid();
                     }
                 }
 
             }
             // Grab values threw combat data
-            foreach (CombatItem c in combat_data)
+            foreach (CombatItem c in _combatData)
             {
-                if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange() == ParseEnum.StateChange.MaxHealthUpdate)//max health update
+                if (c.SrcInstid == _bossData.GetInstid() && c.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)//max health update
                 {
-                    boss_data.setHealth((int)c.getDstAgent());
+                    _bossData.SetHealth((int)c.DstAgent);
 
                 }
-                switch(c.isStateChange())
+                switch(c.IsStateChange)
                 {
                     case ParseEnum.StateChange.PointOfView:
-                        if (log_data.getPOV() == "N/A")//Point of View
+                        if (_logData.GetPOV() == "N/A")//Point of View
                         {
-                            ulong pov_agent = c.getSrcAgent();
-                            if(agentsLookup.TryGetValue(pov_agent, out var p))
+                            ulong povAgent = c.SrcAgent;
+                            if(agentsLookup.TryGetValue(povAgent, out var p))
                             {
-                                log_data.setPOV(p.getName());
+                                _logData.SetPOV(p.GetName());
                             }
                         }
                         break;
                     case ParseEnum.StateChange.LogStart:
-                        log_data.setLogStart(c.getValue());
-                        boss_data.setFirstAware(c.getTime());
+                        _logData.SetLogStart(c.Value);
+                        _bossData.SetFirstAware(c.Time);
                         break;
                     case ParseEnum.StateChange.LogEnd:
-                        log_data.setLogEnd(c.getValue());
-                        boss_data.setLastAware(c.getTime());
+                        _logData.SetLogEnd(c.Value);
+                        _bossData.SetLastAware(c.Time);
                         break;
                     case ParseEnum.StateChange.HealthUpdate:
                         //set health update
-                        if (c.getSrcInstid() == boss_data.getInstid())
+                        if (c.SrcInstid == _bossData.GetInstid())
                         {
-                            bossHealthOverTime.Add(new Point ( (int)(c.getTime() - boss_data.getFirstAware()), (int)c.getDstAgent() ));
+                            bossHealthOverTime.Add(new Point ( (int)(c.Time - _bossData.GetFirstAware()), (int)c.DstAgent ));
                         }
                         break;
                 }
             }
 
             // Dealing with second half of Xera | ((22611300 * 0.5) + (25560600 * 0.5)
-            if (boss_data.getID() == 16246)
+            if (_bossData.GetID() == 16246)
             {
-                int xera_2_instid = 0;
-                foreach (AgentItem NPC in NPC_list)
+                foreach (AgentItem NPC in npcList)
                 {
-                    if (NPC.getID() == 16286)
+                    if (NPC.GetID() == 16286)
                     {
                         bossHealthOverTime = new List<Point>();//reset boss health over time
-                        xera_2_instid = NPC.getInstid();
-                        boss_data.setHealth(24085950);
-                        boss.addPhaseData(NPC.getFirstAware());
-                        boss_data.setLastAware(NPC.getLastAware());
-                        foreach (CombatItem c in combat_data)
+                        int xera2Instid = NPC.GetInstid();
+                        _bossData.SetHealth(24085950);
+                        _boss.AddPhaseData(NPC.GetFirstAware());
+                        _bossData.SetLastAware(NPC.GetLastAware());
+                        foreach (CombatItem c in _combatData)
                         {
-                            if (c.getSrcInstid() == xera_2_instid)
+                            if (c.SrcInstid == xera2Instid)
                             {
-                                c.setSrcInstid(boss_data.getInstid());
-                                c.setSrcAgent(boss_data.getAgent());
+                                c.SrcInstid = _bossData.GetInstid();
+                                c.SrcAgent = _bossData.GetAgent();
                             }
-                            if (c.getDstInstid() == xera_2_instid)
+                            if (c.DstInstid == xera2Instid)
                             {
-                                c.setDstInstid(boss_data.getInstid());
-                                c.setDstAgent(boss_data.getAgent());
+                                c.DstInstid = _bossData.GetInstid();
+                                c.DstAgent = _bossData.GetAgent();
                             }
                             //set health update
-                            if (c.getSrcInstid() == boss_data.getInstid() && c.isStateChange() == ParseEnum.StateChange.HealthUpdate)
+                            if (c.SrcInstid == _bossData.GetInstid() && c.IsStateChange == ParseEnum.StateChange.HealthUpdate)
                             {
-                                bossHealthOverTime.Add(new Point ( (int)(c.getTime() - boss_data.getFirstAware()), (int)c.getDstAgent() ));
+                                bossHealthOverTime.Add(new Point ( (int)(c.Time - _bossData.GetFirstAware()), (int)c.DstAgent ));
                             }
                         }
                         break;
@@ -593,119 +583,121 @@ namespace LuckParser.Controllers
                 }
             }
             //Dealing with Deimos split
-            if (boss_data.getID() == 17154)
+            if (_bossData.GetID() == 17154)
             {
-                int deimos_2_instid = 0;
-                List<AgentItem> deimosGadgets = agent_data.getGadgetAgentList().Where(x => x.getFirstAware() > bossAgent.getLastAware() && x.getName().Contains("Deimos")).OrderBy(x => x.getLastAware()).ToList();
+                List<AgentItem> deimosGadgets = _agentData.GetGadgetAgentList().Where(x => x.GetFirstAware() > bossAgent.GetLastAware() && x.GetName().Contains("Deimos")).OrderBy(x => x.GetLastAware()).ToList();
                 if (deimosGadgets.Count > 0)
                 {
                     AgentItem NPC = deimosGadgets.Last();
-                    deimos_2_instid = NPC.getInstid();
-                    long oldAware = bossAgent.getLastAware();
-                    boss.addPhaseData(NPC.getFirstAware() >= oldAware ? NPC.getFirstAware() : oldAware);
-                    //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos_2_instid ).ToList().Sum(x);
+                    int deimos2Instid = NPC.GetInstid();
+                    long oldAware = bossAgent.GetLastAware();
+                    _boss.AddPhaseData(NPC.GetFirstAware() >= oldAware ? NPC.GetFirstAware() : oldAware);
+                    //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos2Instid ).ToList().Sum(x);
                     //int stop = 0;
-                    foreach (CombatItem c in combat_data)
+                    foreach (CombatItem c in _combatData)
                     {
-                        if (c.getTime() > oldAware)
+                        if (c.Time > oldAware)
                         {
-                            if (c.getSrcInstid() == deimos_2_instid)
+                            if (c.SrcInstid == deimos2Instid)
                             {
-                                c.setSrcInstid(boss_data.getInstid());
-                                c.setSrcAgent(boss_data.getAgent());
+                                c.SrcInstid = _bossData.GetInstid();
+                                c.SrcAgent = _bossData.GetAgent();
 
                             }
-                            if (c.getDstInstid() == deimos_2_instid)
+                            if (c.DstInstid == deimos2Instid)
                             {
-                                c.setDstInstid(boss_data.getInstid());
-                                c.setDstAgent(boss_data.getAgent());
+                                c.DstInstid = _bossData.GetInstid();
+                                c.DstAgent = _bossData.GetAgent();
                             }
                         }
 
                     }
                 }
             }
-            boss_data.setHealthOverTime(bossHealthOverTime);//after xera in case of change
+            _bossData.SetHealthOverTime(bossHealthOverTime);//after xera in case of change
 
-            if (raid_mode)
+            if (raidMode)
             {
                 // Put non reward stuff in this as we find them
                 HashSet<int> notRaidRewardsIds = new HashSet<int>
                 {
                     13
                 };
-                CombatItem reward = combat_data.Find(x => x.isStateChange() == ParseEnum.StateChange.Reward && !notRaidRewardsIds.Contains(x.getValue()));
+                CombatItem reward = _combatData.Find(x => x.IsStateChange == ParseEnum.StateChange.Reward && !notRaidRewardsIds.Contains(x.Value));
                 if (reward != null)
                 {
-                    log_data.setBossKill(true);
-                    boss_data.setLastAware(reward.getTime());
+                    _logData.SetBossKill(true);
+                    _bossData.SetLastAware(reward.Time);
                 }
-            } else if (fractal_mode) {
-                CombatItem reward = combat_data.Find(x => x.isStateChange() == ParseEnum.StateChange.Reward);
-                if (reward != null)
+            } else if (fractalMode) {
+                // check reward
+                CombatItem reward = _combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
+                // check last Health update as fractal rewards and daily chests have the same id
+                Point lastHoT = bossHealthOverTime.Count > 0 ? bossHealthOverTime.Last() : new Point(0,int.MaxValue);
+                long lastHoTTime = lastHoT.X + _bossData.GetFirstAware();
+                if (reward != null && lastHoT.X != 0 && Math.Abs(reward.Time - lastHoTTime) < 10000)
                 {
-                    log_data.setBossKill(true);
-                    boss_data.setLastAware(reward.getTime());
+                    _logData.SetBossKill(true);
+                    _bossData.SetLastAware(reward.Time);
                 } else
                 {
-                    // for skorvald, as CM and normal ids are the same
-                    CombatItem killed = combat_data.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange().IsDead());
+                    // check killed
+                    CombatItem killed = _combatData.Find(x => x.SrcInstid == _bossData.GetInstid() && x.IsStateChange.IsDead());
                     if (killed != null)
                     {
-                        log_data.setBossKill(true);
-                        boss_data.setLastAware(killed.getTime());
+                        _logData.SetBossKill(true);
+                        _bossData.SetLastAware(killed.Time);
+                    }
+                    // Threshold for health checking, for subsequent daily runs, the bouncy chest appears once a day, 100 is 1.0% of the total health
+                    else if (lastHoT.Y < 100)
+                    {
+                        _logData.SetBossKill(true);
+                        _bossData.SetLastAware(lastHoTTime);
                     }
                 }
             } else
             {
-                CombatItem killed = combat_data.Find(x => x.getSrcInstid() == boss_data.getInstid() && x.isStateChange().IsDead());
+                CombatItem killed = _combatData.Find(x => x.SrcInstid == _bossData.GetInstid() && x.IsStateChange.IsDead());
                 if (killed != null)
                 {
-                    log_data.setBossKill(true);
-                    boss_data.setLastAware(killed.getTime());
+                    _logData.SetBossKill(true);
+                    _bossData.SetLastAware(killed.Time);
                 }
             }
 
-            if (golem_mode && bossHealthOverTime.Count > 0)
+            if (golemMode && bossHealthOverTime.Count > 0)
             {
-                log_data.setBossKill(bossHealthOverTime.Last().Y < 200);
-                boss_data.setLastAware(bossHealthOverTime.Last().X + boss_data.getFirstAware());
+                _logData.SetBossKill(bossHealthOverTime.Last().Y < 200);
+                _bossData.SetLastAware(bossHealthOverTime.Last().X + _bossData.GetFirstAware());
             }
             //players
-            if (p_list.Count == 0)
+            if (_playerList.Count == 0)
             {
 
                 //Fix Disconected players
-                var playerAgentList = agent_data.getPlayerAgentList();
+                var playerAgentList = _agentData.GetPlayerAgentList();
 
                 foreach (AgentItem playerAgent in playerAgentList)
                 {
-                    if (playerAgent.getInstid() == 0)
+                    if (playerAgent.GetInstid() == 0)
                     {
-                        CombatItem tst = combat_data.Find(x => x.getSrcAgent() == playerAgent.getAgent());
+                        CombatItem tst = _combatData.Find(x => x.SrcAgent == playerAgent.GetAgent());
                         if (tst == null)
                         {
-                            tst = combat_data.Find(x => x.getDstAgent() == playerAgent.getAgent());
-                            if (tst == null)
-                            {
-                                playerAgent.setInstid(ushort.MaxValue);
-                            }
-                            else
-                            {
-                                playerAgent.setInstid(tst.getDstInstid());
-                            }
+                            tst = _combatData.Find(x => x.DstAgent == playerAgent.GetAgent());
+                            playerAgent.SetInstid(tst == null ? ushort.MaxValue : tst.DstInstid);
                         }
                         else
                         {
-                            playerAgent.setInstid(tst.getSrcInstid());
+                            playerAgent.SetInstid(tst.SrcInstid);
                         }
                     }
-                    List<CombatItem> lp = combat_data.getStates(playerAgent.getInstid(), ParseEnum.StateChange.Despawn, boss_data.getFirstAware(), boss_data.getLastAware());
-                    Player player = new Player(playerAgent, fractal_mode);
+                    List<CombatItem> lp = _combatData.GetStates(playerAgent.GetInstid(), ParseEnum.StateChange.Despawn, _bossData.GetFirstAware(), _bossData.GetLastAware());
+                    Player player = new Player(playerAgent, fractalMode);
                     bool skip = false;
-                    foreach (Player p in p_list)
+                    foreach (Player p in _playerList)
                     {
-                        if (p.getAccount() == player.getAccount())//is this a copy of original?
+                        if (p.GetAccount() == player.GetAccount())//is this a copy of original?
                         {
                             skip = true;
                         }
@@ -717,53 +709,53 @@ namespace LuckParser.Controllers
                     if (lp.Count > 0)
                     {
                         //make all actions of other instances to original instid
-                        foreach (AgentItem extra in NPC_list)
+                        foreach (AgentItem extra in npcList)
                         {
-                            if (extra.getAgent() == playerAgent.getAgent())
+                            if (extra.GetAgent() == playerAgent.GetAgent())
                             {
-                                var extra_login_Id = extra.getInstid();
-                                foreach (CombatItem c in combat_data)
+                                var extraLoginId = extra.GetInstid();
+                                foreach (CombatItem c in _combatData)
                                 {
-                                    if (c.getSrcInstid() == extra_login_Id)
+                                    if (c.SrcInstid == extraLoginId)
                                     {
-                                        c.setSrcInstid(playerAgent.getInstid());
+                                        c.SrcInstid = playerAgent.GetInstid();
                                     }
-                                    if (c.getDstInstid() == extra_login_Id)
+                                    if (c.DstInstid == extraLoginId)
                                     {
-                                        c.setDstInstid(playerAgent.getInstid());
+                                        c.DstInstid = playerAgent.GetInstid();
                                     }
                                 }
                                 break;
                             }
                         }
 
-                        player.SetDC(lp[0].getTime());
-                        p_list.Add(player);
+                        player.SetDC(lp[0].Time);
+                        _playerList.Add(player);
                     }
                     else//didnt dc
                     {
                         if (player.GetDC() == 0)
                         {
-                            p_list.Add(player);
+                            _playerList.Add(player);
                         }
 
                     }
                 }
 
             }
-            if (boss_data.getFirstAware() == 0)
+            if (_bossData.GetFirstAware() == 0)
             {
-                boss_data.setFirstAware(bossAgent.getFirstAware());
+                _bossData.SetFirstAware(bossAgent.GetFirstAware());
             }
-            if (boss_data.getLastAware() == long.MaxValue)
+            if (_bossData.GetLastAware() == long.MaxValue)
             {
-                boss_data.setLastAware(bossAgent.getLastAware());
+                _bossData.SetLastAware(bossAgent.GetLastAware());
             }
             // Sort
-            p_list = p_list.OrderBy(a => a.getGroup()).ToList();
+            _playerList = _playerList.OrderBy(a => a.GetGroup()).ToList();
             // Check CM
-            boss_data.setCM(combat_data);
-            combat_data.validate(boss_data);
+            _bossData.SetCM(_combatData);
+            _combatData.Validate(_bossData);
         }
     }
 }
