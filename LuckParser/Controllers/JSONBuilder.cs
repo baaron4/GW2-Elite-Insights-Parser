@@ -188,7 +188,7 @@ namespace LuckParser.Controllers
 
                         foreach (KeyValuePair<Player, double> playerBoon in boon.Value.Generated)
                         {
-                            if (playerBoon.Value != 0)
+                            if (playerBoon.Value > 0)
                             {
                                 boons[boon.Key].Generated[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
                             }
@@ -201,7 +201,7 @@ namespace LuckParser.Controllers
 
                         foreach (KeyValuePair<Player, double> playerBoon in boon.Value.Overstacked)
                         {
-                            if (playerBoon.Value != 0)
+                            if (playerBoon.Value > 0)
                             {
                                 boons[boon.Key].Overstacked[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
                             }
@@ -230,7 +230,7 @@ namespace LuckParser.Controllers
 
                             foreach (KeyValuePair<Player, double> playerBoon in boon.Value.Generated)
                             {
-                                if (playerBoon.Value != 0)
+                                if (playerBoon.Value > 0)
                                 {
                                     boons[boon.Key].Generated[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
                                 }
@@ -243,7 +243,7 @@ namespace LuckParser.Controllers
 
                             foreach (KeyValuePair<Player, double> playerBoon in boon.Value.Overstacked)
                             {
-                                if (playerBoon.Value != 0)
+                                if (playerBoon.Value > 0)
                                 {
                                     boons[boon.Key].Overstacked[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
                                 }
