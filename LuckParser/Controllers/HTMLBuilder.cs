@@ -211,7 +211,7 @@ namespace LuckParser.Controllers
                     }
 
                     sw.Write("]," +
-                            " name: '" + mech.GetShortName().Replace("'", " ") + "'");
+                            " name: '" + mech.GetPlotlyName().Replace("'", " ") + "'");
                     sw.Write("},");
                 }
                 if (maxDPS > 0)
@@ -2618,7 +2618,7 @@ namespace LuckParser.Controllers
                             sw.Write("<th>Player</th>");
                             foreach (Mechanic mech in presMech)
                             {
-                                sw.Write("<th><span data-toggle=\"tooltip\" title=\""+ mech.GetInGameName() +"\">" + mech.GetShortName() + "</span></th>");
+                                sw.Write("<th><span data-toggle=\"tooltip\" title=\""+ mech.GetDescription() +"\">" + mech.GetShortName() + "</span></th>");
                             }
                         }
                         sw.Write("</tr>");
@@ -2703,7 +2703,7 @@ namespace LuckParser.Controllers
                             sw.Write("<th>Enemy</th>");
                             foreach (Mechanic mech in presEnemyMech)
                             {
-                                sw.Write("<th><span data-toggle=\"tooltip\" title=\"" + mech.GetInGameName() + "\">" + mech.GetShortName() + "</span></th>");
+                                sw.Write("<th><span data-toggle=\"tooltip\" title=\"" + mech.GetDescription() + "\">" + mech.GetShortName() + "</span></th>");
                             }
                         }
                         sw.Write("</tr>");

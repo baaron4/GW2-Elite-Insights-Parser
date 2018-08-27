@@ -27,9 +27,9 @@
         {
             return _player;
         }
-        public string GetName()
+        public string GetDescription()
         {
-            return _mechanic.GetInGameName();
+            return _mechanic.GetDescription();
         }
         public string GetPlotly()
         {
