@@ -790,79 +790,33 @@ namespace LuckParser.Controllers
         /// <param name="listToUse"></param>
         /// <param name="tableId"></param>
         /// <param name="phaseIndex"></param>
-        private void CreateGenSelfTable(StreamWriter sw, List<Boon> listToUse, string tableId, int phaseIndex)
-        { //Generate BoonGenSelf table
-            sw.Write("<script>");
+        private List<BoonData> CreateGenTable(List<Boon> listToUse, int phaseIndex, string target)
+        {
+            List<BoonData> list = new List<BoonData>();
+
+            foreach (Player player in _log.GetPlayerList())
             {
-                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                BoonData boonData = new BoonData();
+
+                Dictionary<long, Statistics.FinalBoonUptime> uptimes;
+                if (target == "self") uptimes = _statistics.SelfBoons[player][phaseIndex];
+                else if (target == "group") uptimes = _statistics.GroupBoons[player][phaseIndex];
+                else if (target == "off") uptimes = _statistics.OffGroupBoons[player][phaseIndex];
+                else if (target == "squad") uptimes = _statistics.SquadBoons[player][phaseIndex];
+                else throw new InvalidOperationException("unknown target type");
+
+                Dictionary<long, string> rates = new Dictionary<long, string>();
+                foreach (Boon boon in listToUse)
                 {
-                    sw.Write("var lazyTable = document.querySelector('#" + tableId + phaseIndex + "');" +
-
-                    "if ('IntersectionObserver' in window) {" +
-                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
-                            "entries.forEach(function(entry) {" +
-                                "if (entry.isIntersecting)" +
-                                "{" +
-                                    "$(function () { $('#" + tableId + phaseIndex + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
-                                    "lazyTableObserver.unobserve(entry.target);" +
-                                "}" +
-                            "});" +
-                        "});" +
-                    "lazyTableObserver.observe(lazyTable);" +
-                    "} else {" +
-                        "$(function () { $('#" + tableId + phaseIndex + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
-                    "}");
+                    Statistics.FinalBoonUptime uptime = uptimes[boon.GetID()];
+                    List<Object> val = new List<Object>(2);
+                    val.Add(uptime.Generation);
+                    val.Add(uptime.Overstack);
+                    boonData.val.Add(val);
                 }
-                sw.Write("});");
+                list.Add(boonData);
             }
-            sw.Write("</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" width=\"100%\" id=\"" + tableId + phaseIndex + "\">");
-            {
-                HTMLHelper.WriteBoonTableHeader(sw, listToUse);
-                sw.Write("<tbody>");
-                {
-                    foreach (Player player in _log.GetPlayerList())
-                    {
-                        Dictionary<long, Statistics.FinalBoonUptime> uptimes = _statistics.SelfBoons[player][phaseIndex];
-
-                        Dictionary<long, string> rates = new Dictionary<long, string>();
-                        foreach (Boon boon in listToUse)
-                        {
-                            string rate = "0";
-
-                            Statistics.FinalBoonUptime uptime = uptimes[boon.GetID()];
-
-                            if (uptime.Generation > 0)
-                            {
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
-                                {
-                                    rate =
-                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
-                                        + uptime.Overstack + "% with overstack \">"
-                                        + uptime.Generation
-                                        + "%</span>";
-                                }
-                                else if (boon.GetBoonType() == Boon.BoonType.Intensity)
-                                {
-                                    rate =
-                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
-                                        + uptime.Overstack + " with overstack \">"
-                                        + uptime.Generation
-                                        + "</span>";
-                                }
-
-                            }
-
-                            rates[boon.GetID()] = rate;
-                        }
-
-                        HTMLHelper.WriteBoonGenTableBody(sw, player, listToUse, rates);
-                    }
-                }
-                sw.Write("</tbody>");
-            }
-
-            sw.Write("</table>");
+            return list;
         }
         /// <summary>
         /// Create the group buff generation table
@@ -2871,8 +2825,14 @@ namespace LuckParser.Controllers
                 scriptWriter.Write(buildJavascript());
             }
 
+            string cssFile = Path.Combine(path, "flomix-ei.css");
+            using (var fs = new FileStream(cssFile, FileMode.Create, FileAccess.Write))
+            using (var scriptWriter = new StreamWriter(fs))
+            {
+                scriptWriter.Write(Properties.Resources.flomix_ei_css);
+            }
 
-                string html = Properties.Resources.template_html;
+            string html = Properties.Resources.template_html;
             html = html.Replace("${bootstrapTheme}", !_settings.LightTheme ? "slate" : "cosmo");
             html = html.Replace("${logDataJson}", BuildLogData());
 
@@ -3225,7 +3185,7 @@ namespace LuckParser.Controllers
                                                         {
                                                             //boonGenSelf
                                                             sw.Write("<p> Boons generated by a character for themselves</p>");
-                                                            CreateGenSelfTable(sw, _statistics.PresentBoons, "boongenself_table", i);
+                                                            //CreateGenSelfTable(sw, _statistics.PresentBoons, "boongenself_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenGroup" + i + "\">");
@@ -3274,7 +3234,7 @@ namespace LuckParser.Controllers
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSelf" + i + "\">");
                                                         {
                                                             sw.Write("<p> Offensive Buffs generated by a character for themselves</p>");
-                                                            CreateGenSelfTable(sw, _statistics.PresentOffbuffs, "offensivegenself_table", i);
+                                                            //CreateGenSelfTable(sw, _statistics.PresentOffbuffs, "offensivegenself_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenGroup" + i + "\">");
@@ -3320,7 +3280,7 @@ namespace LuckParser.Controllers
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSelf" + i + "\">");
                                                         {
                                                             sw.Write("<p> Defensive Buffs generated by a character for themselves</p>");
-                                                            CreateGenSelfTable(sw, _statistics.PresentDefbuffs, "defensivegenself_table", i);
+                                                            //CreateGenSelfTable(sw, _statistics.PresentDefbuffs, "defensivegenself_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenGroup" + i + "\">");
@@ -3443,6 +3403,22 @@ namespace LuckParser.Controllers
                 phaseDto.boonStats = CreateUptimeTable(_statistics.PresentBoons, i);
                 phaseDto.offBuffStats = CreateUptimeTable(_statistics.PresentOffbuffs, i);
                 phaseDto.defBuffStats = CreateUptimeTable(_statistics.PresentDefbuffs, i);
+
+                phaseDto.boonGenSelfStats = CreateGenTable(_statistics.PresentBoons, i, "self");
+                phaseDto.boonGenGroupStats = CreateGenTable(_statistics.PresentBoons, i, "group");
+                phaseDto.boonGenOGroupStats = CreateGenTable(_statistics.PresentBoons, i, "off");
+                phaseDto.boonGenSquadStats = CreateGenTable(_statistics.PresentBoons, i, "squad");
+
+                phaseDto.offBuffGenSelfStats = CreateGenTable(_statistics.PresentOffbuffs, i, "self");
+                phaseDto.offBuffGenGroupStats = CreateGenTable(_statistics.PresentOffbuffs, i, "group");
+                phaseDto.offBuffGenOGroupStats = CreateGenTable(_statistics.PresentOffbuffs, i, "off");
+                phaseDto.offBuffGenSquadStats = CreateGenTable(_statistics.PresentOffbuffs, i, "squad");
+
+                phaseDto.defBuffGenSelfStats = CreateGenTable(_statistics.PresentDefbuffs, i, "self");
+                phaseDto.defBuffGenGroupStats = CreateGenTable(_statistics.PresentDefbuffs, i, "group");
+                phaseDto.defBuffGenOGroupStats = CreateGenTable(_statistics.PresentDefbuffs, i, "off");
+                phaseDto.defBuffGenSquadStats = CreateGenTable(_statistics.PresentDefbuffs, i, "squad");
+
                 data.phases.Add(phaseDto);
             }
 
@@ -3483,7 +3459,8 @@ namespace LuckParser.Controllers
         private string escapeJsrender(string template)
         {
             // escape single quotation marks
-            String escaped = template.Replace("'", @"\'");
+            String escaped = template.Replace(@"\", @"\\");
+            escaped = template.Replace("'", @"\'");
             // remove line breaks
             escaped = Regex.Replace(escaped, @"\s*\r?\n\s*", "");
             return escaped;
@@ -3499,7 +3476,10 @@ namespace LuckParser.Controllers
             string javascript = Properties.Resources.flomix_ei_js;
             javascript+= buildTemplateJS("tmplTabs", Properties.Resources.tmplTabs);
             javascript += buildTemplateJS("tmplPlayerCells", Properties.Resources.tmplPlayerCells);
-            javascript += buildTemplateJS("", Properties.Resources.tm);
+            javascript += buildTemplateJS("tmplDpsTable", Properties.Resources.tmplDpsTable);
+            javascript += buildTemplateJS("tmplBoonTable", Properties.Resources.tmplBoonTable);
+            javascript += buildTemplateJS("tmplSupTable", Properties.Resources.tmplSupTable);
+            javascript += buildTemplateJS("tmplDefTable", Properties.Resources.tmplDefTable);
 
             javascript += buildTemplateJS("tmplDmgTable",Properties.Resources.tmplDmgTable);
 

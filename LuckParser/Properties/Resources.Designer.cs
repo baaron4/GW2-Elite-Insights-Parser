@@ -127,6 +127,34 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot;&gt;
+        ///	&lt;thead&gt;
+        ///		&lt;tr&gt;&lt;th width=&quot;30px&quot;&gt;Sub&lt;/th&gt;&lt;th width=&quot;30px&quot;&gt;&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;{{for boons}}&lt;th width=&quot;40px&quot; title=&quot;{{:name}}&quot;&gt;&lt;img src=&quot;{{:url}}&quot; alt=&quot;{{:name}}&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;/th&gt;{{/for}}&lt;/tr&gt;
+        ///	&lt;/thead&gt;
+        ///	&lt;tbody&gt;
+        ///		{{for rows ~boons=boons}}
+        ///		&lt;tr&gt;
+        ///			&lt;td&gt;{{:player.group}}&lt;/td&gt;
+        ///			&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;&lt;span style=&quot;display:none&quot;&gt;{ [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string tmplBoonTable {
+            get {
+                return ResourceManager.GetString("tmplBoonTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
+        ///	&lt;thead&gt;
+        ///		&lt;tr&gt;&lt;th&gt;Sub&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Dmg Taken&lt;/th&gt;&lt;th&gt;Dmg Barrier&lt;/th&gt;&lt;th&gt;Blocked&lt;/th&gt;&lt;th&gt;Invulned&lt;/th&gt;&lt;th&gt;Evaded&lt;/th&gt;&lt;th&gt;&lt;span data-toggle=&quot;tooltip&quot; data-html=&quot;true&quot; data-placement=&quot;top&quot; title=&quot;Dodges or Mirage Cloak &quot;&gt;Dodges&lt;/span&gt;&lt;/th&gt;&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png&quot; alt=&quot;Downs&quot; title=&quot;Times downed&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;&lt;/th&gt;&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string tmplDefTable {
+            get {
+                return ResourceManager.GetString("tmplDefTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
         ///  &lt;thead&gt;
         ///    &lt;tr&gt;
@@ -146,6 +174,17 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot;  cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
+        ///	&lt;thead&gt;
+        ///		&lt;tr&gt;&lt;th&gt;Sub&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Account&lt;/th&gt;&lt;th&gt;Boss DPS&lt;/th&gt;&lt;th&gt;Power&lt;/th&gt;&lt;th&gt;Condi&lt;/th&gt;&lt;th&gt;All DPS&lt;/th&gt;&lt;th&gt;Power&lt;/th&gt;&lt;th&gt;Condi&lt;/th&gt;&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png&quot; alt=&quot;Downs&quot; title=&quot;Times downed&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;&lt;/th&gt;&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png&quot; alt=&quot;Dead&quot; title=&quot;Time died&quot; height=&quot;18&quot; width=&quot;18 [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string tmplDpsTable {
+            get {
+                return ResourceManager.GetString("tmplDpsTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;td&gt;{{:player.group}}&lt;/td&gt;
         ///&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;&lt;span style=&quot;display:none&quot;&gt;{{:player.profession}}&lt;/span&gt;&lt;/td&gt;
         ///&lt;td&gt;{{:player.name}}&lt;/td&gt; ähnelt.
@@ -153,6 +192,26 @@ namespace LuckParser.Properties {
         internal static string tmplPlayerCells {
             get {
                 return ResourceManager.GetString("tmplPlayerCells", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot;  cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
+        ///	&lt;thead&gt;
+        ///		&lt;tr&gt;&lt;th&gt;Sub&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Condi Cleanse&lt;/th&gt;&lt;th&gt;Resurrects&lt;/th&gt;&lt;/tr&gt;
+        ///	&lt;/thead&gt;
+        ///	&lt;tbody&gt;
+        ///		{{for rows}}
+        ///		&lt;tr&gt;{{include tmpl=&quot;#tmplPlayerCells&quot;/}}&lt;td title=&quot;{{:data[1]}} seconds&quot;&gt;{{:data[0]}}&lt;/td&gt;&lt;td title=&quot;{{:data[3]}} seconds&quot;&gt;{{:data[2]}}&lt;/td&gt;&lt;/tr&gt;
+        ///		{{/for}}
+        ///	&lt;/tbody&gt;
+        ///	&lt;tfoot&gt;
+        ///		{{for sums}}
+        ///		&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;{{:name}}&lt;/td&gt;&lt;td title=&quot;{{:data[1]}} seconds&quot;&gt;{{:data[0]}}&lt;/td [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string tmplSupTable {
+            get {
+                return ResourceManager.GetString("tmplSupTable", resourceCulture);
             }
         }
         

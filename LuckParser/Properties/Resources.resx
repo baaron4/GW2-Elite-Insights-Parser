@@ -127,11 +127,23 @@
   <data name="template_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\template.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="tmplBoonTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tmplBoonTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tmplDefTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tmplDefTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="tmplDmgTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplDmgTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="tmplDpsTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tmplDpsTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="tmplPlayerCells" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplPlayerCells.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tmplSupTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tmplSupTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="tmplTabs" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplTabs.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

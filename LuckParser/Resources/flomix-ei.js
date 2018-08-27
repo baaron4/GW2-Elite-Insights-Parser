@@ -63,9 +63,8 @@ function createDpsTable($target, data) {
 	}
 	sums.push({name:'Total',dps:total});
 	
-	var $table = $(tmplDpsTable.render({rows:rows,sums:sums}));
-	$target.append($table);
-	lazyTable($table, { 'order': [[4, 'desc']]});
+	var html = tmplDpsTable.render({rows:rows,sums:sums});
+	lazyTable2($target, html, { 'order': [[4, 'desc']]})
 }
 
 function createDamageStatsTable($target, data) {
@@ -90,9 +89,8 @@ function createDamageStatsTable($target, data) {
 	}
 	sums.push({name:'Total',data:total});
 
-	var $table = $(tmplDmgTable.render({rows:rows,sums:sums}));
-	$target.append($table);
-	lazyTable($table, { 'order': [[0, 'asc']]});
+	var html = tmplDmgTable.render({rows:rows,sums:sums});
+	lazyTable2($target, html, { 'order': [[0, 'asc']]});
 }
 
 function createDefStatsTable($target, data) {
@@ -115,9 +113,8 @@ function createDefStatsTable($target, data) {
 	}
 	sums.push({name:'Total',data:total});
 
-	var $table = $(tmplDefTable.render({rows:rows,sums:sums}));
-	$target.append($table);
-	lazyTable($table, { 'order': [[3, 'desc']]});
+	var html = tmplDefTable.render({rows:rows,sums:sums});
+	lazyTable2($target, html, { 'order': [[3, 'desc']]});
 }
 
 
@@ -141,9 +138,8 @@ function createSupStatsTable($target, data) {
 	}
 	sums.push({name:'Total',data:total});
 	
-	var $table = $(tmplSupTable.render({rows:rows,sums:sums}));
-	$target.append($table);
-	lazyTable($table, { 'order': [[3, 'desc']]});
+	var html = tmplSupTable.render({rows:rows,sums:sums});
+	lazyTable2($target, html, { 'order': [[3, 'desc']]});
 }
 
 function createBoonTable($target, boons, data, generation) {
@@ -173,10 +169,8 @@ function createBoonTable($target, boons, data, generation) {
 		}
 	}
 
-	var $table = $(tmplBoonTable.render({rows:rows,sums:sums,boons:boons}, {generation:generation}));
-	
-	$target.append($table);
-	lazyTable($table, { 'order': [[3, 'desc']]});
+	var html = tmplBoonTable.render({rows:rows,sums:sums,boons:boons}, {generation:generation});
+	lazyTable2($target, html, { 'order': [[3, 'desc']]});
 }
 
 function createPlayerGraph(elementId, data, dark) {
@@ -322,6 +316,31 @@ function lazyTable($table, options) {
 	}
 }
 
+function createTable($target, tableHtml, options) {
+	var $table = $(tableHtml);
+	$target.append($table);
+	$table.DataTable(options);
+	
+	$target.find('[title]').tooltip({html:true});
+}
+
+function lazyTable2($target, tableHtml, options) {
+	if ('IntersectionObserver' in window) {
+		let lazyTableObserver = new IntersectionObserver(function(entries, observer) {
+			entries.forEach(function(entry) {
+				if (entry.isIntersecting){
+					lazyTableObserver.unobserve(entry.target);
+					createTable($target, tableHtml, options);
+				}
+			});
+		});
+		lazyTableObserver.observe($target[0]);
+	} else {
+		$(function() {
+			createTable($target, tableHtml, options);
+		});
+	}
+}
 
 
 
@@ -352,7 +371,7 @@ function buildContent(layout, parentId, level) {
 function generateWindow(layout) {
 	$.each(data.players, function(i, player) { player.icon = urls[player.profession]; });
 	if (layout.tabs) {
-		$('#content').empty().append(buildTabs(layout,'',0));
+		$('#content').html(buildTabs(layout,'',0));
 	}
 	
 	$.each(data.phases, function(i, phaseData) {
@@ -364,23 +383,23 @@ function generateWindow(layout) {
 		createSupStatsTable($('#healStats'+i), phaseData.healStats);
 		
 		createBoonTable($('#boonsUptime'+i), data.boons, phaseData.boonStats);
-		createBoonTable($('#offensiveUptime'+i), data.offBuffs, phaseData.offBuffStats);
-		createBoonTable($('#defensiveUptime'+i), data.defBuffs, phaseData.defBuffStats);
 
 		createBoonTable($('#boonsGenSelf'+i), data.boons, phaseData.boonGenSelfStats, true);
 		createBoonTable($('#boonsGenGroup'+i), data.boons, phaseData.boonGenGroupStats, true);
 		createBoonTable($('#boonsGenOGroup'+i), data.boons, phaseData.boonGenOGroupStats, true);
 		createBoonTable($('#boonsGenSquad'+i), data.boons, phaseData.boonGenSquadStats, true);
 
-		createBoonTable($('#offensiveGenSelf'+i), data.boons, phaseData.offBuffGenSelfStats, true);
-		createBoonTable($('#offensiveGenGroup'+i), data.boons, phaseData.offBuffGenGroupStats, true);
-		createBoonTable($('#offensiveGenOGroup'+i), data.boons, phaseData.offBuffGenOGroupStats, true);
-		createBoonTable($('#offensiveGenSquad'+i), data.boons, phaseData.offBuffGenSquadStats, true);
+		createBoonTable($('#offensiveUptime'+i), data.offBuffs, phaseData.offBuffStats);
+		createBoonTable($('#offensiveGenSelf'+i), data.offBuffs, phaseData.offBuffGenSelfStats, true);
+		createBoonTable($('#offensiveGenGroup'+i), data.offBuffs, phaseData.offBuffGenGroupStats, true);
+		createBoonTable($('#offensiveGenOGroup'+i), data.offBuffs, phaseData.offBuffGenOGroupStats, true);
+		createBoonTable($('#offensiveGenSquad'+i), data.offBuffs, phaseData.offBuffGenSquadStats, true);
 
-		createBoonTable($('#defensiveGenSelf'+i), data.boons, phaseData.defBuffGenSelfStats, true);
-		createBoonTable($('#defensiveGenGroup'+i), data.boons, phaseData.defBuffGenGroupStats, true);
-		createBoonTable($('#defensiveGenOGroup'+i), data.boons, phaseData.defBuffGenOGroupStats, true);
-		createBoonTable($('#defensiveGenSquad'+i), data.boons, phaseData.defBuffGenSquadStats, true);
+		createBoonTable($('#defensiveUptime'+i), data.defBuffs, phaseData.defBuffStats);
+		createBoonTable($('#defensiveGenSelf'+i), data.defBuffs, phaseData.defBuffGenSelfStats, true);
+		createBoonTable($('#defensiveGenGroup'+i), data.defBuffs, phaseData.defBuffGenGroupStats, true);
+		createBoonTable($('#defensiveGenOGroup'+i), data.defBuffs, phaseData.defBuffGenOGroupStats, true);
+		createBoonTable($('#defensiveGenSquad'+i), data.defBuffs, phaseData.defBuffGenSquadStats, true);
 	});
 
 	$('[title]').tooltip({html:true});
