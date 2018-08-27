@@ -32,13 +32,13 @@ namespace LuckParser.Models.ParseModels
             List<Mechanic> toRemove = new List<Mechanic>();
             foreach (Mechanic mech in Keys)
             {
-                if (altNames.ContainsKey(mech.GetAltName()))
+                if (altNames.ContainsKey(mech.GetShortName()))
                 {
-                    this[altNames[mech.GetAltName()]].AddRange(this[mech]);
+                    this[altNames[mech.GetShortName()]].AddRange(this[mech]);
                     toRemove.Add(mech);
                 } else
                 {
-                    altNames.Add(mech.GetAltName(), mech);
+                    altNames.Add(mech.GetShortName(), mech);
                 }
             }
             foreach(Mechanic mech in toRemove)

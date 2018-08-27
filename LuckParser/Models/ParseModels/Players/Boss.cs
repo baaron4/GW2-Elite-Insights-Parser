@@ -99,6 +99,7 @@ namespace LuckParser.Models.ParseModels
             MechanicData mechData = log.GetMechanicData();
             BossData bossData = log.GetBossData();
             List<Mechanic> bossMechanics = bossData.GetBossBehavior().GetMechanics();
+            Dictionary<ushort, AbstractMasterPlayer> regroupedMobs = new Dictionary<ushort, AbstractMasterPlayer>();
             // Boons
             List<Mechanic> enemyBoons = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon || x.GetMechType() == Mechanic.MechType.EnemyBoonStrip).ToList();
             foreach (Mechanic m in enemyBoons)
@@ -121,7 +122,12 @@ namespace LuckParser.Models.ParseModels
                             }
                             else
                             {
-                                amp = new Mob(log.GetAgentData().GetAgent(c.DstAgent));
+                                AgentItem a = log.GetAgentData().GetAgent(c.DstAgent);
+                                if (!regroupedMobs.TryGetValue(a.GetID(), out amp))
+                                {
+                                    amp = new DummyPlayer(a);
+                                    regroupedMobs.Add(a.GetID(), amp);
+                                }
                             }
                         } else if (m.GetMechType() == Mechanic.MechType.EnemyBoonStrip && c.IsBuffRemove == ParseEnum.BuffRemove.Manual)
                         {
@@ -131,7 +137,12 @@ namespace LuckParser.Models.ParseModels
                             }
                             else
                             {
-                                amp = new Mob(log.GetAgentData().GetAgent(c.SrcAgent));
+                                AgentItem a = log.GetAgentData().GetAgent(c.SrcAgent);
+                                if (!regroupedMobs.TryGetValue(a.GetID(), out amp))
+                                {
+                                    amp = new DummyPlayer(a);
+                                    regroupedMobs.Add(a.GetID(), amp);
+                                }
                             }
 
                         }
@@ -165,7 +176,11 @@ namespace LuckParser.Models.ParseModels
                             }
                             else
                             {
-                                amp = new DummyPlayer(log.GetAgentData().GetAgent(c.SrcAgent));
+                                AgentItem a = log.GetAgentData().GetAgent(c.SrcAgent);
+                                if (!regroupedMobs.TryGetValue(a.GetID(),out amp)) {
+                                    amp = new DummyPlayer(a);
+                                    regroupedMobs.Add(a.GetID(), amp);
+                                }
                             }
                         }
                         if (amp != null)
@@ -181,7 +196,11 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (AgentItem a in log.GetAgentData().GetNPCAgentList().Where(x => x.GetID() == m.GetSkill()))
                 {
-                    AbstractMasterPlayer amp = new DummyPlayer(a);
+                    if (!regroupedMobs.TryGetValue(a.GetID(), out AbstractMasterPlayer amp))
+                    {
+                        amp = new DummyPlayer(a);
+                        regroupedMobs.Add(a.GetID(), amp);
+                    }
                     mechData[m].Add(new MechanicLog(a.GetFirstAware() - bossData.GetFirstAware(), m, amp));
                 }
             }

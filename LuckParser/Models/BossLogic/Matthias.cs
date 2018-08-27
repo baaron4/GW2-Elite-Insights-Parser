@@ -14,28 +14,27 @@ namespace LuckParser.Models
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new Mechanic(34380, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'hexagram',color:'rgb(255,0,0)',", "Ball",0),// Oppressive Gaze (Hadouken projectile), Hadouken //human
-            new Mechanic(34371, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'hexagram',color:'rgb(255,0,0)',", "Ball",0),// Oppressive Gaze (Hadouken projectile), Hadouken//abom
-            new Mechanic(34480, "Blood Shards", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'diamond-wide-open',color:'rgb(255,0,255)',", "RpFire",0),//Blood Shard projectiles during bubble, Rapid Fire //human
-            new Mechanic(34440, "Blood Shards", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'diamond-wide-open',color:'rgb(255,0,255)',", "RpFire",0),//Blood Shard projectiles during bubble, Rapid Fire //abom
-            new Mechanic(34404, "Shards of Rage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'star-diamond',color:'rgb(255,0,0)',", "Shrds",1000),//Shards of Rage (Jump), Jump Shards//human
-            new Mechanic(34411, "Shards of Rage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'star-diamond',color:'rgb(255,0,0)',", "Shrds",1000),//Shards of Rage (Jump), Jump Shards//abom
-            new Mechanic(34466, "Fiery Vortex", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'triangle-down-open',color:'rgb(255,200,0)',", "Torndo",250), //Fiery Vortex (Tornado), Tornado
-            new Mechanic(34543, "Thunder", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'triangle-up-open',color:'rgb(0,255,255)',", "Storm",0), //Thunder Storm hit (air phase), Storm cloud
-            new Mechanic(34450, "Unstable Blood Magic", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'diamond',color:'rgb(255,0,0)',", "Well",0), //Unstable Blood Magic application, Well
-            new Mechanic(34336, "Well of the Profane", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'diamond-open',color:'rgb(255,0,0)',", "W.dmg",0), //Unstable Blood Magic AoE hit, Stood in Well
-            new Mechanic(34416, "Corruption", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle',color:'rgb(255,140,0)',", "Crptn",0), //Corruption Application, Corruption
-            new Mechanic(34473, "Corruption", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(255,140,0)',", "C.dmg",0), //Hit by Corruption AoE, Corruption dmg
-            new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'diamond-tall',color:'rgb(128,0,128)',", "Scrfc",0), //Sacrifice (Breakbar), Sacrifice
-            new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(200,140,255)',", "KD",0,(value => value > 0)), // Unbalanced (triggered Storm phase Debuff), Knockdown //Does this only trigger on actual Knockdown or also when just reaching 10 stacks and letting the debuff time out? Maybe check is_buffremove==3.
+            new Mechanic(34380, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'hexagram',color:'rgb(255,0,0)',", "Ball","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//human
+            new Mechanic(34371, "Oppressive Gaze", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'hexagram',color:'rgb(255,0,0)',", "Ball","Oppressive Gaze (Hadouken projectile)", "Hadouken",0),//abom
+            new Mechanic(34480, "Blood Shards", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'diamond-wide-open',color:'rgb(255,0,255)',", "RpFire","Blood Shard projectiles during bubble", "Rapid Fire",0),// //human
+            new Mechanic(34440, "Blood Shards", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'diamond-wide-open',color:'rgb(255,0,255)',", "RpFire","Blood Shard projectiles during bubble", "Rapid Fire", 0),// //abom
+            new Mechanic(34404, "Shards of Rage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'star-diamond',color:'rgb(255,0,0)',", "Shrds","Shards of Rage (Jump)", "Jump Shards",1000),//human
+            new Mechanic(34411, "Shards of Rage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'star-diamond',color:'rgb(255,0,0)',", "Shrds","Shards of Rage (Jump)", "Jump Shards",1000),//abom
+            new Mechanic(34466, "Fiery Vortex", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'triangle-down-open',color:'rgb(255,200,0)',", "Torndo","Fiery Vortex (Tornado)", "Tornado",250),
+            new Mechanic(34543, "Thunder", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'triangle-up-open',color:'rgb(0,255,255)',", "Storm","Thunder Storm hit (air phase)", "Storm cloud",0),
+            new Mechanic(34450, "Unstable Blood Magic", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'diamond',color:'rgb(255,0,0)',", "Well","Unstable Blood Magic application", "Well",0),
+            new Mechanic(34336, "Well of the Profane", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'diamond-open',color:'rgb(255,0,0)',", "W.dmg","Unstable Blood Magic AoE hit", "Stood in Well",0),
+            new Mechanic(34416, "Corruption", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle',color:'rgb(255,140,0)',", "Crptn","Corruption Application", "Corruption",0),
+            new Mechanic(34473, "Corruption", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(255,140,0)',", "C.dmg","Hit by Corruption AoE", "Corruption dmg",0),
+            new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'diamond-tall',color:'rgb(128,0,128)',", "Scrfc","Sacrifice (Breakbar)", "Sacrifice",0),
+            new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerBoonRemove, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(200,140,255)',", "KD","Unbalanced (triggered Storm phase Debuff)", "Knockdown",0,(value => value > 0)),
             //new Mechanic(34422, "Blood Fueled", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(good)",0),//human //Applied at the same time as Backflip Shards since it is the buff applied by them, can be omitted imho
             //new Mechanic(34428, "Blood Fueled", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(good)",0),//abom
-            new Mechanic(34376, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)',", "Bble",0),// Blood Shield (protective bubble), Bubble//human
-            new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)',", "Bble",0),// Blood Shield (protective bubble), Bubble//abom
+            new Mechanic(34376, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)',", "Bble","Blood Shield (protective bubble)", "Bubble",0),//human
+            new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)',", "Bble","Blood Shield (protective bubble)", "Bubble",0),//abom
             new Mechanic(34511, "Zealous Benediction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle',color:'rgb(255,200,0)',", "Bombs",0),
-            new Mechanic(26766, "Icy Patch", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,255)',", "Icy KD",0,(value => value == 10000)),
-            //Track Zealous Benediction? (Bombs) Application? (ID 34511) Hit? (ID 34528) The hit on allies is not registered since it's percentage based, I think
-            new Mechanic(34413, "Surrender", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,0)',", "Sprt",0) //Surrender (hit by walking Spirit), Spirit hit
+            new Mechanic(26766, "Icy Patch", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,255)',", "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0,(value => value == 10000)),
+            new Mechanic(34413, "Surrender", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,0)',", "Sprt","Surrender (hit by walking Spirit)", "Spirit hit",0)
             });
         }
 
