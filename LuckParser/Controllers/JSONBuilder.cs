@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using LuckParser.Models.DataModels;
-using LuckParser.Models.ParseModels;
 using Newtonsoft.Json;
 
 namespace LuckParser.Controllers
@@ -39,97 +37,6 @@ namespace LuckParser.Controllers
             _settings = settings;
 
             _statistics = statistics;
-        }
-
-        /*
-         * Structs to get serialized into json
-         */
-        private struct JsonLog
-        {
-            public struct JsonDps
-            {
-                public int[] AllDps;
-                public int[] AllDamage;
-                public int[] AllCondiDps;
-                public int[] AllCondiDamage;
-                public int[] AllPowerDps;
-                public int[] AllPowerDamage;
-                // Boss
-                public int[] BossDps;
-                public int[] BossDamage;
-                public int[] BossCondiDps;
-                public int[] BossCondiDamage;
-                public int[] BossPowerDps;
-                public int[] BossPowerDamage;
-                // Player only
-                public int[] PlayerPowerDamage;
-                public int[] PlayerBossPowerDamage;
-            }
-
-            public struct JsonBoonUptime
-            {
-                public double[] Uptime;
-                public double[] Generation;
-                public double[] Overstack;
-            }
-
-            public struct JsonSupport
-            {
-                public int[] Resurrects;
-                public float[] ResurrectTime;
-                public int[] CondiCleanse;
-                public float[] CondiCleanseTime;
-            }
-
-            public struct JsonBoss
-            {
-                public string Name;
-                public ushort Id;
-                public int TotalHealth;
-                public double FinalHealth;
-                public double HealthPercentBurned;
-                public List<Point> HealthOverTime;
-                public JsonDps Dps;
-            }
-
-            public struct JsonPlayer
-            {
-                public string Character;
-                public string Account;
-                public int Condition;
-                public int Concentration;
-                public int Healing;
-                public int Toughness;
-                public int Group;
-                public string Profession;
-                public string[] Weapons;
-                public JsonDps Dps;
-                public Statistics.FinalStats[] Stats;
-                public Statistics.FinalDefenses[] Defenses;
-                public JsonSupport Support;
-                public Dictionary<long, JsonBoonUptime> SelfBoons;
-                public Dictionary<long, JsonBoonUptime> GroupBoons;
-                public Dictionary<long, JsonBoonUptime> OffGroupBoons;
-                public Dictionary<long, JsonBoonUptime> SquadBoons;
-            }
-
-            public struct JsonPhase
-            {
-                public long Duration;
-                public string Name;
-            }
-
-            public string EliteInsightsVersion;
-            public string ArcVersion;
-            public string RecordedBy;
-            public string TimeStart;
-            public string TimeEnd;
-            public string Duration;
-            public bool Success;
-            public JsonBoss Boss;
-            public ArrayList Players;
-            public ArrayList Phases;
-            public List<Point3D> StackCenterPositions;
         }
 
         private JsonLog.JsonDps BuildDPS(Statistics.FinalDPS[] statDps)
@@ -198,9 +105,9 @@ namespace LuckParser.Controllers
             log.Success = _log.GetLogData().GetBosskill();
             log.StackCenterPositions = _statistics.StackCenterPositions;
 
-            log = SetBoss(log);
-            log = SetPlayers(log);
-            log = SetPhases(log);
+            SetBoss(log);
+            SetPlayers(log);
+            SetPhases(log);
 
             var serializer = new JsonSerializer();
             serializer.NullValueHandling = NullValueHandling.Ignore;
@@ -210,7 +117,7 @@ namespace LuckParser.Controllers
         }
 
 
-        private JsonLog SetBoss(JsonLog log)
+        private void SetBoss(JsonLog log)
         {
             log.Boss.Id = _log.GetBossData().GetID();
             log.Boss.Name = _log.GetBossData().GetName();
@@ -223,8 +130,6 @@ namespace LuckParser.Controllers
 
             log.Boss.Dps = BuildDPS(_statistics.BossDps);
             log.Boss.HealthOverTime = _log.GetBossData().GetHealthOverTime();
-
-            return log;
         }
 
         private Dictionary<long, JsonLog.JsonBoonUptime> BuildBoonUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes)
@@ -277,7 +182,7 @@ namespace LuckParser.Controllers
             return support;
         }
 
-        private JsonLog SetPlayers(JsonLog log)
+        private void SetPlayers(JsonLog log)
         {
             log.Players = new ArrayList();
 
@@ -312,11 +217,9 @@ namespace LuckParser.Controllers
 
                 log.Players.Add(currentPlayer);
             }
-
-            return log;
         }
 
-        private JsonLog SetPhases(JsonLog log)
+        private void SetPhases(JsonLog log)
         {
             log.Phases = new ArrayList();
 
@@ -328,8 +231,6 @@ namespace LuckParser.Controllers
                     Name = phase.GetName()
                 });
             }
-
-            return log;
         }
     }
 }
