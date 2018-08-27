@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using LuckParser.Models.DataModels;
+using LuckParser.Models.ParseModels;
 using Newtonsoft.Json;
 
 namespace LuckParser.Controllers
@@ -88,6 +89,7 @@ namespace LuckParser.Controllers
 
             log.Boss.Dps = BuildDPS(_statistics.BossDps);
             log.Boss.HealthOverTime = _log.GetBossData().GetHealthOverTime();
+            log.Boss.Conditions = BuildBossBoons(_statistics.BossConditions);
         }
 
         private void SetPlayers(JsonLog log)
@@ -136,6 +138,53 @@ namespace LuckParser.Controllers
         }
 
         // Statistics to Json Converters ////////////////////////////////////////////////////
+
+        private Dictionary<long, JsonLog.JsonBossBoon> BuildBossBoons(Dictionary<long, Statistics.FinalBossBoon>[] statBoons)
+        {
+            int phases = _statistics.Phases.Count;
+            Dictionary<long, JsonLog.JsonBossBoon> boons = new Dictionary<long, JsonLog.JsonBossBoon>();
+
+            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
+            {
+                foreach (KeyValuePair<long, Statistics.FinalBossBoon> boon in statBoons[phaseIndex])
+                {
+                    if (!boons.ContainsKey(boon.Key))
+                    {
+                        JsonLog.JsonBossBoon newBoon = new JsonLog.JsonBossBoon
+                        {
+                            Uptime = new double[phases],
+                            Generated = new Dictionary<string, double>[phases],
+                            Overstacked = new Dictionary<string, double>[phases]
+                        };
+                        boons[boon.Key] = newBoon;
+                    }
+
+                    boons[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
+
+                    if (boons[boon.Key].Generated[phaseIndex] == null)
+                    {
+                        boons[boon.Key].Generated[phaseIndex] = new Dictionary<string, double>();
+                    }
+
+                    foreach (KeyValuePair<Player, double> playerBoon in boon.Value.Generated)
+                    {
+                        boons[boon.Key].Generated[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                    }
+
+                    if (boons[boon.Key].Overstacked[phaseIndex] == null)
+                    {
+                        boons[boon.Key].Overstacked[phaseIndex] = new Dictionary<string, double>();
+                    }
+
+                    foreach (KeyValuePair<Player, double> playerBoon in boon.Value.Overstacked)
+                    {
+                        boons[boon.Key].Overstacked[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                    }
+                }
+            }
+
+            return boons;
+        }
 
         private JsonLog.JsonDps BuildDPS(Statistics.FinalDPS[] statDps)
         {

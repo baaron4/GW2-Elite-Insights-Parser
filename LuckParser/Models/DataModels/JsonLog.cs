@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using LuckParser.Controllers;
@@ -64,6 +65,7 @@ namespace LuckParser.Models.DataModels
             public double HealthPercentBurned;
             public List<Point> HealthOverTime;
             public JsonDps Dps;
+            public Dictionary<long, JsonBossBoon> Conditions;
         }
 
         public struct JsonStats
@@ -139,6 +141,13 @@ namespace LuckParser.Models.DataModels
         {
             public long Duration;
             public string Name;
+        }
+
+        public struct JsonBossBoon
+        {
+            public double[] Uptime;
+            public Dictionary<String, double>[] Generated;
+            public Dictionary<String, double>[] Overstacked;
         }
 
         public string EliteInsightsVersion;
