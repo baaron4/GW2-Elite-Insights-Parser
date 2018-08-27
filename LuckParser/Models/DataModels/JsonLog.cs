@@ -150,6 +150,14 @@ namespace LuckParser.Models.DataModels
             public Dictionary<String, double>[] Overstacked;
         }
 
+        public struct JsonMechanic
+        {
+            public long Time;
+            public string Player;
+            public string Description;
+            public long Skill;
+        }
+
         public string EliteInsightsVersion;
         public string ArcVersion;
         public string RecordedBy;
@@ -160,6 +168,7 @@ namespace LuckParser.Models.DataModels
         public JsonBoss Boss;
         public ArrayList Players;
         public ArrayList Phases;
+        public JsonMechanic[] Mechanics;
         public List<Point3D> StackCenterPositions;
     }
 }

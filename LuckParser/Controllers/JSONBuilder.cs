@@ -67,6 +67,7 @@ namespace LuckParser.Controllers
             SetBoss(log);
             SetPlayers(log);
             SetPhases(log);
+            SetMechanics(log);
 
             var serializer = new JsonSerializer();
             serializer.NullValueHandling = NullValueHandling.Ignore;
@@ -75,6 +76,30 @@ namespace LuckParser.Controllers
             serializer.Serialize(writer, log);
         }
 
+        private void SetMechanics(JsonLog log)
+        {
+            MechanicData mechanicData = _log.GetMechanicData();
+            List<MechanicLog> mechanicLogs = new List<MechanicLog>();
+            foreach (List<MechanicLog> mLog in mechanicData.Values)
+            {
+                mechanicLogs.AddRange(mLog);
+            }
+            mechanicLogs = mechanicLogs.OrderBy(x => x.GetTime()).ToList();
+            if (mechanicLogs.Any())
+            {
+                log.Mechanics = new JsonLog.JsonMechanic[mechanicLogs.Count];
+                for (int i = 0; i < mechanicLogs.Count; i++)
+                {
+                    log.Mechanics[i] = new JsonLog.JsonMechanic
+                    {
+                        Time = mechanicLogs[i].GetTime(),
+                        Player = mechanicLogs[i].GetPlayer().GetCharacter(),
+                        Description = mechanicLogs[i].GetDescription(),
+                        Skill = mechanicLogs[i].GetSkill()
+                    };
+                }
+            }
+        }
 
         private void SetBoss(JsonLog log)
         {
