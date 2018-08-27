@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Runtime.Serialization.Json;
+using System.Runtime.Serialization;
+using System.IO;
+using System.Text;
+using LuckParser.Models.HtmlModels;
 
 namespace LuckParser
 {

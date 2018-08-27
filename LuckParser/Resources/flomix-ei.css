@@ -1,0 +1,52 @@
+.table th { border-top: 0; }
+
+.template {
+	opacity: 0.3333;
+	display: none;
+}
+td.sorting_1 {
+	background-color: rgba(39,128,227,0.05);
+}
+
+.table > tfoot > tr:first-child > td, .table > tfoot > tr:last-child > td {
+    border-top-width: 3px;
+}
+.table > tfoot > tr > td {
+	color: #888;
+}
+
+
+
+table.dataTable.table-sm>thead>tr>th {
+    padding-right: 10px;
+}
+
+table.dataTable.table-sm .sorting:before,
+table.dataTable.table-sm .sorting_asc:before,
+table.dataTable.table-sm .sorting_desc:before {
+    right: 0.3em;
+}
+
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before,
+table.dataTable thead .sorting_desc_disabled:after {
+    right: 0.3em;
+    display: none;
+}
+
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_desc:after {
+    right: 0.3em;
+    display: block;
+}
+
+.sub-tabs {
+	margin-top: 10px;
+}
+
+td, th {text-align: center; white-space: nowrap;}
