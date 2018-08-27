@@ -299,6 +299,21 @@ namespace LuckParser.Controllers
                 dps.PlayerBossPowerDamage[phaseIndex] = statDps[phaseIndex].PlayerBossPowerDamage;
             }
 
+            if (!dps.AllDps.Any(e => e > 0)) dps.AllDps = null;
+            if (!dps.AllDamage.Any(e => e > 0)) dps.AllDamage = null;
+            if (!dps.AllPowerDps.Any(e => e > 0)) dps.AllPowerDps = null;
+            if (!dps.AllCondiDamage.Any(e => e > 0)) dps.AllCondiDamage = null;
+            if (!dps.AllCondiDps.Any(e => e > 0)) dps.AllCondiDps = null;
+            if (!dps.AllPowerDamage.Any(e => e > 0)) dps.AllPowerDamage = null;
+            if (!dps.BossCondiDamage.Any(e => e > 0)) dps.BossCondiDamage = null;
+            if (!dps.BossPowerDamage.Any(e => e > 0)) dps.BossPowerDamage = null;
+            if (!dps.BossCondiDps.Any(e => e > 0)) dps.BossCondiDps = null;
+            if (!dps.BossPowerDps.Any(e => e > 0)) dps.BossPowerDps = null;
+            if (!dps.BossDamage.Any(e => e > 0)) dps.BossDamage = null;
+            if (!dps.BossDps.Any(e => e > 0)) dps.BossDps = null;
+            if (!dps.PlayerPowerDamage.Any(e => e > 0)) dps.PlayerPowerDamage = null;
+            if (!dps.PlayerBossPowerDamage.Any(e => e > 0)) dps.PlayerBossPowerDamage = null;
+
             return dps;
         }
 
@@ -386,6 +401,11 @@ namespace LuckParser.Controllers
                 support.CondiCleanseTime[phaseIndex] = statSupport[phaseIndex].CondiCleanseTime;
             }
 
+            if (!support.Resurrects.Any(e => e > 0)) support.Resurrects = null;
+            if (!support.ResurrectTime.Any(e => e > 0)) support.ResurrectTime = null;
+            if (!support.CondiCleanse.Any(e => e > 0)) support.CondiCleanse = null;
+            if (!support.CondiCleanseTime.Any(e => e > 0)) support.CondiCleanseTime = null;
+
             return support;
         }
 
@@ -411,6 +431,13 @@ namespace LuckParser.Controllers
                 defense.DamageBarrier[phaseIndex] = statDefense[phaseIndex].DamageBarrier;
                 defense.BlockedCount[phaseIndex] = statDefense[phaseIndex].BlockedCount;
             }
+
+            if (!defense.EvadedCount.Any(e => e > 0)) defense.EvadedCount = null;
+            if (!defense.InvulnedCount.Any(e => e > 0)) defense.InvulnedCount = null;
+            if (!defense.DamageTaken.Any(e => e > 0)) defense.DamageTaken = null;
+            if (!defense.DamageInvulned.Any(e => e > 0)) defense.DamageInvulned = null;
+            if (!defense.DamageBarrier.Any(e => e > 0)) defense.DamageBarrier = null;
+            if (!defense.BlockedCount.Any(e => e > 0)) defense.BlockedCount = null;
 
             return defense;
         }
@@ -499,6 +526,43 @@ namespace LuckParser.Controllers
                 stats.Died[phaseIndex] = statStat[phaseIndex].Died;
                 stats.Dcd[phaseIndex] = statStat[phaseIndex].Dcd;
             }
+
+            if (!stats.Dcd.Any(e => e > 0)) stats.Dcd = null;
+            if (!stats.Died.Any(e => e > 0)) stats.Died = null;
+            if (!stats.DownCount.Any(e => e > 0)) stats.DownCount = null;
+            if (!stats.SwapCount.Any(e => e > 0)) stats.SwapCount = null;
+            if (!stats.InvulnedBoss.Any(e => e > 0)) stats.InvulnedBoss = null;
+            if (!stats.InterruptsBoss.Any(e => e > 0)) stats.InterruptsBoss = null;
+            if (!stats.MissedBoss.Any(e => e > 0)) stats.MissedBoss = null;
+            if (!stats.GlanceRateBoss.Any(e => e > 0)) stats.GlanceRateBoss = null;
+            if (!stats.FlankingRateBoss.Any(e => e > 0)) stats.FlankingRateBoss = null;
+            if (!stats.MovingDamageBoss.Any(e => e > 0)) stats.MovingDamageBoss = null;
+            if (!stats.MovingRateBoss.Any(e => e > 0)) stats.MovingRateBoss = null;
+            if (!stats.ScholarDmgBoss.Any(e => e > 0)) stats.ScholarDmgBoss = null;
+            if (!stats.ScholarRateBoss.Any(e => e > 0)) stats.ScholarRateBoss = null;
+            if (!stats.CriticalDmgBoss.Any(e => e > 0)) stats.CriticalDmgBoss = null;
+            if (!stats.CriticalRateBoss.Any(e => e > 0)) stats.CriticalRateBoss = null;
+            if (!stats.CritablePowerLoopCountBoss.Any(e => e > 0)) stats.CritablePowerLoopCountBoss = null;
+            if (!stats.PowerLoopCountBoss.Any(e => e > 0)) stats.PowerLoopCountBoss = null;
+            if (!stats.StackDist.Any(e => e > 0)) stats.StackDist = null;
+            if (!stats.AvgBoons.Any(e => e > 0)) stats.AvgBoons = null;
+            if (!stats.TimeSaved.Any(e => e > 0)) stats.TimeSaved = null;
+            if (!stats.Saved.Any(e => e > 0)) stats.Saved = null;
+            if (!stats.TimeWasted.Any(e => e > 0)) stats.TimeWasted = null;
+            if (!stats.Wasted.Any(e => e > 0)) stats.Wasted = null;
+            if (!stats.Invulned.Any(e => e > 0)) stats.Invulned = null;
+            if (!stats.Interrupts.Any(e => e > 0)) stats.Interrupts = null;
+            if (!stats.Missed.Any(e => e > 0)) stats.Missed = null;
+            if (!stats.GlanceRate.Any(e => e > 0)) stats.GlanceRate = null;
+            if (!stats.FlankingRate.Any(e => e > 0)) stats.FlankingRate = null;
+            if (!stats.MovingDamage.Any(e => e > 0)) stats.MovingDamage = null;
+            if (!stats.MovingRate.Any(e => e > 0)) stats.MovingRate = null;
+            if (!stats.ScholarDmg.Any(e => e > 0)) stats.ScholarDmg = null;
+            if (!stats.ScholarRate.Any(e => e > 0)) stats.ScholarRate = null;
+            if (!stats.CriticalDmg.Any(e => e > 0)) stats.CriticalDmg = null;
+            if (!stats.CriticalRate.Any(e => e > 0)) stats.CriticalRate = null;
+            if (!stats.CritablePowerLoopCount.Any(e => e > 0)) stats.CritablePowerLoopCount = null;
+            if (!stats.PowerLoopCount.Any(e => e > 0)) stats.PowerLoopCount = null;
 
             return stats;
         }
