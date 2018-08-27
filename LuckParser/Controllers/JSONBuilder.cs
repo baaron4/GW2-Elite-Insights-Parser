@@ -106,7 +106,7 @@ namespace LuckParser.Controllers
                     Concentration = player.GetConcentration(),
                     Healing = player.GetHealing(),
                     Toughness = player.GetToughness(),
-                    Weapons = player.GetWeaponsArray(_log),
+                    Weapons = player.GetWeaponsArray(_log).Where(w => w != null).ToArray(),
                     Group = player.GetGroup(),
                     Profession = player.GetProf(),
                     Dps = BuildDPS(_statistics.Dps[player]),
@@ -168,7 +168,10 @@ namespace LuckParser.Controllers
 
                     foreach (KeyValuePair<Player, double> playerBoon in boon.Value.Generated)
                     {
-                        boons[boon.Key].Generated[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                        if (playerBoon.Value != 0)
+                        {
+                            boons[boon.Key].Generated[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                        }
                     }
 
                     if (boons[boon.Key].Overstacked[phaseIndex] == null)
@@ -178,7 +181,10 @@ namespace LuckParser.Controllers
 
                     foreach (KeyValuePair<Player, double> playerBoon in boon.Value.Overstacked)
                     {
-                        boons[boon.Key].Overstacked[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                        if (playerBoon.Value != 0)
+                        {
+                            boons[boon.Key].Overstacked[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                        }
                     }
                 }
             }
