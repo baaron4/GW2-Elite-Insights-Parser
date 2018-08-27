@@ -182,6 +182,32 @@ namespace LuckParser.Controllers
             return support;
         }
 
+        private JsonLog.JsonDefenses BuildDefenses(Statistics.FinalDefenses[] statDefense)
+        {
+            int phases = _statistics.Phases.Count;
+            JsonLog.JsonDefenses defense = new JsonLog.JsonDefenses
+            {
+                BlockedCount = new int[phases],
+                DamageBarrier = new int[phases],
+                DamageInvulned = new int[phases],
+                DamageTaken = new long[phases],
+                EvadedCount = new int[phases],
+                InvulnedCount = new int[phases]
+            };
+
+            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
+            {
+                defense.EvadedCount[phaseIndex] = statDefense[phaseIndex].EvadedCount;
+                defense.InvulnedCount[phaseIndex] = statDefense[phaseIndex].InvulnedCount;
+                defense.DamageTaken[phaseIndex] = statDefense[phaseIndex].DamageTaken;
+                defense.DamageInvulned[phaseIndex] = statDefense[phaseIndex].DamageInvulned;
+                defense.DamageBarrier[phaseIndex] = statDefense[phaseIndex].DamageBarrier;
+                defense.BlockedCount[phaseIndex] = statDefense[phaseIndex].BlockedCount;
+            }
+
+            return defense;
+        }
+
         private void SetPlayers(JsonLog log)
         {
             log.Players = new ArrayList();
@@ -201,7 +227,7 @@ namespace LuckParser.Controllers
                     Profession = player.GetProf(),
                     Dps = BuildDPS(_statistics.Dps[player]),
                     Stats = new Statistics.FinalStats[_statistics.Phases.Count],
-                    Defenses = new Statistics.FinalDefenses[_statistics.Phases.Count],
+                    Defenses = BuildDefenses(_statistics.Defenses[player]),
                     Support = BuildSupport(_statistics.Support[player]),
                     SelfBoons = BuildBoonUptime(_statistics.SelfBoons[player]),
                     GroupBoons = BuildBoonUptime(_statistics.GroupBoons[player]),
@@ -212,7 +238,6 @@ namespace LuckParser.Controllers
                 for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
                 {
                     currentPlayer.Stats[phaseIndex] = _statistics.Stats[player][phaseIndex];
-                    currentPlayer.Defenses[phaseIndex] = _statistics.Defenses[player][phaseIndex];
                 }
 
                 log.Players.Add(currentPlayer);

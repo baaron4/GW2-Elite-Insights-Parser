@@ -16,6 +16,7 @@ namespace LuckParser.Models.DataModels
             public int[] AllCondiDamage;
             public int[] AllPowerDps;
             public int[] AllPowerDamage;
+
             // Boss
             public int[] BossDps;
             public int[] BossDamage;
@@ -23,9 +24,20 @@ namespace LuckParser.Models.DataModels
             public int[] BossCondiDamage;
             public int[] BossPowerDps;
             public int[] BossPowerDamage;
+
             // Player only
             public int[] PlayerPowerDamage;
             public int[] PlayerBossPowerDamage;
+        }
+
+        public struct JsonDefenses
+        {
+            public long[] DamageTaken;
+            public int[] BlockedCount;
+            public int[] EvadedCount;
+            public int[] InvulnedCount;
+            public int[] DamageInvulned;
+            public int[] DamageBarrier;
         }
 
         public struct JsonBoonUptime
@@ -67,7 +79,7 @@ namespace LuckParser.Models.DataModels
             public string[] Weapons;
             public JsonDps Dps;
             public Statistics.FinalStats[] Stats;
-            public Statistics.FinalDefenses[] Defenses;
+            public JsonDefenses Defenses;
             public JsonSupport Support;
             public Dictionary<long, JsonBoonUptime> SelfBoons;
             public Dictionary<long, JsonBoonUptime> GroupBoons;
