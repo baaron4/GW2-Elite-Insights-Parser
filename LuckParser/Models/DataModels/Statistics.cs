@@ -69,6 +69,7 @@ namespace LuckParser.Models.DataModels
             public double TimeSaved;
             public double AvgBoons;
             public double StackDist;
+
             //Boss only Rates
             public int PowerLoopCountBoss;
             public int CritablePowerLoopCountBoss;
@@ -89,8 +90,7 @@ namespace LuckParser.Models.DataModels
             public int DownCount;
             public int DodgeCount;
 
-            
-
+            // Misc
             public double Died;
             public double Dcd;
         }

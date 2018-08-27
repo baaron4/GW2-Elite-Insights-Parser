@@ -66,6 +66,54 @@ namespace LuckParser.Models.DataModels
             public JsonDps Dps;
         }
 
+        public struct JsonStats
+        {
+            // Rates
+            public int[] PowerLoopCount;
+            public int[] CritablePowerLoopCount;
+            public int[] CriticalRate;
+            public int[] CriticalDmg;
+            public int[] ScholarRate;
+            public int[] ScholarDmg;
+            public int[] MovingRate;
+            public int[] MovingDamage;
+            public int[] FlankingRate;
+            public int[] GlanceRate;
+            public int[] Missed;
+            public int[] Interupts;
+            public int[] Invulned;
+            public int[] Wasted;
+            public double[] TimeWasted;
+            public int[] Saved;
+            public double[] TimeSaved;
+            public double[] AvgBoons;
+            public double[] StackDist;
+
+            //Boss only Rates
+            public int[] PowerLoopCountBoss;
+            public int[] CritablePowerLoopCountBoss;
+            public int[] CriticalRateBoss;
+            public int[] CriticalDmgBoss;
+            public int[] ScholarRateBoss;
+            public int[] ScholarDmgBoss;
+            public int[] MovingRateBoss;
+            public int[] MovingDamageBoss;
+            public int[] FlankingRateBoss;
+            public int[] GlanceRateBoss;
+            public int[] MissedBoss;
+            public int[] InteruptsBoss;
+            public int[] InvulnedBoss;
+
+            // Counts
+            public int[] SwapCount;
+            public int[] DownCount;
+            public int[] DodgeCount;
+
+            // Misc
+            public double[] Died;
+            public double[] Dcd;
+        }
+
         public struct JsonPlayer
         {
             public string Character;
@@ -78,7 +126,7 @@ namespace LuckParser.Models.DataModels
             public string Profession;
             public string[] Weapons;
             public JsonDps Dps;
-            public Statistics.FinalStats[] Stats;
+            public JsonStats Stats;
             public JsonDefenses Defenses;
             public JsonSupport Support;
             public Dictionary<long, JsonBoonUptime> SelfBoons;

@@ -208,6 +208,94 @@ namespace LuckParser.Controllers
             return defense;
         }
 
+        private JsonLog.JsonStats BuildStats(Statistics.FinalStats[] statStat)
+        {
+            int phases = _statistics.Phases.Count;
+            JsonLog.JsonStats stats = new JsonLog.JsonStats
+            {
+                AvgBoons = new double[phases],
+                CritablePowerLoopCount = new int[phases],
+                CritablePowerLoopCountBoss = new int[phases],
+                CriticalDmg = new int[phases],
+                CriticalDmgBoss = new int[phases],
+                CriticalRate = new int[phases],
+                CriticalRateBoss = new int[phases],
+                Dcd = new double[phases],
+                Died = new double[phases],
+                DodgeCount = new int[phases],
+                DownCount = new int[phases],
+                FlankingRate = new int[phases],
+                FlankingRateBoss = new int[phases],
+                GlanceRate = new int[phases],
+                GlanceRateBoss = new int[phases],
+                Interupts = new int[phases],
+                InteruptsBoss = new int[phases],
+                Invulned = new int[phases],
+                InvulnedBoss = new int[phases],
+                Missed = new int[phases],
+                MissedBoss = new int[phases],
+                MovingDamage = new int[phases],
+                MovingDamageBoss = new int[phases],
+                MovingRate = new int[phases],
+                MovingRateBoss = new int[phases],
+                PowerLoopCount = new int[phases],
+                PowerLoopCountBoss = new int[phases],
+                Saved = new int[phases],
+                ScholarDmg = new int[phases],
+                ScholarDmgBoss = new int[phases],
+                ScholarRate = new int[phases],
+                ScholarRateBoss = new int[phases],
+                StackDist = new double[phases],
+                SwapCount = new int[phases],
+                TimeSaved = new double[phases],
+                TimeWasted = new double[phases],
+                Wasted = new int[phases]
+            };
+
+            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
+            {
+                stats.PowerLoopCount[phaseIndex] = statStat[phaseIndex].PowerLoopCount;
+                stats.CritablePowerLoopCount[phaseIndex] = statStat[phaseIndex].CritablePowerLoopCount;
+                stats.CriticalRate[phaseIndex] = statStat[phaseIndex].CriticalRate;
+                stats.CriticalDmg[phaseIndex] = statStat[phaseIndex].CriticalDmg;
+                stats.ScholarRate[phaseIndex] = statStat[phaseIndex].ScholarRate;
+                stats.ScholarDmg[phaseIndex] = statStat[phaseIndex].ScholarDmg;
+                stats.MovingRate[phaseIndex] = statStat[phaseIndex].MovingRate;
+                stats.MovingDamage[phaseIndex] = statStat[phaseIndex].MovingDamage;
+                stats.FlankingRate[phaseIndex] = statStat[phaseIndex].FlankingRate;
+                stats.GlanceRate[phaseIndex] = statStat[phaseIndex].GlanceRate;
+                stats.Missed[phaseIndex] = statStat[phaseIndex].Missed;
+                stats.Interupts[phaseIndex] = statStat[phaseIndex].Interupts;
+                stats.Invulned[phaseIndex] = statStat[phaseIndex].Invulned;
+                stats.Wasted[phaseIndex] = statStat[phaseIndex].Wasted;
+                stats.TimeWasted[phaseIndex] = statStat[phaseIndex].TimeWasted;
+                stats.Saved[phaseIndex] = statStat[phaseIndex].Saved;
+                stats.TimeSaved[phaseIndex] = statStat[phaseIndex].TimeSaved;
+                stats.AvgBoons[phaseIndex] = statStat[phaseIndex].AvgBoons;
+                stats.StackDist[phaseIndex] = statStat[phaseIndex].StackDist;
+                stats.PowerLoopCountBoss[phaseIndex] = statStat[phaseIndex].PowerLoopCountBoss;
+                stats.CritablePowerLoopCountBoss[phaseIndex] = statStat[phaseIndex].CritablePowerLoopCountBoss;
+                stats.CriticalRateBoss[phaseIndex] = statStat[phaseIndex].CriticalRateBoss;
+                stats.CriticalDmgBoss[phaseIndex] = statStat[phaseIndex].CriticalDmgBoss;
+                stats.ScholarRateBoss[phaseIndex] = statStat[phaseIndex].ScholarRateBoss;
+                stats.ScholarDmgBoss[phaseIndex] = statStat[phaseIndex].ScholarDmgBoss;
+                stats.MovingRateBoss[phaseIndex] = statStat[phaseIndex].MovingRateBoss;
+                stats.MovingDamageBoss[phaseIndex] = statStat[phaseIndex].MovingDamageBoss;
+                stats.FlankingRateBoss[phaseIndex] = statStat[phaseIndex].FlankingRateBoss;
+                stats.GlanceRateBoss[phaseIndex] = statStat[phaseIndex].GlanceRateBoss;
+                stats.MissedBoss[phaseIndex] = statStat[phaseIndex].MissedBoss;
+                stats.InteruptsBoss[phaseIndex] = statStat[phaseIndex].InteruptsBoss;
+                stats.InvulnedBoss[phaseIndex] = statStat[phaseIndex].InvulnedBoss;
+                stats.SwapCount[phaseIndex] = statStat[phaseIndex].SwapCount;
+                stats.DownCount[phaseIndex] = statStat[phaseIndex].DownCount;
+                stats.DodgeCount[phaseIndex] = statStat[phaseIndex].DodgeCount;
+                stats.Died[phaseIndex] = statStat[phaseIndex].Died;
+                stats.Dcd[phaseIndex] = statStat[phaseIndex].Dcd;
+            }
+
+            return stats;
+        }
+
         private void SetPlayers(JsonLog log)
         {
             log.Players = new ArrayList();
@@ -226,7 +314,7 @@ namespace LuckParser.Controllers
                     Group = player.GetGroup(),
                     Profession = player.GetProf(),
                     Dps = BuildDPS(_statistics.Dps[player]),
-                    Stats = new Statistics.FinalStats[_statistics.Phases.Count],
+                    Stats = BuildStats(_statistics.Stats[player]),
                     Defenses = BuildDefenses(_statistics.Defenses[player]),
                     Support = BuildSupport(_statistics.Support[player]),
                     SelfBoons = BuildBoonUptime(_statistics.SelfBoons[player]),
@@ -234,11 +322,6 @@ namespace LuckParser.Controllers
                     OffGroupBoons = BuildBoonUptime(_statistics.OffGroupBoons[player]),
                     SquadBoons = BuildBoonUptime(_statistics.SquadBoons[player])
                 };
-
-                for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
-                {
-                    currentPlayer.Stats[phaseIndex] = _statistics.Stats[player][phaseIndex];
-                }
 
                 log.Players.Add(currentPlayer);
             }
