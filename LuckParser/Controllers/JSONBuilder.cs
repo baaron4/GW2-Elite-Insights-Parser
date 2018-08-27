@@ -139,52 +139,119 @@ namespace LuckParser.Controllers
 
         // Statistics to Json Converters ////////////////////////////////////////////////////
 
-        private Dictionary<long, JsonLog.JsonBossBoon> BuildBossBoons(
-            Dictionary<long, Statistics.FinalBossBoon>[] statBoons)
+        private bool ContainsBossBoon(long boon, Dictionary<long, Statistics.FinalBossBoon>[] statBoons)
+        {
+            int phases = _statistics.Phases.Count;
+            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
+            {
+                if (statBoons[phaseIndex][boon].Uptime > 0) return true;
+                if (statBoons[phaseIndex][boon].Generated.Any())
+                {
+                    foreach (KeyValuePair<Player, double> playerBoon in statBoons[phaseIndex][boon].Generated)
+                    {
+                        if (playerBoon.Value > 0) return true;
+                    }
+                }
+
+                if (statBoons[phaseIndex][boon].Overstacked.Any())
+                {
+                    foreach (KeyValuePair<Player, double> playerBoon in statBoons[phaseIndex][boon].Generated)
+                    {
+                        if (playerBoon.Value > 0) return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private Dictionary<long, JsonLog.JsonBossBoon> BuildBossBoons(Dictionary<long, Statistics.FinalBossBoon>[] statBoons)
         {
             int phases = _statistics.Phases.Count;
             Dictionary<long, JsonLog.JsonBossBoon> boons = new Dictionary<long, JsonLog.JsonBossBoon>();
+
+            List<long> boonsFound = new List<long>();
+            List<long> boonsNotFound = new List<long>();
 
             for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
             {
                 foreach (KeyValuePair<long, Statistics.FinalBossBoon> boon in statBoons[phaseIndex])
                 {
-                    if (!boons.ContainsKey(boon.Key))
+                    if (boonsFound.Contains(boon.Key))
                     {
-                        JsonLog.JsonBossBoon newBoon = new JsonLog.JsonBossBoon
+                        boons[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
+
+                        if (boons[boon.Key].Generated[phaseIndex] == null)
                         {
-                            Uptime = new double[phases],
-                            Generated = new Dictionary<string, double>[phases],
-                            Overstacked = new Dictionary<string, double>[phases]
-                        };
-                        boons[boon.Key] = newBoon;
-                    }
+                            boons[boon.Key].Generated[phaseIndex] = new Dictionary<string, double>();
+                        }
 
-                    boons[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
-
-                    if (boons[boon.Key].Generated[phaseIndex] == null)
-                    {
-                        boons[boon.Key].Generated[phaseIndex] = new Dictionary<string, double>();
-                    }
-
-                    foreach (KeyValuePair<Player, double> playerBoon in boon.Value.Generated)
-                    {
-                        if (playerBoon.Value != 0)
+                        foreach (KeyValuePair<Player, double> playerBoon in boon.Value.Generated)
                         {
-                            boons[boon.Key].Generated[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                            if (playerBoon.Value != 0)
+                            {
+                                boons[boon.Key].Generated[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                            }
+                        }
+
+                        if (boons[boon.Key].Overstacked[phaseIndex] == null)
+                        {
+                            boons[boon.Key].Overstacked[phaseIndex] = new Dictionary<string, double>();
+                        }
+
+                        foreach (KeyValuePair<Player, double> playerBoon in boon.Value.Overstacked)
+                        {
+                            if (playerBoon.Value != 0)
+                            {
+                                boons[boon.Key].Overstacked[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                            }
                         }
                     }
-
-                    if (boons[boon.Key].Overstacked[phaseIndex] == null)
+                    else if (!boonsNotFound.Contains(boon.Key))
                     {
-                        boons[boon.Key].Overstacked[phaseIndex] = new Dictionary<string, double>();
-                    }
-
-                    foreach (KeyValuePair<Player, double> playerBoon in boon.Value.Overstacked)
-                    {
-                        if (playerBoon.Value != 0)
+                        if (ContainsBossBoon(boon.Key, statBoons))
                         {
-                            boons[boon.Key].Overstacked[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                            boonsFound.Add(boon.Key);
+
+                            JsonLog.JsonBossBoon newBoon = new JsonLog.JsonBossBoon
+                            {
+                                Uptime = new double[phases],
+                                Generated = new Dictionary<string, double>[phases],
+                                Overstacked = new Dictionary<string, double>[phases]
+                            };
+                            boons[boon.Key] = newBoon;
+
+                            boons[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
+
+                            if (boons[boon.Key].Generated[phaseIndex] == null)
+                            {
+                                boons[boon.Key].Generated[phaseIndex] = new Dictionary<string, double>();
+                            }
+
+                            foreach (KeyValuePair<Player, double> playerBoon in boon.Value.Generated)
+                            {
+                                if (playerBoon.Value != 0)
+                                {
+                                    boons[boon.Key].Generated[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                                }
+                            }
+
+                            if (boons[boon.Key].Overstacked[phaseIndex] == null)
+                            {
+                                boons[boon.Key].Overstacked[phaseIndex] = new Dictionary<string, double>();
+                            }
+
+                            foreach (KeyValuePair<Player, double> playerBoon in boon.Value.Overstacked)
+                            {
+                                if (playerBoon.Value != 0)
+                                {
+                                    boons[boon.Key].Overstacked[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            boonsNotFound.Add(boon.Key);
                         }
                     }
                 }
@@ -266,33 +333,35 @@ namespace LuckParser.Controllers
                         uptimes[boon.Key].Generation[phaseIndex] = boon.Value.Generation;
                         uptimes[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
                     }
-                    else
+                    else if (!boonsNotFound.Contains(boon.Key))
                     {
-                        if (!boonsNotFound.Contains(boon.Key))
+                        if (ContainsBoon(boon.Key, statUptimes))
                         {
-                            if (ContainsBoon(boon.Key, statUptimes))
-                            {
-                                boonsFound.Add(boon.Key);
+                            boonsFound.Add(boon.Key);
 
-                                JsonLog.JsonBoonUptime newUptime = new JsonLog.JsonBoonUptime
-                                {
-                                    Generation = new double[phases],
-                                    Overstack = new double[phases],
-                                    Uptime = new double[phases]
-                                };
-                                uptimes[boon.Key] = newUptime;
-
-                                uptimes[boon.Key].Overstack[phaseIndex] = boon.Value.Overstack;
-                                uptimes[boon.Key].Generation[phaseIndex] = boon.Value.Generation;
-                                uptimes[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
-                            }
-                            else
+                            JsonLog.JsonBoonUptime newUptime = new JsonLog.JsonBoonUptime
                             {
-                                boonsNotFound.Add(boon.Key);
-                            }
+                                Generation = new double[phases],
+                                Overstack = new double[phases],
+                                Uptime = new double[phases]
+                            };
+                            uptimes[boon.Key] = newUptime;
+
+                            uptimes[boon.Key].Overstack[phaseIndex] = boon.Value.Overstack;
+                            uptimes[boon.Key].Generation[phaseIndex] = boon.Value.Generation;
+                            uptimes[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
+                        }
+                        else
+                        {
+                            boonsNotFound.Add(boon.Key);
                         }
                     }
                 }
+            }
+
+            if (!uptimes.Any())
+            {
+                return null;
             }
 
             return uptimes;
