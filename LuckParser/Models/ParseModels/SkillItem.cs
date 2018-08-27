@@ -136,7 +136,7 @@ namespace LuckParser.Models.ParseModels
                         if (fact.text == "Launch" || fact.status == "Launch")
                         {
 
-                            _cc += 232;//Wiki says either 232 or 332 based on duration? launch doesnt provide duration in api however
+                            _cc += 232;//Wiki says either 232 or 332 based on duration? launch doesn't provide duration in api however
                            
                             launch = true;
                         }
@@ -190,7 +190,7 @@ namespace LuckParser.Models.ParseModels
 
                 
                 }
-                if (_id == 30725)//toss elixer x
+                if (_id == 30725)//toss elixir x
                 {
                     _cc = 300;
                 }

@@ -40,7 +40,7 @@ namespace LuckParser.Models.ParseModels
             return Agent.GetProf();
         }
 
-        public List<DamageLog> GetDamageLogs(int instidFilter, ParsedLog log, long start, long end)//isntid = 0 gets all logs if specefied sets and returns filterd logs
+        public List<DamageLog> GetDamageLogs(int instidFilter, ParsedLog log, long start, long end)//isntid = 0 gets all logs if specified sets and returns filtered logs
         {
             if (DamageLogs.Count == 0)
             {
@@ -81,7 +81,7 @@ namespace LuckParser.Models.ParseModels
             }
             return _damageTakenlogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
         }
-        /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)//isntid = 0 gets all logs if specefied sets and returns filterd logs
+        /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)//isntid = 0 gets all logs if specified sets and returns filtered logs
         {
             if (healingLogs.Count == 0)
             {
@@ -150,7 +150,7 @@ namespace LuckParser.Models.ParseModels
                     DamageLogs.Add(new DamageLogPower(time, c));
                 }
                 else if (c.Result == ParseEnum.Result.Absorb || c.Result == ParseEnum.Result.Blind || c.Result == ParseEnum.Result.Interrupt)
-                {//Hits that where blinded, invulned, interupts
+                {//Hits that where blinded, invulned, interrupts
                     DamageLogs.Add(new DamageLogPower(time, c));
                 }
             }

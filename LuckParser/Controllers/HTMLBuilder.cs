@@ -277,7 +277,7 @@ namespace LuckParser.Controllers
         private void GetRoles()
         {
             //tags: tank,healer,dps(power/condi)
-            //Roles:greenteam,green split,cacnoneers,flakkiter,eater,KCpusher,agony,epi,handkiter,golemkiter,orbs
+            //Roles:greenteam,green split,caconeers,flakkiter,eater,KCpusher,agony,epi,handkiter,golemkiter,orbs
         }
         private void PrintWeapons(StreamWriter sw, Player p)
         {
@@ -653,7 +653,7 @@ namespace LuckParser.Controllers
                                 + stats.GlanceRate + " out of " + stats.PowerLoopCount + " hits \">" 
                                 + Math.Round(stats.GlanceRate / (Double)stats.PowerLoopCount * 100,1) + "%</span>" + "</td>");//glance
                             sw.Write("<td>" + stats.Missed + "</td>");//misses
-                            sw.Write("<td>" + stats.Interupts + "</td>");//interupts
+                            sw.Write("<td>" + stats.Interupts + "</td>");//interrupts
                             sw.Write("<td>" + stats.Invulned + "</td>");//dmg invulned
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.Wasted + "cancels \">" + stats.TimeWasted + "</span>" + "</td>");//time wasted
@@ -786,7 +786,7 @@ namespace LuckParser.Controllers
                                 + stats.GlanceRateBoss + " out of " + stats.PowerLoopCountBoss + " hits \">" 
                                 + Math.Round(stats.GlanceRateBoss / (Double)stats.PowerLoopCountBoss * 100,1) + "%</span>" + "</td>");//glance
                             sw.Write("<td>" + stats.MissedBoss + "</td>");//misses
-                            sw.Write("<td>" + stats.InteruptsBoss + "</td>");//interupts
+                            sw.Write("<td>" + stats.InteruptsBoss + "</td>");//interrupts
                             sw.Write("<td>" + stats.InvulnedBoss + "</td>");//dmg invulned
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.Wasted + "cancels \">" + stats.TimeWasted + "</span>" + "</td>");//time wasted
@@ -1035,7 +1035,7 @@ namespace LuckParser.Controllers
                         footerList.Add(new [] {
                             player.GetGroup().ToString(),
                             support.CondiCleanseTime.ToString(), support.CondiCleanse.ToString(),
-                            support.RessurrectTime.ToString(), support.Resurrects.ToString()//, support.allHeal.ToString()
+                            support.ResurrectTime.ToString(), support.Resurrects.ToString()//, support.allHeal.ToString()
                         });
                         sw.Write("<tr>");
                         {
@@ -1044,7 +1044,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.GetCharacter() + "</td>");
                             //sw.Write("<td>" + support.allHeal +"</td>");                                              
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.CondiCleanseTime + " seconds \">" + support.CondiCleanse + "</span>" + "</td>");//condicleanse                                                                                                                                                                   //defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.RessurrectTime + " seconds \">" + support.Resurrects + "</span>" + "</td>");//res
+                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.ResurrectTime + " seconds \">" + support.Resurrects + "</span>" + "</td>");//res
                         }
                         sw.Write("</tr>");
                     }
@@ -1410,7 +1410,7 @@ namespace LuckParser.Controllers
             sw.Write("</table>");
         }
         /// <summary>
-        /// Create the off squade buff generation table
+        /// Create the off squad buff generation table
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="listToUse"></param>
@@ -2733,7 +2733,7 @@ namespace LuckParser.Controllers
             }
         }
         /// <summary>
-        /// Creates the event list of the generation. Debbuging only
+        /// Creates the event list of the generation. Debug only
         /// </summary>
         /// <param name="sw">Stream writer</param>
         private void CreateEventList(StreamWriter sw)
