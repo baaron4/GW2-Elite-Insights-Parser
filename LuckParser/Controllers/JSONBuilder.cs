@@ -240,9 +240,9 @@ namespace LuckParser.Controllers
             int phases = _statistics.Phases.Count;
             for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
             {
-                if (statUptimes[phaseIndex][boon].Uptime != 0) return true;
-                if (statUptimes[phaseIndex][boon].Generation != 0) return true;
-                if (statUptimes[phaseIndex][boon].Overstack != 0) return true;
+                if (statUptimes[phaseIndex][boon].Uptime > 0) return true;
+                if (statUptimes[phaseIndex][boon].Generation > 0) return true;
+                if (statUptimes[phaseIndex][boon].Overstack > 0) return true;
             }
 
             return false;
