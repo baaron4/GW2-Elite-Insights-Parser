@@ -61,7 +61,7 @@ namespace LuckParser.Models.DataModels
             public int FlankingRate;
             public int GlanceRate;
             public int Missed;
-            public int Interupts;
+            public int Interrupts;
             public int Invulned;
             public int Wasted;
             public double TimeWasted;
@@ -82,7 +82,7 @@ namespace LuckParser.Models.DataModels
             public int FlankingRateBoss;
             public int GlanceRateBoss;
             public int MissedBoss;
-            public int InteruptsBoss;
+            public int InterruptsBoss;
             public int InvulnedBoss;
 
             // Counts

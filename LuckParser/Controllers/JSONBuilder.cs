@@ -39,48 +39,6 @@ namespace LuckParser.Controllers
             _statistics = statistics;
         }
 
-        private JsonLog.JsonDps BuildDPS(Statistics.FinalDPS[] statDps)
-        {
-            int phases = _statistics.Phases.Count;
-            JsonLog.JsonDps dps = new JsonLog.JsonDps
-            {
-                AllCondiDamage = new int[phases],
-                AllCondiDps = new int[phases],
-                AllDamage = new int[phases],
-                AllDps = new int[phases],
-                AllPowerDamage = new int[phases],
-                AllPowerDps = new int[phases],
-                BossCondiDamage = new int[phases],
-                BossCondiDps = new int[phases],
-                BossDamage = new int[phases],
-                BossDps = new int[phases],
-                BossPowerDamage = new int[phases],
-                BossPowerDps = new int[phases],
-                PlayerBossPowerDamage = new int[phases],
-                PlayerPowerDamage = new int[phases]
-            };
-
-            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
-            {
-                dps.AllDps[phaseIndex] = statDps[phaseIndex].AllDps;
-                dps.AllDamage[phaseIndex] = statDps[phaseIndex].AllDamage;
-                dps.AllPowerDps[phaseIndex] = statDps[phaseIndex].AllPowerDps;
-                dps.AllCondiDamage[phaseIndex] = statDps[phaseIndex].AllCondiDamage;
-                dps.AllCondiDps[phaseIndex] = statDps[phaseIndex].AllCondiDps;
-                dps.AllPowerDamage[phaseIndex] = statDps[phaseIndex].AllPowerDamage;
-                dps.BossCondiDamage[phaseIndex] = statDps[phaseIndex].BossCondiDamage;
-                dps.BossPowerDamage[phaseIndex] = statDps[phaseIndex].BossPowerDamage;
-                dps.BossCondiDps[phaseIndex] = statDps[phaseIndex].BossCondiDps;
-                dps.BossPowerDps[phaseIndex] = statDps[phaseIndex].BossPowerDps;
-                dps.BossDamage[phaseIndex] = statDps[phaseIndex].BossDamage;
-                dps.BossDps[phaseIndex] = statDps[phaseIndex].BossDps;
-                dps.PlayerPowerDamage[phaseIndex] = statDps[phaseIndex].PlayerPowerDamage;
-                dps.PlayerBossPowerDamage[phaseIndex] = statDps[phaseIndex].PlayerBossPowerDamage;
-            }
-
-            return dps;
-        }
-
         /*
          * Creating the JSON
          */
@@ -130,6 +88,95 @@ namespace LuckParser.Controllers
 
             log.Boss.Dps = BuildDPS(_statistics.BossDps);
             log.Boss.HealthOverTime = _log.GetBossData().GetHealthOverTime();
+        }
+
+        private void SetPlayers(JsonLog log)
+        {
+            log.Players = new ArrayList();
+
+            foreach (var player in _log.GetPlayerList())
+            {
+                var currentPlayer = new JsonLog.JsonPlayer
+                {
+                    Character = player.GetCharacter(),
+                    Account = player.GetAccount(),
+                    Condition = player.GetCondition(),
+                    Concentration = player.GetConcentration(),
+                    Healing = player.GetHealing(),
+                    Toughness = player.GetToughness(),
+                    Weapons = player.GetWeaponsArray(_log),
+                    Group = player.GetGroup(),
+                    Profession = player.GetProf(),
+                    Dps = BuildDPS(_statistics.Dps[player]),
+                    Stats = BuildStats(_statistics.Stats[player]),
+                    Defenses = BuildDefenses(_statistics.Defenses[player]),
+                    Support = BuildSupport(_statistics.Support[player]),
+                    SelfBoons = BuildBoonUptime(_statistics.SelfBoons[player]),
+                    GroupBoons = BuildBoonUptime(_statistics.GroupBoons[player]),
+                    OffGroupBoons = BuildBoonUptime(_statistics.OffGroupBoons[player]),
+                    SquadBoons = BuildBoonUptime(_statistics.SquadBoons[player])
+                };
+
+                log.Players.Add(currentPlayer);
+            }
+        }
+
+        private void SetPhases(JsonLog log)
+        {
+            log.Phases = new ArrayList();
+
+            foreach (var phase in _statistics.Phases)
+            {
+                log.Phases.Add(new JsonLog.JsonPhase
+                {
+                    Duration = phase.GetDuration(),
+                    Name = phase.GetName()
+                });
+            }
+        }
+
+        // Statistics to Json Converters ////////////////////////////////////////////////////
+
+        private JsonLog.JsonDps BuildDPS(Statistics.FinalDPS[] statDps)
+        {
+            int phases = _statistics.Phases.Count;
+            JsonLog.JsonDps dps = new JsonLog.JsonDps
+            {
+                AllCondiDamage = new int[phases],
+                AllCondiDps = new int[phases],
+                AllDamage = new int[phases],
+                AllDps = new int[phases],
+                AllPowerDamage = new int[phases],
+                AllPowerDps = new int[phases],
+                BossCondiDamage = new int[phases],
+                BossCondiDps = new int[phases],
+                BossDamage = new int[phases],
+                BossDps = new int[phases],
+                BossPowerDamage = new int[phases],
+                BossPowerDps = new int[phases],
+                PlayerBossPowerDamage = new int[phases],
+                PlayerPowerDamage = new int[phases]
+            };
+
+            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
+            {
+                dps.AllDps[phaseIndex] = statDps[phaseIndex].AllDps;
+                dps.AllDamage[phaseIndex] = statDps[phaseIndex].AllDamage;
+                dps.AllPowerDps[phaseIndex] = statDps[phaseIndex].AllPowerDps;
+                dps.AllCondiDamage[phaseIndex] = statDps[phaseIndex].AllCondiDamage;
+                dps.AllCondiDps[phaseIndex] = statDps[phaseIndex].AllCondiDps;
+                dps.AllPowerDamage[phaseIndex] = statDps[phaseIndex].AllPowerDamage;
+                dps.BossCondiDamage[phaseIndex] = statDps[phaseIndex].BossCondiDamage;
+                dps.BossPowerDamage[phaseIndex] = statDps[phaseIndex].BossPowerDamage;
+                dps.BossCondiDps[phaseIndex] = statDps[phaseIndex].BossCondiDps;
+                dps.BossPowerDps[phaseIndex] = statDps[phaseIndex].BossPowerDps;
+                dps.BossDamage[phaseIndex] = statDps[phaseIndex].BossDamage;
+                dps.BossDps[phaseIndex] = statDps[phaseIndex].BossDps;
+                dps.PlayerPowerDamage[phaseIndex] = statDps[phaseIndex].PlayerPowerDamage;
+                dps.PlayerBossPowerDamage[phaseIndex] = statDps[phaseIndex].PlayerBossPowerDamage;
+            }
+
+            return dps;
         }
 
         private Dictionary<long, JsonLog.JsonBoonUptime> BuildBoonUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes)
@@ -228,8 +275,8 @@ namespace LuckParser.Controllers
                 FlankingRateBoss = new int[phases],
                 GlanceRate = new int[phases],
                 GlanceRateBoss = new int[phases],
-                Interupts = new int[phases],
-                InteruptsBoss = new int[phases],
+                Interrupts = new int[phases],
+                InterruptsBoss = new int[phases],
                 Invulned = new int[phases],
                 InvulnedBoss = new int[phases],
                 Missed = new int[phases],
@@ -265,7 +312,7 @@ namespace LuckParser.Controllers
                 stats.FlankingRate[phaseIndex] = statStat[phaseIndex].FlankingRate;
                 stats.GlanceRate[phaseIndex] = statStat[phaseIndex].GlanceRate;
                 stats.Missed[phaseIndex] = statStat[phaseIndex].Missed;
-                stats.Interupts[phaseIndex] = statStat[phaseIndex].Interupts;
+                stats.Interrupts[phaseIndex] = statStat[phaseIndex].Interrupts;
                 stats.Invulned[phaseIndex] = statStat[phaseIndex].Invulned;
                 stats.Wasted[phaseIndex] = statStat[phaseIndex].Wasted;
                 stats.TimeWasted[phaseIndex] = statStat[phaseIndex].TimeWasted;
@@ -284,7 +331,7 @@ namespace LuckParser.Controllers
                 stats.FlankingRateBoss[phaseIndex] = statStat[phaseIndex].FlankingRateBoss;
                 stats.GlanceRateBoss[phaseIndex] = statStat[phaseIndex].GlanceRateBoss;
                 stats.MissedBoss[phaseIndex] = statStat[phaseIndex].MissedBoss;
-                stats.InteruptsBoss[phaseIndex] = statStat[phaseIndex].InteruptsBoss;
+                stats.InterruptsBoss[phaseIndex] = statStat[phaseIndex].InterruptsBoss;
                 stats.InvulnedBoss[phaseIndex] = statStat[phaseIndex].InvulnedBoss;
                 stats.SwapCount[phaseIndex] = statStat[phaseIndex].SwapCount;
                 stats.DownCount[phaseIndex] = statStat[phaseIndex].DownCount;
@@ -294,51 +341,6 @@ namespace LuckParser.Controllers
             }
 
             return stats;
-        }
-
-        private void SetPlayers(JsonLog log)
-        {
-            log.Players = new ArrayList();
-
-            foreach (var player in _log.GetPlayerList())
-            {
-                var currentPlayer = new JsonLog.JsonPlayer
-                {
-                    Character = player.GetCharacter(),
-                    Account = player.GetAccount(),
-                    Condition = player.GetCondition(),
-                    Concentration = player.GetConcentration(),
-                    Healing = player.GetHealing(),
-                    Toughness = player.GetToughness(),
-                    Weapons = player.GetWeaponsArray(_log),
-                    Group = player.GetGroup(),
-                    Profession = player.GetProf(),
-                    Dps = BuildDPS(_statistics.Dps[player]),
-                    Stats = BuildStats(_statistics.Stats[player]),
-                    Defenses = BuildDefenses(_statistics.Defenses[player]),
-                    Support = BuildSupport(_statistics.Support[player]),
-                    SelfBoons = BuildBoonUptime(_statistics.SelfBoons[player]),
-                    GroupBoons = BuildBoonUptime(_statistics.GroupBoons[player]),
-                    OffGroupBoons = BuildBoonUptime(_statistics.OffGroupBoons[player]),
-                    SquadBoons = BuildBoonUptime(_statistics.SquadBoons[player])
-                };
-
-                log.Players.Add(currentPlayer);
-            }
-        }
-
-        private void SetPhases(JsonLog log)
-        {
-            log.Phases = new ArrayList();
-
-            foreach (var phase in _statistics.Phases)
-            {
-                log.Phases.Add(new JsonLog.JsonPhase
-                {
-                    Duration = phase.GetDuration(),
-                    Name = phase.GetName()
-                });
-            }
         }
     }
 }
