@@ -46,6 +46,26 @@ namespace LuckParser.Controllers
          */
         private struct JsonLog
         {
+            public struct JsonDps
+            {
+                public int[] AllDps;
+                public int[] AllDamage;
+                public int[] AllCondiDps;
+                public int[] AllCondiDamage;
+                public int[] AllPowerDps;
+                public int[] AllPowerDamage;
+                // Boss
+                public int[] BossDps;
+                public int[] BossDamage;
+                public int[] BossCondiDps;
+                public int[] BossCondiDamage;
+                public int[] BossPowerDps;
+                public int[] BossPowerDamage;
+                // Player only
+                public int[] PlayerPowerDamage;
+                public int[] PlayerBossPowerDamage;
+            }
+
             public struct JsonBoss
             {
                 public string Name;
@@ -54,7 +74,7 @@ namespace LuckParser.Controllers
                 public double FinalHealth;
                 public double HealthPercentBurned;
                 public List<Point> HealthOverTime;
-                public Statistics.FinalDPS[] Dps;
+                public JsonDps Dps;
             }
 
             public struct JsonPlayer
@@ -68,7 +88,7 @@ namespace LuckParser.Controllers
                 public int Group;
                 public string Profession;
                 public string[] Weapons;
-                public Statistics.FinalDPS[] Dps;
+                public JsonDps Dps;
                 public Statistics.FinalStats[] Stats;
                 public Statistics.FinalDefenses[] Defenses;
                 public Statistics.FinalSupport[] Support;
@@ -95,6 +115,48 @@ namespace LuckParser.Controllers
             public ArrayList Players;
             public ArrayList Phases;
             public List<Point3D> StackCenterPositions;
+        }
+
+        private JsonLog.JsonDps BuildDPS(Statistics.FinalDPS[] statDps)
+        {
+            int phases = _statistics.Phases.Count;
+            JsonLog.JsonDps dps = new JsonLog.JsonDps
+            {
+                AllCondiDamage = new int[phases],
+                AllCondiDps = new int[phases],
+                AllDamage = new int[phases],
+                AllDps = new int[phases],
+                AllPowerDamage = new int[phases],
+                AllPowerDps = new int[phases],
+                BossCondiDamage = new int[phases],
+                BossCondiDps = new int[phases],
+                BossDamage = new int[phases],
+                BossDps = new int[phases],
+                BossPowerDamage = new int[phases],
+                BossPowerDps = new int[phases],
+                PlayerBossPowerDamage = new int[phases],
+                PlayerPowerDamage = new int[phases]
+            };
+
+            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
+            {
+                dps.AllDps[phaseIndex] = statDps[phaseIndex].AllDps;
+                dps.AllDamage[phaseIndex] = statDps[phaseIndex].AllDamage;
+                dps.AllPowerDps[phaseIndex] = statDps[phaseIndex].AllPowerDps;
+                dps.AllCondiDamage[phaseIndex] = statDps[phaseIndex].AllCondiDamage;
+                dps.AllCondiDps[phaseIndex] = statDps[phaseIndex].AllCondiDps;
+                dps.AllPowerDamage[phaseIndex] = statDps[phaseIndex].AllPowerDamage;
+                dps.BossCondiDamage[phaseIndex] = statDps[phaseIndex].BossCondiDamage;
+                dps.BossPowerDamage[phaseIndex] = statDps[phaseIndex].BossPowerDamage;
+                dps.BossCondiDps[phaseIndex] = statDps[phaseIndex].BossCondiDps;
+                dps.BossPowerDps[phaseIndex] = statDps[phaseIndex].BossPowerDps;
+                dps.BossDamage[phaseIndex] = statDps[phaseIndex].BossDamage;
+                dps.BossDps[phaseIndex] = statDps[phaseIndex].BossDps;
+                dps.PlayerPowerDamage[phaseIndex] = statDps[phaseIndex].PlayerPowerDamage;
+                dps.PlayerBossPowerDamage[phaseIndex] = statDps[phaseIndex].PlayerBossPowerDamage;
+            }
+
+            return dps;
         }
 
         /*
@@ -143,7 +205,8 @@ namespace LuckParser.Controllers
                 : 10000;
             log.Boss.FinalHealth = _log.GetBossData().GetHealth() * (100.0 - finalBossHealth * 0.01);
             log.Boss.HealthPercentBurned = 100.0 - finalBossHealth * 0.01;
-            log.Boss.Dps = _statistics.BossDps;
+
+            log.Boss.Dps = BuildDPS(_statistics.BossDps);
             log.Boss.HealthOverTime = _log.GetBossData().GetHealthOverTime();
 
             return log;
@@ -166,7 +229,7 @@ namespace LuckParser.Controllers
                     Weapons = player.GetWeaponsArray(_log),
                     Group = player.GetGroup(),
                     Profession = player.GetProf(),
-                    Dps = new Statistics.FinalDPS[_statistics.Phases.Count],
+                    Dps = BuildDPS(_statistics.Dps[player]),
                     Stats = new Statistics.FinalStats[_statistics.Phases.Count],
                     Defenses = new Statistics.FinalDefenses[_statistics.Phases.Count],
                     Support = new Statistics.FinalSupport[_statistics.Phases.Count],
@@ -178,7 +241,6 @@ namespace LuckParser.Controllers
 
                 for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
                 {
-                    currentPlayer.Dps[phaseIndex] = _statistics.Dps[player][phaseIndex];
                     currentPlayer.Stats[phaseIndex] = _statistics.Stats[player][phaseIndex];
                     currentPlayer.Defenses[phaseIndex] = _statistics.Defenses[player][phaseIndex];
                     currentPlayer.Support[phaseIndex] = _statistics.Support[player][phaseIndex];
