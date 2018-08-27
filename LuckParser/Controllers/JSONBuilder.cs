@@ -118,7 +118,7 @@ namespace LuckParser.Controllers
 
         private void SetPlayers(JsonLog log)
         {
-            log.Players = new ArrayList();
+            log.Players = new List<JsonLog.JsonPlayer>();
 
             foreach (var player in _log.GetPlayerList())
             {
@@ -149,7 +149,7 @@ namespace LuckParser.Controllers
 
         private void SetPhases(JsonLog log)
         {
-            log.Phases = new ArrayList();
+            log.Phases = new List<JsonLog.JsonPhase>();
 
             foreach (var phase in _statistics.Phases)
             {

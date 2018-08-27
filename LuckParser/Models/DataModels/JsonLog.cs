@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using LuckParser.Controllers;
 using LuckParser.Models.ParseModels;
 
 namespace LuckParser.Models.DataModels
@@ -145,8 +142,8 @@ namespace LuckParser.Models.DataModels
         public struct JsonBossBoon
         {
             public double[] Uptime;
-            public Dictionary<String, double>[] Generated;
-            public Dictionary<String, double>[] Overstacked;
+            public Dictionary<string, double>[] Generated;
+            public Dictionary<string, double>[] Overstacked;
         }
 
         public struct JsonMechanic
@@ -165,8 +162,8 @@ namespace LuckParser.Models.DataModels
         public string Duration;
         public bool Success;
         public JsonBoss Boss;
-        public ArrayList Players;
-        public ArrayList Phases;
+        public List<JsonPlayer> Players;
+        public List<JsonPhase> Phases;
         public JsonMechanic[] Mechanics;
         public List<Point3D> StackCenterPositions;
     }
