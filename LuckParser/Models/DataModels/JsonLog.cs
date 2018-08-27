@@ -63,7 +63,6 @@ namespace LuckParser.Models.DataModels
             public int TotalHealth;
             public double FinalHealth;
             public double HealthPercentBurned;
-            public List<Point> HealthOverTime;
             public JsonDps Dps;
             public Dictionary<long, JsonBossBoon> Conditions;
         }

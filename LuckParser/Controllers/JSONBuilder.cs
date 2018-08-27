@@ -113,7 +113,6 @@ namespace LuckParser.Controllers
             log.Boss.HealthPercentBurned = 100.0 - finalBossHealth * 0.01;
 
             log.Boss.Dps = BuildDPS(_statistics.BossDps);
-            log.Boss.HealthOverTime = _log.GetBossData().GetHealthOverTime();
             log.Boss.Conditions = BuildBossBoons(_statistics.BossConditions);
         }
 
