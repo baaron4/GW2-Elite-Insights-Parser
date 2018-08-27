@@ -73,6 +73,14 @@ namespace LuckParser.Controllers
                 public double[] Overstack;
             }
 
+            public struct JsonSupport
+            {
+                public int[] Resurrects;
+                public float[] ResurrectTime;
+                public int[] CondiCleanse;
+                public float[] CondiCleanseTime;
+            }
+
             public struct JsonBoss
             {
                 public string Name;
@@ -98,7 +106,7 @@ namespace LuckParser.Controllers
                 public JsonDps Dps;
                 public Statistics.FinalStats[] Stats;
                 public Statistics.FinalDefenses[] Defenses;
-                public Statistics.FinalSupport[] Support;
+                public JsonSupport Support;
                 public Dictionary<long, JsonBoonUptime> SelfBoons;
                 public Dictionary<long, JsonBoonUptime> GroupBoons;
                 public Dictionary<long, JsonBoonUptime> OffGroupBoons;
@@ -247,6 +255,28 @@ namespace LuckParser.Controllers
             return uptimes;
         }
 
+        private JsonLog.JsonSupport BuildSupport(Statistics.FinalSupport[] statSupport)
+        {
+            int phases = _statistics.Phases.Count;
+            JsonLog.JsonSupport support = new JsonLog.JsonSupport
+            {
+                CondiCleanse = new int[phases],
+                CondiCleanseTime = new float[phases],
+                ResurrectTime = new float[phases],
+                Resurrects = new int[phases]
+            };
+
+            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
+            {
+                support.Resurrects[phaseIndex] = statSupport[phaseIndex].Resurrects;
+                support.ResurrectTime[phaseIndex] = statSupport[phaseIndex].ResurrectTime;
+                support.CondiCleanse[phaseIndex] = statSupport[phaseIndex].CondiCleanse;
+                support.CondiCleanseTime[phaseIndex] = statSupport[phaseIndex].CondiCleanseTime;
+            }
+
+            return support;
+        }
+
         private JsonLog SetPlayers(JsonLog log)
         {
             log.Players = new ArrayList();
@@ -267,7 +297,7 @@ namespace LuckParser.Controllers
                     Dps = BuildDPS(_statistics.Dps[player]),
                     Stats = new Statistics.FinalStats[_statistics.Phases.Count],
                     Defenses = new Statistics.FinalDefenses[_statistics.Phases.Count],
-                    Support = new Statistics.FinalSupport[_statistics.Phases.Count],
+                    Support = BuildSupport(_statistics.Support[player]),
                     SelfBoons = BuildBoonUptime(_statistics.SelfBoons[player]),
                     GroupBoons = BuildBoonUptime(_statistics.GroupBoons[player]),
                     OffGroupBoons = BuildBoonUptime(_statistics.OffGroupBoons[player]),
@@ -278,7 +308,6 @@ namespace LuckParser.Controllers
                 {
                     currentPlayer.Stats[phaseIndex] = _statistics.Stats[player][phaseIndex];
                     currentPlayer.Defenses[phaseIndex] = _statistics.Defenses[player][phaseIndex];
-                    currentPlayer.Support[phaseIndex] = _statistics.Support[player][phaseIndex];
                 }
 
                 log.Players.Add(currentPlayer);
