@@ -379,7 +379,17 @@ namespace LuckParser.Controllers
                 return null;
             }
 
-            return uptimes;
+            Dictionary<long, JsonLog.JsonBoonUptime> cleanedUptimes = new Dictionary<long, JsonLog.JsonBoonUptime>();
+            foreach (KeyValuePair<long, JsonLog.JsonBoonUptime> boon in uptimes)
+            {
+                JsonLog.JsonBoonUptime cleanedBoon = boon.Value;
+                if (!boon.Value.Uptime.Any(e => e > 0)) cleanedBoon.Uptime = null;
+                if (!boon.Value.Overstack.Any(e => e > 0)) cleanedBoon.Overstack = null;
+                if (!boon.Value.Generation.Any(e => e > 0)) cleanedBoon.Generation = null;
+                cleanedUptimes[boon.Key] = cleanedBoon;
+            }
+
+            return cleanedUptimes;
         }
 
         private JsonLog.JsonSupport BuildSupport(Statistics.FinalSupport[] statSupport)
