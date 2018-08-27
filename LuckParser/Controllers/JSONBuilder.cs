@@ -139,7 +139,8 @@ namespace LuckParser.Controllers
 
         // Statistics to Json Converters ////////////////////////////////////////////////////
 
-        private Dictionary<long, JsonLog.JsonBossBoon> BuildBossBoons(Dictionary<long, Statistics.FinalBossBoon>[] statBoons)
+        private Dictionary<long, JsonLog.JsonBossBoon> BuildBossBoons(
+            Dictionary<long, Statistics.FinalBossBoon>[] statBoons)
         {
             int phases = _statistics.Phases.Count;
             Dictionary<long, JsonLog.JsonBossBoon> boons = new Dictionary<long, JsonLog.JsonBossBoon>();
@@ -234,28 +235,63 @@ namespace LuckParser.Controllers
             return dps;
         }
 
+        private bool ContainsBoon(long boon, Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes)
+        {
+            int phases = _statistics.Phases.Count;
+            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
+            {
+                if (statUptimes[phaseIndex][boon].Uptime != 0) return true;
+                if (statUptimes[phaseIndex][boon].Generation != 0) return true;
+                if (statUptimes[phaseIndex][boon].Overstack != 0) return true;
+            }
+
+            return false;
+        }
+
         private Dictionary<long, JsonLog.JsonBoonUptime> BuildBoonUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes)
         {
             Dictionary<long, JsonLog.JsonBoonUptime> uptimes = new Dictionary<long, JsonLog.JsonBoonUptime>();
             int phases = _statistics.Phases.Count;
+
+            List<long> boonsFound = new List<long>();
+            List<long> boonsNotFound = new List<long>();
+
             for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
             {
                 foreach (KeyValuePair<long, Statistics.FinalBoonUptime> boon in statUptimes[phaseIndex])
                 {
-                    if (!uptimes.ContainsKey(boon.Key))
+                    if (boonsFound.Contains(boon.Key))
                     {
-                        JsonLog.JsonBoonUptime newUptime = new JsonLog.JsonBoonUptime
-                        {
-                            Generation = new double[phases],
-                            Overstack = new double[phases],
-                            Uptime = new double[phases]
-                        };
-                        uptimes[boon.Key] = newUptime;
+                        uptimes[boon.Key].Overstack[phaseIndex] = boon.Value.Overstack;
+                        uptimes[boon.Key].Generation[phaseIndex] = boon.Value.Generation;
+                        uptimes[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
                     }
+                    else
+                    {
+                        if (!boonsNotFound.Contains(boon.Key))
+                        {
+                            if (ContainsBoon(boon.Key, statUptimes))
+                            {
+                                boonsFound.Add(boon.Key);
 
-                    uptimes[boon.Key].Overstack[phaseIndex] = boon.Value.Overstack;
-                    uptimes[boon.Key].Generation[phaseIndex] = boon.Value.Generation;
-                    uptimes[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
+                                JsonLog.JsonBoonUptime newUptime = new JsonLog.JsonBoonUptime
+                                {
+                                    Generation = new double[phases],
+                                    Overstack = new double[phases],
+                                    Uptime = new double[phases]
+                                };
+                                uptimes[boon.Key] = newUptime;
+
+                                uptimes[boon.Key].Overstack[phaseIndex] = boon.Value.Overstack;
+                                uptimes[boon.Key].Generation[phaseIndex] = boon.Value.Generation;
+                                uptimes[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
+                            }
+                            else
+                            {
+                                boonsNotFound.Add(boon.Key);
+                            }
+                        }
+                    }
                 }
             }
 
