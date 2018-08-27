@@ -54,6 +54,9 @@
   <PropertyGroup>
     <ApplicationIcon>LI.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>App.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -138,6 +141,7 @@
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplay.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplayMap.cs" />
     <Compile Include="Models\ParseModels\EffectStackingLogic\HealingLogic.cs" />
+    <Compile Include="Models\ParseModels\EffectStackingLogic\ForceOverrideLogic.cs" />
     <Compile Include="Models\ParseModels\EffectStackingLogic\OverrideLogic.cs" />
     <Compile Include="Models\ParseModels\EffectStackingLogic\QueueLogic.cs" />
     <Compile Include="Models\ParseModels\EffectStackingLogic\StackingLogic.cs" />
@@ -211,6 +215,7 @@
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="App.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\GridRow.datasource" />
     <None Include="Properties\Settings.settings">

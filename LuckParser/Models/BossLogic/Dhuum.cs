@@ -13,21 +13,21 @@ namespace LuckParser.Models
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(48172, "Hateful Ephemera", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,140,0)',", "Glm.dmg",0),// Hateful Ephemera (Golem AoE dmg), Golem Dmg
-            new Mechanic(48121, "Arcing Affliction", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,0,0)',", "B.dmg",0),// Arcing Affliction (Bomb) hit, Bomb dmg
-            new Mechanic(47646, "Arcing Affliction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(255,0,0)',", "Bmb",0),//Arcing Affliction (Bomb) application, Bomb
+            new Mechanic(48172, "Hateful Ephemera", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,140,0)',", "Glm.dmg","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0), 
+            new Mechanic(48121, "Arcing Affliction", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,0,0)',", "B.dmg","Arcing Affliction (Bomb) hit", "Bomb dmg",0), 
+            new Mechanic(47646, "Arcing Affliction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(255,0,0)',", "Bmb","Arcing Affliction (Bomb) application", "Bomb",0),
             //new Mechanic(47476, "Residual Affliction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'star-diamond',color:'rgb(255,200,0)',", "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
-            new Mechanic(47335, "Soul Shackle", Mechanic.MechType.PlayerOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'diamond',color:'rgb(0,255,255)',", "Shckl",0),// Soul Shackle (Tether) application, Shackles //also used for removal.
-            new Mechanic(47164, "Soul Shackle", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'diamond-open',color:'rgb(0,255,255)',", "Sh.Dmg",0),// Soul Shackle (Tether) dmg ticks, Shackles Dmg//Value is only non-zero after 4 seconds. First 4 seconds don't deal damage. Need to exclude "value==0" events with this ID?
-            new Mechanic(47561, "Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'triangle',color:'rgb(0,128,0)',", "Cone",0), //Boon ripping Cone Attack, Cone
-            new Mechanic(48752, "Cull", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'asterisk-open',color:'rgb(0,255,255)',", "Crk",0), // Cull (Fearing Fissures), Cracks
-            new Mechanic(48760, "Putrid Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(0,128,0)',", "Mrk",0), // Necro Marks during Scythe attack, Nekro Marks
-            new Mechanic(48398, "Cataclysmic Cycle", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,140,0)',", "Sck.Dmg",0), // Damage when sucked to close to middle, Suck dmg
-            new Mechanic(48176, "Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'hexagon',color:'rgb(255,140,0)',", "Dip",0), // Lesser Death Mark hit (Dip into ground), Dip AoE
-            new Mechanic(48210, "Greater Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(255,140,0)',", "KB.Dmg",0), //Knockback damage during Greater Deathmark (mid port), Knockback dmg
+            new Mechanic(47335, "Soul Shackle", Mechanic.MechType.PlayerOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'diamond',color:'rgb(0,255,255)',", "Shckl","Soul Shackle (Tether) application", "Shackles",0),//  //also used for removal.
+            new Mechanic(47164, "Soul Shackle", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'diamond-open',color:'rgb(0,255,255)',", "Sh.Dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0, (value => value > 0)),
+            new Mechanic(47561, "Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'triangle',color:'rgb(0,128,0)',", "Cone","Boon ripping Cone Attack", "Cone",0),
+            new Mechanic(48752, "Cull", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'asterisk-open',color:'rgb(0,255,255)',", "Crk","Cull (Fearing Fissures)", "Cracks",0),
+            new Mechanic(48760, "Putrid Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(0,128,0)',", "Mrk","Necro Marks during Scythe attack", "Necro Marks",0), 
+            new Mechanic(48398, "Cataclysmic Cycle", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle-open',color:'rgb(255,140,0)',", "Sck.Dmg","Damage when sucked to close to middle", "Suck dmg",0),
+            new Mechanic(48176, "Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'hexagon',color:'rgb(255,140,0)',", "Dip","Lesser Death Mark hit (Dip into ground)", "Dip AoE",0), 
+            new Mechanic(48210, "Greater Death Mark", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(255,140,0)',", "KB.Dmg","Knockback damage during Greater Deathmark (mid port)", "Knockback dmg",0),
           //  new Mechanic(48281, "Mortal Coil", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(0,128,0)',", "Green Orbs",
-            new Mechanic(46950, "Fractured Spirit", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(0,255,0)',", "Orb CD",0), // Applied when taking green, Green port
-            new Mechanic(47076 , "Echo's Damage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,0,0)',", "Echo",5000), //Damaged by Ender's Echo (pick up), Ender's Echo
+            new Mechanic(46950, "Fractured Spirit", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(0,255,0)',", "Orb CD","Applied when taking green", "Green port",0), 
+            new Mechanic(47076 , "Echo's Damage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,0,0)',", "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
             });
         }
 
@@ -73,10 +73,10 @@ namespace LuckParser.Models
             }
             else
             {
-                CombatItem invulDhuum = log.GetBoonData().FirstOrDefault(x => x.GetSkillID() == 762 && x.IsBuffremove() != ParseEnum.BuffRemove.None && x.GetSrcInstid() == boss.GetInstid() && x.GetTime() > 115000 + log.GetBossData().GetFirstAware());
+                CombatItem invulDhuum = log.GetBoonData().FirstOrDefault(x => x.SkillID == 762 && x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == boss.GetInstid() && x.Time > 115000 + log.GetBossData().GetFirstAware());
                 if (invulDhuum != null)
                 {
-                    end = invulDhuum.GetTime() - log.GetBossData().GetFirstAware();
+                    end = invulDhuum.Time - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(start, end));
                     start = end + 1;
                     CastLog shield = castLogs.Find(x => x.GetID() == 47396);
@@ -153,20 +153,20 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // spirit transform
-            List<CombatItem> spiritTransform = log.GetBoonData().Where(x => x.GetDstInstid() == p.GetInstid() && x.GetSkillID() == 46950 && x.IsBuffremove() == ParseEnum.BuffRemove.None).ToList();
+            List<CombatItem> spiritTransform = log.GetBoonData().Where(x => x.DstInstid == p.GetInstid() && x.SkillID == 46950 && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in spiritTransform)
             {
                 int duration = 15000;
-                int start = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                int start = (int)(c.Time - log.GetBossData().GetFirstAware());
                 if (log.GetBossData().GetHealthOverTime().FirstOrDefault(x => x.X > start).Y < 1050)
                 {
                     duration = 30000;
                 }
-                CombatItem removedBuff = log.GetBoonData().FirstOrDefault(x => x.GetSrcInstid() == p.GetInstid() && x.GetSkillID() == 48281 && x.IsBuffremove() == ParseEnum.BuffRemove.All && x.GetTime() > c.GetTime() && x.GetTime() < c.GetTime() + duration);
+                CombatItem removedBuff = log.GetBoonData().FirstOrDefault(x => x.SrcInstid == p.GetInstid() && x.SkillID == 48281 && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
                 int end = start + duration;
                 if (removedBuff != null)
                 {
-                    end = (int)(removedBuff.GetTime() - log.GetBossData().GetFirstAware());
+                    end = (int)(removedBuff.Time - log.GetBossData().GetFirstAware());
                 }
                 replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)"));
                 replay.AddCircleActor(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)"));
@@ -176,13 +176,13 @@ namespace LuckParser.Models
             int bombDhuumStart = 0;
             foreach (CombatItem c in bombDhuum)
             {
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    bombDhuumStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    bombDhuumStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 }
                 else
                 {
-                    int bombDhuumEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int bombDhuumEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)"));
                     replay.AddCircleActor(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
                 }

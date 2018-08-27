@@ -114,7 +114,7 @@ namespace LuckParser.Models.DataModels
         {
             //public long allHeal;
             public int Resurrects;
-            public float RessurrectTime;
+            public float ResurrectTime;
             public int CondiCleanse;
             public float CondiCleanseTime;
         }
@@ -156,9 +156,9 @@ namespace LuckParser.Models.DataModels
 
         // present buff
         public readonly List<Boon> PresentBoons = new List<Boon>();//Used only for Boon tables
+        public readonly List<Boon> PresentConditions = new List<Boon>();//Used only for Condition tables
         public readonly List<Boon> PresentOffbuffs = new List<Boon>();//Used only for Off Buff tables
         public readonly List<Boon> PresentDefbuffs = new List<Boon>();//Used only for Def Buff tables
-        public readonly Dictionary<long, List<Boon>> PresentPersonnalBuffs = new Dictionary<long, List<Boon>>();//Used only for personnal
 
         //Positions for group
         public List<Point3D> StackCenterPositions;

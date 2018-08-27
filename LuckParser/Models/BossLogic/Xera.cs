@@ -14,22 +14,22 @@ namespace LuckParser.Models
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new Mechanic(35128, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(255,0,0)',", "Orb",0), //Temporal Shred (Hit by Red Orb), Red Orb
-            new Mechanic(34913, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'circle-open',color:'rgb(255,0,0)',", "O.Aoe",0),//Temporal Shred (Stood in Orb Aoe), Orb AoE
+            new Mechanic(35128, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(255,0,0)',", "Orb","Temporal Shred (Hit by Red Orb)", "Red Orb",0),
+            new Mechanic(34913, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'circle-open',color:'rgb(255,0,0)',", "O.Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
+            new Mechanic(35168, "Bloodstone Protection", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hourglass-open',color:'rgb(128,0,128)',", "InBble","Bloodstone Protection (Stood in Bubble)", "Inside Bubble",0),
+            new Mechanic(34887, "Summon Fragment Start", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "CC","Summon Fragment (Xera Breakbar)", "Breakbar",0),
+            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Summon Fragment (Failed CC)", "CC Fail",0,(value => value >= 11940)),
+            new Mechanic(34965, "Derangement", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square-open',color:'rgb(200,140,255)',", "Drgmnt","Derangement (Stacking Debuff)", "Derangement",0), 
+            new Mechanic(35084, "Bending Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-down-open',color:'rgb(255,200,0)',", "Btn1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
+            new Mechanic(35162, "Shifting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-ne-open',color:'rgb(255,200,0)',", "Btn2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
+            new Mechanic(35032, "Twisting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-nw-open',color:'rgb(255,200,0)',", "Btn3","Bending Chaos (Stood on 3rd Button)", "Button 3",0),
+            new Mechanic(34956, "Intervention", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square',color:'rgb(0,0,255)',", "Shld","Intervention (got Special Action Key)", "Shield",0),
+            new Mechanic(34921, "Gravity Well", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'circle-x-open',color:'rgb(255,0,255)',", "GrWell","Half-platform Gravity Well", "Gravity Well",4000),
+            new Mechanic(34997, "Teleport Out", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(0,128,0)',", "TP.Out","Teleport Out (Teleport to Platform)","TP",0),
+            new Mechanic(35076, "Hero's Return", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(0,200,0)',", "TP.Back","Hero's Return (Teleport back)", "TP back",0),
             /*new Mechanic(35000, "Intervention", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hourglass',color:'rgb(128,0,128)',", "Bubble",0),*/
-            new Mechanic(35168, "Bloodstone Protection", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hourglass-open',color:'rgb(128,0,128)',", "InBble",0), //Bloodstone Protection (Stood in Bubble), Inside Bubble           
-            new Mechanic(34887, "Summon Fragment Start", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(255,0,255)',", "Breakbar",0),
-            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(255,0,255)',", "CC Failed",0,(value => value == 11940)),//Summon Fragment (Failed CC), CC Fail
-            new Mechanic(34965, "Derangement", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square-open',color:'rgb(200,140,255)',", "Drgmnt",0), //Derangement (Stacking Debuff), Derangement
-            new Mechanic(35084, "Bending Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-down-open',color:'rgb(255,200,0)',", "Btn1",0), //Bending Chaos (Stood on 1st Button), Button 1
-            new Mechanic(35162, "Shifting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-ne-open',color:'rgb(255,200,0)',", "Btn2",0), //Bending Chaos (Stood on 2nd Button), Button 2
-            new Mechanic(35032, "Twisting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-nw-open',color:'rgb(255,200,0)',", "Btn3",0), //Bending Chaos (Stood on 3rd Button), Button 3
-            new Mechanic(34956, "Intervention", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square',color:'rgb(0,0,255)',", "Shld",0), //Intervention (got Special Action Key), Shield
-            new Mechanic(34921, "Gravity Well", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'circle-x-open',color:'rgb(255,0,255)',", "GrWell",4000), //Half-platform Gravity Well, Gravity Well
-            //teleport
-            new Mechanic(35034, "Disruption", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'square',color:'rgb(0,128,0)',", "TP",0), //Disruption (Teleport to Platform),  TP
-            new Mechanic(34997, "Teleport Out", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(255,0,255)',", "TP.Out",0), //Teleport Out (Took Portal), TP Portal
-            new Mechanic(35076, "Hero's Return", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(0,128,0)',", "TP.Back",0), //Hero's Return (Teleport back), TP back
+            //new Mechanic(35034, "Disruption", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'square',color:'rgb(0,128,0)',", "TP",0), 
+            //Not sure what this (ID 350342,"Disruption") is. Looks like it is the pulsing "orb removal" from the orange circles on the 40% platform. Would fit the name although it's weird it can hit players. 
             });
         }
 
@@ -50,8 +50,8 @@ namespace LuckParser.Models
             // split happened
             if (boss.GetPhaseData().Count == 1)
             {
-                CombatItem invulXera = log.GetBoonData().Find(x => x.GetDstInstid() == boss.GetInstid() && (x.GetSkillID() == 762 || x.GetSkillID() == 34113));
-                long end = invulXera.GetTime() - log.GetBossData().GetFirstAware();
+                CombatItem invulXera = log.GetBoonData().Find(x => x.DstInstid == boss.GetInstid() && (x.SkillID == 762 || x.SkillID == 34113));
+                long end = invulXera.Time - log.GetBossData().GetFirstAware();
                 phases.Add(new PhaseData(start, end));
                 start = boss.GetPhaseData()[0] - log.GetBossData().GetFirstAware();
                 castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));

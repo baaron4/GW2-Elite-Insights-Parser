@@ -12,7 +12,7 @@ namespace LuckParser.Models.ParseModels
         public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item, Boss };
         private enum RemoveType { CleanseFoe, CleanseFriend, Manual, None, All };
         public enum BoonType { Duration, Intensity };
-        private enum Logic { Queue, HealingPower, Override };
+        private enum Logic { Queue, HealingPower, Override, ForceOverride };
 
         private static BoonSource ProfToEnum(string prof)
         {
@@ -86,7 +86,7 @@ namespace LuckParser.Models.ParseModels
         private static List<Boon> _allBoons = new List<Boon>
             {
                 //Base boons
-                new Boon("Might", 740, BoonSource.Mixed, BoonType.Intensity, 25, BoonEnum.Boon, RemoveType.CleanseFoe, Logic.Queue, "https://wiki.guildwars2.com/images/7/7c/Might.png"),
+                new Boon("Might", 740, BoonSource.Mixed, BoonType.Intensity, 25, BoonEnum.Boon, RemoveType.CleanseFoe, Logic.Override, "https://wiki.guildwars2.com/images/7/7c/Might.png"),
                 new Boon("Fury", 725, BoonSource.Mixed, BoonType.Duration, 9, BoonEnum.Boon, RemoveType.CleanseFoe, Logic.Queue, "https://wiki.guildwars2.com/images/4/46/Fury.png"),//or 3m and 30s
                 new Boon("Quickness", 1187, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Boon, RemoveType.CleanseFoe, Logic.Queue, "https://wiki.guildwars2.com/images/b/b4/Quickness.png"),
                 new Boon("Alacrity", 30328, BoonSource.Mixed, BoonType.Duration, 9, BoonEnum.Boon, RemoveType.CleanseFoe, Logic.Queue, "https://wiki.guildwars2.com/images/4/4c/Alacrity.png"),
@@ -94,16 +94,16 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Regeneration", 718, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Boon, RemoveType.CleanseFoe, Logic.HealingPower, "https://wiki.guildwars2.com/images/5/53/Regeneration.png"),
                 new Boon("Vigor", 726, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Boon, RemoveType.CleanseFoe, Logic.Queue, "https://wiki.guildwars2.com/images/f/f4/Vigor.png"),
                 new Boon("Aegis", 743, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Boon, RemoveType.All, Logic.Queue, "https://wiki.guildwars2.com/images/e/e5/Aegis.png"),
-                new Boon("Stability", 1122, BoonSource.Mixed, BoonType.Intensity, 25, BoonEnum.Boon, RemoveType.All, Logic.Queue, "https://wiki.guildwars2.com/images/a/ae/Stability.png"),
+                new Boon("Stability", 1122, BoonSource.Mixed, BoonType.Intensity, 25, BoonEnum.Boon, RemoveType.All, Logic.Override, "https://wiki.guildwars2.com/images/a/ae/Stability.png"),
                 new Boon("Swiftness", 719, BoonSource.Mixed, BoonType.Duration, 9, BoonEnum.Boon, RemoveType.CleanseFoe, Logic.Queue, "https://wiki.guildwars2.com/images/a/af/Swiftness.png"),
                 new Boon("Retaliation", 873, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Boon, RemoveType.CleanseFoe, Logic.Queue, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
                 new Boon("Resistance", 26980, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Boon, RemoveType.CleanseFoe, Logic.Queue, "https://wiki.guildwars2.com/images/4/4b/Resistance.png"),
                 // Condis         
-                new Boon("Bleeding", 736, BoonSource.Mixed, BoonType.Intensity, 1500, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Queue, "https://wiki.guildwars2.com/images/3/33/Bleeding.png"),
-                new Boon("Burning", 737, BoonSource.Mixed, BoonType.Intensity, 1500, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Queue, "https://wiki.guildwars2.com/images/4/45/Burning.png"),
-                new Boon("Confusion", 861, BoonSource.Mixed, BoonType.Intensity, 1500, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Queue, "https://wiki.guildwars2.com/images/e/e6/Confusion.png"),
-                new Boon("Poison", 723, BoonSource.Mixed, BoonType.Intensity, 1500, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Queue, "https://wiki.guildwars2.com/images/0/05/Poison.png"),
-                new Boon("Torment", 19426, BoonSource.Mixed, BoonType.Intensity, 1500, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Queue, "https://wiki.guildwars2.com/images/0/08/Torment.png"),
+                new Boon("Bleeding", 736, BoonSource.Mixed, BoonType.Intensity, 1500, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Override, "https://wiki.guildwars2.com/images/3/33/Bleeding.png"),
+                new Boon("Burning", 737, BoonSource.Mixed, BoonType.Intensity, 1500, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Override, "https://wiki.guildwars2.com/images/4/45/Burning.png"),
+                new Boon("Confusion", 861, BoonSource.Mixed, BoonType.Intensity, 1500, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Override, "https://wiki.guildwars2.com/images/e/e6/Confusion.png"),
+                new Boon("Poison", 723, BoonSource.Mixed, BoonType.Intensity, 1500, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Override, "https://wiki.guildwars2.com/images/0/05/Poison.png"),
+                new Boon("Torment", 19426, BoonSource.Mixed, BoonType.Intensity, 1500, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Override, "https://wiki.guildwars2.com/images/0/08/Torment.png"),
                 new Boon("Blind", 720, BoonSource.Mixed, BoonType.Duration, 9, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Queue, "https://wiki.guildwars2.com/images/3/33/Blinded.png"),
                 new Boon("Chilled", 722, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Queue, "https://wiki.guildwars2.com/images/a/a6/Chilled.png"),
                 new Boon("Crippled", 721, BoonSource.Mixed, BoonType.Duration, 9, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Queue, "https://wiki.guildwars2.com/images/f/fb/Crippled.png"),
@@ -112,12 +112,12 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Slow", 26766, BoonSource.Mixed, BoonType.Duration, 9, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Queue, "https://wiki.guildwars2.com/images/f/f5/Slow.png"),
                 new Boon("Weakness", 742, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Queue, "https://wiki.guildwars2.com/images/f/f9/Weakness.png"),
                 new Boon("Taunt", 27705, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Queue, "https://wiki.guildwars2.com/images/c/cc/Taunt.png"),
-                new Boon("Vulnerability", 738, BoonSource.Mixed, BoonType.Intensity, 25, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Queue, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png"),
+                new Boon("Vulnerability", 738, BoonSource.Mixed, BoonType.Intensity, 25, BoonEnum.Condition, RemoveType.CleanseFriend, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Vulnerability.png"),
                 new Boon("Retaliation", 873, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.Condition, RemoveType.CleanseFoe, Logic.Queue, "https://wiki.guildwars2.com/images/5/53/Retaliation.png"),
                 // Generic
-                new Boon("Stealth", 13017, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Stealth", 13017, BoonSource.Mixed, BoonType.Duration, 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Queue),
                 new Boon("Revealed", 890, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Superspeed", 5974, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
+                new Boon("Superspeed", 5974, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.ForceOverride,"https://wiki.guildwars2.com/images/1/1a/Super_Speed.png"),
                 //new Boon("Invulnerability", 801, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, "https://wiki.guildwars2.com/images/e/eb/Determined.png"),
                 new Boon("Unblockable",-1, BoonSource.Mixed, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
                 // Sigils
@@ -340,7 +340,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Skelk Venom",-1, BoonSource.Thief, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Skelk_Venom.png"),
                 new Boon("Ice Drake Venom",13095, BoonSource.Thief, BoonType.Intensity, 4, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/7/7b/Ice_Drake_Venom.png"),
                 new Boon("Devourer Venom", 13094, BoonSource.Thief, BoonType.Intensity, 2, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/4/4d/Devourer_Venom.png"),
-                new Boon("Skale Venom", 13036, BoonSource.Thief, BoonType.Intensity, 4, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
+                new Boon("Skale Venom", 13054, BoonSource.Thief, BoonType.Intensity, 4, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/1/14/Skale_Venom.png"),
                 new Boon("Spider Venom",13036, BoonSource.Thief, BoonType.Intensity, 6, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/3/39/Spider_Venom.png"),
                 new Boon("Basilisk Venom", 13133, BoonSource.Thief, BoonType.Intensity, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/3/3a/Basilisk_Venom.png"),
                 //physical
@@ -352,7 +352,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Dagger Storm",13134, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Kneeling",42869, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 //traits
-                //new Boon("Deadeyes's Gaze",46333, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
+                //new Boon("Deadeye's Gaze",46333, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
                 //new Boon("Maleficent Seven",43606, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
                 new Boon("Hidden Killer",42720, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Lead Attacks",34659, BoonSource.Thief, BoonType.Intensity, 15, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -409,7 +409,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Signet of Earth",5592, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Signet of Fire",5544, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Signet of Water",5591, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                //attunments
+                //attunements
                 new Boon("Fire Attunement", 5585, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Water Attunement", 5586, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Air Attunement", 5575, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -440,7 +440,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Obsidian Flesh",5667, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 //traits
                 new Boon("Harmonious Conduit",31353, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
-                new Boon("Fresh Air",31353, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
+                new Boon("Fresh Air",34241, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
                 new Boon("Soothing Mist", 5587, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/f/f7/Soothing_Mist.png"),
                 new Boon("Lesser Arcane Shield",25579, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Weaver's Prowess",42061, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
@@ -493,7 +493,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Tin of Fruitcake",34211, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Tin_of_Fruitcake.png"),
                 new Boon("Writ of Masterful Malice",33836, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Writ_of_Masterful_Malice.png"),
                 new Boon("Writ of Masterful Strength",33297, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/2/2b/Writ_of_Masterful_Strength.png"),
-                // new Boon("Hylek Maintenance Oil",9968, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"), when wiki says "same stats" its litteraly the same buff
+                // new Boon("Hylek Maintenance Oil",9968, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"), when wiki says "same stats" its literally the same buff
         };
 
 
@@ -529,6 +529,11 @@ namespace LuckParser.Models.ParseModels
             return _allBoons.Where(x => x.GetName() == name).ToList();
         }
 
+        // get everything
+        public static List<Boon> GetAll()
+        {
+            return _allBoons;
+        }
 
         // Conditions
         public static List<Boon> GetCondiBoonList()
@@ -662,6 +667,9 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case Logic.HealingPower:
                     logicToUse = new HealingLogic();
+                    break;
+                case Logic.ForceOverride:
+                    logicToUse = new ForceOverrideLogic();
                     break;
                 default:
                     logicToUse = new OverrideLogic();

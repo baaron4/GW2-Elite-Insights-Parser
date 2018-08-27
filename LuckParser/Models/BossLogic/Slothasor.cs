@@ -13,16 +13,16 @@ namespace LuckParser.Models
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(34479, "Tantrum", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,200,0)',", "Tntrm",0), // Tantrum (Triple Circles after Ground slamming), Tantrum
-            new Mechanic(34387, "Volatile Poison", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'circle',color:'rgb(255,0,0)',", "Psn",0), //Volatile Poison Application (Special Action Key), Poisen (Action Key)
-            new Mechanic(34481, "Volatile Poison", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,0,0)',", "P.dmg",0), //Stood in Volatile Poison, Poison dmg
-            new Mechanic(34516, "Halitosis", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'triangle-right',color:'rgb(255,140,0)',", "FlmBrth",0), //Halitosis (Flame Breath), Flame Breath
-            new Mechanic(34482, "Spore Release", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon',color:'rgb(255,0,0)',", "Shake",0), //Spore Release (Coconut Shake), Shake
-            new Mechanic(34362, "Magic Transformation", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,255,255)',", "Slub",0), // Magic Transformation (Ate Magic Mushroom), Slub Transform
+            new Mechanic(34479, "Tantrum", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,200,0)',", "Tntrm","Tantrum (Triple Circles after Ground slamming)", "Tantrum",0), 
+            new Mechanic(34387, "Volatile Poison", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'circle',color:'rgb(255,0,0)',", "Psn","Volatile Poison Application (Special Action Key)", "Poison (Action Key)",0),
+            new Mechanic(34481, "Volatile Poison", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,0,0)',", "P.dmg","Stood in Volatile Poison", "Poison dmg",0),
+            new Mechanic(34516, "Halitosis", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'triangle-right',color:'rgb(255,140,0)',", "FlmBrth","Halitosis (Flame Breath)", "Flame Breath",0),
+            new Mechanic(34482, "Spore Release", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon',color:'rgb(255,0,0)',", "Shake","Spore Release (Coconut Shake)", "Shake",0),
+            new Mechanic(34362, "Magic Transformation", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,255,255)',", "Slub","Magic Transformation (Ate Magic Mushroom)", "Slub Transform",0), 
             //new Mechanic(34496, "Nauseated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall-open',color:'rgb(200,140,255)',", "Slub CD",0), //can be skipped imho, identical person and timestamp as Slub Transform
-            new Mechanic(34508, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'star',color:'rgb(255,0,255)',", "Fix",0), //Fixated by Slothasor, Fixated
-            new Mechanic(34565, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)',", "Floor",0), // Toxic Cloud (stood in green floor poison), Toxic Floor
-            new Mechanic(34537, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)',", "Floor",0) // Toxic Cloud (stood in green floor poison), Toxic Floor
+            new Mechanic(34508, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'star',color:'rgb(255,0,255)',", "Fix","Fixated by Slothasor", "Fixated",0),
+            new Mechanic(34565, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)',", "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0), 
+            new Mechanic(34537, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)',", "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0) 
             });
         }
 
@@ -77,13 +77,13 @@ namespace LuckParser.Models
             int toDropStart = 0;
             foreach (CombatItem c in poisonToDrop)
             {
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    toDropStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    toDropStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 }
                 else
                 {
-                    int toDropEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware()); replay.AddCircleActor(new CircleActor(false, 0, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
+                    int toDropEnd = (int)(c.Time - log.GetBossData().GetFirstAware()); replay.AddCircleActor(new CircleActor(false, 0, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
                     replay.AddCircleActor(new CircleActor(true, toDropStart + 8000, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
                     Point3D poisonPos = replay.GetPositions().FirstOrDefault(x => x.Time > toDropEnd);
                     if (poisonPos != null)
@@ -97,13 +97,13 @@ namespace LuckParser.Models
             int transfoStart = 0;
             foreach (CombatItem c in slubTrans)
             {
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    transfoStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    transfoStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 }
                 else
                 {
-                    int transfoEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int transfoEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 160, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
                 }
             }
@@ -112,13 +112,13 @@ namespace LuckParser.Models
             int fixatedSlothStart = 0;
             foreach (CombatItem c in fixatedSloth)
             {
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    fixatedSlothStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    fixatedSlothStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 }
                 else
                 {
-                    int fixatedSlothEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int fixatedSlothEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 120, new Tuple<int, int>(fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)"));
                 }
             }

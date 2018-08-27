@@ -253,9 +253,9 @@ namespace LuckParser.Controllers
             sw.Write("</tfoot>");
         }
 
-        public static void WriteDamageDistTableCondi(StreamWriter sw, HashSet<long> usedIDs, List<DamageLog> damageLogs, int finalTotalDamage)
+        public static void WriteDamageDistTableCondi(StreamWriter sw, HashSet<long> usedIDs, List<DamageLog> damageLogs, int finalTotalDamage, List<Boon> presentConditions)
         {
-            foreach (Boon condi in Boon.GetCondiBoonList())
+            foreach (Boon condi in presentConditions)
             {
                 int totaldamage = 0;
                 int mindamage = 0;
@@ -340,7 +340,7 @@ namespace LuckParser.Controllers
                     sw.Write("<td>" + maxdamage + "</td>");
                     sw.Write("<td>" + (casts != -1 ? casts.ToString() : "") + "</td>");
                     sw.Write("<td>" + hits + "</td>");
-                    sw.Write("<td>" + (hpcast < 0 ? hpcast.ToString() : "") + "</td>");
+                    sw.Write("<td>" + (hpcast > 0 ? hpcast.ToString() : "") + "</td>");
 
                     sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + crit + " out of " + hits + " hits\">" + Math.Round(100 * (double)crit / hits, 2) + "%</span></td>");
                     sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + flank + " out of " + hits + " hits\">" + Math.Round(100 * (double)flank / hits, 2) + "%</span></td>");
@@ -362,7 +362,7 @@ namespace LuckParser.Controllers
                     sw.Write("<td>" + maxdamage + "</td>");
                     sw.Write("<td>" + (casts != -1 ? casts.ToString() : "") + "</td>");
                     sw.Write("<td>" + hits + "</td>");
-                    sw.Write("<td>" + (hpcast < 0 ? hpcast.ToString() : "") + "</td>");
+                    sw.Write("<td>" + (hpcast > 0 ? hpcast.ToString() : "") + "</td>");
                     sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + crit + " out of " + hits + " hits\">" + Math.Round(100 * (double)crit / hits,2) + "%</span></td>");
                     sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + flank + " out of " + hits + " hits\">" + Math.Round(100 * (double)flank / hits,2) + "%</span></td>");
                     sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + glance + " out of " + hits + " hits\">" + Math.Round(100 * (double)glance / hits,2) + "%</span></td>");
@@ -675,7 +675,7 @@ namespace LuckParser.Controllers
                 sw.Write("<th>Name</th>");
                 sw.Write("<th><img src=\"" + GetLink("Crit") + "\" alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
                 sw.Write("<th><img src=\"" + GetLink("Scholar") + "\" alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + GetLink("SwS") + "\" alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("SwS") + "\" alt=\"SwS\" title=\"Percent time hits while moving\" height=\"18\" width=\"18\"></th>");
                 sw.Write("<th><img src=\"" + GetLink("Flank") + "\" alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
                 sw.Write("<th><img src=\"" + GetLink("Glance") + "\" alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
                 sw.Write("<th><img src=\"" + GetLink("Blinded") + "\" alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");

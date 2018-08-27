@@ -14,22 +14,22 @@ namespace LuckParser.Models
             MechanicList.AddRange(new List<Mechanic>
             {
 
-            new Mechanic(37996, "Shockwave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(0,0,255)',", "Shkwv",0), //Shockwave from Spears, Shockwave
-            new Mechanic(38168, "Prisoner Sweep", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'hexagon',color:'rgb(0,0,255)',", "Swp",0), //Prisoner Sweep (horizontal), Sweep
-            new Mechanic(38305, "Bludgeon", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-down',color:'rgb(0,0,255)',", "Slm",0), //Bludgeon (vertical Slam), Slam
-            new Mechanic(37868, "Fixate: Samarog", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'star',color:'rgb(255,0,255)',", "S.Fix",0), //Fixated by Samarog, Fixate: Samarog
-            new Mechanic(38223, "Fixate: Guldhem", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'star-open',color:'rgb(255,200,0)',", "G.Fix",0), //Fixated by Guldhem, Fixate: Guldhem
-            new Mechanic(37693, "Fixate: Rigom", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'star-open',color:'rgb(255,0,0)',", "R.Fix",0), //Fixated by Rigom, Fixate: Rigom
-            new Mechanic(37966, "Big Hug", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(0,128,0)',", "BgGrn",0), // Big Green (friends mechanic), Big Green
-            new Mechanic(38247, "Small Hug", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'circle-open',color:'rgb(0,128,0)',", "SmGrn",0), //Small Green (friends mechanic), Small Green
-            new Mechanic(38180, "Spear Return", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-left',color:'rgb(255,0,0)',", "SprRtn",0), //Hit by Spear Return, Spear Return
-            new Mechanic(38260, "Inevitable Betrayal", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(255,0,0)',", "G.Fail",0), //Inevitable Betrayal (failed Green), Failed Green
-            new Mechanic(37851, "Inevitable Betrayal", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(255,0,0)',", "G.Fail",0), //Inevitable Betrayal (failed Green), Failed Green
-            new Mechanic(37901, "Effigy Pulse", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-down-open',color:'rgb(255,0,0)',", "S.Pls",0), //Effigy Pulse (Stood in Spear AoE), Spear Aoe
-            new Mechanic(37816, "Spear Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-down',color:'rgb(255,0,0)',", "S.Spwn",0), // Spear Impact (hit by spawning Spear), Spear Spawned
-            new Mechanic(38199, "Brutalize", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'diamond',color:'rgb(255,0,255)',","CC",0), //Brutalize (jumped upon by Samarog->Breakbar), Brutalize (Breakbar)
-            new Mechanic(37892, "Soul Swarm", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'x-thin-open',color:'rgb(0,255,255)',","Wall",0), // Soul Swarm (stood in or beyond Spear Wall), Spear Wall
-            new Mechanic(38231, "Impaling Stab", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'hourglass',color:'rgb(0,0,255)',","ShWv.Ctr",0), //Impaling Stab (hit by Spears causing Shockwave), Shockwave Center
+            new Mechanic(37996, "Shockwave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(0,0,255)',", "Shkwv","Shockwave from Spears", "Shockwave",0),
+            new Mechanic(38168, "Prisoner Sweep", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'hexagon',color:'rgb(0,0,255)',", "Swp","Prisoner Sweep (horizontal)", "Sweep",0),
+            new Mechanic(38305, "Bludgeon", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-down',color:'rgb(0,0,255)',", "Slm","Bludgeon (vertical Slam)", "Slam",0),
+            new Mechanic(37868, "Fixate: Samarog", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'star',color:'rgb(255,0,255)',", "S.Fix","Fixated by Samarog", "Fixate: Samarog",0),
+            new Mechanic(38223, "Fixate: Guldhem", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'star-open',color:'rgb(255,200,0)',", "G.Fix","Fixated by Guldhem", "Fixate: Guldhem",0),
+            new Mechanic(37693, "Fixate: Rigom", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'star-open',color:'rgb(255,0,0)',", "R.Fix","Fixated by Rigom", "Fixate: Rigom",0),
+            new Mechanic(37966, "Big Hug", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(0,128,0)',", "BgGrn","Big Green (friends mechanic)", "Big Green",0), 
+            new Mechanic(38247, "Small Hug", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'circle-open',color:'rgb(0,128,0)',", "SmGrn","Small Green (friends mechanic)", "Small Green",0),
+            new Mechanic(38180, "Spear Return", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-left',color:'rgb(255,0,0)',", "SprRtn","Hit by Spear Return", "Spear Return",0),
+            new Mechanic(38260, "Inevitable Betrayal", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(255,0,0)',", "G.Fail","Inevitable Betrayal (failed Green)", "Failed Green",0),
+            new Mechanic(37851, "Inevitable Betrayal", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(255,0,0)',", "G.Fail","Inevitable Betrayal (failed Green)", "Failed Green",0),
+            new Mechanic(37901, "Effigy Pulse", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-down-open',color:'rgb(255,0,0)',", "S.Pls","Effigy Pulse (Stood in Spear AoE)", "Spear Aoe",0),
+            new Mechanic(37816, "Spear Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'triangle-down',color:'rgb(255,0,0)',", "S.Spwn","Spear Impact (hit by spawning Spear)", "Spear Spawned",0), 
+            new Mechanic(38199, "Brutalize", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'diamond',color:'rgb(255,0,255)',","CC","Brutalize (jumped upon by Samarog->Breakbar)", "Brutalize (Breakbar)",0),
+            new Mechanic(37892, "Soul Swarm", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'x-thin-open',color:'rgb(0,255,255)',","Wall","Soul Swarm (stood in or beyond Spear Wall)", "Spear Wall",0),
+            new Mechanic(38231, "Impaling Stab", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'hourglass',color:'rgb(0,0,255)',","ShWv.Ctr","Impaling Stab (hit by Spears causing Shockwave)", "Shockwave Center",0),
             
             //  new Mechanic(37816, "Brutalize", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'star-square',color:'rgb(255,0,0)',", "CC Target", casted without dmg odd
             });
@@ -55,9 +55,9 @@ namespace LuckParser.Models
             for (int i = 0; i < invulsSam.Count; i++)
             {
                 CombatItem c = invulsSam[i];
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.GetTime() - log.GetBossData().GetFirstAware();
+                    end = c.Time - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsSam.Count - 1)
                     {
@@ -66,7 +66,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.GetTime() - log.GetBossData().GetFirstAware();
+                    start = c.Time - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(end, start));
                     castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
@@ -110,17 +110,17 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Rigom,
                         ParseEnum.ThrashIDS.Guldhem
                     };
-            List<CombatItem> brutalize = log.GetBoonData().Where(x => x.GetSkillID() == 38226 && x.IsBuffremove() != ParseEnum.BuffRemove.Manual).ToList();
+            List<CombatItem> brutalize = log.GetBoonData().Where(x => x.SkillID == 38226 && x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
             int brutStart = 0;
             foreach (CombatItem c in brutalize)
             {
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    brutStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    brutStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 }
                 else
                 {
-                    int brutEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int brutEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 120, new Tuple<int, int>(brutStart, brutEnd), "rgba(0, 180, 255, 0.3)"));
                 }
             }
@@ -130,19 +130,19 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // big bomb
-            List<CombatItem> bigbomb = log.GetBoonData().Where(x => x.GetSkillID() == 37966 && ((x.GetDstInstid() == p.GetInstid() && x.IsBuffremove() == ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> bigbomb = log.GetBoonData().Where(x => x.SkillID == 37966 && ((x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None))).ToList();
             foreach (CombatItem c in bigbomb)
             {
-                int bigStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                int bigStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 int bigEnd = bigStart + 6000;
                 replay.AddCircleActor(new CircleActor(true, 0, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
                 replay.AddCircleActor(new CircleActor(true, bigEnd, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
             }
             // small bomb
-            List<CombatItem> smallbomb = log.GetBoonData().Where(x => x.GetSkillID() == 38247 && ((x.GetDstInstid() == p.GetInstid() && x.IsBuffremove() == ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> smallbomb = log.GetBoonData().Where(x => x.SkillID == 38247 && ((x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None))).ToList();
             foreach (CombatItem c in smallbomb)
             {
-                int smallStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                int smallStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 int smallEnd = smallStart + 6000;
                 replay.AddCircleActor(new CircleActor(true, 0, 80, new Tuple<int, int>(smallStart, smallEnd), "rgba(80, 150, 0, 0.3)"));
             }
@@ -151,13 +151,13 @@ namespace LuckParser.Models
             int fixatedSamStart = 0;
             foreach (CombatItem c in fixatedSam)
             {
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    fixatedSamStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    fixatedSamStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 }
                 else
                 {
-                    int fixatedSamEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int fixatedSamEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 80, new Tuple<int, int>(fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)"));
                 }
             }

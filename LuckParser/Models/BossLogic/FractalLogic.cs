@@ -12,8 +12,9 @@ namespace LuckParser.Models
             Mode = ParseMode.Fractal;
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(37695, "Flux Bomb", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Unknown, "symbol:'circle',color:'rgb(150,0,255)',size:10,", "FBmb",0), // Flux Bomb application, Flux Bomb
-            new Mechanic(36393, "Flux Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Unknown, "symbol:'circle-open',color:'rgb(150,0,255)',size:10,", "FB.dmg",0), // Flux Bomb hit, Flux Bomb dmg
+            new Mechanic(37695, "Flux Bomb", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Unknown, "symbol:'circle',color:'rgb(150,0,255)',size:10,", "FBmb","Flux Bomb application", "Flux Bomb",0),
+            new Mechanic(36393, "Flux Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Unknown, "symbol:'circle-open',color:'rgb(150,0,255)',size:10,", "FB.dmg","Flux Bomb hit", "Flux Bomb dmg",0),
+            new Mechanic(19684, "Fractal Vindicator", Mechanic.MechType.Spawn, ParseEnum.BossIDS.Unknown, "symbol:'star-diamond-open',color:'rgb(0,0,0)',size:10,", "FV.spwn","Fractal Vindicator spawned", "Vindicator spawn",0),
             });
         }
 
@@ -28,9 +29,9 @@ namespace LuckParser.Models
             for (int i = 0; i < invulsBoss.Count; i++)
             {
                 CombatItem c = invulsBoss[i];
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.GetTime() - log.GetBossData().GetFirstAware();
+                    end = c.Time - log.GetBossData().GetFirstAware();
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsBoss.Count - 1)
                     {
@@ -39,7 +40,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.GetTime() - log.GetBossData().GetFirstAware();
+                    start = c.Time - log.GetBossData().GetFirstAware();
                     castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
             }

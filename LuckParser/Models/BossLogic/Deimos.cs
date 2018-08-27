@@ -13,24 +13,21 @@ namespace LuckParser.Models
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(37716, "Rapid Decay", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'circle-open',color:'rgb(0,0,0)',", "Oil",0), //Rapid Decay (Black expanding oil), Black Oil
-            //new Mechanic(37844, "Off Balance", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'cross',color:'rgb(255,0,255)',", "Failed Teleport Break",0), Cast by the drunkard Saul, would be logical to be the forced random teleport but not sure when it's successful or not
-            new Mechanic(37846, "Off Balance", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Deimos, "symbol:'cross',color:'rgb(255,0,255)',", "Drunkard Teleport",0, (value => value >= 2200)),// Seems to be the ID for the breakbar/cast start. If value is above 2200 (and the is_activation==5), the break apparently failed.
-            new Mechanic(38272, "Boon Thief", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Deimos, "symbol:'x',color:'rgb(255,0,255)',", "Boon Thief",0, (value => value >= 4400)),// Seems to only be successful if the value is above 4400 (the duration of the breakbar). Also, has no dst_agent so new category might be necessary?
-            new Mechanic(38208, "Annihilate", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'hexagon',color:'rgb(255,200,0)',", "Smash",0), //Annihilate (Cascading Pizza attack), Boss Smash
-            new Mechanic(37929, "Annihilate", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'hexagon',color:'rgb(255,200,0)',", "Smash",0), //Annihilate (Cascading Pizza attack), Boss Smash
-            new Mechanic(37980, "Demonic Shock Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'circle',color:'rgb(255,0,0)',", "10%Smsh",0), //Knockback in 10% Phase, 10% Smash
-            new Mechanic(37982, "Demonic Shock Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'circle',color:'rgb(255,0,0)',", "10%Smsh",0), //Knockback in 10% Phase, 10% Smash
-            new Mechanic(37733, "Tear Instability", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'diamond',color:'rgb(0,128,128)',", "Tear",0), //Collected a Demonic Tear, Tear
-            new Mechanic(37613, "Mind Crush", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'square',color:'rgb(0,0,255)',", "MCrsh",0,(value => value > 0)), //Hit by Mind Crush without Bubble Protection, Mind Crush // Not properly detected everytime, sometimes people receive mind crush hit but no weak minded afterwards (partly due to green circle immunity). Suggestion: Only mark as hit if it deals non-zero damage (value>=0).
-            new Mechanic(38187, "Weak Minded", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'square-open',color:'rgb(200,140,255)',", "WkMind",0), //Weak Minded (Debuff after Mind Crush), Weak Minded
-            new Mechanic(37730, "Chosen by Eye of Janthir", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'circle',color:'rgb(0,255,0)',", "Grn",0), //Chosen by the Eye of Janthir, Chosen (Green)
-            new Mechanic(38169, "Teleported", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'circle-open',color:'rgb(0,255,0)',", "TP",0), //Teleport to/from Demonic Realm, Teleport
-            new Mechanic(38224, "Unnatural Signet", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Deimos, "symbol:'square-open',color:'rgb(0,255,255)',", "DMGDbf",0)//Double Damage Debuff on Deimos, +100% Dmg Buff
-            //mlist.Add("Chosen by Eye of Janthir");
-            //mlist.Add("");//tp from drunkard
-            //mlist.Add("");//bon currupt from thief
-            //mlist.Add("Teleport");//to demonic realm
+            new Mechanic(37716, "Rapid Decay", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'circle-open',color:'rgb(0,0,0)',", "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
+            new Mechanic(37846, "Off Balance", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Deimos, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "TP.CC","Off Balance (Saul TP Breakbar)", "Saul TP Start",0),
+            new Mechanic(37846, "Off Balance", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Deimos, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "TP.CC.Fail","Failed Saul TP CC", "Failed CC",0, (value => value >= 2200)),
+            new Mechanic(38272, "Boon Thief", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Deimos, "symbol:'diamond-wide',color:'rgb(0,160,150)',", "Thief.CC","Boon Thief (Saul Breakbar)", "Boon Thief Start",0),
+            new Mechanic(38272, "Boon Thief", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Deimos, "symbol:'diamond-wide',color:'rgb(255,0,0)',", "Thief.CC.Fail","Failed Boon Thief CC", "Failed CC",0, (value => value >= 4400)),
+            new Mechanic(38208, "Annihilate", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'hexagon',color:'rgb(255,200,0)',", "Smash","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
+            new Mechanic(37929, "Annihilate", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'hexagon',color:'rgb(255,200,0)',", "Smash","Annihilate (Cascading Pizza attack)", "Boss Smash",0),
+            new Mechanic(37980, "Demonic Shock Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'circle',color:'rgb(255,0,0)',", "10%Smsh","Knockback in 10% Phase", "10% Smash",0),
+            new Mechanic(37982, "Demonic Shock Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'circle',color:'rgb(255,0,0)',", "10%Smsh","Knockback in 10% Phase", "10% Smash",0),
+            new Mechanic(37733, "Tear Instability", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'diamond',color:'rgb(0,128,128)',", "Tear","Collected a Demonic Tear", "Tear",0),
+            new Mechanic(37613, "Mind Crush", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'square',color:'rgb(0,0,255)',", "MCrsh","Hit by Mind Crush without Bubble Protection", "Mind Crush",0,(value => value > 0)),
+            new Mechanic(38187, "Weak Minded", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'square-open',color:'rgb(200,140,255)',", "WkMind","Weak Minded (Debuff after Mind Crush)", "Weak Minded",0),
+            new Mechanic(37730, "Chosen by Eye of Janthir", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'circle',color:'rgb(0,255,0)',", "Grn","Chosen by the Eye of Janthir", "Chosen (Green)",0), 
+            new Mechanic(38169, "Teleported", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'circle-open',color:'rgb(0,255,0)',", "TP","Teleport to/from Demonic Realm", "Teleport",0),
+            new Mechanic(38224, "Unnatural Signet", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Deimos, "symbol:'square-open',color:'rgb(0,255,255)',", "DMGDbf","Double Damage Debuff on Deimos", "+100% Dmg Buff",0)
             });
         }
 
@@ -50,10 +47,10 @@ namespace LuckParser.Models
             long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // Determined + additional data on inst change
-            CombatItem invulDei = log.GetBoonData().Find(x => x.GetSkillID() == 762 && x.IsBuffremove() == ParseEnum.BuffRemove.None && x.GetDstInstid() == boss.GetInstid());
+            CombatItem invulDei = log.GetBoonData().Find(x => x.SkillID == 762 && x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == boss.GetInstid());
             if (invulDei != null)
             {
-                end = invulDei.GetTime() - log.GetBossData().GetFirstAware();
+                end = invulDei.Time - log.GetBossData().GetFirstAware();
                 phases.Add(new PhaseData(start, end));
                 start = (boss.GetPhaseData().Count == 1 ? boss.GetPhaseData()[0] - log.GetBossData().GetFirstAware() : fightDuration);
                 castLogs.Add(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
@@ -67,15 +64,15 @@ namespace LuckParser.Models
                 phases[i].SetName("Phase " + i);
             }
             int offsetDei = phases.Count;
-            CombatItem teleport = log.GetCombatList().FirstOrDefault(x => x.GetSkillID() == 38169);
+            CombatItem teleport = log.GetCombatList().FirstOrDefault(x => x.SkillID == 38169);
             int splits = 0;
             while (teleport != null && splits < 3)
             {
-                start = teleport.GetTime() - log.GetBossData().GetFirstAware();
-                CombatItem teleportBack = log.GetCombatList().FirstOrDefault(x => x.GetSkillID() == 38169 && x.GetTime() - log.GetBossData().GetFirstAware() > start + 10000);
+                start = teleport.Time - log.GetBossData().GetFirstAware();
+                CombatItem teleportBack = log.GetCombatList().FirstOrDefault(x => x.SkillID == 38169 && x.Time - log.GetBossData().GetFirstAware() > start + 10000);
                 if (teleportBack != null)
                 {
-                    end = teleportBack.GetTime() - log.GetBossData().GetFirstAware();
+                    end = teleportBack.Time - log.GetBossData().GetFirstAware();
                 }
                 else
                 {
@@ -83,7 +80,7 @@ namespace LuckParser.Models
                 }
                 phases.Add(new PhaseData(start, end));
                 splits++;
-                teleport = log.GetCombatList().FirstOrDefault(x => x.GetSkillID() == 38169 && x.GetTime() - log.GetBossData().GetFirstAware() > end + 10000);
+                teleport = log.GetCombatList().FirstOrDefault(x => x.SkillID == 38169 && x.Time - log.GetBossData().GetFirstAware() > end + 10000);
             }
 
             string[] namesDeiSplit = new [] { "Thief", "Gambler", "Drunkard" };
@@ -150,13 +147,13 @@ namespace LuckParser.Models
             int tpStart = 0;
             foreach (CombatItem c in tpDeimos)
             {
-                if (c.IsBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    tpStart = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    tpStart = (int)(c.Time - log.GetBossData().GetFirstAware());
                 }
                 else
                 {
-                    int tpEnd = (int)(c.GetTime() - log.GetBossData().GetFirstAware());
+                    int tpEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
                     replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
                     replay.AddCircleActor(new CircleActor(true, tpEnd, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
                 }

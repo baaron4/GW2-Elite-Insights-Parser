@@ -223,7 +223,7 @@ namespace LuckParser.Controllers
                 stats.DownCount.ToString(), timedead.Minutes + " m " + timedead.Seconds + " s",Math.Round((timedead.TotalSeconds / fightDuration) * 100,1) +"%"});
                 count++;
             }
-            while (count < 15)//so each graph has equal spaceing
+            while (count < 15)//so each graph has equal spacing
             {
                 NewLine();
                 count++;
@@ -258,7 +258,7 @@ namespace LuckParser.Controllers
                 stats.InteruptsBoss.ToString(),stats.InvulnedBoss.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() });
                 count++;
             }
-            while (count < 15)//so each graph has equal spaceing
+            while (count < 15)//so each graph has equal spacing
             {
                 NewLine();
                 count++;
@@ -293,7 +293,7 @@ namespace LuckParser.Controllers
                 stats.Interupts.ToString(),stats.Invulned.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() });
                 count++;
             }
-            while (count < 15)//so each graph has equal spaceing
+            while (count < 15)//so each graph has equal spacing
             {
                 NewLine();
                 count++;
@@ -301,7 +301,7 @@ namespace LuckParser.Controllers
         }
         private void CreateDefTable(int phaseIndex)
         {
-            //generate deftats table
+            //generate defstats table
             WriteLine(new [] { "Sub Group", "Profession", "Name" ,
                 "DMG Taken","DMG Barrier","Blocked","Invulned","Evaded","Dodges" });
             int count = 0;
@@ -314,7 +314,7 @@ namespace LuckParser.Controllers
                 defenses.DamageTaken.ToString(),defenses.DamageBarrier.ToString(),defenses.BlockedCount.ToString(),defenses.InvulnedCount.ToString(),defenses.EvadedCount.ToString(),stats.DodgeCount.ToString() });
                 count++;
             }
-            while (count < 15)//so each graph has equal spaceing
+            while (count < 15)//so each graph has equal spacing
             {
                 NewLine();
                 count++;
@@ -331,10 +331,10 @@ namespace LuckParser.Controllers
                 Statistics.FinalSupport support = _statistics.Support[player][phaseIndex];
 
                 WriteLine(new [] { player.GetGroup().ToString(), player.GetProf(), player.GetCharacter(),
-                support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(),support.Resurrects.ToString(),support.RessurrectTime.ToString() });
+                support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(),support.Resurrects.ToString(),support.ResurrectTime.ToString() });
                 count++;
             }
-            while (count < 15)//so each graph has equal spaceing
+            while (count < 15)//so each graph has equal spacing
             {
                 NewLine();
                 count++;
@@ -358,7 +358,7 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.GetPlayerList())
             {
                 Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][phaseIndex];
-                Dictionary<long, long> boonPresence = player.GetBoonPresence(_log, _statistics.Phases, listToUse, phaseIndex);
+                Dictionary<long, long> boonPresence = player.GetBoonPresence(_log, _statistics.Phases, phaseIndex);
                 double avgBoons = 0.0;
                 foreach (long duration in boonPresence.Values)
                 {
@@ -392,7 +392,7 @@ namespace LuckParser.Controllers
                 NewLine();
                 count++;
             }
-            while (count < 15)//so each graph has equal spaceing
+            while (count < 15)//so each graph has equal spacing
             {
                 NewLine();
                 count++;
@@ -440,7 +440,7 @@ namespace LuckParser.Controllers
                 NewLine();
                 count++;
             }
-            while (count < 15)//so each graph has equal spaceing
+            while (count < 15)//so each graph has equal spacing
             {
                 NewLine();
                 count++;
@@ -489,7 +489,7 @@ namespace LuckParser.Controllers
                 NewLine();
                 count++;
             }
-            while (count < 15)//so each graph has equal spaceing
+            while (count < 15)//so each graph has equal spacing
             {
                 NewLine();
                 count++;
@@ -538,7 +538,7 @@ namespace LuckParser.Controllers
                 NewLine();
                 count++;
             }
-            while (count < 15)//so each graph has equal spaceing
+            while (count < 15)//so each graph has equal spacing
             {
                 NewLine();
                 count++;
@@ -586,7 +586,7 @@ namespace LuckParser.Controllers
                 NewLine();
                 count++;
             }
-            while (count < 15)//so each graph has equal spaceing
+            while (count < 15)//so each graph has equal spacing
             {
                 NewLine();
                 count++;
@@ -604,7 +604,7 @@ namespace LuckParser.Controllers
                 WriteCell("Name");
                 foreach (Mechanic mech in presMech)
                 {
-                    WriteCell(mech.GetName());
+                    WriteCell(mech.GetDescription());
                 }
                 NewLine();
 
@@ -622,7 +622,7 @@ namespace LuckParser.Controllers
                 }
 
             }
-            while (countLines < 15)//so each graph has equal spaceing
+            while (countLines < 15)//so each graph has equal spacing
             {
                 NewLine();
                 countLines++;
@@ -655,11 +655,11 @@ namespace LuckParser.Controllers
             WriteCell("Mechanic");
             foreach (MechanicLog m in mLogs)
             {
-                WriteCell(m.GetName());
+                WriteCell(m.GetDescription());
             }
             NewLine();
             count++;
-            while (count < 15)//so each graph has equal spaceing
+            while (count < 15)//so each graph has equal spacing
             {
                 NewLine();
                 count++;
@@ -671,9 +671,7 @@ namespace LuckParser.Controllers
             List<PhaseData> phases = _statistics.Phases;
             long fightDuration = phases[phaseIndex].GetDuration();
             Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[phaseIndex];
-            List<Boon> boonToTrack = Boon.GetCondiBoonList();
-            boonToTrack.AddRange(Boon.GetBoonList());
-            Dictionary<long, long> condiPresence = boss.GetCondiPresence(_log, phases, boonToTrack, phaseIndex);
+            Dictionary<long, long> condiPresence = boss.GetCondiPresence(_log, phases, phaseIndex);
             double avgCondis = 0.0;
             foreach (long duration in condiPresence.Values)
             {
@@ -684,7 +682,7 @@ namespace LuckParser.Controllers
 
             WriteCell("Name");
             WriteCell("Avg");
-            foreach (Boon boon in Boon.GetCondiBoonList())
+            foreach (Boon boon in _statistics.PresentConditions)
             {
                 if (boon.GetName() == "Retaliation")
                 {
@@ -697,7 +695,7 @@ namespace LuckParser.Controllers
             int count = 0;
             WriteCell(boss.GetCharacter());
             WriteCell(Math.Round(avgCondis, 1).ToString());
-            foreach (Boon boon in Boon.GetCondiBoonList())
+            foreach (Boon boon in _statistics.PresentConditions)
             {
                 if (boon.GetName() == "Retaliation")
                 {
@@ -714,7 +712,7 @@ namespace LuckParser.Controllers
             }
             count++;
 
-            while (count < 15)//so each graph has equal spaceing
+            while (count < 15)//so each graph has equal spacing
             {
                 NewLine();
                 count++;
@@ -727,7 +725,7 @@ namespace LuckParser.Controllers
             Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[phaseIndex];
             WriteCell("Name");
             WriteCell("Avg");
-            foreach (Boon boon in Boon.GetBoonList())
+            foreach (Boon boon in _statistics.PresentBoons)
             {
                 WriteCell(boon.GetName());
             }
@@ -735,7 +733,7 @@ namespace LuckParser.Controllers
             NewLine();
             int count = 0;
             WriteCell(boss.GetCharacter());
-            foreach (Boon boon in Boon.GetBoonList())
+            foreach (Boon boon in _statistics.PresentBoons)
             {
                 if (boon.GetBoonType() == Boon.BoonType.Duration)
                 {
@@ -748,7 +746,7 @@ namespace LuckParser.Controllers
             }
             count++;
 
-            while (count < 15)//so each graph has equal spaceing
+            while (count < 15)//so each graph has equal spacing
             {
                 NewLine();
                 count++;
@@ -761,7 +759,7 @@ namespace LuckParser.Controllers
             //bool hasBoons = false;
             int count = 0;
             WriteCell("Name");
-            foreach (Boon boon in Boon.GetCondiBoonList())
+            foreach (Boon boon in _statistics.PresentConditions)
             {
                 if (boon.GetName() == "Retaliation")
                 {
@@ -774,7 +772,7 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.GetPlayerList())
             {
                 WriteCell(player.GetCharacter());
-                foreach (Boon boon in Boon.GetCondiBoonList())
+                foreach (Boon boon in _statistics.PresentConditions)
                 {
                     if (boon.GetName() == "Retaliation")
                     {
@@ -796,7 +794,7 @@ namespace LuckParser.Controllers
             }
 
 
-            while (count < 15)//so each graph has equal spaceing
+            while (count < 15)//so each graph has equal spacing
             {
                 NewLine();
                 count++;
