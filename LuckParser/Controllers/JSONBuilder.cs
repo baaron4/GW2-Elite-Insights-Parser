@@ -66,6 +66,13 @@ namespace LuckParser.Controllers
                 public int[] PlayerBossPowerDamage;
             }
 
+            public struct JsonBoonUptime
+            {
+                public double[] Uptime;
+                public double[] Generation;
+                public double[] Overstack;
+            }
+
             public struct JsonBoss
             {
                 public string Name;
@@ -92,10 +99,10 @@ namespace LuckParser.Controllers
                 public Statistics.FinalStats[] Stats;
                 public Statistics.FinalDefenses[] Defenses;
                 public Statistics.FinalSupport[] Support;
-                public Dictionary<long, Statistics.FinalBoonUptime>[] SelfBoons;
-                public Dictionary<long, Statistics.FinalBoonUptime>[] GroupBoons;
-                public Dictionary<long, Statistics.FinalBoonUptime>[] OffGroupBoons;
-                public Dictionary<long, Statistics.FinalBoonUptime>[] SquadBoons;
+                public Dictionary<long, JsonBoonUptime> SelfBoons;
+                public Dictionary<long, JsonBoonUptime> GroupBoons;
+                public Dictionary<long, JsonBoonUptime> OffGroupBoons;
+                public Dictionary<long, JsonBoonUptime> SquadBoons;
             }
 
             public struct JsonPhase
@@ -212,6 +219,34 @@ namespace LuckParser.Controllers
             return log;
         }
 
+        private Dictionary<long, JsonLog.JsonBoonUptime> BuildBoonUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes)
+        {
+            Dictionary<long, JsonLog.JsonBoonUptime> uptimes = new Dictionary<long, JsonLog.JsonBoonUptime>();
+            int phases = _statistics.Phases.Count;
+            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
+            {
+                foreach (KeyValuePair<long, Statistics.FinalBoonUptime> boon in statUptimes[phaseIndex])
+                {
+                    if (!uptimes.ContainsKey(boon.Key))
+                    {
+                        JsonLog.JsonBoonUptime newUptime = new JsonLog.JsonBoonUptime
+                        {
+                            Generation = new double[phases],
+                            Overstack = new double[phases],
+                            Uptime = new double[phases]
+                        };
+                        uptimes[boon.Key] = newUptime;
+                    }
+
+                    uptimes[boon.Key].Overstack[phaseIndex] = boon.Value.Overstack;
+                    uptimes[boon.Key].Generation[phaseIndex] = boon.Value.Generation;
+                    uptimes[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
+                }
+            }
+
+            return uptimes;
+        }
+
         private JsonLog SetPlayers(JsonLog log)
         {
             log.Players = new ArrayList();
@@ -233,10 +268,10 @@ namespace LuckParser.Controllers
                     Stats = new Statistics.FinalStats[_statistics.Phases.Count],
                     Defenses = new Statistics.FinalDefenses[_statistics.Phases.Count],
                     Support = new Statistics.FinalSupport[_statistics.Phases.Count],
-                    SelfBoons = new Dictionary<long, Statistics.FinalBoonUptime>[_statistics.Phases.Count],
-                    GroupBoons = new Dictionary<long, Statistics.FinalBoonUptime>[_statistics.Phases.Count],
-                    OffGroupBoons = new Dictionary<long, Statistics.FinalBoonUptime>[_statistics.Phases.Count],
-                    SquadBoons = new Dictionary<long, Statistics.FinalBoonUptime>[_statistics.Phases.Count]
+                    SelfBoons = BuildBoonUptime(_statistics.SelfBoons[player]),
+                    GroupBoons = BuildBoonUptime(_statistics.GroupBoons[player]),
+                    OffGroupBoons = BuildBoonUptime(_statistics.OffGroupBoons[player]),
+                    SquadBoons = BuildBoonUptime(_statistics.SquadBoons[player])
                 };
 
                 for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
@@ -244,10 +279,6 @@ namespace LuckParser.Controllers
                     currentPlayer.Stats[phaseIndex] = _statistics.Stats[player][phaseIndex];
                     currentPlayer.Defenses[phaseIndex] = _statistics.Defenses[player][phaseIndex];
                     currentPlayer.Support[phaseIndex] = _statistics.Support[player][phaseIndex];
-                    currentPlayer.SelfBoons[phaseIndex] = _statistics.SelfBoons[player][phaseIndex];
-                    currentPlayer.GroupBoons[phaseIndex] = _statistics.GroupBoons[player][phaseIndex];
-                    currentPlayer.OffGroupBoons[phaseIndex] = _statistics.OffGroupBoons[player][phaseIndex];
-                    currentPlayer.SquadBoons[phaseIndex] = _statistics.SquadBoons[player][phaseIndex];
                 }
 
                 log.Players.Add(currentPlayer);
