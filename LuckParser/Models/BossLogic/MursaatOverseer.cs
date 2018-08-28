@@ -5,11 +5,10 @@ using System.Collections.Generic;
 
 namespace LuckParser.Models
 {
-    public class MursaatOverseer : BossLogic
+    public class MursaatOverseer : RaidLogic
     {
         public MursaatOverseer()
         {
-            Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>()
             {
             new Mechanic(37677, "Soldier's Aura", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MursaatOverseer, "symbol:'circle-open',color:'rgb(255,0,0)',", "Jade","Jade Soldier's Aura hit", "Jade Aura",0),

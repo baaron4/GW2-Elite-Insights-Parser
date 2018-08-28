@@ -216,5 +216,9 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
+        public void SetSuccess(CombatData combatData, LogData logData)
+        {
+            _logic.SetSuccess(combatData, logData, this);
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace LuckParser.Models
@@ -54,5 +56,33 @@ namespace LuckParser.Models
             }
             return phases;
         }
+
+        public override void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
+        {
+            // check reward
+            CombatItem reward = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData().LastOrDefault(x => x.DstInstid == bossData.GetInstid() && x.Value > 0);
+            if (lastDamageTaken != null)
+            {
+                if (reward != null && Math.Abs(lastDamageTaken.Time - reward.Time) < 10000)
+                {
+                    logData.SetBossKill(true);
+                    bossData.SetLastAware(Math.Min(lastDamageTaken.Time, reward.Time));
+                }
+                else
+                {
+                    base.SetSuccess(combatData, logData, bossData);
+                    if (logData.GetBosskill())
+                    {
+                        bossData.SetLastAware(Math.Min(bossData.GetLastAware(), lastDamageTaken.Time));
+                    } else if (bossData.GetLastAware() - lastDamageTaken.Time > 5000)
+                    {
+                        logData.SetBossKill(true);
+                        bossData.SetLastAware(lastDamageTaken.Time);
+                    }
+                }
+            }
+        }
+
     }
 }

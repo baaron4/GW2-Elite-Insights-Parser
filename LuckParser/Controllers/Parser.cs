@@ -614,78 +614,10 @@ namespace LuckParser.Controllers
                     }
                 }
             }
+            _combatData.Validate(_bossData);
             _bossData.SetHealthOverTime(bossHealthOverTime);//after xera in case of change
-
-            if (raidMode)
-            {
-                // Put non reward stuff in this as we find them
-                HashSet<int> notRaidRewardsIds = new HashSet<int>
-                {
-                    13
-                };
-                CombatItem reward = _combatData.Find(x => x.IsStateChange == ParseEnum.StateChange.Reward && !notRaidRewardsIds.Contains(x.Value));
-                if (reward != null)
-                {
-                    _logData.SetBossKill(true);
-                    _bossData.SetLastAware(reward.Time);
-                }
-            } else if (fractalMode) {
-                // check reward
-                CombatItem reward = _combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
-                // check last Health update as fractal rewards and daily chests have the same id
-                Point lastHoT = bossHealthOverTime.Count > 0 ? bossHealthOverTime.Last() : new Point(0,int.MaxValue);
-                long lastHoTTime = lastHoT.X + _bossData.GetFirstAware();
-                if (reward != null && lastHoT.X != 0 && Math.Abs(reward.Time - lastHoTTime) < 10000)
-                {
-                    _logData.SetBossKill(true);
-                    _bossData.SetLastAware(reward.Time);
-                } else
-                {
-                    // check killed
-                    CombatItem killed = _combatData.Find(x => x.SrcInstid == _bossData.GetInstid() && x.IsStateChange.IsDead());
-                    if (killed != null)
-                    {
-                        _logData.SetBossKill(true);
-                        _bossData.SetLastAware(killed.Time);
-                    }
-                    // Threshold for health checking, for subsequent daily runs, the bouncy chest appears once a day, 100 is 1.0% of the total health
-                    else if (lastHoT.Y < 100)
-                    {
-                        _logData.SetBossKill(true);
-                        _bossData.SetLastAware(lastHoTTime);
-                    }
-                }
-            }
-            else if (golemMode)
-            {
-                CombatItem pov = _combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
-                if (pov != null) {
-                    // to make sure that the logging starts when the PoV starts attacking (in case there is a slave with them)
-                    CombatItem enterCombat = _combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
-                    if (enterCombat != null)
-                    {
-                        _bossData.SetLastAware(enterCombat.Time);
-                    }
-                }              
-                CombatItem combatExit = _combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.ExitCombat);
-                if (combatExit != null)
-                {
-                    _bossData.SetLastAware(combatExit.Time);
-                }
-                if (bossHealthOverTime.Count > 0)
-                {
-                    _logData.SetBossKill(bossHealthOverTime.Last().Y < 200);
-                }
-            }
-            else
-            {
-                CombatItem killed = _combatData.Find(x => x.SrcInstid == _bossData.GetInstid() && x.IsStateChange.IsDead());
-                if (killed != null)
-                {
-                    _logData.SetBossKill(true);
-                    _bossData.SetLastAware(killed.Time);
-                }
-            }
+            _bossData.SetSuccess(_combatData, _logData);
+            _bossData.SetCM(_combatData);
 
             //players
             if (_playerList.Count == 0)
@@ -768,11 +700,8 @@ namespace LuckParser.Controllers
             {
                 _bossData.SetLastAware(bossAgent.GetLastAware());
             }
-            // Sort
             _playerList = _playerList.OrderBy(a => a.GetGroup()).ToList();
-            // Check CM
-            _bossData.SetCM(_combatData);
-            _combatData.Validate(_bossData);
+            
         }
     }
 }

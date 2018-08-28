@@ -56,6 +56,16 @@ namespace LuckParser.Models
         {
         }
 
+        public virtual void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
+        {
+            CombatItem killed = combatData.Find(x => x.SrcInstid == bossData.GetInstid() && x.IsStateChange.IsDead());
+            if (killed != null)
+            {
+                logData.SetBossKill(true);
+                bossData.SetLastAware(killed.Time);
+            }
+        }
+
         public virtual string GetReplayIcon()
         {
             return "";
