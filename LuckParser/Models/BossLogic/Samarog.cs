@@ -29,6 +29,7 @@ namespace LuckParser.Models
             new Mechanic(38199, "Brutalize", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'diamond',color:'rgb(255,0,255)',","CC","Brutalize (jumped upon by Samarog->Breakbar)", "Brutalize (Breakbar)",0),
             new Mechanic(37892, "Soul Swarm", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Samarog, "symbol:'x-thin-open',color:'rgb(0,255,255)',","Wall","Soul Swarm (stood in or beyond Spear Wall)", "Spear Wall",0),
             new Mechanic(38231, "Impaling Stab", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'hourglass',color:'rgb(0,0,255)',","ShWv.Ctr","Impaling Stab (hit by Spears causing Shockwave)", "Shockwave Center",0),
+            new Mechanic(38314, "Anguished Bolt", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'circle',color:'rgb(255,140,0)',","Stun","Anguished Bolt (AoE Stun Circle by Guldhem)", "Guldhem's Stun",0),
             
             //  new Mechanic(37816, "Brutalize", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'star-square',color:'rgb(255,0,0)',", "CC Target", casted without dmg odd
             });
