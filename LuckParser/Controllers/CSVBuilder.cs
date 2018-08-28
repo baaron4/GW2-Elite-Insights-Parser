@@ -32,17 +32,7 @@ namespace LuckParser.Controllers
             switches.CalculateCombatReplay = true;
             switches.CalculateMechanics = true;
         }
-        public CSVBuilder(StreamWriter sw, String delimiter, ParsedLog log, SettingsContainer settings, Statistics statistics)
-        {
-            _log = log;
-            _sw = sw;
-            _delimiter = delimiter;
-            _settings = settings;
-
-            _statistics = statistics;
-
-           
-        }
+       
         public CSVBuilder(StreamWriter sw, String delimiter,ParsedLog log, SettingsContainer settings, Statistics statistics,string uploadresult)
         {
             _log = log;

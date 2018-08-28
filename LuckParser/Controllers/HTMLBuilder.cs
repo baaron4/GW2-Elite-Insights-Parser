@@ -30,18 +30,18 @@ namespace LuckParser.Controllers
             switches.CalculateCombatReplay = true;
             switches.CalculateMechanics = true;
         }
-        public HTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics)
-        {
-            _log = log;
+        //public HTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics)
+        //{
+        //    _log = log;
 
-            _settings = settings;
-            HTMLHelper.Settings = settings;
-            GraphHelper.Settings = settings;
+        //    _settings = settings;
+        //    HTMLHelper.Settings = settings;
+        //    GraphHelper.Settings = settings;
 
-            _statistics = statistics;
+        //    _statistics = statistics;
 
             
-        }
+        //}
         public HTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics,string UploadString)
         {
             _log = log;

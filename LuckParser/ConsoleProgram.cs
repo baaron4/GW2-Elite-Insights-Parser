@@ -35,6 +35,7 @@ namespace LuckParser
 
         private void ParseLog(object logFile)
         {
+            UploadController up_controller = null;
             System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
@@ -52,6 +53,18 @@ namespace LuckParser
             {
                 throw new CancellationException(row, new FileNotFoundException("File does not exist", fInfo.FullName));
             }
+            //Upload Process
+            Task<string> task = null;
+            string uploadresult = "No Upload";
+            if (Properties.Settings.Default.UploadToDPSReports)
+            {
+                if (up_controller == null)
+                {
+                    up_controller = new UploadController();
+                }
+                task = Task.Factory.StartNew(() => up_controller.UploadDPSReports(fInfo));
+
+            }
             try
             {
                 Parser control = new Parser();
@@ -64,6 +77,24 @@ namespace LuckParser
                     ParsedLog log = control.GetParsedLog();
                     Console.Write("Log Parsed");
                     //Creating File
+                    //Wait for Upload
+                    if (Properties.Settings.Default.UploadToDPSReports)
+                    {
+                        if (task != null)
+                        {
+                            while (!task.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult = task.Result;
+                        }
+                        else
+                        {
+                            uploadresult = "Failed to Define Upload Task";
+                        }
+
+
+                    }
                     //save location
                     DirectoryInfo saveDirectory;
                     if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
@@ -115,7 +146,7 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs))
                             {
-                                HTMLBuilder builder = new HTMLBuilder(log, settings, statistics);
+                                HTMLBuilder builder = new HTMLBuilder(log, settings, statistics,uploadresult);
                                 builder.CreateHTML(sw);
                             }
                         }
@@ -130,7 +161,7 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                             {
-                                CSVBuilder builder = new CSVBuilder(sw, ",",log, settings, statistics);
+                                CSVBuilder builder = new CSVBuilder(sw, ",",log, settings, statistics,uploadresult);
                                 builder.CreateCSV();
                             }
                         }
