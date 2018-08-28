@@ -27,7 +27,7 @@ namespace LuckParser.Models
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
                 if (enterCombat != null)
                 {
-                    bossData.SetLastAware(enterCombat.Time);
+                    bossData.SetFirstAware(enterCombat.Time);
                 }
             }
             CombatItem combatExit = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.ExitCombat);
