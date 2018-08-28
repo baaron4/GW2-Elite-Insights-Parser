@@ -422,9 +422,6 @@ namespace LuckParser.Controllers
         private void FillMissingData()
         {
             var agentsLookup = _agentData.GetAllAgentsList().ToDictionary(a => a.GetAgent());
-            bool golemMode = _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem;
-            bool raidMode = _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Raid;
-            bool fractalMode = _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Fractal;
             // Set Agent instid, firstAware and lastAware
             foreach (CombatItem c in _combatData)
             {
@@ -491,7 +488,7 @@ namespace LuckParser.Controllers
             _boss = new Boss(bossAgent);
             List<Point> bossHealthOverTime = new List<Point>();
             // a hack for buggy golem logs
-            if (golemMode)
+            if (_bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem)
             {
                 AgentItem otherGolem = npcList.Find(x => x.GetID() == 19603);
                 foreach (CombatItem c in _combatData)
@@ -642,7 +639,7 @@ namespace LuckParser.Controllers
                         }
                     }
                     List<CombatItem> lp = _combatData.GetStates(playerAgent.GetInstid(), ParseEnum.StateChange.Despawn, _bossData.GetFirstAware(), _bossData.GetLastAware());
-                    Player player = new Player(playerAgent, fractalMode);
+                    Player player = new Player(playerAgent, _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Fractal);
                     bool skip = false;
                     foreach (Player p in _playerList)
                     {
