@@ -655,7 +655,29 @@ namespace LuckParser.Controllers
                         _bossData.SetLastAware(lastHoTTime);
                     }
                 }
-            } else
+            }
+            else if (golemMode)
+            {
+                CombatItem pov = _combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
+                if (pov != null) {
+                    // to make sure that the logging starts when the PoV starts attacking (in case there is a slave with them)
+                    CombatItem enterCombat = _combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
+                    if (enterCombat != null)
+                    {
+                        _bossData.SetLastAware(enterCombat.Time);
+                    }
+                }              
+                CombatItem combatExit = _combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.ExitCombat);
+                if (combatExit != null)
+                {
+                    _bossData.SetLastAware(combatExit.Time);
+                }
+                if (bossHealthOverTime.Count > 0)
+                {
+                    _logData.SetBossKill(bossHealthOverTime.Last().Y < 200);
+                }
+            }
+            else
             {
                 CombatItem killed = _combatData.Find(x => x.SrcInstid == _bossData.GetInstid() && x.IsStateChange.IsDead());
                 if (killed != null)
@@ -665,11 +687,6 @@ namespace LuckParser.Controllers
                 }
             }
 
-            if (golemMode && bossHealthOverTime.Count > 0)
-            {
-                _logData.SetBossKill(bossHealthOverTime.Last().Y < 200);
-                _bossData.SetLastAware(bossHealthOverTime.Last().X + _bossData.GetFirstAware());
-            }
             //players
             if (_playerList.Count == 0)
             {
