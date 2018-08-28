@@ -2,6 +2,7 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LuckParser.Models
 {
@@ -35,6 +36,18 @@ namespace LuckParser.Models
         public override string GetReplayIcon()
         {
             return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+        }
+
+        public override void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
+        {
+            int combatExits = combatData.Count(x => x.SrcInstid == bossData.GetInstid() && x.IsStateChange == ParseEnum.StateChange.ExitCombat);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData().LastOrDefault(x => x.DstInstid == bossData.GetInstid() && x.Value > 0);
+            if (combatExits == 3 && lastDamageTaken != null)
+            {
+                logData.SetBossKill(true);
+                bossData.SetLastAware(lastDamageTaken.Time);
+            }
+
         }
     }
 }
