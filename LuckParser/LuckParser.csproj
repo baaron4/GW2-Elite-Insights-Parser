@@ -90,6 +90,7 @@
     <Compile Include="Controllers\HTMLHelper.cs" />
     <Compile Include="Controllers\ParseHelper.cs" />
     <Compile Include="Controllers\StatisticsCalculator.cs" />
+    <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GridRow.cs" />
     <Compile Include="MainForm.cs">

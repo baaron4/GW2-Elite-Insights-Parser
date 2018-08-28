@@ -17,6 +17,8 @@ namespace LuckParser.Controllers
 
         private readonly Statistics _statistics;
 
+        private readonly String _uploadLink;
+
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
             switches.CalculateBoons = true;
@@ -28,7 +30,6 @@ namespace LuckParser.Controllers
             switches.CalculateCombatReplay = true;
             switches.CalculateMechanics = true;
         }
-
         public HTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics)
         {
             _log = log;
@@ -38,6 +39,20 @@ namespace LuckParser.Controllers
             GraphHelper.Settings = settings;
 
             _statistics = statistics;
+
+            
+        }
+        public HTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics,string UploadString)
+        {
+            _log = log;
+
+            _settings = settings;
+            HTMLHelper.Settings = settings;
+            GraphHelper.Settings = settings;
+
+            _statistics = statistics;
+
+            _uploadLink = UploadString;
         }
 
         private static String FilterStringChars(string str)
@@ -3357,6 +3372,10 @@ namespace LuckParser.Controllers
                     sw.Write("<div style=\"width: 1100px;\"class=\"d-flex flex-column\">");
                     {
                         sw.Write("<p> Time Start: " + _log.GetLogData().GetLogStart() + " | Time End: " + _log.GetLogData().GetLogEnd() + " </p> ");
+                        if (_settings.UploadToDPSReports)
+                        {
+                            sw.Write("<p>DPS Reports Link: <a href=\"" + _uploadLink + "\">" + _uploadLink + "</a></p>");
+                        }
                         sw.Write("<div class=\"d-flex flex-row justify-content-center align-items-center flex-wrap mb-3\">");
                         {
                             sw.Write("<div class=\"mr-3\">");

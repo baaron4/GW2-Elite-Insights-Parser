@@ -18,6 +18,9 @@ namespace LuckParser.Controllers
         readonly Statistics _statistics;
         readonly StreamWriter _sw;
         readonly string _delimiter;
+
+        readonly string _uploadResult;
+
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
             switches.CalculateBoons = true;
@@ -29,8 +32,7 @@ namespace LuckParser.Controllers
             switches.CalculateCombatReplay = true;
             switches.CalculateMechanics = true;
         }
-
-        public CSVBuilder(StreamWriter sw, String delimiter,ParsedLog log, SettingsContainer settings, Statistics statistics)
+        public CSVBuilder(StreamWriter sw, String delimiter, ParsedLog log, SettingsContainer settings, Statistics statistics)
         {
             _log = log;
             _sw = sw;
@@ -38,6 +40,19 @@ namespace LuckParser.Controllers
             _settings = settings;
 
             _statistics = statistics;
+
+           
+        }
+        public CSVBuilder(StreamWriter sw, String delimiter,ParsedLog log, SettingsContainer settings, Statistics statistics,string uploadresult)
+        {
+            _log = log;
+            _sw = sw;
+            _delimiter = delimiter;
+            _settings = settings;
+
+            _statistics = statistics;
+
+            _uploadResult = uploadresult;
         }
         private void WriteCell(string content)
         {
@@ -87,7 +102,14 @@ namespace LuckParser.Controllers
             WriteLine(new [] { "Recorded By", _log.GetLogData().GetPOV().Split(':')[0] });
             WriteLine(new [] { "Time Start", _log.GetLogData().GetLogStart() });
             WriteLine(new [] { "Time End", _log.GetLogData().GetLogEnd() });
-            NewLine();
+            if (_settings.UploadToDPSReports)
+            {
+                WriteLine(new[] { "DPS Reports Link", _uploadResult });
+            }
+            else
+            {
+                NewLine();
+            }
             NewLine();
             NewLine();
             NewLine();

@@ -79,6 +79,7 @@ namespace LuckParser
             chkOneAtATime.Checked = Properties.Settings.Default.ParseOneAtATime;
             chkLightTheme.Checked = Properties.Settings.Default.LightTheme;
             chkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
+            UploadDPSReports_checkbox.Checked = Properties.Settings.Default.UploadToDPSReports;
         }
 
         private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)
@@ -195,6 +196,11 @@ namespace LuckParser
         private void ShowClCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ClDPSGraphTotals = chkShowCl.Checked;
+        }
+
+        private void UploadDPSReports_checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.UploadToDPSReports = UploadDPSReports_checkbox.Checked;
         }
     }
 }

@@ -67,6 +67,8 @@
             this.chkLightTheme = new System.Windows.Forms.CheckBox();
             this.chkCombatReplay = new System.Windows.Forms.CheckBox();
             this.chkShowCl = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.UploadDPSReports_checkbox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblDamageGraphSection
@@ -490,12 +492,35 @@
             this.chkShowCl.UseVisualStyleBackColor = true;
             this.chkShowCl.CheckedChanged += new System.EventHandler(this.ShowClCheckedChanged);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(614, 306);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 24);
+            this.label1.TabIndex = 42;
+            this.label1.Text = "Upload";
+            // 
+            // UploadDPSReports_checkbox
+            // 
+            this.UploadDPSReports_checkbox.AutoSize = true;
+            this.UploadDPSReports_checkbox.Location = new System.Drawing.Point(631, 333);
+            this.UploadDPSReports_checkbox.Name = "UploadDPSReports_checkbox";
+            this.UploadDPSReports_checkbox.Size = new System.Drawing.Size(134, 17);
+            this.UploadDPSReports_checkbox.TabIndex = 43;
+            this.UploadDPSReports_checkbox.Text = "Upload to DPSReports";
+            this.UploadDPSReports_checkbox.UseVisualStyleBackColor = true;
+            this.UploadDPSReports_checkbox.CheckedChanged += new System.EventHandler(this.UploadDPSReports_checkbox_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(579, 524);
+            this.ClientSize = new System.Drawing.Size(797, 528);
+            this.Controls.Add(this.UploadDPSReports_checkbox);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.chkShowCl);
             this.Controls.Add(this.chkCombatReplay);
             this.Controls.Add(this.chkLightTheme);
@@ -583,5 +608,7 @@
         private System.Windows.Forms.CheckBox chkLightTheme;
         private System.Windows.Forms.CheckBox chkCombatReplay;
         private System.Windows.Forms.CheckBox chkShowCl;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox UploadDPSReports_checkbox;
     }
 }

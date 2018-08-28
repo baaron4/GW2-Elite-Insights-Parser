@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using LuckParser.Controllers;
 using LuckParser.Models.DataModels;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LuckParser
 {
@@ -108,7 +109,7 @@ namespace LuckParser
                     new System.Globalization.CultureInfo("en-US");
             BackgroundWorker bg = sender as BackgroundWorker;
             GridRow rowData = e.Argument as GridRow;
-
+            UploadController up_controller = null;
             e.Result = rowData;
 
             bg.ThrowIfCanceled(rowData);
@@ -122,7 +123,19 @@ namespace LuckParser
                     e.Cancel = true;
                     throw new CancellationException(rowData);
                 }
-
+                //Upload Process
+                Task<string> task = null;
+                string uploadresult = "No Upload";
+                if (Properties.Settings.Default.UploadToDPSReports)
+                {
+                    bg.UpdateProgress(rowData, " Uploading...", 0);
+                    if (up_controller == null)
+                    {
+                        up_controller = new UploadController();
+                    }
+                    task = Task.Factory.StartNew(() => up_controller.UploadDPSReports(fInfo)) ;
+                    
+                }
                 bg.UpdateProgress(rowData, " Working...", 0);
                 Parser parser = new Parser();
 
@@ -137,6 +150,25 @@ namespace LuckParser
                     bg.UpdateProgress(rowData, "35% - Data parsed", 35);
 
                     //Creating File
+                    //Wait for Upload
+                    if (Properties.Settings.Default.UploadToDPSReports)
+                    {
+                        bg.UpdateProgress(rowData, "40% - Uploading...", 40);
+                        if (task != null)
+                        {
+                            while (!task.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult = task.Result;
+                        }
+                        else
+                        {
+                            uploadresult = "Failed to Define Upload Task";
+                        }
+                        
+                       
+                    }
                     //save location
                     DirectoryInfo saveDirectory;
                     if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
@@ -182,7 +214,7 @@ namespace LuckParser
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs))
                         {
-                            var builder = new HTMLBuilder(log, settings, statistics);
+                            var builder = new HTMLBuilder(log, settings, statistics,uploadresult);
                             builder.CreateHTML(sw);
                         }
                     }
@@ -196,7 +228,7 @@ namespace LuckParser
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                         {
-                            var builder = new CSVBuilder(sw, ",", log, settings, statistics);
+                            var builder = new CSVBuilder(sw, ",", log, settings, statistics,uploadresult);
                             builder.CreateCSV();
                         }
                     }
