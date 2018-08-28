@@ -667,7 +667,7 @@ namespace LuckParser.Controllers
                         _bossData.SetLastAware(enterCombat.Time);
                     }
                 }              
-                CombatItem combatExit = _combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.ExitCombat);
+                CombatItem combatExit = _combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.ExitCombat);
                 if (combatExit != null)
                 {
                     _bossData.SetLastAware(combatExit.Time);
