@@ -13,6 +13,7 @@ namespace LuckParser.Models
         protected RaidLogic()
         {
             Mode = ParseMode.Raid;
+            CanCombatReplay = true;
         }
 
         public override void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
