@@ -62,6 +62,7 @@ namespace LuckParser.Models.ParseModels
         public int[] GetCleanses(ParsedLog log, long start, long end) {
             long timeStart = log.GetBossData().GetFirstAware();
             int[] cleanse = { 0, 0 };
+            List<Boon> condiList = Boon.GetCondiBoonList();
             foreach (CombatItem c in log.GetCombatList().Where(x=>x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuff == 1 && x.Time >= (start + timeStart) && x.Time <= (end + timeStart)))
             {
                 if (c.IsActivation == ParseEnum.Activation.None)
@@ -71,7 +72,7 @@ namespace LuckParser.Models.ParseModels
                         long time = c.Time - timeStart;
                         if (time > 0)
                         {
-                            if (Boon.GetCondiBoonList().Exists(x=>x.GetID() == c.SkillID))
+                            if (condiList.Exists(x=>x.GetID() == c.SkillID))
                             {
                                 cleanse[0]++;
                                 cleanse[1] += c.BuffDmg;
@@ -244,7 +245,11 @@ namespace LuckParser.Models.ParseModels
                 {
                     continue;
                 }
-                long time = c.Time - timeStart;
+                long time = 0;
+                if (c.IsBuff != 18)
+                {
+                    time = c.Time - timeStart;
+                }
                 if (time <= fightDuration)
                 {
                     _consumeList.Add(new Tuple<Boon, long>(food ?? utility, time)); 

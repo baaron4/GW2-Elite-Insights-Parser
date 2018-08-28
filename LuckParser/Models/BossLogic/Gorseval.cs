@@ -13,12 +13,12 @@ namespace LuckParser.Models
             Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
-            new Mechanic(31875, "Spectral Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'hexagram',color:'rgb(255,0,0)',", "Slam",4000), // Spectral Impact (KB Slam), Slam
-            new Mechanic(31623, "Ghastly Prison", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(255,140,0)',", "Egg",500), //Ghastly Prison (Egged), Egged
-            new Mechanic(31498, "Spectral Darkness", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,255)',", "OrbDbf",100), // Spectral Darkness (Stood in Orb AoE), Orb Debuff
-            new Mechanic(31722, "Spirited Fusion", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Gorseval, "symbol:'square',color:'rgb(255,140,0)',", "SprtBf",0), // Spirited Fusion (Consumed a Spirit), Ate Spirit
-            new Mechanic(31720, "Kick", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'triangle-right',color:'rgb(255,0,255)',", "Kick",0), // Kicked by small add, Spirit Kick
-            new Mechanic(738, "Ghastly Rampage", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,0)',", "Black",3000,(value => value == 10000))// //stood in black? Trigger via (25 stacks) vuln (ID 738) application would be possible
+            new Mechanic(31875, "Spectral Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'hexagram',color:'rgb(255,0,0)',", "Slam","Spectral Impact (KB Slam)", "Slam",4000),
+            new Mechanic(31623, "Ghastly Prison", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(255,140,0)',", "Egg","Ghastly Prison (Egged)", "Egged",500),
+            new Mechanic(31498, "Spectral Darkness", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,255)',", "OrbDbf","Spectral Darkness (Stood in Orb AoE)", "Orb Debuff",100),
+            new Mechanic(31722, "Spirited Fusion", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Gorseval, "symbol:'square',color:'rgb(255,140,0)',", "SprtBf","Spirited Fusion (Consumed a Spirit)", "Ate Spirit",0),
+            new Mechanic(31720, "Kick", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'triangle-right',color:'rgb(255,0,255)',", "Kick","Kicked by small add", "Spirit Kick",0),
+            new Mechanic(738, "Ghastly Rampage", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,0)',", "Black","Hit by Black Goo","Black Goo",3000,(value => value == 10000))
             });
         }
 

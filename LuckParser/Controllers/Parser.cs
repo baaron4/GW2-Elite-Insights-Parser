@@ -1,5 +1,5 @@
 ﻿using LuckParser.Models;
-//recomend CTRL+M+O to collapse all
+//recommend CTRL+M+O to collapse all
 using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
 using System;
@@ -224,8 +224,8 @@ namespace LuckParser.Controllers
                     var name = ParseHelper.GetString(stream, 64);
                     if(skillId != 0 && int.TryParse(name, out int n) && n == skillId)
                     {
-                        //was it a known boon?
-                        foreach(Boon b in Boon.GetBoonList())
+                        //was it a known buff?
+                        foreach(Boon b in Boon.GetAll())
                         {
                             if(skillId == b.GetID())
                             {
@@ -674,7 +674,7 @@ namespace LuckParser.Controllers
             if (_playerList.Count == 0)
             {
 
-                //Fix Disconected players
+                //Fix Disconnected players
                 var playerAgentList = _agentData.GetPlayerAgentList();
 
                 foreach (AgentItem playerAgent in playerAgentList)
@@ -732,7 +732,7 @@ namespace LuckParser.Controllers
                         player.SetDC(lp[0].Time);
                         _playerList.Add(player);
                     }
-                    else//didnt dc
+                    else//didn't dc
                     {
                         if (player.GetDC() == 0)
                         {
