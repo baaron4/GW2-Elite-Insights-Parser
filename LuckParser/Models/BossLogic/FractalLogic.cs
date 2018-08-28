@@ -57,6 +57,17 @@ namespace LuckParser.Models
             return phases;
         }
 
+        protected void SetSuccessOnCombatExit(CombatData combatData, LogData logData, BossData bossData, int combatExitCount)
+        {
+            int combatExits = combatData.Count(x => x.SrcInstid == bossData.GetInstid() && x.IsStateChange == ParseEnum.StateChange.ExitCombat);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData().LastOrDefault(x => x.DstInstid == bossData.GetInstid() && x.Value > 0);
+            if (combatExits == combatExitCount && lastDamageTaken != null)
+            {
+                logData.SetBossKill(true);
+                bossData.SetLastAware(lastDamageTaken.Time);
+            }
+        }
+
         public override void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
         {
             // check reward

@@ -60,14 +60,7 @@ namespace LuckParser.Models
 
         public override void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
         {
-            int combatExits = combatData.Count(x => x.SrcInstid == bossData.GetInstid() && x.IsStateChange == ParseEnum.StateChange.ExitCombat);
-            CombatItem lastDamageTaken = combatData.GetDamageTakenData().LastOrDefault(x => x.DstInstid == bossData.GetInstid() && x.Value > 0);
-            if (combatExits == 3 && lastDamageTaken != null)
-            {
-                logData.SetBossKill(true);
-                bossData.SetLastAware(lastDamageTaken.Time);
-            }
-
+            SetSuccessOnCombatExit(combatData, logData, bossData, 3);
         }
     }
 }
