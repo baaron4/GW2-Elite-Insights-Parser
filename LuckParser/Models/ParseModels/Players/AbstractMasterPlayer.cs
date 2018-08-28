@@ -95,9 +95,9 @@ namespace LuckParser.Models.ParseModels
         }
         public void InitCombatReplay(ParsedLog log, int pollingRate, bool trim, bool forceInterpolate)
         {
-            if (log.GetMovementData().Count == 0)
+            if (!log.GetBossData().GetBossBehavior().CanCombatReplay)
             {
-                // no movement data, old arc version
+                // no combat replay support on boss
                 return;
             }
             if (Replay == null)
@@ -108,10 +108,10 @@ namespace LuckParser.Models.ParseModels
                 SetCombatReplayIcon(log);
                 if (trim)
                 {
-                    CombatItem test = log.GetCombatList().FirstOrDefault(x => x.SrcAgent == Agent.GetAgent() && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
-                    if (test != null)
+                    CombatItem despawnCheck = log.GetCombatList().FirstOrDefault(x => x.SrcAgent == Agent.GetAgent() && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
+                    if (despawnCheck != null)
                     {
-                        Replay.Trim(Agent.GetFirstAware() - log.GetBossData().GetFirstAware(), test.Time - log.GetBossData().GetFirstAware());
+                        Replay.Trim(Agent.GetFirstAware() - log.GetBossData().GetFirstAware(), despawnCheck.Time - log.GetBossData().GetFirstAware());
                     }
                     else
                     {

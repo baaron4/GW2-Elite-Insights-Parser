@@ -404,7 +404,7 @@ namespace LuckParser.Controllers
                     final.DodgeCount = combatData.GetSkillCount(instid, SkillItem.DodgeId, start, end) + combatData.GetBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
 
                     //Stack Distance
-                    if (_settings.ParseCombatReplay && _log.GetBoss().GetCombatReplay() != null)
+                    if (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay)
                     {
                         if (_statistics.StackCenterPositions == null)
                         {
