@@ -90,6 +90,7 @@ namespace LuckParser.Models.DataModels
             Position        = 19,
             Velocity        = 20,
             Rotation        = 21,
+            TeamChange      = 22,
             Unknown
         };
 
