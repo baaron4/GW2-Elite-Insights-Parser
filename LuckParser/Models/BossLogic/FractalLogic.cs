@@ -64,7 +64,7 @@ namespace LuckParser.Models
             CombatItem lastDamageTaken = combatData.GetDamageTakenData().LastOrDefault(x => x.DstInstid == bossData.GetInstid() && x.Value > 0);
             if (lastDamageTaken != null)
             {
-                if (reward != null && Math.Abs(lastDamageTaken.Time - reward.Time) < 10000)
+                if (reward != null && lastDamageTaken.Time - reward.Time < 100)
                 {
                     logData.SetBossKill(true);
                     bossData.SetLastAware(Math.Min(lastDamageTaken.Time, reward.Time));
@@ -78,7 +78,7 @@ namespace LuckParser.Models
                     } else if (bossData.GetLastAware() - lastDamageTaken.Time > 5000)
                     {
                         logData.SetBossKill(true);
-                        bossData.SetLastAware(lastDamageTaken.Time);
+                        bossData.SetLastAware(bossData.GetLastAware());
                     }
                 }
             }
