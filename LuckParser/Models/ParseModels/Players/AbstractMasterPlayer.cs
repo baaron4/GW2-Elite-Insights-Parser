@@ -63,7 +63,7 @@ namespace LuckParser.Models.ParseModels
             }
             return _boonPoints;
         }
-        public List<Boon> getBoonToTrack()
+        public List<Boon> GetBoonToTrack()
         {
             return BoonToTrack;
         }
@@ -287,7 +287,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        private void generateExtraBoonData(ParsedLog log, long boonid, BoonSimulationResult boonSimulation, List<PhaseData> phases)
+        private void GenerateExtraBoonData(ParsedLog log, long boonid, BoonSimulationResult boonSimulation, List<PhaseData> phases)
         {
 
             switch (boonid)
@@ -446,7 +446,7 @@ namespace LuckParser.Models.ParseModels
                     // Graphs
                     if (requireExtraData)
                     {
-                        generateExtraBoonData(log, boonid, simulation, phases);
+                        GenerateExtraBoonData(log, boonid, simulation, phases);
                     }
                     // Precision is reduced to seconds
                     var graphPoints = new List<Point>(capacity: fightDuration + 1);
