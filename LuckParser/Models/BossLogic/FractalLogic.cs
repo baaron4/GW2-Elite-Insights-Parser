@@ -82,7 +82,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    base.SetSuccess(combatData, logData, bossData);
+                    SetSuccessByDeath(combatData, logData, bossData);
                 }
             }
         }
