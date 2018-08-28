@@ -2,6 +2,7 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LuckParser.Models
 {
@@ -51,6 +52,26 @@ namespace LuckParser.Models
         public override string GetReplayIcon()
         {
             return "https://i.imgur.com/IOPAHRE.png";
+        }
+
+        public override void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
+        {
+            // check reward
+            CombatItem reward = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward); CombatItem lastDamageTaken = combatData.GetDamageTakenData().LastOrDefault(x => x.DstInstid == bossData.GetInstid() && x.Value > 0);
+            if (reward != null && lastDamageTaken.Time - reward.Time < 100)
+            {
+                logData.SetBossKill(true);
+                bossData.SetLastAware(Math.Min(lastDamageTaken.Time, reward.Time));
+            }
+            else
+            {
+                SetSuccessByDeath(combatData, logData, bossData);
+                if (logData.GetBosskill())
+                {
+                    bossData.SetLastAware(Math.Min(bossData.GetLastAware(), lastDamageTaken.Time));
+                }
+            }
+
         }
     }
 }
