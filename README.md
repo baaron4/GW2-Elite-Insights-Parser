@@ -58,8 +58,11 @@ Note it may take some time for each file to parse and they will not be ready to 
 - cordbleibaum
 - QuiCM
 - amgine
+- Linus
+- Sejsel
+- Flomix
 
 ### Other stuffs
-- Linus (arena maps for combat replay)
+- Linus (arena maps/ icons for combat replay)
 
 
