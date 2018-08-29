@@ -75,7 +75,7 @@ namespace LuckParser.Controllers
             log.TimeEnd = _log.GetLogData().GetLogEnd();
             log.Duration = durationString;
             log.Success = _log.GetLogData().GetBosskill();
-            //log.StackCenterPositions = _statistics.StackCenterPositions;
+            log.StackCenterPositions = _statistics.StackCenterPositions;
         }
 
         private void SetMechanics(JsonLog log)
@@ -253,7 +253,7 @@ namespace LuckParser.Controllers
                 dps.PlayerBossPowerDamage[phaseIndex] = statDps[phaseIndex].PlayerBossPowerDamage;
             }
 
-            removeZeroArrays(dps);
+            RemoveZeroArrays(dps);
 
             return dps;
         }
@@ -315,7 +315,7 @@ namespace LuckParser.Controllers
 
             foreach (var boon in uptimes)
             {
-                removeZeroArrays(boon.Value);
+                RemoveZeroArrays(boon.Value);
             }
 
             return uptimes;
@@ -333,7 +333,7 @@ namespace LuckParser.Controllers
                 support.CondiCleanseTime[phaseIndex] = statSupport[phaseIndex].CondiCleanseTime;
             }
 
-            removeZeroArrays(support);
+            RemoveZeroArrays(support);
 
             return support;
         }
@@ -352,7 +352,7 @@ namespace LuckParser.Controllers
                 defense.BlockedCount[phaseIndex] = statDefense[phaseIndex].BlockedCount;
             }
 
-            removeZeroArrays(defense);
+            RemoveZeroArrays(defense);
 
             return defense;
         }
@@ -402,13 +402,13 @@ namespace LuckParser.Controllers
                 stats.Dcd[phaseIndex] = statStat[phaseIndex].Dcd;
             }
 
-            removeZeroArrays(stats);
+            RemoveZeroArrays(stats);
 
             return stats;
         }
 
         // Null all arrays only consisting of zeros(or below!) by using reflection
-        private void removeZeroArrays(object inObject)
+        private void RemoveZeroArrays(object inObject)
         {
             FieldInfo[] fields = inObject.GetType().GetFields();
             foreach (var field in fields)
