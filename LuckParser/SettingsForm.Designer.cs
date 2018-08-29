@@ -69,6 +69,7 @@
             this.chkShowCl = new System.Windows.Forms.CheckBox();
             this.json = new System.Windows.Forms.Label();
             this.chkOutputJson = new System.Windows.Forms.CheckBox();
+            this.chkIndentJSON = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblDamageGraphSection
@@ -513,12 +514,24 @@
             this.chkOutputJson.UseVisualStyleBackColor = true;
             this.chkOutputJson.CheckedChanged += new System.EventHandler(this.OutputJSONCheckedChanged);
             // 
+            // chkIndentJSON
+            // 
+            this.chkIndentJSON.AutoSize = true;
+            this.chkIndentJSON.Location = new System.Drawing.Point(456, 406);
+            this.chkIndentJSON.Name = "chkIndentJSON";
+            this.chkIndentJSON.Size = new System.Drawing.Size(87, 17);
+            this.chkIndentJSON.TabIndex = 44;
+            this.chkIndentJSON.Text = "Indent JSON";
+            this.chkIndentJSON.UseVisualStyleBackColor = true;
+            this.chkIndentJSON.CheckedChanged += new System.EventHandler(this.chkIndentJSONCheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(579, 524);
+            this.Controls.Add(this.chkIndentJSON);
             this.Controls.Add(this.chkOutputJson);
             this.Controls.Add(this.json);
             this.Controls.Add(this.chkShowCl);
@@ -610,5 +623,6 @@
         private System.Windows.Forms.CheckBox chkShowCl;
         private System.Windows.Forms.Label json;
         private System.Windows.Forms.CheckBox chkOutputJson;
+        private System.Windows.Forms.CheckBox chkIndentJSON;
     }
 }

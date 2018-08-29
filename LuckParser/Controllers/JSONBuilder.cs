@@ -54,7 +54,7 @@ namespace LuckParser.Controllers
             var serializer = new JsonSerializer();
             serializer.NullValueHandling = NullValueHandling.Ignore;
             var writer = new JsonTextWriter(_sw);
-            writer.Formatting = Formatting.Indented;
+            writer.Formatting = _settings.IndentJSON ? Formatting.Indented : Formatting.None;
             serializer.Serialize(writer, log);
         }
 

@@ -80,6 +80,7 @@ namespace LuckParser
             chkLightTheme.Checked = Properties.Settings.Default.LightTheme;
             chkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
             chkOutputJson.Checked = Properties.Settings.Default.SaveOutJSON;
+            chkIndentJSON.Checked = Properties.Settings.Default.IndentJSON;
         }
 
         private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)
@@ -201,6 +202,11 @@ namespace LuckParser
         private void OutputJSONCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutJSON = chkOutputJson.Checked;
+        }
+
+        private void chkIndentJSONCheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.IndentJSON = chkIndentJSON.Checked;
         }
     }
 }
