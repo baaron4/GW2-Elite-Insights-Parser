@@ -46,7 +46,7 @@ namespace LuckParser.Models
             long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // Determined + additional data on inst change
-            CombatItem invulDei = log.GetBoonData().Find(x => x.SkillID == 762 && x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == boss.GetInstid());
+            CombatItem invulDei = log.GetBoonData(762).Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == boss.GetInstid());
             if (invulDei != null)
             {
                 end = invulDei.Time - log.GetBossData().GetFirstAware();

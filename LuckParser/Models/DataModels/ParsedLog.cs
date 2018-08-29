@@ -74,30 +74,60 @@ namespace LuckParser.Models.DataModels
             return _combatData;
         }
 
-        public List<CombatItem> GetBoonData()
+        public Dictionary<long, List<CombatItem>> GetBoonData()
         {
             return _combatData.GetBoonData();
         }
 
-        public List<CombatItem> GetDamageData()
+        public List<CombatItem> GetBoonData(long key)
+        {
+            return _combatData.GetBoonData(key);
+        }
+
+        public Dictionary<ushort, List<CombatItem>> GetDamageData()
         {
             return _combatData.GetDamageData();
         }
 
-        public List<CombatItem> GetCastData()
+        public List<CombatItem> GetDamageData(ushort key)
+        {
+            return _combatData.GetDamageData(key);
+        }
+
+        public Dictionary<ushort, List<CombatItem>> GetCastData()
         {
             return _combatData.GetCastData();
         }
 
-        public List<CombatItem> GetDamageTakenData()
+        public List<CombatItem> GetCastData(ushort key)
+        {
+            return _combatData.GetCastData(key);
+        }
+
+        public Dictionary<long, List<CombatItem>> GetCastDataById()
+        {
+            return _combatData.GetCastDataById();
+        }
+        public List<CombatItem> GetCastDataById(long key)
+        {
+            return _combatData.GetCastDataById(key);
+        }
+
+        public Dictionary<ushort, List<CombatItem>> GetDamageTakenData()
         {
             return _combatData.GetDamageTakenData();
+        }
+
+        public List<CombatItem> GetDamageTakenData(ushort key)
+        {
+            return _combatData.GetDamageTakenData(key);
         }
 
         public bool IsBenchmarkMode()
         {
             return _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem;
         }
+
 
         /*public List<CombatItem> getHealingData()
         {
@@ -109,9 +139,14 @@ namespace LuckParser.Models.DataModels
             return _combatData.getHealingReceivedData();
         }*/
 
-        public List<CombatItem> GetMovementData()
+        public Dictionary<ushort, List<CombatItem>> GetMovementData()
         {
             return _combatData.GetMovementData();
-        }     
+        }
+
+        public List<CombatItem> GetMovementData(ushort key)
+        {
+            return _combatData.GetMovementData(key);
+        }
     }
 }

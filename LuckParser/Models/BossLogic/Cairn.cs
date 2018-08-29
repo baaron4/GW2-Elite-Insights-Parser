@@ -51,7 +51,7 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // shared agony
-            List<CombatItem> agony = log.GetBoonData().Where(x => x.SkillID == 38049 && ((x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> agony = log.GetBoonData(38049).Where(x => (x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             foreach (CombatItem c in agony)
             {
                 int agonyStart = (int)(c.Time - log.GetBossData().GetFirstAware());
