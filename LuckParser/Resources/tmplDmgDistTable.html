@@ -20,7 +20,7 @@
 	<tbody>
 		{{for rows}}
 		<tr class="{{if skill.condi}}condi{{else}}power{{/if}}">
-			<td class="text-left" title="{{:skill.id}}">{{if skill.icon}}<img src="{{:skill.icon}}" height="18" width="18"> {{/if}}{{:skill.name}}</td>
+			<td class="text-left" title="{{:skill.id}}">{{if skill.icon}}<img src="{{:skill.icon}}" class="icon icon-hover"> {{/if}}{{:skill.name}}</td>
 			<td>{{dec:data[2]}}%</td>
 			<td>{{:data[3]}}</td>
 			<td>{{:data[4]}}</td>

@@ -26,6 +26,7 @@ namespace LuckParser.Models.HtmlModels
         public List<MechanicDto> mechanics;
         [DataMember]
         public List<SkillDto> skills;
-        
+        [DataMember]
+        public Boolean simpleRotation;
     }
 }

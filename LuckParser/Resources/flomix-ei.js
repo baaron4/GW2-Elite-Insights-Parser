@@ -212,6 +212,61 @@ function createDistTable($target, data) {
 	lazyTable2($target, html, { 'order': [[2, 'desc']]});
 }
 
+function createRotaTab($target, data) {
+	var html = "";
+	$.each(data, function(i, cast) {
+		var skillName;
+		var icon;
+		var aa = false;
+		var swapped = cast[1] == -2;
+		/*
+		if (cast[1] == -2) {
+			//skillName = "Weapon Swap";
+			//icon = "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
+			swapped = true;
+		}else if (cast[1] == 1066) {
+			skillName = "Resurrect";
+			icon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
+		}else if (cast[1] == 1175) {
+			skillName = "Bandage";
+			icon = "https://render.guildwars2.com/file/D2D7D11874060D68760BFD519CFC77B6DF14981F/102928.png";
+		}else if (cast[1] == 65001) {
+			skillName = "Dodge";
+			icon = "https://wiki.guildwars2.com/images/b/b2/Dodge.png";
+		}else{*/
+			var skill = window.data.skillMap['s'+cast[1]];
+			if (skill) {
+				skillName = skill.name;
+				icon = skill.icon;
+				aa = skill.aa;
+			}
+		//}
+		if (icon && skillName) {
+			
+			html += '<span class="rot-skill'+(aa?' rot-aa':'')+'"><img class="rot-icon'
+				+(cast[3]==2?' rot-cancelled':'')
+				+'" src="'
+				+icon
+				+'" title= "'+skillName+' Time: '+cast[0]+ 's, Dur: '+cast[2]+'ms"></span>';
+
+			if (swapped) {
+				html += '<br>';
+			}
+		}
+	});
+	var buildRota = function() {
+		var $btns = $('<div style="margin-bottom: 8px; margin-top: 8px;"></div>').append(
+			$('<button class="btn btn-primary btn-sm">').text('Switch size').click(function() {
+			$target.toggleClass('rot-small');
+		})).append(' ').append($('<button class="btn btn-primary btn-sm">').text('Toggle AutoAttack').click(function() {
+			$target.toggleClass('rot-noaa');
+		}));
+		$target.append($btns);
+		$target.append(html);
+	};
+	lazy($target, buildRota);
+}
+
 function createPlayerGraph(elementId, data, dark) {
 	var allX = [];
 	var plotData = [];
@@ -339,20 +394,26 @@ function createPlayerGraph(elementId, data, dark) {
 	Plotly.newPlot(elementId, plotData, layout);
 }
 
-function lazyTable($table, options) {
+function lazy($owner, callback) {
 	if ('IntersectionObserver' in window) {
 		let lazyTableObserver = new IntersectionObserver(function(entries, observer) {
 			entries.forEach(function(entry) {
 				if (entry.isIntersecting){
-					$table.DataTable(options);
 					lazyTableObserver.unobserve(entry.target);
+					callback();
 				}
 			});
 		});
-		lazyTableObserver.observe($table[0]);
+		lazyTableObserver.observe($owner[0]);
 	} else {
-		$table.DataTable(options);
+		$(callback);
 	}
+}
+
+function lazyTable($table, options) {
+	lazy($table, function() {
+		$table.DataTable(options);
+	});
 }
 
 function createTable($target, tableHtml, options) {
@@ -364,26 +425,10 @@ function createTable($target, tableHtml, options) {
 }
 
 function lazyTable2($target, tableHtml, options) {
-	if ('IntersectionObserver' in window) {
-		let lazyTableObserver = new IntersectionObserver(function(entries, observer) {
-			entries.forEach(function(entry) {
-				if (entry.isIntersecting){
-					lazyTableObserver.unobserve(entry.target);
-					createTable($target, tableHtml, options);
-				}
-			});
-		});
-		lazyTableObserver.observe($target[0]);
-	} else {
-		$(function() {
-			createTable($target, tableHtml, options);
-		});
-	}
+	lazy($target, function() {
+		createTable($target, tableHtml, options);
+	});
 }
-
-
-
-
 
 
 // Window generation
@@ -446,6 +491,8 @@ function generateWindow(layout) {
 		$.each(data.players, function(p, player) {
 			createDistTable($('#dist_table_'+p+'_'+i+'_boss'), player.details.dmgDistributionsBoss[i]);
 			createDistTable($('#dist_table_'+p+'_'+i), player.details.dmgDistributions[i]);
+			
+			createRotaTab($('#rota_'+p+'_'+i), player.details.rotation[i]);
 		});
 	});
 
@@ -463,7 +510,14 @@ function buildWindowLayout(data) {
 				{name:'Boss', content:{table:'dist_table_'+p+'_'+i+'_boss'},noTitle:true},
 				{name:'All', content:{table:'dist_table_'+p+'_'+i},noTitle:true}
 			]},noTitle:true}];
-			playerTabs.push({name:'Simple Rotation',content:'Simple Rotation',noTitle:true});
+			if(data.simpleRotation) {
+				playerTabs.push({name:'Simple Rotation',content:{table:'rota_'+p+'_'+i},noTitle:true});
+			}
+
+			if (phase.deaths[p]>0) {
+				playerTabs.push({name:'Death Recap',content:{table:'death_recap_'+p+'_'+i},noTitle:false});
+			}
+
 			$.each(player.minions, function(m,minion){
 				playerTabs.push({name:minion.name,content:minion.name,noTitle:true});
 			});

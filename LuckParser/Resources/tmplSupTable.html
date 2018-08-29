@@ -1,15 +1,31 @@
 <table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%">
 	<thead>
-		<tr><th>Sub</th><th></th><th>Name</th><th>Condi Cleanse</th><th>Resurrects</th></tr>
+		<tr>
+			<th>Sub</th>
+			<th></th>
+			<th>Name</th>
+			<th>Condi Cleanse</th>
+			<th>Resurrects</th>
+		</tr>
 	</thead>
 	<tbody>
 		{{for rows}}
-		<tr>{{include tmpl="#tmplPlayerCells"/}}<td title="{{:data[1]}} seconds">{{:data[0]}}</td><td title="{{:data[3]}} seconds">{{:data[2]}}</td></tr>
+		<tr>
+			{{include tmpl="tmplPlayerCells"/}}
+			<td title="{{:data[1]}} seconds">{{:data[0]}}</td>
+			<td title="{{:data[3]}} seconds">{{:data[2]}}</td>
+		</tr>
 		{{/for}}
 	</tbody>
 	<tfoot>
 		{{for sums}}
-		<tr><td></td><td></td><td>{{:name}}</td><td title="{{:data[1]}} seconds">{{:data[0]}}</td><td title="{{:data[3]}} seconds">{{:data[2]}}</td></tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td class="text-left">{{:name}}</td>
+			<td title="{{:data[1]}} seconds">{{:data[0]}}</td>
+			<td title="{{:data[3]}} seconds">{{:data[2]}}</td>
+		</tr>
 		{{/for}}
 	</tfoot>
 </table>

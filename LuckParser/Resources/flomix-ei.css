@@ -19,6 +19,25 @@ tr.condi td {
     background-color: rgba(255,0,0,0.25);
 }
 
+img.icon {
+	width: 18px;
+	height: 18px;
+}
+
+img.icon-hover:hover,
+td:hover img.icon-hover,
+th:hover img.icon-hover,
+.table-hover tr:hover td img.icon-hover {
+	width: 36px;
+	height: 36px;
+	margin: -9px;
+	position: relative;
+	-webkit-filter: drop-shadow(3px 3px 6px #000);
+    filter: drop-shadow(3px 3px 6px #000);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=3, OffY=3, Color='#000')";
+    filter: "progid:DXImageTransform.Microsoft.Dropshadow(OffX=3, OffY=3, Color='#000')";
+}
+
 table.dataTable.table-sm>thead>tr>th {
     padding-right: 10px;
 }
@@ -70,4 +89,26 @@ td, th {text-align: center; white-space: nowrap;}
 
 .theme-slate .nav-tabs .nav-link:hover {
     color: #fff;
+}
+
+.rot-icon {
+	width: 30px;
+	height: 30px;
+}
+
+.rot-icon.rot-cancelled {
+	border: 3px solid #ff0000;
+}
+
+.rot-small .rot-icon {
+	width: 20px;
+	height: 20px;
+}
+
+.rot-small .rot-icon.rot-cancelled {
+	border: 1px solid #ff0000;
+}
+
+.rot-noaa .rot-aa {
+	display: none;
 }

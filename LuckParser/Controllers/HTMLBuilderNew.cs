@@ -1077,7 +1077,7 @@ namespace LuckParser.Controllers
                                 {
                                     simpleRotSize = 30;
                                 }
-                                CreateSimpleRotationTab(sw, p, simpleRotSize, phaseIndex);
+                                //CreateSimpleRotationTab(sw, p, simpleRotSize, phaseIndex);
                             }
                             sw.Write("</div>");
                         }
@@ -1108,83 +1108,38 @@ namespace LuckParser.Controllers
         /// <param name="p"></param>
         /// <param name="simpleRotSize"></param>
         /// <param name="phaseIndex"></param>
-        private void CreateSimpleRotationTab(StreamWriter sw, Player p, int simpleRotSize, int phaseIndex)
+        private List<double[]> CreateSimpleRotationTabData(Player p, int phaseIndex, Dictionary<long, SkillItem> usedSkills)
         {
-            if (_settings.PlayerRot)//Display rotation
+            List<double[]> list = new List<double[]>();
+
+            PhaseData phase = _statistics.Phases[phaseIndex];
+            List<CastLog> casting = p.GetCastLogs(_log, phase.GetStart(), phase.GetEnd());
+            SkillData skillList = _log.GetSkillData();
+            foreach (CastLog cl in casting)
             {
-                PhaseData phase = _statistics.Phases[phaseIndex];
-                List<CastLog> casting = p.GetCastLogs(_log, phase.GetStart(), phase.GetEnd());
-                //GW2APISkill autoSkill = null;
-                //int autosCount = 0;
-                foreach (CastLog cl in casting)
-                {
-                    GW2APISkill apiskill = _log.GetSkillData().Get(cl.GetID())?.GetGW2APISkill();
-
-                    if (apiskill != null)
-                    {
-                        // we must split the autos if we want to show interrupted skills
-                        if (apiskill.slot == "Weapon_1" && !_settings.ShowAutos)
-                        {
-                            continue;
-                        }
-                        string borderSize = simpleRotSize == 30 ? "3px" : "1px";
-                        string style = cl.EndActivation() == ParseEnum.Activation.CancelCancel ? "style=\"outline: "+ borderSize + " solid red\"" : "";
-                        int imageSize = simpleRotSize - (style.Length > 0 ? (simpleRotSize == 30 ? 3 : 1) : 0);
-                        sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img " + style + "src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + imageSize + "\" width=\"" + imageSize + "\"></div></span>");
-                        /*if (apiskill.slot != "Weapon_1")
-                        {
-                            if (autosCount > 0 && settings.ShowAutos)
-                            {
-                                sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + autoSkill.icon + "\" data-toggle=\"tooltip\" title= \"" + autoSkill.name + "[Auto Attack] x" + autosCount + " \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
-                                autosCount = 0;
-                            }
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
-                        }
-                        else
-                        {
-                            if (autosCount == 0)
-                            {
-                                autoSkill = apiskill;
-                            }
-                            autosCount++;
-                        }*/
-                    }
-                    else
-                    {
-                        if (cl.GetID() == SkillItem.WeaponSwapId)
-                        {//wepswap
-                            string skillName = "Weapon Swap";
-                            string skillLink = HTMLHelper.GetLink("Swap");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
-                            sw.Write("<br>");
-                        }
-                        else if (cl.GetID() == SkillItem.ResurrectId)
-                        {
-                            string skillName = "Resurrect";
-                            string skillLink = HTMLHelper.GetLink("Downs");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
-                        }
-                        else if (cl.GetID() == SkillItem.BandageId)
-                        {
-                            string skillName = "Bandage";
-                            string skillLink = HTMLHelper.GetLink("Bandage");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
-
-                        }
-                        else if (cl.GetID() == SkillItem.DodgeId)
-                        {
-                            string skillName = "Dodge";
-                            string skillLink = HTMLHelper.GetLink("Dodge");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
-
-                        }
-
-                    }
-
-                }
+                if (!usedSkills.ContainsKey(cl.GetID())) usedSkills.Add(cl.GetID(), skillList.GetOrDummy(cl.GetID()));
+                double[] rotEntry = new double[5];
+                list.Add(rotEntry);
+                rotEntry[0] = cl.GetTime()/1000.0;
+                rotEntry[1] = cl.GetID();
+                rotEntry[2] = cl.GetActDur();
+                rotEntry[3] = encodeEndActivation(cl.EndActivation());
+                rotEntry[4] = cl.StartActivation() == ParseEnum.Activation.Quickness ? 1 : 0;
             }
-
+            return list;
         }
+
+        private int encodeEndActivation(ParseEnum.Activation endActivation)
+        {
+            switch (endActivation)
+            {
+                case ParseEnum.Activation.CancelFire: return 1;
+                case ParseEnum.Activation.CancelCancel: return 2;
+                case ParseEnum.Activation.Reset: return 3;
+                default: return 0;
+            }
+        }
+
         /// <summary>
         /// Creates the death recap tab for a given player
         /// </summary>
@@ -2951,6 +2906,8 @@ namespace LuckParser.Controllers
                     player.GetProf()));
             }
 
+            data.simpleRotation = _settings.SimpleRotation;
+
             data.graphs.Add(new GraphDto("full", "Full"));
             data.graphs.Add(new GraphDto("10s", "10s"));
             data.graphs.Add(new GraphDto("30s", "30s"));
@@ -2959,6 +2916,7 @@ namespace LuckParser.Controllers
             {
                 PhaseData phaseData = _statistics.Phases[i];
                 PhaseDto phaseDto = new PhaseDto(phaseData.GetName(), phaseData.GetDuration("s"));
+                data.phases.Add(phaseDto);
                 phaseDto.dpsStats = CreateDPSData(i);
                 phaseDto.dmgStatsBoss = CreateDMGStatsBossData(i);
                 phaseDto.dmgStats = CreateDMGStatsData(i);
@@ -2985,7 +2943,12 @@ namespace LuckParser.Controllers
 
                 phaseDto.mechanicStats = CreateMechanicData(i);
 
-                data.phases.Add(phaseDto);
+                phaseDto.deaths = new List<long>();
+
+                foreach (Player player in _log.GetPlayerList())
+                {
+                    phaseDto.deaths.Add(player.GetDeath(_log, phaseData.GetStart(), phaseData.GetEnd()));
+                }
             }
 
             data.boons = AssembleBoons(_statistics.PresentBoons);
@@ -3038,8 +3001,10 @@ namespace LuckParser.Controllers
             PlayerDetailsDto dto = new PlayerDetailsDto();
             dto.dmgDistributions = new List<DmgDistributionDto>();
             dto.dmgDistributionsBoss = new List<DmgDistributionDto>();
+            dto.rotation = new List<List<double[]>>();
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
+                dto.rotation.Add(CreateSimpleRotationTabData(player, i, usedSkills));
                 dto.dmgDistributions.Add(CreatePlayerDMGDistTable(player, false, i, usedSkills, usedBoons));
                 dto.dmgDistributionsBoss.Add(CreatePlayerDMGDistTable(player, true, i, usedSkills, usedBoons));
             }
@@ -3071,7 +3036,14 @@ namespace LuckParser.Controllers
             List<SkillDto> dtos = new List<SkillDto>();
             foreach (SkillItem skill in skills)
             {
-                SkillDto dto = new SkillDto(skill.GetID(), skill.GetName(), skill.GetGW2APISkill()?.icon);
+                GW2APISkill apiSkill = skill.GetGW2APISkill();
+                SkillDto dto = new SkillDto(skill.GetID(), skill.GetName(), apiSkill?.icon);
+                if (skill.GetID() == SkillItem.WeaponSwapId) dto.icon = "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
+                else if (skill.GetID() == SkillItem.ResurrectId) dto.icon = "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png";
+                else if (skill.GetID() == SkillItem.BandageId) dto.icon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
+                else if (skill.GetID() == SkillItem.DodgeId) dto.icon = "https://wiki.guildwars2.com/images/b/b2/Dodge.png";
+
+                dto.aa = apiSkill?.slot == "Weapon_1";
                 dtos.Add(dto);
             }
             return dtos;

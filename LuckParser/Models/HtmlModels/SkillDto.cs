@@ -16,6 +16,8 @@ namespace LuckParser.Models.HtmlModels
         public string name;
         [DataMember(EmitDefaultValue = false)]
         public string icon;
+        [DataMember]
+        public bool aa;
 
         public SkillDto(long id, string name, string icon)
         {

@@ -34,6 +34,8 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public List<BoonData> defBuffGenOGroupStats;
         [DataMember] public List<BoonData> defBuffGenSquadStats;
 
+        [DataMember] public List<long> deaths;
+
         [DataMember] public List<List<int[]>> mechanicStats;
 
         public PhaseDto() { }
