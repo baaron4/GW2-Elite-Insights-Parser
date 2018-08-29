@@ -490,18 +490,12 @@ namespace LuckParser.Controllers
             // a hack for buggy golem logs
             if (_bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem)
             {
-                AgentItem otherGolem = npcList.Find(x => x.GetID() == 19603);
                 foreach (CombatItem c in _combatData)
                 {
                     // redirect all attacks to the main golem
                     if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.Normal && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None)
                     {
                         c.DstAgent = bossAgent.GetAgent();
-                        c.DstInstid = bossAgent.GetInstid();
-                    }
-                    // redirect buff initial to main golem
-                    if (otherGolem != null && c.IsBuff == 18 && c.DstInstid == otherGolem.GetInstid())
-                    {
                         c.DstInstid = bossAgent.GetInstid();
                     }
                 }
