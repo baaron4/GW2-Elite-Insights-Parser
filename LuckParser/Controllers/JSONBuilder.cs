@@ -181,6 +181,23 @@ namespace LuckParser.Controllers
             return false;
         }
 
+        private void MakePhaseBossBoon(JsonLog.JsonBossBoon boon, int phase, Statistics.FinalBossBoon value)
+        {
+            boon.Uptime[phase] = value.Uptime;
+            boon.Generated[phase] = boon.Generated[phase] ?? new Dictionary<string, double>();
+            boon.Overstacked[phase] = boon.Overstacked[phase] ?? new Dictionary<string, double>();
+
+            foreach (var playerBoon in value.Generated.Where(x => x.Value > 0))
+            {
+                boon.Generated[phase][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+            }
+
+            foreach (var playerBoon in value.Overstacked.Where(x => x.Value > 0))
+            {
+                boon.Overstacked[phase][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+            }
+        }
+
         private Dictionary<long, JsonLog.JsonBossBoon> BuildBossBoons(Dictionary<long, Statistics.FinalBossBoon>[] statBoons)
         {
             int phases = _statistics.Phases.Count;
@@ -195,19 +212,7 @@ namespace LuckParser.Controllers
                 {
                     if (boonsFound.Contains(boon.Key))
                     {
-                        boons[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
-                        boons[boon.Key].Generated[phaseIndex] = boons[boon.Key].Generated[phaseIndex] ?? new Dictionary<string, double>();
-                        boons[boon.Key].Overstacked[phaseIndex] = boons[boon.Key].Overstacked[phaseIndex] ?? new Dictionary<string, double>();
-
-                        foreach (var playerBoon in boon.Value.Generated.Where(x => x.Value > 0))
-                        {
-                            boons[boon.Key].Generated[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
-                        }
-
-                        foreach (var playerBoon in boon.Value.Overstacked.Where(x => x.Value > 0))
-                        {
-                            boons[boon.Key].Overstacked[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
-                        }
+                        MakePhaseBossBoon(boons[boon.Key], phaseIndex, boon.Value);
                     }
                     else if (!boonsNotFound.Contains(boon.Key))
                     {
@@ -216,19 +221,7 @@ namespace LuckParser.Controllers
                             boonsFound.Add(boon.Key);
 
                             boons[boon.Key] = new JsonLog.JsonBossBoon(phases);
-                            boons[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
-                            boons[boon.Key].Generated[phaseIndex] = boons[boon.Key].Generated[phaseIndex] ?? new Dictionary<string, double>();
-                            boons[boon.Key].Overstacked[phaseIndex] = boons[boon.Key].Overstacked[phaseIndex] ?? new Dictionary<string, double>();
-
-                            foreach (var playerBoon in boon.Value.Generated.Where(x => x.Value > 0))
-                            {
-                                boons[boon.Key].Generated[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
-                            }
-
-                            foreach (var playerBoon in boon.Value.Overstacked.Where(x => x.Value > 0))
-                            {
-                                boons[boon.Key].Overstacked[phaseIndex][playerBoon.Key.GetCharacter()] = playerBoon.Value;
-                            }
+                            MakePhaseBossBoon(boons[boon.Key], phaseIndex, boon.Value);
                         }
                         else
                         {
@@ -281,6 +274,13 @@ namespace LuckParser.Controllers
             return false;
         }
 
+        private void MakePhaseBoon(JsonLog.JsonBoonUptime boon, int phase, Statistics.FinalBoonUptime value)
+        {
+            boon.Overstack[phase] = value.Overstack;
+            boon.Generation[phase] = value.Generation;
+            boon.Uptime[phase] = value.Uptime;
+        }
+
         private Dictionary<long, JsonLog.JsonBoonUptime> BuildBoonUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes)
         {
             var uptimes = new Dictionary<long, JsonLog.JsonBoonUptime>();
@@ -295,9 +295,7 @@ namespace LuckParser.Controllers
                 {
                     if (boonsFound.Contains(boon.Key))
                     {
-                        uptimes[boon.Key].Overstack[phaseIndex] = boon.Value.Overstack;
-                        uptimes[boon.Key].Generation[phaseIndex] = boon.Value.Generation;
-                        uptimes[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
+                        MakePhaseBoon(uptimes[boon.Key], phaseIndex, boon.Value);
                     }
                     else if (!boonsNotFound.Contains(boon.Key))
                     {
@@ -306,9 +304,7 @@ namespace LuckParser.Controllers
                             boonsFound.Add(boon.Key);
 
                             uptimes[boon.Key] = new JsonLog.JsonBoonUptime(phases);;
-                            uptimes[boon.Key].Overstack[phaseIndex] = boon.Value.Overstack;
-                            uptimes[boon.Key].Generation[phaseIndex] = boon.Value.Generation;
-                            uptimes[boon.Key].Uptime[phaseIndex] = boon.Value.Uptime;
+                            MakePhaseBoon(uptimes[boon.Key], phaseIndex, boon.Value);
                         }
                         else
                         {
@@ -323,17 +319,12 @@ namespace LuckParser.Controllers
                 return null;
             }
 
-            var cleanedUptimes = new Dictionary<long, JsonLog.JsonBoonUptime>();
             foreach (var boon in uptimes)
             {
-                JsonLog.JsonBoonUptime cleanedBoon = boon.Value;
-                if (!boon.Value.Uptime.Any(e => e > 0)) cleanedBoon.Uptime = null;
-                if (!boon.Value.Overstack.Any(e => e > 0)) cleanedBoon.Overstack = null;
-                if (!boon.Value.Generation.Any(e => e > 0)) cleanedBoon.Generation = null;
-                cleanedUptimes[boon.Key] = cleanedBoon;
+                removeZeroArrays(boon.Value);
             }
 
-            return cleanedUptimes;
+            return uptimes;
         }
 
         private JsonLog.JsonSupport BuildSupport(Statistics.FinalSupport[] statSupport)
@@ -426,13 +417,12 @@ namespace LuckParser.Controllers
         private void removeZeroArrays(object inObject)
         {
             FieldInfo[] fields = inObject.GetType().GetFields();
-            foreach (FieldInfo field in fields)
+            foreach (var field in fields)
             {
                 if (!field.FieldType.IsArray) continue;
                 var entry = ((IEnumerable)field.GetValue(inObject)).Cast<object>().ToArray();
                 if (!entry.Any(e => Convert.ToDouble(e) > 0)) field.SetValue(inObject, null);
             }
-
         }
     }
 }
