@@ -241,26 +241,9 @@ namespace LuckParser.Controllers
 
         private JsonLog.JsonDps BuildDPS(Statistics.FinalDPS[] statDps)
         {
-            int phases = _statistics.Phases.Count;
-            var dps = new JsonLog.JsonDps
-            {
-                AllCondiDamage = new int[phases],
-                AllCondiDps = new int[phases],
-                AllDamage = new int[phases],
-                AllDps = new int[phases],
-                AllPowerDamage = new int[phases],
-                AllPowerDps = new int[phases],
-                BossCondiDamage = new int[phases],
-                BossCondiDps = new int[phases],
-                BossDamage = new int[phases],
-                BossDps = new int[phases],
-                BossPowerDamage = new int[phases],
-                BossPowerDps = new int[phases],
-                PlayerBossPowerDamage = new int[phases],
-                PlayerPowerDamage = new int[phases]
-            };
+            var dps = new JsonLog.JsonDps(_statistics.Phases.Count);
 
-            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
+            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
             {
                 dps.AllDps[phaseIndex] = statDps[phaseIndex].AllDps;
                 dps.AllDamage[phaseIndex] = statDps[phaseIndex].AllDamage;
@@ -366,16 +349,9 @@ namespace LuckParser.Controllers
 
         private JsonLog.JsonSupport BuildSupport(Statistics.FinalSupport[] statSupport)
         {
-            int phases = _statistics.Phases.Count;
-            var support = new JsonLog.JsonSupport
-            {
-                CondiCleanse = new int[phases],
-                CondiCleanseTime = new float[phases],
-                ResurrectTime = new float[phases],
-                Resurrects = new int[phases]
-            };
+            var support = new JsonLog.JsonSupport(_statistics.Phases.Count);
 
-            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
+            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
             {
                 support.Resurrects[phaseIndex] = statSupport[phaseIndex].Resurrects;
                 support.ResurrectTime[phaseIndex] = statSupport[phaseIndex].ResurrectTime;
@@ -393,18 +369,9 @@ namespace LuckParser.Controllers
 
         private JsonLog.JsonDefenses BuildDefenses(Statistics.FinalDefenses[] statDefense)
         {
-            int phases = _statistics.Phases.Count;
-            var defense = new JsonLog.JsonDefenses
-            {
-                BlockedCount = new int[phases],
-                DamageBarrier = new int[phases],
-                DamageInvulned = new int[phases],
-                DamageTaken = new long[phases],
-                EvadedCount = new int[phases],
-                InvulnedCount = new int[phases]
-            };
+            var defense = new JsonLog.JsonDefenses(_statistics.Phases.Count);
 
-            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
+            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
             {
                 defense.EvadedCount[phaseIndex] = statDefense[phaseIndex].EvadedCount;
                 defense.InvulnedCount[phaseIndex] = statDefense[phaseIndex].InvulnedCount;
@@ -426,49 +393,9 @@ namespace LuckParser.Controllers
 
         private JsonLog.JsonStats BuildStats(Statistics.FinalStats[] statStat)
         {
-            int phases = _statistics.Phases.Count;
-            var stats = new JsonLog.JsonStats
-            {
-                AvgBoons = new double[phases],
-                CritablePowerLoopCount = new int[phases],
-                CritablePowerLoopCountBoss = new int[phases],
-                CriticalDmg = new int[phases],
-                CriticalDmgBoss = new int[phases],
-                CriticalRate = new int[phases],
-                CriticalRateBoss = new int[phases],
-                Dcd = new double[phases],
-                Died = new double[phases],
-                DodgeCount = new int[phases],
-                DownCount = new int[phases],
-                FlankingRate = new int[phases],
-                FlankingRateBoss = new int[phases],
-                GlanceRate = new int[phases],
-                GlanceRateBoss = new int[phases],
-                Interrupts = new int[phases],
-                InterruptsBoss = new int[phases],
-                Invulned = new int[phases],
-                InvulnedBoss = new int[phases],
-                Missed = new int[phases],
-                MissedBoss = new int[phases],
-                MovingDamage = new int[phases],
-                MovingDamageBoss = new int[phases],
-                MovingRate = new int[phases],
-                MovingRateBoss = new int[phases],
-                PowerLoopCount = new int[phases],
-                PowerLoopCountBoss = new int[phases],
-                Saved = new int[phases],
-                ScholarDmg = new int[phases],
-                ScholarDmgBoss = new int[phases],
-                ScholarRate = new int[phases],
-                ScholarRateBoss = new int[phases],
-                StackDist = new double[phases],
-                SwapCount = new int[phases],
-                TimeSaved = new double[phases],
-                TimeWasted = new double[phases],
-                Wasted = new int[phases]
-            };
+            var stats = new JsonLog.JsonStats(_statistics.Phases.Count);
 
-            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
+            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
             {
                 stats.PowerLoopCount[phaseIndex] = statStat[phaseIndex].PowerLoopCount;
                 stats.CritablePowerLoopCount[phaseIndex] = statStat[phaseIndex].CritablePowerLoopCount;
