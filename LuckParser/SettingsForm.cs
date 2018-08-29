@@ -80,6 +80,9 @@ namespace LuckParser
             chkLightTheme.Checked = Properties.Settings.Default.LightTheme;
             chkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
             UploadDPSReports_checkbox.Checked = Properties.Settings.Default.UploadToDPSReports;
+            UploadDRRH_check.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
+            UploadRaidar_check.Checked = Properties.Settings.Default.UploadToRaidar;
+
         }
 
         private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)
@@ -201,6 +204,16 @@ namespace LuckParser
         private void UploadDPSReports_checkbox_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.UploadToDPSReports = UploadDPSReports_checkbox.Checked;
+        }
+
+        private void UploadRaidar_check_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.UploadToRaidar = UploadRaidar_check.Checked;
+        }
+
+        private void UploadDRRH_check_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.UploadToDPSReportsRH = UploadDRRH_check.Checked;
         }
     }
 }

@@ -124,8 +124,10 @@ namespace LuckParser
                     throw new CancellationException(rowData);
                 }
                 //Upload Process
-                Task<string> task = null;
-                string uploadresult = "No Upload";
+                Task<string> DREITask = null;
+                Task<string> DRRHTask = null;
+                Task<string> RaidarTask = null;
+                string[] uploadresult = new string[3] { "","",""};
                 if (Properties.Settings.Default.UploadToDPSReports)
                 {
                     bg.UpdateProgress(rowData, " Uploading...", 0);
@@ -133,8 +135,28 @@ namespace LuckParser
                     {
                         up_controller = new UploadController();
                     }
-                    task = Task.Factory.StartNew(() => up_controller.UploadDPSReports(fInfo)) ;
+                    DREITask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsEI(fInfo)) ;
                     
+                }
+                if (Properties.Settings.Default.UploadToDPSReportsRH)
+                {
+                    bg.UpdateProgress(rowData, " Uploading...", 0);
+                    if (up_controller == null)
+                    {
+                        up_controller = new UploadController();
+                    }
+                    DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
+
+                }
+                if (Properties.Settings.Default.UploadToRaidar)
+                {
+                    bg.UpdateProgress(rowData, " Uploading...", 0);
+                    if (up_controller == null)
+                    {
+                        up_controller = new UploadController();
+                    }
+                    RaidarTask = Task.Factory.StartNew(() => up_controller.UploadRaidar(fInfo));
+
                 }
                 bg.UpdateProgress(rowData, " Working...", 0);
                 Parser parser = new Parser();
@@ -154,20 +176,50 @@ namespace LuckParser
                     if (Properties.Settings.Default.UploadToDPSReports)
                     {
                         bg.UpdateProgress(rowData, "40% - Uploading...", 40);
-                        if (task != null)
+                        if (DREITask != null)
                         {
-                            while (!task.IsCompleted)
+                            while (!DREITask.IsCompleted)
                             {
                                 System.Threading.Thread.Sleep(100);
                             }
-                            uploadresult = task.Result;
+                            uploadresult[0] = DREITask.Result;
                         }
                         else
                         {
-                            uploadresult = "Failed to Define Upload Task";
+                            uploadresult[0] = "Failed to Define Upload Task";
                         }
-                        
-                       
+                    }
+                    if (Properties.Settings.Default.UploadToDPSReportsRH)
+                    {
+                        bg.UpdateProgress(rowData, "40% - Uploading...", 40);
+                        if (DRRHTask != null)
+                        {
+                            while (!DRRHTask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[1] = DRRHTask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[1] = "Failed to Define Upload Task";
+                        }
+                    }
+                    if (Properties.Settings.Default.UploadToRaidar)
+                    {
+                        bg.UpdateProgress(rowData, "40% - Uploading...", 40);
+                        if (RaidarTask != null)
+                        {
+                            while (!RaidarTask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[2] = RaidarTask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[2] = "Failed to Define Upload Task";
+                        }
                     }
                     //save location
                     DirectoryInfo saveDirectory;

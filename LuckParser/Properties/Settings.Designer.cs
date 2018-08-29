@@ -310,5 +310,29 @@ namespace LuckParser.Properties {
                 this["UploadToDPSReports"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UploadToDPSReportsRH {
+            get {
+                return ((bool)(this["UploadToDPSReportsRH"]));
+            }
+            set {
+                this["UploadToDPSReportsRH"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UploadToRaidar {
+            get {
+                return ((bool)(this["UploadToRaidar"]));
+            }
+            set {
+                this["UploadToRaidar"] = value;
+            }
+        }
     }
 }

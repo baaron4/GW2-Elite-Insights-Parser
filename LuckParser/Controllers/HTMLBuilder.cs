@@ -17,7 +17,7 @@ namespace LuckParser.Controllers
 
         private readonly Statistics _statistics;
 
-        private readonly String _uploadLink;
+        private readonly String[] _uploadLink;
 
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
@@ -42,7 +42,7 @@ namespace LuckParser.Controllers
 
             
         //}
-        public HTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics,string UploadString)
+        public HTMLBuilder(ParsedLog log, SettingsContainer settings, Statistics statistics,string[] UploadString)
         {
             _log = log;
 
@@ -3374,7 +3374,15 @@ namespace LuckParser.Controllers
                         sw.Write("<p> Time Start: " + _log.GetLogData().GetLogStart() + " | Time End: " + _log.GetLogData().GetLogEnd() + " </p> ");
                         if (_settings.UploadToDPSReports)
                         {
-                            sw.Write("<p>DPS Reports Link: <a href=\"" + _uploadLink + "\">" + _uploadLink + "</a></p>");
+                            sw.Write("<p>DPS Reports Link (EI): <a href=\"" + _uploadLink[0] + "\">" + _uploadLink[0] + "</a></p>");
+                        }
+                        if (_settings.UploadToDPSReportsRH)
+                        {
+                            sw.Write("<p>DPS Reports Link (RH): <a href=\"" + _uploadLink[1] + "\">" + _uploadLink[1] + "</a></p>");
+                        }
+                        if (_settings.UploadToRaidar)
+                        {
+                            sw.Write("<p>Raidar Link: <a href=\"" + _uploadLink[2] + "\">" + _uploadLink[2] + "</a></p>");
                         }
                         sw.Write("<div class=\"d-flex flex-row justify-content-center align-items-center flex-wrap mb-3\">");
                         {

@@ -69,6 +69,8 @@
             this.chkShowCl = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.UploadDPSReports_checkbox = new System.Windows.Forms.CheckBox();
+            this.UploadDRRH_check = new System.Windows.Forms.CheckBox();
+            this.UploadRaidar_check = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblDamageGraphSection
@@ -505,13 +507,35 @@
             // UploadDPSReports_checkbox
             // 
             this.UploadDPSReports_checkbox.AutoSize = true;
-            this.UploadDPSReports_checkbox.Location = new System.Drawing.Point(631, 333);
+            this.UploadDPSReports_checkbox.Location = new System.Drawing.Point(589, 333);
             this.UploadDPSReports_checkbox.Name = "UploadDPSReports_checkbox";
-            this.UploadDPSReports_checkbox.Size = new System.Drawing.Size(134, 17);
+            this.UploadDPSReports_checkbox.Size = new System.Drawing.Size(196, 17);
             this.UploadDPSReports_checkbox.TabIndex = 43;
-            this.UploadDPSReports_checkbox.Text = "Upload to DPSReports";
+            this.UploadDPSReports_checkbox.Text = "Upload to DPSReports Elite Insights";
             this.UploadDPSReports_checkbox.UseVisualStyleBackColor = true;
             this.UploadDPSReports_checkbox.CheckedChanged += new System.EventHandler(this.UploadDPSReports_checkbox_CheckedChanged);
+            // 
+            // UploadDRRH_check
+            // 
+            this.UploadDRRH_check.AutoSize = true;
+            this.UploadDRRH_check.Location = new System.Drawing.Point(589, 356);
+            this.UploadDRRH_check.Name = "UploadDRRH_check";
+            this.UploadDRRH_check.Size = new System.Drawing.Size(193, 17);
+            this.UploadDRRH_check.TabIndex = 44;
+            this.UploadDRRH_check.Text = "Upload to DPSReports RaidHeroes";
+            this.UploadDRRH_check.UseVisualStyleBackColor = true;
+            this.UploadDRRH_check.CheckedChanged += new System.EventHandler(this.UploadDRRH_check_CheckedChanged);
+            // 
+            // UploadRaidar_check
+            // 
+            this.UploadRaidar_check.AutoSize = true;
+            this.UploadRaidar_check.Location = new System.Drawing.Point(589, 379);
+            this.UploadRaidar_check.Name = "UploadRaidar_check";
+            this.UploadRaidar_check.Size = new System.Drawing.Size(175, 17);
+            this.UploadRaidar_check.TabIndex = 45;
+            this.UploadRaidar_check.Text = "Upload to Raidar (Not Working)";
+            this.UploadRaidar_check.UseVisualStyleBackColor = true;
+            this.UploadRaidar_check.CheckedChanged += new System.EventHandler(this.UploadRaidar_check_CheckedChanged);
             // 
             // SettingsForm
             // 
@@ -519,6 +543,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(797, 528);
+            this.Controls.Add(this.UploadRaidar_check);
+            this.Controls.Add(this.UploadDRRH_check);
             this.Controls.Add(this.UploadDPSReports_checkbox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.chkShowCl);
@@ -610,5 +636,7 @@
         private System.Windows.Forms.CheckBox chkShowCl;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox UploadDPSReports_checkbox;
+        private System.Windows.Forms.CheckBox UploadDRRH_check;
+        private System.Windows.Forms.CheckBox UploadRaidar_check;
     }
 }
