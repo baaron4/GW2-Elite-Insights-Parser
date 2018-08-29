@@ -170,9 +170,9 @@ namespace LuckParser.Models.ParseModels
                 }
                 long time = c.Time - timeStart;
                 // don't add buff initial table boons and buffs in non golem mode, for others overstack is irrelevant
-                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (log.IsBenchmarkMode() || !tableIds.Contains(c.SkillID)))
+                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (log.IsBenchmarkMode() || !tableIds.Contains(boonId)))
                 {
-                    List<BoonLog> loglist = boonMap[c.SkillID];
+                    List<BoonLog> loglist = boonMap[boonId];
                     loglist.Add(new BoonLog(0, 0, long.MaxValue, 0));
                 }
                 else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= 0 && time < log.GetBossData().GetAwareDuration())
@@ -180,7 +180,7 @@ namespace LuckParser.Models.ParseModels
                     if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
                         ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                        List<BoonLog> loglist = boonMap[c.SkillID];
+                        List<BoonLog> loglist = boonMap[boonId];
 
                         if (loglist.Count == 0 && c.OverstackValue > 0)
                         {
@@ -188,11 +188,11 @@ namespace LuckParser.Models.ParseModels
                         }
                         loglist.Add(new BoonLog(time, src, c.Value, 0));
                     }
-                    else if (Boon.RemovePermission(c.SkillID, c.IsBuffRemove, c.IFF) && time < log.GetBossData().GetAwareDuration() - 50)
+                    else if (Boon.RemovePermission(boonId, c.IsBuffRemove, c.IFF) && time < log.GetBossData().GetAwareDuration() - 50)
                     {
                         if (c.IsBuffRemove == ParseEnum.BuffRemove.All)//All
                         {
-                            List<BoonLog> loglist = boonMap[c.SkillID];
+                            List<BoonLog> loglist = boonMap[boonId];
                             if (loglist.Count == 0)
                             {
                                 loglist.Add(new BoonLog(0, 0, time, 0));
@@ -214,7 +214,7 @@ namespace LuckParser.Models.ParseModels
                         }
                         else if (c.IsBuffRemove == ParseEnum.BuffRemove.Single)//Single
                         {
-                            List<BoonLog> loglist = boonMap[c.SkillID];
+                            List<BoonLog> loglist = boonMap[boonId];
                             if (loglist.Count == 0)
                             {
                                 loglist.Add(new BoonLog(0, 0, time, 0));
@@ -234,7 +234,7 @@ namespace LuckParser.Models.ParseModels
                         }
                         else if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual)//Manuel
                         {
-                            List<BoonLog> loglist = boonMap[c.SkillID];
+                            List<BoonLog> loglist = boonMap[boonId];
                             if (loglist.Count == 0)
                             {
                                 loglist.Add(new BoonLog(0, 0, time, 0));
