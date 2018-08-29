@@ -447,14 +447,14 @@ namespace LuckParser.Models.ParseModels
                     var graphPoints = new List<Point>(capacity: fightDuration + 1);
                     var boonPresence = boonPresencePoints.GetBoonChart();
                     var condiPresence = condiPresencePoints.GetBoonChart();
-                    if (Replay != null && (updateCondiPresence || updateBoonPresence || defIds.Contains(boonid) || offIds.Contains(boonid)))
+                    /*if (Replay != null && (updateCondiPresence || updateBoonPresence || defIds.Contains(boonid) || offIds.Contains(boonid)))
                     {
                         foreach (int time in Replay.GetTimes())
                         {
                             Replay.AddBoon(boonid, simulation.GetBoonStackCount(time));
                         }
 
-                    }
+                    }*/
                     for (int i = 0; i <= fightDuration; i++)
                     {
                         graphPoints.Add(new Point(i, simulation.GetBoonStackCount(1000 * i)));
