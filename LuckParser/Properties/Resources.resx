@@ -133,11 +133,17 @@
   <data name="tmplDefTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplDefTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="tmplDmgDistTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tmplDmgDistTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="tmplDmgTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplDmgTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="tmplDpsTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplDpsTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tmplMechanicTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tmplMechanicTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="tmplPlayerCells" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplPlayerCells.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

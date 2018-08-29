@@ -126,11 +126,15 @@
     <Compile Include="Models\DataModels\ParsedLog.cs" />
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
     <Compile Include="Models\DataModels\Statistics.cs" />
+    <Compile Include="Models\HtmlModels\DmgDistributionDto.cs" />
+    <Compile Include="Models\HtmlModels\SkillDto.cs" />
+    <Compile Include="Models\HtmlModels\MechanicDto.cs" />
     <Compile Include="Models\HtmlModels\BoonDto.cs" />
     <Compile Include="Models\HtmlModels\BoonData.cs" />
     <Compile Include="Models\HtmlModels\PhaseDto.cs" />
     <Compile Include="Models\HtmlModels\LogDataDto.cs" />
     <Compile Include="Models\HtmlModels\GraphDto.cs" />
+    <Compile Include="Models\HtmlModels\PlayerDetailsDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerDto.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\Actor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\CircleActor.cs" />
@@ -243,6 +247,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="LI.ico" />
+    <None Include="Resources\tmplMechanicTable.html" />
+    <None Include="Resources\tmplDmgDistTable.html" />
     <None Include="Resources\tmplSupTable.html" />
     <None Include="Resources\tmplDpsTable.html" />
     <None Include="Resources\tmplDefTable.html" />

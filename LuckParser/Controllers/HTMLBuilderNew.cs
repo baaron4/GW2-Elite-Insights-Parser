@@ -412,7 +412,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> CreateDPSTable(int phaseIndex)
+        private List<List<Object>> CreateDPSData(int phaseIndex)
         {
             List<List<Object>> list = new List<List<Object>>(_log.GetPlayerList().Count);
             PhaseData phase = _statistics.Phases[phaseIndex];
@@ -461,7 +461,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> CreateDMGStatsTable(int phaseIndex)
+        private List<List<Object>> CreateDMGStatsData(int phaseIndex)
         {
             List<List<Object>> list = new List<List<Object>>();
             PhaseData phase = _statistics.Phases[phaseIndex];
@@ -528,7 +528,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> CreateDMGStatsBossTable(int phaseIndex)
+        private List<List<Object>> CreateDMGStatsBossData(int phaseIndex)
         {
             List<List<Object>> list = new List<List<Object>>();
 
@@ -598,7 +598,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> CreateDefTable(int phaseIndex)
+        private List<List<Object>> CreateDefData(int phaseIndex)
         {
             List<List<Object>> list = new List<List<Object>>();
 
@@ -642,7 +642,7 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private List<List<Object>> CreateSupTable(int phaseIndex)
+        private List<List<Object>> CreateSupData(int phaseIndex)
         {
             List<List<Object>> list = new List<List<Object>>();
 
@@ -665,7 +665,7 @@ namespace LuckParser.Controllers
         /// <param name="listToUse"></param>
         /// <param name="tableId"></param>
         /// <param name="phaseIndex"></param>
-        private List<BoonData> CreateUptimeTable(List<Boon> listToUse, int phaseIndex)
+        private List<BoonData> CreateUptimeData(List<Boon> listToUse, int phaseIndex)
         {
             List<PhaseData> phases = _statistics.Phases;
             List<BoonData> list = new List<BoonData>();
@@ -733,54 +733,6 @@ namespace LuckParser.Controllers
                 footList.Add(boonArrayToList);
                 list.Add(boonData);
             }
-                /*
-            if (_log.GetPlayerList().Count > 1)
-            {
-                sw.Write("<tfoot>");
-                    
-                foreach (string groupNum in footList.Select(x => x[0]).Distinct())//selecting group
-                {
-                    List<List<string>> groupList = footList.Where(x => x[0] == groupNum).ToList();
-                    sw.Write("<tr>");
-                            
-                        sw.Write("<td></td>");
-                        sw.Write("<td></td>");
-                        sw.Write("<td>Group " + groupNum + "</td>");
-                        for (int i = 1; i < groupList[0].Count; i++)
-                        {
-                            if (intensityBoon.Contains(i - 1))
-                            {
-                                sw.Write("<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i])) / groupList.Count, 1) + "</td>");
-                            }
-                            else
-                            {
-                                sw.Write("<td>" + Math.Round(groupList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / groupList.Count, 1) + "%</td>");
-                            }
-
-                        }
-                            
-                    sw.Write("</tr>");
-                }
-                sw.Write("<tr>");
-                        
-                sw.Write("<td></td>");
-                sw.Write("<td></td>");
-                sw.Write("<td>Averages</td>");
-                for (int i = 1; i < footList[0].Count; i++)
-                {
-                    if (intensityBoon.Contains(i - 1))
-                    {
-                        sw.Write("<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i])) / footList.Count, 1) + "</td>");
-                    }
-                    else
-                    {
-                        sw.Write("<td>" + Math.Round(footList.Sum(c => Double.Parse(c[i].TrimEnd('%'))) / footList.Count, 1) + "%</td>");
-                    }
-                }
-                sw.Write("</tr>");
-                sw.Write("</tfoot>");
-            }
-            */
             return list;
         }
         /// <summary>
@@ -790,7 +742,7 @@ namespace LuckParser.Controllers
         /// <param name="listToUse"></param>
         /// <param name="tableId"></param>
         /// <param name="phaseIndex"></param>
-        private List<BoonData> CreateGenTable(List<Boon> listToUse, int phaseIndex, string target)
+        private List<BoonData> CreateGenData(List<Boon> listToUse, int phaseIndex, string target)
         {
             List<BoonData> list = new List<BoonData>();
 
@@ -818,247 +770,7 @@ namespace LuckParser.Controllers
             }
             return list;
         }
-        /// <summary>
-        /// Create the group buff generation table
-        /// </summary>
-        /// <param name="sw"></param>
-        /// <param name="listToUse"></param>
-        /// <param name="tableId"></param>
-        /// <param name="phaseIndex"></param>
-        private void CreateGenGroupTable(StreamWriter sw, List<Boon> listToUse, string tableId, int phaseIndex)
-        { //Generate BoonGenGroup table
-            sw.Write("<script>");
-            {
-                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
-                {
-                    sw.Write("var lazyTable = document.querySelector('#" + tableId + phaseIndex + "');" +
 
-                    "if ('IntersectionObserver' in window) {" +
-                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
-                            "entries.forEach(function(entry) {" +
-                                "if (entry.isIntersecting)" +
-                                "{" +
-                                    "$(function () { $('#" + tableId + phaseIndex + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
-                                    "lazyTableObserver.unobserve(entry.target);" +
-                                "}" +
-                            "});" +
-                        "});" +
-                    "lazyTableObserver.observe(lazyTable);" +
-                    "} else {" +
-                        "$(function () { $('#" + tableId + phaseIndex + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
-                    "}");
-                }
-                sw.Write("});");
-            }
-            sw.Write("</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + tableId + phaseIndex + "\">");
-            {
-                HTMLHelper.WriteBoonTableHeader(sw, listToUse);
-                sw.Write("<tbody>");
-                {
-                    foreach (Player player in _log.GetPlayerList())
-                    {
-                        Dictionary<long, Statistics.FinalBoonUptime> boons =
-                            _statistics.GroupBoons[player][phaseIndex];
-
-                        Dictionary<long, string> rates = new Dictionary<long, string>();
-                        foreach (Boon boon in listToUse)
-                        {
-                            string rate = "0";
-
-                            Statistics.FinalBoonUptime uptime = boons[boon.GetID()];
-
-                            if (uptime.Generation > 0)
-                            {
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
-                                {
-                                    rate =
-                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
-                                        + uptime.Overstack + "% with overstack \">"
-                                        + uptime.Generation
-                                        + "%</span>";
-                                }
-                                else if (boon.GetBoonType() == Boon.BoonType.Intensity)
-                                {
-                                    rate =
-                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
-                                        + uptime.Overstack + " with overstack \">"
-                                        + uptime.Generation
-                                        + "</span>";
-                                }
-                            }
-
-                            rates[boon.GetID()] = rate;
-                        }
-
-                        HTMLHelper.WriteBoonGenTableBody(sw, player, listToUse, rates);
-                    }
-                }
-                sw.Write("</tbody>");
-            }
-            sw.Write("</table>");
-        }
-        /// <summary>
-        /// Create the off squad buff generation table
-        /// </summary>
-        /// <param name="sw"></param>
-        /// <param name="listToUse"></param>
-        /// <param name="tableId"></param>
-        /// <param name="phaseIndex"></param>
-        private void CreateGenOGroupTable(StreamWriter sw, List<Boon> listToUse, string tableId, int phaseIndex)
-        {  //Generate BoonGenOGroup table
-            sw.Write("<script>");
-            {
-                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
-                {
-                    sw.Write("var lazyTable = document.querySelector('#" + tableId + phaseIndex + "');" +
-
-                    "if ('IntersectionObserver' in window) {" +
-                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
-                            "entries.forEach(function(entry) {" +
-                                "if (entry.isIntersecting)" +
-                                "{" +
-                                    "$(function () { $('#" + tableId + phaseIndex + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
-                                    "lazyTableObserver.unobserve(entry.target);" +
-                                "}" +
-                            "});" +
-                        "});" +
-                    "lazyTableObserver.observe(lazyTable);" +
-                    "} else {" +
-                        "$(function () { $('#" + tableId + phaseIndex + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
-                    "}");
-                }
-                sw.Write("});");
-            }
-            sw.Write("</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + tableId + phaseIndex + "\">");
-            {
-                HTMLHelper.WriteBoonTableHeader(sw, listToUse);
-                sw.Write("<tbody>");
-                {
-                    foreach (Player player in _log.GetPlayerList())
-                    {
-                        Dictionary<long, Statistics.FinalBoonUptime> boons =
-                            _statistics.OffGroupBoons[player][phaseIndex];
-
-                        Dictionary<long, string> rates = new Dictionary<long, string>();
-                        foreach (Boon boon in listToUse)
-                        {
-                            string rate = "0";
-
-                            Statistics.FinalBoonUptime uptime = boons[boon.GetID()];
-
-                            if (uptime.Generation > 0)
-                            {
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
-                                {
-                                    rate =
-                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
-                                        + uptime.Overstack + "% with overstack \">"
-                                        + uptime.Generation
-                                        + "%</span>";
-                                }
-                                else if (boon.GetBoonType() == Boon.BoonType.Intensity)
-                                {
-                                    rate =
-                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
-                                        + uptime.Overstack + " with overstack \">"
-                                        + uptime.Generation
-                                        + "</span>";
-                                }
-                            }
-
-                            rates[boon.GetID()] = rate;
-                        }
-
-                        HTMLHelper.WriteBoonGenTableBody(sw, player, listToUse, rates);
-                    }
-                }
-                sw.Write("</tbody>");
-            }
-            sw.Write("</table>");
-        }
-        /// <summary>
-        /// Create the squad buff generation table
-        /// </summary>
-        /// <param name="sw"></param>
-        /// <param name="listToUse"></param>
-        /// <param name="tableId"></param>
-        /// <param name="phaseIndex"></param>
-        private void CreateGenSquadTable(StreamWriter sw, List<Boon> listToUse, string tableId, int phaseIndex)
-        {
-            //Generate BoonGenSquad table
-            sw.Write("<script>");
-            {
-                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
-                {
-                    sw.Write("var lazyTable = document.querySelector('#" + tableId + phaseIndex + "');" +
-
-                    "if ('IntersectionObserver' in window) {" +
-                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
-                            "entries.forEach(function(entry) {" +
-                                "if (entry.isIntersecting)" +
-                                "{" +
-                                    "$(function () { $('#" + tableId + phaseIndex + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
-                                    "lazyTableObserver.unobserve(entry.target);" +
-                                "}" +
-                            "});" +
-                        "});" +
-                    "lazyTableObserver.observe(lazyTable);" +
-                    "} else {" +
-                        "$(function () { $('#" + tableId + phaseIndex + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
-                    "}");
-                }
-                sw.Write("});");
-            }
-            sw.Write("</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"" + tableId + phaseIndex + "\">");
-            {
-                HTMLHelper.WriteBoonTableHeader(sw, listToUse);
-                sw.Write("<tbody>");
-                {
-                    foreach (Player player in _log.GetPlayerList())
-                    {
-                        Dictionary<long, Statistics.FinalBoonUptime> boons =
-                            _statistics.SquadBoons[player][phaseIndex];
-
-                        Dictionary<long, string> rates = new Dictionary<long, string>();
-                        foreach (Boon boon in listToUse)
-                        {
-                            string rate = "0";
-
-                            Statistics.FinalBoonUptime uptime = boons[boon.GetID()];
-
-                            if (uptime.Generation > 0)
-                            {
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
-                                {
-                                    rate =
-                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
-                                        + uptime.Overstack + "% with overstack \">"
-                                        + uptime.Generation
-                                        + "%</span>";
-                                }
-                                else if (boon.GetBoonType() == Boon.BoonType.Intensity)
-                                {
-                                    rate =
-                                        "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
-                                        + uptime.Overstack + " with overstack \">"
-                                        + uptime.Generation
-                                        + "</span>";
-                                }
-                            }
-
-                            rates[boon.GetID()] = rate;
-                        }
-
-                        HTMLHelper.WriteBoonGenTableBody(sw, player, listToUse, rates);
-                    }
-                }
-                sw.Write("</tbody>");
-            }
-            sw.Write("</table>");
-        }
         /// <summary>
         /// Creates the player tab
         /// </summary>
@@ -1315,12 +1027,12 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabBoss" + pid + "\">");
                                 {
-                                    CreateDMGDistTable(sw, p, true, phaseIndex);
+                                    //CreatePlayerDMGDistTable(sw, p, true, phaseIndex);
                                 }
                                 sw.Write("</div>");
                                 sw.Write("<div class=\"tab-pane fade \" id=\"distTabAll" + pid + "\">");
                                 {
-                                    CreateDMGDistTable(sw, p, false, phaseIndex);
+                                    //CreatePlayerDMGDistTable(sw, p, false, phaseIndex);
                                 }
                                 sw.Write("</div>");
                             }
@@ -1343,12 +1055,12 @@ namespace LuckParser.Controllers
                                 {
                                     sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabBoss" + id + "\">");
                                     {
-                                        CreateDMGDistTable(sw, p, pair.Value, true, phaseIndex);
+                                        CreatePlayerMinionDMGDistTable(sw, p, pair.Value, true, phaseIndex);
                                     }
                                     sw.Write("</div>");
                                     sw.Write("<div class=\"tab-pane fade\" id=\"distTabAll" + id + "\">");
                                     {
-                                        CreateDMGDistTable(sw, p, pair.Value, false, phaseIndex);
+                                        CreatePlayerMinionDMGDistTable(sw, p, pair.Value, false, phaseIndex);
                                     }
                                     sw.Write("</div>");
                                 }
@@ -1379,7 +1091,7 @@ namespace LuckParser.Controllers
                         }
                         sw.Write("<div class=\"tab-pane fade \" id=\"incDmg" + pid + "\">");
                         {
-                            CreateDMGTakenDistTable(sw, p, phaseIndex);
+                            CreatePlayerDMGTakenDistTable(sw, p, phaseIndex);
                         }
                         sw.Write("</div>");
                     }
@@ -1665,70 +1377,70 @@ namespace LuckParser.Controllers
             sw.Write("</script>");
         }
 
-        private void CreateDMGDistTableBody(StreamWriter sw, List<CastLog> casting, List<DamageLog> damageLogs, int finalTotalDamage)
+        private List<double[]> CreateDMGDistTableBody(List<CastLog> casting, List<DamageLog> damageLogs, long finalTotalDamage,
+            Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
-            HashSet<long> usedIDs = new HashSet<long>();
+            List<double[]> list = new List<double[]>();
+            Dictionary<long, List<CastLog>> castLogsBySkill = casting.GroupBy(x => x.GetID()).ToDictionary(x => x.Key, x => x.ToList());
+            Dictionary<long, List<DamageLog>> damageLogsBySkill = damageLogs.GroupBy(x => x.GetID()).ToDictionary(x => x.Key, x => x.ToList());
+            Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.GetID());
             SkillData skillList = _log.GetSkillData();
-            HTMLHelper.WriteDamageDistTableCondi(sw, usedIDs, damageLogs, finalTotalDamage, _statistics.PresentConditions);
-            foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.GetID())).Select(x => x.GetID()).Distinct().ToList())
+            foreach (KeyValuePair<long,List<DamageLog>> entry in damageLogsBySkill)
             {
-                SkillItem skill = skillList.Get(id);
-                List<DamageLog> listToUse = damageLogs.Where(x => x.GetID() == id).ToList();
-                usedIDs.Add(id);
-                if (skill != null && listToUse.Count > 0)
+                int totaldamage = 0,mindamage = 0,maxdamage = 0,casts = 0,hits = 0,crit = 0,flank = 0,glance = 0,timeswasted = 0,timessaved = 0;
+                foreach (DamageLog dl in entry.Value)
                 {
-                    List<CastLog> clList = casting.Where(x => x.GetID() == id).ToList();
-                    int casts = clList.Count;
-                    double timeswasted = 0;
-                    double timessaved = 0;
-                    foreach (CastLog cl in clList)
-                    {
-                        if (cl.EndActivation() == ParseEnum.Activation.CancelCancel)
-                        {
-                            timeswasted += cl.GetActDur();
-                        }
-                        if (cl.EndActivation() == ParseEnum.Activation.CancelFire)
-                        {
-                            if (cl.GetActDur() < cl.GetExpDur())
-                            {
-                                timessaved += cl.GetExpDur() - cl.GetActDur();
-                            }
-                        }
-                    }
-                    HTMLHelper.WriteDamageDistTableSkill(sw, skill, _log.GetSkillData(), listToUse, finalTotalDamage, casts, timeswasted / 1000.0, -timessaved / 1000.0);
+                    int curdmg = dl.GetDamage();
+                    totaldamage += curdmg;
+                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                    hits++;
+                    if (dl.GetResult() == ParseEnum.Result.Crit) crit++;
+                    if (dl.GetResult() == ParseEnum.Result.Glance) glance++;
+                    if (dl.IsFlanking() == 1) flank++;
                 }
-            }
-            foreach (int id in casting.Where(x => !usedIDs.Contains(x.GetID())).Select(x => (int)x.GetID()).Distinct())
-            {
-                SkillItem skill = skillList.Get(id);
-                if (skill != null)
-                {
-                    List<CastLog> clList = casting.Where(x => x.GetID() == id).ToList();
-                    int casts = clList.Count;
-                    double timeswasted = 0;
-                    double timessaved = 0;
-                    foreach (CastLog cl in clList)
-                    {
-                        if (cl.EndActivation() == ParseEnum.Activation.CancelCancel)
-                        {
-                            timeswasted += cl.GetActDur();
-                        }
-                        if (cl.EndActivation() == ParseEnum.Activation.CancelFire)
-                        {
-                            if (cl.GetActDur() < cl.GetExpDur())
-                            {
-                                timessaved += cl.GetExpDur() - cl.GetActDur();
-                            }
-                        }
-                    }
-                    HTMLHelper.WriteDamageDistTableSkill(sw, skill, _log.GetSkillData(), new List<DamageLog>(), finalTotalDamage, casts, timeswasted / 1000.0, -timessaved / 1000.0);
-                }
-            }
 
+                bool isCondi = conditionsById.ContainsKey(entry.Key);
+                if (isCondi)
+                {
+                    Boon condi = conditionsById[entry.Key];
+                    if (!usedBoons.ContainsKey(condi.GetID())) usedBoons.Add(condi.GetID(), condi);
+                } else
+                {
+                    if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillList.GetOrDummy(entry.Key));
+                }
+
+                if (!isCondi && castLogsBySkill.TryGetValue(entry.Key, out List<CastLog> clList))
+                {
+
+                    casts = clList.Count;
+                    foreach (CastLog cl in clList)
+                    {
+                        if (cl.EndActivation() == ParseEnum.Activation.CancelCancel) timeswasted += cl.GetActDur();
+                        if (cl.EndActivation() == ParseEnum.Activation.CancelFire && cl.GetActDur() < cl.GetExpDur())
+                        {
+                            timessaved += cl.GetExpDur() - cl.GetActDur();
+                        }
+                    }
+                }
+
+                double[] skillData = {
+                    isCondi?1:0,
+                    entry.Key,
+                    finalTotalDamage > 0 ? Math.Round(100.0 * totaldamage / finalTotalDamage,3) : 0,
+                    totaldamage, mindamage, maxdamage,
+                    casts, hits, crit, flank, glance,
+                    timeswasted / 1000.0,
+                    -timessaved / 1000.0};
+                list.Add(skillData);
+            }
+            return list;
         }
 
-        private void _CreateDMGDistTable(Statistics.FinalDPS dps, StreamWriter sw, AbstractMasterPlayer p, bool toBoss, int phaseIndex)
+        private DmgDistributionDto _CreateDMGDistTable(Statistics.FinalDPS dps, AbstractMasterPlayer p, bool toBoss, int phaseIndex,
+            Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
+            DmgDistributionDto dto = new DmgDistributionDto();
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = p.GetCastLogs(_log, phase.GetStart(), phase.GetEnd());
             List<DamageLog> damageLogs;
@@ -1741,48 +1453,14 @@ namespace LuckParser.Controllers
                 damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.GetBossData().GetInstid() : 0, _log, phase.GetStart(), phase.GetEnd());
             }
             int totalDamage = toBoss ? dps.BossDamage : dps.AllDamage;
-            int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.GetDamage()) : 0;
-            if (totalDamage > 0)
-            {
-                string contribution = Math.Round(100.0 * finalTotalDamage / totalDamage,2).ToString();
-                sw.Write("<div>" + p.GetCharacter() + " did " + contribution + "% of its own total " + (toBoss ? (phase.GetRedirection().Count > 0 ? "adds " : "boss ") : "") + "dps</div>");
+            dto.totalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.GetDamage()) : 0;
+            if (totalDamage > 0){
+                dto.contribution = Math.Round(100.0 * dto.totalDamage / totalDamage,3);
             }
-            string tabid = p.GetInstid() + "_" + phaseIndex + (toBoss ? "_boss" : "");
-            sw.Write("<script>");
-            {
-                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
-                {
-                    sw.Write("var lazyTable = document.querySelector('#dist_table_" + tabid + "');" +
 
-                    "if ('IntersectionObserver' in window) {" +
-                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
-                            "entries.forEach(function(entry) {" +
-                                "if (entry.isIntersecting)" +
-                                "{" +
-                                    "$(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});" +
-                                    "lazyTableObserver.unobserve(entry.target);" +
-                                "}" +
-                            "});" +
-                        "});" +
-                    "lazyTableObserver.observe(lazyTable);" +
-                    "} else {" +
-                        "$(function () { $('#dist_table_" + tabid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});" +
-                    "}");
-                }
-                sw.Write("});");
-            }
-            sw.Write("</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"dist_table_" + tabid + "\">");
-            {
-                HTMLHelper.WriteDamageDistTableHeader(sw);
-                sw.Write("<tbody>");
-                {
-                    CreateDMGDistTableBody(sw, casting, damageLogs, finalTotalDamage);
-                }
-                sw.Write("</tbody>");
-                HTMLHelper.WriteDamageDistTableFoot(sw, finalTotalDamage);
-            }
-            sw.Write("</table>");
+            dto.data = CreateDMGDistTableBody(casting, damageLogs, dto.totalDamage, usedSkills, usedBoons);
+
+            return dto;
         }
 
         /// <summary>
@@ -1792,10 +1470,11 @@ namespace LuckParser.Controllers
         /// <param name="p"></param>
         /// <param name="toBoss"></param>
         /// <param name="phaseIndex"></param>
-        private void CreateDMGDistTable(StreamWriter sw, Player p, bool toBoss, int phaseIndex)
+        private DmgDistributionDto CreatePlayerDMGDistTable(Player p, bool toBoss, int phaseIndex,
+            Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
             Statistics.FinalDPS dps = _statistics.Dps[p][phaseIndex];
-            _CreateDMGDistTable(dps, sw, p, toBoss, phaseIndex);
+            return _CreateDMGDistTable(dps, p, toBoss, phaseIndex, usedSkills, usedBoons);
         }
 
         /// <summary>
@@ -1804,14 +1483,15 @@ namespace LuckParser.Controllers
         /// <param name="sw"></param>
         /// <param name="p"></param>
         /// <param name="phaseIndex"></param>
-        private void CreateDMGBossDistTable(StreamWriter sw, Boss p, int phaseIndex)
+        private DmgDistributionDto CreateBossDMGDistTable(Boss p, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
             Statistics.FinalDPS dps = _statistics.BossDps[phaseIndex];
-            _CreateDMGDistTable(dps, sw, p, false, phaseIndex);
+            return _CreateDMGDistTable(dps, p, false, phaseIndex, usedSkills, usedBoons);
         }
 
-        private void _CreateDMGDistTable(Statistics.FinalDPS dps, StreamWriter sw, AbstractMasterPlayer p, Minions minions, bool toBoss, int phaseIndex)
+        private List<Object> _CreateDMGDistTable(Statistics.FinalDPS dps, StreamWriter sw, AbstractMasterPlayer p, Minions minions, bool toBoss, int phaseIndex)
         {
+            List<Object> list = new List<object>();
             int totalDamage = toBoss ? dps.BossDamage : dps.AllDamage;
             string tabid = p.GetInstid() + "_" + phaseIndex + "_" + minions.GetInstid() + (toBoss ? "_boss" : "");
             PhaseData phase = _statistics.Phases[phaseIndex];
@@ -1860,12 +1540,13 @@ namespace LuckParser.Controllers
                 HTMLHelper.WriteDamageDistTableHeader(sw);
                 sw.Write("<tbody>");
                 {
-                    CreateDMGDistTableBody(sw, casting, damageLogs, finalTotalDamage);
+                    //CreateDMGDistTableBody(casting, damageLogs, finalTotalDamage);
                 }
                 sw.Write("</tbody>");
                 HTMLHelper.WriteDamageDistTableFoot(sw, finalTotalDamage);
             }
             sw.Write("</table>");
+            return list;
         }
 
         /// <summary>
@@ -1876,7 +1557,7 @@ namespace LuckParser.Controllers
         /// <param name="minions"></param>
         /// <param name="toBoss"></param>
         /// <param name="phaseIndex"></param>
-        private void CreateDMGDistTable(StreamWriter sw, Player p, Minions minions, bool toBoss, int phaseIndex)
+        private void CreatePlayerMinionDMGDistTable(StreamWriter sw, Player p, Minions minions, bool toBoss, int phaseIndex)
         {
             Statistics.FinalDPS dps = _statistics.Dps[p][phaseIndex];
 
@@ -1890,7 +1571,7 @@ namespace LuckParser.Controllers
         /// <param name="p"></param>
         /// <param name="minions"></param>
         /// <param name="phaseIndex"></param>
-        private void CreateDMGBossDistTable(StreamWriter sw, Boss p, Minions minions, int phaseIndex)
+        private void CreateBossMinionDMGDistTable(StreamWriter sw, Boss p, Minions minions, int phaseIndex)
         {
             Statistics.FinalDPS dps = _statistics.BossDps[phaseIndex];
             _CreateDMGDistTable(dps, sw, p, minions, false, phaseIndex);
@@ -1902,7 +1583,7 @@ namespace LuckParser.Controllers
         /// <param name="sw"></param>
         /// <param name="p"></param>
         /// <param name="phaseIndex"></param>
-        private void CreateDMGTakenDistTable(StreamWriter sw, Player p, int phaseIndex)
+        private void CreatePlayerDMGTakenDistTable(StreamWriter sw, Player p, int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, phase.GetStart(), phase.GetEnd());
@@ -2066,161 +1747,60 @@ namespace LuckParser.Controllers
         /// </summary>
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
-        private void CreateMechanicTable(StreamWriter sw, int phaseIndex)
+        private List<List<int[]>> CreateMechanicData(int phaseIndex)
         {
-            HashSet<Mechanic> presMech = _log.GetMechanicData().GetPresentPlayerMechs(phaseIndex);
+            List<List<int[]>> list = new List<List<int[]>>();
+            HashSet<Mechanic> presMech = _log.GetMechanicData().GetPresentPlayerMechs();
+            PhaseData phase = _statistics.Phases[phaseIndex];
+
+            foreach (Player p in _log.GetPlayerList())
+            {
+                List<int[]> playerData = new List<int[]>(presMech.Count);
+                foreach (Mechanic mech in presMech)
+                {
+                    long timeFilter = 0;
+                    int filterCount = 0;
+                    List<MechanicLog> mls = _log.GetMechanicData()[mech].Where(x => x.GetPlayer().GetInstid() == p.GetInstid() && phase.InInterval(x.GetTime())).ToList();
+                    int count = mls.Count;
+                    foreach (MechanicLog ml in mls)
+                    {
+                        if (mech.GetICD() != 0 && ml.GetTime() - timeFilter < mech.GetICD())//ICD check
+                        {
+                            filterCount++;
+                        }
+                        timeFilter = ml.GetTime();
+
+                    }
+                    int[] mechEntry = {count - filterCount,count};
+                    playerData.Add(mechEntry);
+                }
+                list.Add(playerData);
+            }
+            return list;
+        }
+
+        private List<List<List<int>>> CreateEnemyMechanicTable(int phaseIndex)
+        {
+            List<List<List<int>>> list = new List<List<List<int>>>();
             HashSet<Mechanic> presEnemyMech = _log.GetMechanicData().GetPresentEnemyMechs(phaseIndex);
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<AbstractMasterPlayer> enemyList = _log.GetMechanicData().GetEnemyList(phaseIndex);
-            if (presMech.Count > 0)
+
+            foreach (AbstractMasterPlayer p in enemyList)
             {
-                sw.Write("<script>");
+                List<List<int>> enemyData = new List<List<int>>();
+                foreach (Mechanic mech in presEnemyMech)
                 {
-                    sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
-                    {
-                        sw.Write("var lazyTable = document.querySelector('#mech_table" + phaseIndex + "');" +
-
-                        "if ('IntersectionObserver' in window) {" +
-                            "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
-                                "entries.forEach(function(entry) {" +
-                                    "if (entry.isIntersecting)" +
-                                    "{" +
-                                        "$(function () { $('#mech_table" + phaseIndex + "').DataTable({ \"order\": [[0, \"desc\"]]});});" +
-                                        "lazyTableObserver.unobserve(entry.target);" +
-                                    "}" +
-                                "});" +
-                            "});" +
-                        "lazyTableObserver.observe(lazyTable);" +
-                        "} else {" +
-                            "$(function () { $('#mech_table" + phaseIndex + "').DataTable({ \"order\": [[0, \"desc\"]]});});" +
-                        "}");
-                    }
-                    sw.Write("});");
+                    int count = _log.GetMechanicData()[mech].Count(x => x.GetPlayer().GetInstid() == p.GetInstid() && phase.InInterval(x.GetTime()));
+                    List<int> mechEntry = new List<int>(2);
+                    mechEntry.Add(count);
+                    mechEntry.Add(count);
                 }
-                sw.Write("</script>");
-                sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"mech_table" + phaseIndex + "\">");
-                {
-                    sw.Write("<thead>");
-                    {
-                        sw.Write("<tr>");
-                        {
-                            sw.Write("<th>Player</th>");
-                            foreach (Mechanic mech in presMech)
-                            {
-                                sw.Write("<th><span data-toggle=\"tooltip\" title=\""+ mech.GetDescription() +"\">" + mech.GetShortName() + "</span></th>");
-                            }
-                        }
-                        sw.Write("</tr>");
-                    }
-
-                    sw.Write("</thead>");
-                    sw.Write("<tbody>");
-                    {
-                        foreach (Player p in _log.GetPlayerList())
-                        {
-                            sw.Write("<tr>");
-                            {
-                                sw.Write("<td>" + p.GetCharacter() + "</td>");
-                                foreach (Mechanic mech in presMech)
-                                {
-                                    long timeFilter = 0;
-                                    int filterCount = 0;
-                                    List<MechanicLog> mls = _log.GetMechanicData()[mech].Where(x => x.GetPlayer().GetInstid() == p.GetInstid() && phase.InInterval(x.GetTime())).ToList();
-                                    int count = mls.Count;
-                                    foreach (MechanicLog ml in mls)
-                                    {
-                                        if (mech.GetICD() != 0 && ml.GetTime() - timeFilter < mech.GetICD())//ICD check
-                                        {
-                                            filterCount++;
-                                        }
-                                        timeFilter = ml.GetTime();
-
-                                    }
-
-                                    if (filterCount > 0)
-                                    {
-                                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
-                               + count + " times (multi hits)\">"+ (count - filterCount) + "</span>" + "</td>");
-                                       // sw.Write("<td>" + count + "</td>");
-                                    }
-                                    else
-                                    {
-                                        sw.Write("<td>" + count + "</td>");
-                                    }
-                                   
-                                }
-                            }
-                            sw.Write(" </tr>");
-                        }
-                    }
-                    sw.Write("</tbody>");
-                }
-                sw.Write("</table>");
             }
-            if (presEnemyMech.Count > 0)
-            {
-                sw.Write("<script>");
-                {
-                    sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
-                    {
-                        sw.Write("var lazyTable = document.querySelector('#mechEnemy_table" + phaseIndex + "');" +
 
-                        "if ('IntersectionObserver' in window) {" +
-                            "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
-                                "entries.forEach(function(entry) {" +
-                                    "if (entry.isIntersecting)" +
-                                    "{" +
-                                        "$(function () { $('#mechEnemy_table" + phaseIndex + "').DataTable({ \"order\": [[0, \"desc\"]]});});" +
-                                        "lazyTableObserver.unobserve(entry.target);" +
-                                    "}" +
-                                "});" +
-                            "});" +
-                        "lazyTableObserver.observe(lazyTable);" +
-                        "} else {" +
-                            "$(function () { $('#mechEnemy_table" + phaseIndex + "').DataTable({ \"order\": [[0, \"desc\"]]});});" +
-                        "}");
-                    }
-                    sw.Write("});");
-                }
-                sw.Write("</script>");
-                sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"mechEnemy_table" + phaseIndex + "\">");
-                {
-                    sw.Write("<thead>");
-                    {
-                        sw.Write("<tr>");
-                        {
-                            sw.Write("<th>Enemy</th>");
-                            foreach (Mechanic mech in presEnemyMech)
-                            {
-                                sw.Write("<th><span data-toggle=\"tooltip\" title=\"" + mech.GetDescription() + "\">" + mech.GetShortName() + "</span></th>");
-                            }
-                        }
-                        sw.Write("</tr>");
-                    }
-
-                    sw.Write("</thead>");
-                    sw.Write("<tbody>");
-                    {                     
-                        foreach (AbstractMasterPlayer p in enemyList)
-                        {
-                            sw.Write("<tr>");
-                            {
-                                sw.Write("<td>" + p.GetCharacter() + "</td>");
-                                foreach (Mechanic mech in presEnemyMech)
-                                {
-                                    int count = _log.GetMechanicData()[mech].Count(x => x.GetPlayer().GetInstid() == p.GetInstid() && phase.InInterval(x.GetTime()));
-                                    sw.Write("<td>" + count + "</td>");
-                                }
-                            }
-                            sw.Write(" </tr>");
-                        }
-
-                    }
-                    sw.Write("</tbody>");
-                }
-                sw.Write("</table>");
-            }
+            return list;
         }
+
         /// <summary>
         /// Creates the event list of the generation. Debug only
         /// </summary>
@@ -2676,13 +2256,13 @@ namespace LuckParser.Controllers
                     sw.Write("});");
                 }
                 sw.Write("</script> ");
-                CreateDMGBossDistTable(sw, _log.GetBoss(), phaseIndex);
+                //CreateBossDMGDistTable(_log.GetBoss(), phaseIndex);
                 sw.Write("</div>");
                 foreach (KeyValuePair<string, Minions> pair in _log.GetBoss().GetMinions(_log))
                 {
                     sw.Write("<div class=\"tab-pane fade \" id=\"minion" + pid + "_" + pair.Value.GetInstid() + "\">");
                     {
-                        CreateDMGBossDistTable(sw, _log.GetBoss(), pair.Value, phaseIndex);
+                        CreateBossMinionDMGDistTable(sw, _log.GetBoss(), pair.Value, phaseIndex);
                     }
                     sw.Write("</div>");
                 }
@@ -2817,6 +2397,8 @@ namespace LuckParser.Controllers
             string html = Properties.Resources.template_html;
             html = html.Replace("${bootstrapTheme}", !_settings.LightTheme ? "slate" : "cosmo");
             html = html.Replace("${logDataJson}", BuildLogData());
+
+            html = html.Replace("<!--${playerData}-->", BuildPlayerData());
 
             sw.Write(html);
             return;
@@ -3174,21 +2756,21 @@ namespace LuckParser.Controllers
                                                         {
                                                             sw.Write("<p> Boons generated by a character for their groupmates</p>");
                                                             // boonGenGroup
-                                                            CreateGenGroupTable(sw, _statistics.PresentBoons, "boongengroup_table", i);
+                                                            //CreateGenGroupTable(sw, _statistics.PresentBoons, "boongengroup_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenOGroup" + i + "\">");
                                                         {
                                                             sw.Write("<p> Boons generated by a character for any subgroup that is not their own</p>");
                                                             // boonGenOGroup
-                                                            CreateGenOGroupTable(sw, _statistics.PresentBoons, "boongenogroup_table", i);
+                                                            //CreateGenOGroupTable(sw, _statistics.PresentBoons, "boongenogroup_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"boonsGenSquad" + i + "\">");
                                                         {
                                                             sw.Write("<p> Boons generated by a character for their squadmates</p>");
                                                             //  boonGenSquad
-                                                            CreateGenSquadTable(sw, _statistics.PresentBoons, "boongensquad_table", i);
+                                                            //CreateGenSquadTable(sw, _statistics.PresentBoons, "boongensquad_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                     }
@@ -3222,19 +2804,19 @@ namespace LuckParser.Controllers
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenGroup" + i + "\">");
                                                         {
                                                             sw.Write("<p> Offensive Buffs generated by a character for their groupmates</p>");
-                                                            CreateGenGroupTable(sw, _statistics.PresentOffbuffs, "offensivegengroup_table", i);
+                                                            //CreateGenGroupTable(sw, _statistics.PresentOffbuffs, "offensivegengroup_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenOGroup" + i + "\">");
                                                         {
                                                             sw.Write("<p> Offensive Buffs generated by a character for any subgroup that is not their own</p>");
-                                                            CreateGenOGroupTable(sw, _statistics.PresentOffbuffs, "offensivegenogroup_table", i);
+                                                            //CreateGenOGroupTable(sw, _statistics.PresentOffbuffs, "offensivegenogroup_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"offensiveGenSquad" + i + "\">");
                                                         {
                                                             sw.Write("<p> Offensive Buffs generated by a character for their squadmates</p>");
-                                                            CreateGenSquadTable(sw, _statistics.PresentOffbuffs, "offensivegensquad_table", i);
+                                                            //CreateGenSquadTable(sw, _statistics.PresentOffbuffs, "offensivegensquad_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                     }
@@ -3268,19 +2850,19 @@ namespace LuckParser.Controllers
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenGroup" + i + "\">");
                                                         {
                                                             sw.Write("<p> Defensive Buffs generated by a character for their groupmates</p>");
-                                                            CreateGenGroupTable(sw, _statistics.PresentDefbuffs, "defensivegengroup_table", i);
+                                                            //CreateGenGroupTable(sw, _statistics.PresentDefbuffs, "defensivegengroup_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenOGroup" + i + "\">");
                                                         {
                                                             sw.Write("<p> Defensive Buffs generated by a character for any subgroup that is not their own</p>");
-                                                            CreateGenOGroupTable(sw, _statistics.PresentDefbuffs, "defensivegenogroup_table", i);
+                                                            //CreateGenOGroupTable(sw, _statistics.PresentDefbuffs, "defensivegenogroup_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                         sw.Write("<div class=\"tab-pane fade\" id=\"defensiveGenSquad" + i + "\">");
                                                         {
                                                             sw.Write("<p> Defensive Buffs generated by a character for their squadmates</p>");
-                                                            CreateGenSquadTable(sw, _statistics.PresentDefbuffs, "defensivegensquad_table", i);
+                                                            //CreateGenSquadTable(sw, _statistics.PresentDefbuffs, "defensivegensquad_table", i);
                                                         }
                                                         sw.Write("</div>");
                                                     }
@@ -3295,7 +2877,7 @@ namespace LuckParser.Controllers
                                         sw.Write("<div class=\"tab-pane fade\" id=\"mechTable" + i + "\">");
                                         {
                                             sw.Write("<p>Mechanics</p>");
-                                            CreateMechanicTable(sw, i);
+                                            //CreateMechanicTable(sw, i);
                                         }
                                         sw.Write("</div>");
                                         //boss summary
@@ -3377,29 +2959,31 @@ namespace LuckParser.Controllers
             {
                 PhaseData phaseData = _statistics.Phases[i];
                 PhaseDto phaseDto = new PhaseDto(phaseData.GetName(), phaseData.GetDuration("s"));
-                phaseDto.dpsStats = CreateDPSTable(i);
-                phaseDto.dmgStatsBoss = CreateDMGStatsBossTable(i);
-                phaseDto.dmgStats = CreateDMGStatsTable(i);
-                phaseDto.defStats = CreateDefTable(i);
-                phaseDto.healStats = CreateSupTable(i);
-                phaseDto.boonStats = CreateUptimeTable(_statistics.PresentBoons, i);
-                phaseDto.offBuffStats = CreateUptimeTable(_statistics.PresentOffbuffs, i);
-                phaseDto.defBuffStats = CreateUptimeTable(_statistics.PresentDefbuffs, i);
+                phaseDto.dpsStats = CreateDPSData(i);
+                phaseDto.dmgStatsBoss = CreateDMGStatsBossData(i);
+                phaseDto.dmgStats = CreateDMGStatsData(i);
+                phaseDto.defStats = CreateDefData(i);
+                phaseDto.healStats = CreateSupData(i);
+                phaseDto.boonStats = CreateUptimeData(_statistics.PresentBoons, i);
+                phaseDto.offBuffStats = CreateUptimeData(_statistics.PresentOffbuffs, i);
+                phaseDto.defBuffStats = CreateUptimeData(_statistics.PresentDefbuffs, i);
 
-                phaseDto.boonGenSelfStats = CreateGenTable(_statistics.PresentBoons, i, "self");
-                phaseDto.boonGenGroupStats = CreateGenTable(_statistics.PresentBoons, i, "group");
-                phaseDto.boonGenOGroupStats = CreateGenTable(_statistics.PresentBoons, i, "off");
-                phaseDto.boonGenSquadStats = CreateGenTable(_statistics.PresentBoons, i, "squad");
+                phaseDto.boonGenSelfStats = CreateGenData(_statistics.PresentBoons, i, "self");
+                phaseDto.boonGenGroupStats = CreateGenData(_statistics.PresentBoons, i, "group");
+                phaseDto.boonGenOGroupStats = CreateGenData(_statistics.PresentBoons, i, "off");
+                phaseDto.boonGenSquadStats = CreateGenData(_statistics.PresentBoons, i, "squad");
 
-                phaseDto.offBuffGenSelfStats = CreateGenTable(_statistics.PresentOffbuffs, i, "self");
-                phaseDto.offBuffGenGroupStats = CreateGenTable(_statistics.PresentOffbuffs, i, "group");
-                phaseDto.offBuffGenOGroupStats = CreateGenTable(_statistics.PresentOffbuffs, i, "off");
-                phaseDto.offBuffGenSquadStats = CreateGenTable(_statistics.PresentOffbuffs, i, "squad");
+                phaseDto.offBuffGenSelfStats = CreateGenData(_statistics.PresentOffbuffs, i, "self");
+                phaseDto.offBuffGenGroupStats = CreateGenData(_statistics.PresentOffbuffs, i, "group");
+                phaseDto.offBuffGenOGroupStats = CreateGenData(_statistics.PresentOffbuffs, i, "off");
+                phaseDto.offBuffGenSquadStats = CreateGenData(_statistics.PresentOffbuffs, i, "squad");
 
-                phaseDto.defBuffGenSelfStats = CreateGenTable(_statistics.PresentDefbuffs, i, "self");
-                phaseDto.defBuffGenGroupStats = CreateGenTable(_statistics.PresentDefbuffs, i, "group");
-                phaseDto.defBuffGenOGroupStats = CreateGenTable(_statistics.PresentDefbuffs, i, "off");
-                phaseDto.defBuffGenSquadStats = CreateGenTable(_statistics.PresentDefbuffs, i, "squad");
+                phaseDto.defBuffGenSelfStats = CreateGenData(_statistics.PresentDefbuffs, i, "self");
+                phaseDto.defBuffGenGroupStats = CreateGenData(_statistics.PresentDefbuffs, i, "group");
+                phaseDto.defBuffGenOGroupStats = CreateGenData(_statistics.PresentDefbuffs, i, "off");
+                phaseDto.defBuffGenSquadStats = CreateGenData(_statistics.PresentDefbuffs, i, "squad");
+
+                phaseDto.mechanicStats = CreateMechanicData(i);
 
                 data.phases.Add(phaseDto);
             }
@@ -3407,11 +2991,63 @@ namespace LuckParser.Controllers
             data.boons = AssembleBoons(_statistics.PresentBoons);
             data.offBuffs = AssembleBoons(_statistics.PresentOffbuffs);
             data.defBuffs = AssembleBoons(_statistics.PresentDefbuffs);
+            data.mechanics = AssembleMechanics(_log.GetMechanicData().GetPresentPlayerMechs());
 
             return ToJson(data, typeof(LogDataDto));
         }
-  
-        private List<BoonDto> AssembleBoons(List<Boon> boons)
+
+        private List<MechanicDto> AssembleMechanics(HashSet<Mechanic> mechanics)
+        {
+            List<MechanicDto> dtos = new List<MechanicDto>(mechanics.Count);
+            foreach(Mechanic mechanic in mechanics)
+            {
+                MechanicDto dto = new MechanicDto();
+                dto.name = mechanic.GetShortName();
+                dto.description = mechanic.GetDescription();
+                dto.color = mechanic.GetPlotly();
+                dtos.Add(dto);
+            }
+            return dtos;
+        }
+
+        private string BuildPlayerData()
+        {
+            Dictionary<long, SkillItem> usedSkills = new Dictionary<long, SkillItem>();
+            Dictionary<long, Boon> usedBoons = new Dictionary<long, Boon>();
+            String scripts = "";
+            for (var i = 0; i < _log.GetPlayerList().Count; i++) {
+                Player player = _log.GetPlayerList()[i];
+                String playerScript = "data.players[" + i + "].details = " + ToJson(BuildPlayerData(player, usedSkills, usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
+                scripts += playerScript;
+            }
+            string skillsScript = "var usedSkills = " + ToJson(AssembleSkills(usedSkills.Values), typeof(ICollection<SkillDto>)) + ";" +
+                "data.skillMap = {};" +
+                "$.each(usedSkills, function(i, skill) {" +
+                "data.skillMap['s'+skill.id]=skill;" +
+                "});";
+            string boonsScript = "var usedBoons = " + ToJson(AssembleBoons(usedBoons.Values), typeof(ICollection<BoonDto>)) + ";" +
+                "data.boonMap = {};" +
+                "$.each(usedBoons, function(i, boon) {" +
+                "data.boonMap['b'+boon.id]=boon;" +
+                "});";
+            return "<script>\r\n"+ skillsScript+"\r\n"+boonsScript+"\r\n"+scripts + "\r\n</script>";
+        }
+
+        private PlayerDetailsDto BuildPlayerData(Player player, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
+        {
+            PlayerDetailsDto dto = new PlayerDetailsDto();
+            dto.dmgDistributions = new List<DmgDistributionDto>();
+            dto.dmgDistributionsBoss = new List<DmgDistributionDto>();
+            for (int i = 0; i < _statistics.Phases.Count; i++)
+            {
+                dto.dmgDistributions.Add(CreatePlayerDMGDistTable(player, false, i, usedSkills, usedBoons));
+                dto.dmgDistributionsBoss.Add(CreatePlayerDMGDistTable(player, true, i, usedSkills, usedBoons));
+            }
+
+            return dto;
+        }
+
+        private List<BoonDto> AssembleBoons(ICollection<Boon> boons)
         {
             List<BoonDto> dtos = new List<BoonDto>();
             foreach (Boon boon in boons)
@@ -3430,9 +3066,20 @@ namespace LuckParser.Controllers
                     boon.GetBoonType() == Boon.BoonType.Intensity);
         }
 
+        private List<SkillDto> AssembleSkills(ICollection<SkillItem> skills)
+        {
+            List<SkillDto> dtos = new List<SkillDto>();
+            foreach (SkillItem skill in skills)
+            {
+                SkillDto dto = new SkillDto(skill.GetID(), skill.GetName(), skill.GetGW2APISkill()?.icon);
+                dtos.Add(dto);
+            }
+            return dtos;
+        }
+ 
         private string ToJson(Object value, Type type)
         {
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(LogDataDto));
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(type);
             MemoryStream memoryStream = new MemoryStream();
             ser.WriteObject(memoryStream, value);
             return Encoding.UTF8.GetString(memoryStream.ToArray());
@@ -3463,7 +3110,9 @@ namespace LuckParser.Controllers
             javascript += buildTemplateJS("tmplSupTable", Properties.Resources.tmplSupTable);
             javascript += buildTemplateJS("tmplDefTable", Properties.Resources.tmplDefTable);
 
-            javascript += buildTemplateJS("tmplDmgTable",Properties.Resources.tmplDmgTable);
+            javascript += buildTemplateJS("tmplDmgTable", Properties.Resources.tmplDmgTable);
+            javascript += buildTemplateJS("tmplDmgDistTable", Properties.Resources.tmplDmgDistTable);
+            javascript += buildTemplateJS("tmplMechanicTable", Properties.Resources.tmplMechanicTable);
 
             return javascript;
         }

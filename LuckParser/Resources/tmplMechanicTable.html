@@ -1,0 +1,28 @@
+<table class="table table-sm table-striped table-hover" cellspacing="0">
+	<thead>
+		<tr>
+			<th width="30px">Sub</th>
+			<th width="30px"></th>
+			<th>Player</th>
+			{{for mechanics}}
+				<th title="{{:description}}">{{:name}}</th>
+			{{/for}}
+		</tr>
+	</thead>
+	<tbody>
+		{{for rows ~mechanics=mechanics}}
+		<tr>
+			<td>{{:player.group}}</td>
+			<td title="{{:player.profession}}"><img src="{{:player.icon}}" alt="{{:player.profession}}" height="18" width="18"><span style="display:none">{{:player.profession}}</span></td>
+			<td>{{:player.name}}</td>
+			{{for ~mechanics ~data=data}}
+			{{if ~data[#getIndex()][0]}}
+			<td{{if ~data[#getIndex()][0] != ~data[#getIndex()][1]}}title="{{:~data[#getIndex()][1]}} times (multi hits)"{{/if}}>{{:~data[#getIndex()][0]}}</td>
+			{{else}}
+			<td>-</td>
+			{{/if}}
+			{{/for}}
+		</tr>
+		{{/for}}
+	</tbody>
+</table>

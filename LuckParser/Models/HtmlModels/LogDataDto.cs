@@ -22,7 +22,10 @@ namespace LuckParser.Models.HtmlModels
         public List<BoonDto> offBuffs;
         [DataMember]
         public List<BoonDto> defBuffs;
-
+        [DataMember]
+        public List<MechanicDto> mechanics;
+        [DataMember]
+        public List<SkillDto> skills;
         
     }
 }

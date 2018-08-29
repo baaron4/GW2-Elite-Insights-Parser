@@ -10,26 +10,16 @@ namespace LuckParser.Models.HtmlModels
     [DataContract]
     public class PhaseDto
     {
-        [DataMember]
-        public string name;
-        [DataMember]
-        public long duration;
-        [DataMember]
-        public List<List<Object>> dpsStats;
-        [DataMember]
-        public List<List<Object>> dmgStatsBoss;
-        [DataMember]
-        public List<List<Object>> dmgStats;
-        [DataMember]
-        public List<List<Object>> defStats;
-        [DataMember]
-        public List<List<Object>> healStats;
-        [DataMember]
-        public List<BoonData> boonStats;
-        [DataMember]
-        public List<BoonData> offBuffStats;
-        [DataMember]
-        public List<BoonData> defBuffStats;
+        [DataMember] public string name;
+        [DataMember] public long duration;
+        [DataMember] public List<List<Object>> dpsStats;
+        [DataMember] public List<List<Object>> dmgStatsBoss;
+        [DataMember] public List<List<Object>> dmgStats;
+        [DataMember] public List<List<Object>> defStats;
+        [DataMember] public List<List<Object>> healStats;
+        [DataMember] public List<BoonData> boonStats;
+        [DataMember] public List<BoonData> offBuffStats;
+        [DataMember] public List<BoonData> defBuffStats;
 
         [DataMember] public List<BoonData> boonGenSelfStats;
         [DataMember] public List<BoonData> boonGenGroupStats;
@@ -43,6 +33,8 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public List<BoonData> defBuffGenGroupStats;
         [DataMember] public List<BoonData> defBuffGenOGroupStats;
         [DataMember] public List<BoonData> defBuffGenSquadStats;
+
+        [DataMember] public List<List<int[]>> mechanicStats;
 
         public PhaseDto() { }
 

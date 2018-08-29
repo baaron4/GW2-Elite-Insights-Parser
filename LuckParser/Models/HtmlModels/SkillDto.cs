@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 namespace LuckParser.Models.HtmlModels
 {
     [DataContract]
-    public class BoonDto
+    public class SkillDto
     {
         [DataMember(EmitDefaultValue = false)]
         public long id;
@@ -16,15 +16,12 @@ namespace LuckParser.Models.HtmlModels
         public string name;
         [DataMember(EmitDefaultValue = false)]
         public string icon;
-        [DataMember]
-        public bool stacking;
 
-        public BoonDto(long id, string name, string icon, bool stacking)
+        public SkillDto(long id, string name, string icon)
         {
             this.id = id;
             this.name = name;
             this.icon = icon;
-            this.stacking = stacking;
         }
     }
 }

@@ -117,8 +117,8 @@ namespace LuckParser.Properties {
         ///&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css&quot;  crossorigin=&quot;anonymous&quot;&gt;
         ///&lt;link href=&quot;https://fonts.googleapis.com/css?family=Open+Sans&quot; rel=&quot;stylesheet&quot;&gt;
         ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css&quot;&gt;
-        ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;./flomix-style.css&quot;&gt;
-        ///&lt;script src=&quot;https://code.jque [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;./flomix-ei.css&quot;&gt;
+        ///&lt;script src=&quot;https://code.jquery. [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string template_html {
             get {
@@ -155,17 +155,46 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;display table table-striped table-hover compact&quot;  cellspacing=&quot;0&quot; width=&quot;100%&quot; id=&quot;dist_table_725_0&quot;&gt;
+        ///	&lt;thead&gt;
+        ///		&lt;tr&gt;
+        ///			&lt;th&gt;Skill&lt;/th&gt;
+        ///			&lt;th&gt;&lt;/th&gt;
+        ///			&lt;th&gt;Damage&lt;/th&gt;
+        ///			&lt;th&gt;Min&lt;/th&gt;
+        ///			&lt;th&gt;Avg&lt;/th&gt;
+        ///			&lt;th&gt;Max&lt;/th&gt;
+        ///			&lt;th&gt;Casts&lt;/th&gt;
+        ///			&lt;th&gt;Hits&lt;/th&gt;
+        ///			&lt;th&gt;Hits per Cast&lt;/th&gt;
+        ///			&lt;th&gt;Crit&lt;/th&gt;
+        ///			&lt;th&gt;Flank&lt;/th&gt;
+        ///			&lt;th&gt;Glance&lt;/th&gt;
+        ///			&lt;th&gt;Wasted&lt;/th&gt;
+        ///			&lt;th&gt;Saved&lt;/th&gt;
+        ///		&lt;/tr&gt;
+        ///	&lt;/thead&gt;
+        ///	&lt;tbody&gt;
+        ///		{{for rows}}
+        ///		&lt;tr class=&quot;{{if skill.condi}}condi{{else}}power{{/if}}&quot;&gt;
+        ///			&lt;td  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string tmplDmgDistTable {
+            get {
+                return ResourceManager.GetString("tmplDmgDistTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
-        ///  &lt;thead&gt;
-        ///    &lt;tr&gt;
-        ///      &lt;th&gt;Sub&lt;/th&gt;
-        ///      &lt;th&gt;&lt;/th&gt;
-        ///      &lt;th&gt;Name&lt;/th&gt;
-        ///      &lt;th&gt;
-        ///        &lt;img src=&quot;https://wiki.guildwars2.com/images/9/95/Critical_Chance.png&quot; alt=&quot;Crits&quot; title=&quot;Percent time hits critical&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;
-        ///      &lt;/th&gt;
-        ///      &lt;th&gt;
-        ///        &lt;img src=&quot;https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png&quot; alt=&quot;Scholar&quot; title=&quot;Percent time hits while above 90% health&quot; hei [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///	&lt;thead&gt;
+        ///		&lt;tr&gt;
+        ///			&lt;th&gt;Sub&lt;/th&gt;
+        ///			&lt;th&gt;&lt;/th&gt;
+        ///			&lt;th&gt;Name&lt;/th&gt;
+        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/9/95/Critical_Chance.png&quot; alt=&quot;Crits&quot; title=&quot;Percent time hits critical&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;&lt;/th&gt;
+        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png&quot; alt=&quot;Scholar&quot; title=&quot;Percent time hits while above 90% health&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;&lt;/th&gt;
+        ///			&lt;th&gt;&lt;img src=&quot;ht [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string tmplDmgTable {
             get {
@@ -181,6 +210,30 @@ namespace LuckParser.Properties {
         internal static string tmplDpsTable {
             get {
                 return ResourceManager.GetString("tmplDpsTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot;&gt;
+        ///	&lt;thead&gt;
+        ///		&lt;tr&gt;
+        ///			&lt;th width=&quot;30px&quot;&gt;Sub&lt;/th&gt;
+        ///			&lt;th width=&quot;30px&quot;&gt;&lt;/th&gt;
+        ///			&lt;th&gt;Player&lt;/th&gt;
+        ///			{{for mechanics}}
+        ///				&lt;th title=&quot;{{:description}}&quot;&gt;{{:name}}&lt;/th&gt;
+        ///			{{/for}}
+        ///		&lt;/tr&gt;
+        ///	&lt;/thead&gt;
+        ///	&lt;tbody&gt;
+        ///		{{for rows ~mechanics=mechanics}}
+        ///		&lt;tr&gt;
+        ///			&lt;td&gt;{{:player.group}}&lt;/td&gt;
+        ///			&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;&lt;span style=&quot;display:none&quot;&gt;{{:playe [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string tmplMechanicTable {
+            get {
+                return ResourceManager.GetString("tmplMechanicTable", resourceCulture);
             }
         }
         

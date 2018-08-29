@@ -1,0 +1,59 @@
+<table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%" id="dist_table_725_0">
+	<thead>
+		<tr>
+			<th>Skill</th>
+			<th></th>
+			<th>Damage</th>
+			<th>Min</th>
+			<th>Avg</th>
+			<th>Max</th>
+			<th>Casts</th>
+			<th>Hits</th>
+			<th>Hits per Cast</th>
+			<th>Crit</th>
+			<th>Flank</th>
+			<th>Glance</th>
+			<th>Wasted</th>
+			<th>Saved</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{for rows}}
+		<tr class="{{if skill.condi}}condi{{else}}power{{/if}}">
+			<td class="text-left" title="{{:skill.id}}">{{if skill.icon}}<img src="{{:skill.icon}}" height="18" width="18"> {{/if}}{{:skill.name}}</td>
+			<td>{{dec:data[2]}}%</td>
+			<td>{{:data[3]}}</td>
+			<td>{{:data[4]}}</td>
+			<td>{{if data[7]}}{{round:data[3]/data[7]}}{{else}}0{{/if}}</td>
+			<td>{{:data[5]}}</td>
+			<td>{{if !skill.condi}}{{:data[6]}}{{/if}}</td>
+			<td>{{:data[7]}}</td>
+			<td>{{if !skill.condi && data[6]}}{{dec:data[7]/data[6]}}{{/if}}</td>
+
+			<td>{{if !skill.condi}}{{round:data[8]*100/data[7]}}%{{/if}}</td>
+			<td>{{if !skill.condi}}{{round:data[9]*100/data[7]}}%{{/if}}</td>
+			<td>{{if !skill.condi}}{{round:data[10]*100/data[7]}}%{{/if}}</td>
+			<td>{{if data[11]}}{{:data[11]}}s{{/if}}</td>
+			<td>{{if data[12]}}{{:data[12]}}s{{/if}}</td>
+		</tr>
+		{{/for}}
+	</tbody>
+	<tfoot class="text-dark">
+			<tr>
+				<td>Total</td>
+				<td></td>
+				<td>{{:totalDamage}}</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+	</tfoot>
+</table>
