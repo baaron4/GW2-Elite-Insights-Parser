@@ -235,24 +235,7 @@ namespace LuckParser.Controllers
         {
             var dps = new JsonLog.JsonDps(_statistics.Phases.Count);
 
-            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
-            {
-                dps.AllDps[phaseIndex] = statDps[phaseIndex].AllDps;
-                dps.AllDamage[phaseIndex] = statDps[phaseIndex].AllDamage;
-                dps.AllPowerDps[phaseIndex] = statDps[phaseIndex].AllPowerDps;
-                dps.AllCondiDamage[phaseIndex] = statDps[phaseIndex].AllCondiDamage;
-                dps.AllCondiDps[phaseIndex] = statDps[phaseIndex].AllCondiDps;
-                dps.AllPowerDamage[phaseIndex] = statDps[phaseIndex].AllPowerDamage;
-                dps.BossCondiDamage[phaseIndex] = statDps[phaseIndex].BossCondiDamage;
-                dps.BossPowerDamage[phaseIndex] = statDps[phaseIndex].BossPowerDamage;
-                dps.BossCondiDps[phaseIndex] = statDps[phaseIndex].BossCondiDps;
-                dps.BossPowerDps[phaseIndex] = statDps[phaseIndex].BossPowerDps;
-                dps.BossDamage[phaseIndex] = statDps[phaseIndex].BossDamage;
-                dps.BossDps[phaseIndex] = statDps[phaseIndex].BossDps;
-                dps.PlayerPowerDamage[phaseIndex] = statDps[phaseIndex].PlayerPowerDamage;
-                dps.PlayerBossPowerDamage[phaseIndex] = statDps[phaseIndex].PlayerBossPowerDamage;
-            }
-
+            MoveArrayLevel(dps, _statistics.Phases.Count, statDps);
             RemoveZeroArrays(dps);
 
             return dps;
@@ -325,14 +308,7 @@ namespace LuckParser.Controllers
         {
             var support = new JsonLog.JsonSupport(_statistics.Phases.Count);
 
-            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
-            {
-                support.Resurrects[phaseIndex] = statSupport[phaseIndex].Resurrects;
-                support.ResurrectTime[phaseIndex] = statSupport[phaseIndex].ResurrectTime;
-                support.CondiCleanse[phaseIndex] = statSupport[phaseIndex].CondiCleanse;
-                support.CondiCleanseTime[phaseIndex] = statSupport[phaseIndex].CondiCleanseTime;
-            }
-
+            MoveArrayLevel(support, _statistics.Phases.Count, statSupport);
             RemoveZeroArrays(support);
 
             return support;
@@ -342,16 +318,7 @@ namespace LuckParser.Controllers
         {
             var defense = new JsonLog.JsonDefenses(_statistics.Phases.Count);
 
-            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
-            {
-                defense.EvadedCount[phaseIndex] = statDefense[phaseIndex].EvadedCount;
-                defense.InvulnedCount[phaseIndex] = statDefense[phaseIndex].InvulnedCount;
-                defense.DamageTaken[phaseIndex] = statDefense[phaseIndex].DamageTaken;
-                defense.DamageInvulned[phaseIndex] = statDefense[phaseIndex].DamageInvulned;
-                defense.DamageBarrier[phaseIndex] = statDefense[phaseIndex].DamageBarrier;
-                defense.BlockedCount[phaseIndex] = statDefense[phaseIndex].BlockedCount;
-            }
-
+            MoveArrayLevel(defense, _statistics.Phases.Count, statDefense);
             RemoveZeroArrays(defense);
 
             return defense;
@@ -361,47 +328,7 @@ namespace LuckParser.Controllers
         {
             var stats = new JsonLog.JsonStats(_statistics.Phases.Count);
 
-            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
-            {
-                stats.PowerLoopCount[phaseIndex] = statStat[phaseIndex].PowerLoopCount;
-                stats.CritablePowerLoopCount[phaseIndex] = statStat[phaseIndex].CritablePowerLoopCount;
-                stats.CriticalRate[phaseIndex] = statStat[phaseIndex].CriticalRate;
-                stats.CriticalDmg[phaseIndex] = statStat[phaseIndex].CriticalDmg;
-                stats.ScholarRate[phaseIndex] = statStat[phaseIndex].ScholarRate;
-                stats.ScholarDmg[phaseIndex] = statStat[phaseIndex].ScholarDmg;
-                stats.MovingRate[phaseIndex] = statStat[phaseIndex].MovingRate;
-                stats.MovingDamage[phaseIndex] = statStat[phaseIndex].MovingDamage;
-                stats.FlankingRate[phaseIndex] = statStat[phaseIndex].FlankingRate;
-                stats.GlanceRate[phaseIndex] = statStat[phaseIndex].GlanceRate;
-                stats.Missed[phaseIndex] = statStat[phaseIndex].Missed;
-                stats.Interrupts[phaseIndex] = statStat[phaseIndex].Interrupts;
-                stats.Invulned[phaseIndex] = statStat[phaseIndex].Invulned;
-                stats.Wasted[phaseIndex] = statStat[phaseIndex].Wasted;
-                stats.TimeWasted[phaseIndex] = statStat[phaseIndex].TimeWasted;
-                stats.Saved[phaseIndex] = statStat[phaseIndex].Saved;
-                stats.TimeSaved[phaseIndex] = statStat[phaseIndex].TimeSaved;
-                stats.AvgBoons[phaseIndex] = statStat[phaseIndex].AvgBoons;
-                stats.StackDist[phaseIndex] = statStat[phaseIndex].StackDist;
-                stats.PowerLoopCountBoss[phaseIndex] = statStat[phaseIndex].PowerLoopCountBoss;
-                stats.CritablePowerLoopCountBoss[phaseIndex] = statStat[phaseIndex].CritablePowerLoopCountBoss;
-                stats.CriticalRateBoss[phaseIndex] = statStat[phaseIndex].CriticalRateBoss;
-                stats.CriticalDmgBoss[phaseIndex] = statStat[phaseIndex].CriticalDmgBoss;
-                stats.ScholarRateBoss[phaseIndex] = statStat[phaseIndex].ScholarRateBoss;
-                stats.ScholarDmgBoss[phaseIndex] = statStat[phaseIndex].ScholarDmgBoss;
-                stats.MovingRateBoss[phaseIndex] = statStat[phaseIndex].MovingRateBoss;
-                stats.MovingDamageBoss[phaseIndex] = statStat[phaseIndex].MovingDamageBoss;
-                stats.FlankingRateBoss[phaseIndex] = statStat[phaseIndex].FlankingRateBoss;
-                stats.GlanceRateBoss[phaseIndex] = statStat[phaseIndex].GlanceRateBoss;
-                stats.MissedBoss[phaseIndex] = statStat[phaseIndex].MissedBoss;
-                stats.InterruptsBoss[phaseIndex] = statStat[phaseIndex].InterruptsBoss;
-                stats.InvulnedBoss[phaseIndex] = statStat[phaseIndex].InvulnedBoss;
-                stats.SwapCount[phaseIndex] = statStat[phaseIndex].SwapCount;
-                stats.DownCount[phaseIndex] = statStat[phaseIndex].DownCount;
-                stats.DodgeCount[phaseIndex] = statStat[phaseIndex].DodgeCount;
-                stats.Died[phaseIndex] = statStat[phaseIndex].Died;
-                stats.Dcd[phaseIndex] = statStat[phaseIndex].Dcd;
-            }
-
+            MoveArrayLevel(stats, _statistics.Phases.Count, statStat);
             RemoveZeroArrays(stats);
 
             return stats;
@@ -416,6 +343,20 @@ namespace LuckParser.Controllers
                 if (!field.FieldType.IsArray) continue;
                 var entry = ((IEnumerable)field.GetValue(inObject)).Cast<object>().ToArray();
                 if (!entry.Any(e => Convert.ToDouble(e) > 0)) field.SetValue(inObject, null);
+            }
+        }
+
+        private void MoveArrayLevel(object lowerObject, int count, object[] upperObject)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                FieldInfo[] fields = lowerObject.GetType().GetFields();
+                foreach (var field in fields)
+                {
+                    if (!field.FieldType.IsArray) continue;
+                    var entry = (Array) field.GetValue(lowerObject);
+                    entry.SetValue(upperObject[i].GetType().GetField(field.Name).GetValue(upperObject[i]), i);
+                }
             }
         }
     }
