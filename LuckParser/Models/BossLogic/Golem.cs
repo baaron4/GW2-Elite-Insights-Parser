@@ -30,10 +30,10 @@ namespace LuckParser.Models
                     bossData.SetFirstAware(enterCombat.Time);
                 }
             }
-            CombatItem combatExit = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.ExitCombat);
-            if (combatExit != null)
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData().LastOrDefault(x => x.DstInstid == bossData.GetInstid() && (x.Value > 0 || x.BuffDmg > 0));
+            if (lastDamageTaken != null)
             {
-                bossData.SetLastAware(combatExit.Time);
+                bossData.SetLastAware(lastDamageTaken.Time);
             }
             if (bossData.GetHealthOverTime().Count > 0)
             {
