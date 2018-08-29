@@ -245,7 +245,11 @@ namespace LuckParser.Models.ParseModels
                 {
                     continue;
                 }
-                long time = c.Time - timeStart;
+                long time = 0;
+                if (c.IsBuff != 18)
+                {
+                    time = c.Time - timeStart;
+                }
                 if (time <= fightDuration)
                 {
                     _consumeList.Add(new Tuple<Boon, long>(food ?? utility, time)); 
