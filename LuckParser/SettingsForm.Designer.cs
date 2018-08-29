@@ -511,6 +511,7 @@
             this.chkOutputJson.TabIndex = 43;
             this.chkOutputJson.Text = "Output as JSON";
             this.chkOutputJson.UseVisualStyleBackColor = true;
+            this.chkOutputJson.CheckedChanged += new System.EventHandler(this.OutputJSONCheckedChanged);
             // 
             // SettingsForm
             // 
