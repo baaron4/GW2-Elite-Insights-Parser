@@ -124,7 +124,7 @@ namespace LuckParser.Controllers
 
             foreach (var player in _log.GetPlayerList())
             {
-                var currentPlayer = new JsonLog.JsonPlayer
+                log.Players.Add(new JsonLog.JsonPlayer
                 {
                     Character = player.GetCharacter(),
                     Account = player.GetAccount(),
@@ -143,9 +143,7 @@ namespace LuckParser.Controllers
                     GroupBoons = BuildBoonUptime(_statistics.GroupBoons[player]),
                     OffGroupBoons = BuildBoonUptime(_statistics.OffGroupBoons[player]),
                     SquadBoons = BuildBoonUptime(_statistics.SquadBoons[player])
-                };
-
-                log.Players.Add(currentPlayer);
+                });
             }
         }
 
@@ -167,8 +165,7 @@ namespace LuckParser.Controllers
 
         private bool ContainsBossBoon(long boon, Dictionary<long, Statistics.FinalBossBoon>[] statBoons)
         {
-            int phases = _statistics.Phases.Count;
-            for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
+            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
             {
                 if (statBoons[phaseIndex][boon].Uptime > 0) return true;
                 if (statBoons[phaseIndex][boon].Generated.Any(x => x.Value > 0)) return true;
