@@ -3292,7 +3292,7 @@ namespace LuckParser.Controllers
                     sw.Write(".card {border:1px solid #9B0000;}");
                     sw.Write("td.composition {width: 120px;border:1px solid #9B0000;}");
                 }
-                if (_log.GetBoss().GetCombatReplay() != null)
+                if (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay)
                 {
                     // from W3
                     sw.Write(".slidecontainer {width: 100%;}");
@@ -3426,7 +3426,7 @@ namespace LuckParser.Controllers
                         //    CreateSoloHTML(sw,settingsSnap);
                         //    return;
                         //}
-                        if (phases.Count > 1 || _log.GetBoss().GetCombatReplay() != null)
+                        if (phases.Count > 1 || (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay))
                         {
                             sw.Write("<ul class=\"nav nav-tabs\">");
                             {
@@ -3442,7 +3442,7 @@ namespace LuckParser.Controllers
                                             "</a>" +
                                         "</li>");
                                 }
-                                if (_log.GetBoss().GetCombatReplay() != null)
+                                if (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay)
                                 {
                                     sw.Write("<li  class=\"nav-item\">" +
                                             "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#replay\">" +
@@ -3823,7 +3823,7 @@ namespace LuckParser.Controllers
                                 sw.Write("</div>");
 
                             }
-                            if (_log.GetBoss().GetCombatReplay() != null)
+                            if (_log.GetBossData().GetBossBehavior().CanCombatReplay)
                             {
                                 sw.Write("<div class=\"tab-pane fade\" id=\"replay\">");
                                 {

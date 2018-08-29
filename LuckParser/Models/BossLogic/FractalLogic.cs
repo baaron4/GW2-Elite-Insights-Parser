@@ -1,6 +1,8 @@
 ﻿using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace LuckParser.Models
@@ -10,6 +12,7 @@ namespace LuckParser.Models
         protected FractalLogic()
         { 
             Mode = ParseMode.Fractal;
+            CanCombatReplay = true;
             MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(37695, "Flux Bomb", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Unknown, "symbol:'circle',color:'rgb(150,0,255)',size:10,", "FBmb","Flux Bomb application", "Flux Bomb",0),
@@ -54,5 +57,36 @@ namespace LuckParser.Models
             }
             return phases;
         }
+
+        protected void SetSuccessOnCombatExit(CombatData combatData, LogData logData, BossData bossData, int combatExitCount)
+        {
+            int combatExits = combatData.Count(x => x.SrcInstid == bossData.GetInstid() && x.IsStateChange == ParseEnum.StateChange.ExitCombat);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData().LastOrDefault(x => x.DstInstid == bossData.GetInstid() && x.Value > 0);
+            if (combatExits == combatExitCount && lastDamageTaken != null)
+            {
+                logData.SetBossKill(true);
+                bossData.SetLastAware(lastDamageTaken.Time);
+            }
+        }
+
+        public override void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
+        {
+            // check reward
+            CombatItem reward = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData().LastOrDefault(x => x.DstInstid == bossData.GetInstid() && x.Value > 0);
+            if (lastDamageTaken != null)
+            {
+                if (reward != null && lastDamageTaken.Time - reward.Time < 100)
+                {
+                    logData.SetBossKill(true);
+                    bossData.SetLastAware(reward.Time);
+                }
+                else
+                {
+                    SetSuccessByDeath(combatData, logData, bossData);
+                }
+            }
+        }
+
     }
 }

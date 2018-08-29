@@ -422,9 +422,6 @@ namespace LuckParser.Controllers
         private void FillMissingData()
         {
             var agentsLookup = _agentData.GetAllAgentsList().ToDictionary(a => a.GetAgent());
-            bool golemMode = _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem;
-            bool raidMode = _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Raid;
-            bool fractalMode = _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Fractal;
             // Set Agent instid, firstAware and lastAware
             foreach (CombatItem c in _combatData)
             {
@@ -491,20 +488,14 @@ namespace LuckParser.Controllers
             _boss = new Boss(bossAgent);
             List<Point> bossHealthOverTime = new List<Point>();
             // a hack for buggy golem logs
-            if (golemMode)
+            if (_bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem)
             {
-                AgentItem otherGolem = npcList.Find(x => x.GetID() == 19603);
                 foreach (CombatItem c in _combatData)
                 {
                     // redirect all attacks to the main golem
                     if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.Normal && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None)
                     {
                         c.DstAgent = bossAgent.GetAgent();
-                        c.DstInstid = bossAgent.GetInstid();
-                    }
-                    // redirect buff initial to main golem
-                    if (otherGolem != null && c.IsBuff == 18 && c.DstInstid == otherGolem.GetInstid())
-                    {
                         c.DstInstid = bossAgent.GetInstid();
                     }
                 }
@@ -614,62 +605,11 @@ namespace LuckParser.Controllers
                     }
                 }
             }
+            _combatData.Validate(_bossData);
             _bossData.SetHealthOverTime(bossHealthOverTime);//after xera in case of change
+            _bossData.SetSuccess(_combatData, _logData);
+            _bossData.SetCM(_combatData);
 
-            if (raidMode)
-            {
-                // Put non reward stuff in this as we find them
-                HashSet<int> notRaidRewardsIds = new HashSet<int>
-                {
-                    13
-                };
-                CombatItem reward = _combatData.Find(x => x.IsStateChange == ParseEnum.StateChange.Reward && !notRaidRewardsIds.Contains(x.Value));
-                if (reward != null)
-                {
-                    _logData.SetBossKill(true);
-                    _bossData.SetLastAware(reward.Time);
-                }
-            } else if (fractalMode) {
-                // check reward
-                CombatItem reward = _combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
-                // check last Health update as fractal rewards and daily chests have the same id
-                Point lastHoT = bossHealthOverTime.Count > 0 ? bossHealthOverTime.Last() : new Point(0,int.MaxValue);
-                long lastHoTTime = lastHoT.X + _bossData.GetFirstAware();
-                if (reward != null && lastHoT.X != 0 && Math.Abs(reward.Time - lastHoTTime) < 10000)
-                {
-                    _logData.SetBossKill(true);
-                    _bossData.SetLastAware(reward.Time);
-                } else
-                {
-                    // check killed
-                    CombatItem killed = _combatData.Find(x => x.SrcInstid == _bossData.GetInstid() && x.IsStateChange.IsDead());
-                    if (killed != null)
-                    {
-                        _logData.SetBossKill(true);
-                        _bossData.SetLastAware(killed.Time);
-                    }
-                    // Threshold for health checking, for subsequent daily runs, the bouncy chest appears once a day, 100 is 1.0% of the total health
-                    else if (lastHoT.Y < 100)
-                    {
-                        _logData.SetBossKill(true);
-                        _bossData.SetLastAware(lastHoTTime);
-                    }
-                }
-            } else
-            {
-                CombatItem killed = _combatData.Find(x => x.SrcInstid == _bossData.GetInstid() && x.IsStateChange.IsDead());
-                if (killed != null)
-                {
-                    _logData.SetBossKill(true);
-                    _bossData.SetLastAware(killed.Time);
-                }
-            }
-
-            if (golemMode && bossHealthOverTime.Count > 0)
-            {
-                _logData.SetBossKill(bossHealthOverTime.Last().Y < 200);
-                _bossData.SetLastAware(bossHealthOverTime.Last().X + _bossData.GetFirstAware());
-            }
             //players
             if (_playerList.Count == 0)
             {
@@ -693,7 +633,7 @@ namespace LuckParser.Controllers
                         }
                     }
                     List<CombatItem> lp = _combatData.GetStates(playerAgent.GetInstid(), ParseEnum.StateChange.Despawn, _bossData.GetFirstAware(), _bossData.GetLastAware());
-                    Player player = new Player(playerAgent, fractalMode);
+                    Player player = new Player(playerAgent, _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Fractal);
                     bool skip = false;
                     foreach (Player p in _playerList)
                     {
@@ -751,11 +691,8 @@ namespace LuckParser.Controllers
             {
                 _bossData.SetLastAware(bossAgent.GetLastAware());
             }
-            // Sort
             _playerList = _playerList.OrderBy(a => a.GetGroup()).ToList();
-            // Check CM
-            _bossData.SetCM(_combatData);
-            _combatData.Validate(_bossData);
+            
         }
     }
 }
