@@ -84,6 +84,16 @@ namespace LuckParser.Models.DataModels
             return _combatData.GetBoonData(key);
         }
 
+        public Dictionary<ushort, List<CombatItem>> GetBoonDataByDst()
+        {
+            return _combatData.GetBoonDataByDst();
+        }
+
+        public List<CombatItem> GetBoonDataByDst(ushort key)
+        {
+            return _combatData.GetBoonDataByDst(key);
+        }
+
         public Dictionary<ushort, List<CombatItem>> GetDamageData()
         {
             return _combatData.GetDamageData();

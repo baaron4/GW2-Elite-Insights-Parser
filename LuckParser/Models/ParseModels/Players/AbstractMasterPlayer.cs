@@ -161,106 +161,104 @@ namespace LuckParser.Models.ParseModels
             tableIds.UnionWith(condiIds);
             tableIds.UnionWith(offIds);
             tableIds.UnionWith(defIds);
-            foreach (long boonId in boonMap.Keys)
+            foreach(CombatItem c in log.GetBoonDataByDst(Agent.GetInstid()))
             {
-                foreach (CombatItem c in log.GetBoonData(boonId))
+                long boonId = c.SkillID;
+                if (!boonMap.ContainsKey(boonId))
                 {
-                    long time = c.Time - timeStart;
-                    ushort dst = c.IsBuffRemove == ParseEnum.BuffRemove.None ? c.DstInstid : c.SrcInstid;
-                    if (Agent.GetInstid() == dst)
+                    continue;
+                }
+                long time = c.Time - timeStart;
+                // don't add buff initial table boons and buffs in non golem mode, for others overstack is irrelevant
+                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (log.IsBenchmarkMode() || !tableIds.Contains(c.SkillID)))
+                {
+                    List<BoonLog> loglist = boonMap[c.SkillID];
+                    loglist.Add(new BoonLog(0, 0, long.MaxValue, 0));
+                }
+                else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= 0 && time < log.GetBossData().GetAwareDuration())
+                {
+                    if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
-                        // don't add buff initial table boons and buffs in non golem mode, for others overstack is irrelevant
-                        if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (log.IsBenchmarkMode() || !tableIds.Contains(c.SkillID)))
+                        ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
+                        List<BoonLog> loglist = boonMap[c.SkillID];
+
+                        if (loglist.Count == 0 && c.OverstackValue > 0)
+                        {
+                            loglist.Add(new BoonLog(0, 0, time, 0));
+                        }
+                        loglist.Add(new BoonLog(time, src, c.Value, 0));
+                    }
+                    else if (Boon.RemovePermission(c.SkillID, c.IsBuffRemove, c.IFF) && time < log.GetBossData().GetAwareDuration() - 50)
+                    {
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.All)//All
                         {
                             List<BoonLog> loglist = boonMap[c.SkillID];
-                            loglist.Add(new BoonLog(0, 0, long.MaxValue, 0));
-                        }
-                        else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= 0 && time < log.GetBossData().GetAwareDuration())
-                        {
-                            if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                            if (loglist.Count == 0)
                             {
-                                ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                                List<BoonLog> loglist = boonMap[c.SkillID];
-
-                                if (loglist.Count == 0 && c.OverstackValue > 0)
-                                {
-                                    loglist.Add(new BoonLog(0, 0, time, 0));
-                                }
-                                loglist.Add(new BoonLog(time, src, c.Value, 0));
+                                loglist.Add(new BoonLog(0, 0, time, 0));
                             }
-                            else if (Boon.RemovePermission(c.SkillID, c.IsBuffRemove, c.IFF) && time < log.GetBossData().GetAwareDuration() - 50)
+                            else
                             {
-                                if (c.IsBuffRemove == ParseEnum.BuffRemove.All)//All
+                                for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
                                 {
-                                    List<BoonLog> loglist = boonMap[c.SkillID];
-                                    if (loglist.Count == 0)
+                                    BoonLog curBL = loglist[cnt];
+                                    if (curBL.GetOverstack() == 0 && curBL.GetTime() + curBL.GetValue() > time)
                                     {
-                                        loglist.Add(new BoonLog(0, 0, time, 0));
-                                    }
-                                    else
-                                    {
-                                        for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
-                                        {
-                                            BoonLog curBL = loglist[cnt];
-                                            if (curBL.GetOverstack() == 0 && curBL.GetTime() + curBL.GetValue() > time)
-                                            {
-                                                long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
-                                                curBL.AddValue(-subtract);
-                                                // add removed as overstack
-                                                curBL.AddOverstack((uint)subtract);
-                                            }
-                                        }
+                                        long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
+                                        curBL.AddValue(-subtract);
+                                        // add removed as overstack
+                                        curBL.AddOverstack((uint)subtract);
                                     }
                                 }
-                                else if (c.IsBuffRemove == ParseEnum.BuffRemove.Single)//Single
+                            }
+                        }
+                        else if (c.IsBuffRemove == ParseEnum.BuffRemove.Single)//Single
+                        {
+                            List<BoonLog> loglist = boonMap[c.SkillID];
+                            if (loglist.Count == 0)
+                            {
+                                loglist.Add(new BoonLog(0, 0, time, 0));
+                            }
+                            else
+                            {
+                                int cnt = loglist.Count - 1;
+                                BoonLog curBL = loglist[cnt];
+                                if (curBL.GetOverstack() == 0 && curBL.GetTime() + curBL.GetValue() > time)
                                 {
-                                    List<BoonLog> loglist = boonMap[c.SkillID];
-                                    if (loglist.Count == 0)
-                                    {
-                                        loglist.Add(new BoonLog(0, 0, time, 0));
-                                    }
-                                    else
-                                    {
-                                        int cnt = loglist.Count - 1;
-                                        BoonLog curBL = loglist[cnt];
-                                        if (curBL.GetOverstack() == 0 && curBL.GetTime() + curBL.GetValue() > time)
-                                        {
-                                            long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
-                                            curBL.AddValue(-subtract);
-                                            // add removed as overstack
-                                            curBL.AddOverstack((uint)subtract);
-                                        }
-                                    }
+                                    long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
+                                    curBL.AddValue(-subtract);
+                                    // add removed as overstack
+                                    curBL.AddOverstack((uint)subtract);
                                 }
-                                else if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual)//Manuel
+                            }
+                        }
+                        else if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual)//Manuel
+                        {
+                            List<BoonLog> loglist = boonMap[c.SkillID];
+                            if (loglist.Count == 0)
+                            {
+                                loglist.Add(new BoonLog(0, 0, time, 0));
+                            }
+                            else
+                            {
+                                for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
                                 {
-                                    List<BoonLog> loglist = boonMap[c.SkillID];
-                                    if (loglist.Count == 0)
+                                    BoonLog curBL = loglist[cnt];
+                                    long ctime = curBL.GetTime() + curBL.GetValue();
+                                    if (curBL.GetOverstack() == 0 && ctime > time)
                                     {
-                                        loglist.Add(new BoonLog(0, 0, time, 0));
-                                    }
-                                    else
-                                    {
-                                        for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
-                                        {
-                                            BoonLog curBL = loglist[cnt];
-                                            long ctime = curBL.GetTime() + curBL.GetValue();
-                                            if (curBL.GetOverstack() == 0 && ctime > time)
-                                            {
-                                                long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
-                                                curBL.AddValue(-subtract);
-                                                // add removed as overstack
-                                                curBL.AddOverstack((uint)subtract);
-                                                break;
-                                            }
-                                        }
+                                        long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
+                                        curBL.AddValue(-subtract);
+                                        // add removed as overstack
+                                        curBL.AddOverstack((uint)subtract);
+                                        break;
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }         
+            }   
             return boonMap;
         }
         // private setters

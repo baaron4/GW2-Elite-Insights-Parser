@@ -8,6 +8,7 @@ namespace LuckParser.Models.ParseModels
     {
         // reduced data
         private Dictionary<long, List<CombatItem>> _boonData;
+        private Dictionary<ushort, List<CombatItem>> _boonDataByDst;
         private Dictionary<ushort, List<CombatItem>> _damageData;
         private Dictionary<ushort, List<CombatItem>> _damageTakenData;
         //private List<CombatItem> _healingData;
@@ -60,7 +61,9 @@ namespace LuckParser.Models.ParseModels
         }
         public void Validate(BossData bossData)
         {
-            _boonData = this.Where(x => x.IsBuff > 0 && (x.IsBuff == 18 || x.BuffDmg == 0 || x.IsBuffRemove != ParseEnum.BuffRemove.None)).GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
+            var boonData = this.Where(x => x.IsBuff > 0 && (x.IsBuff == 18 || x.BuffDmg == 0 || x.IsBuffRemove != ParseEnum.BuffRemove.None));
+            _boonData = boonData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
+            _boonDataByDst = boonData.GroupBy(x => x.IsBuffRemove == ParseEnum.BuffRemove.None ? x.DstInstid : x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
 
             _damageData = this.Where(x => x.DstInstid != 0 && x.IsStateChange == ParseEnum.StateChange.Normal && x.IFF == ParseEnum.IFF.Foe && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
                                         ((x.IsBuff == 1 && x.BuffDmg > 0 && x.Value == 0) ||
@@ -93,6 +96,19 @@ namespace LuckParser.Models.ParseModels
         public List<CombatItem> GetBoonData(long key)
         {
             if (_boonData.TryGetValue(key, out List<CombatItem> res))
+            {
+                return res;
+            }
+            return new List<CombatItem>(); ;
+        }
+
+        public Dictionary<ushort, List<CombatItem>> GetBoonDataByDst()
+        {
+            return _boonDataByDst;
+        }
+        public List<CombatItem> GetBoonDataByDst(ushort key)
+        {
+            if (_boonDataByDst.TryGetValue(key, out List<CombatItem> res))
             {
                 return res;
             }
