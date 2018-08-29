@@ -41,9 +41,6 @@ namespace LuckParser.Controllers
             _statistics = statistics;
         }
 
-        /*
-         * Creating the JSON
-         */
         public void CreateJSON()
         {
             var log = new JsonLog();
@@ -303,7 +300,7 @@ namespace LuckParser.Controllers
                         {
                             boonsFound.Add(boon.Key);
 
-                            uptimes[boon.Key] = new JsonLog.JsonBoonUptime(phases);;
+                            uptimes[boon.Key] = new JsonLog.JsonBoonUptime(phases);
                             MakePhaseBoon(uptimes[boon.Key], phaseIndex, boon.Value);
                         }
                         else
@@ -314,10 +311,7 @@ namespace LuckParser.Controllers
                 }
             }
 
-            if (!uptimes.Any())
-            {
-                return null;
-            }
+            if (!uptimes.Any()) return null;
 
             foreach (var boon in uptimes)
             {
@@ -413,7 +407,7 @@ namespace LuckParser.Controllers
             return stats;
         }
 
-        // Null all arrays only consisting of zeros (or below)
+        // Null all arrays only consisting of zeros(or below!) by using reflection
         private void removeZeroArrays(object inObject)
         {
             FieldInfo[] fields = inObject.GetType().GetFields();
