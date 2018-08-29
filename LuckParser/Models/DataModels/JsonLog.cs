@@ -38,8 +38,15 @@ namespace LuckParser.Models.DataModels
             public int[] DamageBarrier;
         }
 
-        public struct JsonBoonUptime
+        public class JsonBoonUptime
         {
+            public JsonBoonUptime(int phaseCount)
+            {
+                Generation = new double[phaseCount];
+                Overstack = new double[phaseCount];
+                Uptime = new double[phaseCount];
+            }
+
             public double[] Uptime;
             public double[] Generation;
             public double[] Overstack;
@@ -139,8 +146,15 @@ namespace LuckParser.Models.DataModels
             public string Name;
         }
 
-        public struct JsonBossBoon
+        public class JsonBossBoon
         {
+            public JsonBossBoon(int phaseCount)
+            {
+                Uptime = new double[phaseCount];
+                Generated = new Dictionary<string, double>[phaseCount];
+                Overstacked = new Dictionary<string, double>[phaseCount];
+            }
+
             public double[] Uptime;
             public Dictionary<string, double>[] Generated;
             public Dictionary<string, double>[] Overstacked;
