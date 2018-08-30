@@ -1746,6 +1746,57 @@ namespace LuckParser.Controllers
             return list;
         }
 
+        private string findPattern(string source, string regex)
+        {
+            if (String.IsNullOrEmpty(source)) return null;
+            Match match = Regex.Match(source, regex);
+            if (match.Success) return match.Groups[1].Value;
+            return null;
+        }
+
+        private List<MechanicDto> CreateMechanicGraphData()
+        {
+            List<MechanicDto> mechanicDtos = new List<MechanicDto>();
+            foreach (Mechanic mech in _log.GetMechanicData().GetPresentPlayerMechs())
+            {
+                List<MechanicLog> mechanicLogs = _log.GetMechanicData()[mech];
+                MechanicDto dto = new MechanicDto();
+                dto.name = mech.GetShortName();
+                dto.description = mech.GetDescription();
+                dto.color = findPattern(mech.GetPlotly(),   "color\\s*:\\s*'([^']*)'");
+                dto.symbol = findPattern(mech.GetPlotly(), "symbol\\s*:\\s*'([^']*)'");
+                dto.data = BuildMechanicData(mechanicLogs);
+                mechanicDtos.Add(dto);
+            }
+            //TODO add DOWN and DEAD data
+            return mechanicDtos;
+        }
+
+        private List<List<List<double>>> BuildMechanicData(List<MechanicLog> mechanicLogs)
+        {
+            List<List<List<double>>> list = new List<List<List<double>>>();
+            foreach (PhaseData phase in _statistics.Phases)
+            {
+                List<List<double>> phaseData = new List<List<double>>();
+                list.Add(phaseData);
+                Dictionary<long, int> playerIndexByInstId = new Dictionary<long, int>();
+                for (var p = 0; p < _log.GetPlayerList().Count; p++)
+                {
+                    playerIndexByInstId.Add(_log.GetPlayerList()[p].GetInstid(), p);
+                    phaseData.Add(new List<double>());
+                }
+                foreach (MechanicLog ml in mechanicLogs.Where(x => phase.InInterval(x.GetTime())))
+                {
+                    if (playerIndexByInstId.TryGetValue(ml.GetPlayer().GetInstid(), out int p))
+                    {
+                        double time = (ml.GetTime() - phase.GetStart()) / 1000.0;
+                        phaseData[p].Add(time);
+                    }
+                }
+            }
+            return list;
+        }
+
         private List<List<List<int>>> CreateEnemyMechanicTable(int phaseIndex)
         {
             List<List<List<int>>> list = new List<List<List<int>>>();
@@ -2930,7 +2981,8 @@ namespace LuckParser.Controllers
                     player.GetProf()));
             }
 
-            data.simpleRotation = _settings.SimpleRotation;
+            data.flags.simpleRotation = _settings.SimpleRotation;
+            data.flags.dark = !_settings.LightTheme;
 
             data.graphs.Add(new GraphDto("full", "Full"));
             data.graphs.Add(new GraphDto("s10", "10s"));
@@ -2975,10 +3027,11 @@ namespace LuckParser.Controllers
                 }
             }
 
+
             data.boons = AssembleBoons(_statistics.PresentBoons);
             data.offBuffs = AssembleBoons(_statistics.PresentOffbuffs);
             data.defBuffs = AssembleBoons(_statistics.PresentDefbuffs);
-            data.mechanics = AssembleMechanics(_log.GetMechanicData().GetPresentPlayerMechs());
+            data.mechanics = CreateMechanicGraphData();
 
             return ToJson(data, typeof(LogDataDto));
         }

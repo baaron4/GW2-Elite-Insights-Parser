@@ -21,5 +21,11 @@ namespace LuckParser.Models.HtmlModels
 
         [DataMember]
         public String color;
+
+        [DataMember(EmitDefaultValue = false)]
+        public bool visible;
+
+        [DataMember]
+        public List<List<List<double>>> data;
     }
 }

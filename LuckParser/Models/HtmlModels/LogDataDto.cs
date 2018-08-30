@@ -27,6 +27,15 @@ namespace LuckParser.Models.HtmlModels
         [DataMember]
         public List<SkillDto> skills;
         [DataMember]
-        public Boolean simpleRotation;
+        public LogFlags flags = new LogFlags();
+    }
+
+    [DataContract]
+    public class LogFlags
+    {
+        [DataMember]
+        public bool simpleRotation;
+        [DataMember]
+        public bool dark;
     }
 }

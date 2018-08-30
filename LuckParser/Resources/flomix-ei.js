@@ -638,13 +638,13 @@ function createGraphs(graphData) {
 
 	for (var i = 0; i < data.phases.length; i++) {
 		for (var t = 0; t < data.graphs.length; t++) {
-			createGraph($('#DPSGraph'+i+'_'+data.graphs[t].id), data.graphData[i], data.graphs[t].id);
+			createGraph($('#DPSGraph'+i+'_'+data.graphs[t].id), data.graphData[i], i, data.graphs[t].id);
 		
 		}
 	}
 }
 
-function createGraph($target, phaseData, type) {
+function createGraph($target, phaseData, phase, type) {
 	var lines = [];
 	var xAxis = [];
 	var seconds = phaseData[0].boss[type].length;
@@ -677,34 +677,38 @@ function createGraph($target, phaseData, type) {
 		yaxis:{
 			title:'DPS',
 			fixedrange: false,
-			rangemode: 'tozero'},
-		xaxis:{title:'Time(sec)',
-		xrangeslider: {}},
+			rangemode: 'tozero',
+			color: window.data.flags.dark?'#cccccc':'#000000'},
+		xaxis:{
+			title:'Time(sec)',
+			color: window.data.flags.dark?'#cccccc':'#000000',
+			xrangeslider: {}
+		},
 		hovermode: 'compare',
 		legend: {orientation: 'h', font:{size: 15}},
-		font: { color: '#000000' },
+		font: { color: window.data.flags.dark?'#cccccc':'#000000' },
 		paper_bgcolor: 'rgba(0,0,0,0)',
 		plot_bgcolor: 'rgba(0,0,0,0)',
 		staticPlot: true,
 		displayModeBar: false,
 	};
 	
-	/*
-	data.push({x: xAxis, y: allPlayerDps, mode: 'lines',line: {shape: 'spline'},visible:'legendonly',name: 'All Player Dps'});
-	$.each(mechanics, function(i, mechanic) {
-	
+
+	//data.push({x: xAxis, y: allPlayerDps, mode: 'lines',line: {shape: 'spline'},visible:'legendonly',name: 'All Player Dps'});
+	$.each(window.data.mechanics, function(i, mechanic) {
 		var chart = {x:[],y:[],mode:'markers',visible:mechanic.visible?null:'legendonly',type:'scatter',marker:{symbol:mechanic.symbol,color:mechanic.color,size:15},text:[],name:mechanic.name,hoverinfo:'text'};
-		$.each(mechanic.players, function(p,pdata) {
+		$.each(mechanic.data[phase], function(p,pdata) {
 			$.each(pdata, function(pd,time){
 				chart.x.push(time);
-				var y = dpsDataFull0[p].dps[Math.floor(time)];
+				var y = phaseData[p].boss[type][Math.floor(time)];
 				if (!y)y = 0;
-				chart.y.push(y); //TODO get player dps on that rounded time
+				chart.y.push(y);
 				chart.text.push(time + 's: ' + window.data.players[p].name);
 			});
 		});
-		data.push(chart);
-	});*/
+		lines.push(chart);
+	});
+  //TODO Boss health
 	/*
 	data.push({
 		y: bossHealth,
