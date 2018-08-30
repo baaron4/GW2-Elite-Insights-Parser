@@ -66,46 +66,56 @@ namespace LuckParser.Controllers
         /// <param name="sw"></param>
         /// <param name="phaseIndex"></param>
         /// <param name="mode"></param>
-        private void CreateDPSGraph(StreamWriter sw, int phaseIndex, GraphHelper.GraphMode mode)
+        private List<PlayerChartDataDto> CreateDPSGraphData(int phaseIndex)
         {
-            //Generate DPS graph
-            string plotID = "DPSGraph" + phaseIndex + "_" + mode;
-            sw.Write("<div id=\"" + plotID + "\" style=\"height: 1000px;width:1200px; display:inline-block \"></div>");
-            sw.Write("<script>");
+            List<PlayerChartDataDto> list = new List<PlayerChartDataDto>();
             PhaseData phase = _statistics.Phases[phaseIndex];
-            sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+
+            foreach (Player p in _log.GetPlayerList())
             {
-                sw.Write("var data = [");
-                int maxDPS = 0;
-                List<Point> totalDpsAllPlayers = new List<Point>();
-                foreach (Player p in _log.GetPlayerList())
+                PlayerChartDataDto playerData = new PlayerChartDataDto();
+                list.Add(playerData);
+                playerData.boss = new List<int>();
+                playerData.cleave = new List<int>();
+                List<Point> bossPoints = GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S1);
+                List<Point> cleavePoints = GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S1);
+                foreach (Point point in bossPoints)
                 {
-                    //Adding dps axis
-                    if (_settings.DPSGraphTotals)
-                    {//Turns display on or off
-                        sw.Write("{");
-                        HTMLHelper.WriteDPSPlots(sw, GraphHelper.GetTotalDPSGraph(_log, p, phaseIndex, phase, mode));
-                        sw.Write("mode: 'lines'," +
-                                "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.GetProf() + "-Total") + "'}," +
-                                "visible:'legendonly'," +
-                                "name: '" + p.GetCharacter() + " TDPS'" + "},");
-                    }
-                    sw.Write("{");
-                    maxDPS = Math.Max(maxDPS, HTMLHelper.WriteDPSPlots(sw, GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, mode), totalDpsAllPlayers));
-                    sw.Write("mode: 'lines'," +
-                            "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.GetProf()) + "'}," +
-                            "name: '" + p.GetCharacter() + " DPS'" +
-                            "},");
-                    if (_settings.ClDPSGraphTotals)
-                    {//Turns display on or off
-                        sw.Write("{");
-                        HTMLHelper.WriteDPSPlots(sw, GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, mode));
-                        sw.Write("mode: 'lines'," +
-                                "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.GetProf() + "-NonBoss") + "'}," +
-                                "visible:'legendonly'," +
-                                "name: '" + p.GetCharacter() + " CleaveDPS'" + "},");
-                    }
+                    playerData.boss.Add(point.Y);
                 }
+                foreach (Point point in cleavePoints)
+                {
+                    playerData.cleave.Add(point.Y);
+                }
+                /*
+                //Adding dps axis
+                if (_settings.DPSGraphTotals)
+                {//Turns display on or off
+                    sw.Write("{");
+                    HTMLHelper.WriteDPSPlots(sw, GraphHelper.GetTotalDPSGraph(_log, p, phaseIndex, phase, mode));
+                    sw.Write("mode: 'lines'," +
+                            "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.GetProf() + "-Total") + "'}," +
+                            "visible:'legendonly'," +
+                            "name: '" + p.GetCharacter() + " TDPS'" + "},");
+                }
+                sw.Write("{");
+                maxDPS = Math.Max(maxDPS, HTMLHelper.WriteDPSPlots(sw, bossPoints, totalDpsAllPlayers));
+                sw.Write("mode: 'lines'," +
+                        "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.GetProf()) + "'}," +
+                        "name: '" + p.GetCharacter() + " DPS'" +
+                        "},");
+                if (_settings.ClDPSGraphTotals)
+                {//Turns display on or off
+                    sw.Write("{");
+                    HTMLHelper.WriteDPSPlots(sw, GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, mode));
+                    sw.Write("mode: 'lines'," +
+                            "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.GetProf() + "-NonBoss") + "'}," +
+                            "visible:'legendonly'," +
+                            "name: '" + p.GetCharacter() + " CleaveDPS'" + "},");
+                }
+                */
+            }
+                /*
                 sw.Write("{");
                 HTMLHelper.WriteDPSPlots(sw, totalDpsAllPlayers);
                 sw.Write(" mode: 'lines'," +
@@ -277,6 +287,8 @@ namespace LuckParser.Controllers
             }
             sw.Write("});");
             sw.Write("</script> ");
+            */
+            return list;
         }
         private void GetRoles()
         {
@@ -2335,7 +2347,7 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         public void CreateHTML(StreamWriter sw, String path)
         {
-            string scriptFile = Path.Combine(path,"flomix-ei.js");
+            string scriptFile = Path.Combine(path, "flomix-ei.js");
             using (var fs = new FileStream(scriptFile, FileMode.Create, FileAccess.Write))
             using (var scriptWriter = new StreamWriter(fs))
             {
@@ -2354,6 +2366,8 @@ namespace LuckParser.Controllers
             html = html.Replace("${logDataJson}", BuildLogData());
 
             html = html.Replace("<!--${playerData}-->", BuildPlayerData());
+
+            html = html.Replace("${graphDataJson}", BuildGraphJson());
 
             sw.Write(html);
             return;
@@ -2646,14 +2660,14 @@ namespace LuckParser.Controllers
                                             {
                                                 sw.Write("<div class=\"tab-pane fade show active  \" id=\"Full" + i + "\">");
                                                 {
-                                                    CreateDPSGraph(sw, i, GraphHelper.GraphMode.Full);
+                                                  //  CreateDPSGraphData(sw, i, GraphHelper.GraphMode.Full);
                                                 }
                                                 sw.Write("</div>");
                                                 if (_settings.Show10s)
                                                 {
                                                     sw.Write("<div class=\"tab-pane fade \" id=\"10s" + i + "\">");
                                                     {
-                                                        CreateDPSGraph(sw, i, GraphHelper.GraphMode.S10);
+                                                     //   CreateDPSGraphData(sw, i, GraphHelper.GraphMode.S10);
                                                     }
                                                     sw.Write("</div>");
                                                 }
@@ -2661,7 +2675,7 @@ namespace LuckParser.Controllers
                                                 {
                                                     sw.Write("<div class=\"tab-pane fade \" id=\"30s" + i + "\">");
                                                     {
-                                                        CreateDPSGraph(sw, i, GraphHelper.GraphMode.S30);
+                                                     //   CreateDPSGraphData(sw, i, GraphHelper.GraphMode.S30);
                                                     }
                                                     sw.Write("</div>");
                                                 }
@@ -2894,6 +2908,16 @@ namespace LuckParser.Controllers
             sw.Write("</html>");
         }
 
+        private string BuildGraphJson()
+        {
+            List<List<PlayerChartDataDto>> chartData = new List<List<PlayerChartDataDto>>();
+            for (int i = 0; i < _statistics.Phases.Count; i++)
+            {
+                chartData.Add(CreateDPSGraphData(i));
+             }
+            return ToJson(chartData, typeof(List<List<PlayerChartDataDto>>));
+        }
+
         private string BuildLogData()
         {
             LogDataDto data = new LogDataDto();
@@ -2909,8 +2933,8 @@ namespace LuckParser.Controllers
             data.simpleRotation = _settings.SimpleRotation;
 
             data.graphs.Add(new GraphDto("full", "Full"));
-            data.graphs.Add(new GraphDto("10s", "10s"));
-            data.graphs.Add(new GraphDto("30s", "30s"));
+            data.graphs.Add(new GraphDto("s10", "10s"));
+            data.graphs.Add(new GraphDto("s30", "30s"));
 
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {

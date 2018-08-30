@@ -219,30 +219,13 @@ function createRotaTab($target, data) {
 		var icon;
 		var aa = false;
 		var swapped = cast[1] == -2;
-		/*
-		if (cast[1] == -2) {
-			//skillName = "Weapon Swap";
-			//icon = "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
-			swapped = true;
-		}else if (cast[1] == 1066) {
-			skillName = "Resurrect";
-			icon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
-		}else if (cast[1] == 1175) {
-			skillName = "Bandage";
-			icon = "https://render.guildwars2.com/file/D2D7D11874060D68760BFD519CFC77B6DF14981F/102928.png";
-		}else if (cast[1] == 65001) {
-			skillName = "Dodge";
-			icon = "https://wiki.guildwars2.com/images/b/b2/Dodge.png";
-		}else{*/
-			var skill = window.data.skillMap['s'+cast[1]];
-			if (skill) {
-				skillName = skill.name;
-				icon = skill.icon;
-				aa = skill.aa;
-			}
-		//}
+		var skill = window.data.skillMap['s'+cast[1]];
+		if (skill) {
+			skillName = skill.name;
+			icon = skill.icon;
+			aa = skill.aa;
+		}
 		if (icon && skillName) {
-			
 			html += '<span class="rot-skill'+(aa?' rot-aa':'')+'"><img class="rot-icon'
 				+(cast[3]==2?' rot-cancelled':'')
 				+'" src="'
@@ -283,8 +266,8 @@ function createPlayerGraph(elementId, data, dark) {
 			var skillId = item[1];
 			var duration = item[2];
 			var endType = item[3];
-			var alac = item[4];
-			var skill = data.skillInfo['s'+skillId];
+			var quick = item[4];
+			var skill = window.data.skillMap['s'+skillId];
 			var aa = false;
 			var icon;
 			var name = '???';
@@ -329,7 +312,7 @@ function createPlayerGraph(elementId, data, dark) {
 					color: fillColor,
 					width: '5',
 					line:{
-						color: alac ? 'rgb(220,40,220)' : 'rgb(20,20,20)',
+						color: quick ? 'rgb(220,40,220)' : 'rgb(20,20,20)',
 						width: '1'
 					}
 				},
@@ -590,4 +573,167 @@ function buildWindowLayout(data) {
 		tabs.push(replayTab);
 	}
 	return {tabs: tabs};
+}
+
+
+function extractDpsData(dmg) {
+	var full = [0];
+	var s10 = [0];
+	var s30 = [0];
+
+	var count = dmg.length;
+	var dmg_tot = 0;
+	var dmg_10 = 0;
+	var dmg_30 = 0;
+	for (var i = 1; i < count; i++) {
+		var lim10 = Math.max(i-10,0);
+		var lim30 = Math.max(i-30,0);
+		dmg_tot+=dmg[i];
+		dmg_10+=dmg[i];
+		dmg_30+=dmg[i];
+		dmg_10-=dmg[lim10];
+		dmg_30-=dmg[lim30];
+		full[i] = Math.round(dmg_tot/i);
+		s10[i] = Math.round(dmg_10/(i-lim10));
+		s30[i] = Math.round(dmg_30/(i-lim30));
+	}
+	
+	return {full:full,s10:s10,s30:s30};
+}
+
+function arrayAdd(a,b) {
+	var c = [];
+	var count = a.length;
+	for (var i=0;i<count;i++){
+		c[i]=a[i]+b[i];
+	}
+	return c;
+}
+
+function extractGraphData(graphData) {
+	data.graphData = [];
+	for (var i = 0; i < graphData.length; i++) {
+		data.graphData[i] = [];
+
+		data.phases[i].graphFull = [];
+		data.phases[i].graphS10 = [];
+		data.phases[i].graphS30 = [];
+		for (var p = 0; p < data.players.length;p++) {
+			var graph = graphData[i][p]; // graph data for player p in phase i
+
+			var bossDps = extractDpsData(graph.boss);
+			var cleaveDps = extractDpsData(graph.cleave);
+			var totDps = {
+				full:arrayAdd(bossDps.full,cleaveDps.full),
+				s10:arrayAdd(bossDps.s10,cleaveDps.s10),
+				s30:arrayAdd(bossDps.s30,cleaveDps.s30)};
+		
+			data.graphData[i][p] = {boss:bossDps,cleave:cleaveDps,total:totDps};
+		}
+	}
+}
+
+function createGraphs(graphData) {
+	extractGraphData(graphData);
+
+	for (var i = 0; i < data.phases.length; i++) {
+		for (var t = 0; t < data.graphs.length; t++) {
+			createGraph($('#DPSGraph'+i+'_'+data.graphs[t].id), data.graphData[i], data.graphs[t].id);
+		
+		}
+	}
+}
+
+function createGraph($target, phaseData, type) {
+	var lines = [];
+	var xAxis = [];
+	var seconds = phaseData[0].boss[type].length;
+	for (var i = 0; i < seconds; i++) xAxis[i] = i;
+	for (var p = 0; p < window.data.players.length; p++) { // Players in phase
+		var player = window.data.players[p];
+		lines.push({y: phaseData[p].boss[type],x: xAxis,mode: 'lines',line: {shape: 'spline',color:player.colBoss},name: player.name + ' DPS'});
+		lines.push({y: phaseData[p].total[type],x: xAxis,mode: 'lines',line: {shape: 'spline',color:player.colTotal},visible:'legendonly',name: player.name + ' TDPS'});
+		lines.push({y: phaseData[p].cleave[type],x: xAxis,mode: 'lines',line: {shape: 'spline',color:player.colTotal},visible:'legendonly',name: player.name + ' Cleave DPS'});
+	}
+	/*
+	var mechanics = [
+		{name: 'Golem Dmg',symbol:'square',color:'rgb(255,140,0)',players: [[],[229,285],[],[],[228,229],[],[],[],[],[],[]]},
+		{name: 'Bomb DMG',symbol:'circle-open',color:'rgb(255,0,0)',players: [[68,84,100,116,160,176,192,208,250,340,356,368],[84,100,116,160,176,192,208,250,340,356,368],[68,84,100,116,160,176,192,208,250,340,356,368],[68,84,100,116,176,192,208,356,368],[68,84,100,116,160,176,192,208,250,340,356,368],[68,84,100,116,160,176,192,208,250,340,356,368],[68,84,100,116,160,176,192,208,250,340,356,368],[68,84,116,160,176,208,250,340,356],[68,84,100,116,160,176,192,208,250,340,356,368],[68,84,100,116,160,176,192,208,250,340,356,368]]},
+		{name: 'Bomn',symbol:'circle',color:'rgb(255,0,0)',players: [[103],[],[195,371],[71,237],[163,211,343],[57],[87],[359],[147,327,417],[179]]},
+		{name: 'Shackle',symbol:'diamond',color:'rgb(0,255,255)',players: [[],[],[248,308,338,368,398],[],[278],[],[428],[],[],[]]},
+		{name: 'Shackle Dmg',symbol:'diamond-open',color:'rgb(0,255,255)',players: [[],[],[372],[372],[],[],[],[],[],[]]},
+		{name: 'Cone',symbol:'triangle',color:'rgb(0,128,0)',players: [[],[],[],[],[],[],[],[],[],[]]},
+		{name: 'Crack',symbol:'asterisk-open',color:'rgb(0,255,255)',players: [[],[],[],[],[],[],[433],[],[433],[]]},
+		{name: 'Marks',symbol:'circle',color:'rgb(0,128,0)',players: [[134,143],[250,360,364,421],[232,421],[139,193,321,325,364,369],[133,189,280,285],[189,193,197,202,356,426],[241,245,272],[148,165,233,289,361],[181,233,329,406,421],[]]},
+		{name: 'Suck Dmg',symbol:'circle-open',color:'rgb(255,140,0)',players: [[],[],[],[],[],[],[],[],[],[]]},
+		{name: 'Dip Aoe',symbol:'hexagon',color:'rgb(255,140,0)',players: [[],[],[],[],[],[],[],[],[],[]]},
+		{name: 'Knockback Dmg',symbol:'circle',color:'rgb(255,140,0)',players: [[213,293,373],[213,293,373],[213,293,373],[213,293,373],[213,373],[213,293,373],[213,293,373],[213,293],[293,373],[213,293,373]]},
+		{name: 'Orbs CD',symbol:'square',color:'rgb(0,255,0)',players: [[435],[62,435],[435],[152,242,332,422,435],[435],[435],[435],[92,182,272,362,435],[32,122,212,302,392,435],[435]]},
+		{name: 'DOWN',symbol:'cross',color:'rgb(255,0,0)',players: [[],[474.5],[228.5],[],[],[],[160.5,353.5],[],[],[]], visible: true},
+		{name: 'DEAD',symbol:'x',color:'rgb(0,0,0)',players: [[],[],[],[],[],[],[],[],[],[]], visible: true}];
+		*/
+
+	var layout = {
+		yaxis:{
+			title:'DPS',
+			fixedrange: false,
+			rangemode: 'tozero'},
+		xaxis:{title:'Time(sec)',
+		xrangeslider: {}},
+		hovermode: 'compare',
+		legend: {orientation: 'h', font:{size: 15}},
+		font: { color: '#000000' },
+		paper_bgcolor: 'rgba(0,0,0,0)',
+		plot_bgcolor: 'rgba(0,0,0,0)',
+		staticPlot: true,
+		displayModeBar: false,
+	};
+	
+	/*
+	data.push({x: xAxis, y: allPlayerDps, mode: 'lines',line: {shape: 'spline'},visible:'legendonly',name: 'All Player Dps'});
+	$.each(mechanics, function(i, mechanic) {
+	
+		var chart = {x:[],y:[],mode:'markers',visible:mechanic.visible?null:'legendonly',type:'scatter',marker:{symbol:mechanic.symbol,color:mechanic.color,size:15},text:[],name:mechanic.name,hoverinfo:'text'};
+		$.each(mechanic.players, function(p,pdata) {
+			$.each(pdata, function(pd,time){
+				chart.x.push(time);
+				var y = dpsDataFull0[p].dps[Math.floor(time)];
+				if (!y)y = 0;
+				chart.y.push(y); //TODO get player dps on that rounded time
+				chart.text.push(time + 's: ' + window.data.players[p].name);
+			});
+		});
+		data.push(chart);
+	});*/
+	/*
+	data.push({
+		y: bossHealth,
+		x: xAxis,
+		mode: 'lines',
+		line: {shape: 'spline', dash: 'dashdot'},
+		hoverinfo: 'text',
+		name: 'Boss health',
+		_yaxis: 'y2'});
+	*/
+	
+	var callback = function() {
+		Plotly.newPlot($target.attr('id'), lines, layout);
+	};
+	
+	
+	
+	var lazyplot = $target[0];
+	if ('IntersectionObserver' in window) {
+		let lazyPlotObserver = new IntersectionObserver(function(entries, observer) {
+			entries.forEach(function(entry) {
+				if (entry.isIntersecting){
+					lazyPlotObserver.unobserve(entry.target);
+					callback();
+				}
+			});
+		});
+		lazyPlotObserver.observe(lazyplot);
+	} else {
+		$(callback);
+	}
 }
