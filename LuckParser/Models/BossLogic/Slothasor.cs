@@ -28,7 +28,7 @@ namespace LuckParser.Models
 
         public override CombatReplayMap GetCombatMap()
         {
-            return new CombatReplayMap("https://i.imgur.com/aLHcYSF.png",
+            return new CombatReplayMap("https://i.imgur.com/PaKMZ8Z.png",
                             Tuple.Create(1688, 2581),
                             Tuple.Create(5822, -3491, 9549, 2205),
                             Tuple.Create(-12288, -27648, 12288, 27648),
@@ -104,7 +104,7 @@ namespace LuckParser.Models
                 else
                 {
                     int transfoEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
-                    replay.AddCircleActor(new CircleActor(true, 0, 160, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
+                    replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
                 }
             }
             // fixated
