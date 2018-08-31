@@ -127,18 +127,19 @@ namespace LuckParser.Controllers
                 string skillName = cl.GetID() == SkillItem.WeaponSwapId ? "Weapon Swap" : skillList.GetName(cl.GetID());
                 if (skillName == "Dodge")
                 {
-                    skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
+                    skillIcon = GetLink("Dodge");
                 }
                 else if (skillName == "Resurrect")
                 {
-                    skillIcon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
+                    skillIcon = GetLink("Resurrect");
                 }
                 else if (skillName == "Bandage")
                 {
-                    skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
-                } else if (cl.GetID() == SkillItem.WeaponSwapId)
+                    skillIcon = GetLink("Bandage");
+                }
+                else if (cl.GetID() == SkillItem.WeaponSwapId)
                 {
-                    skillIcon = "https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png";
+                    skillIcon = GetLink("Swap");
                 }
 
                 sw.Write("{" +
@@ -1289,7 +1290,7 @@ namespace LuckParser.Controllers
             switch (name)
             {
                 case "Question":
-                    return "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png";
+                    return "https://wiki.guildwars2.com/images/d/de/Sword_slot.png";
                 case "Sword":
                     return "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
                 case "Axe":
@@ -1622,25 +1623,27 @@ namespace LuckParser.Controllers
                 case "Crit":
                     return "https://wiki.guildwars2.com/images/9/95/Critical_Chance.png";
                 case "Scholar":
-                    return "https://wiki.guildwars2.com/images/thumb/2/2b/Superior_Rune_of_the_Scholar.png/40px-Superior_Rune_of_the_Scholar.png";
+                    return "https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png";
                 case "SwS":
                     return "https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png";
                 case "Downs":
                     return "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
+                case "Resurrect":
+                    return "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png";
                 case "Dead":
                     return "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
                 case "Flank":
-                    return "https://wiki.guildwars2.com/images/thumb/b/bb/Hunter%27s_Tactics.png/40px-Hunter%27s_Tactics.png";
+                    return "https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png";
                 case "Glance":
                     return "https://wiki.guildwars2.com/images/f/f9/Weakness.png";
                 case "Miss":
                     return "https://wiki.guildwars2.com/images/3/33/Blinded.png";
                 case "Interupts":
-                    return "https://wiki.guildwars2.com/images/thumb/7/79/Daze.png/20px-Daze.png";
+                    return "https://wiki.guildwars2.com/images/7/79/Daze.png";
                 case "Invuln":
                     return "https://wiki.guildwars2.com/images/e/eb/Determined.png";
                 case "Blinded":
-                    return "https://wiki.guildwars2.com/images/thumb/3/33/Blinded.png/20px-Blinded.png";
+                    return "https://wiki.guildwars2.com/images/3/33/Blinded.png";
                 case "Wasted":
                     return "https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png";
                 case "Saved":
@@ -1648,11 +1651,11 @@ namespace LuckParser.Controllers
                 case "Swap":
                     return "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
                 case "Blank":
-                    return "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png";
+                    return "https://wiki.guildwars2.com/images/d/de/Sword_slot.png";
                 case "Dodge":
-                    return "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
+                    return "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png";
                 case "Bandage":
-                    return "https://render.guildwars2.com/file/D2D7D11874060D68760BFD519CFC77B6DF14981F/102928.png";
+                    return "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
                 case "Stack":
                     return "https://wiki.guildwars2.com/images/e/ef/Commander_arrow_marker.png";
 

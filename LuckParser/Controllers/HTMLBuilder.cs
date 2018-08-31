@@ -3823,7 +3823,7 @@ namespace LuckParser.Controllers
                                 sw.Write("</div>");
 
                             }
-                            if (_log.GetBossData().GetBossBehavior().CanCombatReplay)
+                            if (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay)
                             {
                                 sw.Write("<div class=\"tab-pane fade\" id=\"replay\">");
                                 {
