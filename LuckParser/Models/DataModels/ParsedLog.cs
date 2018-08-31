@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using LuckParser.Models.ParseModels;
 
 namespace LuckParser.Models.DataModels
@@ -12,6 +13,7 @@ namespace LuckParser.Models.DataModels
         private readonly CombatData _combatData;
         private readonly MechanicData _mechData;
         private readonly List<Player> _playerList;
+        private readonly Dictionary<string, List<Player>> _playerListBySpec;
         private readonly Boss _boss;
 
         
@@ -27,6 +29,7 @@ namespace LuckParser.Models.DataModels
             _playerList = playerList;
             _boss = boss;
             _mechData = new MechanicData(bossData);
+            _playerListBySpec = playerList.GroupBy(x => x.GetProf()).ToDictionary(x => x.Key, x => x.ToList());
         }
 
         public BossData GetBossData()
@@ -52,6 +55,11 @@ namespace LuckParser.Models.DataModels
         public List<Player> GetPlayerList()
         {
             return _playerList;
+        }
+
+        public Dictionary<string, List<Player>> GetPlayerListBySpec()
+        {
+            return _playerListBySpec;
         }
 
         public MechanicData GetMechanicData()
