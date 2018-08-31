@@ -20,6 +20,8 @@ namespace LuckParser.Controllers
         readonly Statistics _statistics;
         readonly StreamWriter _sw;
 
+        private Dictionary<long, string> _boonDict;
+
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
             switches.CalculateBoons = true;
@@ -39,6 +41,9 @@ namespace LuckParser.Controllers
             _settings = settings;
 
             _statistics = statistics;
+
+            _boonDict = Boon.GetAll().GroupBy(x => x.GetID()).ToDictionary(x => x.Key, x => x.Select(y => y.GetName()).First());
+
         }
 
         public void CreateJSON()
@@ -191,7 +196,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        private Dictionary<long, JsonLog.JsonBossBoon> BuildBossBoons(Dictionary<long, Statistics.FinalBossBoon>[] statBoons)
+        private Dictionary<string, JsonLog.JsonBossBoon> BuildBossBoons(Dictionary<long, Statistics.FinalBossBoon>[] statBoons)
         {
             int phases = _statistics.Phases.Count;
             var boons = new Dictionary<long, JsonLog.JsonBossBoon>();
@@ -224,7 +229,19 @@ namespace LuckParser.Controllers
                 }
             }
 
-            return boons;
+            var namedBoons = new Dictionary<string, JsonLog.JsonBossBoon>();
+            foreach (var entry in boons)
+            {
+                if (_boonDict.ContainsKey(entry.Key)) {
+                    namedBoons[_boonDict[entry.Key]] = entry.Value;
+                }
+                else
+                {
+                    namedBoons[entry.Key.ToString()] = entry.Value;
+                }
+            }
+
+            return namedBoons;
         }
 
         private JsonLog.JsonDps BuildDPS(Statistics.FinalDPS[] statDps)
@@ -257,7 +274,7 @@ namespace LuckParser.Controllers
             boon.Uptime[phase] = value.Uptime;
         }
 
-        private Dictionary<long, JsonLog.JsonBoonUptime> BuildBoonUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes)
+        private Dictionary<string, JsonLog.JsonBoonUptime> BuildBoonUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes)
         {
             var uptimes = new Dictionary<long, JsonLog.JsonBoonUptime>();
             int phases = _statistics.Phases.Count;
@@ -297,7 +314,19 @@ namespace LuckParser.Controllers
                 RemoveZeroArrays(boon.Value);
             }
 
-            return uptimes;
+            var namedBoons = new Dictionary<string, JsonLog.JsonBoonUptime>();
+            foreach (var entry in uptimes)
+            {
+                if (_boonDict.ContainsKey(entry.Key)) {
+                    namedBoons[_boonDict[entry.Key]] = entry.Value;
+                }
+                else
+                {
+                    namedBoons[entry.Key.ToString()] = entry.Value;
+                }
+            }
+
+            return namedBoons;
         }
 
         private JsonLog.JsonSupport BuildSupport(Statistics.FinalSupport[] statSupport)

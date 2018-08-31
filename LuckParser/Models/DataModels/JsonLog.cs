@@ -104,7 +104,7 @@ namespace LuckParser.Models.DataModels
             public double FinalHealth;
             public double HealthPercentBurned;
             public JsonDps Dps;
-            public Dictionary<long, JsonBossBoon> Conditions;
+            public Dictionary<string, JsonBossBoon> Conditions;
         }
 
         public class JsonStats
@@ -211,10 +211,10 @@ namespace LuckParser.Models.DataModels
             public JsonStats Stats;
             public JsonDefenses Defenses;
             public JsonSupport Support;
-            public Dictionary<long, JsonBoonUptime> SelfBoons;
-            public Dictionary<long, JsonBoonUptime> GroupBoons;
-            public Dictionary<long, JsonBoonUptime> OffGroupBoons;
-            public Dictionary<long, JsonBoonUptime> SquadBoons;
+            public Dictionary<string, JsonBoonUptime> SelfBoons;
+            public Dictionary<string, JsonBoonUptime> GroupBoons;
+            public Dictionary<string, JsonBoonUptime> OffGroupBoons;
+            public Dictionary<string, JsonBoonUptime> SquadBoons;
         }
 
         public struct JsonPhase
@@ -256,6 +256,5 @@ namespace LuckParser.Models.DataModels
         public List<JsonPlayer> Players;
         public List<JsonPhase> Phases;
         public JsonMechanic[] Mechanics;
-        public List<Point3D> StackCenterPositions;
     }
 }
