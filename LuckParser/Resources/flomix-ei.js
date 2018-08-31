@@ -493,7 +493,7 @@ function buildWindowLayout(data) {
 				{name:'Boss', content:{table:'dist_table_'+p+'_'+i+'_boss'},noTitle:true},
 				{name:'All', content:{table:'dist_table_'+p+'_'+i},noTitle:true}
 			]},noTitle:true}];
-			if(data.simpleRotation) {
+			if(data.flags.simpleRotation) {
 				playerTabs.push({name:'Simple Rotation',content:{table:'rota_'+p+'_'+i},noTitle:true});
 			}
 

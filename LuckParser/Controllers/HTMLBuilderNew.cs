@@ -1757,7 +1757,7 @@ namespace LuckParser.Controllers
         private List<MechanicDto> CreateMechanicGraphData()
         {
             List<MechanicDto> mechanicDtos = new List<MechanicDto>();
-            foreach (Mechanic mech in _log.GetMechanicData().GetPresentPlayerMechs())
+            foreach (Mechanic mech in _log.GetMechanicData().GetPresentMechanics())
             {
                 List<MechanicLog> mechanicLogs = _log.GetMechanicData()[mech];
                 MechanicDto dto = new MechanicDto();
@@ -1765,6 +1765,7 @@ namespace LuckParser.Controllers
                 dto.description = mech.GetDescription();
                 dto.color = findPattern(mech.GetPlotly(),   "color\\s*:\\s*'([^']*)'");
                 dto.symbol = findPattern(mech.GetPlotly(), "symbol\\s*:\\s*'([^']*)'");
+                dto.visible = (mech.GetSkill() == -2 || mech.GetSkill() == -3);
                 dto.data = BuildMechanicData(mechanicLogs);
                 mechanicDtos.Add(dto);
             }
