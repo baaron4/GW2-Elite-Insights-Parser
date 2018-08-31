@@ -23,6 +23,7 @@ namespace LuckParser.Models.DataModels
         public readonly bool LightTheme;
         public readonly bool ParseCombatReplay;
         public readonly int PollingRate = 32;
+        public readonly bool IndentJSON;
 
         public SettingsContainer(Settings settings)
         {
@@ -44,6 +45,7 @@ namespace LuckParser.Models.DataModels
             Show30s = settings.Show30s;
             LightTheme = settings.LightTheme;
             ParseCombatReplay = settings.ParseCombatReplay;
+            IndentJSON = settings.IndentJSON;
         }
     }
 }

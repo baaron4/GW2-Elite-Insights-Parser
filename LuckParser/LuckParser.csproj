@@ -81,6 +81,7 @@
     <Compile Include="CancellationException.cs" />
     <Compile Include="ConsoleProgram.cs" />
     <Compile Include="Controllers\CSVHelper.cs" />
+    <Compile Include="Controllers\JSONBuilder.cs" />
     <Compile Include="Controllers\Parser.cs" />
     <Compile Include="Controllers\CSVBuilder.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Models\BossLogic\Sabetha.cs" />
     <Compile Include="Models\BossLogic\Gorseval.cs" />
     <Compile Include="Models\BossLogic\ValeGuardian.cs" />
+    <Compile Include="Models\DataModels\JsonLog.cs" />
     <Compile Include="Models\DataModels\ParseEnum.cs" />
     <Compile Include="Models\DataModels\ParsedLog.cs" />
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
