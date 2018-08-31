@@ -442,7 +442,7 @@ namespace LuckParser.Controllers
                                 x = x /activePlayers;
                                 y = y / activePlayers;
                                 z = z / activePlayers;
-                                _statistics.StackCenterPositions.Add(new Point3D(x, y, z, time));
+                                _statistics.StackCenterPositions.Add(new Point3D(x, y, z, _settings.PollingRate * time));
                             }
                         }
                         List<Point3D> positions = player.GetCombatReplay().GetPositions().Where(x => x.Time >= phase.GetStart() && x.Time <= phase.GetEnd()).ToList();
