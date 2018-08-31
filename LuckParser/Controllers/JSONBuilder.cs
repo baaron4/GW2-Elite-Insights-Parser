@@ -75,7 +75,6 @@ namespace LuckParser.Controllers
             log.TimeEnd = _log.GetLogData().GetLogEnd();
             log.Duration = durationString;
             log.Success = _log.GetLogData().GetBosskill();
-            log.StackCenterPositions = _statistics.StackCenterPositions;
         }
 
         private void SetMechanics(JsonLog log)
