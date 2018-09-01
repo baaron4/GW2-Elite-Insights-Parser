@@ -410,12 +410,33 @@ namespace LuckParser.Controllers
                 {
                     if(!TryRead(stream, data)) break;
                     ms.Seek(0, SeekOrigin.Begin);
-                    _combatData.Add( _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader));
+                    CombatItem combatItem  = _revision > 0 ? ReadCombatItemRev1(reader) : ReadCombatItem(reader);
+                    if (!IsValid(combatItem)) continue;
+                    _combatData.Add(combatItem);
                 }
             }
-            _combatData.RemoveAll(x => x.SrcInstid == 0 && x.DstAgent == 0 && x.SrcAgent == 0 && x.DstInstid == 0 && x.IFF == ParseEnum.IFF.Unknown);
         }
-        
+
+        /// <summary>
+        /// Returns true if the combat item contains valid data and should be used, false otherwise
+        /// </summary>
+        /// <param name="combatItem"></param>
+        /// <returns>true if the combat item is valid</returns>
+        private bool IsValid(CombatItem combatItem)
+        {
+            if (combatItem.IsStateChange == ParseEnum.StateChange.HealthUpdate && combatItem.DstAgent > 20000)
+            {
+                // DstAgent should be boss health % times 100, values higher than 10000 are unlikely. 
+                // If it is more than 200% health ignore this record
+                return false;
+            }
+            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ParseEnum.IFF.Unknown)
+            {
+                return false;
+            }
+            return true;
+        }
+
         /// <summary>
         /// Parses all the data again and link related stuff to each other
         /// </summary>
