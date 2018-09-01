@@ -618,7 +618,7 @@ namespace LuckParser.Controllers
                             stats.FlankingRate.ToString(),
                             stats.GlanceRate.ToString(),
                             stats.Missed.ToString(),
-                            stats.Interupts.ToString(),
+                            stats.Interrupts.ToString(),
                             stats.Invulned.ToString(),
                             stats.SwapCount.ToString(),
                             stats.DownCount.ToString(),
@@ -653,7 +653,7 @@ namespace LuckParser.Controllers
                                 + stats.GlanceRate + " out of " + stats.PowerLoopCount + " hits \">" 
                                 + Math.Round(stats.GlanceRate / (Double)stats.PowerLoopCount * 100,1) + "%</span>" + "</td>");//glance
                             sw.Write("<td>" + stats.Missed + "</td>");//misses
-                            sw.Write("<td>" + stats.Interupts + "</td>");//interrupts
+                            sw.Write("<td>" + stats.Interrupts + "</td>");//interrupts
                             sw.Write("<td>" + stats.Invulned + "</td>");//dmg invulned
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.Wasted + "cancels \">" + stats.TimeWasted + "</span>" + "</td>");//time wasted
@@ -751,7 +751,7 @@ namespace LuckParser.Controllers
                             stats.FlankingRateBoss.ToString(),
                             stats.GlanceRateBoss.ToString(),
                             stats.MissedBoss.ToString(),
-                            stats.InteruptsBoss.ToString(),
+                            stats.InterruptsBoss.ToString(),
                             stats.InvulnedBoss.ToString(),
                             stats.SwapCount.ToString(),
                             stats.DownCount.ToString(),
@@ -786,7 +786,7 @@ namespace LuckParser.Controllers
                                 + stats.GlanceRateBoss + " out of " + stats.PowerLoopCountBoss + " hits \">" 
                                 + Math.Round(stats.GlanceRateBoss / (Double)stats.PowerLoopCountBoss * 100,1) + "%</span>" + "</td>");//glance
                             sw.Write("<td>" + stats.MissedBoss + "</td>");//misses
-                            sw.Write("<td>" + stats.InteruptsBoss + "</td>");//interrupts
+                            sw.Write("<td>" + stats.InterruptsBoss + "</td>");//interrupts
                             sw.Write("<td>" + stats.InvulnedBoss + "</td>");//dmg invulned
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.Wasted + "cancels \">" + stats.TimeWasted + "</span>" + "</td>");//time wasted

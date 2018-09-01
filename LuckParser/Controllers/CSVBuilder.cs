@@ -255,7 +255,7 @@ namespace LuckParser.Controllers
                 Math.Round(stats.GlanceRateBoss / (Double)stats.PowerLoopCountBoss * 100,1).ToString(),stats.GlanceRateBoss.ToString(),
                 Math.Round(stats.MissedBoss / (Double)stats.PowerLoopCountBoss * 100,1).ToString(),stats.MissedBoss.ToString(),
                 stats.PowerLoopCountBoss.ToString(),
-                stats.InteruptsBoss.ToString(),stats.InvulnedBoss.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() });
+                stats.InterruptsBoss.ToString(),stats.InvulnedBoss.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() });
                 count++;
             }
             while (count < 15)//so each graph has equal spacing
@@ -290,7 +290,7 @@ namespace LuckParser.Controllers
                 Math.Round(stats.GlanceRate / (Double)stats.PowerLoopCount * 100,1).ToString(),stats.GlanceRate.ToString(),
                 Math.Round(stats.Missed / (Double)stats.PowerLoopCount * 100,1).ToString(),stats.Missed.ToString(),
                 stats.PowerLoopCount.ToString(),
-                stats.Interupts.ToString(),stats.Invulned.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() });
+                stats.Interrupts.ToString(),stats.Invulned.ToString(),stats.TimeWasted.ToString(),stats.TimeSaved.ToString(),stats.SwapCount.ToString() });
                 count++;
             }
             while (count < 15)//so each graph has equal spacing
