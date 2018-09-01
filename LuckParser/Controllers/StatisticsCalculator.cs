@@ -785,7 +785,6 @@ namespace LuckParser.Controllers
                         if (classSpecificBoonsById.TryGetValue(item.SkillID, out Boon boon))
                         {
                             presentPersonalBuffs[player.GetInstid()].Add(boon);
-                            classSpecificBoonsById.Remove(item.SkillID);
                         }
                     }
                 }
