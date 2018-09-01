@@ -91,7 +91,7 @@ namespace LuckParser.Models
         protected static List<CombatItem> GetFilteredList(ParsedLog log, long skillID, ushort instid)
         {
             bool needStart = true;
-            List<CombatItem> main = log.GetBoonData().Where(x => x.SkillID == skillID && ((x.DstInstid == instid && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == instid && x.IsBuffRemove != ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> main = log.GetBoonData(skillID).Where(x => ((x.DstInstid == instid && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == instid && x.IsBuffRemove != ParseEnum.BuffRemove.None))).ToList();
             List<CombatItem> filtered = new List<CombatItem>();
             for (int i = 0; i < main.Count; i++)
             {

@@ -100,7 +100,7 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Storm
                     };
             List<CastLog> humanShield = cls.Where(x => x.GetID() == 34468).ToList();
-            List<int> humanShieldRemoval = log.GetBoonData().Where(x => x.SkillID == 34518 && x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(x.Time - log.GetBossData().GetFirstAware())).Distinct().ToList();
+            List<int> humanShieldRemoval = log.GetBoonData(34518).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(x.Time - log.GetBossData().GetFirstAware())).Distinct().ToList();
             for (var i = 0; i < humanShield.Count; i++)
             {
                 var shield = humanShield[i];
@@ -114,7 +114,7 @@ namespace LuckParser.Models
                 }
             }
             List<CastLog> aboShield = cls.Where(x => x.GetID() == 34510).ToList();
-            List<int> aboShieldRemoval = log.GetBoonData().Where(x => x.SkillID == 34376 && x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(x.Time - log.GetBossData().GetFirstAware())).Distinct().ToList();
+            List<int> aboShieldRemoval = log.GetBoonData(34376).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(x.Time - log.GetBossData().GetFirstAware())).Distinct().ToList();
             for (var i = 0; i < aboShield.Count; i++)
             {
                 var shield = aboShield[i];
@@ -201,7 +201,7 @@ namespace LuckParser.Models
                 }
             }
             // Bombs
-            List<CombatItem> zealousBenediction = log.GetBoonData().Where(x => x.SkillID == 34511 && ((x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> zealousBenediction = log.GetBoonData(34511).Where(x => (x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             foreach (CombatItem c in zealousBenediction)
             {
                 int zealousStart = (int)(c.Time - log.GetBossData().GetFirstAware()) ;
