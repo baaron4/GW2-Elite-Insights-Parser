@@ -59,7 +59,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (_redirection.Count > 0)
             {
-                _start = _redirection.Min(x => x.GetFirstAware())- offset;
+                _start = _redirection.Min(x => x.FirstAware)- offset;
             }
         }
 
