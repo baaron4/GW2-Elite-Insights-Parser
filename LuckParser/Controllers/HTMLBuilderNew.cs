@@ -2975,11 +2975,13 @@ namespace LuckParser.Controllers
             LogDataDto data = new LogDataDto();
             foreach(Player player in _log.GetPlayerList())
             {
-                data.players.Add(new PlayerDto(
+                PlayerDto playerDto = new PlayerDto(
                     player.GetGroup(),
                     player.GetCharacter(),
                     player.GetAccount().TrimStart(':'),
-                    player.GetProf()));
+                    player.GetProf());
+                playerDto.weapons = player.GetWeaponsArray(_log);
+                data.players.Add(playerDto);
             }
 
             data.flags.simpleRotation = _settings.SimpleRotation;
@@ -3163,6 +3165,7 @@ namespace LuckParser.Controllers
             javascript += buildTemplateJS("tmplDmgTable", Properties.Resources.tmplDmgTable);
             javascript += buildTemplateJS("tmplDmgDistTable", Properties.Resources.tmplDmgDistTable);
             javascript += buildTemplateJS("tmplMechanicTable", Properties.Resources.tmplMechanicTable);
+            javascript += buildTemplateJS("tmplCompTable", Properties.Resources.tmplCompTable);
 
             return javascript;
         }

@@ -248,6 +248,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="LI.ico" />
+    <None Include="Resources\tmplCompTable.html" />
     <None Include="Resources\tmplMechanicTable.html" />
     <None Include="Resources\tmplDmgDistTable.html" />
     <None Include="Resources\tmplSupTable.html" />

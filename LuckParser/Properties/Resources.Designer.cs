@@ -78,15 +78,19 @@ namespace LuckParser.Properties {
         ///	color: #888;
         ///}
         ///
-        ///
-        ///
-        ///table.dataTable.table-sm&gt;thead&gt;tr&gt;th {
-        ///    padding-right: 10px;
+        ///tr.condi td {
+        ///    background-color: rgba(255,0,0,0.25);
         ///}
         ///
-        ///table.dataTable.table-sm .sorting:before,
-        ///table.dataTable.table-sm .sorting_asc:before,
-        ///table.dataTable.table-sm .sorting_desc:befo [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///img.icon {
+        ///	width: 18px;
+        ///	height: 18px;
+        ///}
+        ///
+        ///img.icon-hover:hover,
+        ///td:hover img.icon-hover,
+        ///th:hover img.icon-hover,
+        ///.table-hover tr:hover  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string flomix_ei_css {
             get {
@@ -96,12 +100,21 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die $.extend( $.fn.dataTable.defaults, {searching: false, ordering: true,paging: false,dom:&quot;t&quot;} );
+        ///$.views.converters(&quot;dec&quot;,
+        ///  function(val) {
+        ///    return Math.round(val*100)/100;
+        ///  }
+        ///);
+        ///$.views.converters(&quot;round&quot;,
+        ///  function(val) {
+        ///    return Math.round(val);
+        ///  }
+        ///);
+        ///
         ///var urls = {
         ///	&apos;Warrior&apos;: &apos;https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png&apos;,
         ///	&apos;Berserker&apos;: &apos;https://wiki.guildwars2.com/images/d/da/Berserker_tango_icon_20px.png&apos;,
-        ///	&apos;Spellbreaker&apos;: &apos;https://wiki.guildwars2.com/images/e/ed/Spellbreaker_tango_icon_20px.png&apos;,
-        ///	&apos;Guardian&apos;: &apos;https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png&apos;,
-        ///	&apos;Dragonhunter&apos;: &apos;https://wiki.guildwars2.com/imag [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///	&apos;Spellbreaker&apos;: &apos;https://wiki.guildwars2.com/imag [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string flomix_ei_js {
             get {
@@ -117,8 +130,8 @@ namespace LuckParser.Properties {
         ///&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css&quot;  crossorigin=&quot;anonymous&quot;&gt;
         ///&lt;link href=&quot;https://fonts.googleapis.com/css?family=Open+Sans&quot; rel=&quot;stylesheet&quot;&gt;
         ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css&quot;&gt;
-        ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;./flomix-ei.css&quot;&gt;
-        ///&lt;script src=&quot;https://code.jquery. [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;./flomix-ei.css?version=2&quot;&gt;
+        ///&lt;script src=&quot;https://co [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string template_html {
             get {
@@ -129,13 +142,20 @@ namespace LuckParser.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot;&gt;
         ///	&lt;thead&gt;
-        ///		&lt;tr&gt;&lt;th width=&quot;30px&quot;&gt;Sub&lt;/th&gt;&lt;th width=&quot;30px&quot;&gt;&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;{{for boons}}&lt;th width=&quot;40px&quot; title=&quot;{{:name}}&quot;&gt;&lt;img src=&quot;{{:url}}&quot; alt=&quot;{{:name}}&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;/th&gt;{{/for}}&lt;/tr&gt;
+        ///		&lt;tr&gt;
+        ///			&lt;th width=&quot;30px&quot;&gt;Sub&lt;/th&gt;
+        ///			&lt;th width=&quot;30px&quot;&gt;&lt;/th&gt;
+        ///			&lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
+        ///			{{for boons}}
+        ///			&lt;th width=&quot;40px&quot; title=&quot;{{:name}}&quot;&gt;&lt;img src=&quot;{{:icon}}&quot; alt=&quot;{{:name}}&quot; class=&quot;icon icon-hover&quot;&gt;&lt;/th&gt;
+        ///			{{/for}}
+        ///		&lt;/tr&gt;
         ///	&lt;/thead&gt;
         ///	&lt;tbody&gt;
         ///		{{for rows ~boons=boons}}
         ///		&lt;tr&gt;
         ///			&lt;td&gt;{{:player.group}}&lt;/td&gt;
-        ///			&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;&lt;span style=&quot;display:none&quot;&gt;{ [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///			&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession} [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string tmplBoonTable {
             get {
@@ -144,9 +164,38 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table composition&quot;&gt;
+        ///&lt;tbody&gt;
+        ///	{{for groups}}
+        ///	{{if #data}}
+        ///	&lt;tr&gt;
+        ///		{{for #data}}
+        ///		&lt;td&gt;
+        ///			&lt;div&gt;
+        ///				&lt;img src=&quot;{{:icon}}&quot; alt=&quot;{{:profession}}&quot; class=&quot;icon&quot; title=&quot;{{:profession}}&quot;&gt;
+        ///				{{if condi}}&lt;img src=&quot;https://wiki.guildwars2.com/images/5/54/Condition_Damage.png&quot; alt=&quot;Condition Damage&quot; title=&quot;Condition Damage -{{:condi}}&quot; class=&quot;icon&quot;&gt;{{/if}}
+        ///				{{if conc}}&lt;img src=&quot;https://wiki.guildwars2.com/images/4/44/Boon_Duration.png&quot; alt =&quot;Concentration&quot; title=&quot;Concentration -{{:conc}}&quot;  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string tmplCompTable {
+            get {
+                return ResourceManager.GetString("tmplCompTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
         ///	&lt;thead&gt;
-        ///		&lt;tr&gt;&lt;th&gt;Sub&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Dmg Taken&lt;/th&gt;&lt;th&gt;Dmg Barrier&lt;/th&gt;&lt;th&gt;Blocked&lt;/th&gt;&lt;th&gt;Invulned&lt;/th&gt;&lt;th&gt;Evaded&lt;/th&gt;&lt;th&gt;&lt;span data-toggle=&quot;tooltip&quot; data-html=&quot;true&quot; data-placement=&quot;top&quot; title=&quot;Dodges or Mirage Cloak &quot;&gt;Dodges&lt;/span&gt;&lt;/th&gt;&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png&quot; alt=&quot;Downs&quot; title=&quot;Times downed&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;&lt;/th&gt;&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///		&lt;tr&gt;
+        ///			&lt;th&gt;Sub&lt;/th&gt;
+        ///			&lt;th&gt;&lt;/th&gt;
+        ///			&lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
+        ///			&lt;th&gt;Dmg Taken&lt;/th&gt;
+        ///			&lt;th&gt;Dmg Barrier&lt;/th&gt;
+        ///			&lt;th&gt;Blocked&lt;/th&gt;
+        ///			&lt;th&gt;Invulned&lt;/th&gt;
+        ///			&lt;th&gt;Evaded&lt;/th&gt;
+        ///			&lt;th&gt;&lt;span data-toggle=&quot;tooltip&quot; data-html=&quot;true&quot; data-placement=&quot;top&quot; title=&quot;Dodges or Mirage Cloak &quot;&gt;Dodges&lt;/span&gt;&lt;/th&gt;
+        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png&quot; alt=&quot;Downs&quot; title=&quot;Times down [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string tmplDefTable {
             get {
@@ -155,7 +204,7 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;display table table-striped table-hover compact&quot;  cellspacing=&quot;0&quot; width=&quot;100%&quot; id=&quot;dist_table_725_0&quot;&gt;
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot;  cellspacing=&quot;0&quot; width=&quot;100%&quot; id=&quot;dist_table_725_0&quot;&gt;
         ///	&lt;thead&gt;
         ///		&lt;tr&gt;
         ///			&lt;th&gt;Skill&lt;/th&gt;
@@ -177,7 +226,7 @@ namespace LuckParser.Properties {
         ///	&lt;tbody&gt;
         ///		{{for rows}}
         ///		&lt;tr class=&quot;{{if skill.condi}}condi{{else}}power{{/if}}&quot;&gt;
-        ///			&lt;td  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///			&lt;td class=&quot; [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string tmplDmgDistTable {
             get {
@@ -191,10 +240,9 @@ namespace LuckParser.Properties {
         ///		&lt;tr&gt;
         ///			&lt;th&gt;Sub&lt;/th&gt;
         ///			&lt;th&gt;&lt;/th&gt;
-        ///			&lt;th&gt;Name&lt;/th&gt;
-        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/9/95/Critical_Chance.png&quot; alt=&quot;Crits&quot; title=&quot;Percent time hits critical&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;&lt;/th&gt;
-        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png&quot; alt=&quot;Scholar&quot; title=&quot;Percent time hits while above 90% health&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;&lt;/th&gt;
-        ///			&lt;th&gt;&lt;img src=&quot;ht [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///      &lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
+        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/9/95/Critical_Chance.png&quot; alt=&quot;Crits&quot; title=&quot;Percent time hits critical&quot; class=&quot;icon icon-hover&quot;&gt;&lt;/th&gt;
+        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png&quot; alt=&quot;Scholar&quot; title=&quot;Percent time hits while above 90% health&quot; class=&quot;icon icon-hover&quot;&gt;&lt;/t [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string tmplDmgTable {
             get {
@@ -205,7 +253,19 @@ namespace LuckParser.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot;  cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
         ///	&lt;thead&gt;
-        ///		&lt;tr&gt;&lt;th&gt;Sub&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Account&lt;/th&gt;&lt;th&gt;Boss DPS&lt;/th&gt;&lt;th&gt;Power&lt;/th&gt;&lt;th&gt;Condi&lt;/th&gt;&lt;th&gt;All DPS&lt;/th&gt;&lt;th&gt;Power&lt;/th&gt;&lt;th&gt;Condi&lt;/th&gt;&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png&quot; alt=&quot;Downs&quot; title=&quot;Times downed&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;&lt;/th&gt;&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png&quot; alt=&quot;Dead&quot; title=&quot;Time died&quot; height=&quot;18&quot; width=&quot;18 [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///		&lt;tr&gt;
+        ///			&lt;th&gt;Sub&lt;/th&gt;
+        ///			&lt;th&gt;&lt;/th&gt;
+        ///			&lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
+        ///			&lt;th&gt;Account&lt;/th&gt;
+        ///			&lt;th&gt;Boss DPS&lt;/th&gt;
+        ///			&lt;th&gt;Power&lt;/th&gt;
+        ///			&lt;th&gt;Condi&lt;/th&gt;
+        ///			&lt;th&gt;All DPS&lt;/th&gt;
+        ///			&lt;th&gt;Power&lt;/th&gt;
+        ///			&lt;th&gt;Condi&lt;/th&gt;
+        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png&quot; alt=&quot;Downs&quot; title=&quot;Times downed&quot; class=&quot;icon icon-hover&quot;&gt;&lt;/th&gt;
+        ///			&lt;th&gt;&lt;img src=&quot;https://wiki.guildwars2.com/images/4/4a/All [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string tmplDpsTable {
             get {
@@ -219,7 +279,7 @@ namespace LuckParser.Properties {
         ///		&lt;tr&gt;
         ///			&lt;th width=&quot;30px&quot;&gt;Sub&lt;/th&gt;
         ///			&lt;th width=&quot;30px&quot;&gt;&lt;/th&gt;
-        ///			&lt;th&gt;Player&lt;/th&gt;
+        ///			&lt;th class=&quot;text-left&quot;&gt;Player&lt;/th&gt;
         ///			{{for mechanics}}
         ///				&lt;th title=&quot;{{:description}}&quot;&gt;{{:name}}&lt;/th&gt;
         ///			{{/for}}
@@ -229,7 +289,7 @@ namespace LuckParser.Properties {
         ///		{{for rows ~mechanics=mechanics}}
         ///		&lt;tr&gt;
         ///			&lt;td&gt;{{:player.group}}&lt;/td&gt;
-        ///			&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;&lt;span style=&quot;display:none&quot;&gt;{{:playe [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///			&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; class=&quot;icon&quot;&gt;&lt;span style=&quot;display:none&quot;&gt; [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string tmplMechanicTable {
             get {
@@ -239,8 +299,8 @@ namespace LuckParser.Properties {
         
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;td&gt;{{:player.group}}&lt;/td&gt;
-        ///&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; height=&quot;18&quot; width=&quot;18&quot;&gt;&lt;span style=&quot;display:none&quot;&gt;{{:player.profession}}&lt;/span&gt;&lt;/td&gt;
-        ///&lt;td&gt;{{:player.name}}&lt;/td&gt; ähnelt.
+        ///&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; class=&quot;icon&quot;&gt;&lt;span style=&quot;display:none&quot;&gt;{{:player.profession}}&lt;/span&gt;&lt;/td&gt;
+        ///&lt;td class=&quot;text-left&quot;&gt;{{:player.name}}&lt;/td&gt; ähnelt.
         /// </summary>
         internal static string tmplPlayerCells {
             get {
@@ -251,16 +311,29 @@ namespace LuckParser.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot;  cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
         ///	&lt;thead&gt;
-        ///		&lt;tr&gt;&lt;th&gt;Sub&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Condi Cleanse&lt;/th&gt;&lt;th&gt;Resurrects&lt;/th&gt;&lt;/tr&gt;
+        ///		&lt;tr&gt;
+        ///			&lt;th&gt;Sub&lt;/th&gt;
+        ///			&lt;th&gt;&lt;/th&gt;
+        ///			&lt;th&gt;Name&lt;/th&gt;
+        ///			&lt;th&gt;Condi Cleanse&lt;/th&gt;
+        ///			&lt;th&gt;Resurrects&lt;/th&gt;
+        ///		&lt;/tr&gt;
         ///	&lt;/thead&gt;
         ///	&lt;tbody&gt;
         ///		{{for rows}}
-        ///		&lt;tr&gt;{{include tmpl=&quot;#tmplPlayerCells&quot;/}}&lt;td title=&quot;{{:data[1]}} seconds&quot;&gt;{{:data[0]}}&lt;/td&gt;&lt;td title=&quot;{{:data[3]}} seconds&quot;&gt;{{:data[2]}}&lt;/td&gt;&lt;/tr&gt;
+        ///		&lt;tr&gt;
+        ///			{{include tmpl=&quot;tmplPlayerCells&quot;/}}
+        ///			&lt;td title=&quot;{{:data[1]}} seconds&quot;&gt;{{:data[0]}}&lt;/td&gt;
+        ///			&lt;td title=&quot;{{:data[3]}} seconds&quot;&gt;{{:data[2]}}&lt;/td&gt;
+        ///		&lt;/tr&gt;
         ///		{{/for}}
         ///	&lt;/tbody&gt;
         ///	&lt;tfoot&gt;
         ///		{{for sums}}
-        ///		&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;{{:name}}&lt;/td&gt;&lt;td title=&quot;{{:data[1]}} seconds&quot;&gt;{{:data[0]}}&lt;/td [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///		&lt;tr&gt;
+        ///			&lt;td&gt;&lt;/td&gt;
+        ///			&lt;td&gt;&lt;/td&gt;
+        ///			&lt;td c [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string tmplSupTable {
             get {

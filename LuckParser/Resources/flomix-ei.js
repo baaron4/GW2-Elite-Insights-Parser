@@ -38,7 +38,25 @@ var urls = {
 	'Mirage': 'https://wiki.guildwars2.com/images/d/df/Mirage_tango_icon_20px.png',
 	'Necromancer': 'https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png',
 	'Reaper': 'https://wiki.guildwars2.com/images/1/11/Reaper_tango_icon_20px.png',
-	'Scourge': 'https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png'
+	'Scourge': 'https://wiki.guildwars2.com/images/0/06/Scourge_tango_icon_20px.png',
+	
+	'Question':'https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png',
+    'Sword':'https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png',
+    'Axe':'https://wiki.guildwars2.com/images/d/d4/Crimson_Antique_Reaver.png',
+    'Dagger':'https://wiki.guildwars2.com/images/6/65/Crimson_Antique_Razor.png',
+    'Mace':'https://wiki.guildwars2.com/images/6/6d/Crimson_Antique_Flanged_Mace.png',
+    'Pistol':'https://wiki.guildwars2.com/images/4/46/Crimson_Antique_Revolver.png',
+     'Scepter':'https://wiki.guildwars2.com/images/e/e2/Crimson_Antique_Wand.png',
+    'Focus':'https://wiki.guildwars2.com/images/8/87/Crimson_Antique_Artifact.png',
+    'Shield':'https://wiki.guildwars2.com/images/b/b0/Crimson_Antique_Bastion.png',
+    'Torch':'https://wiki.guildwars2.com/images/7/76/Crimson_Antique_Brazier.png',
+    'Warhorn':'https://wiki.guildwars2.com/images/1/1c/Crimson_Antique_Herald.png',
+    'Greatsword':'https://wiki.guildwars2.com/images/5/50/Crimson_Antique_Claymore.png',
+    'Hammer':'https://wiki.guildwars2.com/images/3/38/Crimson_Antique_Warhammer.png',
+    'Longbow':'https://wiki.guildwars2.com/images/f/f0/Crimson_Antique_Greatbow.png',
+    'Shortbow':'https://wiki.guildwars2.com/images/1/17/Crimson_Antique_Short_Bow.png',
+    'Rifle':'https://wiki.guildwars2.com/images/1/19/Crimson_Antique_Musket.png',
+    'Staff':'https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png'
 };
 
 function profImg(p) {
@@ -48,6 +66,16 @@ function profImg(p) {
 		.attr('title',p)
 		.attr('width',18)
 		.attr('height',18);
+}
+
+function createCompTable($target) {
+	var groups = [];
+	$.each(window.data.players, function(p,player) {
+		if (!groups[player.group])groups[player.group]=[];
+		groups[player.group].push(player);
+	});
+	var html = tmplCompTable.render({groups:groups},{urls:urls});
+	$target.html(html);
 }
 
 function createProfessionCell($cell,profession) {
@@ -440,6 +468,8 @@ function generateWindow(layout) {
 	if (layout.tabs) {
 		$('#content').html(buildTabs(layout,'',0));
 	}
+	
+	createCompTable($('#groupComp'));
 	
 	$.each(data.phases, function(i, phaseData) {
 		

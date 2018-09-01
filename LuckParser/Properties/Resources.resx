@@ -130,6 +130,9 @@
   <data name="tmplBoonTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplBoonTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="tmplCompTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tmplCompTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="tmplDefTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplDefTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

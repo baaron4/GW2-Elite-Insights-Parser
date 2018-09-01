@@ -20,6 +20,8 @@ namespace LuckParser.Models.HtmlModels
         public string profession;
         [DataMember]
         public readonly List<string> minions = new List<string>();
+        [DataMember]
+        public string[] weapons;
 
         public PlayerDto() { }
 
