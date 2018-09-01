@@ -228,7 +228,7 @@ namespace LuckParser.Controllers
                     final.FlankingRate = 0;
                     final.GlanceRate = 0;
                     final.Missed = 0;
-                    final.Interupts = 0;
+                    final.Interrupts = 0;
                     final.Invulned = 0;
                     final.Wasted = 0;
                     final.TimeWasted = 0;
@@ -247,7 +247,7 @@ namespace LuckParser.Controllers
                     final.FlankingRateBoss = 0;
                     final.GlanceRateBoss = 0;
                     final.MissedBoss = 0;
-                    final.InteruptsBoss = 0;
+                    final.InterruptsBoss = 0;
                     final.InvulnedBoss = 0;
 
                     // Add non critable sigil/rune procs here
@@ -313,7 +313,7 @@ namespace LuckParser.Controllers
 
                                 if (dl.GetResult() == ParseEnum.Result.Interrupt)
                                 {
-                                    final.InteruptsBoss++;
+                                    final.InterruptsBoss++;
                                 }
 
                                 if (dl.GetResult() == ParseEnum.Result.Absorb)
@@ -359,7 +359,7 @@ namespace LuckParser.Controllers
 
                             if (dl.GetResult() == ParseEnum.Result.Interrupt)
                             {
-                                final.Interupts++;
+                                final.Interrupts++;
                             }
 
                             if (dl.GetResult() == ParseEnum.Result.Absorb)
@@ -404,7 +404,7 @@ namespace LuckParser.Controllers
                     final.DodgeCount = combatData.GetSkillCount(instid, SkillItem.DodgeId, start, end) + combatData.GetBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
 
                     //Stack Distance
-                    if (_settings.ParseCombatReplay && _log.GetBoss().GetCombatReplay() != null)
+                    if (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay)
                     {
                         if (_statistics.StackCenterPositions == null)
                         {
@@ -442,7 +442,7 @@ namespace LuckParser.Controllers
                                 x = x /activePlayers;
                                 y = y / activePlayers;
                                 z = z / activePlayers;
-                                _statistics.StackCenterPositions.Add(new Point3D(x, y, z, time));
+                                _statistics.StackCenterPositions.Add(new Point3D(x, y, z, _settings.PollingRate * time));
                             }
                         }
                         List<Point3D> positions = player.GetCombatReplay().GetPositions().Where(x => x.Time >= phase.GetStart() && x.Time <= phase.GetEnd()).ToList();
@@ -567,7 +567,7 @@ namespace LuckParser.Controllers
                 Dictionary<long, Statistics.FinalBoonUptime> final =
                     new Dictionary<long, Statistics.FinalBoonUptime>();
 
-                foreach (Boon boon in player.getBoonToTrack())
+                foreach (Boon boon in player.GetBoonToTrack())
                 {
                     long totalGeneration = 0;
                     long totalOverstack = 0;
@@ -618,7 +618,7 @@ namespace LuckParser.Controllers
                     BoonDistribution selfBoons = player.GetBoonDistribution(_log,_statistics.Phases, phaseIndex);
 
                     long fightDuration = phase.GetEnd() - phase.GetStart();
-                    foreach (Boon boon in player.getBoonToTrack())
+                    foreach (Boon boon in player.GetBoonToTrack())
                     {
                         Statistics.FinalBoonUptime uptime = new Statistics.FinalBoonUptime
                         {
@@ -676,7 +676,7 @@ namespace LuckParser.Controllers
                 PhaseData phase =_statistics.Phases[phaseIndex];
                 long fightDuration = phase.GetDuration();
 
-                foreach (Boon boon in _log.GetBoss().getBoonToTrack())
+                foreach (Boon boon in _log.GetBoss().GetBoonToTrack())
                 {
                     Statistics.FinalBossBoon condition = new Statistics.FinalBossBoon(_log.GetPlayerList());
                     rates[boon.GetID()] = condition;

@@ -6,11 +6,10 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class Xera : BossLogic
+    public class Xera : RaidLogic
     {
         public Xera()
         {
-            Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
 
@@ -50,7 +49,11 @@ namespace LuckParser.Models
             // split happened
             if (boss.GetPhaseData().Count == 1)
             {
-                CombatItem invulXera = log.GetBoonData().Find(x => x.DstInstid == boss.GetInstid() && (x.SkillID == 762 || x.SkillID == 34113));
+                CombatItem invulXera = log.GetBoonData(762).Find(x => x.DstInstid == boss.GetInstid());
+                if (invulXera == null)
+                {
+                    invulXera = log.GetBoonData(34113).Find(x => x.DstInstid == boss.GetInstid());
+                }
                 long end = invulXera.Time - log.GetBossData().GetFirstAware();
                 phases.Add(new PhaseData(start, end));
                 start = boss.GetPhaseData()[0] - log.GetBossData().GetFirstAware();

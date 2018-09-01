@@ -2,6 +2,7 @@ using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LuckParser.Models
 {
@@ -55,6 +56,11 @@ namespace LuckParser.Models
         public override string GetReplayIcon()
         {
             return "https://i.imgur.com/u6vv8cW.png";
+        }
+
+        public override void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
+        {
+            SetSuccessOnCombatExit(combatData, logData, bossData, 3);
         }
     }
 }

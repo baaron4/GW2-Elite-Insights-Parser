@@ -6,11 +6,10 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class SoullessHorror : BossLogic
+    public class SoullessHorror : RaidLogic
     {
         public SoullessHorror()
         {
-            Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
 

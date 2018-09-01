@@ -6,11 +6,10 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class Slothasor : BossLogic
+    public class Slothasor : RaidLogic
     {
         public Slothasor()
         {
-            Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(34479, "Tantrum", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,200,0)',", "Tntrm","Tantrum (Triple Circles after Ground slamming)", "Tantrum",0), 
