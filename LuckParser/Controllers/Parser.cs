@@ -415,7 +415,6 @@ namespace LuckParser.Controllers
                     _combatData.Add(combatItem);
                 }
             }
-            _combatData.RemoveAll(x => x.SrcInstid == 0 && x.DstAgent == 0 && x.SrcAgent == 0 && x.DstInstid == 0 && x.IFF == ParseEnum.IFF.Unknown);
         }
 
         /// <summary>
@@ -431,7 +430,10 @@ namespace LuckParser.Controllers
                 // If it is more than 200% health ignore this record
                 return false;
             }
-
+            if (combatItem.SrcInstid == 0 && combatItem.DstAgent == 0 && combatItem.SrcAgent == 0 && combatItem.DstInstid == 0 && combatItem.IFF == ParseEnum.IFF.Unknown)
+            {
+                return false;
+            }
             return true;
         }
 
