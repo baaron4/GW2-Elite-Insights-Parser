@@ -22,7 +22,7 @@ namespace LuckParser.Models.ParseModels
             int start = (int)Replay.GetTimeOffsets().Item1;
             int end = (int)Replay.GetTimeOffsets().Item2;
             Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
-            switch (ParseEnum.GetThrashIDS(Agent.GetID()))
+            switch (ParseEnum.GetThrashIDS(Agent.ID))
             {
                 case ParseEnum.ThrashIDS.BlueGuardian:
                     Replay.AddCircleActor(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)"));
@@ -87,7 +87,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetCombatReplayIcon(ParsedLog log)
         {
-            switch (ParseEnum.GetThrashIDS(Agent.GetID()))
+            switch (ParseEnum.GetThrashIDS(Agent.ID))
             {
                 case ParseEnum.ThrashIDS.Seekers:
                     Replay.SetIcon("https://i.imgur.com/FrPoluz.png");

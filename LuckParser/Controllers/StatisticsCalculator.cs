@@ -260,7 +260,7 @@ namespace LuckParser.Controllers
                     {
                         foreach (AgentItem a in phase.GetRedirection())
                         {
-                            idsToCheck.Add(a.GetInstid());
+                            idsToCheck.Add(a.InstID);
                         }
                     } else
                     {
@@ -275,8 +275,8 @@ namespace LuckParser.Controllers
                             {
                                 if (idsToCheck.Count > 1)
                                 {
-                                    AgentItem target = phase.GetRedirection().Find(x => x.GetInstid() == dl.GetDstInstidt());
-                                    if (dl.GetTime() < target.GetFirstAware() - _log.GetBossData().GetFirstAware() || dl.GetTime() > target.GetLastAware() - _log.GetBossData().GetFirstAware())
+                                    AgentItem target = phase.GetRedirection().Find(x => x.InstID == dl.GetDstInstidt());
+                                    if (dl.GetTime() < target.FirstAware - _log.GetBossData().GetFirstAware() || dl.GetTime() > target.LastAware - _log.GetBossData().GetFirstAware())
                                     {
                                         continue;
                                     }

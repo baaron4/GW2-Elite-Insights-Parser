@@ -175,30 +175,34 @@ namespace LuckParser.Controllers
                     int concentration = reader.ReadInt16();
                     // 2 bytes: healing
                     int healing = reader.ReadInt16();
-                    ParseHelper.SafeSkip(stream, 2);
+                    // 2 bytes: hitbox width
+                    int hbWidth = reader.ReadInt16();
                     // 2 bytes: condition
                     int condition = reader.ReadInt16();
-                    ParseHelper.SafeSkip(stream, 2);
+                    // 2 bytes: hitbox height
+                    int hbHeight = reader.ReadInt16();
                     // 68 bytes: name
                     String name = ParseHelper.GetString(stream, 68, false);
                     //Save
                     Agent a = new Agent(agent, name, prof, isElite);
-                    var agentProf = a.GetProf(_logData.GetBuildVersion(), _aPIController);
+                    string agentProf = a.GetProf(_logData.GetBuildVersion(), _aPIController);
+                    string profession;
                     switch(agentProf)
                     {
                         case "NPC":
                             // NPC
-                            _agentData.AddItem(new AgentItem(agent, name, a.GetName() + ":" + prof.ToString().PadLeft(5, '0'), toughness, healing, condition, concentration), agentProf);
+                            profession = a.GetName() + ":" + prof.ToString().PadLeft(5, '0');
                             break;
-                            // Gadget
                         case "GDG":
-                            _agentData.AddItem(new AgentItem(agent, name, a.GetName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0'),toughness, healing, condition,concentration), agentProf);
+                            // Gadget
+                            profession = a.GetName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0');
                             break;
                         default:
                             // Player
-                            _agentData.AddItem(new AgentItem(agent, name, agentProf, toughness, healing, condition,concentration), agentProf);
+                            profession = agentProf;
                             break;
                     }
+                    _agentData.AddItem(new AgentItem(agent, name, profession, toughness, healing, condition, concentration, hbWidth, hbHeight), agentProf);
                 }
             }
         }
@@ -442,26 +446,26 @@ namespace LuckParser.Controllers
         /// </summary>
         private void FillMissingData()
         {
-            var agentsLookup = _agentData.GetAllAgentsList().ToDictionary(a => a.GetAgent());
+            var agentsLookup = _agentData.GetAllAgentsList().ToDictionary(a => a.Agent);
             // Set Agent instid, firstAware and lastAware
             foreach (CombatItem c in _combatData)
             {
                 if(agentsLookup.TryGetValue(c.SrcAgent, out var a))
                 {
-                    if (a.GetInstid() == 0 && c.IsStateChange.IsSpawn())
+                    if (a.InstID == 0 && c.IsStateChange.IsSpawn())
                     {
-                        a.SetInstid(c.SrcInstid);
+                        a.InstID = c.SrcInstid;
                     }
-                    if (a.GetInstid() != 0)
+                    if (a.InstID != 0)
                     {
-                        if (a.GetFirstAware() == 0)
+                        if (a.FirstAware == 0)
                         {
-                            a.SetFirstAware(c.Time);
-                            a.SetLastAware(c.Time);
+                            a.FirstAware = c.Time;
+                            a.LastAware = c.Time;
                         }
                         else
                         {
-                            a.SetLastAware(c.Time);
+                            a.LastAware = c.Time;
                         }
                     }
                 }
@@ -471,12 +475,12 @@ namespace LuckParser.Controllers
             {
                 if (c.SrcMasterInstid != 0)
                 {
-                    var master = _agentData.GetAllAgentsList().Find(x => x.GetInstid() == c.SrcMasterInstid && x.GetFirstAware() < c.Time && c.Time < x.GetLastAware());
+                    var master = _agentData.GetAllAgentsList().Find(x => x.InstID == c.SrcMasterInstid && x.FirstAware < c.Time && c.Time < x.LastAware);
                     if (master != null)
                     {
-                        if(agentsLookup.TryGetValue(c.SrcAgent, out var minion) && minion.GetFirstAware() < c.Time && c.Time < minion.GetLastAware())
+                        if(agentsLookup.TryGetValue(c.SrcAgent, out var minion) && minion.FirstAware < c.Time && c.Time < minion.LastAware)
                         {
-                            minion.SetMasterAgent(master.GetAgent());
+                            minion.MasterAgent = (master.Agent);
                         }
                     }
                 }
@@ -489,16 +493,16 @@ namespace LuckParser.Controllers
             HashSet<ulong> multipleBoss = new HashSet<ulong>();
             foreach (AgentItem NPC in npcList)
             {
-                if (NPC.GetID() == _bossData.GetID())
+                if (NPC.ID == _bossData.GetID())
                 {
                     if (_bossData.GetAgent() == 0)
                     {
-                        _bossData.SetAgent(NPC.GetAgent());
-                        _bossData.SetInstid(NPC.GetInstid());
-                        _bossData.SetName(NPC.GetName());
-                        _bossData.SetTough(NPC.GetToughness());
+                        _bossData.SetAgent(NPC.Agent);
+                        _bossData.SetInstid(NPC.InstID);
+                        _bossData.SetName(NPC.Name);
+                        _bossData.SetTough(NPC.Toughness);
                     }
-                    multipleBoss.Add(NPC.GetAgent());
+                    multipleBoss.Add(NPC.Agent);
                 }
             }
             if (multipleBoss.Count > 1)
@@ -516,8 +520,8 @@ namespace LuckParser.Controllers
                     // redirect all attacks to the main golem
                     if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.Normal && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None)
                     {
-                        c.DstAgent = bossAgent.GetAgent();
-                        c.DstInstid = bossAgent.GetInstid();
+                        c.DstAgent = bossAgent.Agent;
+                        c.DstInstid = bossAgent.InstID;
                     }
                 }
 
@@ -538,7 +542,7 @@ namespace LuckParser.Controllers
                             ulong povAgent = c.SrcAgent;
                             if(agentsLookup.TryGetValue(povAgent, out var p))
                             {
-                                _logData.SetPOV(p.GetName());
+                                _logData.SetPOV(p.Name);
                             }
                         }
                         break;
@@ -565,13 +569,13 @@ namespace LuckParser.Controllers
             {
                 foreach (AgentItem NPC in npcList)
                 {
-                    if (NPC.GetID() == 16286)
+                    if (NPC.ID == 16286)
                     {
                         bossHealthOverTime = new List<Point>();//reset boss health over time
-                        int xera2Instid = NPC.GetInstid();
+                        int xera2Instid = NPC.InstID;
                         _bossData.SetHealth(24085950);
-                        _boss.AddPhaseData(NPC.GetFirstAware());
-                        _bossData.SetLastAware(NPC.GetLastAware());
+                        _boss.AddPhaseData(NPC.FirstAware);
+                        _bossData.SetLastAware(NPC.LastAware);
                         foreach (CombatItem c in _combatData)
                         {
                             if (c.SrcInstid == xera2Instid)
@@ -597,13 +601,13 @@ namespace LuckParser.Controllers
             //Dealing with Deimos split
             if (_bossData.GetID() == 17154)
             {
-                List<AgentItem> deimosGadgets = _agentData.GetGadgetAgentList().Where(x => x.GetFirstAware() > bossAgent.GetLastAware() && x.GetName().Contains("Deimos")).OrderBy(x => x.GetLastAware()).ToList();
+                List<AgentItem> deimosGadgets = _agentData.GetGadgetAgentList().Where(x => x.FirstAware > bossAgent.LastAware && x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
                 if (deimosGadgets.Count > 0)
                 {
                     AgentItem NPC = deimosGadgets.Last();
-                    int deimos2Instid = NPC.GetInstid();
-                    long oldAware = bossAgent.GetLastAware();
-                    _boss.AddPhaseData(NPC.GetFirstAware() >= oldAware ? NPC.GetFirstAware() : oldAware);
+                    int deimos2Instid = NPC.InstID;
+                    long oldAware = bossAgent.LastAware;
+                    _boss.AddPhaseData(NPC.FirstAware >= oldAware ? NPC.FirstAware : oldAware);
                     //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos2Instid ).ToList().Sum(x);
                     //int stop = 0;
                     foreach (CombatItem c in _combatData)
@@ -640,20 +644,20 @@ namespace LuckParser.Controllers
 
                 foreach (AgentItem playerAgent in playerAgentList)
                 {
-                    if (playerAgent.GetInstid() == 0)
+                    if (playerAgent.InstID == 0)
                     {
-                        CombatItem tst = _combatData.Find(x => x.SrcAgent == playerAgent.GetAgent());
+                        CombatItem tst = _combatData.Find(x => x.SrcAgent == playerAgent.Agent);
                         if (tst == null)
                         {
-                            tst = _combatData.Find(x => x.DstAgent == playerAgent.GetAgent());
-                            playerAgent.SetInstid(tst == null ? ushort.MaxValue : tst.DstInstid);
+                            tst = _combatData.Find(x => x.DstAgent == playerAgent.Agent);
+                            playerAgent.InstID = tst == null ? ushort.MaxValue : tst.DstInstid;
                         }
                         else
                         {
-                            playerAgent.SetInstid(tst.SrcInstid);
+                            playerAgent.InstID = tst.SrcInstid;
                         }
                     }
-                    List<CombatItem> lp = _combatData.GetStates(playerAgent.GetInstid(), ParseEnum.StateChange.Despawn, _bossData.GetFirstAware(), _bossData.GetLastAware());
+                    List<CombatItem> lp = _combatData.GetStates(playerAgent.InstID, ParseEnum.StateChange.Despawn, _bossData.GetFirstAware(), _bossData.GetLastAware());
                     Player player = new Player(playerAgent, _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Fractal);
                     bool skip = false;
                     foreach (Player p in _playerList)
@@ -672,18 +676,18 @@ namespace LuckParser.Controllers
                         //make all actions of other instances to original instid
                         foreach (AgentItem extra in npcList)
                         {
-                            if (extra.GetAgent() == playerAgent.GetAgent())
+                            if (extra.Agent == playerAgent.Agent)
                             {
-                                var extraLoginId = extra.GetInstid();
+                                var extraLoginId = extra.InstID;
                                 foreach (CombatItem c in _combatData)
                                 {
                                     if (c.SrcInstid == extraLoginId)
                                     {
-                                        c.SrcInstid = playerAgent.GetInstid();
+                                        c.SrcInstid = playerAgent.InstID;
                                     }
                                     if (c.DstInstid == extraLoginId)
                                     {
-                                        c.DstInstid = playerAgent.GetInstid();
+                                        c.DstInstid = playerAgent.InstID;
                                     }
                                 }
                                 break;
@@ -706,11 +710,11 @@ namespace LuckParser.Controllers
             }
             if (_bossData.GetFirstAware() == 0)
             {
-                _bossData.SetFirstAware(bossAgent.GetFirstAware());
+                _bossData.SetFirstAware(bossAgent.FirstAware);
             }
             if (_bossData.GetLastAware() == long.MaxValue)
             {
-                _bossData.SetLastAware(bossAgent.GetLastAware());
+                _bossData.SetLastAware(bossAgent.LastAware);
             }
             _playerList = _playerList.OrderBy(a => a.GetGroup()).ToList();
             
