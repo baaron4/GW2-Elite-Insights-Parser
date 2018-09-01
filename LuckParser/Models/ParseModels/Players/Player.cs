@@ -148,7 +148,20 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && (apiskill.categories == null || (apiskill.categories.Count() == 1 && apiskill.categories[0] == "Phantasm")))
                     {
-                        if (apiskill.weapon_type == "Greatsword" || apiskill.weapon_type == "Staff" || apiskill.weapon_type == "Rifle" || apiskill.weapon_type == "Longbow" || apiskill.weapon_type == "Shortbow" || apiskill.weapon_type == "Hammer")
+                        if (apiskill.duel_wield != null)
+                        {
+                            if (swapped == 4)
+                            {
+                                weapons[0] = apiskill.weapon_type;
+                                weapons[1] = apiskill.duel_wield;
+                            }
+                            else if (swapped == 5)
+                            {
+                                weapons[2] = apiskill.weapon_type;
+                                weapons[3] = apiskill.duel_wield;
+                            }
+                        }
+                        else if (apiskill.weapon_type == "Greatsword" || apiskill.weapon_type == "Staff" || apiskill.weapon_type == "Rifle" || apiskill.weapon_type == "Longbow" || apiskill.weapon_type == "Shortbow" || apiskill.weapon_type == "Hammer")
                         {
                             if (swapped == 4)
                             {
