@@ -489,19 +489,23 @@ namespace LuckParser.Controllers
 
         public static void WritePlayerTabBoonGraph(StreamWriter sw, BoonsGraphModel bgm, long start, long end)
         {
-            List<Point> bChart = bgm.GetBoonChart().Where(x => x.X >= start / 1000 && x.X <= end / 1000).ToList();
+            long roundedStart = 1000 * (start / 1000);
+            long roundedEnd = 1000 * (end / 1000);
+            List<BoonsGraphModel.Segment> bChart = bgm.GetBoonChart().Where(x => x.End >= roundedStart && x.Start <= roundedEnd).ToList();
             int bChartCount = 0;
             sw.Write("y: [");
             {
-                foreach (Point pnt in bChart)
+                foreach (BoonsGraphModel.Segment seg in bChart)
                 {
                     if (bChartCount == bChart.Count - 1)
                     {
-                        sw.Write("'" + pnt.Y + "'");
+                        sw.Write("'" + seg.Value + "',");
+                        sw.Write("'" + seg.Value + "'");
                     }
                     else
                     {
-                        sw.Write("'" + pnt.Y + "',");
+                        sw.Write("'" + seg.Value + "',");
+                        sw.Write("'" + seg.Value + "',");
                     }
                     bChartCount++;
                 }
@@ -514,15 +518,19 @@ namespace LuckParser.Controllers
             sw.Write("x: [");
             {
                 bChartCount = 0;
-                foreach (Point pnt in bChart)
+                foreach (BoonsGraphModel.Segment seg in bChart)
                 {
+                    double segStart = Math.Round(Math.Max(seg.Start - roundedStart, 0) / 1000.0,3);
+                    double segEnd = Math.Round(Math.Min(seg.End - roundedStart, roundedEnd - roundedStart) / 1000.0,3);
                     if (bChartCount == bChart.Count - 1)
                     {
-                        sw.Write("'" + (pnt.X - (int)start / 1000) + "'");
+                        sw.Write("'" + segStart + "',");
+                        sw.Write("'" + segEnd + "'");
                     }
                     else
                     {
-                        sw.Write("'" + (pnt.X - (int)start / 1000) + "',");
+                        sw.Write("'" + segStart + "',");
+                        sw.Write("'" + segEnd + "',");
                     }
                     bChartCount++;
                 }

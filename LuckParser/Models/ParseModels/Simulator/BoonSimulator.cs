@@ -35,14 +35,14 @@ namespace LuckParser.Models.ParseModels
         // Fields
         protected readonly List<BoonStackItem> BoonStack;
         protected readonly List<BoonSimulationItem> Simulation = new List<BoonSimulationItem>();
-        private readonly int Capacity;
+        private readonly int _capacity;
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;
 
         // Constructor
         protected BoonSimulator(int capacity, ParsedLog log, StackingLogic logic)
         {
-            Capacity = capacity;
+            _capacity = capacity;
             BoonStack = new List<BoonStackItem>(capacity);
             _log = log;
             _logic = logic;
@@ -97,7 +97,7 @@ namespace LuckParser.Models.ParseModels
         {
             var toAdd = new BoonStackItem(start, boonDuration, srcinstid, overstack);
             // Find empty slot
-            if (BoonStack.Count < Capacity)
+            if (BoonStack.Count < _capacity)
             {
                 BoonStack.Add(toAdd);
                 _logic.Sort(_log, BoonStack);

@@ -368,11 +368,6 @@ namespace LuckParser.Models.ParseModels
                 45026,
                 31803
             };
-            for (int i = 0; i <= fightDuration; i++)
-            {
-                boonPresencePoints.GetBoonChart().Add(new Point(i, 0));
-                condiPresencePoints.GetBoonChart().Add(new Point(i, 0));
-            }
             for (int i = 0; i < phases.Count; i++)
             {
                 _boonDistribution.Add(new BoonDistribution());
@@ -401,9 +396,10 @@ namespace LuckParser.Models.ParseModels
                     {
                         simulator.Trim(dur);
                     }
-                    var simulation = simulator.GetSimulationResult();
                     var updateBoonPresence = boonIds.Contains(boonid);
                     var updateCondiPresence = boonid != 873 && condiIds.Contains(boonid);
+                    var simulation = simulator.GetSimulationResult();
+                    var graphSegments = new List<BoonsGraphModel.Segment>();
                     foreach (var simul in simulation.Items)
                     {
                         for (int i = 0; i < phases.Count; i++)
@@ -434,39 +430,39 @@ namespace LuckParser.Models.ParseModels
                                 }
                             }
                         }
+                        List<BoonsGraphModel.Segment> segments = simul.ToSegment();
+                        if (segments.Count > 0)
+                        {
+                            if (graphSegments.Count == 0)
+                            {
+                                graphSegments.Add(new BoonsGraphModel.Segment(0, segments.First().Start, 0));
+                            } else if (graphSegments.Last().End != segments.First().Start)
+                            {
+                                graphSegments.Add(new BoonsGraphModel.Segment(graphSegments.Last().End, segments.First().Start, 0));
+                            }
+                            graphSegments.AddRange(simul.ToSegment());
+                        }
                     }
-
-                    // Graphs
                     if (requireExtraData)
                     {
                         GenerateExtraBoonData(log, boonid, simulation, phases);
                     }
-                    // Precision is reduced to seconds
-                    var graphPoints = new List<Point>(capacity: fightDuration + 1);
-                    var boonPresence = boonPresencePoints.GetBoonChart();
-                    var condiPresence = condiPresencePoints.GetBoonChart();
-                    /*if (Replay != null && (updateCondiPresence || updateBoonPresence || defIds.Contains(boonid) || offIds.Contains(boonid)))
+                    if (graphSegments.Count > 0)
                     {
-                        foreach (int time in Replay.GetTimes())
-                        {
-                            Replay.AddBoon(boonid, simulation.GetBoonStackCount(time));
-                        }
-
-                    }*/
-                    for (int i = 0; i <= fightDuration; i++)
+                        graphSegments.Add(new BoonsGraphModel.Segment(graphSegments.Last().End, dur, 0));
+                    } else
                     {
-                        graphPoints.Add(new Point(i, simulation.GetBoonStackCount(1000 * i)));
-                        if (updateBoonPresence)
-                        {
-                            boonPresence[i] = new Point(i, boonPresence[i].Y + (simulation.GetEffectPresence(1000 * i) ? 1 : 0));
-                        }
-                        if (updateCondiPresence)
-                        {
-                            condiPresence[i] = new Point(i, condiPresence[i].Y + (simulation.GetEffectPresence(1000 * i) ? 1 : 0));
-                        }
+                        graphSegments.Add(new BoonsGraphModel.Segment(0, dur, 0));
                     }
-                    _boonPoints[boonid] = new BoonsGraphModel(boon.GetName(), graphPoints);
+                    _boonPoints[boonid] = new BoonsGraphModel(boon.GetName(), graphSegments);
                 }
+            }
+            foreach(KeyValuePair<long,BoonsGraphModel> pair in _boonPoints)
+            {
+                long boonid = pair.Key;
+                BoonsGraphModel bgm = pair.Value;
+                var updateBoonPresence = boonIds.Contains(boonid);
+                var updateCondiPresence = boonid != 873 && condiIds.Contains(boonid);
             }
             _boonPoints[-2] = boonPresencePoints;
             _boonPoints[-3] = condiPresencePoints;
