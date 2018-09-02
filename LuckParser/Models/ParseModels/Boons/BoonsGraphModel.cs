@@ -40,10 +40,10 @@ namespace LuckParser.Models.ParseModels
         {
             BoonName = boonName;
             BoonChart = boonChart;
-            FuseChart();
+            FuseSegments();
         }
 
-        public void FuseChart()
+        public void FuseSegments()
         {
             List<Segment> newChart = new List<Segment>();
             Segment last = null;

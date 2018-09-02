@@ -511,10 +511,10 @@ namespace LuckParser.Models.ParseModels
                 }
                 if (updateBoonPresence)
                 {
-                    boonPresenceGraph.FuseChart();
+                    boonPresenceGraph.FuseSegments();
                 } else
                 {
-                    condiPresenceGraph.FuseChart();
+                    condiPresenceGraph.FuseSegments();
                 }
             }
             _boonPoints[-2] = boonPresenceGraph;
