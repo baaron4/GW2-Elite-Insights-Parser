@@ -22,7 +22,7 @@ namespace LuckParser.Models.ParseModels
         // Constructors
         public Player(AgentItem agent, bool noSquad) : base(agent)
         {
-            String[] name = agent.GetName().Split('\0');
+            String[] name = agent.Name.Split('\0');
             _account = name[1];
             _group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
         }
@@ -41,22 +41,22 @@ namespace LuckParser.Models.ParseModels
 
         public int GetToughness()
         {
-            return Agent.GetToughness();
+            return Agent.Toughness;
         }
 
         public int GetHealing()
         {
-            return Agent.GetHealing();
+            return Agent.Healing;
         }
 
         public int GetCondition()
         {
-            return Agent.GetCondition();
+            return Agent.Condition;
         }
 
         public int GetConcentration()
         {
-            return Agent.GetConcentration();
+            return Agent.Concentration;
         }
         // Public methods
         public int[] GetCleanses(ParsedLog log, long start, long end) {
@@ -67,7 +67,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (c.IsActivation == ParseEnum.Activation.None)
                 {
-                    if ((Agent.GetInstid() == c.DstInstid || Agent.GetInstid() == c.DstMasterInstid) && c.IFF == ParseEnum.IFF.Friend && (c.IsBuffRemove != ParseEnum.BuffRemove.None))
+                    if ((Agent.InstID == c.DstInstid || Agent.InstID == c.DstMasterInstid) && c.IFF == ParseEnum.IFF.Friend && (c.IsBuffRemove != ParseEnum.BuffRemove.None))
                     {
                         long time = c.Time - timeStart;
                         if (time > 0)
@@ -233,7 +233,7 @@ namespace LuckParser.Models.ParseModels
         protected override void SetDamagetakenLogs(ParsedLog log)
         {
             long timeStart = log.GetBossData().GetFirstAware();               
-            foreach (CombatItem c in log.GetDamageTakenData(Agent.GetInstid())) {
+            foreach (CombatItem c in log.GetDamageTakenData(Agent.InstID)) {
                 if (c.Time > log.GetBossData().GetFirstAware() && c.Time < log.GetBossData().GetLastAware()) {//selecting player as target
                     long time = c.Time - timeStart;
                     AddDamageTakenLog(time, c);
@@ -250,7 +250,7 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (CombatItem c in log.GetBoonData(consumable.GetID()))
                 {
-                    if (c.IsBuffRemove != ParseEnum.BuffRemove.None || (c.IsBuff != 18 && c.IsBuff != 1) || Agent.GetInstid() != c.DstInstid)
+                    if (c.IsBuffRemove != ParseEnum.BuffRemove.None || (c.IsBuff != 18 && c.IsBuff != 1) || Agent.InstID != c.DstInstid)
                     {
                         continue;
                     }
@@ -412,7 +412,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     foreach (DamageLog dl in GetDamageLogs(0,log,0,log.GetBossData().GetAwareDuration()))
                     {
-                        if (dl.GetDstInstidt() != a.GetInstid() || dl.IsCondi() > 0 || dl.GetTime() < a.GetFirstAware() - start || dl.GetTime() > a.GetLastAware() - start || (condition != null && !condition(dl.GetDamage())))
+                        if (dl.GetDstInstidt() != a.InstID || dl.IsCondi() > 0 || dl.GetTime() < a.FirstAware - start || dl.GetTime() > a.LastAware - start || (condition != null && !condition(dl.GetDamage())))
                         {
                             continue;
                         }

@@ -95,10 +95,10 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.GamblerClones,
                         ParseEnum.ThrashIDS.GamblerReal,
                     };
-                List<AgentItem> clones = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.GetID()))).ToList();
+                List<AgentItem> clones = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
                 foreach (AgentItem a in clones)
                 {
-                    long agentStart = a.GetFirstAware() - log.GetBossData().GetFirstAware();
+                    long agentStart = a.FirstAware - log.GetBossData().GetFirstAware();
                     if (phase.InInterval(agentStart))
                     {
                         phase.AddRedirection(a);

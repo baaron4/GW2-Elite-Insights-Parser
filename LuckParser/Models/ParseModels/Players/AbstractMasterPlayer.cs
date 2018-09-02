@@ -108,14 +108,14 @@ namespace LuckParser.Models.ParseModels
                 SetCombatReplayIcon(log);
                 if (trim)
                 {
-                    CombatItem despawnCheck = log.GetCombatList().FirstOrDefault(x => x.SrcAgent == Agent.GetAgent() && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
+                    CombatItem despawnCheck = log.GetCombatList().FirstOrDefault(x => x.SrcAgent == Agent.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
                     if (despawnCheck != null)
                     {
-                        Replay.Trim(Agent.GetFirstAware() - log.GetBossData().GetFirstAware(), despawnCheck.Time - log.GetBossData().GetFirstAware());
+                        Replay.Trim(Agent.FirstAware - log.GetBossData().GetFirstAware(), despawnCheck.Time - log.GetBossData().GetFirstAware());
                     }
                     else
                     {
-                        Replay.Trim(Agent.GetFirstAware() - log.GetBossData().GetFirstAware(), Agent.GetLastAware() - log.GetBossData().GetFirstAware());
+                        Replay.Trim(Agent.FirstAware - log.GetBossData().GetFirstAware(), Agent.LastAware - log.GetBossData().GetFirstAware());
                     }
                 }
                 SetAdditionalCombatReplayData(log, pollingRate);
@@ -129,7 +129,7 @@ namespace LuckParser.Models.ParseModels
         public long GetDeath(ParsedLog log, long start, long end)
         {
             long offset = log.GetBossData().GetFirstAware();
-            CombatItem dead = log.GetCombatList().LastOrDefault(x => x.SrcInstid == Agent.GetInstid() && x.IsStateChange.IsDead() && x.Time >= start + offset && x.Time <= end + offset);
+            CombatItem dead = log.GetCombatList().LastOrDefault(x => x.SrcInstid == Agent.InstID && x.IsStateChange.IsDead() && x.Time >= start + offset && x.Time <= end + offset);
             if (dead != null && dead.Time > 0)
             {
                 return dead.Time;
@@ -161,7 +161,7 @@ namespace LuckParser.Models.ParseModels
             tableIds.UnionWith(condiIds);
             tableIds.UnionWith(offIds);
             tableIds.UnionWith(defIds);
-            foreach(CombatItem c in log.GetBoonDataByDst(Agent.GetInstid()))
+            foreach(CombatItem c in log.GetBoonDataByDst(Agent.InstID))
             {
                 long boonId = c.SkillID;
                 if (!boonMap.ContainsKey(boonId))
@@ -264,7 +264,7 @@ namespace LuckParser.Models.ParseModels
         // private setters
         private void SetMovements(ParsedLog log)
         {
-            foreach (CombatItem c in log.GetMovementData(Agent.GetInstid()))
+            foreach (CombatItem c in log.GetMovementData(Agent.InstID))
             {
                 long time = c.Time - log.GetBossData().GetFirstAware();
                 byte[] xy = BitConverter.GetBytes(c.DstAgent);
@@ -473,11 +473,11 @@ namespace LuckParser.Models.ParseModels
         }
         private void SetMinions(ParsedLog log)
         {
-            List<AgentItem> combatMinion = log.GetAgentData().GetNPCAgentList().Where(x => x.GetMasterAgent() == Agent.GetAgent()).ToList();
+            List<AgentItem> combatMinion = log.GetAgentData().GetNPCAgentList().Where(x => x.MasterAgent == Agent.Agent).ToList();
             Dictionary<string, Minions> auxMinions = new Dictionary<string, Minions>();
             foreach (AgentItem agent in combatMinion)
             {
-                string id = agent.GetName();
+                string id = agent.Name;
                 if (!auxMinions.ContainsKey(id))
                 {
                     auxMinions[id] = new Minions(id.GetHashCode());
@@ -495,7 +495,7 @@ namespace LuckParser.Models.ParseModels
         protected override void SetDamageLogs(ParsedLog log)
         {
             long timeStart = log.GetBossData().GetFirstAware();
-            foreach (CombatItem c in log.GetDamageData(Agent.GetInstid()))
+            foreach (CombatItem c in log.GetDamageData(Agent.InstID))
             {
                 if (c.Time > log.GetBossData().GetFirstAware() && c.Time < log.GetBossData().GetLastAware())//selecting player or minion as caster
                 {
@@ -514,7 +514,7 @@ namespace LuckParser.Models.ParseModels
         {
             long timeStart = log.GetBossData().GetFirstAware();
             CastLog curCastLog = null;
-            foreach (CombatItem c in log.GetCastData(Agent.GetInstid()))
+            foreach (CombatItem c in log.GetCastData(Agent.InstID))
             {
                 if (!(c.Time > log.GetBossData().GetFirstAware() && c.Time < log.GetBossData().GetLastAware()))
                 {
