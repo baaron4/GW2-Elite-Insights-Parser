@@ -491,7 +491,7 @@ namespace LuckParser.Controllers
         {
             long roundedStart = 1000 * (start / 1000);
             long roundedEnd = 1000 * (end / 1000);
-            List<BoonsGraphModel.Segment> bChart = bgm.GetBoonChart().Where(x => x.End >= roundedStart && x.Start <= roundedEnd).ToList();
+            List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= roundedStart && x.Start <= roundedEnd).ToList();
             int bChartCount = 0;
             sw.Write("y: [");
             {
@@ -509,7 +509,7 @@ namespace LuckParser.Controllers
                     }
                     bChartCount++;
                 }
-                if (bgm.GetBoonChart().Count == 0)
+                if (bgm.BoonChart.Count == 0)
                 {
                     sw.Write("'0'");
                 }
@@ -534,7 +534,7 @@ namespace LuckParser.Controllers
                     }
                     bChartCount++;
                 }
-                if (bgm.GetBoonChart().Count == 0)
+                if (bgm.BoonChart.Count == 0)
                 {
                     sw.Write("'0'");
                 }
@@ -543,17 +543,13 @@ namespace LuckParser.Controllers
             sw.Write(" yaxis: 'y2'," +
                  " type: 'scatter',");
             //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
-            if (bgm.GetBoonName() == "Might" || bgm.GetBoonName() == "Quickness")
-            {
-
-            }
-            else
+            if (!(bgm.BoonName == "Might" || bgm.BoonName == "Quickness"))
             {
                 sw.Write(" visible: 'legendonly',");
             }
-            sw.Write(" line: {color:'" + GetLink("Color-" + bgm.GetBoonName()) + "'},");
+            sw.Write(" line: {color:'" + GetLink("Color-" + bgm.BoonName) + "'},");
             sw.Write(" fill: 'tozeroy'," +
-                 " name: \"" + bgm.GetBoonName() + "\"");
+                 " name: \"" + bgm.BoonName + "\"");
         }
 
         public static void WritePlayerTabDPSGraph(StreamWriter sw, string name, List<Point> playerdpsgraphdata, AbstractPlayer p)

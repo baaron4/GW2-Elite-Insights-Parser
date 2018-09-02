@@ -9,9 +9,9 @@ namespace LuckParser.Models.ParseModels
 
         public class Segment
         {
-            public readonly long Start;
+            public long Start { get; set; }
             public long End { get; set; }
-            public readonly int Value;
+            public int Value { get; set; }
 
             public Segment(long start, long end, int value)
             {
@@ -28,45 +28,50 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        private readonly string _boonName;
-        private readonly List<Segment> _boonChart = new List<Segment>();
+        public readonly string BoonName;
+        public List<Segment> BoonChart { get; private set; } = new List<Segment>();
 
         // Constructor
         public BoonsGraphModel(string boonName)
         {
-            _boonName = boonName;
+            BoonName = boonName;
         }
         public BoonsGraphModel(string boonName, List<Segment> boonChart)
         {
-            _boonName = boonName;
-            // Fuse segments
+            BoonName = boonName;
+            BoonChart = boonChart;
+            FuseChart();
+        }
+
+        public void FuseChart()
+        {
+            List<Segment> newChart = new List<Segment>();
             Segment last = null;
-            foreach(Segment seg in boonChart)
+            foreach (Segment seg in BoonChart)
             {
+                if (seg.Start == seg.End)
+                {
+                    continue;
+                }
                 if (last == null)
                 {
-                    _boonChart.Add(new Segment(seg));
-                    last = _boonChart.Last();
-                } else
+                    newChart.Add(new Segment(seg));
+                    last = newChart.Last();
+                }
+                else
                 {
                     if (seg.Value == last.Value)
                     {
                         last.End = seg.End;
-                    } else
+                    }
+                    else
                     {
-                        _boonChart.Add(new Segment(seg));
-                        last = _boonChart.Last();
+                        newChart.Add(new Segment(seg));
+                        last = newChart.Last();
                     }
                 }
             }
-        }
-        //getters
-        public string GetBoonName() {
-            return _boonName;
-        }
-        public List<Segment> GetBoonChart()
-        {
-            return _boonChart;
+            BoonChart = newChart;
         }
 
     }

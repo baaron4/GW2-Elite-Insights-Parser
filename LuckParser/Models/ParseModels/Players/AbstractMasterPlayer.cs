@@ -359,9 +359,6 @@ namespace LuckParser.Models.ParseModels
             BoonMap toUse = GetBoonMap(log, boonIds, condiIds, defIds, offIds);
             long dur = log.GetBossData().GetAwareDuration();
             int fightDuration = (int)(dur) / 1000;
-            // Init boon/condi presence points
-            BoonsGraphModel boonPresencePoints = new BoonsGraphModel("Number of Boons");
-            BoonsGraphModel condiPresencePoints = new BoonsGraphModel("Number of Conditions");
             HashSet<long> extraDataID = new HashSet<long>
             {
                 50421,
@@ -457,15 +454,71 @@ namespace LuckParser.Models.ParseModels
                     _boonPoints[boonid] = new BoonsGraphModel(boon.GetName(), graphSegments);
                 }
             }
-            foreach(KeyValuePair<long,BoonsGraphModel> pair in _boonPoints)
+            BoonsGraphModel boonPresenceGraph = new BoonsGraphModel("Number of Boons");
+            BoonsGraphModel condiPresenceGraph = new BoonsGraphModel("Number of Conditions");
+            foreach (KeyValuePair<long,BoonsGraphModel> pair in _boonPoints)
             {
                 long boonid = pair.Key;
                 BoonsGraphModel bgm = pair.Value;
                 var updateBoonPresence = boonIds.Contains(boonid);
                 var updateCondiPresence = boonid != 873 && condiIds.Contains(boonid);
+                if (!updateBoonPresence && !updateCondiPresence)
+                {
+                    continue;
+                }
+                List<BoonsGraphModel.Segment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.BoonChart : condiPresenceGraph.BoonChart;
+                bool firstPass = segmentsToFill.Count == 0;
+                foreach (BoonsGraphModel.Segment seg in bgm.BoonChart)
+                {
+                    long start = seg.Start;
+                    long end = seg.End;
+                    int value = seg.Value > 0 ? 1 : 0;
+                    if (firstPass)
+                    {
+                        segmentsToFill.Add(new BoonsGraphModel.Segment(start, end, value));
+                    }
+                    else
+                    {
+                        for (int i = 0; i < segmentsToFill.Count; i++)
+                        {
+                            BoonsGraphModel.Segment curSeg = segmentsToFill[i];
+                            long curEnd = curSeg.End;
+                            long curStart = curSeg.Start;
+                            int curVal = curSeg.Value;
+                            if (curStart > end)
+                            {
+                                break;
+                            }
+                            if (curEnd < start)
+                            {
+                                continue;
+                            }
+                            if (end <= curEnd)
+                            {
+                                curSeg.End = start;
+                                segmentsToFill.Insert(i + 1, new BoonsGraphModel.Segment(start, end, curVal + value));
+                                segmentsToFill.Insert(i + 2, new BoonsGraphModel.Segment(end, curEnd, curVal));
+                                break;
+                            } else
+                            {
+                                curSeg.End = start;
+                                segmentsToFill.Insert(i + 1, new BoonsGraphModel.Segment(start, curEnd, curVal + value));
+                                start = curEnd;
+                                i++;
+                            }
+                        }
+                    }
+                }
+                if (updateBoonPresence)
+                {
+                    boonPresenceGraph.FuseChart();
+                } else
+                {
+                    condiPresenceGraph.FuseChart();
+                }
             }
-            _boonPoints[-2] = boonPresencePoints;
-            _boonPoints[-3] = condiPresencePoints;
+            _boonPoints[-2] = boonPresenceGraph;
+            _boonPoints[-3] = condiPresenceGraph;
         }
         private void SetMinions(ParsedLog log)
         {

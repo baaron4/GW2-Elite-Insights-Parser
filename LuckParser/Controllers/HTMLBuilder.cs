@@ -1672,7 +1672,7 @@ namespace LuckParser.Controllers
                                         if (_statistics.PresentBoons.Count > 0)
                                         {
                                             Dictionary<long, BoonsGraphModel> boonGraphData = p.GetBoonGraphs(_log, phases);
-                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.GetBoonName() != "Number of Conditions"))
+                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName != "Number of Conditions"))
                                             {
                                                 sw.Write("{");
                                                 {
@@ -1682,7 +1682,7 @@ namespace LuckParser.Controllers
 
                                             }
                                             boonGraphData = _log.GetBoss().GetBoonGraphs(_log, phases);
-                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.GetBoonName() == "Compromised" || x.GetBoonName() == "Unnatural Signet"))
+                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet"))
                                             {
                                                 sw.Write("{");
                                                 {
@@ -3102,7 +3102,7 @@ namespace LuckParser.Controllers
                             }
                             //============================================
                             Dictionary<long, BoonsGraphModel> boonGraphData = _log.GetBoss().GetBoonGraphs(_log, phases);
-                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.GetBoonName() != "Number of Boons"))
+                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName != "Number of Boons"))
                             {
                                 sw.Write("{");
                                 {
