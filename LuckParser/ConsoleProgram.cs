@@ -101,6 +101,10 @@ namespace LuckParser
                     {
                         CSVBuilder.UpdateStatisticSwitches(switches);
                     }
+                    if (Properties.Settings.Default.SaveOutJSON)
+                    {
+                        JSONBuilder.UpdateStatisticSwitches(switches);
+                    }
                     Statistics statistics = statisticsCalculator.CalculateStatistics(log, switches);
                     Console.Write("Statistics Computed");
 
@@ -115,7 +119,7 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs))
                             {
-                                HTMLBuilder builder = new HTMLBuilder(log, settings, statistics);
+                                var builder = new HTMLBuilder(log, settings, statistics);
                                 builder.CreateHTML(sw);
                             }
                         }
@@ -130,13 +134,29 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                             {
-                                CSVBuilder builder = new CSVBuilder(sw, ",",log, settings, statistics);
+                                var builder = new CSVBuilder(sw, ",",log, settings, statistics);
                                 builder.CreateCSV();
                             }
                         }
                     }
-                    Console.Write("Generation Done");
 
+                    if (Properties.Settings.Default.SaveOutJSON)
+                    {
+                        string outputFile = Path.Combine(
+                            saveDirectory.FullName,
+                            $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.json"
+                        );
+                        using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                        {
+                            using (StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
+                            {
+                                var builder = new JSONBuilder(sw, log, settings, statistics);
+                                builder.CreateJSON();
+                            }
+                        }
+                    }
+
+                    Console.Write("Generation Done");
                 }
                 else
                 {

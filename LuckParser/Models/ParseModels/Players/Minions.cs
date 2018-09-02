@@ -41,7 +41,7 @@ namespace LuckParser.Models.ParseModels
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
             {
-                res.AddRange(dls.Where(x => x.GetDstInstidt() == a.GetInstid() && x.GetTime() >= a.GetFirstAware() - log.GetBossData().GetFirstAware() && x.GetTime() <= a.GetLastAware() - log.GetBossData().GetFirstAware()));
+                res.AddRange(dls.Where(x => x.GetDstInstidt() == a.InstID && x.GetTime() >= a.FirstAware - log.GetBossData().GetFirstAware() && x.GetTime() <= a.LastAware - log.GetBossData().GetFirstAware()));
             }
             res.Sort((x, y) => x.GetTime() < y.GetTime() ? -1 : 1);
             return res;
