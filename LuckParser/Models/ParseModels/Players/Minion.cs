@@ -13,9 +13,9 @@ namespace LuckParser.Models.ParseModels
         protected override void SetDamageLogs(ParsedLog log)
         {
             long timeStart = log.GetBossData().GetFirstAware();
-            long minTime = Math.Max(timeStart, Agent.GetFirstAware());
-            long maxTime = Math.Min(log.GetBossData().GetLastAware(), Agent.GetLastAware());
-            foreach (CombatItem c in log.GetDamageData(Agent.GetInstid()))
+            long minTime = Math.Max(timeStart, Agent.FirstAware);
+            long maxTime = Math.Min(log.GetBossData().GetLastAware(), Agent.LastAware);
+            foreach (CombatItem c in log.GetDamageData(Agent.InstID))
             {
                 if (c.Time > minTime && c.Time < maxTime)//selecting minion as caster
                 {
@@ -29,9 +29,9 @@ namespace LuckParser.Models.ParseModels
         {
             long timeStart = log.GetBossData().GetFirstAware();
             CastLog curCastLog = null;
-            long minTime = Math.Max(timeStart, Agent.GetFirstAware());
-            long maxTime = Math.Min(log.GetBossData().GetLastAware(), Agent.GetLastAware());
-            foreach (CombatItem c in log.GetCastData(Agent.GetInstid()))
+            long minTime = Math.Max(timeStart, Agent.FirstAware);
+            long maxTime = Math.Min(log.GetBossData().GetLastAware(), Agent.LastAware);
+            foreach (CombatItem c in log.GetCastData(Agent.InstID))
             {
                 if (!(c.Time > minTime && c.Time < maxTime))
                 {

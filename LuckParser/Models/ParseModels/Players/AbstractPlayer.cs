@@ -22,14 +22,14 @@ namespace LuckParser.Models.ParseModels
         // Constructor
         protected AbstractPlayer(AgentItem agent)
         {
-            String[] name = agent.GetName().Split('\0');
+            String[] name = agent.Name.Split('\0');
             _character = name[0];
             Agent = agent;
         }
         // Getters
         public ushort GetInstid()
         {
-            return Agent.GetInstid();
+            return Agent.InstID;
         }
         public string GetCharacter()
         {
@@ -37,7 +37,7 @@ namespace LuckParser.Models.ParseModels
         }
         public string GetProf()
         {
-            return Agent.GetProf();
+            return Agent.Prof;
         }
 
         public List<DamageLog> GetDamageLogs(int instidFilter, ParsedLog log, long start, long end)//isntid = 0 gets all logs if specified sets and returns filtered logs
@@ -68,7 +68,7 @@ namespace LuckParser.Models.ParseModels
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
             {
-                res.AddRange(dls.Where(x => x.GetDstInstidt() == a.GetInstid() && x.GetTime() >= a.GetFirstAware() - log.GetBossData().GetFirstAware() && x.GetTime() <= a.GetLastAware() - log.GetBossData().GetFirstAware()));
+                res.AddRange(dls.Where(x => x.GetDstInstidt() == a.InstID && x.GetTime() >= a.FirstAware - log.GetBossData().GetFirstAware() && x.GetTime() <= a.LastAware - log.GetBossData().GetFirstAware()));
             }
             res.Sort((x, y) => x.GetTime() < y.GetTime() ? -1 : 1);
             return res;
@@ -118,7 +118,7 @@ namespace LuckParser.Models.ParseModels
         }
         public List<DamageLog> GetJustPlayerDamageLogs(int instidFilter, ParsedLog log, long start, long end)
         {
-            return GetDamageLogs(instidFilter, log, start, end).Where(x => x.GetSrcInstidt() == Agent.GetInstid()).ToList();
+            return GetDamageLogs(instidFilter, log, start, end).Where(x => x.GetSrcInstidt() == Agent.InstID).ToList();
         }
 
         public List<DamageLog> GetJustPlayerDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
@@ -131,7 +131,7 @@ namespace LuckParser.Models.ParseModels
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
             {
-                res.AddRange(dls.Where(x => x.GetDstInstidt() == a.GetInstid() && x.GetTime() >= a.GetFirstAware() - log.GetBossData().GetFirstAware() && x.GetTime() <= a.GetLastAware() - log.GetBossData().GetFirstAware()));
+                res.AddRange(dls.Where(x => x.GetDstInstidt() == a.InstID && x.GetTime() >= a.FirstAware - log.GetBossData().GetFirstAware() && x.GetTime() <= a.LastAware - log.GetBossData().GetFirstAware()));
             }
             res.Sort((x, y) => x.GetTime() < y.GetTime() ? -1 : 1);
             return res;

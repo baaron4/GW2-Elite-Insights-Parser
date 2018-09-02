@@ -618,7 +618,7 @@ namespace LuckParser.Controllers
                             stats.FlankingRate.ToString(),
                             stats.GlanceRate.ToString(),
                             stats.Missed.ToString(),
-                            stats.Interupts.ToString(),
+                            stats.Interrupts.ToString(),
                             stats.Invulned.ToString(),
                             stats.SwapCount.ToString(),
                             stats.DownCount.ToString(),
@@ -653,7 +653,7 @@ namespace LuckParser.Controllers
                                 + stats.GlanceRate + " out of " + stats.PowerLoopCount + " hits \">" 
                                 + Math.Round(stats.GlanceRate / (Double)stats.PowerLoopCount * 100,1) + "%</span>" + "</td>");//glance
                             sw.Write("<td>" + stats.Missed + "</td>");//misses
-                            sw.Write("<td>" + stats.Interupts + "</td>");//interrupts
+                            sw.Write("<td>" + stats.Interrupts + "</td>");//interrupts
                             sw.Write("<td>" + stats.Invulned + "</td>");//dmg invulned
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.Wasted + "cancels \">" + stats.TimeWasted + "</span>" + "</td>");//time wasted
@@ -751,7 +751,7 @@ namespace LuckParser.Controllers
                             stats.FlankingRateBoss.ToString(),
                             stats.GlanceRateBoss.ToString(),
                             stats.MissedBoss.ToString(),
-                            stats.InteruptsBoss.ToString(),
+                            stats.InterruptsBoss.ToString(),
                             stats.InvulnedBoss.ToString(),
                             stats.SwapCount.ToString(),
                             stats.DownCount.ToString(),
@@ -786,7 +786,7 @@ namespace LuckParser.Controllers
                                 + stats.GlanceRateBoss + " out of " + stats.PowerLoopCountBoss + " hits \">" 
                                 + Math.Round(stats.GlanceRateBoss / (Double)stats.PowerLoopCountBoss * 100,1) + "%</span>" + "</td>");//glance
                             sw.Write("<td>" + stats.MissedBoss + "</td>");//misses
-                            sw.Write("<td>" + stats.InteruptsBoss + "</td>");//interrupts
+                            sw.Write("<td>" + stats.InterruptsBoss + "</td>");//interrupts
                             sw.Write("<td>" + stats.InvulnedBoss + "</td>");//dmg invulned
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.Wasted + "cancels \">" + stats.TimeWasted + "</span>" + "</td>");//time wasted
@@ -2224,7 +2224,7 @@ namespace LuckParser.Controllers
                         string name = "UNKNOWN";
                         if (ag != null)
                         {
-                            name = ag.GetName().Replace("\0", "").Replace("\'", "\\'");
+                            name = ag.Name.Replace("\0", "").Replace("\'", "\\'");
                         }
                         string skillname = _log.GetSkillData().GetName(dl.GetID()).Replace("\'", "\\'");
                         sw.Write("'" + name + "<br>" + skillname + " hit you for " + dl.GetDamage() + "',");
@@ -2236,7 +2236,7 @@ namespace LuckParser.Controllers
                     string name = "UNKNOWN";
                     if (ag != null )
                     {
-                        name = ag.GetName().Replace("\0", "").Replace("\'", "\\'");
+                        name = ag.Name.Replace("\0", "").Replace("\'", "\\'");
                     }
                     string skillname = _log.GetSkillData().GetName(damageToKill[d].GetID()).Replace("\'", "\\'");
                     sw.Write("'" + name + "<br>" +
@@ -2847,49 +2847,49 @@ namespace LuckParser.Controllers
                             {
                                 case ParseEnum.StateChange.EnterCombat:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " entered combat in" + c.DstAgent + "subgroup" +
+                                                   agent.Name + " entered combat in" + c.DstAgent + "subgroup" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
                                 case ParseEnum.StateChange.ExitCombat:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " exited combat" +
+                                                   agent.Name + " exited combat" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
                                 case ParseEnum.StateChange.ChangeUp:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " is now alive" +
+                                                   agent.Name + " is now alive" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
                                 case ParseEnum.StateChange.ChangeDead:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " is now dead" +
+                                                   agent.Name + " is now dead" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
                                 case ParseEnum.StateChange.ChangeDown:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " is now downed" +
+                                                   agent.Name + " is now downed" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
                                 case ParseEnum.StateChange.Spawn:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " is now in logging range of POV player" +
+                                                   agent.Name + " is now in logging range of POV player" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
                                 case ParseEnum.StateChange.Despawn:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " is now out of range of logging player" +
+                                                   agent.Name + " is now out of range of logging player" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
                                 case ParseEnum.StateChange.HealthUpdate:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " is at " + c.DstAgent / 100 + "% health" +
+                                                   agent.Name + " is at " + c.DstAgent / 100 + "% health" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
@@ -2907,19 +2907,19 @@ namespace LuckParser.Controllers
                                     break;
                                 case ParseEnum.StateChange.WeaponSwap:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " weapon swapped to " + c.DstAgent + "(0/1 water, 4/5 land)" +
+                                                   agent.Name + " weapon swapped to " + c.DstAgent + "(0/1 water, 4/5 land)" +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
                                 case ParseEnum.StateChange.MaxHealthUpdate:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " max health changed to  " + c.DstAgent +
+                                                   agent.Name + " max health changed to  " + c.DstAgent +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;
                                 case ParseEnum.StateChange.PointOfView:
                                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                   agent.GetName() + " is recording log " +
+                                                   agent.Name + " is recording log " +
                                                   // " <span class=\"badge badge-primary badge-pill\">14</span>"+
                                                   "</li>");
                                     break;

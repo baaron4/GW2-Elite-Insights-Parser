@@ -228,7 +228,7 @@ namespace LuckParser.Controllers
                     final.FlankingRate = 0;
                     final.GlanceRate = 0;
                     final.Missed = 0;
-                    final.Interupts = 0;
+                    final.Interrupts = 0;
                     final.Invulned = 0;
                     final.Wasted = 0;
                     final.TimeWasted = 0;
@@ -247,7 +247,7 @@ namespace LuckParser.Controllers
                     final.FlankingRateBoss = 0;
                     final.GlanceRateBoss = 0;
                     final.MissedBoss = 0;
-                    final.InteruptsBoss = 0;
+                    final.InterruptsBoss = 0;
                     final.InvulnedBoss = 0;
 
                     // Add non critable sigil/rune procs here
@@ -260,7 +260,7 @@ namespace LuckParser.Controllers
                     {
                         foreach (AgentItem a in phase.GetRedirection())
                         {
-                            idsToCheck.Add(a.GetInstid());
+                            idsToCheck.Add(a.InstID);
                         }
                     } else
                     {
@@ -275,8 +275,8 @@ namespace LuckParser.Controllers
                             {
                                 if (idsToCheck.Count > 1)
                                 {
-                                    AgentItem target = phase.GetRedirection().Find(x => x.GetInstid() == dl.GetDstInstidt());
-                                    if (dl.GetTime() < target.GetFirstAware() - _log.GetBossData().GetFirstAware() || dl.GetTime() > target.GetLastAware() - _log.GetBossData().GetFirstAware())
+                                    AgentItem target = phase.GetRedirection().Find(x => x.InstID == dl.GetDstInstidt());
+                                    if (dl.GetTime() < target.FirstAware - _log.GetBossData().GetFirstAware() || dl.GetTime() > target.LastAware - _log.GetBossData().GetFirstAware())
                                     {
                                         continue;
                                     }
@@ -313,7 +313,7 @@ namespace LuckParser.Controllers
 
                                 if (dl.GetResult() == ParseEnum.Result.Interrupt)
                                 {
-                                    final.InteruptsBoss++;
+                                    final.InterruptsBoss++;
                                 }
 
                                 if (dl.GetResult() == ParseEnum.Result.Absorb)
@@ -359,7 +359,7 @@ namespace LuckParser.Controllers
 
                             if (dl.GetResult() == ParseEnum.Result.Interrupt)
                             {
-                                final.Interupts++;
+                                final.Interrupts++;
                             }
 
                             if (dl.GetResult() == ParseEnum.Result.Absorb)
