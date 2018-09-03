@@ -283,7 +283,7 @@ namespace LuckParser.Models.DataModels
     {
         public static bool IsHit(this ParseEnum.Result result)
         {
-            return result == ParseEnum.Result.Normal || result == ParseEnum.Result.Crit || result == ParseEnum.Result.Glance || result == ParseEnum.Result.KillingBlow || result == ParseEnum.Result.Downed;
+            return result == ParseEnum.Result.Normal || result == ParseEnum.Result.Crit || result == ParseEnum.Result.Glance || result == ParseEnum.Result.KillingBlow || result == ParseEnum.Result.Downed || result == ParseEnum.Result.Interrupt;
         }
     }
 
