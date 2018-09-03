@@ -154,7 +154,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Rite of the Great Dwarf", 26596, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png"),
                 new Boon("Embrace the Darkness", 28001, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Enchanted Daggers", 28557, BoonSource.Revenant, BoonType.Intensity, 6, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Unblockable", 28395, BoonSource.Revenant, BoonType.Intensity, 2, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Phase Traversal", 28395, BoonSource.Revenant, BoonType.Intensity, 2, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Impossible Odds", 27581, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 //facets
                 new Boon("Facet of Light",27336, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
