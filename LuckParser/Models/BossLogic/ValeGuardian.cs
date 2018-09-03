@@ -27,8 +27,8 @@ namespace LuckParser.Models
             new Mechanic(31828, "Unstable Pylon", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'hexagram-open',color:'rgb(0,0,255)',", "Flr.B","Unstable Pylon (Blue Floor dmg)", "Floor dmg",0),
             new Mechanic(31884, "Unstable Pylon", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'hexagram-open',color:'rgb(0,128,0)',", "Flr.G","Unstable Pylon (Green Floor dmg)", "Floor dmg",0),
             new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "CC","Magic Storm (Breakbar)","Breakbar",0),
-            new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Magic Storm (Breakbar broken) ", "CCed",0,(value => value <=8544)),
-            new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,(value => value >8544)),
+            new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Magic Storm (Breakbar broken) ", "CCed",0,(condition => condition.getCombatItem().Value <=8544)),
+            new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,(condition => condition.getCombatItem().Value >8544)),
             });
         }
 
