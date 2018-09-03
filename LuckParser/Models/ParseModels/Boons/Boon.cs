@@ -154,15 +154,27 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Rite of the Great Dwarf", 26596, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png"),
                 new Boon("Embrace the Darkness", 28001, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Enchanted Daggers", 28557, BoonSource.Revenant, BoonType.Intensity, 6, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Unblockable", 28395, BoonSource.Revenant, BoonType.Intensity, 2, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Impossible Odds", 27581, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 //facets
                 new Boon("Facet of Light",27336, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Light",51690, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override), //Lingering buff with Draconic Echo trait
                 new Boon("Infuse Light",27737, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/6/60/Infuse_Light.png"),
                 new Boon("Facet of Darkness",28036, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Darkness",51695, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable, RemoveType.Manual, Logic.Override),//Lingering buff with Draconic Echo trait
                 new Boon("Facet of Elements",28243, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Elements",51706, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override),//Lingering buff with Draconic Echo trait
                 new Boon("Facet of Strength",27376, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Strength",51700, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable, RemoveType.Manual, Logic.Override),//Lingering buff with Draconic Echo trait
                 new Boon("Facet of Chaos",27983, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Chaos",51658, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override),//Lingering buff with Draconic Echo trait
                 new Boon("Facet of Nature",29275, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Nature",51681, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),//Lingering buff with Draconic Echo trait
+                new Boon("Facet of Nature-Assassin",51692, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Nature-Dragon",51674, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Nature-Demon",51704, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Nature-Dwarf",51677, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Nature-Centaur",51699, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Naturalistic Resonance", 29379, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),
                 //legends
                 new Boon("Legendary Centaur Stance",27972, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -177,6 +189,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Soulcleave's Summit",45026, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png"),
                 //traits
                 new Boon("Vicious Lacerations",29395, BoonSource.Revenant, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
+                new Boon("Rising Momentum",51683, BoonSource.Revenant, BoonType.Intensity, 10, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
                 new Boon("Assassin's Presence", 26854, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png"),
                 //new Boon("Expose Defenses", 48894, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
                 new Boon("Invoking Harmony",29025, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
