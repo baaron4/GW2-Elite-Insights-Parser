@@ -1717,7 +1717,7 @@ namespace LuckParser.Controllers
         private List<List<int[]>> CreateMechanicData(int phaseIndex)
         {
             List<List<int[]>> list = new List<List<int[]>>();
-            HashSet<Mechanic> presMech = _log.GetMechanicData().GetPresentPlayerMechs();
+            HashSet<Mechanic> presMech = _log.GetMechanicData().GetPresentMechanics();
             PhaseData phase = _statistics.Phases[phaseIndex];
 
             foreach (Player p in _log.GetPlayerList())
@@ -1757,6 +1757,7 @@ namespace LuckParser.Controllers
         private List<MechanicDto> CreateMechanicGraphData()
         {
             List<MechanicDto> mechanicDtos = new List<MechanicDto>();
+            HashSet<Mechanic> playerMechs = _log.GetMechanicData().GetPresentPlayerMechs();
             foreach (Mechanic mech in _log.GetMechanicData().GetPresentMechanics())
             {
                 List<MechanicLog> mechanicLogs = _log.GetMechanicData()[mech];
@@ -1767,6 +1768,7 @@ namespace LuckParser.Controllers
                 dto.symbol = findPattern(mech.GetPlotly(), "symbol\\s*:\\s*'([^']*)'");
                 dto.visible = (mech.GetSkill() == -2 || mech.GetSkill() == -3);
                 dto.data = BuildMechanicData(mechanicLogs);
+                dto.playerMech = playerMechs.Contains(mech);
                 mechanicDtos.Add(dto);
             }
             //TODO add DOWN and DEAD data
@@ -2393,6 +2395,53 @@ namespace LuckParser.Controllers
             sw.Write("</style>");
         }
 
+        private String ReplaceVariables(String html)
+        {
+            double fightDuration = (_log.GetBossData().GetAwareDuration()) / 1000.0;
+            TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
+            string durationString = duration.Minutes + "m " + duration.Seconds + "s " + duration.Milliseconds + "ms";
+            if (duration.Hours > 0)
+            {
+                durationString = duration.Hours + "h " + durationString;
+            }
+
+            int encounterPercent = 0;
+            double healthLeft = 100;
+            
+            if (_log.GetLogData().GetBosskill())
+            {
+                encounterPercent = 100;
+                healthLeft = 0;
+            }
+            else
+            {
+                if (_log.GetBossData().GetHealthOverTime().Count > 0)
+                {
+                    healthLeft = Math.Round(_log.GetBossData().GetHealthOverTime()[_log.GetBossData().GetHealthOverTime().Count - 1].Y * 0.01, 2);
+                    encounterPercent = (int)Math.Floor(100.0 - _log.GetBossData().GetHealthOverTime()[_log.GetBossData().GetHealthOverTime().Count - 1].Y * 0.01);
+                }
+            }
+
+            html = html.Replace("${bootstrapTheme}", !_settings.LightTheme ? "slate" : "cosmo");
+
+            html = html.Replace("${encounterStart}", _log.GetLogData().GetLogStart());
+            html = html.Replace("${encounterEnd}", _log.GetLogData().GetLogEnd());
+            html = html.Replace("${encounterDuration}", durationString);
+            html = html.Replace("${encounterResult}", _log.GetLogData().GetBosskill()?"Success": "Fail");
+            html = html.Replace("${encounterResultCss}", _log.GetLogData().GetBosskill() ? "text-success" : "text-warning");
+            html = html.Replace("${encounterPercent}", encounterPercent.ToString());
+            html = html.Replace("${evtcVersion}", _log.GetLogData().GetBuildVersion());
+            html = html.Replace("${bossID}", _log.GetBossData().GetID().ToString());
+            html = html.Replace("${bossName}", FilterStringChars(_log.GetBossData().GetName()));
+            html = html.Replace("${bossHealth}", _log.GetBossData().GetHealth().ToString());
+            html = html.Replace("${bossHealthLeft}", healthLeft.ToString());
+            html = html.Replace("${bossIcon}", HTMLHelper.GetLink(_log.GetBossData().GetID() + "-icon"));
+            html = html.Replace("${eiVersion}", Application.ProductVersion);
+            html = html.Replace("${recordedBy}", _log.GetLogData().GetPOV().Split(':')[0]);
+
+            return html;
+        }
+
         /// <summary>
         /// Creates the whole html
         /// </summary>
@@ -2412,9 +2461,11 @@ namespace LuckParser.Controllers
             {
                 scriptWriter.Write(Properties.Resources.flomix_ei_css);
             }
-
             string html = Properties.Resources.template_html;
-            html = html.Replace("${bootstrapTheme}", !_settings.LightTheme ? "slate" : "cosmo");
+            html = ReplaceVariables(html);
+
+
+
             html = html.Replace("${logDataJson}", BuildLogData());
 
             html = html.Replace("<!--${playerData}-->", BuildPlayerData());
@@ -2980,6 +3031,10 @@ namespace LuckParser.Controllers
                     player.GetCharacter(),
                     player.GetAccount().TrimStart(':'),
                     player.GetProf());
+                playerDto.condi = player.GetCondition();
+                playerDto.conc = player.GetConcentration();
+                playerDto.heal = player.GetHealing();
+                playerDto.tough = player.GetToughness();
                 playerDto.weapons = player.GetWeaponsArray(_log);
                 data.players.Add(playerDto);
             }
@@ -3117,13 +3172,11 @@ namespace LuckParser.Controllers
             foreach (SkillItem skill in skills)
             {
                 GW2APISkill apiSkill = skill.GetGW2APISkill();
-                SkillDto dto = new SkillDto(skill.GetID(), skill.GetName(), apiSkill?.icon);
+                SkillDto dto = new SkillDto(skill.GetID(), skill.GetName(), apiSkill?.icon, apiSkill?.slot == "Weapon_1");
                 if (skill.GetID() == SkillItem.WeaponSwapId) dto.icon = "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
                 else if (skill.GetID() == SkillItem.ResurrectId) dto.icon = "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png";
                 else if (skill.GetID() == SkillItem.BandageId) dto.icon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
                 else if (skill.GetID() == SkillItem.DodgeId) dto.icon = "https://wiki.guildwars2.com/images/b/b2/Dodge.png";
-
-                dto.aa = apiSkill?.slot == "Weapon_1";
                 dtos.Add(dto);
             }
             return dtos;

@@ -85,16 +85,16 @@ function createProfessionCell($cell,profession) {
 function createDpsTable($target, data) {
 	var rows = [];
 	var sums = [];
-	var total = [0,0,0,0,0,0,0,0,0,0,0,0,0];
+	var total = [];
 	var groups = [];
 
 	$.each(data, function(i, dps) {
 		var p = window.data.players[i];
 		rows.push({player:p,dps:dps});
-		if (!groups[p.group]) groups[p.group] = [0,0,0,0,0,0,0,0,0,0,0,0,0];
+		if (!groups[p.group]) groups[p.group] = [];
 		for (var j = 0; j < 13; j++) {
-			total[j]+=dps[j];
-			groups[p.group][j]+=dps[j];
+			total[j]=(total[j]||0)+dps[j];
+			groups[p.group][j]=(groups[p.group][j]||0)+dps[j];
 		}
 	});
 	for (var i = 0; i < groups.length; i++) {
@@ -109,27 +109,40 @@ function createDpsTable($target, data) {
 function createDamageStatsTable($target, data) {
 	var rows = [];
 	var sums = [];
-	var total = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+	var total = [];
 	var groups = [];
+	var groupCnt = [];
+	var avgCols = [2,5,9,13,15];
 	$.each(data, function(i, dmg) {
 		var player = window.data.players[i];
+		var g = player.group;
 		rows.push({player:player,data:dmg});
-
-		if (!groups[player.group]) groups[player.group] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-		for (var j = 0; j < total.length; j++) {
-			//total[j]+=dmg[j];
-			//groups[player.group][j]+=dmg[j];
+		if (!groups[g]) groups[g] = [];
+		groupCnt[g] = (groupCnt[g]||0)+1;
+		for (var j = 0; j < dmg.length; j++) {
+			total[j]=(total[j]||0)+dmg[j];
+			groups[g][j]=(groups[g][j]||0)+dmg[j];
 		}
 
 	});
 
 	for (var i = 0; i < groups.length; i++) {
-		if (groups[i]) sums.push({name:'Group '+i,data:groups[i]});
+		if (groups[i]) {
+			calcAverages(groups[i], avgCols, groupCnt[i]);
+			sums.push({name:'Group '+i,data:groups[i]});
+		}
 	}
+	calcAverages(total,avgCols,window.data.players.length);
 	sums.push({name:'Total',data:total});
 
 	var html = tmplDmgTable.render({rows:rows,sums:sums});
 	lazyTable2($target, html, { 'order': [[0, 'asc']]});
+}
+
+function calcAverages(data, avgCols, count) {
+	$.each(avgCols,function(ai,a) {
+		data[a] = Math.round(data[a] * 10.0 / count) / 10.0;
+	});
 }
 
 function createDefStatsTable($target, data) {
@@ -185,27 +198,37 @@ function createBoonTable($target, boons, data, generation) {
 	var rows = [];
 	var sums = [];
 
-	var total = [0,0,0,0];
+	var total = [];
 	var groups = [];
+	var groupLen = [];
+	var avgCols = [];
 	
 	$.each(data, function(i, values) {
 		var player = window.data.players[i];
+		var g = player.group;
 		rows.push({player:player,data:values});
-		if (!groups[player.group]) {
-			groups[player.group] = [0,0,0,0];
-		}
-		for (var j = 0; j < 4; j++) {
-			total[j]+=values[j];
-			groups[player.group][j]+=values[j];
+		if (!generation) {
+			groupLen[g]=(groupLen[g]||0)+1;
+			if (!groups[g]) groups[g] = [];
+			for (var j = 0; j < boons.length; j++) {
+				var v = values.val[j][0];
+				total[j]=(total[j]||0)+v;
+				groups[g][j]=(groups[g][j]||0)+v;
+			}
 		}
 	});
-
-	for (var i = 0; i < groups.length; i++) {
-		if (groups[i]) {
-			//var $row = $tfoot.find('tr.groupsum.template').clone().removeClass('template');
-			//$row.find('.group').text('Group ' + i);
-			//$rowTotal.before($row);
+	
+	if (!generation) {
+		$.each(boons,function(b,boon){ avgCols.push(b); });
+		for (var i = 0; i < groups.length; i++) {
+			if (groups[i]) {
+				calcAverages(groups[i],avgCols,groupLen[i]);
+				sums.push({name:'Group '+i,data:groups[i]});
+			}
 		}
+		
+		calcAverages(total,avgCols,window.data.players.length);
+		sums.push({name:'Total',data:total});
 	}
 
 	var html = tmplBoonTable.render({rows:rows,sums:sums,boons:boons}, {generation:generation});
@@ -278,21 +301,17 @@ function createRotaTab($target, data) {
 	lazy($target, buildRota);
 }
 
-function createPlayerGraph(elementId, data, dark) {
-	var allX = [];
+function createPlayerGraph($element, player, phaseIndex, playerIndex) {
 	var plotData = [];
 	var images = [];
+	var dark = data.flags.dark;
 
-	var seconds = data.dpsData[0].data.length;
-	for (var i = 0; i < seconds; i++) {
-		allX[i] = i;
-	}
-
-	if (data.rotationData) {
-		$.each(data.rotationData, function(i, item) {
+	var rotationData = player.details.rotation[phaseIndex];
+	if (rotationData) {
+		$.each(rotationData, function(i, item) {
 			var x = item[0];
 			var skillId = item[1];
-			var duration = item[2];
+			var duration = item[2]/1000.0;
 			var endType = item[3];
 			var quick = item[4];
 			var skill = window.data.skillMap['s'+skillId];
@@ -349,6 +368,38 @@ function createPlayerGraph(elementId, data, dark) {
 		});
 	}
 
+	var lines = [{id:'boss',name:'DPS'},{id:'cleave',name:'Cleave DPS'},{id:'total',name:'TDPS'}];
+
+	var dpsData = data.graphData[phaseIndex][playerIndex];
+	var seconds = dpsData.boss.full.length;
+	var allX = [];
+	for (var i = 0; i < seconds; i++) {
+		allX[i] = i;
+	}
+
+	for (var l = 0; l < lines.length; l++) {
+		for (var t = 0; t < data.graphs.length; t++) {
+			var name = lines[l].name + ' ' + data.graphs[t].name;
+			var points = dpsData[lines[l].id][data.graphs[t].id];
+			
+			var visible = null;
+			var legendgroup = null;
+	
+			if (data.graphs[t].id != 'full') {
+				visible = 'legendonly';
+			}
+			plotData.push({
+				x: allX,
+				y: points,
+				yaxis: 'y3',
+				mode: 'lines',
+				visible: visible,
+				line: {shape:'spline', color:null},
+				name: name,
+			});
+		}
+	}
+
 	$.each(data.dpsData, function(i, item) {
 		var visible = null;
 		var legendgroup = null;
@@ -402,7 +453,11 @@ function createPlayerGraph(elementId, data, dark) {
 		plot_bgcolor: dark ? 'rgba(0,0,0,0)' : 'rgba(255, 255, 255, 0)'
 	};
 
-	Plotly.newPlot(elementId, plotData, layout);
+	var callback = function() {
+		Plotly.newPlot($element[0], plotData, layout);
+	};
+
+	lazy($element, callback);
 }
 
 function lazy($owner, callback) {
@@ -504,7 +559,7 @@ function generateWindow(layout) {
 		$.each(data.players, function(p, player) {
 			createDistTable($('#dist_table_'+p+'_'+i+'_boss'), player.details.dmgDistributionsBoss[i]);
 			createDistTable($('#dist_table_'+p+'_'+i), player.details.dmgDistributions[i]);
-			
+
 			createRotaTab($('#rota_'+p+'_'+i), player.details.rotation[i]);
 		});
 	});
@@ -519,7 +574,7 @@ function buildWindowLayout(data) {
 		var playerSubtabs = [];
 		$.each(data.players, function(p, player) {
 			var playerTabs = [{name:player.name,content:{tabs: [
-				{name:'Graph', content:'DPS/Rotation graph',noTitle:true},
+				{name:'Graph', content:'<div id="pgraph_'+p+'_'+i+'" style="height: 1000px; width:1200px;"></div>',noTitle:true},
 				{name:'Boss', content:{table:'dist_table_'+p+'_'+i+'_boss'},noTitle:true},
 				{name:'All', content:{table:'dist_table_'+p+'_'+i},noTitle:true}
 			]},noTitle:true}];
@@ -545,9 +600,9 @@ function buildWindowLayout(data) {
 					noTitle:true,
 					content: '<div id="DPSGraph'+i+'_'+graph.id+'" style="height: 1000px; width:1200px;"></div>'});
 			});
-			var bossTabs = [{name:'Dhuum',content:'Dhuum'}];
+			var bossTabs = [{name:'(Boss name)',content:'(TODO Boss tab content)'}];
 			//TODO add boss minions
-			bossTabs.push({name:'Deathling',content:'Deathling'});
+			bossTabs.push({name:'(Boss minions)',content:'(TODO Boss minions)'});
 			var phaseTabs = [
 				{
 					name:'Stats',content:{tabs: [
@@ -671,6 +726,10 @@ function createGraphs(graphData) {
 			createGraph($('#DPSGraph'+i+'_'+data.graphs[t].id), data.graphData[i], i, data.graphs[t].id);
 		
 		}
+
+		$.each(data.players, function(p, player) {
+			createPlayerGraph($('#pgraph_'+p+'_'+i), player, i, p);
+		});
 	}
 }
 
@@ -754,20 +813,5 @@ function createGraph($target, phaseData, phase, type) {
 		Plotly.newPlot($target.attr('id'), lines, layout);
 	};
 	
-	
-	
-	var lazyplot = $target[0];
-	if ('IntersectionObserver' in window) {
-		let lazyPlotObserver = new IntersectionObserver(function(entries, observer) {
-			entries.forEach(function(entry) {
-				if (entry.isIntersecting){
-					lazyPlotObserver.unobserve(entry.target);
-					callback();
-				}
-			});
-		});
-		lazyPlotObserver.observe(lazyplot);
-	} else {
-		$(callback);
-	}
+	lazy($target, callback);
 }

@@ -22,6 +22,9 @@ namespace LuckParser.Models.HtmlModels
         [DataMember]
         public String color;
 
+        [DataMember]
+        public bool playerMech;
+
         [DataMember(EmitDefaultValue = false)]
         public bool visible;
 

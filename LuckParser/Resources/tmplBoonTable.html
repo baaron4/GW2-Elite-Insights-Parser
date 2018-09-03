@@ -5,7 +5,7 @@
 			<th width="30px"></th>
 			<th class="text-left">Name</th>
 			{{for boons}}
-			<th width="40px" title="{{:name}}"><img src="{{:icon}}" alt="{{:name}}" class="icon icon-hover"></th>
+			<th title="{{:name}}"><img src="{{:icon}}" alt="{{:name}}" class="icon icon-hover"></th>
 			{{/for}}
 		</tr>
 	</thead>
@@ -42,7 +42,7 @@
 			<td></td>
 			<td class="text-left">{{:name}}</td>
 			{{for ~boons ~data=data}}
-			<td></td>
+			<td>{{:~data[#getIndex()]}}{{if !stacking}}%{{/if}}</td>
 			{{/for}}
 			</tr>
 		{{/for}}

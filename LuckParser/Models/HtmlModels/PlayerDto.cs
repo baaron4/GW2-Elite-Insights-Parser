@@ -10,18 +10,16 @@ namespace LuckParser.Models.HtmlModels
     [DataContract]
     public class PlayerDto
     {
-        [DataMember]
-        public int group;
-        [DataMember]
-        public string name;
-        [DataMember]
-        public string acc;
-        [DataMember]
-        public string profession;
-        [DataMember]
-        public readonly List<string> minions = new List<string>();
-        [DataMember]
-        public string[] weapons;
+        [DataMember] public int group;
+        [DataMember] public string name;
+        [DataMember] public string acc;
+        [DataMember] public string profession;
+        [DataMember] public int condi;
+        [DataMember] public int conc;
+        [DataMember] public int heal;
+        [DataMember] public int tough;
+        [DataMember] public readonly List<string> minions = new List<string>();
+        [DataMember] public string[] weapons;
 
         public PlayerDto() { }
 

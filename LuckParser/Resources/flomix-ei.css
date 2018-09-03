@@ -1,9 +1,19 @@
 .table th { border-top: 0; }
 
-.template {
-	opacity: 0.3333;
-	display: none;
+.header {
+    text-align: center;
+	width: 100%;
+	margin-top: 6px;
+	margin-bottom: 10px;
 }
+
+.footer {
+    text-align: center;
+	margin-top: 10px;
+	margin-bottom: 6px;
+	width: 100%;
+}
+
 td.sorting_1 {
 	background-color: rgba(39,128,227,0.05);
 }
@@ -24,10 +34,22 @@ img.icon {
 	height: 18px;
 }
 
+.boss-summary {
+	border:1px solid #EE5F5B;
+}
+
 table.composition td {
-border: 1px solid #ff0000;
+	border: 1px solid #EE5F5B;
     max-width: 120px;
     width: 120px;
+}
+
+.theme-slate .boss-summary {
+	border-color: #9B0000;
+}
+
+.theme-slate table.composition td {
+	border-color: #9B0000;
 }
 
 table.composition .shorten {
