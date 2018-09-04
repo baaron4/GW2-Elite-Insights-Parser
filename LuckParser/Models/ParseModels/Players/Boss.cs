@@ -101,8 +101,7 @@ namespace LuckParser.Models.ParseModels
             List<Mechanic> bossMechanics = bossData.GetBossBehavior().GetMechanics();
             Dictionary<ushort, AbstractMasterPlayer> regroupedMobs = new Dictionary<ushort, AbstractMasterPlayer>();
             // Boons
-            List<Mechanic> enemyBoons = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon || x.GetMechType() == Mechanic.MechType.EnemyBoonStrip).ToList();
-            foreach (Mechanic m in enemyBoons)
+            foreach (Mechanic m in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon || x.GetMechType() == Mechanic.MechType.EnemyBoonStrip))
             {
                 Mechanic.SpecialCondition condition = m.GetSpecialCondition();
                 foreach (CombatItem c in log.GetBoonData(m.GetSkill()))
@@ -152,8 +151,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             // Casting
-            List<Mechanic> enemyCasts = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyCastEnd || x.GetMechType() == Mechanic.MechType.EnemyCastStart).ToList();
-            foreach (Mechanic m in enemyCasts)
+            foreach (Mechanic m in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyCastEnd || x.GetMechType() == Mechanic.MechType.EnemyCastStart))
             {
                 Mechanic.SpecialCondition condition = m.GetSpecialCondition();
                 foreach (CombatItem c in log.GetCastDataById(m.GetSkill()))
@@ -187,8 +185,7 @@ namespace LuckParser.Models.ParseModels
 
             }
             // Spawn
-            List<Mechanic> spawnMech = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.Spawn).ToList();
-            foreach (Mechanic m in spawnMech)
+            foreach (Mechanic m in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.Spawn))
             {
                 foreach (AgentItem a in log.GetAgentData().GetNPCAgentList().Where(x => x.ID == m.GetSkill()))
                 {
