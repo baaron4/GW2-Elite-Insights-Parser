@@ -690,12 +690,12 @@ namespace LuckParser.Controllers
                             }
                         }
 
-                        player.Deconnected = lp[0].Time;
+                        player.Disconnected = lp[0].Time;
                         _playerList.Add(player);
                     }
                     else//didn't dc
                     {
-                        if (player.Deconnected == 0)
+                        if (player.Disconnected == 0)
                         {
                             _playerList.Add(player);
                         }

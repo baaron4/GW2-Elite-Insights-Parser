@@ -16,7 +16,7 @@ namespace LuckParser.Models.ParseModels
 
             public int Compare(BoonSimulator.BoonStackItem x, BoonSimulator.BoonStackItem y)
             {
-                List<Player> players = _log.GetPlayerList();
+                List<Player> players = _log.PlayerList;
                 Player a = players.Find(p => p.InstID == x.Src);
                 Player b = players.Find(p => p.InstID == y.Src);
                 if (a == null || b == null)

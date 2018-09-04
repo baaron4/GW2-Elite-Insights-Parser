@@ -46,14 +46,14 @@ namespace LuckParser.Controllers
 
             _log = log;
 
-            _statistics.Phases = log.GetBoss().GetPhases(log, _settings.ParsePhases);
+            _statistics.Phases = log.Boss.GetPhases(log, _settings.ParsePhases);
             if (switches.CalculateCombatReplay && _settings.ParseCombatReplay)
             {
-                foreach (Player p in log.GetPlayerList())
+                foreach (Player p in log.PlayerList)
                 {
                     p.InitCombatReplay(log, _settings.PollingRate, false, true);
                 }
-                log.GetBoss().InitCombatReplay(log, _settings.PollingRate, false, true);
+                log.Boss.InitCombatReplay(log, _settings.PollingRate, false, true);
             }
             if (switches.CalculateDPS) CalculateDPS();
             if (switches.CalculateStats) CalculateStats();
@@ -68,12 +68,12 @@ namespace LuckParser.Controllers
             if (switches.CalculateConditions) CalculateConditions();
             if (switches.CalculateMechanics)
             {
-                log.GetBoss().AddMechanics(log);
-                foreach (Player p in log.GetPlayerList())
+                log.Boss.AddMechanics(log);
+                foreach (Player p in log.PlayerList)
                 {
                     p.AddMechanics(log);
                 }
-                log.GetMechanicData().ComputePresentMechanics(log, _statistics.Phases);
+                log.MechanicData.ComputePresentMechanics(log, _statistics.Phases);
             }
 
             return _statistics;
@@ -129,7 +129,7 @@ namespace LuckParser.Controllers
                     phase.Start, phase.End).Sum(x => x.GetDamage());
             } else
             {
-                damage = player.GetDamageLogs(_log.GetFightData().InstID, _log,
+                damage = player.GetDamageLogs(_log.FightData.InstID, _log,
                     phase.Start, phase.End).Sum(x => x.GetDamage());
             }
             if (phaseDuration > 0)
@@ -146,7 +146,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damage = player.GetDamageLogs(_log.GetFightData().InstID, _log,
+                damage = player.GetDamageLogs(_log.FightData.InstID, _log,
                     phase.Start, phase.End).Where(x => x.IsCondi() > 0).Sum(x => x.GetDamage());
             }
             if (phaseDuration > 0)
@@ -170,7 +170,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(_log.GetFightData().InstID, _log,
+                final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(_log.FightData.InstID, _log,
                     phase.Start, phase.End).Where(x => x.IsCondi() == 0).Sum(x => x.GetDamage());
             }
 
@@ -179,7 +179,7 @@ namespace LuckParser.Controllers
 
         private void CalculateDPS()
         {
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDPS[] phaseDps = new Statistics.FinalDPS[_statistics.Phases.Count];
                 for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
@@ -193,7 +193,7 @@ namespace LuckParser.Controllers
             Statistics.FinalDPS[] phaseBossDps = new Statistics.FinalDPS[_statistics.Phases.Count];
             for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
             {
-                phaseBossDps[phaseIndex] = GetFinalDPS(_log.GetBoss(), phaseIndex, false);
+                phaseBossDps[phaseIndex] = GetFinalDPS(_log.Boss, phaseIndex, false);
             }
 
             _statistics.BossDps = phaseBossDps;
@@ -201,7 +201,7 @@ namespace LuckParser.Controllers
 
         private void CalculateStats()
         {
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalStats[] phaseStats = new Statistics.FinalStats[_statistics.Phases.Count];
                 for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
@@ -209,8 +209,8 @@ namespace LuckParser.Controllers
                     Statistics.FinalStats final = new Statistics.FinalStats();
 
                     PhaseData phase = _statistics.Phases[phaseIndex];
-                    long start = phase.Start + _log.GetFightData().FightStart;
-                    long end = phase.End + _log.GetFightData().FightStart;
+                    long start = phase.Start + _log.FightData.FightStart;
+                    long end = phase.End + _log.FightData.FightStart;
 
                     List<DamageLog> damageLogs  = player.GetJustPlayerDamageLogs(0, _log, phase.Start, phase.End);
                     List<CastLog> castLogs = player.GetCastLogs(_log, phase.Start, phase.End);
@@ -264,7 +264,7 @@ namespace LuckParser.Controllers
                         }
                     } else
                     {
-                        idsToCheck.Add(_log.GetFightData().InstID);
+                        idsToCheck.Add(_log.FightData.InstID);
                     }
                     foreach (DamageLog dl in damageLogs)
                     {
@@ -276,7 +276,7 @@ namespace LuckParser.Controllers
                                 if (idsToCheck.Count > 1)
                                 {
                                     AgentItem target = phase.Redirection.Find(x => x.InstID == dl.GetDstInstidt());
-                                    if (dl.GetTime() < target.FirstAware - _log.GetFightData().FightStart || dl.GetTime() > target.LastAware - _log.GetFightData().FightStart)
+                                    if (dl.GetTime() < target.FirstAware - _log.FightData.FightStart || dl.GetTime() > target.LastAware - _log.FightData.FightStart)
                                     {
                                         continue;
                                     }
@@ -398,19 +398,19 @@ namespace LuckParser.Controllers
                     final.PowerLoopCountBoss = final.PowerLoopCountBoss == 0 ? 1 : final.PowerLoopCountBoss;
 
                     // Counts
-                    CombatData combatData = _log.GetCombatData();
+                    CombatData combatData = _log.CombatData;
                     final.SwapCount = combatData.GetStates(instid, ParseEnum.StateChange.WeaponSwap, start, end).Count;
                     final.DownCount = combatData.GetStates(instid, ParseEnum.StateChange.ChangeDown, start, end).Count;
                     final.DodgeCount = combatData.GetSkillCount(instid, SkillItem.DodgeId, start, end) + combatData.GetBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
 
                     //Stack Distance
-                    if (_settings.ParseCombatReplay && _log.GetFightData().Logic.CanCombatReplay)
+                    if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
                     {
                         if (_statistics.StackCenterPositions == null)
                         {
                             _statistics.StackCenterPositions = new List<Point3D>();
                             List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
-                            foreach (Player p in _log.GetPlayerList())
+                            foreach (Player p in _log.PlayerList)
                             {
                                 List<Point3D> list = p.CombatReplay.GetActivePositions();  
                                 if (list.Count > 1)
@@ -490,7 +490,7 @@ namespace LuckParser.Controllers
 
         private void CalculateDefenses()
         {
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDefenses[] phaseDefense = new Statistics.FinalDefenses[_statistics.Phases.Count];
                 for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
@@ -524,7 +524,7 @@ namespace LuckParser.Controllers
        
         private void CalculateSupport()
         {
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalSupport[] phaseSupport = new Statistics.FinalSupport[_statistics.Phases.Count];
                 for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
@@ -605,7 +605,7 @@ namespace LuckParser.Controllers
 
         private void CalculateBoons()
         {
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 // Boons applied to self
                 Dictionary<long, Statistics.FinalBoonUptime>[] selfUptimesByPhase = new Dictionary<long, Statistics.FinalBoonUptime>[_statistics.Phases.Count];
@@ -650,17 +650,17 @@ namespace LuckParser.Controllers
                 _statistics.SelfBoons[player] = selfUptimesByPhase;
 
                 // Boons applied to player's group
-                var otherPlayersInGroup = _log.GetPlayerList()
+                var otherPlayersInGroup = _log.PlayerList
                     .Where(p => p.Group == player.Group && player.InstID != p.InstID)
                     .ToList();
                 _statistics.GroupBoons[player] = GetBoonsForPlayers(otherPlayersInGroup, player);
 
                 // Boons applied to other groups
-                var offGroupPlayers = _log.GetPlayerList().Where(p => p.Group != player.Group).ToList();
+                var offGroupPlayers = _log.PlayerList.Where(p => p.Group != player.Group).ToList();
                 _statistics.OffGroupBoons[player] = GetBoonsForPlayers(offGroupPlayers, player);
 
                 // Boons applied to squad
-                var otherPlayers = _log.GetPlayerList().Where(p => p.InstID != player.InstID).ToList();
+                var otherPlayers = _log.PlayerList.Where(p => p.InstID != player.InstID).ToList();
                 _statistics.SquadBoons[player] = GetBoonsForPlayers(otherPlayers, player);
             }
         }
@@ -670,22 +670,22 @@ namespace LuckParser.Controllers
             _statistics.BossConditions = new Dictionary<long, Statistics.FinalBossBoon>[_statistics.Phases.Count];
             for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
             {
-                BoonDistribution boonDistribution = _log.GetBoss().GetBoonDistribution(_log,_statistics.Phases, phaseIndex);
+                BoonDistribution boonDistribution = _log.Boss.GetBoonDistribution(_log,_statistics.Phases, phaseIndex);
                 Dictionary<long, Statistics.FinalBossBoon> rates = new Dictionary<long, Statistics.FinalBossBoon>();
 
                 PhaseData phase =_statistics.Phases[phaseIndex];
                 long fightDuration = phase.GetDuration();
 
-                foreach (Boon boon in _log.GetBoss().BoonToTrack)
+                foreach (Boon boon in _log.Boss.BoonToTrack)
                 {
-                    Statistics.FinalBossBoon condition = new Statistics.FinalBossBoon(_log.GetPlayerList());
+                    Statistics.FinalBossBoon condition = new Statistics.FinalBossBoon(_log.PlayerList);
                     rates[boon.ID] = condition;
                     if (boonDistribution.ContainsKey(boon.ID))
                     {
                         if (boon.Type == Boon.BoonType.Duration)
                         {
                             condition.Uptime = Math.Round(100.0 * boonDistribution.GetUptime(boon.ID) / fightDuration, 1);
-                            foreach(Player p in _log.GetPlayerList())
+                            foreach(Player p in _log.PlayerList)
                             {
                                 long gen = boonDistribution.GetGeneration(boon.ID, p.InstID);
                                 condition.Generated[p] = Math.Round(100.0 * gen / fightDuration, 1);
@@ -695,7 +695,7 @@ namespace LuckParser.Controllers
                         else if (boon.Type == Boon.BoonType.Intensity)
                         {
                             condition.Uptime = Math.Round((double) boonDistribution.GetUptime(boon.ID) / fightDuration, 1);
-                            foreach (Player p in _log.GetPlayerList())
+                            foreach (Player p in _log.PlayerList)
                             {
                                 long gen = boonDistribution.GetGeneration(boon.ID, p.InstID);
                                 condition.Generated[p] = Math.Round((double) gen / fightDuration, 1);
@@ -715,7 +715,7 @@ namespace LuckParser.Controllers
         /// </summary>
         private void SetPresentBoons()
         {
-            List<CombatItem> combatList = _log.GetCombatData();
+            List<CombatItem> combatList = _log.CombatData;
             var skillIDs = new HashSet<long>(combatList.Select(x => x.SkillID));
             if (_settings.PlayerBoonsUniversal)
             {
@@ -757,7 +757,7 @@ namespace LuckParser.Controllers
                 }
             }
 
-            var players = _log.GetPlayerList();
+            var players = _log.PlayerList;
             Dictionary<ushort, List<Boon>> presentPersonalBuffs = new Dictionary<ushort, List<Boon>>();
             if (_settings.PlayerBoonsAllProf)
             {
@@ -800,7 +800,7 @@ namespace LuckParser.Controllers
                 }
             }
             // boss boons
-            Boss boss = _log.GetBoss();
+            Boss boss = _log.Boss;
             boss.BoonToTrack.AddRange(_statistics.PresentBoons);
             boss.BoonToTrack.AddRange(_statistics.PresentConditions);
             boss.BoonToTrack.AddRange(Boon.GetBossBoonList());

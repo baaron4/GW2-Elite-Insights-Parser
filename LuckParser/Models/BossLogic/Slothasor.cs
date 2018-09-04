@@ -79,11 +79,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    toDropStart = (int)(c.Time - log.GetFightData().FightStart);
+                    toDropStart = (int)(c.Time - log.FightData.FightStart);
                 }
                 else
                 {
-                    int toDropEnd = (int)(c.Time - log.GetFightData().FightStart); replay.AddCircleActor(new CircleActor(false, 0, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
+                    int toDropEnd = (int)(c.Time - log.FightData.FightStart); replay.AddCircleActor(new CircleActor(false, 0, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
                     replay.AddCircleActor(new CircleActor(true, toDropStart + 8000, 180, new Tuple<int, int>(toDropStart, toDropEnd), "rgba(255, 255, 100, 0.5)"));
                     Point3D poisonPos = replay.GetPositions().FirstOrDefault(x => x.Time > toDropEnd);
                     if (poisonPos != null)
@@ -99,11 +99,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    transfoStart = (int)(c.Time - log.GetFightData().FightStart);
+                    transfoStart = (int)(c.Time - log.FightData.FightStart);
                 }
                 else
                 {
-                    int transfoEnd = (int)(c.Time - log.GetFightData().FightStart);
+                    int transfoEnd = (int)(c.Time - log.FightData.FightStart);
                     replay.AddCircleActor(new CircleActor(true, 0, 160, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
                 }
             }
@@ -114,11 +114,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    fixatedSlothStart = (int)(c.Time - log.GetFightData().FightStart);
+                    fixatedSlothStart = (int)(c.Time - log.FightData.FightStart);
                 }
                 else
                 {
-                    int fixatedSlothEnd = (int)(c.Time - log.GetFightData().FightStart);
+                    int fixatedSlothEnd = (int)(c.Time - log.FightData.FightStart);
                     replay.AddCircleActor(new CircleActor(true, 0, 120, new Tuple<int, int>(fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)"));
                 }
             }

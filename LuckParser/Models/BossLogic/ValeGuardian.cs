@@ -43,7 +43,7 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.GetFightData().FightDuration;
+            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             // Invul check
             List<CombatItem> invulsVG = GetFilteredList(log, 757, boss.InstID);
@@ -52,7 +52,7 @@ namespace LuckParser.Models
                 CombatItem c = invulsVG[i];
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.Time - log.GetFightData().FightStart;
+                    end = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsVG.Count - 1)
                     {
@@ -61,7 +61,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.Time - log.GetFightData().FightStart;
+                    start = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(end, start));
                     castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
@@ -83,16 +83,16 @@ namespace LuckParser.Models
                        ParseEnum.ThrashIDS.GreenGuardian,
                        ParseEnum.ThrashIDS.RedGuardian
                     };
-                    List<AgentItem> guardians = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
+                    List<AgentItem> guardians = log.AgentData.GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
                     foreach (AgentItem a in guardians)
                     {
-                        long agentStart = a.FirstAware - log.GetFightData().FightStart;
+                        long agentStart = a.FirstAware - log.FightData.FightStart;
                         if (phase.InInterval(agentStart))
                         {
                             phase.Redirection.Add(a);
                         }
                     }
-                    phase.OverrideStart(log.GetFightData().FightStart);
+                    phase.OverrideStart(log.FightData.FightStart);
                 }
             }
             return phases;

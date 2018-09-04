@@ -43,7 +43,7 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.GetFightData().FightDuration;
+            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             // Sometimes the preevent is not in the evtc
             List<CastLog> dhuumCast = boss.GetCastLogs(log, 0, 20000);
@@ -72,10 +72,10 @@ namespace LuckParser.Models
             }
             else
             {
-                CombatItem invulDhuum = log.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == boss.InstID && x.Time > 115000 + log.GetFightData().FightStart);
+                CombatItem invulDhuum = log.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == boss.InstID && x.Time > 115000 + log.FightData.FightStart);
                 if (invulDhuum != null)
                 {
-                    end = invulDhuum.Time - log.GetFightData().FightStart;
+                    end = invulDhuum.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(start, end));
                     start = end + 1;
                     CastLog shield = castLogs.Find(x => x.GetID() == 47396);
@@ -143,7 +143,7 @@ namespace LuckParser.Models
             if (majorSplit != null)
             {
                 int start = (int)majorSplit.GetTime();
-                int end = (int)log.GetFightData().FightDuration;
+                int end = (int)log.FightData.FightDuration;
                 replay.AddCircleActor(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
             }
             return ids;
@@ -156,8 +156,8 @@ namespace LuckParser.Models
             foreach (CombatItem c in spiritTransform)
             {
                 int duration = 15000;
-                int start = (int)(c.Time - log.GetFightData().FightStart);
-                if (log.GetFightData().HealthOverTime.FirstOrDefault(x => x.X > start).Y < 1050)
+                int start = (int)(c.Time - log.FightData.FightStart);
+                if (log.FightData.HealthOverTime.FirstOrDefault(x => x.X > start).Y < 1050)
                 {
                     duration = 30000;
                 }
@@ -165,7 +165,7 @@ namespace LuckParser.Models
                 int end = start + duration;
                 if (removedBuff != null)
                 {
-                    end = (int)(removedBuff.Time - log.GetFightData().FightStart);
+                    end = (int)(removedBuff.Time - log.FightData.FightStart);
                 }
                 replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)"));
                 replay.AddCircleActor(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)"));
@@ -177,11 +177,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    bombDhuumStart = (int)(c.Time - log.GetFightData().FightStart);
+                    bombDhuumStart = (int)(c.Time - log.FightData.FightStart);
                 }
                 else
                 {
-                    int bombDhuumEnd = (int)(c.Time - log.GetFightData().FightStart);
+                    int bombDhuumEnd = (int)(c.Time - log.FightData.FightStart);
                     replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)"));
                     replay.AddCircleActor(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
                 }

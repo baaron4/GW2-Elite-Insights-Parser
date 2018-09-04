@@ -31,7 +31,7 @@ namespace LuckParser.Models
         protected List<PhaseData> GetInitialPhase(ParsedLog log)
         {
             List<PhaseData> phases = new List<PhaseData>();
-            long fightDuration = log.GetFightData().FightDuration;
+            long fightDuration = log.FightData.FightDuration;
             phases.Add(new PhaseData(0, fightDuration));
             phases[0].Name = "Full Fight";
             return phases;

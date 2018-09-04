@@ -72,31 +72,31 @@ namespace LuckParser.Controllers
         //Creating CSV---------------------------------------------------------------------------------
         public void CreateCSV()
         {       
-            double fightDuration = (_log.GetFightData().FightDuration) / 1000.0;
+            double fightDuration = (_log.FightData.FightDuration) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
             string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
             if (duration.ToString("hh") != "00")
             {
                 durationString = duration.ToString("hh") + "h " + durationString;
             }
-            string bossname = _log.GetFightData().Name;
+            string bossname = _log.FightData.Name;
             //header
             WriteLine(new [] { "Elite Insights Version", Application.ProductVersion });
-            WriteLine(new [] { "ARC Version", _log.GetLogData().BuildVersion});
-            WriteLine(new [] { "Boss ID", _log.GetFightData().ID.ToString() });
-            WriteLine(new [] { "Recorded By", _log.GetLogData().PoV.Split(':')[0] });
-            WriteLine(new [] { "Time Start", _log.GetLogData().LogStart });
-            WriteLine(new [] { "Time End", _log.GetLogData().LogEnd });
+            WriteLine(new [] { "ARC Version", _log.LogData.BuildVersion});
+            WriteLine(new [] { "Boss ID", _log.FightData.ID.ToString() });
+            WriteLine(new [] { "Recorded By", _log.LogData.PoV.Split(':')[0] });
+            WriteLine(new [] { "Time Start", _log.LogData.LogStart });
+            WriteLine(new [] { "Time End", _log.LogData.LogEnd });
             NewLine();
             NewLine();
             NewLine();
             NewLine();
             //Boss card
             WriteLine(new [] { "Boss", bossname });
-            WriteLine(new [] { "Success", _log.GetLogData().Success.ToString() });
-            WriteLine(new [] { "Total Boss Health", _log.GetFightData().Health.ToString() });
-            int finalBossHealth = _log.GetFightData().HealthOverTime.Count > 0 ? _log.GetFightData().HealthOverTime.Last().Y : 10000;
-            WriteLine(new [] { "Final Boss Health", (_log.GetFightData().Health * (100.0 - finalBossHealth * 0.01)).ToString() });
+            WriteLine(new [] { "Success", _log.LogData.Success.ToString() });
+            WriteLine(new [] { "Total Boss Health", _log.FightData.Health.ToString() });
+            int finalBossHealth = _log.FightData.HealthOverTime.Count > 0 ? _log.FightData.HealthOverTime.Last().Y : 10000;
+            WriteLine(new [] { "Final Boss Health", (_log.FightData.Health * (100.0 - finalBossHealth * 0.01)).ToString() });
             WriteLine(new [] { "Boss Health Burned %", (100.0 - finalBossHealth * 0.01).ToString() });
             WriteLine(new [] { "Duration", durationString });
 
@@ -193,7 +193,7 @@ namespace LuckParser.Controllers
                 "Times Downed", "Time Died","Percent Alive"});
             }
             int count = 0;
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDPS dps = _statistics.Dps[player][phaseIndex];
                 Statistics.FinalStats stats = _statistics.Stats[player][phaseIndex];
@@ -242,7 +242,7 @@ namespace LuckParser.Controllers
                 "Total Hits",
                 "Hits to Interupt","Hits Invulned","Time wasted","Time saved","Weapon Swaps"});
             int count = 0;
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalStats stats = _statistics.Stats[player][phaseIndex];
                 Statistics.FinalDPS dps = _statistics.Dps[player][phaseIndex];
@@ -277,7 +277,7 @@ namespace LuckParser.Controllers
                 "Total Hits",
                 "Hits to Interupt","Hits Invulned","Time wasted","Time saved","Weapon Swaps"});
             int count = 0;
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalStats stats = _statistics.Stats[player][phaseIndex];
                 Statistics.FinalDPS dps = _statistics.Dps[player][phaseIndex];
@@ -305,7 +305,7 @@ namespace LuckParser.Controllers
             WriteLine(new [] { "Sub Group", "Profession", "Name" ,
                 "DMG Taken","DMG Barrier","Blocked","Invulned","Evaded","Dodges" });
             int count = 0;
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
                 Statistics.FinalStats stats = _statistics.Stats[player][phaseIndex];
@@ -326,7 +326,7 @@ namespace LuckParser.Controllers
             WriteLine(new [] { "Sub Group", "Profession", "Name" ,
                 "Condi Cleanse","Condi Cleanse time","Resurrects","Time Resurecting" });
             int count = 0;
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalSupport support = _statistics.Support[player][phaseIndex];
 
@@ -355,7 +355,7 @@ namespace LuckParser.Controllers
             NewLine();
 
             int count = 0;
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][phaseIndex];
                 Dictionary<long, long> boonPresence = player.GetBoonPresence(_log, _statistics.Phases, phaseIndex);
@@ -410,7 +410,7 @@ namespace LuckParser.Controllers
             NewLine();
 
             int count = 0;
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 Dictionary<long, Statistics.FinalBoonUptime> uptimes = _statistics.SelfBoons[player][phaseIndex];
 
@@ -458,7 +458,7 @@ namespace LuckParser.Controllers
             NewLine();
 
             int count = 0;
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 Dictionary<long, Statistics.FinalBoonUptime> boons =
                             _statistics.GroupBoons[player][phaseIndex];
@@ -507,7 +507,7 @@ namespace LuckParser.Controllers
             NewLine();
 
             int count = 0;
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 Dictionary<long, Statistics.FinalBoonUptime> boons =
                               _statistics.OffGroupBoons[player][phaseIndex];
@@ -556,7 +556,7 @@ namespace LuckParser.Controllers
             NewLine();
 
             int count = 0;
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 Dictionary<long, Statistics.FinalBoonUptime> boons =
                             _statistics.SquadBoons[player][phaseIndex];
@@ -594,10 +594,10 @@ namespace LuckParser.Controllers
         }
         private void CreateMechanicTable(int phaseIndex)
         {
-            HashSet<Mechanic> presMech = _log.GetMechanicData().GetPresentPlayerMechs(phaseIndex);
-            //Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.getMechanicData().getPresentEnemyMechs(phaseIndex);
+            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentPlayerMechs(phaseIndex);
+            //Dictionary<string, HashSet<Mechanic>> presEnemyMech = log.MechanicData.getPresentEnemyMechs(phaseIndex);
             PhaseData phase = _statistics.Phases[phaseIndex];
-            //List<AbstractMasterPlayer> enemyList = log.getMechanicData().getEnemyList(phaseIndex);
+            //List<AbstractMasterPlayer> enemyList = log.MechanicData.getEnemyList(phaseIndex);
             int countLines = 0;
             if (presMech.Count > 0)
             {
@@ -608,12 +608,12 @@ namespace LuckParser.Controllers
                 }
                 NewLine();
 
-                foreach (Player p in _log.GetPlayerList())
+                foreach (Player p in _log.PlayerList)
                 {
                     WriteCell(p.Character);
                     foreach (Mechanic mech in presMech)
                     {
-                        int count = _log.GetMechanicData()[mech].Count(x => x.GetPlayer().InstID == p.InstID && phase.InInterval(x.GetTime()));
+                        int count = _log.MechanicData[mech].Count(x => x.GetPlayer().InstID == p.InstID && phase.InInterval(x.GetTime()));
                         WriteCell(count.ToString());
                     }
                     NewLine();
@@ -630,7 +630,7 @@ namespace LuckParser.Controllers
         }
         private void CreateMechList(int phaseIndex)
         {
-            MechanicData mData = _log.GetMechanicData();
+            MechanicData mData = _log.MechanicData;
             List<MechanicLog> mLogs = new List<MechanicLog>();
             foreach (List<MechanicLog> mLs in mData.Values)
             {
@@ -667,7 +667,7 @@ namespace LuckParser.Controllers
         }
         private void CreateCondiUptime(int phaseIndex)
         {
-            Boss boss = _log.GetBoss();
+            Boss boss = _log.Boss;
             List<PhaseData> phases = _statistics.Phases;
             long fightDuration = phases[phaseIndex].GetDuration();
             Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[phaseIndex];
@@ -720,7 +720,7 @@ namespace LuckParser.Controllers
         }
         private void CreateBossBoonUptime(int phaseIndex)
         {
-            Boss boss = _log.GetBoss();
+            Boss boss = _log.Boss;
             List<PhaseData> phases = _statistics.Phases;
             Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[phaseIndex];
             WriteCell("Name");
@@ -769,7 +769,7 @@ namespace LuckParser.Controllers
                 WriteCell(boon.Name + " Overstack");
             }
             NewLine();
-            foreach (Player player in _log.GetPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
                 WriteCell(player.Character);
                 foreach (Boon boon in _statistics.PresentConditions)

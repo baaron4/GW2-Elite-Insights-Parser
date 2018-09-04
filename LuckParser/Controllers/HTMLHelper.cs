@@ -756,7 +756,7 @@ namespace LuckParser.Controllers
                     sw.Write("</canvas>");
                     sw.Write("<div class=\"d-flex justify-content-center slidecontainer\">");
                     {
-                        sw.Write("<input oninput=\"updateTime(this.value);\"type=\"range\" min=\"0\" max=\"" + (log.GetBoss().CombatReplay.GetPositions().Count - 1) + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
+                        sw.Write("<input oninput=\"updateTime(this.value);\"type=\"range\" min=\"0\" max=\"" + (log.Boss.CombatReplay.GetPositions().Count - 1) + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
                         sw.Write("<input class=\"ml-5\" type=\"text\" id=\"timeRangeDisplay\" disabled value=\"0 secs\">");
                     }
                     sw.Write("</div>");
@@ -816,13 +816,13 @@ namespace LuckParser.Controllers
                     sw.Write("</div>");
                     sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center btn-group btn-group-toggle mb-5\" data-toggle=\"buttons\">");
                     {
-                        List<int> groups = log.GetPlayerList().Select(x => x.Group).Distinct().ToList();
+                        List<int> groups = log.PlayerList.Select(x => x.Group).Distinct().ToList();
                         foreach (int group in groups)
                         {
                             sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center mt-2\">");
                             {
                                 sw.Write("<h3>Group " + group + "</h3>");
-                                foreach (Player p in log.GetPlayerList().Where(x => x.Group == group))
+                                foreach (Player p in log.PlayerList.Where(x => x.Group == group))
                                 {
                                     sw.Write("<label id=\"id" + p.InstID + "\" style=\"width: 150px;\" onclick=\"selectActor(" + p.InstID + ")\"  class=\"btn btn-dark\">" +
                                         "<input class=\"invisible\" type=\"radio\" autocomplete=\"off\">" +
@@ -848,7 +848,7 @@ namespace LuckParser.Controllers
         {
             // animation control
             sw.Write("function startAnimate() {if (animation === null) { " +
-                "if (time ===" + (log.GetBoss().CombatReplay.GetPositions().Count - 1) + ") {" +
+                "if (time ===" + (log.Boss.CombatReplay.GetPositions().Count - 1) + ") {" +
                     "time = 0;" +
                 "}" +
                 "animation = setInterval(function(){myanimate(time++)},speed);" +
@@ -975,7 +975,7 @@ namespace LuckParser.Controllers
                     "}" +
                 "};");
             // create players
-            foreach (Player p in log.GetPlayerList())
+            foreach (Player p in log.PlayerList)
             {
                 sw.Write("{");
                 sw.Write("var p = new mainActor(" + p.Group + ",'" + p.CombatReplay.GetIcon() + "');");
@@ -1005,9 +1005,9 @@ namespace LuckParser.Controllers
                 sw.Write("}");
             }
             // create boss
-            sw.Write("boss = new mainActor(-2,'" + log.GetBoss().CombatReplay.GetIcon() + "');");
+            sw.Write("boss = new mainActor(-2,'" + log.Boss.CombatReplay.GetIcon() + "');");
             sw.Write("boss.pos = [");
-            foreach (Point3D pos in log.GetBoss().CombatReplay.GetPositions())
+            foreach (Point3D pos in log.Boss.CombatReplay.GetPositions())
             {
                 Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
                 sw.Write(coord.Item1 + ",");
@@ -1036,7 +1036,7 @@ namespace LuckParser.Controllers
                     "}" +
                 "};");
             // create thrash mobs
-            foreach (Mob mob in log.GetBoss().ThrashMobs)
+            foreach (Mob mob in log.Boss.ThrashMobs)
             {
                 sw.Write("{");
                 sw.Write("var p = new secondaryActor('" + mob.CombatReplay.GetIcon() + "'," + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "," + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate + ");");
@@ -1107,7 +1107,7 @@ namespace LuckParser.Controllers
                         "}" +
                     "}" +
                 "};");
-            foreach (Mob mob in log.GetBoss().ThrashMobs)
+            foreach (Mob mob in log.Boss.ThrashMobs)
             {
                 CombatReplay replay = mob.CombatReplay;
                 foreach(CircleActor a in replay.GetCircleActors())
@@ -1119,7 +1119,7 @@ namespace LuckParser.Controllers
                     sw.Write("}");
                 }
             }
-            foreach (Player player in log.GetPlayerList())
+            foreach (Player player in log.PlayerList)
             {
                 CombatReplay replay = player.CombatReplay;
                 foreach (CircleActor a in replay.GetCircleActors())
@@ -1131,12 +1131,12 @@ namespace LuckParser.Controllers
                     sw.Write("}");
                 }
             }
-            foreach (CircleActor a in log.GetBoss().CombatReplay.GetCircleActors())
+            foreach (CircleActor a in log.Boss.CombatReplay.GetCircleActors())
             {
                 sw.Write("{");
                 sw.Write("var a = new circleActor(" + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                 sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.GetPosition(log.GetFightData().InstID.ToString(), map) + ";");
+                sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
                 sw.Write("}");
 
             }
@@ -1188,7 +1188,7 @@ namespace LuckParser.Controllers
                         "}" +
                     "}" +
                 "};");
-            foreach (Mob mob in log.GetBoss().ThrashMobs)
+            foreach (Mob mob in log.Boss.ThrashMobs)
             {
                 CombatReplay replay = mob.CombatReplay;
                 foreach (DoughnutActor a in replay.GetDoughnutActors())
@@ -1200,7 +1200,7 @@ namespace LuckParser.Controllers
                     sw.Write("}");
                 }
             }
-            foreach (Player player in log.GetPlayerList())
+            foreach (Player player in log.PlayerList)
             {
                 CombatReplay replay = player.CombatReplay;
                 foreach (DoughnutActor a in replay.GetDoughnutActors())
@@ -1212,12 +1212,12 @@ namespace LuckParser.Controllers
                     sw.Write("}");
                 }
             }
-            foreach (DoughnutActor a in log.GetBoss().CombatReplay.GetDoughnutActors())
+            foreach (DoughnutActor a in log.Boss.CombatReplay.GetDoughnutActors())
             {
                 sw.Write("{");
                 sw.Write("var a = new doughnutActor(" + a.GetInnerRadius() + "," + a.GetOuterRadius() + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                 sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.GetPosition(log.GetFightData().InstID.ToString(), map) + ";");
+                sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
                 sw.Write("}");
 
             }
@@ -1276,7 +1276,7 @@ namespace LuckParser.Controllers
                     sw.Write("if (selectedPlayer) {" +
                                 "selectedPlayer.draw(ctx,timeToUse,20);"+                              
                             "}");
-                    sw.Write("if (timeToUse === " + (log.GetBoss().CombatReplay.GetPositions().Count - 1) + ") {stopAnimate();}");
+                    sw.Write("if (timeToUse === " + (log.Boss.CombatReplay.GetPositions().Count - 1) + ") {stopAnimate();}");
                     sw.Write("timeSlider.value = time;");
                     sw.Write("updateTextInput(time);");
                 }
