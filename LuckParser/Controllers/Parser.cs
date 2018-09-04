@@ -229,12 +229,9 @@ namespace LuckParser.Controllers
                     if(skillId != 0 && int.TryParse(name, out int n) && n == skillId)
                     {
                         //was it a known buff?
-                        foreach(Boon b in Boon.GetAll())
+                        if (Boon.BoonsByIds.TryGetValue(skillId, out Boon boon))
                         {
-                            if(skillId == b.ID)
-                            {
-                                name = b.Name;
-                            }
+                            name = boon.Name;
                         }
                     }
                     //Save

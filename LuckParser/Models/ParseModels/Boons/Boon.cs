@@ -514,6 +514,10 @@ namespace LuckParser.Models.ParseModels
         };
 
 
+        public static Dictionary<long, Boon> BoonsByIds = _allBoons.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
+        public static Dictionary<BoonEnum, List<Boon>> BoonsByNature= _allBoons.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
+        public static Dictionary<BoonSource, List<Boon>> BoonsBySource = _allBoons.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
+
         public static bool RemovePermission(long boonid, ParseEnum.BuffRemove buffremove, ParseEnum.IFF iff)
         {
             if (buffremove == 0)
@@ -555,85 +559,56 @@ namespace LuckParser.Models.ParseModels
         // Conditions
         public static List<Boon> GetCondiBoonList()
         {
-            return _allBoons.Where(x => x.Nature == BoonEnum.Condition).ToList();
+            return BoonsByNature[BoonEnum.Condition];
         }
         // Boons
         public static List<Boon> GetBoonList()
         {
-            return _allBoons.Where(x => x.Nature == BoonEnum.Boon).ToList();
+            return BoonsByNature[BoonEnum.Boon];
         }
         // Shareable buffs
         public static List<Boon> GetOffensiveTableList()
         {
-            return _allBoons.Where(x => x.Nature == BoonEnum.OffensiveBuffTable).ToList();
-        }
-        private static List<Boon> GetOffensiveTableList(BoonSource source)
-        {
-            return GetOffensiveTableList().Where(x => x.Source == source).ToList();
-        }
-        public static List<Boon> GetOffensiveTableList(String source)
-        {
-            return GetOffensiveTableList(ProfToEnum(source));
+            return BoonsByNature[BoonEnum.OffensiveBuffTable];
         }
         public static List<Boon> GetDefensiveTableList()
         {
-            return _allBoons.Where(x => x.Nature == BoonEnum.DefensiveBuffTable).ToList();
-        }
-        private static List<Boon> GetDefensiveTableList(BoonSource source)
-        {
-            return GetDefensiveTableList().Where(x => x.Source == source).ToList();
-        }
-        public static List<Boon> GetDefensiveTableList(String source)
-        {
-            return GetDefensiveTableList(ProfToEnum(source));
-        }
-        // Table + graph
-        public static List<Boon> GetTableProfList()
-        {
-            return _allBoons.Where(x => x.Nature == BoonEnum.OffensiveBuffTable || x.Nature == BoonEnum.DefensiveBuffTable).ToList();
-        }
-        private static List<Boon> GetTableProfList(BoonSource source)
-        {
-            return GetTableProfList().Where(x => x.Source == source).ToList();
-        }
-        public static List<Boon> GetTableProfList(String source)
-        {
-            return GetTableProfList(ProfToEnum(source));
+            return BoonsByNature[BoonEnum.DefensiveBuffTable];
         }
         // Foods
         public static List<Boon> GetFoodList()
         {
-            return _allBoons.Where(x => x.Nature == BoonEnum.Food).ToList();
+            return BoonsByNature[BoonEnum.Food];
         }
         // Utilities
         public static List<Boon> GetUtilityList()
         {
-            return _allBoons.Where(x => x.Nature == BoonEnum.Utility).ToList();
+            return BoonsByNature[BoonEnum.Utility];
         }
         // Boss
         public static List<Boon> GetBossBoonList()
         {
-            return _allBoons.Where(x => x.Source == BoonSource.Boss).ToList();
+            return BoonsBySource[BoonSource.Boss];
         }
         // All buffs
         public static List<Boon> GetAllBuffList()
         {
             List<Boon> res = new List<Boon>();
             // correct order for the boon graph
-            res.AddRange(GetBoonList());
-            res.AddRange(GetOffensiveTableList());
-            res.AddRange(GetDefensiveTableList());
-            res.AddRange(GetRemainingBuffsList());
+            res.AddRange(BoonsByNature[BoonEnum.Boon]);
+            res.AddRange(BoonsByNature[BoonEnum.DefensiveBuffTable]);
+            res.AddRange(BoonsByNature[BoonEnum.OffensiveBuffTable]);
+            res.AddRange(BoonsByNature[BoonEnum.GraphOnlyBuff]);
             return res;
         }
         // Non shareable buffs
         public static List<Boon> GetRemainingBuffsList()
         {
-            return _allBoons.Where(x => x.Nature == BoonEnum.GraphOnlyBuff).ToList();
+            return BoonsByNature[BoonEnum.GraphOnlyBuff];
         }
         private static List<Boon> GetRemainingBuffsList(BoonSource source)
         {
-            return GetRemainingBuffsList().Where(x => x.Source == source).ToList();
+            return BoonsBySource[source].Where(x => x.Nature == BoonEnum.GraphOnlyBuff).ToList();
         }
         public static List<Boon> GetRemainingBuffsList(String source)
         {
