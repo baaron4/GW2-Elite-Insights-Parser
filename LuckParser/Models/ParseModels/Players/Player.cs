@@ -13,7 +13,7 @@ namespace LuckParser.Models.ParseModels
         // Fields
         public readonly string Account;
         public readonly int Group;
-        public long Deconnected { get; set; }//time in ms the player dcd
+        public long Disconnected { get; set; }//time in ms the player dcd
        
         private readonly List<Tuple<Boon,long>> _consumeList = new List<Tuple<Boon, long>>();
         //weaponslist
