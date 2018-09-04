@@ -31,9 +31,9 @@ namespace LuckParser.Models
         protected List<PhaseData> GetInitialPhase(ParsedLog log)
         {
             List<PhaseData> phases = new List<PhaseData>();
-            long fightDuration = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.FightData.FightDuration;
             phases.Add(new PhaseData(0, fightDuration));
-            phases[0].SetName("Full Fight");
+            phases[0].Name = "Full Fight";
             return phases;
         }
 
@@ -58,19 +58,19 @@ namespace LuckParser.Models
         {
         }
 
-        protected void SetSuccessByDeath(CombatData combatData, LogData logData, BossData bossData)
+        protected void SetSuccessByDeath(CombatData combatData, LogData logData, FightData fightData)
         {
-            CombatItem killed = combatData.Find(x => x.SrcInstid == bossData.GetInstid() && x.IsStateChange.IsDead());
+            CombatItem killed = combatData.Find(x => x.SrcInstid == fightData.InstID && x.IsStateChange.IsDead());
             if (killed != null)
             {
-                logData.SetBossKill(true);
-                bossData.SetLastAware(killed.Time);
+                logData.Success = true;
+                fightData.FightEnd = killed.Time;
             }
         }
 
-        public virtual void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
+        public virtual void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
         {
-            SetSuccessByDeath(combatData, logData, bossData);
+            SetSuccessByDeath(combatData, logData, fightData);
         }
 
         public virtual string GetReplayIcon()

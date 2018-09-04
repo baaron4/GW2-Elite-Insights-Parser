@@ -37,16 +37,16 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             // Ghostly protection check
-            List<CombatItem> invulsGorse = log.GetCombatList().Where(x => x.SkillID == 31790 && x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
+            List<CombatItem> invulsGorse = log.GetBoonData(31790).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
             for (int i = 0; i < invulsGorse.Count; i++)
             {
                 CombatItem c = invulsGorse[i];
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.Time - log.GetBossData().GetFirstAware();
+                    end = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsGorse.Count - 1)
                     {
@@ -55,12 +55,12 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.Time - log.GetBossData().GetFirstAware();
+                    start = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(end, start));
                     castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
@@ -68,19 +68,19 @@ namespace LuckParser.Models
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                phase.SetName(namesGorse[i - 1]);
+                phase.Name = namesGorse[i - 1];
                 if (i == 2 || i == 4)
                 {
-                    List<AgentItem> spirits = log.GetAgentData().GetNPCAgentList().Where(x => ParseEnum.GetThrashIDS(x.ID) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
+                    List<AgentItem> spirits = log.AgentData.GetNPCAgentList().Where(x => ParseEnum.GetThrashIDS(x.ID) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
                     foreach (AgentItem a in spirits)
                     {
-                        long agentStart = a.FirstAware - log.GetBossData().GetFirstAware();
+                        long agentStart = a.FirstAware - log.FightData.FightStart;
                         if (phase.InInterval(agentStart))
                         {
-                            phase.AddRedirection(a);
+                            phase.Redirection.Add(a);
                         }
                     }
-                    phase.OverrideStart(log.GetBossData().GetFirstAware());
+                    phase.OverrideStart(log.FightData.FightStart);
                 }
             }
             return phases;
@@ -103,11 +103,11 @@ namespace LuckParser.Models
                 replay.AddCircleActor(new CircleActor(true, c.GetExpDur() + (int)c.GetTime(), 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
                 replay.AddCircleActor(new CircleActor(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
             }
-            List<PhaseData> phases = log.GetBoss().GetPhases(log, true);
+            List<PhaseData> phases = log.Boss.GetPhases(log);
             if (phases.Count > 1)
             {
                 List<CastLog> rampage = cls.Where(x => x.GetID() == 31834).ToList();
-                Point3D pos = log.GetBoss().GetCombatReplay().GetPositions().First();
+                Point3D pos = log.Boss.CombatReplay.GetPositions().First();
                 foreach (CastLog c in rampage)
                 {
                     int start = (int)c.GetTime();

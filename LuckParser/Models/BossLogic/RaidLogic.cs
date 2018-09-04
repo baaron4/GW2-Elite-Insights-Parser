@@ -16,7 +16,7 @@ namespace LuckParser.Models
             CanCombatReplay = true;
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
         {
             // Put non reward stuff in this as we find them
             HashSet<int> notRaidRewardsIds = new HashSet<int>
@@ -26,8 +26,8 @@ namespace LuckParser.Models
             CombatItem reward = combatData.Find(x => x.IsStateChange == ParseEnum.StateChange.Reward && !notRaidRewardsIds.Contains(x.Value));
             if (reward != null)
             {
-                logData.SetBossKill(true);
-                bossData.SetLastAware(reward.Time);
+                logData.Success = true;
+                fightData.FightEnd = reward.Time;
             }
         }
     }
