@@ -120,7 +120,14 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (!found)
                     {
-                        Simulation.Insert(0, new BoonSimulationItemDuration(new BoonStackItem(0, 1, srcValue, overstackValue)));
+                        if (Simulation.Count == 0)
+                        {
+                            Simulation.Add(new BoonSimulationOverstackItem(new BoonStackItem(start, 1, srcValue, overstackValue)));
+                        }
+                        else
+                        {
+                            Simulation.Insert(Simulation.Count - 1, new BoonSimulationOverstackItem(new BoonStackItem(start, 1, srcValue, overstackValue)));
+                        }
                     }
                 }
             }

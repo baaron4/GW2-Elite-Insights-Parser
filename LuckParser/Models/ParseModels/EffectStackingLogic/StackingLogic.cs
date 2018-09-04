@@ -27,7 +27,14 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (!found)
                     {
-                        simulation.Insert(0, new BoonSimulationItemDuration(new BoonStackItem(stacks[i].Start, 1, srcValue, overstackValue)));
+                        if (simulation.Count == 0)
+                        {
+                            simulation.Add(new BoonSimulationOverstackItem(new BoonStackItem(stacks[i].Start, 1, srcValue, overstackValue)));
+                        }
+                        else
+                        {
+                            simulation.Insert(simulation.Count - 1, new BoonSimulationOverstackItem(new BoonStackItem(stacks[i].Start, 1, srcValue, overstackValue)));
+                        }
                     }
                     stacks[i] = stackItem;
                     Sort(log, stacks);

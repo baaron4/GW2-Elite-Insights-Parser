@@ -6,8 +6,8 @@ namespace LuckParser.Models.ParseModels
 {
     public class BoonSimulationItemDuration: BoonSimulationItem
     {
-        private readonly ushort _src;
-        private long _overstack;
+        protected readonly ushort _src;
+        protected long _overstack;
 
         public BoonSimulationItemDuration(BoonStackItem other) : base(other.Start, other.BoonDuration)
         {
