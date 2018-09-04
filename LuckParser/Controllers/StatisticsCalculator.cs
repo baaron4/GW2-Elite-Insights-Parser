@@ -46,7 +46,7 @@ namespace LuckParser.Controllers
 
             _log = log;
 
-            _statistics.Phases = log.Boss.GetPhases(log, _settings.ParsePhases);
+            _statistics.Phases = log.Boss.GetPhases(log);
             if (switches.CalculateCombatReplay && _settings.ParseCombatReplay)
             {
                 foreach (Player p in log.PlayerList)
@@ -73,7 +73,7 @@ namespace LuckParser.Controllers
                 {
                     p.AddMechanics(log);
                 }
-                log.MechanicData.ComputePresentMechanics(log, _statistics.Phases);
+                log.MechanicData.ComputePresentMechanics(log);
             }
 
             return _statistics;
@@ -561,7 +561,7 @@ namespace LuckParser.Controllers
                 Dictionary<Player, BoonDistribution> boonDistributions = new Dictionary<Player, BoonDistribution>();
                 foreach (Player p in playerList)
                 {
-                    boonDistributions[p] = p.GetBoonDistribution(_log, _statistics.Phases, phaseIndex);
+                    boonDistributions[p] = p.GetBoonDistribution(_log, phaseIndex);
                 }
 
                 Dictionary<long, Statistics.FinalBoonUptime> final =
@@ -615,7 +615,7 @@ namespace LuckParser.Controllers
 
                     PhaseData phase =_statistics.Phases[phaseIndex];
 
-                    BoonDistribution selfBoons = player.GetBoonDistribution(_log,_statistics.Phases, phaseIndex);
+                    BoonDistribution selfBoons = player.GetBoonDistribution(_log, phaseIndex);
 
                     long fightDuration = phase.End - phase.Start;
                     foreach (Boon boon in player.BoonToTrack)
@@ -670,7 +670,7 @@ namespace LuckParser.Controllers
             _statistics.BossConditions = new Dictionary<long, Statistics.FinalBossBoon>[_statistics.Phases.Count];
             for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
             {
-                BoonDistribution boonDistribution = _log.Boss.GetBoonDistribution(_log,_statistics.Phases, phaseIndex);
+                BoonDistribution boonDistribution = _log.Boss.GetBoonDistribution(_log, phaseIndex);
                 Dictionary<long, Statistics.FinalBossBoon> rates = new Dictionary<long, Statistics.FinalBossBoon>();
 
                 PhaseData phase =_statistics.Phases[phaseIndex];

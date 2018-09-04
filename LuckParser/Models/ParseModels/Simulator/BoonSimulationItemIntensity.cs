@@ -27,7 +27,7 @@ namespace LuckParser.Models.ParseModels
             Duration = _stacks.Max(x => x.GetSourcelessDuration());
         }
 
-        public override long GetDuration(ushort src, long start = 0, long end = 0)
+        public override long GetDuration(ushort src, long start, long end)
         {
             long total = 0;
             foreach (BoonSimulationItemDuration stack in _stacks.Where(x => x.GetSrc()[0] == src))
@@ -36,12 +36,12 @@ namespace LuckParser.Models.ParseModels
             }
             return total;
         }
-        public override long GetSourcelessDuration(long start = 0, long end = 0)
+        public override long GetSourcelessDuration()
         {
             long total = 0;
             foreach (BoonSimulationItemDuration stack in _stacks)
             {
-                total += stack.GetSourcelessDuration(start, end);
+                total += stack.GetSourcelessDuration();
             }
             return total;
         }

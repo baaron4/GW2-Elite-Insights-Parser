@@ -44,45 +44,45 @@ namespace LuckParser.Models.ParseModels
             }
             return new List<Point>();
         }
-        public BoonDistribution GetBoonDistribution(ParsedLog log, List<PhaseData> phases, int phaseIndex)
+        public BoonDistribution GetBoonDistribution(ParsedLog log, int phaseIndex)
         {
             if (_boonDistribution.Count == 0)
             {
-                SetBoonDistribution(log, phases);
+                SetBoonDistribution(log);
             }
             return _boonDistribution[phaseIndex];
         }
-        public Dictionary<long, BoonsGraphModel> GetBoonGraphs(ParsedLog log, List<PhaseData> phases)
+        public Dictionary<long, BoonsGraphModel> GetBoonGraphs(ParsedLog log)
         {
             if (_boonDistribution.Count == 0)
             {
-                SetBoonDistribution(log, phases);
+                SetBoonDistribution(log);
             }
             return _boonPoints;
         }
-        public Dictionary<long, long> GetBoonPresence(ParsedLog log, List<PhaseData> phases, int phaseIndex)
+        public Dictionary<long, long> GetBoonPresence(ParsedLog log, int phaseIndex)
         {
             if (_boonDistribution.Count == 0)
             {
-                SetBoonDistribution(log, phases);
+                SetBoonDistribution(log);
             }
             return _boonPresence[phaseIndex];
         }
 
-        public Dictionary<long, Dictionary<int, string[]>> GetExtraBoonData(ParsedLog log, List<PhaseData> phases)
+        public Dictionary<long, Dictionary<int, string[]>> GetExtraBoonData(ParsedLog log)
         {
             if (_boonDistribution.Count == 0)
             {
-                SetBoonDistribution(log, phases);
+                SetBoonDistribution(log);
             }
             return _boonExtra;
         }
 
-        public Dictionary<long, long> GetCondiPresence(ParsedLog log, List<PhaseData> phases, int phaseIndex)
+        public Dictionary<long, long> GetCondiPresence(ParsedLog log, int phaseIndex)
         {
             if (_boonDistribution.Count == 0)
             {
-                SetBoonDistribution(log, phases);
+                SetBoonDistribution(log);
             }
             return _condiPresence[phaseIndex];
         }
@@ -327,12 +327,13 @@ namespace LuckParser.Models.ParseModels
                     break;
             }
         }
-        private void SetBoonDistribution(ParsedLog log, List<PhaseData> phases)
+        private void SetBoonDistribution(ParsedLog log)
         {
             HashSet<long> boonIds = new HashSet<long>(Boon.GetBoonList().Select(x => x.ID));
             HashSet<long> condiIds = new HashSet<long>(Boon.GetCondiBoonList().Select(x => x.ID));
             HashSet<long> defIds = new HashSet<long>(Boon.GetDefensiveTableList().Select(x => x.ID));
             HashSet<long> offIds = new HashSet<long>(Boon.GetOffensiveTableList().Select(x => x.ID));
+            List<PhaseData> phases = log.Boss.GetPhases(log);
             BoonMap toUse = GetBoonMap(log, boonIds, condiIds, defIds, offIds);
             long dur = log.FightData.FightDuration;
             int fightDuration = (int)(dur) / 1000;

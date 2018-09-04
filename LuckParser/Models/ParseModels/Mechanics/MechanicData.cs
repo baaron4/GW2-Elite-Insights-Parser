@@ -21,7 +21,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public void ComputePresentMechanics(ParsedLog log, List<PhaseData> phases)
+        public void ComputePresentMechanics(ParsedLog log)
         {
             if (_presentOnPlayerMechanics.Count > 0)
             {
@@ -46,7 +46,7 @@ namespace LuckParser.Models.ParseModels
                 Remove(mech);
             }
             // ready present mechanics
-            foreach (PhaseData phase in phases)
+            foreach (PhaseData phase in log.Boss.GetPhases(log))
             {
                 HashSet<Mechanic> toAddPlayer = new HashSet<Mechanic>();
                 HashSet<Mechanic> toAddEnemy = new HashSet<Mechanic>();
@@ -90,20 +90,20 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public HashSet<Mechanic> GetPresentEnemyMechs(int phaseIndex = 0)
+        public HashSet<Mechanic> GetPresentEnemyMechs(int phaseIndex)
         {
             return _presentOnEnemyMechanics[phaseIndex];
         }
-        public HashSet<Mechanic> GetPresentPlayerMechs(int phaseIndex = 0)
+        public HashSet<Mechanic> GetPresentPlayerMechs(int phaseIndex)
         {
             return _presentOnPlayerMechanics[phaseIndex];
         }
-        public HashSet<Mechanic> GetPresentMechanics(int phaseIndex = 0)
+        public HashSet<Mechanic> GetPresentMechanics(int phaseIndex)
         {
             return _presentMechanics[phaseIndex];
         }
 
-        public List<AbstractMasterPlayer> GetEnemyList(int phaseIndex = 0)
+        public List<AbstractMasterPlayer> GetEnemyList(int phaseIndex)
         {
             return _enemyList[phaseIndex];
         }

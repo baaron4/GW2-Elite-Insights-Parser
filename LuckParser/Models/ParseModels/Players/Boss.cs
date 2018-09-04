@@ -7,22 +7,24 @@ namespace LuckParser.Models.ParseModels
     public class Boss : AbstractMasterPlayer
     {
         // Constructors
-        public Boss(AgentItem agent) : base(agent)
+        public Boss(AgentItem agent, bool requirePhases) : base(agent)
         {
+            _requirePhases = requirePhases;
         }
 
         private List<PhaseData> _phases = new List<PhaseData>();
         public readonly List<long> PhaseData = new List<long>();
         private CombatReplayMap _map;
         public readonly List<Mob> ThrashMobs = new List<Mob>();
+        private readonly bool _requirePhases;
 
-        public List<PhaseData> GetPhases(ParsedLog log, bool getAllPhases)
+        public List<PhaseData> GetPhases(ParsedLog log)
         {
 
             if (_phases.Count == 0)
             {
                 long fightDuration = log.FightData.FightDuration;
-                if (!getAllPhases)
+                if (!_requirePhases)
                 {
                     _phases.Add(new PhaseData(0, fightDuration));
                     _phases[0].Name = "Full Fight";
