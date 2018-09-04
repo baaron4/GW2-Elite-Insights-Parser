@@ -107,7 +107,7 @@ namespace LuckParser.Models.ParseModels
                 Mechanic.SpecialCondition condition = m.GetSpecialCondition();
                 foreach (CombatItem c in log.GetBoonData(m.GetSkill()))
                 {
-                    if (condition != null && !condition(c.Value))
+                    if (condition != null && !condition(new SpecialConditionItem(c)))
                     {
                         continue;
                     }
@@ -158,7 +158,7 @@ namespace LuckParser.Models.ParseModels
                 Mechanic.SpecialCondition condition = m.GetSpecialCondition();
                 foreach (CombatItem c in log.GetCastDataById(m.GetSkill()))
                 {
-                    if (condition != null && !condition(c.Value))
+                    if (condition != null && !condition(new SpecialConditionItem(c)))
                     {
                         continue;
                     }

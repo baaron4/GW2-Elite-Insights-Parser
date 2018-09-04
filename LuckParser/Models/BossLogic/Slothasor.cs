@@ -17,18 +17,21 @@ namespace LuckParser.Models
             new Mechanic(34481, "Volatile Poison", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'circle-open',color:'rgb(255,0,0)',", "P.dmg","Stood in Volatile Poison", "Poison dmg",0),
             new Mechanic(34516, "Halitosis", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'triangle-right-open',color:'rgb(255,140,0)',", "FlmBrth","Halitosis (Flame Breath)", "Flame Breath",0),
             new Mechanic(34482, "Spore Release", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon',color:'rgb(255,0,0)',", "Shake","Spore Release (Coconut Shake)", "Shake",0),
-            new Mechanic(34362, "Magic Transformation", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,255,255)',", "Slub","Magic Transformation (Ate Magic Mushroom)", "Slub Transform",0), 
+            new Mechanic(34362, "Magic Transformation", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'hexagram',color:'rgb(0,255,255)',", "Slub","Magic Transformation (Ate Magic Mushroom)", "Slub Transform",0), 
             //new Mechanic(34496, "Nauseated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall-open',color:'rgb(200,140,255)',", "Slub CD",0), //can be skipped imho, identical person and timestamp as Slub Transform
             new Mechanic(34508, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'star',color:'rgb(255,0,255)',", "Fix","Fixated by Slothasor", "Fixated",0),
             new Mechanic(34565, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)',", "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0), 
             new Mechanic(34537, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)',", "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
-            new Mechanic(791, "Fear", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'square-open',color:'rgb(255,0,0)',", "Fear","Hit by fear after breakbar", "Feared",0,(value=> value == 8000)),
+            new Mechanic(791, "Fear", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'square-open',color:'rgb(255,0,0)',", "Fear","Hit by fear after breakbar", "Feared",0,(condition=> condition.getCombatItem().Value == 8000)),
+            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "CC","Narcolepsy (Breakbar)", "Breakbar",0),
+            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Narcolepsy (Failed CC)", "CC Fail",0,(condition => condition.getCombatItem().Value > 120000)),
+            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Narcolepsy (Breakbar broken)", "CCed",0,(condition => condition.getCombatItem().Value <= 120000))
             });
         }
 
         public override CombatReplayMap GetCombatMap()
         {
-            return new CombatReplayMap("https://i.imgur.com/aLHcYSF.png",
+            return new CombatReplayMap("https://i.imgur.com/PaKMZ8Z.png",
                             Tuple.Create(1688, 2581),
                             Tuple.Create(5822, -3491, 9549, 2205),
                             Tuple.Create(-12288, -27648, 12288, 27648),
@@ -104,7 +107,7 @@ namespace LuckParser.Models
                 else
                 {
                     int transfoEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
-                    replay.AddCircleActor(new CircleActor(true, 0, 160, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
+                    replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(transfoStart, transfoEnd), "rgba(0, 80, 255, 0.3)"));
                 }
             }
             // fixated
