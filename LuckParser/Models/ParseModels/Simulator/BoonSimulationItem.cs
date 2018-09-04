@@ -21,6 +21,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         public abstract long GetDuration(ushort src, long start = 0, long end = 0);
+        public abstract long GetDuration(long start = 0, long end = 0);
 
 
         public long GetStart()
@@ -50,6 +51,8 @@ namespace LuckParser.Models.ParseModels
             }
             return Duration;
         }
+
+        public abstract List<BoonsGraphModel.Segment> ToSegment();
 
         public abstract void SetEnd(long end);
 

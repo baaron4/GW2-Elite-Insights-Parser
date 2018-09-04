@@ -6,11 +6,10 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class Dhuum : BossLogic
+    public class Dhuum : RaidLogic
     {
         public Dhuum()
         {
-            Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(48172, "Hateful Ephemera", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,140,0)',", "Glm.dmg","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0), 
@@ -73,7 +72,7 @@ namespace LuckParser.Models
             }
             else
             {
-                CombatItem invulDhuum = log.GetBoonData().FirstOrDefault(x => x.SkillID == 762 && x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == boss.GetInstid() && x.Time > 115000 + log.GetBossData().GetFirstAware());
+                CombatItem invulDhuum = log.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == boss.GetInstid() && x.Time > 115000 + log.GetBossData().GetFirstAware());
                 if (invulDhuum != null)
                 {
                     end = invulDhuum.Time - log.GetBossData().GetFirstAware();
@@ -153,7 +152,7 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // spirit transform
-            List<CombatItem> spiritTransform = log.GetBoonData().Where(x => x.DstInstid == p.GetInstid() && x.SkillID == 46950 && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
+            List<CombatItem> spiritTransform = log.GetBoonData(46950).Where(x => x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in spiritTransform)
             {
                 int duration = 15000;
@@ -162,7 +161,7 @@ namespace LuckParser.Models
                 {
                     duration = 30000;
                 }
-                CombatItem removedBuff = log.GetBoonData().FirstOrDefault(x => x.SrcInstid == p.GetInstid() && x.SkillID == 48281 && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
+                CombatItem removedBuff = log.GetBoonData(48281).FirstOrDefault(x => x.SrcInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
                 int end = start + duration;
                 if (removedBuff != null)
                 {

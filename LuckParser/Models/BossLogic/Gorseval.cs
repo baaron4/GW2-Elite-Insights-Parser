@@ -6,11 +6,10 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class Gorseval : BossLogic
+    public class Gorseval : RaidLogic
     {
         public Gorseval()
         {
-            Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(31875, "Spectral Impact", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'hexagram',color:'rgb(255,0,0)',", "Slam","Spectral Impact (KB Slam)", "Slam",4000),
@@ -69,10 +68,10 @@ namespace LuckParser.Models
                 phase.SetName(namesGorse[i - 1]);
                 if (i == 2 || i == 4)
                 {
-                    List<AgentItem> spirits = log.GetAgentData().GetNPCAgentList().Where(x => ParseEnum.GetThrashIDS(x.GetID()) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
+                    List<AgentItem> spirits = log.GetAgentData().GetNPCAgentList().Where(x => ParseEnum.GetThrashIDS(x.ID) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
                     foreach (AgentItem a in spirits)
                     {
-                        long agentStart = a.GetFirstAware() - log.GetBossData().GetFirstAware();
+                        long agentStart = a.FirstAware - log.GetBossData().GetFirstAware();
                         if (phase.InInterval(agentStart))
                         {
                             phase.AddRedirection(a);

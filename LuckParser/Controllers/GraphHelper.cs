@@ -56,7 +56,7 @@ namespace LuckParser.Controllers
             {
                 dmgListFull[totalTime] = totalDamage;
             }
-            CombatReplay replay = p.GetCombatReplay();
+            /*CombatReplay replay = p.GetCombatReplay();
             if (replay != null && dstid == 0 && phaseIndex == 0)
             {
                 foreach (int i in replay.GetTimes())
@@ -74,7 +74,7 @@ namespace LuckParser.Controllers
                         replay.AddDPS30s((int)Math.Round(1000 * (dmgListFull[i] - dmgListFull[limitId]) / (i - limitId)));
                     }
                 }
-            }
+            }*/
             dmgList.Add(new Point(0, 0));
             dmgList1s.Add(new Point(0, 0));
             dmgList10s.Add(new Point(0, 0));

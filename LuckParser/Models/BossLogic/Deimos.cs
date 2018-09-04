@@ -6,11 +6,10 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class Deimos : BossLogic
+    public class Deimos : RaidLogic
     {
         public Deimos()
         {
-            Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(37716, "Rapid Decay", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Deimos, "symbol:'circle-open',color:'rgb(0,0,0)',", "Oil","Rapid Decay (Black expanding oil)", "Black Oil",0),
@@ -47,7 +46,7 @@ namespace LuckParser.Models
             long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // Determined + additional data on inst change
-            CombatItem invulDei = log.GetBoonData().Find(x => x.SkillID == 762 && x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == boss.GetInstid());
+            CombatItem invulDei = log.GetBoonData(762).Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == boss.GetInstid());
             if (invulDei != null)
             {
                 end = invulDei.Time - log.GetBossData().GetFirstAware();
@@ -96,10 +95,10 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.GamblerClones,
                         ParseEnum.ThrashIDS.GamblerReal,
                     };
-                List<AgentItem> clones = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.GetID()))).ToList();
+                List<AgentItem> clones = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
                 foreach (AgentItem a in clones)
                 {
-                    long agentStart = a.GetFirstAware() - log.GetBossData().GetFirstAware();
+                    long agentStart = a.FirstAware - log.GetBossData().GetFirstAware();
                     if (phase.InInterval(agentStart))
                     {
                         phase.AddRedirection(a);

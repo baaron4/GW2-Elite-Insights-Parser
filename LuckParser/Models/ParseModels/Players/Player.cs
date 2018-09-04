@@ -22,7 +22,7 @@ namespace LuckParser.Models.ParseModels
         // Constructors
         public Player(AgentItem agent, bool noSquad) : base(agent)
         {
-            String[] name = agent.GetName().Split('\0');
+            String[] name = agent.Name.Split('\0');
             _account = name[1];
             _group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
         }
@@ -41,22 +41,22 @@ namespace LuckParser.Models.ParseModels
 
         public int GetToughness()
         {
-            return Agent.GetToughness();
+            return Agent.Toughness;
         }
 
         public int GetHealing()
         {
-            return Agent.GetHealing();
+            return Agent.Healing;
         }
 
         public int GetCondition()
         {
-            return Agent.GetCondition();
+            return Agent.Condition;
         }
 
         public int GetConcentration()
         {
-            return Agent.GetConcentration();
+            return Agent.Concentration;
         }
         // Public methods
         public int[] GetCleanses(ParsedLog log, long start, long end) {
@@ -67,7 +67,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (c.IsActivation == ParseEnum.Activation.None)
                 {
-                    if ((Agent.GetInstid() == c.DstInstid || Agent.GetInstid() == c.DstMasterInstid) && c.IFF == ParseEnum.IFF.Friend && (c.IsBuffRemove != ParseEnum.BuffRemove.None))
+                    if ((Agent.InstID == c.DstInstid || Agent.InstID == c.DstMasterInstid) && c.IFF == ParseEnum.IFF.Friend && (c.IsBuffRemove != ParseEnum.BuffRemove.None))
                     {
                         long time = c.Time - timeStart;
                         if (time > 0)
@@ -148,7 +148,20 @@ namespace LuckParser.Models.ParseModels
                 {
                     if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && (apiskill.categories == null || (apiskill.categories.Count() == 1 && apiskill.categories[0] == "Phantasm")))
                     {
-                        if (apiskill.weapon_type == "Greatsword" || apiskill.weapon_type == "Staff" || apiskill.weapon_type == "Rifle" || apiskill.weapon_type == "Longbow" || apiskill.weapon_type == "Shortbow" || apiskill.weapon_type == "Hammer")
+                        if (apiskill.dual_wield != null)
+                        {
+                            if (swapped == 4)
+                            {
+                                weapons[0] = apiskill.weapon_type;
+                                weapons[1] = apiskill.dual_wield;
+                            }
+                            else if (swapped == 5)
+                            {
+                                weapons[2] = apiskill.weapon_type;
+                                weapons[3] = apiskill.dual_wield;
+                            }
+                        }
+                        else if (apiskill.weapon_type == "Greatsword" || apiskill.weapon_type == "Staff" || apiskill.weapon_type == "Rifle" || apiskill.weapon_type == "Longbow" || apiskill.weapon_type == "Shortbow" || apiskill.weapon_type == "Hammer")
                         {
                             if (swapped == 4)
                             {
@@ -220,8 +233,8 @@ namespace LuckParser.Models.ParseModels
         protected override void SetDamagetakenLogs(ParsedLog log)
         {
             long timeStart = log.GetBossData().GetFirstAware();               
-            foreach (CombatItem c in log.GetDamageTakenData()) {
-                if (Agent.GetInstid() == c.DstInstid && c.Time > log.GetBossData().GetFirstAware() && c.Time < log.GetBossData().GetLastAware()) {//selecting player as target
+            foreach (CombatItem c in log.GetDamageTakenData(Agent.InstID)) {
+                if (c.Time > log.GetBossData().GetFirstAware() && c.Time < log.GetBossData().GetLastAware()) {//selecting player as target
                     long time = c.Time - timeStart;
                     AddDamageTakenLog(time, c);
                 }
@@ -229,28 +242,30 @@ namespace LuckParser.Models.ParseModels
         }  
         private void SetConsumablesList(ParsedLog log)
         {
-            List<Boon> foodBoon = Boon.GetFoodList();
-            List<Boon> utilityBoon = Boon.GetUtilityList();
+            List<Boon> consumableList = Boon.GetFoodList();
+            consumableList.AddRange(Boon.GetUtilityList());
             long timeStart = log.GetBossData().GetFirstAware();
             long fightDuration = log.GetBossData().GetLastAware() - timeStart;
-            foreach (CombatItem c in log.GetBoonData())
+            foreach (Boon consumable in consumableList)
             {
-                if ( c.IsBuffRemove != ParseEnum.BuffRemove.None || (c.IsBuff != 18 && c.IsBuff != 1) || Agent.GetInstid() != c.DstInstid)
+                foreach (CombatItem c in log.GetBoonData(consumable.GetID()))
                 {
-                    continue;
-                }
-                var food = foodBoon.FirstOrDefault(x => x.GetID() == c.SkillID);
-                var utility = utilityBoon.FirstOrDefault(x => x.GetID() == c.SkillID);
-                if (food == null && utility == null)
-                {
-                    continue;
-                }
-                long time = c.Time - timeStart;
-                if (time <= fightDuration)
-                {
-                    _consumeList.Add(new Tuple<Boon, long>(food ?? utility, time)); 
+                    if (c.IsBuffRemove != ParseEnum.BuffRemove.None || (c.IsBuff != 18 && c.IsBuff != 1) || Agent.InstID != c.DstInstid)
+                    {
+                        continue;
+                    }
+                    long time = 0;
+                    if (c.IsBuff != 18)
+                    {
+                        time = c.Time - timeStart;
+                    }
+                    if (time <= fightDuration)
+                    {
+                        _consumeList.Add(new Tuple<Boon, long>(consumable, time));
+                    }
                 }
             }
+            
         }
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
@@ -328,7 +343,7 @@ namespace LuckParser.Models.ParseModels
                         toUse = combatData.GetStates(GetInstid(), ParseEnum.StateChange.ChangeDown, start, end);
                         break;
                     case SkillItem.ResurrectId:
-                        toUse = log.GetCastData().Where(x => x.SkillID == SkillItem.ResurrectId && x.SrcInstid == GetInstid() && x.IsActivation.IsCasting()).ToList();
+                        toUse = log.GetCastData(GetInstid()).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.IsCasting()).ToList();
                         break;
                 }
                 foreach (CombatItem pnt in toUse)
@@ -361,7 +376,7 @@ namespace LuckParser.Models.ParseModels
             foreach (Mechanic mech in playerBoon)
             {
                 Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
-                foreach (CombatItem c in log.GetBoonData())
+                foreach (CombatItem c in log.GetBoonData(mech.GetSkill()))
                 {
                     if (condition != null && !condition(c.Value))
                     {
@@ -369,14 +384,14 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (mech.GetMechType() == Mechanic.MechType.PlayerBoonRemove)
                     {
-                        if (c.SkillID == mech.GetSkill() && c.IsBuffRemove == ParseEnum.BuffRemove.Manual && GetInstid() == c.SrcInstid)
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual && GetInstid() == c.SrcInstid)
                         {
                             mechData[mech].Add(new MechanicLog(c.Time - start, mech, this));
                         }
                     } else
                     {
 
-                        if (c.SkillID == mech.GetSkill() && c.IsBuffRemove == ParseEnum.BuffRemove.None && GetInstid() == c.DstInstid)
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None && GetInstid() == c.DstInstid)
                         {
                             mechData[mech].Add(new MechanicLog(c.Time - start, mech, this));
                             if (mech.GetMechType() == Mechanic.MechType.PlayerOnPlayer)
@@ -397,7 +412,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     foreach (DamageLog dl in GetDamageLogs(0,log,0,log.GetBossData().GetAwareDuration()))
                     {
-                        if (dl.GetDstInstidt() != a.GetInstid() || dl.IsCondi() > 0 || dl.GetTime() < a.GetFirstAware() - start || dl.GetTime() > a.GetLastAware() - start || (condition != null && !condition(dl.GetDamage())))
+                        if (dl.GetDstInstidt() != a.InstID || dl.IsCondi() > 0 || dl.GetTime() < a.FirstAware - start || dl.GetTime() > a.LastAware - start || (condition != null && !condition(dl.GetDamage())))
                         {
                             continue;
                         }

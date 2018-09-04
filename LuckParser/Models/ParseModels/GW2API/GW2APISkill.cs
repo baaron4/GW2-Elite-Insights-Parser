@@ -16,7 +16,7 @@
 
         // public string attunement { get; set; }
         //public string cost { get; set; }
-        // public string duel_wield { get; set; }
+        public string dual_wield { get; set; }
         // public int flip_skill { get; set; }
         // public int initiative { get; set; }
         // public int next_chain { get; set; }

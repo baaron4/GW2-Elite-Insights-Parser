@@ -6,11 +6,10 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class ValeGuardian : BossLogic
+    public class ValeGuardian : RaidLogic
     {
         public ValeGuardian()
         {
-            Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(31860, "Unstable Magic Spike", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'circle',color:'rgb(0,0,255)',", "G.TP","Unstable Magic Spike (Green Guard Teleport)","Green Guard TP",500),
@@ -84,10 +83,10 @@ namespace LuckParser.Models
                        ParseEnum.ThrashIDS.GreenGuardian,
                        ParseEnum.ThrashIDS.RedGuardian
                     };
-                    List<AgentItem> guardians = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.GetID()))).ToList();
+                    List<AgentItem> guardians = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
                     foreach (AgentItem a in guardians)
                     {
-                        long agentStart = a.GetFirstAware() - log.GetBossData().GetFirstAware();
+                        long agentStart = a.FirstAware - log.GetBossData().GetFirstAware();
                         if (phase.InInterval(agentStart))
                         {
                             phase.AddRedirection(a);

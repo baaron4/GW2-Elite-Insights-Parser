@@ -6,11 +6,10 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class Sabetha : BossLogic
+    public class Sabetha : RaidLogic
     {
         public Sabetha()
         {
-            Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(34108, "Shell-Shocked", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Sabetha, "symbol:'circle-open',color:'rgb(0,128,0)',", "Lnchd","Shell-Shocked (launched up to cannons)", "Shell-Shocked",0),
@@ -78,10 +77,10 @@ namespace LuckParser.Models
                        ParseEnum.ThrashIDS.Knuckles,
                        ParseEnum.ThrashIDS.Karde,
                     };
-                    List<AgentItem> champs = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.GetID()))).ToList();
+                    List<AgentItem> champs = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
                     foreach (AgentItem a in champs)
                     {
-                        long agentStart = a.GetFirstAware() - log.GetBossData().GetFirstAware();
+                        long agentStart = a.FirstAware - log.GetBossData().GetFirstAware();
                         if (phase.InInterval(agentStart))
                         {
                             phase.AddRedirection(a);
@@ -111,7 +110,7 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // timed bombs
-            List<CombatItem> timedBombs = log.GetBoonData().Where(x => x.SkillID == 31485 && (x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
+            List<CombatItem> timedBombs = log.GetBoonData(31485).Where(x => x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in timedBombs)
             {
                 int start = (int)(c.Time - log.GetBossData().GetFirstAware());

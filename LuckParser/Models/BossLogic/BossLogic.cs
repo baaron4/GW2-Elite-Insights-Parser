@@ -15,10 +15,12 @@ namespace LuckParser.Models
             new Mechanic(-3, "Downs", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross',color:'rgb(255,0,0)',", "Downs",0),
             new Mechanic(SkillItem.ResurrectId, "Resurrect", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross-open',color:'rgb(0,255,255)',", "Res",0)}; //Resurrects (start), Resurrect
         protected ParseMode Mode;
+        public bool CanCombatReplay { get; protected set; }
 
         public BossLogic()
         {
             Mode = ParseMode.Unknown;
+            CanCombatReplay = false;
         }
 
         public virtual CombatReplayMap GetCombatMap()
@@ -56,6 +58,21 @@ namespace LuckParser.Models
         {
         }
 
+        protected void SetSuccessByDeath(CombatData combatData, LogData logData, BossData bossData)
+        {
+            CombatItem killed = combatData.Find(x => x.SrcInstid == bossData.GetInstid() && x.IsStateChange.IsDead());
+            if (killed != null)
+            {
+                logData.SetBossKill(true);
+                bossData.SetLastAware(killed.Time);
+            }
+        }
+
+        public virtual void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
+        {
+            SetSuccessByDeath(combatData, logData, bossData);
+        }
+
         public virtual string GetReplayIcon()
         {
             return "";
@@ -74,7 +91,7 @@ namespace LuckParser.Models
         protected static List<CombatItem> GetFilteredList(ParsedLog log, long skillID, ushort instid)
         {
             bool needStart = true;
-            List<CombatItem> main = log.GetBoonData().Where(x => x.SkillID == skillID && ((x.DstInstid == instid && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == instid && x.IsBuffRemove != ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> main = log.GetBoonData(skillID).Where(x => ((x.DstInstid == instid && x.IsBuffRemove == ParseEnum.BuffRemove.None) || (x.SrcInstid == instid && x.IsBuffRemove != ParseEnum.BuffRemove.None))).ToList();
             List<CombatItem> filtered = new List<CombatItem>();
             for (int i = 0; i < main.Count; i++)
             {
