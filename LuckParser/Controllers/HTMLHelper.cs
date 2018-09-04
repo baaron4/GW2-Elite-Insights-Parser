@@ -489,23 +489,27 @@ namespace LuckParser.Controllers
 
         public static void WritePlayerTabBoonGraph(StreamWriter sw, BoonsGraphModel bgm, long start, long end)
         {
-            List<Point> bChart = bgm.GetBoonChart().Where(x => x.X >= start / 1000 && x.X <= end / 1000).ToList();
+            long roundedStart = 1000 * (start / 1000);
+            long roundedEnd = 1000 * (end / 1000);
+            List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= roundedStart && x.Start <= roundedEnd).ToList();
             int bChartCount = 0;
             sw.Write("y: [");
             {
-                foreach (Point pnt in bChart)
+                foreach (BoonsGraphModel.Segment seg in bChart)
                 {
                     if (bChartCount == bChart.Count - 1)
                     {
-                        sw.Write("'" + pnt.Y + "'");
+                        sw.Write("'" + seg.Value + "',");
+                        sw.Write("'" + seg.Value + "'");
                     }
                     else
                     {
-                        sw.Write("'" + pnt.Y + "',");
+                        sw.Write("'" + seg.Value + "',");
+                        sw.Write("'" + seg.Value + "',");
                     }
                     bChartCount++;
                 }
-                if (bgm.GetBoonChart().Count == 0)
+                if (bgm.BoonChart.Count == 0)
                 {
                     sw.Write("'0'");
                 }
@@ -514,19 +518,23 @@ namespace LuckParser.Controllers
             sw.Write("x: [");
             {
                 bChartCount = 0;
-                foreach (Point pnt in bChart)
+                foreach (BoonsGraphModel.Segment seg in bChart)
                 {
+                    double segStart = Math.Round(Math.Max(seg.Start - roundedStart, 0) / 1000.0,3);
+                    double segEnd = Math.Round(Math.Min(seg.End - roundedStart, roundedEnd - roundedStart) / 1000.0,3);
                     if (bChartCount == bChart.Count - 1)
                     {
-                        sw.Write("'" + (pnt.X - (int)start / 1000) + "'");
+                        sw.Write("'" + segStart + "',");
+                        sw.Write("'" + segEnd + "'");
                     }
                     else
                     {
-                        sw.Write("'" + (pnt.X - (int)start / 1000) + "',");
+                        sw.Write("'" + segStart + "',");
+                        sw.Write("'" + segEnd + "',");
                     }
                     bChartCount++;
                 }
-                if (bgm.GetBoonChart().Count == 0)
+                if (bgm.BoonChart.Count == 0)
                 {
                     sw.Write("'0'");
                 }
@@ -535,17 +543,13 @@ namespace LuckParser.Controllers
             sw.Write(" yaxis: 'y2'," +
                  " type: 'scatter',");
             //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
-            if (bgm.GetBoonName() == "Might" || bgm.GetBoonName() == "Quickness")
-            {
-
-            }
-            else
+            if (!(bgm.BoonName == "Might" || bgm.BoonName == "Quickness"))
             {
                 sw.Write(" visible: 'legendonly',");
             }
-            sw.Write(" line: {color:'" + GetLink("Color-" + bgm.GetBoonName()) + "'},");
+            sw.Write(" line: {color:'" + GetLink("Color-" + bgm.BoonName) + "'},");
             sw.Write(" fill: 'tozeroy'," +
-                 " name: \"" + bgm.GetBoonName() + "\"");
+                 " name: \"" + bgm.BoonName + "\"");
         }
 
         public static void WritePlayerTabDPSGraph(StreamWriter sw, string name, List<Point> playerdpsgraphdata, AbstractPlayer p)

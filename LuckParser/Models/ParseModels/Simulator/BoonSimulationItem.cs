@@ -52,6 +52,8 @@ namespace LuckParser.Models.ParseModels
             return Duration;
         }
 
+        public abstract List<BoonsGraphModel.Segment> ToSegment();
+
         public abstract void SetEnd(long end);
 
         public abstract int GetStack(long end);

@@ -1768,7 +1768,7 @@ namespace LuckParser.Controllers
                                         if (_statistics.PresentBoons.Count > 0)
                                         {
                                             Dictionary<long, BoonsGraphModel> boonGraphData = p.GetBoonGraphs(_log, phases);
-                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.GetBoonName() != "Number of Conditions"))
+                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName != "Number of Conditions"))
                                             {
                                                 sw.Write("{");
                                                 {
@@ -1778,7 +1778,7 @@ namespace LuckParser.Controllers
 
                                             }
                                             boonGraphData = _log.GetBoss().GetBoonGraphs(_log, phases);
-                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.GetBoonName() == "Compromised" || x.GetBoonName() == "Unnatural Signet"))
+                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet"))
                                             {
                                                 sw.Write("{");
                                                 {
@@ -1860,7 +1860,7 @@ namespace LuckParser.Controllers
                                                  "}," +
                                                  "legend: { traceorder: 'reversed' }," +
                                                  "hovermode: 'compare'," +
-                                                 "yaxis2: { title: 'Boons', domain: [0.11, 0.50], fixedrange: true }," +
+                                                 "yaxis2: { title: 'Boons', domain: [0.11, 0.50], fixedrange: true, dtick: 1.0,tick0: 0, gridcolor: '#909090', }," +
                                                  "yaxis3: { title: 'DPS', domain: [0.51, 1] },"
                                          );
                                         sw.Write("images: [");
@@ -3198,7 +3198,7 @@ namespace LuckParser.Controllers
                             }
                             //============================================
                             Dictionary<long, BoonsGraphModel> boonGraphData = _log.GetBoss().GetBoonGraphs(_log, phases);
-                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.GetBoonName() != "Number of Boons"))
+                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName != "Number of Boons"))
                             {
                                 sw.Write("{");
                                 {

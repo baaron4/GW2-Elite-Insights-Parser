@@ -81,5 +81,24 @@ namespace LuckParser.Models.ParseModels
             }
             return false;
         }
+
+        public override List<BoonsGraphModel.Segment> ToSegment()
+        {
+            if (Duration == _stacks.Min(x => x.GetDuration()))
+            {
+                return new List<BoonsGraphModel.Segment>
+                {
+                    new BoonsGraphModel.Segment(Start,GetEnd(),_stacks.Count)
+                };
+            }
+            long start = Start;
+            List<BoonsGraphModel.Segment> res = new List<BoonsGraphModel.Segment>();
+            foreach ( long end in _stacks.Select(x => x.GetDuration() + Start).Distinct())
+            {
+                res.Add(new BoonsGraphModel.Segment(start,end,GetStack(end)));
+                start = end;
+            }
+            return res;
+        }
     }
 }
