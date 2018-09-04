@@ -342,6 +342,8 @@ namespace LuckParser.Models.ParseModels
                 45026,
                 31803
             };
+            BoonsGraphModel boonPresenceGraph = new BoonsGraphModel("Number of Boons");
+            BoonsGraphModel condiPresenceGraph = new BoonsGraphModel("Number of Conditions");
             for (int i = 0; i < phases.Count; i++)
             {
                 _boonDistribution.Add(new BoonDistribution());
@@ -429,69 +431,62 @@ namespace LuckParser.Models.ParseModels
                         graphSegments.Add(new BoonsGraphModel.Segment(0, dur, 0));
                     }
                     _boonPoints[boonid] = new BoonsGraphModel(boon.Name, graphSegments);
-                }
-            }
-            BoonsGraphModel boonPresenceGraph = new BoonsGraphModel("Number of Boons");
-            BoonsGraphModel condiPresenceGraph = new BoonsGraphModel("Number of Conditions");
-            foreach (KeyValuePair<long,BoonsGraphModel> pair in _boonPoints)
-            {
-                long boonid = pair.Key;
-                BoonsGraphModel bgm = pair.Value;
-                var updateBoonPresence = boonIds.Contains(boonid);
-                var updateCondiPresence = boonid != 873 && condiIds.Contains(boonid);
-                if (!updateBoonPresence && !updateCondiPresence)
-                {
-                    continue;
-                }
-                List<BoonsGraphModel.Segment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.BoonChart : condiPresenceGraph.BoonChart;
-                bool firstPass = segmentsToFill.Count == 0;
-                foreach (BoonsGraphModel.Segment seg in bgm.BoonChart)
-                {
-                    long start = seg.Start;
-                    long end = seg.End;
-                    int value = seg.Value > 0 ? 1 : 0;
-                    if (firstPass)
+                    if (updateBoonPresence || updateCondiPresence)
                     {
-                        segmentsToFill.Add(new BoonsGraphModel.Segment(start, end, value));
-                    }
-                    else
-                    {
-                        for (int i = 0; i < segmentsToFill.Count; i++)
+                        List<BoonsGraphModel.Segment> segmentsToFill = updateBoonPresence ? boonPresenceGraph.BoonChart : condiPresenceGraph.BoonChart;
+                        bool firstPass = segmentsToFill.Count == 0;
+                        foreach (BoonsGraphModel.Segment seg in _boonPoints[boonid].BoonChart)
                         {
-                            BoonsGraphModel.Segment curSeg = segmentsToFill[i];
-                            long curEnd = curSeg.End;
-                            long curStart = curSeg.Start;
-                            int curVal = curSeg.Value;
-                            if (curStart > end)
+                            long start = seg.Start;
+                            long end = seg.End;
+                            int value = seg.Value > 0 ? 1 : 0;
+                            if (firstPass)
                             {
-                                break;
+                                segmentsToFill.Add(new BoonsGraphModel.Segment(start, end, value));
                             }
-                            if (curEnd < start)
+                            else
                             {
-                                continue;
-                            }
-                            if (end <= curEnd)
-                            {
-                                curSeg.End = start;
-                                segmentsToFill.Insert(i + 1, new BoonsGraphModel.Segment(start, end, curVal + value));
-                                segmentsToFill.Insert(i + 2, new BoonsGraphModel.Segment(end, curEnd, curVal));
-                                break;
-                            } else
-                            {
-                                curSeg.End = start;
-                                segmentsToFill.Insert(i + 1, new BoonsGraphModel.Segment(start, curEnd, curVal + value));
-                                start = curEnd;
-                                i++;
+                                for (int i = 0; i < segmentsToFill.Count; i++)
+                                {
+                                    BoonsGraphModel.Segment curSeg = segmentsToFill[i];
+                                    long curEnd = curSeg.End;
+                                    long curStart = curSeg.Start;
+                                    int curVal = curSeg.Value;
+                                    if (curStart > end)
+                                    {
+                                        break;
+                                    }
+                                    if (curEnd < start)
+                                    {
+                                        continue;
+                                    }
+                                    if (end <= curEnd)
+                                    {
+                                        curSeg.End = start;
+                                        segmentsToFill.Insert(i + 1, new BoonsGraphModel.Segment(start, end, curVal + value));
+                                        segmentsToFill.Insert(i + 2, new BoonsGraphModel.Segment(end, curEnd, curVal));
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        curSeg.End = start;
+                                        segmentsToFill.Insert(i + 1, new BoonsGraphModel.Segment(start, curEnd, curVal + value));
+                                        start = curEnd;
+                                        i++;
+                                    }
+                                }
                             }
                         }
+                        if (updateBoonPresence)
+                        {
+                            boonPresenceGraph.FuseSegments();
+                        }
+                        else
+                        {
+                            condiPresenceGraph.FuseSegments();
+                        }
                     }
-                }
-                if (updateBoonPresence)
-                {
-                    boonPresenceGraph.FuseSegments();
-                } else
-                {
-                    condiPresenceGraph.FuseSegments();
+                    
                 }
             }
             _boonPoints[-2] = boonPresenceGraph;
