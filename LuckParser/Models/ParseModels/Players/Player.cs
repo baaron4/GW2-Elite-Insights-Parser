@@ -286,11 +286,11 @@ namespace LuckParser.Models.ParseModels
         public void AddMechanics(ParsedLog log)
         {
             MechanicData mechData = log.GetMechanicData();
-            FightData bossData = log.GetFightData();
+            FightData fightData = log.GetFightData();
             CombatData combatData = log.GetCombatData();
-            List<Mechanic> bossMechanics = bossData.Logic.GetMechanics();
-            long start = bossData.FightStart;
-            long end = bossData.FightEnd;
+            List<Mechanic> bossMechanics = fightData.Logic.GetMechanics();
+            long start = fightData.FightStart;
+            long end = fightData.FightEnd;
             // Player status
             foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerStatus))
             {
@@ -313,7 +313,7 @@ namespace LuckParser.Models.ParseModels
 
             }
             //Player hit
-            List<DamageLog> dls = GetDamageTakenLogs(log, 0, bossData.FightDuration);
+            List<DamageLog> dls = GetDamageTakenLogs(log, 0, fightData.FightDuration);
             foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.SkillOnPlayer))
             {
                 Mechanic.SpecialCondition condition = mech.GetSpecialCondition();

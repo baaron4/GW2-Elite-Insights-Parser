@@ -58,19 +58,19 @@ namespace LuckParser.Models
         {
         }
 
-        protected void SetSuccessByDeath(CombatData combatData, LogData logData, FightData bossData)
+        protected void SetSuccessByDeath(CombatData combatData, LogData logData, FightData fightData)
         {
-            CombatItem killed = combatData.Find(x => x.SrcInstid == bossData.InstID && x.IsStateChange.IsDead());
+            CombatItem killed = combatData.Find(x => x.SrcInstid == fightData.InstID && x.IsStateChange.IsDead());
             if (killed != null)
             {
                 logData.Success = true;
-                bossData.FightEnd = killed.Time;
+                fightData.FightEnd = killed.Time;
             }
         }
 
-        public virtual void SetSuccess(CombatData combatData, LogData logData, FightData bossData)
+        public virtual void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
         {
-            SetSuccessByDeath(combatData, logData, bossData);
+            SetSuccessByDeath(combatData, logData, fightData);
         }
 
         public virtual string GetReplayIcon()

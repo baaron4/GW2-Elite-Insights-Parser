@@ -416,7 +416,7 @@ namespace LuckParser.Controllers
             }
         }
         
-        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, FightData bossData, string yAxis = "")
+        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, FightData fightData, string yAxis = "")
         {
             //Boss Health
             //Adding dps axis
@@ -426,7 +426,7 @@ namespace LuckParser.Controllers
                 maxDPS = 1000;
             }
             int hotCount = 0;
-            List<Point> BossHOT = bossData.HealthOverTime.Where(x => x.X >= start && x.X <= end).ToList();
+            List<Point> BossHOT = fightData.HealthOverTime.Where(x => x.X >= start && x.X <= end).ToList();
             foreach (Point dp in BossHOT)
             {
                 if (hotCount == BossHOT.Count - 1)

@@ -1297,7 +1297,7 @@ namespace LuckParser.Controllers
 
                             Statistics.FinalBoonUptime uptime = uptimes[boon.ID];
 
-                            if (uptime.Generation > 0)
+                            if (uptime.Generation > 0 || uptime.Overstack > 0)
                             {
                                 if (boon.Type == Boon.BoonType.Duration)
                                 {
@@ -1379,7 +1379,7 @@ namespace LuckParser.Controllers
 
                             Statistics.FinalBoonUptime uptime = boons[boon.ID];
 
-                            if (uptime.Generation > 0)
+                            if (uptime.Generation > 0 || uptime.Overstack > 0)
                             {
                                 if (boon.Type == Boon.BoonType.Duration)
                                 {
@@ -1459,7 +1459,7 @@ namespace LuckParser.Controllers
 
                             Statistics.FinalBoonUptime uptime = boons[boon.ID];
 
-                            if (uptime.Generation > 0)
+                            if (uptime.Generation > 0 || uptime.Overstack > 0)
                             {
                                 if (boon.Type == Boon.BoonType.Duration)
                                 {
@@ -1540,7 +1540,7 @@ namespace LuckParser.Controllers
 
                             Statistics.FinalBoonUptime uptime = boons[boon.ID];
 
-                            if (uptime.Generation > 0)
+                            if (uptime.Generation > 0 || uptime.Overstack > 0)
                             {
                                 if (boon.Type == Boon.BoonType.Duration)
                                 {
@@ -1764,7 +1764,7 @@ namespace LuckParser.Controllers
                                                  "}," +
                                                  "legend: { traceorder: 'reversed' }," +
                                                  "hovermode: 'compare'," +
-                                                 "yaxis2: { title: 'Boons', domain: [0.11, 0.50], fixedrange: true, dtick: 1.0,tick0: 0, gridcolor: '#909090', }," +
+                                                 "yaxis2: { title: 'Boons', domain: [0.11, 0.50], fixedrange: true, dtick: 1.0,tick0: 0, gridcolor: '#909090' }," +
                                                  "yaxis3: { title: 'DPS', domain: [0.51, 1] },"
                                          );
                                         sw.Write("images: [");
@@ -3137,7 +3137,7 @@ namespace LuckParser.Controllers
 
                                "legend: { traceorder: 'reversed' }," +
                                "hovermode: 'compare'," +
-                               "yaxis2: { title: 'Condis/Boons', domain: [0.11, 0.50], fixedrange: true }," +
+                               "yaxis2: { title: 'Condis/Boons', domain: [0.11, 0.50], fixedrange: true,dtick: 1.0,tick0: 0, gridcolor: '#909090' }," +
                                "yaxis3: { title: 'DPS', domain: [0.51, 1] },");
                             sw.Write("images: [");
                             {

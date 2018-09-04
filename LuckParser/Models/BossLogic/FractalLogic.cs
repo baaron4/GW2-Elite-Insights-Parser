@@ -58,32 +58,32 @@ namespace LuckParser.Models
             return phases;
         }
 
-        protected void SetSuccessOnCombatExit(CombatData combatData, LogData logData, FightData bossData, int combatExitCount)
+        protected void SetSuccessOnCombatExit(CombatData combatData, LogData logData, FightData fightData, int combatExitCount)
         {
-            int combatExits = combatData.Count(x => x.SrcInstid == bossData.InstID && x.IsStateChange == ParseEnum.StateChange.ExitCombat);
-            CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.InstID).LastOrDefault(x => x.Value > 0);
+            int combatExits = combatData.Count(x => x.SrcInstid == fightData.InstID && x.IsStateChange == ParseEnum.StateChange.ExitCombat);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData(fightData.InstID).LastOrDefault(x => x.Value > 0);
             if (combatExits == combatExitCount && lastDamageTaken != null)
             {
                 logData.Success = true;
-                bossData.FightEnd = lastDamageTaken.Time;
+                fightData.FightEnd = lastDamageTaken.Time;
             }
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, FightData bossData)
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
         {
             // check reward
             CombatItem reward = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
-            CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.InstID).LastOrDefault(x => x.Value > 0);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData(fightData.InstID).LastOrDefault(x => x.Value > 0);
             if (lastDamageTaken != null)
             {
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)
                 {
                     logData.Success = true;
-                    bossData.FightEnd = reward.Time;
+                    fightData.FightEnd = reward.Time;
                 }
                 else
                 {
-                    SetSuccessByDeath(combatData, logData, bossData);
+                    SetSuccessByDeath(combatData, logData, fightData);
                 }
             }
         }
