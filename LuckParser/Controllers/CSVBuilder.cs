@@ -420,7 +420,7 @@ namespace LuckParser.Controllers
                     string rate = "0";
                     string overstack = "0";
                     Statistics.FinalBoonUptime uptime = uptimes[boon.ID];
-                    if (uptime.Generation > 0)
+                    if (uptime.Generation > 0 || uptime.Overstack > 0)
                     {
                         if (boon.Type == Boon.BoonType.Duration)
                         {
@@ -469,7 +469,7 @@ namespace LuckParser.Controllers
                     string rate = "0";
                     string overstack = "0";
                     Statistics.FinalBoonUptime uptime = boons[boon.ID];
-                    if (uptime.Generation > 0)
+                    if (uptime.Generation > 0 || uptime.Overstack > 0)
                     {
                         if (boon.Type == Boon.BoonType.Duration)
                         {
@@ -518,7 +518,7 @@ namespace LuckParser.Controllers
                     string rate = "0";
                     string overstack = "0";
                     Statistics.FinalBoonUptime uptime = boons[boon.ID];
-                    if (uptime.Generation > 0)
+                    if (uptime.Generation > 0 || uptime.Overstack > 0)
                     {
                         if (boon.Type == Boon.BoonType.Duration)
                         {
@@ -566,7 +566,7 @@ namespace LuckParser.Controllers
                     string rate = "0";
                     string overstack = "0";
                     Statistics.FinalBoonUptime uptime = boons[boon.ID];
-                    if (uptime.Generation > 0)
+                    if (uptime.Generation > 0 || uptime.Overstack > 0)
                     {
                         if (boon.Type == Boon.BoonType.Duration)
                         {
