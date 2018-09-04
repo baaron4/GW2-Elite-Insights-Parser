@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
             _overstack = other.Overstack;
         }
 
-        public override long GetDuration(ushort src, long start = 0, long end = 0)
+        public override long GetDuration(ushort src, long start, long end)
         {
             if (src != _src)
             {
@@ -23,9 +23,9 @@ namespace LuckParser.Models.ParseModels
             }
             return GetItemDuration(start, end);
         }
-        public override long GetDuration(long start = 0, long end = 0)
+        public override long GetSourcelessDuration()
         {
-            return GetItemDuration(start, end);
+            return GetItemDuration();
         }
         public override void SetEnd(long end)
         {

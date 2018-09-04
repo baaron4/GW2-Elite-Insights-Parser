@@ -20,8 +20,8 @@ namespace LuckParser.Models.ParseModels
             Duration = duration;
         }
 
-        public abstract long GetDuration(ushort src, long start = 0, long end = 0);
-        public abstract long GetDuration(long start = 0, long end = 0);
+        public abstract long GetDuration(ushort src, long start, long end);
+        public abstract long GetSourcelessDuration();
 
 
         public long GetStart()
