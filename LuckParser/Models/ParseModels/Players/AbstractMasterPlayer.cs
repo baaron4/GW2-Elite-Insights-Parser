@@ -267,7 +267,7 @@ namespace LuckParser.Models.ParseModels
                     _boonExtra[boonid] = new Dictionary<int, string[]>();
                     for (int i = 0; i < phases.Count; i++)
                     {
-                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].GetStart(), phases[i].GetEnd());
+                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].Start, phases[i].End);
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
                         int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.GetFightData().InstID).Sum(x => x.GetDamage()), 1);
                         List<DamageLog> effect = dmLogs.Where(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0).ToList();
@@ -288,7 +288,7 @@ namespace LuckParser.Models.ParseModels
                     _boonExtra[boonid] = new Dictionary<int, string[]>();
                     for (int i = 0; i < phases.Count; i++)
                     {
-                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].GetStart(), phases[i].GetEnd());
+                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].Start, phases[i].End);
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
                         int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.GetFightData().InstID).Sum(x => x.GetDamage()), 1);
                         int effectCount = dmLogs.Count(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0);
@@ -309,7 +309,7 @@ namespace LuckParser.Models.ParseModels
                     _boonExtra[boonid] = new Dictionary<int, string[]>();
                     for (int i = 0; i < phases.Count; i++)
                     {
-                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].GetStart(), phases[i].GetEnd());
+                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].Start, phases[i].End);
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
                         int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.GetFightData().InstID).Sum(x => x.GetDamage()), 1);
                         List<DamageLog> effect = dmLogs.Where(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0).ToList();
@@ -385,22 +385,22 @@ namespace LuckParser.Models.ParseModels
                                 _boonDistribution[i].Add(boonid, distrib);
                             }
                             if (updateBoonPresence)
-                                Add(_boonPresence[i], boonid, simul.GetItemDuration(phase.GetStart(), phase.GetEnd()));
+                                Add(_boonPresence[i], boonid, simul.GetItemDuration(phase.Start, phase.End));
                             if (updateCondiPresence)
-                                Add(_condiPresence[i], boonid, simul.GetItemDuration(phase.GetStart(), phase.GetEnd()));
+                                Add(_condiPresence[i], boonid, simul.GetItemDuration(phase.Start, phase.End));
                             foreach (ushort src in simul.GetSrc())
                             {
                                 if (distrib.TryGetValue(src, out var toModify))
                                 {
-                                    toModify.Value += simul.GetDuration(src, phase.GetStart(), phase.GetEnd());
-                                    toModify.Overstack += simul.GetOverstack(src, phase.GetStart(), phase.GetEnd());
+                                    toModify.Value += simul.GetDuration(src, phase.Start, phase.End);
+                                    toModify.Overstack += simul.GetOverstack(src, phase.Start, phase.End);
                                     distrib[src] = toModify;
                                 }
                                 else
                                 {
                                     distrib.Add(src, new OverAndValue(
-                                        simul.GetDuration(src, phase.GetStart(), phase.GetEnd()),
-                                        simul.GetOverstack(src, phase.GetStart(), phase.GetEnd())));
+                                        simul.GetDuration(src, phase.Start, phase.End),
+                                        simul.GetOverstack(src, phase.Start, phase.End)));
                                 }
                             }
                         }

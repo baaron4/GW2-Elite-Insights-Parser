@@ -25,7 +25,7 @@ namespace LuckParser.Models.ParseModels
                 if (!getAllPhases)
                 {
                     _phases.Add(new PhaseData(0, fightDuration));
-                    _phases[0].SetName("Full Fight");
+                    _phases[0].Name = "Full Fight";
                     return _phases;
                 }
                 GetCastLogs(log, 0, fightDuration);

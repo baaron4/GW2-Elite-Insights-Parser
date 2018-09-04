@@ -24,12 +24,12 @@ namespace LuckParser.Controllers
             List<Point> dmgList10s = new List<Point>();
             List<Point> dmgList30s = new List<Point>();
             List<DamageLog> damageLogs;
-            if (dstid != 0 && phase.GetRedirection().Count > 0)
+            if (dstid != 0 && phase.Redirection.Count > 0)
             {      
-                damageLogs = p.GetDamageLogs(phase.GetRedirection(), log, phase.GetStart(), phase.GetEnd());
+                damageLogs = p.GetDamageLogs(phase.Redirection, log, phase.Start, phase.End);
             } else
             {
-                damageLogs = p.GetDamageLogs(dstid, log, phase.GetStart(), phase.GetEnd());
+                damageLogs = p.GetDamageLogs(dstid, log, phase.Start, phase.End);
             }
             // fill the graph, full precision
             List<double> dmgListFull = new List<double>();
@@ -41,7 +41,7 @@ namespace LuckParser.Controllers
             int totalDamage = 0;
             foreach (DamageLog dl in damageLogs)
             {
-                int time = (int)(dl.GetTime() - phase.GetStart());
+                int time = (int)(dl.GetTime() - phase.Start);
                 // fill
                 for (; totalTime < time; totalTime++)
                 {

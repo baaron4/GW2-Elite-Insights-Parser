@@ -76,14 +76,14 @@ namespace LuckParser.Models
                 // make sure stuff from the precedent phase mix witch each other
                 start = t + 1;
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
             string[] namesMat = new [] { "Ice Phase", "Fire Phase", "Storm Phase", "Abomination Phase" };
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].SetName(namesMat[i - 1]);
+                phases[i].Name = namesMat[i - 1];
             }
             return phases;
         }

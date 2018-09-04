@@ -160,7 +160,7 @@ namespace LuckParser.Controllers
                 log.Phases.Add(new JsonLog.JsonPhase
                 {
                     Duration = phase.GetDuration(),
-                    Name = phase.GetName()
+                    Name = phase.Name
                 });
             }
         }

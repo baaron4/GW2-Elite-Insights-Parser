@@ -59,13 +59,13 @@ namespace LuckParser.Models
                 start = boss.PhaseData[0] - log.GetFightData().FightStart;
                 castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].SetName("Phase " + i);
+                phases[i].Name = "Phase " + i;
             }
             return phases;
         }

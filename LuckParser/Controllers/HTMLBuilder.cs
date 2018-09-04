@@ -123,7 +123,7 @@ namespace LuckParser.Controllers
                         Point check;
                         if (playersIds.Contains(ml.GetPlayer().InstID))
                         {
-                            double time = (ml.GetTime() - phase.GetStart()) / 1000.0;
+                            double time = (ml.GetTime() - phase.Start) / 1000.0;
                             check = GraphHelper.GetBossDPSGraph(_log, ml.GetPlayer(), phaseIndex, phase, mode).LastOrDefault(x => x.X <= time);
                             if (check == Point.Empty)
                             {
@@ -177,11 +177,11 @@ namespace LuckParser.Controllers
                     {
                         if (mechcount == filterdList.Count - 1)
                         {
-                            sw.Write("'" + Math.Round((ml.GetTime() - phase.GetStart()) / 1000.0,4) + "'");
+                            sw.Write("'" + Math.Round((ml.GetTime() - phase.Start) / 1000.0,4) + "'");
                         }
                         else
                         {
-                            sw.Write("'" + Math.Round((ml.GetTime() - phase.GetStart()) / 1000.0,4) + "',");
+                            sw.Write("'" + Math.Round((ml.GetTime() - phase.Start) / 1000.0,4) + "',");
                         }
 
                         mechcount++;
@@ -217,7 +217,7 @@ namespace LuckParser.Controllers
                 if (maxDPS > 0)
                 {
                     sw.Write("{");
-                    HTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase.GetStart(), phase.GetEnd(), _log.GetFightData());
+                    HTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase.Start, phase.End, _log.GetFightData());
                     sw.Write("}");
                 }
                 else
@@ -446,7 +446,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th></th>");
                         sw.Write("<th>Name</th>");
                         sw.Write("<th>Account</th>");
-                        if (phase.GetRedirection().Count > 0)
+                        if (phase.Redirection.Count > 0)
                         {
                             sw.Write("<th>Adds DPS</th>");
                         } else
@@ -1582,9 +1582,9 @@ namespace LuckParser.Controllers
             //generate Player list Graphs
             foreach (Player p in _log.GetPlayerList())
             {
-                List<CastLog> casting = p.GetCastLogsActDur(_log, phase.GetStart(), phase.GetEnd());
+                List<CastLog> casting = p.GetCastLogsActDur(_log, phase.Start, phase.End);
 
-                bool died = p.GetDeath(_log, phase.GetStart(), phase.GetEnd()) > 0;
+                bool died = p.GetDeath(_log, phase.Start, phase.End) > 0;
                 string charname = p.Character;
                 string pid = p.InstID + "_" + phaseIndex;
                 sw.Write("<div class=\"tab-pane fade\" id=\"" + pid + "\">");
@@ -1616,7 +1616,7 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
                         {
-                            List<Tuple<Boon,long>> consume = p.GetConsumablesList(_log, phase.GetStart(), phase.GetEnd());
+                            List<Tuple<Boon,long>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
                             List<Tuple<Boon, long>> initial = consume.Where(x => x.Item2 == 0).ToList();
                             List<Tuple<Boon, long>> refreshed = consume.Where(x => x.Item2 > 0).ToList();
                             if (initial.Count > 0)
@@ -1666,7 +1666,7 @@ namespace LuckParser.Controllers
                                         {
                                             foreach (CastLog cl in casting)
                                             {
-                                                HTMLHelper.WriteCastingItem(sw, cl, _log.GetSkillData(), phase.GetStart(), phase.GetEnd());
+                                                HTMLHelper.WriteCastingItem(sw, cl, _log.GetSkillData(), phase.Start, phase.End);
                                             }
                                         }
                                         if (_statistics.PresentBoons.Count > 0)
@@ -1676,7 +1676,7 @@ namespace LuckParser.Controllers
                                             {
                                                 sw.Write("{");
                                                 {
-                                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.GetStart(), phase.GetEnd());
+                                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.Start, phase.End);
                                                 }
                                                 sw.Write(" },");
 
@@ -1686,7 +1686,7 @@ namespace LuckParser.Controllers
                                             {
                                                 sw.Write("{");
                                                 {
-                                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.GetStart(), phase.GetEnd());
+                                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.Start, phase.End);
                                                 }
                                                 sw.Write(" },");
 
@@ -1774,7 +1774,7 @@ namespace LuckParser.Controllers
                                                 int castCount = 0;
                                                 foreach (CastLog cl in casting)
                                                 {
-                                                    HTMLHelper.WriteCastingItemIcon(sw, cl, _log.GetSkillData(), phase.GetStart(), castCount == casting.Count - 1);
+                                                    HTMLHelper.WriteCastingItemIcon(sw, cl, _log.GetSkillData(), phase.Start, castCount == casting.Count - 1);
                                                     castCount++;
                                                 }
                                             }
@@ -1817,7 +1817,7 @@ namespace LuckParser.Controllers
                             sw.Write("</script> ");
                             sw.Write("<ul class=\"nav nav-tabs\">");
                             {
-                                string bossText = phase.GetRedirection().Count > 0 ? "Adds" : "Boss";
+                                string bossText = phase.Redirection.Count > 0 ? "Adds" : "Boss";
                                 sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabBoss" + pid + "\">" + bossText + "</a></li>");
                                 sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabAll" + pid + "\">" + "All" + "</a></li>");
                             }
@@ -1843,7 +1843,7 @@ namespace LuckParser.Controllers
                             string id = pid + "_" + pair.Value.InstID;
                             sw.Write("<div class=\"tab-pane fade \" id=\"minion" + id + "\">");
                             {
-                                string bossText = phase.GetRedirection().Count > 0 ? "Adds" : "Boss";
+                                string bossText = phase.Redirection.Count > 0 ? "Adds" : "Boss";
                                 sw.Write("<ul class=\"nav nav-tabs\">");
                                 {
                                     sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabBoss" + id + "\">" + bossText + "</a></li>");
@@ -1912,7 +1912,7 @@ namespace LuckParser.Controllers
             if (_settings.PlayerRot)//Display rotation
             {
                 PhaseData phase = _statistics.Phases[phaseIndex];
-                List<CastLog> casting = p.GetCastLogs(_log, phase.GetStart(), phase.GetEnd());
+                List<CastLog> casting = p.GetCastLogs(_log, phase.Start, phase.End);
                 //GW2APISkill autoSkill = null;
                 //int autosCount = 0;
                 foreach (CastLog cl in casting)
@@ -2241,22 +2241,22 @@ namespace LuckParser.Controllers
         private void _CreateDMGDistTable(Statistics.FinalDPS dps, StreamWriter sw, AbstractMasterPlayer p, bool toBoss, int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            List<CastLog> casting = p.GetCastLogs(_log, phase.GetStart(), phase.GetEnd());
+            List<CastLog> casting = p.GetCastLogs(_log, phase.Start, phase.End);
             List<DamageLog> damageLogs;
-            if (toBoss && phase.GetRedirection().Count > 0)
+            if (toBoss && phase.Redirection.Count > 0)
             {
-                damageLogs = p.GetJustPlayerDamageLogs(phase.GetRedirection(), _log, phase.GetStart(), phase.GetEnd());
+                damageLogs = p.GetJustPlayerDamageLogs(phase.Redirection, _log, phase.Start, phase.End);
             }
             else
             {
-                damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.GetFightData().InstID : 0, _log, phase.GetStart(), phase.GetEnd());
+                damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.GetFightData().InstID : 0, _log, phase.Start, phase.End);
             }
             int totalDamage = toBoss ? dps.BossDamage : dps.AllDamage;
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.GetDamage()) : 0;
             if (totalDamage > 0)
             {
                 string contribution = Math.Round(100.0 * finalTotalDamage / totalDamage,2).ToString();
-                sw.Write("<div>" + p.Character + " did " + contribution + "% of its own total " + (toBoss ? (phase.GetRedirection().Count > 0 ? "adds " : "boss ") : "") + "dps</div>");
+                sw.Write("<div>" + p.Character + " did " + contribution + "% of its own total " + (toBoss ? (phase.Redirection.Count > 0 ? "adds " : "boss ") : "") + "dps</div>");
             }
             string tabid = p.InstID + "_" + phaseIndex + (toBoss ? "_boss" : "");
             sw.Write("<script>");
@@ -2326,21 +2326,21 @@ namespace LuckParser.Controllers
             int totalDamage = toBoss ? dps.BossDamage : dps.AllDamage;
             string tabid = p.InstID + "_" + phaseIndex + "_" + minions.InstID + (toBoss ? "_boss" : "");
             PhaseData phase = _statistics.Phases[phaseIndex];
-            List<CastLog> casting = minions.GetCastLogs(_log, phase.GetStart(), phase.GetEnd());
+            List<CastLog> casting = minions.GetCastLogs(_log, phase.Start, phase.End);
             List<DamageLog> damageLogs;
-            if (toBoss && phase.GetRedirection().Count > 0)
+            if (toBoss && phase.Redirection.Count > 0)
             {
-                damageLogs = minions.GetDamageLogs(phase.GetRedirection(), _log, phase.GetStart(), phase.GetEnd());
+                damageLogs = minions.GetDamageLogs(phase.Redirection, _log, phase.Start, phase.End);
             }
             else
             {
-                damageLogs = minions.GetDamageLogs(toBoss ? _log.GetFightData().InstID : 0, _log, phase.GetStart(), phase.GetEnd());
+                damageLogs = minions.GetDamageLogs(toBoss ? _log.GetFightData().InstID : 0, _log, phase.Start, phase.End);
             }
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.GetDamage()) : 0;
             if (totalDamage > 0)
             {
                 string contribution = Math.Round(100.0 * finalTotalDamage / totalDamage,2).ToString();
-                sw.Write("<div>" + minions.Character + " did " + contribution + "% of " + p.Character + "'s total " + (toBoss ? (phase.GetRedirection().Count > 0 ? "adds " : "boss " ) : "") + "dps</div>");
+                sw.Write("<div>" + minions.Character + " did " + contribution + "% of " + p.Character + "'s total " + (toBoss ? (phase.Redirection.Count > 0 ? "adds " : "boss " ) : "") + "dps</div>");
             }
             sw.Write("<script>");
             {
@@ -2416,7 +2416,7 @@ namespace LuckParser.Controllers
         private void CreateDMGTakenDistTable(StreamWriter sw, Player p, int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, phase.GetStart(), phase.GetEnd());
+            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, phase.Start, phase.End);
             SkillData skillList = _log.GetSkillData();
             long finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.GetDamage()) : 0;
             string pid = p.InstID + "_" + phaseIndex;
@@ -3067,7 +3067,7 @@ namespace LuckParser.Controllers
             //generate Player list Graphs
             List<PhaseData> phases = _statistics.Phases;
             PhaseData phase = phases[phaseIndex];
-            List<CastLog> casting = _log.GetBoss().GetCastLogsActDur(_log, phase.GetStart(), phase.GetEnd());
+            List<CastLog> casting = _log.GetBoss().GetCastLogsActDur(_log, phase.Start, phase.End);
             string charname = _log.GetBoss().Character;
             string pid = _log.GetBoss().InstID + "_" + phaseIndex;
             sw.Write("<h1 align=\"center\"> " + charname + "</h1>");
@@ -3097,7 +3097,7 @@ namespace LuckParser.Controllers
 
                                 foreach (CastLog cl in casting)
                                 {
-                                    HTMLHelper.WriteCastingItem(sw, cl, _log.GetSkillData(), phase.GetStart(), phase.GetEnd());
+                                    HTMLHelper.WriteCastingItem(sw, cl, _log.GetSkillData(), phase.Start, phase.End);
                                 }
                             }
                             //============================================
@@ -3106,7 +3106,7 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("{");
                                 {
-                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.GetStart(), phase.GetEnd());
+                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.Start, phase.End);
                                 }
                                 sw.Write(" },");
 
@@ -3123,7 +3123,7 @@ namespace LuckParser.Controllers
                                 sw.Write("},");
                             }
                             sw.Write("{");
-                            HTMLHelper.WriteBossHealthGraph(sw, GraphHelper.GetTotalDPSGraph(_log, _log.GetBoss(), phaseIndex, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase.GetStart(), phase.GetEnd(), _log.GetFightData(), "y3");
+                            HTMLHelper.WriteBossHealthGraph(sw, GraphHelper.GetTotalDPSGraph(_log, _log.GetBoss(), phaseIndex, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase.Start, phase.End, _log.GetFightData(), "y3");
                             sw.Write("}");
                         }
                         sw.Write("];");
@@ -3146,7 +3146,7 @@ namespace LuckParser.Controllers
                                     int castCount = 0;
                                     foreach (CastLog cl in casting)
                                     {
-                                        HTMLHelper.WriteCastingItemIcon(sw, cl, _log.GetSkillData(), phase.GetStart(), castCount == casting.Count - 1);
+                                        HTMLHelper.WriteCastingItemIcon(sw, cl, _log.GetSkillData(), phase.Start, castCount == casting.Count - 1);
                                         castCount++;
                                     }
                                 }
@@ -3435,7 +3435,7 @@ namespace LuckParser.Controllers
                                     if (phases[i].GetDuration() == 0)
                                         continue;
                                     string active = (i > 0 ? "" : "active");
-                                    string name = phases[i].GetName();
+                                    string name = phases[i].Name;
                                     sw.Write("<li  class=\"nav-item\">" +
                                             "<a class=\"nav-link " + active + "\" data-toggle=\"tab\" href=\"#phase" + i + "\">" +
                                                 "<span data-toggle=\"tooltip\" title=\"" + phases[i].GetDuration("s") + " seconds\">" + name + "</span>" +
@@ -3464,7 +3464,7 @@ namespace LuckParser.Controllers
                                 sw.Write("<div class=\"tab-pane fade " + active + "\" id=\"phase" + i + "\">");
                                 {
                                     if (phases.Count > 1)
-                                        sw.Write("<h2 align=\"center\">"+ phases[i].GetName()+ "</h2>");
+                                        sw.Write("<h2 align=\"center\">"+ phases[i].Name+ "</h2>");
                                     string playerDropdown = "";
                                     foreach (Player p in _log.GetPlayerList())
                                     {
@@ -3536,7 +3536,7 @@ namespace LuckParser.Controllers
                                                 sw.Write("</div>");
                                                 sw.Write("<div class=\"tab-pane fade \" id=\"offStats" + i + "\">");
                                                 {
-                                                    string bossText = phases[i].GetRedirection().Count > 0 ? "Adds" : "Boss";
+                                                    string bossText = phases[i].Redirection.Count > 0 ? "Adds" : "Boss";
                                                     sw.Write("<ul class=\"nav nav-tabs\">" +
                                                        "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#dpsStatsBoss" + i + "\">"+ bossText + "</a></li>" +
                                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#dpsStatsAll" + i + "\">All</a></li>" +

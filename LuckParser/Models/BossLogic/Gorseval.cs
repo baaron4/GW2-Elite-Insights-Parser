@@ -57,7 +57,7 @@ namespace LuckParser.Models
                     castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
@@ -65,7 +65,7 @@ namespace LuckParser.Models
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                phase.SetName(namesGorse[i - 1]);
+                phase.Name = namesGorse[i - 1];
                 if (i == 2 || i == 4)
                 {
                     List<AgentItem> spirits = log.GetAgentData().GetNPCAgentList().Where(x => ParseEnum.GetThrashIDS(x.ID) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
@@ -74,7 +74,7 @@ namespace LuckParser.Models
                         long agentStart = a.FirstAware - log.GetFightData().FightStart;
                         if (phase.InInterval(agentStart))
                         {
-                            phase.AddRedirection(a);
+                            phase.Redirection.Add(a);
                         }
                     }
                     phase.OverrideStart(log.GetFightData().FightStart);

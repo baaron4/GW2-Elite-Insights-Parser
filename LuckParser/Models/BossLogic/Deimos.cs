@@ -54,13 +54,13 @@ namespace LuckParser.Models
                 start = (boss.PhaseData.Count == 1 ? boss.PhaseData[0] - log.GetFightData().FightStart : fightDuration);
                 castLogs.Add(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].SetName("Phase " + i);
+                phases[i].Name = "Phase " + i;
             }
             int offsetDei = phases.Count;
             CombatItem teleport = log.GetCombatList().FirstOrDefault(x => x.SkillID == 38169);
@@ -86,7 +86,7 @@ namespace LuckParser.Models
             for (int i = offsetDei; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                phase.SetName(namesDeiSplit[i - offsetDei]);
+                phase.Name = namesDeiSplit[i - offsetDei];
                 List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
                     {
                         ParseEnum.ThrashIDS.Thief,
@@ -101,12 +101,12 @@ namespace LuckParser.Models
                     long agentStart = a.FirstAware - log.GetFightData().FightStart;
                     if (phase.InInterval(agentStart))
                     {
-                        phase.AddRedirection(a);
+                        phase.Redirection.Add(a);
                     }
                 }
 
             }
-            phases.Sort((x, y) => (x.GetStart() < y.GetStart()) ? -1 : 1);
+            phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
             return phases;
         }
 

@@ -49,14 +49,14 @@ namespace LuckParser.Models
                 phases.Add(new PhaseData(start, end));
                 start = end + cl.GetActDur();
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
                 start = fightDuration;
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].SetName("Phase " + i);
+                phases[i].Name = "Phase " + i;
             }
             // add burn phases
             int offset = phases.Count;
@@ -101,16 +101,16 @@ namespace LuckParser.Models
                     phases.Add(new PhaseData(start, end));
                 }
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
                 start = fightDuration;
             }
             for (int i = offset; i < phases.Count; i++)
             {
-                phases[i].SetName("Burn " + (i - offset + 1) + " (" + orbs[phases[i].GetStart()] + " orbs)");
+                phases[i].Name = "Burn " + (i - offset + 1) + " (" + orbs[phases[i].Start] + " orbs)";
             }
-            phases.Sort((x, y) => (x.GetStart() < y.GetStart()) ? -1 : 1);
+            phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
             return phases;
         }
 

@@ -60,14 +60,14 @@ namespace LuckParser.Models
                         phases.Add(new PhaseData(start, fightDuration));
                     }
                 }
-                if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+                if (fightDuration - start > 5000 && start >= phases.Last().End)
                 {
                     phases.Add(new PhaseData(start, fightDuration));
                 }
                 string[] namesDh = new [] { "Main Fight", "Ritual" };
                 for (int i = 1; i < phases.Count; i++)
                 {
-                    phases[i].SetName(namesDh[i - 1]);
+                    phases[i].Name = namesDh[i - 1];
                 }
             }
             else
@@ -90,14 +90,14 @@ namespace LuckParser.Models
                         }
                     }
                 }
-                if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+                if (fightDuration - start > 5000 && start >= phases.Last().End)
                 {
                     phases.Add(new PhaseData(start, fightDuration));
                 }
                 string[] namesDh = new [] { "Roleplay", "Main Fight", "Ritual" };
                 for (int i = 1; i < phases.Count; i++)
                 {
-                    phases[i].SetName(namesDh[i - 1]);
+                    phases[i].Name = namesDh[i - 1];
                 }
             }
             return phases;

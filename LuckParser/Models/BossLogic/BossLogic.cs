@@ -33,7 +33,7 @@ namespace LuckParser.Models
             List<PhaseData> phases = new List<PhaseData>();
             long fightDuration = log.GetFightData().FightDuration;
             phases.Add(new PhaseData(0, fightDuration));
-            phases[0].SetName("Full Fight");
+            phases[0].Name = "Full Fight";
             return phases;
         }
 
