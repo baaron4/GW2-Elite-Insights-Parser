@@ -9,17 +9,41 @@ namespace LuckParser.Models.ParseModels
     {
         protected readonly AgentItem Agent;
         private readonly String _character;
-        // DPS
         protected readonly List<DamageLog> DamageLogs = new List<DamageLog>();
         private List<DamageLog> _damageLogsFiltered = new List<DamageLog>();
-        // Heal
         //protected List<DamageLog> HealingLogs = new List<DamageLog>();
         //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
-        // Taken damage
         private readonly List<DamageLog> _damageTakenlogs = new List<DamageLog>();
-        // Casts
         protected readonly List<CastLog> CastLogs = new List<CastLog>();
-        // Constructor
+        public int Toughness
+        {
+            get
+            {
+                return Agent.Toughness;
+            }
+        }
+        public int Condition
+        {
+            get
+            {
+                return Agent.Condition;
+            }
+        }
+        public int Concentration
+        {
+            get
+            {
+                return Agent.Concentration;
+            }
+        }
+        public int Healing
+        {
+            get
+            {
+                return Agent.Healing;
+            }
+        }
+
         protected AbstractPlayer(AgentItem agent)
         {
             String[] name = agent.Name.Split('\0');

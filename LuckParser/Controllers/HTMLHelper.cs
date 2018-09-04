@@ -184,7 +184,7 @@ namespace LuckParser.Controllers
         {
             sw.Write("<tr>");
             {
-                sw.Write("<td>" + player.GetGroup() + "</td>");
+                sw.Write("<td>" + player.Group + "</td>");
                 sw.Write("<td>" + "<img src=\"" + GetLink(player.GetProf()) + "\" alt=\"" + player.GetProf() + "\" height=\"20\" width=\"20\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
                 sw.Write("<td>" + player.GetCharacter() + "</td>");
                 foreach (Boon boon in listToUse)
@@ -816,13 +816,13 @@ namespace LuckParser.Controllers
                     sw.Write("</div>");
                     sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center btn-group btn-group-toggle mb-5\" data-toggle=\"buttons\">");
                     {
-                        List<int> groups = log.GetPlayerList().Select(x => x.GetGroup()).Distinct().ToList();
+                        List<int> groups = log.GetPlayerList().Select(x => x.Group).Distinct().ToList();
                         foreach (int group in groups)
                         {
                             sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center mt-2\">");
                             {
                                 sw.Write("<h3>Group " + group + "</h3>");
-                                foreach (Player p in log.GetPlayerList().Where(x => x.GetGroup() == group))
+                                foreach (Player p in log.GetPlayerList().Where(x => x.Group == group))
                                 {
                                     sw.Write("<label id=\"id" + p.GetInstid() + "\" style=\"width: 150px;\" onclick=\"selectActor(" + p.GetInstid() + ")\"  class=\"btn btn-dark\">" +
                                         "<input class=\"invisible\" type=\"radio\" autocomplete=\"off\">" +
@@ -978,7 +978,7 @@ namespace LuckParser.Controllers
             foreach (Player p in log.GetPlayerList())
             {
                 sw.Write("{");
-                sw.Write("var p = new mainActor(" + p.GetGroup() + ",'" + p.GetCombatReplay().GetIcon() + "');");
+                sw.Write("var p = new mainActor(" + p.Group + ",'" + p.GetCombatReplay().GetIcon() + "');");
                 sw.Write("data.set(" + p.GetInstid() + ",p);");
                 sw.Write("p.pos = [");
                 foreach (Point3D pos in p.GetCombatReplay().GetPositions())

@@ -345,7 +345,7 @@ namespace LuckParser.Controllers
             int firstGroup = 11;
             foreach (Player play in _log.GetPlayerList())
             {
-                int playerGroup = play.GetGroup();
+                int playerGroup = play.Group;
                 if (playerGroup > groupCount)
                 {
                     groupCount = playerGroup;
@@ -362,7 +362,7 @@ namespace LuckParser.Controllers
                 for (int n = firstGroup; n <= groupCount; n++)
                 {
                     sw.Write("<tr>");
-                    List<Player> sortedList = _log.GetPlayerList().Where(x => x.GetGroup() == n).ToList();
+                    List<Player> sortedList = _log.GetPlayerList().Where(x => x.Group == n).ToList();
                     if (sortedList.Count > 0)
                     {
                         foreach (Player gPlay in sortedList)
@@ -370,21 +370,21 @@ namespace LuckParser.Controllers
                             string charName = gPlay.GetCharacter().Length > 10 ? gPlay.GetCharacter().Substring(0, 10) : gPlay.GetCharacter();
                             //Getting Build
                             string build = "";
-                            if (gPlay.GetCondition() > 0)
+                            if (gPlay.Condition > 0)
                             {
-                                build += "<img src=\"https://wiki.guildwars2.com/images/5/54/Condition_Damage.png\" alt=\"Condition Damage\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Condition Damage-" + gPlay.GetCondition() + "\">";//"<span class=\"badge badge-warning\">Condi("+ gPlay.getCondition() + ")</span>";
+                                build += "<img src=\"https://wiki.guildwars2.com/images/5/54/Condition_Damage.png\" alt=\"Condition Damage\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Condition Damage-" + gPlay.Condition + "\">";//"<span class=\"badge badge-warning\">Condi("+ gPlay.getCondition() + ")</span>";
                             }
-                            if (gPlay.GetConcentration() > 0)
+                            if (gPlay.Concentration > 0)
                             {
-                                build += "<img src=\"https://wiki.guildwars2.com/images/4/44/Boon_Duration.png\" alt =\"Concentration\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Concentration-" + gPlay.GetConcentration() + "\">";//"<span class=\"badge badge-warning\">Condi("+ gPlay.getCondition() + ")</span>";
+                                build += "<img src=\"https://wiki.guildwars2.com/images/4/44/Boon_Duration.png\" alt =\"Concentration\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Concentration-" + gPlay.Concentration + "\">";//"<span class=\"badge badge-warning\">Condi("+ gPlay.getCondition() + ")</span>";
                             }
-                            if (gPlay.GetHealing() > 0)
+                            if (gPlay.Healing > 0)
                             {
-                                build += "<img src=\"https://wiki.guildwars2.com/images/8/81/Healing_Power.png\" alt=\"Healing Power\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Healing Power-" + gPlay.GetHealing() + "\">";//"<span class=\"badge badge-success\">Heal("+ gPlay.getHealing() + ")</span>";
+                                build += "<img src=\"https://wiki.guildwars2.com/images/8/81/Healing_Power.png\" alt=\"Healing Power\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Healing Power-" + gPlay.Healing + "\">";//"<span class=\"badge badge-success\">Heal("+ gPlay.getHealing() + ")</span>";
                             }
-                            if (gPlay.GetToughness() > 0)
+                            if (gPlay.Toughness > 0)
                             {
-                                build += "<img src=\"https://wiki.guildwars2.com/images/1/12/Toughness.png\" alt=\"Toughness\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Toughness-" + gPlay.GetToughness() + "\">";//"<span class=\"badge badge-secondary\">Tough("+ gPlay.getToughness() + ")</span>";
+                                build += "<img src=\"https://wiki.guildwars2.com/images/1/12/Toughness.png\" alt=\"Toughness\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Toughness-" + gPlay.Toughness + "\">";//"<span class=\"badge badge-secondary\">Tough("+ gPlay.getToughness() + ")</span>";
                             }
                             sw.Write("<td class=\"composition\">");
                             {
@@ -474,7 +474,7 @@ namespace LuckParser.Controllers
                     //gather data for footer
                     footerList.Add(new []
                     {
-                        player.GetGroup().ToString(),
+                        player.Group.ToString(),
                         dps.AllDps.ToString(), dps.AllDamage.ToString(),
                         dps.AllPowerDps.ToString(), dps.AllPowerDamage.ToString(),
                         dps.AllCondiDps.ToString(), dps.AllCondiDamage.ToString(),
@@ -484,10 +484,10 @@ namespace LuckParser.Controllers
                     });
                     sw.Write("<tr>");
                     {
-                        sw.Write("<td>" + player.GetGroup() + "</td>");
+                        sw.Write("<td>" + player.Group + "</td>");
                         sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + " \" alt=\"" + player.GetProf() + "\" height=\"18\" width=\"18\" >"+"<span style=\"display:none\">"+ player.GetProf() + "</span>"+"</td>");
                         sw.Write("<td>" + player.GetCharacter() + "</td>");
-                        sw.Write("<td>" + player.GetAccount().TrimStart(':') + "</td>");
+                        sw.Write("<td>" + player.Account.TrimStart(':') + "</td>");
                         //Boss dps
                         sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.BossDamage + " dmg \">" + dps.BossDps + "</span>" + "</td>");
                         sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.BossPowerDamage + " dmg \">" + dps.BossPowerDps + "</span>" + "</td>");
@@ -610,7 +610,7 @@ namespace LuckParser.Controllers
 
                         //gather data for footer
                         footerList.Add(new [] {
-                            player.GetGroup().ToString(),
+                            player.Group.ToString(),
                             stats.PowerLoopCount.ToString(),
                             stats.CriticalRate.ToString(),
                             stats.ScholarRate.ToString(),
@@ -626,7 +626,7 @@ namespace LuckParser.Controllers
                         });
                         sw.Write("<tr>");
                         {
-                            sw.Write("<td>" + player.GetGroup().ToString() + "</td>");
+                            sw.Write("<td>" + player.Group.ToString() + "</td>");
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + "\" alt=\"" 
                                 + player.GetProf() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
                             sw.Write("<td>" + player.GetCharacter() + "</td>");
@@ -743,7 +743,7 @@ namespace LuckParser.Controllers
 
                         //gather data for footer
                         footerList.Add(new [] {
-                            player.GetGroup().ToString(),
+                            player.Group.ToString(),
                             stats.PowerLoopCountBoss.ToString(),
                             stats.CriticalRateBoss.ToString(),
                             stats.ScholarRateBoss.ToString(),
@@ -759,7 +759,7 @@ namespace LuckParser.Controllers
                         });
                         sw.Write("<tr>");
                         {
-                            sw.Write("<td>" + player.GetGroup().ToString() + "</td>");
+                            sw.Write("<td>" + player.Group.ToString() + "</td>");
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + "\" alt=\"" 
                                 + player.GetProf()+ "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
                             sw.Write("<td>" + player.GetCharacter() + "</td>");
@@ -894,7 +894,7 @@ namespace LuckParser.Controllers
                                                                                               //gather data for footer
                         footerList.Add(new []
                         {
-                            player.GetGroup().ToString(),
+                            player.Group.ToString(),
                             defenses.DamageTaken.ToString(), defenses.DamageBarrier.ToString(),
                             defenses.BlockedCount.ToString(), defenses.InvulnedCount.ToString(),
                             defenses.EvadedCount.ToString(), stats.DodgeCount.ToString(),
@@ -902,7 +902,7 @@ namespace LuckParser.Controllers
                         });
                         sw.Write("<tr>");
                         {
-                            sw.Write("<td>" + player.GetGroup().ToString() + "</td>");
+                            sw.Write("<td>" + player.Group.ToString() + "</td>");
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + "\" alt=\"" + player.GetProf() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
                             sw.Write("<td>" + player.GetCharacter() + "</td>");
                             sw.Write("<td>" + defenses.DamageTaken + "</td>");//dmg taken
@@ -1033,13 +1033,13 @@ namespace LuckParser.Controllers
 
                         //gather data for footer
                         footerList.Add(new [] {
-                            player.GetGroup().ToString(),
+                            player.Group.ToString(),
                             support.CondiCleanseTime.ToString(), support.CondiCleanse.ToString(),
                             support.ResurrectTime.ToString(), support.Resurrects.ToString()//, support.allHeal.ToString()
                         });
                         sw.Write("<tr>");
                         {
-                            sw.Write("<td>" + player.GetGroup().ToString() + "</td>");
+                            sw.Write("<td>" + player.Group.ToString() + "</td>");
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + " \" alt=\"" + player.GetProf() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
                             sw.Write("<td>" + player.GetCharacter() + "</td>");
                             //sw.Write("<td>" + support.allHeal +"</td>");                                              
@@ -1135,7 +1135,7 @@ namespace LuckParser.Controllers
                         Dictionary<long, Dictionary<int, string[]>> extraBoonData = player.GetExtraBoonData(_log, phases);
                         List<string> boonArrayToList = new List<string>
                         {
-                            player.GetGroup().ToString()
+                            player.Group.ToString()
                         };
                         long fightDuration = phases[phaseIndex].GetDuration();
                         Dictionary<long, long> boonPresence = player.GetBoonPresence(_log, phases, phaseIndex);
@@ -1143,7 +1143,7 @@ namespace LuckParser.Controllers
 
                         sw.Write("<tr>");
                         {
-                            sw.Write("<td>" + player.GetGroup().ToString() + "</td>");
+                            sw.Write("<td>" + player.Group.ToString() + "</td>");
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + "\" alt=\"" + player.GetProf() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
                             if (boonTable)
                             {                        
@@ -3021,7 +3021,7 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<tr>");
                         {
-                            sw.Write("<td>" + player.GetGroup().ToString() + "</td>");
+                            sw.Write("<td>" + player.Group.ToString() + "</td>");
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + "\" alt=\"" + player.GetProf() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
                             sw.Write("<td>" + player.GetCharacter() + " </td>");
                             foreach (Boon boon in _statistics.PresentConditions)

@@ -44,10 +44,10 @@ namespace LuckParser.Controllers
             foreach (Player p in log.GetPlayerList())
             {
                 Statistics.FinalDPS dps = statistics.Dps[p][0];
-                sw.Write(p.GetGroup() + delimiter + // group
+                sw.Write(p.Group + delimiter + // group
                         p.GetProf() + delimiter +  // class
                         p.GetCharacter() + delimiter + // character
-                        p.GetAccount().Substring(1) + delimiter + // account
+                        p.Account.Substring(1) + delimiter + // account
                         dps.BossDps + delimiter + // dps
                         dps.BossPowerDps + delimiter + // physical
                         dps.BossCondiDps + delimiter + // condi

@@ -11,9 +11,9 @@ namespace LuckParser.Models.ParseModels
     public class Player : AbstractMasterPlayer
     {
         // Fields
-        private readonly string _account;
-        private readonly int _group;
-        private long _dcd;//time in ms the player dcd
+        public readonly string Account;
+        public readonly int Group;
+        public long Deconnected;//time in ms the player dcd
        
         private readonly List<Tuple<Boon,long>> _consumeList = new List<Tuple<Boon, long>>();
         //weaponslist
@@ -23,41 +23,10 @@ namespace LuckParser.Models.ParseModels
         public Player(AgentItem agent, bool noSquad) : base(agent)
         {
             String[] name = agent.Name.Split('\0');
-            _account = name[1];
-            _group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
+            Account = name[1];
+            Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
         }
-
-        // Getters
-
-        public string GetAccount()
-        {
-            return _account;
-        }
-    
-        public int GetGroup()
-        {
-            return _group;
-        }
-
-        public int GetToughness()
-        {
-            return Agent.Toughness;
-        }
-
-        public int GetHealing()
-        {
-            return Agent.Healing;
-        }
-
-        public int GetCondition()
-        {
-            return Agent.Condition;
-        }
-
-        public int GetConcentration()
-        {
-            return Agent.Concentration;
-        }
+        
         // Public methods
         public int[] GetCleanses(ParsedLog log, long start, long end) {
             long timeStart = log.GetBossData().GetFirstAware();
@@ -104,15 +73,7 @@ namespace LuckParser.Models.ParseModels
             }
             return _weaponsArray;
         }
-        
-        public long GetDC()
-        {
-            return _dcd;
-        }
-        public void SetDC(long value)
-        {
-            _dcd = value;
-        }
+
         public List<Tuple<Boon, long>> GetConsumablesList(ParsedLog log, long start, long end)
         {
             if (_consumeList.Count == 0)

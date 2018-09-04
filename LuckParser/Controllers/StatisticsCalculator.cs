@@ -651,12 +651,12 @@ namespace LuckParser.Controllers
 
                 // Boons applied to player's group
                 var otherPlayersInGroup = _log.GetPlayerList()
-                    .Where(p => p.GetGroup() == player.GetGroup() && player.GetInstid() != p.GetInstid())
+                    .Where(p => p.Group == player.Group && player.GetInstid() != p.GetInstid())
                     .ToList();
                 _statistics.GroupBoons[player] = GetBoonsForPlayers(otherPlayersInGroup, player);
 
                 // Boons applied to other groups
-                var offGroupPlayers = _log.GetPlayerList().Where(p => p.GetGroup() != player.GetGroup()).ToList();
+                var offGroupPlayers = _log.GetPlayerList().Where(p => p.Group != player.Group).ToList();
                 _statistics.OffGroupBoons[player] = GetBoonsForPlayers(offGroupPlayers, player);
 
                 // Boons applied to squad

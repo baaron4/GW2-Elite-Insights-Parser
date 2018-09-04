@@ -201,23 +201,23 @@ namespace LuckParser.Controllers
                 long fightDuration = phase.GetDuration("s");
                 string[] wep = player.GetWeaponsArray(_log);
                 string build = "";
-                if (player.GetCondition() > 0)
+                if (player.Condition > 0)
                 {
-                    build += " Condi:" + player.GetCondition();
+                    build += " Condi:" + player.Condition;
                 }
-                if (player.GetConcentration() > 0)
+                if (player.Concentration > 0)
                 {
-                    build += " Concentration:" + player.GetConcentration();
+                    build += " Concentration:" + player.Concentration;
                 }
-                if (player.GetHealing() > 0)
+                if (player.Healing > 0)
                 {
-                    build += " Healing:" + player.GetHealing();
+                    build += " Healing:" + player.Healing;
                 }
-                if (player.GetToughness() > 0)
+                if (player.Toughness > 0)
                 {
-                    build += " Toughness:" + player.GetToughness();
+                    build += " Toughness:" + player.Toughness;
                 }
-                WriteLine(new [] { player.GetGroup().ToString(), player.GetProf(),build,player.GetCharacter(), player.GetAccount().TrimStart(':') ,wep[0],wep[1],wep[2],wep[3],
+                WriteLine(new [] { player.Group.ToString(), player.GetProf(),build,player.GetCharacter(), player.Account.TrimStart(':') ,wep[0],wep[1],wep[2],wep[3],
                 dps.BossDps.ToString(),dps.BossDamage.ToString(),dps.BossPowerDps.ToString(),dps.BossPowerDamage.ToString(),dps.BossCondiDps.ToString(),dps.BossCondiDamage.ToString(),
                 dps.AllDps.ToString(),dps.AllDamage.ToString(),dps.AllPowerDps.ToString(),dps.AllPowerDamage.ToString(),dps.AllCondiDps.ToString(),dps.AllCondiDamage.ToString(),
                 stats.DownCount.ToString(), timedead.Minutes + " m " + timedead.Seconds + " s",Math.Round((timedead.TotalSeconds / fightDuration) * 100,1) +"%"});
@@ -247,7 +247,7 @@ namespace LuckParser.Controllers
                 Statistics.FinalStats stats = _statistics.Stats[player][phaseIndex];
                 Statistics.FinalDPS dps = _statistics.Dps[player][phaseIndex];
 
-                WriteLine(new [] { player.GetGroup().ToString(), player.GetProf(), player.GetCharacter(),
+                WriteLine(new [] { player.Group.ToString(), player.GetProf(), player.GetCharacter(),
                 Math.Round((Double)(stats.CriticalRateBoss) / stats.CritablePowerLoopCountBoss * 100,1).ToString(), stats.CriticalRateBoss.ToString(),stats.CriticalDmgBoss.ToString(),
                 Math.Round((Double)(stats.ScholarRateBoss) / stats.PowerLoopCountBoss * 100,1).ToString(),stats.ScholarRateBoss.ToString(),stats.ScholarDmgBoss.ToString(),Math.Round(100.0 * (dps.PlayerBossPowerDamage / (Double)(dps.PlayerBossPowerDamage - stats.ScholarDmgBoss) - 1.0), 3).ToString(),
                 Math.Round((Double)(stats.MovingRateBoss) / stats.PowerLoopCountBoss * 100,1).ToString(),stats.MovingRateBoss.ToString(),stats.MovingDamageBoss.ToString(),Math.Round(100.0 * (dps.PlayerBossPowerDamage / (Double)(dps.PlayerBossPowerDamage - stats.MovingDamageBoss) - 1.0), 3).ToString(),
@@ -282,7 +282,7 @@ namespace LuckParser.Controllers
                 Statistics.FinalStats stats = _statistics.Stats[player][phaseIndex];
                 Statistics.FinalDPS dps = _statistics.Dps[player][phaseIndex];
 
-                WriteLine(new [] { player.GetGroup().ToString(), player.GetProf(), player.GetCharacter(),
+                WriteLine(new [] { player.Group.ToString(), player.GetProf(), player.GetCharacter(),
                 Math.Round((Double)(stats.CriticalRate) / stats.CritablePowerLoopCount * 100,1).ToString(), stats.CriticalRate.ToString(),stats.CriticalDmg.ToString(),
                 Math.Round((Double)(stats.ScholarRate) / stats.PowerLoopCount * 100,1).ToString(),stats.ScholarRate.ToString(),stats.ScholarDmg.ToString(),Math.Round(100.0 * (dps.PlayerPowerDamage / (Double)(dps.PlayerPowerDamage - stats.ScholarDmg) - 1.0), 3).ToString(),
                 Math.Round((Double)(stats.MovingRate) / stats.PowerLoopCount * 100,1).ToString(),stats.MovingRate.ToString(),stats.MovingDamage.ToString(),Math.Round(100.0 * (dps.PlayerPowerDamage / (Double)(dps.PlayerPowerDamage - stats.MovingDamage) - 1.0), 3).ToString(),
@@ -310,7 +310,7 @@ namespace LuckParser.Controllers
                 Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
                 Statistics.FinalStats stats = _statistics.Stats[player][phaseIndex];
 
-                WriteLine(new [] { player.GetGroup().ToString(), player.GetProf(), player.GetCharacter(),
+                WriteLine(new [] { player.Group.ToString(), player.GetProf(), player.GetCharacter(),
                 defenses.DamageTaken.ToString(),defenses.DamageBarrier.ToString(),defenses.BlockedCount.ToString(),defenses.InvulnedCount.ToString(),defenses.EvadedCount.ToString(),stats.DodgeCount.ToString() });
                 count++;
             }
@@ -330,7 +330,7 @@ namespace LuckParser.Controllers
             {
                 Statistics.FinalSupport support = _statistics.Support[player][phaseIndex];
 
-                WriteLine(new [] { player.GetGroup().ToString(), player.GetProf(), player.GetCharacter(),
+                WriteLine(new [] { player.Group.ToString(), player.GetProf(), player.GetCharacter(),
                 support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(),support.Resurrects.ToString(),support.ResurrectTime.ToString() });
                 count++;
             }

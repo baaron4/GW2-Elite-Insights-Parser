@@ -662,7 +662,7 @@ namespace LuckParser.Controllers
                     bool skip = false;
                     foreach (Player p in _playerList)
                     {
-                        if (p.GetAccount() == player.GetAccount())//is this a copy of original?
+                        if (p.Account == player.Account)//is this a copy of original?
                         {
                             skip = true;
                         }
@@ -694,12 +694,12 @@ namespace LuckParser.Controllers
                             }
                         }
 
-                        player.SetDC(lp[0].Time);
+                        player.Deconnected = lp[0].Time;
                         _playerList.Add(player);
                     }
                     else//didn't dc
                     {
-                        if (player.GetDC() == 0)
+                        if (player.Deconnected == 0)
                         {
                             _playerList.Add(player);
                         }
@@ -716,7 +716,7 @@ namespace LuckParser.Controllers
             {
                 _bossData.SetLastAware(bossAgent.LastAware);
             }
-            _playerList = _playerList.OrderBy(a => a.GetGroup()).ToList();
+            _playerList = _playerList.OrderBy(a => a.Group).ToList();
             
         }
     }
