@@ -114,8 +114,13 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (Simulation[j].AddOverstack(srcValue, overstackValue))
                         {
+                            found = true;
                             break;
                         }
+                    }
+                    if (!found)
+                    {
+                        Simulation.Insert(0, new BoonSimulationItemDuration(new BoonStackItem(0, 1, srcValue, overstackValue)));
                     }
                 }
             }

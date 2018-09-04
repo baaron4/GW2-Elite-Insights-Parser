@@ -16,12 +16,18 @@ namespace LuckParser.Models.ParseModels
                 {
                     long overstackValue = stacks[i].Overstack + stacks[i].BoonDuration;
                     ushort srcValue = stacks[i].Src;
+                    bool found = false;
                     for (int j = simulation.Count - 1; j >= 0; j--)
                     {
                         if (simulation[j].AddOverstack(srcValue, overstackValue))
                         {
+                            found = true;
                             break;
                         }
+                    }
+                    if (!found)
+                    {
+                        simulation.Insert(0, new BoonSimulationItemDuration(new BoonStackItem(stacks[i].Start, 1, srcValue, overstackValue)));
                     }
                     stacks[i] = stackItem;
                     Sort(log, stacks);
