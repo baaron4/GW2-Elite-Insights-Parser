@@ -69,5 +69,13 @@ namespace LuckParser.Models.ParseModels
             _overstack += overstack;
             return true;
         }
+
+        public override List<BoonsGraphModel.Segment> ToSegment()
+        {
+            return new List<BoonsGraphModel.Segment>
+            {
+                new BoonsGraphModel.Segment(Start,GetEnd(),1)
+            };
+        }
     }
 }
