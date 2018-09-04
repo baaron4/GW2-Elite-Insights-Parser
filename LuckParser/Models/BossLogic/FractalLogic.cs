@@ -26,7 +26,7 @@ namespace LuckParser.Models
             // generic method for fractals
             long start = 0;
             long end = 0;
-            long fightDuration = log.GetFightData().FightDuration;
+            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             List<CombatItem> invulsBoss = GetFilteredList(log,762,boss.InstID);        
             for (int i = 0; i < invulsBoss.Count; i++)
@@ -34,7 +34,7 @@ namespace LuckParser.Models
                 CombatItem c = invulsBoss[i];
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.Time - log.GetFightData().FightStart;
+                    end = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsBoss.Count - 1)
                     {
@@ -43,7 +43,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.Time - log.GetFightData().FightStart;
+                    start = c.Time - log.FightData.FightStart;
                     castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
             }

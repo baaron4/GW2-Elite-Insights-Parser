@@ -65,7 +65,7 @@ namespace LuckParser.Controllers
 
         private void SetGeneral(JsonLog log)
         {
-            double fightDuration = _log.GetFightData().FightDuration / 1000.0;
+            double fightDuration = _log.FightData.FightDuration / 1000.0;
             var duration = TimeSpan.FromSeconds(fightDuration);
             string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
             if (duration.ToString("hh") != "00")
@@ -74,17 +74,17 @@ namespace LuckParser.Controllers
             }
 
             log.EliteInsightsVersion = Application.ProductVersion;
-            log.ArcVersion = _log.GetLogData().BuildVersion;
-            log.RecordedBy = _log.GetLogData().PoV.Split(':')[0].TrimEnd('\u0000');
-            log.TimeStart = _log.GetLogData().LogStart;
-            log.TimeEnd = _log.GetLogData().LogEnd;
+            log.ArcVersion = _log.LogData.BuildVersion;
+            log.RecordedBy = _log.LogData.PoV.Split(':')[0].TrimEnd('\u0000');
+            log.TimeStart = _log.LogData.LogStart;
+            log.TimeEnd = _log.LogData.LogEnd;
             log.Duration = durationString;
-            log.Success = _log.GetLogData().Success;
+            log.Success = _log.LogData.Success;
         }
 
         private void SetMechanics(JsonLog log)
         {
-            MechanicData mechanicData = _log.GetMechanicData();
+            MechanicData mechanicData = _log.MechanicData;
             var mechanicLogs = new List<MechanicLog>();
             foreach (var mLog in mechanicData.Values)
             {
@@ -109,13 +109,13 @@ namespace LuckParser.Controllers
 
         private void SetBoss(JsonLog log)
         {
-            log.Boss.Id = _log.GetFightData().ID;
-            log.Boss.Name = _log.GetFightData().Name;
-            log.Boss.TotalHealth = _log.GetFightData().Health;
-            int finalBossHealth = _log.GetFightData().HealthOverTime.Count > 0
-                ? _log.GetFightData().HealthOverTime.Last().Y
+            log.Boss.Id = _log.FightData.ID;
+            log.Boss.Name = _log.FightData.Name;
+            log.Boss.TotalHealth = _log.FightData.Health;
+            int finalBossHealth = _log.FightData.HealthOverTime.Count > 0
+                ? _log.FightData.HealthOverTime.Last().Y
                 : 10000;
-            log.Boss.FinalHealth = _log.GetFightData().Health * (100.0 - finalBossHealth * 0.01);
+            log.Boss.FinalHealth = _log.FightData.Health * (100.0 - finalBossHealth * 0.01);
             log.Boss.HealthPercentBurned = 100.0 - finalBossHealth * 0.01;
 
             log.Boss.Dps = BuildDPS(_statistics.BossDps);
@@ -126,7 +126,7 @@ namespace LuckParser.Controllers
         {
             log.Players = new List<JsonLog.JsonPlayer>();
 
-            foreach (var player in _log.GetPlayerList())
+            foreach (var player in _log.PlayerList)
             {
                 log.Players.Add(new JsonLog.JsonPlayer
                 {

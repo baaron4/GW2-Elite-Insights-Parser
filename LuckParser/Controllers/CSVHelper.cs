@@ -11,7 +11,7 @@ namespace LuckParser.Controllers
 
         public static void WriteOldCSV(StreamWriter sw, string delimiter,ParsedLog log,Statistics statistics)
         {
-            double fightDuration = (log.GetFightData().FightDuration) / 1000.0;
+            double fightDuration = (log.FightData.FightDuration) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
             String durationString = duration.ToString("mm") + ":" + duration.ToString("ss");
             sw.Write("Group" + delimiter +
@@ -33,7 +33,7 @@ namespace LuckParser.Controllers
             sw.Write("\r\n");
 
             int[] teamStats = { 0, 0, 0 };
-            foreach (Player p in log.GetPlayerList())
+            foreach (Player p in log.PlayerList)
             {
                 Statistics.FinalDPS dps = statistics.Dps[p][0];
                 teamStats[0] += dps.BossDps;
@@ -41,7 +41,7 @@ namespace LuckParser.Controllers
                 teamStats[2] += dps.AllDps - dps.BossDps;
             }
 
-            foreach (Player p in log.GetPlayerList())
+            foreach (Player p in log.PlayerList)
             {
                 Statistics.FinalDPS dps = statistics.Dps[p][0];
                 sw.Write(p.Group + delimiter + // group
