@@ -375,7 +375,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     var updateBoonPresence = boonIds.Contains(boonid);
                     var updateCondiPresence = boonid != 873 && condiIds.Contains(boonid);
-                    var simulation = simulator.GetSimulationResult();
+                    var simulation = simulator.SimulationResult;
                     var graphSegments = new List<BoonsGraphModel.Segment>();
                     foreach (var simul in simulation.Items)
                     {

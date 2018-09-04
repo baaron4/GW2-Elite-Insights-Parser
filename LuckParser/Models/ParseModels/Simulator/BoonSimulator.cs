@@ -7,7 +7,7 @@ namespace LuckParser.Models.ParseModels
     public abstract class BoonSimulator
     {
  
-        public struct BoonStackItem
+        public class BoonStackItem
         {
             public readonly long Start;
             public readonly long BoonDuration;
@@ -35,6 +35,13 @@ namespace LuckParser.Models.ParseModels
         // Fields
         protected readonly List<BoonStackItem> BoonStack;
         protected readonly List<BoonSimulationItem> Simulation = new List<BoonSimulationItem>();
+        public BoonSimulationResult SimulationResult
+        {
+            get
+            {
+                return new BoonSimulationResult(Simulation);
+            }
+        }
         private readonly int _capacity;
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;
@@ -47,11 +54,7 @@ namespace LuckParser.Models.ParseModels
             _log = log;
             _logic = logic;
         }  
-
-        public BoonSimulationResult GetSimulationResult()
-        {
-            return new BoonSimulationResult(Simulation);
-        }
+        
 
         // Abstract Methods
         /// <summary>
