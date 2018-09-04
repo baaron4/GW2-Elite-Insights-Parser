@@ -47,7 +47,7 @@ namespace LuckParser.Models
             long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // split happened
-            if (boss.GetPhaseData().Count == 1)
+            if (boss.PhaseData.Count == 1)
             {
                 CombatItem invulXera = log.GetBoonData(762).Find(x => x.DstInstid == boss.GetInstid());
                 if (invulXera == null)
@@ -56,7 +56,7 @@ namespace LuckParser.Models
                 }
                 long end = invulXera.Time - log.GetBossData().GetFirstAware();
                 phases.Add(new PhaseData(start, end));
-                start = boss.GetPhaseData()[0] - log.GetBossData().GetFirstAware();
+                start = boss.PhaseData[0] - log.GetBossData().GetFirstAware();
                 castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
             }
             if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())

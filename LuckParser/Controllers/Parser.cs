@@ -574,7 +574,7 @@ namespace LuckParser.Controllers
                         bossHealthOverTime = new List<Point>();//reset boss health over time
                         int xera2Instid = NPC.InstID;
                         _bossData.SetHealth(24085950);
-                        _boss.AddPhaseData(NPC.FirstAware);
+                        _boss.PhaseData.Add(NPC.FirstAware);
                         _bossData.SetLastAware(NPC.LastAware);
                         foreach (CombatItem c in _combatData)
                         {
@@ -607,7 +607,7 @@ namespace LuckParser.Controllers
                     AgentItem NPC = deimosGadgets.Last();
                     int deimos2Instid = NPC.InstID;
                     long oldAware = bossAgent.LastAware;
-                    _boss.AddPhaseData(NPC.FirstAware >= oldAware ? NPC.FirstAware : oldAware);
+                    _boss.PhaseData.Add(NPC.FirstAware >= oldAware ? NPC.FirstAware : oldAware);
                     //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos2Instid ).ToList().Sum(x);
                     //int stop = 0;
                     foreach (CombatItem c in _combatData)

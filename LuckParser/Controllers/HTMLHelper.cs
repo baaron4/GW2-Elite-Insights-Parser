@@ -1036,7 +1036,7 @@ namespace LuckParser.Controllers
                     "}" +
                 "};");
             // create thrash mobs
-            foreach (Mob mob in log.GetBoss().GetThrashMobs())
+            foreach (Mob mob in log.GetBoss().ThrashMobs)
             {
                 sw.Write("{");
                 sw.Write("var p = new secondaryActor('" + mob.GetCombatReplay().GetIcon() + "'," + mob.GetCombatReplay().GetTimeOffsets().Item1 / pollingRate + "," + mob.GetCombatReplay().GetTimeOffsets().Item2 / pollingRate + ");");
@@ -1107,7 +1107,7 @@ namespace LuckParser.Controllers
                         "}" +
                     "}" +
                 "};");
-            foreach (Mob mob in log.GetBoss().GetThrashMobs())
+            foreach (Mob mob in log.GetBoss().ThrashMobs)
             {
                 CombatReplay replay = mob.GetCombatReplay();
                 foreach(CircleActor a in replay.GetCircleActors())
@@ -1188,7 +1188,7 @@ namespace LuckParser.Controllers
                         "}" +
                     "}" +
                 "};");
-            foreach (Mob mob in log.GetBoss().GetThrashMobs())
+            foreach (Mob mob in log.GetBoss().ThrashMobs)
             {
                 CombatReplay replay = mob.GetCombatReplay();
                 foreach (DoughnutActor a in replay.GetDoughnutActors())

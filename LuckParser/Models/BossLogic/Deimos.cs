@@ -51,7 +51,7 @@ namespace LuckParser.Models
             {
                 end = invulDei.Time - log.GetBossData().GetFirstAware();
                 phases.Add(new PhaseData(start, end));
-                start = (boss.GetPhaseData().Count == 1 ? boss.GetPhaseData()[0] - log.GetBossData().GetFirstAware() : fightDuration);
+                start = (boss.PhaseData.Count == 1 ? boss.PhaseData[0] - log.GetBossData().GetFirstAware() : fightDuration);
                 castLogs.Add(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
             }
             if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())

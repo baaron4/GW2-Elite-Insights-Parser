@@ -12,9 +12,9 @@ namespace LuckParser.Models.ParseModels
         }
 
         private List<PhaseData> _phases = new List<PhaseData>();
-        private readonly List<long> _phaseData = new List<long>();
+        public List<long> PhaseData = new List<long>();
         private CombatReplayMap _map;
-        private readonly List<Mob> _thrashMobs = new List<Mob>();
+        public readonly List<Mob> ThrashMobs = new List<Mob>();
 
         public List<PhaseData> GetPhases(ParsedLog log, bool getAllPhases)
         {
@@ -34,16 +34,6 @@ namespace LuckParser.Models.ParseModels
             return _phases;
         }
 
-        public void AddPhaseData(long data)
-        {
-            _phaseData.Add(data);
-        }
-
-        public List<long> GetPhaseData()
-        {
-            return _phaseData;
-        }
-
         public CombatReplayMap GetCombatMap(ParsedLog log)
         {
             if (_map == null)
@@ -51,11 +41,6 @@ namespace LuckParser.Models.ParseModels
                 _map = log.GetBossData().GetBossBehavior().GetCombatMap();
             }
             return _map;
-        }
-
-        public List<Mob> GetThrashMobs()
-        {
-            return _thrashMobs;
         }
 
         // Private Methods
@@ -85,7 +70,7 @@ namespace LuckParser.Models.ParseModels
             {
                 Mob mob = new Mob(a);
                 mob.InitCombatReplay(log, pollingRate, true, false);
-                _thrashMobs.Add(mob);
+                ThrashMobs.Add(mob);
             }
         }
 
