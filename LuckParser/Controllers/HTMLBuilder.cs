@@ -1093,7 +1093,7 @@ namespace LuckParser.Controllers
         /// <param name="phaseIndex"></param>
         private void CreatePersonalBuffUptimeTables(StreamWriter sw, int phaseIndex)
         {
-            Dictionary<string, List<Player>> bySpec = _log.GetPlayerListBySpec();
+            Dictionary<string, List<Player>> bySpec = _log.PlayerListBySpec;
             List<PhaseData> phases = _statistics.Phases;
             long fightDuration = phases[phaseIndex].GetDuration();
             List<string> orderedSpecs = new List<string>
@@ -1106,14 +1106,14 @@ namespace LuckParser.Controllers
             {
                 if (bySpec.TryGetValue(spec,out List<Player> players))
                 {
-                    HashSet<long> specBoonIds = new HashSet<long>(Boon.GetRemainingBuffsList(spec).Select(x => x.GetID()));
+                    HashSet<long> specBoonIds = new HashSet<long>(Boon.GetRemainingBuffsList(spec).Select(x => x.ID));
                     HashSet<Boon> boonToUse = new HashSet<Boon>();
                     foreach (Player player in players)
                     {
                         Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][phaseIndex];
-                        foreach (Boon boon in _statistics.PresentPersonalBuffs[player.GetInstid()])
+                        foreach (Boon boon in _statistics.PresentPersonalBuffs[player.InstID])
                         {
-                            if (boons[boon.GetID()].Uptime > 0 && specBoonIds.Contains(boon.GetID()))
+                            if (boons[boon.ID].Uptime > 0 && specBoonIds.Contains(boon.ID))
                             {
                                 boonToUse.Add(boon);
                             }
@@ -1155,15 +1155,15 @@ namespace LuckParser.Controllers
                                 Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][phaseIndex];
                                 sw.Write("<tr>");
                                 {
-                                    sw.Write("<td>" + player.GetGroup().ToString() + "</td>");
-                                    sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + "\" alt=\"" + player.GetProf() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
-                                    sw.Write("<td>" + player.GetCharacter() + "</td>");
+                                    sw.Write("<td>" + player.Group.ToString() + "</td>");
+                                    sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
+                                    sw.Write("<td>" + player.Character + "</td>");
 
                                     foreach (Boon boon in listToUse)
                                     {
-                                        if (boons.TryGetValue(boon.GetID(),out Statistics.FinalBoonUptime value))
+                                        if (boons.TryGetValue(boon.ID,out Statistics.FinalBoonUptime value))
                                         {
-                                            string cellContent = boons[boon.GetID()].Uptime + (boon.GetBoonType() == Boon.BoonType.Intensity ? "" : "%");
+                                            string cellContent = boons[boon.ID].Uptime + (boon.Type == Boon.BoonType.Intensity ? "" : "%");
                                             sw.Write("<td>" + cellContent + "</td>");
                                         } else
                                         {

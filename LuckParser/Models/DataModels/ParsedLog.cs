@@ -13,7 +13,7 @@ namespace LuckParser.Models.DataModels
         public readonly CombatData CombatData;
         public readonly MechanicData MechanicData;
         public readonly List<Player> PlayerList;
-        private readonly Dictionary<string, List<Player>> _playerListBySpec;
+        public readonly Dictionary<string, List<Player>> PlayerListBySpec;
         public readonly Boss Boss;
 
         
@@ -29,7 +29,7 @@ namespace LuckParser.Models.DataModels
             PlayerList = playerList;
             Boss = boss;
             MechanicData = new MechanicData(fightData);
-            _playerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
+            PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
         }
 
         public Dictionary<long, List<CombatItem>> GetBoonData()
