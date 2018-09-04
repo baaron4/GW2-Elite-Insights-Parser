@@ -63,7 +63,7 @@ namespace LuckParser.Models.ParseModels
             for (int i = Simulation.Count - 1; i >= 0; i--)
             {
                 BoonSimulationItem data = Simulation[i];
-                if (data.GetEnd() > fightDuration)
+                if (data.End > fightDuration)
                 {
                     data.SetEnd(fightDuration);
                 }
@@ -72,7 +72,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 }
             }
-            Simulation.RemoveAll(x => x.GetSourcelessDuration() <= 0);
+            Simulation.RemoveAll(x => x.GetItemDuration() <= 0);
         }
 
         public void Simulate(List<BoonLog> logs, long fightDuration)
@@ -87,7 +87,7 @@ namespace LuckParser.Models.ParseModels
                 timePrev = timeCur;
             }
             Update(fightDuration - timePrev);
-            Simulation.RemoveAll(x => x.GetSourcelessDuration() <= 0);
+            Simulation.RemoveAll(x => x.GetItemDuration() <= 0);
             BoonStack.Clear();
         }
 

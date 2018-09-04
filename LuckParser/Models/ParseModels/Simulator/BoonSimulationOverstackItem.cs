@@ -19,20 +19,20 @@ namespace LuckParser.Models.ParseModels
             return 0;
         }
 
-        public override long GetDuration(ushort src, long start = 0, long end = 0)
+        public override long GetSrcDuration(ushort src, long start, long end)
         {
             return 0;
         }
-        public override long GetSourcelessDuration()
+        public override long GetItemDuration()
         {
             return Duration;
         }
-        public override long GetItemDuration(long start = 0, long end = 0)
+        public override long GetClampedDuration(long start, long end)
         {
             return 0;
         }
 
-        public override long GetOverstack(ushort src, long start = 0, long end = 0)
+        public override long GetOverstack(ushort src, long start, long end)
         {
             if (src != _src)
             {

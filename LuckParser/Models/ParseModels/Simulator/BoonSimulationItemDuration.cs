@@ -15,17 +15,17 @@ namespace LuckParser.Models.ParseModels
             _overstack = other.Overstack;
         }
 
-        public override long GetDuration(ushort src, long start, long end)
+        public override long GetSrcDuration(ushort src, long start, long end)
         {
             if (src != _src)
             {
                 return 0;
             }
-            return GetItemDuration(start, end);
+            return GetClampedDuration(start, end);
         }
-        public override long GetSourcelessDuration()
+        public override long GetItemDuration()
         {
-            return GetItemDuration();
+            return Duration;
         }
         public override void SetEnd(long end)
         {
@@ -46,7 +46,7 @@ namespace LuckParser.Models.ParseModels
             return 1;
         }
 
-        public override long GetOverstack(ushort src, long start = 0, long end = 0)
+        public override long GetOverstack(ushort src, long start, long end)
         {
             if (src != _src)
             {
@@ -54,7 +54,7 @@ namespace LuckParser.Models.ParseModels
             }
             if (end > 0 && Duration > 0)
             {
-                long dur = GetItemDuration(start, end);
+                long dur = GetClampedDuration(start, end);
                 return (long)Math.Round((double)dur / Duration * _overstack);
             }
             return _overstack;
@@ -74,7 +74,7 @@ namespace LuckParser.Models.ParseModels
         {
             return new List<BoonsGraphModel.Segment>
             {
-                new BoonsGraphModel.Segment(Start,GetEnd(),1)
+                new BoonsGraphModel.Segment(Start,End,1)
             };
         }
     }

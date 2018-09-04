@@ -388,21 +388,21 @@ namespace LuckParser.Models.ParseModels
                                 _boonDistribution[i].Add(boonid, distrib);
                             }
                             if (updateBoonPresence)
-                                Add(_boonPresence[i], boonid, simul.GetItemDuration(phase.Start, phase.End));
+                                Add(_boonPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                             if (updateCondiPresence)
-                                Add(_condiPresence[i], boonid, simul.GetItemDuration(phase.Start, phase.End));
+                                Add(_condiPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                             foreach (ushort src in simul.GetSrc())
                             {
                                 if (distrib.TryGetValue(src, out var toModify))
                                 {
-                                    toModify.Value += simul.GetDuration(src, phase.Start, phase.End);
+                                    toModify.Value += simul.GetSrcDuration(src, phase.Start, phase.End);
                                     toModify.Overstack += simul.GetOverstack(src, phase.Start, phase.End);
                                     distrib[src] = toModify;
                                 }
                                 else
                                 {
                                     distrib.Add(src, new OverAndValue(
-                                        simul.GetDuration(src, phase.Start, phase.End),
+                                        simul.GetSrcDuration(src, phase.Start, phase.End),
                                         simul.GetOverstack(src, phase.Start, phase.End)));
                                 }
                             }

@@ -22,9 +22,9 @@ namespace LuckParser.Models.ParseModels
                 if (Simulation.Count > 0)
                 {
                     var last = Simulation.Last();
-                    if (last.GetEnd() > toAdd.GetStart())
+                    if (last.End > toAdd.Start)
                     {
-                        last.SetEnd(toAdd.GetStart());
+                        last.SetEnd(toAdd.Start);
                     }
                 }
                 Simulation.Add(toAdd);

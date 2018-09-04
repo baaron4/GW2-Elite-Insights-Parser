@@ -18,8 +18,8 @@ namespace LuckParser.Models.ParseModels
 		{
 			foreach (var item in boonSimulationItems)
 			{
-				int start = (int) item.GetStart();
-				int end = (int) item.GetEnd();
+				int start = (int) item.Start;
+				int end = (int) item.End;
 				if (time >= start && time < end)
 				{
 					return item.GetStack(time);
@@ -33,11 +33,11 @@ namespace LuckParser.Models.ParseModels
 		{
 			foreach (var item in boonSimulationItems)
 			{
-				int start = (int) item.GetStart();
-				int end = (int) item.GetEnd();
+				int start = (int) item.Start;
+				int end = (int) item.End;
 				if (time >= start && time < end)
 				{
-					bool present = item.GetItemDuration() > 0;
+					bool present = item.Duration > 0;
 					return present;
 				}
 			}
