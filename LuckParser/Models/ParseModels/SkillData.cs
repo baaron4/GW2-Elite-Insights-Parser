@@ -56,7 +56,7 @@ namespace LuckParser.Models.ParseModels
 
         public void Add(SkillItem skillItem)
         {
-            _skills.Add(skillItem.GetID(), skillItem);
+            _skills.Add(skillItem.ID, skillItem);
         }
 
         public String GetName(long ID)
@@ -71,7 +71,7 @@ namespace LuckParser.Models.ParseModels
             SkillItem skillItem = Get(ID);
             if (skillItem != null)
             {
-                return skillItem.GetName();
+                return skillItem.Name;
             }
 
             // Unknown

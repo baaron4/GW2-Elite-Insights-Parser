@@ -14,7 +14,7 @@ namespace LuckParser.Controllers
 
         public static void WriteCastingItem(StreamWriter sw, CastLog cl, SkillData skillList, long start, long end)
         {
-            GW2APISkill skill = skillList.Get(cl.GetID())?.GetGW2APISkill();
+            GW2APISkill skill = skillList.Get(cl.GetID())?.ApiSkill;
             string skillName = skill == null ? skillList.GetName(cl.GetID()) : skill.name;
             float dur;
             if (skillName == "Dodge")
@@ -102,7 +102,7 @@ namespace LuckParser.Controllers
         public static void WriteCastingItemIcon(StreamWriter sw, CastLog cl, SkillData skillList, long start, bool last)
         {
             string skillIcon = "";
-            GW2APISkill skill = skillList.Get(cl.GetID())?.GetGW2APISkill();
+            GW2APISkill skill = skillList.Get(cl.GetID())?.ApiSkill;
             if (skill != null && cl.GetID() != -2)
             {
                 float offset = (cl.GetTime() - start) / 1000f;
@@ -328,12 +328,12 @@ namespace LuckParser.Controllers
             if (casts > 0) {
                 hpcast = Math.Round(hits / (double)casts, 2);
             }
-            string skillName = (skill.GetID().ToString() == skill.GetName()) ? skillData.GetName(skill.GetID()) : skill.GetName();
-            if (totaldamage != 0 && skill.GetGW2APISkill() != null)
+            string skillName = (skill.ID.ToString() == skill.Name) ? skillData.GetName(skill.ID) : skill.Name;
+            if (totaldamage != 0 && skill.ApiSkill != null)
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.GetName() + "\" title=\"" + skill.GetID() + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
+                    sw.Write("<td align=\"left\"><img src=\"" + skill.ApiSkill.icon + "\" alt=\"" + skill.Name + "\" title=\"" + skill.ID + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
                     sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
                     sw.Write("<td>" + totaldamage + "</td>");
                     sw.Write("<td>" + mindamage + "</td>");
@@ -372,11 +372,11 @@ namespace LuckParser.Controllers
                 }
                 sw.Write("</tr>");
             }
-            else if (skill.GetGW2APISkill() != null)
+            else if (skill.ApiSkill != null)
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.GetName() + "\" title=\"" + skill.GetID() + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
+                    sw.Write("<td align=\"left\"><img src=\"" + skill.ApiSkill.icon + "\" alt=\"" + skill.Name + "\" title=\"" + skill.ID + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");

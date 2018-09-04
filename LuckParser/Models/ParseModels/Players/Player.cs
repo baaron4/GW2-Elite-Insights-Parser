@@ -104,7 +104,7 @@ namespace LuckParser.Models.ParseModels
             }
             foreach (CastLog cl in casting)
             {
-                GW2APISkill apiskill = skillList.Get(cl.GetID())?.GetGW2APISkill();
+                GW2APISkill apiskill = skillList.Get(cl.GetID())?.ApiSkill;
                 if (apiskill != null && cl.GetTime() > swappedTime)
                 {
                     if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && (apiskill.categories == null || (apiskill.categories.Count() == 1 && apiskill.categories[0] == "Phantasm")))

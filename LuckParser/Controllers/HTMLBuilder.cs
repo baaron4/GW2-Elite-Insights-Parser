@@ -1917,7 +1917,7 @@ namespace LuckParser.Controllers
                 //int autosCount = 0;
                 foreach (CastLog cl in casting)
                 {
-                    GW2APISkill apiskill = _log.GetSkillData().Get(cl.GetID())?.GetGW2APISkill();
+                    GW2APISkill apiskill = _log.GetSkillData().Get(cl.GetID())?.ApiSkill;
 
                     if (apiskill != null)
                     {
@@ -2531,11 +2531,11 @@ namespace LuckParser.Controllers
                             }
                             int avgdamage = (int)(totaldamage / (double)hits);
 
-                            if (skill.GetGW2APISkill() != null)
+                            if (skill.ApiSkill != null)
                             {
                                 sw.Write("<tr>");
                                 {
-                                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.GetName() + "\" title=\"" + skill.GetID() + "\" height=\"18\" width=\"18\">" + skill.GetName() + "</td>");
+                                    sw.Write("<td align=\"left\"><img src=\"" + skill.ApiSkill.icon + "\" alt=\"" + skill.Name + "\" title=\"" + skill.ID + "\" height=\"18\" width=\"18\">" + skill.Name + "</td>");
                                     sw.Write("<td>" + totaldamage + "</td>");
                                     sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
                                     sw.Write("<td>" + hits + "</td>");
@@ -2552,7 +2552,7 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("<tr>");
                                 {
-                                    sw.Write("<td align=\"left\">" + skill.GetName() + "</td>");
+                                    sw.Write("<td align=\"left\">" + skill.Name + "</td>");
                                     sw.Write("<td>" + totaldamage + "</td>");
                                     sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
                                     sw.Write("<td>" + hits + "</td>");
@@ -2845,7 +2845,7 @@ namespace LuckParser.Controllers
                 foreach (SkillItem skill in _log.GetSkillData().Values)
                 {
                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                  skill.GetID() + " : " + skill.GetName() +
+                                                  skill.ID+ " : " + skill.Name +
                              "</li>");
                 }
             }
