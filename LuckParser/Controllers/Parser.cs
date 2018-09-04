@@ -79,7 +79,7 @@ namespace LuckParser.Controllers
             {
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "15% - Parsing boss data...", 15);
-                ParseBossData(stream);
+                ParseFightData(stream);
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "20% - Parsing agent data...", 20);
                 ParseAgentData(stream);
@@ -126,7 +126,7 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Parses boss related data
         /// </summary>
-        private void ParseBossData(Stream stream)
+        private void ParseFightData(Stream stream)
         {
             using (var reader = CreateReader(stream))
             {

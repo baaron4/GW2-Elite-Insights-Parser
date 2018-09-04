@@ -44,7 +44,7 @@ namespace LuckParser.Models.ParseModels
             }
             return 0;
         }
-        public void Validate(FightData bossData)
+        public void Validate(FightData fightData)
         {
             var boonData = this.Where(x => x.IsBuff > 0 && (x.IsBuff == 18 || x.BuffDmg == 0 || x.IsBuffRemove != ParseEnum.BuffRemove.None));
             _boonData = boonData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
@@ -62,7 +62,7 @@ namespace LuckParser.Models.ParseModels
 
             _statesData = this.GroupBy(x => x.IsStateChange).ToDictionary(x => x.Key, x => x.ToList());
 
-            _movementData = (bossData.Logic.CanCombatReplay) ? this.Where(x => x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Velocity).GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList()) : new Dictionary<ushort, List<CombatItem>>();
+            _movementData = (fightData.Logic.CanCombatReplay) ? this.Where(x => x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Velocity).GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList()) : new Dictionary<ushort, List<CombatItem>>();
 
             /*healing_data = this.Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                          ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||

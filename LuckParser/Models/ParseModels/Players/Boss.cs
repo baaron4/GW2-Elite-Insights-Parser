@@ -82,8 +82,8 @@ namespace LuckParser.Models.ParseModels
         public void AddMechanics(ParsedLog log)
         {
             MechanicData mechData = log.GetMechanicData();
-            FightData bossData = log.GetFightData();
-            List<Mechanic> bossMechanics = bossData.Logic.GetMechanics();
+            FightData fightData = log.GetFightData();
+            List<Mechanic> bossMechanics = fightData.Logic.GetMechanics();
             Dictionary<ushort, AbstractMasterPlayer> regroupedMobs = new Dictionary<ushort, AbstractMasterPlayer>();
             // Boons
             foreach (Mechanic m in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon || x.GetMechType() == Mechanic.MechType.EnemyBoonStrip))
@@ -98,7 +98,7 @@ namespace LuckParser.Models.ParseModels
                     AbstractMasterPlayer amp = null;
                     if (m.GetMechType() == Mechanic.MechType.EnemyBoon && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
-                        if (c.DstInstid == bossData.InstID)
+                        if (c.DstInstid == fightData.InstID)
                         {
                             amp = this;
                         }
@@ -114,7 +114,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     else if (m.GetMechType() == Mechanic.MechType.EnemyBoonStrip && c.IsBuffRemove == ParseEnum.BuffRemove.Manual)
                     {
-                        if (c.SrcInstid == bossData.InstID)
+                        if (c.SrcInstid == fightData.InstID)
                         {
                             amp = this;
                         }
@@ -130,7 +130,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (amp != null)
                     {
-                        mechData[m].Add(new MechanicLog(c.Time - bossData.FightStart, m, amp));
+                        mechData[m].Add(new MechanicLog(c.Time - fightData.FightStart, m, amp));
                     }
 
                 }
@@ -148,7 +148,7 @@ namespace LuckParser.Models.ParseModels
                     AbstractMasterPlayer amp = null;
                     if ((m.GetMechType() == Mechanic.MechType.EnemyCastStart && c.IsActivation.IsCasting()) || (m.GetMechType() == Mechanic.MechType.EnemyCastEnd && !c.IsActivation.IsCasting()))
                     {
-                        if (c.SrcInstid == bossData.InstID)
+                        if (c.SrcInstid == fightData.InstID)
                         {
                             amp = this;
                         }
@@ -164,7 +164,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (amp != null)
                     {
-                        mechData[m].Add(new MechanicLog(c.Time - bossData.FightStart, m, amp));
+                        mechData[m].Add(new MechanicLog(c.Time - fightData.FightStart, m, amp));
                     }
                 }
 
@@ -179,7 +179,7 @@ namespace LuckParser.Models.ParseModels
                         amp = new DummyPlayer(a);
                         regroupedMobs.Add(a.ID, amp);
                     }
-                    mechData[m].Add(new MechanicLog(a.FirstAware - bossData.FightStart, m, amp));
+                    mechData[m].Add(new MechanicLog(a.FirstAware - fightData.FightStart, m, amp));
                 }
             }
         }
