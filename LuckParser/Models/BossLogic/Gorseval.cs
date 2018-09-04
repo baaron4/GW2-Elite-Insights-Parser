@@ -100,7 +100,7 @@ namespace LuckParser.Models
                 replay.AddCircleActor(new CircleActor(true, c.GetExpDur() + (int)c.GetTime(), 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
                 replay.AddCircleActor(new CircleActor(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
             }
-            List<PhaseData> phases = log.Boss.GetPhases(log, true);
+            List<PhaseData> phases = log.Boss.GetPhases(log);
             if (phases.Count > 1)
             {
                 List<CastLog> rampage = cls.Where(x => x.GetID() == 31834).ToList();

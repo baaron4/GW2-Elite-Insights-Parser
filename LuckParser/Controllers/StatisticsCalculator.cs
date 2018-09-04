@@ -46,7 +46,7 @@ namespace LuckParser.Controllers
 
             _log = log;
 
-            _statistics.Phases = log.Boss.GetPhases(log, _settings.ParsePhases);
+            _statistics.Phases = log.Boss.GetPhases(log);
             if (switches.CalculateCombatReplay && _settings.ParseCombatReplay)
             {
                 foreach (Player p in log.PlayerList)
