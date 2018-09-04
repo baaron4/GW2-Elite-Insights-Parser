@@ -12,9 +12,9 @@ namespace LuckParser.Models.ParseModels
         private readonly List<HashSet<Mechanic>> _presentMechanics = new List<HashSet<Mechanic>>();
         private readonly List<List<AbstractMasterPlayer>> _enemyList = new List<List<AbstractMasterPlayer>>();
 
-        public MechanicData(BossData bossData)
+        public MechanicData(FightData bossData)
         {
-            List<Mechanic> bossMechanics = bossData.GetBossBehavior().GetMechanics();
+            List<Mechanic> bossMechanics = bossData.Logic.GetMechanics();
             foreach(Mechanic m in bossMechanics)
             {
                 Add(m, new List<MechanicLog>());
@@ -76,7 +76,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     foreach (AbstractMasterPlayer p in this[m].Where(x => phase.InInterval(x.GetTime())).Select(x => x.GetPlayer()).Distinct())
                     {
-                        if (toAdd.FirstOrDefault(x => x.GetInstid() == p.GetInstid()) == null)
+                        if (toAdd.FirstOrDefault(x => x.InstID == p.InstID) == null)
                         {
                             toAdd.Add(p);
                         }

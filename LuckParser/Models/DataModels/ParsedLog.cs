@@ -7,7 +7,7 @@ namespace LuckParser.Models.DataModels
     public class ParsedLog
     {
         private readonly LogData _logData;
-        private readonly BossData _bossData;
+        private readonly FightData _fightData;
         private readonly AgentData _agentData;
         private readonly SkillData _skillData;
         private readonly CombatData _combatData;
@@ -18,23 +18,23 @@ namespace LuckParser.Models.DataModels
 
         
 
-        public ParsedLog(LogData logData, BossData bossData, AgentData agentData, SkillData skillData, 
+        public ParsedLog(LogData logData, FightData fightData, AgentData agentData, SkillData skillData, 
                 CombatData combatData, List<Player> playerList, Boss boss)
         {
             _logData = logData;
-            _bossData = bossData;
+            _fightData = fightData;
             _agentData = agentData;
             _skillData = skillData;
             _combatData = combatData;
             _playerList = playerList;
             _boss = boss;
-            _mechData = new MechanicData(bossData);
-            _playerListBySpec = playerList.GroupBy(x => x.GetProf()).ToDictionary(x => x.Key, x => x.ToList());
+            _mechData = new MechanicData(fightData);
+            _playerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
         }
 
-        public BossData GetBossData()
+        public FightData GetFightData()
         {
-            return _bossData;
+            return _fightData;
         }
 
         public Boss GetBoss()
@@ -143,7 +143,7 @@ namespace LuckParser.Models.DataModels
 
         public bool IsBenchmarkMode()
         {
-            return _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem;
+            return _fightData.Logic.GetMode() == BossLogic.ParseMode.Golem;
         }
 
 

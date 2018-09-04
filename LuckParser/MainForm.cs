@@ -153,8 +153,8 @@ namespace LuckParser
                     {
                         throw new CancellationException(rowData, new Exception("Invalid save directory"));
                     }
-                    string bossid = parser.GetBossData().GetID().ToString();
-                    string result = parser.GetLogData().GetBosskill() ? "kill" : "fail";
+                    string bossid = parser.GetFightData().ID.ToString();
+                    string result = parser.GetLogData().Success ? "kill" : "fail";
 
                     SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
                     

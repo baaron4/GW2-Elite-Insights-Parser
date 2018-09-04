@@ -82,24 +82,24 @@ namespace LuckParser.Controllers
                         sw.Write("{");
                         HTMLHelper.WriteDPSPlots(sw, GraphHelper.GetTotalDPSGraph(_log, p, phaseIndex, phase, mode));
                         sw.Write("mode: 'lines'," +
-                                "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.GetProf() + "-Total") + "'}," +
+                                "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.Prof + "-Total") + "'}," +
                                 "visible:'legendonly'," +
-                                "name: '" + p.GetCharacter() + " TDPS'" + "},");
+                                "name: '" + p.Character + " TDPS'" + "},");
                     }
                     sw.Write("{");
                     maxDPS = Math.Max(maxDPS, HTMLHelper.WriteDPSPlots(sw, GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, mode), totalDpsAllPlayers));
                     sw.Write("mode: 'lines'," +
-                            "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.GetProf()) + "'}," +
-                            "name: '" + p.GetCharacter() + " DPS'" +
+                            "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.Prof) + "'}," +
+                            "name: '" + p.Character + " DPS'" +
                             "},");
                     if (_settings.ClDPSGraphTotals)
                     {//Turns display on or off
                         sw.Write("{");
                         HTMLHelper.WriteDPSPlots(sw, GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, mode));
                         sw.Write("mode: 'lines'," +
-                                "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.GetProf() + "-NonBoss") + "'}," +
+                                "line: {shape: 'spline',color:'" + HTMLHelper.GetLink("Color-" + p.Prof + "-NonBoss") + "'}," +
                                 "visible:'legendonly'," +
-                                "name: '" + p.GetCharacter() + " CleaveDPS'" + "},");
+                                "name: '" + p.Character + " CleaveDPS'" + "},");
                     }
                 }
                 sw.Write("{");
@@ -110,7 +110,7 @@ namespace LuckParser.Controllers
                         "name: 'All Player Dps'");
                 sw.Write("},");
                 HashSet<Mechanic> presMech = _log.GetMechanicData().GetPresentMechanics(phaseIndex);
-                List<ushort> playersIds = _log.GetPlayerList().Select(x => x.GetInstid()).ToList();
+                List<ushort> playersIds = _log.GetPlayerList().Select(x => x.InstID).ToList();
                 foreach (Mechanic mech in presMech)
                 {
                     List<MechanicLog> filterdList = _log.GetMechanicData()[mech].Where(x => phase.InInterval(x.GetTime())).ToList();
@@ -121,9 +121,9 @@ namespace LuckParser.Controllers
                     foreach (MechanicLog ml in filterdList)
                     {                     
                         Point check;
-                        if (playersIds.Contains(ml.GetPlayer().GetInstid()))
+                        if (playersIds.Contains(ml.GetPlayer().InstID))
                         {
-                            double time = (ml.GetTime() - phase.GetStart()) / 1000.0;
+                            double time = (ml.GetTime() - phase.Start) / 1000.0;
                             check = GraphHelper.GetBossDPSGraph(_log, ml.GetPlayer(), phaseIndex, phase, mode).LastOrDefault(x => x.X <= time);
                             if (check == Point.Empty)
                             {
@@ -149,10 +149,10 @@ namespace LuckParser.Controllers
                         }
                         else
                         {
-                            check = _log.GetBossData().GetHealthOverTime().FirstOrDefault(x => x.X > ml.GetTime());
+                            check = _log.GetFightData().HealthOverTime.FirstOrDefault(x => x.X > ml.GetTime());
                             if (check == Point.Empty)
                             {
-                                check = _log.GetBossData().GetHealthOverTime().Count == 0 ? new Point(0, 10000) : new Point(0, _log.GetBossData().GetHealthOverTime().Last().Y);
+                                check = _log.GetFightData().HealthOverTime.Count == 0 ? new Point(0, 10000) : new Point(0, _log.GetFightData().HealthOverTime.Last().Y);
                             }
                             check.Y = (int)((check.Y / 10000f) * maxDPS);
                         }
@@ -177,11 +177,11 @@ namespace LuckParser.Controllers
                     {
                         if (mechcount == filterdList.Count - 1)
                         {
-                            sw.Write("'" + Math.Round((ml.GetTime() - phase.GetStart()) / 1000.0,4) + "'");
+                            sw.Write("'" + Math.Round((ml.GetTime() - phase.Start) / 1000.0,4) + "'");
                         }
                         else
                         {
-                            sw.Write("'" + Math.Round((ml.GetTime() - phase.GetStart()) / 1000.0,4) + "',");
+                            sw.Write("'" + Math.Round((ml.GetTime() - phase.Start) / 1000.0,4) + "',");
                         }
 
                         mechcount++;
@@ -200,11 +200,11 @@ namespace LuckParser.Controllers
                     {
                         if (mechcount == filterdList.Count - 1)
                         {
-                            sw.Write("'" + ml.GetPlayer().GetCharacter().Replace("'"," ") + "'");
+                            sw.Write("'" + ml.GetPlayer().Character.Replace("'"," ") + "'");
                         }
                         else
                         {
-                            sw.Write("'" + ml.GetPlayer().GetCharacter().Replace("'", " ") + "',");
+                            sw.Write("'" + ml.GetPlayer().Character.Replace("'", " ") + "',");
                         }
 
                         mechcount++;
@@ -217,7 +217,7 @@ namespace LuckParser.Controllers
                 if (maxDPS > 0)
                 {
                     sw.Write("{");
-                    HTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase.GetStart(), phase.GetEnd(), _log.GetBossData());
+                    HTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase.Start, phase.End, _log.GetFightData());
                     sw.Write("}");
                 }
                 else
@@ -345,7 +345,7 @@ namespace LuckParser.Controllers
             int firstGroup = 11;
             foreach (Player play in _log.GetPlayerList())
             {
-                int playerGroup = play.GetGroup();
+                int playerGroup = play.Group;
                 if (playerGroup > groupCount)
                 {
                     groupCount = playerGroup;
@@ -362,33 +362,33 @@ namespace LuckParser.Controllers
                 for (int n = firstGroup; n <= groupCount; n++)
                 {
                     sw.Write("<tr>");
-                    List<Player> sortedList = _log.GetPlayerList().Where(x => x.GetGroup() == n).ToList();
+                    List<Player> sortedList = _log.GetPlayerList().Where(x => x.Group == n).ToList();
                     if (sortedList.Count > 0)
                     {
                         foreach (Player gPlay in sortedList)
                         {
-                            string charName = gPlay.GetCharacter().Length > 10 ? gPlay.GetCharacter().Substring(0, 10) : gPlay.GetCharacter();
+                            string charName = gPlay.Character.Length > 10 ? gPlay.Character.Substring(0, 10) : gPlay.Character;
                             //Getting Build
                             string build = "";
-                            if (gPlay.GetCondition() > 0)
+                            if (gPlay.Condition > 0)
                             {
-                                build += "<img src=\"https://wiki.guildwars2.com/images/5/54/Condition_Damage.png\" alt=\"Condition Damage\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Condition Damage-" + gPlay.GetCondition() + "\">";//"<span class=\"badge badge-warning\">Condi("+ gPlay.getCondition() + ")</span>";
+                                build += "<img src=\"https://wiki.guildwars2.com/images/5/54/Condition_Damage.png\" alt=\"Condition Damage\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Condition Damage-" + gPlay.Condition + "\">";//"<span class=\"badge badge-warning\">Condi("+ gPlay.getCondition() + ")</span>";
                             }
-                            if (gPlay.GetConcentration() > 0)
+                            if (gPlay.Concentration > 0)
                             {
-                                build += "<img src=\"https://wiki.guildwars2.com/images/4/44/Boon_Duration.png\" alt =\"Concentration\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Concentration-" + gPlay.GetConcentration() + "\">";//"<span class=\"badge badge-warning\">Condi("+ gPlay.getCondition() + ")</span>";
+                                build += "<img src=\"https://wiki.guildwars2.com/images/4/44/Boon_Duration.png\" alt =\"Concentration\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Concentration-" + gPlay.Concentration + "\">";//"<span class=\"badge badge-warning\">Condi("+ gPlay.getCondition() + ")</span>";
                             }
-                            if (gPlay.GetHealing() > 0)
+                            if (gPlay.Healing > 0)
                             {
-                                build += "<img src=\"https://wiki.guildwars2.com/images/8/81/Healing_Power.png\" alt=\"Healing Power\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Healing Power-" + gPlay.GetHealing() + "\">";//"<span class=\"badge badge-success\">Heal("+ gPlay.getHealing() + ")</span>";
+                                build += "<img src=\"https://wiki.guildwars2.com/images/8/81/Healing_Power.png\" alt=\"Healing Power\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Healing Power-" + gPlay.Healing + "\">";//"<span class=\"badge badge-success\">Heal("+ gPlay.getHealing() + ")</span>";
                             }
-                            if (gPlay.GetToughness() > 0)
+                            if (gPlay.Toughness > 0)
                             {
-                                build += "<img src=\"https://wiki.guildwars2.com/images/1/12/Toughness.png\" alt=\"Toughness\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Toughness-" + gPlay.GetToughness() + "\">";//"<span class=\"badge badge-secondary\">Tough("+ gPlay.getToughness() + ")</span>";
+                                build += "<img src=\"https://wiki.guildwars2.com/images/1/12/Toughness.png\" alt=\"Toughness\" data-toggle=\"tooltip\" title=\"\" height=\"18\" width=\"18\" data-original-title=\"Toughness-" + gPlay.Toughness + "\">";//"<span class=\"badge badge-secondary\">Tough("+ gPlay.getToughness() + ")</span>";
                             }
                             sw.Write("<td class=\"composition\">");
                             {
-                                sw.Write("<img src=\"" + HTMLHelper.GetLink(gPlay.GetProf()) + "\" alt=\"" + gPlay.GetProf() + "\" height=\"18\" width=\"18\" >");
+                                sw.Write("<img src=\"" + HTMLHelper.GetLink(gPlay.Prof) + "\" alt=\"" + gPlay.Prof + "\" height=\"18\" width=\"18\" >");
                                 sw.Write(build);
                                 PrintWeapons(sw, gPlay);
                                 sw.Write(charName);
@@ -446,7 +446,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th></th>");
                         sw.Write("<th>Name</th>");
                         sw.Write("<th>Account</th>");
-                        if (phase.GetRedirection().Count > 0)
+                        if (phase.Redirection.Count > 0)
                         {
                             sw.Write("<th>Adds DPS</th>");
                         } else
@@ -474,7 +474,7 @@ namespace LuckParser.Controllers
                     //gather data for footer
                     footerList.Add(new []
                     {
-                        player.GetGroup().ToString(),
+                        player.Group.ToString(),
                         dps.AllDps.ToString(), dps.AllDamage.ToString(),
                         dps.AllPowerDps.ToString(), dps.AllPowerDamage.ToString(),
                         dps.AllCondiDps.ToString(), dps.AllCondiDamage.ToString(),
@@ -484,10 +484,10 @@ namespace LuckParser.Controllers
                     });
                     sw.Write("<tr>");
                     {
-                        sw.Write("<td>" + player.GetGroup() + "</td>");
-                        sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + " \" alt=\"" + player.GetProf() + "\" height=\"18\" width=\"18\" >"+"<span style=\"display:none\">"+ player.GetProf() + "</span>"+"</td>");
-                        sw.Write("<td>" + player.GetCharacter() + "</td>");
-                        sw.Write("<td>" + player.GetAccount().TrimStart(':') + "</td>");
+                        sw.Write("<td>" + player.Group + "</td>");
+                        sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + " \" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >"+"<span style=\"display:none\">"+ player.Prof + "</span>"+"</td>");
+                        sw.Write("<td>" + player.Character + "</td>");
+                        sw.Write("<td>" + player.Account.TrimStart(':') + "</td>");
                         //Boss dps
                         sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.BossDamage + " dmg \">" + dps.BossDps + "</span>" + "</td>");
                         sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.BossPowerDamage + " dmg \">" + dps.BossPowerDps + "</span>" + "</td>");
@@ -610,7 +610,7 @@ namespace LuckParser.Controllers
 
                         //gather data for footer
                         footerList.Add(new [] {
-                            player.GetGroup().ToString(),
+                            player.Group.ToString(),
                             stats.PowerLoopCount.ToString(),
                             stats.CriticalRate.ToString(),
                             stats.ScholarRate.ToString(),
@@ -626,10 +626,10 @@ namespace LuckParser.Controllers
                         });
                         sw.Write("<tr>");
                         {
-                            sw.Write("<td>" + player.GetGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + "\" alt=\"" 
-                                + player.GetProf() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
-                            sw.Write("<td>" + player.GetCharacter() + "</td>");
+                            sw.Write("<td>" + player.Group.ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" 
+                                + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
+                            sw.Write("<td>" + player.Character + "</td>");
 
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.CriticalRate + " out of " + stats.CritablePowerLoopCount
@@ -743,7 +743,7 @@ namespace LuckParser.Controllers
 
                         //gather data for footer
                         footerList.Add(new [] {
-                            player.GetGroup().ToString(),
+                            player.Group.ToString(),
                             stats.PowerLoopCountBoss.ToString(),
                             stats.CriticalRateBoss.ToString(),
                             stats.ScholarRateBoss.ToString(),
@@ -759,10 +759,10 @@ namespace LuckParser.Controllers
                         });
                         sw.Write("<tr>");
                         {
-                            sw.Write("<td>" + player.GetGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + "\" alt=\"" 
-                                + player.GetProf()+ "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
-                            sw.Write("<td>" + player.GetCharacter() + "</td>");
+                            sw.Write("<td>" + player.Group.ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" 
+                                + player.Prof+ "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
+                            sw.Write("<td>" + player.Character + "</td>");
 
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.CriticalRateBoss + " out of " + stats.CritablePowerLoopCountBoss 
@@ -894,7 +894,7 @@ namespace LuckParser.Controllers
                                                                                               //gather data for footer
                         footerList.Add(new []
                         {
-                            player.GetGroup().ToString(),
+                            player.Group.ToString(),
                             defenses.DamageTaken.ToString(), defenses.DamageBarrier.ToString(),
                             defenses.BlockedCount.ToString(), defenses.InvulnedCount.ToString(),
                             defenses.EvadedCount.ToString(), stats.DodgeCount.ToString(),
@@ -902,9 +902,9 @@ namespace LuckParser.Controllers
                         });
                         sw.Write("<tr>");
                         {
-                            sw.Write("<td>" + player.GetGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + "\" alt=\"" + player.GetProf() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
-                            sw.Write("<td>" + player.GetCharacter() + "</td>");
+                            sw.Write("<td>" + player.Group.ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
+                            sw.Write("<td>" + player.Character + "</td>");
                             sw.Write("<td>" + defenses.DamageTaken + "</td>");//dmg taken
                             sw.Write("<td>" + defenses.DamageBarrier + "</td>");//dmgbarrier
                             //sw.Write("<td>" + defenses.allHealReceived + "</td>");//dmgbarrier
@@ -1033,15 +1033,15 @@ namespace LuckParser.Controllers
 
                         //gather data for footer
                         footerList.Add(new [] {
-                            player.GetGroup().ToString(),
+                            player.Group.ToString(),
                             support.CondiCleanseTime.ToString(), support.CondiCleanse.ToString(),
                             support.ResurrectTime.ToString(), support.Resurrects.ToString()//, support.allHeal.ToString()
                         });
                         sw.Write("<tr>");
                         {
-                            sw.Write("<td>" + player.GetGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + " \" alt=\"" + player.GetProf() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
-                            sw.Write("<td>" + player.GetCharacter() + "</td>");
+                            sw.Write("<td>" + player.Group.ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + " \" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
+                            sw.Write("<td>" + player.Character + "</td>");
                             //sw.Write("<td>" + support.allHeal +"</td>");                                              
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.CondiCleanseTime + " seconds \">" + support.CondiCleanse + "</span>" + "</td>");//condicleanse                                                                                                                                                                   //defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
                             sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.ResurrectTime + " seconds \">" + support.Resurrects + "</span>" + "</td>");//res
@@ -1221,7 +1221,7 @@ namespace LuckParser.Controllers
             {
                 HTMLHelper.WriteBoonTableHeader(sw, listToUse);
                 HashSet<int> intensityBoon = new HashSet<int>();
-                bool boonTable = listToUse.Select(x => x.GetID()).Contains(740);
+                bool boonTable = listToUse.Select(x => x.ID).Contains(740);
                 sw.Write("<tbody>");
                 {
                     foreach (Player player in _log.GetPlayerList())
@@ -1231,7 +1231,7 @@ namespace LuckParser.Controllers
                         Dictionary<long, Dictionary<int, string[]>> extraBoonData = player.GetExtraBoonData(_log, phases);
                         List<string> boonArrayToList = new List<string>
                         {
-                            player.GetGroup().ToString()
+                            player.Group.ToString()
                         };
                         long fightDuration = phases[phaseIndex].GetDuration();
                         Dictionary<long, long> boonPresence = player.GetBoonPresence(_log, phases, phaseIndex);
@@ -1239,8 +1239,8 @@ namespace LuckParser.Controllers
 
                         sw.Write("<tr>");
                         {
-                            sw.Write("<td>" + player.GetGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + "\" alt=\"" + player.GetProf() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
+                            sw.Write("<td>" + player.Group.ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
                             if (boonTable)
                             {                        
                                 double avgBoons = 0.0;
@@ -1249,32 +1249,32 @@ namespace LuckParser.Controllers
                                     avgBoons += duration;
                                 }
                                 avgBoons /= fightDuration;
-                                sw.Write("<td data-toggle=\"tooltip\" title=\"Average number of boons: " + Math.Round(avgBoons, 1) + "\">" + player.GetCharacter() + " </td>");
+                                sw.Write("<td data-toggle=\"tooltip\" title=\"Average number of boons: " + Math.Round(avgBoons, 1) + "\">" + player.Character + " </td>");
                             }
                             else
                             {
-                                sw.Write("<td>" + player.GetCharacter() + "</td>");
+                                sw.Write("<td>" + player.Character + "</td>");
                             }
                             foreach (Boon boon in listToUse)
                             {
-                                if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                                if (boon.Type == Boon.BoonType.Intensity)
                                 {
                                     intensityBoon.Add(count);
                                 }
                                 string tooltip = "";
-                                if (extraBoonData.TryGetValue(boon.GetID(),out var myDict))
+                                if (extraBoonData.TryGetValue(boon.ID, out var myDict))
                                 {
                                     string[] tooltips = myDict[phaseIndex];
                                     tooltip = " <br> <big><b>Boss</b></big> </br> " + tooltips[1] + " <br> <big><b>All</b></big> </br> " + tooltips[0];
                                 }
-                                string toWrite = boons[boon.GetID()].Uptime + (boon.GetBoonType() == Boon.BoonType.Intensity ? "" : "%");
+                                string toWrite = boons[boon.ID].Uptime + (boon.Type == Boon.BoonType.Intensity ? "" : "%");
                                 if (tooltip.Length > 0)
                                 {
                                     sw.Write("<td data-html=\"true\" data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + toWrite + " </td>");
                                 }
                                 else
                                 {
-                                    if (boonTable && boon.GetBoonType() == Boon.BoonType.Intensity && boonPresence.TryGetValue(boon.GetID(),out long presenceValue))
+                                    if (boonTable && boon.Type == Boon.BoonType.Intensity && boonPresence.TryGetValue(boon.ID, out long presenceValue))
                                     {
                                         tooltip = "uptime: " + Math.Round(100.0* presenceValue / fightDuration,1) + "%";
                                         sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + toWrite + " </td>");
@@ -1283,7 +1283,7 @@ namespace LuckParser.Controllers
                                         sw.Write("<td>" + toWrite + "</td>");
                                     }
                                 }                                
-                                boonArrayToList.Add(boons[boon.GetID()].Uptime.ToString());                        
+                                boonArrayToList.Add(boons[boon.ID].Uptime.ToString());                        
                                 count++;
                             }
                         }
@@ -1391,11 +1391,11 @@ namespace LuckParser.Controllers
                         {
                             string rate = "0";
 
-                            Statistics.FinalBoonUptime uptime = uptimes[boon.GetID()];
+                            Statistics.FinalBoonUptime uptime = uptimes[boon.ID];
 
                             if (uptime.Generation > 0)
                             {
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
+                                if (boon.Type == Boon.BoonType.Duration)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1403,7 +1403,7 @@ namespace LuckParser.Controllers
                                         + uptime.Generation
                                         + "%</span>";
                                 }
-                                else if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                                else if (boon.Type == Boon.BoonType.Intensity)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1414,7 +1414,7 @@ namespace LuckParser.Controllers
 
                             }
 
-                            rates[boon.GetID()] = rate;
+                            rates[boon.ID] = rate;
                         }
 
                         HTMLHelper.WriteBoonGenTableBody(sw, player, listToUse, rates);
@@ -1473,11 +1473,11 @@ namespace LuckParser.Controllers
                         {
                             string rate = "0";
 
-                            Statistics.FinalBoonUptime uptime = boons[boon.GetID()];
+                            Statistics.FinalBoonUptime uptime = boons[boon.ID];
 
                             if (uptime.Generation > 0)
                             {
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
+                                if (boon.Type == Boon.BoonType.Duration)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1485,7 +1485,7 @@ namespace LuckParser.Controllers
                                         + uptime.Generation
                                         + "%</span>";
                                 }
-                                else if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                                else if (boon.Type == Boon.BoonType.Intensity)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1495,7 +1495,7 @@ namespace LuckParser.Controllers
                                 }
                             }
 
-                            rates[boon.GetID()] = rate;
+                            rates[boon.ID] = rate;
                         }
 
                         HTMLHelper.WriteBoonGenTableBody(sw, player, listToUse, rates);
@@ -1553,11 +1553,11 @@ namespace LuckParser.Controllers
                         {
                             string rate = "0";
 
-                            Statistics.FinalBoonUptime uptime = boons[boon.GetID()];
+                            Statistics.FinalBoonUptime uptime = boons[boon.ID];
 
                             if (uptime.Generation > 0)
                             {
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
+                                if (boon.Type == Boon.BoonType.Duration)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1565,7 +1565,7 @@ namespace LuckParser.Controllers
                                         + uptime.Generation
                                         + "%</span>";
                                 }
-                                else if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                                else if (boon.Type == Boon.BoonType.Intensity)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1575,7 +1575,7 @@ namespace LuckParser.Controllers
                                 }
                             }
 
-                            rates[boon.GetID()] = rate;
+                            rates[boon.ID] = rate;
                         }
 
                         HTMLHelper.WriteBoonGenTableBody(sw, player, listToUse, rates);
@@ -1634,11 +1634,11 @@ namespace LuckParser.Controllers
                         {
                             string rate = "0";
 
-                            Statistics.FinalBoonUptime uptime = boons[boon.GetID()];
+                            Statistics.FinalBoonUptime uptime = boons[boon.ID];
 
                             if (uptime.Generation > 0)
                             {
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
+                                if (boon.Type == Boon.BoonType.Duration)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1646,7 +1646,7 @@ namespace LuckParser.Controllers
                                         + uptime.Generation
                                         + "%</span>";
                                 }
-                                else if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                                else if (boon.Type == Boon.BoonType.Intensity)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1656,7 +1656,7 @@ namespace LuckParser.Controllers
                                 }
                             }
 
-                            rates[boon.GetID()] = rate;
+                            rates[boon.ID] = rate;
                         }
 
                         HTMLHelper.WriteBoonGenTableBody(sw, player, listToUse, rates);
@@ -1678,17 +1678,17 @@ namespace LuckParser.Controllers
             //generate Player list Graphs
             foreach (Player p in _log.GetPlayerList())
             {
-                List<CastLog> casting = p.GetCastLogsActDur(_log, phase.GetStart(), phase.GetEnd());
+                List<CastLog> casting = p.GetCastLogsActDur(_log, phase.Start, phase.End);
 
-                bool died = p.GetDeath(_log, phase.GetStart(), phase.GetEnd()) > 0;
-                string charname = p.GetCharacter();
-                string pid = p.GetInstid() + "_" + phaseIndex;
+                bool died = p.GetDeath(_log, phase.Start, phase.End) > 0;
+                string charname = p.Character;
+                string pid = p.InstID + "_" + phaseIndex;
                 sw.Write("<div class=\"tab-pane fade\" id=\"" + pid + "\">");
                 {
-                    sw.Write("<h1 align=\"center\"> " + charname + "<img src=\"" + HTMLHelper.GetLink(p.GetProf()) + "\" alt=\"" + p.GetProf() + "\" height=\"18\" width=\"18\" >" + "</h1>");
+                    sw.Write("<h1 align=\"center\"> " + charname + "<img src=\"" + HTMLHelper.GetLink(p.Prof) + "\" alt=\"" + p.Prof + "\" height=\"18\" width=\"18\" >" + "</h1>");
                     sw.Write("<ul class=\"nav nav-tabs\">");
                     {
-                        sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + pid + "\">" + p.GetCharacter() + "</a></li>");
+                        sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + pid + "\">" + p.Character + "</a></li>");
                         if (_settings.SimpleRotation)
                         {
                             sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#SimpleRot" + pid + "\">Simple Rotation</a></li>");
@@ -1702,7 +1702,7 @@ namespace LuckParser.Controllers
                         //foreach pet loop here                        
                         foreach (KeyValuePair<string, Minions> pair in p.GetMinions(_log))
                         {
-                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.GetInstid() + "\">" + pair.Key + "</a></li>");
+                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.InstID + "\">" + pair.Key + "</a></li>");
                         }
                         //inc dmg
                         sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#incDmg" + pid + "\">Damage Taken</a></li>");
@@ -1712,7 +1712,7 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
                         {
-                            List<Tuple<Boon,long>> consume = p.GetConsumablesList(_log, phase.GetStart(), phase.GetEnd());
+                            List<Tuple<Boon,long>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
                             List<Tuple<Boon, long>> initial = consume.Where(x => x.Item2 == 0).ToList();
                             List<Tuple<Boon, long>> refreshed = consume.Where(x => x.Item2 > 0).ToList();
                             if (initial.Count > 0)
@@ -1721,7 +1721,7 @@ namespace LuckParser.Controllers
                                 Boon utility = null;
                                 foreach (Tuple<Boon, long> buff in initial)
                                 {
-                                    if (buff.Item1.GetNature() == Boon.BoonEnum.Food)
+                                    if (buff.Item1.Nature == Boon.BoonEnum.Food)
                                     {
                                         food = buff.Item1;
                                     } else
@@ -1732,11 +1732,11 @@ namespace LuckParser.Controllers
                                 sw.Write("<p>Started with ");
                                 if (food != null)
                                 {
-                                    sw.Write(food.GetName() + "<img src=\"" + food.GetLink() + "\" alt=\"" + food.GetName() + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write(food.Name + "<img src=\"" + food.Link + "\" alt=\"" + food.Name + "\" height=\"18\" width=\"18\" >");
                                 }
                                 if (utility != null)
                                 {
-                                    sw.Write((food != null ?" and " : "") + utility.GetName() + "<img src=\"" + utility.GetLink() + "\" alt=\"" + utility.GetName() + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write((food != null ?" and " : "") + utility.Name + "<img src=\"" + utility.Link + "\" alt=\"" + utility.Name + "\" height=\"18\" width=\"18\" >");
                                 }
                                 sw.Write("</p>");
                             }
@@ -1746,7 +1746,7 @@ namespace LuckParser.Controllers
                                 sw.Write("<ul>");
                                 foreach (Tuple<Boon, long> buff in refreshed)
                                 {
-                                    sw.Write("<li>" + buff.Item1.GetName() + "<img src=\"" + buff.Item1.GetLink() + "\" alt=\"" + buff.Item1.GetName() + "\" height=\"18\" width=\"18\" > at "+ Math.Round(buff.Item2 / 1000.0,3)+"s</li>");
+                                    sw.Write("<li>" + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at "+ Math.Round(buff.Item2 / 1000.0,3)+"s</li>");
                                 }
                                 sw.Write("</ul>");
                                 sw.Write("</p>");
@@ -1762,7 +1762,7 @@ namespace LuckParser.Controllers
                                         {
                                             foreach (CastLog cl in casting)
                                             {
-                                                HTMLHelper.WriteCastingItem(sw, cl, _log.GetSkillData(), phase.GetStart(), phase.GetEnd());
+                                                HTMLHelper.WriteCastingItem(sw, cl, _log.GetSkillData(), phase.Start, phase.End);
                                             }
                                         }
                                         if (_statistics.PresentBoons.Count > 0)
@@ -1772,7 +1772,7 @@ namespace LuckParser.Controllers
                                             {
                                                 sw.Write("{");
                                                 {
-                                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.GetStart(), phase.GetEnd());
+                                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.Start, phase.End);
                                                 }
                                                 sw.Write(" },");
 
@@ -1782,7 +1782,7 @@ namespace LuckParser.Controllers
                                             {
                                                 sw.Write("{");
                                                 {
-                                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.GetStart(), phase.GetEnd());
+                                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.Start, phase.End);
                                                 }
                                                 sw.Write(" },");
 
@@ -1870,7 +1870,7 @@ namespace LuckParser.Controllers
                                                 int castCount = 0;
                                                 foreach (CastLog cl in casting)
                                                 {
-                                                    HTMLHelper.WriteCastingItemIcon(sw, cl, _log.GetSkillData(), phase.GetStart(), castCount == casting.Count - 1);
+                                                    HTMLHelper.WriteCastingItemIcon(sw, cl, _log.GetSkillData(), phase.Start, castCount == casting.Count - 1);
                                                     castCount++;
                                                 }
                                             }
@@ -1913,7 +1913,7 @@ namespace LuckParser.Controllers
                             sw.Write("</script> ");
                             sw.Write("<ul class=\"nav nav-tabs\">");
                             {
-                                string bossText = phase.GetRedirection().Count > 0 ? "Adds" : "Boss";
+                                string bossText = phase.Redirection.Count > 0 ? "Adds" : "Boss";
                                 sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabBoss" + pid + "\">" + bossText + "</a></li>");
                                 sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabAll" + pid + "\">" + "All" + "</a></li>");
                             }
@@ -1936,10 +1936,10 @@ namespace LuckParser.Controllers
                         sw.Write("</div>");
                         foreach (KeyValuePair<string, Minions> pair in p.GetMinions(_log))
                         {
-                            string id = pid + "_" + pair.Value.GetInstid();
+                            string id = pid + "_" + pair.Value.InstID;
                             sw.Write("<div class=\"tab-pane fade \" id=\"minion" + id + "\">");
                             {
-                                string bossText = phase.GetRedirection().Count > 0 ? "Adds" : "Boss";
+                                string bossText = phase.Redirection.Count > 0 ? "Adds" : "Boss";
                                 sw.Write("<ul class=\"nav nav-tabs\">");
                                 {
                                     sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabBoss" + id + "\">" + bossText + "</a></li>");
@@ -2008,12 +2008,12 @@ namespace LuckParser.Controllers
             if (_settings.PlayerRot)//Display rotation
             {
                 PhaseData phase = _statistics.Phases[phaseIndex];
-                List<CastLog> casting = p.GetCastLogs(_log, phase.GetStart(), phase.GetEnd());
+                List<CastLog> casting = p.GetCastLogs(_log, phase.Start, phase.End);
                 //GW2APISkill autoSkill = null;
                 //int autosCount = 0;
                 foreach (CastLog cl in casting)
                 {
-                    GW2APISkill apiskill = _log.GetSkillData().Get(cl.GetID())?.GetGW2APISkill();
+                    GW2APISkill apiskill = _log.GetSkillData().Get(cl.GetID())?.ApiSkill;
 
                     if (apiskill != null)
                     {
@@ -2087,17 +2087,17 @@ namespace LuckParser.Controllers
         /// <param name="p">The player</param>
         private void CreateDeathRecap(StreamWriter sw, Player p)
         {
-            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, 0, _log.GetBossData().GetAwareDuration());
-            long start = _log.GetBossData().GetFirstAware();
-            long end = _log.GetBossData().GetLastAware();
-            List<CombatItem> down = _log.GetCombatData().GetStates(p.GetInstid(), ParseEnum.StateChange.ChangeDown, start, end);
+            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, 0, _log.GetFightData().FightDuration);
+            long start = _log.GetFightData().FightStart;
+            long end = _log.GetFightData().FightEnd;
+            List<CombatItem> down = _log.GetCombatData().GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, start, end);
             if (down.Count > 0)
             {
-                List<CombatItem> ups = _log.GetCombatData().GetStates(p.GetInstid(), ParseEnum.StateChange.ChangeUp, start, end);
+                List<CombatItem> ups = _log.GetCombatData().GetStates(p.InstID, ParseEnum.StateChange.ChangeUp, start, end);
                 // Surely a consumable in fractals
                 down = ups.Count > down.Count ? new List<CombatItem>() : down.GetRange(ups.Count, down.Count - ups.Count);
             }
-            List<CombatItem> dead = _log.GetCombatData().GetStates(p.GetInstid(), ParseEnum.StateChange.ChangeDead, start, end);
+            List<CombatItem> dead = _log.GetCombatData().GetStates(p.InstID, ParseEnum.StateChange.ChangeDead, start, end);
             List<DamageLog> damageToDown = new List<DamageLog>();
             List<DamageLog> damageToKill = new List<DamageLog>();
             if (down.Count > 0)
@@ -2152,7 +2152,7 @@ namespace LuckParser.Controllers
                 }
                 sw.Write("<center><h3>Player was insta killed by a mechanic, fall damage or by /gg</h3></center>");
             }
-            string pid = p.GetInstid().ToString();
+            string pid = p.InstID.ToString();
             sw.Write("<center><div id=\"BarDeathRecap" + pid + "\"></div> </center>");
             sw.Write("<script>");
             {
@@ -2337,24 +2337,24 @@ namespace LuckParser.Controllers
         private void _CreateDMGDistTable(Statistics.FinalDPS dps, StreamWriter sw, AbstractMasterPlayer p, bool toBoss, int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            List<CastLog> casting = p.GetCastLogs(_log, phase.GetStart(), phase.GetEnd());
+            List<CastLog> casting = p.GetCastLogs(_log, phase.Start, phase.End);
             List<DamageLog> damageLogs;
-            if (toBoss && phase.GetRedirection().Count > 0)
+            if (toBoss && phase.Redirection.Count > 0)
             {
-                damageLogs = p.GetJustPlayerDamageLogs(phase.GetRedirection(), _log, phase.GetStart(), phase.GetEnd());
+                damageLogs = p.GetJustPlayerDamageLogs(phase.Redirection, _log, phase.Start, phase.End);
             }
             else
             {
-                damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.GetBossData().GetInstid() : 0, _log, phase.GetStart(), phase.GetEnd());
+                damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.GetFightData().InstID : 0, _log, phase.Start, phase.End);
             }
             int totalDamage = toBoss ? dps.BossDamage : dps.AllDamage;
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.GetDamage()) : 0;
             if (totalDamage > 0)
             {
                 string contribution = Math.Round(100.0 * finalTotalDamage / totalDamage,2).ToString();
-                sw.Write("<div>" + p.GetCharacter() + " did " + contribution + "% of its own total " + (toBoss ? (phase.GetRedirection().Count > 0 ? "adds " : "boss ") : "") + "dps</div>");
+                sw.Write("<div>" + p.Character + " did " + contribution + "% of its own total " + (toBoss ? (phase.Redirection.Count > 0 ? "adds " : "boss ") : "") + "dps</div>");
             }
-            string tabid = p.GetInstid() + "_" + phaseIndex + (toBoss ? "_boss" : "");
+            string tabid = p.InstID + "_" + phaseIndex + (toBoss ? "_boss" : "");
             sw.Write("<script>");
             {
                 sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
@@ -2420,23 +2420,23 @@ namespace LuckParser.Controllers
         private void _CreateDMGDistTable(Statistics.FinalDPS dps, StreamWriter sw, AbstractMasterPlayer p, Minions minions, bool toBoss, int phaseIndex)
         {
             int totalDamage = toBoss ? dps.BossDamage : dps.AllDamage;
-            string tabid = p.GetInstid() + "_" + phaseIndex + "_" + minions.GetInstid() + (toBoss ? "_boss" : "");
+            string tabid = p.InstID + "_" + phaseIndex + "_" + minions.InstID + (toBoss ? "_boss" : "");
             PhaseData phase = _statistics.Phases[phaseIndex];
-            List<CastLog> casting = minions.GetCastLogs(_log, phase.GetStart(), phase.GetEnd());
+            List<CastLog> casting = minions.GetCastLogs(_log, phase.Start, phase.End);
             List<DamageLog> damageLogs;
-            if (toBoss && phase.GetRedirection().Count > 0)
+            if (toBoss && phase.Redirection.Count > 0)
             {
-                damageLogs = minions.GetDamageLogs(phase.GetRedirection(), _log, phase.GetStart(), phase.GetEnd());
+                damageLogs = minions.GetDamageLogs(phase.Redirection, _log, phase.Start, phase.End);
             }
             else
             {
-                damageLogs = minions.GetDamageLogs(toBoss ? _log.GetBossData().GetInstid() : 0, _log, phase.GetStart(), phase.GetEnd());
+                damageLogs = minions.GetDamageLogs(toBoss ? _log.GetFightData().InstID : 0, _log, phase.Start, phase.End);
             }
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.GetDamage()) : 0;
             if (totalDamage > 0)
             {
                 string contribution = Math.Round(100.0 * finalTotalDamage / totalDamage,2).ToString();
-                sw.Write("<div>" + minions.GetCharacter() + " did " + contribution + "% of " + p.GetCharacter() + "'s total " + (toBoss ? (phase.GetRedirection().Count > 0 ? "adds " : "boss " ) : "") + "dps</div>");
+                sw.Write("<div>" + minions.Character + " did " + contribution + "% of " + p.Character + "'s total " + (toBoss ? (phase.Redirection.Count > 0 ? "adds " : "boss " ) : "") + "dps</div>");
             }
             sw.Write("<script>");
             {
@@ -2512,10 +2512,10 @@ namespace LuckParser.Controllers
         private void CreateDMGTakenDistTable(StreamWriter sw, Player p, int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, phase.GetStart(), phase.GetEnd());
+            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, phase.Start, phase.End);
             SkillData skillList = _log.GetSkillData();
             long finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.GetDamage()) : 0;
-            string pid = p.GetInstid() + "_" + phaseIndex;
+            string pid = p.InstID + "_" + phaseIndex;
             sw.Write("<script>");
             {
                 sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
@@ -2566,7 +2566,7 @@ namespace LuckParser.Controllers
                     List<Boon> condiList = _statistics.PresentConditions;
                     foreach (Boon condi in condiList)
                     {
-                        long condiID = condi.GetID();
+                        long condiID = condi.ID;
                         int totaldamage = 0;
                         int mindamage = 0;
                         int hits = 0;
@@ -2584,10 +2584,10 @@ namespace LuckParser.Controllers
                         int avgdamage = (int)(totaldamage / (double)hits);
                         if (totaldamage > 0)
                         {
-                            string condiName = condi.GetName();// Boon.getCondiName(condiID);
+                            string condiName = condi.Name;// Boon.getCondiName(condiID);
                             sw.Write("<tr>");
                             {
-                                sw.Write("<td align=\"left\"><img src=\"" + condi.GetLink() + "\" alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                                sw.Write("<td align=\"left\"><img src=\"" + condi.Link + "\" alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
                                 sw.Write("<td>" + totaldamage + "</td>");
                                 sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
                                 sw.Write("<td>" + hits + "</td>");
@@ -2627,11 +2627,11 @@ namespace LuckParser.Controllers
                             }
                             int avgdamage = (int)(totaldamage / (double)hits);
 
-                            if (skill.GetGW2APISkill() != null)
+                            if (skill.ApiSkill != null)
                             {
                                 sw.Write("<tr>");
                                 {
-                                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.GetName() + "\" title=\"" + skill.GetID() + "\" height=\"18\" width=\"18\">" + skill.GetName() + "</td>");
+                                    sw.Write("<td align=\"left\"><img src=\"" + skill.ApiSkill.icon + "\" alt=\"" + skill.Name + "\" title=\"" + skill.ID + "\" height=\"18\" width=\"18\">" + skill.Name + "</td>");
                                     sw.Write("<td>" + totaldamage + "</td>");
                                     sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
                                     sw.Write("<td>" + hits + "</td>");
@@ -2648,7 +2648,7 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("<tr>");
                                 {
-                                    sw.Write("<td align=\"left\">" + skill.GetName() + "</td>");
+                                    sw.Write("<td align=\"left\">" + skill.Name + "</td>");
                                     sw.Write("<td>" + totaldamage + "</td>");
                                     sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
                                     sw.Write("<td>" + hits + "</td>");
@@ -2727,12 +2727,12 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("<tr>");
                             {
-                                sw.Write("<td>" + p.GetCharacter() + "</td>");
+                                sw.Write("<td>" + p.Character + "</td>");
                                 foreach (Mechanic mech in presMech)
                                 {
                                     long timeFilter = 0;
                                     int filterCount = 0;
-                                    List<MechanicLog> mls = _log.GetMechanicData()[mech].Where(x => x.GetPlayer().GetInstid() == p.GetInstid() && phase.InInterval(x.GetTime())).ToList();
+                                    List<MechanicLog> mls = _log.GetMechanicData()[mech].Where(x => x.GetPlayer().InstID == p.InstID && phase.InInterval(x.GetTime())).ToList();
                                     int count = mls.Count;
                                     foreach (MechanicLog ml in mls)
                                     {
@@ -2812,10 +2812,10 @@ namespace LuckParser.Controllers
                         {
                             sw.Write("<tr>");
                             {
-                                sw.Write("<td>" + p.GetCharacter() + "</td>");
+                                sw.Write("<td>" + p.Character + "</td>");
                                 foreach (Mechanic mech in presEnemyMech)
                                 {
-                                    int count = _log.GetMechanicData()[mech].Count(x => x.GetPlayer().GetInstid() == p.GetInstid() && phase.InInterval(x.GetTime()));
+                                    int count = _log.GetMechanicData()[mech].Count(x => x.GetPlayer().InstID == p.InstID && phase.InInterval(x.GetTime()));
                                     sw.Write("<td>" + count + "</td>");
                                 }
                             }
@@ -2941,7 +2941,7 @@ namespace LuckParser.Controllers
                 foreach (SkillItem skill in _log.GetSkillData().Values)
                 {
                     sw.Write("<li class=\"list-group-item d-flex justify-content-between align-items-center\">" +
-                                                  skill.GetID() + " : " + skill.GetName() +
+                                                  skill.ID+ " : " + skill.Name +
                              "</li>");
                 }
             }
@@ -2961,11 +2961,11 @@ namespace LuckParser.Controllers
             bool hasBoons = false;
             foreach (Boon boon in _statistics.PresentBoons)
             {
-                if (boon.GetName() == "Retaliation")
+                if (boon.Name == "Retaliation")
                 {
                     continue;
                 }
-                if (conditions[boon.GetID()].Uptime > 0.0)
+                if (conditions[boon.ID].Uptime > 0.0)
                 {
                     hasBoons = true;
                     break;
@@ -2990,11 +2990,11 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (hasBoons && boon.GetName() == "Retaliation")
+                            if (hasBoons && boon.Name == "Retaliation")
                             {
                                 continue;
                             }
-                            sw.Write("<th>" + "<img src=\"" + boon.GetLink() + " \" alt=\"" + boon.GetName() + "\" title =\" " + boon.GetName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            sw.Write("<th>" + "<img src=\"" + boon.Link + " \" alt=\"" + boon.Name + "\" title =\" " + boon.Name + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
                     sw.Write("</tr>");
@@ -3005,27 +3005,27 @@ namespace LuckParser.Controllers
                     sw.Write("<tr>");
                     {
                         
-                        sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avgCondis, 1) + "\">" + boss.GetCharacter() + " </td>");
+                        sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avgCondis, 1) + "\">" + boss.Character + " </td>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (hasBoons && boon.GetName() == "Retaliation")
+                            if (hasBoons && boon.Name == "Retaliation")
                             {
                                 continue;
                             }
-                            if (boon.GetBoonType() == Boon.BoonType.Duration)
+                            if (boon.Type == Boon.BoonType.Duration)
                             {
-                                sw.Write("<td>" + conditions[boon.GetID()].Uptime + "%</td>");
+                                sw.Write("<td>" + conditions[boon.ID].Uptime + "%</td>");
                             }
                             else
                             {
-                                if (condiPresence.TryGetValue(boon.GetID(), out long presenceTime))
+                                if (condiPresence.TryGetValue(boon.ID, out long presenceTime))
                                 {
                                     string tooltip = "uptime: " + Math.Round(100.0 * presenceTime / fightDuration, 1) + "%";
-                                    sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + conditions[boon.GetID()].Uptime + " </td>");
+                                    sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + conditions[boon.ID].Uptime + " </td>");
                                 }
                                 else
                                 {
-                                   sw.Write("<td>" + conditions[boon.GetID()].Uptime + "</td>");
+                                   sw.Write("<td>" + conditions[boon.ID].Uptime + "</td>");
                                 }
                             }
                         }
@@ -3050,7 +3050,7 @@ namespace LuckParser.Controllers
                             sw.Write("<th>Name</th>");
                             foreach (Boon boon in _statistics.PresentBoons)
                             {
-                                sw.Write("<th>" + "<img src=\"" + boon.GetLink() + " \" alt=\"" + boon.GetName() + "\" title =\" " + boon.GetName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                                sw.Write("<th>" + "<img src=\"" + boon.Link + " \" alt=\"" + boon.Name + "\" title =\" " + boon.Name + "\" height=\"18\" width=\"18\" >" + "</th>");
                             }
                         }
                         sw.Write("</tr>");
@@ -3060,23 +3060,23 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<tr>");
                         {
-                            sw.Write("<td style=\"width: 275px;\">" + boss.GetCharacter() + " </td>");
+                            sw.Write("<td style=\"width: 275px;\">" + boss.Character + " </td>");
                             foreach (Boon boon in _statistics.PresentBoons)
                             {
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
+                                if (boon.Type == Boon.BoonType.Duration)
                                 {
-                                    sw.Write("<td>" + conditions[boon.GetID()].Uptime + "%</td>");
+                                    sw.Write("<td>" + conditions[boon.ID].Uptime + "%</td>");
                                 }
                                 else
                                 {
-                                    if (boonPresence.TryGetValue(boon.GetID(), out long presenceTime))
+                                    if (boonPresence.TryGetValue(boon.ID, out long presenceTime))
                                     {
                                         string tooltip = "uptime: " + Math.Round(100.0 * presenceTime / fightDuration, 1) + "%";
-                                        sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + conditions[boon.GetID()].Uptime + " </td>");
+                                        sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + conditions[boon.ID].Uptime + " </td>");
                                     }
                                     else
                                     {
-                                        sw.Write("<td>" + conditions[boon.GetID()].Uptime + "</td>");
+                                        sw.Write("<td>" + conditions[boon.ID].Uptime + "</td>");
                                     }
                                 }
                             }
@@ -3101,11 +3101,11 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (boon.GetName() == "Retaliation")
+                            if (boon.Name == "Retaliation")
                             {
                                 continue;
                             }
-                            sw.Write("<th>" + "<img src=\"" + boon.GetLink() + " \" alt=\"" + boon.GetName() + "\" title =\" " + boon.GetName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            sw.Write("<th>" + "<img src=\"" + boon.Link + " \" alt=\"" + boon.Name + "\" title =\" " + boon.Name + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
                     sw.Write("</tr>");
@@ -3117,17 +3117,17 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<tr>");
                         {
-                            sw.Write("<td>" + player.GetGroup().ToString() + "</td>");
-                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.GetProf()) + "\" alt=\"" + player.GetProf() + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
-                            sw.Write("<td>" + player.GetCharacter() + " </td>");
+                            sw.Write("<td>" + player.Group.ToString() + "</td>");
+                            sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
+                            sw.Write("<td>" + player.Character + " </td>");
                             foreach (Boon boon in _statistics.PresentConditions)
                             {
-                                if (boon.GetName() == "Retaliation")
+                                if (boon.Name == "Retaliation")
                                 {
                                     continue;
                                 }
-                                Statistics.FinalBossBoon toUse = conditions[boon.GetID()];
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
+                                Statistics.FinalBossBoon toUse = conditions[boon.ID];
+                                if (boon.Type == Boon.BoonType.Duration)
                                 {
                                     sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
                                         + toUse.Overstacked[player] + "% with overstack \">"
@@ -3163,17 +3163,17 @@ namespace LuckParser.Controllers
             //generate Player list Graphs
             List<PhaseData> phases = _statistics.Phases;
             PhaseData phase = phases[phaseIndex];
-            List<CastLog> casting = _log.GetBoss().GetCastLogsActDur(_log, phase.GetStart(), phase.GetEnd());
-            string charname = _log.GetBoss().GetCharacter();
-            string pid = _log.GetBoss().GetInstid() + "_" + phaseIndex;
+            List<CastLog> casting = _log.GetBoss().GetCastLogsActDur(_log, phase.Start, phase.End);
+            string charname = _log.GetBoss().Character;
+            string pid = _log.GetBoss().InstID + "_" + phaseIndex;
             sw.Write("<h1 align=\"center\"> " + charname + "</h1>");
             sw.Write("<ul class=\"nav nav-tabs\">");
             {
-                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + pid + "\">" + _log.GetBoss().GetCharacter() + "</a></li>");
+                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + pid + "\">" + _log.GetBoss().Character + "</a></li>");
                 //foreach pet loop here
                 foreach (KeyValuePair<string, Minions> pair in _log.GetBoss().GetMinions(_log))
                 {
-                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.GetInstid() + "\">" + pair.Key + "</a></li>");
+                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.InstID + "\">" + pair.Key + "</a></li>");
                 }
             }
             sw.Write("</ul>");
@@ -3193,7 +3193,7 @@ namespace LuckParser.Controllers
 
                                 foreach (CastLog cl in casting)
                                 {
-                                    HTMLHelper.WriteCastingItem(sw, cl, _log.GetSkillData(), phase.GetStart(), phase.GetEnd());
+                                    HTMLHelper.WriteCastingItem(sw, cl, _log.GetSkillData(), phase.Start, phase.End);
                                 }
                             }
                             //============================================
@@ -3202,7 +3202,7 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("{");
                                 {
-                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.GetStart(), phase.GetEnd());
+                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.Start, phase.End);
                                 }
                                 sw.Write(" },");
 
@@ -3219,7 +3219,7 @@ namespace LuckParser.Controllers
                                 sw.Write("},");
                             }
                             sw.Write("{");
-                            HTMLHelper.WriteBossHealthGraph(sw, GraphHelper.GetTotalDPSGraph(_log, _log.GetBoss(), phaseIndex, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase.GetStart(), phase.GetEnd(), _log.GetBossData(), "y3");
+                            HTMLHelper.WriteBossHealthGraph(sw, GraphHelper.GetTotalDPSGraph(_log, _log.GetBoss(), phaseIndex, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase.Start, phase.End, _log.GetFightData(), "y3");
                             sw.Write("}");
                         }
                         sw.Write("];");
@@ -3242,7 +3242,7 @@ namespace LuckParser.Controllers
                                     int castCount = 0;
                                     foreach (CastLog cl in casting)
                                     {
-                                        HTMLHelper.WriteCastingItemIcon(sw, cl, _log.GetSkillData(), phase.GetStart(), castCount == casting.Count - 1);
+                                        HTMLHelper.WriteCastingItemIcon(sw, cl, _log.GetSkillData(), phase.Start, castCount == casting.Count - 1);
                                         castCount++;
                                     }
                                 }
@@ -3287,7 +3287,7 @@ namespace LuckParser.Controllers
                 sw.Write("</div>");
                 foreach (KeyValuePair<string, Minions> pair in _log.GetBoss().GetMinions(_log))
                 {
-                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + pid + "_" + pair.Value.GetInstid() + "\">");
+                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + pid + "_" + pair.Value.InstID + "\">");
                     {
                         CreateDMGBossDistTable(sw, _log.GetBoss(), pair.Value, phaseIndex);
                     }
@@ -3388,7 +3388,7 @@ namespace LuckParser.Controllers
                     sw.Write(".card {border:1px solid #9B0000;}");
                     sw.Write("td.composition {width: 120px;border:1px solid #9B0000;}");
                 }
-                if (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay)
+                if (_settings.ParseCombatReplay && _log.GetFightData().Logic.CanCombatReplay)
                 {
                     // from W3
                     sw.Write(".slidecontainer {width: 100%;}");
@@ -3407,14 +3407,14 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         public void CreateHTML(StreamWriter sw)
         {
-            double fightDuration = (_log.GetBossData().GetAwareDuration()) / 1000.0;
+            double fightDuration = (_log.GetFightData().FightDuration) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
             string durationString = duration.Minutes + "m " + duration.Seconds + "s " + duration.Milliseconds + "ms";
             if (duration.Hours > 0)
             {
                 durationString = duration.Hours + "h " + durationString;
             }
-            string bossname = FilterStringChars(_log.GetBossData().GetName());
+            string bossname = FilterStringChars(_log.GetFightData().Name);
             List<PhaseData> phases = _statistics.Phases;
             // HTML STARTS
             sw.Write("<!DOCTYPE html><html lang=\"en\">");
@@ -3452,7 +3452,7 @@ namespace LuckParser.Controllers
                 {
                     sw.Write("<div style=\"width: 1100px;\"class=\"d-flex flex-column\">");
                     {
-                        sw.Write("<p> Time Start: " + _log.GetLogData().GetLogStart() + " | Time End: " + _log.GetLogData().GetLogEnd() + " </p> ");
+                        sw.Write("<p> Time Start: " + _log.GetLogData().LogStart + " | Time End: " + _log.GetLogData().LogEnd + " </p> ");
                         sw.Write("<div class=\"d-flex flex-row justify-content-center align-items-center flex-wrap mb-3\">");
                         {
                             sw.Write("<div class=\"mr-3\">");
@@ -3468,35 +3468,35 @@ namespace LuckParser.Controllers
                                             {
                                                 sw.Write("<div>");
                                                 {
-                                                    sw.Write("<img src=\"" + HTMLHelper.GetLink(_log.GetBossData().GetID() + "-icon") + "\"alt=\"" + bossname + "-icon" + "\" style=\"height: 120px; width: 120px;\" >");
+                                                    sw.Write("<img src=\"" + HTMLHelper.GetLink(_log.GetFightData().ID + "-icon") + "\"alt=\"" + bossname + "-icon" + "\" style=\"height: 120px; width: 120px;\" >");
                                                 }
                                                 sw.Write("</div>");
                                                 sw.Write("<div>");
                                                 {
                                                     sw.Write("<div class=\"progress\" style=\"width: 100 %; height: 20px;\">");
                                                     {
-                                                        if (_log.GetLogData().GetBosskill())
+                                                        if (_log.GetLogData().Success)
                                                         {
-                                                            string tp = _log.GetBossData().GetHealth().ToString() + " Health";
+                                                            string tp = _log.GetFightData().Health.ToString() + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:100%; ;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
                                                         }
                                                         else
                                                         {
                                                             double finalPercent = 0;
-                                                            if (_log.GetBossData().GetHealthOverTime().Count > 0)
+                                                            if (_log.GetFightData().HealthOverTime.Count > 0)
                                                             {
-                                                                finalPercent = 100.0 - _log.GetBossData().GetHealthOverTime()[_log.GetBossData().GetHealthOverTime().Count - 1].Y * 0.01;
+                                                                finalPercent = 100.0 - _log.GetFightData().HealthOverTime[_log.GetFightData().HealthOverTime.Count - 1].Y * 0.01;
                                                             }
-                                                            string tp = Math.Round(_log.GetBossData().GetHealth() * finalPercent / 100.0) + " Health";
+                                                            string tp = Math.Round(_log.GetFightData().Health * finalPercent / 100.0) + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + finalPercent + "%;\" aria-valuenow=\"" + finalPercent + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
-                                                            tp = Math.Round(_log.GetBossData().GetHealth() * (100.0 - finalPercent) / 100.0) + " Health";
+                                                            tp = Math.Round(_log.GetFightData().Health * (100.0 - finalPercent) / 100.0) + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-danger\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + (100.0 - finalPercent) + "%;\" aria-valuenow=\"" + (100.0 - finalPercent) + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
 
                                                         }
                                                     }
                                                     sw.Write("</div>");
-                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: "+ (_settings.LightTheme ? "#000" : "#FFF") +";\">" + _log.GetBossData().GetHealth().ToString() + " Health</p>");
-                                                    sw.Write(_log.GetLogData().GetBosskill() ? "<p class='text text-success'> Result: Success</p>" : "<p class='text text-warning'> Result: Fail</p>");
+                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: "+ (_settings.LightTheme ? "#000" : "#FFF") +";\">" + _log.GetFightData().Health.ToString() + " Health</p>");
+                                                    sw.Write(_log.GetLogData().Success ? "<p class='text text-success'> Result: Success</p>" : "<p class='text text-warning'> Result: Fail</p>");
                                                     sw.Write("<p>Duration: " + durationString + " </p> ");
                                                 }
                                                 sw.Write("</div>");
@@ -3522,7 +3522,7 @@ namespace LuckParser.Controllers
                         //    CreateSoloHTML(sw,settingsSnap);
                         //    return;
                         //}
-                        if (phases.Count > 1 || (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay))
+                        if (phases.Count > 1 || (_settings.ParseCombatReplay && _log.GetFightData().Logic.CanCombatReplay))
                         {
                             sw.Write("<ul class=\"nav nav-tabs\">");
                             {
@@ -3531,14 +3531,14 @@ namespace LuckParser.Controllers
                                     if (phases[i].GetDuration() == 0)
                                         continue;
                                     string active = (i > 0 ? "" : "active");
-                                    string name = phases[i].GetName();
+                                    string name = phases[i].Name;
                                     sw.Write("<li  class=\"nav-item\">" +
                                             "<a class=\"nav-link " + active + "\" data-toggle=\"tab\" href=\"#phase" + i + "\">" +
                                                 "<span data-toggle=\"tooltip\" title=\"" + phases[i].GetDuration("s") + " seconds\">" + name + "</span>" +
                                             "</a>" +
                                         "</li>");
                                 }
-                                if (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay)
+                                if (_settings.ParseCombatReplay && _log.GetFightData().Logic.CanCombatReplay)
                                 {
                                     sw.Write("<li  class=\"nav-item\">" +
                                             "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#replay\">" +
@@ -3560,13 +3560,13 @@ namespace LuckParser.Controllers
                                 sw.Write("<div class=\"tab-pane fade " + active + "\" id=\"phase" + i + "\">");
                                 {
                                     if (phases.Count > 1)
-                                        sw.Write("<h2 align=\"center\">"+ phases[i].GetName()+ "</h2>");
+                                        sw.Write("<h2 align=\"center\">"+ phases[i].Name+ "</h2>");
                                     string playerDropdown = "";
                                     foreach (Player p in _log.GetPlayerList())
                                     {
-                                        string charname = p.GetCharacter();
-                                        playerDropdown += "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#" + p.GetInstid() + "_" + i + "\">" + charname +
-                                            "<img src=\"" + HTMLHelper.GetLink(p.GetProf()) + "\" alt=\"" + p.GetProf() + "\" height=\"18\" width=\"18\" >" + "</a>";
+                                        string charname = p.Character;
+                                        playerDropdown += "<a class=\"dropdown-item\"  data-toggle=\"tab\" href=\"#" + p.InstID + "_" + i + "\">" + charname +
+                                            "<img src=\"" + HTMLHelper.GetLink(p.Prof) + "\" alt=\"" + p.Prof + "\" height=\"18\" width=\"18\" >" + "</a>";
                                     }
                                     sw.Write("<ul class=\"nav nav-tabs\">");
                                     {
@@ -3632,7 +3632,7 @@ namespace LuckParser.Controllers
                                                 sw.Write("</div>");
                                                 sw.Write("<div class=\"tab-pane fade \" id=\"offStats" + i + "\">");
                                                 {
-                                                    string bossText = phases[i].GetRedirection().Count > 0 ? "Adds" : "Boss";
+                                                    string bossText = phases[i].Redirection.Count > 0 ? "Adds" : "Boss";
                                                     sw.Write("<ul class=\"nav nav-tabs\">" +
                                                        "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#dpsStatsBoss" + i + "\">"+ bossText + "</a></li>" +
                                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#dpsStatsAll" + i + "\">All</a></li>" +
@@ -3935,7 +3935,7 @@ namespace LuckParser.Controllers
                                 sw.Write("</div>");
 
                             }
-                            if (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay)
+                            if (_settings.ParseCombatReplay && _log.GetFightData().Logic.CanCombatReplay)
                             {
                                 sw.Write("<div class=\"tab-pane fade\" id=\"replay\">");
                                 {
@@ -3944,9 +3944,9 @@ namespace LuckParser.Controllers
                             }
                         }
                         sw.Write("</div>");
-                        sw.Write("<p style=\"margin-top:10px;\"> ARC:" + _log.GetLogData().GetBuildVersion() + " | Bossid " + _log.GetBossData().GetID().ToString() + "| EI Version: " +Application.ProductVersion + " </p> ");
+                        sw.Write("<p style=\"margin-top:10px;\"> ARC:" + _log.GetLogData().BuildVersion + " | Bossid " + _log.GetFightData().ID.ToString() + "| EI Version: " +Application.ProductVersion + " </p> ");
                        
-                        sw.Write("<p style=\"margin-top:-15px;\">File recorded by: " + _log.GetLogData().GetPOV().Split(':')[0] + "</p>");
+                        sw.Write("<p style=\"margin-top:-15px;\">File recorded by: " + _log.GetLogData().PoV.Split(':')[0] + "</p>");
                     }
                     sw.Write("</div>");
                 }

@@ -17,13 +17,13 @@ namespace LuckParser.Models.ParseModels
             public int Compare(BoonSimulator.BoonStackItem x, BoonSimulator.BoonStackItem y)
             {
                 List<Player> players = _log.GetPlayerList();
-                Player a = players.Find(p => p.GetInstid() == x.Src);
-                Player b = players.Find(p => p.GetInstid() == y.Src);
+                Player a = players.Find(p => p.InstID == x.Src);
+                Player b = players.Find(p => p.InstID == y.Src);
                 if (a == null || b == null)
                 {
                     return 0;
                 }
-                return a.GetHealing() < b.GetHealing() ? 1 : -1;
+                return a.Healing < b.Healing ? 1 : -1;
             }
         }
         public override void Sort(ParsedLog log, List<BoonSimulator.BoonStackItem> stacks)

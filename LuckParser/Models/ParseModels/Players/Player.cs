@@ -11,9 +11,9 @@ namespace LuckParser.Models.ParseModels
     public class Player : AbstractMasterPlayer
     {
         // Fields
-        private readonly string _account;
-        private readonly int _group;
-        private long _dcd;//time in ms the player dcd
+        public readonly string Account;
+        public readonly int Group;
+        public long Deconnected { get; set; }//time in ms the player dcd
        
         private readonly List<Tuple<Boon,long>> _consumeList = new List<Tuple<Boon, long>>();
         //weaponslist
@@ -23,44 +23,13 @@ namespace LuckParser.Models.ParseModels
         public Player(AgentItem agent, bool noSquad) : base(agent)
         {
             String[] name = agent.Name.Split('\0');
-            _account = name[1];
-            _group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
+            Account = name[1];
+            Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
         }
-
-        // Getters
-
-        public string GetAccount()
-        {
-            return _account;
-        }
-    
-        public int GetGroup()
-        {
-            return _group;
-        }
-
-        public int GetToughness()
-        {
-            return Agent.Toughness;
-        }
-
-        public int GetHealing()
-        {
-            return Agent.Healing;
-        }
-
-        public int GetCondition()
-        {
-            return Agent.Condition;
-        }
-
-        public int GetConcentration()
-        {
-            return Agent.Concentration;
-        }
+        
         // Public methods
         public int[] GetCleanses(ParsedLog log, long start, long end) {
-            long timeStart = log.GetBossData().GetFirstAware();
+            long timeStart = log.GetFightData().FightStart;
             int[] cleanse = { 0, 0 };
             List<Boon> condiList = Boon.GetCondiBoonList();
             foreach (CombatItem c in log.GetCombatList().Where(x=>x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuff == 1 && x.Time >= (start + timeStart) && x.Time <= (end + timeStart)))
@@ -72,7 +41,7 @@ namespace LuckParser.Models.ParseModels
                         long time = c.Time - timeStart;
                         if (time > 0)
                         {
-                            if (condiList.Exists(x=>x.GetID() == c.SkillID))
+                            if (condiList.Exists(x=>x.ID == c.SkillID))
                             {
                                 cleanse[0]++;
                                 cleanse[1] += c.BuffDmg;
@@ -104,15 +73,7 @@ namespace LuckParser.Models.ParseModels
             }
             return _weaponsArray;
         }
-        
-        public long GetDC()
-        {
-            return _dcd;
-        }
-        public void SetDC(long value)
-        {
-            _dcd = value;
-        }
+
         public List<Tuple<Boon, long>> GetConsumablesList(ParsedLog log, long start, long end)
         {
             if (_consumeList.Count == 0)
@@ -127,7 +88,7 @@ namespace LuckParser.Models.ParseModels
         {
             string[] weapons = new string[4];//first 2 for first set next 2 for second set
             SkillData skillList = log.GetSkillData();
-            List<CastLog> casting = GetCastLogs(log, 0, log.GetBossData().GetAwareDuration());      
+            List<CastLog> casting = GetCastLogs(log, 0, log.GetFightData().FightDuration);      
             int swapped = 0;//4 for first set and 5 for next
             long swappedTime = 0;
             List<CastLog> swaps = casting.Where(x => x.GetID() == SkillItem.WeaponSwapId).Take(2).ToList();
@@ -143,7 +104,7 @@ namespace LuckParser.Models.ParseModels
             }
             foreach (CastLog cl in casting)
             {
-                GW2APISkill apiskill = skillList.Get(cl.GetID())?.GetGW2APISkill();
+                GW2APISkill apiskill = skillList.Get(cl.GetID())?.ApiSkill;
                 if (apiskill != null && cl.GetTime() > swappedTime)
                 {
                     if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && (apiskill.categories == null || (apiskill.categories.Count() == 1 && apiskill.categories[0] == "Phantasm")))
@@ -232,9 +193,9 @@ namespace LuckParser.Models.ParseModels
         
         protected override void SetDamagetakenLogs(ParsedLog log)
         {
-            long timeStart = log.GetBossData().GetFirstAware();               
+            long timeStart = log.GetFightData().FightStart;               
             foreach (CombatItem c in log.GetDamageTakenData(Agent.InstID)) {
-                if (c.Time > log.GetBossData().GetFirstAware() && c.Time < log.GetBossData().GetLastAware()) {//selecting player as target
+                if (c.Time > log.GetFightData().FightStart && c.Time < log.GetFightData().FightEnd) {//selecting player as target
                     long time = c.Time - timeStart;
                     AddDamageTakenLog(time, c);
                 }
@@ -244,11 +205,11 @@ namespace LuckParser.Models.ParseModels
         {
             List<Boon> consumableList = Boon.GetFoodList();
             consumableList.AddRange(Boon.GetUtilityList());
-            long timeStart = log.GetBossData().GetFirstAware();
-            long fightDuration = log.GetBossData().GetLastAware() - timeStart;
+            long timeStart = log.GetFightData().FightStart;
+            long fightDuration = log.GetFightData().FightEnd - timeStart;
             foreach (Boon consumable in consumableList)
             {
-                foreach (CombatItem c in log.GetBoonData(consumable.GetID()))
+                foreach (CombatItem c in log.GetBoonData(consumable.ID))
                 {
                     if (c.IsBuffRemove != ParseEnum.BuffRemove.None || (c.IsBuff != 18 && c.IsBuff != 1) || Agent.InstID != c.DstInstid)
                     {
@@ -271,11 +232,11 @@ namespace LuckParser.Models.ParseModels
         protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
             // Down and deads
-            List<CombatItem> status = log.GetCombatData().GetStates(GetInstid(), ParseEnum.StateChange.ChangeDown, log.GetBossData().GetFirstAware(), log.GetBossData().GetLastAware());
-            status.AddRange(log.GetCombatData().GetStates(GetInstid(), ParseEnum.StateChange.ChangeUp, log.GetBossData().GetFirstAware(), log.GetBossData().GetLastAware()));
-            status.AddRange(log.GetCombatData().GetStates(GetInstid(), ParseEnum.StateChange.ChangeDead, log.GetBossData().GetFirstAware(), log.GetBossData().GetLastAware()));
-            status.AddRange(log.GetCombatData().GetStates(GetInstid(), ParseEnum.StateChange.Spawn, log.GetBossData().GetFirstAware(), log.GetBossData().GetLastAware()));
-            status.AddRange(log.GetCombatData().GetStates(GetInstid(), ParseEnum.StateChange.Despawn, log.GetBossData().GetFirstAware(), log.GetBossData().GetLastAware()));
+            List<CombatItem> status = log.GetCombatData().GetStates(InstID, ParseEnum.StateChange.ChangeDown, log.GetFightData().FightStart, log.GetFightData().FightEnd);
+            status.AddRange(log.GetCombatData().GetStates(InstID, ParseEnum.StateChange.ChangeUp, log.GetFightData().FightStart, log.GetFightData().FightEnd));
+            status.AddRange(log.GetCombatData().GetStates(InstID, ParseEnum.StateChange.ChangeDead, log.GetFightData().FightStart, log.GetFightData().FightEnd));
+            status.AddRange(log.GetCombatData().GetStates(InstID, ParseEnum.StateChange.Spawn, log.GetFightData().FightStart, log.GetFightData().FightEnd));
+            status.AddRange(log.GetCombatData().GetStates(InstID, ParseEnum.StateChange.Despawn, log.GetFightData().FightStart, log.GetFightData().FightEnd));
             status = status.OrderBy(x => x.Time).ToList();
             List<Tuple<long, long>> dead = new List<Tuple<long, long>>();
             List<Tuple<long, long>> down = new List<Tuple<long, long>>();
@@ -286,13 +247,13 @@ namespace LuckParser.Models.ParseModels
                 CombatItem next = status[i + 1];
                 if (cur.IsStateChange.IsDown())
                 {
-                    down.Add(new Tuple<long, long>(cur.Time - log.GetBossData().GetFirstAware(), next.Time - log.GetBossData().GetFirstAware()));
+                    down.Add(new Tuple<long, long>(cur.Time - log.GetFightData().FightStart, next.Time - log.GetFightData().FightStart));
                 } else if (cur.IsStateChange.IsDead())
                 {
-                    dead.Add(new Tuple<long, long>(cur.Time - log.GetBossData().GetFirstAware(), next.Time - log.GetBossData().GetFirstAware()));
+                    dead.Add(new Tuple<long, long>(cur.Time - log.GetFightData().FightStart, next.Time - log.GetFightData().FightStart));
                 } else if (cur.IsStateChange.IsDespawn())
                 {
-                    dc.Add(new Tuple<long, long>(cur.Time - log.GetBossData().GetFirstAware(), next.Time - log.GetBossData().GetFirstAware()));
+                    dc.Add(new Tuple<long, long>(cur.Time - log.GetFightData().FightStart, next.Time - log.GetFightData().FightStart));
                 }
             }
             // check last value
@@ -301,49 +262,48 @@ namespace LuckParser.Models.ParseModels
                 CombatItem cur = status.Last();
                 if (cur.IsStateChange.IsDown())
                 {
-                    down.Add(new Tuple<long, long>(cur.Time - log.GetBossData().GetFirstAware(), log.GetBossData().GetAwareDuration()));
+                    down.Add(new Tuple<long, long>(cur.Time - log.GetFightData().FightStart, log.GetFightData().FightDuration));
                 }
                 else if (cur.IsStateChange.IsDead())
                 {
-                    dead.Add(new Tuple<long, long>(cur.Time - log.GetBossData().GetFirstAware(), log.GetBossData().GetAwareDuration()));
+                    dead.Add(new Tuple<long, long>(cur.Time - log.GetFightData().FightStart, log.GetFightData().FightDuration));
                 }
                 else if (cur.IsStateChange.IsDespawn())
                 {
-                    dc.Add(new Tuple<long, long>(cur.Time - log.GetBossData().GetFirstAware(), log.GetBossData().GetAwareDuration()));
+                    dc.Add(new Tuple<long, long>(cur.Time - log.GetFightData().FightStart, log.GetFightData().FightDuration));
                 }
             }
-            Replay.SetStatus(down, dead, dc);
+            CombatReplay.SetStatus(down, dead, dc);
             // Boss related stuff
-            log.GetBossData().GetBossBehavior().GetAdditionalPlayerData(Replay, this, log);
+            log.GetFightData().Logic.GetAdditionalPlayerData(CombatReplay, this, log);
         }
 
         protected override void SetCombatReplayIcon(ParsedLog log)
         {
-            Replay.SetIcon(HTMLHelper.GetLink(GetProf()));
+            CombatReplay.SetIcon(HTMLHelper.GetLink(Prof));
         }
 
         public void AddMechanics(ParsedLog log)
         {
             MechanicData mechData = log.GetMechanicData();
-            BossData bossData = log.GetBossData();
+            FightData bossData = log.GetFightData();
             CombatData combatData = log.GetCombatData();
-            List<Mechanic> bossMechanics = bossData.GetBossBehavior().GetMechanics();
-            long start = bossData.GetFirstAware();
-            long end = bossData.GetLastAware();
+            List<Mechanic> bossMechanics = bossData.Logic.GetMechanics();
+            long start = bossData.FightStart;
+            long end = bossData.FightEnd;
             // Player status
-            List<Mechanic> playerStatus = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerStatus).ToList();
-            foreach (Mechanic mech in playerStatus)
+            foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerStatus))
             {
                 List<CombatItem> toUse = new List<CombatItem>();
                 switch (mech.GetSkill()) {
                     case -2:
-                        toUse = combatData.GetStates(GetInstid(), ParseEnum.StateChange.ChangeDead, start, end);                 
+                        toUse = combatData.GetStates(InstID, ParseEnum.StateChange.ChangeDead, start, end);                 
                         break;
                     case -3:
-                        toUse = combatData.GetStates(GetInstid(), ParseEnum.StateChange.ChangeDown, start, end);
+                        toUse = combatData.GetStates(InstID, ParseEnum.StateChange.ChangeDown, start, end);
                         break;
                     case SkillItem.ResurrectId:
-                        toUse = log.GetCastData(GetInstid()).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.IsCasting()).ToList();
+                        toUse = log.GetCastData(InstID).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.IsCasting()).ToList();
                         break;
                 }
                 foreach (CombatItem pnt in toUse)
@@ -353,9 +313,8 @@ namespace LuckParser.Models.ParseModels
 
             }
             //Player hit
-            List<DamageLog> dls = GetDamageTakenLogs(log, 0, bossData.GetAwareDuration());
-            List<Mechanic> skillOnPlayer = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.SkillOnPlayer).ToList();
-            foreach (Mechanic mech in skillOnPlayer)
+            List<DamageLog> dls = GetDamageTakenLogs(log, 0, bossData.FightDuration);
+            foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.SkillOnPlayer))
             {
                 Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
                 foreach (DamageLog dLog in dls)
@@ -372,8 +331,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             // Player boon
-            List<Mechanic> playerBoon = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerBoon || x.GetMechType() == Mechanic.MechType.PlayerOnPlayer || x.GetMechType() == Mechanic.MechType.PlayerBoonRemove).ToList();
-            foreach (Mechanic mech in playerBoon)
+            foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerBoon || x.GetMechType() == Mechanic.MechType.PlayerOnPlayer || x.GetMechType() == Mechanic.MechType.PlayerBoonRemove))
             {
                 Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
                 foreach (CombatItem c in log.GetBoonData(mech.GetSkill()))
@@ -384,33 +342,32 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (mech.GetMechType() == Mechanic.MechType.PlayerBoonRemove)
                     {
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual && GetInstid() == c.SrcInstid)
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual && InstID == c.SrcInstid)
                         {
                             mechData[mech].Add(new MechanicLog(c.Time - start, mech, this));
                         }
                     } else
                     {
 
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None && GetInstid() == c.DstInstid)
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None && InstID == c.DstInstid)
                         {
                             mechData[mech].Add(new MechanicLog(c.Time - start, mech, this));
                             if (mech.GetMechType() == Mechanic.MechType.PlayerOnPlayer)
                             {
-                                mechData[mech].Add(new MechanicLog(c.Time - start, mech, log.GetPlayerList().FirstOrDefault(x => x.GetInstid() == c.SrcInstid)));
+                                mechData[mech].Add(new MechanicLog(c.Time - start, mech, log.GetPlayerList().FirstOrDefault(x => x.InstID == c.SrcInstid)));
                             }
                         }
                     }
                 }
             }
             // Hitting enemy
-            List<Mechanic> enemyHit = bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.HitOnEnemy).ToList();
-            foreach (Mechanic mech in enemyHit)
+            foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.HitOnEnemy))
             {
                 Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
                 List<AgentItem> agents = log.GetAgentData().GetAgents((ushort)mech.GetSkill());
                 foreach (AgentItem a in agents)
                 {
-                    foreach (DamageLog dl in GetDamageLogs(0,log,0,log.GetBossData().GetAwareDuration()))
+                    foreach (DamageLog dl in GetDamageLogs(0,log,0,log.GetFightData().FightDuration))
                     {
                         if (dl.GetDstInstidt() != a.InstID || dl.IsCondi() > 0 || dl.GetTime() < a.FirstAware - start || dl.GetTime() > a.LastAware - start || (condition != null && !condition(dl.GetDamage())))
                         {
@@ -427,7 +384,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = log.getBossData().getFirstAware();
             foreach (CombatItem c in log.getHealingData())
             {
-                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())//selecting player or minion as caster
+                if (agent.InstID == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())//selecting player or minion as caster
                 {
                     long time = c.getTime() - time_start;
                     addHealingLog(time, c);
@@ -446,7 +403,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = log.getBossData().getFirstAware();
             foreach (CombatItem c in log.getHealingReceivedData())
             {
-                if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
+                if (agent.InstID == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
                 {//selecting player as target
                     long time = c.getTime() - time_start;
                     addHealingReceivedLog(time, c);

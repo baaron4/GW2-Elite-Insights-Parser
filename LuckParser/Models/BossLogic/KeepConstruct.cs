@@ -39,7 +39,7 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.GetFightData().FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             // Main phases
             List<CastLog> clsKC = castLogs.Where(x => x.GetID() == 35048).ToList();
@@ -49,24 +49,24 @@ namespace LuckParser.Models
                 phases.Add(new PhaseData(start, end));
                 start = end + cl.GetActDur();
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
                 start = fightDuration;
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].SetName("Phase " + i);
+                phases[i].Name = "Phase " + i;
             }
             // add burn phases
             int offset = phases.Count;
-            List<CombatItem> orbItems = log.GetBoonData(35096).Where(x => x.DstInstid == boss.GetInstid()).ToList();
+            List<CombatItem> orbItems = log.GetBoonData(35096).Where(x => x.DstInstid == boss.InstID).ToList();
             // Get number of orbs and filter the list
             List<CombatItem> orbItemsFiltered = new List<CombatItem>();
             Dictionary<long, int> orbs = new Dictionary<long, int>();
             foreach (CombatItem c in orbItems)
             {
-                long time = c.Time - log.GetBossData().GetFirstAware();
+                long time = c.Time - log.GetFightData().FightStart;
                 if (!orbs.ContainsKey(time))
                 {
                     orbs[time] = 0;
@@ -93,24 +93,24 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    start = c.Time - log.GetBossData().GetFirstAware();
+                    start = c.Time - log.GetFightData().FightStart;
                 }
                 else
                 {
-                    end = c.Time - log.GetBossData().GetFirstAware();
+                    end = c.Time - log.GetFightData().FightStart;
                     phases.Add(new PhaseData(start, end));
                 }
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
                 start = fightDuration;
             }
             for (int i = offset; i < phases.Count; i++)
             {
-                phases[i].SetName("Burn " + (i - offset + 1) + " (" + orbs[phases[i].GetStart()] + " orbs)");
+                phases[i].Name = "Burn " + (i - offset + 1) + " (" + orbs[phases[i].Start] + " orbs)";
             }
-            phases.Sort((x, y) => (x.GetStart() < y.GetStart()) ? -1 : 1);
+            phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
             return phases;
         }
 
@@ -167,17 +167,17 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // Bombs
-            List<CombatItem> xeraFury = GetFilteredList(log, 35103, p.GetInstid());
+            List<CombatItem> xeraFury = GetFilteredList(log, 35103, p.InstID);
             int xeraFuryStart = 0;
             foreach (CombatItem c in xeraFury)
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    xeraFuryStart = (int)(c.Time - log.GetBossData().GetFirstAware());
+                    xeraFuryStart = (int)(c.Time - log.GetFightData().FightStart);
                 }
                 else
                 {
-                    int xeraFuryEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
+                    int xeraFuryEnd = (int)(c.Time - log.GetFightData().FightStart);
                     replay.AddCircleActor(new CircleActor(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)"));
                     replay.AddCircleActor(new CircleActor(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)"));
                 }

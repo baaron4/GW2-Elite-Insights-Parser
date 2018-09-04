@@ -38,7 +38,7 @@ namespace LuckParser.Models
             return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData bossData)
         {
             SetSuccessOnCombatExit(combatData, logData, bossData, 3);
         }

@@ -42,7 +42,7 @@ namespace LuckParser.Controllers
 
             _statistics = statistics;
 
-            _boonDict = Boon.GetAll().GroupBy(x => x.GetID()).ToDictionary(x => x.Key, x => x.Select(y => y.GetName()).First());
+            _boonDict = Boon.GetAll().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Select(y => y.Name).First());
 
         }
 
@@ -65,7 +65,7 @@ namespace LuckParser.Controllers
 
         private void SetGeneral(JsonLog log)
         {
-            double fightDuration = _log.GetBossData().GetAwareDuration() / 1000.0;
+            double fightDuration = _log.GetFightData().FightDuration / 1000.0;
             var duration = TimeSpan.FromSeconds(fightDuration);
             string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
             if (duration.ToString("hh") != "00")
@@ -74,12 +74,12 @@ namespace LuckParser.Controllers
             }
 
             log.EliteInsightsVersion = Application.ProductVersion;
-            log.ArcVersion = _log.GetLogData().GetBuildVersion();
-            log.RecordedBy = _log.GetLogData().GetPOV().Split(':')[0].TrimEnd('\u0000');
-            log.TimeStart = _log.GetLogData().GetLogStart();
-            log.TimeEnd = _log.GetLogData().GetLogEnd();
+            log.ArcVersion = _log.GetLogData().BuildVersion;
+            log.RecordedBy = _log.GetLogData().PoV.Split(':')[0].TrimEnd('\u0000');
+            log.TimeStart = _log.GetLogData().LogStart;
+            log.TimeEnd = _log.GetLogData().LogEnd;
             log.Duration = durationString;
-            log.Success = _log.GetLogData().GetBosskill();
+            log.Success = _log.GetLogData().Success;
         }
 
         private void SetMechanics(JsonLog log)
@@ -99,7 +99,7 @@ namespace LuckParser.Controllers
                     log.Mechanics[i] = new JsonLog.JsonMechanic
                     {
                         Time = mechanicLogs[i].GetTime(),
-                        Player = mechanicLogs[i].GetPlayer().GetCharacter(),
+                        Player = mechanicLogs[i].GetPlayer().Character,
                         Description = mechanicLogs[i].GetDescription(),
                         Skill = mechanicLogs[i].GetSkill()
                     };
@@ -109,13 +109,13 @@ namespace LuckParser.Controllers
 
         private void SetBoss(JsonLog log)
         {
-            log.Boss.Id = _log.GetBossData().GetID();
-            log.Boss.Name = _log.GetBossData().GetName();
-            log.Boss.TotalHealth = _log.GetBossData().GetHealth();
-            int finalBossHealth = _log.GetBossData().GetHealthOverTime().Count > 0
-                ? _log.GetBossData().GetHealthOverTime().Last().Y
+            log.Boss.Id = _log.GetFightData().ID;
+            log.Boss.Name = _log.GetFightData().Name;
+            log.Boss.TotalHealth = _log.GetFightData().Health;
+            int finalBossHealth = _log.GetFightData().HealthOverTime.Count > 0
+                ? _log.GetFightData().HealthOverTime.Last().Y
                 : 10000;
-            log.Boss.FinalHealth = _log.GetBossData().GetHealth() * (100.0 - finalBossHealth * 0.01);
+            log.Boss.FinalHealth = _log.GetFightData().Health * (100.0 - finalBossHealth * 0.01);
             log.Boss.HealthPercentBurned = 100.0 - finalBossHealth * 0.01;
 
             log.Boss.Dps = BuildDPS(_statistics.BossDps);
@@ -130,15 +130,15 @@ namespace LuckParser.Controllers
             {
                 log.Players.Add(new JsonLog.JsonPlayer
                 {
-                    Character = player.GetCharacter(),
-                    Account = player.GetAccount(),
-                    Condition = player.GetCondition(),
-                    Concentration = player.GetConcentration(),
-                    Healing = player.GetHealing(),
-                    Toughness = player.GetToughness(),
+                    Character = player.Character,
+                    Account = player.Account,
+                    Condition = player.Condition,
+                    Concentration = player.Concentration,
+                    Healing = player.Healing,
+                    Toughness = player.Toughness,
                     Weapons = player.GetWeaponsArray(_log).Where(w => w != null).ToArray(),
-                    Group = player.GetGroup(),
-                    Profession = player.GetProf(),
+                    Group = player.Group,
+                    Profession = player.Prof,
                     Dps = BuildDPS(_statistics.Dps[player]),
                     Stats = BuildStats(_statistics.Stats[player]),
                     Defenses = BuildDefenses(_statistics.Defenses[player]),
@@ -160,7 +160,7 @@ namespace LuckParser.Controllers
                 log.Phases.Add(new JsonLog.JsonPhase
                 {
                     Duration = phase.GetDuration(),
-                    Name = phase.GetName()
+                    Name = phase.Name
                 });
             }
         }
@@ -187,12 +187,12 @@ namespace LuckParser.Controllers
 
             foreach (var playerBoon in value.Generated.Where(x => x.Value > 0))
             {
-                boon.Generated[phase][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                boon.Generated[phase][playerBoon.Key.Character] = playerBoon.Value;
             }
 
             foreach (var playerBoon in value.Overstacked.Where(x => x.Value > 0))
             {
-                boon.Overstacked[phase][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                boon.Overstacked[phase][playerBoon.Key.Character] = playerBoon.Value;
             }
         }
 
