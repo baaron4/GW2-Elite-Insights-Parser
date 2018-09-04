@@ -1606,7 +1606,7 @@ namespace LuckParser.Controllers
                         //foreach pet loop here                        
                         foreach (KeyValuePair<string, Minions> pair in p.GetMinions(_log))
                         {
-                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.GetInstid() + "\">" + pair.Key + "</a></li>");
+                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.InstID + "\">" + pair.Key + "</a></li>");
                         }
                         //inc dmg
                         sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#incDmg" + pid + "\">Damage Taken</a></li>");
@@ -1840,7 +1840,7 @@ namespace LuckParser.Controllers
                         sw.Write("</div>");
                         foreach (KeyValuePair<string, Minions> pair in p.GetMinions(_log))
                         {
-                            string id = pid + "_" + pair.Value.GetInstid();
+                            string id = pid + "_" + pair.Value.InstID;
                             sw.Write("<div class=\"tab-pane fade \" id=\"minion" + id + "\">");
                             {
                                 string bossText = phase.GetRedirection().Count > 0 ? "Adds" : "Boss";
@@ -2324,7 +2324,7 @@ namespace LuckParser.Controllers
         private void _CreateDMGDistTable(Statistics.FinalDPS dps, StreamWriter sw, AbstractMasterPlayer p, Minions minions, bool toBoss, int phaseIndex)
         {
             int totalDamage = toBoss ? dps.BossDamage : dps.AllDamage;
-            string tabid = p.GetInstid() + "_" + phaseIndex + "_" + minions.GetInstid() + (toBoss ? "_boss" : "");
+            string tabid = p.GetInstid() + "_" + phaseIndex + "_" + minions.InstID + (toBoss ? "_boss" : "");
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = minions.GetCastLogs(_log, phase.GetStart(), phase.GetEnd());
             List<DamageLog> damageLogs;
@@ -2340,7 +2340,7 @@ namespace LuckParser.Controllers
             if (totalDamage > 0)
             {
                 string contribution = Math.Round(100.0 * finalTotalDamage / totalDamage,2).ToString();
-                sw.Write("<div>" + minions.GetCharacter() + " did " + contribution + "% of " + p.GetCharacter() + "'s total " + (toBoss ? (phase.GetRedirection().Count > 0 ? "adds " : "boss " ) : "") + "dps</div>");
+                sw.Write("<div>" + minions.Character + " did " + contribution + "% of " + p.GetCharacter() + "'s total " + (toBoss ? (phase.GetRedirection().Count > 0 ? "adds " : "boss " ) : "") + "dps</div>");
             }
             sw.Write("<script>");
             {
@@ -3077,7 +3077,7 @@ namespace LuckParser.Controllers
                 //foreach pet loop here
                 foreach (KeyValuePair<string, Minions> pair in _log.GetBoss().GetMinions(_log))
                 {
-                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.GetInstid() + "\">" + pair.Key + "</a></li>");
+                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.InstID + "\">" + pair.Key + "</a></li>");
                 }
             }
             sw.Write("</ul>");
@@ -3191,7 +3191,7 @@ namespace LuckParser.Controllers
                 sw.Write("</div>");
                 foreach (KeyValuePair<string, Minions> pair in _log.GetBoss().GetMinions(_log))
                 {
-                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + pid + "_" + pair.Value.GetInstid() + "\">");
+                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + pid + "_" + pair.Value.InstID + "\">");
                     {
                         CreateDMGBossDistTable(sw, _log.GetBoss(), pair.Value, phaseIndex);
                     }

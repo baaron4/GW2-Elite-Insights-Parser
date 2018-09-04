@@ -6,13 +6,21 @@ namespace LuckParser.Models.ParseModels
 {
     public class Minions : List<Minion>
     {
-        private readonly int _instid;
+        public readonly int InstID;
         private readonly List<DamageLog> _damageLogs = new List<DamageLog>();
         private List<DamageLog> _filteredDamageLogs = new List<DamageLog>();
         private readonly List<CastLog> _castLogs = new List<CastLog>();
+        public string Character
+        {
+            get
+            {
+                return Count > 0 ? this[0].GetCharacter() : "";
+            }
+        }
+
         public Minions(int instid)
         {
-            _instid = instid;
+            InstID = instid;
         }
 
         public List<DamageLog> GetDamageLogs(int instidFilter, ParsedLog log, long start, long end)
@@ -67,20 +75,6 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             return _castLogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
-        }
-
-        public int GetInstid()
-        {
-            return _instid;
-        }
-
-        public string GetCharacter()
-        {
-            if (Count > 0)
-            {
-                return this[0].GetCharacter();
-            }
-            return "";
         }
 
     }
