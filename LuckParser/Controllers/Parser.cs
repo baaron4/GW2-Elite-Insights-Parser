@@ -498,7 +498,7 @@ namespace LuckParser.Controllers
                     if (_bossData.GetAgent() == 0)
                     {
                         _bossData.SetAgent(NPC.Agent);
-                        _bossData.SetInstid(NPC.InstID);
+                        _bossData.InstID = NPC.InstID;
                         _bossData.SetName(NPC.Name);
                         _bossData.SetTough(NPC.Toughness);
                     }
@@ -507,7 +507,7 @@ namespace LuckParser.Controllers
             }
             if (multipleBoss.Count > 1)
             {
-                _agentData.CleanInstid(_bossData.GetInstid());
+                _agentData.CleanInstid(_bossData.InstID);
             }
             AgentItem bossAgent = _agentData.GetAgent(_bossData.GetAgent());
             _boss = new Boss(bossAgent);
@@ -529,7 +529,7 @@ namespace LuckParser.Controllers
             // Grab values threw combat data
             foreach (CombatItem c in _combatData)
             {
-                if (c.SrcInstid == _bossData.GetInstid() && c.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)//max health update
+                if (c.SrcInstid == _bossData.InstID && c.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)//max health update
                 {
                     _bossData.SetHealth((int)c.DstAgent);
 
@@ -556,7 +556,7 @@ namespace LuckParser.Controllers
                         break;
                     case ParseEnum.StateChange.HealthUpdate:
                         //set health update
-                        if (c.SrcInstid == _bossData.GetInstid())
+                        if (c.SrcInstid == _bossData.InstID)
                         {
                             bossHealthOverTime.Add(new Point ( (int)(c.Time - _bossData.GetFirstAware()), (int)c.DstAgent ));
                         }
@@ -580,16 +580,16 @@ namespace LuckParser.Controllers
                         {
                             if (c.SrcInstid == xera2Instid)
                             {
-                                c.SrcInstid = _bossData.GetInstid();
+                                c.SrcInstid = _bossData.InstID;
                                 c.SrcAgent = _bossData.GetAgent();
                             }
                             if (c.DstInstid == xera2Instid)
                             {
-                                c.DstInstid = _bossData.GetInstid();
+                                c.DstInstid = _bossData.InstID;
                                 c.DstAgent = _bossData.GetAgent();
                             }
                             //set health update
-                            if (c.SrcInstid == _bossData.GetInstid() && c.IsStateChange == ParseEnum.StateChange.HealthUpdate)
+                            if (c.SrcInstid == _bossData.InstID && c.IsStateChange == ParseEnum.StateChange.HealthUpdate)
                             {
                                 bossHealthOverTime.Add(new Point ( (int)(c.Time - _bossData.GetFirstAware()), (int)c.DstAgent ));
                             }
@@ -616,13 +616,13 @@ namespace LuckParser.Controllers
                         {
                             if (c.SrcInstid == deimos2Instid)
                             {
-                                c.SrcInstid = _bossData.GetInstid();
+                                c.SrcInstid = _bossData.InstID;
                                 c.SrcAgent = _bossData.GetAgent();
 
                             }
                             if (c.DstInstid == deimos2Instid)
                             {
-                                c.DstInstid = _bossData.GetInstid();
+                                c.DstInstid = _bossData.InstID;
                                 c.DstAgent = _bossData.GetAgent();
                             }
                         }

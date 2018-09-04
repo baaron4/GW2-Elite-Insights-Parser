@@ -58,7 +58,7 @@ namespace LuckParser.Models
         {
             // check reward
             CombatItem reward = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
-            CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.GetInstid()).LastOrDefault(x => x.Value > 0);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.InstID).LastOrDefault(x => x.Value > 0);
             if (lastDamageTaken != null)
             {
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)

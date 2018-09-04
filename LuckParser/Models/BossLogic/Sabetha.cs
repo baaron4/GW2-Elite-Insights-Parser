@@ -40,7 +40,7 @@ namespace LuckParser.Models
             long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // Invul check
-            List<CombatItem> invulsSab = GetFilteredList(log, 757, boss.GetInstid());
+            List<CombatItem> invulsSab = GetFilteredList(log, 757, boss.InstID);
             for (int i = 0; i < invulsSab.Count; i++)
             {
                 CombatItem c = invulsSab[i];
@@ -110,7 +110,7 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // timed bombs
-            List<CombatItem> timedBombs = log.GetBoonData(31485).Where(x => x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
+            List<CombatItem> timedBombs = log.GetBoonData(31485).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in timedBombs)
             {
                 int start = (int)(c.Time - log.GetBossData().GetFirstAware());
@@ -119,7 +119,7 @@ namespace LuckParser.Models
                 replay.AddCircleActor(new CircleActor(true, end, 280, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
             }
             // Sapper bombs
-            List<CombatItem> sapperBombs = GetFilteredList(log, 31473, p.GetInstid());
+            List<CombatItem> sapperBombs = GetFilteredList(log, 31473, p.InstID);
             int sapperStart = 0;
             foreach (CombatItem c in sapperBombs)
             {

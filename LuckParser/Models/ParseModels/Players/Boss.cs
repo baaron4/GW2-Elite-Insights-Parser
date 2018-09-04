@@ -12,7 +12,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         private List<PhaseData> _phases = new List<PhaseData>();
-        public List<long> PhaseData = new List<long>();
+        public readonly List<long> PhaseData = new List<long>();
         private CombatReplayMap _map;
         public readonly List<Mob> ThrashMobs = new List<Mob>();
 
@@ -98,7 +98,7 @@ namespace LuckParser.Models.ParseModels
                     AbstractMasterPlayer amp = null;
                     if (m.GetMechType() == Mechanic.MechType.EnemyBoon && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
-                        if (c.DstInstid == bossData.GetInstid())
+                        if (c.DstInstid == bossData.InstID)
                         {
                             amp = this;
                         }
@@ -114,7 +114,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     else if (m.GetMechType() == Mechanic.MechType.EnemyBoonStrip && c.IsBuffRemove == ParseEnum.BuffRemove.Manual)
                     {
-                        if (c.SrcInstid == bossData.GetInstid())
+                        if (c.SrcInstid == bossData.InstID)
                         {
                             amp = this;
                         }
@@ -148,7 +148,7 @@ namespace LuckParser.Models.ParseModels
                     AbstractMasterPlayer amp = null;
                     if ((m.GetMechType() == Mechanic.MechType.EnemyCastStart && c.IsActivation.IsCasting()) || (m.GetMechType() == Mechanic.MechType.EnemyCastEnd && !c.IsActivation.IsCasting()))
                     {
-                        if (c.SrcInstid == bossData.GetInstid())
+                        if (c.SrcInstid == bossData.InstID)
                         {
                             amp = this;
                         }

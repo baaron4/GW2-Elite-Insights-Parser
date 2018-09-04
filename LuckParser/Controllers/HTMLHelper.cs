@@ -185,8 +185,8 @@ namespace LuckParser.Controllers
             sw.Write("<tr>");
             {
                 sw.Write("<td>" + player.Group + "</td>");
-                sw.Write("<td>" + "<img src=\"" + GetLink(player.GetProf()) + "\" alt=\"" + player.GetProf() + "\" height=\"20\" width=\"20\" >" + "<span style=\"display:none\">" + player.GetProf() + "</span>" + "</td>");
-                sw.Write("<td>" + player.GetCharacter() + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"20\" width=\"20\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
+                sw.Write("<td>" + player.Character + "</td>");
                 foreach (Boon boon in listToUse)
                 {
                     if (boonArray.ContainsKey(boon.GetID()))
@@ -601,7 +601,7 @@ namespace LuckParser.Controllers
                 }
             }
             sw.Write("],");
-            string color = GetLink("Color-" + p.GetProf() + ( total? "-Total" : ( cleave? "-NonBoss": "")));
+            string color = GetLink("Color-" + p.Prof + ( total? "-Total" : ( cleave? "-NonBoss": "")));
             sw.Write(" mode: 'lines'," +
                    "line: {shape: 'spline',color:'" + color + "'}," +
                    "yaxis: 'y3',");
@@ -611,7 +611,7 @@ namespace LuckParser.Controllers
             }
             // "legendgroup: 'Damage'," +
             sw.Write("name: '" + name+"'," +
-                "legendgroup: '" + p.GetCharacter() + (s10 ? "10s" : (s30 ? "30s" : ""))+"'");
+                "legendgroup: '" + p.Character + (s10 ? "10s" : (s30 ? "30s" : ""))+"'");
         }
 
         public static int WriteDPSPlots(StreamWriter sw, List<Point> graphdata, List<Point> totalData = null)
@@ -824,11 +824,11 @@ namespace LuckParser.Controllers
                                 sw.Write("<h3>Group " + group + "</h3>");
                                 foreach (Player p in log.GetPlayerList().Where(x => x.Group == group))
                                 {
-                                    sw.Write("<label id=\"id" + p.GetInstid() + "\" style=\"width: 150px;\" onclick=\"selectActor(" + p.GetInstid() + ")\"  class=\"btn btn-dark\">" +
+                                    sw.Write("<label id=\"id" + p.InstID + "\" style=\"width: 150px;\" onclick=\"selectActor(" + p.InstID + ")\"  class=\"btn btn-dark\">" +
                                         "<input class=\"invisible\" type=\"radio\" autocomplete=\"off\">" +
-                                        p.GetCharacter().Substring(0, Math.Min(10, p.GetCharacter().Length))
-                                        + " <img src=\"" + GetLink(p.GetProf())
-                                            + "\" alt=\"" + p.GetProf()
+                                        p.Character.Substring(0, Math.Min(10, p.Character.Length))
+                                        + " <img src=\"" + GetLink(p.Prof)
+                                            + "\" alt=\"" + p.Prof
                                             + "\" height=\"18\" width=\"18\" >" +
                                         "</label >");
                                 }
@@ -979,7 +979,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("{");
                 sw.Write("var p = new mainActor(" + p.Group + ",'" + p.CombatReplay.GetIcon() + "');");
-                sw.Write("data.set(" + p.GetInstid() + ",p);");
+                sw.Write("data.set(" + p.InstID + ",p);");
                 sw.Write("p.pos = [");
                 foreach (Point3D pos in p.CombatReplay.GetPositions())
                 {
@@ -1040,7 +1040,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("{");
                 sw.Write("var p = new secondaryActor('" + mob.CombatReplay.GetIcon() + "'," + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "," + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate + ");");
-                sw.Write("secondaryData.set('" + mob.GetInstid() + "_" + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "_" + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate + "',p);");
+                sw.Write("secondaryData.set('" + mob.InstID + "_" + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "_" + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate + "',p);");
                 sw.Write("p.pos = [");
                 foreach (Point3D pos in mob.CombatReplay.GetPositions())
                 {
@@ -1115,7 +1115,7 @@ namespace LuckParser.Controllers
                     sw.Write("{");
                     sw.Write("var a = new circleActor("+a.GetRadius()+","+(a.IsFilled() ? "true" : "false") + ","+a.GetGrowing() / pollingRate + ","+a.GetColor()+","+a.GetLifespan().Item1/pollingRate+","+ a.GetLifespan().Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos ="+a.GetPosition(mob.GetInstid() + "_" + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "_" + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate, map)+";");
+                    sw.Write("a.pos ="+a.GetPosition(mob.InstID + "_" + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "_" + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate, map)+";");
                     sw.Write("}");
                 }
             }
@@ -1127,7 +1127,7 @@ namespace LuckParser.Controllers
                     sw.Write("{");
                     sw.Write("var a = new circleActor(" + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(player.GetInstid().ToString(), map) + ";");
+                    sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
                     sw.Write("}");
                 }
             }
@@ -1136,7 +1136,7 @@ namespace LuckParser.Controllers
                 sw.Write("{");
                 sw.Write("var a = new circleActor(" + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                 sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.GetPosition(log.GetBossData().GetInstid().ToString(), map) + ";");
+                sw.Write("a.pos =" + a.GetPosition(log.GetBossData().InstID.ToString(), map) + ";");
                 sw.Write("}");
 
             }
@@ -1196,7 +1196,7 @@ namespace LuckParser.Controllers
                     sw.Write("{");
                     sw.Write("var a = new doughnutActor(" + a.GetInnerRadius() + "," + a.GetOuterRadius() + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(mob.GetInstid() + "_" + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "_" + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate, map) + ";");
+                    sw.Write("a.pos =" + a.GetPosition(mob.InstID + "_" + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "_" + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate, map) + ";");
                     sw.Write("}");
                 }
             }
@@ -1208,7 +1208,7 @@ namespace LuckParser.Controllers
                     sw.Write("{");
                     sw.Write("var a = new doughnutActor(" + a.GetInnerRadius() + "," + a.GetOuterRadius() + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(player.GetInstid().ToString(), map) + ";");
+                    sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
                     sw.Write("}");
                 }
             }
@@ -1217,7 +1217,7 @@ namespace LuckParser.Controllers
                 sw.Write("{");
                 sw.Write("var a = new doughnutActor(" + a.GetInnerRadius() + "," + a.GetOuterRadius() + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                 sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.GetPosition(log.GetBossData().GetInstid().ToString(), map) + ";");
+                sw.Write("a.pos =" + a.GetPosition(log.GetBossData().InstID.ToString(), map) + ";");
                 sw.Write("}");
 
             }

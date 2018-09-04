@@ -76,7 +76,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     foreach (AbstractMasterPlayer p in this[m].Where(x => phase.InInterval(x.GetTime())).Select(x => x.GetPlayer()).Distinct())
                     {
-                        if (toAdd.FirstOrDefault(x => x.GetInstid() == p.GetInstid()) == null)
+                        if (toAdd.FirstOrDefault(x => x.InstID == p.InstID) == null)
                         {
                             toAdd.Add(p);
                         }

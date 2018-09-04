@@ -14,7 +14,7 @@ namespace LuckParser.Models.ParseModels
         {
             get
             {
-                return Count > 0 ? this[0].GetCharacter() : "";
+                return Count > 0 ? this[0].Character : "";
             }
         }
 
@@ -34,7 +34,7 @@ namespace LuckParser.Models.ParseModels
             }
             if (_filteredDamageLogs.Count == 0)
             {
-                _filteredDamageLogs = _damageLogs.Where(x => x.GetDstInstidt() == log.GetBossData().GetInstid()).ToList();
+                _filteredDamageLogs = _damageLogs.Where(x => x.GetDstInstidt() == log.GetBossData().InstID).ToList();
             }
             if (instidFilter > 0)
             {

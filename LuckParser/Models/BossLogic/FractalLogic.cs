@@ -28,7 +28,7 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
-            List<CombatItem> invulsBoss = GetFilteredList(log,762,boss.GetInstid());        
+            List<CombatItem> invulsBoss = GetFilteredList(log,762,boss.InstID);        
             for (int i = 0; i < invulsBoss.Count; i++)
             {
                 CombatItem c = invulsBoss[i];
@@ -60,8 +60,8 @@ namespace LuckParser.Models
 
         protected void SetSuccessOnCombatExit(CombatData combatData, LogData logData, BossData bossData, int combatExitCount)
         {
-            int combatExits = combatData.Count(x => x.SrcInstid == bossData.GetInstid() && x.IsStateChange == ParseEnum.StateChange.ExitCombat);
-            CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.GetInstid()).LastOrDefault(x => x.Value > 0);
+            int combatExits = combatData.Count(x => x.SrcInstid == bossData.InstID && x.IsStateChange == ParseEnum.StateChange.ExitCombat);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.InstID).LastOrDefault(x => x.Value > 0);
             if (combatExits == combatExitCount && lastDamageTaken != null)
             {
                 logData.SetBossKill(true);
@@ -73,7 +73,7 @@ namespace LuckParser.Models
         {
             // check reward
             CombatItem reward = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
-            CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.GetInstid()).LastOrDefault(x => x.Value > 0);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.InstID).LastOrDefault(x => x.Value > 0);
             if (lastDamageTaken != null)
             {
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)

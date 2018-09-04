@@ -73,7 +73,7 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // Poison
-            List<CombatItem> poisonToDrop = GetFilteredList(log, 34387, p.GetInstid());
+            List<CombatItem> poisonToDrop = GetFilteredList(log, 34387, p.InstID);
             int toDropStart = 0;
             foreach (CombatItem c in poisonToDrop)
             {
@@ -93,7 +93,7 @@ namespace LuckParser.Models
                 }
             }
             // Transformation
-            List<CombatItem> slubTrans = GetFilteredList(log, 34362, p.GetInstid());
+            List<CombatItem> slubTrans = GetFilteredList(log, 34362, p.InstID);
             int transfoStart = 0;
             foreach (CombatItem c in slubTrans)
             {
@@ -108,7 +108,7 @@ namespace LuckParser.Models
                 }
             }
             // fixated
-            List<CombatItem> fixatedSloth = GetFilteredList(log, 34508, p.GetInstid());
+            List<CombatItem> fixatedSloth = GetFilteredList(log, 34508, p.InstID);
             int fixatedSlothStart = 0;
             foreach (CombatItem c in fixatedSloth)
             {

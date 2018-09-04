@@ -60,7 +60,7 @@ namespace LuckParser.Models
             }
             // add burn phases
             int offset = phases.Count;
-            List<CombatItem> orbItems = log.GetBoonData(35096).Where(x => x.DstInstid == boss.GetInstid()).ToList();
+            List<CombatItem> orbItems = log.GetBoonData(35096).Where(x => x.DstInstid == boss.InstID).ToList();
             // Get number of orbs and filter the list
             List<CombatItem> orbItemsFiltered = new List<CombatItem>();
             Dictionary<long, int> orbs = new Dictionary<long, int>();
@@ -167,7 +167,7 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // Bombs
-            List<CombatItem> xeraFury = GetFilteredList(log, 35103, p.GetInstid());
+            List<CombatItem> xeraFury = GetFilteredList(log, 35103, p.InstID);
             int xeraFuryStart = 0;
             foreach (CombatItem c in xeraFury)
             {

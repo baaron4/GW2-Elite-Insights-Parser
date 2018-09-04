@@ -46,7 +46,7 @@ namespace LuckParser.Models
             long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // Invul check
-            List<CombatItem> invulsVG = GetFilteredList(log, 757, boss.GetInstid());
+            List<CombatItem> invulsVG = GetFilteredList(log, 757, boss.InstID);
             for (int i = 0; i < invulsVG.Count; i++)
             {
                 CombatItem c = invulsVG[i];

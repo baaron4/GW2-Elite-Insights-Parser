@@ -9,7 +9,7 @@ namespace LuckParser.Models.ParseModels
     {
         // Fields
         private ulong _agent;
-        private ushort _instid ;
+        public ushort InstID { get; set; }
         private readonly BossLogic _logic;
         private long _firstAware;
         private long _lastAware = long.MaxValue;
@@ -100,7 +100,7 @@ namespace LuckParser.Models.ParseModels
         {
             String[] array = new String[7];
             array[0] = _agent.ToString();
-            array[1] = _instid.ToString();
+            array[1] = InstID.ToString();
             array[2] = _firstAware.ToString();
             array[3] = _lastAware.ToString();
             array[4] = _id.ToString();
@@ -118,11 +118,6 @@ namespace LuckParser.Models.ParseModels
         public BossLogic GetBossBehavior()
         {
             return _logic;
-        }
-
-        public ushort GetInstid()
-        {
-            return _instid;
         }
 
         public long GetFirstAware()
@@ -167,11 +162,6 @@ namespace LuckParser.Models.ParseModels
         public void SetAgent(ulong agent)
         {
             _agent = agent;
-        }
-
-        public void SetInstid(ushort instid)
-        {
-            _instid = instid;
         }
 
         public void SetFirstAware(long firstAware)

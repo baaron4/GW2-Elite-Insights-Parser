@@ -46,7 +46,7 @@ namespace LuckParser.Models
             long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // Determined + additional data on inst change
-            CombatItem invulDei = log.GetBoonData(762).Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == boss.GetInstid());
+            CombatItem invulDei = log.GetBoonData(762).Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == boss.InstID);
             if (invulDei != null)
             {
                 end = invulDei.Time - log.GetBossData().GetFirstAware();
@@ -142,7 +142,7 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // teleport zone
-            List<CombatItem> tpDeimos = GetFilteredList(log, 37730, p.GetInstid());
+            List<CombatItem> tpDeimos = GetFilteredList(log, 37730, p.InstID);
             int tpStart = 0;
             foreach (CombatItem c in tpDeimos)
             {

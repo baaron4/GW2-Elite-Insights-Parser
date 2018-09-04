@@ -217,7 +217,7 @@ namespace LuckParser.Controllers
                 {
                     build += " Toughness:" + player.Toughness;
                 }
-                WriteLine(new [] { player.Group.ToString(), player.GetProf(),build,player.GetCharacter(), player.Account.TrimStart(':') ,wep[0],wep[1],wep[2],wep[3],
+                WriteLine(new [] { player.Group.ToString(), player.Prof,build,player.Character, player.Account.TrimStart(':') ,wep[0],wep[1],wep[2],wep[3],
                 dps.BossDps.ToString(),dps.BossDamage.ToString(),dps.BossPowerDps.ToString(),dps.BossPowerDamage.ToString(),dps.BossCondiDps.ToString(),dps.BossCondiDamage.ToString(),
                 dps.AllDps.ToString(),dps.AllDamage.ToString(),dps.AllPowerDps.ToString(),dps.AllPowerDamage.ToString(),dps.AllCondiDps.ToString(),dps.AllCondiDamage.ToString(),
                 stats.DownCount.ToString(), timedead.Minutes + " m " + timedead.Seconds + " s",Math.Round((timedead.TotalSeconds / fightDuration) * 100,1) +"%"});
@@ -247,7 +247,7 @@ namespace LuckParser.Controllers
                 Statistics.FinalStats stats = _statistics.Stats[player][phaseIndex];
                 Statistics.FinalDPS dps = _statistics.Dps[player][phaseIndex];
 
-                WriteLine(new [] { player.Group.ToString(), player.GetProf(), player.GetCharacter(),
+                WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 Math.Round((Double)(stats.CriticalRateBoss) / stats.CritablePowerLoopCountBoss * 100,1).ToString(), stats.CriticalRateBoss.ToString(),stats.CriticalDmgBoss.ToString(),
                 Math.Round((Double)(stats.ScholarRateBoss) / stats.PowerLoopCountBoss * 100,1).ToString(),stats.ScholarRateBoss.ToString(),stats.ScholarDmgBoss.ToString(),Math.Round(100.0 * (dps.PlayerBossPowerDamage / (Double)(dps.PlayerBossPowerDamage - stats.ScholarDmgBoss) - 1.0), 3).ToString(),
                 Math.Round((Double)(stats.MovingRateBoss) / stats.PowerLoopCountBoss * 100,1).ToString(),stats.MovingRateBoss.ToString(),stats.MovingDamageBoss.ToString(),Math.Round(100.0 * (dps.PlayerBossPowerDamage / (Double)(dps.PlayerBossPowerDamage - stats.MovingDamageBoss) - 1.0), 3).ToString(),
@@ -282,7 +282,7 @@ namespace LuckParser.Controllers
                 Statistics.FinalStats stats = _statistics.Stats[player][phaseIndex];
                 Statistics.FinalDPS dps = _statistics.Dps[player][phaseIndex];
 
-                WriteLine(new [] { player.Group.ToString(), player.GetProf(), player.GetCharacter(),
+                WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 Math.Round((Double)(stats.CriticalRate) / stats.CritablePowerLoopCount * 100,1).ToString(), stats.CriticalRate.ToString(),stats.CriticalDmg.ToString(),
                 Math.Round((Double)(stats.ScholarRate) / stats.PowerLoopCount * 100,1).ToString(),stats.ScholarRate.ToString(),stats.ScholarDmg.ToString(),Math.Round(100.0 * (dps.PlayerPowerDamage / (Double)(dps.PlayerPowerDamage - stats.ScholarDmg) - 1.0), 3).ToString(),
                 Math.Round((Double)(stats.MovingRate) / stats.PowerLoopCount * 100,1).ToString(),stats.MovingRate.ToString(),stats.MovingDamage.ToString(),Math.Round(100.0 * (dps.PlayerPowerDamage / (Double)(dps.PlayerPowerDamage - stats.MovingDamage) - 1.0), 3).ToString(),
@@ -310,7 +310,7 @@ namespace LuckParser.Controllers
                 Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
                 Statistics.FinalStats stats = _statistics.Stats[player][phaseIndex];
 
-                WriteLine(new [] { player.Group.ToString(), player.GetProf(), player.GetCharacter(),
+                WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 defenses.DamageTaken.ToString(),defenses.DamageBarrier.ToString(),defenses.BlockedCount.ToString(),defenses.InvulnedCount.ToString(),defenses.EvadedCount.ToString(),stats.DodgeCount.ToString() });
                 count++;
             }
@@ -330,7 +330,7 @@ namespace LuckParser.Controllers
             {
                 Statistics.FinalSupport support = _statistics.Support[player][phaseIndex];
 
-                WriteLine(new [] { player.Group.ToString(), player.GetProf(), player.GetCharacter(),
+                WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 support.CondiCleanse.ToString(),support.CondiCleanseTime.ToString(),support.Resurrects.ToString(),support.ResurrectTime.ToString() });
                 count++;
             }
@@ -366,7 +366,7 @@ namespace LuckParser.Controllers
                 }
                 avgBoons /= fightDuration;
 
-                WriteCell(player.GetCharacter());
+                WriteCell(player.Character);
                 WriteCell(Math.Round(avgBoons, 1).ToString());
                 foreach (Boon boon in listToUse)
                 {
@@ -414,7 +414,7 @@ namespace LuckParser.Controllers
             {
                 Dictionary<long, Statistics.FinalBoonUptime> uptimes = _statistics.SelfBoons[player][phaseIndex];
 
-                WriteCell(player.GetCharacter());
+                WriteCell(player.Character);
                 foreach (Boon boon in listToUse)
                 {
                     string rate = "0";
@@ -463,7 +463,7 @@ namespace LuckParser.Controllers
                 Dictionary<long, Statistics.FinalBoonUptime> boons =
                             _statistics.GroupBoons[player][phaseIndex];
 
-                WriteCell(player.GetCharacter());
+                WriteCell(player.Character);
                 foreach (Boon boon in listToUse)
                 {
                     string rate = "0";
@@ -512,7 +512,7 @@ namespace LuckParser.Controllers
                 Dictionary<long, Statistics.FinalBoonUptime> boons =
                               _statistics.OffGroupBoons[player][phaseIndex];
 
-                WriteCell(player.GetCharacter());
+                WriteCell(player.Character);
                 foreach (Boon boon in listToUse)
                 {
                     string rate = "0";
@@ -560,7 +560,7 @@ namespace LuckParser.Controllers
             {
                 Dictionary<long, Statistics.FinalBoonUptime> boons =
                             _statistics.SquadBoons[player][phaseIndex];
-                WriteCell(player.GetCharacter());
+                WriteCell(player.Character);
                 foreach (Boon boon in listToUse)
                 {
                     string rate = "0";
@@ -610,10 +610,10 @@ namespace LuckParser.Controllers
 
                 foreach (Player p in _log.GetPlayerList())
                 {
-                    WriteCell(p.GetCharacter());
+                    WriteCell(p.Character);
                     foreach (Mechanic mech in presMech)
                     {
-                        int count = _log.GetMechanicData()[mech].Count(x => x.GetPlayer().GetInstid() == p.GetInstid() && phase.InInterval(x.GetTime()));
+                        int count = _log.GetMechanicData()[mech].Count(x => x.GetPlayer().InstID == p.InstID && phase.InInterval(x.GetTime()));
                         WriteCell(count.ToString());
                     }
                     NewLine();
@@ -648,7 +648,7 @@ namespace LuckParser.Controllers
             WriteCell("Player");
             foreach (MechanicLog m in mLogs)
             {
-                WriteCell(m.GetPlayer().GetCharacter());
+                WriteCell(m.GetPlayer().Character);
             }
             NewLine();
             count++;
@@ -693,7 +693,7 @@ namespace LuckParser.Controllers
 
             NewLine();
             int count = 0;
-            WriteCell(boss.GetCharacter());
+            WriteCell(boss.Character);
             WriteCell(Math.Round(avgCondis, 1).ToString());
             foreach (Boon boon in _statistics.PresentConditions)
             {
@@ -732,7 +732,7 @@ namespace LuckParser.Controllers
 
             NewLine();
             int count = 0;
-            WriteCell(boss.GetCharacter());
+            WriteCell(boss.Character);
             foreach (Boon boon in _statistics.PresentBoons)
             {
                 if (boon.GetBoonType() == Boon.BoonType.Duration)
@@ -771,7 +771,7 @@ namespace LuckParser.Controllers
             NewLine();
             foreach (Player player in _log.GetPlayerList())
             {
-                WriteCell(player.GetCharacter());
+                WriteCell(player.Character);
                 foreach (Boon boon in _statistics.PresentConditions)
                 {
                     if (boon.GetName() == "Retaliation")

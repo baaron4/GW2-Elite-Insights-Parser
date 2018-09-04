@@ -45,8 +45,8 @@ namespace LuckParser.Controllers
             {
                 Statistics.FinalDPS dps = statistics.Dps[p][0];
                 sw.Write(p.Group + delimiter + // group
-                        p.GetProf() + delimiter +  // class
-                        p.GetCharacter() + delimiter + // character
+                        p.Prof + delimiter +  // class
+                        p.Character + delimiter + // character
                         p.Account.Substring(1) + delimiter + // account
                         dps.BossDps + delimiter + // dps
                         dps.BossPowerDps + delimiter + // physical

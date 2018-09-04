@@ -142,8 +142,8 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // Corruption
-            List<CombatItem> corruptedMatthias = GetFilteredList(log, 34416, p.GetInstid());
-            corruptedMatthias.AddRange(GetFilteredList(log, 34473, p.GetInstid()));
+            List<CombatItem> corruptedMatthias = GetFilteredList(log, 34416, p.InstID);
+            corruptedMatthias.AddRange(GetFilteredList(log, 34473, p.InstID));
             int corruptedMatthiasStart = 0;
             foreach (CombatItem c in corruptedMatthias)
             {
@@ -164,7 +164,7 @@ namespace LuckParser.Models
                 }
             }
             // Well of profane
-            List<CombatItem> wellMatthias = GetFilteredList(log, 34450, p.GetInstid());
+            List<CombatItem> wellMatthias = GetFilteredList(log, 34450, p.InstID);
             int wellMatthiasStart = 0;
             foreach (CombatItem c in wellMatthias)
             {
@@ -185,7 +185,7 @@ namespace LuckParser.Models
                 }
             }
             // Sacrifice
-            List<CombatItem> sacrificeMatthias = GetFilteredList(log, 34442, p.GetInstid());
+            List<CombatItem> sacrificeMatthias = GetFilteredList(log, 34442, p.InstID);
             int sacrificeMatthiasStart = 0;
             foreach (CombatItem c in sacrificeMatthias)
             {
@@ -201,7 +201,7 @@ namespace LuckParser.Models
                 }
             }
             // Bombs
-            List<CombatItem> zealousBenediction = log.GetBoonData(34511).Where(x => (x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
+            List<CombatItem> zealousBenediction = log.GetBoonData(34511).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             foreach (CombatItem c in zealousBenediction)
             {
                 int zealousStart = (int)(c.Time - log.GetBossData().GetFirstAware()) ;

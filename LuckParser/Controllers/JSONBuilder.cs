@@ -99,7 +99,7 @@ namespace LuckParser.Controllers
                     log.Mechanics[i] = new JsonLog.JsonMechanic
                     {
                         Time = mechanicLogs[i].GetTime(),
-                        Player = mechanicLogs[i].GetPlayer().GetCharacter(),
+                        Player = mechanicLogs[i].GetPlayer().Character,
                         Description = mechanicLogs[i].GetDescription(),
                         Skill = mechanicLogs[i].GetSkill()
                     };
@@ -130,7 +130,7 @@ namespace LuckParser.Controllers
             {
                 log.Players.Add(new JsonLog.JsonPlayer
                 {
-                    Character = player.GetCharacter(),
+                    Character = player.Character,
                     Account = player.Account,
                     Condition = player.Condition,
                     Concentration = player.Concentration,
@@ -138,7 +138,7 @@ namespace LuckParser.Controllers
                     Toughness = player.Toughness,
                     Weapons = player.GetWeaponsArray(_log).Where(w => w != null).ToArray(),
                     Group = player.Group,
-                    Profession = player.GetProf(),
+                    Profession = player.Prof,
                     Dps = BuildDPS(_statistics.Dps[player]),
                     Stats = BuildStats(_statistics.Stats[player]),
                     Defenses = BuildDefenses(_statistics.Defenses[player]),
@@ -187,12 +187,12 @@ namespace LuckParser.Controllers
 
             foreach (var playerBoon in value.Generated.Where(x => x.Value > 0))
             {
-                boon.Generated[phase][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                boon.Generated[phase][playerBoon.Key.Character] = playerBoon.Value;
             }
 
             foreach (var playerBoon in value.Overstacked.Where(x => x.Value > 0))
             {
-                boon.Overstacked[phase][playerBoon.Key.GetCharacter()] = playerBoon.Value;
+                boon.Overstacked[phase][playerBoon.Key.Character] = playerBoon.Value;
             }
         }
 

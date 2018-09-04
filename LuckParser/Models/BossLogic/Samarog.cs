@@ -51,7 +51,7 @@ namespace LuckParser.Models
             long fightDuration = log.GetBossData().GetAwareDuration();
             List<PhaseData> phases = GetInitialPhase(log);
             // Determined check
-            List<CombatItem> invulsSam = GetFilteredList(log, 762, boss.GetInstid());         
+            List<CombatItem> invulsSam = GetFilteredList(log, 762, boss.InstID);         
             for (int i = 0; i < invulsSam.Count; i++)
             {
                 CombatItem c = invulsSam[i];
@@ -130,7 +130,7 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // big bomb
-            List<CombatItem> bigbomb = log.GetBoonData(37966).Where(x => (x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
+            List<CombatItem> bigbomb = log.GetBoonData(37966).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             foreach (CombatItem c in bigbomb)
             {
                 int bigStart = (int)(c.Time - log.GetBossData().GetFirstAware());
@@ -139,7 +139,7 @@ namespace LuckParser.Models
                 replay.AddCircleActor(new CircleActor(true, bigEnd, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
             }
             // small bomb
-            List<CombatItem> smallbomb = log.GetBoonData(38247).Where(x => (x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
+            List<CombatItem> smallbomb = log.GetBoonData(38247).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             foreach (CombatItem c in smallbomb)
             {
                 int smallStart = (int)(c.Time - log.GetBossData().GetFirstAware());
@@ -147,7 +147,7 @@ namespace LuckParser.Models
                 replay.AddCircleActor(new CircleActor(true, 0, 80, new Tuple<int, int>(smallStart, smallEnd), "rgba(80, 150, 0, 0.3)"));
             }
             // fixated
-            List<CombatItem> fixatedSam = GetFilteredList(log, 37868, p.GetInstid());
+            List<CombatItem> fixatedSam = GetFilteredList(log, 37868, p.InstID);
             int fixatedSamStart = 0;
             foreach (CombatItem c in fixatedSam)
             {

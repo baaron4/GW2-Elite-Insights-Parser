@@ -30,7 +30,7 @@ namespace LuckParser.Models
                     bossData.SetFirstAware(enterCombat.Time);
                 }
             }
-            CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.GetInstid()).LastOrDefault(x => x.Value > 0 || x.BuffDmg > 0);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.InstID).LastOrDefault(x => x.Value > 0 || x.BuffDmg > 0);
             if (lastDamageTaken != null)
             {
                 bossData.SetLastAware(lastDamageTaken.Time);

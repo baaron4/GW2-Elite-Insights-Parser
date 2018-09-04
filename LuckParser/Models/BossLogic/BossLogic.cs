@@ -60,7 +60,7 @@ namespace LuckParser.Models
 
         protected void SetSuccessByDeath(CombatData combatData, LogData logData, BossData bossData)
         {
-            CombatItem killed = combatData.Find(x => x.SrcInstid == bossData.GetInstid() && x.IsStateChange.IsDead());
+            CombatItem killed = combatData.Find(x => x.SrcInstid == bossData.InstID && x.IsStateChange.IsDead());
             if (killed != null)
             {
                 logData.SetBossKill(true);

@@ -72,7 +72,7 @@ namespace LuckParser.Models
             }
             else
             {
-                CombatItem invulDhuum = log.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == boss.GetInstid() && x.Time > 115000 + log.GetBossData().GetFirstAware());
+                CombatItem invulDhuum = log.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == boss.InstID && x.Time > 115000 + log.GetBossData().GetFirstAware());
                 if (invulDhuum != null)
                 {
                     end = invulDhuum.Time - log.GetBossData().GetFirstAware();
@@ -152,7 +152,7 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // spirit transform
-            List<CombatItem> spiritTransform = log.GetBoonData(46950).Where(x => x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
+            List<CombatItem> spiritTransform = log.GetBoonData(46950).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in spiritTransform)
             {
                 int duration = 15000;
@@ -161,7 +161,7 @@ namespace LuckParser.Models
                 {
                     duration = 30000;
                 }
-                CombatItem removedBuff = log.GetBoonData(48281).FirstOrDefault(x => x.SrcInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
+                CombatItem removedBuff = log.GetBoonData(48281).FirstOrDefault(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
                 int end = start + duration;
                 if (removedBuff != null)
                 {
@@ -171,7 +171,7 @@ namespace LuckParser.Models
                 replay.AddCircleActor(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)"));
             }
             // bomb
-            List<CombatItem> bombDhuum = GetFilteredList(log, 47646, p.GetInstid());
+            List<CombatItem> bombDhuum = GetFilteredList(log, 47646, p.InstID);
             int bombDhuumStart = 0;
             foreach (CombatItem c in bombDhuum)
             {
