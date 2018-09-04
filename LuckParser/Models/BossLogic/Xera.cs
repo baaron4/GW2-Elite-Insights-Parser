@@ -44,7 +44,7 @@ namespace LuckParser.Models
         public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
         {
             long start = 0;
-            long fightDuration = log.GetFightData().FightDuration;
+            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             // split happened
             if (boss.PhaseData.Count == 1)
@@ -54,9 +54,9 @@ namespace LuckParser.Models
                 {
                     invulXera = log.GetBoonData(34113).Find(x => x.DstInstid == boss.InstID);
                 }
-                long end = invulXera.Time - log.GetFightData().FightStart;
+                long end = invulXera.Time - log.FightData.FightStart;
                 phases.Add(new PhaseData(start, end));
-                start = boss.PhaseData[0] - log.GetFightData().FightStart;
+                start = boss.PhaseData[0] - log.FightData.FightStart;
                 castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)

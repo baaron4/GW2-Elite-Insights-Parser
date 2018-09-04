@@ -54,7 +54,7 @@ namespace LuckParser.Models
             List<CombatItem> agony = log.GetBoonData(38049).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             foreach (CombatItem c in agony)
             {
-                int agonyStart = (int)(c.Time - log.GetFightData().FightStart);
+                int agonyStart = (int)(c.Time - log.FightData.FightStart);
                 int agonyEnd = agonyStart + 62000;
                 replay.AddCircleActor(new CircleActor(false, 0, 220, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)"));
             }

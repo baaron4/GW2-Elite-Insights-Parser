@@ -39,7 +39,7 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.GetFightData().FightDuration;
+            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             // Main phases
             List<CastLog> clsKC = castLogs.Where(x => x.GetID() == 35048).ToList();
@@ -66,7 +66,7 @@ namespace LuckParser.Models
             Dictionary<long, int> orbs = new Dictionary<long, int>();
             foreach (CombatItem c in orbItems)
             {
-                long time = c.Time - log.GetFightData().FightStart;
+                long time = c.Time - log.FightData.FightStart;
                 if (!orbs.ContainsKey(time))
                 {
                     orbs[time] = 0;
@@ -93,11 +93,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    start = c.Time - log.GetFightData().FightStart;
+                    start = c.Time - log.FightData.FightStart;
                 }
                 else
                 {
-                    end = c.Time - log.GetFightData().FightStart;
+                    end = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(start, end));
                 }
             }
@@ -173,11 +173,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    xeraFuryStart = (int)(c.Time - log.GetFightData().FightStart);
+                    xeraFuryStart = (int)(c.Time - log.FightData.FightStart);
                 }
                 else
                 {
-                    int xeraFuryEnd = (int)(c.Time - log.GetFightData().FightStart);
+                    int xeraFuryEnd = (int)(c.Time - log.FightData.FightStart);
                     replay.AddCircleActor(new CircleActor(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)"));
                     replay.AddCircleActor(new CircleActor(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)"));
                 }

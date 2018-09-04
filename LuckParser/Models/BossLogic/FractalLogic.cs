@@ -26,7 +26,7 @@ namespace LuckParser.Models
             // generic method for fractals
             long start = 0;
             long end = 0;
-            long fightDuration = log.GetFightData().FightDuration;
+            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             List<CombatItem> invulsBoss = GetFilteredList(log,762,boss.InstID);        
             for (int i = 0; i < invulsBoss.Count; i++)
@@ -34,7 +34,7 @@ namespace LuckParser.Models
                 CombatItem c = invulsBoss[i];
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.Time - log.GetFightData().FightStart;
+                    end = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsBoss.Count - 1)
                     {
@@ -43,7 +43,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.Time - log.GetFightData().FightStart;
+                    start = c.Time - log.FightData.FightStart;
                     castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
             }
@@ -58,32 +58,32 @@ namespace LuckParser.Models
             return phases;
         }
 
-        protected void SetSuccessOnCombatExit(CombatData combatData, LogData logData, FightData bossData, int combatExitCount)
+        protected void SetSuccessOnCombatExit(CombatData combatData, LogData logData, FightData fightData, int combatExitCount)
         {
-            int combatExits = combatData.Count(x => x.SrcInstid == bossData.InstID && x.IsStateChange == ParseEnum.StateChange.ExitCombat);
-            CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.InstID).LastOrDefault(x => x.Value > 0);
+            int combatExits = combatData.Count(x => x.SrcInstid == fightData.InstID && x.IsStateChange == ParseEnum.StateChange.ExitCombat);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData(fightData.InstID).LastOrDefault(x => x.Value > 0);
             if (combatExits == combatExitCount && lastDamageTaken != null)
             {
                 logData.Success = true;
-                bossData.FightEnd = lastDamageTaken.Time;
+                fightData.FightEnd = lastDamageTaken.Time;
             }
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, FightData bossData)
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
         {
             // check reward
             CombatItem reward = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
-            CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.InstID).LastOrDefault(x => x.Value > 0);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData(fightData.InstID).LastOrDefault(x => x.Value > 0);
             if (lastDamageTaken != null)
             {
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)
                 {
                     logData.Success = true;
-                    bossData.FightEnd = reward.Time;
+                    fightData.FightEnd = reward.Time;
                 }
                 else
                 {
-                    SetSuccessByDeath(combatData, logData, bossData);
+                    SetSuccessByDeath(combatData, logData, fightData);
                 }
             }
         }
