@@ -63,7 +63,7 @@ namespace LuckParser.Models
             CombatItem killed = combatData.Find(x => x.SrcInstid == bossData.InstID && x.IsStateChange.IsDead());
             if (killed != null)
             {
-                logData.SetBossKill(true);
+                logData.Success = true;
                 bossData.FightEnd = killed.Time;
             }
         }

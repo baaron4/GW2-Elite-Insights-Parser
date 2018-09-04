@@ -3356,7 +3356,7 @@ namespace LuckParser.Controllers
                 {
                     sw.Write("<div style=\"width: 1100px;\"class=\"d-flex flex-column\">");
                     {
-                        sw.Write("<p> Time Start: " + _log.GetLogData().GetLogStart() + " | Time End: " + _log.GetLogData().GetLogEnd() + " </p> ");
+                        sw.Write("<p> Time Start: " + _log.GetLogData().LogStart + " | Time End: " + _log.GetLogData().LogEnd + " </p> ");
                         sw.Write("<div class=\"d-flex flex-row justify-content-center align-items-center flex-wrap mb-3\">");
                         {
                             sw.Write("<div class=\"mr-3\">");
@@ -3379,7 +3379,7 @@ namespace LuckParser.Controllers
                                                 {
                                                     sw.Write("<div class=\"progress\" style=\"width: 100 %; height: 20px;\">");
                                                     {
-                                                        if (_log.GetLogData().GetBosskill())
+                                                        if (_log.GetLogData().Success)
                                                         {
                                                             string tp = _log.GetFightData().Health.ToString() + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:100%; ;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
@@ -3400,7 +3400,7 @@ namespace LuckParser.Controllers
                                                     }
                                                     sw.Write("</div>");
                                                     sw.Write("<p class=\"small\" style=\"text-align:center; color: "+ (_settings.LightTheme ? "#000" : "#FFF") +";\">" + _log.GetFightData().Health.ToString() + " Health</p>");
-                                                    sw.Write(_log.GetLogData().GetBosskill() ? "<p class='text text-success'> Result: Success</p>" : "<p class='text text-warning'> Result: Fail</p>");
+                                                    sw.Write(_log.GetLogData().Success ? "<p class='text text-success'> Result: Success</p>" : "<p class='text text-warning'> Result: Fail</p>");
                                                     sw.Write("<p>Duration: " + durationString + " </p> ");
                                                 }
                                                 sw.Write("</div>");
@@ -3832,9 +3832,9 @@ namespace LuckParser.Controllers
                             }
                         }
                         sw.Write("</div>");
-                        sw.Write("<p style=\"margin-top:10px;\"> ARC:" + _log.GetLogData().GetBuildVersion() + " | Bossid " + _log.GetFightData().ID.ToString() + "| EI Version: " +Application.ProductVersion + " </p> ");
+                        sw.Write("<p style=\"margin-top:10px;\"> ARC:" + _log.GetLogData().BuildVersion + " | Bossid " + _log.GetFightData().ID.ToString() + "| EI Version: " +Application.ProductVersion + " </p> ");
                        
-                        sw.Write("<p style=\"margin-top:-15px;\">File recorded by: " + _log.GetLogData().GetPOV().Split(':')[0] + "</p>");
+                        sw.Write("<p style=\"margin-top:-15px;\">File recorded by: " + _log.GetLogData().PoV.Split(':')[0] + "</p>");
                     }
                     sw.Write("</div>");
                 }

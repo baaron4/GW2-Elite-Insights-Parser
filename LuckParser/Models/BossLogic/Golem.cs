@@ -37,7 +37,7 @@ namespace LuckParser.Models
             }
             if (bossData.HealthOverTime.Count > 0)
             {
-                logData.SetBossKill(bossData.HealthOverTime.Last().Y < 200);
+                logData.Success = bossData.HealthOverTime.Last().Y < 200;
             }
         }
     }

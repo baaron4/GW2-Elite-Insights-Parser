@@ -85,7 +85,7 @@ namespace LuckParser
                     string bossid = control.GetFightData().ID.ToString();
                     string result = "fail";
 
-                    if (control.GetLogData().GetBosskill())
+                    if (control.GetLogData().Success)
                     {
                         result = "kill";
                     }

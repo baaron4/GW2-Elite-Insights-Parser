@@ -64,7 +64,7 @@ namespace LuckParser.Models
             CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.InstID).LastOrDefault(x => x.Value > 0);
             if (combatExits == combatExitCount && lastDamageTaken != null)
             {
-                logData.SetBossKill(true);
+                logData.Success = true;
                 bossData.FightEnd = lastDamageTaken.Time;
             }
         }
@@ -78,7 +78,7 @@ namespace LuckParser.Models
             {
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)
                 {
-                    logData.SetBossKill(true);
+                    logData.Success = true;
                     bossData.FightEnd = reward.Time;
                 }
                 else

@@ -74,12 +74,12 @@ namespace LuckParser.Controllers
             }
 
             log.EliteInsightsVersion = Application.ProductVersion;
-            log.ArcVersion = _log.GetLogData().GetBuildVersion();
-            log.RecordedBy = _log.GetLogData().GetPOV().Split(':')[0].TrimEnd('\u0000');
-            log.TimeStart = _log.GetLogData().GetLogStart();
-            log.TimeEnd = _log.GetLogData().GetLogEnd();
+            log.ArcVersion = _log.GetLogData().BuildVersion;
+            log.RecordedBy = _log.GetLogData().PoV.Split(':')[0].TrimEnd('\u0000');
+            log.TimeStart = _log.GetLogData().LogStart;
+            log.TimeEnd = _log.GetLogData().LogEnd;
             log.Duration = durationString;
-            log.Success = _log.GetLogData().GetBosskill();
+            log.Success = _log.GetLogData().Success;
         }
 
         private void SetMechanics(JsonLog log)

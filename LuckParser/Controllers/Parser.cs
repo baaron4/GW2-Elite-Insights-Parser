@@ -185,7 +185,7 @@ namespace LuckParser.Controllers
                     String name = ParseHelper.GetString(stream, 68, false);
                     //Save
                     Agent a = new Agent(agent, name, prof, isElite);
-                    string agentProf = a.GetProf(_logData.GetBuildVersion(), _aPIController);
+                    string agentProf = a.GetProf(_logData.BuildVersion, _aPIController);
                     string profession;
                     switch(agentProf)
                     {
@@ -536,7 +536,7 @@ namespace LuckParser.Controllers
                 switch(c.IsStateChange)
                 {
                     case ParseEnum.StateChange.PointOfView:
-                        if (_logData.GetPOV() == "N/A")//Point of View
+                        if (_logData.PoV == "N/A")//Point of View
                         {
                             ulong povAgent = c.SrcAgent;
                             if(agentsLookup.TryGetValue(povAgent, out var p))
