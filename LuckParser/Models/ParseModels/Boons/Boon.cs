@@ -376,7 +376,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Illusion of Life",-1, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 //new Boon("Time Block",30134, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff), What is this?
                 new Boon("Time Echo",29582, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Time Anchored",30136, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Time Anchored",30136, BoonSource.Mesmer, BoonType.Duration, 3, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 //traits
                 new Boon("Fencer's Finesse", 30426 , BoonSource.Mesmer, BoonType.Intensity, 10, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
                 new Boon("Illusionary Defense",49099, BoonSource.Mesmer, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
