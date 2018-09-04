@@ -13,51 +13,36 @@ namespace LuckParser.Models.ParseModels
         private Dictionary<ushort, List<CombatItem>> _damageTakenData;
         //private List<CombatItem> _healingData;
         //private List<CombatItem> _healingReceivedData;
-        private Dictionary<ushort,List<CombatItem>> _castData;
+        private Dictionary<ushort, List<CombatItem>> _castData;
         private Dictionary<long, List<CombatItem>> _castDataById;
         private Dictionary<ushort, List<CombatItem>> _movementData;
+        private Dictionary<ParseEnum.StateChange, List<CombatItem>> _statesData;
         // Public Methods
 
         public List<CombatItem> GetStates(int srcInstid, ParseEnum.StateChange change, long start, long end)
         {
-            var list = new List<CombatItem>();
-            foreach (var combatItem in this)
+            if (_statesData.TryGetValue(change, out List<CombatItem> data))
             {
-                if (combatItem.Time >= start && combatItem.Time <= end &&
-                    combatItem.SrcInstid == srcInstid && combatItem.IsStateChange == change)
-                {
-                    list.Add(combatItem);
-                }
+                return data.Where(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end).ToList();
             }
-
-            return list;
+            return new List<CombatItem>();
         }
 
         public int GetSkillCount(int srcInstid, int skillId, long start, long end)
         {
-            int count = 0;
-            foreach (CombatItem c in this.Where(x => x.Time >= start && x.Time <= end))
+            if (_castDataById.TryGetValue(skillId, out List<CombatItem> data))
             {
-                if (c.SrcInstid == srcInstid && c.SkillID == skillId)
-                {
-                    if (c.IsActivation.IsCasting())
-                        count++;
-                }
+                return data.Count(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end && x.IsActivation.IsCasting());
             }
-            return count;
+            return 0;
         }
         public int GetBuffCount(int srcInstid, int skillId, long start, long end)
         {
-            int count = 0;
-            foreach (CombatItem c in this.Where(x => x.Time >= start && x.Time <= end))
+            if (_boonData.TryGetValue(skillId, out List<CombatItem> data))
             {
-                if (c.SrcInstid == srcInstid && c.SkillID == skillId)
-                {
-                    if (c.IsBuff == 1 && c.IsBuffRemove == ParseEnum.BuffRemove.None)
-                        count++;
-                }
+                return data.Count(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end && x.IsBuffRemove == ParseEnum.BuffRemove.None);
             }
-            return count;
+            return 0;
         }
         public void Validate(BossData bossData)
         {
@@ -65,18 +50,17 @@ namespace LuckParser.Models.ParseModels
             _boonData = boonData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
             _boonDataByDst = boonData.GroupBy(x => x.IsBuffRemove == ParseEnum.BuffRemove.None ? x.DstInstid : x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
 
-            _damageData = this.Where(x => x.DstInstid != 0 && x.IsStateChange == ParseEnum.StateChange.Normal && x.IFF == ParseEnum.IFF.Foe && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
-                                        ((x.IsBuff == 1 && x.BuffDmg > 0 && x.Value == 0) ||
-                                        (x.IsBuff == 0 && x.Value > 0))).GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
-
-            _damageTakenData = this.Where(x => x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
-                                            ((x.IsBuff == 1 && x.BuffDmg >= 0 && x.Value == 0) ||
-                                                (x.IsBuff == 0 && x.Value >= 0))).GroupBy(x => x.DstInstid).ToDictionary(x => x.Key, x => x.ToList());
+            var damageData = this.Where(x => x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                                        ((x.IsBuff == 1 && x.BuffDmg >= 0 && x.Value == 0) ||
+                                        (x.IsBuff == 0 && x.Value >= 0)));
+            _damageData = damageData.Where(x => x.DstInstid != 0 && x.IFF == ParseEnum.IFF.Foe).GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
+            _damageTakenData = damageData.GroupBy(x => x.DstInstid).ToDictionary(x => x.Key, x => x.ToList());
 
             var castData = this.Where(x => (x.IsStateChange == ParseEnum.StateChange.Normal && x.IsActivation != ParseEnum.Activation.None) || x.IsStateChange == ParseEnum.StateChange.WeaponSwap);
-
             _castData = castData.GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
             _castDataById = castData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
+
+            _statesData = this.GroupBy(x => x.IsStateChange).ToDictionary(x => x.Key, x => x.ToList());
 
             _movementData = (bossData.GetBossBehavior().CanCombatReplay) ? this.Where(x => x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Velocity).GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList()) : new Dictionary<ushort, List<CombatItem>>();
 
