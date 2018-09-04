@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
             {
                 _stacks.Add(new BoonSimulationItemDuration(stack));
             }
-            Duration = _stacks.Max(x => x.GetDuration());
+            Duration = _stacks.Max(x => x.GetSourcelessDuration());
         }
 
         public override void SetEnd(long end)
@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
             {
                 stack.SetEnd(end);
             }
-            Duration = _stacks.Max(x => x.GetDuration());
+            Duration = _stacks.Max(x => x.GetSourcelessDuration());
         }
 
         public override long GetDuration(ushort src, long start = 0, long end = 0)
@@ -36,12 +36,12 @@ namespace LuckParser.Models.ParseModels
             }
             return total;
         }
-        public override long GetDuration(long start = 0, long end = 0)
+        public override long GetSourcelessDuration(long start = 0, long end = 0)
         {
             long total = 0;
             foreach (BoonSimulationItemDuration stack in _stacks)
             {
-                total += stack.GetDuration(start, end);
+                total += stack.GetSourcelessDuration(start, end);
             }
             return total;
         }
@@ -84,7 +84,7 @@ namespace LuckParser.Models.ParseModels
 
         public override List<BoonsGraphModel.Segment> ToSegment()
         {
-            if (Duration == _stacks.Min(x => x.GetDuration()))
+            if (Duration == _stacks.Min(x => x.GetSourcelessDuration()))
             {
                 return new List<BoonsGraphModel.Segment>
                 {
@@ -93,7 +93,7 @@ namespace LuckParser.Models.ParseModels
             }
             long start = Start;
             List<BoonsGraphModel.Segment> res = new List<BoonsGraphModel.Segment>();
-            foreach ( long end in _stacks.Select(x => x.GetDuration() + Start).Distinct())
+            foreach ( long end in _stacks.Select(x => x.GetSourcelessDuration() + Start).Distinct())
             {
                 res.Add(new BoonsGraphModel.Segment(start,end,GetStack(end)));
                 start = end;

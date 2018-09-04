@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
             }
             return GetItemDuration(start, end);
         }
-        public override long GetDuration(long start = 0, long end = 0)
+        public override long GetSourcelessDuration(long start = 0, long end = 0)
         {
             return GetItemDuration(start, end);
         }
