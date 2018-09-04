@@ -73,7 +73,7 @@ namespace LuckParser.Controllers
                 {
                     p.AddMechanics(log);
                 }
-                log.MechanicData.ComputePresentMechanics(log, _statistics.Phases);
+                log.MechanicData.ComputePresentMechanics(log);
             }
 
             return _statistics;
