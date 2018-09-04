@@ -72,18 +72,18 @@ namespace LuckParser.Controllers
         //Creating CSV---------------------------------------------------------------------------------
         public void CreateCSV()
         {       
-            double fightDuration = (_log.GetBossData().GetAwareDuration()) / 1000.0;
+            double fightDuration = (_log.GetFightData().FightDuration) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
             string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
             if (duration.ToString("hh") != "00")
             {
                 durationString = duration.ToString("hh") + "h " + durationString;
             }
-            string bossname = _log.GetBossData().GetName();
+            string bossname = _log.GetFightData().Name;
             //header
             WriteLine(new [] { "Elite Insights Version", Application.ProductVersion });
             WriteLine(new [] { "ARC Version", _log.GetLogData().GetBuildVersion()});
-            WriteLine(new [] { "Boss ID", _log.GetBossData().GetID().ToString() });
+            WriteLine(new [] { "Boss ID", _log.GetFightData().ID.ToString() });
             WriteLine(new [] { "Recorded By", _log.GetLogData().GetPOV().Split(':')[0] });
             WriteLine(new [] { "Time Start", _log.GetLogData().GetLogStart() });
             WriteLine(new [] { "Time End", _log.GetLogData().GetLogEnd() });
@@ -94,9 +94,9 @@ namespace LuckParser.Controllers
             //Boss card
             WriteLine(new [] { "Boss", bossname });
             WriteLine(new [] { "Success", _log.GetLogData().GetBosskill().ToString() });
-            WriteLine(new [] { "Total Boss Health", _log.GetBossData().GetHealth().ToString() });
-            int finalBossHealth = _log.GetBossData().GetHealthOverTime().Count > 0 ? _log.GetBossData().GetHealthOverTime().Last().Y : 10000;
-            WriteLine(new [] { "Final Boss Health", (_log.GetBossData().GetHealth() * (100.0 - finalBossHealth * 0.01)).ToString() });
+            WriteLine(new [] { "Total Boss Health", _log.GetFightData().Health.ToString() });
+            int finalBossHealth = _log.GetFightData().HealthOverTime.Count > 0 ? _log.GetFightData().HealthOverTime.Last().Y : 10000;
+            WriteLine(new [] { "Final Boss Health", (_log.GetFightData().Health * (100.0 - finalBossHealth * 0.01)).ToString() });
             WriteLine(new [] { "Boss Health Burned %", (100.0 - finalBossHealth * 0.01).ToString() });
             WriteLine(new [] { "Duration", durationString });
 

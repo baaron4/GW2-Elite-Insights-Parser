@@ -117,7 +117,7 @@ namespace LuckParser.Controllers
         /// <returns></returns>
         public static List<Point> GetBossDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, GraphMode mode)
         {
-            return GetDPSGraph(log, p, phaseIndex, phase, log.GetBossData().InstID, mode);
+            return GetDPSGraph(log, p, phaseIndex, phase, log.GetFightData().InstID, mode);
         }
 
         /// <summary>

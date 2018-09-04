@@ -65,7 +65,7 @@ namespace LuckParser.Controllers
 
         private void SetGeneral(JsonLog log)
         {
-            double fightDuration = _log.GetBossData().GetAwareDuration() / 1000.0;
+            double fightDuration = _log.GetFightData().FightDuration / 1000.0;
             var duration = TimeSpan.FromSeconds(fightDuration);
             string durationString = duration.ToString("mm") + "m " + duration.ToString("ss") + "s";
             if (duration.ToString("hh") != "00")
@@ -109,13 +109,13 @@ namespace LuckParser.Controllers
 
         private void SetBoss(JsonLog log)
         {
-            log.Boss.Id = _log.GetBossData().GetID();
-            log.Boss.Name = _log.GetBossData().GetName();
-            log.Boss.TotalHealth = _log.GetBossData().GetHealth();
-            int finalBossHealth = _log.GetBossData().GetHealthOverTime().Count > 0
-                ? _log.GetBossData().GetHealthOverTime().Last().Y
+            log.Boss.Id = _log.GetFightData().ID;
+            log.Boss.Name = _log.GetFightData().Name;
+            log.Boss.TotalHealth = _log.GetFightData().Health;
+            int finalBossHealth = _log.GetFightData().HealthOverTime.Count > 0
+                ? _log.GetFightData().HealthOverTime.Last().Y
                 : 10000;
-            log.Boss.FinalHealth = _log.GetBossData().GetHealth() * (100.0 - finalBossHealth * 0.01);
+            log.Boss.FinalHealth = _log.GetFightData().Health * (100.0 - finalBossHealth * 0.01);
             log.Boss.HealthPercentBurned = 100.0 - finalBossHealth * 0.01;
 
             log.Boss.Dps = BuildDPS(_statistics.BossDps);

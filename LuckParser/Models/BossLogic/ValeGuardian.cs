@@ -43,7 +43,7 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.GetFightData().FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             // Invul check
             List<CombatItem> invulsVG = GetFilteredList(log, 757, boss.InstID);
@@ -52,7 +52,7 @@ namespace LuckParser.Models
                 CombatItem c = invulsVG[i];
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.Time - log.GetBossData().GetFirstAware();
+                    end = c.Time - log.GetFightData().FightStart;
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsVG.Count - 1)
                     {
@@ -61,7 +61,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.Time - log.GetBossData().GetFirstAware();
+                    start = c.Time - log.GetFightData().FightStart;
                     phases.Add(new PhaseData(end, start));
                     castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
@@ -86,13 +86,13 @@ namespace LuckParser.Models
                     List<AgentItem> guardians = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
                     foreach (AgentItem a in guardians)
                     {
-                        long agentStart = a.FirstAware - log.GetBossData().GetFirstAware();
+                        long agentStart = a.FirstAware - log.GetFightData().FightStart;
                         if (phase.InInterval(agentStart))
                         {
                             phase.AddRedirection(a);
                         }
                     }
-                    phase.OverrideStart(log.GetBossData().GetFirstAware());
+                    phase.OverrideStart(log.GetFightData().FightStart);
                 }
             }
             return phases;

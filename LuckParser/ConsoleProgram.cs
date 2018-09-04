@@ -82,7 +82,7 @@ namespace LuckParser
                         throw new CancellationException(row, new InvalidDataException("Save Directory not found"));
                     }
 
-                    string bossid = control.GetBossData().GetID().ToString();
+                    string bossid = control.GetFightData().ID.ToString();
                     string result = "fail";
 
                     if (control.GetLogData().GetBosskill())

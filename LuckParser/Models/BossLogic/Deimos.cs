@@ -43,15 +43,15 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.GetFightData().FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             // Determined + additional data on inst change
             CombatItem invulDei = log.GetBoonData(762).Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == boss.InstID);
             if (invulDei != null)
             {
-                end = invulDei.Time - log.GetBossData().GetFirstAware();
+                end = invulDei.Time - log.GetFightData().FightStart;
                 phases.Add(new PhaseData(start, end));
-                start = (boss.PhaseData.Count == 1 ? boss.PhaseData[0] - log.GetBossData().GetFirstAware() : fightDuration);
+                start = (boss.PhaseData.Count == 1 ? boss.PhaseData[0] - log.GetFightData().FightStart : fightDuration);
                 castLogs.Add(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
             }
             if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
@@ -67,11 +67,11 @@ namespace LuckParser.Models
             int splits = 0;
             while (teleport != null && splits < 3)
             {
-                start = teleport.Time - log.GetBossData().GetFirstAware();
-                CombatItem teleportBack = log.GetCombatList().FirstOrDefault(x => x.SkillID == 38169 && x.Time - log.GetBossData().GetFirstAware() > start + 10000);
+                start = teleport.Time - log.GetFightData().FightStart;
+                CombatItem teleportBack = log.GetCombatList().FirstOrDefault(x => x.SkillID == 38169 && x.Time - log.GetFightData().FightStart > start + 10000);
                 if (teleportBack != null)
                 {
-                    end = teleportBack.Time - log.GetBossData().GetFirstAware();
+                    end = teleportBack.Time - log.GetFightData().FightStart;
                 }
                 else
                 {
@@ -79,7 +79,7 @@ namespace LuckParser.Models
                 }
                 phases.Add(new PhaseData(start, end));
                 splits++;
-                teleport = log.GetCombatList().FirstOrDefault(x => x.SkillID == 38169 && x.Time - log.GetBossData().GetFirstAware() > end + 10000);
+                teleport = log.GetCombatList().FirstOrDefault(x => x.SkillID == 38169 && x.Time - log.GetFightData().FightStart > end + 10000);
             }
 
             string[] namesDeiSplit = new [] { "Thief", "Gambler", "Drunkard" };
@@ -98,7 +98,7 @@ namespace LuckParser.Models
                 List<AgentItem> clones = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
                 foreach (AgentItem a in clones)
                 {
-                    long agentStart = a.FirstAware - log.GetBossData().GetFirstAware();
+                    long agentStart = a.FirstAware - log.GetFightData().FightStart;
                     if (phase.InInterval(agentStart))
                     {
                         phase.AddRedirection(a);
@@ -131,7 +131,7 @@ namespace LuckParser.Models
                 int end = start + 5000;
                 replay.AddCircleActor(new CircleActor(true, end, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                 replay.AddCircleActor(new CircleActor(false, 0, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
-                if (!log.GetBossData().IsCM())
+                if (!log.GetFightData().IsCM)
                 {
                     replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 0, 255, 0.3)", new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216)));
                 }
@@ -148,11 +148,11 @@ namespace LuckParser.Models
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    tpStart = (int)(c.Time - log.GetBossData().GetFirstAware());
+                    tpStart = (int)(c.Time - log.GetFightData().FightStart);
                 }
                 else
                 {
-                    int tpEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
+                    int tpEnd = (int)(c.Time - log.GetFightData().FightStart);
                     replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
                     replay.AddCircleActor(new CircleActor(true, tpEnd, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
                 }

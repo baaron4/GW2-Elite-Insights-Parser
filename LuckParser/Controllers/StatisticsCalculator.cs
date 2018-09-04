@@ -129,7 +129,7 @@ namespace LuckParser.Controllers
                     phase.GetStart(), phase.GetEnd()).Sum(x => x.GetDamage());
             } else
             {
-                damage = player.GetDamageLogs(_log.GetBossData().InstID, _log,
+                damage = player.GetDamageLogs(_log.GetFightData().InstID, _log,
                     phase.GetStart(), phase.GetEnd()).Sum(x => x.GetDamage());
             }
             if (phaseDuration > 0)
@@ -146,7 +146,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damage = player.GetDamageLogs(_log.GetBossData().InstID, _log,
+                damage = player.GetDamageLogs(_log.GetFightData().InstID, _log,
                     phase.GetStart(), phase.GetEnd()).Where(x => x.IsCondi() > 0).Sum(x => x.GetDamage());
             }
             if (phaseDuration > 0)
@@ -170,7 +170,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(_log.GetBossData().InstID, _log,
+                final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(_log.GetFightData().InstID, _log,
                     phase.GetStart(), phase.GetEnd()).Where(x => x.IsCondi() == 0).Sum(x => x.GetDamage());
             }
 
@@ -209,8 +209,8 @@ namespace LuckParser.Controllers
                     Statistics.FinalStats final = new Statistics.FinalStats();
 
                     PhaseData phase = _statistics.Phases[phaseIndex];
-                    long start = phase.GetStart() + _log.GetBossData().GetFirstAware();
-                    long end = phase.GetEnd() + _log.GetBossData().GetFirstAware();
+                    long start = phase.GetStart() + _log.GetFightData().FightStart;
+                    long end = phase.GetEnd() + _log.GetFightData().FightStart;
 
                     List<DamageLog> damageLogs  = player.GetJustPlayerDamageLogs(0, _log, phase.GetStart(), phase.GetEnd());
                     List<CastLog> castLogs = player.GetCastLogs(_log, phase.GetStart(), phase.GetEnd());
@@ -264,7 +264,7 @@ namespace LuckParser.Controllers
                         }
                     } else
                     {
-                        idsToCheck.Add(_log.GetBossData().InstID);
+                        idsToCheck.Add(_log.GetFightData().InstID);
                     }
                     foreach (DamageLog dl in damageLogs)
                     {
@@ -276,7 +276,7 @@ namespace LuckParser.Controllers
                                 if (idsToCheck.Count > 1)
                                 {
                                     AgentItem target = phase.GetRedirection().Find(x => x.InstID == dl.GetDstInstidt());
-                                    if (dl.GetTime() < target.FirstAware - _log.GetBossData().GetFirstAware() || dl.GetTime() > target.LastAware - _log.GetBossData().GetFirstAware())
+                                    if (dl.GetTime() < target.FirstAware - _log.GetFightData().FightStart || dl.GetTime() > target.LastAware - _log.GetFightData().FightStart)
                                     {
                                         continue;
                                     }
@@ -404,7 +404,7 @@ namespace LuckParser.Controllers
                     final.DodgeCount = combatData.GetSkillCount(instid, SkillItem.DodgeId, start, end) + combatData.GetBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
 
                     //Stack Distance
-                    if (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay)
+                    if (_settings.ParseCombatReplay && _log.GetFightData().Logic.CanCombatReplay)
                     {
                         if (_statistics.StackCenterPositions == null)
                         {

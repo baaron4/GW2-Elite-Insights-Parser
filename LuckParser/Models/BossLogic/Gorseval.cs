@@ -34,7 +34,7 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.GetFightData().FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             // Ghostly protection check
             List<CombatItem> invulsGorse = log.GetCombatList().Where(x => x.SkillID == 31790 && x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
@@ -43,7 +43,7 @@ namespace LuckParser.Models
                 CombatItem c = invulsGorse[i];
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.Time - log.GetBossData().GetFirstAware();
+                    end = c.Time - log.GetFightData().FightStart;
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsGorse.Count - 1)
                     {
@@ -52,7 +52,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.Time - log.GetBossData().GetFirstAware();
+                    start = c.Time - log.GetFightData().FightStart;
                     phases.Add(new PhaseData(end, start));
                     castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
@@ -71,13 +71,13 @@ namespace LuckParser.Models
                     List<AgentItem> spirits = log.GetAgentData().GetNPCAgentList().Where(x => ParseEnum.GetThrashIDS(x.ID) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
                     foreach (AgentItem a in spirits)
                     {
-                        long agentStart = a.FirstAware - log.GetBossData().GetFirstAware();
+                        long agentStart = a.FirstAware - log.GetFightData().FightStart;
                         if (phase.InInterval(agentStart))
                         {
                             phase.AddRedirection(a);
                         }
                     }
-                    phase.OverrideStart(log.GetBossData().GetFirstAware());
+                    phase.OverrideStart(log.GetFightData().FightStart);
                 }
             }
             return phases;

@@ -21,7 +21,7 @@ namespace LuckParser.Models.ParseModels
 
             if (_phases.Count == 0)
             {
-                long fightDuration = log.GetBossData().GetAwareDuration();
+                long fightDuration = log.GetFightData().FightDuration;
                 if (!getAllPhases)
                 {
                     _phases.Add(new PhaseData(0, fightDuration));
@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
                     return _phases;
                 }
                 GetCastLogs(log, 0, fightDuration);
-                _phases = log.GetBossData().GetBossBehavior().GetPhases(this, log, CastLogs);
+                _phases = log.GetFightData().Logic.GetPhases(this, log, CastLogs);
             }
             return _phases;
         }
@@ -38,7 +38,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (_map == null)
             {
-                _map = log.GetBossData().GetBossBehavior().GetCombatMap();
+                _map = log.GetFightData().Logic.GetCombatMap();
             }
             return _map;
         }
@@ -64,7 +64,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
-            List<ParseEnum.ThrashIDS> ids = log.GetBossData().GetBossBehavior().GetAdditionalData(CombatReplay, GetCastLogs(log, 0, log.GetBossData().GetAwareDuration()), log);
+            List<ParseEnum.ThrashIDS> ids = log.GetFightData().Logic.GetAdditionalData(CombatReplay, GetCastLogs(log, 0, log.GetFightData().FightDuration), log);
             List<AgentItem> aList = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
             foreach (AgentItem a in aList)
             {
@@ -76,14 +76,14 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetCombatReplayIcon(ParsedLog log)
         {
-            CombatReplay.SetIcon(log.GetBossData().GetBossBehavior().GetReplayIcon());
+            CombatReplay.SetIcon(log.GetFightData().Logic.GetReplayIcon());
         }
 
         public void AddMechanics(ParsedLog log)
         {
             MechanicData mechData = log.GetMechanicData();
-            BossData bossData = log.GetBossData();
-            List<Mechanic> bossMechanics = bossData.GetBossBehavior().GetMechanics();
+            FightData bossData = log.GetFightData();
+            List<Mechanic> bossMechanics = bossData.Logic.GetMechanics();
             Dictionary<ushort, AbstractMasterPlayer> regroupedMobs = new Dictionary<ushort, AbstractMasterPlayer>();
             // Boons
             foreach (Mechanic m in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon || x.GetMechType() == Mechanic.MechType.EnemyBoonStrip))
@@ -130,7 +130,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (amp != null)
                     {
-                        mechData[m].Add(new MechanicLog(c.Time - bossData.GetFirstAware(), m, amp));
+                        mechData[m].Add(new MechanicLog(c.Time - bossData.FightStart, m, amp));
                     }
 
                 }
@@ -164,7 +164,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (amp != null)
                     {
-                        mechData[m].Add(new MechanicLog(c.Time - bossData.GetFirstAware(), m, amp));
+                        mechData[m].Add(new MechanicLog(c.Time - bossData.FightStart, m, amp));
                     }
                 }
 
@@ -179,7 +179,7 @@ namespace LuckParser.Models.ParseModels
                         amp = new DummyPlayer(a);
                         regroupedMobs.Add(a.ID, amp);
                     }
-                    mechData[m].Add(new MechanicLog(a.FirstAware - bossData.GetFirstAware(), m, amp));
+                    mechData[m].Add(new MechanicLog(a.FirstAware - bossData.FightStart, m, amp));
                 }
             }
         }

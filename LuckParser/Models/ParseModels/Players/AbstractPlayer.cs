@@ -88,13 +88,13 @@ namespace LuckParser.Models.ParseModels
         {
             if (redirection.Count == 0)
             {
-                return GetDamageLogs(log.GetBossData().InstID, log, start, end);
+                return GetDamageLogs(log.GetFightData().InstID, log, start, end);
             }
             List<DamageLog> dls = GetDamageLogs(0, log, start, end);
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
             {
-                res.AddRange(dls.Where(x => x.GetDstInstidt() == a.InstID && x.GetTime() >= a.FirstAware - log.GetBossData().GetFirstAware() && x.GetTime() <= a.LastAware - log.GetBossData().GetFirstAware()));
+                res.AddRange(dls.Where(x => x.GetDstInstidt() == a.InstID && x.GetTime() >= a.FirstAware - log.GetFightData().FightStart && x.GetTime() <= a.LastAware - log.GetFightData().FightStart));
             }
             res.Sort((x, y) => x.GetTime() < y.GetTime() ? -1 : 1);
             return res;
@@ -151,13 +151,13 @@ namespace LuckParser.Models.ParseModels
         {
             if (redirection.Count == 0)
             {
-                return GetJustPlayerDamageLogs(log.GetBossData().InstID, log, start, end);
+                return GetJustPlayerDamageLogs(log.GetFightData().InstID, log, start, end);
             }
             List<DamageLog> dls = GetJustPlayerDamageLogs(0, log, start, end);
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
             {
-                res.AddRange(dls.Where(x => x.GetDstInstidt() == a.InstID && x.GetTime() >= a.FirstAware - log.GetBossData().GetFirstAware() && x.GetTime() <= a.LastAware - log.GetBossData().GetFirstAware()));
+                res.AddRange(dls.Where(x => x.GetDstInstidt() == a.InstID && x.GetTime() >= a.FirstAware - log.GetFightData().FightStart && x.GetTime() <= a.LastAware - log.GetFightData().FightStart));
             }
             res.Sort((x, y) => x.GetTime() < y.GetTime() ? -1 : 1);
             return res;

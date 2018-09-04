@@ -328,7 +328,7 @@ namespace LuckParser.Controllers
             if (casts > 0) {
                 hpcast = Math.Round(hits / (double)casts, 2);
             }
-            string skillName = (skill.GetID().ToString() == skill.GetName()) ? skillData.GetName(skill.GetID()): skill.GetName();
+            string skillName = (skill.GetID().ToString() == skill.GetName()) ? skillData.GetName(skill.GetID()) : skill.GetName();
             if (totaldamage != 0 && skill.GetGW2APISkill() != null)
             {
                 sw.Write("<tr>");
@@ -416,7 +416,7 @@ namespace LuckParser.Controllers
             }
         }
         
-        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, BossData bossData, string yAxis = "")
+        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, FightData bossData, string yAxis = "")
         {
             //Boss Health
             //Adding dps axis
@@ -426,7 +426,7 @@ namespace LuckParser.Controllers
                 maxDPS = 1000;
             }
             int hotCount = 0;
-            List<Point> BossHOT = bossData.GetHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
+            List<Point> BossHOT = bossData.HealthOverTime.Where(x => x.X >= start && x.X <= end).ToList();
             foreach (Point dp in BossHOT)
             {
                 if (hotCount == BossHOT.Count - 1)
@@ -1136,7 +1136,7 @@ namespace LuckParser.Controllers
                 sw.Write("{");
                 sw.Write("var a = new circleActor(" + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                 sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.GetPosition(log.GetBossData().InstID.ToString(), map) + ";");
+                sw.Write("a.pos =" + a.GetPosition(log.GetFightData().InstID.ToString(), map) + ";");
                 sw.Write("}");
 
             }
@@ -1217,7 +1217,7 @@ namespace LuckParser.Controllers
                 sw.Write("{");
                 sw.Write("var a = new doughnutActor(" + a.GetInnerRadius() + "," + a.GetOuterRadius() + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                 sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.GetPosition(log.GetBossData().InstID.ToString(), map) + ";");
+                sw.Write("a.pos =" + a.GetPosition(log.GetFightData().InstID.ToString(), map) + ";");
                 sw.Write("}");
 
             }

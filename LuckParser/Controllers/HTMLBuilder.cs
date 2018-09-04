@@ -149,10 +149,10 @@ namespace LuckParser.Controllers
                         }
                         else
                         {
-                            check = _log.GetBossData().GetHealthOverTime().FirstOrDefault(x => x.X > ml.GetTime());
+                            check = _log.GetFightData().HealthOverTime.FirstOrDefault(x => x.X > ml.GetTime());
                             if (check == Point.Empty)
                             {
-                                check = _log.GetBossData().GetHealthOverTime().Count == 0 ? new Point(0, 10000) : new Point(0, _log.GetBossData().GetHealthOverTime().Last().Y);
+                                check = _log.GetFightData().HealthOverTime.Count == 0 ? new Point(0, 10000) : new Point(0, _log.GetFightData().HealthOverTime.Last().Y);
                             }
                             check.Y = (int)((check.Y / 10000f) * maxDPS);
                         }
@@ -217,7 +217,7 @@ namespace LuckParser.Controllers
                 if (maxDPS > 0)
                 {
                     sw.Write("{");
-                    HTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase.GetStart(), phase.GetEnd(), _log.GetBossData());
+                    HTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase.GetStart(), phase.GetEnd(), _log.GetFightData());
                     sw.Write("}");
                 }
                 else
@@ -1166,7 +1166,7 @@ namespace LuckParser.Controllers
                                     intensityBoon.Add(count);
                                 }
                                 string tooltip = "";
-                                if (extraBoonData.TryGetValue(boon.GetID(),out var myDict))
+                                if (extraBoonData.TryGetValue(boon.GetID(), out var myDict))
                                 {
                                     string[] tooltips = myDict[phaseIndex];
                                     tooltip = " <br> <big><b>Boss</b></big> </br> " + tooltips[1] + " <br> <big><b>All</b></big> </br> " + tooltips[0];
@@ -1178,7 +1178,7 @@ namespace LuckParser.Controllers
                                 }
                                 else
                                 {
-                                    if (boonTable && boon.GetBoonType() == Boon.BoonType.Intensity && boonPresence.TryGetValue(boon.GetID(),out long presenceValue))
+                                    if (boonTable && boon.GetBoonType() == Boon.BoonType.Intensity && boonPresence.TryGetValue(boon.GetID(), out long presenceValue))
                                     {
                                         tooltip = "uptime: " + Math.Round(100.0* presenceValue / fightDuration,1) + "%";
                                         sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + toWrite + " </td>");
@@ -1991,9 +1991,9 @@ namespace LuckParser.Controllers
         /// <param name="p">The player</param>
         private void CreateDeathRecap(StreamWriter sw, Player p)
         {
-            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, 0, _log.GetBossData().GetAwareDuration());
-            long start = _log.GetBossData().GetFirstAware();
-            long end = _log.GetBossData().GetLastAware();
+            List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, 0, _log.GetFightData().FightDuration);
+            long start = _log.GetFightData().FightStart;
+            long end = _log.GetFightData().FightEnd;
             List<CombatItem> down = _log.GetCombatData().GetStates(p.InstID, ParseEnum.StateChange.ChangeDown, start, end);
             if (down.Count > 0)
             {
@@ -2249,7 +2249,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.GetBossData().InstID : 0, _log, phase.GetStart(), phase.GetEnd());
+                damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.GetFightData().InstID : 0, _log, phase.GetStart(), phase.GetEnd());
             }
             int totalDamage = toBoss ? dps.BossDamage : dps.AllDamage;
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.GetDamage()) : 0;
@@ -2334,7 +2334,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damageLogs = minions.GetDamageLogs(toBoss ? _log.GetBossData().InstID : 0, _log, phase.GetStart(), phase.GetEnd());
+                damageLogs = minions.GetDamageLogs(toBoss ? _log.GetFightData().InstID : 0, _log, phase.GetStart(), phase.GetEnd());
             }
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.GetDamage()) : 0;
             if (totalDamage > 0)
@@ -3123,7 +3123,7 @@ namespace LuckParser.Controllers
                                 sw.Write("},");
                             }
                             sw.Write("{");
-                            HTMLHelper.WriteBossHealthGraph(sw, GraphHelper.GetTotalDPSGraph(_log, _log.GetBoss(), phaseIndex, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase.GetStart(), phase.GetEnd(), _log.GetBossData(), "y3");
+                            HTMLHelper.WriteBossHealthGraph(sw, GraphHelper.GetTotalDPSGraph(_log, _log.GetBoss(), phaseIndex, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase.GetStart(), phase.GetEnd(), _log.GetFightData(), "y3");
                             sw.Write("}");
                         }
                         sw.Write("];");
@@ -3292,7 +3292,7 @@ namespace LuckParser.Controllers
                     sw.Write(".card {border:1px solid #9B0000;}");
                     sw.Write("td.composition {width: 120px;border:1px solid #9B0000;}");
                 }
-                if (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay)
+                if (_settings.ParseCombatReplay && _log.GetFightData().Logic.CanCombatReplay)
                 {
                     // from W3
                     sw.Write(".slidecontainer {width: 100%;}");
@@ -3311,14 +3311,14 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         public void CreateHTML(StreamWriter sw)
         {
-            double fightDuration = (_log.GetBossData().GetAwareDuration()) / 1000.0;
+            double fightDuration = (_log.GetFightData().FightDuration) / 1000.0;
             TimeSpan duration = TimeSpan.FromSeconds(fightDuration);
             string durationString = duration.Minutes + "m " + duration.Seconds + "s " + duration.Milliseconds + "ms";
             if (duration.Hours > 0)
             {
                 durationString = duration.Hours + "h " + durationString;
             }
-            string bossname = FilterStringChars(_log.GetBossData().GetName());
+            string bossname = FilterStringChars(_log.GetFightData().Name);
             List<PhaseData> phases = _statistics.Phases;
             // HTML STARTS
             sw.Write("<!DOCTYPE html><html lang=\"en\">");
@@ -3372,7 +3372,7 @@ namespace LuckParser.Controllers
                                             {
                                                 sw.Write("<div>");
                                                 {
-                                                    sw.Write("<img src=\"" + HTMLHelper.GetLink(_log.GetBossData().GetID() + "-icon") + "\"alt=\"" + bossname + "-icon" + "\" style=\"height: 120px; width: 120px;\" >");
+                                                    sw.Write("<img src=\"" + HTMLHelper.GetLink(_log.GetFightData().ID + "-icon") + "\"alt=\"" + bossname + "-icon" + "\" style=\"height: 120px; width: 120px;\" >");
                                                 }
                                                 sw.Write("</div>");
                                                 sw.Write("<div>");
@@ -3381,25 +3381,25 @@ namespace LuckParser.Controllers
                                                     {
                                                         if (_log.GetLogData().GetBosskill())
                                                         {
-                                                            string tp = _log.GetBossData().GetHealth().ToString() + " Health";
+                                                            string tp = _log.GetFightData().Health.ToString() + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:100%; ;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
                                                         }
                                                         else
                                                         {
                                                             double finalPercent = 0;
-                                                            if (_log.GetBossData().GetHealthOverTime().Count > 0)
+                                                            if (_log.GetFightData().HealthOverTime.Count > 0)
                                                             {
-                                                                finalPercent = 100.0 - _log.GetBossData().GetHealthOverTime()[_log.GetBossData().GetHealthOverTime().Count - 1].Y * 0.01;
+                                                                finalPercent = 100.0 - _log.GetFightData().HealthOverTime[_log.GetFightData().HealthOverTime.Count - 1].Y * 0.01;
                                                             }
-                                                            string tp = Math.Round(_log.GetBossData().GetHealth() * finalPercent / 100.0) + " Health";
+                                                            string tp = Math.Round(_log.GetFightData().Health * finalPercent / 100.0) + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + finalPercent + "%;\" aria-valuenow=\"" + finalPercent + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
-                                                            tp = Math.Round(_log.GetBossData().GetHealth() * (100.0 - finalPercent) / 100.0) + " Health";
+                                                            tp = Math.Round(_log.GetFightData().Health * (100.0 - finalPercent) / 100.0) + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-danger\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + (100.0 - finalPercent) + "%;\" aria-valuenow=\"" + (100.0 - finalPercent) + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
 
                                                         }
                                                     }
                                                     sw.Write("</div>");
-                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: "+ (_settings.LightTheme ? "#000" : "#FFF") +";\">" + _log.GetBossData().GetHealth().ToString() + " Health</p>");
+                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: "+ (_settings.LightTheme ? "#000" : "#FFF") +";\">" + _log.GetFightData().Health.ToString() + " Health</p>");
                                                     sw.Write(_log.GetLogData().GetBosskill() ? "<p class='text text-success'> Result: Success</p>" : "<p class='text text-warning'> Result: Fail</p>");
                                                     sw.Write("<p>Duration: " + durationString + " </p> ");
                                                 }
@@ -3426,7 +3426,7 @@ namespace LuckParser.Controllers
                         //    CreateSoloHTML(sw,settingsSnap);
                         //    return;
                         //}
-                        if (phases.Count > 1 || (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay))
+                        if (phases.Count > 1 || (_settings.ParseCombatReplay && _log.GetFightData().Logic.CanCombatReplay))
                         {
                             sw.Write("<ul class=\"nav nav-tabs\">");
                             {
@@ -3442,7 +3442,7 @@ namespace LuckParser.Controllers
                                             "</a>" +
                                         "</li>");
                                 }
-                                if (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay)
+                                if (_settings.ParseCombatReplay && _log.GetFightData().Logic.CanCombatReplay)
                                 {
                                     sw.Write("<li  class=\"nav-item\">" +
                                             "<a class=\"nav-link\" data-toggle=\"tab\" href=\"#replay\">" +
@@ -3823,7 +3823,7 @@ namespace LuckParser.Controllers
                                 sw.Write("</div>");
 
                             }
-                            if (_settings.ParseCombatReplay && _log.GetBossData().GetBossBehavior().CanCombatReplay)
+                            if (_settings.ParseCombatReplay && _log.GetFightData().Logic.CanCombatReplay)
                             {
                                 sw.Write("<div class=\"tab-pane fade\" id=\"replay\">");
                                 {
@@ -3832,7 +3832,7 @@ namespace LuckParser.Controllers
                             }
                         }
                         sw.Write("</div>");
-                        sw.Write("<p style=\"margin-top:10px;\"> ARC:" + _log.GetLogData().GetBuildVersion() + " | Bossid " + _log.GetBossData().GetID().ToString() + "| EI Version: " +Application.ProductVersion + " </p> ");
+                        sw.Write("<p style=\"margin-top:10px;\"> ARC:" + _log.GetLogData().GetBuildVersion() + " | Bossid " + _log.GetFightData().ID.ToString() + "| EI Version: " +Application.ProductVersion + " </p> ");
                        
                         sw.Write("<p style=\"margin-top:-15px;\">File recorded by: " + _log.GetLogData().GetPOV().Split(':')[0] + "</p>");
                     }
