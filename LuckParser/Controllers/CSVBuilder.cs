@@ -358,7 +358,7 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][phaseIndex];
-                Dictionary<long, long> boonPresence = player.GetBoonPresence(_log, _statistics.Phases, phaseIndex);
+                Dictionary<long, long> boonPresence = player.GetBoonPresence(_log, phaseIndex);
                 double avgBoons = 0.0;
                 foreach (long duration in boonPresence.Values)
                 {
@@ -671,7 +671,7 @@ namespace LuckParser.Controllers
             List<PhaseData> phases = _statistics.Phases;
             long fightDuration = phases[phaseIndex].GetDuration();
             Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[phaseIndex];
-            Dictionary<long, long> condiPresence = boss.GetCondiPresence(_log, phases, phaseIndex);
+            Dictionary<long, long> condiPresence = boss.GetCondiPresence(_log, phaseIndex);
             double avgCondis = 0.0;
             foreach (long duration in condiPresence.Values)
             {

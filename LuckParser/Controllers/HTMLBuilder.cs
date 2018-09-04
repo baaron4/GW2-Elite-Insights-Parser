@@ -1228,13 +1228,13 @@ namespace LuckParser.Controllers
                     {
 
                         Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][phaseIndex];
-                        Dictionary<long, Dictionary<int, string[]>> extraBoonData = player.GetExtraBoonData(_log, phases);
+                        Dictionary<long, Dictionary<int, string[]>> extraBoonData = player.GetExtraBoonData(_log);
                         List<string> boonArrayToList = new List<string>
                         {
                             player.Group.ToString()
                         };
                         long fightDuration = phases[phaseIndex].GetDuration();
-                        Dictionary<long, long> boonPresence = player.GetBoonPresence(_log, phases, phaseIndex);
+                        Dictionary<long, long> boonPresence = player.GetBoonPresence(_log, phaseIndex);
                         int count = 0;
 
                         sw.Write("<tr>");
@@ -1767,7 +1767,7 @@ namespace LuckParser.Controllers
                                         }
                                         if (_statistics.PresentBoons.Count > 0)
                                         {
-                                            Dictionary<long, BoonsGraphModel> boonGraphData = p.GetBoonGraphs(_log, phases);
+                                            Dictionary<long, BoonsGraphModel> boonGraphData = p.GetBoonGraphs(_log);
                                             foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName != "Number of Conditions"))
                                             {
                                                 sw.Write("{");
@@ -1777,7 +1777,7 @@ namespace LuckParser.Controllers
                                                 sw.Write(" },");
 
                                             }
-                                            boonGraphData = _log.Boss.GetBoonGraphs(_log, phases);
+                                            boonGraphData = _log.Boss.GetBoonGraphs(_log);
                                             foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet"))
                                             {
                                                 sw.Write("{");
@@ -2971,7 +2971,7 @@ namespace LuckParser.Controllers
                     break;
                 }
             }
-            Dictionary<long, long> condiPresence = boss.GetCondiPresence(_log, phases, phaseIndex);
+            Dictionary<long, long> condiPresence = boss.GetCondiPresence(_log, phaseIndex);
             double avgCondis = 0.0;
             foreach (long duration in condiPresence.Values)
             {
@@ -3038,7 +3038,7 @@ namespace LuckParser.Controllers
             // Boon table if applicable
             if (hasBoons)
             {
-                Dictionary<long, long> boonPresence = boss.GetBoonPresence(_log, phases, phaseIndex);
+                Dictionary<long, long> boonPresence = boss.GetBoonPresence(_log, phaseIndex);
                 sw.Write("<h3 align=\"center\"> Boon Uptime </h3>");
                 sw.Write("<script> $(function () { $('#boss_boon_table" + phaseIndex + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
                 sw.Write("<table class=\"display table table-striped table-hover compact mb-3\"  cellspacing=\"0\" width=\"100%\" id=\"boss_boon_table" + phaseIndex + "\">");
@@ -3197,7 +3197,7 @@ namespace LuckParser.Controllers
                                 }
                             }
                             //============================================
-                            Dictionary<long, BoonsGraphModel> boonGraphData = _log.Boss.GetBoonGraphs(_log, phases);
+                            Dictionary<long, BoonsGraphModel> boonGraphData = _log.Boss.GetBoonGraphs(_log);
                             foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName != "Number of Boons"))
                             {
                                 sw.Write("{");

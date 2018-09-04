@@ -12,7 +12,7 @@ using System.Linq;
 //recommend CTRL+M+O to collapse all
 namespace LuckParser.Controllers
 {
-    public class Parser
+    class Parser
     {
         private readonly GW2APIController _aPIController = new GW2APIController();
 
@@ -22,9 +22,15 @@ namespace LuckParser.Controllers
         private readonly AgentData _agentData = new AgentData();
         private readonly SkillData _skillData = new SkillData();
         private readonly CombatData _combatData = new CombatData();
+        private readonly SettingsContainer _settings;
         private List<Player> _playerList = new List<Player>();
         private Boss _boss;
         private byte _revision;
+
+        public Parser(SettingsContainer settings)
+        {
+            _settings = settings;
+        }
 
         // Public Methods
         public LogData GetLogData()
@@ -506,7 +512,7 @@ namespace LuckParser.Controllers
                 _agentData.CleanInstid(_fightData.InstID);
             }
             AgentItem bossAgent = _agentData.GetAgent(_fightData.Agent);
-            _boss = new Boss(bossAgent);
+            _boss = new Boss(bossAgent, _settings.ParsePhases);
             List<Point> bossHealthOverTime = new List<Point>();
             // a hack for buggy golem logs
             if (_fightData.Logic.GetMode() == BossLogic.ParseMode.Golem)
