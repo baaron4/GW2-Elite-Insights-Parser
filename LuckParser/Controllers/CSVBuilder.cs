@@ -349,7 +349,7 @@ namespace LuckParser.Controllers
             WriteCells(new [] { "Name", "Avg Boons" });
             foreach (Boon boon in listToUse)
             {
-                WriteCell(boon.GetName());
+                WriteCell(boon.Name);
 
             }
             NewLine();
@@ -370,16 +370,16 @@ namespace LuckParser.Controllers
                 WriteCell(Math.Round(avgBoons, 1).ToString());
                 foreach (Boon boon in listToUse)
                 {
-                    if (boons.ContainsKey(boon.GetID()))
+                    if (boons.ContainsKey(boon.ID))
                     {
 
-                        if (boon.GetBoonType() == Boon.BoonType.Duration)
+                        if (boon.Type == Boon.BoonType.Duration)
                         {
-                            WriteCell(boons[boon.GetID()].Uptime + "%");
+                            WriteCell(boons[boon.ID].Uptime + "%");
                         }
-                        else if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                        else if (boon.Type == Boon.BoonType.Intensity)
                         {
-                            WriteCell(boons[boon.GetID()].Uptime.ToString());
+                            WriteCell(boons[boon.ID].Uptime.ToString());
                         }
 
                     }
@@ -404,8 +404,8 @@ namespace LuckParser.Controllers
             WriteCell("Name");
             foreach (Boon boon in listToUse)
             {
-                WriteCell(boon.GetName());
-                WriteCell(boon.GetName() + " Overstack");
+                WriteCell(boon.Name);
+                WriteCell(boon.Name + " Overstack");
             }
             NewLine();
 
@@ -419,15 +419,15 @@ namespace LuckParser.Controllers
                 {
                     string rate = "0";
                     string overstack = "0";
-                    Statistics.FinalBoonUptime uptime = uptimes[boon.GetID()];
+                    Statistics.FinalBoonUptime uptime = uptimes[boon.ID];
                     if (uptime.Generation > 0)
                     {
-                        if (boon.GetBoonType() == Boon.BoonType.Duration)
+                        if (boon.Type == Boon.BoonType.Duration)
                         {
                             rate = uptime.Generation.ToString() + "%";
                             overstack = uptime.Overstack.ToString() + "%";
                         }
-                        else if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                        else if (boon.Type == Boon.BoonType.Intensity)
                         {
                             rate = uptime.Generation.ToString();
                             overstack = uptime.Overstack.ToString();
@@ -452,8 +452,8 @@ namespace LuckParser.Controllers
             WriteCell("Name");
             foreach (Boon boon in listToUse)
             {
-                WriteCell(boon.GetName());
-                WriteCell(boon.GetName() + " Overstack");
+                WriteCell(boon.Name);
+                WriteCell(boon.Name + " Overstack");
             }
             NewLine();
 
@@ -468,15 +468,15 @@ namespace LuckParser.Controllers
                 {
                     string rate = "0";
                     string overstack = "0";
-                    Statistics.FinalBoonUptime uptime = boons[boon.GetID()];
+                    Statistics.FinalBoonUptime uptime = boons[boon.ID];
                     if (uptime.Generation > 0)
                     {
-                        if (boon.GetBoonType() == Boon.BoonType.Duration)
+                        if (boon.Type == Boon.BoonType.Duration)
                         {
                             rate = uptime.Generation.ToString() + "%";
                             overstack = uptime.Overstack.ToString() + "%";
                         }
-                        else if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                        else if (boon.Type == Boon.BoonType.Intensity)
                         {
                             rate = uptime.Generation.ToString();
                             overstack = uptime.Overstack.ToString();
@@ -501,8 +501,8 @@ namespace LuckParser.Controllers
             WriteCell("Name");
             foreach (Boon boon in listToUse)
             {
-                WriteCell(boon.GetName());
-                WriteCell(boon.GetName() + " Overstack");
+                WriteCell(boon.Name);
+                WriteCell(boon.Name + " Overstack");
             }
             NewLine();
 
@@ -517,15 +517,15 @@ namespace LuckParser.Controllers
                 {
                     string rate = "0";
                     string overstack = "0";
-                    Statistics.FinalBoonUptime uptime = boons[boon.GetID()];
+                    Statistics.FinalBoonUptime uptime = boons[boon.ID];
                     if (uptime.Generation > 0)
                     {
-                        if (boon.GetBoonType() == Boon.BoonType.Duration)
+                        if (boon.Type == Boon.BoonType.Duration)
                         {
                             rate = uptime.Generation.ToString() + "%";
                             overstack = uptime.Overstack.ToString() + "%";
                         }
-                        else if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                        else if (boon.Type == Boon.BoonType.Intensity)
                         {
                             rate = uptime.Generation.ToString();
                             overstack = uptime.Overstack.ToString();
@@ -550,8 +550,8 @@ namespace LuckParser.Controllers
             WriteCell("Name");
             foreach (Boon boon in listToUse)
             {
-                WriteCell(boon.GetName());
-                WriteCell(boon.GetName() + " Overstack");
+                WriteCell(boon.Name);
+                WriteCell(boon.Name + " Overstack");
             }
             NewLine();
 
@@ -565,15 +565,15 @@ namespace LuckParser.Controllers
                 {
                     string rate = "0";
                     string overstack = "0";
-                    Statistics.FinalBoonUptime uptime = boons[boon.GetID()];
+                    Statistics.FinalBoonUptime uptime = boons[boon.ID];
                     if (uptime.Generation > 0)
                     {
-                        if (boon.GetBoonType() == Boon.BoonType.Duration)
+                        if (boon.Type == Boon.BoonType.Duration)
                         {
                             rate = uptime.Generation.ToString() + "%";
                             overstack = uptime.Overstack.ToString() + "%";
                         }
-                        else if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                        else if (boon.Type == Boon.BoonType.Intensity)
                         {
                             rate = uptime.Generation.ToString();
                             overstack = uptime.Overstack.ToString();
@@ -684,11 +684,11 @@ namespace LuckParser.Controllers
             WriteCell("Avg");
             foreach (Boon boon in _statistics.PresentConditions)
             {
-                if (boon.GetName() == "Retaliation")
+                if (boon.Name == "Retaliation")
                 {
                     continue;
                 }
-                WriteCell(boon.GetName());
+                WriteCell(boon.Name);
             }
 
             NewLine();
@@ -697,17 +697,17 @@ namespace LuckParser.Controllers
             WriteCell(Math.Round(avgCondis, 1).ToString());
             foreach (Boon boon in _statistics.PresentConditions)
             {
-                if (boon.GetName() == "Retaliation")
+                if (boon.Name == "Retaliation")
                 {
                     continue;
                 }
-                if (boon.GetBoonType() == Boon.BoonType.Duration)
+                if (boon.Type == Boon.BoonType.Duration)
                 {
-                    WriteCell(conditions[boon.GetID()].Uptime.ToString() + "%");
+                    WriteCell(conditions[boon.ID].Uptime.ToString() + "%");
                 }
                 else
                 {
-                    WriteCell(conditions[boon.GetID()].Uptime.ToString());
+                    WriteCell(conditions[boon.ID].Uptime.ToString());
                 }
             }
             count++;
@@ -727,7 +727,7 @@ namespace LuckParser.Controllers
             WriteCell("Avg");
             foreach (Boon boon in _statistics.PresentBoons)
             {
-                WriteCell(boon.GetName());
+                WriteCell(boon.Name);
             }
 
             NewLine();
@@ -735,13 +735,13 @@ namespace LuckParser.Controllers
             WriteCell(boss.Character);
             foreach (Boon boon in _statistics.PresentBoons)
             {
-                if (boon.GetBoonType() == Boon.BoonType.Duration)
+                if (boon.Type == Boon.BoonType.Duration)
                 {
-                    WriteCell(conditions[boon.GetID()].Uptime.ToString() + "%");
+                    WriteCell(conditions[boon.ID].Uptime.ToString() + "%");
                 }
                 else
                 {
-                    WriteCell(conditions[boon.GetID()].Uptime.ToString());
+                    WriteCell(conditions[boon.ID].Uptime.ToString());
                 }
             }
             count++;
@@ -761,12 +761,12 @@ namespace LuckParser.Controllers
             WriteCell("Name");
             foreach (Boon boon in _statistics.PresentConditions)
             {
-                if (boon.GetName() == "Retaliation")
+                if (boon.Name == "Retaliation")
                 {
                     continue;
                 }
-                WriteCell(boon.GetName());
-                WriteCell(boon.GetName() + " Overstack");
+                WriteCell(boon.Name);
+                WriteCell(boon.Name + " Overstack");
             }
             NewLine();
             foreach (Player player in _log.GetPlayerList())
@@ -774,19 +774,19 @@ namespace LuckParser.Controllers
                 WriteCell(player.Character);
                 foreach (Boon boon in _statistics.PresentConditions)
                 {
-                    if (boon.GetName() == "Retaliation")
+                    if (boon.Name == "Retaliation")
                     {
                         continue;
                     }
-                    if (boon.GetBoonType() == Boon.BoonType.Duration)
+                    if (boon.Type == Boon.BoonType.Duration)
                     {
-                        WriteCell(conditions[boon.GetID()].Generated[player].ToString() + "%");
-                        WriteCell(conditions[boon.GetID()].Overstacked[player].ToString() + "%");
+                        WriteCell(conditions[boon.ID].Generated[player].ToString() + "%");
+                        WriteCell(conditions[boon.ID].Overstacked[player].ToString() + "%");
                     }
                     else
                     {
-                        WriteCell(conditions[boon.GetID()].Generated[player].ToString());
-                        WriteCell(conditions[boon.GetID()].Overstacked[player].ToString());
+                        WriteCell(conditions[boon.ID].Generated[player].ToString());
+                        WriteCell(conditions[boon.ID].Overstacked[player].ToString());
                     }
                 }
                 NewLine();

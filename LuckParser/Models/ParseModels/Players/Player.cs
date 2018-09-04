@@ -41,7 +41,7 @@ namespace LuckParser.Models.ParseModels
                         long time = c.Time - timeStart;
                         if (time > 0)
                         {
-                            if (condiList.Exists(x=>x.GetID() == c.SkillID))
+                            if (condiList.Exists(x=>x.ID == c.SkillID))
                             {
                                 cleanse[0]++;
                                 cleanse[1] += c.BuffDmg;
@@ -209,7 +209,7 @@ namespace LuckParser.Models.ParseModels
             long fightDuration = log.GetFightData().FightEnd - timeStart;
             foreach (Boon consumable in consumableList)
             {
-                foreach (CombatItem c in log.GetBoonData(consumable.GetID()))
+                foreach (CombatItem c in log.GetBoonData(consumable.ID))
                 {
                     if (c.IsBuffRemove != ParseEnum.BuffRemove.None || (c.IsBuff != 18 && c.IsBuff != 1) || Agent.InstID != c.DstInstid)
                     {

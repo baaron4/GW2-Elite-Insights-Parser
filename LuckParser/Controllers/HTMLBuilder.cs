@@ -1125,7 +1125,7 @@ namespace LuckParser.Controllers
             {
                 HTMLHelper.WriteBoonTableHeader(sw, listToUse);
                 HashSet<int> intensityBoon = new HashSet<int>();
-                bool boonTable = listToUse.Select(x => x.GetID()).Contains(740);
+                bool boonTable = listToUse.Select(x => x.ID).Contains(740);
                 sw.Write("<tbody>");
                 {
                     foreach (Player player in _log.GetPlayerList())
@@ -1161,24 +1161,24 @@ namespace LuckParser.Controllers
                             }
                             foreach (Boon boon in listToUse)
                             {
-                                if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                                if (boon.Type == Boon.BoonType.Intensity)
                                 {
                                     intensityBoon.Add(count);
                                 }
                                 string tooltip = "";
-                                if (extraBoonData.TryGetValue(boon.GetID(), out var myDict))
+                                if (extraBoonData.TryGetValue(boon.ID, out var myDict))
                                 {
                                     string[] tooltips = myDict[phaseIndex];
                                     tooltip = " <br> <big><b>Boss</b></big> </br> " + tooltips[1] + " <br> <big><b>All</b></big> </br> " + tooltips[0];
                                 }
-                                string toWrite = boons[boon.GetID()].Uptime + (intensityBoon.Contains(count) ? "" : "%");
+                                string toWrite = boons[boon.ID].Uptime + (intensityBoon.Contains(count) ? "" : "%");
                                 if (tooltip.Length > 0)
                                 {
                                     sw.Write("<td data-html=\"true\" data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + toWrite + " </td>");
                                 }
                                 else
                                 {
-                                    if (boonTable && boon.GetBoonType() == Boon.BoonType.Intensity && boonPresence.TryGetValue(boon.GetID(), out long presenceValue))
+                                    if (boonTable && boon.Type == Boon.BoonType.Intensity && boonPresence.TryGetValue(boon.ID, out long presenceValue))
                                     {
                                         tooltip = "uptime: " + Math.Round(100.0* presenceValue / fightDuration,1) + "%";
                                         sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + toWrite + " </td>");
@@ -1187,7 +1187,7 @@ namespace LuckParser.Controllers
                                         sw.Write("<td>" + toWrite + "</td>");
                                     }
                                 }                                
-                                boonArrayToList.Add(boons[boon.GetID()].Uptime.ToString());                        
+                                boonArrayToList.Add(boons[boon.ID].Uptime.ToString());                        
                                 count++;
                             }
                         }
@@ -1295,11 +1295,11 @@ namespace LuckParser.Controllers
                         {
                             string rate = "0";
 
-                            Statistics.FinalBoonUptime uptime = uptimes[boon.GetID()];
+                            Statistics.FinalBoonUptime uptime = uptimes[boon.ID];
 
                             if (uptime.Generation > 0)
                             {
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
+                                if (boon.Type == Boon.BoonType.Duration)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1307,7 +1307,7 @@ namespace LuckParser.Controllers
                                         + uptime.Generation
                                         + "%</span>";
                                 }
-                                else if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                                else if (boon.Type == Boon.BoonType.Intensity)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1318,7 +1318,7 @@ namespace LuckParser.Controllers
 
                             }
 
-                            rates[boon.GetID()] = rate;
+                            rates[boon.ID] = rate;
                         }
 
                         HTMLHelper.WriteBoonGenTableBody(sw, player, listToUse, rates);
@@ -1377,11 +1377,11 @@ namespace LuckParser.Controllers
                         {
                             string rate = "0";
 
-                            Statistics.FinalBoonUptime uptime = boons[boon.GetID()];
+                            Statistics.FinalBoonUptime uptime = boons[boon.ID];
 
                             if (uptime.Generation > 0)
                             {
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
+                                if (boon.Type == Boon.BoonType.Duration)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1389,7 +1389,7 @@ namespace LuckParser.Controllers
                                         + uptime.Generation
                                         + "%</span>";
                                 }
-                                else if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                                else if (boon.Type == Boon.BoonType.Intensity)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1399,7 +1399,7 @@ namespace LuckParser.Controllers
                                 }
                             }
 
-                            rates[boon.GetID()] = rate;
+                            rates[boon.ID] = rate;
                         }
 
                         HTMLHelper.WriteBoonGenTableBody(sw, player, listToUse, rates);
@@ -1457,11 +1457,11 @@ namespace LuckParser.Controllers
                         {
                             string rate = "0";
 
-                            Statistics.FinalBoonUptime uptime = boons[boon.GetID()];
+                            Statistics.FinalBoonUptime uptime = boons[boon.ID];
 
                             if (uptime.Generation > 0)
                             {
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
+                                if (boon.Type == Boon.BoonType.Duration)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1469,7 +1469,7 @@ namespace LuckParser.Controllers
                                         + uptime.Generation
                                         + "%</span>";
                                 }
-                                else if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                                else if (boon.Type == Boon.BoonType.Intensity)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1479,7 +1479,7 @@ namespace LuckParser.Controllers
                                 }
                             }
 
-                            rates[boon.GetID()] = rate;
+                            rates[boon.ID] = rate;
                         }
 
                         HTMLHelper.WriteBoonGenTableBody(sw, player, listToUse, rates);
@@ -1538,11 +1538,11 @@ namespace LuckParser.Controllers
                         {
                             string rate = "0";
 
-                            Statistics.FinalBoonUptime uptime = boons[boon.GetID()];
+                            Statistics.FinalBoonUptime uptime = boons[boon.ID];
 
                             if (uptime.Generation > 0)
                             {
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
+                                if (boon.Type == Boon.BoonType.Duration)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1550,7 +1550,7 @@ namespace LuckParser.Controllers
                                         + uptime.Generation
                                         + "%</span>";
                                 }
-                                else if (boon.GetBoonType() == Boon.BoonType.Intensity)
+                                else if (boon.Type == Boon.BoonType.Intensity)
                                 {
                                     rate =
                                         "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
@@ -1560,7 +1560,7 @@ namespace LuckParser.Controllers
                                 }
                             }
 
-                            rates[boon.GetID()] = rate;
+                            rates[boon.ID] = rate;
                         }
 
                         HTMLHelper.WriteBoonGenTableBody(sw, player, listToUse, rates);
@@ -1625,7 +1625,7 @@ namespace LuckParser.Controllers
                                 Boon utility = null;
                                 foreach (Tuple<Boon, long> buff in initial)
                                 {
-                                    if (buff.Item1.GetNature() == Boon.BoonEnum.Food)
+                                    if (buff.Item1.Nature == Boon.BoonEnum.Food)
                                     {
                                         food = buff.Item1;
                                     } else
@@ -1636,11 +1636,11 @@ namespace LuckParser.Controllers
                                 sw.Write("<p>Started with ");
                                 if (food != null)
                                 {
-                                    sw.Write(food.GetName() + "<img src=\"" + food.GetLink() + "\" alt=\"" + food.GetName() + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write(food.Name + "<img src=\"" + food.Link + "\" alt=\"" + food.Name + "\" height=\"18\" width=\"18\" >");
                                 }
                                 if (utility != null)
                                 {
-                                    sw.Write((food != null ?" and " : "") + utility.GetName() + "<img src=\"" + utility.GetLink() + "\" alt=\"" + utility.GetName() + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write((food != null ?" and " : "") + utility.Name + "<img src=\"" + utility.Link + "\" alt=\"" + utility.Name + "\" height=\"18\" width=\"18\" >");
                                 }
                                 sw.Write("</p>");
                             }
@@ -1650,7 +1650,7 @@ namespace LuckParser.Controllers
                                 sw.Write("<ul>");
                                 foreach (Tuple<Boon, long> buff in refreshed)
                                 {
-                                    sw.Write("<li>" + buff.Item1.GetName() + "<img src=\"" + buff.Item1.GetLink() + "\" alt=\"" + buff.Item1.GetName() + "\" height=\"18\" width=\"18\" > at "+ Math.Round(buff.Item2 / 1000.0,3)+"s</li>");
+                                    sw.Write("<li>" + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at "+ Math.Round(buff.Item2 / 1000.0,3)+"s</li>");
                                 }
                                 sw.Write("</ul>");
                                 sw.Write("</p>");
@@ -2470,7 +2470,7 @@ namespace LuckParser.Controllers
                     List<Boon> condiList = _statistics.PresentConditions;
                     foreach (Boon condi in condiList)
                     {
-                        long condiID = condi.GetID();
+                        long condiID = condi.ID;
                         int totaldamage = 0;
                         int mindamage = 0;
                         int hits = 0;
@@ -2488,10 +2488,10 @@ namespace LuckParser.Controllers
                         int avgdamage = (int)(totaldamage / (double)hits);
                         if (totaldamage > 0)
                         {
-                            string condiName = condi.GetName();// Boon.getCondiName(condiID);
+                            string condiName = condi.Name;// Boon.getCondiName(condiID);
                             sw.Write("<tr>");
                             {
-                                sw.Write("<td align=\"left\"><img src=\"" + condi.GetLink() + "\" alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                                sw.Write("<td align=\"left\"><img src=\"" + condi.Link + "\" alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
                                 sw.Write("<td>" + totaldamage + "</td>");
                                 sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
                                 sw.Write("<td>" + hits + "</td>");
@@ -2865,11 +2865,11 @@ namespace LuckParser.Controllers
             bool hasBoons = false;
             foreach (Boon boon in _statistics.PresentBoons)
             {
-                if (boon.GetName() == "Retaliation")
+                if (boon.Name == "Retaliation")
                 {
                     continue;
                 }
-                if (conditions[boon.GetID()].Uptime > 0.0)
+                if (conditions[boon.ID].Uptime > 0.0)
                 {
                     hasBoons = true;
                     break;
@@ -2894,11 +2894,11 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (hasBoons && boon.GetName() == "Retaliation")
+                            if (hasBoons && boon.Name == "Retaliation")
                             {
                                 continue;
                             }
-                            sw.Write("<th>" + "<img src=\"" + boon.GetLink() + " \" alt=\"" + boon.GetName() + "\" title =\" " + boon.GetName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            sw.Write("<th>" + "<img src=\"" + boon.Link + " \" alt=\"" + boon.Name + "\" title =\" " + boon.Name + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
                     sw.Write("</tr>");
@@ -2912,24 +2912,24 @@ namespace LuckParser.Controllers
                         sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avgCondis, 1) + "\">" + boss.Character + " </td>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (hasBoons && boon.GetName() == "Retaliation")
+                            if (hasBoons && boon.Name == "Retaliation")
                             {
                                 continue;
                             }
-                            if (boon.GetBoonType() == Boon.BoonType.Duration)
+                            if (boon.Type == Boon.BoonType.Duration)
                             {
-                                sw.Write("<td>" + conditions[boon.GetID()].Uptime + "%</td>");
+                                sw.Write("<td>" + conditions[boon.ID].Uptime + "%</td>");
                             }
                             else
                             {
-                                if (condiPresence.TryGetValue(boon.GetID(), out long presenceTime))
+                                if (condiPresence.TryGetValue(boon.ID, out long presenceTime))
                                 {
                                     string tooltip = "uptime: " + Math.Round(100.0 * presenceTime / fightDuration, 1) + "%";
-                                    sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + conditions[boon.GetID()].Uptime + " </td>");
+                                    sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + conditions[boon.ID].Uptime + " </td>");
                                 }
                                 else
                                 {
-                                   sw.Write("<td>" + conditions[boon.GetID()].Uptime + "</td>");
+                                   sw.Write("<td>" + conditions[boon.ID].Uptime + "</td>");
                                 }
                             }
                         }
@@ -2954,7 +2954,7 @@ namespace LuckParser.Controllers
                             sw.Write("<th>Name</th>");
                             foreach (Boon boon in _statistics.PresentBoons)
                             {
-                                sw.Write("<th>" + "<img src=\"" + boon.GetLink() + " \" alt=\"" + boon.GetName() + "\" title =\" " + boon.GetName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                                sw.Write("<th>" + "<img src=\"" + boon.Link + " \" alt=\"" + boon.Name + "\" title =\" " + boon.Name + "\" height=\"18\" width=\"18\" >" + "</th>");
                             }
                         }
                         sw.Write("</tr>");
@@ -2967,20 +2967,20 @@ namespace LuckParser.Controllers
                             sw.Write("<td style=\"width: 275px;\">" + boss.Character + " </td>");
                             foreach (Boon boon in _statistics.PresentBoons)
                             {
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
+                                if (boon.Type == Boon.BoonType.Duration)
                                 {
-                                    sw.Write("<td>" + conditions[boon.GetID()].Uptime + "%</td>");
+                                    sw.Write("<td>" + conditions[boon.ID].Uptime + "%</td>");
                                 }
                                 else
                                 {
-                                    if (boonPresence.TryGetValue(boon.GetID(), out long presenceTime))
+                                    if (boonPresence.TryGetValue(boon.ID, out long presenceTime))
                                     {
                                         string tooltip = "uptime: " + Math.Round(100.0 * presenceTime / fightDuration, 1) + "%";
-                                        sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + conditions[boon.GetID()].Uptime + " </td>");
+                                        sw.Write("<td data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + conditions[boon.ID].Uptime + " </td>");
                                     }
                                     else
                                     {
-                                        sw.Write("<td>" + conditions[boon.GetID()].Uptime + "</td>");
+                                        sw.Write("<td>" + conditions[boon.ID].Uptime + "</td>");
                                     }
                                 }
                             }
@@ -3005,11 +3005,11 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (boon.GetName() == "Retaliation")
+                            if (boon.Name == "Retaliation")
                             {
                                 continue;
                             }
-                            sw.Write("<th>" + "<img src=\"" + boon.GetLink() + " \" alt=\"" + boon.GetName() + "\" title =\" " + boon.GetName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                            sw.Write("<th>" + "<img src=\"" + boon.Link + " \" alt=\"" + boon.Name + "\" title =\" " + boon.Name + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
                     sw.Write("</tr>");
@@ -3026,12 +3026,12 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.Character + " </td>");
                             foreach (Boon boon in _statistics.PresentConditions)
                             {
-                                if (boon.GetName() == "Retaliation")
+                                if (boon.Name == "Retaliation")
                                 {
                                     continue;
                                 }
-                                Statistics.FinalBossBoon toUse = conditions[boon.GetID()];
-                                if (boon.GetBoonType() == Boon.BoonType.Duration)
+                                Statistics.FinalBossBoon toUse = conditions[boon.ID];
+                                if (boon.Type == Boon.BoonType.Duration)
                                 {
                                     sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"\" data-original-title=\""
                                         + toUse.Overstacked[player] + "% with overstack \">"

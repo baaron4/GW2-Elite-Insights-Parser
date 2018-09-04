@@ -231,9 +231,9 @@ namespace LuckParser.Controllers
                         //was it a known buff?
                         foreach(Boon b in Boon.GetAll())
                         {
-                            if(skillId == b.GetID())
+                            if(skillId == b.ID)
                             {
-                                name = b.GetName();
+                                name = b.Name;
                             }
                         }
                     }

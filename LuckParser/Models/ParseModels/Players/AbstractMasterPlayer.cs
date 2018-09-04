@@ -329,10 +329,10 @@ namespace LuckParser.Models.ParseModels
         }
         private void SetBoonDistribution(ParsedLog log, List<PhaseData> phases)
         {
-            HashSet<long> boonIds = new HashSet<long>(Boon.GetBoonList().Select(x => x.GetID()));
-            HashSet<long> condiIds = new HashSet<long>(Boon.GetCondiBoonList().Select(x => x.GetID()));
-            HashSet<long> defIds = new HashSet<long>(Boon.GetDefensiveTableList().Select(x => x.GetID()));
-            HashSet<long> offIds = new HashSet<long>(Boon.GetOffensiveTableList().Select(x => x.GetID()));
+            HashSet<long> boonIds = new HashSet<long>(Boon.GetBoonList().Select(x => x.ID));
+            HashSet<long> condiIds = new HashSet<long>(Boon.GetCondiBoonList().Select(x => x.ID));
+            HashSet<long> defIds = new HashSet<long>(Boon.GetDefensiveTableList().Select(x => x.ID));
+            HashSet<long> offIds = new HashSet<long>(Boon.GetOffensiveTableList().Select(x => x.ID));
             BoonMap toUse = GetBoonMap(log, boonIds, condiIds, defIds, offIds);
             long dur = log.GetFightData().FightDuration;
             int fightDuration = (int)(dur) / 1000;
@@ -352,7 +352,7 @@ namespace LuckParser.Models.ParseModels
             long death = GetDeath(log, 0, dur) - log.GetFightData().FightStart;
             foreach (Boon boon in BoonToTrack)
             {
-                long boonid = boon.GetID();
+                long boonid = boon.ID;
                 if (toUse.TryGetValue(boonid, out var logs) && logs.Count != 0)
                 {
                     if (_boonDistribution[0].ContainsKey(boonid))
@@ -428,7 +428,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         graphSegments.Add(new BoonsGraphModel.Segment(0, dur, 0));
                     }
-                    _boonPoints[boonid] = new BoonsGraphModel(boon.GetName(), graphSegments);
+                    _boonPoints[boonid] = new BoonsGraphModel(boon.Name, graphSegments);
                 }
             }
             BoonsGraphModel boonPresenceGraph = new BoonsGraphModel("Number of Boons");

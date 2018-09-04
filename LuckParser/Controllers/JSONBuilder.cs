@@ -42,7 +42,7 @@ namespace LuckParser.Controllers
 
             _statistics = statistics;
 
-            _boonDict = Boon.GetAll().GroupBy(x => x.GetID()).ToDictionary(x => x.Key, x => x.Select(y => y.GetName()).First());
+            _boonDict = Boon.GetAll().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Select(y => y.Name).First());
 
         }
 

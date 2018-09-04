@@ -171,7 +171,7 @@ namespace LuckParser.Controllers
                     sw.Write("<th>Name</th>");
                     foreach (Boon boon in listToUse)
                     {
-                        sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.GetLink() + "\" alt=\"" + boon.GetName() + "\" title =\" " + boon.GetName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                        sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.Link + "\" alt=\"" + boon.Name + "\" title =\" " + boon.Name + "\" height=\"18\" width=\"18\" >" + "</th>");
                     }
                 }
                 sw.Write("</tr> ");
@@ -189,9 +189,9 @@ namespace LuckParser.Controllers
                 sw.Write("<td>" + player.Character + "</td>");
                 foreach (Boon boon in listToUse)
                 {
-                    if (boonArray.ContainsKey(boon.GetID()))
+                    if (boonArray.ContainsKey(boon.ID))
                     {
-                        sw.Write("<td>" + boonArray[boon.GetID()] + "</td>");
+                        sw.Write("<td>" + boonArray[boon.ID] + "</td>");
                     }
                     else
                     {
@@ -263,7 +263,7 @@ namespace LuckParser.Controllers
                 int avgdamage;
                 int hits = 0;
                 int maxdamage = 0;
-                long condiID = condi.GetID();
+                long condiID = condi.ID;
                 usedIDs.Add(condiID);
                 foreach (DamageLog dl in damageLogs.Where(x => x.GetID() == condiID))
                 {
@@ -277,10 +277,10 @@ namespace LuckParser.Controllers
                 avgdamage = (int)(totaldamage / (double)hits);
                 if (totaldamage != 0)
                 {
-                    string condiName = condi.GetName();// Boon.getCondiName(condiID);
+                    string condiName = condi.Name;// Boon.getCondiName(condiID);
                     sw.Write("<tr class=\"condi\">");
                     {
-                        sw.Write("<td align=\"left\"><img src=\"" + condi.GetLink() + "\" alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                        sw.Write("<td align=\"left\"><img src=\"" + condi.Link + "\" alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
                         sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
                         sw.Write("<td>" + totaldamage + "</td>");
                         sw.Write("<td>" + mindamage + "</td>");
