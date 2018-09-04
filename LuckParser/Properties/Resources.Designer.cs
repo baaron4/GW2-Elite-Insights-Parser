@@ -63,10 +63,20 @@ namespace LuckParser.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die .table th { border-top: 0; }
         ///
-        ///.template {
-        ///	opacity: 0.3333;
-        ///	display: none;
+        ///.header {
+        ///    text-align: center;
+        ///	width: 100%;
+        ///	margin-top: 6px;
+        ///	margin-bottom: 10px;
         ///}
+        ///
+        ///.footer {
+        ///    text-align: center;
+        ///	margin-top: 10px;
+        ///	margin-bottom: 6px;
+        ///	width: 100%;
+        ///}
+        ///
         ///td.sorting_1 {
         ///	background-color: rgba(39,128,227,0.05);
         ///}
@@ -82,15 +92,7 @@ namespace LuckParser.Properties {
         ///    background-color: rgba(255,0,0,0.25);
         ///}
         ///
-        ///img.icon {
-        ///	width: 18px;
-        ///	height: 18px;
-        ///}
-        ///
-        ///img.icon-hover:hover,
-        ///td:hover img.icon-hover,
-        ///th:hover img.icon-hover,
-        ///.table-hover tr:hover  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///i [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string flomix_ei_css {
             get {
@@ -130,7 +132,7 @@ namespace LuckParser.Properties {
         ///&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css&quot;  crossorigin=&quot;anonymous&quot;&gt;
         ///&lt;link href=&quot;https://fonts.googleapis.com/css?family=Open+Sans&quot; rel=&quot;stylesheet&quot;&gt;
         ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css&quot;&gt;
-        ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;./flomix-ei.css?version=2&quot;&gt;
+        ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;./flomix-ei.css?version=3&quot;&gt;
         ///&lt;script src=&quot;https://co [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string template_html {
@@ -147,7 +149,7 @@ namespace LuckParser.Properties {
         ///			&lt;th width=&quot;30px&quot;&gt;&lt;/th&gt;
         ///			&lt;th class=&quot;text-left&quot;&gt;Name&lt;/th&gt;
         ///			{{for boons}}
-        ///			&lt;th width=&quot;40px&quot; title=&quot;{{:name}}&quot;&gt;&lt;img src=&quot;{{:icon}}&quot; alt=&quot;{{:name}}&quot; class=&quot;icon icon-hover&quot;&gt;&lt;/th&gt;
+        ///			&lt;th title=&quot;{{:name}}&quot;&gt;&lt;img src=&quot;{{:icon}}&quot; alt=&quot;{{:name}}&quot; class=&quot;icon icon-hover&quot;&gt;&lt;/th&gt;
         ///			{{/for}}
         ///		&lt;/tr&gt;
         ///	&lt;/thead&gt;
@@ -155,7 +157,7 @@ namespace LuckParser.Properties {
         ///		{{for rows ~boons=boons}}
         ///		&lt;tr&gt;
         ///			&lt;td&gt;{{:player.group}}&lt;/td&gt;
-        ///			&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession} [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///			&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; class=&quot;ico [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string tmplBoonTable {
             get {
@@ -281,7 +283,9 @@ namespace LuckParser.Properties {
         ///			&lt;th width=&quot;30px&quot;&gt;&lt;/th&gt;
         ///			&lt;th class=&quot;text-left&quot;&gt;Player&lt;/th&gt;
         ///			{{for mechanics}}
+        ///			{{if playerMech}}
         ///				&lt;th title=&quot;{{:description}}&quot;&gt;{{:name}}&lt;/th&gt;
+        ///			{{/if}}
         ///			{{/for}}
         ///		&lt;/tr&gt;
         ///	&lt;/thead&gt;
@@ -289,7 +293,7 @@ namespace LuckParser.Properties {
         ///		{{for rows ~mechanics=mechanics}}
         ///		&lt;tr&gt;
         ///			&lt;td&gt;{{:player.group}}&lt;/td&gt;
-        ///			&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; class=&quot;icon&quot;&gt;&lt;span style=&quot;display:none&quot;&gt; [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///			&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; class= [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string tmplMechanicTable {
             get {
