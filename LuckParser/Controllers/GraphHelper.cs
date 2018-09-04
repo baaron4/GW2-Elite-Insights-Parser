@@ -55,7 +55,7 @@ namespace LuckParser.Controllers
             {
                 dmgListFull[totalTime] = totalDamage;
             }
-            /*CombatReplay replay = p.GetCombatReplay();
+            /*CombatReplay replay = p.Replay;
             if (replay != null && dstid == 0 && phaseIndex == 0)
             {
                 foreach (int i in replay.GetTimes())
@@ -93,16 +93,16 @@ namespace LuckParser.Controllers
                 }
             }
             int id = (phaseIndex + "_" + dstid + "_" + GraphMode.Full).GetHashCode();
-            p.AddDPSGraph(id, dmgList);
+            p.DpsGraph[id] = dmgList;
             if (Settings.Show10s)
             {
                 id = (phaseIndex + "_" + dstid + "_" + GraphMode.S10).GetHashCode();
-                p.AddDPSGraph(id, dmgList10s);
+                p.DpsGraph[id] = dmgList10s;
             }
             if (Settings.Show30s)
             {
                 id = (phaseIndex + "_" + dstid + "_" + GraphMode.S30).GetHashCode();
-                p.AddDPSGraph(id, dmgList30s);
+                p.DpsGraph[id] = dmgList30s;
             }
             return p.GetDPSGraph(askedId);
         }
@@ -157,7 +157,7 @@ namespace LuckParser.Controllers
             {
                 cleave.Add(new Point(boss[i].X, total[i].Y - boss[i].Y));
             }
-            p.AddDPSGraph(askedId, cleave);
+            p.DpsGraph[askedId] = cleave;
             return cleave;
         }
     }

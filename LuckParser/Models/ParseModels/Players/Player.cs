@@ -273,14 +273,14 @@ namespace LuckParser.Models.ParseModels
                     dc.Add(new Tuple<long, long>(cur.Time - log.GetBossData().GetFirstAware(), log.GetBossData().GetAwareDuration()));
                 }
             }
-            Replay.SetStatus(down, dead, dc);
+            CombatReplay.SetStatus(down, dead, dc);
             // Boss related stuff
-            log.GetBossData().GetBossBehavior().GetAdditionalPlayerData(Replay, this, log);
+            log.GetBossData().GetBossBehavior().GetAdditionalPlayerData(CombatReplay, this, log);
         }
 
         protected override void SetCombatReplayIcon(ParsedLog log)
         {
-            Replay.SetIcon(HTMLHelper.GetLink(GetProf()));
+            CombatReplay.SetIcon(HTMLHelper.GetLink(GetProf()));
         }
 
         public void AddMechanics(ParsedLog log)

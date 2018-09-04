@@ -64,7 +64,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
-            List<ParseEnum.ThrashIDS> ids = log.GetBossData().GetBossBehavior().GetAdditionalData(Replay, GetCastLogs(log, 0, log.GetBossData().GetAwareDuration()), log);
+            List<ParseEnum.ThrashIDS> ids = log.GetBossData().GetBossBehavior().GetAdditionalData(CombatReplay, GetCastLogs(log, 0, log.GetBossData().GetAwareDuration()), log);
             List<AgentItem> aList = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
             foreach (AgentItem a in aList)
             {
@@ -76,7 +76,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetCombatReplayIcon(ParsedLog log)
         {
-            Replay.SetIcon(log.GetBossData().GetBossBehavior().GetReplayIcon());
+            CombatReplay.SetIcon(log.GetBossData().GetBossBehavior().GetReplayIcon());
         }
 
         public void AddMechanics(ParsedLog log)

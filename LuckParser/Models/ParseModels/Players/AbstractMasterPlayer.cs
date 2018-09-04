@@ -9,18 +9,18 @@ namespace LuckParser.Models.ParseModels
     public abstract class AbstractMasterPlayer : AbstractPlayer
     {
         // Boons
-        protected readonly List<Boon> BoonToTrack = new List<Boon>();
+        public readonly List<Boon> BoonToTrack = new List<Boon>();
         private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
         private readonly List<Dictionary<long, long>> _boonPresence = new List<Dictionary<long, long>>();
         private readonly List<Dictionary<long, long>> _condiPresence = new List<Dictionary<long, long>>();
         private readonly Dictionary<long, BoonsGraphModel> _boonPoints = new Dictionary<long, BoonsGraphModel>();
         private readonly Dictionary<long, Dictionary<int, string[]>> _boonExtra = new Dictionary<long, Dictionary<int, string[]>>();
         // dps graphs
-        private readonly Dictionary<int, List<Point>> _dpsGraphs = new Dictionary<int, List<Point>>();
+        public readonly Dictionary<int, List<Point>> DpsGraph = new Dictionary<int, List<Point>>();
         // Minions
         private readonly Dictionary<string, Minions> _minions = new Dictionary<string, Minions>();
         // Replay
-        protected CombatReplay Replay;
+        public CombatReplay CombatReplay { get; protected set; }
 
         protected AbstractMasterPlayer(AgentItem agent) : base(agent)
         {
@@ -35,15 +35,12 @@ namespace LuckParser.Models.ParseModels
             }
             return _minions;
         }
-        public void AddDPSGraph(int id, List<Point> graph)
-        {
-            _dpsGraphs[id] = graph;
-        }
+
         public List<Point> GetDPSGraph(int id)
         {
-            if (_dpsGraphs.ContainsKey(id))
+            if (DpsGraph.TryGetValue(id, out List<Point> res))
             {
-                return _dpsGraphs[id];
+                return res;
             }
             return new List<Point>();
         }
@@ -62,10 +59,6 @@ namespace LuckParser.Models.ParseModels
                 SetBoonDistribution(log, phases);
             }
             return _boonPoints;
-        }
-        public List<Boon> GetBoonToTrack()
-        {
-            return BoonToTrack;
         }
         public Dictionary<long, long> GetBoonPresence(ParsedLog log, List<PhaseData> phases, int phaseIndex)
         {
@@ -100,30 +93,26 @@ namespace LuckParser.Models.ParseModels
                 // no combat replay support on boss
                 return;
             }
-            if (Replay == null)
+            if (CombatReplay == null)
             {
-                Replay = new CombatReplay();
+                CombatReplay = new CombatReplay();
                 SetMovements(log);
-                Replay.PollingRate(pollingRate, log.GetBossData().GetAwareDuration(), forceInterpolate);
+                CombatReplay.PollingRate(pollingRate, log.GetBossData().GetAwareDuration(), forceInterpolate);
                 SetCombatReplayIcon(log);
                 if (trim)
                 {
                     CombatItem despawnCheck = log.GetCombatList().FirstOrDefault(x => x.SrcAgent == Agent.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
                     if (despawnCheck != null)
                     {
-                        Replay.Trim(Agent.FirstAware - log.GetBossData().GetFirstAware(), despawnCheck.Time - log.GetBossData().GetFirstAware());
+                        CombatReplay.Trim(Agent.FirstAware - log.GetBossData().GetFirstAware(), despawnCheck.Time - log.GetBossData().GetFirstAware());
                     }
                     else
                     {
-                        Replay.Trim(Agent.FirstAware - log.GetBossData().GetFirstAware(), Agent.LastAware - log.GetBossData().GetFirstAware());
+                        CombatReplay.Trim(Agent.FirstAware - log.GetBossData().GetFirstAware(), Agent.LastAware - log.GetBossData().GetFirstAware());
                     }
                 }
                 SetAdditionalCombatReplayData(log, pollingRate);
             }
-        }
-        public CombatReplay GetCombatReplay()
-        {
-            return Replay;
         }
 
         public long GetDeath(ParsedLog log, long start, long end)
@@ -135,18 +124,6 @@ namespace LuckParser.Models.ParseModels
                 return dead.Time;
             }
             return 0;
-        }
-
-        public void SetBoonToTrack(List<List<Boon>> boonToTrack)
-        {
-            if (BoonToTrack.Count > 0)
-            {
-                return;
-            }
-            foreach(List<Boon> lBoon in boonToTrack)
-            {
-                BoonToTrack.AddRange(lBoon);
-            }
         }
         // private getters
         private BoonMap GetBoonMap(ParsedLog log, HashSet<long> boonIds, HashSet<long> condiIds, HashSet<long> offIds, HashSet<long> defIds)
@@ -272,11 +249,11 @@ namespace LuckParser.Models.ParseModels
                 float y = BitConverter.ToSingle(xy, 4);
                 if (c.IsStateChange == ParseEnum.StateChange.Position)
                 {
-                    Replay.AddPosition(new Point3D(x, y, c.Value, time));
+                    CombatReplay.AddPosition(new Point3D(x, y, c.Value, time));
                 }
                 else
                 {
-                    Replay.AddVelocity(new Point3D(x, y, c.Value, time));
+                    CombatReplay.AddVelocity(new Point3D(x, y, c.Value, time));
                 }
             }
         }

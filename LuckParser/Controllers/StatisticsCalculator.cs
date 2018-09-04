@@ -412,7 +412,7 @@ namespace LuckParser.Controllers
                             List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
                             foreach (Player p in _log.GetPlayerList())
                             {
-                                List<Point3D> list = p.GetCombatReplay().GetActivePositions();  
+                                List<Point3D> list = p.CombatReplay.GetActivePositions();  
                                 if (list.Count > 1)
                                 {
                                     GroupsPosList.Add(list);
@@ -445,8 +445,8 @@ namespace LuckParser.Controllers
                                 _statistics.StackCenterPositions.Add(new Point3D(x, y, z, _settings.PollingRate * time));
                             }
                         }
-                        List<Point3D> positions = player.GetCombatReplay().GetPositions().Where(x => x.Time >= phase.GetStart() && x.Time <= phase.GetEnd()).ToList();
-                        int offset = player.GetCombatReplay().GetPositions().Count(x => x.Time < phase.GetStart());
+                        List<Point3D> positions = player.CombatReplay.GetPositions().Where(x => x.Time >= phase.GetStart() && x.Time <= phase.GetEnd()).ToList();
+                        int offset = player.CombatReplay.GetPositions().Count(x => x.Time < phase.GetStart());
                         if (positions.Count > 1)
                         {
                             List<float> distances = new List<float>();
@@ -567,7 +567,7 @@ namespace LuckParser.Controllers
                 Dictionary<long, Statistics.FinalBoonUptime> final =
                     new Dictionary<long, Statistics.FinalBoonUptime>();
 
-                foreach (Boon boon in player.GetBoonToTrack())
+                foreach (Boon boon in player.BoonToTrack)
                 {
                     long totalGeneration = 0;
                     long totalOverstack = 0;
@@ -618,7 +618,7 @@ namespace LuckParser.Controllers
                     BoonDistribution selfBoons = player.GetBoonDistribution(_log,_statistics.Phases, phaseIndex);
 
                     long fightDuration = phase.GetEnd() - phase.GetStart();
-                    foreach (Boon boon in player.GetBoonToTrack())
+                    foreach (Boon boon in player.BoonToTrack)
                     {
                         Statistics.FinalBoonUptime uptime = new Statistics.FinalBoonUptime
                         {
@@ -676,7 +676,7 @@ namespace LuckParser.Controllers
                 PhaseData phase =_statistics.Phases[phaseIndex];
                 long fightDuration = phase.GetDuration();
 
-                foreach (Boon boon in _log.GetBoss().GetBoonToTrack())
+                foreach (Boon boon in _log.GetBoss().BoonToTrack)
                 {
                     Statistics.FinalBossBoon condition = new Statistics.FinalBossBoon(_log.GetPlayerList());
                     rates[boon.GetID()] = condition;
@@ -791,20 +791,19 @@ namespace LuckParser.Controllers
             }
             foreach (Player player in players)
             {
-                List<List<Boon>> boonListToTrack = new List<List<Boon>>
-                {
-                    _statistics.PresentBoons,
-                    _statistics.PresentOffbuffs,
-                    _statistics.PresentDefbuffs,
-                };
+                player.BoonToTrack.AddRange(_statistics.PresentBoons);
+                player.BoonToTrack.AddRange(_statistics.PresentOffbuffs);
+                player.BoonToTrack.AddRange(_statistics.PresentDefbuffs);
                 if(_settings.PlayerBoonsAllProf)
                 {
-                    boonListToTrack.Add(presentPersonalBuffs[player.GetInstid()]);
+                    player.BoonToTrack.AddRange(presentPersonalBuffs[player.GetInstid()]);
                 }
-                player.SetBoonToTrack(boonListToTrack);
             }
             // boss boons
-            _log.GetBoss().SetBoonToTrack(new List<List<Boon>> {_statistics.PresentBoons, _statistics.PresentConditions, Boon.GetBossBoonList()});
+            Boss boss = _log.GetBoss();
+            boss.BoonToTrack.AddRange(_statistics.PresentBoons);
+            boss.BoonToTrack.AddRange(_statistics.PresentConditions);
+            boss.BoonToTrack.AddRange(Boon.GetBossBoonList());
         }
     }
 }
