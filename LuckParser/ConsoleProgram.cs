@@ -95,7 +95,7 @@ namespace LuckParser
                     StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
                     if (Properties.Settings.Default.SaveOutHTML)
                     {
-                        HTMLBuilderNew.UpdateStatisticSwitches(switches);
+                        HTMLBuilder.UpdateStatisticSwitches(switches);
                     }
                     if (Properties.Settings.Default.SaveOutCSV)
                     {
@@ -119,8 +119,15 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs))
                             {
-                                var builder = new HTMLBuilderNew(log, settings, statistics);
-                                builder.CreateHTML(sw, saveDirectory.FullName);
+                                if (Properties.Settings.Default.NewHtmlMode)
+                                {
+                                    var builder = new HTMLBuilderNew(log, settings, statistics);
+                                    builder.CreateHTML(sw, saveDirectory.FullName);
+                                } else
+                                {
+                                    var builder = new HTMLBuilder(log, settings, statistics);
+                                    builder.CreateHTML(sw);
+                                }
                             }
                         }
                     }
