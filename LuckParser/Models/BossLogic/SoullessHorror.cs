@@ -21,7 +21,13 @@ namespace LuckParser.Models
             new Mechanic(47363, "Spinning Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'star-triangle-up-open',color:'rgb(128,0,0)',", "Scth","Spinning Slash (hit by Scythe)", "Scythe",0),
             new Mechanic(48500, "Death Bloom", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'octagon',color:'rgb(255,140,0)',", "8Slcs","Death Bloom (8 Slices)", "8 Slices",0),
             new Mechanic(47434, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.SoullessHorror, "symbol:'star',color:'rgb(255,0,255)',", "Fix","Fixated (Special Action Key)", "Fixated",0),
-            new Mechanic(47414, "Necrosis", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.SoullessHorror, "symbol:'star-open',color:'rgb(255,0,255)',", "Necr","Necrosis (Tanking Debuff)", "Necrosis Debuff",0)
+            new Mechanic(47414, "Necrosis", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.SoullessHorror, "symbol:'star-open',color:'rgb(255,0,255)',", "Necr","Necrosis (Tanking Debuff)", "Necrosis Debuff",0),
+            new Mechanic(48327, "Corrupt the Living", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'circle',color:'rgb(255,0,0)',", "Spin","Corrupt the Living (Torment+Poisen Spin)", "Torment+Poisen Spin",0),
+            new Mechanic(47756, "Wurm Spit", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'diamond-open',color:'rgb(0,128,128)',", "Spit","Wurm Spit", "Wurm Spit",0),
+            new Mechanic(48662, "Howling Death", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.SoullessHorror, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "CC","Howling Death (Breakbar)", "Breakbar",0),
+            new Mechanic(48662, "Howling Death", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.SoullessHorror, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Howling Death (Breakbar) broken", "CCed",0,(condition => condition.getCombatItem().Value <=6800)),
+            new Mechanic(48662, "Howling Death", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.SoullessHorror, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Howling Death (Breakbar failed) ", "CC Fail",0,(condition => condition.getCombatItem().Value >6800)),
+
             });
         }
 
