@@ -9,11 +9,11 @@ namespace LuckParser.Models.ParseModels
         {
             get
             {
-                return skills.Values;
+                return _skills.Values;
             }
         }
         // Fields
-        private Dictionary<long, SkillItem> skills = new Dictionary<long, SkillItem>();
+        private readonly Dictionary<long, SkillItem> _skills = new Dictionary<long, SkillItem>();
         readonly static Dictionary<long, string> _apiMissingID = new Dictionary<long, string>()
         {
             {SkillItem.ResurrectId, "Resurrect"},
@@ -47,7 +47,7 @@ namespace LuckParser.Models.ParseModels
 
         public SkillItem Get(long ID)
         {
-            if (skills.TryGetValue(ID, out SkillItem value))
+            if (_skills.TryGetValue(ID, out SkillItem value))
             {
                 return value;
             }
@@ -56,7 +56,7 @@ namespace LuckParser.Models.ParseModels
 
         public void Add(SkillItem skillItem)
         {
-            skills.Add(skillItem.GetID(), skillItem);
+            _skills.Add(skillItem.GetID(), skillItem);
         }
 
         public String GetName(long ID)
