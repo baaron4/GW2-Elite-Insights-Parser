@@ -319,7 +319,7 @@ namespace LuckParser.Models.ParseModels
                 Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
                 foreach (DamageLog dLog in dls)
                 {
-                    if (condition != null && !condition(dLog.GetDamage()))
+                    if (condition != null && !condition(new SpecialConditionItem(dLog)))
                     {
                         continue;
                     }
@@ -336,7 +336,7 @@ namespace LuckParser.Models.ParseModels
                 Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
                 foreach (CombatItem c in log.GetBoonData(mech.GetSkill()))
                 {
-                    if (condition != null && !condition(c.Value))
+                    if (condition != null && !condition(new SpecialConditionItem(c)))
                     {
                         continue;
                     }
@@ -369,7 +369,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     foreach (DamageLog dl in GetDamageLogs(0,log,0,log.FightData.FightDuration))
                     {
-                        if (dl.GetDstInstidt() != a.InstID || dl.IsCondi() > 0 || dl.GetTime() < a.FirstAware - start || dl.GetTime() > a.LastAware - start || (condition != null && !condition(dl.GetDamage())))
+                        if (dl.GetDstInstidt() != a.InstID || dl.IsCondi() > 0 || dl.GetTime() < a.FirstAware - start || dl.GetTime() > a.LastAware - start || (condition != null && !condition(new SpecialConditionItem(dl))))
                         {
                             continue;
                         }

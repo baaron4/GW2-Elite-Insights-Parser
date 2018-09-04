@@ -2,6 +2,36 @@
 
 namespace LuckParser.Models.ParseModels
 {
+    public class SpecialConditionItem
+    {
+        private readonly CombatItem _combatItem;
+        private readonly DamageLog _dLog;
+
+        //covers the special conditions that one might want to check when tracking mechanics
+        public SpecialConditionItem(DamageLog dLog)
+        {
+            _dLog = dLog;
+            _combatItem = null;
+        }
+
+        public SpecialConditionItem(CombatItem combatItem)
+        {
+            _dLog = null;
+            _combatItem = combatItem;
+        }
+
+        public DamageLog getDLog()
+        {
+            return _dLog;
+        }
+
+        public CombatItem getCombatItem()
+        {
+            return _combatItem;
+        }
+
+    }
+
     public class Mechanic
     {
         /// <summary>
@@ -20,7 +50,7 @@ namespace LuckParser.Models.ParseModels
         /// </summary>
         public enum MechType { PlayerBoon, PlayerBoonRemove, EnemyBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, PlayerOnPlayer, HitOnEnemy, PlayerStatus, EnemyCastStart, EnemyCastEnd }
 
-        public delegate bool SpecialCondition(long value);
+        public delegate bool SpecialCondition(SpecialConditionItem conditionItem);
         // Fields
         
         private readonly string _inGameName;
