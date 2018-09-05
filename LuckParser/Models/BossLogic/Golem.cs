@@ -18,7 +18,7 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
         {
             CombatItem pov = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
             if (pov != null)
@@ -27,17 +27,17 @@ namespace LuckParser.Models
                 CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
                 if (enterCombat != null)
                 {
-                    bossData.SetFirstAware(enterCombat.Time);
+                    fightData.FightStart = enterCombat.Time;
                 }
             }
-            CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.GetInstid()).LastOrDefault(x => x.Value > 0 || x.BuffDmg > 0);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData(fightData.InstID).LastOrDefault(x => x.Value > 0 || x.BuffDmg > 0);
             if (lastDamageTaken != null)
             {
-                bossData.SetLastAware(lastDamageTaken.Time);
+                fightData.FightEnd = lastDamageTaken.Time;
             }
-            if (bossData.GetHealthOverTime().Count > 0)
+            if (fightData.HealthOverTime.Count > 0)
             {
-                logData.SetBossKill(bossData.GetHealthOverTime().Last().Y < 200);
+                logData.Success = fightData.HealthOverTime.Last().Y < 200;
             }
         }
     }

@@ -45,28 +45,28 @@ namespace LuckParser.Models
         public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
         {
             long start = 0;
-            long fightDuration = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             // split happened
-            if (boss.GetPhaseData().Count == 1)
+            if (boss.PhaseData.Count == 1)
             {
-                CombatItem invulXera = log.GetBoonData(762).Find(x => x.DstInstid == boss.GetInstid());
+                CombatItem invulXera = log.GetBoonData(762).Find(x => x.DstInstid == boss.InstID);
                 if (invulXera == null)
                 {
-                    invulXera = log.GetBoonData(34113).Find(x => x.DstInstid == boss.GetInstid());
+                    invulXera = log.GetBoonData(34113).Find(x => x.DstInstid == boss.InstID);
                 }
-                long end = invulXera.Time - log.GetBossData().GetFirstAware();
+                long end = invulXera.Time - log.FightData.FightStart;
                 phases.Add(new PhaseData(start, end));
-                start = boss.GetPhaseData()[0] - log.GetBossData().GetFirstAware();
+                start = boss.PhaseData[0] - log.FightData.FightStart;
                 castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].SetName("Phase " + i);
+                phases[i].Name = "Phase " + i;
             }
             return phases;
         }

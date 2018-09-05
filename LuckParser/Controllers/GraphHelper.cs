@@ -25,12 +25,12 @@ namespace LuckParser.Controllers
             List<Point> dmgList10s = new List<Point>();
             List<Point> dmgList30s = new List<Point>();
             List<DamageLog> damageLogs;
-            if (dstid != 0 && phase.GetRedirection().Count > 0)
+            if (dstid != 0 && phase.Redirection.Count > 0)
             {      
-                damageLogs = p.GetDamageLogs(phase.GetRedirection(), log, phase.GetStart(), phase.GetEnd());
+                damageLogs = p.GetDamageLogs(phase.Redirection, log, phase.Start, phase.End);
             } else
             {
-                damageLogs = p.GetDamageLogs(dstid, log, phase.GetStart(), phase.GetEnd());
+                damageLogs = p.GetDamageLogs(dstid, log, phase.Start, phase.End);
             }
             // fill the graph, full precision
             List<double> dmgListFull = new List<double>();
@@ -42,7 +42,7 @@ namespace LuckParser.Controllers
             int totalDamage = 0;
             foreach (DamageLog dl in damageLogs)
             {
-                int time = (int)(dl.GetTime() - phase.GetStart());
+                int time = (int)(dl.GetTime() - phase.Start);
                 // fill
                 for (; totalTime < time; totalTime++)
                 {
@@ -56,7 +56,7 @@ namespace LuckParser.Controllers
             {
                 dmgListFull[totalTime] = totalDamage;
             }
-            /*CombatReplay replay = p.GetCombatReplay();
+            /*CombatReplay replay = p.Replay;
             if (replay != null && dstid == 0 && phaseIndex == 0)
             {
                 foreach (int i in replay.GetTimes())
@@ -97,18 +97,18 @@ namespace LuckParser.Controllers
                 }
             }
             int id = (phaseIndex + "_" + dstid + "_" + GraphMode.Full).GetHashCode();
-            p.AddDPSGraph(id, dmgList);
+            p.DpsGraph[id] = dmgList;
             id = (phaseIndex + "_" + dstid + "_" + GraphMode.S1).GetHashCode();
-            p.AddDPSGraph(id, dmgList1s);
+            p.DpsGraph[id] = dmgList1s;
             if (Settings.Show10s)
             {
                 id = (phaseIndex + "_" + dstid + "_" + GraphMode.S10).GetHashCode();
-                p.AddDPSGraph(id, dmgList10s);
+                p.DpsGraph[id] = dmgList10s;
             }
             if (Settings.Show30s)
             {
                 id = (phaseIndex + "_" + dstid + "_" + GraphMode.S30).GetHashCode();
-                p.AddDPSGraph(id, dmgList30s);
+                p.DpsGraph[id] = dmgList30s;
             }
             return p.GetDPSGraph(askedId);
         }
@@ -123,7 +123,7 @@ namespace LuckParser.Controllers
         /// <returns></returns>
         public static List<Point> GetBossDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, GraphMode mode)
         {
-            return GetDPSGraph(log, p, phaseIndex, phase, log.GetBossData().GetInstid(), mode);
+            return GetDPSGraph(log, p, phaseIndex, phase, log.FightData.InstID, mode);
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace LuckParser.Controllers
             {
                 cleave.Add(new Point(boss[i].X, total[i].Y - boss[i].Y));
             }
-            p.AddDPSGraph(askedId, cleave);
+            p.DpsGraph[askedId] = cleave;
             return cleave;
         }
     }

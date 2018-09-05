@@ -54,7 +54,8 @@ namespace LuckParser
             }
             try
             {
-                Parser control = new Parser();
+                SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
+                Parser control = new Parser(settings);
 
                 if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
                     fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
@@ -82,15 +83,14 @@ namespace LuckParser
                         throw new CancellationException(row, new InvalidDataException("Save Directory not found"));
                     }
 
-                    string bossid = control.GetBossData().GetID().ToString();
+                    string bossid = control.GetFightData().ID.ToString();
                     string result = "fail";
 
-                    if (control.GetLogData().GetBosskill())
+                    if (control.GetLogData().Success)
                     {
                         result = "kill";
                     }
 
-                    SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
                     StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
                     StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
                     if (Properties.Settings.Default.SaveOutHTML)

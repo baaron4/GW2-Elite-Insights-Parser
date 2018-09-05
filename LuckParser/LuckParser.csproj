@@ -184,7 +184,7 @@
     <Compile Include="Models\ParseModels\Boons\Boon.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonLog.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonMap.cs" />
-    <Compile Include="Models\ParseModels\BossData.cs" />
+    <Compile Include="Models\ParseModels\FightData.cs" />
     <Compile Include="Models\ParseModels\Logs\CastLog.cs" />
     <Compile Include="Models\ParseModels\CombatData.cs" />
     <Compile Include="Models\ParseModels\CombatItem.cs" />

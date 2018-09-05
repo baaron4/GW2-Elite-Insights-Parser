@@ -10,14 +10,14 @@ namespace LuckParser.Models.ParseModels
         }
         public BoonMap(Boon boon)
         {
-            this[boon.GetID()] = new List<BoonLog>();
+            this[boon.ID] = new List<BoonLog>();
         }
 
         public BoonMap(List<Boon> boons)
         {
             foreach (Boon boon in boons)
             {
-                this[boon.GetID()] = new List<BoonLog>();
+                this[boon.ID] = new List<BoonLog>();
             }
         }
 
@@ -26,21 +26,21 @@ namespace LuckParser.Models.ParseModels
         {
             foreach (Boon boon in boons)
             {
-                if (ContainsKey(boon.GetID()))
+                if (ContainsKey(boon.ID))
                 {
                     continue;
                 }
-                this[boon.GetID()] = new List<BoonLog>();
+                this[boon.ID] = new List<BoonLog>();
             }
         }
 
         public void Add(Boon boon)
         {
-            if (ContainsKey(boon.GetID()))
+            if (ContainsKey(boon.ID))
             {
                 return;
             }
-            this[boon.GetID()] = new List<BoonLog>();
+            this[boon.ID] = new List<BoonLog>();
         }
         
     }
