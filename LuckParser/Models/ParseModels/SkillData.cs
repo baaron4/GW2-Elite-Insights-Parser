@@ -56,7 +56,7 @@ namespace LuckParser.Models.ParseModels
 
         public SkillItem GetOrDummy(long ID)
         {
-            if (skills.TryGetValue(ID, out SkillItem value))
+            if (_skills.TryGetValue(ID, out SkillItem value))
             {
                 return value;
             }
