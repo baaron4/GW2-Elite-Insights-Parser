@@ -11,19 +11,29 @@ namespace LuckParser.Models.ParseModels
         {
             public readonly long Start;
             public readonly long BoonDuration;
+            public long InitialBoonDuration
+            {
+                get
+                {
+                    return BoonDuration + _overstack;
+                }
+            }
             public readonly ushort Src;
+            private readonly long _overstack;
 
-            public BoonStackItem(long start, long boonDuration, ushort srcinstid)
+            public BoonStackItem(long start, long boonDuration, ushort srcinstid, long overstack)
             {
                 Start = start;
                 BoonDuration = boonDuration;
                 Src = srcinstid;
+                _overstack = overstack;
             }
 
             public BoonStackItem(BoonStackItem other, long startShift, long durationShift)
             {
                 Start = Math.Max(other.Start + startShift, 0);
                 BoonDuration = other.BoonDuration - durationShift;
+                _overstack = other._overstack;
                 Src = other.Src;
             }
         }
@@ -95,7 +105,7 @@ namespace LuckParser.Models.ParseModels
         
         private void Add(long boonDuration, ushort srcinstid, long start, long overstack)
         {
-            var toAdd = new BoonStackItem(start, boonDuration, srcinstid);
+            var toAdd = new BoonStackItem(start, boonDuration, srcinstid, overstack);
             if (overstack > 0)
             {
                 OverstackSimulation.Add(new BoonSimulationOverstackItem(srcinstid,overstack,start + boonDuration));
