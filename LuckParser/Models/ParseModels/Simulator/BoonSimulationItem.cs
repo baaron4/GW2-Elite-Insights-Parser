@@ -31,12 +31,8 @@ namespace LuckParser.Models.ParseModels
         public abstract long GetItemDuration();
 
         public abstract List<ushort> GetSrc();
-        
-        public abstract bool AddOverstack(ushort src, long overstack);
 
-        public abstract long GetOverstack(ushort src, long start, long end);
-
-        public virtual long GetClampedDuration(long start, long end)
+        public long GetClampedDuration(long start, long end)
         {
             if (end > 0 && end - start > 0)
             {

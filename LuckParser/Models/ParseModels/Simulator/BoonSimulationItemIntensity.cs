@@ -56,32 +56,6 @@ namespace LuckParser.Models.ParseModels
             return _stacks.Count(x => x.End >= end);
         }
 
-        public override long GetOverstack(ushort src, long start, long end)
-        {
-            long total = 0;
-            foreach (BoonSimulationItemDuration stack in _stacks.Where(x => x.GetSrc()[0] == src))
-            {
-                total += stack.GetOverstack(src, start, end);
-            }
-            return total;
-        }
-
-        public override bool AddOverstack(ushort src, long overstack)
-        {
-            if (Duration == 0)
-            {
-                return false;
-            }
-            foreach(BoonSimulationItemDuration stack in _stacks)
-            {
-                if (stack.AddOverstack(src,overstack))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public override List<BoonsGraphModel.Segment> ToSegment()
         {
             if (Duration == _stacks.Min(x => x.GetItemDuration()))

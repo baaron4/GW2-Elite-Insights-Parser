@@ -11,9 +11,9 @@ namespace LuckParser.Models.ParseModels
             // no sort
         }
 
-        public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationItem> simulation)
+        public override bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationOverstackItem> overstacks)
         {
-            return StackEffect(1, log, stackItem, stacks, simulation);
+            return StackEffect(1, log, stackItem, stacks, overstacks);
         }
     }
 }

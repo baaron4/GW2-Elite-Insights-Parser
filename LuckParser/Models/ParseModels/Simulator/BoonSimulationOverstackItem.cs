@@ -7,47 +7,22 @@ using static LuckParser.Models.ParseModels.BoonSimulator;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class BoonSimulationOverstackItem : BoonSimulationItemDuration
+    public class BoonSimulationOverstackItem
     {
-        public BoonSimulationOverstackItem(BoonStackItem other) : base(other)
+        public readonly ushort Src;
+        private readonly long _overstack;
+        private readonly long _time;
+
+        public BoonSimulationOverstackItem(ushort src, long overstack, long time)
         {
-            Duration = 1;
+            Src = src;
+            _overstack = overstack;
+            _time = time;
         }
 
-        public override int GetStack(long end)
+        public long GetOverstack(long start, long end)
         {
-            return 0;
-        }
-
-        public override long GetSrcDuration(ushort src, long start, long end)
-        {
-            return 0;
-        }
-        public override long GetItemDuration()
-        {
-            return Duration;
-        }
-        public override long GetClampedDuration(long start, long end)
-        {
-            return 0;
-        }
-
-        public override long GetOverstack(ushort src, long start, long end)
-        {
-            if (src != _src)
-            {
-                return 0;
-            }
-            if (end == 0 || (end > 0 && start <= Start && Start + Duration <= end ))
-            {
-                return _overstack;
-            }
-            return 0;
-        }
-
-        public override List<BoonsGraphModel.Segment> ToSegment()
-        {
-            return new List<BoonsGraphModel.Segment>();
+            return (start <= _time && _time <= end) ? _overstack : 0;
         }
     }
 }
