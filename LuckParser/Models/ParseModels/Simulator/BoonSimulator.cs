@@ -48,7 +48,7 @@ namespace LuckParser.Models.ParseModels
                 return new GenerationSimulationResult(GenerationSimulation);
             }
         }
-        public readonly List<BoonSimulationOverstackItem> OverstackSimulation = new List<BoonSimulationOverstackItem>();
+        public readonly List<BoonSimulationOverstackItem> OverstackSimulationResult = new List<BoonSimulationOverstackItem>();
         private readonly int _capacity;
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;
@@ -108,7 +108,7 @@ namespace LuckParser.Models.ParseModels
             var toAdd = new BoonStackItem(start, boonDuration, srcinstid, overstack);
             if (overstack > 0)
             {
-                OverstackSimulation.Add(new BoonSimulationOverstackItem(srcinstid,overstack,start + boonDuration));
+                OverstackSimulationResult.Add(new BoonSimulationOverstackItem(srcinstid,overstack,start + boonDuration));
             }
             // Find empty slot
             if (BoonStack.Count < _capacity)
@@ -119,12 +119,12 @@ namespace LuckParser.Models.ParseModels
             // Replace lowest value
             else
             {
-                bool found = _logic.StackEffect(_log, toAdd, BoonStack, OverstackSimulation);
+                bool found = _logic.StackEffect(_log, toAdd, BoonStack, OverstackSimulationResult);
                 if (!found)
                 {
                     long overstackValue = boonDuration;
                     ushort srcValue = srcinstid;
-                    OverstackSimulation.Add(new BoonSimulationOverstackItem(srcinstid, boonDuration,start));                 
+                    OverstackSimulationResult.Add(new BoonSimulationOverstackItem(srcinstid, boonDuration,start));                 
                 }
             }
         }
