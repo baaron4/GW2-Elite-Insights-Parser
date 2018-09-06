@@ -21,7 +21,7 @@ namespace LuckParser.Models.ParseModels
             }
             return GetClampedDuration(start, end);
         }
-        public override long GetItemDuration()
+        public override long GetTotalDuration()
         {
             return Duration;
         }
