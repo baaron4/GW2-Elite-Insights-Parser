@@ -257,7 +257,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        private void GenerateExtraBoonData(ParsedLog log, long boonid, BoonSimulationResult boonSimulation, List<PhaseData> phases)
+        private void GenerateExtraBoonData(ParsedLog log, long boonid, GenerationSimulationResult buffSimulationGeneration, List<PhaseData> phases)
         {
 
             switch (boonid)
@@ -270,7 +270,7 @@ namespace LuckParser.Models.ParseModels
                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].Start, phases[i].End);
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
                         int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.FightData.InstID).Sum(x => x.GetDamage()), 1);
-                        List<DamageLog> effect = dmLogs.Where(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0).ToList();
+                        List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0).ToList();
                         List<DamageLog> effectBoss = effect.Where(x => x.GetDstInstidt() == log.FightData.InstID).ToList();
                         int damage = (int)(effect.Sum(x => x.GetDamage()) / 21.0);
                         int bossDamage = (int)(effectBoss.Sum(x => x.GetDamage()) / 21.0);
@@ -291,8 +291,8 @@ namespace LuckParser.Models.ParseModels
                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].Start, phases[i].End);
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
                         int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.FightData.InstID).Sum(x => x.GetDamage()), 1);
-                        int effectCount = dmLogs.Count(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0);
-                        int effectBossCount = dmLogs.Count(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0 && x.GetDstInstidt() == log.FightData.InstID);
+                        int effectCount = dmLogs.Count(x => buffSimulationGeneration.GetStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0);
+                        int effectBossCount = dmLogs.Count(x => buffSimulationGeneration.GetStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0 && x.GetDstInstidt() == log.FightData.InstID);
                         int damage = (int)(effectCount * (325 + 3000 * 0.04));
                         int bossDamage = (int)(effectBossCount * (325 + 3000 * 0.04));
                         double gain = Math.Round(100.0 * ((double)(totalDamage + damage) / totalDamage - 1.0), 2);
@@ -312,7 +312,7 @@ namespace LuckParser.Models.ParseModels
                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].Start, phases[i].End);
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
                         int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.FightData.InstID).Sum(x => x.GetDamage()), 1);
-                        List<DamageLog> effect = dmLogs.Where(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0).ToList();
+                        List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0).ToList();
                         List<DamageLog> effectBoss = effect.Where(x => x.GetDstInstidt() == log.FightData.InstID).ToList();
                         int damage = (int)(effect.Sum(x => x.GetDamage()) / 11.0);
                         int bossDamage = (int)(effectBoss.Sum(x => x.GetDamage()) / 11.0);
@@ -375,9 +375,9 @@ namespace LuckParser.Models.ParseModels
                     }
                     var updateBoonPresence = boonIds.Contains(boonid);
                     var updateCondiPresence = boonid != 873 && condiIds.Contains(boonid);
-                    var simulation = simulator.GetSimulationResult();
+                    var generationSimulation = simulator.GenerationSimulationResult;
                     var graphSegments = new List<BoonsGraphModel.Segment>();
-                    foreach (var simul in simulation.Items)
+                    foreach (var simul in generationSimulation.Items)
                     {
                         for (int i = 0; i < phases.Count; i++)
                         {
@@ -388,22 +388,21 @@ namespace LuckParser.Models.ParseModels
                                 _boonDistribution[i].Add(boonid, distrib);
                             }
                             if (updateBoonPresence)
-                                Add(_boonPresence[i], boonid, simul.GetItemDuration(phase.Start, phase.End));
+                                Add(_boonPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                             if (updateCondiPresence)
-                                Add(_condiPresence[i], boonid, simul.GetItemDuration(phase.Start, phase.End));
+                                Add(_condiPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                             foreach (ushort src in simul.GetSrc())
                             {
                                 if (distrib.TryGetValue(src, out var toModify))
                                 {
-                                    toModify.Value += simul.GetDuration(src, phase.Start, phase.End);
-                                    toModify.Overstack += simul.GetOverstack(src, phase.Start, phase.End);
+                                    toModify.Value += simul.GetSrcDuration(src, phase.Start, phase.End);
                                     distrib[src] = toModify;
                                 }
                                 else
                                 {
                                     distrib.Add(src, new OverAndValue(
-                                        simul.GetDuration(src, phase.Start, phase.End),
-                                        simul.GetOverstack(src, phase.Start, phase.End)));
+                                        simul.GetSrcDuration(src, phase.Start, phase.End),
+                                        0));
                                 }
                             }
                         }
@@ -420,9 +419,32 @@ namespace LuckParser.Models.ParseModels
                             graphSegments.AddRange(simul.ToSegment());
                         }
                     }
+                    foreach (var simul in simulator.OverstackSimulationResult)
+                    {
+                        for (int i = 0; i < phases.Count; i++)
+                        {
+                            var phase = phases[i];
+                            if (!_boonDistribution[i].TryGetValue(boonid, out var distrib))
+                            {
+                                distrib = new Dictionary<ushort, OverAndValue>();
+                                _boonDistribution[i].Add(boonid, distrib);
+                            }
+                            if (distrib.TryGetValue(simul.Src, out var toModify))
+                            {
+                                toModify.Overstack += simul.GetOverstack(phase.Start, phase.End);
+                                distrib[simul.Src] = toModify;
+                            }
+                            else
+                            {
+                                distrib.Add(simul.Src, new OverAndValue(
+                                    0,
+                                    simul.GetOverstack(phase.Start, phase.End)));
+                            }
+                        }
+                    }
                     if (requireExtraData)
                     {
-                        GenerateExtraBoonData(log, boonid, simulation, phases);
+                        GenerateExtraBoonData(log, boonid, generationSimulation, phases);
                     }
                     if (graphSegments.Count > 0)
                     {

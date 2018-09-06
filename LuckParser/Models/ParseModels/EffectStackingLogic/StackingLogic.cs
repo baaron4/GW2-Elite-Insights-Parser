@@ -6,23 +6,16 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class StackingLogic
     {
-        public abstract bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationItem> simulation);
+        public abstract bool StackEffect(ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationOverstackItem> overstacks);
 
-        protected bool StackEffect(int startIndex, ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationItem> simulation)
+        protected bool StackEffect(int startIndex, ParsedLog log, BoonStackItem stackItem, List<BoonStackItem> stacks, List<BoonSimulationOverstackItem> overstacks)
         {
             for (int i = startIndex; i < stacks.Count; i++)
             {
-                if (stacks[i].BoonDuration < stackItem.BoonDuration)
+                if (stacks[i].InitialBoonDuration < stackItem.InitialBoonDuration)
                 {
-                    long overstackValue = stacks[i].Overstack + stacks[i].BoonDuration;
-                    ushort srcValue = stacks[i].Src;
-                    for (int j = simulation.Count - 1; j >= 0; j--)
-                    {
-                        if (simulation[j].AddOverstack(srcValue, overstackValue))
-                        {
-                            break;
-                        }
-                    }
+                    BoonStackItem stack = stacks[i];
+                    overstacks.Add(new BoonSimulationOverstackItem(stack.Src, stack.BoonDuration, stack.Start));                   
                     stacks[i] = stackItem;
                     Sort(log, stacks);
                     return true;
