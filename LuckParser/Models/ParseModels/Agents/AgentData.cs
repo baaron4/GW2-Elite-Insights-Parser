@@ -28,19 +28,18 @@ namespace LuckParser.Models.ParseModels
             AllAgentsList.Add(item);
         }
 
-        public AgentItem GetAgent(ulong agent)
+        public AgentItem GetAgent(ulong agentAddress)
         {
-            if (agent != 0)
+            if (agentAddress != 0)
             {
-                AgentItem agtreturn = AllAgentsList.FirstOrDefault(x => x.Agent == agent);
-                if (agtreturn != null)
+                AgentItem agent = AllAgentsList.FirstOrDefault(x => x.Agent == agentAddress);
+                if (agent != null)
                 {
-                    return agtreturn;
+                    return agent;
                 }
-
             }
 
-            return new AgentItem(0, "UNKOWN", "UNKNOWN",0,0,0,0,0,0);
+            return new AgentItem(0, "UNKNOWN", "UNKNOWN", 0, 0, 0, 0, 0, 0);
         }
 
         public List<AgentItem> GetAgents(ushort id)
