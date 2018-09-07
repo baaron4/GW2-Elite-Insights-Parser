@@ -63,7 +63,12 @@ namespace LuckParser.Models.ParseModels
 
             _statesData = this.GroupBy(x => x.IsStateChange).ToDictionary(x => x.Key, x => x.ToList());
 
-            MovementData = (fightData.Logic.CanCombatReplay) ? this.Where(x => x.IsStateChange == ParseEnum.StateChange.Position || x.IsStateChange == ParseEnum.StateChange.Velocity).GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList()) : new Dictionary<ushort, List<CombatItem>>();
+            MovementData = fightData.Logic.CanCombatReplay
+                ? this.Where(x =>
+                        x.IsStateChange == ParseEnum.StateChange.Position ||
+                        x.IsStateChange == ParseEnum.StateChange.Velocity).GroupBy(x => x.SrcInstid)
+                    .ToDictionary(x => x.Key, x => x.ToList())
+                : new Dictionary<ushort, List<CombatItem>>();
 
             /*healing_data = this.Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
                                          ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
