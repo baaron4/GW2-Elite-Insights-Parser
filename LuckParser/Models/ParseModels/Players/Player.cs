@@ -364,7 +364,7 @@ namespace LuckParser.Models.ParseModels
             foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.HitOnEnemy))
             {
                 Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
-                List<AgentItem> agents = log.AgentData.GetAgents((ushort)mech.GetSkill());
+                IEnumerable<AgentItem> agents = log.AgentData.GetAgents((ushort)mech.GetSkill());
                 foreach (AgentItem a in agents)
                 {
                     foreach (DamageLog dl in GetDamageLogs(0,log,0,log.FightData.FightDuration))
