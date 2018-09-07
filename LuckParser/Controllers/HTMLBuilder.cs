@@ -1830,7 +1830,19 @@ namespace LuckParser.Controllers
                                 sw.Write("});");
                             }
                             sw.Write("</script> ");
-                            sw.Write("<ul class=\"nav nav-tabs\">");
+                            //Explanation of rotation graph
+                            sw.Write("<div class=\"alert alert-dismissible alert-light\"><button type = \"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>");
+                            sw.Write("<p><u>Fill</u></p>");
+                            sw.Write("<span class=\"badge badge-info\">Hit without aftercast</span>");
+                            sw.Write("<span class=\"badge badge-success\">Hit with full aftercast</span>");
+                            sw.Write("<span class=\"badge badge-danger\">Attack canceled before completing</span>");
+                            sw.Write("<p><u>Outline</u></p>");
+                            sw.Write("<span class=\"badge badge-primary\">Normal animation length</span>");
+                            sw.Write("<span class=\"badge\" style=\"background-color:#800080\">Animation with quickness</span>");
+                            sw.Write("</div>");
+
+
+                           sw.Write("<ul class=\"nav nav-tabs\">");
                             {
                                 string bossText = phase.Redirection.Count > 0 ? "Adds" : "Boss";
                                 sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabBoss" + pid + "\">" + bossText + "</a></li>");
