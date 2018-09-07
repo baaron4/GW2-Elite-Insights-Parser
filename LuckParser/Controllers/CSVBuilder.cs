@@ -87,11 +87,11 @@ namespace LuckParser.Controllers
             string bossname = _log.FightData.Name;
             //header
             WriteLine(new [] { "Elite Insights Version", Application.ProductVersion });
-            WriteLine(new [] { "ARC Version", _log.GetLogData().GetBuildVersion()});
-            WriteLine(new [] { "Boss ID", _log.GetBossData().GetID().ToString() });
-            WriteLine(new [] { "Recorded By", _log.GetLogData().GetPOV().Split(':')[0] });
-            WriteLine(new [] { "Time Start", _log.GetLogData().GetLogStart() });
-            WriteLine(new [] { "Time End", _log.GetLogData().GetLogEnd() });
+            WriteLine(new [] { "ARC Version", _log.LogData.BuildVersion});
+            WriteLine(new [] { "Boss ID", _log.Boss.InstID.ToString() });
+            WriteLine(new [] { "Recorded By", _log.LogData.PoV.Split(':')[0] });
+            WriteLine(new [] { "Time Start", _log.LogData.LogStart });
+            WriteLine(new [] { "Time End", _log.LogData.LogEnd });
             if (_settings.UploadToDPSReports || _settings.UploadToDPSReportsRH || _settings.UploadToRaidar)
             {
                 WriteLine(new[] { "Links", _uploadResult[0], _uploadResult[1], _uploadResult[2] });
