@@ -4,103 +4,36 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class DamageLog
     {
-        // Fields
-        private readonly long _time;
-        protected int Damage;
-        private readonly long _skillId;
-        private readonly int _buff;
-        private readonly ParseEnum.Result _result;
-        private readonly ushort _isNinety;
-        private readonly ushort _isMoving;
-        private readonly ushort _isFlanking;
-        private readonly ParseEnum.Activation _isActivation;
-        private readonly ushort _isShields;
-        private readonly ulong _srcAgent;
-        private readonly ushort _srcInstid;
-        private readonly ulong _dstAgent;
-        private readonly ushort _dstInstid;
+        public long Time { get; }
+        public int Damage { get; protected set; }
+        public long SkillId { get; }
+        public int IsCondi { get; }
+        public ParseEnum.Result Result { get; }
+        public ushort IsNinety { get; }
+        public ushort IsMoving { get; }
+        public ushort IsFlanking { get; }
+        public ParseEnum.Activation Activation { get; }
+        public ushort IsShields { get; }
+        public ulong SrcAgent { get; }
+        public ushort SrcInstId { get; }
+        public ulong DstAgent { get; }
+        public ushort DstInstId { get; }
 
-        // Constructor
         protected DamageLog(long time, CombatItem c)
         {
-            _time = time;
-            _skillId = c.SkillID;
-            _buff = c.IsBuff;
-            _result = c.Result;
-            _isNinety = c.IsNinety;
-            _isMoving = c.IsMoving;
-            _isFlanking = c.IsFlanking;
-            _isActivation = c.IsActivation;
-            _srcAgent = c.SrcAgent;
-            _srcInstid = c.SrcInstid;
-            _isShields = c.IsShields;
-            _dstAgent = c.DstAgent;
-            _dstInstid = c.DstInstid;
-
-        }
-        // Getters
-        public long GetTime()
-        {
-            return _time;
-        }
-
-        public int GetDamage()
-        {
-            return Damage;
-        }
-
-        public long GetID()
-        {
-            return _skillId;
-        }
-
-        public int IsCondi()
-        {
-            return _buff;
-        }
-
-        public ParseEnum.Result GetResult()
-        {
-            return _result;
-        }
-
-        public ushort IsNinety()
-        {
-            return _isNinety;
-        }
-
-        public ushort IsMoving()
-        {
-            return _isMoving;
-        }
-
-        public ushort IsFlanking()
-        {
-            return _isFlanking;
-        }
-        public ParseEnum.Activation IsActivation()
-        {
-            return _isActivation;
-        }
-        public ushort IsShields() {
-            return _isShields;
-        }
-        public ulong GetSrcAgent()
-        {
-            return _srcAgent;
-        }
-        public ushort GetSrcInstidt()
-        {
-            return _srcInstid;
-        }
-
-        public ulong GetDstAgent()
-        {
-            return _dstAgent;
-        }
-        public ushort GetDstInstidt()
-        {
-            return _dstInstid;
+            Time = time;
+            SkillId = c.SkillID;
+            IsCondi = c.IsBuff;
+            Result = c.Result;
+            IsNinety = c.IsNinety;
+            IsMoving = c.IsMoving;
+            IsFlanking = c.IsFlanking;
+            Activation = c.IsActivation;
+            SrcAgent = c.SrcAgent;
+            SrcInstId = c.SrcInstid;
+            IsShields = c.IsShields;
+            DstAgent = c.DstAgent;
+            DstInstId = c.DstInstid;
         }
     }
 }

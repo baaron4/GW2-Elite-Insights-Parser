@@ -5,72 +5,42 @@ namespace LuckParser.Models.ParseModels
 {
     public class PhaseData
     {
-        private long _start;
-        private readonly long _end;
-        private string _name;
-        private readonly List<AgentItem> _redirection = new List<AgentItem>();
+        public long Start { get; private set; }
+        public readonly long End;
+        public string Name { get; set; }
+        public readonly List<AgentItem> Redirection = new List<AgentItem>();
 
         public PhaseData(long start, long end)
         {
-            _start = start;
-            _end = end;
+            Start = start;
+            End = end;
         }
-
-        public void SetName(string name)
-        {
-            _name = name;
-        }
-
-        public string GetName()
-        {
-            return _name;
-        }
-
-        public void AddRedirection(AgentItem agent)
-        {
-            _redirection.Add(agent);
-        }
-
-        public List<AgentItem> GetRedirection()
-        {
-            return _redirection;
-        }
-
+        
         public long GetDuration(string format = "ms")
         {
             switch (format)
             {
                 case "m":
-                    return (_end - _start) / 60000;
+                    return (End - Start) / 60000;
                 case "s":
-                    return (_end - _start) / 1000;
+                    return (End - Start) / 1000;
                 default:
-                    return (_end - _start);
+                    return (End - Start);
             }
 
         }
 
         public bool InInterval(long time, long offset = 0)
         {
-            return _start <= time - offset && time - offset <= _end;
+            return Start <= time - offset && time - offset <= End;
         }
 
         public void OverrideStart(long offset)
         {
-            if (_redirection.Count > 0)
+            if (Redirection.Count > 0)
             {
-                _start = _redirection.Min(x => x.FirstAware)- offset;
+                Start = Redirection.Min(x => x.FirstAware)- offset;
             }
-        }
-
-        public long GetStart()
-        {
-            return _start;
-        }
-
-        public long GetEnd()
-        {
-            return _end;
         }
     }
 }

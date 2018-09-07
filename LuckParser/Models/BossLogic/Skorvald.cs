@@ -27,7 +27,7 @@ namespace LuckParser.Models
             new Mechanic(39846, "Crimson Dawn", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Skorvald, "symbol:'circle',color:'rgb(50,0,0)',", "HS.end","Crimson Dawn (almost Full platform attack after Horizon Strike)", "Horizon Strike (last)",0),
             new Mechanic(39228, "Solar Cyclone", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Skorvald, "symbol:'asterisk-open',color:'rgb(140,0,140)',", "Cycln","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
             new Mechanic(39228, "Solar Cyclone", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Skorvald, "symbol:'asterisk-open',color:'rgb(140,0,140)',", "Cycln","Solar Cyclone (Circling Knockback)", "KB Cyclone",0),
-            new Mechanic(791, "Fear", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Skorvald, "symbol:'square-open',color:'rgb(255,0,0)',", "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0,(value=> value == 3000)), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
+            new Mechanic(791, "Fear", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Skorvald, "symbol:'square-open',color:'rgb(255,0,0)',", "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)",0,(condition => condition.CombatItem.Value == 3000)), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new Mechanic(39131, "Fixate", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Skorvald, "symbol:'star-open',color:'rgb(255,0,255)',", "Blm.Fix","Fixated by Solar Bloom", "Bloom Fixate",0),
             new Mechanic(39491, "Explode", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Skorvald, "symbol:'circle',color:'rgb(255,200,0)',", "Blm.Exp","Hit by Solar Bloom Explosion", "Bloom Explosion",0), //shockwave, not damage? (damage is 50% max HP, not tracked)
             new Mechanic(39911, "Spiral Strike", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Skorvald, "symbol:'circle-open',color:'rgb(0,200,0)',", "SprlStr","Hit after Warp (Jump to Player with overhead bomb)", "Spiral Strike",0),
@@ -54,24 +54,24 @@ namespace LuckParser.Models
             return "https://i.imgur.com/IOPAHRE.png";
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, BossData bossData)
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
         {
             // check reward
             CombatItem reward = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
-            CombatItem lastDamageTaken = combatData.GetDamageTakenData(bossData.GetInstid()).LastOrDefault(x => x.Value > 0);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData(fightData.InstID).LastOrDefault(x => x.Value > 0);
             if (lastDamageTaken != null)
             {
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)
                 {
-                    logData.SetBossKill(true);
-                    bossData.SetLastAware(Math.Min(lastDamageTaken.Time, reward.Time));
+                    logData.Success = true;
+                    fightData.FightStart = Math.Min(lastDamageTaken.Time, reward.Time);
                 }
                 else
                 {
-                    SetSuccessByDeath(combatData, logData, bossData);
-                    if (logData.GetBosskill())
+                    SetSuccessByDeath(combatData, logData, fightData);
+                    if (logData.Success)
                     {
-                        bossData.SetLastAware(Math.Min(bossData.GetLastAware(), lastDamageTaken.Time));
+                        fightData.FightEnd = Math.Min(fightData.FightEnd, lastDamageTaken.Time);
                     }
                 }
             }

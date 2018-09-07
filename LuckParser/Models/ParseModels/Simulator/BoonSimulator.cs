@@ -7,51 +7,61 @@ namespace LuckParser.Models.ParseModels
     public abstract class BoonSimulator
     {
  
-        public struct BoonStackItem
+        public class BoonStackItem
         {
             public readonly long Start;
             public readonly long BoonDuration;
+            public long InitialBoonDuration
+            {
+                get
+                {
+                    return BoonDuration + _overstack;
+                }
+            }
             public readonly ushort Src;
-            public readonly long Overstack;
+            private readonly long _overstack;
 
             public BoonStackItem(long start, long boonDuration, ushort srcinstid, long overstack)
             {
                 Start = start;
                 BoonDuration = boonDuration;
                 Src = srcinstid;
-                Overstack = overstack;
+                _overstack = overstack;
             }
 
             public BoonStackItem(BoonStackItem other, long startShift, long durationShift)
             {
                 Start = Math.Max(other.Start + startShift, 0);
                 BoonDuration = other.BoonDuration - durationShift;
-                // if duration shift > 0 this means the boon ticked, aka already in simulation, we remove the overstack
-                Overstack = durationShift > 0 ? 0 : other.Overstack;
+                _overstack = other._overstack;
                 Src = other.Src;
             }
         }
 
         // Fields
         protected readonly List<BoonStackItem> BoonStack;
-        protected readonly List<BoonSimulationItem> Simulation = new List<BoonSimulationItem>();
-        private readonly int Capacity;
+        protected readonly List<BoonSimulationItem> GenerationSimulation = new List<BoonSimulationItem>();
+        public GenerationSimulationResult GenerationSimulationResult
+        {
+            get
+            {
+                return new GenerationSimulationResult(GenerationSimulation);
+            }
+        }
+        public readonly List<BoonSimulationOverstackItem> OverstackSimulationResult = new List<BoonSimulationOverstackItem>();
+        private readonly int _capacity;
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;
 
         // Constructor
         protected BoonSimulator(int capacity, ParsedLog log, StackingLogic logic)
         {
-            Capacity = capacity;
+            _capacity = capacity;
             BoonStack = new List<BoonStackItem>(capacity);
             _log = log;
             _logic = logic;
         }  
-
-        public BoonSimulationResult GetSimulationResult()
-        {
-            return new BoonSimulationResult(Simulation);
-        }
+        
 
         // Abstract Methods
         /// <summary>
@@ -60,10 +70,10 @@ namespace LuckParser.Models.ParseModels
         /// <param name="fightDuration">Duration of the fight</param>
         public void Trim(long fightDuration)
         {
-            for (int i = Simulation.Count - 1; i >= 0; i--)
+            for (int i = GenerationSimulation.Count - 1; i >= 0; i--)
             {
-                BoonSimulationItem data = Simulation[i];
-                if (data.GetEnd() > fightDuration)
+                BoonSimulationItem data = GenerationSimulation[i];
+                if (data.End > fightDuration)
                 {
                     data.SetEnd(fightDuration);
                 }
@@ -72,7 +82,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 }
             }
-            Simulation.RemoveAll(x => x.GetDuration() <= 0);
+            GenerationSimulation.RemoveAll(x => x.GetTotalDuration() <= 0);
         }
 
         public void Simulate(List<BoonLog> logs, long fightDuration)
@@ -81,13 +91,13 @@ namespace LuckParser.Models.ParseModels
             long timePrev = 0;
             foreach (BoonLog log in logs)
             {
-                timeCur = log.GetTime();
+                timeCur = log.Time;
                 Update(timeCur - timePrev);
-                Add(log.GetValue(), log.GetSrcInstid(), timeCur, log.GetOverstack());
+                Add(log.Value, log.SrcInstid, timeCur, log.Overstack);
                 timePrev = timeCur;
             }
             Update(fightDuration - timePrev);
-            Simulation.RemoveAll(x => x.GetDuration() <= 0);
+            GenerationSimulation.RemoveAll(x => x.GetTotalDuration() <= 0);
             BoonStack.Clear();
         }
 
@@ -96,8 +106,12 @@ namespace LuckParser.Models.ParseModels
         private void Add(long boonDuration, ushort srcinstid, long start, long overstack)
         {
             var toAdd = new BoonStackItem(start, boonDuration, srcinstid, overstack);
+            if (overstack > 0)
+            {
+                OverstackSimulationResult.Add(new BoonSimulationOverstackItem(srcinstid,overstack,start + boonDuration));
+            }
             // Find empty slot
-            if (BoonStack.Count < Capacity)
+            if (BoonStack.Count < _capacity)
             {
                 BoonStack.Add(toAdd);
                 _logic.Sort(_log, BoonStack);
@@ -105,18 +119,12 @@ namespace LuckParser.Models.ParseModels
             // Replace lowest value
             else
             {
-                bool found = _logic.StackEffect(_log, toAdd, BoonStack, Simulation);
+                bool found = _logic.StackEffect(_log, toAdd, BoonStack, OverstackSimulationResult);
                 if (!found)
                 {
-                    long overstackValue = overstack + boonDuration;
+                    long overstackValue = boonDuration;
                     ushort srcValue = srcinstid;
-                    for (int j = Simulation.Count - 1; j >= 0; j--)
-                    {
-                        if (Simulation[j].AddOverstack(srcValue, overstackValue))
-                        {
-                            break;
-                        }
-                    }
+                    OverstackSimulationResult.Add(new BoonSimulationOverstackItem(srcinstid, boonDuration,start));                 
                 }
             }
         }

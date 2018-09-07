@@ -12,9 +12,9 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetDamageLogs(ParsedLog log)
         {
-            long timeStart = log.GetBossData().GetFirstAware();
+            long timeStart = log.FightData.FightStart;
             long minTime = Math.Max(timeStart, Agent.FirstAware);
-            long maxTime = Math.Min(log.GetBossData().GetLastAware(), Agent.LastAware);
+            long maxTime = Math.Min(log.FightData.FightEnd, Agent.LastAware);
             foreach (CombatItem c in log.GetDamageData(Agent.InstID))
             {
                 if (c.Time > minTime && c.Time < maxTime)//selecting minion as caster
@@ -27,10 +27,10 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetCastLogs(ParsedLog log)
         {
-            long timeStart = log.GetBossData().GetFirstAware();
+            long timeStart = log.FightData.FightStart;
             CastLog curCastLog = null;
             long minTime = Math.Max(timeStart, Agent.FirstAware);
-            long maxTime = Math.Min(log.GetBossData().GetLastAware(), Agent.LastAware);
+            long maxTime = Math.Min(log.FightData.FightEnd, Agent.LastAware);
             foreach (CombatItem c in log.GetCastData(Agent.InstID))
             {
                 if (!(c.Time > minTime && c.Time < maxTime))
@@ -50,7 +50,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (curCastLog != null)
                         {
-                            if (curCastLog.GetID() == c.SkillID)
+                            if (curCastLog.SkillId == c.SkillID)
                             {
                                 curCastLog.SetEndStatus(c.Value, c.IsActivation);
                                 curCastLog = null;
@@ -61,7 +61,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void SetDamagetakenLogs(ParsedLog log)
+        protected override void SetDamageTakenLogs(ParsedLog log)
         {
         }
 

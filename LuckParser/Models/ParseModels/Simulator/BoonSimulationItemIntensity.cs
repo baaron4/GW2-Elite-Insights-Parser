@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
             {
                 _stacks.Add(new BoonSimulationItemDuration(stack));
             }
-            Duration = _stacks.Max(x => x.GetDuration());
+            Duration = _stacks.Max(x => x.GetTotalDuration());
         }
 
         public override void SetEnd(long end)
@@ -24,24 +24,24 @@ namespace LuckParser.Models.ParseModels
             {
                 stack.SetEnd(end);
             }
-            Duration = _stacks.Max(x => x.GetDuration());
+            Duration = _stacks.Max(x => x.GetTotalDuration());
         }
 
-        public override long GetDuration(ushort src, long start = 0, long end = 0)
+        public override long GetSrcDuration(ushort src, long start, long end)
         {
             long total = 0;
             foreach (BoonSimulationItemDuration stack in _stacks.Where(x => x.GetSrc()[0] == src))
             {
-                total += stack.GetDuration(src, start, end);
+                total += stack.GetSrcDuration(src, start, end);
             }
             return total;
         }
-        public override long GetDuration(long start = 0, long end = 0)
+        public override long GetTotalDuration()
         {
             long total = 0;
             foreach (BoonSimulationItemDuration stack in _stacks)
             {
-                total += stack.GetDuration(start, end);
+                total += stack.GetTotalDuration();
             }
             return total;
         }
@@ -53,33 +53,26 @@ namespace LuckParser.Models.ParseModels
 
         public override int GetStack(long end)
         {
-            return _stacks.Count(x => x.GetEnd() >= end);
+            return _stacks.Count(x => x.End >= end);
         }
 
-        public override long GetOverstack(ushort src, long start = 0, long end = 0)
+        public override List<BoonsGraphModel.Segment> ToSegment()
         {
-            long total = 0;
-            foreach (BoonSimulationItemDuration stack in _stacks.Where(x => x.GetSrc()[0] == src))
+            if (Duration == _stacks.Min(x => x.GetTotalDuration()))
             {
-                total += stack.GetOverstack(src, start, end);
-            }
-            return total;
-        }
-
-        public override bool AddOverstack(ushort src, long overstack)
-        {
-            if (Duration == 0)
-            {
-                return false;
-            }
-            foreach(BoonSimulationItemDuration stack in _stacks)
-            {
-                if (stack.AddOverstack(src,overstack))
+                return new List<BoonsGraphModel.Segment>
                 {
-                    return true;
-                }
+                    new BoonsGraphModel.Segment(Start,End,_stacks.Count)
+                };
             }
-            return false;
+            long start = Start;
+            List<BoonsGraphModel.Segment> res = new List<BoonsGraphModel.Segment>();
+            foreach ( long end in _stacks.Select(x => x.GetTotalDuration() + Start).Distinct())
+            {
+                res.Add(new BoonsGraphModel.Segment(start,end,GetStack(end)));
+                start = end;
+            }
+            return res;
         }
     }
 }
