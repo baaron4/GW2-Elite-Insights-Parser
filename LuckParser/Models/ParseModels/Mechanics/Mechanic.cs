@@ -40,10 +40,6 @@ namespace LuckParser.Models.ParseModels
         public enum MechType { PlayerBoon, PlayerBoonRemove, EnemyBoon, SkillOnPlayer, PlayerSkill, EnemyBoonStrip, Spawn, PlayerOnPlayer, HitOnEnemy, PlayerStatus, EnemyCastStart, EnemyCastEnd }
 
         public delegate bool CheckSpecialCondition(SpecialConditionItem conditionItem);
-        // Fields
-
-        private readonly string _description;
-        private readonly string _plotlyName;
 
         public long SkillId { get; }
         public MechType MechanicType { get; }
@@ -53,41 +49,36 @@ namespace LuckParser.Models.ParseModels
         public CheckSpecialCondition SpecialCondition { get; }
 
         public string PlotlyShape { get; }
-        public string Description => _description ?? InGameName;
-        public string PlotlyName => _plotlyName ?? InGameName;
+        public string Description { get; }
+        public string PlotlyName { get; }
         public string InGameName { get; }
         public string ShortName { get; }
+        public bool IsEnemyMechanic { get; }
 
-        public Mechanic(long skillId, string inGameName, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape, string shortName, int internalCoolDown, CheckSpecialCondition condition = null)
+        public Mechanic(long skillId, string inGameName, MechType mechType, ParseEnum.BossIDS bossId,
+            string plotlyShape, string shortName, int internalCoolDown, CheckSpecialCondition condition = null) :
+            this(skillId, inGameName, mechType, bossId, plotlyShape, shortName, null, null, internalCoolDown, condition)
+        {
+        }
+
+        public Mechanic(long skillId, string inGameName, MechType mechType, ParseEnum.BossIDS bossId,
+            string plotlyShape, string shortName, string description, string plotlyName, int internalCoolDown,
+            CheckSpecialCondition condition = null)
         {
             InGameName = inGameName;
             SkillId = skillId;
-            MechanicType = mechtype;
-            BossID = bossid;
+            MechanicType = mechType;
+            BossID = bossId;
             PlotlyShape = plotlyShape;
             ShortName = shortName;
-            _description = null;
-            _plotlyName = null;
+            Description = description ?? InGameName;
+            PlotlyName = plotlyName ?? InGameName;
             InternalCooldown = internalCoolDown;
             SpecialCondition = condition;
+            IsEnemyMechanic = MechanicType == MechType.EnemyBoon || MechanicType == MechType.EnemyBoonStrip ||
+                              MechanicType == MechType.EnemyCastEnd || MechanicType == MechType.EnemyCastStart ||
+                              MechanicType == MechType.Spawn;
         }
 
-        public Mechanic(long skillId,string inGameName, MechType mechtype, ParseEnum.BossIDS bossid, string plotlyShape,string shortName, string description, string plotlyName, int internalCoolDown, CheckSpecialCondition condition = null)
-        {
-            InGameName = inGameName;
-            SkillId = skillId;
-            MechanicType = mechtype;
-            BossID = bossid;
-            PlotlyShape = plotlyShape;
-            ShortName = shortName;
-            _description = description;
-            _plotlyName = plotlyName;
-            InternalCooldown = internalCoolDown;
-            SpecialCondition = condition;
-        }
-
-        public bool IsEnemyMechanic => MechanicType == MechType.EnemyBoon || MechanicType == MechType.EnemyBoonStrip ||
-                                       MechanicType == MechType.EnemyCastEnd || MechanicType == MechType.EnemyCastStart ||
-                                       MechanicType == MechType.Spawn;
     }
 }
