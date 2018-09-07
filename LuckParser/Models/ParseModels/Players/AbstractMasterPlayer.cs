@@ -179,9 +179,9 @@ namespace LuckParser.Models.ParseModels
                                 for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
                                 {
                                     BoonLog curBL = loglist[cnt];
-                                    if (curBL.GetOverstack() == 0 && curBL.GetTime() + curBL.GetValue() > time)
+                                    if (curBL.Overstack == 0 && curBL.Time + curBL.Value > time)
                                     {
-                                        long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
+                                        long subtract = (curBL.Time + curBL.Value) - time;
                                         curBL.AddValue(-subtract);
                                         // add removed as overstack
                                         curBL.AddOverstack((uint)subtract);
@@ -200,9 +200,9 @@ namespace LuckParser.Models.ParseModels
                             {
                                 int cnt = loglist.Count - 1;
                                 BoonLog curBL = loglist[cnt];
-                                if (curBL.GetOverstack() == 0 && curBL.GetTime() + curBL.GetValue() > time)
+                                if (curBL.Overstack == 0 && curBL.Time + curBL.Value > time)
                                 {
-                                    long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
+                                    long subtract = (curBL.Time + curBL.Value) - time;
                                     curBL.AddValue(-subtract);
                                     // add removed as overstack
                                     curBL.AddOverstack((uint)subtract);
@@ -221,10 +221,10 @@ namespace LuckParser.Models.ParseModels
                                 for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
                                 {
                                     BoonLog curBL = loglist[cnt];
-                                    long ctime = curBL.GetTime() + curBL.GetValue();
-                                    if (curBL.GetOverstack() == 0 && ctime > time)
+                                    long ctime = curBL.Time + curBL.Value;
+                                    if (curBL.Overstack == 0 && ctime > time)
                                     {
-                                        long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
+                                        long subtract = (curBL.Time + curBL.Value) - time;
                                         curBL.AddValue(-subtract);
                                         // add removed as overstack
                                         curBL.AddOverstack((uint)subtract);
