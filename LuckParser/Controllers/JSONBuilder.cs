@@ -90,7 +90,7 @@ namespace LuckParser.Controllers
             {
                 mechanicLogs.AddRange(mLog);
             }
-            mechanicLogs = mechanicLogs.OrderBy(x => x.GetTime()).ToList();
+            mechanicLogs = mechanicLogs.OrderBy(x => x.Time).ToList();
             if (mechanicLogs.Any())
             {
                 log.Mechanics = new JsonLog.JsonMechanic[mechanicLogs.Count];
@@ -98,10 +98,10 @@ namespace LuckParser.Controllers
                 {
                     log.Mechanics[i] = new JsonLog.JsonMechanic
                     {
-                        Time = mechanicLogs[i].GetTime(),
-                        Player = mechanicLogs[i].GetPlayer().Character,
-                        Description = mechanicLogs[i].GetDescription(),
-                        Skill = mechanicLogs[i].GetSkill()
+                        Time = mechanicLogs[i].Time,
+                        Player = mechanicLogs[i].Player.Character,
+                        Description = mechanicLogs[i].Description,
+                        Skill = mechanicLogs[i].Skill
                     };
                 }
             }

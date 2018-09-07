@@ -2,38 +2,20 @@
 {
     public class MechanicLog
     {
-        // Fields
-        private readonly long _time;
         private readonly Mechanic _mechanic;
-        private readonly AbstractMasterPlayer _player;
+
+        public long Time { get; }
+        public AbstractMasterPlayer Player { get; }
+        public long Skill => _mechanic.GetSkill();
+        public string Description => _mechanic.GetDescription();
+        public string Plotly => _mechanic.GetPlotly();
 
         public MechanicLog(long time, Mechanic mechanic,
         AbstractMasterPlayer player)
         {
-            _time = time;
+            Time = time;
             _mechanic = mechanic;
-            _player = player;
-        }
-        //getters
-        public long GetTime()
-        {
-            return _time;
-        }
-        public long GetSkill()
-        {
-            return _mechanic.GetSkill();
-        }
-        public AbstractMasterPlayer GetPlayer()
-        {
-            return _player;
-        }
-        public string GetDescription()
-        {
-            return _mechanic.GetDescription();
-        }
-        public string GetPlotly()
-        {
-            return _mechanic.GetPlotly();
+            Player = player;
         }
     }
 }

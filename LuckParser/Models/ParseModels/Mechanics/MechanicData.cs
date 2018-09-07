@@ -56,7 +56,7 @@ namespace LuckParser.Models.ParseModels
                 _presentMechanics.Add(toAddAll);
                 foreach (KeyValuePair<Mechanic, List<MechanicLog>> pair in this)
                 {
-                    if (pair.Value.Count(x => phase.InInterval(x.GetTime())) > 0)
+                    if (pair.Value.Count(x => phase.InInterval(x.Time)) > 0)
                     {
                         toAddAll.Add(pair.Key);
                         if (pair.Key.IsEnemyMechanic())
@@ -74,7 +74,7 @@ namespace LuckParser.Models.ParseModels
                 toAdd.Add(log.Boss);
                 foreach(Mechanic m in Keys.Where(x=> x.IsEnemyMechanic()))
                 {
-                    foreach (AbstractMasterPlayer p in this[m].Where(x => phase.InInterval(x.GetTime())).Select(x => x.GetPlayer()).Distinct())
+                    foreach (AbstractMasterPlayer p in this[m].Where(x => phase.InInterval(x.Time)).Select(x => x.Player).Distinct())
                     {
                         if (toAdd.FirstOrDefault(x => x.InstID == p.InstID) == null)
                         {
