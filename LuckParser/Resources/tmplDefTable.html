@@ -1,0 +1,49 @@
+<table class="table table-sm table-striped table-hover" cellspacing="0" width="100%">
+	<thead>
+		<tr>
+			<th>Sub</th>
+			<th></th>
+			<th class="text-left">Name</th>
+			<th>Dmg Taken</th>
+			<th>Dmg Barrier</th>
+			<th>Blocked</th>
+			<th>Invulned</th>
+			<th>Evaded</th>
+			<th><span data-toggle="tooltip" data-html="true" data-placement="top" title="Dodges or Mirage Cloak ">Dodges</span></th>
+			<th><img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png" alt="Downs" title="Times downed" class="icon icon-hover"></th>
+			<th><img src="https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png" alt="Dead" title="Time died" class="icon icon-hover"></th>
+		</tr>
+	</thead>
+	<tbody>
+		{{for rows}}
+		<tr>
+		{{include tmpl="tmplPlayerCells"/}}
+		<td>{{:data[0]}}</td>
+		<td>{{:data[1]}}</td>
+		<td title="{{:data[3]}} Damage">{{:data[2]}}</td>
+		<td>{{:data[4]}}</td>
+		<td>{{:data[5]}}</td>
+		<td>{{:data[6]}}</td>
+		<td>{{:data[7]}}</td>
+		<td title="{{:data[9]}}">{{:data[8]}}</td>
+		</tr>
+		{{/for}}
+	</tbody>
+	<tfoot>
+		{{for sums}}
+		<tr>
+			<td></td>
+			<td></td>
+			<td class="text-left">{{:name}}</td>
+			<td>{{:data[0]}}</td>
+			<td>{{:data[1]}}</td>
+			<td title="{{:data[3]}} Damage">{{:data[2]}}</td>
+			<td>{{:data[4]}}</td>
+			<td>{{:data[5]}}</td>
+			<td>{{:data[6]}}</td>
+			<td>{{:data[7]}}</td>
+			<td></td>
+		</tr>
+		{{/for}}
+	</tfoot>
+</table>

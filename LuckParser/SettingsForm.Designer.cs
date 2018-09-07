@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.lblDamageGraphSection = new System.Windows.Forms.Label();
             this.chkPlayerDpsPlot = new System.Windows.Forms.CheckBox();
@@ -70,6 +71,8 @@
             this.json = new System.Windows.Forms.Label();
             this.chkOutputJson = new System.Windows.Forms.CheckBox();
             this.chkIndentJSON = new System.Windows.Forms.CheckBox();
+            this.chkHtmlExperimental = new System.Windows.Forms.CheckBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // lblDamageGraphSection
@@ -157,7 +160,7 @@
             this.chkSkillIcons.AutoSize = true;
             this.chkSkillIcons.Checked = true;
             this.chkSkillIcons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSkillIcons.Location = new System.Drawing.Point(417, 115);
+            this.chkSkillIcons.Location = new System.Drawing.Point(410, 115);
             this.chkSkillIcons.Name = "chkSkillIcons";
             this.chkSkillIcons.Size = new System.Drawing.Size(99, 17);
             this.chkSkillIcons.TabIndex = 10;
@@ -281,7 +284,7 @@
             this.chkShowAutos.AutoSize = true;
             this.chkShowAutos.Checked = true;
             this.chkShowAutos.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowAutos.Location = new System.Drawing.Point(278, 458);
+            this.chkShowAutos.Location = new System.Drawing.Point(274, 458);
             this.chkShowAutos.Name = "chkShowAutos";
             this.chkShowAutos.Size = new System.Drawing.Size(117, 17);
             this.chkShowAutos.TabIndex = 22;
@@ -292,7 +295,7 @@
             // chkLargeSkillIcons
             // 
             this.chkLargeSkillIcons.AutoSize = true;
-            this.chkLargeSkillIcons.Location = new System.Drawing.Point(278, 481);
+            this.chkLargeSkillIcons.Location = new System.Drawing.Point(274, 481);
             this.chkLargeSkillIcons.Name = "chkLargeSkillIcons";
             this.chkLargeSkillIcons.Size = new System.Drawing.Size(104, 17);
             this.chkLargeSkillIcons.TabIndex = 23;
@@ -525,12 +528,28 @@
             this.chkIndentJSON.UseVisualStyleBackColor = true;
             this.chkIndentJSON.CheckedChanged += new System.EventHandler(this.chkIndentJSONCheckedChanged);
             // 
+            // chkHtmlExperimental
+            // 
+            this.chkHtmlExperimental.AutoSize = true;
+            this.chkHtmlExperimental.Location = new System.Drawing.Point(178, 333);
+            this.chkHtmlExperimental.Name = "chkHtmlExperimental";
+            this.chkHtmlExperimental.Size = new System.Drawing.Size(146, 17);
+            this.chkHtmlExperimental.TabIndex = 45;
+            this.chkHtmlExperimental.Text = "Experimental Mode (WIP)";
+            this.chkHtmlExperimental.UseVisualStyleBackColor = true;
+            this.chkHtmlExperimental.CheckedChanged += new System.EventHandler(this.chkHtmlExperimental_CheckedChanged);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ToolTipTitle = "Setting description";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(579, 524);
+            this.Controls.Add(this.chkHtmlExperimental);
             this.Controls.Add(this.chkIndentJSON);
             this.Controls.Add(this.chkOutputJson);
             this.Controls.Add(this.json);
@@ -624,5 +643,7 @@
         private System.Windows.Forms.Label json;
         private System.Windows.Forms.CheckBox chkOutputJson;
         private System.Windows.Forms.CheckBox chkIndentJSON;
+        private System.Windows.Forms.CheckBox chkHtmlExperimental;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

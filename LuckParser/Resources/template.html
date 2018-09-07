@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css"  crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" type="text/css" href="./flomix-ei.css?version=3">
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.13/sorting/alt-string.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.90/jsrender.min.js"></script>
+<script src="./flomix-ei.js?version=3"></script>
+<script>
+var data = ${logDataJson};
+</script>
+<!--${playerData}-->
+</head>
+<body class="d-flex flex-column align-items-center theme-${bootstrapTheme}">
+	<div class="header">
+		<div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
+	</div>
+	<div style="width: 1100px;"class="d-flex flex-column">
+		<div class="d-flex flex-row justify-content-center align-items-center flex-wrap mb-3">
+			<div class="mr-3">
+				<div style="width: 400px;" class="card boss-summary d-flex flex-column">
+					<h3 class="card-header text-center">${bossName}</h3>
+					<div class="card-body d-flex flex-column align-items-center">
+						<blockquote class="card-blockquote mb-0">
+							<div style="width: 300px;" class="d-flex flex-row justify-content-between align-items-center">
+								<div><img src="${bossIcon}" alt="${bossName}" style="height: 120px; width: 120px;"></div>
+								<div>
+									<div class="progress" style="width: 100%; height: 20px;" title="${bossHealthLeft}% left">
+										<div class="progress-bar bg-success" role="progressbar" style="width:${encounterPercent}%;" aria-valuenow="${encounterPercent}" aria-valuemin="0" aria-valuemax="100">
+										</div>
+									</div>
+									<p class="small" style="text-align:center;">${bossHealth} Health</p>
+									<p class='text ${encounterResultCss}'>Result: ${encounterResult}</p>
+									<p>Duration: ${encounterDuration}</p>
+								</div>
+							</div>
+						</blockquote>
+					</div>
+				</div>
+			</div>
+			<div class="ml-3 mt-3" id="groupComp">
+			</div>
+		</div>
+		<div id="content">
+			<div class="card">
+			  <div class="card-body" style="margin: 100px; text-align: center;">
+				Loading data...
+			  </div>
+			</div>
+		</div>
+	</div>
+
+		<div class="footer">
+			<div>ARC: ${evtcVersion} | Boss ID: ${bossID} | EI Version: ${eiVersion}</div>
+			<div>File recorded by: ${recordedBy}</div>
+		</div>
+	</div>
+
+	<script>
+		generateWindow(buildWindowLayout(data));
+	</script>
+
+	<script>
+		var playerGraphData = ${graphDataJson};
+	</script>
+	<script>
+		createGraphs(playerGraphData);
+	</script>
+	<script> $(function(){$('[title]').tooltip({html:true}); });</script >
+</body>
+</html>

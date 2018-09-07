@@ -1,0 +1,28 @@
+﻿OK (General encounter infos)
+OK (Boss Panel)
+Boss Tab
+	Boss itself
+		Condi Uptime
+		Boon Uptime
+		Condi Generation
+		DPS Graph
+		Skills
+	Minions
+		% of total DPS
+		Skills
+Player Tab
+	Player
+		Buff Foods
+		Graph
+OK			(DPS)
+			Boons
+OK			(Rota)
+	Minions
+		Boss
+			% of total DPS
+			Skills
+		All
+			% of total DPS
+			Skills
+	Death Recap
+	Damage Taken
