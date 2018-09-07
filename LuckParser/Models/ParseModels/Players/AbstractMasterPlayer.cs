@@ -517,7 +517,7 @@ namespace LuckParser.Models.ParseModels
         }
         private void SetMinions(ParsedLog log)
         {
-            List<AgentItem> combatMinion = log.AgentData.GetNPCAgentList().Where(x => x.MasterAgent == Agent.Agent).ToList();
+            List<AgentItem> combatMinion = log.AgentData.NPCAgentList.Where(x => x.MasterAgent == Agent.Agent).ToList();
             Dictionary<string, Minions> auxMinions = new Dictionary<string, Minions>();
             foreach (AgentItem agent in combatMinion)
             {

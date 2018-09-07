@@ -71,7 +71,7 @@ namespace LuckParser.Models
                 phase.Name = namesGorse[i - 1];
                 if (i == 2 || i == 4)
                 {
-                    List<AgentItem> spirits = log.AgentData.GetNPCAgentList().Where(x => ParseEnum.GetThrashIDS(x.ID) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
+                    List<AgentItem> spirits = log.AgentData.NPCAgentList.Where(x => ParseEnum.GetThrashIDS(x.ID) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
                     foreach (AgentItem a in spirits)
                     {
                         long agentStart = a.FirstAware - log.FightData.FightStart;
