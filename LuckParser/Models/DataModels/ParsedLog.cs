@@ -31,7 +31,7 @@ namespace LuckParser.Models.DataModels
 
         public Dictionary<long, List<CombatItem>> GetBoonData()
         {
-            return CombatData.GetBoonData();
+            return CombatData.BoonData;
         }
 
         public List<CombatItem> GetBoonData(long key)
@@ -41,7 +41,7 @@ namespace LuckParser.Models.DataModels
 
         public Dictionary<ushort, List<CombatItem>> GetBoonDataByDst()
         {
-            return CombatData.GetBoonDataByDst();
+            return CombatData.BoonDataByDst;
         }
 
         public List<CombatItem> GetBoonDataByDst(ushort key)
@@ -51,7 +51,7 @@ namespace LuckParser.Models.DataModels
 
         public Dictionary<ushort, List<CombatItem>> GetDamageData()
         {
-            return CombatData.GetDamageData();
+            return CombatData.DamageData;
         }
 
         public List<CombatItem> GetDamageData(ushort key)
@@ -61,7 +61,7 @@ namespace LuckParser.Models.DataModels
 
         public Dictionary<ushort, List<CombatItem>> GetCastData()
         {
-            return CombatData.GetCastData();
+            return CombatData.CastData;
         }
 
         public List<CombatItem> GetCastData(ushort key)
@@ -71,7 +71,7 @@ namespace LuckParser.Models.DataModels
 
         public Dictionary<long, List<CombatItem>> GetCastDataById()
         {
-            return CombatData.GetCastDataById();
+            return CombatData.CastDataById;
         }
         public List<CombatItem> GetCastDataById(long key)
         {
@@ -80,7 +80,7 @@ namespace LuckParser.Models.DataModels
 
         public Dictionary<ushort, List<CombatItem>> GetDamageTakenData()
         {
-            return CombatData.GetDamageTakenData();
+            return CombatData.DamageTakenData;
         }
 
         public List<CombatItem> GetDamageTakenData(ushort key)
@@ -106,7 +106,7 @@ namespace LuckParser.Models.DataModels
 
         public Dictionary<ushort, List<CombatItem>> GetMovementData()
         {
-            return CombatData.GetMovementData();
+            return CombatData.MovementData;
         }
 
         public List<CombatItem> GetMovementData(ushort key)

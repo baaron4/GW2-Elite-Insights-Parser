@@ -12,7 +12,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         //setters
-        protected override void SetDamagetakenLogs(ParsedLog log)
+        protected override void SetDamageTakenLogs(ParsedLog log)
         {
         }
 

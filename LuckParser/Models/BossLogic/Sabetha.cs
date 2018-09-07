@@ -77,7 +77,7 @@ namespace LuckParser.Models
                        ParseEnum.ThrashIDS.Knuckles,
                        ParseEnum.ThrashIDS.Karde,
                     };
-                    List<AgentItem> champs = log.AgentData.GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
+                    List<AgentItem> champs = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
                     foreach (AgentItem a in champs)
                     {
                         long agentStart = a.FirstAware - log.FightData.FightStart;

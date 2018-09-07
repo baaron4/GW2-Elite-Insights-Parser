@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -604,7 +604,7 @@ namespace LuckParser.Controllers
                 WriteCell("Name");
                 foreach (Mechanic mech in presMech)
                 {
-                    WriteCell(mech.GetDescription());
+                    WriteCell(mech.Description);
                 }
                 NewLine();
 
@@ -613,7 +613,7 @@ namespace LuckParser.Controllers
                     WriteCell(p.Character);
                     foreach (Mechanic mech in presMech)
                     {
-                        int count = _log.MechanicData[mech].Count(x => x.GetPlayer().InstID == p.InstID && phase.InInterval(x.GetTime()));
+                        int count = _log.MechanicData[mech].Count(x => x.Player.InstID == p.InstID && phase.InInterval(x.Time));
                         WriteCell(count.ToString());
                     }
                     NewLine();
@@ -636,26 +636,26 @@ namespace LuckParser.Controllers
             {
                 mLogs.AddRange(mLs);
             }
-            mLogs = mLogs.OrderBy(x => x.GetTime()).ToList();
+            mLogs = mLogs.OrderBy(x => x.Time).ToList();
             int count = 0;
             WriteCell("Time");
             foreach (MechanicLog m in mLogs)
             {
-                WriteCell((m.GetTime() / 1000f).ToString());
+                WriteCell((m.Time / 1000f).ToString());
             }
             NewLine();
             count++;
             WriteCell("Player");
             foreach (MechanicLog m in mLogs)
             {
-                WriteCell(m.GetPlayer().Character);
+                WriteCell(m.Player.Character);
             }
             NewLine();
             count++;
             WriteCell("Mechanic");
             foreach (MechanicLog m in mLogs)
             {
-                WriteCell(m.GetDescription());
+                WriteCell(m.Description);
             }
             NewLine();
             count++;

@@ -26,9 +26,9 @@ namespace LuckParser.Models
             new Mechanic(34416, "Corruption", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle',color:'rgb(255,140,0)',", "Crptn","Corruption Application", "Corruption",0),
             new Mechanic(34473, "Corruption", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(255,140,0)',", "C.dmg","Hit by Corruption AoE", "Corruption dmg",0),
             new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "Scrfc","Sacrifice (Breakbar)", "Sacrifice",0),
-            new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoonRemove, ParseEnum.BossIDS.Matthias, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CC.End","Sacrifice (Breakbar) ended", "Sacrifice End",0,(condition => condition.getCombatItem().Value>25)),
-            new Mechanic(34442, "Sacrificed", Mechanic.MechType.PlayerBoonRemove, ParseEnum.BossIDS.Matthias, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Sacrifice time ran out", "Sacrificed",0,(condition => condition.getCombatItem().Value<=25)),
-            new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerBoonRemove, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(200,140,255)',", "KD","Unbalanced (triggered Storm phase Debuff)", "Knockdown",0,(condition => condition.getCombatItem().Value > 0)),
+            new Mechanic(34442, "Sacrifice", Mechanic.MechType.PlayerBoonRemove, ParseEnum.BossIDS.Matthias, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CC.End","Sacrifice (Breakbar) ended", "Sacrifice End",0,(condition => condition.CombatItem.Value>25)),
+            new Mechanic(34442, "Sacrificed", Mechanic.MechType.PlayerBoonRemove, ParseEnum.BossIDS.Matthias, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Sacrifice time ran out", "Sacrificed",0,(condition => condition.CombatItem.Value<=25)),
+            new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerBoonRemove, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(200,140,255)',", "KD","Unbalanced (triggered Storm phase Debuff)", "Knockdown",0,(condition => condition.CombatItem.Value > 0)),
             //new Mechanic(34367, "Unbalanced", Mechanic.MechType.PlayerOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(0,140,0)',", "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getCombatItem().Result == ParseEnum.Result.Interrupt)),
             //new Mechanic(34367, "Unbalanced", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(0,140,0)',", "KD","Unbalanced (triggered Storm phase Debuff) only on successful interrupt", "Knockdown (interrupt)",0,(condition => condition.getDLog().GetResult() == ParseEnum.Result.Interrupt)),
             //new Mechanic(34422, "Blood Fueled", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'square',color:'rgb(255,0,0)',", "Ate Reflects(good)",0),//human //Applied at the same time as Backflip Shards since it is the buff applied by them, can be omitted imho
@@ -36,7 +36,7 @@ namespace LuckParser.Models
             new Mechanic(34376, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)',", "Bble","Blood Shield (protective bubble)", "Bubble",0),//human
             new Mechanic(34518, "Blood Shield", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Matthias, "symbol:'octagon',color:'rgb(255,0,0)',", "Bble","Blood Shield (protective bubble)", "Bubble",0),//abom
             new Mechanic(34511, "Zealous Benediction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle',color:'rgb(255,200,0)',", "Bombs",0),
-            new Mechanic(26766, "Icy Patch", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,255)',", "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0,(condition => condition.getCombatItem().Value == 10000)),
+            new Mechanic(26766, "Icy Patch", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,255)',", "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0,(condition => condition.CombatItem.Value == 10000)),
             new Mechanic(34413, "Surrender", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,0)',", "Sprt","Surrender (hit by walking Spirit)", "Spirit hit",0)
             });
         }
@@ -66,10 +66,10 @@ namespace LuckParser.Models
                 if (downPour != null)
                 {
                     phaseStarts.Add(downPour.Time - log.FightData.FightStart);
-                    CastLog abo = castLogs.Find(x => x.GetID() == 34427);
+                    CastLog abo = castLogs.Find(x => x.SkillId == 34427);
                     if (abo != null)
                     {
-                        phaseStarts.Add(abo.GetTime());
+                        phaseStarts.Add(abo.Time);
                     }
                 }
             }
@@ -103,7 +103,7 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Tornado,
                         ParseEnum.ThrashIDS.Storm
                     };
-            List<CastLog> humanShield = cls.Where(x => x.GetID() == 34468).ToList();
+            List<CastLog> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
             List<int> humanShieldRemoval = log.GetBoonData(34518).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(x.Time - log.FightData.FightStart)).Distinct().ToList();
             for (var i = 0; i < humanShield.Count; i++)
             {
@@ -111,13 +111,13 @@ namespace LuckParser.Models
                 if (i < humanShieldRemoval.Count)
                 {
                     int removal = humanShieldRemoval[i];
-                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.GetTime(), removal), "rgba(255, 0, 255, 0.5)"));
+                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)"));
                 } else
                 {
-                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.GetTime(), (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)"));
+                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)"));
                 }
             }
-            List<CastLog> aboShield = cls.Where(x => x.GetID() == 34510).ToList();
+            List<CastLog> aboShield = cls.Where(x => x.SkillId == 34510).ToList();
             List<int> aboShieldRemoval = log.GetBoonData(34376).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(x.Time - log.FightData.FightStart)).Distinct().ToList();
             for (var i = 0; i < aboShield.Count; i++)
             {
@@ -125,18 +125,18 @@ namespace LuckParser.Models
                 if (i < aboShieldRemoval.Count)
                 {
                     int removal = aboShieldRemoval[i];
-                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.GetTime(), removal), "rgba(255, 0, 255, 0.5)"));
+                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)"));
                 }
                 else
                 {
-                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.GetTime(), (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)"));
+                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)"));
                 }
             }
-            List<CastLog> rageShards = cls.Where(x => x.GetID() == 34404 || x.GetID() == 34411).ToList();
+            List<CastLog> rageShards = cls.Where(x => x.SkillId == 34404 || x.SkillId == 34411).ToList();
             foreach (CastLog c in rageShards)
             {
-                int start = (int)c.GetTime();
-                int end = start + c.GetActDur();
+                int start = (int)c.Time;
+                int end = start + c.ActualDuration;
                 replay.AddCircleActor(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                 replay.AddCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
             }

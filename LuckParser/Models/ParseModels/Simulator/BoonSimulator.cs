@@ -91,9 +91,9 @@ namespace LuckParser.Models.ParseModels
             long timePrev = 0;
             foreach (BoonLog log in logs)
             {
-                timeCur = log.GetTime();
+                timeCur = log.Time;
                 Update(timeCur - timePrev);
-                Add(log.GetValue(), log.GetSrcInstid(), timeCur, log.GetOverstack());
+                Add(log.Value, log.SrcInstid, timeCur, log.Overstack);
                 timePrev = timeCur;
             }
             Update(fightDuration - timePrev);

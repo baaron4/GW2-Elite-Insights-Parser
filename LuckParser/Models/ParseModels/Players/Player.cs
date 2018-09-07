@@ -57,10 +57,10 @@ namespace LuckParser.Models.ParseModels
             List<CastLog> cls = GetCastLogs(log, start, end);
             int[] reses = { 0, 0 };
             foreach (CastLog cl in cls) {
-                if (cl.GetID() == SkillItem.ResurrectId)
+                if (cl.SkillId == SkillItem.ResurrectId)
                 {
                     reses[0]++;
-                    reses[1] += cl.GetActDur();
+                    reses[1] += cl.ActualDuration;
                 }
             }
             return reses;
@@ -91,7 +91,7 @@ namespace LuckParser.Models.ParseModels
             List<CastLog> casting = GetCastLogs(log, 0, log.FightData.FightDuration);      
             int swapped = 0;//4 for first set and 5 for next
             long swappedTime = 0;
-            List<CastLog> swaps = casting.Where(x => x.GetID() == SkillItem.WeaponSwapId).Take(2).ToList();
+            List<CastLog> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Take(2).ToList();
             // If the player never swapped, assume they are on their first set
             if (swaps.Count == 0)
             {
@@ -100,12 +100,12 @@ namespace LuckParser.Models.ParseModels
             // if the player swapped once, check on which set they started
             else if (swaps.Count == 1)
             {
-                swapped = swaps.First().GetExpDur() == 4 ? 5 : 4;
+                swapped = swaps.First().ExpectedDuration == 4 ? 5 : 4;
             }
             foreach (CastLog cl in casting)
             {
-                GW2APISkill apiskill = skillList.Get(cl.GetID())?.ApiSkill;
-                if (apiskill != null && cl.GetTime() > swappedTime)
+                GW2APISkill apiskill = skillList.Get(cl.SkillId)?.ApiSkill;
+                if (apiskill != null && cl.Time > swappedTime)
                 {
                     if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && (apiskill.categories == null || (apiskill.categories.Count() == 1 && apiskill.categories[0] == "Phantasm")))
                     {
@@ -180,18 +180,18 @@ namespace LuckParser.Models.ParseModels
                     }
 
                 }
-                else if (cl.GetID() == SkillItem.WeaponSwapId)
+                else if (cl.SkillId == SkillItem.WeaponSwapId)
                 {
                     //wepswap  
-                    swapped = cl.GetExpDur();
-                    swappedTime = cl.GetTime();
+                    swapped = cl.ExpectedDuration;
+                    swappedTime = cl.Time;
                     continue;
                 }
             }
             _weaponsArray = weapons;
         }    
         
-        protected override void SetDamagetakenLogs(ParsedLog log)
+        protected override void SetDamageTakenLogs(ParsedLog log)
         {
             long timeStart = log.FightData.FightStart;               
             foreach (CombatItem c in log.GetDamageTakenData(Agent.InstID)) {
@@ -292,10 +292,10 @@ namespace LuckParser.Models.ParseModels
             long start = fightData.FightStart;
             long end = fightData.FightEnd;
             // Player status
-            foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerStatus))
+            foreach (Mechanic mech in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.PlayerStatus))
             {
                 List<CombatItem> toUse = new List<CombatItem>();
-                switch (mech.GetSkill()) {
+                switch (mech.SkillId) {
                     case -2:
                         toUse = combatData.GetStates(InstID, ParseEnum.StateChange.ChangeDead, start, end);                 
                         break;
@@ -314,33 +314,33 @@ namespace LuckParser.Models.ParseModels
             }
             //Player hit
             List<DamageLog> dls = GetDamageTakenLogs(log, 0, fightData.FightDuration);
-            foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.SkillOnPlayer))
+            foreach (Mechanic mech in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.SkillOnPlayer))
             {
-                Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
+                Mechanic.CheckSpecialCondition condition = mech.SpecialCondition;
                 foreach (DamageLog dLog in dls)
                 {
                     if (condition != null && !condition(new SpecialConditionItem(dLog)))
                     {
                         continue;
                     }
-                    if (dLog.GetID() == mech.GetSkill() && dLog.GetResult().IsHit())
+                    if (dLog.SkillId == mech.SkillId && dLog.Result.IsHit())
                     {
-                        mechData[mech].Add(new MechanicLog(dLog.GetTime(), mech, this));
+                        mechData[mech].Add(new MechanicLog(dLog.Time, mech, this));
 
                     }
                 }
             }
             // Player boon
-            foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerBoon || x.GetMechType() == Mechanic.MechType.PlayerOnPlayer || x.GetMechType() == Mechanic.MechType.PlayerBoonRemove))
+            foreach (Mechanic mech in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.PlayerBoon || x.MechanicType == Mechanic.MechType.PlayerOnPlayer || x.MechanicType == Mechanic.MechType.PlayerBoonRemove))
             {
-                Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
-                foreach (CombatItem c in log.GetBoonData(mech.GetSkill()))
+                Mechanic.CheckSpecialCondition condition = mech.SpecialCondition;
+                foreach (CombatItem c in log.GetBoonData(mech.SkillId))
                 {
                     if (condition != null && !condition(new SpecialConditionItem(c)))
                     {
                         continue;
                     }
-                    if (mech.GetMechType() == Mechanic.MechType.PlayerBoonRemove)
+                    if (mech.MechanicType == Mechanic.MechType.PlayerBoonRemove)
                     {
                         if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual && InstID == c.SrcInstid)
                         {
@@ -352,7 +352,7 @@ namespace LuckParser.Models.ParseModels
                         if (c.IsBuffRemove == ParseEnum.BuffRemove.None && InstID == c.DstInstid)
                         {
                             mechData[mech].Add(new MechanicLog(c.Time - start, mech, this));
-                            if (mech.GetMechType() == Mechanic.MechType.PlayerOnPlayer)
+                            if (mech.MechanicType == Mechanic.MechType.PlayerOnPlayer)
                             {
                                 mechData[mech].Add(new MechanicLog(c.Time - start, mech, log.PlayerList.FirstOrDefault(x => x.InstID == c.SrcInstid)));
                             }
@@ -361,19 +361,19 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             // Hitting enemy
-            foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.HitOnEnemy))
+            foreach (Mechanic mech in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.HitOnEnemy))
             {
-                Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
-                List<AgentItem> agents = log.AgentData.GetAgents((ushort)mech.GetSkill());
+                Mechanic.CheckSpecialCondition condition = mech.SpecialCondition;
+                IEnumerable<AgentItem> agents = log.AgentData.GetAgents((ushort)mech.SkillId);
                 foreach (AgentItem a in agents)
                 {
                     foreach (DamageLog dl in GetDamageLogs(0,log,0,log.FightData.FightDuration))
                     {
-                        if (dl.GetDstInstidt() != a.InstID || dl.IsCondi() > 0 || dl.GetTime() < a.FirstAware - start || dl.GetTime() > a.LastAware - start || (condition != null && !condition(new SpecialConditionItem(dl))))
+                        if (dl.DstInstId != a.InstID || dl.IsCondi > 0 || dl.Time < a.FirstAware - start || dl.Time > a.LastAware - start || (condition != null && !condition(new SpecialConditionItem(dl))))
                         {
                             continue;
                         }
-                        mechData[mech].Add(new MechanicLog(dl.GetTime(), mech, this));
+                        mechData[mech].Add(new MechanicLog(dl.Time, mech, this));
                     }
                 }
             }
