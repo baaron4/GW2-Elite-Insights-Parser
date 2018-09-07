@@ -15,49 +15,13 @@ namespace LuckParser.Models.ParseModels
         //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
         private readonly List<DamageLog> _damageTakenlogs = new List<DamageLog>();
         protected readonly List<CastLog> CastLogs = new List<CastLog>();
-        public int Toughness
-        {
-            get
-            {
-                return Agent.Toughness;
-            }
-        }
-        public int Condition
-        {
-            get
-            {
-                return Agent.Condition;
-            }
-        }
-        public int Concentration
-        {
-            get
-            {
-                return Agent.Concentration;
-            }
-        }
-        public int Healing
-        {
-            get
-            {
-                return Agent.Healing;
-            }
-        }
-        public ushort InstID
-        {
-            get
-            {
-                return Agent.InstID;
-            }
-        }
 
-        public string Prof
-        {
-            get
-            {
-                return Agent.Prof;
-            }
-        }
+        public int Toughness => Agent.Toughness;
+        public int Condition => Agent.Condition;
+        public int Concentration => Agent.Concentration;
+        public int Healing => Agent.Healing;
+        public ushort InstID => Agent.InstID;
+        public string Prof => Agent.Prof;
 
         protected AbstractPlayer(AgentItem agent)
         {
