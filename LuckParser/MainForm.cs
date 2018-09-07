@@ -280,7 +280,7 @@ namespace LuckParser
                         $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.csv"
                         );
                         string splitString = "";
-                        if (rowData.LogLocation.Length != 0) { splitString = ","; }
+                        if (rowData.LogLocation != null) { splitString = ","; }
                         rowData.LogLocation += splitString + outputFile;
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
@@ -296,7 +296,7 @@ namespace LuckParser
                             $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.json"
                         );
                         string splitString = "";
-                        if (rowData.LogLocation.Length != 0) { splitString = ","; }
+                        if (rowData.LogLocation != null) { splitString = ","; }
                         rowData.LogLocation += splitString + outputFile;
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
