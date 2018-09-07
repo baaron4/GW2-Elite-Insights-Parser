@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LuckParser.Models.DataModels;
@@ -375,17 +375,17 @@ namespace LuckParser.Controllers
                     }
                     foreach (CastLog cl in castLogs)
                     {
-                        if (cl.EndActivation() == ParseEnum.Activation.CancelCancel)
+                        if (cl.EndActivation == ParseEnum.Activation.CancelCancel)
                         {
                             final.Wasted++;
-                            final.TimeWasted += cl.GetActDur();
+                            final.TimeWasted += cl.ActualDuration;
                         }
-                        if (cl.EndActivation() == ParseEnum.Activation.CancelFire)
+                        if (cl.EndActivation == ParseEnum.Activation.CancelFire)
                         {
                             final.Saved++;
-                            if (cl.GetActDur() < cl.GetExpDur())
+                            if (cl.ActualDuration < cl.ExpectedDuration)
                             {
-                                final.TimeSaved += cl.GetExpDur() - cl.GetActDur();
+                                final.TimeSaved += cl.ExpectedDuration - cl.ActualDuration;
                             }
                         }
                     }

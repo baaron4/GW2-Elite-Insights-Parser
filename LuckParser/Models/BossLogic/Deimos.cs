@@ -126,10 +126,10 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Greed,
                         ParseEnum.ThrashIDS.Pride
                     };
-            List<CastLog> mindCrush = cls.Where(x => x.GetID() == 37613).ToList();
+            List<CastLog> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
             foreach (CastLog c in mindCrush)
             {
-                int start = (int)c.GetTime();
+                int start = (int)c.Time;
                 int end = start + 5000;
                 replay.AddCircleActor(new CircleActor(true, end, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                 replay.AddCircleActor(new CircleActor(false, 0, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));

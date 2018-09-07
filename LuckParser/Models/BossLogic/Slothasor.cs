@@ -48,25 +48,25 @@ namespace LuckParser.Models
                 ParseEnum.ThrashIDS.Slubling3,
                 ParseEnum.ThrashIDS.Slubling4
             };
-            List<CastLog> sleepy = cls.Where(x => x.GetID() == 34515).ToList();
+            List<CastLog> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
             foreach (CastLog c in sleepy)
             {
-                replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.GetTime(), (int)c.GetTime() + c.GetActDur()), "rgba(0, 180, 255, 0.3)"));
+                replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
             }
 
-            List<CastLog> tantrum = cls.Where(x => x.GetID() == 34547).ToList();
+            List<CastLog> tantrum = cls.Where(x => x.SkillId == 34547).ToList();
             foreach (CastLog c in tantrum)
             {
-                int start = (int)c.GetTime();
-                int end = start + c.GetActDur();
+                int start = (int)c.Time;
+                int end = start + c.ActualDuration;
                 replay.AddCircleActor(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)"));
                 replay.AddCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)"));
             }
-            List<CastLog> shakes = cls.Where(x => x.GetID() == 34482).ToList();
+            List<CastLog> shakes = cls.Where(x => x.SkillId == 34482).ToList();
             foreach (CastLog c in shakes)
             {
-                int start = (int)c.GetTime();
-                int end = start + c.GetActDur();
+                int start = (int)c.Time;
+                int end = start + c.ActualDuration;
                 replay.AddCircleActor(new CircleActor(false, 0, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
                 replay.AddCircleActor(new CircleActor(true, end, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
             }

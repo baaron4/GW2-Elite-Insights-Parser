@@ -109,10 +109,10 @@ namespace LuckParser.Models
                ParseEnum.ThrashIDS.GreenGuardian,
                ParseEnum.ThrashIDS.RedGuardian
             };
-            List<CastLog> magicStorms = cls.Where(x => x.GetID() == 31419).ToList();
+            List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
             foreach (CastLog c in magicStorms)
             {
-                replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.GetTime(), (int)c.GetTime() + c.GetActDur()), "rgba(0, 180, 255, 0.3)"));
+                replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
             }
             return ids;
         }

@@ -49,12 +49,12 @@ namespace LuckParser.Models
             List<CastLog> dhuumCast = boss.GetCastLogs(log, 0, 20000);
             if (dhuumCast.Count > 0)
             {
-                CastLog shield = castLogs.Find(x => x.GetID() == 47396);
+                CastLog shield = castLogs.Find(x => x.SkillId == 47396);
                 if (shield != null)
                 {
-                    end = shield.GetTime();
+                    end = shield.Time;
                     phases.Add(new PhaseData(start, end));
-                    start = shield.GetTime() + shield.GetActDur();
+                    start = shield.Time + shield.ActualDuration;
                     if (start < fightDuration - 5000)
                     {
                         phases.Add(new PhaseData(start, fightDuration));
@@ -78,12 +78,12 @@ namespace LuckParser.Models
                     end = invulDhuum.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(start, end));
                     start = end + 1;
-                    CastLog shield = castLogs.Find(x => x.GetID() == 47396);
+                    CastLog shield = castLogs.Find(x => x.SkillId == 47396);
                     if (shield != null)
                     {
-                        end = shield.GetTime();
+                        end = shield.Time;
                         phases.Add(new PhaseData(start, end));
-                        start = shield.GetTime() + shield.GetActDur();
+                        start = shield.Time + shield.ActualDuration;
                         if (start < fightDuration - 5000)
                         {
                             phases.Add(new PhaseData(start, fightDuration));
@@ -112,17 +112,17 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Enforcer,
                         ParseEnum.ThrashIDS.Messenger
                     };
-            List<CastLog> deathmark = cls.Where(x => x.GetID() == 48176).ToList();
-            CastLog majorSplit = cls.Find(x => x.GetID() == 47396);
+            List<CastLog> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
+            CastLog majorSplit = cls.Find(x => x.SkillId == 47396);
             foreach (CastLog c in deathmark)
             {
-                int start = (int)c.GetTime();
-                int castEnd = start + c.GetActDur();
+                int start = (int)c.Time;
+                int castEnd = start + c.ActualDuration;
                 int zoneEnd = castEnd + 120000;
                 if (majorSplit != null)
                 {
-                    castEnd = Math.Min(castEnd, (int)majorSplit.GetTime());
-                    zoneEnd = Math.Min(zoneEnd, (int)majorSplit.GetTime());
+                    castEnd = Math.Min(castEnd, (int)majorSplit.Time);
+                    zoneEnd = Math.Min(zoneEnd, (int)majorSplit.Time);
                 }
                 Point3D pos = replay.GetPositions().FirstOrDefault(x => x.Time > castEnd);
                 if (pos != null)
@@ -132,17 +132,17 @@ namespace LuckParser.Models
                     replay.AddCircleActor(new CircleActor(true, 0, 450, new Tuple<int, int>(castEnd, zoneEnd), "rgba(200, 255, 100, 0.5)", pos));
                 }
             }
-            List<CastLog> cataCycle = cls.Where(x => x.GetID() == 48398).ToList();
+            List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
             foreach (CastLog c in cataCycle)
             {
-                int start = (int)c.GetTime();
-                int end = start + c.GetActDur();
+                int start = (int)c.Time;
+                int end = start + c.ActualDuration;
                 replay.AddCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
                 replay.AddCircleActor(new CircleActor(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
             }
             if (majorSplit != null)
             {
-                int start = (int)majorSplit.GetTime();
+                int start = (int)majorSplit.Time;
                 int end = (int)log.FightData.FightDuration;
                 replay.AddCircleActor(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
             }

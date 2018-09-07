@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -1917,7 +1917,7 @@ namespace LuckParser.Controllers
                 //int autosCount = 0;
                 foreach (CastLog cl in casting)
                 {
-                    GW2APISkill apiskill = _log.SkillData.Get(cl.GetID())?.ApiSkill;
+                    GW2APISkill apiskill = _log.SkillData.Get(cl.SkillId)?.ApiSkill;
 
                     if (apiskill != null)
                     {
@@ -1927,9 +1927,9 @@ namespace LuckParser.Controllers
                             continue;
                         }
                         string borderSize = simpleRotSize == 30 ? "3px" : "1px";
-                        string style = cl.EndActivation() == ParseEnum.Activation.CancelCancel ? "style=\"outline: "+ borderSize + " solid red\"" : "";
+                        string style = cl.EndActivation == ParseEnum.Activation.CancelCancel ? "style=\"outline: "+ borderSize + " solid red\"" : "";
                         int imageSize = simpleRotSize - (style.Length > 0 ? (simpleRotSize == 30 ? 3 : 1) : 0);
-                        sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img " + style + "src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + imageSize + "\" width=\"" + imageSize + "\"></div></span>");
+                        sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img " + style + "src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.Time + "ms " + "Dur: " + cl.ActualDuration + "ms \" height=\"" + imageSize + "\" width=\"" + imageSize + "\"></div></span>");
                         /*if (apiskill.slot != "Weapon_1")
                         {
                             if (autosCount > 0 && settings.ShowAutos)
@@ -1950,31 +1950,31 @@ namespace LuckParser.Controllers
                     }
                     else
                     {
-                        if (cl.GetID() == SkillItem.WeaponSwapId)
+                        if (cl.SkillId == SkillItem.WeaponSwapId)
                         {//wepswap
                             string skillName = "Weapon Swap";
                             string skillLink = HTMLHelper.GetLink("Swap");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.Time + "ms " + "Dur: " + cl.ActualDuration + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
                             sw.Write("<br>");
                         }
-                        else if (cl.GetID() == SkillItem.ResurrectId)
+                        else if (cl.SkillId == SkillItem.ResurrectId)
                         {
                             string skillName = "Resurrect";
                             string skillLink = HTMLHelper.GetLink("Downs");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.Time + "ms " + "Dur: " + cl.ActualDuration + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
                         }
-                        else if (cl.GetID() == SkillItem.BandageId)
+                        else if (cl.SkillId == SkillItem.BandageId)
                         {
                             string skillName = "Bandage";
                             string skillLink = HTMLHelper.GetLink("Bandage");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.Time + "ms " + "Dur: " + cl.ActualDuration + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
 
                         }
-                        else if (cl.GetID() == SkillItem.DodgeId)
+                        else if (cl.SkillId == SkillItem.DodgeId)
                         {
                             string skillName = "Dodge";
                             string skillLink = HTMLHelper.GetLink("Dodge");
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.GetTime() + "ms " + "Dur: " + cl.GetActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
+                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + skillLink + "\" data-toggle=\"tooltip\" title= \"" + skillName + " Time: " + cl.Time + "ms " + "Dur: " + cl.ActualDuration + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
 
                         }
 
@@ -2188,47 +2188,47 @@ namespace LuckParser.Controllers
                 usedIDs.Add(id);
                 if (skill != null && listToUse.Count > 0)
                 {
-                    List<CastLog> clList = casting.Where(x => x.GetID() == id).ToList();
+                    List<CastLog> clList = casting.Where(x => x.SkillId == id).ToList();
                     int casts = clList.Count;
                     double timeswasted = 0;
                     double timessaved = 0;
                     foreach (CastLog cl in clList)
                     {
-                        if (cl.EndActivation() == ParseEnum.Activation.CancelCancel)
+                        if (cl.EndActivation == ParseEnum.Activation.CancelCancel)
                         {
-                            timeswasted += cl.GetActDur();
+                            timeswasted += cl.ActualDuration;
                         }
-                        if (cl.EndActivation() == ParseEnum.Activation.CancelFire)
+                        if (cl.EndActivation == ParseEnum.Activation.CancelFire)
                         {
-                            if (cl.GetActDur() < cl.GetExpDur())
+                            if (cl.ActualDuration < cl.ExpectedDuration)
                             {
-                                timessaved += cl.GetExpDur() - cl.GetActDur();
+                                timessaved += cl.ExpectedDuration - cl.ActualDuration;
                             }
                         }
                     }
                     HTMLHelper.WriteDamageDistTableSkill(sw, skill, _log.SkillData, listToUse, finalTotalDamage, casts, timeswasted / 1000.0, -timessaved / 1000.0);
                 }
             }
-            foreach (int id in casting.Where(x => !usedIDs.Contains(x.GetID())).Select(x => (int)x.GetID()).Distinct())
+            foreach (int id in casting.Where(x => !usedIDs.Contains(x.SkillId)).Select(x => (int)x.SkillId).Distinct())
             {
                 SkillItem skill = skillList.Get(id);
                 if (skill != null)
                 {
-                    List<CastLog> clList = casting.Where(x => x.GetID() == id).ToList();
+                    List<CastLog> clList = casting.Where(x => x.SkillId == id).ToList();
                     int casts = clList.Count;
                     double timeswasted = 0;
                     double timessaved = 0;
                     foreach (CastLog cl in clList)
                     {
-                        if (cl.EndActivation() == ParseEnum.Activation.CancelCancel)
+                        if (cl.EndActivation == ParseEnum.Activation.CancelCancel)
                         {
-                            timeswasted += cl.GetActDur();
+                            timeswasted += cl.ActualDuration;
                         }
-                        if (cl.EndActivation() == ParseEnum.Activation.CancelFire)
+                        if (cl.EndActivation == ParseEnum.Activation.CancelFire)
                         {
-                            if (cl.GetActDur() < cl.GetExpDur())
+                            if (cl.ActualDuration < cl.ExpectedDuration)
                             {
-                                timessaved += cl.GetExpDur() - cl.GetActDur();
+                                timessaved += cl.ExpectedDuration - cl.ActualDuration;
                             }
                         }
                     }

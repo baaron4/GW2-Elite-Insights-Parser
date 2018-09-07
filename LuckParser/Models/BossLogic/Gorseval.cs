@@ -95,26 +95,26 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.EnragedSpirit,
                         ParseEnum.ThrashIDS.AngeredSpirit
                     };
-            List<CastLog> blooms = cls.Where(x => x.GetID() == 31616).ToList();
+            List<CastLog> blooms = cls.Where(x => x.SkillId == 31616).ToList();
             foreach (CastLog c in blooms)
             {
-                int start = (int)c.GetTime();
-                int end = start + c.GetActDur();
-                replay.AddCircleActor(new CircleActor(true, c.GetExpDur() + (int)c.GetTime(), 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
+                int start = (int)c.Time;
+                int end = start + c.ActualDuration;
+                replay.AddCircleActor(new CircleActor(true, c.ExpectedDuration + (int)c.Time, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
                 replay.AddCircleActor(new CircleActor(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
             }
             List<PhaseData> phases = log.Boss.GetPhases(log);
             if (phases.Count > 1)
             {
-                List<CastLog> rampage = cls.Where(x => x.GetID() == 31834).ToList();
+                List<CastLog> rampage = cls.Where(x => x.SkillId == 31834).ToList();
                 Point3D pos = log.Boss.CombatReplay.GetPositions().First();
                 foreach (CastLog c in rampage)
                 {
-                    int start = (int)c.GetTime();
-                    int end = start + c.GetActDur();
+                    int start = (int)c.Time;
+                    int end = start + c.ActualDuration;
                     replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 125, 255, 0.3)"));
                     // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
-                    int ticks = (int)Math.Min(Math.Ceiling(c.GetActDur() / 4000.0),6);
+                    int ticks = (int)Math.Min(Math.Ceiling(c.ActualDuration / 4000.0),6);
                     int phaseIndex;
                     for (phaseIndex = 1; phaseIndex < phases.Count; phaseIndex++)
                     {

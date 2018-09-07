@@ -129,7 +129,7 @@ namespace LuckParser.Models.ParseModels
             {
                 SetCastLogs(log);
             }
-            return CastLogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+            return CastLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
 
         }
 
@@ -139,7 +139,7 @@ namespace LuckParser.Models.ParseModels
             {
                 SetCastLogs(log);
             }
-            return CastLogs.Where(x => x.GetTime() + x.GetActDur() >= start && x.GetTime() <= end).ToList();
+            return CastLogs.Where(x => x.Time + x.ActualDuration >= start && x.Time <= end).ToList();
 
         }
         public List<DamageLog> GetJustPlayerDamageLogs(int instidFilter, ParsedLog log, long start, long end)

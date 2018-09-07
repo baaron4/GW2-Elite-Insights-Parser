@@ -57,10 +57,10 @@ namespace LuckParser.Models.ParseModels
             List<CastLog> cls = GetCastLogs(log, start, end);
             int[] reses = { 0, 0 };
             foreach (CastLog cl in cls) {
-                if (cl.GetID() == SkillItem.ResurrectId)
+                if (cl.SkillId == SkillItem.ResurrectId)
                 {
                     reses[0]++;
-                    reses[1] += cl.GetActDur();
+                    reses[1] += cl.ActualDuration;
                 }
             }
             return reses;
@@ -91,7 +91,7 @@ namespace LuckParser.Models.ParseModels
             List<CastLog> casting = GetCastLogs(log, 0, log.FightData.FightDuration);      
             int swapped = 0;//4 for first set and 5 for next
             long swappedTime = 0;
-            List<CastLog> swaps = casting.Where(x => x.GetID() == SkillItem.WeaponSwapId).Take(2).ToList();
+            List<CastLog> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Take(2).ToList();
             // If the player never swapped, assume they are on their first set
             if (swaps.Count == 0)
             {
@@ -100,12 +100,12 @@ namespace LuckParser.Models.ParseModels
             // if the player swapped once, check on which set they started
             else if (swaps.Count == 1)
             {
-                swapped = swaps.First().GetExpDur() == 4 ? 5 : 4;
+                swapped = swaps.First().ExpectedDuration == 4 ? 5 : 4;
             }
             foreach (CastLog cl in casting)
             {
-                GW2APISkill apiskill = skillList.Get(cl.GetID())?.ApiSkill;
-                if (apiskill != null && cl.GetTime() > swappedTime)
+                GW2APISkill apiskill = skillList.Get(cl.SkillId)?.ApiSkill;
+                if (apiskill != null && cl.Time > swappedTime)
                 {
                     if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && (apiskill.categories == null || (apiskill.categories.Count() == 1 && apiskill.categories[0] == "Phantasm")))
                     {
@@ -180,11 +180,11 @@ namespace LuckParser.Models.ParseModels
                     }
 
                 }
-                else if (cl.GetID() == SkillItem.WeaponSwapId)
+                else if (cl.SkillId == SkillItem.WeaponSwapId)
                 {
                     //wepswap  
-                    swapped = cl.GetExpDur();
-                    swappedTime = cl.GetTime();
+                    swapped = cl.ExpectedDuration;
+                    swappedTime = cl.Time;
                     continue;
                 }
             }

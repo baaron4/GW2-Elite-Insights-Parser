@@ -49,18 +49,18 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.TormentedDead,
                         ParseEnum.ThrashIDS.SurgingSoul
                     };
-            List<CastLog> howling = cls.Where(x => x.GetID() == 48662).ToList();
+            List<CastLog> howling = cls.Where(x => x.SkillId == 48662).ToList();
             foreach (CastLog c in howling)
             {
-                int start = (int)c.GetTime();
-                int end = start + c.GetActDur();
-                replay.AddCircleActor(new CircleActor(true, (int)c.GetTime() + c.GetExpDur(), 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
+                int start = (int)c.Time;
+                int end = start + c.ActualDuration;
+                replay.AddCircleActor(new CircleActor(true, (int)c.Time + c.ExpectedDuration, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
                 replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
             }
-            List<CastLog> vortex = cls.Where(x => x.GetID() == 47327).ToList();
+            List<CastLog> vortex = cls.Where(x => x.SkillId == 47327).ToList();
             foreach (CastLog c in vortex)
             {
-                int start = (int)c.GetTime();
+                int start = (int)c.Time;
                 int end = start + 4000;
                 Point3D pos = replay.GetPositions().FirstOrDefault(x => x.Time > start);
                 if (pos != null)

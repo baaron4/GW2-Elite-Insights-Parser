@@ -66,10 +66,10 @@ namespace LuckParser.Models
                 if (downPour != null)
                 {
                     phaseStarts.Add(downPour.Time - log.FightData.FightStart);
-                    CastLog abo = castLogs.Find(x => x.GetID() == 34427);
+                    CastLog abo = castLogs.Find(x => x.SkillId == 34427);
                     if (abo != null)
                     {
-                        phaseStarts.Add(abo.GetTime());
+                        phaseStarts.Add(abo.Time);
                     }
                 }
             }
@@ -103,7 +103,7 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Tornado,
                         ParseEnum.ThrashIDS.Storm
                     };
-            List<CastLog> humanShield = cls.Where(x => x.GetID() == 34468).ToList();
+            List<CastLog> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
             List<int> humanShieldRemoval = log.GetBoonData(34518).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(x.Time - log.FightData.FightStart)).Distinct().ToList();
             for (var i = 0; i < humanShield.Count; i++)
             {
@@ -111,13 +111,13 @@ namespace LuckParser.Models
                 if (i < humanShieldRemoval.Count)
                 {
                     int removal = humanShieldRemoval[i];
-                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.GetTime(), removal), "rgba(255, 0, 255, 0.5)"));
+                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)"));
                 } else
                 {
-                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.GetTime(), (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)"));
+                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)"));
                 }
             }
-            List<CastLog> aboShield = cls.Where(x => x.GetID() == 34510).ToList();
+            List<CastLog> aboShield = cls.Where(x => x.SkillId == 34510).ToList();
             List<int> aboShieldRemoval = log.GetBoonData(34376).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(x.Time - log.FightData.FightStart)).Distinct().ToList();
             for (var i = 0; i < aboShield.Count; i++)
             {
@@ -125,18 +125,18 @@ namespace LuckParser.Models
                 if (i < aboShieldRemoval.Count)
                 {
                     int removal = aboShieldRemoval[i];
-                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.GetTime(), removal), "rgba(255, 0, 255, 0.5)"));
+                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)"));
                 }
                 else
                 {
-                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.GetTime(), (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)"));
+                    replay.AddCircleActor(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)"));
                 }
             }
-            List<CastLog> rageShards = cls.Where(x => x.GetID() == 34404 || x.GetID() == 34411).ToList();
+            List<CastLog> rageShards = cls.Where(x => x.SkillId == 34404 || x.SkillId == 34411).ToList();
             foreach (CastLog c in rageShards)
             {
-                int start = (int)c.GetTime();
-                int end = start + c.GetActDur();
+                int start = (int)c.Time;
+                int end = start + c.ActualDuration;
                 replay.AddCircleActor(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                 replay.AddCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
             }
