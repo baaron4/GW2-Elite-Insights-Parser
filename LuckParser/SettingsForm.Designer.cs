@@ -577,12 +577,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(797, 528);
+            this.ClientSize = new System.Drawing.Size(853, 553);
             this.Controls.Add(this.UploadRaidar_check);
             this.Controls.Add(this.UploadDRRH_check);
             this.Controls.Add(this.UploadDPSReports_checkbox);
             this.Controls.Add(this.label1);
-            this.ClientSize = new System.Drawing.Size(579, 524);
             this.Controls.Add(this.chkIndentJSON);
             this.Controls.Add(this.chkOutputJson);
             this.Controls.Add(this.json);

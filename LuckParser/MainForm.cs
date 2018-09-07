@@ -297,7 +297,7 @@ namespace LuckParser
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                         {
-                            var builder = new JSONBuilder(sw, log, settings, statistics);
+                            var builder = new JSONBuilder(sw, log, settings, statistics,uploadresult);
                             builder.CreateJSON();
                         }
                     }

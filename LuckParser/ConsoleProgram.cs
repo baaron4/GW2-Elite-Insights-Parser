@@ -235,7 +235,7 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                             {
-                                var builder = new JSONBuilder(sw, log, settings, statistics);
+                                var builder = new JSONBuilder(sw, log, settings, statistics,uploadresult);
                                 builder.CreateJSON();
                             }
                         }
