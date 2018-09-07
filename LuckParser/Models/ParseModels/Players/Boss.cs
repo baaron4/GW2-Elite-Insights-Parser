@@ -88,17 +88,17 @@ namespace LuckParser.Models.ParseModels
             List<Mechanic> bossMechanics = fightData.Logic.GetMechanics();
             Dictionary<ushort, AbstractMasterPlayer> regroupedMobs = new Dictionary<ushort, AbstractMasterPlayer>();
             // Boons
-            foreach (Mechanic m in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyBoon || x.GetMechType() == Mechanic.MechType.EnemyBoonStrip))
+            foreach (Mechanic m in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.EnemyBoon || x.MechanicType == Mechanic.MechType.EnemyBoonStrip))
             {
-                Mechanic.SpecialCondition condition = m.GetSpecialCondition();
-                foreach (CombatItem c in log.GetBoonData(m.GetSkill()))
+                Mechanic.CheckSpecialCondition condition = m.SpecialCondition;
+                foreach (CombatItem c in log.GetBoonData(m.SkillId))
                 {
                     if (condition != null && !condition(new SpecialConditionItem(c)))
                     {
                         continue;
                     }
                     AbstractMasterPlayer amp = null;
-                    if (m.GetMechType() == Mechanic.MechType.EnemyBoon && c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                    if (m.MechanicType == Mechanic.MechType.EnemyBoon && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
                         if (c.DstInstid == fightData.InstID)
                         {
@@ -114,7 +114,7 @@ namespace LuckParser.Models.ParseModels
                             }
                         }
                     }
-                    else if (m.GetMechType() == Mechanic.MechType.EnemyBoonStrip && c.IsBuffRemove == ParseEnum.BuffRemove.Manual)
+                    else if (m.MechanicType == Mechanic.MechType.EnemyBoonStrip && c.IsBuffRemove == ParseEnum.BuffRemove.Manual)
                     {
                         if (c.SrcInstid == fightData.InstID)
                         {
@@ -138,17 +138,17 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             // Casting
-            foreach (Mechanic m in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.EnemyCastEnd || x.GetMechType() == Mechanic.MechType.EnemyCastStart))
+            foreach (Mechanic m in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.EnemyCastEnd || x.MechanicType == Mechanic.MechType.EnemyCastStart))
             {
-                Mechanic.SpecialCondition condition = m.GetSpecialCondition();
-                foreach (CombatItem c in log.GetCastDataById(m.GetSkill()))
+                Mechanic.CheckSpecialCondition condition = m.SpecialCondition;
+                foreach (CombatItem c in log.GetCastDataById(m.SkillId))
                 {
                     if (condition != null && !condition(new SpecialConditionItem(c)))
                     {
                         continue;
                     }
                     AbstractMasterPlayer amp = null;
-                    if ((m.GetMechType() == Mechanic.MechType.EnemyCastStart && c.IsActivation.IsCasting()) || (m.GetMechType() == Mechanic.MechType.EnemyCastEnd && !c.IsActivation.IsCasting()))
+                    if ((m.MechanicType == Mechanic.MechType.EnemyCastStart && c.IsActivation.IsCasting()) || (m.MechanicType == Mechanic.MechType.EnemyCastEnd && !c.IsActivation.IsCasting()))
                     {
                         if (c.SrcInstid == fightData.InstID)
                         {
@@ -172,9 +172,9 @@ namespace LuckParser.Models.ParseModels
 
             }
             // Spawn
-            foreach (Mechanic m in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.Spawn))
+            foreach (Mechanic m in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.Spawn))
             {
-                foreach (AgentItem a in log.AgentData.NPCAgentList.Where(x => x.ID == m.GetSkill()))
+                foreach (AgentItem a in log.AgentData.NPCAgentList.Where(x => x.ID == m.SkillId))
                 {
                     if (!regroupedMobs.TryGetValue(a.ID, out AbstractMasterPlayer amp))
                     {

@@ -32,13 +32,13 @@ namespace LuckParser.Models.ParseModels
             List<Mechanic> toRemove = new List<Mechanic>();
             foreach (Mechanic mech in Keys)
             {
-                if (altNames.ContainsKey(mech.GetShortName()))
+                if (altNames.ContainsKey(mech.ShortName))
                 {
-                    this[altNames[mech.GetShortName()]].AddRange(this[mech]);
+                    this[altNames[mech.ShortName]].AddRange(this[mech]);
                     toRemove.Add(mech);
                 } else
                 {
-                    altNames.Add(mech.GetShortName(), mech);
+                    altNames.Add(mech.ShortName, mech);
                 }
             }
             foreach(Mechanic mech in toRemove)
@@ -59,10 +59,10 @@ namespace LuckParser.Models.ParseModels
                     if (pair.Value.Count(x => phase.InInterval(x.Time)) > 0)
                     {
                         toAddAll.Add(pair.Key);
-                        if (pair.Key.IsEnemyMechanic())
+                        if (pair.Key.IsEnemyMechanic)
                         {
                             toAddEnemy.Add(pair.Key);
-                        } else if (pair.Key.GetMechType() != Mechanic.MechType.PlayerStatus)
+                        } else if (pair.Key.MechanicType != Mechanic.MechType.PlayerStatus)
                         {
                             toAddPlayer.Add(pair.Key);
                         }
@@ -72,7 +72,7 @@ namespace LuckParser.Models.ParseModels
                 List<AbstractMasterPlayer> toAdd = new List<AbstractMasterPlayer>();
                 _enemyList.Add(toAdd);
                 toAdd.Add(log.Boss);
-                foreach(Mechanic m in Keys.Where(x=> x.IsEnemyMechanic()))
+                foreach(Mechanic m in Keys.Where(x=> x.IsEnemyMechanic))
                 {
                     foreach (AbstractMasterPlayer p in this[m].Where(x => phase.InInterval(x.Time)).Select(x => x.Player).Distinct())
                     {

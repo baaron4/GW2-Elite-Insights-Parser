@@ -292,10 +292,10 @@ namespace LuckParser.Models.ParseModels
             long start = fightData.FightStart;
             long end = fightData.FightEnd;
             // Player status
-            foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerStatus))
+            foreach (Mechanic mech in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.PlayerStatus))
             {
                 List<CombatItem> toUse = new List<CombatItem>();
-                switch (mech.GetSkill()) {
+                switch (mech.SkillId) {
                     case -2:
                         toUse = combatData.GetStates(InstID, ParseEnum.StateChange.ChangeDead, start, end);                 
                         break;
@@ -314,16 +314,16 @@ namespace LuckParser.Models.ParseModels
             }
             //Player hit
             List<DamageLog> dls = GetDamageTakenLogs(log, 0, fightData.FightDuration);
-            foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.SkillOnPlayer))
+            foreach (Mechanic mech in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.SkillOnPlayer))
             {
-                Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
+                Mechanic.CheckSpecialCondition condition = mech.SpecialCondition;
                 foreach (DamageLog dLog in dls)
                 {
                     if (condition != null && !condition(new SpecialConditionItem(dLog)))
                     {
                         continue;
                     }
-                    if (dLog.SkillId == mech.GetSkill() && dLog.Result.IsHit())
+                    if (dLog.SkillId == mech.SkillId && dLog.Result.IsHit())
                     {
                         mechData[mech].Add(new MechanicLog(dLog.Time, mech, this));
 
@@ -331,16 +331,16 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             // Player boon
-            foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.PlayerBoon || x.GetMechType() == Mechanic.MechType.PlayerOnPlayer || x.GetMechType() == Mechanic.MechType.PlayerBoonRemove))
+            foreach (Mechanic mech in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.PlayerBoon || x.MechanicType == Mechanic.MechType.PlayerOnPlayer || x.MechanicType == Mechanic.MechType.PlayerBoonRemove))
             {
-                Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
-                foreach (CombatItem c in log.GetBoonData(mech.GetSkill()))
+                Mechanic.CheckSpecialCondition condition = mech.SpecialCondition;
+                foreach (CombatItem c in log.GetBoonData(mech.SkillId))
                 {
                     if (condition != null && !condition(new SpecialConditionItem(c)))
                     {
                         continue;
                     }
-                    if (mech.GetMechType() == Mechanic.MechType.PlayerBoonRemove)
+                    if (mech.MechanicType == Mechanic.MechType.PlayerBoonRemove)
                     {
                         if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual && InstID == c.SrcInstid)
                         {
@@ -352,7 +352,7 @@ namespace LuckParser.Models.ParseModels
                         if (c.IsBuffRemove == ParseEnum.BuffRemove.None && InstID == c.DstInstid)
                         {
                             mechData[mech].Add(new MechanicLog(c.Time - start, mech, this));
-                            if (mech.GetMechType() == Mechanic.MechType.PlayerOnPlayer)
+                            if (mech.MechanicType == Mechanic.MechType.PlayerOnPlayer)
                             {
                                 mechData[mech].Add(new MechanicLog(c.Time - start, mech, log.PlayerList.FirstOrDefault(x => x.InstID == c.SrcInstid)));
                             }
@@ -361,10 +361,10 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             // Hitting enemy
-            foreach (Mechanic mech in bossMechanics.Where(x => x.GetMechType() == Mechanic.MechType.HitOnEnemy))
+            foreach (Mechanic mech in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.HitOnEnemy))
             {
-                Mechanic.SpecialCondition condition = mech.GetSpecialCondition();
-                IEnumerable<AgentItem> agents = log.AgentData.GetAgents((ushort)mech.GetSkill());
+                Mechanic.CheckSpecialCondition condition = mech.SpecialCondition;
+                IEnumerable<AgentItem> agents = log.AgentData.GetAgents((ushort)mech.SkillId);
                 foreach (AgentItem a in agents)
                 {
                     foreach (DamageLog dl in GetDamageLogs(0,log,0,log.FightData.FightDuration))

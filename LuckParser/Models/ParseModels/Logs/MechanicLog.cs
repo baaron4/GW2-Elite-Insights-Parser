@@ -6,9 +6,9 @@
 
         public long Time { get; }
         public AbstractMasterPlayer Player { get; }
-        public long Skill => _mechanic.GetSkill();
-        public string Description => _mechanic.GetDescription();
-        public string Plotly => _mechanic.GetPlotly();
+        public long Skill => _mechanic.SkillId;
+        public string Description => _mechanic.Description;
+        public string PlotlyShape => _mechanic.PlotlyShape;
 
         public MechanicLog(long time, Mechanic mechanic,
         AbstractMasterPlayer player)

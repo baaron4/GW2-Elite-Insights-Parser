@@ -189,12 +189,12 @@ namespace LuckParser.Controllers
 
                     sw.Write("],");
                     sw.Write(" mode: 'markers',");
-                    if (!(mech.GetSkill() == -2 || mech.GetSkill() == -3))
+                    if (!(mech.SkillId == -2 || mech.SkillId == -3))
                     {
                         sw.Write("visible:'legendonly',");
                     }
                     sw.Write("type:'scatter'," +
-                            "marker:{" + "size: 15," + mech.GetPlotly() +  "}," +
+                            "marker:{" + "size: 15," + mech.PlotlyShape +  "}," +
                             "text:[");
                     foreach (MechanicLog ml in filterdList)
                     {
@@ -211,7 +211,7 @@ namespace LuckParser.Controllers
                     }
 
                     sw.Write("]," +
-                            " name: '" + mech.GetPlotlyName().Replace("'", " ") + "'");
+                            " name: '" + mech.PlotlyName.Replace("'", " ") + "'");
                     sw.Write("},");
                 }
                 if (maxDPS > 0)
@@ -2618,7 +2618,7 @@ namespace LuckParser.Controllers
                             sw.Write("<th>Player</th>");
                             foreach (Mechanic mech in presMech)
                             {
-                                sw.Write("<th><span data-toggle=\"tooltip\" title=\""+ mech.GetDescription() +"\">" + mech.GetShortName() + "</span></th>");
+                                sw.Write("<th><span data-toggle=\"tooltip\" title=\""+ mech.Description +"\">" + mech.ShortName + "</span></th>");
                             }
                         }
                         sw.Write("</tr>");
@@ -2640,7 +2640,7 @@ namespace LuckParser.Controllers
                                     int count = mls.Count;
                                     foreach (MechanicLog ml in mls)
                                     {
-                                        if (mech.GetICD() != 0 && ml.Time - timeFilter < mech.GetICD())//ICD check
+                                        if (mech.InternalCooldown != 0 && ml.Time - timeFilter < mech.InternalCooldown)//ICD check
                                         {
                                             filterCount++;
                                         }
@@ -2703,7 +2703,7 @@ namespace LuckParser.Controllers
                             sw.Write("<th>Enemy</th>");
                             foreach (Mechanic mech in presEnemyMech)
                             {
-                                sw.Write("<th><span data-toggle=\"tooltip\" title=\"" + mech.GetDescription() + "\">" + mech.GetShortName() + "</span></th>");
+                                sw.Write("<th><span data-toggle=\"tooltip\" title=\"" + mech.Description + "\">" + mech.ShortName + "</span></th>");
                             }
                         }
                         sw.Write("</tr>");

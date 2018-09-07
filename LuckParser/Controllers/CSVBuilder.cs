@@ -604,7 +604,7 @@ namespace LuckParser.Controllers
                 WriteCell("Name");
                 foreach (Mechanic mech in presMech)
                 {
-                    WriteCell(mech.GetDescription());
+                    WriteCell(mech.Description);
                 }
                 NewLine();
 

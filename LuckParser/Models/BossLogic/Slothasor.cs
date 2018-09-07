@@ -22,10 +22,10 @@ namespace LuckParser.Models
             new Mechanic(34508, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'star',color:'rgb(255,0,255)',", "Fix","Fixated by Slothasor", "Fixated",0),
             new Mechanic(34565, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)',", "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0), 
             new Mechanic(34537, "Toxic Cloud", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Slothasor, "symbol:'pentagon-open',color:'rgb(0,128,0)',", "Floor","Toxic Cloud (stood in green floor poison)", "Toxic Floor",0),
-            new Mechanic(791, "Fear", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'square-open',color:'rgb(255,0,0)',", "Fear","Hit by fear after breakbar", "Feared",0,(condition=> condition.getCombatItem().Value == 8000)),
+            new Mechanic(791, "Fear", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Slothasor, "symbol:'square-open',color:'rgb(255,0,0)',", "Fear","Hit by fear after breakbar", "Feared",0,(condition=> condition.CombatItem.Value == 8000)),
             new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "CC","Narcolepsy (Breakbar)", "Breakbar",0),
-            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Narcolepsy (Failed CC)", "CC Fail",0,(condition => condition.getCombatItem().Value > 120000)),
-            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Narcolepsy (Breakbar broken)", "CCed",0,(condition => condition.getCombatItem().Value <= 120000))
+            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Narcolepsy (Failed CC)", "CC Fail",0,(condition => condition.CombatItem.Value > 120000)),
+            new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Narcolepsy (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 120000))
             });
         }
 
