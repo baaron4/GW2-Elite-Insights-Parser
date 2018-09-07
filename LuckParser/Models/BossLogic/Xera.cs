@@ -6,11 +6,10 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class Xera : BossLogic
+    public class Xera : RaidLogic
     {
         public Xera()
         {
-            Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
 
@@ -18,7 +17,8 @@ namespace LuckParser.Models
             new Mechanic(34913, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'circle-open',color:'rgb(255,0,0)',", "O.Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
             new Mechanic(35168, "Bloodstone Protection", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hourglass-open',color:'rgb(128,0,128)',", "InBble","Bloodstone Protection (Stood in Bubble)", "Inside Bubble",0),
             new Mechanic(34887, "Summon Fragment Start", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "CC","Summon Fragment (Xera Breakbar)", "Breakbar",0),
-            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Summon Fragment (Failed CC)", "CC Fail",0,(value => value >= 11940)),
+            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Summon Fragment (Failed CC)", "CC Fail",0,(condition => condition.CombatItem.Value > 11940)),
+            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Summon Fragment (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 11940)),
             new Mechanic(34965, "Derangement", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square-open',color:'rgb(200,140,255)',", "Drgmnt","Derangement (Stacking Debuff)", "Derangement",0), 
             new Mechanic(35084, "Bending Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-down-open',color:'rgb(255,200,0)',", "Btn1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
             new Mechanic(35162, "Shifting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-ne-open',color:'rgb(255,200,0)',", "Btn2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
@@ -45,24 +45,28 @@ namespace LuckParser.Models
         public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
         {
             long start = 0;
-            long fightDuration = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             // split happened
-            if (boss.GetPhaseData().Count == 1)
+            if (boss.PhaseData.Count == 1)
             {
-                CombatItem invulXera = log.GetBoonData().Find(x => x.DstInstid == boss.GetInstid() && (x.SkillID == 762 || x.SkillID == 34113));
-                long end = invulXera.Time - log.GetBossData().GetFirstAware();
+                CombatItem invulXera = log.GetBoonData(762).Find(x => x.DstInstid == boss.InstID);
+                if (invulXera == null)
+                {
+                    invulXera = log.GetBoonData(34113).Find(x => x.DstInstid == boss.InstID);
+                }
+                long end = invulXera.Time - log.FightData.FightStart;
                 phases.Add(new PhaseData(start, end));
-                start = boss.GetPhaseData()[0] - log.GetBossData().GetFirstAware();
+                start = boss.PhaseData[0] - log.FightData.FightStart;
                 castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].SetName("Phase " + i);
+                phases[i].Name = "Phase " + i;
             }
             return phases;
         }
@@ -78,10 +82,10 @@ namespace LuckParser.Models
                 ParseEnum.ThrashIDS.WhiteMantleBattleMage,
                 ParseEnum.ThrashIDS.ExquisiteConjunction
             };
-            List<CastLog> summon = cls.Where(x => x.GetID() == 34887).ToList();
+            List<CastLog> summon = cls.Where(x => x.SkillId == 34887).ToList();
             foreach (CastLog c in summon)
             {
-                replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.GetTime(), (int)c.GetTime() + c.GetActDur()), "rgba(0, 180, 255, 0.3)"));
+                replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
             }
             return ids;
         }

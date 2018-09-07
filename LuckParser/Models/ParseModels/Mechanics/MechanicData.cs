@@ -12,16 +12,16 @@ namespace LuckParser.Models.ParseModels
         private readonly List<HashSet<Mechanic>> _presentMechanics = new List<HashSet<Mechanic>>();
         private readonly List<List<AbstractMasterPlayer>> _enemyList = new List<List<AbstractMasterPlayer>>();
 
-        public MechanicData(BossData bossData)
+        public MechanicData(FightData fightData)
         {
-            List<Mechanic> bossMechanics = bossData.GetBossBehavior().GetMechanics();
+            List<Mechanic> bossMechanics = fightData.Logic.GetMechanics();
             foreach(Mechanic m in bossMechanics)
             {
                 Add(m, new List<MechanicLog>());
             }
         }
 
-        public void ComputePresentMechanics(ParsedLog log, List<PhaseData> phases)
+        public void ComputePresentMechanics(ParsedLog log)
         {
             if (_presentOnPlayerMechanics.Count > 0)
             {
@@ -32,13 +32,13 @@ namespace LuckParser.Models.ParseModels
             List<Mechanic> toRemove = new List<Mechanic>();
             foreach (Mechanic mech in Keys)
             {
-                if (altNames.ContainsKey(mech.GetShortName()))
+                if (altNames.ContainsKey(mech.ShortName))
                 {
-                    this[altNames[mech.GetShortName()]].AddRange(this[mech]);
+                    this[altNames[mech.ShortName]].AddRange(this[mech]);
                     toRemove.Add(mech);
                 } else
                 {
-                    altNames.Add(mech.GetShortName(), mech);
+                    altNames.Add(mech.ShortName, mech);
                 }
             }
             foreach(Mechanic mech in toRemove)
@@ -46,7 +46,7 @@ namespace LuckParser.Models.ParseModels
                 Remove(mech);
             }
             // ready present mechanics
-            foreach (PhaseData phase in phases)
+            foreach (PhaseData phase in log.Boss.GetPhases(log))
             {
                 HashSet<Mechanic> toAddPlayer = new HashSet<Mechanic>();
                 HashSet<Mechanic> toAddEnemy = new HashSet<Mechanic>();
@@ -56,13 +56,13 @@ namespace LuckParser.Models.ParseModels
                 _presentMechanics.Add(toAddAll);
                 foreach (KeyValuePair<Mechanic, List<MechanicLog>> pair in this)
                 {
-                    if (pair.Value.Count(x => phase.InInterval(x.GetTime())) > 0)
+                    if (pair.Value.Count(x => phase.InInterval(x.Time)) > 0)
                     {
                         toAddAll.Add(pair.Key);
-                        if (pair.Key.IsEnemyMechanic())
+                        if (pair.Key.IsEnemyMechanic)
                         {
                             toAddEnemy.Add(pair.Key);
-                        } else if (pair.Key.GetMechType() != Mechanic.MechType.PlayerStatus)
+                        } else if (pair.Key.MechanicType != Mechanic.MechType.PlayerStatus)
                         {
                             toAddPlayer.Add(pair.Key);
                         }
@@ -71,12 +71,12 @@ namespace LuckParser.Models.ParseModels
                 // ready enemy list
                 List<AbstractMasterPlayer> toAdd = new List<AbstractMasterPlayer>();
                 _enemyList.Add(toAdd);
-                toAdd.Add(log.GetBoss());
-                foreach(Mechanic m in Keys.Where(x=> x.IsEnemyMechanic()))
+                toAdd.Add(log.Boss);
+                foreach(Mechanic m in Keys.Where(x=> x.IsEnemyMechanic))
                 {
-                    foreach (AbstractMasterPlayer p in this[m].Where(x => phase.InInterval(x.GetTime())).Select(x => x.GetPlayer()).Distinct())
+                    foreach (AbstractMasterPlayer p in this[m].Where(x => phase.InInterval(x.Time)).Select(x => x.Player).Distinct())
                     {
-                        if (toAdd.FirstOrDefault(x => x.GetInstid() == p.GetInstid()) == null)
+                        if (toAdd.FirstOrDefault(x => x.InstID == p.InstID) == null)
                         {
                             toAdd.Add(p);
                         }
@@ -90,20 +90,20 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public HashSet<Mechanic> GetPresentEnemyMechs(int phaseIndex = 0)
+        public HashSet<Mechanic> GetPresentEnemyMechs(int phaseIndex)
         {
             return _presentOnEnemyMechanics[phaseIndex];
         }
-        public HashSet<Mechanic> GetPresentPlayerMechs(int phaseIndex = 0)
+        public HashSet<Mechanic> GetPresentPlayerMechs(int phaseIndex)
         {
             return _presentOnPlayerMechanics[phaseIndex];
         }
-        public HashSet<Mechanic> GetPresentMechanics(int phaseIndex = 0)
+        public HashSet<Mechanic> GetPresentMechanics(int phaseIndex)
         {
             return _presentMechanics[phaseIndex];
         }
 
-        public List<AbstractMasterPlayer> GetEnemyList(int phaseIndex = 0)
+        public List<AbstractMasterPlayer> GetEnemyList(int phaseIndex)
         {
             return _enemyList[phaseIndex];
         }

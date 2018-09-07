@@ -334,5 +334,29 @@ namespace LuckParser.Properties {
                 this["UploadToRaidar"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SaveOutJSON {
+            get {
+                return ((bool)(this["SaveOutJSON"]));
+            }
+            set {
+                this["SaveOutJSON"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IndentJSON {
+            get {
+                return ((bool)(this["IndentJSON"]));
+            }
+            set {
+                this["IndentJSON"] = value;
+            }
+        }
     }
 }

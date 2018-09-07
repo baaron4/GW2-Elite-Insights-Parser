@@ -6,11 +6,10 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class Cairn : BossLogic
+    public class Cairn : RaidLogic
     {
         public Cairn()
         {
-            Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
             // (ID, ingame name, Type, BossID, plotly marker, Table header name, ICD, Special condition) // long table hover name, graph legend name
@@ -27,7 +26,7 @@ namespace LuckParser.Models
             // new Mechanic(37768, "Shared Agony", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, "symbol:'circle-open',color:'rgb(255,0,0)',", "Agony Damage",0), from old raidheroes logs? 1k damage, seems fixed. Doesn't seem to come from Shared Agony target though.
             // new Mechanic(37775, "Shared Agony", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, "symbol:'circle-open',color:'rgb(255,0,0)',", "Agony Damage",0), from old raidheroes logs? Is also named "Shared Agony" in the evtc.
             new Mechanic(38210, "Shared Agony", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, "symbol:'circle-open',color:'rgb(255,0,0)',", "SA.dmg","Spectral Agony Damage dealt", "Spectral Agony dmg",0), //could flip. Sometimes doesn't appear at all (even though SA damage was dealt), can have Cairn or a player as source agent.
-            new Mechanic(38060, "Energy Surge", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, "symbol:'triangle-left',color:'rgb(0,128,0)',", "Leap","Jump between green fields", "Leap",0),
+            new Mechanic(38060, "Energy Surge", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, "symbol:'triangle-left',color:'rgb(0,128,0)',", "Leap","Jump between green fields", "Leap",100),
             new Mechanic(37631, "Orbital Sweep", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, "symbol:'diamond-wide',color:'rgb(255,0,255)',", "Sweep","Sword Spin (Knockback)", "Sweep",100),//short cooldown because of multihits. Would still like to register second hit at the end of spin though, thus only 0.1s
             new Mechanic(37910, "Gravity Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, "symbol:'octagon',color:'rgb(255,0,255)',", "Donut","Expanding Crystal Donut Wave (Knockback)", "Crystal Donut",0)
             });
@@ -52,10 +51,10 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // shared agony
-            List<CombatItem> agony = log.GetBoonData().Where(x => x.SkillID == 38049 && ((x.DstInstid == p.GetInstid() && x.IsBuffRemove == ParseEnum.BuffRemove.None))).ToList();
+            List<CombatItem> agony = log.GetBoonData(38049).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             foreach (CombatItem c in agony)
             {
-                int agonyStart = (int)(c.Time - log.GetBossData().GetFirstAware());
+                int agonyStart = (int)(c.Time - log.FightData.FightStart);
                 int agonyEnd = agonyStart + 62000;
                 replay.AddCircleActor(new CircleActor(false, 0, 220, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)"));
             }

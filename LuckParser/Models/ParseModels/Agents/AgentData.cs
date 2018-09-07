@@ -6,107 +6,86 @@ namespace LuckParser.Models.ParseModels
 {
     public class AgentData
     {
-        // Fields
-        private readonly List<AgentItem> _playerAgentList = new List<AgentItem>();
-        private readonly List<AgentItem> _npcAgentList = new List<AgentItem>();
-        private readonly List<AgentItem> _gadgetAgentList = new List<AgentItem>();
-        private readonly List<AgentItem> _allAgentList = new List<AgentItem>();
+        public List<AgentItem> PlayerAgentList { get; } = new List<AgentItem>();
+        public List<AgentItem> NPCAgentList { get; } = new List<AgentItem>();
+        public List<AgentItem> GadgetAgentList { get; } = new List<AgentItem>();
+        public List<AgentItem> AllAgentsList { get; } = new List<AgentItem>();
 
-        // Public Methods
         public void AddItem(AgentItem item, string prof)
         {
             if (prof == "NPC")
             {
-                _npcAgentList.Add(item);
+                NPCAgentList.Add(item);
             }
             else if (prof == "GDG")
             {
-                _gadgetAgentList.Add(item);
+                GadgetAgentList.Add(item);
             }
             else
             {
-                _playerAgentList.Add(item);
+                PlayerAgentList.Add(item);
             }
-            _allAgentList.Add(item);
+            AllAgentsList.Add(item);
         }
 
-        // Getters
-        public List<AgentItem> GetPlayerAgentList()
+        public AgentItem GetAgent(ulong agentAddress)
         {
-            return _playerAgentList;
-        }
-
-        public List<AgentItem> GetNPCAgentList()
-        {
-            return _npcAgentList;
-        }
-
-        public List<AgentItem> GetGadgetAgentList()
-        {
-            return _gadgetAgentList;
-        }
-
-        public List<AgentItem> GetAllAgentsList()
-        {
-            return _allAgentList;
-        }
-        public AgentItem GetAgent(ulong agent)
-        {
-            if (agent != 0)
+            if (agentAddress != 0)
             {
-                AgentItem agtreturn = _allAgentList.FirstOrDefault(x => x.GetAgent() == agent);
-                if (agtreturn != null)
+                AgentItem agent = AllAgentsList.FirstOrDefault(x => x.Agent == agentAddress);
+                if (agent != null)
                 {
-                    return agtreturn;
+                    return agent;
                 }
-
             }
 
-            return new AgentItem(0, "UNKOWN", "UNKNOWN",0,0,0,0);
+            return new AgentItem(0, "UNKNOWN", "UNKNOWN", 0, 0, 0, 0, 0, 0);
+        }
 
-        }
-        public List<AgentItem> GetAgents(ushort id)
+        public IEnumerable<AgentItem> GetAgents(ushort id)
         {
-            return _allAgentList.Where(x => x.GetID() == id).ToList();
+            return AllAgentsList.Where(x => x.ID == id);
         }
+
         public AgentItem GetAgentWInst(ushort instid)
         {
-            return _allAgentList.FirstOrDefault(x => x.GetInstid() == instid);
+            return AllAgentsList.FirstOrDefault(x => x.InstID == instid);
         }
 
         public void Clean()
         {
-            _gadgetAgentList.RemoveAll(x => !(x.GetInstid() != 0 && x.GetLastAware() - x.GetFirstAware() >= 0 && x.GetFirstAware() != 0 && x.GetLastAware() != long.MaxValue));
-            _npcAgentList.RemoveAll(x => !(x.GetInstid() != 0 && x.GetLastAware() - x.GetFirstAware() >= 0 && x.GetFirstAware() != 0 && x.GetLastAware() != long.MaxValue));
-            _allAgentList.RemoveAll(x => !(x.GetInstid() != 0 && x.GetLastAware() - x.GetFirstAware() >= 0 && x.GetFirstAware() != 0 && x.GetLastAware() != long.MaxValue));
+            GadgetAgentList.RemoveAll(x => !(x.InstID != 0 && x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue));
+            NPCAgentList.RemoveAll(x => !(x.InstID != 0 && x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue));
+            AllAgentsList.RemoveAll(x => !(x.InstID != 0 && x.LastAware - x.FirstAware >= 0 && x.FirstAware != 0 && x.LastAware != long.MaxValue));
         }
 
         public void CleanInstid(ushort instid)
         {
-            List<AgentItem> instances = _npcAgentList.Where(x => x.GetInstid() == instid).ToList();
+            List<AgentItem> instances = NPCAgentList.Where(x => x.InstID == instid).ToList();
             long firstAware = long.MaxValue;
             long lastAware = 0;
             if (instances.Count == 0)
             {
                 return;
             }
-            string name = instances[0].GetName();
-            string prof = instances[0].GetProf();
-            ulong agent = instances[0].GetAgent();
-            ushort inst = instances[0].GetInstid();
-            AgentItem toAdd = new AgentItem(agent, name, prof, instances[0].GetToughness(), instances[0].GetHealing(), instances[0].GetCondition(), instances[0].GetConcentration());
+            AgentItem firstInstance = instances[0];
+            string name = firstInstance.Name;
+            string prof = firstInstance.Prof;
+            ulong agent = firstInstance.Agent;
+            ushort inst = firstInstance.InstID;
+            AgentItem toAdd = new AgentItem(agent, name, prof, firstInstance.Toughness, firstInstance.Healing, firstInstance.Condition, firstInstance.Concentration, firstInstance.HitboxWidth, firstInstance.HitboxHeight);
             foreach (AgentItem a in instances)
             {
-                firstAware = Math.Min(firstAware, a.GetFirstAware());
-                lastAware = Math.Max(lastAware, a.GetLastAware());
-                _allAgentList.Remove(a);
-                _npcAgentList.Remove(a);
+                firstAware = Math.Min(firstAware, a.FirstAware);
+                lastAware = Math.Max(lastAware, a.LastAware);
+                AllAgentsList.Remove(a);
+                NPCAgentList.Remove(a);
             }
-            toAdd.SetInstid(inst);
-            toAdd.SetFirstAware(firstAware);
-            toAdd.SetLastAware(lastAware);
-            _allAgentList.Add(toAdd);
-            _npcAgentList.Add(toAdd);
+            toAdd.InstID = inst;
+            toAdd.FirstAware = firstAware;
+            toAdd.LastAware = lastAware;
+            AllAgentsList.Add(toAdd);
+            NPCAgentList.Add(toAdd);
         }
     }
 }

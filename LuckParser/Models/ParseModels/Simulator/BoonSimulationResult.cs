@@ -3,23 +3,23 @@ using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
-	public class BoonSimulationResult
+	public class GenerationSimulationResult
 	{
-		private readonly BoonSimulationItem[] boonSimulationItems;
+		private readonly BoonSimulationItem[] _generationSimulationItems;
 
-		public IEnumerable<BoonSimulationItem> Items => boonSimulationItems;
+		public IEnumerable<BoonSimulationItem> Items => _generationSimulationItems;
 
-		public BoonSimulationResult(IEnumerable<BoonSimulationItem> boonSimulationItems)
+		public GenerationSimulationResult(IEnumerable<BoonSimulationItem> generationSimulationItems)
 		{
-			this.boonSimulationItems = boonSimulationItems.ToArray();
+			this._generationSimulationItems = generationSimulationItems.ToArray();
 		}
 
-		public int GetBoonStackCount(int time)
+		public int GetStackCount(int time)
 		{
-			foreach (var item in boonSimulationItems)
+			foreach (var item in _generationSimulationItems)
 			{
-				int start = (int) item.GetStart();
-				int end = (int) item.GetEnd();
+				int start = (int) item.Start;
+				int end = (int) item.End;
 				if (time >= start && time < end)
 				{
 					return item.GetStack(time);
@@ -31,13 +31,13 @@ namespace LuckParser.Models.ParseModels
 
 		public bool GetEffectPresence(int time)
 		{
-			foreach (var item in boonSimulationItems)
+			foreach (var item in _generationSimulationItems)
 			{
-				int start = (int) item.GetStart();
-				int end = (int) item.GetEnd();
+				int start = (int) item.Start;
+				int end = (int) item.End;
 				if (time >= start && time < end)
 				{
-					bool present = item.GetItemDuration() > 0;
+					bool present = item.Duration > 0;
 					return present;
 				}
 			}

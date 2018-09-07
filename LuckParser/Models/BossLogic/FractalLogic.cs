@@ -1,6 +1,8 @@
 ﻿using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace LuckParser.Models
@@ -10,6 +12,7 @@ namespace LuckParser.Models
         protected FractalLogic()
         { 
             Mode = ParseMode.Fractal;
+            CanCombatReplay = true;
             MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(37695, "Flux Bomb", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Unknown, "symbol:'circle',color:'rgb(150,0,255)',size:10,", "FBmb","Flux Bomb application", "Flux Bomb",0),
@@ -23,15 +26,15 @@ namespace LuckParser.Models
             // generic method for fractals
             long start = 0;
             long end = 0;
-            long fightDuration = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            List<CombatItem> invulsBoss = GetFilteredList(log,762,boss.GetInstid());        
+            List<CombatItem> invulsBoss = GetFilteredList(log,762,boss.InstID);        
             for (int i = 0; i < invulsBoss.Count; i++)
             {
                 CombatItem c = invulsBoss[i];
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.Time - log.GetBossData().GetFirstAware();
+                    end = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsBoss.Count - 1)
                     {
@@ -40,19 +43,50 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.Time - log.GetBossData().GetFirstAware();
+                    start = c.Time - log.FightData.FightStart;
                     castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
             for (int i = 1; i < phases.Count; i++)
             {
-                phases[i].SetName("Phase " + i);
+                phases[i].Name = "Phase " + i;
             }
             return phases;
         }
+
+        protected void SetSuccessOnCombatExit(CombatData combatData, LogData logData, FightData fightData, int combatExitCount)
+        {
+            int combatExits = combatData.Count(x => x.SrcInstid == fightData.InstID && x.IsStateChange == ParseEnum.StateChange.ExitCombat);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData(fightData.InstID).LastOrDefault(x => x.Value > 0);
+            if (combatExits == combatExitCount && lastDamageTaken != null)
+            {
+                logData.Success = true;
+                fightData.FightEnd = lastDamageTaken.Time;
+            }
+        }
+
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
+        {
+            // check reward
+            CombatItem reward = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
+            CombatItem lastDamageTaken = combatData.GetDamageTakenData(fightData.InstID).LastOrDefault(x => x.Value > 0);
+            if (lastDamageTaken != null)
+            {
+                if (reward != null && lastDamageTaken.Time - reward.Time < 100)
+                {
+                    logData.Success = true;
+                    fightData.FightEnd = reward.Time;
+                }
+                else
+                {
+                    SetSuccessByDeath(combatData, logData, fightData);
+                }
+            }
+        }
+
     }
 }

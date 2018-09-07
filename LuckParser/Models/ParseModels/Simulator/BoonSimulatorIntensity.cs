@@ -18,15 +18,15 @@ namespace LuckParser.Models.ParseModels
             if (BoonStack.Count > 0)
             {
                 var toAdd = new BoonSimulationItemIntensity(BoonStack);
-                if (Simulation.Count > 0)
+                if (GenerationSimulation.Count > 0)
                 {
-                    BoonSimulationItem last = Simulation.Last();
-                    if (last.GetEnd() > toAdd.GetStart())
+                    BoonSimulationItem last = GenerationSimulation.Last();
+                    if (last.End > toAdd.Start)
                     {
-                        last.SetEnd(toAdd.GetStart());
+                        last.SetEnd(toAdd.Start);
                     }
                 }
-                Simulation.Add(toAdd);
+                GenerationSimulation.Add(toAdd);
                 // Subtract from each
                 for(int i = BoonStack.Count - 1; i >= 0; i--)
                 {

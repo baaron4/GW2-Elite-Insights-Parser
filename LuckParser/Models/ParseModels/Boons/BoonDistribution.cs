@@ -3,10 +3,10 @@ using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
-    public struct OverAndValue
+    public class OverAndValue
     {
-        public long Value;
-        public long Overstack;
+        public long Value { get; set; }
+        public long Overstack { get; set; }
 
         public OverAndValue(long value, long overstack)
         {

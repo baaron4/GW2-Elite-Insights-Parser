@@ -2,6 +2,7 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LuckParser.Models
 {
@@ -18,7 +19,7 @@ namespace LuckParser.Models
             new Mechanic(39035, "Astral Surge", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'circle-open',color:'rgb(255,200,0)',", "Flr","Different sized spiraling circles", "1000 Circles",0),
             new Mechanic(39029, "Red Marble", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'circle',color:'rgb(255,0,0)',", "Marble","Red KD Marble after Jump", "Red Marble",0), 
             new Mechanic(39863, "Red Marble", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Artsariiv, "symbol:'circle',color:'rgb(255,0,0)',", "Marble","Red KD Marble after Jump", "Red Marble",0), 
-            new Mechanic(791, "Fear", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Artsariiv, "symbol:'square-open',color:'rgb(255,0,0)',", "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)" ,0,(value => value == 3000)), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
+            new Mechanic(791, "Fear", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Artsariiv, "symbol:'square-open',color:'rgb(255,0,0)',", "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)" ,0,(condition => condition.CombatItem.Value == 3000)), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new Mechanic(17630, "Spark", Mechanic.MechType.Spawn, ParseEnum.BossIDS.Artsariiv, "symbol: 'star', color: 'rgb(0,255,255)',","Sprk","Spawned a Spark (missed marble)", "Spark",0),
             });
         }
@@ -35,6 +36,11 @@ namespace LuckParser.Models
         public override string GetReplayIcon()
         {
             return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+        }
+
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
+        {
+            SetSuccessOnCombatExit(combatData, logData, fightData, 3);
         }
     }
 }

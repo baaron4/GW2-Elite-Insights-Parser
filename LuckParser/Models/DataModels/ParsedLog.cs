@@ -1,103 +1,98 @@
-﻿using System.Collections.Generic;
-using LuckParser.Models.ParseModels;
+﻿using LuckParser.Models.ParseModels;
+using System.Collections.Generic;
 
 namespace LuckParser.Models.DataModels
 {
     public class ParsedLog
     {
-        private readonly LogData _logData;
-        private readonly BossData _bossData;
-        private readonly AgentData _agentData;
-        private readonly SkillData _skillData;
-        private readonly CombatData _combatData;
-        private readonly MechanicData _mechData;
-        private readonly List<Player> _playerList;
-        private readonly Boss _boss;
+        public readonly LogData LogData;
+        public readonly FightData FightData;
+        public readonly AgentData AgentData;
+        public readonly SkillData SkillData;
+        public readonly CombatData CombatData;
+        public readonly MechanicData MechanicData;
+        public readonly List<Player> PlayerList;
+        public readonly Boss Boss;
 
         
 
-        public ParsedLog(LogData logData, BossData bossData, AgentData agentData, SkillData skillData, 
+        public ParsedLog(LogData logData, FightData fightData, AgentData agentData, SkillData skillData, 
                 CombatData combatData, List<Player> playerList, Boss boss)
         {
-            _logData = logData;
-            _bossData = bossData;
-            _agentData = agentData;
-            _skillData = skillData;
-            _combatData = combatData;
-            _playerList = playerList;
-            _boss = boss;
-            _mechData = new MechanicData(bossData);
+            LogData = logData;
+            FightData = fightData;
+            AgentData = agentData;
+            SkillData = skillData;
+            CombatData = combatData;
+            PlayerList = playerList;
+            Boss = boss;
+            MechanicData = new MechanicData(fightData);
         }
 
-        public BossData GetBossData()
+        public Dictionary<long, List<CombatItem>> GetBoonData()
         {
-            return _bossData;
+            return CombatData.BoonData;
         }
 
-        public Boss GetBoss()
+        public List<CombatItem> GetBoonData(long key)
         {
-            return _boss;
+            return CombatData.GetBoonData(key);
         }
 
-        public CombatData GetCombatData()
+        public Dictionary<ushort, List<CombatItem>> GetBoonDataByDst()
         {
-            return _combatData;
+            return CombatData.BoonDataByDst;
         }
 
-        public AgentData GetAgentData()
+        public List<CombatItem> GetBoonDataByDst(ushort key)
         {
-            return _agentData;
+            return CombatData.GetBoonDataByDst(key);
         }
 
-        public List<Player> GetPlayerList()
+        public Dictionary<ushort, List<CombatItem>> GetDamageData()
         {
-            return _playerList;
+            return CombatData.DamageData;
         }
 
-        public MechanicData GetMechanicData()
+        public List<CombatItem> GetDamageData(ushort key)
         {
-            return _mechData;
+            return CombatData.GetDamageData(key);
         }
 
-        public SkillData GetSkillData()
+        public Dictionary<ushort, List<CombatItem>> GetCastData()
         {
-            return _skillData;
+            return CombatData.CastData;
         }
 
-        public LogData GetLogData()
+        public List<CombatItem> GetCastData(ushort key)
         {
-            return _logData;
+            return CombatData.GetCastData(key);
         }
 
-        public CombatData GetCombatList()
+        public Dictionary<long, List<CombatItem>> GetCastDataById()
         {
-            return _combatData;
+            return CombatData.CastDataById;
+        }
+        public List<CombatItem> GetCastDataById(long key)
+        {
+            return CombatData.GetCastDataById(key);
         }
 
-        public List<CombatItem> GetBoonData()
+        public Dictionary<ushort, List<CombatItem>> GetDamageTakenData()
         {
-            return _combatData.GetBoonData();
+            return CombatData.DamageTakenData;
         }
 
-        public List<CombatItem> GetDamageData()
+        public List<CombatItem> GetDamageTakenData(ushort key)
         {
-            return _combatData.GetDamageData();
-        }
-
-        public List<CombatItem> GetCastData()
-        {
-            return _combatData.GetCastData();
-        }
-
-        public List<CombatItem> GetDamageTakenData()
-        {
-            return _combatData.GetDamageTakenData();
+            return CombatData.GetDamageTakenData(key);
         }
 
         public bool IsBenchmarkMode()
         {
-            return _bossData.GetBossBehavior().GetMode() == BossLogic.ParseMode.Golem;
+            return FightData.Logic.GetMode() == BossLogic.ParseMode.Golem;
         }
+
 
         /*public List<CombatItem> getHealingData()
         {
@@ -109,9 +104,14 @@ namespace LuckParser.Models.DataModels
             return _combatData.getHealingReceivedData();
         }*/
 
-        public List<CombatItem> GetMovementData()
+        public Dictionary<ushort, List<CombatItem>> GetMovementData()
         {
-            return _combatData.GetMovementData();
-        }     
+            return CombatData.MovementData;
+        }
+
+        public List<CombatItem> GetMovementData(ushort key)
+        {
+            return CombatData.GetMovementData(key);
+        }
     }
 }

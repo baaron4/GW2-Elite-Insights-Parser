@@ -79,6 +79,8 @@ namespace LuckParser
             chkOneAtATime.Checked = Properties.Settings.Default.ParseOneAtATime;
             chkLightTheme.Checked = Properties.Settings.Default.LightTheme;
             chkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
+            chkOutputJson.Checked = Properties.Settings.Default.SaveOutJSON;
+            chkIndentJSON.Checked = Properties.Settings.Default.IndentJSON;
             UploadDPSReports_checkbox.Checked = Properties.Settings.Default.UploadToDPSReports;
             UploadDRRH_check.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
             UploadRaidar_check.Checked = Properties.Settings.Default.UploadToRaidar;
@@ -214,6 +216,16 @@ namespace LuckParser
         private void UploadDRRH_check_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.UploadToDPSReportsRH = UploadDRRH_check.Checked;
+        }
+
+        private void OutputJSONCheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SaveOutJSON = chkOutputJson.Checked;
+        }
+
+        private void chkIndentJSONCheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.IndentJSON = chkIndentJSON.Checked;
         }
     }
 }

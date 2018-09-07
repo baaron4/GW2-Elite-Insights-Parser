@@ -59,25 +59,25 @@ namespace LuckParser.Models.ParseModels
         }
 
         // Fields
-        private readonly string _name;
-        private readonly long _id;
-        private readonly BoonEnum _nature;
-        private readonly BoonSource _source;
+        public readonly string Name;
+        public readonly long ID;
+        public readonly BoonEnum Nature;
+        public readonly BoonSource Source;
         private readonly RemoveType _removeType;
-        private readonly BoonType _type;
-        private readonly int _capacity;
-        private readonly string _link;
+        public readonly BoonType Type;
+        public readonly int Capacity;
+        public readonly string Link;
         private readonly Logic _logic;
 
         private Boon(string name, int id, BoonSource source, BoonType type, int capacity, BoonEnum nature, RemoveType removeType, Logic logic, string link = "")
         {
-            _name = name;
-            _id = id;
-            _source = source;
-            _type = type;
-            _capacity = capacity;
-            _nature = nature;
-            _link = link;
+            Name = name;
+            ID = id;
+            Source = source;
+            Type = type;
+            Capacity = capacity;
+            Nature = nature;
+            Link = link;
             _removeType = removeType;
             _logic = logic;
         }
@@ -154,15 +154,27 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Rite of the Great Dwarf", 26596, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/6/69/Rite_of_the_Great_Dwarf.png"),
                 new Boon("Embrace the Darkness", 28001, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Enchanted Daggers", 28557, BoonSource.Revenant, BoonType.Intensity, 6, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Phase Traversal", 28395, BoonSource.Revenant, BoonType.Intensity, 2, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Impossible Odds", 27581, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 //facets
                 new Boon("Facet of Light",27336, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Light",51690, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override), //Lingering buff with Draconic Echo trait
                 new Boon("Infuse Light",27737, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/6/60/Infuse_Light.png"),
                 new Boon("Facet of Darkness",28036, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Darkness",51695, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable, RemoveType.Manual, Logic.Override),//Lingering buff with Draconic Echo trait
                 new Boon("Facet of Elements",28243, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Elements",51706, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override),//Lingering buff with Draconic Echo trait
                 new Boon("Facet of Strength",27376, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Strength",51700, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable, RemoveType.Manual, Logic.Override),//Lingering buff with Draconic Echo trait
                 new Boon("Facet of Chaos",27983, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Chaos",51658, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override),//Lingering buff with Draconic Echo trait
                 new Boon("Facet of Nature",29275, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Nature",51681, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),//Lingering buff with Draconic Echo trait
+                new Boon("Facet of Nature-Assassin",51692, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Nature-Dragon",51674, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Nature-Demon",51704, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Nature-Dwarf",51677, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Facet of Nature-Centaur",51699, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Naturalistic Resonance", 29379, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/e/e9/Facet_of_Nature.png"),
                 //legends
                 new Boon("Legendary Centaur Stance",27972, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -177,6 +189,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Soulcleave's Summit",45026, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Soulcleave%27s_Summit.png"),
                 //traits
                 new Boon("Vicious Lacerations",29395, BoonSource.Revenant, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
+                new Boon("Rising Momentum",51683, BoonSource.Revenant, BoonType.Intensity, 10, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
                 new Boon("Assassin's Presence", 26854, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/54/Assassin%27s_Presence.png"),
                 //new Boon("Expose Defenses", 48894, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff),
                 new Boon("Invoking Harmony",29025, BoonSource.Revenant, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.None, Logic.Override),
@@ -301,9 +314,9 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Storm Spirit", 50381, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.DefensiveBuffTable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/thumb/2/25/Storm_Spirit.png/30px-Storm_Spirit.png"),
                 //skills
                 new Boon("Attack of Opportunity",12574, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Call of the Wild",36781, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Strength of the pack!",12554, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Sick 'Em!",33902, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Call of the Wild",36781, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
+                new Boon("Strength of the pack!",12554, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
+                new Boon("Sick 'Em!",33902, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
                 new Boon("Sharpening Stones",12536, BoonSource.Ranger, BoonType.Intensity, 10, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Ancestral Grace", 31584, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Glyph of Empowerment", 31803, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.OffensiveBuffTable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/thumb/f/f0/Glyph_of_Empowerment.png/33px-Glyph_of_Empowerment.png"),
@@ -319,7 +332,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Opening Strike",13988, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Quick Draw",29703, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Light on your feet",30673, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Natural Mender",30449, BoonSource.Ranger, BoonType.Intensity, 10, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Natural Mender",30449, BoonSource.Ranger, BoonType.Intensity, 10, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
                 new Boon("Lingering Light",32248, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Deadly",44932, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Ferocious",41720, BoonSource.Ranger, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -369,7 +382,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Signet of Midnight",10233, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Signet of Humility",30739, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 //skills
-                new Boon("Distortion",10243, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Distortion",10243, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
                 new Boon("Blur", 10335 , BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Mirror",10357, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Echo",29664, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -378,11 +391,11 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Time Echo",29582, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 new Boon("Time Anchored",30136, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 //traits
-                new Boon("Fencer's Finesse", 30426 , BoonSource.Mesmer, BoonType.Intensity, 10, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Illusionary Defense",49099, BoonSource.Mesmer, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Compunding Power",49058, BoonSource.Mesmer, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Phantasmal Force", 44691 , BoonSource.Mesmer, BoonType.Intensity, 25, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Mirage Cloak",40408, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Fencer's Finesse", 30426 , BoonSource.Mesmer, BoonType.Intensity, 10, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
+                new Boon("Illusionary Defense",49099, BoonSource.Mesmer, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
+                new Boon("Compounding Power",49058, BoonSource.Mesmer, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
+                new Boon("Phantasmal Force", 44691 , BoonSource.Mesmer, BoonType.Intensity, 25, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
+                new Boon("Mirage Cloak",40408, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
                 //NECROMANCER
                 //forms
                 new Boon("Lich Form",10631, BoonSource.Necromancer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
@@ -493,9 +506,30 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Tin of Fruitcake",34211, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Tin_of_Fruitcake.png"),
                 new Boon("Writ of Masterful Malice",33836, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Writ_of_Masterful_Malice.png"),
                 new Boon("Writ of Masterful Strength",33297, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/2/2b/Writ_of_Masterful_Strength.png"),
+                new Boon("Powerful Potion of Flame Legion Slaying",9925, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Powerful_Potion_of_Flame_Legion_Slaying.png"),
+                new Boon("Powerful Potion of Halloween Slaying",15279, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/f/fe/Powerful_Potion_of_Halloween_Slaying.png"),
+                new Boon("Powerful Potion of Centaur Slaying",9845, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/3/3b/Powerful_Potion_of_Centaur_Slaying.png"),
+                new Boon("Powerful Potion of Krait Slaying",9885, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/b/b4/Powerful_Potion_of_Krait_Slaying.png"),
+                new Boon("Powerful Potion of Ogre Slaying",9877, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/b/b5/Powerful_Potion_of_Ogre_Slaying.png"),
+                new Boon("Powerful Potion of Elemental Slaying",9893, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/5f/Powerful_Potion_of_Elemental_Slaying.png"),
+                new Boon("Powerful Potion of Destroyer Slaying",9869, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/b/bd/Powerful_Potion_of_Destroyer_Slaying.png"),
+                new Boon("Powerful Potion of Nightmare Court Slaying",9941, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/74/Powerful_Potion_of_Nightmare_Court_Slaying.png"),
+                new Boon("Powerful Potion of Slaying Scarlet's Armies",23228, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/e/ee/Powerful_Potion_of_Demon_Slaying.png"),
+                new Boon("Powerful Potion of Undead Slaying",9837, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/b/bd/Powerful_Potion_of_Undead_Slaying.png"),
+                new Boon("Powerful Potion of Dredge Slaying",9949, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/9/9a/Powerful_Potion_of_Dredge_Slaying.png"),
+                new Boon("Powerful Potion of Inquest Slaying",9917, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/f/fb/Powerful_Potion_of_Inquest_Slaying.png"),
+                new Boon("Powerful Potion of Demon Slaying",9901, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/e/ee/Powerful_Potion_of_Demon_Slaying.png"),
+                new Boon("Powerful Potion of Grawl Slaying",9853, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/1/15/Powerful_Potion_of_Grawl_Slaying.png"),
+                new Boon("Powerful Potion of Sons of Svanir Slaying",9909, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/3/33/Powerful_Potion_of_Sons_of_Svanir_Slaying.png"),
+                new Boon("Powerful Potion of Outlaw Slaying",9933, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/e/ec/Powerful_Potion_of_Outlaw_Slaying.png"),
+                new Boon("Powerful Potion of Ice Brood Slaying",9861, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/0/0d/Powerful_Potion_of_Ice_Brood_Slaying.png"),
                 // new Boon("Hylek Maintenance Oil",9968, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"), when wiki says "same stats" its literally the same buff
         };
 
+
+        public static Dictionary<long, Boon> BoonsByIds = _allBoons.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.First());
+        public static Dictionary<BoonEnum, List<Boon>> BoonsByNature= _allBoons.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
+        public static Dictionary<BoonSource, List<Boon>> BoonsBySource = _allBoons.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
 
         public static bool RemovePermission(long boonid, ParseEnum.BuffRemove buffremove, ParseEnum.IFF iff)
         {
@@ -503,7 +537,7 @@ namespace LuckParser.Models.ParseModels
             {
                 return false;
             }
-            Boon toCheck = _allBoons.Find(x => x.GetID() == boonid);
+            Boon toCheck = _allBoons.Find(x => x.ID == boonid);
             if (toCheck != null)
             {
                 switch (toCheck._removeType)
@@ -526,7 +560,7 @@ namespace LuckParser.Models.ParseModels
         // debug
         public static List<Boon> GetBoonByName(string name)
         {
-            return _allBoons.Where(x => x.GetName() == name).ToList();
+            return _allBoons.Where(x => x.Name == name).ToList();
         }
 
         // get everything
@@ -538,125 +572,62 @@ namespace LuckParser.Models.ParseModels
         // Conditions
         public static List<Boon> GetCondiBoonList()
         {
-            return _allBoons.Where(x => x._nature == BoonEnum.Condition).ToList();
+            return BoonsByNature[BoonEnum.Condition];
         }
         // Boons
         public static List<Boon> GetBoonList()
         {
-            return _allBoons.Where(x => x._nature == BoonEnum.Boon).ToList();
+            return BoonsByNature[BoonEnum.Boon];
         }
         // Shareable buffs
         public static List<Boon> GetOffensiveTableList()
         {
-            return _allBoons.Where(x => x._nature == BoonEnum.OffensiveBuffTable).ToList();
-        }
-        private static List<Boon> GetOffensiveTableList(BoonSource source)
-        {
-            return GetOffensiveTableList().Where(x => x._source == source).ToList();
-        }
-        public static List<Boon> GetOffensiveTableList(String source)
-        {
-            return GetOffensiveTableList(ProfToEnum(source));
+            return BoonsByNature[BoonEnum.OffensiveBuffTable];
         }
         public static List<Boon> GetDefensiveTableList()
         {
-            return _allBoons.Where(x => x._nature == BoonEnum.DefensiveBuffTable).ToList();
-        }
-        private static List<Boon> GetDefensiveTableList(BoonSource source)
-        {
-            return GetDefensiveTableList().Where(x => x._source == source).ToList();
-        }
-        public static List<Boon> GetDefensiveTableList(String source)
-        {
-            return GetDefensiveTableList(ProfToEnum(source));
-        }
-        // Table + graph
-        public static List<Boon> GetTableProfList()
-        {
-            return _allBoons.Where(x => x._nature == BoonEnum.OffensiveBuffTable || x._nature == BoonEnum.DefensiveBuffTable).ToList();
-        }
-        private static List<Boon> GetTableProfList(BoonSource source)
-        {
-            return GetTableProfList().Where(x => x._source == source).ToList();
-        }
-        public static List<Boon> GetTableProfList(String source)
-        {
-            return GetTableProfList(ProfToEnum(source));
+            return BoonsByNature[BoonEnum.DefensiveBuffTable];
         }
         // Foods
         public static List<Boon> GetFoodList()
         {
-            return _allBoons.Where(x => x._nature == BoonEnum.Food).ToList();
+            return BoonsByNature[BoonEnum.Food];
         }
         // Utilities
         public static List<Boon> GetUtilityList()
         {
-            return _allBoons.Where(x => x._nature == BoonEnum.Utility).ToList();
+            return BoonsByNature[BoonEnum.Utility];
         }
         // Boss
         public static List<Boon> GetBossBoonList()
         {
-            return _allBoons.Where(x => x._source == BoonSource.Boss).ToList();
+            return BoonsBySource[BoonSource.Boss];
         }
         // All buffs
         public static List<Boon> GetAllBuffList()
         {
             List<Boon> res = new List<Boon>();
             // correct order for the boon graph
-            res.AddRange(GetBoonList());
-            res.AddRange(GetOffensiveTableList());
-            res.AddRange(GetDefensiveTableList());
-            res.AddRange(GetRemainingBuffsList());
+            res.AddRange(BoonsByNature[BoonEnum.Boon]);
+            res.AddRange(BoonsByNature[BoonEnum.DefensiveBuffTable]);
+            res.AddRange(BoonsByNature[BoonEnum.OffensiveBuffTable]);
+            res.AddRange(BoonsByNature[BoonEnum.GraphOnlyBuff]);
             return res;
         }
         // Non shareable buffs
         public static List<Boon> GetRemainingBuffsList()
         {
-            return _allBoons.Where(x => x._nature == BoonEnum.GraphOnlyBuff).ToList();
+            return BoonsByNature[BoonEnum.GraphOnlyBuff];
         }
         private static List<Boon> GetRemainingBuffsList(BoonSource source)
         {
-            return GetRemainingBuffsList().Where(x => x._source == source).ToList();
+            return BoonsBySource[source].Where(x => x.Nature == BoonEnum.GraphOnlyBuff).ToList();
         }
         public static List<Boon> GetRemainingBuffsList(String source)
         {
             return GetRemainingBuffsList(ProfToEnum(source));
         }
-
-
-        // Getters
-        public string GetName()
-        {
-            return _name;
-        }
-        public long GetID()
-        {
-            return _id;
-        }
-        public BoonSource GetSource()
-        {
-            return _source;
-        }
-        public BoonEnum GetNature()
-        {
-            return _nature;
-        }
-
-        public BoonType GetBoonType()
-        {
-            return _type;
-        }
-
-        public int GetCapacity()
-        {
-            return _capacity;
-        }
-
-        public string GetLink()
-        {
-            return _link;
-        }
-
+        
         public BoonSimulator CreateSimulator(ParsedLog log)
         {
             StackingLogic logicToUse;
@@ -675,10 +646,10 @@ namespace LuckParser.Models.ParseModels
                     logicToUse = new OverrideLogic();
                     break;
             }
-            switch (_type)
+            switch (Type)
             {
-                case BoonType.Intensity: return new BoonSimulatorIntensity(_capacity, log, logicToUse);
-                case BoonType.Duration: return new BoonSimulatorDuration(_capacity, log, logicToUse);
+                case BoonType.Intensity: return new BoonSimulatorIntensity(Capacity, log, logicToUse);
+                case BoonType.Duration: return new BoonSimulatorDuration(Capacity, log, logicToUse);
                 default: throw new InvalidOperationException();
             }
         }

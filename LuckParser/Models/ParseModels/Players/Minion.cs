@@ -12,12 +12,12 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetDamageLogs(ParsedLog log)
         {
-            long timeStart = log.GetBossData().GetFirstAware();
-            long minTime = Math.Max(timeStart, Agent.GetFirstAware());
-            long maxTime = Math.Min(log.GetBossData().GetLastAware(), Agent.GetLastAware());
-            foreach (CombatItem c in log.GetDamageData())
+            long timeStart = log.FightData.FightStart;
+            long minTime = Math.Max(timeStart, Agent.FirstAware);
+            long maxTime = Math.Min(log.FightData.FightEnd, Agent.LastAware);
+            foreach (CombatItem c in log.GetDamageData(Agent.InstID))
             {
-                if (Agent.GetInstid() == c.SrcInstid && c.Time > minTime && c.Time < maxTime)//selecting minion as caster
+                if (c.Time > minTime && c.Time < maxTime)//selecting minion as caster
                 {
                     long time = c.Time - timeStart;
                     AddDamageLog(time, c);
@@ -27,11 +27,11 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetCastLogs(ParsedLog log)
         {
-            long timeStart = log.GetBossData().GetFirstAware();
+            long timeStart = log.FightData.FightStart;
             CastLog curCastLog = null;
-            long minTime = Math.Max(timeStart, Agent.GetFirstAware());
-            long maxTime = Math.Min(log.GetBossData().GetLastAware(), Agent.GetLastAware());
-            foreach (CombatItem c in log.GetCastData())
+            long minTime = Math.Max(timeStart, Agent.FirstAware);
+            long maxTime = Math.Min(log.FightData.FightEnd, Agent.LastAware);
+            foreach (CombatItem c in log.GetCastData(Agent.InstID))
             {
                 if (!(c.Time > minTime && c.Time < maxTime))
                 {
@@ -40,32 +40,28 @@ namespace LuckParser.Models.ParseModels
                 ParseEnum.StateChange state = c.IsStateChange;
                 if (state == ParseEnum.StateChange.Normal)
                 {
-                    if (Agent.GetInstid() == c.SrcInstid)//selecting player as caster
+                    if (c.IsActivation.IsCasting())
                     {
-                        if (c.IsActivation.IsCasting())
+                        long time = c.Time - timeStart;
+                        curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);
+                        CastLogs.Add(curCastLog);
+                    }
+                    else
+                    {
+                        if (curCastLog != null)
                         {
-                            long time = c.Time - timeStart;
-                            curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);
-                            CastLogs.Add(curCastLog);
-                        }
-                        else
-                        {
-                            if (curCastLog != null)
+                            if (curCastLog.SkillId == c.SkillID)
                             {
-                                if (curCastLog.GetID() == c.SkillID)
-                                {
-                                    curCastLog.SetEndStatus(c.Value, c.IsActivation);
-                                    curCastLog = null;
-                                }
+                                curCastLog.SetEndStatus(c.Value, c.IsActivation);
+                                curCastLog = null;
                             }
                         }
-
                     }
                 }
             }
         }
 
-        protected override void SetDamagetakenLogs(ParsedLog log)
+        protected override void SetDamageTakenLogs(ParsedLog log)
         {
         }
 

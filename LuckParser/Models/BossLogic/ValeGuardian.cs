@@ -6,11 +6,10 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class ValeGuardian : BossLogic
+    public class ValeGuardian : RaidLogic
     {
         public ValeGuardian()
         {
-            Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(31860, "Unstable Magic Spike", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'circle',color:'rgb(0,0,255)',", "G.TP","Unstable Magic Spike (Green Guard Teleport)","Green Guard TP",500),
@@ -27,7 +26,9 @@ namespace LuckParser.Models
             new Mechanic(31539, "Unstable Pylon", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'hexagram-open',color:'rgb(255,0,0)',", "Flr.R","Unstable Pylon (Red Floor dmg)", "Floor dmg",0),
             new Mechanic(31828, "Unstable Pylon", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'hexagram-open',color:'rgb(0,0,255)',", "Flr.B","Unstable Pylon (Blue Floor dmg)", "Floor dmg",0),
             new Mechanic(31884, "Unstable Pylon", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'hexagram-open',color:'rgb(0,128,0)',", "Flr.G","Unstable Pylon (Green Floor dmg)", "Floor dmg",0),
-            new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.ValeGuardian, "symbol:'star-diamond',color:'rgb(0,255,255)',", "Breakbar",0)
+            new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "CC","Magic Storm (Breakbar)","Breakbar",0),
+            new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Magic Storm (Breakbar broken) ", "CCed",0,(condition => condition.CombatItem.Value <=8544)),
+            new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,(condition => condition.CombatItem.Value >8544)),
             });
         }
 
@@ -44,16 +45,16 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             // Invul check
-            List<CombatItem> invulsVG = GetFilteredList(log, 757, boss.GetInstid());
+            List<CombatItem> invulsVG = GetFilteredList(log, 757, boss.InstID);
             for (int i = 0; i < invulsVG.Count; i++)
             {
                 CombatItem c = invulsVG[i];
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    end = c.Time - log.GetBossData().GetFirstAware();
+                    end = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsVG.Count - 1)
                     {
@@ -62,12 +63,12 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    start = c.Time - log.GetBossData().GetFirstAware();
+                    start = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(end, start));
                     castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
                 }
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+            if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
                 phases.Add(new PhaseData(start, fightDuration));
             }
@@ -75,7 +76,7 @@ namespace LuckParser.Models
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
-                phase.SetName(namesVG[i - 1]);
+                phase.Name = namesVG[i - 1];
                 if (i == 2 || i == 4)
                 {
                     List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
@@ -84,16 +85,16 @@ namespace LuckParser.Models
                        ParseEnum.ThrashIDS.GreenGuardian,
                        ParseEnum.ThrashIDS.RedGuardian
                     };
-                    List<AgentItem> guardians = log.GetAgentData().GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.GetID()))).ToList();
+                    List<AgentItem> guardians = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
                     foreach (AgentItem a in guardians)
                     {
-                        long agentStart = a.GetFirstAware() - log.GetBossData().GetFirstAware();
+                        long agentStart = a.FirstAware - log.FightData.FightStart;
                         if (phase.InInterval(agentStart))
                         {
-                            phase.AddRedirection(a);
+                            phase.Redirection.Add(a);
                         }
                     }
-                    phase.OverrideStart(log.GetBossData().GetFirstAware());
+                    phase.OverrideStart(log.FightData.FightStart);
                 }
             }
             return phases;
@@ -108,10 +109,10 @@ namespace LuckParser.Models
                ParseEnum.ThrashIDS.GreenGuardian,
                ParseEnum.ThrashIDS.RedGuardian
             };
-            List<CastLog> magicStorms = cls.Where(x => x.GetID() == 31419).ToList();
+            List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
             foreach (CastLog c in magicStorms)
             {
-                replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.GetTime(), (int)c.GetTime() + c.GetActDur()), "rgba(0, 180, 255, 0.3)"));
+                replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
             }
             return ids;
         }

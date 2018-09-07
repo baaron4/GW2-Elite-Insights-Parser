@@ -71,6 +71,9 @@
             this.UploadDPSReports_checkbox = new System.Windows.Forms.CheckBox();
             this.UploadDRRH_check = new System.Windows.Forms.CheckBox();
             this.UploadRaidar_check = new System.Windows.Forms.CheckBox();
+            this.json = new System.Windows.Forms.Label();
+            this.chkOutputJson = new System.Windows.Forms.CheckBox();
+            this.chkIndentJSON = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblDamageGraphSection
@@ -537,6 +540,38 @@
             this.UploadRaidar_check.UseVisualStyleBackColor = true;
             this.UploadRaidar_check.CheckedChanged += new System.EventHandler(this.UploadRaidar_check_CheckedChanged);
             // 
+            // json
+            // 
+            this.json.AutoSize = true;
+            this.json.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.json.Location = new System.Drawing.Point(440, 356);
+            this.json.Name = "json";
+            this.json.Size = new System.Drawing.Size(54, 24);
+            this.json.TabIndex = 42;
+            this.json.Text = "Json";
+            // 
+            // chkOutputJson
+            // 
+            this.chkOutputJson.AutoSize = true;
+            this.chkOutputJson.Location = new System.Drawing.Point(456, 383);
+            this.chkOutputJson.Name = "chkOutputJson";
+            this.chkOutputJson.Size = new System.Drawing.Size(103, 17);
+            this.chkOutputJson.TabIndex = 43;
+            this.chkOutputJson.Text = "Output as JSON";
+            this.chkOutputJson.UseVisualStyleBackColor = true;
+            this.chkOutputJson.CheckedChanged += new System.EventHandler(this.OutputJSONCheckedChanged);
+            // 
+            // chkIndentJSON
+            // 
+            this.chkIndentJSON.AutoSize = true;
+            this.chkIndentJSON.Location = new System.Drawing.Point(456, 406);
+            this.chkIndentJSON.Name = "chkIndentJSON";
+            this.chkIndentJSON.Size = new System.Drawing.Size(87, 17);
+            this.chkIndentJSON.TabIndex = 44;
+            this.chkIndentJSON.Text = "Indent JSON";
+            this.chkIndentJSON.UseVisualStyleBackColor = true;
+            this.chkIndentJSON.CheckedChanged += new System.EventHandler(this.chkIndentJSONCheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -547,6 +582,10 @@
             this.Controls.Add(this.UploadDRRH_check);
             this.Controls.Add(this.UploadDPSReports_checkbox);
             this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(579, 524);
+            this.Controls.Add(this.chkIndentJSON);
+            this.Controls.Add(this.chkOutputJson);
+            this.Controls.Add(this.json);
             this.Controls.Add(this.chkShowCl);
             this.Controls.Add(this.chkCombatReplay);
             this.Controls.Add(this.chkLightTheme);
@@ -638,5 +677,8 @@
         private System.Windows.Forms.CheckBox UploadDPSReports_checkbox;
         private System.Windows.Forms.CheckBox UploadDRRH_check;
         private System.Windows.Forms.CheckBox UploadRaidar_check;
+        private System.Windows.Forms.Label json;
+        private System.Windows.Forms.CheckBox chkOutputJson;
+        private System.Windows.Forms.CheckBox chkIndentJSON;
     }
 }

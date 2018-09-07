@@ -6,11 +6,10 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class Dhuum : BossLogic
+    public class Dhuum : RaidLogic
     {
         public Dhuum()
         {
-            Mode = ParseMode.Raid;
             MechanicList.AddRange(new List<Mechanic>
             {
             new Mechanic(48172, "Hateful Ephemera", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,140,0)',", "Glm.dmg","Hateful Ephemera (Golem AoE dmg)", "Golem Dmg",0), 
@@ -18,7 +17,7 @@ namespace LuckParser.Models
             new Mechanic(47646, "Arcing Affliction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(255,0,0)',", "Bmb","Arcing Affliction (Bomb) application", "Bomb",0),
             //new Mechanic(47476, "Residual Affliction", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'star-diamond',color:'rgb(255,200,0)',", "Bomb",0), //not needed, imho, applied at the same time as Arcing Affliction
             new Mechanic(47335, "Soul Shackle", Mechanic.MechType.PlayerOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'diamond',color:'rgb(0,255,255)',", "Shckl","Soul Shackle (Tether) application", "Shackles",0),//  //also used for removal.
-            new Mechanic(47164, "Soul Shackle", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'diamond-open',color:'rgb(0,255,255)',", "Sh.Dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0, (value => value > 0)),
+            new Mechanic(47164, "Soul Shackle", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'diamond-open',color:'rgb(0,255,255)',", "Sh.Dmg","Soul Shackle (Tether) dmg ticks", "Shackles Dmg",0, (item => item.DamageLog.Damage > 0)),
             new Mechanic(47561, "Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'triangle',color:'rgb(0,128,0)',", "Cone","Boon ripping Cone Attack", "Cone",0),
             new Mechanic(48752, "Cull", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'asterisk-open',color:'rgb(0,255,255)',", "Crk","Cull (Fearing Fissures)", "Cracks",0),
             new Mechanic(48760, "Putrid Bomb", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'circle',color:'rgb(0,128,0)',", "Mrk","Necro Marks during Scythe attack", "Necro Marks",0), 
@@ -44,61 +43,61 @@ namespace LuckParser.Models
         {
             long start = 0;
             long end = 0;
-            long fightDuration = log.GetBossData().GetAwareDuration();
+            long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             // Sometimes the preevent is not in the evtc
             List<CastLog> dhuumCast = boss.GetCastLogs(log, 0, 20000);
             if (dhuumCast.Count > 0)
             {
-                CastLog shield = castLogs.Find(x => x.GetID() == 47396);
+                CastLog shield = castLogs.Find(x => x.SkillId == 47396);
                 if (shield != null)
                 {
-                    end = shield.GetTime();
+                    end = shield.Time;
                     phases.Add(new PhaseData(start, end));
-                    start = shield.GetTime() + shield.GetActDur();
+                    start = shield.Time + shield.ActualDuration;
                     if (start < fightDuration - 5000)
                     {
                         phases.Add(new PhaseData(start, fightDuration));
                     }
                 }
-                if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+                if (fightDuration - start > 5000 && start >= phases.Last().End)
                 {
                     phases.Add(new PhaseData(start, fightDuration));
                 }
                 string[] namesDh = new [] { "Main Fight", "Ritual" };
                 for (int i = 1; i < phases.Count; i++)
                 {
-                    phases[i].SetName(namesDh[i - 1]);
+                    phases[i].Name = namesDh[i - 1];
                 }
             }
             else
             {
-                CombatItem invulDhuum = log.GetBoonData().FirstOrDefault(x => x.SkillID == 762 && x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == boss.GetInstid() && x.Time > 115000 + log.GetBossData().GetFirstAware());
+                CombatItem invulDhuum = log.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == boss.InstID && x.Time > 115000 + log.FightData.FightStart);
                 if (invulDhuum != null)
                 {
-                    end = invulDhuum.Time - log.GetBossData().GetFirstAware();
+                    end = invulDhuum.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(start, end));
                     start = end + 1;
-                    CastLog shield = castLogs.Find(x => x.GetID() == 47396);
+                    CastLog shield = castLogs.Find(x => x.SkillId == 47396);
                     if (shield != null)
                     {
-                        end = shield.GetTime();
+                        end = shield.Time;
                         phases.Add(new PhaseData(start, end));
-                        start = shield.GetTime() + shield.GetActDur();
+                        start = shield.Time + shield.ActualDuration;
                         if (start < fightDuration - 5000)
                         {
                             phases.Add(new PhaseData(start, fightDuration));
                         }
                     }
                 }
-                if (fightDuration - start > 5000 && start >= phases.Last().GetEnd())
+                if (fightDuration - start > 5000 && start >= phases.Last().End)
                 {
                     phases.Add(new PhaseData(start, fightDuration));
                 }
                 string[] namesDh = new [] { "Roleplay", "Main Fight", "Ritual" };
                 for (int i = 1; i < phases.Count; i++)
                 {
-                    phases[i].SetName(namesDh[i - 1]);
+                    phases[i].Name = namesDh[i - 1];
                 }
             }
             return phases;
@@ -113,17 +112,17 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.Enforcer,
                         ParseEnum.ThrashIDS.Messenger
                     };
-            List<CastLog> deathmark = cls.Where(x => x.GetID() == 48176).ToList();
-            CastLog majorSplit = cls.Find(x => x.GetID() == 47396);
+            List<CastLog> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
+            CastLog majorSplit = cls.Find(x => x.SkillId == 47396);
             foreach (CastLog c in deathmark)
             {
-                int start = (int)c.GetTime();
-                int castEnd = start + c.GetActDur();
+                int start = (int)c.Time;
+                int castEnd = start + c.ActualDuration;
                 int zoneEnd = castEnd + 120000;
                 if (majorSplit != null)
                 {
-                    castEnd = Math.Min(castEnd, (int)majorSplit.GetTime());
-                    zoneEnd = Math.Min(zoneEnd, (int)majorSplit.GetTime());
+                    castEnd = Math.Min(castEnd, (int)majorSplit.Time);
+                    zoneEnd = Math.Min(zoneEnd, (int)majorSplit.Time);
                 }
                 Point3D pos = replay.GetPositions().FirstOrDefault(x => x.Time > castEnd);
                 if (pos != null)
@@ -133,18 +132,18 @@ namespace LuckParser.Models
                     replay.AddCircleActor(new CircleActor(true, 0, 450, new Tuple<int, int>(castEnd, zoneEnd), "rgba(200, 255, 100, 0.5)", pos));
                 }
             }
-            List<CastLog> cataCycle = cls.Where(x => x.GetID() == 48398).ToList();
+            List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
             foreach (CastLog c in cataCycle)
             {
-                int start = (int)c.GetTime();
-                int end = start + c.GetActDur();
+                int start = (int)c.Time;
+                int end = start + c.ActualDuration;
                 replay.AddCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
                 replay.AddCircleActor(new CircleActor(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
             }
             if (majorSplit != null)
             {
-                int start = (int)majorSplit.GetTime();
-                int end = (int)log.GetBossData().GetAwareDuration();
+                int start = (int)majorSplit.Time;
+                int end = (int)log.FightData.FightDuration;
                 replay.AddCircleActor(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
             }
             return ids;
@@ -153,36 +152,36 @@ namespace LuckParser.Models
         public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // spirit transform
-            List<CombatItem> spiritTransform = log.GetBoonData().Where(x => x.DstInstid == p.GetInstid() && x.SkillID == 46950 && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
+            List<CombatItem> spiritTransform = log.GetBoonData(46950).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in spiritTransform)
             {
                 int duration = 15000;
-                int start = (int)(c.Time - log.GetBossData().GetFirstAware());
-                if (log.GetBossData().GetHealthOverTime().FirstOrDefault(x => x.X > start).Y < 1050)
+                int start = (int)(c.Time - log.FightData.FightStart);
+                if (log.FightData.HealthOverTime.FirstOrDefault(x => x.X > start).Y < 1050)
                 {
                     duration = 30000;
                 }
-                CombatItem removedBuff = log.GetBoonData().FirstOrDefault(x => x.SrcInstid == p.GetInstid() && x.SkillID == 48281 && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
+                CombatItem removedBuff = log.GetBoonData(48281).FirstOrDefault(x => x.SrcInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.All && x.Time > c.Time && x.Time < c.Time + duration);
                 int end = start + duration;
                 if (removedBuff != null)
                 {
-                    end = (int)(removedBuff.Time - log.GetBossData().GetFirstAware());
+                    end = (int)(removedBuff.Time - log.FightData.FightStart);
                 }
                 replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)"));
                 replay.AddCircleActor(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)"));
             }
             // bomb
-            List<CombatItem> bombDhuum = GetFilteredList(log, 47646, p.GetInstid());
+            List<CombatItem> bombDhuum = GetFilteredList(log, 47646, p.InstID);
             int bombDhuumStart = 0;
             foreach (CombatItem c in bombDhuum)
             {
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    bombDhuumStart = (int)(c.Time - log.GetBossData().GetFirstAware());
+                    bombDhuumStart = (int)(c.Time - log.FightData.FightStart);
                 }
                 else
                 {
-                    int bombDhuumEnd = (int)(c.Time - log.GetBossData().GetFirstAware());
+                    int bombDhuumEnd = (int)(c.Time - log.FightData.FightStart);
                     replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)"));
                     replay.AddCircleActor(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
                 }

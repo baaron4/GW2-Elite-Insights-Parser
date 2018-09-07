@@ -14,7 +14,6 @@ namespace LuckParser
     {
         private SettingsForm _settingsForm;
         private readonly List<string> _logsFiles;
-        private Parser _controller = new Parser();
         private bool _anyRunning;
         private readonly Queue<GridRow> _logQueue = new Queue<GridRow>();
         public MainForm()
@@ -159,7 +158,9 @@ namespace LuckParser
 
                 }
                 bg.UpdateProgress(rowData, " Working...", 0);
-                Parser parser = new Parser();
+
+                SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
+                Parser parser = new Parser(settings);
 
                 if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
                     fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
@@ -237,10 +238,8 @@ namespace LuckParser
                     {
                         throw new CancellationException(rowData, new Exception("Invalid save directory"));
                     }
-                    string bossid = parser.GetBossData().GetID().ToString();
-                    string result = parser.GetLogData().GetBosskill() ? "kill" : "fail";
-
-                    SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
+                    string bossid = parser.GetFightData().ID.ToString();
+                    string result = parser.GetLogData().Success ? "kill" : "fail";
                     
                     StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
                     StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
@@ -251,6 +250,10 @@ namespace LuckParser
                     if (Properties.Settings.Default.SaveOutCSV)
                     {
                         CSVBuilder.UpdateStatisticSwitches(switches);
+                    }
+                    if (Properties.Settings.Default.SaveOutJSON)
+                    {
+                        JSONBuilder.UpdateStatisticSwitches(switches);
                     }
                     Statistics statistics = statisticsCalculator.CalculateStatistics(log, switches);
                     bg.UpdateProgress(rowData, "85% - Statistics computed", 85);
@@ -282,6 +285,20 @@ namespace LuckParser
                         {
                             var builder = new CSVBuilder(sw, ",", log, settings, statistics,uploadresult);
                             builder.CreateCSV();
+                        }
+                    }
+                    if (Properties.Settings.Default.SaveOutJSON)
+                    {
+                        string outputFile = Path.Combine(
+                            saveDirectory.FullName,
+                            $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.json"
+                        );
+                        rowData.LogLocation = outputFile;
+                        using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                        using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
+                        {
+                            var builder = new JSONBuilder(sw, log, settings, statistics);
+                            builder.CreateJSON();
                         }
                     }
 
