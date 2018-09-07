@@ -9,14 +9,14 @@ namespace LuckParser.Models.ParseModels
     public abstract class AbstractMasterPlayer : AbstractPlayer
     {
         // Boons
-        public readonly List<Boon> BoonToTrack = new List<Boon>();
+        public List<Boon> BoonToTrack { get; } = new List<Boon>();
         private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
         private readonly List<Dictionary<long, long>> _boonPresence = new List<Dictionary<long, long>>();
         private readonly List<Dictionary<long, long>> _condiPresence = new List<Dictionary<long, long>>();
         private readonly Dictionary<long, BoonsGraphModel> _boonPoints = new Dictionary<long, BoonsGraphModel>();
         private readonly Dictionary<long, Dictionary<int, string[]>> _boonExtra = new Dictionary<long, Dictionary<int, string[]>>();
         // dps graphs
-        public readonly Dictionary<int, List<Point>> DpsGraph = new Dictionary<int, List<Point>>();
+        public Dictionary<int, List<Point>> DpsGraph { get; } = new Dictionary<int, List<Point>>();
         // Minions
         private readonly Dictionary<string, Minions> _minions = new Dictionary<string, Minions>();
         // Replay
