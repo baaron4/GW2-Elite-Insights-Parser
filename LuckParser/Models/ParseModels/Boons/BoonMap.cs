@@ -13,7 +13,7 @@ namespace LuckParser.Models.ParseModels
             this[boon.ID] = new List<BoonLog>();
         }
 
-        public BoonMap(List<Boon> boons)
+        public BoonMap(IEnumerable<Boon> boons)
         {
             foreach (Boon boon in boons)
             {
@@ -22,7 +22,7 @@ namespace LuckParser.Models.ParseModels
         }
 
 
-        public void Add(List<Boon> boons)
+        public void Add(IEnumerable<Boon> boons)
         {
             foreach (Boon boon in boons)
             {

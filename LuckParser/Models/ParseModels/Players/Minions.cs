@@ -34,13 +34,13 @@ namespace LuckParser.Models.ParseModels
             }
             if (_filteredDamageLogs.Count == 0)
             {
-                _filteredDamageLogs = _damageLogs.Where(x => x.GetDstInstidt() == log.FightData.InstID).ToList();
+                _filteredDamageLogs = _damageLogs.Where(x => x.DstInstId == log.FightData.InstID).ToList();
             }
             if (instidFilter > 0)
             {
-                return _filteredDamageLogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+                return _filteredDamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
-            return _damageLogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+            return _damageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
         public List<DamageLog> GetDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
@@ -49,9 +49,9 @@ namespace LuckParser.Models.ParseModels
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
             {
-                res.AddRange(dls.Where(x => x.GetDstInstidt() == a.InstID && x.GetTime() >= a.FirstAware - log.FightData.FightStart && x.GetTime() <= a.LastAware - log.FightData.FightStart));
+                res.AddRange(dls.Where(x => x.DstInstId == a.InstID && x.Time >= a.FirstAware - log.FightData.FightStart && x.Time <= a.LastAware - log.FightData.FightStart));
             }
-            res.Sort((x, y) => x.GetTime() < y.GetTime() ? -1 : 1);
+            res.Sort((x, y) => x.Time < y.Time ? -1 : 1);
             return res;
         }
 
@@ -74,7 +74,7 @@ namespace LuckParser.Models.ParseModels
                     _castLogs.AddRange(minion.GetCastLogs(log, 0, log.FightData.FightDuration));
                 }
             }
-            return _castLogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+            return _castLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
     }

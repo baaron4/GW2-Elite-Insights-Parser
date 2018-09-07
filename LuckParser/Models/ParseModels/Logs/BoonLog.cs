@@ -2,53 +2,32 @@
 {
     public class BoonLog
     {
-        // Fields
-        private long _time;
-        private long _value;
-        private uint _overstack;
-        private readonly ushort _srcInstid;
+        public long Time { get; private set; }
+        public long Value { get; private set; }
+        public uint Overstack { get; private set; }
+        public ushort SrcInstid { get; }
 
-        //Constructor
         public BoonLog(long time, ushort srcInstid, long value, uint overstack)
         {
-            _time = time;
-            _value = value;
-            _srcInstid = srcInstid;
-            _overstack = overstack;
+            Time = time;
+            Value = value;
+            SrcInstid = srcInstid;
+            Overstack = overstack;
         }
 
-        // Getters
-        public long GetTime()
-        {
-            return _time;
-        }
-
-        public long GetValue()
-        {
-            return _value;
-        }
-        public uint GetOverstack() {
-            return _overstack;
-        }
-
-        public ushort GetSrcInstid()
-        {
-            return _srcInstid;
-        }
-
-        // Add
         public void AddTime(long time)
         {
-            _time += time;
+            Time += time;
         }
 
         public void AddValue(long value)
         {
-            _value += value;
+            Value += value;
         }
+
         public void AddOverstack(uint overstack)
         {
-            _overstack += overstack;
+            Overstack += overstack;
         }
     }
 }

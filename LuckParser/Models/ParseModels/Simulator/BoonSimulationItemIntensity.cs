@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
             {
                 _stacks.Add(new BoonSimulationItemDuration(stack));
             }
-            Duration = _stacks.Max(x => x.GetItemDuration());
+            Duration = _stacks.Max(x => x.GetTotalDuration());
         }
 
         public override void SetEnd(long end)
@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
             {
                 stack.SetEnd(end);
             }
-            Duration = _stacks.Max(x => x.GetItemDuration());
+            Duration = _stacks.Max(x => x.GetTotalDuration());
         }
 
         public override long GetSrcDuration(ushort src, long start, long end)
@@ -36,12 +36,12 @@ namespace LuckParser.Models.ParseModels
             }
             return total;
         }
-        public override long GetItemDuration()
+        public override long GetTotalDuration()
         {
             long total = 0;
             foreach (BoonSimulationItemDuration stack in _stacks)
             {
-                total += stack.GetItemDuration();
+                total += stack.GetTotalDuration();
             }
             return total;
         }
@@ -58,7 +58,7 @@ namespace LuckParser.Models.ParseModels
 
         public override List<BoonsGraphModel.Segment> ToSegment()
         {
-            if (Duration == _stacks.Min(x => x.GetItemDuration()))
+            if (Duration == _stacks.Min(x => x.GetTotalDuration()))
             {
                 return new List<BoonsGraphModel.Segment>
                 {
@@ -67,7 +67,7 @@ namespace LuckParser.Models.ParseModels
             }
             long start = Start;
             List<BoonsGraphModel.Segment> res = new List<BoonsGraphModel.Segment>();
-            foreach ( long end in _stacks.Select(x => x.GetItemDuration() + Start).Distinct())
+            foreach ( long end in _stacks.Select(x => x.GetTotalDuration() + Start).Distinct())
             {
                 res.Add(new BoonsGraphModel.Segment(start,end,GetStack(end)));
                 start = end;

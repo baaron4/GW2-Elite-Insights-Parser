@@ -28,7 +28,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         public abstract long GetSrcDuration(ushort src, long start, long end);
-        public abstract long GetItemDuration();
+        public abstract long GetTotalDuration();
 
         public abstract List<ushort> GetSrc();
 

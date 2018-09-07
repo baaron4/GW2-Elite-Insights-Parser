@@ -17,8 +17,8 @@ namespace LuckParser.Models
             new Mechanic(34913, "Temporal Shred", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'circle-open',color:'rgb(255,0,0)',", "O.Aoe","Temporal Shred (Stood in Orb Aoe)", "Orb AoE",0),
             new Mechanic(35168, "Bloodstone Protection", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hourglass-open',color:'rgb(128,0,128)',", "InBble","Bloodstone Protection (Stood in Bubble)", "Inside Bubble",0),
             new Mechanic(34887, "Summon Fragment Start", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "CC","Summon Fragment (Xera Breakbar)", "Breakbar",0),
-            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Summon Fragment (Failed CC)", "CC Fail",0,(condition => condition.getCombatItem().Value > 11940)),
-            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Summon Fragment (Breakbar broken)", "CCed",0,(condition => condition.getCombatItem().Value <= 11940)),
+            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Summon Fragment (Failed CC)", "CC Fail",0,(condition => condition.CombatItem.Value > 11940)),
+            new Mechanic(34887, "Summon Fragment End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Xera, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Summon Fragment (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 11940)),
             new Mechanic(34965, "Derangement", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square-open',color:'rgb(200,140,255)',", "Drgmnt","Derangement (Stacking Debuff)", "Derangement",0), 
             new Mechanic(35084, "Bending Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-down-open',color:'rgb(255,200,0)',", "Btn1","Bending Chaos (Stood on 1st Button)", "Button 1",0),
             new Mechanic(35162, "Shifting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-ne-open',color:'rgb(255,200,0)',", "Btn2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
@@ -82,10 +82,10 @@ namespace LuckParser.Models
                 ParseEnum.ThrashIDS.WhiteMantleBattleMage,
                 ParseEnum.ThrashIDS.ExquisiteConjunction
             };
-            List<CastLog> summon = cls.Where(x => x.GetID() == 34887).ToList();
+            List<CastLog> summon = cls.Where(x => x.SkillId == 34887).ToList();
             foreach (CastLog c in summon)
             {
-                replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.GetTime(), (int)c.GetTime() + c.GetActDur()), "rgba(0, 180, 255, 0.3)"));
+                replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
             }
             return ids;
         }
