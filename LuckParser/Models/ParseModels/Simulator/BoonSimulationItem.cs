@@ -5,8 +5,15 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class BoonSimulationItem
     {
-        protected long Start;
-        protected long Duration;
+        public long Start { get; protected set; }
+        public long Duration { get; protected set; }
+        public long End
+        {
+            get
+            {
+                return Start + Duration;
+            }
+        }
 
         protected BoonSimulationItem()
         {
@@ -20,36 +27,21 @@ namespace LuckParser.Models.ParseModels
             Duration = duration;
         }
 
-        public abstract long GetDuration(ushort src, long start, long end);
-        public abstract long GetSourcelessDuration();
-
-
-        public long GetStart()
-        {
-            return Start;
-        }
+        public abstract long GetSrcDuration(ushort src, long start, long end);
+        public abstract long GetTotalDuration();
 
         public abstract List<ushort> GetSrc();
 
-        public long GetEnd()
+        public long GetClampedDuration(long start, long end)
         {
-            return Start + Duration;
-        }
-
-        public abstract bool AddOverstack(ushort src, long overstack);
-
-        public abstract long GetOverstack(ushort src, long start = 0, long end = 0);
-
-        public long GetItemDuration(long start = 0, long end = 0)
-        {
-            if (end > 0)
+            if (end > 0 && end - start > 0)
             {
                 long startoffset = Math.Max(Math.Min(Duration, start - Start),0);
                 long itemEnd = Start + Duration;
                 long endOffset = Math.Max(Math.Min(Duration, itemEnd - end),0);
                 return Duration - startoffset - endOffset;
             }
-            return Duration;
+            return 0;
         }
 
         public abstract List<BoonsGraphModel.Segment> ToSegment();

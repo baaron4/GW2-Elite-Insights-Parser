@@ -1,4 +1,4 @@
-﻿using LuckParser.Models;
+using LuckParser.Models;
 //recommend CTRL+M+O to collapse all
 using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
@@ -449,7 +449,7 @@ namespace LuckParser.Controllers
         /// </summary>
         private void FillMissingData()
         {
-            var agentsLookup = _agentData.GetAllAgentsList().ToDictionary(a => a.Agent);
+            var agentsLookup = _agentData.AllAgentsList.ToDictionary(a => a.Agent);
             // Set Agent instid, firstAware and lastAware
             foreach (CombatItem c in _combatData)
             {
@@ -478,7 +478,7 @@ namespace LuckParser.Controllers
             {
                 if (c.SrcMasterInstid != 0)
                 {
-                    var master = _agentData.GetAllAgentsList().Find(x => x.InstID == c.SrcMasterInstid && x.FirstAware < c.Time && c.Time < x.LastAware);
+                    var master = _agentData.AllAgentsList.Find(x => x.InstID == c.SrcMasterInstid && x.FirstAware < c.Time && c.Time < x.LastAware);
                     if (master != null)
                     {
                         if(agentsLookup.TryGetValue(c.SrcAgent, out var minion) && minion.FirstAware < c.Time && c.Time < minion.LastAware)
@@ -492,7 +492,7 @@ namespace LuckParser.Controllers
             _agentData.Clean();
 
             // Set Boss data agent, instid, firstAware, lastAware and name
-            List<AgentItem> npcList = _agentData.GetNPCAgentList();
+            List<AgentItem> npcList = _agentData.NPCAgentList;
             HashSet<ulong> multipleBoss = new HashSet<ulong>();
             foreach (AgentItem NPC in npcList)
             {
@@ -603,7 +603,7 @@ namespace LuckParser.Controllers
             //Dealing with Deimos split
             if (_fightData.ID == 17154)
             {
-                List<AgentItem> deimosGadgets = _agentData.GetGadgetAgentList().Where(x => x.FirstAware > bossAgent.LastAware && x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
+                List<AgentItem> deimosGadgets = _agentData.GadgetAgentList.Where(x => x.FirstAware > bossAgent.LastAware && x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
                 if (deimosGadgets.Count > 0)
                 {
                     AgentItem NPC = deimosGadgets.Last();
@@ -642,7 +642,7 @@ namespace LuckParser.Controllers
             {
 
                 //Fix Disconnected players
-                var playerAgentList = _agentData.GetPlayerAgentList();
+                var playerAgentList = _agentData.PlayerAgentList;
 
                 foreach (AgentItem playerAgent in playerAgentList)
                 {
