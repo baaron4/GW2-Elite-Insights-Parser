@@ -279,7 +279,9 @@ namespace LuckParser
                         saveDirectory.FullName,
                         $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.csv"
                         );
-                        rowData.LogLocation = outputFile;
+                        string splitString = "";
+                        if (rowData.LogLocation.Length != 0) { splitString = ","; }
+                        rowData.LogLocation += splitString + outputFile;
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                         {
@@ -293,7 +295,9 @@ namespace LuckParser
                             saveDirectory.FullName,
                             $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.json"
                         );
-                        rowData.LogLocation = outputFile;
+                        string splitString = "";
+                        if (rowData.LogLocation.Length != 0) { splitString = ","; }
+                        rowData.LogLocation += splitString + outputFile;
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                         {
@@ -530,12 +534,16 @@ namespace LuckParser
                         break;
 
                     case RowState.Complete:
-                        string fileLoc = row.LogLocation;
-                        if (File.Exists(fileLoc))
+                        string[] files = row.LogLocation.Split(',');
+                        foreach (string fileLoc in files)
                         {
-                            System.Diagnostics.Process.Start(fileLoc);
+                            if (File.Exists(fileLoc))
+                            {
+                                System.Diagnostics.Process.Start(fileLoc);
+                            }
                         }
                         break;
+
                 }
             }
         }
