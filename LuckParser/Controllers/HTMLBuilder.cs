@@ -1145,6 +1145,7 @@ namespace LuckParser.Controllers
                         sw.Write("});");
                     }
                     sw.Write("</script>");
+                    sw.Write("<h3 class=\"text-center mt-3\">" + spec + "</h3>");
                     sw.Write("<table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" id=\"" + tableId + phaseIndex + "\">");
                     {
                         HTMLHelper.WriteBoonTableHeader(sw, listToUse);
@@ -1157,7 +1158,7 @@ namespace LuckParser.Controllers
                                 {
                                     sw.Write("<td>" + player.Group.ToString() + "</td>");
                                     sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
-                                    sw.Write("<td>" + player.Character + "</td>");
+                                    sw.Write("<td> " + player.Character + "</td>");
 
                                     foreach (Boon boon in listToUse)
                                     {
