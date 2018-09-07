@@ -94,7 +94,7 @@ namespace LuckParser.Controllers
             //DPS
             damage = player.GetDamageLogs(0, _log, phase.Start,
                     phase.End)
-                .Sum(x => x.GetDamage());
+                .Sum(x => x.Damage);
             if (phaseDuration > 0)
             {
                 dps = damage / phaseDuration;
@@ -104,7 +104,7 @@ namespace LuckParser.Controllers
             //Condi DPS
             damage = player.GetDamageLogs(0, _log, phase.Start,
                     phase.End)
-                .Where(x => x.IsCondi() > 0).Sum(x => x.GetDamage());
+                .Where(x => x.IsCondi > 0).Sum(x => x.Damage);
             if (phaseDuration > 0)
             {
                 dps = damage / phaseDuration;
@@ -120,17 +120,17 @@ namespace LuckParser.Controllers
             final.AllPowerDps = (int)dps;
             final.AllPowerDamage = (int)damage;
             final.PlayerPowerDamage = player.GetJustPlayerDamageLogs(0, _log,
-                phase.Start, phase.End).Where(x => x.IsCondi() == 0).Sum(x => x.GetDamage());
+                phase.Start, phase.End).Where(x => x.IsCondi == 0).Sum(x => x.Damage);
             /////////// BOSS
             //DPS
             if (checkRedirection && phase.Redirection.Count > 0)
             {
                 damage = player.GetDamageLogs(phase.Redirection, _log,
-                    phase.Start, phase.End).Sum(x => x.GetDamage());
+                    phase.Start, phase.End).Sum(x => x.Damage);
             } else
             {
                 damage = player.GetDamageLogs(_log.FightData.InstID, _log,
-                    phase.Start, phase.End).Sum(x => x.GetDamage());
+                    phase.Start, phase.End).Sum(x => x.Damage);
             }
             if (phaseDuration > 0)
             {
@@ -142,12 +142,12 @@ namespace LuckParser.Controllers
             if (checkRedirection && phase.Redirection.Count > 0)
             {
                 damage = player.GetDamageLogs(phase.Redirection, _log,
-                    phase.Start, phase.End).Where(x => x.IsCondi() > 0).Sum(x => x.GetDamage());
+                    phase.Start, phase.End).Where(x => x.IsCondi > 0).Sum(x => x.Damage);
             }
             else
             {
                 damage = player.GetDamageLogs(_log.FightData.InstID, _log,
-                    phase.Start, phase.End).Where(x => x.IsCondi() > 0).Sum(x => x.GetDamage());
+                    phase.Start, phase.End).Where(x => x.IsCondi > 0).Sum(x => x.Damage);
             }
             if (phaseDuration > 0)
             {
@@ -166,12 +166,12 @@ namespace LuckParser.Controllers
             if (checkRedirection && phase.Redirection.Count > 0)
             {
                 final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(phase.Redirection, _log,
-                    phase.Start, phase.End).Where(x => x.IsCondi() == 0).Sum(x => x.GetDamage());
+                    phase.Start, phase.End).Where(x => x.IsCondi == 0).Sum(x => x.Damage);
             }
             else
             {
                 final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(_log.FightData.InstID, _log,
-                    phase.Start, phase.End).Where(x => x.IsCondi() == 0).Sum(x => x.GetDamage());
+                    phase.Start, phase.End).Where(x => x.IsCondi == 0).Sum(x => x.Damage);
             }
 
             return final;
@@ -268,106 +268,106 @@ namespace LuckParser.Controllers
                     }
                     foreach (DamageLog dl in damageLogs)
                     {
-                        if (dl.IsCondi() == 0)
+                        if (dl.IsCondi == 0)
                         {
 
-                            if (idsToCheck.Contains(dl.GetDstInstidt()))
+                            if (idsToCheck.Contains(dl.DstInstId))
                             {
                                 if (idsToCheck.Count > 1)
                                 {
-                                    AgentItem target = phase.Redirection.Find(x => x.InstID == dl.GetDstInstidt());
-                                    if (dl.GetTime() < target.FirstAware - _log.FightData.FightStart || dl.GetTime() > target.LastAware - _log.FightData.FightStart)
+                                    AgentItem target = phase.Redirection.Find(x => x.InstID == dl.DstInstId);
+                                    if (dl.Time < target.FirstAware - _log.FightData.FightStart || dl.Time > target.LastAware - _log.FightData.FightStart)
                                     {
                                         continue;
                                     }
                                 }
-                                if (dl.GetResult() == ParseEnum.Result.Crit)
+                                if (dl.Result == ParseEnum.Result.Crit)
                                 {
                                     final.CriticalRateBoss++;
-                                    final.CriticalDmgBoss += dl.GetDamage();
+                                    final.CriticalDmgBoss += dl.Damage;
                                 }
 
-                                if (dl.IsNinety() > 0)
+                                if (dl.IsNinety > 0)
                                 {
                                     final.ScholarRateBoss++;
-                                    final.ScholarDmgBoss += (int)(dl.GetDamage() / 11.0); //regular+10% damage
+                                    final.ScholarDmgBoss += (int)(dl.Damage / 11.0); //regular+10% damage
                                 }
 
-                                if (dl.IsMoving() > 0)
+                                if (dl.IsMoving > 0)
                                 {
                                     final.MovingRateBoss++;
-                                    final.MovingDamageBoss += (int)(dl.GetDamage() / 21.0);
+                                    final.MovingDamageBoss += (int)(dl.Damage / 21.0);
                                 }
                                 
-                                final.FlankingRateBoss += dl.IsFlanking();
+                                final.FlankingRateBoss += dl.IsFlanking;
 
-                                if (dl.GetResult() == ParseEnum.Result.Glance)
+                                if (dl.Result == ParseEnum.Result.Glance)
                                 {
                                     final.GlanceRateBoss++;
                                 }
 
-                                if (dl.GetResult() == ParseEnum.Result.Blind)
+                                if (dl.Result == ParseEnum.Result.Blind)
                                 {
                                     final.MissedBoss++;
                                 }
 
-                                if (dl.GetResult() == ParseEnum.Result.Interrupt)
+                                if (dl.Result == ParseEnum.Result.Interrupt)
                                 {
                                     final.InterruptsBoss++;
                                 }
 
-                                if (dl.GetResult() == ParseEnum.Result.Absorb)
+                                if (dl.Result == ParseEnum.Result.Absorb)
                                 {
                                     final.InvulnedBoss++;
                                 }
                                 final.PowerLoopCountBoss++;
-                                if (!nonCritable.Contains(dl.GetID()))
+                                if (!nonCritable.Contains(dl.SkillId))
                                 {
                                     final.CritablePowerLoopCountBoss++;
                                 }
                             }
 
-                            if (dl.GetResult() == ParseEnum.Result.Crit)
+                            if (dl.Result == ParseEnum.Result.Crit)
                             {
                                 final.CriticalRate++;
-                                final.CriticalDmg += dl.GetDamage();
+                                final.CriticalDmg += dl.Damage;
                             }
 
-                            if (dl.IsNinety() > 0)
+                            if (dl.IsNinety > 0)
                             {
                                 final.ScholarRate++;
-                                final.ScholarDmg += (int)(dl.GetDamage() / 11.0); //regular+10% damage
+                                final.ScholarDmg += (int)(dl.Damage / 11.0); //regular+10% damage
                             }
 
-                            if (dl.IsMoving() > 0)
+                            if (dl.IsMoving > 0)
                             {
                                 final.MovingRate++;
-                                final.MovingDamage += (int)(dl.GetDamage() / 21.0);
+                                final.MovingDamage += (int)(dl.Damage / 21.0);
                             }
                             
-                            final.FlankingRate += dl.IsFlanking();
+                            final.FlankingRate += dl.IsFlanking;
 
-                            if (dl.GetResult() == ParseEnum.Result.Glance)
+                            if (dl.Result == ParseEnum.Result.Glance)
                             {
                                 final.GlanceRate++;
                             }
 
-                            if (dl.GetResult() == ParseEnum.Result.Blind)
+                            if (dl.Result == ParseEnum.Result.Blind)
                             {
                                 final.Missed++;
                             }
 
-                            if (dl.GetResult() == ParseEnum.Result.Interrupt)
+                            if (dl.Result == ParseEnum.Result.Interrupt)
                             {
                                 final.Interrupts++;
                             }
 
-                            if (dl.GetResult() == ParseEnum.Result.Absorb)
+                            if (dl.Result == ParseEnum.Result.Absorb)
                             {
                                 final.Invulned++;
                             }
                             final.PowerLoopCount++;
-                            if (!nonCritable.Contains(dl.GetID()))
+                            if (!nonCritable.Contains(dl.SkillId))
                             {
                                 final.CritablePowerLoopCount++;
                             }
@@ -502,17 +502,17 @@ namespace LuckParser.Controllers
                     List<DamageLog> damageLogs = player.GetDamageTakenLogs(_log, phase.Start, phase.End);
                     //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
                  
-                    final.DamageTaken = damageLogs.Sum(x => (long)x.GetDamage());
+                    final.DamageTaken = damageLogs.Sum(x => (long)x.Damage);
                     //final.allHealReceived = healingLogs.Sum(x => x.getDamage());
-                    final.BlockedCount = damageLogs.Count(x => x.GetResult() == ParseEnum.Result.Block);
+                    final.BlockedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Block);
                     final.InvulnedCount = 0;
                     final.DamageInvulned = 0;
-                    final.EvadedCount = damageLogs.Count(x => x.GetResult() == ParseEnum.Result.Evade);
-                    final.DamageBarrier = damageLogs.Sum(x => x.IsShields() == 1 ? x.GetDamage() : 0);
-                    foreach (DamageLog log in damageLogs.Where(x => x.GetResult() == ParseEnum.Result.Absorb))
+                    final.EvadedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Evade);
+                    final.DamageBarrier = damageLogs.Sum(x => x.IsShields == 1 ? x.Damage : 0);
+                    foreach (DamageLog log in damageLogs.Where(x => x.Result == ParseEnum.Result.Absorb))
                     {
                         final.InvulnedCount++;
-                        final.DamageInvulned += log.GetDamage();
+                        final.DamageInvulned += log.Damage;
                     }
 
                     phaseDefense[phaseIndex] = final;

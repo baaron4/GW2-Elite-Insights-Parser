@@ -265,9 +265,9 @@ namespace LuckParser.Controllers
                 int maxdamage = 0;
                 long condiID = condi.ID;
                 usedIDs.Add(condiID);
-                foreach (DamageLog dl in damageLogs.Where(x => x.GetID() == condiID))
+                foreach (DamageLog dl in damageLogs.Where(x => x.SkillId == condiID))
                 {
-                    int curdmg = dl.GetDamage();
+                    int curdmg = dl.Damage;
                     totaldamage += curdmg;
                     if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                     if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
@@ -312,14 +312,14 @@ namespace LuckParser.Controllers
             int glance = 0;
             foreach (DamageLog dl in damageLogs)
             {
-                int curdmg = dl.GetDamage();
+                int curdmg = dl.Damage;
                 totaldamage += curdmg;
                 if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                 if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
                 hits++;
-                ParseEnum.Result result = dl.GetResult();
+                ParseEnum.Result result = dl.Result;
                 if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
-                if (dl.IsFlanking() == 1) { flank++; }
+                if (dl.IsFlanking == 1) { flank++; }
             }
             avgdamage = (int)(totaldamage / (double)hits);
             string wasted = timeswasted > 0.0 ? Math.Round(timeswasted, 2) + "s" : "";

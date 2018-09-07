@@ -2006,13 +2006,13 @@ namespace LuckParser.Controllers
             List<DamageLog> damageToKill = new List<DamageLog>();
             if (down.Count > 0)
             {//went to down state before death
-                damageToDown = damageLogs.Where(x => x.GetTime() < down.Last().Time - start && x.GetDamage() > 0).ToList();
-                damageToKill = damageLogs.Where(x => x.GetTime() > down.Last().Time - start && x.GetTime() < dead.Last().Time - start && x.GetDamage() > 0).ToList();
+                damageToDown = damageLogs.Where(x => x.Time < down.Last().Time - start && x.Damage > 0).ToList();
+                damageToKill = damageLogs.Where(x => x.Time > down.Last().Time - start && x.Time < dead.Last().Time - start && x.Damage > 0).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
                 for (int i = damageToDown.Count - 1; i > 0; i--)
                 {
-                    totaldmg += damageToDown[i].GetDamage();
+                    totaldmg += damageToDown[i].Damage;
                     if (totaldmg > 30000)
                     {
                         damageToDown = damageToDown.GetRange(i, damageToDown.Count - i);
@@ -2027,12 +2027,12 @@ namespace LuckParser.Controllers
                     return;
                 }
                 sw.Write("<center>");
-                sw.Write("<p>Took " + damageToDown.Sum(x => x.GetDamage()) + " damage in " +
-                ((damageToDown.Last().GetTime() - damageToDown.First().GetTime()) / 1000f).ToString() + " seconds to enter downstate");
+                sw.Write("<p>Took " + damageToDown.Sum(x => x.Damage) + " damage in " +
+                ((damageToDown.Last().Time - damageToDown.First().Time) / 1000f).ToString() + " seconds to enter downstate");
                 if (damageToKill.Count > 0)
                 {
-                    sw.Write("<p>Took " + damageToKill.Sum(x => x.GetDamage()) + " damage in " +
-                       ((damageToKill.Last().GetTime() - damageToKill.First().GetTime()) / 1000f).ToString() + " seconds to die</p>");
+                    sw.Write("<p>Took " + damageToKill.Sum(x => x.Damage) + " damage in " +
+                       ((damageToKill.Last().Time - damageToKill.First().Time) / 1000f).ToString() + " seconds to die</p>");
                 }
                 else
                 {
@@ -2042,12 +2042,12 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damageToKill = damageLogs.Where(x => x.GetTime() < dead.Last().Time && x.GetDamage() > 0).ToList();
+                damageToKill = damageLogs.Where(x => x.Time < dead.Last().Time && x.Damage > 0).ToList();
                 //Filter last 30k dmg taken
                 int totaldmg = 0;
                 for (int i = damageToKill.Count - 1; i > 0; i--)
                 {
-                    totaldmg += damageToKill[i].GetDamage();
+                    totaldmg += damageToKill[i].Damage;
                     if (totaldmg > 30000)
                     {
                         damageToKill = damageToKill.GetRange(i, damageToKill.Count - 1 - i);
@@ -2067,12 +2067,12 @@ namespace LuckParser.Controllers
                 {
                     foreach (DamageLog dl in damageToDown)
                     {
-                        sw.Write("'" + dl.GetTime() / 1000f + "s',");
+                        sw.Write("'" + dl.Time / 1000f + "s',");
                     }
                 }
                 for (int d = 0; d < damageToKill.Count; d++)
                 {
-                    sw.Write("'" + damageToKill[d].GetTime() / 1000f + "s'");
+                    sw.Write("'" + damageToKill[d].Time / 1000f + "s'");
 
                     if (d != damageToKill.Count - 1)
                     {
@@ -2086,12 +2086,12 @@ namespace LuckParser.Controllers
                 {
                     foreach (DamageLog dl in damageToDown)
                     {
-                        sw.Write("'" + dl.GetDamage() + "',");
+                        sw.Write("'" + dl.Damage + "',");
                     }
                 }
                 for (int d = 0; d < damageToKill.Count; d++)
                 {
-                    sw.Write("'" + damageToKill[d].GetDamage() + "'");
+                    sw.Write("'" + damageToKill[d].Damage + "'");
 
                     if (d != damageToKill.Count - 1)
                     {
@@ -2124,27 +2124,27 @@ namespace LuckParser.Controllers
                 {
                     foreach (DamageLog dl in damageToDown)
                     {
-                        AgentItem ag = _log.AgentData.GetAgentWInst(dl.GetSrcInstidt());
+                        AgentItem ag = _log.AgentData.GetAgentWInst(dl.SrcInstId);
                         string name = "UNKNOWN";
                         if (ag != null)
                         {
                             name = ag.Name.Replace("\0", "").Replace("\'", "\\'");
                         }
-                        string skillname = _log.SkillData.GetName(dl.GetID()).Replace("\'", "\\'");
-                        sw.Write("'" + name + "<br>" + skillname + " hit you for " + dl.GetDamage() + "',");
+                        string skillname = _log.SkillData.GetName(dl.SkillId).Replace("\'", "\\'");
+                        sw.Write("'" + name + "<br>" + skillname + " hit you for " + dl.Damage + "',");
                     }
                 }
                 for (int d = 0; d < damageToKill.Count; d++)
                 {
-                    AgentItem ag = _log.AgentData.GetAgentWInst(damageToKill[d].GetSrcInstidt());
+                    AgentItem ag = _log.AgentData.GetAgentWInst(damageToKill[d].SrcInstId);
                     string name = "UNKNOWN";
                     if (ag != null )
                     {
                         name = ag.Name.Replace("\0", "").Replace("\'", "\\'");
                     }
-                    string skillname = _log.SkillData.GetName(damageToKill[d].GetID()).Replace("\'", "\\'");
+                    string skillname = _log.SkillData.GetName(damageToKill[d].SkillId).Replace("\'", "\\'");
                     sw.Write("'" + name + "<br>" +
-                           "hit you with <b>" + skillname + "</b> for " + damageToKill[d].GetDamage() + "'");
+                           "hit you with <b>" + skillname + "</b> for " + damageToKill[d].Damage + "'");
 
                     if (d != damageToKill.Count - 1)
                     {
@@ -2181,10 +2181,10 @@ namespace LuckParser.Controllers
             HashSet<long> usedIDs = new HashSet<long>();
             SkillData skillList = _log.SkillData;
             HTMLHelper.WriteDamageDistTableCondi(sw, usedIDs, damageLogs, finalTotalDamage, _statistics.PresentConditions);
-            foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.GetID())).Select(x => x.GetID()).Distinct().ToList())
+            foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.SkillId)).Select(x => x.SkillId).Distinct().ToList())
             {
                 SkillItem skill = skillList.Get(id);
-                List<DamageLog> listToUse = damageLogs.Where(x => x.GetID() == id).ToList();
+                List<DamageLog> listToUse = damageLogs.Where(x => x.SkillId == id).ToList();
                 usedIDs.Add(id);
                 if (skill != null && listToUse.Count > 0)
                 {
@@ -2252,7 +2252,7 @@ namespace LuckParser.Controllers
                 damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.FightData.InstID : 0, _log, phase.Start, phase.End);
             }
             int totalDamage = toBoss ? dps.BossDamage : dps.AllDamage;
-            int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.GetDamage()) : 0;
+            int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             if (totalDamage > 0)
             {
                 string contribution = Math.Round(100.0 * finalTotalDamage / totalDamage,2).ToString();
@@ -2336,7 +2336,7 @@ namespace LuckParser.Controllers
             {
                 damageLogs = minions.GetDamageLogs(toBoss ? _log.FightData.InstID : 0, _log, phase.Start, phase.End);
             }
-            int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.GetDamage()) : 0;
+            int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             if (totalDamage > 0)
             {
                 string contribution = Math.Round(100.0 * finalTotalDamage / totalDamage,2).ToString();
@@ -2418,7 +2418,7 @@ namespace LuckParser.Controllers
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, phase.Start, phase.End);
             SkillData skillList = _log.SkillData;
-            long finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.GetDamage()) : 0;
+            long finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
             string pid = p.InstID + "_" + phaseIndex;
             sw.Write("<script>");
             {
@@ -2476,9 +2476,9 @@ namespace LuckParser.Controllers
                         int hits = 0;
                         int maxdamage = 0;
                         usedIDs.Add(condiID);
-                        foreach (DamageLog dl in damageLogs.Where(x => x.GetID() == condiID))
+                        foreach (DamageLog dl in damageLogs.Where(x => x.SkillId == condiID))
                         {
-                            int curdmg = dl.GetDamage();
+                            int curdmg = dl.Damage;
                             totaldamage += curdmg;
                             if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                             if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
@@ -2505,7 +2505,7 @@ namespace LuckParser.Controllers
                             sw.Write("</tr>");
                         }
                     }
-                    foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.GetID())).Select(x => (int)x.GetID()).Distinct())
+                    foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.SkillId)).Select(x => (int)x.SkillId).Distinct())
                     {//foreach casted skill
                         SkillItem skill = skillList.Get(id);
 
@@ -2518,16 +2518,16 @@ namespace LuckParser.Controllers
                             int crit = 0;
                             int flank = 0;
                             int glance = 0;
-                            foreach (DamageLog dl in damageLogs.Where(x => x.GetID() == id))
+                            foreach (DamageLog dl in damageLogs.Where(x => x.SkillId == id))
                             {
-                                int curdmg = dl.GetDamage();
+                                int curdmg = dl.Damage;
                                 totaldamage += curdmg;
                                 if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                                 if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
                                 if (curdmg >= 0) { hits++; };
-                                ParseEnum.Result result = dl.GetResult();
+                                ParseEnum.Result result = dl.Result;
                                 if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
-                                if (dl.IsFlanking() == 1) { flank++; }
+                                if (dl.IsFlanking == 1) { flank++; }
                             }
                             int avgdamage = (int)(totaldamage / (double)hits);
 

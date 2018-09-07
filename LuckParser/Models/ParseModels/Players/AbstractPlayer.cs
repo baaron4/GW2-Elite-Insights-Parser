@@ -76,13 +76,13 @@ namespace LuckParser.Models.ParseModels
 
             if (_damageLogsFiltered.Count == 0)
             {
-                _damageLogsFiltered = DamageLogs.Where(x => x.GetDstInstidt() == instidFilter).ToList();
+                _damageLogsFiltered = DamageLogs.Where(x => x.DstInstId == instidFilter).ToList();
             }
             if (instidFilter == 0)
             {
-                return DamageLogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+                return DamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
-            return _damageLogsFiltered.Where( x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+            return _damageLogsFiltered.Where( x => x.Time >= start && x.Time <= end).ToList();
         }
         public List<DamageLog> GetDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
         {
@@ -94,9 +94,9 @@ namespace LuckParser.Models.ParseModels
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
             {
-                res.AddRange(dls.Where(x => x.GetDstInstidt() == a.InstID && x.GetTime() >= a.FirstAware - log.FightData.FightStart && x.GetTime() <= a.LastAware - log.FightData.FightStart));
+                res.AddRange(dls.Where(x => x.DstInstId == a.InstID && x.Time >= a.FirstAware - log.FightData.FightStart && x.Time <= a.LastAware - log.FightData.FightStart));
             }
-            res.Sort((x, y) => x.GetTime() < y.GetTime() ? -1 : 1);
+            res.Sort((x, y) => x.Time < y.Time ? -1 : 1);
             return res;
         }
         public List<DamageLog> GetDamageTakenLogs(ParsedLog log, long start, long end)
@@ -105,7 +105,7 @@ namespace LuckParser.Models.ParseModels
             {
                 SetDamagetakenLogs(log);
             }
-            return _damageTakenlogs.Where(x => x.GetTime() >= start && x.GetTime() <= end).ToList();
+            return _damageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
         /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)//isntid = 0 gets all logs if specified sets and returns filtered logs
         {
@@ -144,7 +144,7 @@ namespace LuckParser.Models.ParseModels
         }
         public List<DamageLog> GetJustPlayerDamageLogs(int instidFilter, ParsedLog log, long start, long end)
         {
-            return GetDamageLogs(instidFilter, log, start, end).Where(x => x.GetSrcInstidt() == Agent.InstID).ToList();
+            return GetDamageLogs(instidFilter, log, start, end).Where(x => x.SrcInstId == Agent.InstID).ToList();
         }
 
         public List<DamageLog> GetJustPlayerDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
@@ -157,9 +157,9 @@ namespace LuckParser.Models.ParseModels
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
             {
-                res.AddRange(dls.Where(x => x.GetDstInstidt() == a.InstID && x.GetTime() >= a.FirstAware - log.FightData.FightStart && x.GetTime() <= a.LastAware - log.FightData.FightStart));
+                res.AddRange(dls.Where(x => x.DstInstId == a.InstID && x.Time >= a.FirstAware - log.FightData.FightStart && x.Time <= a.LastAware - log.FightData.FightStart));
             }
-            res.Sort((x, y) => x.GetTime() < y.GetTime() ? -1 : 1);
+            res.Sort((x, y) => x.Time < y.Time ? -1 : 1);
             return res;
         }
         // privates

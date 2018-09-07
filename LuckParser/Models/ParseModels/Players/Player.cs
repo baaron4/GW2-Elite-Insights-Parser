@@ -323,9 +323,9 @@ namespace LuckParser.Models.ParseModels
                     {
                         continue;
                     }
-                    if (dLog.GetID() == mech.GetSkill() && dLog.GetResult().IsHit())
+                    if (dLog.SkillId == mech.GetSkill() && dLog.Result.IsHit())
                     {
-                        mechData[mech].Add(new MechanicLog(dLog.GetTime(), mech, this));
+                        mechData[mech].Add(new MechanicLog(dLog.Time, mech, this));
 
                     }
                 }
@@ -369,11 +369,11 @@ namespace LuckParser.Models.ParseModels
                 {
                     foreach (DamageLog dl in GetDamageLogs(0,log,0,log.FightData.FightDuration))
                     {
-                        if (dl.GetDstInstidt() != a.InstID || dl.IsCondi() > 0 || dl.GetTime() < a.FirstAware - start || dl.GetTime() > a.LastAware - start || (condition != null && !condition(new SpecialConditionItem(dl))))
+                        if (dl.DstInstId != a.InstID || dl.IsCondi > 0 || dl.Time < a.FirstAware - start || dl.Time > a.LastAware - start || (condition != null && !condition(new SpecialConditionItem(dl))))
                         {
                             continue;
                         }
-                        mechData[mech].Add(new MechanicLog(dl.GetTime(), mech, this));
+                        mechData[mech].Add(new MechanicLog(dl.Time, mech, this));
                     }
                 }
             }
