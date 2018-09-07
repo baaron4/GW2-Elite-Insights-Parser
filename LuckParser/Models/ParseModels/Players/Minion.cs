@@ -61,7 +61,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void SetDamagetakenLogs(ParsedLog log)
+        protected override void SetDamageTakenLogs(ParsedLog log)
         {
         }
 

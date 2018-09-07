@@ -47,7 +47,7 @@ namespace LuckParser.Models.ParseModels
 
         // Private Methods
 
-        protected override void SetDamagetakenLogs(ParsedLog log)
+        protected override void SetDamageTakenLogs(ParsedLog log)
         {
             // nothing to do
             /*long time_start = log.getBossData().getFirstAware();

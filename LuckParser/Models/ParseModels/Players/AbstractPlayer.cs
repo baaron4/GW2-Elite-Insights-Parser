@@ -67,7 +67,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (_damageTakenlogs.Count == 0)
             {
-                SetDamagetakenLogs(log);
+                SetDamageTakenLogs(log);
             }
             return _damageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
@@ -190,7 +190,7 @@ namespace LuckParser.Models.ParseModels
         // Setters
         protected abstract void SetDamageLogs(ParsedLog log);     
         protected abstract void SetCastLogs(ParsedLog log);
-        protected abstract void SetDamagetakenLogs(ParsedLog log);
+        protected abstract void SetDamageTakenLogs(ParsedLog log);
         //protected abstract void setHealingLogs(ParsedLog log);
         //protected abstract void setHealingReceivedLogs(ParsedLog log);
     }

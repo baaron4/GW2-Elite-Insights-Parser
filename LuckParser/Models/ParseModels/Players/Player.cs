@@ -191,7 +191,7 @@ namespace LuckParser.Models.ParseModels
             _weaponsArray = weapons;
         }    
         
-        protected override void SetDamagetakenLogs(ParsedLog log)
+        protected override void SetDamageTakenLogs(ParsedLog log)
         {
             long timeStart = log.FightData.FightStart;               
             foreach (CombatItem c in log.GetDamageTakenData(Agent.InstID)) {
