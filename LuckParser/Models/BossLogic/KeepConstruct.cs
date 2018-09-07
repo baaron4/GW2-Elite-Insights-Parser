@@ -42,12 +42,12 @@ namespace LuckParser.Models
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             // Main phases
-            List<CastLog> clsKC = castLogs.Where(x => x.GetID() == 35048).ToList();
+            List<CastLog> clsKC = castLogs.Where(x => x.SkillId == 35048).ToList();
             foreach (CastLog cl in clsKC)
             {
-                end = cl.GetTime();
+                end = cl.Time;
                 phases.Add(new PhaseData(start, end));
-                start = end + cl.GetActDur();
+                start = end + cl.ActualDuration;
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
@@ -135,25 +135,25 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.CrimsonPhantasm,
                         ParseEnum.ThrashIDS.RetrieverProjection
                     };
-            List<CastLog> magicCharge = cls.Where(x => x.GetID() == 35048).ToList();
-            List<CastLog> magicExplode = cls.Where(x => x.GetID() == 34894).ToList();
+            List<CastLog> magicCharge = cls.Where(x => x.SkillId == 35048).ToList();
+            List<CastLog> magicExplode = cls.Where(x => x.SkillId == 34894).ToList();
             for (var i = 0; i < magicCharge.Count; i++)
             {
                 CastLog charge = magicCharge[i];
                 if (i < magicExplode.Count)
                 {
                     CastLog fire = magicExplode[i];
-                    int start = (int)charge.GetTime();
-                    int end = (int)fire.GetTime() + fire.GetActDur();
+                    int start = (int)charge.Time;
+                    int end = (int)fire.Time + fire.ActualDuration;
                     replay.AddCircleActor(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                     replay.AddCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                 }
             }
-            List<CastLog> towerDrop = cls.Where(x => x.GetID() == 35086).ToList();
+            List<CastLog> towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
             foreach (CastLog c in towerDrop)
             {
-                int start = (int)c.GetTime();
-                int end = start + c.GetActDur();
+                int start = (int)c.Time;
+                int end = start + c.ActualDuration;
                 Point3D pos = replay.GetPositions().FirstOrDefault(x => x.Time > end);
                 if (pos != null)
                 {

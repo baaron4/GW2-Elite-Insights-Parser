@@ -17,10 +17,10 @@ namespace LuckParser.Models
             new Mechanic(31498, "Spectral Darkness", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,255)',", "OrbDbf","Spectral Darkness (Stood in Orb AoE)", "Orb Debuff",100),
             new Mechanic(31722, "Spirited Fusion", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Gorseval, "symbol:'square',color:'rgb(255,140,0)',", "SprtBf","Spirited Fusion (Consumed a Spirit)", "Ate Spirit",0),
             new Mechanic(31720, "Kick", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Gorseval, "symbol:'triangle-right',color:'rgb(255,0,255)',", "Kick","Kicked by small add", "Spirit Kick",0),
-            new Mechanic(738, "Ghastly Rampage Black Goo Hit", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,0)',", "Black","Hit by Black Goo","Black Goo",3000,(condition => condition.getCombatItem().Value == 10000)),
+            new Mechanic(738, "Ghastly Rampage Black Goo Hit", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Gorseval, "symbol:'circle',color:'rgb(0,0,0)',", "Black","Hit by Black Goo","Black Goo",3000,(condition => condition.CombatItem.Value == 10000)),
             new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Gorseval, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "CC","Ghastly Rampage (Breakbar)", "Breakbar",0),
-            new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Gorseval, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.End","Ghastly Rampage (Full duration)", "CC ran out",0,(condition => condition.getCombatItem().Value > 21985)),
-            new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Gorseval, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0,(condition => condition.getCombatItem().Value <= 21985)),
+            new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Gorseval, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.End","Ghastly Rampage (Full duration)", "CC ran out",0,(condition => condition.CombatItem.Value > 21985)),
+            new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Gorseval, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 21985)),
 }); 
         }
 
@@ -71,7 +71,7 @@ namespace LuckParser.Models
                 phase.Name = namesGorse[i - 1];
                 if (i == 2 || i == 4)
                 {
-                    List<AgentItem> spirits = log.AgentData.GetNPCAgentList().Where(x => ParseEnum.GetThrashIDS(x.ID) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
+                    List<AgentItem> spirits = log.AgentData.NPCAgentList.Where(x => ParseEnum.GetThrashIDS(x.ID) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
                     foreach (AgentItem a in spirits)
                     {
                         long agentStart = a.FirstAware - log.FightData.FightStart;
@@ -95,26 +95,26 @@ namespace LuckParser.Models
                         ParseEnum.ThrashIDS.EnragedSpirit,
                         ParseEnum.ThrashIDS.AngeredSpirit
                     };
-            List<CastLog> blooms = cls.Where(x => x.GetID() == 31616).ToList();
+            List<CastLog> blooms = cls.Where(x => x.SkillId == 31616).ToList();
             foreach (CastLog c in blooms)
             {
-                int start = (int)c.GetTime();
-                int end = start + c.GetActDur();
-                replay.AddCircleActor(new CircleActor(true, c.GetExpDur() + (int)c.GetTime(), 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
+                int start = (int)c.Time;
+                int end = start + c.ActualDuration;
+                replay.AddCircleActor(new CircleActor(true, c.ExpectedDuration + (int)c.Time, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
                 replay.AddCircleActor(new CircleActor(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
             }
             List<PhaseData> phases = log.Boss.GetPhases(log);
             if (phases.Count > 1)
             {
-                List<CastLog> rampage = cls.Where(x => x.GetID() == 31834).ToList();
+                List<CastLog> rampage = cls.Where(x => x.SkillId == 31834).ToList();
                 Point3D pos = log.Boss.CombatReplay.GetPositions().First();
                 foreach (CastLog c in rampage)
                 {
-                    int start = (int)c.GetTime();
-                    int end = start + c.GetActDur();
+                    int start = (int)c.Time;
+                    int end = start + c.ActualDuration;
                     replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 125, 255, 0.3)"));
                     // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
-                    int ticks = (int)Math.Min(Math.Ceiling(c.GetActDur() / 4000.0),6);
+                    int ticks = (int)Math.Min(Math.Ceiling(c.ActualDuration / 4000.0),6);
                     int phaseIndex;
                     for (phaseIndex = 1; phaseIndex < phases.Count; phaseIndex++)
                     {

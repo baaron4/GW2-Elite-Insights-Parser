@@ -27,8 +27,8 @@ namespace LuckParser.Models
             new Mechanic(31828, "Unstable Pylon", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'hexagram-open',color:'rgb(0,0,255)',", "Flr.B","Unstable Pylon (Blue Floor dmg)", "Floor dmg",0),
             new Mechanic(31884, "Unstable Pylon", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ValeGuardian, "symbol:'hexagram-open',color:'rgb(0,128,0)',", "Flr.G","Unstable Pylon (Green Floor dmg)", "Floor dmg",0),
             new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "CC","Magic Storm (Breakbar)","Breakbar",0),
-            new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Magic Storm (Breakbar broken) ", "CCed",0,(condition => condition.getCombatItem().Value <=8544)),
-            new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,(condition => condition.getCombatItem().Value >8544)),
+            new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Magic Storm (Breakbar broken) ", "CCed",0,(condition => condition.CombatItem.Value <=8544)),
+            new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,(condition => condition.CombatItem.Value >8544)),
             });
         }
 
@@ -85,7 +85,7 @@ namespace LuckParser.Models
                        ParseEnum.ThrashIDS.GreenGuardian,
                        ParseEnum.ThrashIDS.RedGuardian
                     };
-                    List<AgentItem> guardians = log.AgentData.GetNPCAgentList().Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
+                    List<AgentItem> guardians = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
                     foreach (AgentItem a in guardians)
                     {
                         long agentStart = a.FirstAware - log.FightData.FightStart;
@@ -109,10 +109,10 @@ namespace LuckParser.Models
                ParseEnum.ThrashIDS.GreenGuardian,
                ParseEnum.ThrashIDS.RedGuardian
             };
-            List<CastLog> magicStorms = cls.Where(x => x.GetID() == 31419).ToList();
+            List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
             foreach (CastLog c in magicStorms)
             {
-                replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.GetTime(), (int)c.GetTime() + c.GetActDur()), "rgba(0, 180, 255, 0.3)"));
+                replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
             }
             return ids;
         }
