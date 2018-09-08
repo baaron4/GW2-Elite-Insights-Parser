@@ -251,6 +251,34 @@ namespace LuckParser.Controllers
             */
             return list;
         }
+
+        private double[] CreateBossHealthData(int phaseIndex)
+        {
+            PhaseData phase = _statistics.Phases[phaseIndex];
+            long seconds = phase.GetDuration("s");
+            double[] chart = new double[seconds+1];
+            int i = 0;
+            double curHealth = 100.0;
+            foreach(Point p in _log.FightData.HealthOverTime)
+            {
+                double hp = p.Y / 100.0;
+                long timeInPhase = 1+(p.X - phase.Start) / 1000;
+                if (timeInPhase >= seconds)
+                {
+                    break;
+                }
+                while (i < timeInPhase) chart[i++] = curHealth;
+                curHealth = hp;
+                if (timeInPhase >= 0)
+                {
+                    chart[timeInPhase] = curHealth;
+                }
+            }
+            for (;i<=seconds;i++) chart[i] = curHealth;
+
+            return chart;
+        }
+
         private void GetRoles()
         {
             //tags: tank,healer,dps(power/condi)
@@ -2977,12 +3005,15 @@ namespace LuckParser.Controllers
 
         private string BuildGraphJson()
         {
-            List<List<PlayerChartDataDto>> chartData = new List<List<PlayerChartDataDto>>();
+            List<PhaseChartDataDto> chartData = new List<PhaseChartDataDto>();
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
-                chartData.Add(CreateDPSGraphData(i));
+                PhaseChartDataDto phaseData = new PhaseChartDataDto();
+                phaseData.bossHealth = CreateBossHealthData(i);
+                phaseData.players = CreateDPSGraphData(i);
+                chartData.Add(phaseData);
              }
-            return ToJson(chartData, typeof(List<List<PlayerChartDataDto>>));
+            return ToJson(chartData, typeof(List<PhaseChartDataDto>));
         }
 
         private string BuildLogData()

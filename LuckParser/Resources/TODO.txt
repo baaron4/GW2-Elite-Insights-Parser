@@ -1,5 +1,7 @@
 ﻿OK (General encounter infos)
 OK (Boss Panel)
+OK (DPS Graph Boss HP)
+Mechanics: Boss Mechanics
 Boss Tab
 	Boss itself
 		Condi Uptime
