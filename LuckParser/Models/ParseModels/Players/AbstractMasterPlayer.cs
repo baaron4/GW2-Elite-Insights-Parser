@@ -9,14 +9,14 @@ namespace LuckParser.Models.ParseModels
     public abstract class AbstractMasterPlayer : AbstractPlayer
     {
         // Boons
-        public readonly List<Boon> BoonToTrack = new List<Boon>();
+        public List<Boon> BoonToTrack { get; } = new List<Boon>();
         private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
         private readonly List<Dictionary<long, long>> _boonPresence = new List<Dictionary<long, long>>();
         private readonly List<Dictionary<long, long>> _condiPresence = new List<Dictionary<long, long>>();
         private readonly Dictionary<long, BoonsGraphModel> _boonPoints = new Dictionary<long, BoonsGraphModel>();
         private readonly Dictionary<long, Dictionary<int, string[]>> _boonExtra = new Dictionary<long, Dictionary<int, string[]>>();
         // dps graphs
-        public readonly Dictionary<int, List<Point>> DpsGraph = new Dictionary<int, List<Point>>();
+        public Dictionary<int, List<Point>> DpsGraph { get; } = new Dictionary<int, List<Point>>();
         // Minions
         private readonly Dictionary<string, Minions> _minions = new Dictionary<string, Minions>();
         // Replay
@@ -179,9 +179,9 @@ namespace LuckParser.Models.ParseModels
                                 for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
                                 {
                                     BoonLog curBL = loglist[cnt];
-                                    if (curBL.GetOverstack() == 0 && curBL.GetTime() + curBL.GetValue() > time)
+                                    if (curBL.Overstack == 0 && curBL.Time + curBL.Value > time)
                                     {
-                                        long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
+                                        long subtract = (curBL.Time + curBL.Value) - time;
                                         curBL.AddValue(-subtract);
                                         // add removed as overstack
                                         curBL.AddOverstack((uint)subtract);
@@ -200,9 +200,9 @@ namespace LuckParser.Models.ParseModels
                             {
                                 int cnt = loglist.Count - 1;
                                 BoonLog curBL = loglist[cnt];
-                                if (curBL.GetOverstack() == 0 && curBL.GetTime() + curBL.GetValue() > time)
+                                if (curBL.Overstack == 0 && curBL.Time + curBL.Value > time)
                                 {
-                                    long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
+                                    long subtract = (curBL.Time + curBL.Value) - time;
                                     curBL.AddValue(-subtract);
                                     // add removed as overstack
                                     curBL.AddOverstack((uint)subtract);
@@ -221,10 +221,10 @@ namespace LuckParser.Models.ParseModels
                                 for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
                                 {
                                     BoonLog curBL = loglist[cnt];
-                                    long ctime = curBL.GetTime() + curBL.GetValue();
-                                    if (curBL.GetOverstack() == 0 && ctime > time)
+                                    long ctime = curBL.Time + curBL.Value;
+                                    if (curBL.Overstack == 0 && ctime > time)
                                     {
-                                        long subtract = (curBL.GetTime() + curBL.GetValue()) - time;
+                                        long subtract = (curBL.Time + curBL.Value) - time;
                                         curBL.AddValue(-subtract);
                                         // add removed as overstack
                                         curBL.AddOverstack((uint)subtract);
@@ -257,7 +257,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        private void GenerateExtraBoonData(ParsedLog log, long boonid, BoonSimulationResult boonSimulation, List<PhaseData> phases)
+        private void GenerateExtraBoonData(ParsedLog log, long boonid, GenerationSimulationResult buffSimulationGeneration, List<PhaseData> phases)
         {
 
             switch (boonid)
@@ -268,17 +268,17 @@ namespace LuckParser.Models.ParseModels
                     for (int i = 0; i < phases.Count; i++)
                     {
                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].Start, phases[i].End);
-                        int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
-                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.FightData.InstID).Sum(x => x.GetDamage()), 1);
-                        List<DamageLog> effect = dmLogs.Where(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0).ToList();
-                        List<DamageLog> effectBoss = effect.Where(x => x.GetDstInstidt() == log.FightData.InstID).ToList();
-                        int damage = (int)(effect.Sum(x => x.GetDamage()) / 21.0);
-                        int bossDamage = (int)(effectBoss.Sum(x => x.GetDamage()) / 21.0);
+                        int totalDamage = Math.Max(dmLogs.Sum(x => x.Damage), 1);
+                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.DstInstId == log.FightData.InstID).Sum(x => x.Damage), 1);
+                        List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && x.IsCondi == 0).ToList();
+                        List<DamageLog> effectBoss = effect.Where(x => x.DstInstId == log.FightData.InstID).ToList();
+                        int damage = (int)(effect.Sum(x => x.Damage) / 21.0);
+                        int bossDamage = (int)(effectBoss.Sum(x => x.Damage) / 21.0);
                         double gain = Math.Round(100.0 * ((double)totalDamage / (totalDamage - damage) - 1.0), 2);
                         double gainBoss = Math.Round(100.0 * ((double)totalBossDamage / (totalBossDamage - bossDamage) - 1.0), 2);
-                        string gainText = effect.Count + " out of " + dmLogs.Count(x => x.IsCondi() == 0) + " hits <br> Pure Frost Spirit Damage: "
+                        string gainText = effect.Count + " out of " + dmLogs.Count(x => x.IsCondi == 0) + " hits <br> Pure Frost Spirit Damage: "
                                 + damage + "<br> Effective Damage Increase: " + gain + "%";
-                        string gainBossText = effectBoss.Count + " out of " + dmLogs.Count(x => x.GetDstInstidt() == log.FightData.InstID && x.IsCondi() == 0) + " hits <br> Pure Frost Spirit Damage: "
+                        string gainBossText = effectBoss.Count + " out of " + dmLogs.Count(x => x.DstInstId == log.FightData.InstID && x.IsCondi == 0) + " hits <br> Pure Frost Spirit Damage: "
                                 + bossDamage + "<br> Effective Damage Increase: " + gainBoss + "%";
                         _boonExtra[boonid][i] = new [] { gainText, gainBossText };
                     }
@@ -289,17 +289,17 @@ namespace LuckParser.Models.ParseModels
                     for (int i = 0; i < phases.Count; i++)
                     {
                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].Start, phases[i].End);
-                        int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
-                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.FightData.InstID).Sum(x => x.GetDamage()), 1);
-                        int effectCount = dmLogs.Count(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0);
-                        int effectBossCount = dmLogs.Count(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0 && x.GetDstInstidt() == log.FightData.InstID);
+                        int totalDamage = Math.Max(dmLogs.Sum(x => x.Damage), 1);
+                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.DstInstId == log.FightData.InstID).Sum(x => x.Damage), 1);
+                        int effectCount = dmLogs.Count(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && x.IsCondi == 0);
+                        int effectBossCount = dmLogs.Count(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && x.IsCondi == 0 && x.DstInstId == log.FightData.InstID);
                         int damage = (int)(effectCount * (325 + 3000 * 0.04));
                         int bossDamage = (int)(effectBossCount * (325 + 3000 * 0.04));
                         double gain = Math.Round(100.0 * ((double)(totalDamage + damage) / totalDamage - 1.0), 2);
                         double gainBoss = Math.Round(100.0 * ((double)(totalBossDamage + bossDamage) / totalBossDamage - 1.0), 2);
-                        string gainText = effectCount + " out of " + dmLogs.Count(x => x.IsCondi() == 0) + " hits <br> Estimated Soulcleave Damage: "
+                        string gainText = effectCount + " out of " + dmLogs.Count(x => x.IsCondi == 0) + " hits <br> Estimated Soulcleave Damage: "
                                 + damage + "<br> Estimated Damage Increase: " + gain + "%";
-                        string gainBossText = effectBossCount + " out of " + dmLogs.Count(x => x.GetDstInstidt() == log.FightData.InstID && x.IsCondi() == 0) + " hits <br> Estimated Soulcleave Damage: "
+                        string gainBossText = effectBossCount + " out of " + dmLogs.Count(x => x.DstInstId == log.FightData.InstID && x.IsCondi == 0) + " hits <br> Estimated Soulcleave Damage: "
                                 + bossDamage + "<br> Estimated Damage Increase: " + gainBoss + "%";
                         _boonExtra[boonid][i] = new [] { gainText, gainBossText };
                     }
@@ -310,17 +310,17 @@ namespace LuckParser.Models.ParseModels
                     for (int i = 0; i < phases.Count; i++)
                     {
                         List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].Start, phases[i].End);
-                        int totalDamage = Math.Max(dmLogs.Sum(x => x.GetDamage()), 1);
-                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.GetDstInstidt() == log.FightData.InstID).Sum(x => x.GetDamage()), 1);
-                        List<DamageLog> effect = dmLogs.Where(x => boonSimulation.GetBoonStackCount((int)x.GetTime()) > 0 && x.IsCondi() == 0).ToList();
-                        List<DamageLog> effectBoss = effect.Where(x => x.GetDstInstidt() == log.FightData.InstID).ToList();
-                        int damage = (int)(effect.Sum(x => x.GetDamage()) / 11.0);
-                        int bossDamage = (int)(effectBoss.Sum(x => x.GetDamage()) / 11.0);
+                        int totalDamage = Math.Max(dmLogs.Sum(x => x.Damage), 1);
+                        int totalBossDamage = Math.Max(dmLogs.Where(x => x.DstInstId == log.FightData.InstID).Sum(x => x.Damage), 1);
+                        List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && x.IsCondi == 0).ToList();
+                        List<DamageLog> effectBoss = effect.Where(x => x.DstInstId == log.FightData.InstID).ToList();
+                        int damage = (int)(effect.Sum(x => x.Damage) / 11.0);
+                        int bossDamage = (int)(effectBoss.Sum(x => x.Damage) / 11.0);
                         double gain = Math.Round(100.0 * ((double)totalDamage / (totalDamage - damage) - 1.0), 2);
                         double gainBoss = Math.Round(100.0 * ((double)totalBossDamage / (totalBossDamage - bossDamage) - 1.0), 2);
-                        string gainText = effect.Count + " out of " + dmLogs.Count(x => x.IsCondi() == 0) + " hits <br> Pure GoE Damage: "
+                        string gainText = effect.Count + " out of " + dmLogs.Count(x => x.IsCondi == 0) + " hits <br> Pure GoE Damage: "
                                 + damage + "<br> Effective Damage Increase: " + gain + "%";
-                        string gainBossText = effectBoss.Count + " out of " + dmLogs.Count(x => x.GetDstInstidt() == log.FightData.InstID && x.IsCondi() == 0) + " hits <br> Pure GoE Damage: "
+                        string gainBossText = effectBoss.Count + " out of " + dmLogs.Count(x => x.DstInstId == log.FightData.InstID && x.IsCondi == 0) + " hits <br> Pure GoE Damage: "
                                 + bossDamage + "<br> Effective Damage Increase: " + gainBoss + "%";
                         _boonExtra[boonid][i] = new [] { gainText, gainBossText };
                     }
@@ -375,9 +375,9 @@ namespace LuckParser.Models.ParseModels
                     }
                     var updateBoonPresence = boonIds.Contains(boonid);
                     var updateCondiPresence = boonid != 873 && condiIds.Contains(boonid);
-                    var simulation = simulator.GetSimulationResult();
+                    var generationSimulation = simulator.GenerationSimulationResult;
                     var graphSegments = new List<BoonsGraphModel.Segment>();
-                    foreach (var simul in simulation.Items)
+                    foreach (var simul in generationSimulation.Items)
                     {
                         for (int i = 0; i < phases.Count; i++)
                         {
@@ -388,22 +388,21 @@ namespace LuckParser.Models.ParseModels
                                 _boonDistribution[i].Add(boonid, distrib);
                             }
                             if (updateBoonPresence)
-                                Add(_boonPresence[i], boonid, simul.GetItemDuration(phase.Start, phase.End));
+                                Add(_boonPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                             if (updateCondiPresence)
-                                Add(_condiPresence[i], boonid, simul.GetItemDuration(phase.Start, phase.End));
+                                Add(_condiPresence[i], boonid, simul.GetClampedDuration(phase.Start, phase.End));
                             foreach (ushort src in simul.GetSrc())
                             {
                                 if (distrib.TryGetValue(src, out var toModify))
                                 {
-                                    toModify.Value += simul.GetDuration(src, phase.Start, phase.End);
-                                    toModify.Overstack += simul.GetOverstack(src, phase.Start, phase.End);
+                                    toModify.Value += simul.GetSrcDuration(src, phase.Start, phase.End);
                                     distrib[src] = toModify;
                                 }
                                 else
                                 {
                                     distrib.Add(src, new OverAndValue(
-                                        simul.GetDuration(src, phase.Start, phase.End),
-                                        simul.GetOverstack(src, phase.Start, phase.End)));
+                                        simul.GetSrcDuration(src, phase.Start, phase.End),
+                                        0));
                                 }
                             }
                         }
@@ -420,9 +419,32 @@ namespace LuckParser.Models.ParseModels
                             graphSegments.AddRange(simul.ToSegment());
                         }
                     }
+                    foreach (var simul in simulator.OverstackSimulationResult)
+                    {
+                        for (int i = 0; i < phases.Count; i++)
+                        {
+                            var phase = phases[i];
+                            if (!_boonDistribution[i].TryGetValue(boonid, out var distrib))
+                            {
+                                distrib = new Dictionary<ushort, OverAndValue>();
+                                _boonDistribution[i].Add(boonid, distrib);
+                            }
+                            if (distrib.TryGetValue(simul.Src, out var toModify))
+                            {
+                                toModify.Overstack += simul.GetOverstack(phase.Start, phase.End);
+                                distrib[simul.Src] = toModify;
+                            }
+                            else
+                            {
+                                distrib.Add(simul.Src, new OverAndValue(
+                                    0,
+                                    simul.GetOverstack(phase.Start, phase.End)));
+                            }
+                        }
+                    }
                     if (requireExtraData)
                     {
-                        GenerateExtraBoonData(log, boonid, simulation, phases);
+                        GenerateExtraBoonData(log, boonid, generationSimulation, phases);
                     }
                     if (graphSegments.Count > 0)
                     {
@@ -495,7 +517,7 @@ namespace LuckParser.Models.ParseModels
         }
         private void SetMinions(ParsedLog log)
         {
-            List<AgentItem> combatMinion = log.AgentData.GetNPCAgentList().Where(x => x.MasterAgent == Agent.Agent).ToList();
+            List<AgentItem> combatMinion = log.AgentData.NPCAgentList.Where(x => x.MasterAgent == Agent.Agent).ToList();
             Dictionary<string, Minions> auxMinions = new Dictionary<string, Minions>();
             foreach (AgentItem agent in combatMinion)
             {
@@ -530,7 +552,7 @@ namespace LuckParser.Models.ParseModels
             {
                 DamageLogs.AddRange(mins.GetDamageLogs(0, log, 0, log.FightData.FightDuration));
             }
-            DamageLogs.Sort((x, y) => x.GetTime() < y.GetTime() ? -1 : 1);
+            DamageLogs.Sort((x, y) => x.Time < y.Time ? -1 : 1);
         }
         protected override void SetCastLogs(ParsedLog log)
         {
@@ -555,7 +577,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (curCastLog != null)
                         {
-                            if (curCastLog.GetID() == c.SkillID)
+                            if (curCastLog.SkillId == c.SkillID)
                             {
                                 curCastLog.SetEndStatus(c.Value, c.IsActivation);
                                 curCastLog = null;

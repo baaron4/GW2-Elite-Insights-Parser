@@ -14,33 +14,33 @@ namespace LuckParser.Controllers
 
         public static void WriteCastingItem(StreamWriter sw, CastLog cl, SkillData skillList, long start, long end)
         {
-            GW2APISkill skill = skillList.Get(cl.GetID())?.ApiSkill;
-            string skillName = skill == null ? skillList.GetName(cl.GetID()) : skill.name;
+            GW2APISkill skill = skillList.Get(cl.SkillId)?.ApiSkill;
+            string skillName = skill == null ? skillList.GetName(cl.SkillId) : skill.name;
             float dur;
             if (skillName == "Dodge")
             {
                 dur = 0.5f;
             }
-            else if (cl.GetID() == SkillItem.WeaponSwapId)
+            else if (cl.SkillId == SkillItem.WeaponSwapId)
             {
                 skillName = "Weapon Swap";
                 dur = 0.1f;
             }
             else
             {
-                dur = cl.GetActDur() / 1000f;
+                dur = cl.ActualDuration / 1000f;
             }
             skillName = skillName.Replace("\"", "");
-            float offset = (cl.GetTime() - start) / 1000f;
+            float offset = (cl.Time - start) / 1000f;
             float xVal = dur;
             if (offset < 0.0f)
             {
                 xVal += offset;
             }
-            xVal = Math.Min(xVal, (end - cl.GetTime()) / 1000f);
+            xVal = Math.Min(xVal, (end - cl.Time) / 1000f);
             sw.Write("{");
             {
-                sw.Write(cl.GetID() == -5 ? "y: ['1']," : "y: ['1.5'],");
+                sw.Write(cl.SkillId == -5 ? "y: ['1']," : "y: ['1.5'],");
               
                 sw.Write(
                        "x: ['" + xVal + "']," +
@@ -62,15 +62,15 @@ namespace LuckParser.Controllers
                         "hoverlabel:{namelength:'-1'},");
                 sw.Write("marker: {");
                 {
-                        if (cl.EndActivation() == ParseEnum.Activation.CancelFire)
+                        if (cl.EndActivation == ParseEnum.Activation.CancelFire)
                         {
                             sw.Write("color: 'rgb(40,40,220)',");
                         }
-                        else if (cl.EndActivation() == ParseEnum.Activation.CancelCancel)
+                        else if (cl.EndActivation == ParseEnum.Activation.CancelCancel)
                         {
                             sw.Write("color: 'rgb(220,40,40)',");
                         }
-                        else if (cl.EndActivation() == ParseEnum.Activation.Reset)
+                        else if (cl.EndActivation == ParseEnum.Activation.Reset)
                         {
                             sw.Write("color: 'rgb(40,220,40)',");
                         }
@@ -81,11 +81,11 @@ namespace LuckParser.Controllers
                     sw.Write("width: '5',");
                     sw.Write("line:{");
                     {
-                            if (cl.StartActivation() == ParseEnum.Activation.Normal)
+                            if (cl.StartActivation == ParseEnum.Activation.Normal)
                             {
                                 sw.Write("color: 'rgb(20,20,20)',");
                             }
-                            else if (cl.StartActivation() == ParseEnum.Activation.Quickness)
+                            else if (cl.StartActivation == ParseEnum.Activation.Quickness)
                             {
                                 sw.Write("color: 'rgb(220,40,220)',");
                             }
@@ -102,10 +102,10 @@ namespace LuckParser.Controllers
         public static void WriteCastingItemIcon(StreamWriter sw, CastLog cl, SkillData skillList, long start, bool last)
         {
             string skillIcon = "";
-            GW2APISkill skill = skillList.Get(cl.GetID())?.ApiSkill;
-            if (skill != null && cl.GetID() != -2)
+            GW2APISkill skill = skillList.Get(cl.SkillId)?.ApiSkill;
+            if (skill != null && cl.SkillId != -2)
             {
-                float offset = (cl.GetTime() - start) / 1000f;
+                float offset = (cl.Time - start) / 1000f;
                 if (skill.slot != "Weapon_1")
                 {
                     skillIcon = skill.icon;
@@ -124,7 +124,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                string skillName = cl.GetID() == SkillItem.WeaponSwapId ? "Weapon Swap" : skillList.GetName(cl.GetID());
+                string skillName = cl.SkillId == SkillItem.WeaponSwapId ? "Weapon Swap" : skillList.GetName(cl.SkillId);
                 if (skillName == "Dodge")
                 {
                     skillIcon = GetLink("Dodge");
@@ -137,7 +137,7 @@ namespace LuckParser.Controllers
                 {
                     skillIcon = GetLink("Bandage");
                 }
-                else if (cl.GetID() == SkillItem.WeaponSwapId)
+                else if (cl.SkillId == SkillItem.WeaponSwapId)
                 {
                     skillIcon = GetLink("Swap");
                 }
@@ -146,7 +146,7 @@ namespace LuckParser.Controllers
                               "source: '" + skillIcon + "'," +
                               "xref: 'x'," +
                               "yref: 'y'," +
-                              "x: " + (cl.GetTime() - start) / 1000f + "," +
+                              "x: " + (cl.Time - start) / 1000f + "," +
                               "y: 0," +
                               "sizex: 1.1," +
                               "sizey: 1.1," +
@@ -265,9 +265,9 @@ namespace LuckParser.Controllers
                 int maxdamage = 0;
                 long condiID = condi.ID;
                 usedIDs.Add(condiID);
-                foreach (DamageLog dl in damageLogs.Where(x => x.GetID() == condiID))
+                foreach (DamageLog dl in damageLogs.Where(x => x.SkillId == condiID))
                 {
-                    int curdmg = dl.GetDamage();
+                    int curdmg = dl.Damage;
                     totaldamage += curdmg;
                     if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                     if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
@@ -312,14 +312,14 @@ namespace LuckParser.Controllers
             int glance = 0;
             foreach (DamageLog dl in damageLogs)
             {
-                int curdmg = dl.GetDamage();
+                int curdmg = dl.Damage;
                 totaldamage += curdmg;
                 if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                 if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
                 hits++;
-                ParseEnum.Result result = dl.GetResult();
+                ParseEnum.Result result = dl.Result;
                 if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
-                if (dl.IsFlanking() == 1) { flank++; }
+                if (dl.IsFlanking == 1) { flank++; }
             }
             avgdamage = (int)(totaldamage / (double)hits);
             string wasted = timeswasted > 0.0 ? Math.Round(timeswasted, 2) + "s" : "";

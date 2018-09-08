@@ -35,6 +35,7 @@ namespace LuckParser
 
         private void ParseLog(object logFile)
         {
+            UploadController up_controller = null;
             System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
@@ -52,6 +53,41 @@ namespace LuckParser
             {
                 throw new CancellationException(row, new FileNotFoundException("File does not exist", fInfo.FullName));
             }
+            //Upload Process
+            Task<string> DREITask = null;
+            Task<string> DRRHTask = null;
+            Task<string> RaidarTask = null;
+            string[] uploadresult = new string[3] { "", "", "" };
+            if (Properties.Settings.Default.UploadToDPSReports)
+            {
+               
+                if (up_controller == null)
+                {
+                    up_controller = new UploadController();
+                }
+                DREITask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsEI(fInfo));
+
+            }
+            if (Properties.Settings.Default.UploadToDPSReportsRH)
+            {
+              
+                if (up_controller == null)
+                {
+                    up_controller = new UploadController();
+                }
+                DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
+
+            }
+            if (Properties.Settings.Default.UploadToRaidar)
+            {
+               
+                if (up_controller == null)
+                {
+                    up_controller = new UploadController();
+                }
+                RaidarTask = Task.Factory.StartNew(() => up_controller.UploadRaidar(fInfo));
+
+            }
             try
             {
                 SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
@@ -65,6 +101,55 @@ namespace LuckParser
                     ParsedLog log = control.GetParsedLog();
                     Console.Write("Log Parsed");
                     //Creating File
+                    //Wait for Upload
+                    if (Properties.Settings.Default.UploadToDPSReports)
+                    {
+                       
+                        if (DREITask != null)
+                        {
+                            while (!DREITask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[0] = DREITask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[0] = "Failed to Define Upload Task";
+                        }
+                    }
+                    if (Properties.Settings.Default.UploadToDPSReportsRH)
+                    {
+                        
+                        if (DRRHTask != null)
+                        {
+                            while (!DRRHTask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[1] = DRRHTask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[1] = "Failed to Define Upload Task";
+                        }
+                    }
+                    if (Properties.Settings.Default.UploadToRaidar)
+                    {
+                        
+                        if (RaidarTask != null)
+                        {
+                            while (!RaidarTask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[2] = RaidarTask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[2] = "Failed to Define Upload Task";
+                        }
+                    }
                     //save location
                     DirectoryInfo saveDirectory;
                     if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
@@ -125,7 +210,7 @@ namespace LuckParser
                                     builder.CreateHTML(sw, saveDirectory.FullName);
                                 } else
                                 {
-                                    var builder = new HTMLBuilder(log, settings, statistics);
+                                    var builder = new HTMLBuilder(log, settings, statistics, uploadresult);
                                     builder.CreateHTML(sw);
                                 }
                             }
@@ -141,7 +226,7 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                             {
-                                var builder = new CSVBuilder(sw, ",",log, settings, statistics);
+                                var builder = new CSVBuilder(sw, ",",log, settings, statistics,uploadresult);
                                 builder.CreateCSV();
                             }
                         }
@@ -157,7 +242,7 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                             {
-                                var builder = new JSONBuilder(sw, log, settings, statistics);
+                                var builder = new JSONBuilder(sw, log, settings, statistics,uploadresult);
                                 builder.CreateJSON();
                             }
                         }

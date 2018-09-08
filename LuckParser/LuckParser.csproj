@@ -93,6 +93,7 @@
     <Compile Include="Controllers\HTMLHelper.cs" />
     <Compile Include="Controllers\ParseHelper.cs" />
     <Compile Include="Controllers\StatisticsCalculator.cs" />
+    <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GridRow.cs" />
     <Compile Include="MainForm.cs">
@@ -177,6 +178,7 @@
     <Compile Include="Models\ParseModels\GW2API\GW2APISkill.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItemDuration.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItemIntensity.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationOverstackItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationResult.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulator.cs" />
     <Compile Include="Models\ParseModels\Agents\Agent.cs" />

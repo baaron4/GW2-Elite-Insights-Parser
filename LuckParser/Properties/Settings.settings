@@ -71,6 +71,15 @@
     <Setting Name="ParseCombatReplay" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="UploadToDPSReports" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="UploadToDPSReportsRH" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="UploadToRaidar" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
     <Setting Name="SaveOutJSON" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>

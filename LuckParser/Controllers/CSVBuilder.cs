@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,6 +18,9 @@ namespace LuckParser.Controllers
         readonly Statistics _statistics;
         readonly StreamWriter _sw;
         readonly string _delimiter;
+
+        readonly string[] _uploadResult;
+
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
         {
             switches.CalculateBoons = true;
@@ -29,8 +32,8 @@ namespace LuckParser.Controllers
             switches.CalculateCombatReplay = true;
             switches.CalculateMechanics = true;
         }
-
-        public CSVBuilder(StreamWriter sw, String delimiter,ParsedLog log, SettingsContainer settings, Statistics statistics)
+       
+        public CSVBuilder(StreamWriter sw, String delimiter,ParsedLog log, SettingsContainer settings, Statistics statistics,string[] uploadresult)
         {
             _log = log;
             _sw = sw;
@@ -38,6 +41,8 @@ namespace LuckParser.Controllers
             _settings = settings;
 
             _statistics = statistics;
+
+            _uploadResult = uploadresult;
         }
         private void WriteCell(string content)
         {
@@ -83,11 +88,18 @@ namespace LuckParser.Controllers
             //header
             WriteLine(new [] { "Elite Insights Version", Application.ProductVersion });
             WriteLine(new [] { "ARC Version", _log.LogData.BuildVersion});
-            WriteLine(new [] { "Boss ID", _log.FightData.ID.ToString() });
+            WriteLine(new [] { "Boss ID", _log.Boss.InstID.ToString() });
             WriteLine(new [] { "Recorded By", _log.LogData.PoV.Split(':')[0] });
             WriteLine(new [] { "Time Start", _log.LogData.LogStart });
             WriteLine(new [] { "Time End", _log.LogData.LogEnd });
-            NewLine();
+            if (_settings.UploadToDPSReports || _settings.UploadToDPSReportsRH || _settings.UploadToRaidar)
+            {
+                WriteLine(new[] { "Links", _uploadResult[0], _uploadResult[1], _uploadResult[2] });
+            }
+            else
+            {
+                NewLine();
+            }
             NewLine();
             NewLine();
             NewLine();
@@ -420,7 +432,7 @@ namespace LuckParser.Controllers
                     string rate = "0";
                     string overstack = "0";
                     Statistics.FinalBoonUptime uptime = uptimes[boon.ID];
-                    if (uptime.Generation > 0)
+                    if (uptime.Generation > 0 || uptime.Overstack > 0)
                     {
                         if (boon.Type == Boon.BoonType.Duration)
                         {
@@ -469,7 +481,7 @@ namespace LuckParser.Controllers
                     string rate = "0";
                     string overstack = "0";
                     Statistics.FinalBoonUptime uptime = boons[boon.ID];
-                    if (uptime.Generation > 0)
+                    if (uptime.Generation > 0 || uptime.Overstack > 0)
                     {
                         if (boon.Type == Boon.BoonType.Duration)
                         {
@@ -518,7 +530,7 @@ namespace LuckParser.Controllers
                     string rate = "0";
                     string overstack = "0";
                     Statistics.FinalBoonUptime uptime = boons[boon.ID];
-                    if (uptime.Generation > 0)
+                    if (uptime.Generation > 0 || uptime.Overstack > 0)
                     {
                         if (boon.Type == Boon.BoonType.Duration)
                         {
@@ -566,7 +578,7 @@ namespace LuckParser.Controllers
                     string rate = "0";
                     string overstack = "0";
                     Statistics.FinalBoonUptime uptime = boons[boon.ID];
-                    if (uptime.Generation > 0)
+                    if (uptime.Generation > 0 || uptime.Overstack > 0)
                     {
                         if (boon.Type == Boon.BoonType.Duration)
                         {
@@ -604,7 +616,7 @@ namespace LuckParser.Controllers
                 WriteCell("Name");
                 foreach (Mechanic mech in presMech)
                 {
-                    WriteCell(mech.GetDescription());
+                    WriteCell(mech.Description);
                 }
                 NewLine();
 
@@ -613,7 +625,7 @@ namespace LuckParser.Controllers
                     WriteCell(p.Character);
                     foreach (Mechanic mech in presMech)
                     {
-                        int count = _log.MechanicData[mech].Count(x => x.GetPlayer().InstID == p.InstID && phase.InInterval(x.GetTime()));
+                        int count = _log.MechanicData[mech].Count(x => x.Player.InstID == p.InstID && phase.InInterval(x.Time));
                         WriteCell(count.ToString());
                     }
                     NewLine();
@@ -636,26 +648,26 @@ namespace LuckParser.Controllers
             {
                 mLogs.AddRange(mLs);
             }
-            mLogs = mLogs.OrderBy(x => x.GetTime()).ToList();
+            mLogs = mLogs.OrderBy(x => x.Time).ToList();
             int count = 0;
             WriteCell("Time");
             foreach (MechanicLog m in mLogs)
             {
-                WriteCell((m.GetTime() / 1000f).ToString());
+                WriteCell((m.Time / 1000f).ToString());
             }
             NewLine();
             count++;
             WriteCell("Player");
             foreach (MechanicLog m in mLogs)
             {
-                WriteCell(m.GetPlayer().Character);
+                WriteCell(m.Player.Character);
             }
             NewLine();
             count++;
             WriteCell("Mechanic");
             foreach (MechanicLog m in mLogs)
             {
-                WriteCell(m.GetDescription());
+                WriteCell(m.Description);
             }
             NewLine();
             count++;

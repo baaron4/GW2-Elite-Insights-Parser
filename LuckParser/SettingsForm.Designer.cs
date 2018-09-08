@@ -68,6 +68,10 @@
             this.chkLightTheme = new System.Windows.Forms.CheckBox();
             this.chkCombatReplay = new System.Windows.Forms.CheckBox();
             this.chkShowCl = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.UploadDPSReports_checkbox = new System.Windows.Forms.CheckBox();
+            this.UploadDRRH_check = new System.Windows.Forms.CheckBox();
+            this.UploadRaidar_check = new System.Windows.Forms.CheckBox();
             this.json = new System.Windows.Forms.Label();
             this.chkOutputJson = new System.Windows.Forms.CheckBox();
             this.chkIndentJSON = new System.Windows.Forms.CheckBox();
@@ -496,6 +500,49 @@
             this.chkShowCl.UseVisualStyleBackColor = true;
             this.chkShowCl.CheckedChanged += new System.EventHandler(this.ShowClCheckedChanged);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(614, 306);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 24);
+            this.label1.TabIndex = 42;
+            this.label1.Text = "Upload";
+            // 
+            // UploadDPSReports_checkbox
+            // 
+            this.UploadDPSReports_checkbox.AutoSize = true;
+            this.UploadDPSReports_checkbox.Location = new System.Drawing.Point(589, 333);
+            this.UploadDPSReports_checkbox.Name = "UploadDPSReports_checkbox";
+            this.UploadDPSReports_checkbox.Size = new System.Drawing.Size(196, 17);
+            this.UploadDPSReports_checkbox.TabIndex = 43;
+            this.UploadDPSReports_checkbox.Text = "Upload to DPSReports Elite Insights";
+            this.UploadDPSReports_checkbox.UseVisualStyleBackColor = true;
+            this.UploadDPSReports_checkbox.CheckedChanged += new System.EventHandler(this.UploadDPSReports_checkbox_CheckedChanged);
+            // 
+            // UploadDRRH_check
+            // 
+            this.UploadDRRH_check.AutoSize = true;
+            this.UploadDRRH_check.Location = new System.Drawing.Point(589, 356);
+            this.UploadDRRH_check.Name = "UploadDRRH_check";
+            this.UploadDRRH_check.Size = new System.Drawing.Size(193, 17);
+            this.UploadDRRH_check.TabIndex = 44;
+            this.UploadDRRH_check.Text = "Upload to DPSReports RaidHeroes";
+            this.UploadDRRH_check.UseVisualStyleBackColor = true;
+            this.UploadDRRH_check.CheckedChanged += new System.EventHandler(this.UploadDRRH_check_CheckedChanged);
+            // 
+            // UploadRaidar_check
+            // 
+            this.UploadRaidar_check.AutoSize = true;
+            this.UploadRaidar_check.Location = new System.Drawing.Point(589, 379);
+            this.UploadRaidar_check.Name = "UploadRaidar_check";
+            this.UploadRaidar_check.Size = new System.Drawing.Size(175, 17);
+            this.UploadRaidar_check.TabIndex = 45;
+            this.UploadRaidar_check.Text = "Upload to Raidar (Not Working)";
+            this.UploadRaidar_check.UseVisualStyleBackColor = true;
+            this.UploadRaidar_check.CheckedChanged += new System.EventHandler(this.UploadRaidar_check_CheckedChanged);
+            // 
             // json
             // 
             this.json.AutoSize = true;
@@ -548,7 +595,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(579, 524);
+            this.ClientSize = new System.Drawing.Size(853, 553);
+            this.Controls.Add(this.UploadRaidar_check);
+            this.Controls.Add(this.UploadDRRH_check);
+            this.Controls.Add(this.UploadDPSReports_checkbox);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.chkHtmlExperimental);
             this.Controls.Add(this.chkIndentJSON);
             this.Controls.Add(this.chkOutputJson);
@@ -640,6 +691,10 @@
         private System.Windows.Forms.CheckBox chkLightTheme;
         private System.Windows.Forms.CheckBox chkCombatReplay;
         private System.Windows.Forms.CheckBox chkShowCl;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox UploadDPSReports_checkbox;
+        private System.Windows.Forms.CheckBox UploadDRRH_check;
+        private System.Windows.Forms.CheckBox UploadRaidar_check;
         private System.Windows.Forms.Label json;
         private System.Windows.Forms.CheckBox chkOutputJson;
         private System.Windows.Forms.CheckBox chkIndentJSON;

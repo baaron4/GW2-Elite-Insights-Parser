@@ -20,6 +20,8 @@ namespace LuckParser.Controllers
         readonly Statistics _statistics;
         readonly StreamWriter _sw;
 
+        private readonly String[] _uploadLink;
+
         private Dictionary<long, string> _boonDict;
 
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
@@ -34,7 +36,7 @@ namespace LuckParser.Controllers
             switches.CalculateMechanics = true;
         }
 
-        public JSONBuilder(StreamWriter sw, ParsedLog log, SettingsContainer settings, Statistics statistics)
+        public JSONBuilder(StreamWriter sw, ParsedLog log, SettingsContainer settings, Statistics statistics, string[] UploadString)
         {
             _log = log;
             _sw = sw;
@@ -43,7 +45,8 @@ namespace LuckParser.Controllers
             _statistics = statistics;
 
             _boonDict = Boon.GetAll().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Select(y => y.Name).First());
-
+            
+           _uploadLink = UploadString;
         }
 
         public void CreateJSON()
@@ -80,6 +83,7 @@ namespace LuckParser.Controllers
             log.TimeEnd = _log.LogData.LogEnd;
             log.Duration = durationString;
             log.Success = _log.LogData.Success;
+            log.UploadLinks = _uploadLink;
         }
 
         private void SetMechanics(JsonLog log)
@@ -90,7 +94,7 @@ namespace LuckParser.Controllers
             {
                 mechanicLogs.AddRange(mLog);
             }
-            mechanicLogs = mechanicLogs.OrderBy(x => x.GetTime()).ToList();
+            mechanicLogs = mechanicLogs.OrderBy(x => x.Time).ToList();
             if (mechanicLogs.Any())
             {
                 log.Mechanics = new JsonLog.JsonMechanic[mechanicLogs.Count];
@@ -98,10 +102,10 @@ namespace LuckParser.Controllers
                 {
                     log.Mechanics[i] = new JsonLog.JsonMechanic
                     {
-                        Time = mechanicLogs[i].GetTime(),
-                        Player = mechanicLogs[i].GetPlayer().Character,
-                        Description = mechanicLogs[i].GetDescription(),
-                        Skill = mechanicLogs[i].GetSkill()
+                        Time = mechanicLogs[i].Time,
+                        Player = mechanicLogs[i].Player.Character,
+                        Description = mechanicLogs[i].Description,
+                        Skill = mechanicLogs[i].Skill
                     };
                 }
             }

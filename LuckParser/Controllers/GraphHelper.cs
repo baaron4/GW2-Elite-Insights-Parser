@@ -42,13 +42,13 @@ namespace LuckParser.Controllers
             int totalDamage = 0;
             foreach (DamageLog dl in damageLogs)
             {
-                int time = (int)(dl.GetTime() - phase.Start);
+                int time = (int)(dl.Time - phase.Start);
                 // fill
                 for (; totalTime < time; totalTime++)
                 {
                     dmgListFull[totalTime] = totalDamage;
                 }
-                totalDamage += dl.GetDamage();
+                totalDamage += dl.Damage;
                 dmgListFull[totalTime] = totalDamage;
             }
             // fill

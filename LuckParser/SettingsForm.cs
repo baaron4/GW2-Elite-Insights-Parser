@@ -81,6 +81,10 @@ namespace LuckParser
             chkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
             chkOutputJson.Checked = Properties.Settings.Default.SaveOutJSON;
             chkIndentJSON.Checked = Properties.Settings.Default.IndentJSON;
+            UploadDPSReports_checkbox.Checked = Properties.Settings.Default.UploadToDPSReports;
+            UploadDRRH_check.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
+            UploadRaidar_check.Checked = Properties.Settings.Default.UploadToRaidar;
+
             chkHtmlExperimental.Checked = Properties.Settings.Default.NewHtmlMode;
             toolTip1.SetToolTip(chkHtmlExperimental, "Alternative method to build the HTML page.\nThe page is much smaller, and some static CSS and JS scripts are written in an external file.");
         }
@@ -199,6 +203,21 @@ namespace LuckParser
         private void ShowClCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ClDPSGraphTotals = chkShowCl.Checked;
+        }
+
+        private void UploadDPSReports_checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.UploadToDPSReports = UploadDPSReports_checkbox.Checked;
+        }
+
+        private void UploadRaidar_check_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.UploadToRaidar = UploadRaidar_check.Checked;
+        }
+
+        private void UploadDRRH_check_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.UploadToDPSReportsRH = UploadDRRH_check.Checked;
         }
 
         private void OutputJSONCheckedChanged(object sender, EventArgs e)

@@ -23,6 +23,9 @@ namespace LuckParser.Models.DataModels
         public readonly bool LightTheme;
         public readonly bool ParseCombatReplay;
         public readonly int PollingRate = 32;
+        public readonly bool UploadToDPSReports;
+        public readonly bool UploadToDPSReportsRH;
+        public readonly bool UploadToRaidar;
         public readonly bool IndentJSON;
 
         public SettingsContainer(Settings settings)
@@ -45,6 +48,10 @@ namespace LuckParser.Models.DataModels
             Show30s = settings.Show30s;
             LightTheme = settings.LightTheme;
             ParseCombatReplay = settings.ParseCombatReplay;
+            UploadToDPSReports = settings.UploadToDPSReports;
+            UploadToDPSReportsRH = settings.UploadToDPSReportsRH;
+            UploadToRaidar = settings.UploadToRaidar;
+
             IndentJSON = settings.IndentJSON;
         }
     }
