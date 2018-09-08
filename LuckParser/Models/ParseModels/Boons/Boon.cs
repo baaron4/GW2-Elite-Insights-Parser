@@ -69,7 +69,7 @@ namespace LuckParser.Models.ParseModels
         public readonly string Link;
         private readonly Logic _logic;
 
-        private Boon(string name, int id, BoonSource source, BoonType type, int capacity, BoonEnum nature, RemoveType removeType, Logic logic, string link = "")
+        private Boon(string name, int id, BoonSource source, BoonType type, int capacity, BoonEnum nature, RemoveType removeType, Logic logic, string link)
         {
             Name = name;
             ID = id;
@@ -381,27 +381,27 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Bounding Dodger", 33162, BoonSource.Thief, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/3/30/Bounding_Dodger.png"),
                 //MESMER
                 //signets
-                new Boon("Signet of the Ether (Passive)", 21751, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Signet of Domination (Passive)",10231, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Signet of Illusions (Passive)",10246, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Signet of Inspiration (Passive)",10235, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Signet of Midnight (Passive)",10233, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Signet of Humility (Passive)",30739, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Signet of the Ether", 21751, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/7/7a/Signet_of_the_Ether.png"),
+                new Boon("Signet of Domination",10231, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/3/3b/Signet_of_Domination.png"),
+                new Boon("Signet of Illusions",10246, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Signet_of_Illusions.png"),
+                new Boon("Signet of Inspiration",10235, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/e/ed/Signet_of_Inspiration.png"),
+                new Boon("Signet of Midnight",10233, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/2/24/Signet_of_Midnight.png"),
+                new Boon("Signet of Humility",30739, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/b/b5/Signet_of_Humility.png"),
                 //skills
-                new Boon("Distortion",10243, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
-                new Boon("Blur", 10335 , BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Mirror",10357, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Echo",29664, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Illusion of Life",-1, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Distortion",10243, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/2/22/Distortion.png"),
+                new Boon("Blur", 10335 , BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/2/22/Distortion.png"),
+                new Boon("Mirror",10357, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/b/b8/Mirror.png"),
+                new Boon("Echo",29664, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/c/ce/Echo.png"),
+                //new Boon("Illusion of Life",-1, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
                 //new Boon("Time Block",30134, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff), What is this?
-                new Boon("Time Echo",29582, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
-                new Boon("Time Anchored",30136, BoonSource.Mesmer, BoonType.Duration, 3, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override),
+                new Boon("Time Echo",29582, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Deja_Vu.png"),
+                new Boon("Time Anchored",30136, BoonSource.Mesmer, BoonType.Duration, 3, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Continuum_Split.png"),
                 //traits
-                new Boon("Fencer's Finesse", 30426 , BoonSource.Mesmer, BoonType.Intensity, 10, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
-                new Boon("Illusionary Defense",49099, BoonSource.Mesmer, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
-                new Boon("Compounding Power",49058, BoonSource.Mesmer, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
-                new Boon("Phantasmal Force", 44691 , BoonSource.Mesmer, BoonType.Intensity, 25, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
-                new Boon("Mirage Cloak",40408, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override),
+                new Boon("Fencer's Finesse", 30426 , BoonSource.Mesmer, BoonType.Intensity, 10, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png"),
+                new Boon("Illusionary Defense",49099, BoonSource.Mesmer, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/e/e0/Illusionary_Defense.png"),
+                new Boon("Compounding Power",49058, BoonSource.Mesmer, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Compounding_Power.png"),
+                new Boon("Phantasmal Force", 44691 , BoonSource.Mesmer, BoonType.Intensity, 25, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/5f/Mistrust.png"),
+                new Boon("Mirage Cloak",40408, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/a/a5/Mirage_Cloak_%28effect%29.png"),
                 //NECROMANCER
                 //forms
                 new Boon("Lich Form",10631, BoonSource.Necromancer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Manual, Logic.Override, "https://wiki.guildwars2.com/images/a/ab/Lich_Form.png"),
