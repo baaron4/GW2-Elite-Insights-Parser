@@ -504,23 +504,23 @@ namespace LuckParser.Controllers
                         sw.Write("<td>" + player.Character + "</td>");
                         sw.Write("<td>" + player.Account.TrimStart(':') + "</td>");
                         //Boss dps
-                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.BossDamage + " dmg \">" + dps.BossDps + "</span>" + "</td>");
-                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.BossPowerDamage + " dmg \">" + dps.BossPowerDps + "</span>" + "</td>");
-                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.BossCondiDamage + " dmg \">" + dps.BossCondiDps + "</span>" + "</td>");
+                        sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.BossDamage + " dmg \">" + dps.BossDps + "</td>");
+                        sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.BossPowerDamage + " dmg \">" + dps.BossPowerDps + "</td>");
+                        sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.BossCondiDamage + " dmg \">" + dps.BossCondiDps + "</td>");
                         //All DPS
-                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.AllDamage + " dmg \">" + dps.AllDps + "</span>" + "</td>");
-                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.AllPowerDamage + " dmg \">" + dps.AllPowerDps + "</span>" + "</td>");
-                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.AllCondiDamage + " dmg \">" + dps.AllCondiDps + "</span>" + "</td>");
+                        sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.AllDamage + " dmg \">" + dps.AllDps + "</td>");
+                        sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.AllPowerDamage + " dmg \">" + dps.AllPowerDps + "</td>");
+                        sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.AllCondiDamage + " dmg \">" + dps.AllCondiDps + "</td>");
                         sw.Write("<td>" + stats.DownCount + "</td>");
                         TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
                         long fightDuration = phase.GetDuration();
                         if (timedead > TimeSpan.Zero)
                         {
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100,1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100,1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</td>");
                         }
                         else
                         {
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died\"> 0</span>" + " </td>");
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died\"> 0</td>");
                         }
                     }
                     sw.Write("</tr>");
@@ -539,12 +539,12 @@ namespace LuckParser.Controllers
                                 sw.Write("<td></td>");
                                 sw.Write("<td>Group " + groupNum + "</td>");
                                 sw.Write("<td></td>");
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[8])) + " dmg \">" + groupList.Sum(c => int.Parse(c[7])) + "</span>" + "</td>");
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[10])) + " dmg \">" + groupList.Sum(c => int.Parse(c[9])) + "</span>" + "</td>");
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[12])) + " dmg \">" + groupList.Sum(c => int.Parse(c[11])) + "</span>" + "</td>");
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[2])) + " dmg \">" + groupList.Sum(c => int.Parse(c[1])) + "</span>" + "</td>");
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[4])) + " dmg \">" + groupList.Sum(c => int.Parse(c[3])) + "</span>" + "</td>");
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[6])) + " dmg \">" + groupList.Sum(c => int.Parse(c[5])) + "</span>" + "</td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[8])) + " dmg \">" + groupList.Sum(c => int.Parse(c[7])) + "</td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[10])) + " dmg \">" + groupList.Sum(c => int.Parse(c[9])) + "</td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[12])) + " dmg \">" + groupList.Sum(c => int.Parse(c[11])) + "</td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[2])) + " dmg \">" + groupList.Sum(c => int.Parse(c[1])) + "</td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[4])) + " dmg \">" + groupList.Sum(c => int.Parse(c[3])) + "</td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => int.Parse(c[6])) + " dmg \">" + groupList.Sum(c => int.Parse(c[5])) + "</td>");
                                 sw.Write("<td></td>");
                                 sw.Write("<td></td>");
                             }
@@ -556,12 +556,12 @@ namespace LuckParser.Controllers
                             sw.Write("<td></td>");
                             sw.Write("<td>Total</td>");
                             sw.Write("<td></td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[8])) + " dmg \">" + footerList.Sum(c => int.Parse(c[7])) + "</span>" + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[10])) + " dmg \">" + footerList.Sum(c => int.Parse(c[9])) + "</span>" + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[12])) + " dmg \">" + footerList.Sum(c => int.Parse(c[11])) + "</span>" + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[2])) + " dmg \">" + footerList.Sum(c => int.Parse(c[1])) + "</span>" + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[4])) + " dmg \">" + footerList.Sum(c => int.Parse(c[3])) + "</span>" + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[6])) + " dmg \">" + footerList.Sum(c => int.Parse(c[5])) + "</span>" + "</td>");
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[8])) + " dmg \">" + footerList.Sum(c => int.Parse(c[7])) + "</td>");
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[10])) + " dmg \">" + footerList.Sum(c => int.Parse(c[9])) + "</td>");
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[12])) + " dmg \">" + footerList.Sum(c => int.Parse(c[11])) + "</span>" + "</td>");
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[2])) + " dmg \">" + footerList.Sum(c => int.Parse(c[1])) + "</td>");
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[4])) + " dmg \">" + footerList.Sum(c => int.Parse(c[3])) + "</td>");
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => int.Parse(c[6])) + " dmg \">" + footerList.Sum(c => int.Parse(c[5])) + "</td>");
                             sw.Write("<td></td>");
                             sw.Write("<td></td>");
                         }
@@ -779,48 +779,48 @@ namespace LuckParser.Controllers
                                 + player.Prof+ "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
                             sw.Write("<td>" + player.Character + "</td>");
 
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.CriticalRateBoss + " out of " + stats.CritablePowerLoopCountBoss 
                                 + " critable hits<br> Total Damage Effected by Crits: " + stats.CriticalDmgBoss 
                                 + " \">" + Math.Round((Double)(stats.CriticalRateBoss) / stats.CritablePowerLoopCountBoss * 100,1) 
-                                + "%</span>" + "</td>");//crit
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + "%</td>");//crit
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.ScholarRateBoss + " out of " + stats.PowerLoopCountBoss + " hits <br> Pure Scholar Damage: " 
                                 + stats.ScholarDmgBoss + "<br> Effective Physical Damage Increase: " 
                                 + Math.Round(100.0* (dps.PlayerBossPowerDamage / (Double)(dps.PlayerBossPowerDamage - stats.ScholarDmgBoss) - 1.0), 3) 
-                                + "% \">" + Math.Round((Double)(stats.ScholarRateBoss) / stats.PowerLoopCountBoss * 100,1) + "%</span>" + "</td>");//scholar
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
+                                + "% \">" + Math.Round((Double)(stats.ScholarRateBoss) / stats.PowerLoopCountBoss * 100,1) + "%</td>");//scholar
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
                                 + stats.MovingRateBoss + " out of " + stats.PowerLoopCountBoss + " hits <br> Pure Seaweed Damage: "
                                 + stats.MovingDamageBoss + "<br> Effective Physical Damage Increase: "
                                 + Math.Round(100.0 * (dps.PlayerBossPowerDamage / (Double)(dps.PlayerBossPowerDamage - stats.MovingDamageBoss) - 1.0), 3)
-                                + "% \">" + Math.Round((Double)(stats.MovingRateBoss) / stats.PowerLoopCountBoss * 100, 1) + "%</span>" + "</td>");//sws
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + "% \">" + Math.Round((Double)(stats.MovingRateBoss) / stats.PowerLoopCountBoss * 100, 1) + "%</td>");//sws
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.FlankingRateBoss + " out of " + stats.PowerLoopCountBoss + " hits \">" 
-                                + Math.Round(stats.FlankingRateBoss / (Double)stats.PowerLoopCountBoss * 100,1) + "%</span>" + "</td>");//flank
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + Math.Round(stats.FlankingRateBoss / (Double)stats.PowerLoopCountBoss * 100,1) + "%</td>");//flank
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                 + stats.GlanceRateBoss + " out of " + stats.PowerLoopCountBoss + " hits \">" 
-                                + Math.Round(stats.GlanceRateBoss / (Double)stats.PowerLoopCountBoss * 100,1) + "%</span>" + "</td>");//glance
+                                + Math.Round(stats.GlanceRateBoss / (Double)stats.PowerLoopCountBoss * 100,1) + "%</td>");//glance
                             sw.Write("<td>" + stats.MissedBoss + "</td>");//misses
                             sw.Write("<td>" + stats.InterruptsBoss + "</td>");//interrupts
                             sw.Write("<td>" + stats.InvulnedBoss + "</td>");//dmg invulned
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                + stats.Wasted + "cancels \">" + stats.TimeWasted + "</span>" + "</td>");//time wasted
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                + stats.Saved + "cancels \">" + stats.TimeSaved + "</span>" + "</td>");//timesaved
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.Wasted + "cancels \">" + stats.TimeWasted + "</td>");//time wasted
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                + stats.Saved + "cancels \">" + stats.TimeSaved + "</td>");//timesaved
                             sw.Write("<td>" + stats.SwapCount + "</td>");//w swaps
                             sw.Write("<td>" + Math.Round(stats.StackDist,2) + "</td>");//stack dist
                             sw.Write("<td>" + stats.DownCount + "</td>");//downs
                             long fightDuration = phase.GetDuration();
                             if (timedead > TimeSpan.Zero)
                             {
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
                                     + timedead + "(" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100,1) + "% Alive) \">" 
-                                    + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                                    + timedead.Minutes + " m " + timedead.Seconds + " s</td>");
                             }
                             else
                             {
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\"" +
-                                    " title=\"Never died\"> </span>" + " </td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\"" +
+                                    " title=\"Never died\"> </td>");
                             }
                         }
                         sw.Write("</tr>");
@@ -887,7 +887,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Blocked</th>");
                         sw.Write("<th>Invulned</th>");
                         sw.Write("<th>Evaded</th>");
-                        sw.Write("<th><span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Dodges or Mirage Cloak \">Dodges</span></th>");
+                        sw.Write("<th data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Dodges or Mirage Cloak \">Dodges</th>");
                         sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Downs") + "\" alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
                         sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Dead") + "\" alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\">" + "</th>");
                     }
@@ -923,7 +923,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + defenses.DamageTaken + "</td>");//dmg taken
                             sw.Write("<td>" + defenses.DamageBarrier + "</td>");//dmgbarrier
                             //sw.Write("<td>" + defenses.allHealReceived + "</td>");//dmgbarrier
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + 0 + "Damage \">" + defenses.BlockedCount + "</span>" + "</td>");//Blocks  
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + 0 + "Damage \">" + defenses.BlockedCount + "</td>");//Blocks  
                             sw.Write("<td>" + defenses.InvulnedCount + "</td>");//invulns
                             sw.Write("<td>" + defenses.EvadedCount + "</td>");// evades
                             sw.Write("<td>" + stats.DodgeCount + "</td>");//dodges
@@ -931,11 +931,11 @@ namespace LuckParser.Controllers
                             long fightDuration = phase.GetDuration("s");
                             if (timedead > TimeSpan.Zero)
                             {
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100,1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + "(" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100,1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</td>");
                             }
                             else
                             {
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </span>" + " </td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died 100% Alive) \"> </td>");
                             }
                         }
                         sw.Write("</tr>");
@@ -1058,8 +1058,8 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + " \" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
                             sw.Write("<td>" + player.Character + "</td>");
                             //sw.Write("<td>" + support.allHeal +"</td>");                                              
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.CondiCleanseTime + " seconds \">" + support.CondiCleanse + "</span>" + "</td>");//condicleanse                                                                                                                                                                   //defstats += "<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + stats[6] + " Evades \">" + stats[7] + "dmg</span>" + "</td>";//evades
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.ResurrectTime + " seconds \">" + support.Resurrects + "</span>" + "</td>");//res
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.CondiCleanseTime + " seconds \">" + support.CondiCleanse + "</td>");
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + support.ResurrectTime + " seconds \">" + support.Resurrects + "</td>");//res
                         }
                         sw.Write("</tr>");
                     }
@@ -1078,8 +1078,8 @@ namespace LuckParser.Controllers
                                 sw.Write("<td></td>");
                                 sw.Write("<td>Group " + groupNum + "</td>");
                                 //sw.Write("<td>" + groupList.Sum(c => int.Parse(c[5])).ToString() + "</td>");
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + groupList.Sum(c => int.Parse(c[2])).ToString() + " condis</span>" + "</td>");
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + groupList.Sum(c => int.Parse(c[4])) + "</span>" + "</td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + groupList.Sum(c => int.Parse(c[2])).ToString() + " condis</td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + groupList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + groupList.Sum(c => int.Parse(c[4])) + "</td>");
                             }
                             sw.Write("</tr>");
                         }
@@ -1089,8 +1089,8 @@ namespace LuckParser.Controllers
                             sw.Write("<td></td>");
                             sw.Write("<td>Total</td>");
                             //sw.Write("<td>" + footerList.Sum(c => int.Parse(c[5])).ToString() + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + footerList.Sum(c => int.Parse(c[2])).ToString() + " condis</span>" + "</td>");
-                            sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + footerList.Sum(c => int.Parse(c[4])).ToString() + "</span>" + "</td>");
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[1])).ToString() + " seconds \">" + footerList.Sum(c => int.Parse(c[2])).ToString() + " condis</td>");
+                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + footerList.Sum(c => Double.Parse(c[3])).ToString() + " seconds \">" + footerList.Sum(c => int.Parse(c[4])).ToString() + "</td>");
                         }
                         sw.Write("</tr>");
                     }
@@ -1957,23 +1957,6 @@ namespace LuckParser.Controllers
                         string style = cl.EndActivation == ParseEnum.Activation.CancelCancel ? "style=\"outline: "+ borderSize + " solid red\"" : "";
                         int imageSize = simpleRotSize - (style.Length > 0 ? (simpleRotSize == 30 ? 3 : 1) : 0);
                         sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img " + style + "src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.Time + "ms " + "Dur: " + cl.ActualDuration + "ms \" height=\"" + imageSize + "\" width=\"" + imageSize + "\"></div></span>");
-                        /*if (apiskill.slot != "Weapon_1")
-                        {
-                            if (autosCount > 0 && settings.ShowAutos)
-                            {
-                                sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + autoSkill.icon + "\" data-toggle=\"tooltip\" title= \"" + autoSkill.name + "[Auto Attack] x" + autosCount + " \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
-                                autosCount = 0;
-                            }
-                            sw.Write("<span class=\"rot-skill\"><div class=\"rot-crop\"><img src=\"" + apiskill.icon + "\" data-toggle=\"tooltip\" title= \"" + apiskill.name + " Time: " + cl.getTime() + "ms " + "Dur: " + cl.getActDur() + "ms \" height=\"" + simpleRotSize + "\" width=\"" + simpleRotSize + "\"></div></span>");
-                        }
-                        else
-                        {
-                            if (autosCount == 0)
-                            {
-                                autoSkill = apiskill;
-                            }
-                            autosCount++;
-                        }*/
                     }
                     else
                     {
@@ -2645,7 +2628,7 @@ namespace LuckParser.Controllers
                             sw.Write("<th>Player</th>");
                             foreach (Mechanic mech in presMech)
                             {
-                                sw.Write("<th><span data-toggle=\"tooltip\" title=\""+ mech.Description +"\">" + mech.ShortName + "</span></th>");
+                                sw.Write("<th data-toggle=\"tooltip\" title=\""+ mech.Description +"\">" + mech.ShortName + "</th>");
                             }
                         }
                         sw.Write("</tr>");
@@ -2677,8 +2660,8 @@ namespace LuckParser.Controllers
 
                                     if (filterCount > 0)
                                     {
-                                        sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
-                               + count + " times (multi hits)\">"+ (count - filterCount) + "</span>" + "</td>");
+                                        sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\""
+                               + count + " times (multi hits)\">"+ (count - filterCount) + "</td>");
                                        // sw.Write("<td>" + count + "</td>");
                                     }
                                     else
@@ -2730,7 +2713,7 @@ namespace LuckParser.Controllers
                             sw.Write("<th>Enemy</th>");
                             foreach (Mechanic mech in presEnemyMech)
                             {
-                                sw.Write("<th><span data-toggle=\"tooltip\" title=\"" + mech.Description + "\">" + mech.ShortName + "</span></th>");
+                                sw.Write("<th data-toggle=\"tooltip\" title=\"" + mech.Description + "\">" + mech.ShortName + "</th>");
                             }
                         }
                         sw.Write("</tr>");
@@ -3477,8 +3460,8 @@ namespace LuckParser.Controllers
                                     string name = phases[i].Name;
                                     sw.Write("<li  class=\"nav-item\">" +
                                             "<a class=\"nav-link " + active + "\" data-toggle=\"tab\" href=\"#phase" + i + "\">" +
-                                                "<span data-toggle=\"tooltip\" title=\"" + phases[i].GetDuration("s") + " seconds\">" + name + "</span>" +
-                                            "</a>" +
+                                                "<span data-toggle=\"tooltip\" title=\"" + phases[i].GetDuration("s") + " seconds\">" + name + "</span>" + 
+                                                "</a>" +
                                         "</li>");
                                 }
                                 if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
