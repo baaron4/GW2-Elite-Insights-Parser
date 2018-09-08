@@ -358,5 +358,17 @@ namespace LuckParser.Properties {
                 this["IndentJSON"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NewHtmlMode {
+            get {
+                return ((bool)(this["NewHtmlMode"]));
+            }
+            set {
+                this["NewHtmlMode"] = value;
+            }
+        }
     }
 }

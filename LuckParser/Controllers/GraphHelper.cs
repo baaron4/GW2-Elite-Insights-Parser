@@ -10,7 +10,7 @@ namespace LuckParser.Controllers
     {
         public static SettingsContainer Settings;
 
-        public enum GraphMode { Full, S10, S30 };
+        public enum GraphMode { Full, S10, S30, S1 };
 
         private static List<Point> GetDPSGraph(ParsedLog log, AbstractMasterPlayer p, int phaseIndex, PhaseData phase, ushort dstid, GraphMode mode)
         {
@@ -21,6 +21,7 @@ namespace LuckParser.Controllers
             }
 
             List<Point> dmgList = new List<Point>();
+            List<Point> dmgList1s = new List<Point>();
             List<Point> dmgList10s = new List<Point>();
             List<Point> dmgList30s = new List<Point>();
             List<DamageLog> damageLogs;
@@ -75,12 +76,15 @@ namespace LuckParser.Controllers
                 }
             }*/
             dmgList.Add(new Point(0, 0));
+            dmgList1s.Add(new Point(0, 0));
             dmgList10s.Add(new Point(0, 0));
             dmgList30s.Add(new Point(0, 0));
             for (int i = 1; i <= phase.GetDuration("s"); i++)
             {
                 int limitId = 0;
                 dmgList.Add(new Point(i, (int)Math.Round((dmgListFull[1000 * i] - dmgListFull[1000 * limitId]) / (i - limitId))));
+                limitId = i - 1;
+                dmgList1s.Add(new Point(i, (int)Math.Round((dmgListFull[1000 * i] - dmgListFull[1000 * limitId]) / (i - limitId))));
                 if (Settings.Show10s)
                 {
                     limitId = Math.Max(i - 10, 0);
@@ -94,6 +98,8 @@ namespace LuckParser.Controllers
             }
             int id = (phaseIndex + "_" + dstid + "_" + GraphMode.Full).GetHashCode();
             p.DpsGraph[id] = dmgList;
+            id = (phaseIndex + "_" + dstid + "_" + GraphMode.S1).GetHashCode();
+            p.DpsGraph[id] = dmgList1s;
             if (Settings.Show10s)
             {
                 id = (phaseIndex + "_" + dstid + "_" + GraphMode.S10).GetHashCode();

@@ -85,6 +85,8 @@ namespace LuckParser
             UploadDRRH_check.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
             UploadRaidar_check.Checked = Properties.Settings.Default.UploadToRaidar;
 
+            chkHtmlExperimental.Checked = Properties.Settings.Default.NewHtmlMode;
+            toolTip1.SetToolTip(chkHtmlExperimental, "Alternative method to build the HTML page.\nThe page is much smaller, and some static CSS and JS scripts are written in an external file.");
         }
 
         private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)
@@ -226,6 +228,11 @@ namespace LuckParser
         private void chkIndentJSONCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.IndentJSON = chkIndentJSON.Checked;
+        }
+
+        private void chkHtmlExperimental_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.NewHtmlMode = chkHtmlExperimental.Checked;
         }
     }
 }

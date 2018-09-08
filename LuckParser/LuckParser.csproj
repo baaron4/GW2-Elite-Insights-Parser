@@ -67,6 +67,7 @@
     <Reference Include="System.Net.Http.Formatting, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.4\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -82,6 +83,7 @@
     <Compile Include="ConsoleProgram.cs" />
     <Compile Include="Controllers\CSVHelper.cs" />
     <Compile Include="Controllers\JSONBuilder.cs" />
+    <Compile Include="Controllers\HTMLBuilderNew.cs" />
     <Compile Include="Controllers\Parser.cs" />
     <Compile Include="Controllers\CSVBuilder.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
@@ -128,6 +130,18 @@
     <Compile Include="Models\DataModels\ParsedLog.cs" />
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
     <Compile Include="Models\DataModels\Statistics.cs" />
+    <Compile Include="Models\HtmlModels\DmgDistributionDto.cs" />
+    <Compile Include="Models\HtmlModels\PhaseChartDataDto.cs" />
+    <Compile Include="Models\HtmlModels\PlayerChartDataDto.cs" />
+    <Compile Include="Models\HtmlModels\SkillDto.cs" />
+    <Compile Include="Models\HtmlModels\MechanicDto.cs" />
+    <Compile Include="Models\HtmlModels\BoonDto.cs" />
+    <Compile Include="Models\HtmlModels\BoonData.cs" />
+    <Compile Include="Models\HtmlModels\PhaseDto.cs" />
+    <Compile Include="Models\HtmlModels\LogDataDto.cs" />
+    <Compile Include="Models\HtmlModels\GraphDto.cs" />
+    <Compile Include="Models\HtmlModels\PlayerDetailsDto.cs" />
+    <Compile Include="Models\HtmlModels\PlayerDto.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\Actor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\CircleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\DoughnutActor.cs" />
@@ -207,6 +221,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
@@ -239,6 +254,22 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="LI.ico" />
+    <Content Include="Resources\TODO.txt" />
+    <None Include="Resources\tmplCompTable.html" />
+    <None Include="Resources\tmplMechanicTable.html" />
+    <None Include="Resources\tmplDmgDistTable.html" />
+    <None Include="Resources\tmplSupTable.html" />
+    <None Include="Resources\tmplDpsTable.html" />
+    <None Include="Resources\tmplDefTable.html" />
+    <None Include="Resources\tmplBoonTable.html" />
+    <None Include="Resources\flomix-ei.js" />
+    <None Include="Resources\flomix-ei.css" />
+    <None Include="Resources\tmplTabs.html" />
+    <None Include="Resources\tmplPlayerCells.html" />
+    <None Include="Resources\tmplDmgTable.html">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Resources\template.html" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">

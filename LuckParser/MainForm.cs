@@ -269,8 +269,16 @@ namespace LuckParser
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs))
                         {
-                            var builder = new HTMLBuilder(log, settings, statistics,uploadresult);
-                            builder.CreateHTML(sw);
+                            if (Properties.Settings.Default.NewHtmlMode)
+                            {
+                                var builder = new HTMLBuilderNew(log, settings, statistics);
+                                builder.CreateHTML(sw, saveDirectory.FullName);
+                            }
+                            else
+                            {
+                                var builder = new HTMLBuilder(log, settings, statistics, uploadresult);
+                                builder.CreateHTML(sw);
+                            }
                         }
                     }
                     if (Properties.Settings.Default.SaveOutCSV)

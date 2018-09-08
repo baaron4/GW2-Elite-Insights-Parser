@@ -54,6 +54,15 @@ namespace LuckParser.Models.ParseModels
             return null;
         }
 
+        public SkillItem GetOrDummy(long ID)
+        {
+            if (_skills.TryGetValue(ID, out SkillItem value))
+            {
+                return value;
+            }
+            return new SkillItem((int)ID, GetName(ID));
+        }
+
         public void Add(SkillItem skillItem)
         {
             _skills.Add(skillItem.ID, skillItem);

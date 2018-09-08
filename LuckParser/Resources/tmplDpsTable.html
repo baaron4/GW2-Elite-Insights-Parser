@@ -1,0 +1,52 @@
+<table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%">
+	<thead>
+		<tr>
+			<th>Sub</th>
+			<th></th>
+			<th class="text-left">Name</th>
+			<th>Account</th>
+			<th>Boss DPS</th>
+			<th>Power</th>
+			<th>Condi</th>
+			<th>All DPS</th>
+			<th>Power</th>
+			<th>Condi</th>
+			<th><img src="https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png" alt="Downs" title="Times downed" class="icon icon-hover"></th>
+			<th><img src="https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png" alt="Dead" title="Time died" class="icon icon-hover"></th>
+		</tr>
+	</thead>
+	<tbody>
+		{{for rows}}
+		<tr>
+			{{include tmpl="tmplPlayerCells"/}}
+			<td>{{:player.acc}}</td>
+			<td title="{{:dps[0]}} dmg">{{:dps[1]}}</td>
+			<td title="{{:dps[2]}} dmg">{{:dps[3]}}</td>
+			<td title="{{:dps[4]}} dmg">{{:dps[5]}}</td>
+			<td title="{{:dps[6]}} dmg">{{:dps[7]}}</td>
+			<td title="{{:dps[8]}} dmg">{{:dps[9]}}</td>
+			<td title="{{:dps[10]}} dmg">{{:dps[11]}}</td>
+			<td>{{:dps[12]}}</td>
+			<td title="{{:dps[13]}}">{{:dps[14]}}</td>
+		</tr>
+		{{/for}}
+	</tbody>
+	<tfoot>
+		{{for sums}}
+		<tr>
+			<td></td>
+			<td></td>
+			<td class="text-left">{{:name}}</td>
+			<td></td>
+			<td title="{{:dps[0]}} dmg">{{:dps[1]}}</td>
+			<td title="{{:dps[2]}} dmg">{{:dps[3]}}</td>
+			<td title="{{:dps[4]}} dmg">{{:dps[5]}}</td>
+			<td title="{{:dps[6]}} dmg">{{:dps[7]}}</td>
+			<td title="{{:dps[8]}} dmg">{{:dps[9]}}</td>
+			<td title="{{:dps[10]}} dmg">{{:dps[11]}}</td>
+			<td>{{:dps[12]}}</td>
+			<td></td>
+		</tr>
+		{{/for}}
+	</tfoot>
+</table>
