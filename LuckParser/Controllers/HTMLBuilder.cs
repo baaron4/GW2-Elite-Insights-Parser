@@ -1100,6 +1100,103 @@ namespace LuckParser.Controllers
 
             sw.Write("</table>");
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sw"></param>
+        /// <param name="phaseIndex"></param>
+        private void CreatePersonalBuffUptimeTables(StreamWriter sw, int phaseIndex)
+        {
+            Dictionary<string, List<Player>> bySpec = _log.PlayerListBySpec;
+            List<PhaseData> phases = _statistics.Phases;
+            long fightDuration = phases[phaseIndex].GetDuration();
+            List<string> orderedSpecs = new List<string>
+            {
+                "Warrior","Berserker","Spellbreaker","Revenant","Herald","Renegade","Guardian","Dragonhunter","Firebrand",
+                "Ranger","Druid","Soulbeast","Engineer","Scrapper","Holosmith","Thief","Daredevil","Deadeye",
+                "Mesmer","Chronomancer","Mirage","Necromancer","Reaper","Scourge","Elementalist","Tempest","Weaver",
+            };
+            foreach (string spec in orderedSpecs)
+            {
+                if (bySpec.TryGetValue(spec,out List<Player> players))
+                {
+                    HashSet<long> specBoonIds = new HashSet<long>(Boon.GetRemainingBuffsList(spec).Select(x => x.ID));
+                    HashSet<Boon> boonToUse = new HashSet<Boon>();
+                    foreach (Player player in players)
+                    {
+                        Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][phaseIndex];
+                        foreach (Boon boon in _statistics.PresentPersonalBuffs[player.InstID])
+                        {
+                            if (boons[boon.ID].Uptime > 0 && specBoonIds.Contains(boon.ID))
+                            {
+                                boonToUse.Add(boon);
+                            }
+                        }
+                    }
+                    List<Boon> listToUse = boonToUse.ToList();
+                    string tableId = "uptime_" + spec + "_";
+                    sw.Write("<script>");
+                    {
+                        sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                        {
+                            sw.Write("var lazyTable = document.querySelector('#" + tableId + phaseIndex + "');" +
+
+                            "if ('IntersectionObserver' in window) {" +
+                                "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
+                                    "entries.forEach(function(entry) {" +
+                                        "if (entry.isIntersecting)" +
+                                        "{" +
+                                            "$(function () { $('#" + tableId + phaseIndex + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
+                                            "lazyTableObserver.unobserve(entry.target);" +
+                                        "}" +
+                                    "});" +
+                                "});" +
+                            "lazyTableObserver.observe(lazyTable);" +
+                            "} else {" +
+                                "$(function () { $('#" + tableId + phaseIndex + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
+                            "}");
+                        }
+                        sw.Write("});");
+                    }
+                    sw.Write("</script>");
+                    sw.Write("<h3 class=\"text-center mt-3\">" + spec + "</h3>");
+                    sw.Write("<table class=\"display table table-striped table-hover compact\" cellspacing=\"0\" id=\"" + tableId + phaseIndex + "\">");
+                    {
+                        HTMLHelper.WriteBoonTableHeader(sw, listToUse);
+                        sw.Write("<tbody>");
+                        {
+                            foreach (Player player in players)
+                            {
+                                Dictionary<long, Statistics.FinalBoonUptime> boons = _statistics.SelfBoons[player][phaseIndex];
+                                sw.Write("<tr>");
+                                {
+                                    sw.Write("<td>" + player.Group.ToString() + "</td>");
+                                    sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
+                                    sw.Write("<td> " + player.Character + "</td>");
+
+                                    foreach (Boon boon in listToUse)
+                                    {
+                                        if (boons.TryGetValue(boon.ID,out Statistics.FinalBoonUptime value))
+                                        {
+                                            string cellContent = boons[boon.ID].Uptime + (boon.Type == Boon.BoonType.Intensity ? "" : "%");
+                                            sw.Write("<td>" + cellContent + "</td>");
+                                        } else
+                                        {
+                                            sw.Write("<td>0</td>");
+                                        }
+                                    }
+                                }
+                                sw.Write("</tr>");
+                            }
+                        }
+                        sw.Write("</tbody>");
+                    }
+                    sw.Write("</table>");
+                }
+            }
+        }
+
         /// <summary>
         /// Create the buff uptime table
         /// </summary>
@@ -1132,7 +1229,7 @@ namespace LuckParser.Controllers
                         "$(function () { $('#" + tableId + phaseIndex + "').DataTable({ \"order\": [[0, \"asc\"]]});});" +
                     "}");
                 }
-                sw.Write("});");
+                sw.Write("});");              
             }
             sw.Write("</script>");
             List<List<string>> footList = new List<List<string>>();
@@ -1186,7 +1283,7 @@ namespace LuckParser.Controllers
                                     string[] tooltips = myDict[phaseIndex];
                                     tooltip = " <br> <big><b>Boss</b></big> </br> " + tooltips[1] + " <br> <big><b>All</b></big> </br> " + tooltips[0];
                                 }
-                                string toWrite = boons[boon.ID].Uptime + (intensityBoon.Contains(count) ? "" : "%");
+                                string toWrite = boons[boon.ID].Uptime + (boon.Type == Boon.BoonType.Intensity ? "" : "%");
                                 if (tooltip.Length > 0)
                                 {
                                     sw.Write("<td data-html=\"true\" data-toggle=\"tooltip\" title=\"" + tooltip + "\">" + toWrite + " </td>");
@@ -3652,6 +3749,7 @@ namespace LuckParser.Controllers
                                                     "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#mainBoon" + i + "\">Boons</a></li>" +
                                                     "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#offBuff" + i + "\">Damage Buffs</a></li>" +
                                                     "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#defBuff" + i + "\">Defensive Buffs</a></li>" +
+                                                    "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#perBuff" + i + "\">Personal Buffs</a></li>" +
                                                 "</ul>");
                                             sw.Write("<div id=\"boonsSubTab" + i + "\" class=\"tab-content\">");
                                             {
@@ -3791,6 +3889,21 @@ namespace LuckParser.Controllers
                                                         {
                                                             sw.Write("<p> Defensive Buffs generated by a character for their squadmates</p>");
                                                             CreateGenSquadTable(sw, _statistics.PresentDefbuffs, "defensivegensquad_table", i);
+                                                        }
+                                                        sw.Write("</div>");
+                                                    }
+                                                    sw.Write("</div>");
+                                                }
+                                                sw.Write("</div>");
+                                                sw.Write("<div class=\"tab-pane fade  \" id=\"perBuff" + i + "\">");
+                                                {   
+                                                    sw.Write("<div id=\"perBuffSubTab" + i + "\" class=\"tab-content\">");
+                                                    {
+                                                        //Personal Buffs stats
+                                                        sw.Write("<div class=\"tab-pane fade show active\" id=\"perUptime" + i + "\">");
+                                                        {
+                                                            sw.Write("<p> Personal Buffs Uptime</p>");
+                                                            CreatePersonalBuffUptimeTables(sw, i);
                                                         }
                                                         sw.Write("</div>");
                                                     }
