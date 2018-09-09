@@ -256,5 +256,6 @@ namespace LuckParser.Models.DataModels
         public List<JsonPlayer> Players;
         public List<JsonPhase> Phases;
         public JsonMechanic[] Mechanics;
+        public string[] UploadLinks;
     }
 }
