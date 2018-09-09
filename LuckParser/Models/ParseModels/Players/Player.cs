@@ -377,7 +377,34 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
+            //PlayerSkill
+            foreach (Mechanic m in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.PlayerSkill ))
+            {
+                Mechanic.CheckSpecialCondition condition = m.SpecialCondition;
+                foreach (CombatItem c in log.GetCastDataById(m.SkillId))
+                {
+                    if (condition != null && !condition(new SpecialConditionItem(c)))
+                    {
+                        continue;
+                    }
+                    AbstractMasterPlayer amp = null;
+                    if (m.MechanicType == Mechanic.MechType.PlayerSkill && c.IsActivation.IsCasting())
+                    {
+                        if (c.SrcInstid == InstID)
+                        {
+                            amp = this;
+                        }
+                       
+                    }
+                    if (amp != null)
+                    {
+                        mechData[m].Add(new MechanicLog(c.Time - fightData.FightStart, m, amp));
+                    }
+                }
+
+            }
         }
+        
 
         /*protected override void setHealingLogs(ParsedLog log)
         {

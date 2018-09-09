@@ -20,6 +20,8 @@ namespace LuckParser.Controllers
         readonly Statistics _statistics;
         readonly StreamWriter _sw;
 
+        private readonly String[] _uploadLink;
+
         private Dictionary<long, string> _boonDict;
 
         public static void UpdateStatisticSwitches(StatisticsCalculator.Switches switches)
@@ -34,7 +36,7 @@ namespace LuckParser.Controllers
             switches.CalculateMechanics = true;
         }
 
-        public JSONBuilder(StreamWriter sw, ParsedLog log, SettingsContainer settings, Statistics statistics)
+        public JSONBuilder(StreamWriter sw, ParsedLog log, SettingsContainer settings, Statistics statistics, string[] UploadString)
         {
             _log = log;
             _sw = sw;
@@ -43,7 +45,8 @@ namespace LuckParser.Controllers
             _statistics = statistics;
 
             _boonDict = Boon.GetAll().GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.Select(y => y.Name).First());
-
+            
+           _uploadLink = UploadString;
         }
 
         public void CreateJSON()
@@ -80,6 +83,7 @@ namespace LuckParser.Controllers
             log.TimeEnd = _log.LogData.LogEnd;
             log.Duration = durationString;
             log.Success = _log.LogData.Success;
+            log.UploadLinks = _uploadLink;
         }
 
         private void SetMechanics(JsonLog log)

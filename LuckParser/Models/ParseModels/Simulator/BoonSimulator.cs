@@ -11,13 +11,7 @@ namespace LuckParser.Models.ParseModels
         {
             public readonly long Start;
             public readonly long BoonDuration;
-            public long InitialBoonDuration
-            {
-                get
-                {
-                    return BoonDuration + _overstack;
-                }
-            }
+            public long InitialBoonDuration => BoonDuration + _overstack;
             public readonly ushort Src;
             private readonly long _overstack;
 
@@ -41,13 +35,7 @@ namespace LuckParser.Models.ParseModels
         // Fields
         protected readonly List<BoonStackItem> BoonStack;
         protected readonly List<BoonSimulationItem> GenerationSimulation = new List<BoonSimulationItem>();
-        public GenerationSimulationResult GenerationSimulationResult
-        {
-            get
-            {
-                return new GenerationSimulationResult(GenerationSimulation);
-            }
-        }
+        public GenerationSimulationResult GenerationSimulationResult => new GenerationSimulationResult(GenerationSimulation); 
         public readonly List<BoonSimulationOverstackItem> OverstackSimulationResult = new List<BoonSimulationOverstackItem>();
         private readonly int _capacity;
         private readonly ParsedLog _log;
