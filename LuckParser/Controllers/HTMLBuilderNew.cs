@@ -15,6 +15,8 @@ namespace LuckParser.Controllers
 {
     class HTMLBuilderNew
     {
+        private const string scriptVersion = "0.5";
+        private const int scriptVersionRev = 1;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -2993,16 +2995,17 @@ namespace LuckParser.Controllers
 
         private string BuildFlomixCss(string path)
         {
-            String scriptContent = Properties.Resources.flomix_ei_css;
+            string scriptContent = Properties.Resources.flomix_ei_css;
+            string cssFilename = "flomix-ei-" + scriptVersion + ".css";
             if (Properties.Settings.Default.NewHtmlExternalScripts)
             {
-                string cssFile = Path.Combine(path, "flomix-ei.css");
-                using (var fs = new FileStream(cssFile, FileMode.Create, FileAccess.Write))
+                string cssPath = Path.Combine(path, cssFilename);
+                using (var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write))
                 using (var scriptWriter = new StreamWriter(fs))
                 {
                     scriptWriter.Write(scriptContent);
                 }
-                return "<link rel=\"stylesheet\" type=\"text/css\" href=\"./flomix-ei.css?version=4\">";
+                return "<link rel=\"stylesheet\" type=\"text/css\" href=\"./"+ cssFilename + "?version="+scriptVersionRev+"\">";
             }
             else
             {
@@ -3013,15 +3016,16 @@ namespace LuckParser.Controllers
         private string BuildFlomixJs(string path)
         {
             String scriptContent = buildJavascript();
+            string scriptFilename = "flomix-ei-" + scriptVersion + ".js";
             if (Properties.Settings.Default.NewHtmlExternalScripts)
             {
-                string scriptFile = Path.Combine(path, "flomix-ei.js");
-                using (var fs = new FileStream(scriptFile, FileMode.Create, FileAccess.Write))
+                string scriptPath = Path.Combine(path, scriptFilename);
+                using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
                 using (var scriptWriter = new StreamWriter(fs))
                 {
                     scriptWriter.Write(scriptContent);
                 }
-                return "<script src=\"./flomix-ei.js?version=4\"></script>";
+                return "<script src=\"./" + scriptFilename + "?version=" + scriptVersionRev + "\"></script>";
             }
             else
             {
