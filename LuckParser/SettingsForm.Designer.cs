@@ -77,6 +77,7 @@
             this.chkIndentJSON = new System.Windows.Forms.CheckBox();
             this.chkHtmlExperimental = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.chkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblDamageGraphSection
@@ -590,12 +591,24 @@
             // 
             this.toolTip1.ToolTipTitle = "Setting description";
             // 
+            // chkHtmlExternalScripts
+            // 
+            this.chkHtmlExternalScripts.AutoSize = true;
+            this.chkHtmlExternalScripts.Location = new System.Drawing.Point(231, 356);
+            this.chkHtmlExternalScripts.Name = "chkHtmlExternalScripts";
+            this.chkHtmlExternalScripts.Size = new System.Drawing.Size(99, 17);
+            this.chkHtmlExternalScripts.TabIndex = 46;
+            this.chkHtmlExternalScripts.Text = "External Scripts";
+            this.chkHtmlExternalScripts.UseVisualStyleBackColor = true;
+            this.chkHtmlExternalScripts.CheckedChanged += new System.EventHandler(this.chkHtmlExternalScripts_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(853, 553);
+            this.Controls.Add(this.chkHtmlExternalScripts);
             this.Controls.Add(this.UploadRaidar_check);
             this.Controls.Add(this.UploadDRRH_check);
             this.Controls.Add(this.UploadDPSReports_checkbox);
@@ -700,5 +713,6 @@
         private System.Windows.Forms.CheckBox chkIndentJSON;
         private System.Windows.Forms.CheckBox chkHtmlExperimental;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.CheckBox chkHtmlExternalScripts;
     }
 }
