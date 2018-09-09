@@ -28,7 +28,7 @@
 			{{for ~mechanics ~data=data}}
 			{{if playerMech == ~playerMech}}
 			{{if ~data[#getIndex()][0]}}
-			<td{{if ~data[#getIndex()][0] != ~data[#getIndex()][1]}}title="{{:~data[#getIndex()][1]}} times (multi hits)"{{/if}}>{{:~data[#getIndex()][0]}}</td>
+			<td{{if ~data[#getIndex()][0] != ~data[#getIndex()][1]}} title="{{:~data[#getIndex()][1]}} times (multi hits)"{{/if}}>{{:~data[#getIndex()][0]}}</td>
 			{{else}}
 			<td>-</td>
 			{{/if}}

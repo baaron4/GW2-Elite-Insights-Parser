@@ -758,13 +758,12 @@ namespace LuckParser.Controllers
             }
 
             var players = _log.PlayerList;
-            Dictionary<ushort, List<Boon>> presentPersonalBuffs = new Dictionary<ushort, List<Boon>>();
             if (_settings.PlayerBoonsAllProf)
             {
                 var playersById = new Dictionary<ushort, Player>();
                 foreach (var player in players)
                 {
-                    presentPersonalBuffs[player.InstID] = new List<Boon>();
+                    _statistics.PresentPersonalBuffs[player.InstID] = new List<Boon>();
                     playersById.Add(player.InstID, player);
                 }
                 // All class specific boons
@@ -784,7 +783,7 @@ namespace LuckParser.Controllers
                     {
                         if (classSpecificBoonsById.TryGetValue(item.SkillID, out Boon boon))
                         {
-                            presentPersonalBuffs[player.InstID].Add(boon);
+                            _statistics.PresentPersonalBuffs[player.InstID].Add(boon);
                         }
                     }
                 }
@@ -796,7 +795,7 @@ namespace LuckParser.Controllers
                 player.BoonToTrack.AddRange(_statistics.PresentDefbuffs);
                 if(_settings.PlayerBoonsAllProf)
                 {
-                    player.BoonToTrack.AddRange(presentPersonalBuffs[player.InstID]);
+                    player.BoonToTrack.AddRange(_statistics.PresentPersonalBuffs[player.InstID]);
                 }
             }
             // boss boons

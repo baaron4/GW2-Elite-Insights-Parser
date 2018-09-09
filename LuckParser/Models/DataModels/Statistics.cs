@@ -159,6 +159,7 @@ namespace LuckParser.Models.DataModels
         public readonly List<Boon> PresentConditions = new List<Boon>();//Used only for Condition tables
         public readonly List<Boon> PresentOffbuffs = new List<Boon>();//Used only for Off Buff tables
         public readonly List<Boon> PresentDefbuffs = new List<Boon>();//Used only for Def Buff tables
+        public readonly Dictionary<ushort, List<Boon>> PresentPersonalBuffs = new Dictionary<ushort,List<Boon>>();
 
         //Positions for group
         public List<Point3D> StackCenterPositions;

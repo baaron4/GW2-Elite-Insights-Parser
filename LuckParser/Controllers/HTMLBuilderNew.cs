@@ -15,6 +15,8 @@ namespace LuckParser.Controllers
 {
     class HTMLBuilderNew
     {
+        private const string scriptVersion = "0.5";
+        private const int scriptVersionRev = 1;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -2437,23 +2439,11 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         public void CreateHTML(StreamWriter sw, String path)
         {
-            string scriptFile = Path.Combine(path, "flomix-ei.js");
-            using (var fs = new FileStream(scriptFile, FileMode.Create, FileAccess.Write))
-            using (var scriptWriter = new StreamWriter(fs))
-            {
-                scriptWriter.Write(buildJavascript());
-            }
-
-            string cssFile = Path.Combine(path, "flomix-ei.css");
-            using (var fs = new FileStream(cssFile, FileMode.Create, FileAccess.Write))
-            using (var scriptWriter = new StreamWriter(fs))
-            {
-                scriptWriter.Write(Properties.Resources.flomix_ei_css);
-            }
             string html = Properties.Resources.template_html;
             html = ReplaceVariables(html);
 
-
+            html = html.Replace("<!--${flomixCss}-->", BuildFlomixCss(path));
+            html = html.Replace("<!--${flomixJs}-->", BuildFlomixJs(path));
 
             html = html.Replace("${logDataJson}", BuildLogData());
 
@@ -3001,6 +2991,46 @@ namespace LuckParser.Controllers
             sw.Write("</html>");
 
             */
+        }
+
+        private string BuildFlomixCss(string path)
+        {
+            string scriptContent = Properties.Resources.flomix_ei_css;
+            string cssFilename = "flomix-ei-" + scriptVersion + ".css";
+            if (Properties.Settings.Default.NewHtmlExternalScripts)
+            {
+                string cssPath = Path.Combine(path, cssFilename);
+                using (var fs = new FileStream(cssPath, FileMode.Create, FileAccess.Write))
+                using (var scriptWriter = new StreamWriter(fs))
+                {
+                    scriptWriter.Write(scriptContent);
+                }
+                return "<link rel=\"stylesheet\" type=\"text/css\" href=\"./"+ cssFilename + "?version="+scriptVersionRev+"\">";
+            }
+            else
+            {
+                return "<style type=\"text/css\">\r\n" + scriptContent + "\r\n</style>";
+            }
+        }
+
+        private string BuildFlomixJs(string path)
+        {
+            String scriptContent = buildJavascript();
+            string scriptFilename = "flomix-ei-" + scriptVersion + ".js";
+            if (Properties.Settings.Default.NewHtmlExternalScripts)
+            {
+                string scriptPath = Path.Combine(path, scriptFilename);
+                using (var fs = new FileStream(scriptPath, FileMode.Create, FileAccess.Write))
+                using (var scriptWriter = new StreamWriter(fs))
+                {
+                    scriptWriter.Write(scriptContent);
+                }
+                return "<script src=\"./" + scriptFilename + "?version=" + scriptVersionRev + "\"></script>";
+            }
+            else
+            {
+                return "<script>\r\n" + scriptContent + "\r\n</script>";
+            }
         }
 
         private string BuildGraphJson()

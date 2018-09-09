@@ -87,6 +87,10 @@ namespace LuckParser
 
             chkHtmlExperimental.Checked = Properties.Settings.Default.NewHtmlMode;
             toolTip1.SetToolTip(chkHtmlExperimental, "Alternative method to build the HTML page.\nThe page is much smaller, and some static CSS and JS scripts are written in an external file.");
+
+            chkHtmlExternalScripts.Checked = Properties.Settings.Default.NewHtmlExternalScripts;
+            chkHtmlExternalScripts.Enabled = Properties.Settings.Default.NewHtmlMode;
+            toolTip1.SetToolTip(chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
         }
 
         private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)
@@ -233,6 +237,12 @@ namespace LuckParser
         private void chkHtmlExperimental_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.NewHtmlMode = chkHtmlExperimental.Checked;
+            chkHtmlExternalScripts.Enabled = Properties.Settings.Default.NewHtmlMode;
+        }
+
+        private void chkHtmlExternalScripts_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.NewHtmlExternalScripts = chkHtmlExternalScripts.Checked;
         }
     }
 }

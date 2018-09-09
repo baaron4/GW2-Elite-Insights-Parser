@@ -370,5 +370,17 @@ namespace LuckParser.Properties {
                 this["NewHtmlMode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NewHtmlExternalScripts {
+            get {
+                return ((bool)(this["NewHtmlExternalScripts"]));
+            }
+            set {
+                this["NewHtmlExternalScripts"] = value;
+            }
+        }
     }
 }
