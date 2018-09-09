@@ -713,7 +713,7 @@
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Size = new System.Drawing.Size(471, 372);
             this.tabPage6.TabIndex = 5;
-            this.tabPage6.Text = "Maintainance";
+            this.tabPage6.Text = "Maintenance";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
             // cmdClose
