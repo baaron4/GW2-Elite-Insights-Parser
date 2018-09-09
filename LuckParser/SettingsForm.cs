@@ -82,6 +82,7 @@ namespace LuckParser
             chkOneAtATime.Checked = Properties.Settings.Default.ParseOneAtATime;
             radioThemeLight.Checked = Properties.Settings.Default.LightTheme;
             radioThemeDark.Checked = !Properties.Settings.Default.LightTheme;
+            imgTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
             chkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
             chkOutputJson.Checked = Properties.Settings.Default.SaveOutJSON;
             chkIndentJSON.Checked = Properties.Settings.Default.IndentJSON;
@@ -254,11 +255,13 @@ namespace LuckParser
         private void radioThemeLight_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.LightTheme = radioThemeLight.Checked;
+            imgTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
         }
 
         private void radioThemeDark_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.LightTheme = radioThemeLight.Checked;
+            imgTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
         }
 
         private void cmdClose_Click(object sender, EventArgs e)

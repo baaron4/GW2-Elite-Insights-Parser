@@ -88,6 +88,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panelJson = new System.Windows.Forms.Panel();
+            this.imgTheme = new System.Windows.Forms.PictureBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -105,6 +106,7 @@
             this.tabPage6.SuspendLayout();
             this.panelHtml.SuspendLayout();
             this.panelJson.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imgTheme)).BeginInit();
             this.SuspendLayout();
             // 
             // chkPlayerDpsPlot
@@ -579,6 +581,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.imgTheme);
             this.tabPage2.Controls.Add(this.panelHtml);
             this.tabPage2.Controls.Add(this.chkOutputHtml);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -595,7 +598,7 @@
             this.panel1.Controls.Add(this.radioThemeDark);
             this.panel1.Location = new System.Drawing.Point(252, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(204, 48);
+            this.panel1.Size = new System.Drawing.Size(156, 60);
             this.panel1.TabIndex = 53;
             // 
             // radioThemeLight
@@ -767,6 +770,15 @@
             this.panelJson.Size = new System.Drawing.Size(468, 144);
             this.panelJson.TabIndex = 45;
             // 
+            // imgTheme
+            // 
+            this.imgTheme.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.imgTheme.Location = new System.Drawing.Point(346, 30);
+            this.imgTheme.Name = "imgTheme";
+            this.imgTheme.Size = new System.Drawing.Size(110, 74);
+            this.imgTheme.TabIndex = 49;
+            this.imgTheme.TabStop = false;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -816,6 +828,7 @@
             this.panelHtml.PerformLayout();
             this.panelJson.ResumeLayout(false);
             this.panelJson.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imgTheme)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -880,5 +893,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panelJson;
+        private System.Windows.Forms.PictureBox imgTheme;
     }
 }
