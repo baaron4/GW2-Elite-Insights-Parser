@@ -36,7 +36,7 @@ namespace LuckParser
         private void RotationCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.PlayerRot = chkRotation.Checked;
-           // mainfrm.settingArray[7] = checkBox8.Checked;
+            chkSkillIcons.Enabled = Properties.Settings.Default.PlayerRot;
         }
         
         private void SkillIconsCheckedChanged(object sender, EventArgs e)
@@ -64,12 +64,15 @@ namespace LuckParser
             chkAllProfSpecBoons.Checked = Properties.Settings.Default.PlayerBoonsAllProf;
             chkRotation.Checked = Properties.Settings.Default.PlayerRot;
             chkSkillIcons.Checked = Properties.Settings.Default.PlayerRotIcons;
+            chkSkillIcons.Enabled = Properties.Settings.Default.PlayerRot;
             chkDefaultOutputLoc.Checked =Properties.Settings.Default.SaveAtOut;
             chkEventListDbg.Checked = Properties.Settings.Default.EventList ;
             txtCustomSaveLoc.Text = Properties.Settings.Default.OutLocation;
             checkBossSummary.Checked = Properties.Settings.Default.BossSummary;
             chkShowAutos.Checked = Properties.Settings.Default.ShowAutos;
+            chkShowAutos.Enabled = Properties.Settings.Default.SimpleRotation;
             chkLargeSkillIcons.Checked = Properties.Settings.Default.LargeRotIcons;
+            chkLargeSkillIcons.Enabled = Properties.Settings.Default.SimpleRotation;
             chkOutputHtml.Checked = Properties.Settings.Default.SaveOutHTML;
             chkOutputCsv.Checked = Properties.Settings.Default.SaveOutCSV;  
             chkShowEstimates.Checked = Properties.Settings.Default.ShowEstimates;
@@ -77,7 +80,10 @@ namespace LuckParser
             chkShow10s.Checked = Properties.Settings.Default.Show10s;
             chkShow30s.Checked = Properties.Settings.Default.Show30s;
             chkOneAtATime.Checked = Properties.Settings.Default.ParseOneAtATime;
-            chkLightTheme.Checked = Properties.Settings.Default.LightTheme;
+            radioThemeLight.Checked = Properties.Settings.Default.LightTheme;
+            radioThemeDark.Checked = !Properties.Settings.Default.LightTheme;
+            imgTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
+            chkSimpleRotationTab.Checked = Properties.Settings.Default.SimpleRotation;
             chkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
             chkOutputJson.Checked = Properties.Settings.Default.SaveOutJSON;
             chkIndentJSON.Checked = Properties.Settings.Default.IndentJSON;
@@ -91,6 +97,9 @@ namespace LuckParser
             chkHtmlExternalScripts.Checked = Properties.Settings.Default.NewHtmlExternalScripts;
             chkHtmlExternalScripts.Enabled = Properties.Settings.Default.NewHtmlMode;
             toolTip1.SetToolTip(chkHtmlExternalScripts, "Writes static css and js scripts in own files, which are shared between all logs. Log file size decreases, but the script files have to be kept along with the html.");
+
+            panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
+            panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
         }
 
         private void DefaultOutputLocationCheckedChanged(object sender, EventArgs e)
@@ -133,6 +142,8 @@ namespace LuckParser
         private void SimpleRotationTabCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SimpleRotation = chkSimpleRotationTab.Checked;
+            chkShowAutos.Enabled = Properties.Settings.Default.SimpleRotation;
+            chkLargeSkillIcons.Enabled = Properties.Settings.Default.SimpleRotation;
         }
 
         private void ShowAutosCheckedChanged(object sender, EventArgs e)
@@ -162,6 +173,7 @@ namespace LuckParser
         private void OuputCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutHTML = chkOutputHtml.Checked;
+            panelHtml.Enabled = Properties.Settings.Default.SaveOutHTML;
         }
 
         private void OutputCsvCheckedChanged(object sender, EventArgs e)
@@ -194,11 +206,6 @@ namespace LuckParser
             Properties.Settings.Default.Show30s = chkShow30s.Checked;
         }
 
-        private void LightThemeCheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.LightTheme = chkLightTheme.Checked;
-        }
-
         private void ChkCombatReplayCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ParseCombatReplay = chkCombatReplay.Checked;
@@ -227,6 +234,7 @@ namespace LuckParser
         private void OutputJSONCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutJSON = chkOutputJson.Checked;
+            panelJson.Enabled = Properties.Settings.Default.SaveOutJSON;
         }
 
         private void chkIndentJSONCheckedChanged(object sender, EventArgs e)
@@ -243,6 +251,23 @@ namespace LuckParser
         private void chkHtmlExternalScripts_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.NewHtmlExternalScripts = chkHtmlExternalScripts.Checked;
+        }
+
+        private void radioThemeLight_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.LightTheme = radioThemeLight.Checked;
+            imgTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
+        }
+
+        private void radioThemeDark_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.LightTheme = radioThemeLight.Checked;
+            imgTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
+        }
+
+        private void cmdClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
