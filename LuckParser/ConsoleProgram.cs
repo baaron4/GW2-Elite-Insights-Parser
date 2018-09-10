@@ -99,7 +99,7 @@ namespace LuckParser
                     //Process evtc here
                     control.ParseLog(row, fInfo.FullName);
                     ParsedLog log = control.GetParsedLog();
-                    Console.Write("Log Parsed");
+                    Console.Write("Log Parsed\n");
                     //Creating File
                     //Wait for Upload
                     if (Properties.Settings.Default.UploadToDPSReports)
@@ -191,7 +191,7 @@ namespace LuckParser
                         JSONBuilder.UpdateStatisticSwitches(switches);
                     }
                     Statistics statistics = statisticsCalculator.CalculateStatistics(log, switches);
-                    Console.Write("Statistics Computed");
+                    Console.Write("Statistics Computed\n");
 
                     string fName = fInfo.Name.Split('.')[0];
                     if (Properties.Settings.Default.SaveOutHTML)
@@ -248,7 +248,7 @@ namespace LuckParser
                         }
                     }
 
-                    Console.Write("Generation Done");
+                    Console.Write("Generation Done\n");
                 }
                 else
                 {
