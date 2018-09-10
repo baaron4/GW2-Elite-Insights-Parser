@@ -83,6 +83,7 @@ namespace LuckParser
             radioThemeLight.Checked = Properties.Settings.Default.LightTheme;
             radioThemeDark.Checked = !Properties.Settings.Default.LightTheme;
             imgTheme.Image = Properties.Settings.Default.LightTheme ? Properties.Resources.theme_cosmo : Properties.Resources.theme_slate;
+            chkSimpleRotationTab.Checked = Properties.Settings.Default.SimpleRotation;
             chkCombatReplay.Checked = Properties.Settings.Default.ParseCombatReplay;
             chkOutputJson.Checked = Properties.Settings.Default.SaveOutJSON;
             chkIndentJSON.Checked = Properties.Settings.Default.IndentJSON;
