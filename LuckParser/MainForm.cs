@@ -127,7 +127,7 @@ namespace LuckParser
                 Task<string> DRRHTask = null;
                 Task<string> RaidarTask = null;
                 string[] uploadresult = new string[3] { "","",""};
-                if (Properties.Settings.Default.UploadToDPSReports)
+                if (Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.SkipFailedTrys)
                 {
                     bg.UpdateProgress(rowData, " Uploading...", 0);
                     if (up_controller == null)
@@ -137,7 +137,7 @@ namespace LuckParser
                     DREITask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsEI(fInfo)) ;
                     
                 }
-                if (Properties.Settings.Default.UploadToDPSReportsRH)
+                if (Properties.Settings.Default.UploadToDPSReportsRH && !Properties.Settings.Default.SkipFailedTrys)
                 {
                     bg.UpdateProgress(rowData, " Uploading...", 0);
                     if (up_controller == null)
@@ -147,7 +147,7 @@ namespace LuckParser
                     DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
 
                 }
-                if (Properties.Settings.Default.UploadToRaidar)
+                if (Properties.Settings.Default.UploadToRaidar && !Properties.Settings.Default.SkipFailedTrys)
                 {
                     bg.UpdateProgress(rowData, " Uploading...", 0);
                     if (up_controller == null)
@@ -169,10 +169,48 @@ namespace LuckParser
                     bg.UpdateProgress(rowData, "10% - Reading Binary...", 10);
                     parser.ParseLog(rowData, fInfo.FullName);
                     ParsedLog log = parser.GetParsedLog();
+                    if (Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        if (!log.LogData.Success)
+                        {
+                            rowData.Cancel();
+                        }
+                    }
                     bg.ThrowIfCanceled(rowData);
                     bg.UpdateProgress(rowData, "35% - Data parsed", 35);
 
-                    //Creating File
+                   
+                    //Upload if skipFailed trys is on(this is after check for fail)
+                    if (Properties.Settings.Default.UploadToDPSReports && Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        bg.UpdateProgress(rowData, " Uploading...", 0);
+                        if (up_controller == null)
+                        {
+                            up_controller = new UploadController();
+                        }
+                        DREITask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsEI(fInfo));
+
+                    }
+                    if (Properties.Settings.Default.UploadToDPSReportsRH && Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        bg.UpdateProgress(rowData, " Uploading...", 0);
+                        if (up_controller == null)
+                        {
+                            up_controller = new UploadController();
+                        }
+                        DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
+
+                    }
+                    if (Properties.Settings.Default.UploadToRaidar && Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        bg.UpdateProgress(rowData, " Uploading...", 0);
+                        if (up_controller == null)
+                        {
+                            up_controller = new UploadController();
+                        }
+                        RaidarTask = Task.Factory.StartNew(() => up_controller.UploadRaidar(fInfo));
+
+                    }
                     //Wait for Upload
                     if (Properties.Settings.Default.UploadToDPSReports)
                     {
@@ -222,6 +260,7 @@ namespace LuckParser
                             uploadresult[2] = "Failed to Define Upload Task";
                         }
                     }
+                    //Creating File
                     //save location
                     DirectoryInfo saveDirectory;
                     if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)

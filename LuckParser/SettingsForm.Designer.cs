@@ -72,41 +72,42 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.imgTheme = new System.Windows.Forms.PictureBox();
+            this.panelHtml = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.radioThemeLight = new System.Windows.Forms.RadioButton();
             this.radioThemeDark = new System.Windows.Forms.RadioButton();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.grpGraphs = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.grpGraphs = new System.Windows.Forms.GroupBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.panelJson = new System.Windows.Forms.Panel();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.cmdClose = new System.Windows.Forms.Button();
-            this.panelHtml = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.panelJson = new System.Windows.Forms.Panel();
-            this.imgTheme = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cmdClose = new System.Windows.Forms.Button();
+            this.chkB_SkipFailedTrys = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imgTheme)).BeginInit();
+            this.panelHtml.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            this.grpGraphs.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            this.grpGraphs.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.panelJson.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
-            this.panelHtml.SuspendLayout();
-            this.panelJson.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.imgTheme)).BeginInit();
             this.SuspendLayout();
             // 
             // chkPlayerDpsPlot
@@ -531,6 +532,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.chkB_SkipFailedTrys);
             this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.groupBox1);
@@ -592,6 +594,29 @@
             this.tabPage2.Text = "HTML";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // imgTheme
+            // 
+            this.imgTheme.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.imgTheme.Location = new System.Drawing.Point(346, 30);
+            this.imgTheme.Name = "imgTheme";
+            this.imgTheme.Size = new System.Drawing.Size(110, 74);
+            this.imgTheme.TabIndex = 49;
+            this.imgTheme.TabStop = false;
+            // 
+            // panelHtml
+            // 
+            this.panelHtml.Controls.Add(this.chkEventListDbg);
+            this.panelHtml.Controls.Add(this.panel1);
+            this.panelHtml.Controls.Add(this.chkShowEstimates);
+            this.panelHtml.Controls.Add(this.groupBox7);
+            this.panelHtml.Controls.Add(this.grpGraphs);
+            this.panelHtml.Controls.Add(this.groupBox6);
+            this.panelHtml.Controls.Add(this.groupBox5);
+            this.panelHtml.Location = new System.Drawing.Point(0, 36);
+            this.panelHtml.Name = "panelHtml";
+            this.panelHtml.Size = new System.Drawing.Size(468, 336);
+            this.panelHtml.TabIndex = 54;
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.radioThemeLight);
@@ -636,6 +661,19 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Experimental Mode";
             // 
+            // grpGraphs
+            // 
+            this.grpGraphs.Controls.Add(this.chkPlayerDpsPlot);
+            this.grpGraphs.Controls.Add(this.chkShow10s);
+            this.grpGraphs.Controls.Add(this.chkShow30s);
+            this.grpGraphs.Controls.Add(this.chkShowCl);
+            this.grpGraphs.Location = new System.Drawing.Point(12, 72);
+            this.grpGraphs.Name = "grpGraphs";
+            this.grpGraphs.Size = new System.Drawing.Size(216, 132);
+            this.grpGraphs.TabIndex = 49;
+            this.grpGraphs.TabStop = false;
+            this.grpGraphs.Text = "Damage Graphs";
+            // 
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.chkSimpleRotationTab);
@@ -660,19 +698,6 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Player Rotation";
             // 
-            // grpGraphs
-            // 
-            this.grpGraphs.Controls.Add(this.chkPlayerDpsPlot);
-            this.grpGraphs.Controls.Add(this.chkShow10s);
-            this.grpGraphs.Controls.Add(this.chkShow30s);
-            this.grpGraphs.Controls.Add(this.chkShowCl);
-            this.grpGraphs.Location = new System.Drawing.Point(12, 72);
-            this.grpGraphs.Name = "grpGraphs";
-            this.grpGraphs.Size = new System.Drawing.Size(216, 132);
-            this.grpGraphs.TabIndex = 49;
-            this.grpGraphs.TabStop = false;
-            this.grpGraphs.Text = "Damage Graphs";
-            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.chkOutputCsv);
@@ -693,6 +718,14 @@
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "JSON";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // panelJson
+            // 
+            this.panelJson.Controls.Add(this.chkIndentJSON);
+            this.panelJson.Location = new System.Drawing.Point(0, 36);
+            this.panelJson.Name = "panelJson";
+            this.panelJson.Size = new System.Drawing.Size(468, 144);
+            this.panelJson.TabIndex = 45;
             // 
             // tabPage5
             // 
@@ -719,6 +752,24 @@
             this.tabPage6.Text = "Maintenance";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(24, 180);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(294, 13);
+            this.label2.TabIndex = 27;
+            this.label2.Text = "Resets the local skill list and loads all skills from the GW2 API";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(24, 24);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(310, 13);
+            this.label1.TabIndex = 26;
+            this.label1.Text = "Updates missing skills in the local skill storage from the GW2 API";
+            // 
             // cmdClose
             // 
             this.cmdClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -730,54 +781,16 @@
             this.cmdClose.UseVisualStyleBackColor = true;
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
-            // panelHtml
+            // chkB_SkipFailedTrys
             // 
-            this.panelHtml.Controls.Add(this.chkEventListDbg);
-            this.panelHtml.Controls.Add(this.panel1);
-            this.panelHtml.Controls.Add(this.chkShowEstimates);
-            this.panelHtml.Controls.Add(this.groupBox7);
-            this.panelHtml.Controls.Add(this.grpGraphs);
-            this.panelHtml.Controls.Add(this.groupBox6);
-            this.panelHtml.Controls.Add(this.groupBox5);
-            this.panelHtml.Location = new System.Drawing.Point(0, 36);
-            this.panelHtml.Name = "panelHtml";
-            this.panelHtml.Size = new System.Drawing.Size(468, 336);
-            this.panelHtml.TabIndex = 54;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 24);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(310, 13);
-            this.label1.TabIndex = 26;
-            this.label1.Text = "Updates missing skills in the local skill storage from the GW2 API";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 180);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(294, 13);
-            this.label2.TabIndex = 27;
-            this.label2.Text = "Resets the local skill list and loads all skills from the GW2 API";
-            // 
-            // panelJson
-            // 
-            this.panelJson.Controls.Add(this.chkIndentJSON);
-            this.panelJson.Location = new System.Drawing.Point(0, 36);
-            this.panelJson.Name = "panelJson";
-            this.panelJson.Size = new System.Drawing.Size(468, 144);
-            this.panelJson.TabIndex = 45;
-            // 
-            // imgTheme
-            // 
-            this.imgTheme.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.imgTheme.Location = new System.Drawing.Point(346, 30);
-            this.imgTheme.Name = "imgTheme";
-            this.imgTheme.Size = new System.Drawing.Size(110, 74);
-            this.imgTheme.TabIndex = 49;
-            this.imgTheme.TabStop = false;
+            this.chkB_SkipFailedTrys.AutoSize = true;
+            this.chkB_SkipFailedTrys.Location = new System.Drawing.Point(24, 275);
+            this.chkB_SkipFailedTrys.Name = "chkB_SkipFailedTrys";
+            this.chkB_SkipFailedTrys.Size = new System.Drawing.Size(141, 17);
+            this.chkB_SkipFailedTrys.TabIndex = 38;
+            this.chkB_SkipFailedTrys.Text = "Skip generating log if fail";
+            this.chkB_SkipFailedTrys.UseVisualStyleBackColor = true;
+            this.chkB_SkipFailedTrys.CheckedChanged += new System.EventHandler(this.chkB_SkipFailedTrys_CheckedChanged);
             // 
             // SettingsForm
             // 
@@ -806,29 +819,29 @@
             this.groupBox1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.imgTheme)).EndInit();
+            this.panelHtml.ResumeLayout(false);
+            this.panelHtml.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
+            this.grpGraphs.ResumeLayout(false);
+            this.grpGraphs.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
-            this.grpGraphs.ResumeLayout(false);
-            this.grpGraphs.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.panelJson.ResumeLayout(false);
+            this.panelJson.PerformLayout();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
-            this.panelHtml.ResumeLayout(false);
-            this.panelHtml.PerformLayout();
-            this.panelJson.ResumeLayout(false);
-            this.panelJson.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.imgTheme)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -894,5 +907,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panelJson;
         private System.Windows.Forms.PictureBox imgTheme;
+        private System.Windows.Forms.CheckBox chkB_SkipFailedTrys;
     }
 }

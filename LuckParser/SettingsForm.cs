@@ -90,6 +90,7 @@ namespace LuckParser
             UploadDPSReports_checkbox.Checked = Properties.Settings.Default.UploadToDPSReports;
             UploadDRRH_check.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
             UploadRaidar_check.Checked = Properties.Settings.Default.UploadToRaidar;
+            chkB_SkipFailedTrys.Checked = Properties.Settings.Default.SkipFailedTrys;
 
             chkHtmlExperimental.Checked = Properties.Settings.Default.NewHtmlMode;
             toolTip1.SetToolTip(chkHtmlExperimental, "Alternative method to build the HTML page.\nThe page is much smaller, and some static CSS and JS scripts are written in an external file.");
@@ -231,6 +232,10 @@ namespace LuckParser
             Properties.Settings.Default.UploadToDPSReportsRH = UploadDRRH_check.Checked;
         }
 
+        private void chkB_SkipFailedTrys_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.SkipFailedTrys = chkB_SkipFailedTrys.Checked;
+        }
         private void OutputJSONCheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SaveOutJSON = chkOutputJson.Checked;
@@ -269,5 +274,7 @@ namespace LuckParser
         {
             this.Close();
         }
+
+       
     }
 }
