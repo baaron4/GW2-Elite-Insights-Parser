@@ -127,36 +127,6 @@ namespace LuckParser
                 Task<string> DRRHTask = null;
                 Task<string> RaidarTask = null;
                 string[] uploadresult = new string[3] { "","",""};
-                if (Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.SkipFailedTrys)
-                {
-                    bg.UpdateProgress(rowData, " Uploading...", 0);
-                    if (up_controller == null)
-                    {
-                        up_controller = new UploadController();
-                    }
-                    DREITask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsEI(fInfo)) ;
-                    
-                }
-                if (Properties.Settings.Default.UploadToDPSReportsRH && !Properties.Settings.Default.SkipFailedTrys)
-                {
-                    bg.UpdateProgress(rowData, " Uploading...", 0);
-                    if (up_controller == null)
-                    {
-                        up_controller = new UploadController();
-                    }
-                    DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
-
-                }
-                if (Properties.Settings.Default.UploadToRaidar && !Properties.Settings.Default.SkipFailedTrys)
-                {
-                    bg.UpdateProgress(rowData, " Uploading...", 0);
-                    if (up_controller == null)
-                    {
-                        up_controller = new UploadController();
-                    }
-                    RaidarTask = Task.Factory.StartNew(() => up_controller.UploadRaidar(fInfo));
-
-                }
                 bg.UpdateProgress(rowData, " Working...", 0);
 
                 SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
@@ -169,19 +139,10 @@ namespace LuckParser
                     bg.UpdateProgress(rowData, "10% - Reading Binary...", 10);
                     parser.ParseLog(rowData, fInfo.FullName);
                     ParsedLog log = parser.GetParsedLog();
-                    if (Properties.Settings.Default.SkipFailedTrys)
-                    {
-                        if (!log.LogData.Success)
-                        {
-                            rowData.Cancel();
-                        }
-                    }
                     bg.ThrowIfCanceled(rowData);
                     bg.UpdateProgress(rowData, "35% - Data parsed", 35);
-
-                   
-                    //Upload if skipFailed trys is on(this is after check for fail)
-                    if (Properties.Settings.Default.UploadToDPSReports && Properties.Settings.Default.SkipFailedTrys)
+                    bool uploadAuthorized = !Properties.Settings.Default.SkipFailedTrys || (Properties.Settings.Default.SkipFailedTrys && log.LogData.Success);
+                    if (Properties.Settings.Default.UploadToDPSReports && uploadAuthorized)
                     {
                         bg.UpdateProgress(rowData, " Uploading...", 0);
                         if (up_controller == null)
@@ -189,32 +150,6 @@ namespace LuckParser
                             up_controller = new UploadController();
                         }
                         DREITask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsEI(fInfo));
-
-                    }
-                    if (Properties.Settings.Default.UploadToDPSReportsRH && Properties.Settings.Default.SkipFailedTrys)
-                    {
-                        bg.UpdateProgress(rowData, " Uploading...", 0);
-                        if (up_controller == null)
-                        {
-                            up_controller = new UploadController();
-                        }
-                        DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
-
-                    }
-                    if (Properties.Settings.Default.UploadToRaidar && Properties.Settings.Default.SkipFailedTrys)
-                    {
-                        bg.UpdateProgress(rowData, " Uploading...", 0);
-                        if (up_controller == null)
-                        {
-                            up_controller = new UploadController();
-                        }
-                        RaidarTask = Task.Factory.StartNew(() => up_controller.UploadRaidar(fInfo));
-
-                    }
-                    //Wait for Upload
-                    if (Properties.Settings.Default.UploadToDPSReports)
-                    {
-                        bg.UpdateProgress(rowData, "40% - Uploading...", 40);
                         if (DREITask != null)
                         {
                             while (!DREITask.IsCompleted)
@@ -228,9 +163,14 @@ namespace LuckParser
                             uploadresult[0] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.UploadToDPSReportsRH)
+                    if (Properties.Settings.Default.UploadToDPSReportsRH && uploadAuthorized)
                     {
-                        bg.UpdateProgress(rowData, "40% - Uploading...", 40);
+                        bg.UpdateProgress(rowData, " Uploading...", 0);
+                        if (up_controller == null)
+                        {
+                            up_controller = new UploadController();
+                        }
+                        DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
                         if (DRRHTask != null)
                         {
                             while (!DRRHTask.IsCompleted)
@@ -244,9 +184,14 @@ namespace LuckParser
                             uploadresult[1] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.UploadToRaidar)
+                    if (Properties.Settings.Default.UploadToRaidar && uploadAuthorized)
                     {
-                        bg.UpdateProgress(rowData, "40% - Uploading...", 40);
+                        bg.UpdateProgress(rowData, " Uploading...", 0);
+                        if (up_controller == null)
+                        {
+                            up_controller = new UploadController();
+                        }
+                        RaidarTask = Task.Factory.StartNew(() => up_controller.UploadRaidar(fInfo));
                         if (RaidarTask != null)
                         {
                             while (!RaidarTask.IsCompleted)
@@ -258,6 +203,13 @@ namespace LuckParser
                         else
                         {
                             uploadresult[2] = "Failed to Define Upload Task";
+                        }
+                    }
+                    if (Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        if (!log.LogData.Success)
+                        {
+                            rowData.Cancel();
                         }
                     }
                     //Creating File

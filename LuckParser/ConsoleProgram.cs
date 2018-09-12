@@ -58,36 +58,6 @@ namespace LuckParser
             Task<string> DRRHTask = null;
             Task<string> RaidarTask = null;
             string[] uploadresult = new string[3] { "", "", "" };
-            if (Properties.Settings.Default.UploadToDPSReports)
-            {
-               
-                if (up_controller == null)
-                {
-                    up_controller = new UploadController();
-                }
-                DREITask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsEI(fInfo));
-
-            }
-            if (Properties.Settings.Default.UploadToDPSReportsRH)
-            {
-              
-                if (up_controller == null)
-                {
-                    up_controller = new UploadController();
-                }
-                DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
-
-            }
-            if (Properties.Settings.Default.UploadToRaidar)
-            {
-               
-                if (up_controller == null)
-                {
-                    up_controller = new UploadController();
-                }
-                RaidarTask = Task.Factory.StartNew(() => up_controller.UploadRaidar(fInfo));
-
-            }
             try
             {
                 SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
@@ -98,9 +68,16 @@ namespace LuckParser
                 {
                     //Process evtc here
                     control.ParseLog(row, fInfo.FullName);
-                    if (Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.SkipFailedTrys)
+                    ParsedLog log = control.GetParsedLog();
+                    Console.Write("Log Parsed\n");
+                    bool uploadAuthorized = !Properties.Settings.Default.SkipFailedTrys || (Properties.Settings.Default.SkipFailedTrys && log.LogData.Success);
+                    if (Properties.Settings.Default.UploadToDPSReports)
                     {
-
+                        if (up_controller == null)
+                        {
+                            up_controller = new UploadController();
+                        }
+                        DREITask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsEI(fInfo));
                         if (DREITask != null)
                         {
                             while (!DREITask.IsCompleted)
@@ -114,9 +91,13 @@ namespace LuckParser
                             uploadresult[0] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.UploadToDPSReportsRH && !Properties.Settings.Default.SkipFailedTrys)
+                    if (Properties.Settings.Default.UploadToDPSReportsRH)
                     {
-
+                        if (up_controller == null)
+                        {
+                            up_controller = new UploadController();
+                        }
+                        DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
                         if (DRRHTask != null)
                         {
                             while (!DRRHTask.IsCompleted)
@@ -130,9 +111,13 @@ namespace LuckParser
                             uploadresult[1] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.UploadToRaidar && !Properties.Settings.Default.SkipFailedTrys)
+                    if (Properties.Settings.Default.UploadToRaidar)
                     {
-
+                        if (up_controller == null)
+                        {
+                            up_controller = new UploadController();
+                        }
+                        RaidarTask = Task.Factory.StartNew(() => up_controller.UploadRaidar(fInfo));
                         if (RaidarTask != null)
                         {
                             while (!RaidarTask.IsCompleted)
@@ -146,8 +131,6 @@ namespace LuckParser
                             uploadresult[2] = "Failed to Define Upload Task";
                         }
                     }
-                    ParsedLog log = control.GetParsedLog();
-                    Console.Write("Log Parsed\n");
                     if (Properties.Settings.Default.SkipFailedTrys)
                     {
                         if (!log.LogData.Success)
@@ -156,55 +139,6 @@ namespace LuckParser
                         }
                     }
                     //Creating File
-                    //Wait for Upload
-                    if (Properties.Settings.Default.UploadToDPSReports && Properties.Settings.Default.SkipFailedTrys)
-                    {
-                       
-                        if (DREITask != null)
-                        {
-                            while (!DREITask.IsCompleted)
-                            {
-                                System.Threading.Thread.Sleep(100);
-                            }
-                            uploadresult[0] = DREITask.Result;
-                        }
-                        else
-                        {
-                            uploadresult[0] = "Failed to Define Upload Task";
-                        }
-                    }
-                    if (Properties.Settings.Default.UploadToDPSReportsRH && Properties.Settings.Default.SkipFailedTrys)
-                    {
-                        
-                        if (DRRHTask != null)
-                        {
-                            while (!DRRHTask.IsCompleted)
-                            {
-                                System.Threading.Thread.Sleep(100);
-                            }
-                            uploadresult[1] = DRRHTask.Result;
-                        }
-                        else
-                        {
-                            uploadresult[1] = "Failed to Define Upload Task";
-                        }
-                    }
-                    if (Properties.Settings.Default.UploadToRaidar && Properties.Settings.Default.SkipFailedTrys)
-                    {
-                        
-                        if (RaidarTask != null)
-                        {
-                            while (!RaidarTask.IsCompleted)
-                            {
-                                System.Threading.Thread.Sleep(100);
-                            }
-                            uploadresult[2] = RaidarTask.Result;
-                        }
-                        else
-                        {
-                            uploadresult[2] = "Failed to Define Upload Task";
-                        }
-                    }
                     //save location
                     DirectoryInfo saveDirectory;
                     if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
