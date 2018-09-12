@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
     class HTMLBuilderNew
     {
         private const string scriptVersion = "0.5";
-        private const int scriptVersionRev = 1;
+        private const int scriptVersionRev = 2;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -2451,6 +2451,8 @@ namespace LuckParser.Controllers
 
             html = html.Replace("${graphDataJson}", BuildGraphJson());
 
+            html = html.Replace("<!--${combatReplay}-->", BuildCombatReplayContent());
+
             sw.Write(html);
             return;
 
@@ -2993,6 +2995,24 @@ namespace LuckParser.Controllers
             */
         }
 
+        private string BuildCombatReplayContent()
+        {
+            if (!_settings.ParseCombatReplay || !_log.FightData.Logic.CanCombatReplay)
+            {
+                return "";
+            }
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (StreamWriter sw = new StreamWriter(ms))
+                {
+                    sw.Write("<div id=\"replay_template\">");
+                    CreateReplayTable(sw);
+                    sw.Write("</div>");
+                }
+                return Encoding.UTF8.GetString(ms.ToArray());
+            }
+        }
+
         private string BuildFlomixCss(string path)
         {
             string scriptContent = Properties.Resources.flomix_ei_css;
@@ -3066,8 +3086,9 @@ namespace LuckParser.Controllers
 
             data.flags.simpleRotation = _settings.SimpleRotation;
             data.flags.dark = !_settings.LightTheme;
+            data.flags.combatReplay = _settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay;
 
-            data.graphs.Add(new GraphDto("full", "Full"));
+                data.graphs.Add(new GraphDto("full", "Full"));
             data.graphs.Add(new GraphDto("s10", "10s"));
             data.graphs.Add(new GraphDto("s30", "30s"));
 
