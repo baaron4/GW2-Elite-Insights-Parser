@@ -1,6 +1,7 @@
 ﻿OK (General encounter infos)
 OK (Boss Panel)
 OK (DPS Graph Boss HP)
+OK (Combat Replay)
 Mechanics: Boss Mechanics
 Boss Tab
 	Boss itself

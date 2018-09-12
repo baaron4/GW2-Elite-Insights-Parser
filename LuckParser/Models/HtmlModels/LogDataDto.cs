@@ -37,5 +37,7 @@ namespace LuckParser.Models.HtmlModels
         public bool simpleRotation;
         [DataMember]
         public bool dark;
+        [DataMember]
+        public bool combatReplay;
     }
 }
