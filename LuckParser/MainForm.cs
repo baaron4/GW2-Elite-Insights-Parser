@@ -144,7 +144,7 @@ namespace LuckParser
                     bool uploadAuthorized = !Properties.Settings.Default.SkipFailedTrys || (Properties.Settings.Default.SkipFailedTrys && log.LogData.Success);
                     if (Properties.Settings.Default.UploadToDPSReports && uploadAuthorized)
                     {
-                        bg.UpdateProgress(rowData, " Uploading...", 0);
+                        bg.UpdateProgress(rowData, " 40% - Uploading to DPSReports using EI...", 40);
                         if (up_controller == null)
                         {
                             up_controller = new UploadController();
@@ -165,7 +165,7 @@ namespace LuckParser
                     }
                     if (Properties.Settings.Default.UploadToDPSReportsRH && uploadAuthorized)
                     {
-                        bg.UpdateProgress(rowData, " Uploading...", 0);
+                        bg.UpdateProgress(rowData, " 40% - Uploading to DPSReports using RH...", 40);
                         if (up_controller == null)
                         {
                             up_controller = new UploadController();
@@ -186,7 +186,7 @@ namespace LuckParser
                     }
                     if (Properties.Settings.Default.UploadToRaidar && uploadAuthorized)
                     {
-                        bg.UpdateProgress(rowData, " Uploading...", 0);
+                        bg.UpdateProgress(rowData, " 40% - Uploading to Raidar...", 40);
                         if (up_controller == null)
                         {
                             up_controller = new UploadController();
