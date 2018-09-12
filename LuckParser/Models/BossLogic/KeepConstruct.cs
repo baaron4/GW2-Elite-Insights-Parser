@@ -114,26 +114,26 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: needs arc circles for blades
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
                     {
-                        ParseEnum.ThrashIDS.Core,
-                        ParseEnum.ThrashIDS.Jessica,
-                        ParseEnum.ThrashIDS.Olson,
-                        ParseEnum.ThrashIDS.Engul,
-                        ParseEnum.ThrashIDS.Faerla,
-                        ParseEnum.ThrashIDS.Caulle,
-                        ParseEnum.ThrashIDS.Henley,
-                        ParseEnum.ThrashIDS.Galletta,
-                        ParseEnum.ThrashIDS.Ianim,
-                        ParseEnum.ThrashIDS.GreenPhantasm,
-                        ParseEnum.ThrashIDS.InsidiousProjection,
-                        ParseEnum.ThrashIDS.UnstableLeyRift,
-                        ParseEnum.ThrashIDS.RadiantPhantasm,
-                        ParseEnum.ThrashIDS.CrimsonPhantasm,
-                        ParseEnum.ThrashIDS.RetrieverProjection
+                        ParseEnum.TrashIDS.Core,
+                        ParseEnum.TrashIDS.Jessica,
+                        ParseEnum.TrashIDS.Olson,
+                        ParseEnum.TrashIDS.Engul,
+                        ParseEnum.TrashIDS.Faerla,
+                        ParseEnum.TrashIDS.Caulle,
+                        ParseEnum.TrashIDS.Henley,
+                        ParseEnum.TrashIDS.Galletta,
+                        ParseEnum.TrashIDS.Ianim,
+                        ParseEnum.TrashIDS.GreenPhantasm,
+                        ParseEnum.TrashIDS.InsidiousProjection,
+                        ParseEnum.TrashIDS.UnstableLeyRift,
+                        ParseEnum.TrashIDS.RadiantPhantasm,
+                        ParseEnum.TrashIDS.CrimsonPhantasm,
+                        ParseEnum.TrashIDS.RetrieverProjection
                     };
             List<CastLog> magicCharge = cls.Where(x => x.SkillId == 35048).ToList();
             List<CastLog> magicExplode = cls.Where(x => x.SkillId == 34894).ToList();

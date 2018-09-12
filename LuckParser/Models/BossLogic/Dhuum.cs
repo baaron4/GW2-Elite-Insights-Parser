@@ -103,14 +103,14 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: facing information (pull thingy)
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
                     {
-                        ParseEnum.ThrashIDS.Echo,
-                        ParseEnum.ThrashIDS.Enforcer,
-                        ParseEnum.ThrashIDS.Messenger
+                        ParseEnum.TrashIDS.Echo,
+                        ParseEnum.TrashIDS.Enforcer,
+                        ParseEnum.TrashIDS.Messenger
                     };
             List<CastLog> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
             CastLog majorSplit = cls.Find(x => x.SkillId == 47396);
