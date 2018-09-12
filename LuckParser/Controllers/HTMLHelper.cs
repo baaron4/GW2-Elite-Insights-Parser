@@ -1,5 +1,4 @@
-﻿using LuckParser.Models;
-using LuckParser.Models.ParseModels;
+﻿using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,67 +10,38 @@ namespace LuckParser.Controllers
 {
     class HTMLHelper
     {
-        public static SettingsContainer settings;
+        public static SettingsContainer Settings;
 
-        public static void writeCastingItem(StreamWriter sw, CastLog cl, SkillData skill_data, long start, long end)
+        public static void WriteCastingItem(StreamWriter sw, CastLog cl, SkillData skillList, long start, long end)
         {
-            string skillName = "";
-            GW2APISkill skill = null;
-            List<SkillItem> s_list = skill_data.getSkillList();
-            if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
-            {
-                skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
-            }
-            if (skill == null)
-            {
-                skillName = skill_data.getName(cl.getID());
-            }
-            else
-            {
-                skillName = skill.name;
-            }
-            float dur = 0.0f;
+            GW2APISkill skill = skillList.Get(cl.SkillId)?.ApiSkill;
+            string skillName = skill == null ? skillList.GetName(cl.SkillId) : skill.name;
+            float dur;
             if (skillName == "Dodge")
             {
                 dur = 0.5f;
             }
-            else if (cl.getID() == -2)
-            {//wepswap
+            else if (cl.SkillId == SkillItem.WeaponSwapId)
+            {
                 skillName = "Weapon Swap";
                 dur = 0.1f;
             }
-            else if (skillName == "Resurrect")
-            {
-                dur = cl.getActDur() / 1000f;
-            }
-            else if (skillName == "Bandage")
-            {
-                dur = cl.getActDur() / 1000f;
-            }
             else
             {
-                dur = cl.getActDur() / 1000f;
+                dur = cl.ActualDuration / 1000f;
             }
             skillName = skillName.Replace("\"", "");
-            float offset = (cl.getTime() - start) / 1000f;
+            float offset = (cl.Time - start) / 1000f;
             float xVal = dur;
             if (offset < 0.0f)
             {
                 xVal += offset;
             }
-            xVal = Math.Min(xVal, (end - cl.getTime()) / 1000f);
+            xVal = Math.Min(xVal, (end - cl.Time) / 1000f);
             sw.Write("{");
             {
-                if (cl.getID() == -5)
-                {
-                    sw.Write("y: ['1'],");
-                }
-                else
-                {
-                    sw.Write("y: ['1.5'],");
-                }
+                sw.Write(cl.SkillId == -5 ? "y: ['1']," : "y: ['1.5'],");
               
-
                 sw.Write(
                        "x: ['" + xVal + "']," +
                        "base:'" + Math.Max(offset,0.0f) + "'," +
@@ -81,14 +51,7 @@ namespace LuckParser.Controllers
                        "type: 'bar',");
                 if (skill != null)
                 {
-                    if (skill.slot == "Weapon_1")
-                    {
-                        sw.Write("width:'0.5',");
-                    }
-                    else
-                    {
-                        sw.Write("width:'1',");
-                    }
+                    sw.Write(skill.slot == "Weapon_1" ? "width:'0.5'," : "width:'1',");
 
                 }
                 else
@@ -99,15 +62,15 @@ namespace LuckParser.Controllers
                         "hoverlabel:{namelength:'-1'},");
                 sw.Write("marker: {");
                 {
-                        if (cl.endActivation() == ParseEnum.Activation.CancelFire)
+                        if (cl.EndActivation == ParseEnum.Activation.CancelFire)
                         {
                             sw.Write("color: 'rgb(40,40,220)',");
                         }
-                        else if (cl.endActivation() == ParseEnum.Activation.CancelCancel)
+                        else if (cl.EndActivation == ParseEnum.Activation.CancelCancel)
                         {
                             sw.Write("color: 'rgb(220,40,40)',");
                         }
-                        else if (cl.endActivation() == ParseEnum.Activation.Reset)
+                        else if (cl.EndActivation == ParseEnum.Activation.Reset)
                         {
                             sw.Write("color: 'rgb(40,220,40)',");
                         }
@@ -118,11 +81,11 @@ namespace LuckParser.Controllers
                     sw.Write("width: '5',");
                     sw.Write("line:{");
                     {
-                            if (cl.startActivation() == ParseEnum.Activation.Normal)
+                            if (cl.StartActivation == ParseEnum.Activation.Normal)
                             {
                                 sw.Write("color: 'rgb(20,20,20)',");
                             }
-                            else if (cl.startActivation() == ParseEnum.Activation.Quickness)
+                            else if (cl.StartActivation == ParseEnum.Activation.Quickness)
                             {
                                 sw.Write("color: 'rgb(220,40,220)',");
                             }
@@ -136,18 +99,13 @@ namespace LuckParser.Controllers
             sw.Write(" },");
         }
 
-        public static void writeCastingItemIcon(StreamWriter sw, CastLog cl, SkillData skill_data, long start, bool last)
+        public static void WriteCastingItemIcon(StreamWriter sw, CastLog cl, SkillData skillList, long start, bool last)
         {
             string skillIcon = "";
-            GW2APISkill skill = null;
-            List<SkillItem> s_list = skill_data.getSkillList();
-            if (s_list.FirstOrDefault(x => x.getID() == cl.getID()) != null)
+            GW2APISkill skill = skillList.Get(cl.SkillId)?.ApiSkill;
+            if (skill != null && cl.SkillId != -2)
             {
-                skill = s_list.FirstOrDefault(x => x.getID() == cl.getID()).GetGW2APISkill();
-            }
-            if (skill != null && cl.getID() != -2)
-            {
-                float offset = (cl.getTime() - start) / 1000f;
+                float offset = (cl.Time - start) / 1000f;
                 if (skill.slot != "Weapon_1")
                 {
                     skillIcon = skill.icon;
@@ -166,36 +124,29 @@ namespace LuckParser.Controllers
             }
             else
             {
-                string skillName = "";
-
-                if (cl.getID() == -2)
-                { //wepswap
-                    skillName = "Weapon Swap";
-                    // skillIcon = "https://wiki.guildwars2.com/images/archive/c/ce/20140606174035%21Weapon_Swap_Button.png";
-                }
-                else
-                {
-                    skillName = skill_data.getName(cl.getID());
-                }
-
-
+                string skillName = cl.SkillId == SkillItem.WeaponSwapId ? "Weapon Swap" : skillList.GetName(cl.SkillId);
                 if (skillName == "Dodge")
                 {
-                    // skillIcon = "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
+                    skillIcon = GetLink("Dodge");
                 }
                 else if (skillName == "Resurrect")
                 {
-                    //skillIcon = "https://wiki.guildwars2.com/images/archive/d/dd/20120611120554%21Downed.png";
+                    skillIcon = GetLink("Resurrect");
                 }
                 else if (skillName == "Bandage")
                 {
-                    // skillIcon = "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
+                    skillIcon = GetLink("Bandage");
                 }
+                else if (cl.SkillId == SkillItem.WeaponSwapId)
+                {
+                    skillIcon = GetLink("Swap");
+                }
+
                 sw.Write("{" +
                               "source: '" + skillIcon + "'," +
                               "xref: 'x'," +
                               "yref: 'y'," +
-                              "x: " + (cl.getTime() - start) / 1000f + "," +
+                              "x: " + (cl.Time - start) / 1000f + "," +
                               "y: 0," +
                               "sizex: 1.1," +
                               "sizey: 1.1," +
@@ -209,7 +160,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        public static void writeBoonTableHeader(StreamWriter sw, List<Boon> list_to_use)
+        public static void WriteBoonTableHeader(StreamWriter sw, List<Boon> listToUse)
         {
             sw.Write("<thead>");
             {
@@ -218,9 +169,9 @@ namespace LuckParser.Controllers
                     sw.Write("<th width=\"50px\">Sub</th>");
                     sw.Write("<th width=\"50px\"></th>");
                     sw.Write("<th>Name</th>");
-                    foreach (Boon boon in list_to_use)
+                    foreach (Boon boon in listToUse)
                     {
-                        sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.getLink() + "\" alt=\"" + boon.getName() + "\" title =\" " + boon.getName() + "\" height=\"18\" width=\"18\" >" + "</th>");
+                        sw.Write("<th width=\"50px\">" + "<img src=\"" + boon.Link + "\" alt=\"" + boon.Name + "\" title =\" " + boon.Name + "\" height=\"18\" width=\"18\" >" + "</th>");
                     }
                 }
                 sw.Write("</tr> ");
@@ -229,18 +180,18 @@ namespace LuckParser.Controllers
 
         }
 
-        public static void writeBoonGenTableBody(StreamWriter sw, Player player, List<Boon> list_to_use, Dictionary<int, string> boonArray)
+        public static void WriteBoonGenTableBody(StreamWriter sw, Player player, List<Boon> listToUse, Dictionary<long, string> boonArray)
         {
             sw.Write("<tr>");
             {
-                sw.Write("<td>" + player.getGroup().ToString() + "</td>");
-                sw.Write("<td>" + "<img src=\"" + GetLink(player.getProf().ToString()) + "\" alt=\"" + player.getProf().ToString() + "\" height=\"20\" width=\"20\" >" + "</td>");
-                sw.Write("<td>" + player.getCharacter().ToString() + "</td>");
-                foreach (Boon boon in list_to_use)
+                sw.Write("<td>" + player.Group + "</td>");
+                sw.Write("<td>" + "<img src=\"" + GetLink(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"20\" width=\"20\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
+                sw.Write("<td>" + player.Character + "</td>");
+                foreach (Boon boon in listToUse)
                 {
-                    if (boonArray.ContainsKey(boon.getID()))
+                    if (boonArray.ContainsKey(boon.ID))
                     {
-                        sw.Write("<td>" + boonArray[boon.getID()] + "</td>");
+                        sw.Write("<td>" + boonArray[boon.ID] + "</td>");
                     }
                     else
                     {
@@ -251,7 +202,7 @@ namespace LuckParser.Controllers
             sw.Write("</tr>");
         }
 
-        public static void writeDamageDistTableHeader(StreamWriter sw)
+        public static void WriteDamageDistTableHeader(StreamWriter sw)
         {
             sw.Write("<thead>");
             {
@@ -277,7 +228,7 @@ namespace LuckParser.Controllers
             sw.Write("</thead>");
         }
 
-        public static void writeDamageDistTableFoot(StreamWriter sw, int finalTotalDamage)
+        public static void WriteDamageDistTableFoot(StreamWriter sw, int finalTotalDamage)
         {
             sw.Write("<tfoot class=\"text-dark\">");
             {
@@ -303,20 +254,20 @@ namespace LuckParser.Controllers
             sw.Write("</tfoot>");
         }
 
-        public static void writeDamageDistTableCondi(StreamWriter sw, HashSet<int> usedIDs, List<DamageLog> damageLogs, int finalTotalDamage)
+        public static void WriteDamageDistTableCondi(StreamWriter sw, HashSet<long> usedIDs, List<DamageLog> damageLogs, int finalTotalDamage, List<Boon> presentConditions)
         {
-            foreach (Boon condi in Boon.getCondiBoonList())
+            foreach (Boon condi in presentConditions)
             {
                 int totaldamage = 0;
                 int mindamage = 0;
-                int avgdamage = 0;
+                int avgdamage;
                 int hits = 0;
                 int maxdamage = 0;
-                int condiID = condi.getID();
+                long condiID = condi.ID;
                 usedIDs.Add(condiID);
-                foreach (DamageLog dl in damageLogs.Where(x => x.getID() == condiID))
+                foreach (DamageLog dl in damageLogs.Where(x => x.SkillId == condiID))
                 {
-                    int curdmg = dl.getDamage();
+                    int curdmg = dl.Damage;
                     totaldamage += curdmg;
                     if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                     if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
@@ -326,11 +277,11 @@ namespace LuckParser.Controllers
                 avgdamage = (int)(totaldamage / (double)hits);
                 if (totaldamage != 0)
                 {
-                    string condiName = condi.getName();// Boon.getCondiName(condiID);
+                    string condiName = condi.Name;// Boon.getCondiName(condiID);
                     sw.Write("<tr class=\"condi\">");
                     {
-                        sw.Write("<td align=\"left\"><img src=\"" + condi.getLink() + "\" alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
-                        sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
+                        sw.Write("<td align=\"left\"><img src=\"" + condi.Link + "\" alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
+                        sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
                         sw.Write("<td>" + totaldamage + "</td>");
                         sw.Write("<td>" + mindamage + "</td>");
                         sw.Write("<td>" + avgdamage + "</td>");
@@ -349,11 +300,11 @@ namespace LuckParser.Controllers
             }
         }
 
-        public static void writeDamageDistTableSkill(StreamWriter sw, SkillItem skill, List<DamageLog> damageLogs, int finalTotalDamage, int casts = -1, double timeswasted = -1, double timessaved = 1)
+        public static void WriteDamageDistTableSkill(StreamWriter sw, SkillItem skill, SkillData skillData, List<DamageLog> damageLogs, int finalTotalDamage, int casts = -1, double timeswasted = -1, double timessaved = 1)
         {
             int totaldamage = 0;
             int mindamage = 0;
-            int avgdamage = 0;
+            int avgdamage;
             int hits = 0;
             int maxdamage = 0;
             int crit = 0;
@@ -361,14 +312,14 @@ namespace LuckParser.Controllers
             int glance = 0;
             foreach (DamageLog dl in damageLogs)
             {
-                int curdmg = dl.getDamage();
+                int curdmg = dl.Damage;
                 totaldamage += curdmg;
                 if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
                 if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
                 hits++;
-                ParseEnum.Result result = dl.getResult();
+                ParseEnum.Result result = dl.Result;
                 if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
-                if (dl.isFlanking() == 1) { flank++; }
+                if (dl.IsFlanking == 1) { flank++; }
             }
             avgdamage = (int)(totaldamage / (double)hits);
             string wasted = timeswasted > 0.0 ? Math.Round(timeswasted, 2) + "s" : "";
@@ -377,22 +328,24 @@ namespace LuckParser.Controllers
             if (casts > 0) {
                 hpcast = Math.Round(hits / (double)casts, 2);
             }
-            if (totaldamage != 0 && skill.GetGW2APISkill() != null)
+            string skillName = (skill.ID.ToString() == skill.Name) ? skillData.GetName(skill.ID) : skill.Name;
+            if (totaldamage != 0 && skill.ApiSkill != null)
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
+                    sw.Write("<td align=\"left\"><img src=\"" + skill.ApiSkill.icon + "\" alt=\"" + skill.Name + "\" title=\"" + skill.ID + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
+                    sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
                     sw.Write("<td>" + totaldamage + "</td>");
                     sw.Write("<td>" + mindamage + "</td>");
                     sw.Write("<td>" + avgdamage + "</td>");
                     sw.Write("<td>" + maxdamage + "</td>");
                     sw.Write("<td>" + (casts != -1 ? casts.ToString() : "") + "</td>");
                     sw.Write("<td>" + hits + "</td>");
-                    sw.Write("<td>" + (hpcast != -1 ? hpcast.ToString() : "") + "</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</td>");
+                    sw.Write("<td>" + (hpcast > 0 ? hpcast.ToString() : "") + "</td>");
+
+                    sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + crit + " out of " + hits + " hits\">" + Math.Round(100 * (double)crit / hits, 2) + "%</td>");
+                    sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + flank + " out of " + hits + " hits\">" + Math.Round(100 * (double)flank / hits, 2) + "%</td>");
+                    sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + glance + " out of " + hits + " hits\">" + Math.Round(100 * (double)glance / hits, 2) + "%></td>");
                     sw.Write("<td>" + wasted +"</td>");
                     sw.Write("<td>" + saved + "</td>");
                 }
@@ -402,28 +355,28 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)totaldamage / finalTotalDamage) + "%</td>");
+                    sw.Write("<td align=\"left\">" + skillName + "</td>");
+                    sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
                     sw.Write("<td>" + totaldamage + "</td>");
                     sw.Write("<td>" + mindamage + "</td>");
                     sw.Write("<td>" + avgdamage + "</td>");
                     sw.Write("<td>" + maxdamage + "</td>");
                     sw.Write("<td>" + (casts != -1 ? casts.ToString() : "") + "</td>");
                     sw.Write("<td>" + hits + "</td>");
-                    sw.Write("<td>" + (hpcast != -1 ? hpcast.ToString() : "") + "</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)crit / hits) + "%</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)flank / hits) + "%</td>");
-                    sw.Write("<td>" + String.Format("{0:0.00}", 100 * (double)glance / hits) + "%</td>");
+                    sw.Write("<td>" + (hpcast > 0 ? hpcast.ToString() : "") + "</td>");
+                    sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + crit + " out of " + hits + " hits\">" + Math.Round(100 * (double)crit / hits,2) + "%</td>");
+                    sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + flank + " out of " + hits + " hits\">" + Math.Round(100 * (double)flank / hits,2) + "%</td>");
+                    sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + glance + " out of " + hits + " hits\">" + Math.Round(100 * (double)glance / hits,2) + "%</td>");
                     sw.Write("<td>" + wasted + "</td>");
                     sw.Write("<td>" + saved + "</td>");
                 }
                 sw.Write("</tr>");
             }
-            else if (skill.GetGW2APISkill() != null)
+            else if (skill.ApiSkill != null)
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\"><img src=\"" + skill.GetGW2APISkill().icon + "\" alt=\"" + skill.getName() + "\" title=\"" + skill.getID() + "\" height=\"18\" width=\"18\">" + skill.getName() + "</td>");
+                    sw.Write("<td align=\"left\"><img src=\"" + skill.ApiSkill.icon + "\" alt=\"" + skill.Name + "\" title=\"" + skill.ID + "\" height=\"18\" width=\"18\">" + skillName + "</td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
@@ -444,7 +397,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write("<tr>");
                 {
-                    sw.Write("<td align=\"left\">" + skill.getName() + "</td>");
+                    sw.Write("<td align=\"left\">" + skillName + "</td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
@@ -463,7 +416,7 @@ namespace LuckParser.Controllers
             }
         }
         
-        public static void writeBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, BossData boss_data, string y_axis = "")
+        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, FightData fightData, string yAxis = "")
         {
             //Boss Health
             //Adding dps axis
@@ -473,7 +426,7 @@ namespace LuckParser.Controllers
                 maxDPS = 1000;
             }
             int hotCount = 0;
-            List<Point> BossHOT = boss_data.getHealthOverTime().Where(x => x.X >= start && x.X <= end).ToList();
+            List<Point> BossHOT = fightData.HealthOverTime.Where(x => x.X >= start && x.X <= end).ToList();
             foreach (Point dp in BossHOT)
             {
                 if (hotCount == BossHOT.Count - 1)
@@ -491,8 +444,7 @@ namespace LuckParser.Controllers
             sw.Write("],");
             //text axis is boss hp in %
             sw.Write("text: [");
-
-            float scaler2 = boss_data.getHealth() / 100;
+            
             hotCount = 0;
             foreach (Point dp in BossHOT)
             {
@@ -529,31 +481,39 @@ namespace LuckParser.Controllers
             sw.Write("],");
             sw.Write(" mode: 'lines'," +
                     " line: {shape: 'spline', dash: 'dashdot'}," +
-                   ( y_axis.Length > 0 ? " yaxis: '"+ y_axis+"',"  : "") +
+                   ( yAxis.Length > 0 ? " yaxis: '"+ yAxis+"',"  : "") +
                     "hoverinfo: 'text'," +
                     " name: 'Boss health'");
             
         }
 
-        public static void writeBoonGraph(StreamWriter sw, BoonsGraphModel bgm, long start, long end)
+        public static void WritePlayerTabBoonGraph(StreamWriter sw, BoonsGraphModel bgm, long start, long end)
         {
-            List<Point> bChart = bgm.getBoonChart().Where(x => x.X >= start / 1000 && x.X <= end / 1000).ToList();
+            long roundedStart = 1000 * (start / 1000);
+            long roundedEnd = 1000 * (end / 1000);
+            List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= roundedStart && x.Start <= roundedEnd).ToList();
+            if (bChart.Count == 1 && bChart.First().Value == 0)
+            {
+                return;
+            }
             int bChartCount = 0;
             sw.Write("y: [");
             {
-                foreach (Point pnt in bChart)
+                foreach (BoonsGraphModel.Segment seg in bChart)
                 {
                     if (bChartCount == bChart.Count - 1)
                     {
-                        sw.Write("'" + pnt.Y + "'");
+                        sw.Write("'" + seg.Value + "',");
+                        sw.Write("'" + seg.Value + "'");
                     }
                     else
                     {
-                        sw.Write("'" + pnt.Y + "',");
+                        sw.Write("'" + seg.Value + "',");
+                        sw.Write("'" + seg.Value + "',");
                     }
                     bChartCount++;
                 }
-                if (bgm.getBoonChart().Count == 0)
+                if (bgm.BoonChart.Count == 0)
                 {
                     sw.Write("'0'");
                 }
@@ -562,19 +522,23 @@ namespace LuckParser.Controllers
             sw.Write("x: [");
             {
                 bChartCount = 0;
-                foreach (Point pnt in bChart)
+                foreach (BoonsGraphModel.Segment seg in bChart)
                 {
+                    double segStart = Math.Round(Math.Max(seg.Start - roundedStart, 0) / 1000.0,3);
+                    double segEnd = Math.Round(Math.Min(seg.End - roundedStart, roundedEnd - roundedStart) / 1000.0,3);
                     if (bChartCount == bChart.Count - 1)
                     {
-                        sw.Write("'" + (pnt.X - (int)start / 1000) + "'");
+                        sw.Write("'" + segStart + "',");
+                        sw.Write("'" + segEnd + "'");
                     }
                     else
                     {
-                        sw.Write("'" + (pnt.X - (int)start / 1000) + "',");
+                        sw.Write("'" + segStart + "',");
+                        sw.Write("'" + segEnd + "',");
                     }
                     bChartCount++;
                 }
-                if (bgm.getBoonChart().Count == 0)
+                if (bgm.BoonChart.Count == 0)
                 {
                     sw.Write("'0'");
                 }
@@ -583,22 +547,22 @@ namespace LuckParser.Controllers
             sw.Write(" yaxis: 'y2'," +
                  " type: 'scatter',");
             //  "legendgroup: '"+Boon.getEnum(bgm.getBoonName()).getPloltyGroup()+"',";
-            if (bgm.getBoonName() == "Might" || bgm.getBoonName() == "Quickness")
-            {
-
-            }
-            else
+            if (!(bgm.BoonName == "Might" || bgm.BoonName == "Quickness"))
             {
                 sw.Write(" visible: 'legendonly',");
             }
-            sw.Write(" line: {color:'" + GetLink("Color-" + bgm.getBoonName()) + "'},");
+            sw.Write(" line: {color:'" + GetLink("Color-" + bgm.BoonName) + "'},");
             sw.Write(" fill: 'tozeroy'," +
-                 " name: \"" + bgm.getBoonName() + "\"");
+                 " name: \"" + bgm.BoonName + "\"");
         }
 
-        public static void writeDPSGraph(StreamWriter sw, string name, List<Point> playerdpsgraphdata, AbstractPlayer p)
+        public static void WritePlayerTabDPSGraph(StreamWriter sw, string name, List<Point> playerdpsgraphdata, AbstractPlayer p)
         {
             int ptdgCount = 0;
+            bool total = name.Contains("Total");
+            bool cleave = name.Contains("Cleave");
+            bool s10 = name.Contains("10s");
+            bool s30 = name.Contains("30s");
             sw.Write("y: [");
             {
                 foreach (Point dp in playerdpsgraphdata)
@@ -641,42 +605,102 @@ namespace LuckParser.Controllers
                 }
             }
             sw.Write("],");
+            string color = GetLink("Color-" + p.Prof + ( total? "-Total" : ( cleave? "-NonBoss": "")));
             sw.Write(" mode: 'lines'," +
-                   "line: {shape: 'spline',color:'" + GetLink("Color-" + p.getProf() + (name.Contains("Total") ? "-Total" : "")) + "'}," +
+                   "line: {shape: 'spline',color:'" + color + "'}," +
                    "yaxis: 'y3',");
-            if (name.Contains("10s") || name.Contains("30s"))
+            if (s10 || s30)
             {
                 sw.Write(" visible: 'legendonly',");
             }
             // "legendgroup: 'Damage'," +
-            sw.Write("name: '" + name+"'");
+            sw.Write("name: '" + name+"'," +
+                "legendgroup: '" + p.Character + (s10 ? "10s" : (s30 ? "30s" : ""))+"'");
         }
 
-        public static void writeDamageStatsTableHeader(StreamWriter sw)
+        public static int WriteDPSPlots(StreamWriter sw, List<Point> graphdata, List<Point> totalData = null)
+        {
+            //Adding dps axis
+            int maxDPS = 0;
+            sw.Write("y: [");
+            for (int i = 0; i < graphdata.Count; i++)
+            {
+                if (i == graphdata.Count - 1)
+                {
+                    sw.Write("'" + graphdata[i].Y + "'");
+                }
+                else
+                {
+                    sw.Write("'" + graphdata[i].Y + "',");
+                }
+                if (totalData != null)
+                {
+                    maxDPS = Math.Max(maxDPS, graphdata[i].Y);
+                    if (i >= totalData.Count)
+                    {
+                        totalData.Add(new Point(graphdata[i].X, graphdata[i].Y));
+                    }
+                    else
+                    {
+                        totalData[i] = new Point(graphdata[i].X, graphdata[i].Y + totalData[i].Y);
+                    }
+                }
+            }
+            //cuts off extra comma
+            if (graphdata.Count == 0)
+            {
+                sw.Write("'0'");
+            }
+
+            sw.Write("],");
+            //add time axis
+            sw.Write("x: [");
+            for (int i = 0; i < graphdata.Count; i++)
+            {
+                if (i == graphdata.Count - 1)
+                {
+                    sw.Write("'" + graphdata[i].X + "'");
+                }
+                else
+                {
+                    sw.Write("'" + graphdata[i].X + "',");
+                }
+            }
+            if (graphdata.Count == 0)
+            {
+                sw.Write("'0'");
+            }
+
+            sw.Write("],");
+            return maxDPS;
+        }     
+
+        public static void WriteDamageStatsTableHeader(StreamWriter sw)
         {
             sw.Write("<tr>");
             {
                 sw.Write("<th>Sub</th>");
                 sw.Write("<th></th>");
                 sw.Write("<th>Name</th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Crit") + "\" alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Scholar") + "\" alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("SwS") + "\" alt=\"SwS\" title=\"Percent time hits while moveing\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Flank") + "\" alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Glance") + "\" alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Blinded") + "\" alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Interupts") + "\" alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Invuln") + "\" alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Wasted") + "\" alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Saved") + "\" alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Swap") + "\" alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Downs") + "\" alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
-                sw.Write("<th><img src=\"" + HTMLHelper.GetLink("Dead") + "\" alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Crit") + "\" alt=\"Crits\" title=\"Percent time hits critical\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Scholar") + "\" alt=\"Scholar\" title=\"Percent time hits while above 90% health\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("SwS") + "\" alt=\"SwS\" title=\"Percent time hits while moving\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Flank") + "\" alt=\"Flank\" title=\"Percent time hits while flanking\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Glance") + "\" alt=\"Glance\" title=\"Percent time hits while glanceing\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Blinded") + "\" alt=\"Miss\" title=\"Number of hits while blinded\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Interupts") + "\" alt=\"Interupts\" title=\"Number of hits interupted?/hits used to interupt\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Invuln") + "\" alt=\"Ivuln\" title=\"times the enemy was invulnerable to attacks\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Wasted") + "\" alt=\"Wasted\" title=\"Time wasted(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Saved") + "\" alt=\"Saved\" title=\"Time saved(in seconds) interupting skill casts\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Swap") + "\" alt=\"Swap\" title=\"Times weapon swapped\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Stack") + "\" alt=\"Stack\" title=\"Average Distance from center of group stack\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Downs") + "\" alt=\"Downs\" title=\"Times downed\" height=\"18\" width=\"18\"></th>");
+                sw.Write("<th><img src=\"" + GetLink("Dead") + "\" alt=\"Dead\" title=\"Time died\" height=\"18\" width=\"18\"></th>");
             }
             sw.Write("</tr>");
         }
 
-        public static void writeDamageStatsTableFoot(StreamWriter sw, List<string[]> footerList)
+        public static void WriteDamageStatsTableFoot(StreamWriter sw, List<string[]> footerList)
         {
             foreach (string groupNum in footerList.Select(x => x[0]).Distinct())
             {
@@ -697,6 +721,7 @@ namespace LuckParser.Controllers
                     sw.Write("<td></td>");
                     sw.Write("<td></td>");
                     sw.Write("<td>" + groupList.Sum(c => int.Parse(c[10])) + "</td>");
+                    sw.Write("<td></td>");
                     sw.Write("<td>" + groupList.Sum(c => int.Parse(c[11])) + "</td>");
                     sw.Write("<td></td>");
                 }
@@ -718,10 +743,554 @@ namespace LuckParser.Controllers
                 sw.Write("<td></td>");
                 sw.Write("<td></td>");
                 sw.Write("<td>" + footerList.Sum(c => int.Parse(c[10])) + "</td>");
+                sw.Write("<td></td>");
                 sw.Write("<td>" + footerList.Sum(c => int.Parse(c[11])) + "</td>");
                 sw.Write("<td></td>");
             }
             sw.Write("</tr>");
+        }
+
+        public static void WriteCombatReplayInterface(StreamWriter sw, Tuple<int,int> canvasSize, ParsedLog log)
+        {
+            sw.Write("<div class=\"d-flex justify-content-around align-items-center justify-content-center\">");
+            {
+                sw.Write("<div class=\"d-flex flex-column flex-wrap\">");
+                {
+                    sw.Write("<canvas width=\"" + canvasSize.Item1 + "px\" height=\"" + canvasSize.Item2 + "px\" id=\"replayCanvas\" class=\"replay\">");
+                    sw.Write("</canvas>");
+                    sw.Write("<div class=\"d-flex justify-content-center slidecontainer\">");
+                    {
+                        sw.Write("<input oninput=\"updateTime(this.value);\"type=\"range\" min=\"0\" max=\"" + (log.Boss.CombatReplay.GetPositions().Count - 1) + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
+                        sw.Write("<input class=\"ml-5\" type=\"text\" id=\"timeRangeDisplay\" disabled value=\"0 secs\">");
+                    }
+                    sw.Write("</div>");
+                    sw.Write("<div class=\"d-flex justify-content-center\">");
+                    {
+                        sw.Write("<div onclick=\"startAnimate();\" type=\"button\" class=\"btn btn-dark\">Animate</div>");
+                        sw.Write("<div onclick=\"stopAnimate();\" type=\"button\" class=\"btn btn-dark\">Pause</div>");
+                        sw.Write("<div onclick=\"restartAnimate();\" type=\"button\" class=\"btn btn-dark\">Restart</div>");
+                    }
+                    sw.Write("</div>");
+                    sw.Write("<div class=\"d-flex justify-content-center btn-group btn-group-toggle\" data-toggle=\"buttons\">");
+                    {
+                        sw.Write("<label onclick=\"normalSpeed()\" class=\"btn btn-dark active\">" +
+                                "<input type=\"radio\" autocomplete=\"off\" checked>1x" +
+                            "</label>");
+                        sw.Write("<label onclick=\"twoSpeed()\" class=\"btn btn-dark\">" +
+                                 "<input  type=\"radio\" autocomplete=\"off\">2x" +
+                             "</label>");
+                        sw.Write("<label onclick=\"fourSpeed()\" class=\"btn btn-dark\">" +
+                                 "<input  type=\"radio\" autocomplete=\"off\">4x" +
+                             "</label>");
+                    }
+                    sw.Write("</div>");
+                }
+                sw.Write("</div>");
+
+                sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center\">");
+                {
+                    sw.Write("<h3>Range Selectors</h3>");
+                    sw.Write("<div style=\"width:200px;\" class=\"d-flex flex-row flex-wrap justify-content-center align-items-center btn-group btn-group-toggle mb-5\" data-toggle=\"buttons\">");
+                    {
+                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(180);\" class=\"btn btn-dark\">" +
+                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
+                            "180" +
+                            "</label >");
+                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(240);\" class=\"btn btn-dark\">" +
+                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
+                            "240" +
+                            "</label >");
+                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(300);\" class=\"btn btn-dark\">" +
+                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
+                            "300" +
+                            "</label >");
+                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(600);\" class=\"btn btn-dark\">" +
+                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
+                            "600" +
+                            "</label >");
+                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(900);\" class=\"btn btn-dark\">" +
+                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
+                            "900" +
+                            "</label >");
+                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(1200);\" class=\"btn btn-dark\">" +
+                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
+                            "1200" +
+                            "</label >");
+                    }
+                    sw.Write("</div>");
+                    sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center btn-group btn-group-toggle mb-5\" data-toggle=\"buttons\">");
+                    {
+                        List<int> groups = log.PlayerList.Select(x => x.Group).Distinct().ToList();
+                        foreach (int group in groups)
+                        {
+                            sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center mt-2\">");
+                            {
+                                sw.Write("<h3>Group " + group + "</h3>");
+                                foreach (Player p in log.PlayerList.Where(x => x.Group == group))
+                                {
+                                    sw.Write("<label id=\"id" + p.InstID + "\" style=\"width: 150px;\" onclick=\"selectActor(" + p.InstID + ")\"  class=\"btn btn-dark\">" +
+                                        "<input class=\"invisible\" type=\"radio\" autocomplete=\"off\">" +
+                                        p.Character.Substring(0, Math.Min(10, p.Character.Length))
+                                        + " <img src=\"" + GetLink(p.Prof)
+                                            + "\" alt=\"" + p.Prof
+                                            + "\" height=\"18\" width=\"18\" >" +
+                                        "</label >");
+                                }
+                            }
+                            sw.Write("</div>");
+                        }
+                    }
+                    sw.Write("</div>");
+                }
+                sw.Write("</div>");
+
+            }
+            sw.Write("</div>");
+        }
+
+        private static void WriteCombatReplayControls(StreamWriter sw, ParsedLog log, int pollingRate)
+        {
+            // animation control
+            sw.Write("function startAnimate() {if (animation === null) { " +
+                "if (time ===" + (log.Boss.CombatReplay.GetPositions().Count - 1) + ") {" +
+                    "time = 0;" +
+                "}" +
+                "animation = setInterval(function(){myanimate(time++)},speed);" +
+                "}};");
+            sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null; time--;}};");
+            sw.Write("function restartAnimate() { time = 0; myanimate(time++);};");
+            // speed control
+            sw.Write("function normalSpeed(){ speed = " + pollingRate + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
+            sw.Write("function twoSpeed(){ speed = " + pollingRate/2 + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
+            sw.Write("function fourSpeed(){ speed = " + pollingRate/4 + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
+            // slider
+            sw.Write("var timeSlider = document.getElementById('timeRange');");
+            sw.Write("var timeSliderDisplay = document.getElementById('timeRangeDisplay');");
+            sw.Write("function updateTime(value) { time = value; myanimate(time); updateTextInput(time)};");
+            sw.Write("function updateTextInput(val) {" +
+                "timeSliderDisplay.value = Math.round("+pollingRate+"*val/100.0)/10.0 + ' secs';" +
+            "}");
+            // Range marker control
+            sw.Write("var rangeControl = new Map();" +
+                "rangeControl.set(180,false);" +
+                "rangeControl.set(240,false);" +
+                "rangeControl.set(300,false);" +
+                "rangeControl.set(600,false);" +
+                "rangeControl.set(900,false);" +
+                "rangeControl.set(1200,false);");
+            sw.Write("function toggleRange(radius) {rangeControl.set(radius, !rangeControl.get(radius)); myanimate(time);};");
+            // Selection
+            sw.Write("function selectActor(pId) { " +
+                    "var actor = data.get(pId);" +
+                    "selectedPlayer = null;" +
+                    "var oldSelect = actor.selected;" +
+                    "data.forEach(function(value,key,map) {" +
+                        "value.selected = false;" +
+                    "});" +
+                    "actor.selected = !oldSelect;" +
+                    "selectedGroup = actor.selected ? actor.group : -1;" +
+                    "if (!actor.selected){" +
+                        "var hasActive = document.getElementById('id'+pId).classList.contains('active');" +
+                        "if (hasActive) {" +
+                            "setTimeout(function() {document.getElementById('id'+pId).classList.remove('active')},50);" +
+                        "}" +
+                    "} else {" +
+                        "selectedPlayer = actor;" +
+                    "}" +
+                    "myanimate(time);" +
+                "}");
+        }
+
+        private static void WriteCombatReplayMainClass(StreamWriter sw, ParsedLog log,CombatReplayMap map, int pollingRate)
+        {
+            // Players and boss
+            sw.Write("var mainActor = function(group, imgSrc) {" +
+                    "this.group = group;" +
+                    "this.pos = [];" +
+                    "this.start = 0;" +
+                    "this.dead = [];" +
+                    "this.down = [];" +
+                    "this.selected = false;" +
+                    "this.img = new Image();" +
+                    "this.img.src = imgSrc;" +
+                "};");
+            sw.Write("mainActor.prototype.died = function(timeToUse) {" +
+                    "for (var i = 0; i < this.dead.length; i++) {" +
+                        "if (!this.dead[i]) continue;" +
+                        "if (this.dead[i][0] <= timeToUse && this.dead[i][1] >= timeToUse) {" +
+                            "return true;" +
+                        "}" +
+                    "}" +
+                    "return false;" +
+                "};");
+            sw.Write("mainActor.prototype.downed = function(timeToUse) {" +
+                    "for (var i = 0; i < this.down.length; i++) {" +
+                        "if (!this.down[i]) continue;"+
+                        "if (this.down[i][0] <= timeToUse && this.down[i][1] >= timeToUse) {" +
+                            "return true;" +
+                        "}" +
+                    "}" +
+                    "return false;" +
+                "};");
+            sw.Write("mainActor.prototype.draw = function(ctx,timeToUse, pixelSize) {" +
+                    "if (!this.pos.length) {" +
+                    "   return;" +
+                    "}" +
+                    "var halfSize = pixelSize / 2;" +
+                    "var x = this.pos.length > 2 ? this.pos[2*timeToUse] : this.pos[0];" +
+                    "var y = this.pos.length > 2 ? this.pos[2*timeToUse + 1] : this.pos[1];" +
+                    // the player is in the selected's player group
+                    "if (!this.selected && this.group === selectedGroup) {" +
+                        "ctx.beginPath();" +
+                        "ctx.lineWidth='2';" +
+                        "ctx.strokeStyle='blue';" +
+                        "ctx.rect(x-halfSize,y-halfSize,pixelSize,pixelSize);" +
+                        "ctx.stroke();" +
+                    "} else if (this.selected){" +
+                        // this player is selected
+                        "ctx.beginPath();" +
+                        "ctx.lineWidth='4';" +
+                        "ctx.strokeStyle='green';" +
+                        "ctx.rect(x-halfSize,y-halfSize,pixelSize,pixelSize);" +
+                        "ctx.stroke();" +
+                        "var _this = this;" +
+                        // draw range markers
+                        "rangeControl.forEach(function(enabled,radius,map) {" +
+                            "if (!enabled) return;" +
+                            "ctx.beginPath();" +
+                            "ctx.lineWidth='2';" +
+                            "ctx.strokeStyle='green';" +
+                            "ctx.arc(x,y,inch * radius,0,2*Math.PI);" +
+                            "ctx.stroke();" +
+                        "});" +
+                    "}" +
+                    "if (this.died(timeToUse)) {" +
+                        "ctx.drawImage(deadIcon," +
+                        "x-1.5*halfSize," +
+                        "y-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
+                    "} else if (this.downed(timeToUse)) {" +
+                        "ctx.drawImage(downIcon," +
+                        "x-1.5*halfSize," +
+                        "y-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
+                    "} else {" +
+                        "ctx.drawImage(this.img," +
+                        "x-halfSize," +
+                        "y-halfSize,pixelSize,pixelSize);" +
+                    "}" +
+                "};");
+            // create players
+            foreach (Player p in log.PlayerList)
+            {
+                sw.Write("{");
+                sw.Write("var p = new mainActor(" + p.Group + ",'" + p.CombatReplay.GetIcon() + "');");
+                sw.Write("data.set(" + p.InstID + ",p);");
+                sw.Write("p.pos = [");
+                foreach (Point3D pos in p.CombatReplay.GetPositions())
+                {
+                    Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
+                    sw.Write(coord.Item1 + ",");
+                    sw.Write(coord.Item2 + ",");
+                }
+                sw.Write("];");
+                sw.Write("p.dead = [");
+                foreach (Tuple<long, long> status in p.CombatReplay.GetDead())
+                {
+                    sw.Write("[" + status.Item1/pollingRate + ",");
+                    sw.Write(status.Item2 / pollingRate + "],");
+                }
+                sw.Write("];");
+                sw.Write("p.down = [");
+                foreach (Tuple<long,long> status in p.CombatReplay.GetDown())
+                {
+                    sw.Write("[" + status.Item1 / pollingRate + ",");
+                    sw.Write(status.Item2 / pollingRate + "],");
+                }
+                sw.Write("];");
+                sw.Write("}");
+            }
+            // create boss
+            sw.Write("boss = new mainActor(-2,'" + log.Boss.CombatReplay.GetIcon() + "');");
+            sw.Write("boss.pos = [");
+            foreach (Point3D pos in log.Boss.CombatReplay.GetPositions())
+            {
+                Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
+                sw.Write(coord.Item1 + ",");
+                sw.Write(coord.Item2 + ",");
+            }
+            sw.Write("];");
+        }
+
+        private static void WriteCombatReplaySecondaryClass(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
+        {
+            // thrash mobs
+            sw.Write("var secondaryActor = function(imgSrc, start, end) {" +
+                    "this.pos = [];" +
+                    "this.start = start;" +
+                    "this.end = end;" +
+                    "this.img = new Image();" +
+                    "this.img.src = imgSrc;" +
+                "};");
+            sw.Write("secondaryActor.prototype.draw = function(ctx,timeToUse,pixelSize){" +
+                    "if (!(this.start > timeToUse || this.end < timeToUse) && this.pos.length) {" +
+                        "var x = this.pos.length > 2 ? this.pos[2*(timeToUse - this.start)] : this.pos[0];" +
+                        "var y = this.pos.length > 2 ? this.pos[2*(timeToUse - this.start) + 1] : this.pos[1];" +
+                        "ctx.drawImage(this.img," +
+                        "x-pixelSize/2,y-pixelSize/2," +
+                        "pixelSize,pixelSize);" +
+                    "}" +
+                "};");
+            // create thrash mobs
+            foreach (Mob mob in log.Boss.ThrashMobs)
+            {
+                sw.Write("{");
+                sw.Write("var p = new secondaryActor('" + mob.CombatReplay.GetIcon() + "'," + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "," + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate + ");");
+                sw.Write("secondaryData.set('" + mob.InstID + "_" + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "_" + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate + "',p);");
+                sw.Write("p.pos = [");
+                foreach (Point3D pos in mob.CombatReplay.GetPositions())
+                {
+                    Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
+                    sw.Write(coord.Item1 + ",");
+                    sw.Write(coord.Item2 + ",");
+                }
+                sw.Write("];");
+                sw.Write("}");
+            }
+        }
+
+        private static void WriteCombatReplayCircleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
+        {
+            // Circle actors
+            sw.Write("var circleActor = function(radius,fill,growing, color, start, end) {" +
+                    "this.pos = null;" +
+                    "this.master = null;" +
+                    "this.start = start;" +
+                    "this.radius = radius;" +
+                    "this.end = end;" +
+                    "this.growing = growing;" +
+                    "this.fill = fill;" +
+                    "this.color = color;" +
+                "};");
+            sw.Write("circleActor.prototype.draw = function(ctx,timeToUse){" +
+                    "if (!(this.start > timeToUse || this.end < timeToUse)) {" +
+                        "var x,y;" +
+                        "if (this.pos instanceof Array) {" +
+                            "x = this.pos[0];" +
+                            "y = this.pos[1];" +
+                        "} else {" +
+                            "if (!this.master) {" +
+                                "var playerID = parseInt(this.pos);" +
+                                "this.master = data.has(playerID) ? data.get(playerID) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);" +
+                            "}" +
+                            "var start = this.master.start ? this.master.start : 0;" +
+                            "x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];" +
+                            "y = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start) + 1] : this.master.pos[1];" +
+                        "}" +
+                        "if (this.growing) {" +
+                            "var percent = Math.min((timeToUse - this.start)/(this.growing - this.start),1.0);" +
+                            "ctx.beginPath();" +
+                            "ctx.arc(x,y,percent*inch * this.radius,0,2*Math.PI);" +
+                            "if (this.fill) {" +
+                                "ctx.fillStyle=this.color;" +
+                                "ctx.fill();" +
+                            "} else {" +
+                                "ctx.lineWidth='2';" +
+                                "ctx.strokeStyle=this.color;" +
+                                "ctx.stroke();" +
+                            "}" +
+                        "} else {" +
+                            "ctx.beginPath();" +
+                            "ctx.arc(x,y,inch * this.radius,0,2*Math.PI);" +
+                            "if (this.fill) {" +
+                                "ctx.fillStyle=this.color;" +
+                                "ctx.fill();" +
+                            "} else {" +
+                                "ctx.lineWidth='2';" +
+                                "ctx.strokeStyle=this.color;" +
+                                "ctx.stroke();" +
+                            "}" +
+                        "}" +
+                    "}" +
+                "};");
+            foreach (Mob mob in log.Boss.ThrashMobs)
+            {
+                CombatReplay replay = mob.CombatReplay;
+                foreach(CircleActor a in replay.GetCircleActors())
+                {
+                    sw.Write("{");
+                    sw.Write("var a = new circleActor("+a.GetRadius()+","+(a.IsFilled() ? "true" : "false") + ","+a.GetGrowing() / pollingRate + ","+a.GetColor()+","+a.GetLifespan().Item1/pollingRate+","+ a.GetLifespan().Item2 / pollingRate + ");");
+                    sw.Write("mechanicData.add(a);");
+                    sw.Write("a.pos ="+a.GetPosition(mob.InstID + "_" + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "_" + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate, map)+";");
+                    sw.Write("}");
+                }
+            }
+            foreach (Player player in log.PlayerList)
+            {
+                CombatReplay replay = player.CombatReplay;
+                foreach (CircleActor a in replay.GetCircleActors())
+                {
+                    sw.Write("{");
+                    sw.Write("var a = new circleActor(" + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
+                    sw.Write("mechanicData.add(a);");
+                    sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
+                    sw.Write("}");
+                }
+            }
+            foreach (CircleActor a in log.Boss.CombatReplay.GetCircleActors())
+            {
+                sw.Write("{");
+                sw.Write("var a = new circleActor(" + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
+                sw.Write("mechanicData.add(a);");
+                sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
+                sw.Write("}");
+
+            }
+        }
+
+        private static void WriteCombatReplayDoughnutActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
+        {
+            // Circle actors
+            sw.Write("var doughnutActor = function(innerRadius,outerRadius,growing, color, start, end) {" +
+                    "this.pos = null;" +
+                    "this.master = null;" +
+                    "this.start = start;" +
+                    "this.innerRadius = innerRadius;" +
+                    "this.outerRadius = outerRadius;" +
+                    "this.end = end;" +
+                    "this.growing = growing;" +
+                    "this.color = color;" +
+                "};");
+            sw.Write("doughnutActor.prototype.draw = function(ctx,timeToUse){" +
+                    "if (!(this.start > timeToUse || this.end < timeToUse)) {" +
+                        "var x,y;" +
+                        "if (this.pos instanceof Array) {" +
+                            "x = this.pos[0];" +
+                            "y = this.pos[1];" +
+                        "} else {" +
+                            "if (!this.master) {" +
+                                "var playerID = parseInt(this.pos);" +
+                                "this.master = data.has(playerID) ? data.get(playerID) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);" +
+                            "}" +
+                            "var start = this.master.start ? this.master.start : 0;" +
+                            "x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];" +
+                            "y = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start) + 1] : this.master.pos[1];" +
+                        "}" +
+                        "var radius = 0.5*(this.innerRadius + this.outerRadius);" +
+                        "var width = (this.outerRadius - this.innerRadius);" +
+                        "if (this.growing) {" +
+                            "var percent = Math.min((timeToUse - this.start)/(this.growing - this.start),1.0);" +
+                            "ctx.beginPath();" +
+                            "ctx.arc(x,y,inch * radius,0,2*Math.PI);" +
+                            "ctx.lineWidth=(inch * percent * width).toString();" +
+                            "ctx.strokeStyle=this.color;" +
+                            "ctx.stroke();" +
+                        "} else {" +
+                            "ctx.beginPath();" +
+                            "ctx.arc(x,y,inch * radius,0,2*Math.PI);" +
+                            "ctx.lineWidth=(inch * width).toString();" +
+                            "ctx.strokeStyle=this.color;" +
+                            "ctx.stroke();" +
+                        "}" +
+                    "}" +
+                "};");
+            foreach (Mob mob in log.Boss.ThrashMobs)
+            {
+                CombatReplay replay = mob.CombatReplay;
+                foreach (DoughnutActor a in replay.GetDoughnutActors())
+                {
+                    sw.Write("{");
+                    sw.Write("var a = new doughnutActor(" + a.GetInnerRadius() + "," + a.GetOuterRadius() + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
+                    sw.Write("mechanicData.add(a);");
+                    sw.Write("a.pos =" + a.GetPosition(mob.InstID + "_" + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "_" + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate, map) + ";");
+                    sw.Write("}");
+                }
+            }
+            foreach (Player player in log.PlayerList)
+            {
+                CombatReplay replay = player.CombatReplay;
+                foreach (DoughnutActor a in replay.GetDoughnutActors())
+                {
+                    sw.Write("{");
+                    sw.Write("var a = new doughnutActor(" + a.GetInnerRadius() + "," + a.GetOuterRadius() + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
+                    sw.Write("mechanicData.add(a);");
+                    sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
+                    sw.Write("}");
+                }
+            }
+            foreach (DoughnutActor a in log.Boss.CombatReplay.GetDoughnutActors())
+            {
+                sw.Write("{");
+                sw.Write("var a = new doughnutActor(" + a.GetInnerRadius() + "," + a.GetOuterRadius() + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
+                sw.Write("mechanicData.add(a);");
+                sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
+                sw.Write("}");
+
+            }
+        }
+
+        public static void WriteCombatReplayScript(StreamWriter sw, ParsedLog log, Tuple<int,int> canvasSize, CombatReplayMap map, int pollingRate)
+        {
+            sw.Write("<script>");
+            {
+                // globals
+                sw.Write("var animation = null;");
+                sw.Write("var time = 0;");
+                sw.Write("var inch = " + map.GetInch()+";");
+                sw.Write("var speed = "+ pollingRate+";");
+                sw.Write("var selectedGroup = -1;");
+                sw.Write("var selectedPlayer = null;");
+                sw.Write("var data = new Map();");
+                sw.Write("var secondaryData = new Map();");
+                sw.Write("var mechanicData = new Set();");
+                sw.Write("var deadIcon = new Image();" +
+                            "deadIcon.src = '"+GetLink("Dead")+"';");
+                sw.Write("var downIcon = new Image();" +
+                            "downIcon.src = '" + GetLink("Downs") + "';");
+                sw.Write("var boss = null;");
+                WriteCombatReplayControls(sw, log, pollingRate);
+                WriteCombatReplayMainClass(sw, log, map, pollingRate);
+                WriteCombatReplaySecondaryClass(sw, log, map, pollingRate);
+                WriteCombatReplayCircleActors(sw, log, map, pollingRate);
+                WriteCombatReplayDoughnutActors(sw, log, map, pollingRate);
+                // Main loop
+                sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
+                sw.Write("ctx.imageSmoothingEnabled = true;");
+                sw.Write("ctx.imageSmoothingQuality = 'high';");
+                sw.Write("function myanimate(timeToUse) {");
+                {
+                    sw.Write("ctx.clearRect(0,0," + canvasSize.Item1 + "," + canvasSize.Item2 + ");");
+                    // draw arena
+                    sw.Write("ctx.drawImage(bgImage,0,0," + canvasSize.Item1 + "," + canvasSize.Item2 + ");");
+                    // draw mechanics
+                    sw.Write("mechanicData.forEach(function(value,key,map) {" +
+                            "value.draw(ctx,timeToUse);" +
+                        "});");
+                    // draw unselected players
+                    sw.Write("data.forEach(function(value,key,map) {" +
+                            "if (!value.selected) {" +
+                                "value.draw(ctx,timeToUse,20);"+
+                            "}" +
+                        "});");
+                    // draw thrash mobs
+                    sw.Write("secondaryData.forEach(function(value,key,map) {" +
+                            "value.draw(ctx,timeToUse,28);"+
+                        "});");
+                    // draw boss
+                    sw.Write("boss.draw(ctx,timeToUse,36);");
+                    // draw selected player
+                    sw.Write("if (selectedPlayer) {" +
+                                "selectedPlayer.draw(ctx,timeToUse,20);"+                              
+                            "}");
+                    sw.Write("if (timeToUse === " + (log.Boss.CombatReplay.GetPositions().Count - 1) + ") {stopAnimate();}");
+                    sw.Write("timeSlider.value = time;");
+                    sw.Write("updateTextInput(time);");
+                }
+                sw.Write("}");
+                // when background loaded
+                sw.Write("var bgImage = new Image();");
+                sw.Write("bgImage.onload = function() { myanimate(0);};");
+                sw.Write("bgImage.src = '" + map.GetLink() + "';");
+            }
+            sw.Write("</script>");
         }
 
         public static string GetLink(string name)
@@ -729,7 +1298,7 @@ namespace LuckParser.Controllers
             switch (name)
             {
                 case "Question":
-                    return "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png";
+                    return "https://wiki.guildwars2.com/images/d/de/Sword_slot.png";
                 case "Sword":
                     return "https://wiki.guildwars2.com/images/0/07/Crimson_Antique_Blade.png";
                 case "Axe":
@@ -911,7 +1480,7 @@ namespace LuckParser.Controllers
                 case "17632-ext":
                     return "skorv";
                 case "17949-ext":
-                    return "arstra";
+                    return "arts";
                 case "17759-ext":
                     return "arkk";
 
@@ -1001,6 +1570,35 @@ namespace LuckParser.Controllers
                 case "Color-Scourge": return "rgb(82,167,111)";
                 case "Color-Boss": return "rgb(82,167,250)";
 
+                case "Color-Warrior-NonBoss": return "rgb(125,109,66)";
+                case "Color-Berserker-NonBoss": return "rgb(125,109,66)";
+                case "Color-Spellbreaker-NonBoss": return "rgb(125,109,66)";
+                case "Color-Guardian-NonBoss": return "rgb(62,101,113)";
+                case "Color-Dragonhunter-NonBoss": return "rgb(62,101,113)";
+                case "Color-Firebrand-NonBoss": return "rgb(62,101,113)";
+                case "Color-Revenant-NonBoss": return "rgb(110,60,50)";
+                case "Color-Herald-NonBoss": return "rgb(110,60,50)";
+                case "Color-Renegade-NonBoss": return "rgb(110,60,50)";
+                case "Color-Engineer-NonBoss": return "rgb(109,83,48)";
+                case "Color-Scrapper-NonBoss": return "rgb(109,83,48)";
+                case "Color-Holosmith-NonBoss": return "rgb(109,83,48)";
+                case "Color-Ranger-NonBoss": return "rgb(75,115,70)";
+                case "Color-Druid-NonBoss": return "rgb(75,115,70)";
+                case "Color-Soulbeast-NonBoss": return "rgb(75,115,70)";
+                case "Color-Thief-NonBoss": return "rgb(101,76,79)";
+                case "Color-Daredevil-NonBoss": return "rgb(101,76,79)";
+                case "Color-Deadeye-NonBoss": return "rgb(101,76,79)";
+                case "Color-Elementalist-NonBoss": return "rgb(127,74,72)";
+                case "Color-Tempest-NonBoss": return "rgb(127,74,72)";
+                case "Color-Weaver-NonBoss": return "rgb(127,74,72)";
+                case "Color-Mesmer-NonBoss": return "rgb(96,60,111)";
+                case "Color-Chronomancer-NonBoss": return "rgb(96,60,111)";
+                case "Color-Mirage-NonBoss": return "rgb(96,60,111)";
+                case "Color-Necromancer-NonBoss": return "rgb(46,88,60)";
+                case "Color-Reaper-NonBoss": return "rgb(46,88,60)";
+                case "Color-Scourge-NonBoss": return "rgb(46,88,60)";
+                case "Color-Boss-NonBoss": return "rgb(92,177,250)";
+
                 case "Color-Warrior-Total": return "rgb(125,109,66)";
                 case "Color-Berserker-Total": return "rgb(125,109,66)";
                 case "Color-Spellbreaker-Total": return "rgb(125,109,66)";
@@ -1033,25 +1631,27 @@ namespace LuckParser.Controllers
                 case "Crit":
                     return "https://wiki.guildwars2.com/images/9/95/Critical_Chance.png";
                 case "Scholar":
-                    return "https://wiki.guildwars2.com/images/thumb/2/2b/Superior_Rune_of_the_Scholar.png/40px-Superior_Rune_of_the_Scholar.png";
+                    return "https://wiki.guildwars2.com/images/2/2b/Superior_Rune_of_the_Scholar.png";
                 case "SwS":
                     return "https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png";
                 case "Downs":
                     return "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
+                case "Resurrect":
+                    return "https://wiki.guildwars2.com/images/3/3d/Downed_ally.png";
                 case "Dead":
                     return "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
                 case "Flank":
-                    return "https://wiki.guildwars2.com/images/thumb/b/bb/Hunter%27s_Tactics.png/40px-Hunter%27s_Tactics.png";
+                    return "https://wiki.guildwars2.com/images/b/bb/Hunter%27s_Tactics.png";
                 case "Glance":
                     return "https://wiki.guildwars2.com/images/f/f9/Weakness.png";
                 case "Miss":
                     return "https://wiki.guildwars2.com/images/3/33/Blinded.png";
                 case "Interupts":
-                    return "https://wiki.guildwars2.com/images/thumb/7/79/Daze.png/20px-Daze.png";
+                    return "https://wiki.guildwars2.com/images/7/79/Daze.png";
                 case "Invuln":
                     return "https://wiki.guildwars2.com/images/e/eb/Determined.png";
                 case "Blinded":
-                    return "https://wiki.guildwars2.com/images/thumb/3/33/Blinded.png/20px-Blinded.png";
+                    return "https://wiki.guildwars2.com/images/3/33/Blinded.png";
                 case "Wasted":
                     return "https://wiki.guildwars2.com/images/b/b3/Out_Of_Health_Potions.png";
                 case "Saved":
@@ -1059,11 +1659,13 @@ namespace LuckParser.Controllers
                 case "Swap":
                     return "https://wiki.guildwars2.com/images/c/ce/Weapon_Swap_Button.png";
                 case "Blank":
-                    return "https://wiki.guildwars2.com/images/thumb/d/de/Sword_slot.png/40px-Sword_slot.png";
+                    return "https://wiki.guildwars2.com/images/d/de/Sword_slot.png";
                 case "Dodge":
-                    return "https://wiki.guildwars2.com/images/c/cc/Dodge_Instructor.png";
+                    return "https://wiki.guildwars2.com/images/archive/b/b2/20150601155307%21Dodge.png";
                 case "Bandage":
-                    return "https://render.guildwars2.com/file/D2D7D11874060D68760BFD519CFC77B6DF14981F/102928.png";
+                    return "https://wiki.guildwars2.com/images/0/0c/Bandage.png";
+                case "Stack":
+                    return "https://wiki.guildwars2.com/images/e/ef/Commander_arrow_marker.png";
 
                 case "Color-Aegis": return "rgb(102,255,255)";
                 case "Color-Fury": return "rgb(255,153,0)";

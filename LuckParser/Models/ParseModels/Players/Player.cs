@@ -1,4 +1,5 @@
-﻿using LuckParser.Models.DataModels;
+﻿using LuckParser.Controllers;
+using LuckParser.Models.DataModels;
 using System;
 using System.Collections.Generic;
 
@@ -10,119 +11,87 @@ namespace LuckParser.Models.ParseModels
     public class Player : AbstractMasterPlayer
     {
         // Fields
-        private String account;
-        private int group;
-        private long dcd = 0;//time in ms the player dcd
+        public readonly string Account;
+        public readonly int Group;
+        public long Disconnected { get; set; }//time in ms the player dcd
        
-        private List<CombatItem> consumeList = new List<CombatItem>();
+        private readonly List<Tuple<Boon,long>> _consumeList = new List<Tuple<Boon, long>>();
         //weaponslist
-        private string[] weapons_array;
+        private string[] _weaponsArray;
 
         // Constructors
-        public Player(AgentItem agent) : base(agent)
+        public Player(AgentItem agent, bool noSquad) : base(agent)
         {
-            String[] name = agent.getName().Split('\0');
-            account = name[1];
-            group   = int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
+            String[] name = agent.Name.Split('\0');
+            Account = name[1];
+            Group = noSquad ? 1 : int.Parse(name[2], NumberStyles.Integer, CultureInfo.InvariantCulture);
         }
-
-        // Getters
-
-        public string getAccount()
-        {
-            return account;
-        }
-    
-        public int getGroup()
-        {
-            return group;
-        }
-
-
-        public int getToughness()
-        {
-            return agent.getToughness();
-        }
-
-        public int getHealing()
-        {
-            return agent.getHealing();
-        }
-
-        public int getCondition()
-        {
-            return agent.getCondition();
-        }
+        
         // Public methods
-        public int[] getCleanses(ParsedLog log, long start, long end) {
-            long time_start = log.getBossData().getFirstAware();
+        public int[] GetCleanses(ParsedLog log, long start, long end) {
+            long timeStart = log.FightData.FightStart;
             int[] cleanse = { 0, 0 };
-            int retalId = Boon.getBoonByName("Retaliation")[0].getID();
-            foreach (CombatItem c in log.getBoonData().Where(x => x.getTime() >= (start + time_start) && x.getTime() <= (end + time_start)))
+            List<Boon> condiList = Boon.GetCondiBoonList();
+            foreach (CombatItem c in log.CombatData.Where(x=>x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuff == 1 && x.Time >= (start + timeStart) && x.Time <= (end + timeStart)))
             {
-                if (agent.getInstid() == c.getDstInstid() && c.getIFF() == ParseEnum.IFF.Friend && (c.isBuffremove() == ParseEnum.BuffRemove.All))
+                if (c.IsActivation == ParseEnum.Activation.None)
                 {
-                    long time = c.getTime() - time_start;
-                    if (time > 0)
+                    if ((Agent.InstID == c.DstInstid || Agent.InstID == c.DstMasterInstid) && c.IFF == ParseEnum.IFF.Friend && (c.IsBuffRemove != ParseEnum.BuffRemove.None))
                     {
-                        if (Boon.getCondiBoonList().Exists(x => x.getID() != retalId && x.getID() == c.getSkillID()))
+                        long time = c.Time - timeStart;
+                        if (time > 0)
                         {
-                            cleanse[0]++;
-                            cleanse[1] += c.getValue();
+                            if (condiList.Exists(x=>x.ID == c.SkillID))
+                            {
+                                cleanse[0]++;
+                                cleanse[1] += c.BuffDmg;
+                            }
                         }
                     }
                 }
             }
             return cleanse;
         }
-        public int[] getReses(ParsedLog log, long start, long end)
+        public int[] GetReses(ParsedLog log, long start, long end)
         {
-            List<CastLog> cls = getCastLogs(log, start, end);
+            List<CastLog> cls = GetCastLogs(log, start, end);
             int[] reses = { 0, 0 };
             foreach (CastLog cl in cls) {
-                if (cl.getID() == 1066)
+                if (cl.SkillId == SkillItem.ResurrectId)
                 {
                     reses[0]++;
-                    reses[1] += cl.getActDur();
+                    reses[1] += cl.ActualDuration;
                 }
             }
             return reses;
         }
-        public string[] getWeaponsArray(ParsedLog log)
+        public string[] GetWeaponsArray(ParsedLog log)
         {
-            if (weapons_array == null)
+            if (_weaponsArray == null)
             {
                 EstimateWeapons( log);
             }
-            return weapons_array;
+            return _weaponsArray;
         }
-        
-        public long GetDC()
+
+        public List<Tuple<Boon, long>> GetConsumablesList(ParsedLog log, long start, long end)
         {
-            return dcd;
-        }
-        public void SetDC(long value)
-        {
-            dcd = value;
-        }
-        public List<int[]> getConsumablesList(ParsedLog log, long start, long end)
-        {
-            if (consumeList.Count == 0)
+            if (_consumeList.Count == 0)
             {
-                setConsumablesList(log);
+                SetConsumablesList(log);
             }
-            return consumeList.Where(x => x.getTime() >= start && x.getTime() <= end).Select( x => new int[] { x.getSkillID(), (int)x.getTime() }).ToList() ;
+            return _consumeList.Where(x => x.Item2 >= start && x.Item2 <= end).ToList() ;
         }
         
         // Private Methods
         private void EstimateWeapons(ParsedLog log)
         {
             string[] weapons = new string[4];//first 2 for first set next 2 for second set
-            List<SkillItem> s_list = log.getSkillData().getSkillList();
-            List<CastLog> casting = getCastLogs(log, 0, log.getBossData().getAwareDuration());      
+            SkillData skillList = log.SkillData;
+            List<CastLog> casting = GetCastLogs(log, 0, log.FightData.FightDuration);      
             int swapped = 0;//4 for first set and 5 for next
             long swappedTime = 0;
-            List<CastLog> swaps = casting.Where(x => x.getID() == -2).Take(2).ToList();
+            List<CastLog> swaps = casting.Where(x => x.SkillId == SkillItem.WeaponSwapId).Take(2).ToList();
             // If the player never swapped, assume they are on their first set
             if (swaps.Count == 0)
             {
@@ -131,146 +100,318 @@ namespace LuckParser.Models.ParseModels
             // if the player swapped once, check on which set they started
             else if (swaps.Count == 1)
             {
-                swapped = swaps.First().getExpDur() == 4 ? 5 : 4;
+                swapped = swaps.First().ExpectedDuration == 4 ? 5 : 4;
             }
             foreach (CastLog cl in casting)
             {
-                GW2APISkill apiskill = null;
-                SkillItem skill = s_list.FirstOrDefault(x => x.getID() == cl.getID());
-                if (skill != null)
-                {
-                    apiskill = skill.GetGW2APISkill();
-                }
-                if (apiskill != null && cl.getTime() > swappedTime)
+                GW2APISkill apiskill = skillList.Get(cl.SkillId)?.ApiSkill;
+                if (apiskill != null && cl.Time > swappedTime)
                 {
                     if (apiskill.type == "Weapon" && apiskill.professions.Count() > 0 && (apiskill.categories == null || (apiskill.categories.Count() == 1 && apiskill.categories[0] == "Phantasm")))
                     {
-                        if (apiskill.weapon_type == "Greatsword" || apiskill.weapon_type == "Staff" || apiskill.weapon_type == "Rifle" || apiskill.weapon_type == "Longbow" || apiskill.weapon_type == "Shortbow" || apiskill.weapon_type == "Hammer")
+                        if (apiskill.dual_wield != null)
                         {
-                            if (swapped == 4 && (weapons[0] == null && weapons[1] == null))
+                            if (swapped == 4)
+                            {
+                                weapons[0] = apiskill.weapon_type;
+                                weapons[1] = apiskill.dual_wield;
+                            }
+                            else if (swapped == 5)
+                            {
+                                weapons[2] = apiskill.weapon_type;
+                                weapons[3] = apiskill.dual_wield;
+                            }
+                        }
+                        else if (apiskill.weapon_type == "Greatsword" || apiskill.weapon_type == "Staff" || apiskill.weapon_type == "Rifle" || apiskill.weapon_type == "Longbow" || apiskill.weapon_type == "Shortbow" || apiskill.weapon_type == "Hammer")
+                        {
+                            if (swapped == 4)
                             {
                                 weapons[0] = apiskill.weapon_type;
                                 weapons[1] = "2Hand";
-                                continue;
                             }
-                            else if (swapped == 5 && (weapons[2] == null && weapons[3] == null))
+                            else if (swapped == 5)
                             {
                                 weapons[2] = apiskill.weapon_type;
                                 weapons[3] = "2Hand";
-                                continue;
                             }
-                            continue;
                         }//2 handed
-                        if (apiskill.weapon_type == "Focus" || apiskill.weapon_type == "Shield" || apiskill.weapon_type == "Torch" || apiskill.weapon_type == "Warhorn")
+                        else if (apiskill.weapon_type == "Focus" || apiskill.weapon_type == "Shield" || apiskill.weapon_type == "Torch" || apiskill.weapon_type == "Warhorn")
                         {
-                            if (swapped == 4 && (weapons[1] == null))
+                            if (swapped == 4)
                             {
 
                                 weapons[1] = apiskill.weapon_type;
-                                continue;
                             }
-                            else if (swapped == 5 && (weapons[3] == null))
+                            else if (swapped == 5)
                             {
 
                                 weapons[3] = apiskill.weapon_type;
-                                continue;
                             }
-                            continue;
                         }//OffHand
-                        if (apiskill.weapon_type == "Axe" || apiskill.weapon_type == "Dagger" || apiskill.weapon_type == "Mace" || apiskill.weapon_type == "Pistol" || apiskill.weapon_type == "Sword" || apiskill.weapon_type == "Scepter")
+                        else if (apiskill.weapon_type == "Axe" || apiskill.weapon_type == "Dagger" || apiskill.weapon_type == "Mace" || apiskill.weapon_type == "Pistol" || apiskill.weapon_type == "Sword" || apiskill.weapon_type == "Scepter")
                         {
                             if (apiskill.slot == "Weapon_1" || apiskill.slot == "Weapon_2" || apiskill.slot == "Weapon_3")
                             {
-                                if (swapped == 4 && (weapons[0] == null))
+                                if (swapped == 4)
                                 {
 
                                     weapons[0] = apiskill.weapon_type;
-                                    continue;
                                 }
-                                else if (swapped == 5 && (weapons[2] == null))
+                                else if (swapped == 5)
                                 {
 
                                     weapons[2] = apiskill.weapon_type;
-                                    continue;
                                 }
-                                continue;
                             }
                             if (apiskill.slot == "Weapon_4" || apiskill.slot == "Weapon_5")
                             {
-                                if (swapped == 4 && (weapons[1] == null))
+                                if (swapped == 4)
                                 {
 
                                     weapons[1] = apiskill.weapon_type;
-                                    continue;
                                 }
-                                else if (swapped == 5 && (weapons[3] == null))
+                                else if (swapped == 5)
                                 {
 
                                     weapons[3] = apiskill.weapon_type;
-                                    continue;
                                 }
-                                continue;
                             }
                         }// 1 handed
                     }
 
                 }
-                else if (cl.getID() == -2)
+                else if (cl.SkillId == SkillItem.WeaponSwapId)
                 {
                     //wepswap  
-                    swapped = cl.getExpDur();
-                    swappedTime = cl.getTime();
+                    swapped = cl.ExpectedDuration;
+                    swappedTime = cl.Time;
                     continue;
                 }
-                if (weapons[0] != null && weapons[1] != null && weapons[2] != null && weapons[3] != null)
-                {
-                    break;
-                }
             }
-            weapons_array = weapons;
+            _weaponsArray = weapons;
         }    
         
-        protected override void setDamagetakenLogs(ParsedLog log)
+        protected override void SetDamageTakenLogs(ParsedLog log)
         {
-            long time_start = log.getBossData().getFirstAware();               
-            foreach (CombatItem c in log.getDamageTakenData()) {
-                if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware()) {//selecting player as target
-                    long time = c.getTime() - time_start;
-                    addDamageTakenLog(time, 0, c);
+            long timeStart = log.FightData.FightStart;               
+            foreach (CombatItem c in log.GetDamageTakenData(Agent.InstID)) {
+                if (c.Time > log.FightData.FightStart && c.Time < log.FightData.FightEnd) {//selecting player as target
+                    long time = c.Time - timeStart;
+                    AddDamageTakenLog(time, c);
                 }
             }
         }  
-        private void setConsumablesList(ParsedLog log)
+        private void SetConsumablesList(ParsedLog log)
         {
-            List<Boon> foodBoon = Boon.getFoodList();
-            List<Boon> utilityBoon = Boon.getUtilityList();
-            long time_start = log.getBossData().getFirstAware();
-            long fight_duration = log.getBossData().getLastAware() - time_start;
-            foreach (CombatItem c in log.getCombatList())
+            List<Boon> consumableList = Boon.GetFoodList();
+            consumableList.AddRange(Boon.GetUtilityList());
+            long timeStart = log.FightData.FightStart;
+            long fightDuration = log.FightData.FightEnd - timeStart;
+            foreach (Boon consumable in consumableList)
             {
-                if ( c.isBuff() != 18 && c.isBuff() != 1)
+                foreach (CombatItem c in log.GetBoonData(consumable.ID))
                 {
-                    continue;
-                }
-                
-                if (foodBoon.FirstOrDefault(x => x.getID() == c.getSkillID()) == null  && utilityBoon.FirstOrDefault(x => x.getID() == c.getSkillID()) == null)
-                {
-                    continue;
-                }
-                long time = c.getTime() - time_start;
-                if (agent.getInstid() == c.getDstInstid())
-                {
-                    consumeList.Add(c); 
+                    if (c.IsBuffRemove != ParseEnum.BuffRemove.None || (c.IsBuff != 18 && c.IsBuff != 1) || Agent.InstID != c.DstInstid)
+                    {
+                        continue;
+                    }
+                    long time = 0;
+                    if (c.IsBuff != 18)
+                    {
+                        time = c.Time - timeStart;
+                    }
+                    if (time <= fightDuration)
+                    {
+                        _consumeList.Add(new Tuple<Boon, long>(consumable, time));
+                    }
                 }
             }
+            
         }
+
+        protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
+        {
+            // Down and deads
+            List<CombatItem> status = log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
+            status.AddRange(log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeUp, log.FightData.FightStart, log.FightData.FightEnd));
+            status.AddRange(log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeDead, log.FightData.FightStart, log.FightData.FightEnd));
+            status.AddRange(log.CombatData.GetStates(InstID, ParseEnum.StateChange.Spawn, log.FightData.FightStart, log.FightData.FightEnd));
+            status.AddRange(log.CombatData.GetStates(InstID, ParseEnum.StateChange.Despawn, log.FightData.FightStart, log.FightData.FightEnd));
+            status = status.OrderBy(x => x.Time).ToList();
+            List<Tuple<long, long>> dead = new List<Tuple<long, long>>();
+            List<Tuple<long, long>> down = new List<Tuple<long, long>>();
+            List<Tuple<long, long>> dc = new List<Tuple<long, long>>();
+            for (var i = 0; i < status.Count -1;i++)
+            {
+                CombatItem cur = status[i];
+                CombatItem next = status[i + 1];
+                if (cur.IsStateChange.IsDown())
+                {
+                    down.Add(new Tuple<long, long>(cur.Time - log.FightData.FightStart, next.Time - log.FightData.FightStart));
+                } else if (cur.IsStateChange.IsDead())
+                {
+                    dead.Add(new Tuple<long, long>(cur.Time - log.FightData.FightStart, next.Time - log.FightData.FightStart));
+                } else if (cur.IsStateChange.IsDespawn())
+                {
+                    dc.Add(new Tuple<long, long>(cur.Time - log.FightData.FightStart, next.Time - log.FightData.FightStart));
+                }
+            }
+            // check last value
+            if (status.Count > 0)
+            {
+                CombatItem cur = status.Last();
+                if (cur.IsStateChange.IsDown())
+                {
+                    down.Add(new Tuple<long, long>(cur.Time - log.FightData.FightStart, log.FightData.FightDuration));
+                }
+                else if (cur.IsStateChange.IsDead())
+                {
+                    dead.Add(new Tuple<long, long>(cur.Time - log.FightData.FightStart, log.FightData.FightDuration));
+                }
+                else if (cur.IsStateChange.IsDespawn())
+                {
+                    dc.Add(new Tuple<long, long>(cur.Time - log.FightData.FightStart, log.FightData.FightDuration));
+                }
+            }
+            CombatReplay.SetStatus(down, dead, dc);
+            // Boss related stuff
+            log.FightData.Logic.GetAdditionalPlayerData(CombatReplay, this, log);
+        }
+
+        protected override void SetCombatReplayIcon(ParsedLog log)
+        {
+            CombatReplay.SetIcon(HTMLHelper.GetLink(Prof));
+        }
+
+        public void AddMechanics(ParsedLog log)
+        {
+            MechanicData mechData = log.MechanicData;
+            FightData fightData = log.FightData;
+            CombatData combatData = log.CombatData;
+            List<Mechanic> bossMechanics = fightData.Logic.GetMechanics();
+            long start = fightData.FightStart;
+            long end = fightData.FightEnd;
+            // Player status
+            foreach (Mechanic mech in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.PlayerStatus))
+            {
+                List<CombatItem> toUse = new List<CombatItem>();
+                switch (mech.SkillId) {
+                    case -2:
+                        toUse = combatData.GetStates(InstID, ParseEnum.StateChange.ChangeDead, start, end);                 
+                        break;
+                    case -3:
+                        toUse = combatData.GetStates(InstID, ParseEnum.StateChange.ChangeDown, start, end);
+                        break;
+                    case SkillItem.ResurrectId:
+                        toUse = log.GetCastData(InstID).Where(x => x.SkillID == SkillItem.ResurrectId && x.IsActivation.IsCasting()).ToList();
+                        break;
+                }
+                foreach (CombatItem pnt in toUse)
+                {
+                    mechData[mech].Add(new MechanicLog(pnt.Time - start, mech, this));
+                }
+
+            }
+            //Player hit
+            List<DamageLog> dls = GetDamageTakenLogs(log, 0, fightData.FightDuration);
+            foreach (Mechanic mech in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.SkillOnPlayer))
+            {
+                Mechanic.CheckSpecialCondition condition = mech.SpecialCondition;
+                foreach (DamageLog dLog in dls)
+                {
+                    if (condition != null && !condition(new SpecialConditionItem(dLog)))
+                    {
+                        continue;
+                    }
+                    if (dLog.SkillId == mech.SkillId && dLog.Result.IsHit())
+                    {
+                        mechData[mech].Add(new MechanicLog(dLog.Time, mech, this));
+
+                    }
+                }
+            }
+            // Player boon
+            foreach (Mechanic mech in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.PlayerBoon || x.MechanicType == Mechanic.MechType.PlayerOnPlayer || x.MechanicType == Mechanic.MechType.PlayerBoonRemove))
+            {
+                Mechanic.CheckSpecialCondition condition = mech.SpecialCondition;
+                foreach (CombatItem c in log.GetBoonData(mech.SkillId))
+                {
+                    if (condition != null && !condition(new SpecialConditionItem(c)))
+                    {
+                        continue;
+                    }
+                    if (mech.MechanicType == Mechanic.MechType.PlayerBoonRemove)
+                    {
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual && InstID == c.SrcInstid)
+                        {
+                            mechData[mech].Add(new MechanicLog(c.Time - start, mech, this));
+                        }
+                    } else
+                    {
+
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None && InstID == c.DstInstid)
+                        {
+                            mechData[mech].Add(new MechanicLog(c.Time - start, mech, this));
+                            if (mech.MechanicType == Mechanic.MechType.PlayerOnPlayer)
+                            {
+                                mechData[mech].Add(new MechanicLog(c.Time - start, mech, log.PlayerList.FirstOrDefault(x => x.InstID == c.SrcInstid)));
+                            }
+                        }
+                    }
+                }
+            }
+            // Hitting enemy
+            foreach (Mechanic mech in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.HitOnEnemy))
+            {
+                Mechanic.CheckSpecialCondition condition = mech.SpecialCondition;
+                IEnumerable<AgentItem> agents = log.AgentData.GetAgents((ushort)mech.SkillId);
+                foreach (AgentItem a in agents)
+                {
+                    foreach (DamageLog dl in GetDamageLogs(0,log,0,log.FightData.FightDuration))
+                    {
+                        if (dl.DstInstId != a.InstID || dl.IsCondi > 0 || dl.Time < a.FirstAware - start || dl.Time > a.LastAware - start || (condition != null && !condition(new SpecialConditionItem(dl))))
+                        {
+                            continue;
+                        }
+                        mechData[mech].Add(new MechanicLog(dl.Time, mech, this));
+                    }
+                }
+            }
+            //PlayerSkill
+            foreach (Mechanic m in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.PlayerSkill ))
+            {
+                Mechanic.CheckSpecialCondition condition = m.SpecialCondition;
+                foreach (CombatItem c in log.GetCastDataById(m.SkillId))
+                {
+                    if (condition != null && !condition(new SpecialConditionItem(c)))
+                    {
+                        continue;
+                    }
+                    AbstractMasterPlayer amp = null;
+                    if (m.MechanicType == Mechanic.MechType.PlayerSkill && c.IsActivation.IsCasting())
+                    {
+                        if (c.SrcInstid == InstID)
+                        {
+                            amp = this;
+                        }
+                       
+                    }
+                    if (amp != null)
+                    {
+                        mechData[m].Add(new MechanicLog(c.Time - fightData.FightStart, m, amp));
+                    }
+                }
+
+            }
+        }
+        
 
         /*protected override void setHealingLogs(ParsedLog log)
         {
             long time_start = log.getBossData().getFirstAware();
             foreach (CombatItem c in log.getHealingData())
             {
-                if (agent.getInstid() == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())//selecting player or minion as caster
+                if (agent.InstID == c.getSrcInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())//selecting player or minion as caster
                 {
                     long time = c.getTime() - time_start;
                     addHealingLog(time, c);
@@ -289,7 +430,7 @@ namespace LuckParser.Models.ParseModels
             long time_start = log.getBossData().getFirstAware();
             foreach (CombatItem c in log.getHealingReceivedData())
             {
-                if (agent.getInstid() == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
+                if (agent.InstID == c.getDstInstid() && c.getTime() > log.getBossData().getFirstAware() && c.getTime() < log.getBossData().getLastAware())
                 {//selecting player as target
                     long time = c.getTime() - time_start;
                     addHealingReceivedLog(time, c);

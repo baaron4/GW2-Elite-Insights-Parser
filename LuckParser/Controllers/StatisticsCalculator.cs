@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LuckParser.Models.DataModels;
@@ -13,706 +13,796 @@ namespace LuckParser.Controllers
     {
         public class Switches
         {
-            public bool calculateDPS = false;
-            public bool calculateStats = false;
-            public bool calculateDefense = false;
-            public bool calculateSupport = false;
-            public bool calculateBoons = false;
-            public bool calculateConditions = false;
-            public bool calculateCombatReplay = false;
+            public bool CalculateDPS = false;
+            public bool CalculateStats = false;
+            public bool CalculateDefense = false;
+            public bool CalculateSupport = false;
+            public bool CalculateBoons = false;
+            public bool CalculateConditions = false;
+            public bool CalculateCombatReplay = false;
+            public bool CalculateMechanics = false;
         }
 
-        private SettingsContainer settings;
+        private readonly SettingsContainer _settings;
 
-        private Statistics statistics;
+        private Statistics _statistics;
 
-        private ParsedLog log;
-
-        private List<PhaseData> phases;
+        private ParsedLog _log;
 
         public StatisticsCalculator(SettingsContainer settings)
         {
-            this.settings = settings;
+            _settings = settings;
         }
 
         /// <summary>
         /// Calculate a statistic from a log
         /// </summary>
-        /// <param name="log">log to calculate stats from</param>
+        /// <param name="log"></param>
+        /// <param name="switches"></param>
         /// <returns></returns>
-        public Statistics calculateStatistics(ParsedLog log, Switches switches)
+        public Statistics CalculateStatistics(ParsedLog log, Switches switches)
         {
-            statistics = new Statistics();
+            _statistics = new Statistics();
 
-            this.log = log;
+            _log = log;
 
-            phases = log.getBoss().getPhases(log, settings.ParsePhases);
-            if (switches.calculateCombatReplay && settings.ParseCombatReplay)
+            _statistics.Phases = log.Boss.GetPhases(log);
+            if (switches.CalculateCombatReplay && _settings.ParseCombatReplay)
             {
-                foreach (Player p in log.getPlayerList())
+                foreach (Player p in log.PlayerList)
                 {
-                    p.initCombatReplay(log);
+                    p.InitCombatReplay(log, _settings.PollingRate, false, true);
                 }
-                log.getBoss().initCombatReplay(log);
+                log.Boss.InitCombatReplay(log, _settings.PollingRate, false, true);
             }
-            if (switches.calculateDPS) calculateDPS();
-            if (switches.calculateStats) calculateStats();
-            if (switches.calculateDefense) calculateDefenses();
-            if (switches.calculateSupport) calculateSupport();
-            if (switches.calculateBoons)
+            if (switches.CalculateDPS) CalculateDPS();
+            if (switches.CalculateStats) CalculateStats();
+            if (switches.CalculateDefense) CalculateDefenses();
+            if (switches.CalculateSupport) CalculateSupport();
+            if (switches.CalculateBoons)
             {
-                setPresentBoons();
-                calculateBoons();
-            }                  
-            if (switches.calculateConditions) calculateConditions();
+                SetPresentBoons();
+                CalculateBoons();
+            } 
+                      
+            if (switches.CalculateConditions) CalculateConditions();
+            if (switches.CalculateMechanics)
+            {
+                log.Boss.AddMechanics(log);
+                foreach (Player p in log.PlayerList)
+                {
+                    p.AddMechanics(log);
+                }
+                log.MechanicData.ComputePresentMechanics(log);
+            }
 
-            return statistics;
+            return _statistics;
         }
 
-        private Statistics.FinalDPS getFinalDPS(AbstractPlayer player, int phaseIndex)
+        private Statistics.FinalDPS GetFinalDPS(AbstractPlayer player, int phaseIndex, bool checkRedirection)
         {
             Statistics.FinalDPS final = new Statistics.FinalDPS();
 
-            PhaseData phase = phases[phaseIndex];
+            PhaseData phase = _statistics.Phases[phaseIndex];
 
-            double phaseDuration = (phase.getDuration()) / 1000.0;
+            double phaseDuration = (phase.GetDuration()) / 1000.0;
 
-            double damage = 0.0;
+            double damage;
             double dps = 0.0;
 
-            // All DPS
-            damage = player.getDamageLogs(0, log, phase.getStart(),
-                    phase.getEnd())
-                .Sum(x => x.getDamage());
+            ////////// ALL
+            //DPS
+            damage = player.GetDamageLogs(0, _log, phase.Start,
+                    phase.End)
+                .Sum(x => x.Damage);
             if (phaseDuration > 0)
             {
                 dps = damage / phaseDuration;
             }
-
-            final.allDps = (int)dps;
-            final.allDamage = (int)damage;
-
-            // All Condi DPS
-            damage = player.getDamageLogs(0, log, phase.getStart(),
-                    phase.getEnd())
-                .Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
+            final.AllDps = (int)dps;
+            final.AllDamage = (int)damage;
+            //Condi DPS
+            damage = player.GetDamageLogs(0, _log, phase.Start,
+                    phase.End)
+                .Where(x => x.IsCondi > 0).Sum(x => x.Damage);
             if (phaseDuration > 0)
             {
                 dps = damage / phaseDuration;
             }
-
-            final.allCondiDps = (int)dps;
-            final.allCondiDamage = (int)damage;
-
-            // All Power DPS
-            damage = final.allDamage - damage;
+            final.AllCondiDps = (int)dps;
+            final.AllCondiDamage = (int)damage;
+            //Power DPS
+            damage = final.AllDamage - final.AllCondiDamage;
             if (phaseDuration > 0)
             {
                 dps = damage / phaseDuration;
             }
-
-            final.allPowerDps = (int)dps;
-            final.allPowerDamage = (int)damage;
-
-            // Boss DPS
-            damage = player.getDamageLogs(log.getBossData().getInstid(), log,
-                phase.getStart(), phase.getEnd()).Sum(x => x.getDamage());
+            final.AllPowerDps = (int)dps;
+            final.AllPowerDamage = (int)damage;
+            final.PlayerPowerDamage = player.GetJustPlayerDamageLogs(0, _log,
+                phase.Start, phase.End).Where(x => x.IsCondi == 0).Sum(x => x.Damage);
+            /////////// BOSS
+            //DPS
+            if (checkRedirection && phase.Redirection.Count > 0)
+            {
+                damage = player.GetDamageLogs(phase.Redirection, _log,
+                    phase.Start, phase.End).Sum(x => x.Damage);
+            } else
+            {
+                damage = player.GetDamageLogs(_log.FightData.InstID, _log,
+                    phase.Start, phase.End).Sum(x => x.Damage);
+            }
             if (phaseDuration > 0)
             {
                 dps = damage / phaseDuration;
             }
-
-            final.bossDps = (int)dps;
-            final.bossDamage = (int)damage;
-
-
-            // Boss Condi DPS
-            damage = player.getDamageLogs(log.getBossData().getInstid(), log,
-                phase.getStart(), phase.getEnd()).Where(x => x.isCondi() > 0).Sum(x => x.getDamage());
+            final.BossDps = (int)dps;
+            final.BossDamage = (int)damage;
+            //Condi DPS
+            if (checkRedirection && phase.Redirection.Count > 0)
+            {
+                damage = player.GetDamageLogs(phase.Redirection, _log,
+                    phase.Start, phase.End).Where(x => x.IsCondi > 0).Sum(x => x.Damage);
+            }
+            else
+            {
+                damage = player.GetDamageLogs(_log.FightData.InstID, _log,
+                    phase.Start, phase.End).Where(x => x.IsCondi > 0).Sum(x => x.Damage);
+            }
             if (phaseDuration > 0)
             {
                 dps = damage / phaseDuration;
             }
-
-            final.bossCondiDps = (int)dps;
-            final.bossCondiDamage = (int)dps;
-
-            // Boss Power DPS
-            damage = final.bossDamage - damage;
+            final.BossCondiDps = (int)dps;
+            final.BossCondiDamage = (int)damage;
+            //Power DPS
+            damage = final.BossDamage - final.BossCondiDamage;
             if (phaseDuration > 0)
             {
                 dps = damage / phaseDuration;
             }
-
-            final.bossPowerDps = (int)dps;
-            final.bossPowerDamage = (int)damage;
+            final.BossPowerDps = (int)dps;
+            final.BossPowerDamage = (int)damage;
+            if (checkRedirection && phase.Redirection.Count > 0)
+            {
+                final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(phase.Redirection, _log,
+                    phase.Start, phase.End).Where(x => x.IsCondi == 0).Sum(x => x.Damage);
+            }
+            else
+            {
+                final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(_log.FightData.InstID, _log,
+                    phase.Start, phase.End).Where(x => x.IsCondi == 0).Sum(x => x.Damage);
+            }
 
             return final;
         }
 
-        private void calculateDPS()
+        private void CalculateDPS()
         {
-            foreach (Player player in log.getPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalDPS[] phaseDps = new Statistics.FinalDPS[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                Statistics.FinalDPS[] phaseDps = new Statistics.FinalDPS[_statistics.Phases.Count];
+                for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
                 {
-                    phaseDps[phaseIndex] = getFinalDPS(player,phaseIndex);
+                    phaseDps[phaseIndex] = GetFinalDPS(player,phaseIndex, true);
                 }
 
-                statistics.dps[player] = phaseDps;
+                _statistics.Dps[player] = phaseDps;
             }
 
-            Statistics.FinalDPS[] phaseBossDps = new Statistics.FinalDPS[phases.Count];
-            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+            Statistics.FinalDPS[] phaseBossDps = new Statistics.FinalDPS[_statistics.Phases.Count];
+            for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
             {
-                phaseBossDps[phaseIndex] = getFinalDPS(log.getBoss(), phaseIndex);
+                phaseBossDps[phaseIndex] = GetFinalDPS(_log.Boss, phaseIndex, false);
             }
 
-            statistics.bossDps = phaseBossDps;
+            _statistics.BossDps = phaseBossDps;
         }
 
-        private void calculateStats()
+        private void CalculateStats()
         {
-            foreach (Player player in log.getPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalStats[] phaseStats = new Statistics.FinalStats[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                Statistics.FinalStats[] phaseStats = new Statistics.FinalStats[_statistics.Phases.Count];
+                for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
                 {
                     Statistics.FinalStats final = new Statistics.FinalStats();
 
-                    PhaseData phase = phases[phaseIndex];
-                    long start = phase.getStart() + log.getBossData().getFirstAware();
-                    long end = phase.getEnd() + log.getBossData().getFirstAware();
+                    PhaseData phase = _statistics.Phases[phaseIndex];
+                    long start = phase.Start + _log.FightData.FightStart;
+                    long end = phase.End + _log.FightData.FightStart;
 
-                    List<DamageLog> damageLogs = player.getDamageLogs(0, log, phase.getStart(), phase.getEnd());
-                    List<DamageLog> damageLogsBoss = player.getDamageLogs(log.getBoss().getInstid(), log, phase.getStart(), phase.getEnd());
-                    List<CastLog> castLogs = player.getCastLogs(log, phase.getStart(), phase.getEnd());
+                    List<DamageLog> damageLogs  = player.GetJustPlayerDamageLogs(0, _log, phase.Start, phase.End);
+                    List<CastLog> castLogs = player.GetCastLogs(_log, phase.Start, phase.End);
 
-                    int instid = player.getInstid();
+                    int instid = player.InstID;
 
-                    final.powerLoopCount = 0;
-                    final.critablePowerLoopCount = 0;
-                    final.criticalRate = 0;
-                    final.criticalDmg = 0;
-                    final.scholarRate = 0;
-                    final.scholarDmg = 0;
-                    final.movingRate = 0;
-                    final.flankingRate = 0;
-                    final.glanceRate = 0;
-                    final.missed = 0;
-                    final.interupts = 0;
-                    final.invulned = 0;
-                    final.wasted = 0;
-                    final.timeWasted = 0;
-                    final.saved = 0;
-                    final.timeSaved = 0;
-
-                    final.powerLoopCountBoss = 0;
-                    final.critablePowerLoopCountBoss = 0;
-                    final.criticalRateBoss = 0;
-                    final.criticalDmgBoss = 0;
-                    final.scholarRateBoss = 0;
-                    final.scholarDmgBoss = 0;
-                    final.movingRateBoss = 0;
-                    final.flankingRateBoss = 0;
-                    final.glanceRateBoss = 0;
-                    final.missedBoss = 0;
-                    final.interuptsBoss = 0;
-                    final.invulnedBoss = 0;
+                    final.PowerLoopCount = 0;
+                    final.CritablePowerLoopCount = 0;
+                    final.CriticalRate = 0;
+                    final.CriticalDmg = 0;
+                    final.ScholarRate = 0;
+                    final.ScholarDmg = 0;
+                    final.MovingRate = 0;
+                    final.MovingDamage = 0;
+                    final.FlankingRate = 0;
+                    final.GlanceRate = 0;
+                    final.Missed = 0;
+                    final.Interrupts = 0;
+                    final.Invulned = 0;
+                    final.Wasted = 0;
+                    final.TimeWasted = 0;
+                    final.Saved = 0;
+                    final.TimeSaved = 0;
+                    final.StackDist = 0;
+                    
+                    final.PowerLoopCountBoss = 0;
+                    final.CritablePowerLoopCountBoss = 0;
+                    final.CriticalRateBoss = 0;
+                    final.CriticalDmgBoss = 0;
+                    final.ScholarRateBoss = 0;
+                    final.ScholarDmgBoss = 0;
+                    final.MovingRateBoss = 0;
+                    final.MovingDamageBoss = 0;
+                    final.FlankingRateBoss = 0;
+                    final.GlanceRateBoss = 0;
+                    final.MissedBoss = 0;
+                    final.InterruptsBoss = 0;
+                    final.InvulnedBoss = 0;
 
                     // Add non critable sigil/rune procs here
-                    HashSet<int> nonCritable = new HashSet<int>
+                    HashSet<long> nonCritable = new HashSet<long>
                     {
                         9292
                     };
-
-                    foreach (DamageLog log in damageLogs)
+                    HashSet<long> idsToCheck = new HashSet<long>();
+                    if (phase.Redirection.Count > 0)
                     {
-                        if (log.isCondi() == 0)
+                        foreach (AgentItem a in phase.Redirection)
                         {
-                            if (log.getResult() == ParseEnum.Result.Crit)
-                            {
-                                final.criticalRate++;
-                                final.criticalDmg += log.getDamage();
-                            }
-
-                            if (log.isNinety() > 0)
-                            {
-                                final.scholarRate++;
-                                final.scholarDmg += (int)(log.getDamage() / 11.0); //regular+10% damage
-                            }
-
-                            final.movingRate += log.isMoving();
-                            final.flankingRate += log.isFlanking();
-
-                            if (log.getResult() == ParseEnum.Result.Glance)
-                            {
-                                final.glanceRate++;
-                            }
-
-                            if (log.getResult() == ParseEnum.Result.Blind)
-                            {
-                                final.missed++;
-                            }
-
-                            if (log.getResult() == ParseEnum.Result.Interrupt)
-                            {
-                                final.interupts++;
-                            }
-
-                            if (log.getResult() == ParseEnum.Result.Absorb)
-                            {
-                                final.invulned++;
-                            }
-                            final.powerLoopCount++;
-                            if (!nonCritable.Contains(log.getID()))
-                            {
-                                final.critablePowerLoopCount++;
-                            }
+                            idsToCheck.Add(a.InstID);
                         }
-                    }
-                    foreach (DamageLog log in damageLogsBoss)
+                    } else
                     {
-                        if (log.isCondi() == 0)
+                        idsToCheck.Add(_log.FightData.InstID);
+                    }
+                    foreach (DamageLog dl in damageLogs)
+                    {
+                        if (dl.IsCondi == 0)
                         {
-                            if (log.getResult() == ParseEnum.Result.Crit)
+
+                            if (idsToCheck.Contains(dl.DstInstId))
                             {
-                                final.criticalRateBoss++;
-                                final.criticalDmgBoss += log.getDamage();
+                                if (idsToCheck.Count > 1)
+                                {
+                                    AgentItem target = phase.Redirection.Find(x => x.InstID == dl.DstInstId);
+                                    if (dl.Time < target.FirstAware - _log.FightData.FightStart || dl.Time > target.LastAware - _log.FightData.FightStart)
+                                    {
+                                        continue;
+                                    }
+                                }
+                                if (dl.Result == ParseEnum.Result.Crit)
+                                {
+                                    final.CriticalRateBoss++;
+                                    final.CriticalDmgBoss += dl.Damage;
+                                }
+
+                                if (dl.IsNinety > 0)
+                                {
+                                    final.ScholarRateBoss++;
+                                    final.ScholarDmgBoss += (int)(dl.Damage / 11.0); //regular+10% damage
+                                }
+
+                                if (dl.IsMoving > 0)
+                                {
+                                    final.MovingRateBoss++;
+                                    final.MovingDamageBoss += (int)(dl.Damage / 21.0);
+                                }
+                                
+                                final.FlankingRateBoss += dl.IsFlanking;
+
+                                if (dl.Result == ParseEnum.Result.Glance)
+                                {
+                                    final.GlanceRateBoss++;
+                                }
+
+                                if (dl.Result == ParseEnum.Result.Blind)
+                                {
+                                    final.MissedBoss++;
+                                }
+
+                                if (dl.Result == ParseEnum.Result.Interrupt)
+                                {
+                                    final.InterruptsBoss++;
+                                }
+
+                                if (dl.Result == ParseEnum.Result.Absorb)
+                                {
+                                    final.InvulnedBoss++;
+                                }
+                                final.PowerLoopCountBoss++;
+                                if (!nonCritable.Contains(dl.SkillId))
+                                {
+                                    final.CritablePowerLoopCountBoss++;
+                                }
                             }
 
-                            if (log.isNinety() > 0)
+                            if (dl.Result == ParseEnum.Result.Crit)
                             {
-                                final.scholarRateBoss++;
-                                final.scholarDmgBoss += (int)(log.getDamage() / 11.0); //regular+10% damage
+                                final.CriticalRate++;
+                                final.CriticalDmg += dl.Damage;
                             }
 
-                            final.movingRateBoss += log.isMoving();
-                            final.flankingRateBoss += log.isFlanking();
-
-                            if (log.getResult() == ParseEnum.Result.Glance)
+                            if (dl.IsNinety > 0)
                             {
-                                final.glanceRateBoss++;
+                                final.ScholarRate++;
+                                final.ScholarDmg += (int)(dl.Damage / 11.0); //regular+10% damage
                             }
 
-                            if (log.getResult() == ParseEnum.Result.Blind)
+                            if (dl.IsMoving > 0)
                             {
-                                final.missedBoss++;
+                                final.MovingRate++;
+                                final.MovingDamage += (int)(dl.Damage / 21.0);
+                            }
+                            
+                            final.FlankingRate += dl.IsFlanking;
+
+                            if (dl.Result == ParseEnum.Result.Glance)
+                            {
+                                final.GlanceRate++;
                             }
 
-                            if (log.getResult() == ParseEnum.Result.Interrupt)
+                            if (dl.Result == ParseEnum.Result.Blind)
                             {
-                                final.interuptsBoss++;
+                                final.Missed++;
                             }
 
-                            if (log.getResult() == ParseEnum.Result.Absorb)
+                            if (dl.Result == ParseEnum.Result.Interrupt)
                             {
-                                final.invulnedBoss++;
+                                final.Interrupts++;
                             }
-                            final.powerLoopCountBoss++;
-                            if (!nonCritable.Contains(log.getID()))
+
+                            if (dl.Result == ParseEnum.Result.Absorb)
                             {
-                                final.critablePowerLoopCountBoss++;
+                                final.Invulned++;
+                            }
+                            final.PowerLoopCount++;
+                            if (!nonCritable.Contains(dl.SkillId))
+                            {
+                                final.CritablePowerLoopCount++;
                             }
                         }
                     }
                     foreach (CastLog cl in castLogs)
                     {
-                        if (cl.endActivation() == ParseEnum.Activation.CancelCancel)
+                        if (cl.EndActivation == ParseEnum.Activation.CancelCancel)
                         {
-                            final.wasted++;
-                            final.timeWasted += cl.getActDur();
+                            final.Wasted++;
+                            final.TimeWasted += cl.ActualDuration;
                         }
-                        if (cl.endActivation() == ParseEnum.Activation.CancelFire)
+                        if (cl.EndActivation == ParseEnum.Activation.CancelFire)
                         {
-                            final.saved++;
-                            if (cl.getActDur() < cl.getExpDur())
+                            final.Saved++;
+                            if (cl.ActualDuration < cl.ExpectedDuration)
                             {
-                                final.timeSaved += cl.getExpDur() - cl.getActDur();
+                                final.TimeSaved += cl.ExpectedDuration - cl.ActualDuration;
                             }
                         }
                     }
 
-                    final.timeSaved = final.timeSaved / 1000f;
-                    final.timeWasted = final.timeWasted / 1000f;
+                    final.TimeSaved = final.TimeSaved / 1000f;
+                    final.TimeWasted = final.TimeWasted / 1000f;
                     
-                    final.powerLoopCount = final.powerLoopCount == 0 ? 1 : final.powerLoopCount;
+                    final.PowerLoopCount = final.PowerLoopCount == 0 ? 1 : final.PowerLoopCount;
                     
-                    final.powerLoopCountBoss = final.powerLoopCountBoss == 0 ? 1 : final.powerLoopCountBoss;
+                    final.PowerLoopCountBoss = final.PowerLoopCountBoss == 0 ? 1 : final.PowerLoopCountBoss;
 
                     // Counts
-                    CombatData combatData = log.getCombatData();
-                    final.swapCount = combatData.getStates(instid, ParseEnum.StateChange.WeaponSwap, start, end).Count;
-                    final.downCount = combatData.getStates(instid, ParseEnum.StateChange.ChangeDown, start, end).Count;
-                    final.dodgeCount = combatData.getSkillCount(instid, 65001, start, end) + combatData.getBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
-                    final.ressCount = combatData.getSkillCount(instid, 1066, start, end); //Res = 1066
+                    CombatData combatData = _log.CombatData;
+                    final.SwapCount = combatData.GetStates(instid, ParseEnum.StateChange.WeaponSwap, start, end).Count;
+                    final.DownCount = combatData.GetStates(instid, ParseEnum.StateChange.ChangeDown, start, end).Count;
+                    final.DodgeCount = combatData.GetSkillCount(instid, SkillItem.DodgeId, start, end) + combatData.GetBuffCount(instid, 40408, start, end);//dodge = 65001 mirage cloak =40408
 
+                    //Stack Distance
+                    if (_settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay)
+                    {
+                        if (_statistics.StackCenterPositions == null)
+                        {
+                            _statistics.StackCenterPositions = new List<Point3D>();
+                            List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
+                            foreach (Player p in _log.PlayerList)
+                            {
+                                List<Point3D> list = p.CombatReplay.GetActivePositions();  
+                                if (list.Count > 1)
+                                {
+                                    GroupsPosList.Add(list);
+                                }
+                            }                       
+                            for (int time = 0; time < GroupsPosList[0].Count; time++)
+                            {
+                                float x = 0;
+                                float y = 0;
+                                float z = 0;
+                                int activePlayers = GroupsPosList.Count;
+                                foreach (List<Point3D> points in GroupsPosList)
+                                {
+                                    Point3D point = points[time];
+                                    if (point != null)
+                                    {
+                                        x += point.X;
+                                        y += point.Y;
+                                        z += point.Z;
+                                    }
+                                    else
+                                    {
+                                        activePlayers--;
+                                    }
+                                   
+                                }
+                                x = x /activePlayers;
+                                y = y / activePlayers;
+                                z = z / activePlayers;
+                                _statistics.StackCenterPositions.Add(new Point3D(x, y, z, _settings.PollingRate * time));
+                            }
+                        }
+                        List<Point3D> positions = player.CombatReplay.GetPositions().Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
+                        int offset = player.CombatReplay.GetPositions().Count(x => x.Time < phase.Start);
+                        if (positions.Count > 1)
+                        {
+                            List<float> distances = new List<float>();
+                            for (int time = 0; time < positions.Count; time++)
+                            {
+
+                                float deltaX = positions[time].X - _statistics.StackCenterPositions[time + offset].X;
+                                float deltaY = positions[time].Y - _statistics.StackCenterPositions[time + offset].Y;
+                                //float deltaZ = positions[time].Z - Statistics.StackCenterPositions[time].Z;
+
+
+                                distances.Add((float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY));
+                            }
+                            final.StackDist = distances.Sum() / distances.Count;
+                        }
+                        else
+                        {
+                            final.StackDist = -1;
+                        }
+                    }
                     // R.I.P
-                    List<CombatItem> dead = combatData.getStates(instid, ParseEnum.StateChange.ChangeDead, start, end);
-                    final.died = 0.0;
+                    List<CombatItem> dead = combatData.GetStates(instid, ParseEnum.StateChange.ChangeDead, start, end);
+                    final.Died = 0.0;
                     if (dead.Count > 0)
                     {
-                        final.died = dead[0].getTime() - start;
+                        final.Died = dead.Last().Time - start;
                     }
 
-                    List<CombatItem> disconect = combatData.getStates(instid, ParseEnum.StateChange.Despawn, start, end);
-                    final.dcd = 0.0;
-                    if (disconect.Count > 0)
+                    List<CombatItem> disconnect = combatData.GetStates(instid, ParseEnum.StateChange.Despawn, start, end);
+                    final.Dcd = 0.0;
+                    if (disconnect.Count > 0)
                     {
-                        final.dcd = disconect[0].getTime() - start;
+                        final.Dcd = disconnect.Last().Time - start;
                     }
 
                     phaseStats[phaseIndex] = final;
                 }
-                statistics.stats[player] = phaseStats;
+                _statistics.Stats[player] = phaseStats;
             }
         }
 
-        private void calculateDefenses()
+        private void CalculateDefenses()
         {
-            foreach (Player player in log.getPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalDefenses[] phaseDefense = new Statistics.FinalDefenses[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                Statistics.FinalDefenses[] phaseDefense = new Statistics.FinalDefenses[_statistics.Phases.Count];
+                for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
                 {
                     Statistics.FinalDefenses final = new Statistics.FinalDefenses();
 
-                    PhaseData phase = phases[phaseIndex];
-                    long start = phase.getStart() + log.getBossData().getFirstAware();
-                    long end = phase.getEnd() + log.getBossData().getFirstAware();
+                    PhaseData phase =_statistics.Phases[phaseIndex];
 
-                    List<DamageLog> damageLogs = player.getDamageTakenLogs(log, phase.getStart(), phase.getEnd());
+                    List<DamageLog> damageLogs = player.GetDamageTakenLogs(_log, phase.Start, phase.End);
                     //List<DamageLog> healingLogs = player.getHealingReceivedLogs(log, phase.getStart(), phase.getEnd());
-
-                    int instID = player.getInstid();
-
-                  
-
-                    final.damageTaken = damageLogs.Sum(x => (long)x.getDamage());
+                 
+                    final.DamageTaken = damageLogs.Sum(x => (long)x.Damage);
                     //final.allHealReceived = healingLogs.Sum(x => x.getDamage());
-                    final.blockedCount = 0;
-                    final.invulnedCount = 0;
-                    final.damageInvulned = 0;
-                    final.evadedCount = 0;
-                    final.damageBarrier = 0;
-                    foreach (DamageLog log in damageLogs.Where(x => x.getResult() == ParseEnum.Result.Block))
+                    final.BlockedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Block);
+                    final.InvulnedCount = 0;
+                    final.DamageInvulned = 0;
+                    final.EvadedCount = damageLogs.Count(x => x.Result == ParseEnum.Result.Evade);
+                    final.DamageBarrier = damageLogs.Sum(x => x.IsShields == 1 ? x.Damage : 0);
+                    foreach (DamageLog log in damageLogs.Where(x => x.Result == ParseEnum.Result.Absorb))
                     {
-                        final.blockedCount++;
-                    }
-                    foreach (DamageLog log in damageLogs.Where(x => x.getResult() == ParseEnum.Result.Absorb))
-                    {
-                        final.invulnedCount++;
-                        final.damageInvulned += log.getDamage();
-                    }
-                    foreach (DamageLog log in damageLogs.Where(x => x.getResult() == ParseEnum.Result.Evade))
-                    {
-                        final.evadedCount++;
-                    }
-                    foreach (DamageLog log in damageLogs.Where(x => x.isShields() == 1))
-                    {
-                        final.damageBarrier += log.getDamage();
+                        final.InvulnedCount++;
+                        final.DamageInvulned += log.Damage;
                     }
 
                     phaseDefense[phaseIndex] = final;
                 }
-                statistics.defenses[player] = phaseDefense;
+                _statistics.Defenses[player] = phaseDefense;
             }
         }
 
        
-        private void calculateSupport()
+        private void CalculateSupport()
         {
-            foreach (Player player in log.getPlayerList())
+            foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalSupport[] phaseSupport = new Statistics.FinalSupport[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+                Statistics.FinalSupport[] phaseSupport = new Statistics.FinalSupport[_statistics.Phases.Count];
+                for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
                 {
                     Statistics.FinalSupport final = new Statistics.FinalSupport();
 
-                    PhaseData phase = phases[phaseIndex];
-                    long start = phase.getStart() + log.getBossData().getFirstAware();
-                    long end = phase.getEnd() + log.getBossData().getFirstAware();
+                    PhaseData phase =_statistics.Phases[phaseIndex];
 
-                    // List<DamageLog> damage_logs = p.getDamageTakenLogs(b_data, c_data.getCombatList(), getAgentData());
-                    int instid = player.getInstid();
-
-                    int[] resArray = player.getReses(log, phase.getStart(), phase.getEnd());
-                    int[] cleanseArray = player.getCleanses(log, phase.getStart(), phase.getEnd());
+                    int[] resArray = player.GetReses(_log, phase.Start, phase.End);
+                    int[] cleanseArray = player.GetCleanses(_log, phase.Start, phase.End);
                     //List<DamageLog> healingLogs = player.getHealingLogs(log, phase.getStart(), phase.getEnd());
                     //final.allHeal = healingLogs.Sum(x => x.getDamage());
-                    final.resurrects = resArray[0];
-                    final.ressurrectTime = resArray[1]/1000f;
-                    final.condiCleanse = cleanseArray[0];
-                    final.condiCleanseTime = cleanseArray[1]/1000f;
+                    final.Resurrects = resArray[0];
+                    final.ResurrectTime = resArray[1]/1000f;
+                    final.CondiCleanse = cleanseArray[0];
+                    final.CondiCleanseTime = cleanseArray[1]/1000f;
 
                     phaseSupport[phaseIndex] = final;
                 }
-                statistics.support[player] = phaseSupport;
+                _statistics.Support[player] = phaseSupport;
             }
         }
 
-        private Dictionary<int, Statistics.FinalBoonUptime> getBoonsForList(List<Player> playerList, Player player, List<Boon> to_track, int phaseIndex)
+        private Dictionary<long, Statistics.FinalBoonUptime>[] GetBoonsForPlayers(List<Player> playerList, Player player)
         {
-            PhaseData phase = phases[phaseIndex];
-            long fightDuration = phase.getEnd() - phase.getStart();
+            Dictionary<long, Statistics.FinalBoonUptime>[] uptimesByPhase =
+                new Dictionary<long, Statistics.FinalBoonUptime>[_statistics.Phases.Count];
 
-            Dictionary<Player, BoonDistribution> boonDistributions = new Dictionary<Player, BoonDistribution>();
-            foreach (Player p in playerList)
+            for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
             {
-                boonDistributions[p] = p.getBoonDistribution(log, phases, to_track, phaseIndex);
-            }
+                PhaseData phase = _statistics.Phases[phaseIndex];
+                long fightDuration = phase.End - phase.Start;
 
-            Dictionary<int, Statistics.FinalBoonUptime> final =
-                new Dictionary<int, Statistics.FinalBoonUptime>();
-
-            foreach (Boon boon in to_track)
-            {
-                long totalGeneration = 0;
-                long totalOverstack = 0;
-                long totalUptime = 0;
-
-                foreach (BoonDistribution boons in boonDistributions.Values)
+                Dictionary<Player, BoonDistribution> boonDistributions = new Dictionary<Player, BoonDistribution>();
+                foreach (Player p in playerList)
                 {
-                    if (boons.ContainsKey(boon.getID()))
+                    boonDistributions[p] = p.GetBoonDistribution(_log, phaseIndex);
+                }
+
+                Dictionary<long, Statistics.FinalBoonUptime> final =
+                    new Dictionary<long, Statistics.FinalBoonUptime>();
+
+                foreach (Boon boon in player.BoonToTrack)
+                {
+                    long totalGeneration = 0;
+                    long totalOverstack = 0;
+
+                    foreach (BoonDistribution boons in boonDistributions.Values)
                     {
-                        totalGeneration += boons.getGeneration(boon.getID(), player.getInstid());
-                        totalOverstack += boons.getOverstack(boon.getID(), player.getInstid());
-                        totalUptime += boons.getUptime(boon.getID());
-                    }
-                }
-
-                Statistics.FinalBoonUptime uptime = new Statistics.FinalBoonUptime();
-
-                if (boon.getType() == Boon.BoonType.Duration)
-                {
-                    uptime.uptime = Math.Round(100.0 * totalUptime / fightDuration / playerList.Count, 1);
-                    uptime.generation = Math.Round(100.0f * totalGeneration / fightDuration / playerList.Count, 1);
-                    uptime.overstack = Math.Round(100.0f * (totalOverstack + totalGeneration)/ fightDuration / playerList.Count, 1);
-                }
-                else if (boon.getType() == Boon.BoonType.Intensity)
-                {
-                    uptime.uptime = Math.Round((double)totalUptime / fightDuration / playerList.Count, 1);
-                    uptime.generation = Math.Round((double)totalGeneration / fightDuration / playerList.Count, 1);
-                    uptime.overstack = Math.Round((double)(totalOverstack + totalGeneration) / fightDuration / playerList.Count, 1);
-                }
-
-                uptime.boonType = boon.getType();
-
-                final[boon.getID()] = uptime;
-            }
-
-            return final;
-        }
-
-        private void calculateBoons()
-        {
-            // Player Boons
-            foreach (Player player in log.getPlayerList())
-            {
-                List<Boon> boon_to_track = new List<Boon>();
-                boon_to_track.AddRange(statistics.present_boons);
-                boon_to_track.AddRange(statistics.present_offbuffs);
-                boon_to_track.AddRange(statistics.present_defbuffs);
-                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
-                Dictionary<int, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<int, Statistics.FinalBoonUptime>[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
-                {
-                    Dictionary<int, Statistics.FinalBoonUptime> final = new Dictionary<int, Statistics.FinalBoonUptime>();
-
-                    PhaseData phase = phases[phaseIndex];
-
-                    BoonDistribution selfBoons = player.getBoonDistribution(log, phases, boon_to_track, phaseIndex);
-
-                    long fightDuration = phase.getEnd() - phase.getStart();
-                    foreach (Boon boon in Boon.getAllBuffList())
-                    {
-                        Statistics.FinalBoonUptime uptime = new Statistics.FinalBoonUptime();
-
-                        uptime.uptime = 0;
-                        uptime.generation = 0;
-                        uptime.overstack = 0;
-                        if (selfBoons.ContainsKey(boon.getID()))
+                        if (boons.ContainsKey(boon.ID))
                         {
-                            if (boon.getType() == Boon.BoonType.Duration)
+                            totalGeneration += boons.GetGeneration(boon.ID, player.InstID);
+                            totalOverstack += boons.GetOverstack(boon.ID, player.InstID);
+                        }
+                    }
+
+                    Statistics.FinalBoonUptime uptime = new Statistics.FinalBoonUptime();
+
+                    if (boon.Type == Boon.BoonType.Duration)
+                    {
+                        uptime.Generation = Math.Round(100.0f * totalGeneration / fightDuration / playerList.Count, 1);
+                        uptime.Overstack = Math.Round(100.0f * (totalOverstack + totalGeneration) / fightDuration / playerList.Count, 1);
+                    }
+                    else if (boon.Type == Boon.BoonType.Intensity)
+                    {
+                        uptime.Generation = Math.Round((double) totalGeneration / fightDuration / playerList.Count, 1);
+                        uptime.Overstack = Math.Round((double) (totalOverstack + totalGeneration) / fightDuration / playerList.Count, 1);
+                    }
+
+                    final[boon.ID] = uptime;
+                }
+
+                uptimesByPhase[phaseIndex] = final;
+            }
+
+            return uptimesByPhase;
+        }
+
+        private void CalculateBoons()
+        {
+            foreach (Player player in _log.PlayerList)
+            {
+                // Boons applied to self
+                Dictionary<long, Statistics.FinalBoonUptime>[] selfUptimesByPhase = new Dictionary<long, Statistics.FinalBoonUptime>[_statistics.Phases.Count];
+                for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
+                {
+                    Dictionary<long, Statistics.FinalBoonUptime> final = new Dictionary<long, Statistics.FinalBoonUptime>();
+
+                    PhaseData phase =_statistics.Phases[phaseIndex];
+
+                    BoonDistribution selfBoons = player.GetBoonDistribution(_log, phaseIndex);
+
+                    long fightDuration = phase.End - phase.Start;
+                    foreach (Boon boon in player.BoonToTrack)
+                    {
+                        Statistics.FinalBoonUptime uptime = new Statistics.FinalBoonUptime
+                        {
+                            Uptime = 0,
+                            Generation = 0,
+                            Overstack = 0
+                        };
+                        if (selfBoons.ContainsKey(boon.ID))
+                        {
+                            long generation = selfBoons.GetGeneration(boon.ID, player.InstID);
+                            if (boon.Type == Boon.BoonType.Duration)
                             {
-                                uptime.uptime = Math.Round(100.0 * selfBoons.getUptime(boon.getID()) / fightDuration, 1);
-                                uptime.generation = Math.Round(100.0f * selfBoons.getGeneration(boon.getID(), player.getInstid()) / fightDuration, 1);
-                                uptime.overstack = Math.Round(100.0f * selfBoons.getOverstack(boon.getID(), player.getInstid()) / fightDuration, 1);
+                                uptime.Uptime = Math.Round(100.0 * selfBoons.GetUptime(boon.ID) / fightDuration, 1);
+                                uptime.Generation = Math.Round(100.0f * generation / fightDuration, 1);
+                                uptime.Overstack = Math.Round(100.0f * (selfBoons.GetOverstack(boon.ID, player.InstID) + generation) / fightDuration, 1);
                             }
-                            else if (boon.getType() == Boon.BoonType.Intensity)
+                            else if (boon.Type == Boon.BoonType.Intensity)
                             {
-                                uptime.uptime = Math.Round((double)selfBoons.getUptime(boon.getID()) / fightDuration, 1);
-                                uptime.generation = Math.Round((double)selfBoons.getGeneration(boon.getID(), player.getInstid()) / fightDuration, 1);
-                                uptime.overstack = Math.Round((double)selfBoons.getOverstack(boon.getID(), player.getInstid()) / fightDuration, 1);
+                                uptime.Uptime = Math.Round((double)selfBoons.GetUptime(boon.ID) / fightDuration, 1);
+                                uptime.Generation = Math.Round((double)generation / fightDuration, 1);
+                                uptime.Overstack = Math.Round((double)(selfBoons.GetOverstack(boon.ID, player.InstID) + generation) / fightDuration, 1);
                             }
-
-                            uptime.boonType = boon.getType();
                         }
-                        final[boon.getID()] = uptime;
+                        final[boon.ID] = uptime;
                     }
 
-                    phaseBoons[phaseIndex] = final;
+                    selfUptimesByPhase[phaseIndex] = final;
                 }
-                statistics.selfBoons[player] = phaseBoons;
-            }
+                _statistics.SelfBoons[player] = selfUptimesByPhase;
 
-            // Group Boons
-            foreach (Player player in log.getPlayerList())
-            {
-                List<Boon> boon_to_track = new List<Boon>();
-                boon_to_track.AddRange(statistics.present_boons);
-                boon_to_track.AddRange(statistics.present_offbuffs);
-                boon_to_track.AddRange(statistics.present_defbuffs);
-                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
-                List<Player> groupPlayers = new List<Player>();
-                foreach (Player p in log.getPlayerList())
-                {
-                    if (p.getGroup() == player.getGroup()) groupPlayers.Add(p);
-                }
-                Dictionary<int, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<int, Statistics.FinalBoonUptime>[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
-                {
-                    phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
-                }
-                statistics.groupBoons[player] = phaseBoons;
-            }
+                // Boons applied to player's group
+                var otherPlayersInGroup = _log.PlayerList
+                    .Where(p => p.Group == player.Group && player.InstID != p.InstID)
+                    .ToList();
+                _statistics.GroupBoons[player] = GetBoonsForPlayers(otherPlayersInGroup, player);
 
-            // Off Group Boons
-            foreach (Player player in log.getPlayerList())
-            {
-                List<Boon> boon_to_track = new List<Boon>();
-                boon_to_track.AddRange(statistics.present_boons);
-                boon_to_track.AddRange(statistics.present_offbuffs);
-                boon_to_track.AddRange(statistics.present_defbuffs);
-                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
-                List<Player> groupPlayers = new List<Player>();
-                foreach (Player p in log.getPlayerList())
-                {
-                    if (p.getGroup() != player.getGroup()) groupPlayers.Add(p);
-                }
-                Dictionary<int, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<int, Statistics.FinalBoonUptime>[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
-                {                    
-                    phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
-                }
-                statistics.offGroupBoons[player] = phaseBoons;
-            }
+                // Boons applied to other groups
+                var offGroupPlayers = _log.PlayerList.Where(p => p.Group != player.Group).ToList();
+                _statistics.OffGroupBoons[player] = GetBoonsForPlayers(offGroupPlayers, player);
 
-            // Squad Boons
-            foreach (Player player in log.getPlayerList())
-            {
-                List<Boon> boon_to_track = new List<Boon>();
-                boon_to_track.AddRange(statistics.present_boons);
-                boon_to_track.AddRange(statistics.present_offbuffs);
-                boon_to_track.AddRange(statistics.present_defbuffs);
-                boon_to_track.AddRange(statistics.present_personnal[player.getInstid()]);
-                List<Player> groupPlayers = new List<Player>();
-                foreach (Player p in log.getPlayerList())
-                {
-                    groupPlayers.Add(p);
-                }
-                Dictionary<int, Statistics.FinalBoonUptime>[] phaseBoons = new Dictionary<int, Statistics.FinalBoonUptime>[phases.Count];
-                for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
-                {                
-                    phaseBoons[phaseIndex] = getBoonsForList(groupPlayers, player, boon_to_track, phaseIndex);
-                }
-                statistics.squadBoons[player] = phaseBoons;
+                // Boons applied to squad
+                var otherPlayers = _log.PlayerList.Where(p => p.InstID != player.InstID).ToList();
+                _statistics.SquadBoons[player] = GetBoonsForPlayers(otherPlayers, player);
             }
         }
 
-        public void calculateConditions()
+        private void CalculateConditions()
         {
-            statistics.bossConditions = new Dictionary<int, Statistics.FinalBossBoon>[phases.Count];
-            List<Boon> boon_to_track = Boon.getCondiBoonList();
-            boon_to_track.AddRange(Boon.getBoonList());
-            for (int phaseIndex = 0; phaseIndex < phases.Count; phaseIndex++)
+            _statistics.BossConditions = new Dictionary<long, Statistics.FinalBossBoon>[_statistics.Phases.Count];
+            for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
             {
-                List<PhaseData> phases = log.getBoss().getPhases(log, settings.ParsePhases);
-                BoonDistribution boonDistribution = log.getBoss().getBoonDistribution(log, phases, boon_to_track, phaseIndex);
-                Dictionary<int, Statistics.FinalBossBoon> rates = new Dictionary<int, Statistics.FinalBossBoon>();
+                BoonDistribution boonDistribution = _log.Boss.GetBoonDistribution(_log, phaseIndex);
+                Dictionary<long, Statistics.FinalBossBoon> rates = new Dictionary<long, Statistics.FinalBossBoon>();
 
-                PhaseData phase = phases[phaseIndex];
-                long fightDuration = phase.getDuration();
+                PhaseData phase =_statistics.Phases[phaseIndex];
+                long fightDuration = phase.GetDuration();
 
-                foreach (Boon boon in Boon.getCondiBoonList())
+                foreach (Boon boon in _log.Boss.BoonToTrack)
                 {
-                    Statistics.FinalBossBoon condition = new Statistics.FinalBossBoon();
-                    rates[boon.getID()] = condition;
-                    if (boonDistribution.ContainsKey(boon.getID()))
+                    Statistics.FinalBossBoon condition = new Statistics.FinalBossBoon(_log.PlayerList);
+                    rates[boon.ID] = condition;
+                    if (boonDistribution.ContainsKey(boon.ID))
                     {
-                        if (boon.getType() == Boon.BoonType.Duration)
+                        if (boon.Type == Boon.BoonType.Duration)
                         {
-                            condition.boonType = Boon.BoonType.Duration;
-                            condition.uptime = Math.Round(100.0 * boonDistribution.getUptime(boon.getID()) / fightDuration, 1);
+                            condition.Uptime = Math.Round(100.0 * boonDistribution.GetUptime(boon.ID) / fightDuration, 1);
+                            foreach(Player p in _log.PlayerList)
+                            {
+                                long gen = boonDistribution.GetGeneration(boon.ID, p.InstID);
+                                condition.Generated[p] = Math.Round(100.0 * gen / fightDuration, 1);
+                                condition.Overstacked[p] = Math.Round(100.0 * (boonDistribution.GetOverstack(boon.ID, p.InstID) + gen) / fightDuration, 1);
+                            }
                         }
-                        else if (boon.getType() == Boon.BoonType.Intensity)
+                        else if (boon.Type == Boon.BoonType.Intensity)
                         {
-                            condition.boonType = Boon.BoonType.Intensity;
-                            condition.uptime = Math.Round((double) boonDistribution.getUptime(boon.getID()) / fightDuration, 1);
+                            condition.Uptime = Math.Round((double) boonDistribution.GetUptime(boon.ID) / fightDuration, 1);
+                            foreach (Player p in _log.PlayerList)
+                            {
+                                long gen = boonDistribution.GetGeneration(boon.ID, p.InstID);
+                                condition.Generated[p] = Math.Round((double) gen / fightDuration, 1);
+                                condition.Overstacked[p] = Math.Round((double)(boonDistribution.GetOverstack(boon.ID, p.InstID)+ gen) / fightDuration, 1);
+                            }
                         }
 
-                        rates[boon.getID()] = condition;
+                        rates[boon.ID] = condition;
                     }
                 }
 
-                statistics.bossConditions[phaseIndex] = rates;
+                _statistics.BossConditions[phaseIndex] = rates;
             }
         }
         /// <summary>
         /// Checks the combat data and gets buffs that were present during the fight
         /// </summary>
-        private void setPresentBoons()
+        private void SetPresentBoons()
         {
-            List<SkillItem> s_list = log.getSkillData().getSkillList();
-            if (settings.PlayerBoonsUniversal)
-            {//Main boons
-                foreach (Boon boon in Boon.getBoonList())
-                {
-                    if (s_list.Exists(x => x.getID() == boon.getID()))
-                    {
-                        statistics.present_boons.Add(boon);
-                    }
-                }
-            }
-            if (settings.PlayerBoonsImpProf)
-            {//Important Class specefic boons
-                foreach (Boon boon in Boon.getOffensiveTableList())
-                {
-                    if (s_list.Exists(x => x.getID() == boon.getID()))
-                    {
-                        statistics.present_offbuffs.Add(boon);
-                    }
-                }
-                foreach (Boon boon in Boon.getDefensiveTableList())
-                {
-                    if (s_list.Exists(x => x.getID() == boon.getID()))
-                    {
-                        statistics.present_defbuffs.Add(boon);
-                    }
-                }
-            }
-            List<CombatItem> c_list = log.getCombatData().getCombatList();
-
-            foreach (Player p in log.getPlayerList())
+            List<CombatItem> combatList = _log.CombatData;
+            var skillIDs = new HashSet<long>(combatList.Select(x => x.SkillID));
+            if (_settings.PlayerBoonsUniversal)
             {
-                statistics.present_personnal[p.getInstid()] = new List<Boon>();
-                if (settings.PlayerBoonsAllProf)
-                {//All class specefic boons
-                    List<Boon> notYetFoundBoons = Boon.getRemainingBuffsList();
-                    c_list.ForEach(item =>
+                // Main boons
+                foreach (Boon boon in Boon.GetBoonList())
+                {
+                    if (skillIDs.Contains(boon.ID))
                     {
-                        if (item.getDstInstid() == p.getInstid()) {
-                            Boon foundBoon = notYetFoundBoons.Find(boon => boon.getID() == item.getSkillID());
-                            if (foundBoon != null)
-                            {
-                                notYetFoundBoons.Remove(foundBoon);
-                                statistics.present_personnal[p.getInstid()].Add(foundBoon);
-                            }
-                        }
-                    });
+                        _statistics.PresentBoons.Add(boon);
+                    }
+                }
+                // Main Conditions
+                foreach (Boon boon in Boon.GetCondiBoonList())
+                {
+                    if (skillIDs.Contains(boon.ID))
+                    {
+                        _statistics.PresentConditions.Add(boon);
+                    }
                 }
             }
+
+            if (_settings.PlayerBoonsImpProf)
+            {
+                // Important class specific boons
+                foreach (Boon boon in Boon.GetOffensiveTableList())
+                {
+                    if (skillIDs.Contains(boon.ID))
+                    {
+                        _statistics.PresentOffbuffs.Add(boon);
+                    }
+                }
+
+                foreach (Boon boon in Boon.GetDefensiveTableList())
+                {
+                    if (skillIDs.Contains(boon.ID))
+                    {
+                        _statistics.PresentDefbuffs.Add(boon);
+                    }
+                }
+            }
+
+            var players = _log.PlayerList;
+            if (_settings.PlayerBoonsAllProf)
+            {
+                var playersById = new Dictionary<ushort, Player>();
+                foreach (var player in players)
+                {
+                    _statistics.PresentPersonalBuffs[player.InstID] = new List<Boon>();
+                    playersById.Add(player.InstID, player);
+                }
+                // All class specific boons
+                var remainingBoons = Boon.GetRemainingBuffsList();
+
+                var classSpecificBoonsById = new Dictionary<long, Boon>();
+                foreach (var boon in remainingBoons)
+                {
+                    if (boon.ID == -1) continue;
+
+                    classSpecificBoonsById.Add(boon.ID, boon);
+                }
+
+                foreach (var item in combatList)
+                {
+                    if (playersById.TryGetValue(item.DstInstid, out Player player))
+                    {
+                        if (classSpecificBoonsById.TryGetValue(item.SkillID, out Boon boon))
+                        {
+                            _statistics.PresentPersonalBuffs[player.InstID].Add(boon);
+                        }
+                    }
+                }
+            }
+            foreach (Player player in players)
+            {
+                player.BoonToTrack.AddRange(_statistics.PresentBoons);
+                player.BoonToTrack.AddRange(_statistics.PresentOffbuffs);
+                player.BoonToTrack.AddRange(_statistics.PresentDefbuffs);
+                if(_settings.PlayerBoonsAllProf)
+                {
+                    player.BoonToTrack.AddRange(_statistics.PresentPersonalBuffs[player.InstID]);
+                }
+            }
+            // boss boons
+            Boss boss = _log.Boss;
+            boss.BoonToTrack.AddRange(_statistics.PresentBoons);
+            boss.BoonToTrack.AddRange(_statistics.PresentConditions);
+            boss.BoonToTrack.AddRange(Boon.GetBossBoonList());
         }
     }
 }

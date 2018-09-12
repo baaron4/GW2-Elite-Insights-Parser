@@ -1,27 +1,27 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 using LuckParser.Controllers;
 using LuckParser.Models.DataModels;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace LuckParser
 {
     public partial class MainForm : Form
     {
         private SettingsForm _settingsForm;
-        private List<string> _logsFiles = new List<string>();
-        private Parser controller = new Parser();
-        private bool _AnyRunning = false;
-        private Queue<GridRow> _logQueue = new Queue<GridRow>();
+        private readonly List<string> _logsFiles;
+        private bool _anyRunning;
+        private readonly Queue<GridRow> _logQueue = new Queue<GridRow>();
         public MainForm()
         {
             InitializeComponent();
             //display version
             string version = Application.ProductVersion;
-            Version_Label.Text = version;
+            VersionLabel.Text = version;
             _logsFiles = new List<string>();
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
@@ -31,7 +31,6 @@ namespace LuckParser
         /// Adds log files to the bound data source for display in the interface
         /// </summary>
         /// <param name="filesArray"></param>
-        /// <param name="consoleStart"></param>
         private void AddLogFiles(string[] filesArray)
         {
             foreach (string file in filesArray)
@@ -48,9 +47,9 @@ namespace LuckParser
                 {
                     BgWorker = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true }
                 };
-                gRow.BgWorker.DoWork += BgWorker_DoWork;
-                gRow.BgWorker.ProgressChanged += BgWorker_ProgressChanged;
-                gRow.BgWorker.RunWorkerCompleted += BgWorker_Completed;
+                gRow.BgWorker.DoWork += BgWorkerDoWork;
+                gRow.BgWorker.ProgressChanged += BgWorkerProgressChanged;
+                gRow.BgWorker.RunWorkerCompleted += BgWorkerCompleted;
 
                 gridRowBindingSource.Add(gRow);
             }
@@ -66,7 +65,7 @@ namespace LuckParser
         {
             if (Properties.Settings.Default.ParseOneAtATime)
             {
-                if (_AnyRunning)
+                if (_anyRunning)
                 {
                     _logQueue.Enqueue(row);
                     row.Status = "Queued";
@@ -76,7 +75,7 @@ namespace LuckParser
                 else
                 {
                     row.Run();
-                    _AnyRunning = true;
+                    _anyRunning = true;
                 }
             }
             else
@@ -102,14 +101,14 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BgWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void BgWorkerDoWork(object sender, DoWorkEventArgs e)
         {
             System.Globalization.CultureInfo before = System.Threading.Thread.CurrentThread.CurrentCulture;
             System.Threading.Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
             BackgroundWorker bg = sender as BackgroundWorker;
             GridRow rowData = e.Argument as GridRow;
-
+            UploadController up_controller = null;
             e.Result = rowData;
 
             bg.ThrowIfCanceled(rowData);
@@ -117,15 +116,51 @@ namespace LuckParser
             try
             {
                 FileInfo fInfo = new FileInfo(rowData.Location);
-                if (!fInfo.Exists)
+                if (fInfo == null || !fInfo.Exists)
                 {
                     bg.UpdateProgress(rowData, "File does not exist", 100);
                     e.Cancel = true;
                     throw new CancellationException(rowData);
                 }
+                //Upload Process
+                Task<string> DREITask = null;
+                Task<string> DRRHTask = null;
+                Task<string> RaidarTask = null;
+                string[] uploadresult = new string[3] { "","",""};
+                if (Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.SkipFailedTrys)
+                {
+                    bg.UpdateProgress(rowData, " Uploading...", 0);
+                    if (up_controller == null)
+                    {
+                        up_controller = new UploadController();
+                    }
+                    DREITask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsEI(fInfo)) ;
+                    
+                }
+                if (Properties.Settings.Default.UploadToDPSReportsRH && !Properties.Settings.Default.SkipFailedTrys)
+                {
+                    bg.UpdateProgress(rowData, " Uploading...", 0);
+                    if (up_controller == null)
+                    {
+                        up_controller = new UploadController();
+                    }
+                    DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
 
+                }
+                if (Properties.Settings.Default.UploadToRaidar && !Properties.Settings.Default.SkipFailedTrys)
+                {
+                    bg.UpdateProgress(rowData, " Uploading...", 0);
+                    if (up_controller == null)
+                    {
+                        up_controller = new UploadController();
+                    }
+                    RaidarTask = Task.Factory.StartNew(() => up_controller.UploadRaidar(fInfo));
+
+                }
                 bg.UpdateProgress(rowData, " Working...", 0);
-                Parser parser = new Parser();
+
+                SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
+                Parser parser = new Parser(settings);
 
                 if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
                     fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
@@ -134,10 +169,97 @@ namespace LuckParser
                     bg.UpdateProgress(rowData, "10% - Reading Binary...", 10);
                     parser.ParseLog(rowData, fInfo.FullName);
                     ParsedLog log = parser.GetParsedLog();
-                    log.validateLogData();
+                    if (Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        if (!log.LogData.Success)
+                        {
+                            rowData.Cancel();
+                        }
+                    }
                     bg.ThrowIfCanceled(rowData);
                     bg.UpdateProgress(rowData, "35% - Data parsed", 35);
 
+                   
+                    //Upload if skipFailed trys is on(this is after check for fail)
+                    if (Properties.Settings.Default.UploadToDPSReports && Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        bg.UpdateProgress(rowData, " Uploading...", 0);
+                        if (up_controller == null)
+                        {
+                            up_controller = new UploadController();
+                        }
+                        DREITask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsEI(fInfo));
+
+                    }
+                    if (Properties.Settings.Default.UploadToDPSReportsRH && Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        bg.UpdateProgress(rowData, " Uploading...", 0);
+                        if (up_controller == null)
+                        {
+                            up_controller = new UploadController();
+                        }
+                        DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
+
+                    }
+                    if (Properties.Settings.Default.UploadToRaidar && Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        bg.UpdateProgress(rowData, " Uploading...", 0);
+                        if (up_controller == null)
+                        {
+                            up_controller = new UploadController();
+                        }
+                        RaidarTask = Task.Factory.StartNew(() => up_controller.UploadRaidar(fInfo));
+
+                    }
+                    //Wait for Upload
+                    if (Properties.Settings.Default.UploadToDPSReports)
+                    {
+                        bg.UpdateProgress(rowData, "40% - Uploading...", 40);
+                        if (DREITask != null)
+                        {
+                            while (!DREITask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[0] = DREITask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[0] = "Failed to Define Upload Task";
+                        }
+                    }
+                    if (Properties.Settings.Default.UploadToDPSReportsRH)
+                    {
+                        bg.UpdateProgress(rowData, "40% - Uploading...", 40);
+                        if (DRRHTask != null)
+                        {
+                            while (!DRRHTask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[1] = DRRHTask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[1] = "Failed to Define Upload Task";
+                        }
+                    }
+                    if (Properties.Settings.Default.UploadToRaidar)
+                    {
+                        bg.UpdateProgress(rowData, "40% - Uploading...", 40);
+                        if (RaidarTask != null)
+                        {
+                            while (!RaidarTask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[2] = RaidarTask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[2] = "Failed to Define Upload Task";
+                        }
+                    }
                     //Creating File
                     //save location
                     DirectoryInfo saveDirectory;
@@ -151,23 +273,28 @@ namespace LuckParser
                         //Customised save directory
                         saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
                     }
-
-                    string bossid = parser.getBossData().getID().ToString();
-                    string result = parser.getLogData().getBosskill() ? "kill" : "fail";
-
-                    SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
-
-                    Statistics statistics;
+                    if (saveDirectory == null)
+                    {
+                        throw new CancellationException(rowData, new Exception("Invalid save directory"));
+                    }
+                    string bossid = parser.GetFightData().ID.ToString();
+                    string result = parser.GetLogData().Success ? "kill" : "fail";
+                    
                     StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
+                    StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
                     if (Properties.Settings.Default.SaveOutHTML)
                     {
-                        statistics = statisticsCalculator.calculateStatistics(log, HTMLBuilder.GetStatisticSwitches());
+                        HTMLBuilder.UpdateStatisticSwitches(switches);
                     }
-                    else
+                    if (Properties.Settings.Default.SaveOutCSV)
                     {
-                        statistics = statisticsCalculator.calculateStatistics(log, CSVBuilder.GetStatisticSwitches());
+                        CSVBuilder.UpdateStatisticSwitches(switches);
                     }
-
+                    if (Properties.Settings.Default.SaveOutJSON)
+                    {
+                        JSONBuilder.UpdateStatisticSwitches(switches);
+                    }
+                    Statistics statistics = statisticsCalculator.CalculateStatistics(log, switches);
                     bg.UpdateProgress(rowData, "85% - Statistics computed", 85);
                     string fName = fInfo.Name.Split('.')[0];
                     bg.UpdateProgress(rowData, "90% - Creating File...", 90);
@@ -181,8 +308,16 @@ namespace LuckParser
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         using (var sw = new StreamWriter(fs))
                         {
-                            var builder = new HTMLBuilder(log, settings, statistics);
-                            builder.CreateHTML(sw);
+                            if (Properties.Settings.Default.NewHtmlMode)
+                            {
+                                var builder = new HTMLBuilderNew(log, settings, statistics);
+                                builder.CreateHTML(sw, saveDirectory.FullName);
+                            }
+                            else
+                            {
+                                var builder = new HTMLBuilder(log, settings, statistics, uploadresult);
+                                builder.CreateHTML(sw);
+                            }
                         }
                     }
                     if (Properties.Settings.Default.SaveOutCSV)
@@ -191,12 +326,30 @@ namespace LuckParser
                         saveDirectory.FullName,
                         $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.csv"
                         );
-                        rowData.LogLocation = outputFile;
+                        string splitString = "";
+                        if (rowData.LogLocation != null) { splitString = ","; }
+                        rowData.LogLocation += splitString + outputFile;
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
-                        using (var sw = new StreamWriter(fs))
+                        using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                         {
-                            var builder = new CSVBuilder(log, settings, statistics);
-                            builder.CreateCSV(sw, ",");
+                            var builder = new CSVBuilder(sw, ",", log, settings, statistics,uploadresult);
+                            builder.CreateCSV();
+                        }
+                    }
+                    if (Properties.Settings.Default.SaveOutJSON)
+                    {
+                        string outputFile = Path.Combine(
+                            saveDirectory.FullName,
+                            $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.json"
+                        );
+                        string splitString = "";
+                        if (rowData.LogLocation != null) { splitString = ","; }
+                        rowData.LogLocation += splitString + outputFile;
+                        using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                        using (var sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
+                        {
+                            var builder = new JSONBuilder(sw, log, settings, statistics,uploadresult);
+                            builder.CreateJSON();
                         }
                     }
 
@@ -206,13 +359,15 @@ namespace LuckParser
                 {
                     bg.UpdateProgress(rowData, "Not EVTC", 100);
                     e.Cancel = true;
+                    Console.Error.Write("Not EVTC");
                     throw new CancellationException(rowData);
                 }
 
             }
-            catch (Exception ex)
-            {
-                throw new CancellationException(rowData, ex);
+            catch (Exception ex) when (!System.Diagnostics.Debugger.IsAttached)	
+            {	
+                Console.Error.Write(ex.Message);	
+                throw new CancellationException(rowData, ex);	
             }
             finally
             {
@@ -226,7 +381,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void BgWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             //Redraw rows
             dgvFiles.Invalidate();
@@ -237,9 +392,9 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BgWorker_Completed(object sender, RunWorkerCompletedEventArgs e)
+        private void BgWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            _AnyRunning = false;
+            _anyRunning = false;
 
             GridRow row;
             if (e.Cancelled || e.Error != null)
@@ -291,7 +446,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnParse_Click(object sender, EventArgs e)
+        private void BtnParseClick(object sender, EventArgs e)
         {
             //Clear queue before parsing all
             _logQueue.Clear();
@@ -316,7 +471,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnCancel_Click(object sender, EventArgs e)
+        private void BtnCancelClick(object sender, EventArgs e)
         {
             //Clear queue so queued workers don't get started by any cancellations
             _logQueue.Clear();
@@ -345,7 +500,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnSettings_Click(object sender, EventArgs e)
+        private void BtnSettingsClick(object sender, EventArgs e)
         {
             _settingsForm = new SettingsForm();
             _settingsForm.Show();
@@ -356,7 +511,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnClear_Click(object sender, EventArgs e)
+        private void BtnClearClick(object sender, EventArgs e)
         {
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
@@ -385,7 +540,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DgvFiles_DragDrop(object sender, DragEventArgs e)
+        private void DgvFilesDragDrop(object sender, DragEventArgs e)
         {
             btnParse.Enabled = true;
             string[] filesArray = (string[])e.Data.GetData(DataFormats.FileDrop, false);
@@ -397,7 +552,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DgvFiles_DragEnter(object sender, DragEventArgs e)
+        private void DgvFilesDragEnter(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.All;
         }
@@ -407,7 +562,7 @@ namespace LuckParser
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DgvFiles_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void DgvFilesCellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 2)
             {
@@ -426,15 +581,16 @@ namespace LuckParser
                         break;
 
                     case RowState.Complete:
-                        string fileLoc = row.LogLocation;
-                        if (File.Exists(fileLoc))
+                        string[] files = row.LogLocation.Split(',');
+                        foreach (string fileLoc in files)
                         {
-                            System.Diagnostics.Process.Start(fileLoc);
+                            if (File.Exists(fileLoc))
+                            {
+                                System.Diagnostics.Process.Start(fileLoc);
+                            }
                         }
                         break;
 
-                    default:
-                        break;
                 }
             }
         }

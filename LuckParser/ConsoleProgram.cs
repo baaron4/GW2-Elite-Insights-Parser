@@ -3,7 +3,6 @@ using LuckParser.Models.DataModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,8 +35,9 @@ namespace LuckParser
 
         private void ParseLog(object logFile)
         {
-            System.Globalization.CultureInfo before = System.Threading.Thread.CurrentThread.CurrentCulture;
-            System.Threading.Thread.CurrentThread.CurrentCulture =
+            UploadController up_controller = null;
+            System.Globalization.CultureInfo before = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture =
                     new System.Globalization.CultureInfo("en-US");
             GridRow row = new GridRow(logFile as string, "")
             {
@@ -53,19 +53,158 @@ namespace LuckParser
             {
                 throw new CancellationException(row, new FileNotFoundException("File does not exist", fInfo.FullName));
             }
+            //Upload Process
+            Task<string> DREITask = null;
+            Task<string> DRRHTask = null;
+            Task<string> RaidarTask = null;
+            string[] uploadresult = new string[3] { "", "", "" };
+            if (Properties.Settings.Default.UploadToDPSReports)
+            {
+               
+                if (up_controller == null)
+                {
+                    up_controller = new UploadController();
+                }
+                DREITask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsEI(fInfo));
+
+            }
+            if (Properties.Settings.Default.UploadToDPSReportsRH)
+            {
+              
+                if (up_controller == null)
+                {
+                    up_controller = new UploadController();
+                }
+                DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
+
+            }
+            if (Properties.Settings.Default.UploadToRaidar)
+            {
+               
+                if (up_controller == null)
+                {
+                    up_controller = new UploadController();
+                }
+                RaidarTask = Task.Factory.StartNew(() => up_controller.UploadRaidar(fInfo));
+
+            }
             try
             {
-                Parser control = new Parser();
+                SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
+                Parser control = new Parser(settings);
 
                 if (fInfo.Extension.Equals(".evtc", StringComparison.OrdinalIgnoreCase) ||
                     fInfo.Name.EndsWith(".evtc.zip", StringComparison.OrdinalIgnoreCase))
                 {
                     //Process evtc here
                     control.ParseLog(row, fInfo.FullName);
+                    if (Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.SkipFailedTrys)
+                    {
+
+                        if (DREITask != null)
+                        {
+                            while (!DREITask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[0] = DREITask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[0] = "Failed to Define Upload Task";
+                        }
+                    }
+                    if (Properties.Settings.Default.UploadToDPSReportsRH && !Properties.Settings.Default.SkipFailedTrys)
+                    {
+
+                        if (DRRHTask != null)
+                        {
+                            while (!DRRHTask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[1] = DRRHTask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[1] = "Failed to Define Upload Task";
+                        }
+                    }
+                    if (Properties.Settings.Default.UploadToRaidar && !Properties.Settings.Default.SkipFailedTrys)
+                    {
+
+                        if (RaidarTask != null)
+                        {
+                            while (!RaidarTask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[2] = RaidarTask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[2] = "Failed to Define Upload Task";
+                        }
+                    }
                     ParsedLog log = control.GetParsedLog();
-                    log.validateLogData();
-                    Console.Write("Log Parsed");
+                    Console.Write("Log Parsed\n");
+                    if (Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        if (!log.LogData.Success)
+                        {
+                            row.Cancel();
+                        }
+                    }
                     //Creating File
+                    //Wait for Upload
+                    if (Properties.Settings.Default.UploadToDPSReports && Properties.Settings.Default.SkipFailedTrys)
+                    {
+                       
+                        if (DREITask != null)
+                        {
+                            while (!DREITask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[0] = DREITask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[0] = "Failed to Define Upload Task";
+                        }
+                    }
+                    if (Properties.Settings.Default.UploadToDPSReportsRH && Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        
+                        if (DRRHTask != null)
+                        {
+                            while (!DRRHTask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[1] = DRRHTask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[1] = "Failed to Define Upload Task";
+                        }
+                    }
+                    if (Properties.Settings.Default.UploadToRaidar && Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        
+                        if (RaidarTask != null)
+                        {
+                            while (!RaidarTask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[2] = RaidarTask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[2] = "Failed to Define Upload Task";
+                        }
+                    }
                     //save location
                     DirectoryInfo saveDirectory;
                     if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
@@ -79,26 +218,35 @@ namespace LuckParser
                         saveDirectory = new DirectoryInfo(Properties.Settings.Default.OutLocation);
                     }
 
-                    string bossid = control.getBossData().getID().ToString();
+                    if (saveDirectory == null)
+                    {
+                        throw new CancellationException(row, new InvalidDataException("Save Directory not found"));
+                    }
+
+                    string bossid = control.GetFightData().ID.ToString();
                     string result = "fail";
 
-                    if (control.getLogData().getBosskill())
+                    if (log.LogData.Success)
                     {
                         result = "kill";
                     }
 
-                    SettingsContainer settings = new SettingsContainer(Properties.Settings.Default);
-                    Statistics statistics;
                     StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
+                    StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
                     if (Properties.Settings.Default.SaveOutHTML)
                     {
-                        statistics = statisticsCalculator.calculateStatistics(log, HTMLBuilder.GetStatisticSwitches());
+                        HTMLBuilder.UpdateStatisticSwitches(switches);
                     }
-                    else
+                    if (Properties.Settings.Default.SaveOutCSV)
                     {
-                        statistics = statisticsCalculator.calculateStatistics(log, CSVBuilder.GetStatisticSwitches());
+                        CSVBuilder.UpdateStatisticSwitches(switches);
                     }
-                    Console.Write("Statistics Computed");
+                    if (Properties.Settings.Default.SaveOutJSON)
+                    {
+                        JSONBuilder.UpdateStatisticSwitches(switches);
+                    }
+                    Statistics statistics = statisticsCalculator.CalculateStatistics(log, switches);
+                    Console.Write("Statistics Computed\n");
 
                     string fName = fInfo.Name.Split('.')[0];
                     if (Properties.Settings.Default.SaveOutHTML)
@@ -111,8 +259,15 @@ namespace LuckParser
                         {
                             using (StreamWriter sw = new StreamWriter(fs))
                             {
-                                HTMLBuilder builder = new HTMLBuilder(log, settings, statistics);
-                                builder.CreateHTML(sw);
+                                if (Properties.Settings.Default.NewHtmlMode)
+                                {
+                                    var builder = new HTMLBuilderNew(log, settings, statistics);
+                                    builder.CreateHTML(sw, saveDirectory.FullName);
+                                } else
+                                {
+                                    var builder = new HTMLBuilder(log, settings, statistics, uploadresult);
+                                    builder.CreateHTML(sw);
+                                }
                             }
                         }
                     }
@@ -124,23 +279,41 @@ namespace LuckParser
                         );
                         using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         {
-                            using (StreamWriter sw = new StreamWriter(fs))
+                            using (StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
                             {
-                                CSVBuilder builder = new CSVBuilder(log, settings, statistics);
-                                builder.CreateCSV(sw, ",");
+                                var builder = new CSVBuilder(sw, ",",log, settings, statistics,uploadresult);
+                                builder.CreateCSV();
                             }
                         }
                     }
-                    Console.Write("Generation Done");
 
+                    if (Properties.Settings.Default.SaveOutJSON)
+                    {
+                        string outputFile = Path.Combine(
+                            saveDirectory.FullName,
+                            $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.json"
+                        );
+                        using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
+                        {
+                            using (StreamWriter sw = new StreamWriter(fs, Encoding.GetEncoding(1252)))
+                            {
+                                var builder = new JSONBuilder(sw, log, settings, statistics,uploadresult);
+                                builder.CreateJSON();
+                            }
+                        }
+                    }
+
+                    Console.Write("Generation Done\n");
                 }
                 else
                 {
+                    Console.Error.Write("Not EVTC");
                     throw new CancellationException(row, new InvalidDataException("Not EVTC"));
                 }
-            } 
-            catch (Exception ex)
+            }
+            catch (Exception ex) when (!System.Diagnostics.Debugger.IsAttached)
             {
+                Console.Error.Write(ex.Message);
                 throw new CancellationException(row, ex);
             } 
             finally

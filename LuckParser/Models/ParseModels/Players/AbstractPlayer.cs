@@ -1,162 +1,162 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Drawing;
 using LuckParser.Models.DataModels;
 
 namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractPlayer
     {
-        protected AgentItem agent;
-        private String character;
-        // DPS
-        protected List<DamageLog> damage_logs = new List<DamageLog>();
-        protected List<DamageLog> damage_logsFiltered = new List<DamageLog>();
-        // Heal
-        //protected List<DamageLog> healing_logs = new List<DamageLog>();
-        //protected List<DamageLog> healing_received_logs = new List<DamageLog>();
-        // Taken damage
-        protected List<DamageLog> damageTaken_logs = new List<DamageLog>();
-        // Casts
-        protected List<CastLog> cast_logs = new List<CastLog>();
-        // Constructor
-        public AbstractPlayer(AgentItem agent)
+        protected readonly AgentItem Agent;
+        public readonly String Character;
+        protected readonly List<DamageLog> DamageLogs = new List<DamageLog>();
+        private List<DamageLog> _damageLogsFiltered = new List<DamageLog>();
+        //protected List<DamageLog> HealingLogs = new List<DamageLog>();
+        //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
+        private readonly List<DamageLog> _damageTakenlogs = new List<DamageLog>();
+        protected readonly List<CastLog> CastLogs = new List<CastLog>();
+
+        public int Toughness => Agent.Toughness;
+        public int Condition => Agent.Condition;
+        public int Concentration => Agent.Concentration;
+        public int Healing => Agent.Healing;
+        public ushort InstID => Agent.InstID;
+        public string Prof => Agent.Prof;
+
+        protected AbstractPlayer(AgentItem agent)
         {
-            String[] name = agent.getName().Split('\0');
-            character = name[0];
-            this.agent = agent;
+            String[] name = agent.Name.Split('\0');
+            Character = name[0];
+            Agent = agent;
         }
         // Getters
-        public ushort getInstid()
+        public List<DamageLog> GetDamageLogs(int instidFilter, ParsedLog log, long start, long end)//isntid = 0 gets all logs if specified sets and returns filtered logs
         {
-            return agent.getInstid();
-        }
-        public string getCharacter()
-        {
-            return character;
-        }
-        public string getProf()
-        {
-            return agent.getProf();
-        }
-        public long getDeath(ParsedLog log, long start, long end)
-        {
-            long offset = log.getBossData().getFirstAware();
-            CombatItem dead = log.getCombatList().FirstOrDefault(x => x.getSrcInstid() == agent.getInstid() && x.isStateChange() == ParseEnum.StateChange.ChangeDead && x.getTime() >= start + offset && x.getTime() <= end + offset);
-            if (dead != null && dead.getTime() > 0)
+            if (DamageLogs.Count == 0)
             {
-                return dead.getTime();
-            }
-            return 0;
-        }
-
-        public List<DamageLog> getDamageLogs(int instidFilter, ParsedLog log, long start, long end)//isntid = 0 gets all logs if specefied sets and returns filterd logs
-        {
-            if (damage_logs.Count == 0)
-            {
-                setDamageLogs(log);
+                SetDamageLogs(log);
             }
 
 
-            if (damage_logsFiltered.Count == 0)
+            if (_damageLogsFiltered.Count == 0)
             {
-                setFilteredLogs(log);
+                _damageLogsFiltered = DamageLogs.Where(x => x.DstInstId == instidFilter).ToList();
             }
             if (instidFilter == 0)
             {
-                return damage_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
+                return DamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
-            else
-            {
-                return damage_logsFiltered.Where( x => x.getTime() >= start && x.getTime() <= end).ToList();
-            }
+            return _damageLogsFiltered.Where( x => x.Time >= start && x.Time <= end).ToList();
         }
-        public List<DamageLog> getDamageTakenLogs(ParsedLog log, long start, long end)
+        public List<DamageLog> GetDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
         {
-            if (damageTaken_logs.Count == 0)
+            if (redirection.Count == 0)
             {
-                setDamagetakenLogs(log);
+                return GetDamageLogs(log.FightData.InstID, log, start, end);
             }
-            return damageTaken_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
+            List<DamageLog> dls = GetDamageLogs(0, log, start, end);
+            List<DamageLog> res = new List<DamageLog>();
+            foreach (AgentItem a in redirection)
+            {
+                res.AddRange(dls.Where(x => x.DstInstId == a.InstID && x.Time >= a.FirstAware - log.FightData.FightStart && x.Time <= a.LastAware - log.FightData.FightStart));
+            }
+            res.Sort((x, y) => x.Time < y.Time ? -1 : 1);
+            return res;
         }
-        /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)//isntid = 0 gets all logs if specefied sets and returns filterd logs
+        public List<DamageLog> GetDamageTakenLogs(ParsedLog log, long start, long end)
         {
-            if (healing_logs.Count == 0)
+            if (_damageTakenlogs.Count == 0)
+            {
+                SetDamageTakenLogs(log);
+            }
+            return _damageTakenlogs.Where(x => x.Time >= start && x.Time <= end).ToList();
+        }
+        /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)//isntid = 0 gets all logs if specified sets and returns filtered logs
+        {
+            if (healingLogs.Count == 0)
             {
                 setHealingLogs(log);
             }
-            return healing_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
+            return healingLogs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }
         public List<DamageLog> getHealingReceivedLogs(ParsedLog log, long start, long end)
         {
-            if (healing_received_logs.Count == 0)
+            if (healingReceivedLogs.Count == 0)
             {
                 setHealingReceivedLogs(log);
             }
-            return healing_received_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
+            return healingReceivedLogs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
         }*/
-        public List<CastLog> getCastLogs(ParsedLog log, long start, long end)
+        public List<CastLog> GetCastLogs(ParsedLog log, long start, long end)
         {
-            if (cast_logs.Count == 0)
+            if (CastLogs.Count == 0)
             {
-                setCastLogs(log);
+                SetCastLogs(log);
             }
-            return cast_logs.Where(x => x.getTime() >= start && x.getTime() <= end).ToList();
+            return CastLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
 
         }
 
-        public List<CastLog> getCastLogsActDur(ParsedLog log, long start, long end)
+        public List<CastLog> GetCastLogsActDur(ParsedLog log, long start, long end)
         {
-            if (cast_logs.Count == 0)
+            if (CastLogs.Count == 0)
             {
-                setCastLogs(log);
+                SetCastLogs(log);
             }
-            return cast_logs.Where(x => x.getTime() + x.getActDur() >= start && x.getTime() <= end).ToList();
+            return CastLogs.Where(x => x.Time + x.ActualDuration >= start && x.Time <= end).ToList();
 
         }
-        public List<DamageLog> getJustPlayerDamageLogs(int instidFilter, ParsedLog log, long start, long end)
+        public List<DamageLog> GetJustPlayerDamageLogs(int instidFilter, ParsedLog log, long start, long end)
         {
-            return getDamageLogs(instidFilter, log, start, end).Where(x => x.getInstidt() == agent.getInstid()).ToList();
+            return GetDamageLogs(instidFilter, log, start, end).Where(x => x.SrcInstId == Agent.InstID).ToList();
+        }
+
+        public List<DamageLog> GetJustPlayerDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
+        {
+            if (redirection.Count == 0)
+            {
+                return GetJustPlayerDamageLogs(log.FightData.InstID, log, start, end);
+            }
+            List<DamageLog> dls = GetJustPlayerDamageLogs(0, log, start, end);
+            List<DamageLog> res = new List<DamageLog>();
+            foreach (AgentItem a in redirection)
+            {
+                res.AddRange(dls.Where(x => x.DstInstId == a.InstID && x.Time >= a.FirstAware - log.FightData.FightStart && x.Time <= a.LastAware - log.FightData.FightStart));
+            }
+            res.Sort((x, y) => x.Time < y.Time ? -1 : 1);
+            return res;
         }
         // privates
-        protected void addDamageLog(long time, ushort instid, CombatItem c, List<DamageLog> toFill)
+        protected void AddDamageLog(long time, CombatItem c)
         {
-            if (instid == c.getDstInstid() || instid == 0)
+            if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
             {
-                if (c.isBuffremove() == ParseEnum.BuffRemove.None)
+                if (c.IsBuff == 1 && c.BuffDmg != 0)//condi
                 {
-                    if (c.isBuff() == 1 && c.getBuffDmg() != 0)//condi
-                    {
-                        toFill.Add(new DamageLogCondition(time, c));
-                    }
-                    else if (c.isBuff() == 0 && c.getValue() != 0)//power
-                    {
-                        toFill.Add(new DamageLogPower(time, c));
-                    }
-                    else if (c.getResult() == ParseEnum.Result.Absorb || c.getResult() == ParseEnum.Result.Blind || c.getResult() == ParseEnum.Result.Interrupt)
-                    {//Hits that where blinded, invulned, interupts
-                        toFill.Add(new DamageLogPower(time, c));
-                    }
+                    DamageLogs.Add(new DamageLogCondition(time, c));
+                }
+                else if (c.IsBuff == 0 && c.Value != 0)//power
+                {
+                    DamageLogs.Add(new DamageLogPower(time, c));
+                }
+                else if (c.Result == ParseEnum.Result.Absorb || c.Result == ParseEnum.Result.Blind || c.Result == ParseEnum.Result.Interrupt)
+                {//Hits that where blinded, invulned, interrupts
+                    DamageLogs.Add(new DamageLogPower(time, c));
                 }
             }
-        }
-        protected void addDamageTakenLog(long time, ushort instid, CombatItem c)
-        {
-            if (instid == c.getSrcInstid() || instid == 0)
-            {
-                if (c.isBuff() == 1 && c.getBuffDmg() != 0)
-                {
-                    //inco,ing condi dmg not working or just not present?
-                    // damagetaken.Add(c.getBuffDmg());
-                    damageTaken_logs.Add(new DamageLogCondition(time, c));
-                }
-                else if (c.isBuff() == 0 && c.getValue() >= 0)
-                {
-                    damageTaken_logs.Add(new DamageLogPower(time, c));
 
-                }
+        }
+        protected void AddDamageTakenLog(long time, CombatItem c)
+        {
+            if (c.IsBuff == 1 && c.BuffDmg != 0)
+            {
+                //inco,ing condi dmg not working or just not present?
+                // damagetaken.Add(c.getBuffDmg());
+                _damageTakenlogs.Add(new DamageLogCondition(time, c));
+            }
+            else if (c.IsBuff == 0 && c.Value >= 0)
+            {
+                _damageTakenlogs.Add(new DamageLogPower(time, c));
 
             }
         }
@@ -188,10 +188,9 @@ namespace LuckParser.Models.ParseModels
             }
         }*/
         // Setters
-        protected abstract void setDamageLogs(ParsedLog log);     
-        protected abstract void setFilteredLogs(ParsedLog log);
-        protected abstract void setCastLogs(ParsedLog log);
-        protected abstract void setDamagetakenLogs(ParsedLog log);
+        protected abstract void SetDamageLogs(ParsedLog log);     
+        protected abstract void SetCastLogs(ParsedLog log);
+        protected abstract void SetDamageTakenLogs(ParsedLog log);
         //protected abstract void setHealingLogs(ParsedLog log);
         //protected abstract void setHealingReceivedLogs(ParsedLog log);
     }

@@ -5,19 +5,30 @@ namespace LuckParser.Models.ParseModels
 {
     public class SkillData
     {
-        // Fields
-        private List<SkillItem> skill_list;
-        private Dictionary<int, string> apiMissingID = new Dictionary<int, string>()
+        public ICollection<SkillItem> Values
         {
-            {1066, "Resurrect"},
-            {1175, "Bandage" },
-            {65001, "Dodge" },
+            get
+            {
+                return _skills.Values;
+            }
+        }
+        // Fields
+        private readonly Dictionary<long, SkillItem> _skills = new Dictionary<long, SkillItem>();
+        readonly static Dictionary<long, string> _apiMissingID = new Dictionary<long, string>()
+        {
+            {SkillItem.ResurrectId, "Resurrect"},
+            {SkillItem.BandageId, "Bandage" },
+            {SkillItem.DodgeId, "Dodge" },
             // Gorseval
             {31834,"Ghastly Rampage" },
             {31759,"Protective Shadow" },
             {31466,"Ghastly Rampage (Begin)" },
             // Sabetha
             {31372, "Shadow Step" },
+            // Slothasor
+            {34547, "Tantrum Start" },
+            {34515, "Sleeping" },
+            {34340, "Fear Me!" },
             // Matthias
             { 34468, "Shield (Human)"},
             { 34427, "Abomination Transformation"},
@@ -31,45 +42,49 @@ namespace LuckParser.Models.ParseModels
             // Keep Construct
             {35048, "Magic Blast Charge" }
         };
-
-        // Constructors
-        public SkillData()
-        {
-            this.skill_list = new List<SkillItem>();
-        }
-
+        
         // Public Methods
-        public void addItem(SkillItem item)
+
+        public SkillItem Get(long ID)
         {
-            skill_list.Add(item);
+            if (_skills.TryGetValue(ID, out SkillItem value))
+            {
+                return value;
+            }
+            return null;
         }
 
-        public String getName(int ID)
+        public SkillItem GetOrDummy(long ID)
         {
-
-            // Custom
-            if (apiMissingID.ContainsKey(ID))
+            if (_skills.TryGetValue(ID, out SkillItem value))
             {
-                return apiMissingID[ID];
+                return value;
+            }
+            return new SkillItem((int)ID, GetName(ID));
+        }
+
+        public void Add(SkillItem skillItem)
+        {
+            _skills.Add(skillItem.ID, skillItem);
+        }
+
+        public String GetName(long ID)
+        {
+            // Custom
+            if (_apiMissingID.ContainsKey(ID))
+            {
+                return _apiMissingID[ID];
             }
 
             // Normal
-            foreach (SkillItem s in skill_list)
+            SkillItem skillItem = Get(ID);
+            if (skillItem != null)
             {
-                if (s.getID() == ID)
-                {
-                    return s.getName();
-                }
+                return skillItem.Name;
             }
 
             // Unknown
             return "uid: " + ID.ToString();
-        }
-
-        // Getters
-        public List<SkillItem> getSkillList()
-        {
-            return skill_list;
-        }
+        }    
     }
 }

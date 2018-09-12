@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LuckParser.Properties;
+﻿using LuckParser.Properties;
 
 namespace LuckParser.Models.DataModels
 {
     class SettingsContainer
     {
         public readonly bool DPSGraphTotals;
-        public readonly bool PlayerGraphTotals;
-        public readonly bool PlayerGraphBoss;
+        public readonly bool ClDPSGraphTotals;
         public readonly bool PlayerBoonsUniversal;
         public readonly bool PlayerBoonsImpProf;
         public readonly bool PlayerBoonsAllProf;
@@ -28,28 +22,37 @@ namespace LuckParser.Models.DataModels
         public readonly bool Show10s;
         public readonly bool LightTheme;
         public readonly bool ParseCombatReplay;
+        public readonly int PollingRate = 32;
+        public readonly bool UploadToDPSReports;
+        public readonly bool UploadToDPSReportsRH;
+        public readonly bool UploadToRaidar;
+        public readonly bool IndentJSON;
 
         public SettingsContainer(Settings settings)
         {
-            this.DPSGraphTotals = settings.DPSGraphTotals;
-            this.PlayerGraphTotals = settings.PlayerGraphTotals;
-            this.PlayerGraphBoss = settings.PlayerGraphBoss;
-            this.PlayerBoonsUniversal = settings.PlayerBoonsUniversal;
-            this.PlayerBoonsImpProf = settings.PlayerBoonsImpProf;
-            this.PlayerBoonsAllProf = settings.PlayerBoonsAllProf;
-            this.PlayerRot = settings.PlayerRot;
-            this.PlayerRotIcons = settings.PlayerRotIcons;
-            this.EventList = settings.EventList;
-            this.BossSummary = settings.BossSummary;
-            this.SimpleRotation = settings.SimpleRotation;
-            this.ShowAutos = settings.ShowAutos;
-            this.LargeRotIcons = settings.LargeRotIcons;
-            this.ShowEstimates = settings.ShowEstimates;
-            this.ParsePhases = settings.ParsePhases;
-            this.Show10s = settings.Show10s;
-            this.Show30s = settings.Show30s;
-            this.LightTheme = settings.LightTheme;
-            this.ParseCombatReplay = settings.ParseCombatReplay;
+            DPSGraphTotals = settings.DPSGraphTotals;
+            ClDPSGraphTotals = settings.ClDPSGraphTotals;
+            PlayerBoonsUniversal = settings.PlayerBoonsUniversal;
+            PlayerBoonsImpProf = settings.PlayerBoonsImpProf;
+            PlayerBoonsAllProf = settings.PlayerBoonsAllProf;
+            PlayerRot = settings.PlayerRot;
+            PlayerRotIcons = settings.PlayerRotIcons;
+            EventList = settings.EventList;
+            BossSummary = settings.BossSummary;
+            SimpleRotation = settings.SimpleRotation;
+            ShowAutos = settings.ShowAutos;
+            LargeRotIcons = settings.LargeRotIcons;
+            ShowEstimates = settings.ShowEstimates;
+            ParsePhases = settings.ParsePhases;
+            Show10s = settings.Show10s;
+            Show30s = settings.Show30s;
+            LightTheme = settings.LightTheme;
+            ParseCombatReplay = settings.ParseCombatReplay;
+            UploadToDPSReports = settings.UploadToDPSReports;
+            UploadToDPSReportsRH = settings.UploadToDPSReportsRH;
+            UploadToRaidar = settings.UploadToRaidar;
+
+            IndentJSON = settings.IndentJSON;
         }
     }
 }

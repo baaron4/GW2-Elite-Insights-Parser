@@ -5,132 +5,53 @@ namespace LuckParser.Models.ParseModels
     public class AgentItem
     {
         // Fields
-        private ulong agent;
-        private ulong master_agent = 0;
-        private ushort instid = 0;
-        private long first_aware = 0;
-        private long last_aware = long.MaxValue;
-        private String name;
-        private String prof;
-        private int toughness = 0;
-        private int healing = 0;
-        private int condition = 0;
+        public readonly ulong Agent;
+        public readonly ushort ID;
+        public ulong MasterAgent { get; set; }
+        public ushort InstID { get; set; }
+        public long FirstAware { get; set; }
+        public long LastAware { get; set; } = long.MaxValue;
+        public readonly String Name;
+        public readonly String Prof;
+        public readonly int Toughness;
+        public readonly int Healing;
+        public readonly int Condition;
+        public readonly int Concentration;
+        public readonly int HitboxWidth;
+        public readonly int HitboxHeight;
 
         // Constructors
-        public AgentItem(ulong agent, String name, String prof)
+        public AgentItem(ulong agent, String name, String prof, int toughness, int healing, int condition, int concentration, int hbWidth, int hbHeight)
         {
-            this.agent = agent;
-            this.name = name;
-            this.prof = prof;
-        }
-
-        public AgentItem(ulong agent, String name, String prof, int toughness, int healing, int condition)
-        {
-            this.agent = agent;
-            this.name = name;
-            this.prof = prof;
-            this.toughness = toughness;
-            this.healing = healing;
-            this.condition = condition;
+            Agent = agent;
+            Name = name;
+            Prof = prof;
+            if (prof.Contains(":"))
+            {
+                ID = UInt16.Parse(Prof.Split(':')[1]);
+            }
+            Toughness = toughness;
+            Healing = healing;
+            Condition = condition;
+            Concentration = concentration;
+            HitboxWidth = hbWidth;
+            HitboxHeight = hbHeight;
         }
 
         // Public Methods
-        public String[] toStringArray()
+        public String[] ToStringArray()
         {
             String[] array = new String[9];
-            array[0] = string.Format("{0:X}", agent);//Long.toHexString(agent); 
-            array[1] = instid.ToString();
-            array[2] = first_aware.ToString();
-            array[3] = last_aware.ToString();
-            array[4] = name;
-            array[5] = prof;
-            array[6] = toughness.ToString();
-            array[7] = healing.ToString();
-            array[8] = condition.ToString();
+            array[0] = Agent.ToString(); 
+            array[1] = InstID.ToString();
+            array[2] = FirstAware.ToString();
+            array[3] = LastAware.ToString();
+            array[4] = Name;
+            array[5] = Prof;
+            array[6] = Toughness.ToString();
+            array[7] = Healing.ToString();
+            array[8] = Condition.ToString();
             return array;
-        }
-
-        // Getters
-        public ulong getAgent()
-        {
-            return agent;
-        }
-
-        public ushort getInstid()
-        {
-            return instid;
-        }
-
-        public long getFirstAware()
-        {
-            return first_aware;
-        }
-
-        public long getLastAware()
-        {
-            return last_aware;
-        }
-
-        public String getName()
-        {
-           // name = name.Replace("\0", "");
-            
-            return name;
-        }
-
-        public String getProf()
-        {
-            return prof;
-        }
-
-        public ulong getMasterAgent()
-        {
-            return master_agent;
-        }
-
-        public int getToughness()
-        {
-            return toughness;
-        }
-
-        public int getHealing()
-        {
-            return healing;
-        }
-
-        public int getCondition()
-        {
-            return condition;
-        }
-
-        public ushort getID()
-        {
-            if (prof.Contains(":"))
-            {
-                return UInt16.Parse(this.prof.Split(':')[1]);
-            }
-            return 0;
-        }
-
-        // Setters
-        public void setInstid(ushort instid)
-        {
-            this.instid = instid;
-        }
-
-        public void setMasterAgent(ulong master)
-        {
-            this.master_agent = master;
-        }
-
-        public void setFirstAware(long first_aware)
-        {
-            this.first_aware = first_aware;
-        }
-
-        public void setLastAware(long last_aware)
-        {
-            this.last_aware = last_aware;
         }
     }
 }

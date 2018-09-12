@@ -1,70 +1,159 @@
 ﻿using LuckParser.Models.DataModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
-    public class CombatData
+    public class CombatData : List<CombatItem>
     {
-        // Fields
-        private List<CombatItem> combat_list;
+        private Dictionary<ParseEnum.StateChange, List<CombatItem>> _statesData;
+        //private List<CombatItem> _healingData;
+        //private List<CombatItem> _healingReceivedData;
 
-        // Constructors
-        public CombatData()
-        {
-            this.combat_list = new List<CombatItem>();
-        }
+        public Dictionary<long, List<CombatItem>> BoonData { get; private set; }
+        public Dictionary<ushort, List<CombatItem>> BoonDataByDst { get; private set; }
+        public Dictionary<ushort, List<CombatItem>> DamageData { get; private set; }
+        public Dictionary<ushort, List<CombatItem>> CastData { get; private set; }
+        public Dictionary<long, List<CombatItem>> CastDataById { get; private set; }
+        public Dictionary<ushort, List<CombatItem>> DamageTakenData { get; private set; }
+        public Dictionary<ushort, List<CombatItem>> MovementData { get; private set; }
 
-        // Public Methods
-        public void addItem(CombatItem item)
+        public List<CombatItem> GetStates(int srcInstid, ParseEnum.StateChange change, long start, long end)
         {
-            combat_list.Add(item);
-        }
-
-        public List<CombatItem> getStates(int src_instid, ParseEnum.StateChange change, long start, long end)
-        {
-            List<CombatItem> states = new List<CombatItem>();
-            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() <= end))
+            if (_statesData.TryGetValue(change, out List<CombatItem> data))
             {
-                if (c.getSrcInstid() == src_instid && c.isStateChange() == change)
-                {
-                    states.Add(c);
-                }
+                return data.Where(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end).ToList();
             }
-            return states;
+            return new List<CombatItem>();
         }
 
-        public int getSkillCount(int src_instid, int skill_id, long start, long end)
+        public int GetSkillCount(int srcInstid, int skillId, long start, long end)
         {
-            int count = 0;
-            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() <= end))
+            if (CastDataById.TryGetValue(skillId, out List<CombatItem> data))
             {
-                if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
-                {
-                    if (c.isActivation().IsCasting())
-                        count++;
-                }
+                return data.Count(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end && x.IsActivation.IsCasting());
             }
-            return count;
+            return 0;
         }
-        public int getBuffCount(int src_instid, int skill_id, long start, long end)
+
+        public int GetBuffCount(int srcInstid, int skillId, long start, long end)
         {
-            int count = 0;
-            foreach (CombatItem c in combat_list.Where(x => x.getTime() >= start && x.getTime() <= end))
+            if (BoonData.TryGetValue(skillId, out List<CombatItem> data))
             {
-                if (c.getSrcInstid() == src_instid && c.getSkillID() == skill_id)
-                {
-                    if (c.isBuff() == 1 && c.isBuffremove() == ParseEnum.BuffRemove.None)
-                        count++;
-                }
+                return data.Count(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end && x.IsBuffRemove == ParseEnum.BuffRemove.None);
             }
-            return count;
+            return 0;
         }
-        // Getters
-        public List<CombatItem> getCombatList()
+
+        public void Validate(FightData fightData)
         {
-            return combat_list;
+            var boonData = this.Where(x => x.IsBuff > 0 && (x.IsBuff == 18 || x.BuffDmg == 0 || x.IsBuffRemove != ParseEnum.BuffRemove.None)).ToArray();
+            BoonData = boonData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
+            BoonDataByDst = boonData.GroupBy(x => x.IsBuffRemove == ParseEnum.BuffRemove.None ? x.DstInstid : x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
+
+            var damageData = this.Where(x => x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuffRemove == ParseEnum.BuffRemove.None &&
+                                        ((x.IsBuff == 1 && x.BuffDmg >= 0 && x.Value == 0) ||
+                                        (x.IsBuff == 0 && x.Value >= 0))).ToArray();
+            DamageData = damageData.Where(x => x.DstInstid != 0 && x.IFF == ParseEnum.IFF.Foe).GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
+            DamageTakenData = damageData.GroupBy(x => x.DstInstid).ToDictionary(x => x.Key, x => x.ToList());
+
+            var castData = this.Where(x => (x.IsStateChange == ParseEnum.StateChange.Normal && x.IsActivation != ParseEnum.Activation.None) || x.IsStateChange == ParseEnum.StateChange.WeaponSwap).ToArray();
+            CastData = castData.GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
+            CastDataById = castData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
+
+            _statesData = this.GroupBy(x => x.IsStateChange).ToDictionary(x => x.Key, x => x.ToList());
+
+            MovementData = fightData.Logic.CanCombatReplay
+                ? this.Where(x =>
+                        x.IsStateChange == ParseEnum.StateChange.Position ||
+                        x.IsStateChange == ParseEnum.StateChange.Velocity).GroupBy(x => x.SrcInstid)
+                    .ToDictionary(x => x.Key, x => x.ToList())
+                : new Dictionary<ushort, List<CombatItem>>();
+
+            /*healing_data = this.Where(x => x.getDstInstid() != 0 && x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
+                                         ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
+                                         (x.isBuff() == 0 && x.getValue() > 0))).ToList();
+
+            healing_received_data = this.Where(x => x.isStateChange() == ParseEnum.StateChange.Normal && x.getIFF() == ParseEnum.IFF.Friend && x.isBuffremove() == ParseEnum.BuffRemove.None &&
+                                            ((x.isBuff() == 1 && x.getBuffDmg() > 0 && x.getValue() == 0) ||
+                                                (x.isBuff() == 0 && x.getValue() >= 0))).ToList();*/
+        }
+        // getters
+
+        public List<CombatItem> GetBoonData(long key)
+        {
+            if (BoonData.TryGetValue(key, out List<CombatItem> res))
+            {
+                return res;
+            }
+            return new List<CombatItem>(); ;
+        }
+
+        public List<CombatItem> GetBoonDataByDst(ushort key)
+        {
+            if (BoonDataByDst.TryGetValue(key, out List<CombatItem> res))
+            {
+                return res;
+            }
+            return new List<CombatItem>(); ;
+        }
+
+
+        public List<CombatItem> GetDamageData(ushort key)
+        {
+            if (DamageData.TryGetValue(key, out List<CombatItem> res))
+            {
+                return res;
+            }
+            return new List<CombatItem>(); ;
+        }
+
+        public List<CombatItem> GetCastData(ushort key)
+        {
+            if (CastData.TryGetValue(key, out List<CombatItem> res))
+            {
+                return res;
+            }
+            return new List<CombatItem>(); ;
+        }
+
+
+        public List<CombatItem> GetCastDataById(long key)
+        {
+            if (CastDataById.TryGetValue(key, out List<CombatItem> res))
+            {
+                return res;
+            }
+            return new List<CombatItem>(); ;
+        }
+
+        public List<CombatItem> GetDamageTakenData(ushort key)
+        {
+            if (DamageTakenData.TryGetValue(key, out List<CombatItem> res))
+            {
+                return res;
+            }
+            return new List<CombatItem>(); ;
+        }
+
+        /*public List<CombatItem> getHealingData()
+        {
+            return _healingData;
+        }
+
+        public List<CombatItem> getHealingReceivedData()
+        {
+            return _healingReceivedData;
+        }*/
+
+
+        public List<CombatItem> GetMovementData(ushort key)
+        {
+            if (MovementData.TryGetValue(key, out List<CombatItem> res))
+            {
+                return res;
+            }
+            return new List<CombatItem>(); ;
         }
     }
 }

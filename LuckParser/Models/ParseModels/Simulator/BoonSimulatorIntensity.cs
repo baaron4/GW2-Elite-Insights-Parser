@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using LuckParser.Models.DataModels;
+using System.Linq;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -6,39 +7,33 @@ namespace LuckParser.Models.ParseModels
     {
         
         // Constructor
-        public BoonSimulatorIntensity(int capacity) : base(capacity)
+        public BoonSimulatorIntensity(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
         }
 
         // Public Methods
              
-        public override void update(long time_passed)
+        protected override void Update(long timePassed)
         {
-            if (boon_stack.Count > 0)
+            if (BoonStack.Count > 0)
             {
-                var toAdd = new BoonSimulationItemIntensity(boon_stack);
-                if (simulation.Count > 0)
+                var toAdd = new BoonSimulationItemIntensity(BoonStack);
+                if (GenerationSimulation.Count > 0)
                 {
-                    BoonSimulationItem last = simulation.Last();
-                    if (last.getEnd() > toAdd.getStart())
+                    BoonSimulationItem last = GenerationSimulation.Last();
+                    if (last.End > toAdd.Start)
                     {
-                        last.setEnd(toAdd.getStart());
+                        last.SetEnd(toAdd.Start);
                     }
                 }
-                simulation.Add(toAdd);
+                GenerationSimulation.Add(toAdd);
                 // Subtract from each
-                for(int i = boon_stack.Count - 1; i >= 0; i--)
+                for(int i = BoonStack.Count - 1; i >= 0; i--)
                 {
-                    var item = new BoonStackItem(boon_stack[i], time_passed, -time_passed);
-                    if(item.boon_duration <= 0)
-                    {
-                        boon_stack.RemoveAt(i);
-                    }
-                    else
-                    {
-                        boon_stack[i] = item;
-                    }
+                    var item = new BoonStackItem(BoonStack[i], timePassed, timePassed);
+                    BoonStack[i] = item;
                 }
+                BoonStack.RemoveAll(x => x.BoonDuration < 1);
             }
         }
     }

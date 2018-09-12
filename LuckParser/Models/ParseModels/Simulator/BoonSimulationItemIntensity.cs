@@ -6,71 +6,73 @@ namespace LuckParser.Models.ParseModels
 {
     class BoonSimulationItemIntensity : BoonSimulationItem
     {
-        private List<BoonSimulationItemDuration> stacks = new List<BoonSimulationItemDuration>();
+        private List<BoonSimulationItemDuration> _stacks = new List<BoonSimulationItemDuration>();
 
         public BoonSimulationItemIntensity(List<BoonStackItem> stacks) : base()
         {
-            this.start = stacks[0].start;
+            Start = stacks[0].Start;
             foreach (BoonStackItem stack in stacks)
             {
-                this.stacks.Add(new BoonSimulationItemDuration(stack));
+                _stacks.Add(new BoonSimulationItemDuration(stack));
             }
-            this.duration = this.stacks.Max(x => x.getDuration(0));
+            Duration = _stacks.Max(x => x.GetTotalDuration());
         }
 
-        public override void setEnd(long end)
+        public override void SetEnd(long end)
         {
-            foreach (BoonSimulationItemDuration stack in stacks)
+            foreach (BoonSimulationItemDuration stack in _stacks)
             {
-                stack.setEnd(end);
+                stack.SetEnd(end);
             }
-            this.duration = this.stacks.Max(x => x.getDuration(0));
+            Duration = _stacks.Max(x => x.GetTotalDuration());
         }
 
-        public override long getDuration(ushort src, long start = 0, long end = 0)
+        public override long GetSrcDuration(ushort src, long start, long end)
         {
             long total = 0;
-            foreach (BoonSimulationItemDuration stack in stacks.Where(x => src == 0 || x.getSrc()[0] == src))
+            foreach (BoonSimulationItemDuration stack in _stacks.Where(x => x.GetSrc()[0] == src))
             {
-                total += stack.getDuration(src, start, end);
+                total += stack.GetSrcDuration(src, start, end);
             }
             return total;
         }
-        
-        public override List<ushort> getSrc()
-        {
-            return stacks.Select(x => x.getSrc()[0]).Distinct().ToList();
-        }
-
-        public override int getStack(long end)
-        {
-            return stacks.Count(x => x.getEnd() >= end);
-        }
-
-        public override long getOverstack(ushort src, long start = 0, long end = 0)
+        public override long GetTotalDuration()
         {
             long total = 0;
-            foreach (BoonSimulationItemDuration stack in stacks.Where(x => src == 0 || x.getSrc()[0] == src))
+            foreach (BoonSimulationItemDuration stack in _stacks)
             {
-                total += stack.getOverstack(src, start, end);
+                total += stack.GetTotalDuration();
             }
             return total;
         }
 
-        public override bool addOverstack(ushort src, long overstack)
+        public override List<ushort> GetSrc()
         {
-            if (duration == 0)
+            return _stacks.Select(x => x.GetSrc()[0]).Distinct().ToList();
+        }
+
+        public override int GetStack(long end)
+        {
+            return _stacks.Count(x => x.End >= end);
+        }
+
+        public override List<BoonsGraphModel.Segment> ToSegment()
+        {
+            if (Duration == _stacks.Min(x => x.GetTotalDuration()))
             {
-                return false;
-            }
-            foreach(BoonSimulationItemDuration stack in stacks)
-            {
-                if (stack.addOverstack(src,overstack))
+                return new List<BoonsGraphModel.Segment>
                 {
-                    return true;
-                }
+                    new BoonsGraphModel.Segment(Start,End,_stacks.Count)
+                };
             }
-            return false;
+            long start = Start;
+            List<BoonsGraphModel.Segment> res = new List<BoonsGraphModel.Segment>();
+            foreach ( long end in _stacks.Select(x => x.GetTotalDuration() + Start).Distinct())
+            {
+                res.Add(new BoonsGraphModel.Segment(start,end,GetStack(end)));
+                start = end;
+            }
+            return res;
         }
     }
 }

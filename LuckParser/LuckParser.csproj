@@ -54,6 +54,9 @@
   <PropertyGroup>
     <ApplicationIcon>LI.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>App.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -64,6 +67,7 @@
     <Reference Include="System.Net.Http.Formatting, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.4\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -78,6 +82,8 @@
     <Compile Include="CancellationException.cs" />
     <Compile Include="ConsoleProgram.cs" />
     <Compile Include="Controllers\CSVHelper.cs" />
+    <Compile Include="Controllers\JSONBuilder.cs" />
+    <Compile Include="Controllers\HTMLBuilderNew.cs" />
     <Compile Include="Controllers\Parser.cs" />
     <Compile Include="Controllers\CSVBuilder.cs" />
     <Compile Include="Controllers\FlashWindow.cs" />
@@ -87,6 +93,7 @@
     <Compile Include="Controllers\HTMLHelper.cs" />
     <Compile Include="Controllers\ParseHelper.cs" />
     <Compile Include="Controllers\StatisticsCalculator.cs" />
+    <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GridRow.cs" />
     <Compile Include="MainForm.cs">
@@ -95,32 +102,84 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\BossLogic\BossLogic.cs" />
+    <Compile Include="Models\BossLogic\Dhuum.cs" />
+    <Compile Include="Models\BossLogic\Ensolyss.cs" />
+    <Compile Include="Models\BossLogic\Artsariiv.cs" />
+    <Compile Include="Models\BossLogic\Arkk.cs" />
+    <Compile Include="Models\BossLogic\FractalLogic.cs" />
+    <Compile Include="Models\BossLogic\RaidLogic.cs" />
+    <Compile Include="Models\BossLogic\Skorvald.cs" />
+    <Compile Include="Models\BossLogic\Siax.cs" />
+    <Compile Include="Models\BossLogic\MAMA.cs" />
+    <Compile Include="Models\BossLogic\KeepConstruct.cs" />
+    <Compile Include="Models\BossLogic\Cairn.cs" />
+    <Compile Include="Models\BossLogic\Deimos.cs" />
+    <Compile Include="Models\BossLogic\Golem.cs" />
+    <Compile Include="Models\BossLogic\SoullessHorror.cs" />
+    <Compile Include="Models\BossLogic\Samarog.cs" />
+    <Compile Include="Models\BossLogic\MursaatOverseer.cs" />
+    <Compile Include="Models\BossLogic\Xera.cs" />
+    <Compile Include="Models\BossLogic\Matthias.cs" />
+    <Compile Include="Models\BossLogic\Slothasor.cs" />
+    <Compile Include="Models\BossLogic\Sabetha.cs" />
+    <Compile Include="Models\BossLogic\Gorseval.cs" />
+    <Compile Include="Models\BossLogic\ValeGuardian.cs" />
+    <Compile Include="Models\DataModels\JsonLog.cs" />
     <Compile Include="Models\DataModels\ParseEnum.cs" />
     <Compile Include="Models\DataModels\ParsedLog.cs" />
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
     <Compile Include="Models\DataModels\Statistics.cs" />
-    <Compile Include="Models\ParseModels\CombatReplay.cs" />
-    <Compile Include="Models\ParseModels\GW2APICategory.cs" />
+    <Compile Include="Models\HtmlModels\DmgDistributionDto.cs" />
+    <Compile Include="Models\HtmlModels\PhaseChartDataDto.cs" />
+    <Compile Include="Models\HtmlModels\PlayerChartDataDto.cs" />
+    <Compile Include="Models\HtmlModels\SkillDto.cs" />
+    <Compile Include="Models\HtmlModels\MechanicDto.cs" />
+    <Compile Include="Models\HtmlModels\BoonDto.cs" />
+    <Compile Include="Models\HtmlModels\BoonData.cs" />
+    <Compile Include="Models\HtmlModels\PhaseDto.cs" />
+    <Compile Include="Models\HtmlModels\LogDataDto.cs" />
+    <Compile Include="Models\HtmlModels\GraphDto.cs" />
+    <Compile Include="Models\HtmlModels\PlayerDetailsDto.cs" />
+    <Compile Include="Models\HtmlModels\PlayerDto.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\Actor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\CircleActor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\DoughnutActor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\ImmobileActor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\MobileActor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\Mobility.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\CombatReplay.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\CombatReplayMap.cs" />
+    <Compile Include="Models\ParseModels\EffectStackingLogic\HealingLogic.cs" />
+    <Compile Include="Models\ParseModels\EffectStackingLogic\ForceOverrideLogic.cs" />
+    <Compile Include="Models\ParseModels\EffectStackingLogic\OverrideLogic.cs" />
+    <Compile Include="Models\ParseModels\EffectStackingLogic\QueueLogic.cs" />
+    <Compile Include="Models\ParseModels\EffectStackingLogic\StackingLogic.cs" />
+    <Compile Include="Models\ParseModels\GW2API\GW2APICategory.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\MechanicData.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractMasterPlayer.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractPlayer.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonsGraphModel.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonDistribution.cs" />
+    <Compile Include="Models\ParseModels\Players\DummyPlayer.cs" />
     <Compile Include="Models\ParseModels\Players\Minion.cs" />
     <Compile Include="Models\ParseModels\Players\Minions.cs" />
     <Compile Include="Models\ParseModels\PhaseData.cs" />
     <Compile Include="Models\ParseModels\Players\Mob.cs" />
-    <Compile Include="Models\ParseModels\Point3D.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Point3D.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItem.cs" />
     <Compile Include="Models\ParseModels\Players\Boss.cs" />
-    <Compile Include="Models\ParseModels\GW2APISpec.cs" />
+    <Compile Include="Models\ParseModels\GW2API\GW2APISpec.cs" />
     <Compile Include="Models\ParseModels\Logs\DamageLogCondition.cs" />
-    <Compile Include="Models\ParseModels\GW2APISkillCheck.cs" />
-    <Compile Include="Models\ParseModels\GW2APISkillDetailed.cs" />
-    <Compile Include="Models\ParseModels\GW2APIfacts.cs" />
-    <Compile Include="Models\ParseModels\GW2APIfactsDetail.cs" />
-    <Compile Include="Models\ParseModels\GW2APISkill.cs" />
+    <Compile Include="Models\ParseModels\GW2API\GW2APISkillCheck.cs" />
+    <Compile Include="Models\ParseModels\GW2API\GW2APISkillDetailed.cs" />
+    <Compile Include="Models\ParseModels\GW2API\GW2APIfacts.cs" />
+    <Compile Include="Models\ParseModels\GW2API\GW2APIfactsDetail.cs" />
+    <Compile Include="Models\ParseModels\GW2API\GW2APISkill.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItemDuration.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulationItemIntensity.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationOverstackItem.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulationResult.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulator.cs" />
     <Compile Include="Models\ParseModels\Agents\Agent.cs" />
     <Compile Include="Models\ParseModels\Agents\AgentData.cs" />
@@ -128,16 +187,15 @@
     <Compile Include="Models\ParseModels\Boons\Boon.cs" />
     <Compile Include="Models\ParseModels\Logs\BoonLog.cs" />
     <Compile Include="Models\ParseModels\Boons\BoonMap.cs" />
-    <Compile Include="Models\ParseModels\BossData.cs" />
+    <Compile Include="Models\ParseModels\FightData.cs" />
     <Compile Include="Models\ParseModels\Logs\CastLog.cs" />
     <Compile Include="Models\ParseModels\CombatData.cs" />
     <Compile Include="Models\ParseModels\CombatItem.cs" />
     <Compile Include="Models\ParseModels\Logs\DamageLog.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulatorDuration.cs" />
     <Compile Include="Models\ParseModels\Simulator\BoonSimulatorIntensity.cs" />
-    <Compile Include="Models\ParseModels\Logs\LogData.cs" />
-    <Compile Include="Models\ParseModels\Mechanic.cs" />
-    <Compile Include="Models\ParseModels\MechanicData.cs" />
+    <Compile Include="Models\ParseModels\LogData.cs" />
+    <Compile Include="Models\ParseModels\Mechanics\Mechanic.cs" />
     <Compile Include="Models\ParseModels\Logs\MechanicLog.cs" />
     <Compile Include="Models\ParseModels\Players\Player.cs" />
     <Compile Include="Models\ParseModels\Logs\DamageLogPower.cs" />
@@ -163,10 +221,12 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="App.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\GridRow.datasource" />
     <None Include="Properties\Settings.settings">
@@ -194,6 +254,24 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="LI.ico" />
+    <None Include="Resources\theme-cosmo.png" />
+    <None Include="Resources\theme-slate.png" />
+    <Content Include="Resources\TODO.txt" />
+    <None Include="Resources\tmplCompTable.html" />
+    <None Include="Resources\tmplMechanicTable.html" />
+    <None Include="Resources\tmplDmgDistTable.html" />
+    <None Include="Resources\tmplSupTable.html" />
+    <None Include="Resources\tmplDpsTable.html" />
+    <None Include="Resources\tmplDefTable.html" />
+    <None Include="Resources\tmplBoonTable.html" />
+    <None Include="Resources\flomix-ei.js" />
+    <None Include="Resources\flomix-ei.css" />
+    <None Include="Resources\tmplTabs.html" />
+    <None Include="Resources\tmplPlayerCells.html" />
+    <None Include="Resources\tmplDmgTable.html">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Resources\template.html" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">

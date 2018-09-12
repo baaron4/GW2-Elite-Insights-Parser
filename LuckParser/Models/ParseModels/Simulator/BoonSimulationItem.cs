@@ -5,54 +5,49 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class BoonSimulationItem
     {
-        protected long start;
-        protected long duration;
-
-        public BoonSimulationItem()
+        public long Start { get; protected set; }
+        public long Duration { get; protected set; }
+        public long End
         {
-            this.start = 0;
-            this.duration = 0;
-        }
-
-        public BoonSimulationItem(long start, long duration)
-        {
-            this.start = start;
-            this.duration = duration;
-        }
-
-        public abstract long getDuration(ushort src, long start = 0, long end = 0);
-
-
-        public long getStart()
-        {
-            return start;
-        }
-
-        public abstract List<ushort> getSrc();
-
-        public long getEnd()
-        {
-            return start + duration;
-        }
-
-        public abstract bool addOverstack(ushort src, long overstack);
-
-        public abstract long getOverstack(ushort src, long start = 0, long end = 0);
-
-        public long getItemDuration(long start = 0, long end = 0)
-        {
-            if (end > 0)
+            get
             {
-                long start_offset = Math.Max(Math.Min(duration, start - this.start),0);
-                long item_end = this.start + duration;
-                long end_offset = Math.Max(Math.Min(duration, item_end - end),0);
-                return duration - start_offset - end_offset;
+                return Start + Duration;
             }
-            return duration;
         }
 
-        public abstract void setEnd(long end);
+        protected BoonSimulationItem()
+        {
+            Start = 0;
+            Duration = 0;
+        }
 
-        public abstract int getStack(long end);
+        protected BoonSimulationItem(long start, long duration)
+        {
+            Start = start;
+            Duration = duration;
+        }
+
+        public abstract long GetSrcDuration(ushort src, long start, long end);
+        public abstract long GetTotalDuration();
+
+        public abstract List<ushort> GetSrc();
+
+        public long GetClampedDuration(long start, long end)
+        {
+            if (end > 0 && end - start > 0)
+            {
+                long startoffset = Math.Max(Math.Min(Duration, start - Start),0);
+                long itemEnd = Start + Duration;
+                long endOffset = Math.Max(Math.Min(Duration, itemEnd - end),0);
+                return Duration - startoffset - endOffset;
+            }
+            return 0;
+        }
+
+        public abstract List<BoonsGraphModel.Segment> ToSegment();
+
+        public abstract void SetEnd(long end);
+
+        public abstract int GetStack(long end);
     }
 }

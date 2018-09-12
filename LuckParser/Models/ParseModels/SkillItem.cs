@@ -5,79 +5,64 @@ namespace LuckParser.Models.ParseModels
 {
     public class SkillItem
     {
+        public const int ResurrectId = 1066;
+        public const int BandageId = 1175;
+        public const int DodgeId = 65001;
+        public const int WeaponSwapId = -2;
+
         // Fields
-        private int ID;
-        private String name;
-        private GW2APISkill apiSkill = null;
-        private int cc = 0;
+        public readonly int ID;
+        private String _name;
+        public String Name
+        {
+            get
+            {
+                return ID == ResurrectId ? "Resurrect" : _name;
+            }
+        }
+        public GW2APISkill ApiSkill { get; private set; }
+        public int CC { get; private set; }
 
         // Constructor
         public SkillItem(int ID, String name)
         {
             name = name.Replace("\0", "");
             this.ID = ID;
-            this.name = name;
+            _name = name;
         }
 
         // Public Methods
-        public String[] toStringArray()
+        public String[] ToStringArray()
         {
             String[] array = new String[2];
             array[0] = ID.ToString();
-            array[1] = name.ToString();
+            array[1] = _name;
             return array;
         }
         //setter
         public void SetGW2APISkill(GW2APIController apiController)
         {
-            if (apiSkill == null)
+            if (ApiSkill == null)
             {
                 GW2APISkill skillAPI = apiController.GetSkill(ID);
 
                 if (skillAPI != null) {
-                    this.apiSkill = skillAPI;
-                    this.name = skillAPI.name;
+                    ApiSkill = skillAPI;
+                    _name = skillAPI.name;
                 }
                 
             }
             
         }
-        // Getters
-        public int getID()
-        {
-            return ID;
-        }
 
-        public String getName()
+        public void SetCCAPI()//this is 100% off the GW2 API is not a reliable source of finding skill CC
         {
-            if (ID == 1066) {
-                return "Resurrect";
-            }
-            return name;
-        }
-
-        public GW2APISkill GetGW2APISkill() {
-            return apiSkill;
-        }
-        public int GetCC() {
-            return cc;
-        }
-        public void SetCCAPI(int cc)//this is 100% off the GW2 API is not a reliable source of finding skill CC
-        {
-            cc = 0;
-            if (apiSkill != null)
+            CC = 0;
+            if (ApiSkill != null)
             {
-                GW2APISkillDetailed apiskilldet = (GW2APISkillDetailed)this.apiSkill;
-                GW2APISkillCheck apiskillchec = (GW2APISkillCheck)this.apiSkill;
-                GW2APIfacts[] factsList;
-                if (apiskilldet != null)
-                {
-                    factsList = apiskilldet.facts;
-                }
-                else
-                {
-                    factsList = apiskillchec.facts;
-                }
+                GW2APISkillDetailed apiskilldet = (GW2APISkillDetailed)ApiSkill;
+                GW2APISkillCheck apiskillchec = (GW2APISkillCheck)ApiSkill;
+                GW2APIfacts[] factsList = apiskilldet != null ? apiskilldet.facts : apiskillchec.facts;
                 bool daze = false;
                 bool stun = false;
                 bool knockdown = false;
@@ -94,11 +79,11 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (fact.duration < 1)
                             {
-                                cc += 100;
+                                CC += 100;
                             }
                             else
                             {
-                                cc += fact.duration * 100;
+                                CC += fact.duration * 100;
                             }
                             daze = true;
                         }
@@ -110,11 +95,11 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (fact.duration < 1)
                             {
-                                cc += 100;
+                                CC += 100;
                             }
                             else
                             {
-                                cc += fact.duration * 100;
+                                CC += fact.duration * 100;
                             }
                             stun = true;
                         }
@@ -125,11 +110,11 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (fact.duration < 1)
                             {
-                                cc += 100;
+                                CC += 100;
                             }
                             else
                             {
-                                cc += fact.duration * 100;
+                                CC += fact.duration * 100;
                             }
                             knockdown = true;
                         }
@@ -138,8 +123,8 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (fact.text == "Launch" || fact.status == "Launch")
                         {
-                            
-                                cc += 232;//Wiki says either 232 or 332 based on duration? launch doesnt provide duration in api however
+
+                            CC += 232;//Wiki says either 232 or 332 based on duration? launch doesn't provide duration in api however
                            
                             launch = true;
                         }
@@ -149,7 +134,7 @@ namespace LuckParser.Models.ParseModels
                         if (fact.text == "Knockback" || fact.status == "Knockback")
                         {
 
-                            cc += 150;//always 150 unless special case of 232 for ranger pet?
+                            CC += 150;//always 150 unless special case of 232 for ranger pet?
                             knockback = true;
                         }
                     }
@@ -158,7 +143,7 @@ namespace LuckParser.Models.ParseModels
                         if (fact.text == "Pull" || fact.status == "Pull")
                         {
 
-                            cc += 150;
+                            CC += 150;
 
                             pull = true;
                         }
@@ -169,11 +154,11 @@ namespace LuckParser.Models.ParseModels
                         {
                             if (fact.duration < 1)
                             {
-                                cc += 100;
+                                CC += 100;
                             }
                             else
                             {
-                                cc += fact.duration * 100;
+                                CC += fact.duration * 100;
                             }
                             flaot = true;
                         }
@@ -182,24 +167,24 @@ namespace LuckParser.Models.ParseModels
                     {
                         if (fact.duration < 1)
                         {
-                            cc += 100;
+                            CC += 100;
                         }
                         else
                         {
-                            cc += fact.duration * 100;
+                            CC += fact.duration * 100;
                         }
                         
                     }
 
                 
                 }
-                if (ID == 30725)//toss elixer x
+                if (ID == 30725)//toss elixir x
                 {
-                    cc = 300;
+                    CC = 300;
                 }
                 if (ID == 29519)//MOA signet
                 {
-                    cc = 1000;
+                    CC = 1000;
                 }
                
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LuckParser.Models.DataModels;
+using System;
 using System.Linq;
 
 namespace LuckParser.Models.ParseModels
@@ -7,40 +8,40 @@ namespace LuckParser.Models.ParseModels
     {
         
         // Constructor
-        public BoonSimulatorDuration(int capacity) : base(capacity)
+        public BoonSimulatorDuration(int capacity, ParsedLog log, StackingLogic logic) : base(capacity, log, logic)
         {
         }
 
         // Public Methods
     
-        public override void update(long time_passed)
+        protected override void Update(long timePassed)
         {
-            if (boon_stack.Count > 0)
+            if (BoonStack.Count > 0)
             {
-                var toAdd = new BoonSimulationItemDuration(boon_stack[0]);
-                if (simulation.Count > 0)
+                var toAdd = new BoonSimulationItemDuration(BoonStack[0]);
+                if (GenerationSimulation.Count > 0)
                 {
-                    var last = simulation.Last();
-                    if (last.getEnd() > toAdd.getStart())
+                    var last = GenerationSimulation.Last();
+                    if (last.End > toAdd.Start)
                     {
-                        last.setEnd(toAdd.getStart());
+                        last.SetEnd(toAdd.Start);
                     }
                 }
-                simulation.Add(toAdd);
-                boon_stack[0] = new BoonStackItem(boon_stack[0], time_passed, -time_passed);
-                long diff = time_passed - Math.Abs(Math.Min(boon_stack[0].boon_duration, 0));
-                for (int i = 1; i < boon_stack.Count; i++)
+                GenerationSimulation.Add(toAdd);
+                BoonStack[0] = new BoonStackItem(BoonStack[0], timePassed, timePassed);
+                long diff = timePassed - Math.Abs(Math.Min(BoonStack[0].BoonDuration, 0));
+                for (int i = 1; i < BoonStack.Count; i++)
                 {
-                    boon_stack[i] = new BoonStackItem(boon_stack[i], diff, 0);
+                    BoonStack[i] = new BoonStackItem(BoonStack[i], diff, 0);
                 }
-                if (boon_stack[0].boon_duration <= 0)
+                if (BoonStack[0].BoonDuration <= 0)
                 {
                     // Spend leftover time
-                    long leftover = Math.Abs(boon_stack[0].boon_duration);
-                    boon_stack.RemoveAt(0);
-                    update(leftover);
+                    long leftover = Math.Abs(BoonStack[0].BoonDuration);
+                    BoonStack.RemoveAt(0);
+                    Update(leftover);
                 }
             }
-        }
+        }      
     }
 }

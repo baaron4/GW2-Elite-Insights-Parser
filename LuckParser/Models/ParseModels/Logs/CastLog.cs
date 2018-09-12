@@ -4,66 +4,35 @@ namespace LuckParser.Models.ParseModels
 {
     public  class CastLog
     {
-        // Fields
-        private long time;
-        private int skill_id;
-        private int exp_dur;
-        private int act_dur;
-        private ParseEnum.Activation start_activation;
-        private ParseEnum.Activation end_activation;
+        public long Time { get; }
+        public long SkillId { get; }
+        public int ExpectedDuration { get; }
+        public int ActualDuration { get; private set; }
+        public ParseEnum.Activation StartActivation { get; }
+        public ParseEnum.Activation EndActivation { get; private set; }
 
-
-        // Constructor
-        public CastLog(long time, int skill_id, int exp_dur, ParseEnum.Activation start_activation,int act_dur, ParseEnum.Activation end_activation)
+        public CastLog(long time, long skillId, int expDuration, ParseEnum.Activation startActivation,int actDur, ParseEnum.Activation endActivation)
         {
-            this.time = time;
-            this.skill_id = skill_id;
-            this.exp_dur = exp_dur;
-            this.start_activation = start_activation;
-            this.act_dur = act_dur;
-            this.end_activation = end_activation;
-        }
-        //start cast log
-        public CastLog(long time, int skill_id, int exp_dur, ParseEnum.Activation start_activation)
-        {
-            this.time = time;
-            this.skill_id = skill_id;
-            this.exp_dur = exp_dur;
-            this.start_activation = start_activation;
-            
+            Time = time;
+            SkillId = skillId;
+            ExpectedDuration = expDuration;
+            StartActivation = startActivation;
+            ActualDuration = actDur;
+            EndActivation = endActivation;
         }
 
-        // setters
-        public void setEndStatus(int act_dur, ParseEnum.Activation end_activation)
+        public CastLog(long time, long skillId, int expDuration, ParseEnum.Activation startActivation)
         {
-            this.act_dur = act_dur;
-            this.end_activation = end_activation;
+            Time = time;
+            SkillId = skillId;
+            ExpectedDuration = expDuration;
+            StartActivation = startActivation;
         }
 
-        // Getters
-        public long getTime()
+        public void SetEndStatus(int actDuration, ParseEnum.Activation endActivation)
         {
-            return time;
-        }
-        public int getID()
-        {
-            return skill_id;
-        }
-        public int getExpDur()
-        {
-            return exp_dur;
-        }
-        public ParseEnum.Activation startActivation()
-        {
-            return start_activation;
-        }
-        public int getActDur()
-        {
-            return act_dur;
-        }
-        public ParseEnum.Activation endActivation()
-        {
-            return end_activation;
+            ActualDuration = actDuration;
+            EndActivation = endActivation;
         }
     }
 }

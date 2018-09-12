@@ -1,55 +1,46 @@
-﻿namespace LuckParser.Models.ParseModels
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace LuckParser.Models.ParseModels
 {
     public class PhaseData
     {
-        private long start;
-        private long end;
-        private string name;
+        public long Start { get; private set; }
+        public readonly long End;
+        public string Name { get; set; }
+        public readonly List<AgentItem> Redirection = new List<AgentItem>();
 
         public PhaseData(long start, long end)
         {
-            this.start = start;
-            this.end = end;
+            Start = start;
+            End = end;
         }
-
-        public void setName(string name)
-        {
-            this.name = name;
-        }
-
-        public string getName()
-        {
-            return name;
-        }
-
-        public long getDuration(string format = "ms")
+        
+        public long GetDuration(string format = "ms")
         {
             switch (format)
             {
                 case "m":
-                    return (end - start) / 60000;
+                    return (End - Start) / 60000;
                 case "s":
-                    return (end - start) / 1000;
-                case "ms":
+                    return (End - Start) / 1000;
                 default:
-                    return (end - start);
+                    return (End - Start);
             }
 
         }
 
-        public bool inInterval(long time, long offset = 0)
+        public bool InInterval(long time, long offset = 0)
         {
-            return start <= time - offset && time - offset <= end;
+            return Start <= time - offset && time - offset <= End;
         }
 
-        public long getStart()
+        public void OverrideStart(long offset)
         {
-            return start;
-        }
-
-        public long getEnd()
-        {
-            return end;
+            if (Redirection.Count > 0)
+            {
+                Start = Redirection.Min(x => x.FirstAware)- offset;
+            }
         }
     }
 }

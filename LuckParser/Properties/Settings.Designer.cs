@@ -12,7 +12,7 @@ namespace LuckParser.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.6.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -37,25 +37,13 @@ namespace LuckParser.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool PlayerGraphTotals {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ClDPSGraphTotals {
             get {
-                return ((bool)(this["PlayerGraphTotals"]));
+                return ((bool)(this["ClDPSGraphTotals"]));
             }
             set {
-                this["PlayerGraphTotals"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool PlayerGraphBoss {
-            get {
-                return ((bool)(this["PlayerGraphBoss"]));
-            }
-            set {
-                this["PlayerGraphBoss"] = value;
+                this["ClDPSGraphTotals"] = value;
             }
         }
         
@@ -308,6 +296,102 @@ namespace LuckParser.Properties {
             }
             set {
                 this["ParseCombatReplay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UploadToDPSReports {
+            get {
+                return ((bool)(this["UploadToDPSReports"]));
+            }
+            set {
+                this["UploadToDPSReports"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UploadToDPSReportsRH {
+            get {
+                return ((bool)(this["UploadToDPSReportsRH"]));
+            }
+            set {
+                this["UploadToDPSReportsRH"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UploadToRaidar {
+            get {
+                return ((bool)(this["UploadToRaidar"]));
+            }
+            set {
+                this["UploadToRaidar"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SaveOutJSON {
+            get {
+                return ((bool)(this["SaveOutJSON"]));
+            }
+            set {
+                this["SaveOutJSON"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IndentJSON {
+            get {
+                return ((bool)(this["IndentJSON"]));
+            }
+            set {
+                this["IndentJSON"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NewHtmlMode {
+            get {
+                return ((bool)(this["NewHtmlMode"]));
+            }
+            set {
+                this["NewHtmlMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NewHtmlExternalScripts {
+            get {
+                return ((bool)(this["NewHtmlExternalScripts"]));
+            }
+            set {
+                this["NewHtmlExternalScripts"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SkipFailedTrys {
+            get {
+                return ((bool)(this["SkipFailedTrys"]));
+            }
+            set {
+                this["SkipFailedTrys"] = value;
             }
         }
     }
