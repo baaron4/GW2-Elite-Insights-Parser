@@ -319,7 +319,7 @@ namespace LuckParser
                 }
             }
             Properties.Settings.Default.AutoAdd = chkAutoAdd.Checked;
-            mainForm.updateWatchDirectory();
+            mainForm.UpdateWatchDirectory();
         }
 
         private void chkAutoParse_CheckedChanged(object sender, EventArgs e)

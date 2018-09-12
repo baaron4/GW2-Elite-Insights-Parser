@@ -25,7 +25,7 @@ namespace LuckParser
             _logsFiles = new List<string>();
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
-            updateWatchDirectory();
+            UpdateWatchDirectory();
         }
 
         /// <summary>
@@ -601,7 +601,7 @@ namespace LuckParser
             }
         }
 
-        public void updateWatchDirectory()
+        public void UpdateWatchDirectory()
         {
             if (Properties.Settings.Default.AutoAdd)
             {
