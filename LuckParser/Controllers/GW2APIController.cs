@@ -109,6 +109,61 @@ namespace LuckParser.Controllers
             }
             return skill;
         }
+        private List<GW2APISkill> GetListGW2APISkills()
+        {
+            if (APIClient == null) { GetAPIClient(); }
+            List<GW2APISkill> skill_L = new List<GW2APISkill>();
+            bool maxPageSizeReached = false;
+            int page = 0;
+            int pagesize = 200;
+            string path = "";
+            while (!maxPageSizeReached)
+            {
+                path = "/v2/skills?page=" + page + "&page_size=" + pagesize;
+                HttpResponseMessage response = APIClient.GetAsync(path).Result;
+                if (response.IsSuccessStatusCode)
+                {
+
+
+                    List<GW2APISkillCheck> skillCheck = response.Content.ReadAsAsync<List<GW2APISkillCheck>>().Result;
+                    skill_L.AddRange(skillCheck);
+                    //if (skillCheck.facts != null)
+                    // {
+                    //     bool block = true;
+                    //     foreach (GW2APIfacts fact in skillCheck.facts)
+                    //     {
+                    //         if (fact.type == "Unblockable" || fact.type == "StunBreak")//Unblockable changing value from an int to a bool has caused so much chaos
+                    //         {
+                    //             skill = skillCheck;
+                    //             block = false;
+                    //             break;
+                    //         }
+
+                    //     }
+                    //     if (block)
+                    //     {
+                    //         response = APIClient.GetAsync(path).Result;
+                    //         if (response.IsSuccessStatusCode)
+                    //         {
+                    //             skill = response.Content.ReadAsAsync<GW2APISkillDetailed>().Result;
+                    //         }
+
+                    //     }
+                    // }
+                    // else
+                    // {
+                    //     skill = skillCheck;
+                    // }
+                }
+                else
+                {
+                    maxPageSizeReached = true;
+                }
+                page++;
+            }
+           
+            return skill_L;
+        }
         private SkillList GetSkillList()
         {
             if (_listOfSkills.Items.Count == 0)
@@ -139,23 +194,24 @@ namespace LuckParser.Controllers
                 // Get Skill ID list
                 idArray = response.Content.ReadAsAsync<int[]>().Result;
 
-                foreach (int id in idArray)
-                {
-                    GW2APISkill curSkill = new GW2APISkill();
-                    curSkill = GetGW2APISKill("/v2/skills/" + id);
-                    if (curSkill != null)
-                    {
+                //foreach (int id in idArray)
+                //{
+                //    GW2APISkill curSkill = new GW2APISkill();
+                //    curSkill = GetGW2APISKill("/v2/skills/" + id);
+                //    if (curSkill != null)
+                //    {
 
-                        _listOfSkills.Items.Add(curSkill);
+                //        _listOfSkills.Items.Add(curSkill);
 
-                    }
-                    else
-                    {
-                        Console.WriteLine("Fail to get response");//fail to retrieve
-                        failedList.Add(id);
-                    }
+                //    }
+                //    else
+                //    {
+                //        Console.WriteLine("Fail to get response");//fail to retrieve
+                //        failedList.Add(id);
+                //    }
 
-                }
+                //}
+                _listOfSkills.Items.AddRange(GetListGW2APISkills());
                 Stream stream = System.IO.File.OpenWrite(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)
             + "/Content/SkillList.txt");
                 Type[] tyList = { typeof(List<GW2APISkillCheck>), typeof(List<GW2APISkillDetailed>) };

@@ -34,6 +34,7 @@ namespace LuckParser
             {
                 row.Status = cancelStatus;
                 throw new CancellationException(row);
+                
             }
         }
     }

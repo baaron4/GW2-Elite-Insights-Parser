@@ -74,6 +74,15 @@ var data = ${logDataJson};
 	<script>
 		createGraphs(playerGraphData);
 	</script>
+
+	<div style="display:none;">
+	<!--${combatReplay}-->
+	</div>
+	<script>
+		$('#replay_template').appendTo('#replay');
+	</script>
+
+
 	<script> $(function(){$('[title]').tooltip({html:true}); });</script >
 </body>
 </html>

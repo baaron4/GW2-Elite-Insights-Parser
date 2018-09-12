@@ -88,12 +88,12 @@ namespace LuckParser.Models
                 phase.Name = namesSam[i - 1];
                 if (i == 2 || i == 4)
                 {
-                    List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+                    List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
                     {
-                       ParseEnum.ThrashIDS.Rigom,
-                       ParseEnum.ThrashIDS.Guldhem
+                       ParseEnum.TrashIDS.Rigom,
+                       ParseEnum.TrashIDS.Guldhem
                     };
-                    List<AgentItem> slaves = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
+                    List<AgentItem> slaves = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
                     foreach (AgentItem a in slaves)
                     {
                         long agentStart = a.FirstAware - log.FightData.FightStart;
@@ -108,13 +108,13 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: facing information (shock wave)
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
                     {
-                        ParseEnum.ThrashIDS.Rigom,
-                        ParseEnum.ThrashIDS.Guldhem
+                        ParseEnum.TrashIDS.Rigom,
+                        ParseEnum.TrashIDS.Guldhem
                     };
             List<CombatItem> brutalize = log.GetBoonData(38226).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
             int brutStart = 0;

@@ -1022,7 +1022,7 @@ namespace LuckParser.Controllers
 
         private static void WriteCombatReplaySecondaryClass(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
-            // thrash mobs
+            // trash mobs
             sw.Write("var secondaryActor = function(imgSrc, start, end) {" +
                     "this.pos = [];" +
                     "this.start = start;" +
@@ -1039,8 +1039,8 @@ namespace LuckParser.Controllers
                         "pixelSize,pixelSize);" +
                     "}" +
                 "};");
-            // create thrash mobs
-            foreach (Mob mob in log.Boss.ThrashMobs)
+            // create trash mobs
+            foreach (Mob mob in log.Boss.TrashMobs)
             {
                 sw.Write("{");
                 sw.Write("var p = new secondaryActor('" + mob.CombatReplay.GetIcon() + "'," + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "," + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate + ");");
@@ -1111,7 +1111,7 @@ namespace LuckParser.Controllers
                         "}" +
                     "}" +
                 "};");
-            foreach (Mob mob in log.Boss.ThrashMobs)
+            foreach (Mob mob in log.Boss.TrashMobs)
             {
                 CombatReplay replay = mob.CombatReplay;
                 foreach(CircleActor a in replay.GetCircleActors())
@@ -1192,7 +1192,7 @@ namespace LuckParser.Controllers
                         "}" +
                     "}" +
                 "};");
-            foreach (Mob mob in log.Boss.ThrashMobs)
+            foreach (Mob mob in log.Boss.TrashMobs)
             {
                 CombatReplay replay = mob.CombatReplay;
                 foreach (DoughnutActor a in replay.GetDoughnutActors())
@@ -1270,7 +1270,7 @@ namespace LuckParser.Controllers
                                 "value.draw(ctx,timeToUse,20);"+
                             "}" +
                         "});");
-                    // draw thrash mobs
+                    // draw trash mobs
                     sw.Write("secondaryData.forEach(function(value,key,map) {" +
                             "value.draw(ctx,timeToUse,28);"+
                         "});");
