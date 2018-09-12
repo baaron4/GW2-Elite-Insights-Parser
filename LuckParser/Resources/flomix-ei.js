@@ -500,6 +500,9 @@ function lazyTable2($target, tableHtml, options) {
 // Window generation
 
 function buildTabs(tabLayout, parentId, level) {
+	if (tabLayout.tabs.length ==1) {
+		return buildContent(tabLayout.tabs[0].content, parentId, level);
+	}
 	var idPrefix = parentId ? parentId+'-' : 'tab';
 	return tmplTabs.render(tabLayout, {
 		idPrefix:idPrefix,
@@ -577,7 +580,7 @@ function generateWindow(layout) {
 
 function buildWindowLayout(data) {
 	var tabs = [];
-	var replayTab = {id:'replay',name: 'Combat Replay',content: 'Combat Replay'};
+	var replayTab = {id:'replay',name: 'Combat Replay',content: {table:'replay'}};
 	$.each(data.phases, function(i, phase) {
 		var playerSubtabs = [];
 		$.each(data.players, function(p, player) {
@@ -654,7 +657,7 @@ function buildWindowLayout(data) {
 				{name:'Boss',content:{tabs: bossTabs}},
 				{name:'Estimates',content:'Estimates'}
 			];
-			if (data.phases.length == 1) {
+			if (data.flags.combatReplay && data.phases.length == 1) {
 				phaseTabs.push(replayTab);
 			}
 			var tab = {
@@ -664,7 +667,7 @@ function buildWindowLayout(data) {
 			};
 			tabs.push(tab);
 	});
-	if (data.phases.length > 1) {
+	if (data.flags.combatReplay && data.phases.length > 1) {
 		tabs.push(replayTab);
 	}
 	return {tabs: tabs};

@@ -38,15 +38,15 @@ namespace LuckParser.Models
                             Tuple.Create(2688, 11906, 3712, 14210));
         }
 
-        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO:facing information (breath)
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.ThrashIDS.Slubling1,
-                ParseEnum.ThrashIDS.Slubling2,
-                ParseEnum.ThrashIDS.Slubling3,
-                ParseEnum.ThrashIDS.Slubling4
+                ParseEnum.TrashIDS.Slubling1,
+                ParseEnum.TrashIDS.Slubling2,
+                ParseEnum.TrashIDS.Slubling3,
+                ParseEnum.TrashIDS.Slubling4
             };
             List<CastLog> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
             foreach (CastLog c in sleepy)
