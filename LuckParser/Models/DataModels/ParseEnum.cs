@@ -118,7 +118,7 @@ namespace LuckParser.Models.DataModels
                 : IFF.Unknown;
         }
 
-        public enum ThrashIDS : ushort
+        public enum TrashIDS : ushort
         {
             // VG
             Seekers = 15426,
@@ -238,9 +238,9 @@ namespace LuckParser.Models.DataModels
             //
             Unknown
         };
-        public static ThrashIDS GetThrashIDS(ushort id)
+        public static TrashIDS GetTrashIDS(ushort id)
         {
-            return Enum.IsDefined(typeof(ThrashIDS), id) ? (ThrashIDS)id : ThrashIDS.Unknown;
+            return Enum.IsDefined(typeof(TrashIDS), id) ? (TrashIDS)id : TrashIDS.Unknown;
         }
 
         public enum BossIDS : ushort

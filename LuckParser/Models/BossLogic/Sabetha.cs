@@ -71,13 +71,13 @@ namespace LuckParser.Models
                 phase.Name = namesSab[i - 1];
                 if (i == 2 || i == 4 || i == 6)
                 {
-                    List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+                    List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
                     {
-                       ParseEnum.ThrashIDS.Kernan,
-                       ParseEnum.ThrashIDS.Knuckles,
-                       ParseEnum.ThrashIDS.Karde,
+                       ParseEnum.TrashIDS.Kernan,
+                       ParseEnum.TrashIDS.Knuckles,
+                       ParseEnum.TrashIDS.Karde,
                     };
-                    List<AgentItem> champs = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
+                    List<AgentItem> champs = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
                     foreach (AgentItem a in champs)
                     {
                         long agentStart = a.FirstAware - log.FightData.FightStart;
@@ -92,17 +92,17 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO:facing information (flame wall)
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
                     {
-                        ParseEnum.ThrashIDS.Kernan,
-                        ParseEnum.ThrashIDS.Knuckles,
-                        ParseEnum.ThrashIDS.Karde,
-                        ParseEnum.ThrashIDS.BanditSapper,
-                        ParseEnum.ThrashIDS.BanditThug,
-                        ParseEnum.ThrashIDS.BanditArsonist
+                        ParseEnum.TrashIDS.Kernan,
+                        ParseEnum.TrashIDS.Knuckles,
+                        ParseEnum.TrashIDS.Karde,
+                        ParseEnum.TrashIDS.BanditSapper,
+                        ParseEnum.TrashIDS.BanditThug,
+                        ParseEnum.TrashIDS.BanditArsonist
                     };
             return ids;
         }
