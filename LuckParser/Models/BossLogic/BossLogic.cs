@@ -15,7 +15,7 @@ namespace LuckParser.Models
             new Mechanic(-3, "Downed", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross',color:'rgb(255,0,0)',", "Downed",0),
             new Mechanic(SkillItem.ResurrectId, "Resurrect", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross-open',color:'rgb(0,255,255)',", "Res",0)}; //Resurrects (start), Resurrect
         protected ParseMode Mode;
-        public bool CanCombatReplay { get; protected set; }
+        public bool CanCombatReplay { get; set; }
 
         public BossLogic()
         {
