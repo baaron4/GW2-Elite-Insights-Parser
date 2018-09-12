@@ -82,6 +82,10 @@ namespace LuckParser.Models.ParseModels
                     }
                     CombatReplay.AddCircleActor(new CircleActor(true,0,400,new Tuple<int, int>(end,end+60000), "rgba(255, 0, 0, 0.5)",CombatReplay.GetPositions().Last()));
                     break;
+                case ParseEnum.TrashIDS.SurgingSoul:
+                    CombatReplay.AddRectangleActor(new RectangleActor(true, 0, 660, 240, lifespan, "rgba(255,150,0,0.1)", "https://i.imgur.com/zNHctbS.png"));
+                    CombatReplay.AddRectangleActor(new RectangleActor(true, 0, 240, 660, lifespan, "rgba(255,150,0,0.1)", "https://i.imgur.com/9qpuf8c.png"));
+                    break;
             }
         }
 
