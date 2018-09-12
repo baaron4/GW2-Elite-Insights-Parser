@@ -98,11 +98,66 @@ namespace LuckParser
                 {
                     //Process evtc here
                     control.ParseLog(row, fInfo.FullName);
+                    if (Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.SkipFailedTrys)
+                    {
+
+                        if (DREITask != null)
+                        {
+                            while (!DREITask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[0] = DREITask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[0] = "Failed to Define Upload Task";
+                        }
+                    }
+                    if (Properties.Settings.Default.UploadToDPSReportsRH && !Properties.Settings.Default.SkipFailedTrys)
+                    {
+
+                        if (DRRHTask != null)
+                        {
+                            while (!DRRHTask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[1] = DRRHTask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[1] = "Failed to Define Upload Task";
+                        }
+                    }
+                    if (Properties.Settings.Default.UploadToRaidar && !Properties.Settings.Default.SkipFailedTrys)
+                    {
+
+                        if (RaidarTask != null)
+                        {
+                            while (!RaidarTask.IsCompleted)
+                            {
+                                System.Threading.Thread.Sleep(100);
+                            }
+                            uploadresult[2] = RaidarTask.Result;
+                        }
+                        else
+                        {
+                            uploadresult[2] = "Failed to Define Upload Task";
+                        }
+                    }
                     ParsedLog log = control.GetParsedLog();
-                    Console.Write("Log Parsed");
+                    Console.Write("Log Parsed\n");
+                    if (Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        if (!log.LogData.Success)
+                        {
+                            row.Cancel();
+                        }
+                    }
                     //Creating File
                     //Wait for Upload
-                    if (Properties.Settings.Default.UploadToDPSReports)
+                    if (Properties.Settings.Default.UploadToDPSReports && Properties.Settings.Default.SkipFailedTrys)
                     {
                        
                         if (DREITask != null)
@@ -118,7 +173,7 @@ namespace LuckParser
                             uploadresult[0] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.UploadToDPSReportsRH)
+                    if (Properties.Settings.Default.UploadToDPSReportsRH && Properties.Settings.Default.SkipFailedTrys)
                     {
                         
                         if (DRRHTask != null)
@@ -134,7 +189,7 @@ namespace LuckParser
                             uploadresult[1] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.UploadToRaidar)
+                    if (Properties.Settings.Default.UploadToRaidar && Properties.Settings.Default.SkipFailedTrys)
                     {
                         
                         if (RaidarTask != null)
@@ -171,7 +226,7 @@ namespace LuckParser
                     string bossid = control.GetFightData().ID.ToString();
                     string result = "fail";
 
-                    if (control.GetLogData().Success)
+                    if (log.LogData.Success)
                     {
                         result = "kill";
                     }
@@ -191,7 +246,7 @@ namespace LuckParser
                         JSONBuilder.UpdateStatisticSwitches(switches);
                     }
                     Statistics statistics = statisticsCalculator.CalculateStatistics(log, switches);
-                    Console.Write("Statistics Computed");
+                    Console.Write("Statistics Computed\n");
 
                     string fName = fInfo.Name.Split('.')[0];
                     if (Properties.Settings.Default.SaveOutHTML)
@@ -248,7 +303,7 @@ namespace LuckParser
                         }
                     }
 
-                    Console.Write("Generation Done");
+                    Console.Write("Generation Done\n");
                 }
                 else
                 {

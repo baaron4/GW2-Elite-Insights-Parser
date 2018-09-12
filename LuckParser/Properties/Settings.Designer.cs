@@ -382,5 +382,17 @@ namespace LuckParser.Properties {
                 this["NewHtmlExternalScripts"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SkipFailedTrys {
+            get {
+                return ((bool)(this["SkipFailedTrys"]));
+            }
+            set {
+                this["SkipFailedTrys"] = value;
+            }
+        }
     }
 }

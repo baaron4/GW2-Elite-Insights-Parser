@@ -395,6 +395,7 @@ namespace LuckParser.Models.ParseModels
                 //new Boon("Illusion of Life",-1, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Normal, Logic.Override),
                 //new Boon("Time Block",30134, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff), What is this?
                 new Boon("Time Echo",29582, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Normal, Logic.Override, "https://wiki.guildwars2.com/images/8/8d/Deja_Vu.png"),
+                new Boon("Illusionary Counter",10278, BoonSource.Mesmer, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Normal, Logic.Override, "https://wiki.guildwars2.com/images/e/e5/Illusionary_Counter.png"),
                 new Boon("Time Anchored",30136, BoonSource.Mesmer, BoonType.Duration, 3, BoonEnum.GraphOnlyBuff, RemoveType.Normal, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Continuum_Split.png"),
                 //traits
                 new Boon("Fencer's Finesse", 30426 , BoonSource.Mesmer, BoonType.Intensity, 10, BoonEnum.GraphOnlyBuff, RemoveType.Normal, Logic.Override, "https://wiki.guildwars2.com/images/e/e7/Fencer%27s_Finesse.png"),
@@ -464,6 +465,7 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Rock Barrier",34633, BoonSource.Elementalist, BoonType.Intensity, 5, BoonEnum.GraphOnlyBuff, RemoveType.Normal, Logic.Override, "https://wiki.guildwars2.com/images/d/dd/Rock_Barrier.png"),//750?
                 new Boon("Magnetic Wave",15794, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.Normal, Logic.Override, "https://wiki.guildwars2.com/images/3/32/Magnetic_Wave.png"),
                 new Boon("Obsidian Flesh",5667, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Normal, Logic.Override, "https://wiki.guildwars2.com/images/c/c1/Obsidian_Flesh.png"),
+                new Boon("Grinding Stones",51658, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff, RemoveType.Normal, Logic.Override, "https://wiki.guildwars2.com/images/3/3d/Grinding_Stones.png"),
                 //traits
                 new Boon("Harmonious Conduit",31353, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.Normal, Logic.Override, "https://wiki.guildwars2.com/images/b/b3/Harmonious_Conduit.png"),
                 new Boon("Fresh Air",34241, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.Normal, Logic.Override, "https://wiki.guildwars2.com/images/d/d8/Fresh_Air.png"),
