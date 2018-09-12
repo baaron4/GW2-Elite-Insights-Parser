@@ -146,7 +146,7 @@
             this.logFileWatcher.EnableRaisingEvents = true;
             this.logFileWatcher.IncludeSubdirectories = true;
             this.logFileWatcher.SynchronizingObject = this;
-            this.logFileWatcher.Created += new System.IO.FileSystemEventHandler(this.logFileWatcher_Created);
+            this.logFileWatcher.Created += new System.IO.FileSystemEventHandler(this.LogFileWatcher_Created);
             // 
             // VersionLabel
             // 

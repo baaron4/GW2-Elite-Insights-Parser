@@ -558,7 +558,7 @@
             this.chkAutoAdd.TabIndex = 40;
             this.chkAutoAdd.Text = "Automatically add new logs";
             this.chkAutoAdd.UseVisualStyleBackColor = true;
-            this.chkAutoAdd.CheckedChanged += new System.EventHandler(this.chkAutoAdd_CheckedChanged);
+            this.chkAutoAdd.CheckedChanged += new System.EventHandler(this.ChkAutoAdd_CheckedChanged);
             // 
             // chkAutoParse
             // 
@@ -569,7 +569,7 @@
             this.chkAutoParse.TabIndex = 39;
             this.chkAutoParse.Text = "Automatically parse added files";
             this.chkAutoParse.UseVisualStyleBackColor = true;
-            this.chkAutoParse.CheckedChanged += new System.EventHandler(this.chkAutoParse_CheckedChanged);
+            this.chkAutoParse.CheckedChanged += new System.EventHandler(this.ChkAutoParse_CheckedChanged);
             // 
             // groupBox3
             // 

@@ -634,7 +634,7 @@ namespace LuckParser
             }
         }
 
-        private void logFileWatcher_Created(object sender, FileSystemEventArgs e)
+        private void LogFileWatcher_Created(object sender, FileSystemEventArgs e)
         {
             if (e.FullPath.EndsWith(".zip") || e.FullPath.EndsWith(".evtc"))
             {
