@@ -25,6 +25,7 @@ namespace LuckParser
             _logsFiles = new List<string>();
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
+            updateWatchDirectory();
         }
 
         /// <summary>
@@ -52,6 +53,11 @@ namespace LuckParser
                 gRow.BgWorker.RunWorkerCompleted += BgWorkerCompleted;
 
                 gridRowBindingSource.Add(gRow);
+
+                if (Properties.Settings.Default.AutoParse)
+                {
+                    gRow.Run();
+                }
             }
 
             btnParse.Enabled = true;
@@ -502,7 +508,7 @@ namespace LuckParser
         /// <param name="e"></param>
         private void BtnSettingsClick(object sender, EventArgs e)
         {
-            _settingsForm = new SettingsForm();
+            _settingsForm = new SettingsForm(this);
             _settingsForm.Show();
         }
 
@@ -595,6 +601,46 @@ namespace LuckParser
             }
         }
 
-      
+        public void updateWatchDirectory()
+        {
+            if (Properties.Settings.Default.AutoAdd)
+            {
+                logFileWatcher.Path = Properties.Settings.Default.AutoAddPath;
+                labWatchingDir.Text = "Watching for log files in " + Properties.Settings.Default.AutoAddPath;
+                logFileWatcher.EnableRaisingEvents = true;
+                labWatchingDir.Visible = true;
+            } else
+            {
+                labWatchingDir.Visible = false;
+                logFileWatcher.EnableRaisingEvents = false;
+            }
+        }
+
+        /// <summary>
+        /// Waits 3 seconds, checks if the file still exists and then adds it to the queue.
+        /// This is neccessary because:
+        /// 1.) Arc needs some time to complete writing the log file. The watcher gets triggered as soon as the writing starts.
+        /// 2.) When Arc is configured to use ZIP compression, the log file is still created as usual, but after the file is written
+        ///     it is then zipped and deleted again. Therefore the watcher gets triggered twice, first for the .evtc and then for the .zip.
+        /// 3.) Zipping the file also needs time, so we have to wait a bit there too.
+        /// </summary>
+        /// <param name="path"></param>
+        private async void AddDelayed(string path)
+        {
+            await Task.Delay(3000);
+            if (File.Exists(path))
+            {
+                AddLogFiles(new string[] { path });
+            }
+        }
+
+        private void logFileWatcher_Created(object sender, FileSystemEventArgs e)
+        {
+            if (e.FullPath.EndsWith(".zip") || e.FullPath.EndsWith(".evtc"))
+            {
+                AddDelayed(e.FullPath);
+            }
+        }
+
     }
 }

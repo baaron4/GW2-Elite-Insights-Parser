@@ -1,13 +1,17 @@
 ﻿using LuckParser.Controllers;
 using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace LuckParser
 {
     public partial class SettingsForm : Form
     {
-        public SettingsForm()
+        private MainForm mainForm;
+
+        public SettingsForm(MainForm mainForm)
         {
+            this.mainForm = mainForm;
             InitializeComponent();
         }
 
@@ -91,6 +95,8 @@ namespace LuckParser
             UploadDRRH_check.Checked = Properties.Settings.Default.UploadToDPSReportsRH;
             UploadRaidar_check.Checked = Properties.Settings.Default.UploadToRaidar;
             chkB_SkipFailedTrys.Checked = Properties.Settings.Default.SkipFailedTrys;
+            chkAutoAdd.Checked = Properties.Settings.Default.AutoAdd;
+            chkAutoParse.Checked = Properties.Settings.Default.AutoParse;
 
             chkHtmlExperimental.Checked = Properties.Settings.Default.NewHtmlMode;
             toolTip1.SetToolTip(chkHtmlExperimental, "Alternative method to build the HTML page.\nThe page is much smaller, and some static CSS and JS scripts are written in an external file.");
@@ -275,6 +281,50 @@ namespace LuckParser
             this.Close();
         }
 
-       
+        private void chkAutoAdd_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkAutoAdd.Checked && !Properties.Settings.Default.AutoAdd)
+            {
+                String path = Properties.Settings.Default.AutoAddPath;
+                if (String.IsNullOrEmpty(path) || !Directory.Exists(path))
+                {
+                    try
+                    {
+                        path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Guild Wars 2/addons/arcdps/arcdps.cbtlogs");
+                    }
+                    catch (PlatformNotSupportedException)
+                    {
+                        path = null;
+                    }
+                }
+                if (!Directory.Exists(path))
+                {
+                    path = null;
+                }
+
+                using (var fbd = new FolderBrowserDialog())
+                {
+                    fbd.ShowNewFolderButton = false;
+                    fbd.SelectedPath = path;
+                    DialogResult result = fbd.ShowDialog();
+
+                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                    {
+                        Properties.Settings.Default.AutoAddPath = fbd.SelectedPath;
+                    }
+                    else
+                    {
+                        chkAutoAdd.Checked = false;
+                    }
+                }
+            }
+            Properties.Settings.Default.AutoAdd = chkAutoAdd.Checked;
+            mainForm.updateWatchDirectory();
+        }
+
+        private void chkAutoParse_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AutoParse = chkAutoParse.Checked;
+        }
     }
 }
