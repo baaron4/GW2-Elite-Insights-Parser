@@ -696,10 +696,6 @@ namespace LuckParser.Controllers
             WriteCell("Avg");
             foreach (Boon boon in _statistics.PresentConditions)
             {
-                if (boon.Name == "Retaliation")
-                {
-                    continue;
-                }
                 WriteCell(boon.Name);
             }
 
@@ -709,10 +705,6 @@ namespace LuckParser.Controllers
             WriteCell(Math.Round(avgCondis, 1).ToString());
             foreach (Boon boon in _statistics.PresentConditions)
             {
-                if (boon.Name == "Retaliation")
-                {
-                    continue;
-                }
                 if (boon.Type == Boon.BoonType.Duration)
                 {
                     WriteCell(conditions[boon.ID].Uptime.ToString() + "%");
@@ -773,10 +765,6 @@ namespace LuckParser.Controllers
             WriteCell("Name");
             foreach (Boon boon in _statistics.PresentConditions)
             {
-                if (boon.Name == "Retaliation")
-                {
-                    continue;
-                }
                 WriteCell(boon.Name);
                 WriteCell(boon.Name + " Overstack");
             }
@@ -786,10 +774,6 @@ namespace LuckParser.Controllers
                 WriteCell(player.Character);
                 foreach (Boon boon in _statistics.PresentConditions)
                 {
-                    if (boon.Name == "Retaliation")
-                    {
-                        continue;
-                    }
                     if (boon.Type == Boon.BoonType.Duration)
                     {
                         WriteCell(conditions[boon.ID].Generated[player].ToString() + "%");

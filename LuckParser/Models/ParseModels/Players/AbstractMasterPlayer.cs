@@ -130,7 +130,7 @@ namespace LuckParser.Models.ParseModels
         {
             BoonMap boonMap = new BoonMap
             {
-                Boon.GetBoonByName("Aegis")
+                Boon.GetBoonByName("Might")
             };
             // Fill in Boon Map
             long timeStart = log.FightData.FightStart;
@@ -165,7 +165,7 @@ namespace LuckParser.Models.ParseModels
                         }
                         loglist.Add(new BoonLog(time, src, c.Value, 0));
                     }
-                    else if (time < log.FightData.FightDuration - 50)
+                    else if (time < log.FightData.FightDuration - 50 && Boon.RemovePermission(boonId, c.IsBuffRemove, c.IFF, c.DstInstid, c.SrcInstid))
                     {
                         if (c.IsBuffRemove == ParseEnum.BuffRemove.All)//All
                         {

@@ -2972,10 +2972,6 @@ namespace LuckParser.Controllers
             bool hasBoons = false;
             foreach (Boon boon in _statistics.PresentBoons)
             {
-                if (boon.Name == "Retaliation")
-                {
-                    continue;
-                }
                 if (conditions[boon.ID].Uptime > 0.0)
                 {
                     hasBoons = true;
@@ -3001,10 +2997,6 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (hasBoons && boon.Name == "Retaliation")
-                            {
-                                continue;
-                            }
                             sw.Write("<th>" + "<img src=\"" + boon.Link + " \" alt=\"" + boon.Name + "\" title =\" " + boon.Name + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
@@ -3019,10 +3011,6 @@ namespace LuckParser.Controllers
                         sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avgCondis, 1) + "\">" + boss.Character + " </td>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (hasBoons && boon.Name == "Retaliation")
-                            {
-                                continue;
-                            }
                             if (boon.Type == Boon.BoonType.Duration)
                             {
                                 sw.Write("<td>" + conditions[boon.ID].Uptime + "%</td>");
@@ -3112,10 +3100,6 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (boon.Name == "Retaliation")
-                            {
-                                continue;
-                            }
                             sw.Write("<th>" + "<img src=\"" + boon.Link + " \" alt=\"" + boon.Name + "\" title =\" " + boon.Name + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
@@ -3133,10 +3117,6 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.Character + " </td>");
                             foreach (Boon boon in _statistics.PresentConditions)
                             {
-                                if (boon.Name == "Retaliation")
-                                {
-                                    continue;
-                                }
                                 Statistics.FinalBossBoon toUse = conditions[boon.ID];
                                 if (boon.Type == Boon.BoonType.Duration)
                                 {
