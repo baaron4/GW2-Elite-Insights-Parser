@@ -1,5 +1,6 @@
 ﻿using LuckParser.Models.DataModels;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LuckParser.Models.ParseModels
@@ -81,6 +82,23 @@ namespace LuckParser.Models.ParseModels
                         break;
                     }
                     CombatReplay.AddCircleActor(new CircleActor(true,0,400,new Tuple<int, int>(end,end+60000), "rgba(255, 0, 0, 0.5)",CombatReplay.GetPositions().Last()));
+                    break;
+                case ParseEnum.TrashIDS.SurgingSoul:
+                    List<Point3D> positions = CombatReplay.GetPositions();
+                    if (positions.Count < 2)
+                    {
+                        break;
+                    }
+                    if (positions[1].X < -12000 || positions[1].X > -9250)
+                    {
+                        CombatReplay.AddRectangleActor(new RectangleActor(true, 0, 240, 660, lifespan, "rgba(255,100,0,0.5)"));
+                        break;
+                    }
+                    else if (positions[1].Y < -525 || positions[1].Y > 2275)
+                    {
+                        CombatReplay.AddRectangleActor(new RectangleActor(true, 0, 645, 238, lifespan, "rgba(255,100,0,0.5)"));
+                        break;
+                    }
                     break;
             }
         }
@@ -175,8 +193,24 @@ namespace LuckParser.Models.ParseModels
                     CombatReplay.SetIcon("https://i.imgur.com/ePTXx23.png");
                     break;
                 case ParseEnum.TrashIDS.SurgingSoul:
-                    CombatReplay.SetIcon("https://i.imgur.com/k79t7ZA.png");
-                    break;
+                    //List<Point3D> positions = CombatReplay.GetPositions();
+                    //if (positions.Count < 2)
+                    //{
+                        CombatReplay.SetIcon("https://i.imgur.com/k79t7ZA.png");
+                        break;
+                    //}
+                    //if (positions[1].X < -12000 || positions[1].X > -9250)
+                    //{
+                    //    CombatReplay.SetIcon("https://i.imgur.com/9qpuf8c.png");
+                    //    break;
+                    //}
+                    //else if (positions[1].Y < -525 || positions[1].Y > 2275)
+                    //{
+                    //    CombatReplay.SetIcon("https://i.imgur.com/zNHctbS.png");
+                    //    break;
+                    //}
+                    //CombatReplay.SetIcon("https://i.imgur.com/kcN9ECn.png");
+                    //break;
                 case ParseEnum.TrashIDS.Echo:
                     CombatReplay.SetIcon("https://i.imgur.com/kcN9ECn.png");
                     break;

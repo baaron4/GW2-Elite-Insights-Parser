@@ -25,6 +25,7 @@ namespace LuckParser.Models.ParseModels
         // actors
         private readonly List<CircleActor> _circleActors = new List<CircleActor>();
         private readonly List<DoughnutActor> _doughnutActors = new List<DoughnutActor>();
+        public List<RectangleActor> RectangleActors{ get; } = new List<RectangleActor>();
 
         public void SetIcon(string icon)
         {
@@ -65,6 +66,10 @@ namespace LuckParser.Models.ParseModels
         public void AddDoughnutActor(DoughnutActor doughnutActor)
         {
             _doughnutActors.Add(doughnutActor);
+        }
+        public void AddRectangleActor(RectangleActor rectangleActor)
+        {
+            RectangleActors.Add(rectangleActor);
         }
 
         public void SetStatus(List<Tuple<long, long>> down, List<Tuple<long, long>> dead, List<Tuple<long, long>> dc)
