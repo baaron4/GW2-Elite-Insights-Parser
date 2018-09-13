@@ -89,15 +89,15 @@ namespace LuckParser.Models
             {
                 PhaseData phase = phases[i];
                 phase.Name = namesDeiSplit[i - offsetDei];
-                List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+                List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
                     {
-                        ParseEnum.ThrashIDS.Thief,
-                        ParseEnum.ThrashIDS.Drunkard,
-                        ParseEnum.ThrashIDS.Gambler,
-                        ParseEnum.ThrashIDS.GamblerClones,
-                        ParseEnum.ThrashIDS.GamblerReal,
+                        ParseEnum.TrashIDS.Thief,
+                        ParseEnum.TrashIDS.Drunkard,
+                        ParseEnum.TrashIDS.Gambler,
+                        ParseEnum.TrashIDS.GamblerClones,
+                        ParseEnum.TrashIDS.GamblerReal,
                     };
-                List<AgentItem> clones = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
+                List<AgentItem> clones = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
                 foreach (AgentItem a in clones)
                 {
                     long agentStart = a.FirstAware - log.FightData.FightStart;
@@ -112,19 +112,19 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: facing information (slam)
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
                     {
-                        ParseEnum.ThrashIDS.Saul,
-                        ParseEnum.ThrashIDS.Thief,
-                        ParseEnum.ThrashIDS.Drunkard,
-                        ParseEnum.ThrashIDS.Gambler,
-                        ParseEnum.ThrashIDS.GamblerClones,
-                        ParseEnum.ThrashIDS.GamblerReal,
-                        ParseEnum.ThrashIDS.Greed,
-                        ParseEnum.ThrashIDS.Pride
+                        ParseEnum.TrashIDS.Saul,
+                        ParseEnum.TrashIDS.Thief,
+                        ParseEnum.TrashIDS.Drunkard,
+                        ParseEnum.TrashIDS.Gambler,
+                        ParseEnum.TrashIDS.GamblerClones,
+                        ParseEnum.TrashIDS.GamblerReal,
+                        ParseEnum.TrashIDS.Greed,
+                        ParseEnum.TrashIDS.Pride
                     };
             List<CastLog> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
             foreach (CastLog c in mindCrush)

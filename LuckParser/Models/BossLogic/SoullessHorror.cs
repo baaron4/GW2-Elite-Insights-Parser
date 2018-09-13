@@ -40,14 +40,14 @@ namespace LuckParser.Models
                             Tuple.Create(19072, 15484, 20992, 16508));
         }
 
-        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: facing information (slashes) and doughnuts for outer circle attack
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
                     {
-                        ParseEnum.ThrashIDS.Scythe,
-                        ParseEnum.ThrashIDS.TormentedDead,
-                        ParseEnum.ThrashIDS.SurgingSoul
+                        ParseEnum.TrashIDS.Scythe,
+                        ParseEnum.TrashIDS.TormentedDead,
+                        ParseEnum.TrashIDS.SurgingSoul
                     };
             List<CastLog> howling = cls.Where(x => x.SkillId == 48662).ToList();
             foreach (CastLog c in howling)

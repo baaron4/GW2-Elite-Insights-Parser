@@ -123,7 +123,7 @@ namespace LuckParser.Properties {
                 return ResourceManager.GetString("flomix_ei_js", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;!DOCTYPE html&gt;
         ///&lt;html lang=&quot;en&quot;&gt;
@@ -138,6 +138,26 @@ namespace LuckParser.Properties {
         internal static string template_html {
             get {
                 return ResourceManager.GetString("template_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap theme_cosmo {
+            get {
+                object obj = ResourceManager.GetObject("theme_cosmo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap theme_slate {
+            get {
+                object obj = ResourceManager.GetObject("theme_slate", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -274,7 +294,7 @@ namespace LuckParser.Properties {
                 return ResourceManager.GetString("tmplDpsTable", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot;&gt;
         ///	&lt;thead&gt;

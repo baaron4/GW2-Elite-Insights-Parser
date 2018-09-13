@@ -25,6 +25,7 @@ namespace LuckParser
             _logsFiles = new List<string>();
             btnCancel.Enabled = false;
             btnParse.Enabled = false;
+            UpdateWatchDirectory();
         }
 
         /// <summary>
@@ -52,6 +53,11 @@ namespace LuckParser
                 gRow.BgWorker.RunWorkerCompleted += BgWorkerCompleted;
 
                 gridRowBindingSource.Add(gRow);
+
+                if (Properties.Settings.Default.AutoParse)
+                {
+                    gRow.Run();
+                }
             }
 
             btnParse.Enabled = true;
@@ -127,7 +133,7 @@ namespace LuckParser
                 Task<string> DRRHTask = null;
                 Task<string> RaidarTask = null;
                 string[] uploadresult = new string[3] { "","",""};
-                if (Properties.Settings.Default.UploadToDPSReports)
+                if (Properties.Settings.Default.UploadToDPSReports && !Properties.Settings.Default.SkipFailedTrys)
                 {
                     bg.UpdateProgress(rowData, " Uploading...", 0);
                     if (up_controller == null)
@@ -137,7 +143,7 @@ namespace LuckParser
                     DREITask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsEI(fInfo)) ;
                     
                 }
-                if (Properties.Settings.Default.UploadToDPSReportsRH)
+                if (Properties.Settings.Default.UploadToDPSReportsRH && !Properties.Settings.Default.SkipFailedTrys)
                 {
                     bg.UpdateProgress(rowData, " Uploading...", 0);
                     if (up_controller == null)
@@ -147,7 +153,7 @@ namespace LuckParser
                     DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
 
                 }
-                if (Properties.Settings.Default.UploadToRaidar)
+                if (Properties.Settings.Default.UploadToRaidar && !Properties.Settings.Default.SkipFailedTrys)
                 {
                     bg.UpdateProgress(rowData, " Uploading...", 0);
                     if (up_controller == null)
@@ -169,10 +175,48 @@ namespace LuckParser
                     bg.UpdateProgress(rowData, "10% - Reading Binary...", 10);
                     parser.ParseLog(rowData, fInfo.FullName);
                     ParsedLog log = parser.GetParsedLog();
+                    if (Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        if (!log.LogData.Success)
+                        {
+                            rowData.Cancel();
+                        }
+                    }
                     bg.ThrowIfCanceled(rowData);
                     bg.UpdateProgress(rowData, "35% - Data parsed", 35);
 
-                    //Creating File
+                   
+                    //Upload if skipFailed trys is on(this is after check for fail)
+                    if (Properties.Settings.Default.UploadToDPSReports && Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        bg.UpdateProgress(rowData, " Uploading...", 0);
+                        if (up_controller == null)
+                        {
+                            up_controller = new UploadController();
+                        }
+                        DREITask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsEI(fInfo));
+
+                    }
+                    if (Properties.Settings.Default.UploadToDPSReportsRH && Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        bg.UpdateProgress(rowData, " Uploading...", 0);
+                        if (up_controller == null)
+                        {
+                            up_controller = new UploadController();
+                        }
+                        DRRHTask = Task.Factory.StartNew(() => up_controller.UploadDPSReportsRH(fInfo));
+
+                    }
+                    if (Properties.Settings.Default.UploadToRaidar && Properties.Settings.Default.SkipFailedTrys)
+                    {
+                        bg.UpdateProgress(rowData, " Uploading...", 0);
+                        if (up_controller == null)
+                        {
+                            up_controller = new UploadController();
+                        }
+                        RaidarTask = Task.Factory.StartNew(() => up_controller.UploadRaidar(fInfo));
+
+                    }
                     //Wait for Upload
                     if (Properties.Settings.Default.UploadToDPSReports)
                     {
@@ -222,6 +266,7 @@ namespace LuckParser
                             uploadresult[2] = "Failed to Define Upload Task";
                         }
                     }
+                    //Creating File
                     //save location
                     DirectoryInfo saveDirectory;
                     if (Properties.Settings.Default.SaveAtOut || Properties.Settings.Default.OutLocation == null)
@@ -463,7 +508,7 @@ namespace LuckParser
         /// <param name="e"></param>
         private void BtnSettingsClick(object sender, EventArgs e)
         {
-            _settingsForm = new SettingsForm();
+            _settingsForm = new SettingsForm(this);
             _settingsForm.Show();
         }
 
@@ -556,6 +601,46 @@ namespace LuckParser
             }
         }
 
-      
+        public void UpdateWatchDirectory()
+        {
+            if (Properties.Settings.Default.AutoAdd)
+            {
+                logFileWatcher.Path = Properties.Settings.Default.AutoAddPath;
+                labWatchingDir.Text = "Watching for log files in " + Properties.Settings.Default.AutoAddPath;
+                logFileWatcher.EnableRaisingEvents = true;
+                labWatchingDir.Visible = true;
+            } else
+            {
+                labWatchingDir.Visible = false;
+                logFileWatcher.EnableRaisingEvents = false;
+            }
+        }
+
+        /// <summary>
+        /// Waits 3 seconds, checks if the file still exists and then adds it to the queue.
+        /// This is neccessary because:
+        /// 1.) Arc needs some time to complete writing the log file. The watcher gets triggered as soon as the writing starts.
+        /// 2.) When Arc is configured to use ZIP compression, the log file is still created as usual, but after the file is written
+        ///     it is then zipped and deleted again. Therefore the watcher gets triggered twice, first for the .evtc and then for the .zip.
+        /// 3.) Zipping the file also needs time, so we have to wait a bit there too.
+        /// </summary>
+        /// <param name="path"></param>
+        private async void AddDelayed(string path)
+        {
+            await Task.Delay(3000);
+            if (File.Exists(path))
+            {
+                AddLogFiles(new string[] { path });
+            }
+        }
+
+        private void LogFileWatcher_Created(object sender, FileSystemEventArgs e)
+        {
+            if (e.FullPath.EndsWith(".zip") || e.FullPath.EndsWith(".evtc"))
+            {
+                AddDelayed(e.FullPath);
+            }
+        }
+
     }
 }
