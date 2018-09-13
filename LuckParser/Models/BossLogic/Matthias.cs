@@ -92,16 +92,16 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: needs facing information for hadouken
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
                     {
-                        ParseEnum.ThrashIDS.Spirit,
-                        ParseEnum.ThrashIDS.Spirit2,
-                        ParseEnum.ThrashIDS.IcePatch,
-                        ParseEnum.ThrashIDS.Tornado,
-                        ParseEnum.ThrashIDS.Storm
+                        ParseEnum.TrashIDS.Spirit,
+                        ParseEnum.TrashIDS.Spirit2,
+                        ParseEnum.TrashIDS.IcePatch,
+                        ParseEnum.TrashIDS.Tornado,
+                        ParseEnum.TrashIDS.Storm
                     };
             List<CastLog> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
             List<int> humanShieldRemoval = log.GetBoonData(34518).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(x.Time - log.FightData.FightStart)).Distinct().ToList();

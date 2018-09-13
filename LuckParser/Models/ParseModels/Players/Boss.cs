@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
         private List<PhaseData> _phases = new List<PhaseData>();
         public readonly List<long> PhaseData = new List<long>();
         private CombatReplayMap _map;
-        public readonly List<Mob> ThrashMobs = new List<Mob>();
+        public readonly List<Mob> TrashMobs = new List<Mob>();
         private readonly bool _requirePhases;
 
         public List<PhaseData> GetPhases(ParsedLog log)
@@ -66,13 +66,13 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
-            List<ParseEnum.ThrashIDS> ids = log.FightData.Logic.GetAdditionalData(CombatReplay, GetCastLogs(log, 0, log.FightData.FightDuration), log);
-            List<AgentItem> aList = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
+            List<ParseEnum.TrashIDS> ids = log.FightData.Logic.GetAdditionalData(CombatReplay, GetCastLogs(log, 0, log.FightData.FightDuration), log);
+            List<AgentItem> aList = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
             foreach (AgentItem a in aList)
             {
                 Mob mob = new Mob(a);
                 mob.InitCombatReplay(log, pollingRate, true, false);
-                ThrashMobs.Add(mob);
+                TrashMobs.Add(mob);
             }
         }
 

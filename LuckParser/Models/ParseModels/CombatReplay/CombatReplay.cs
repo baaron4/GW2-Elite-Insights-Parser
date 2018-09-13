@@ -21,6 +21,7 @@ namespace LuckParser.Models.ParseModels
         // actors
         public List<CircleActor> CircleActors { get; } = new List<CircleActor>();
         public List<DoughnutActor> DoughnutActors { get; } = new List<DoughnutActor>();
+        public List<RectangleActor> RectangleActors{ get; } = new List<RectangleActor>();
 
         public void Trim(long start, long end)
         {

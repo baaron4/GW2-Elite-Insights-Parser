@@ -71,16 +71,16 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: needs facing information for hadouken
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.ThrashIDS.WhiteMantleSeeker1,
-                ParseEnum.ThrashIDS.WhiteMantleSeeker2,
-                ParseEnum.ThrashIDS.WhiteMantleKnight,
-                ParseEnum.ThrashIDS.WhiteMantleBattleMage,
-                ParseEnum.ThrashIDS.ExquisiteConjunction
+                ParseEnum.TrashIDS.WhiteMantleSeeker1,
+                ParseEnum.TrashIDS.WhiteMantleSeeker2,
+                ParseEnum.TrashIDS.WhiteMantleKnight,
+                ParseEnum.TrashIDS.WhiteMantleBattleMage,
+                ParseEnum.TrashIDS.ExquisiteConjunction
             };
             List<CastLog> summon = cls.Where(x => x.SkillId == 34887).ToList();
             foreach (CastLog c in summon)

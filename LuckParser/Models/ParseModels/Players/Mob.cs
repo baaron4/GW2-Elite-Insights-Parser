@@ -1,5 +1,6 @@
 ﻿using LuckParser.Models.DataModels;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LuckParser.Models.ParseModels
@@ -22,7 +23,7 @@ namespace LuckParser.Models.ParseModels
             int start = (int)CombatReplay.TimeOffsets.Item1;
             int end = (int)CombatReplay.TimeOffsets.Item2;
             Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
-            switch (ParseEnum.GetThrashIDS(Agent.ID))
+            switch (ParseEnum.GetTrashIDS(Agent.ID))
             {
                 case ParseEnum.ThrashIDS.BlueGuardian:
                     CombatReplay.CircleActors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)"));
@@ -82,12 +83,29 @@ namespace LuckParser.Models.ParseModels
                     }
                     CombatReplay.CircleActors.Add(new CircleActor(true,0,400,new Tuple<int, int>(end,end+60000), "rgba(255, 0, 0, 0.5)",CombatReplay.Positions.Last()));
                     break;
+                case ParseEnum.TrashIDS.SurgingSoul:
+                    List<Point3D> positions = CombatReplay.GetPositions();
+                    if (positions.Count < 2)
+                    {
+                        break;
+                    }
+                    if (positions[1].X < -12000 || positions[1].X > -9250)
+                    {
+                        CombatReplay.AddRectangleActor(new RectangleActor(true, 0, 240, 660, lifespan, "rgba(255,100,0,0.5)"));
+                        break;
+                    }
+                    else if (positions[1].Y < -525 || positions[1].Y > 2275)
+                    {
+                        CombatReplay.AddRectangleActor(new RectangleActor(true, 0, 645, 238, lifespan, "rgba(255,100,0,0.5)"));
+                        break;
+                    }
+                    break;
             }
         }
 
         protected override void SetCombatReplayIcon(ParsedLog log)
         {
-            switch (ParseEnum.GetThrashIDS(Agent.ID))
+            switch (ParseEnum.GetTrashIDS(Agent.ID))
             {
                 case ParseEnum.ThrashIDS.Seekers:
                     CombatReplay.Icon = "https://i.imgur.com/FrPoluz.png";
@@ -174,9 +192,25 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.ThrashIDS.Pride:
                     CombatReplay.Icon = "https://i.imgur.com/ePTXx23.png";
                     break;
-                case ParseEnum.ThrashIDS.SurgingSoul:
-                    CombatReplay.Icon = "https://i.imgur.com/k79t7ZA.png";
-                    break;
+                case ParseEnum.TrashIDS.SurgingSoul:
+                    //List<Point3D> positions = CombatReplay.GetPositions();
+                    //if (positions.Count < 2)
+                    //{
+                        CombatReplay.SetIcon("https://i.imgur.com/k79t7ZA.png");
+                        break;
+                    //}
+                    //if (positions[1].X < -12000 || positions[1].X > -9250)
+                    //{
+                    //    CombatReplay.SetIcon("https://i.imgur.com/9qpuf8c.png");
+                    //    break;
+                    //}
+                    //else if (positions[1].Y < -525 || positions[1].Y > 2275)
+                    //{
+                    //    CombatReplay.SetIcon("https://i.imgur.com/zNHctbS.png");
+                    //    break;
+                    //}
+                    //CombatReplay.SetIcon("https://i.imgur.com/kcN9ECn.png");
+                    //break;
                 case ParseEnum.ThrashIDS.Echo:
                     CombatReplay.Icon = "https://i.imgur.com/kcN9ECn.png";
                     break;
@@ -205,7 +239,7 @@ namespace LuckParser.Models.ParseModels
 
         public void AddMechanics(ParsedLog log)
         {
-            // nothing to do, thrash mob mechanics should be managed by the boss
+            // nothing to do, trash mob mechanics should be managed by the boss
         }
     }
 }

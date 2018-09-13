@@ -79,13 +79,13 @@ namespace LuckParser.Models
                 phase.Name = namesVG[i - 1];
                 if (i == 2 || i == 4)
                 {
-                    List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+                    List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
                     {
-                       ParseEnum.ThrashIDS.BlueGuardian,
-                       ParseEnum.ThrashIDS.GreenGuardian,
-                       ParseEnum.ThrashIDS.RedGuardian
+                       ParseEnum.TrashIDS.BlueGuardian,
+                       ParseEnum.TrashIDS.GreenGuardian,
+                       ParseEnum.TrashIDS.RedGuardian
                     };
-                    List<AgentItem> guardians = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetThrashIDS(x.ID))).ToList();
+                    List<AgentItem> guardians = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
                     foreach (AgentItem a in guardians)
                     {
                         long agentStart = a.FirstAware - log.FightData.FightStart;
@@ -100,14 +100,14 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
             {
-               ParseEnum.ThrashIDS.Seekers,
-               ParseEnum.ThrashIDS.BlueGuardian,
-               ParseEnum.ThrashIDS.GreenGuardian,
-               ParseEnum.ThrashIDS.RedGuardian
+               ParseEnum.TrashIDS.Seekers,
+               ParseEnum.TrashIDS.BlueGuardian,
+               ParseEnum.TrashIDS.GreenGuardian,
+               ParseEnum.TrashIDS.RedGuardian
             };
             List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
             foreach (CastLog c in magicStorms)

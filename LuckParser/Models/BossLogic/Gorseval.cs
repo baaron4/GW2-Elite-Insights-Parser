@@ -71,7 +71,7 @@ namespace LuckParser.Models
                 phase.Name = namesGorse[i - 1];
                 if (i == 2 || i == 4)
                 {
-                    List<AgentItem> spirits = log.AgentData.NPCAgentList.Where(x => ParseEnum.GetThrashIDS(x.ID) == ParseEnum.ThrashIDS.ChargedSoul).ToList();
+                    List<AgentItem> spirits = log.AgentData.NPCAgentList.Where(x => ParseEnum.GetTrashIDS(x.ID) == ParseEnum.TrashIDS.ChargedSoul).ToList();
                     foreach (AgentItem a in spirits)
                     {
                         long agentStart = a.FirstAware - log.FightData.FightStart;
@@ -86,14 +86,14 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.ThrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: doughnuts (rampage)
-            List<ParseEnum.ThrashIDS> ids = new List<ParseEnum.ThrashIDS>
+            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
                     {
-                        ParseEnum.ThrashIDS.ChargedSoul,
-                        ParseEnum.ThrashIDS.EnragedSpirit,
-                        ParseEnum.ThrashIDS.AngeredSpirit
+                        ParseEnum.TrashIDS.ChargedSoul,
+                        ParseEnum.TrashIDS.EnragedSpirit,
+                        ParseEnum.TrashIDS.AngeredSpirit
                     };
             List<CastLog> blooms = cls.Where(x => x.SkillId == 31616).ToList();
             foreach (CastLog c in blooms)
