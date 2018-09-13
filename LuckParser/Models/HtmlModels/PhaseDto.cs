@@ -37,6 +37,7 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public List<long> deaths;
 
         [DataMember] public List<List<int[]>> mechanicStats;
+        [DataMember] public List<List<int[]>> enemyMechanicStats;
 
         public PhaseDto() { }
 

@@ -239,7 +239,7 @@ function createMechanicsTable($target, mechanics, data, boss) {
 	var rows = [];
 	var sums = [];
 	$.each(data, function(i, values) {
-		var player = window.data.players[i];
+		var player = boss ? window.data.enemies[i] : window.data.players[i];
 		rows.push({player:player,data:values});
 	});
 
@@ -546,7 +546,7 @@ function generateWindow(layout) {
 		createSupStatsTable($('#healStats'+i), phaseData.healStats);
 
 		createMechanicsTable($('#mechanicStats'+i), data.mechanics, phaseData.mechanicStats, false);
-		createMechanicsTable($('#mechanicBossStats'+i), data.mechanics, phaseData.mechanicStats, true);
+		createMechanicsTable($('#mechanicBossStats'+i), data.mechanics, phaseData.enemyMechanicStats, true);
 		
 		createBoonTable($('#boonsUptime'+i), data.boons, phaseData.boonStats);
 

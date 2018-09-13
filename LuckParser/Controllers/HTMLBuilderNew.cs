@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
     class HTMLBuilderNew
     {
         private const string scriptVersion = "0.5";
-        private const int scriptVersionRev = 2;
+        private const int scriptVersionRev = 3;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -1737,6 +1737,24 @@ namespace LuckParser.Controllers
             return list;
         }
 
+        private List<List<int[]>> CreateBossMechanicData(int phaseIndex)
+        {
+            List<List<int[]>> list = new List<List<int[]>>();
+            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentMechanics(0);
+            PhaseData phase = _statistics.Phases[phaseIndex];
+            foreach (AbstractMasterPlayer p in _log.MechanicData.GetEnemyList(0))
+            {
+                List<int[]> enemyData = new List<int[]>(presMech.Count);
+                foreach (Mechanic mech in presMech)
+                {
+                    int count = _log.MechanicData[mech].Count(x => x.Player.InstID == p.InstID && phase.InInterval(x.Time));
+                    enemyData.Add(new int[] { count, count });
+                }
+                list.Add(enemyData);
+            }
+            return list;
+        }
+
         private string findPattern(string source, string regex)
         {
             if (String.IsNullOrEmpty(source)) return null;
@@ -1749,6 +1767,7 @@ namespace LuckParser.Controllers
         {
             List<MechanicDto> mechanicDtos = new List<MechanicDto>();
             HashSet<Mechanic> playerMechs = _log.MechanicData.GetPresentPlayerMechs(0);
+            HashSet<Mechanic> enemyMechs = _log.MechanicData.GetPresentEnemyMechs(0);
             foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(0))
             {
                 List<MechanicLog> mechanicLogs = _log.MechanicData[mech];
@@ -1760,6 +1779,7 @@ namespace LuckParser.Controllers
                 dto.visible = (mech.SkillId == -2 || mech.SkillId == -3);
                 dto.data = BuildMechanicData(mechanicLogs);
                 dto.playerMech = playerMechs.Contains(mech);
+                dto.enemyMech = enemyMechs.Contains(mech);
                 mechanicDtos.Add(dto);
             }
             //TODO add DOWN and DEAD data
@@ -3084,11 +3104,16 @@ namespace LuckParser.Controllers
                 data.players.Add(playerDto);
             }
 
+            foreach(AbstractMasterPlayer enemy in _log.MechanicData.GetEnemyList(0))
+            {
+                data.enemies.Add(new EnemyDto(enemy.Character));
+            }
+
             data.flags.simpleRotation = _settings.SimpleRotation;
             data.flags.dark = !_settings.LightTheme;
             data.flags.combatReplay = _settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay;
 
-                data.graphs.Add(new GraphDto("full", "Full"));
+            data.graphs.Add(new GraphDto("full", "Full"));
             data.graphs.Add(new GraphDto("s10", "10s"));
             data.graphs.Add(new GraphDto("s30", "30s"));
 
@@ -3122,6 +3147,7 @@ namespace LuckParser.Controllers
                 phaseDto.defBuffGenSquadStats = CreateGenData(_statistics.PresentDefbuffs, i, "squad");
 
                 phaseDto.mechanicStats = CreateMechanicData(i);
+                phaseDto.enemyMechanicStats = CreateBossMechanicData(i);
 
                 phaseDto.deaths = new List<long>();
 

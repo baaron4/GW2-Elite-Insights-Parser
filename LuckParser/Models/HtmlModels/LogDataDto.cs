@@ -13,20 +13,22 @@ namespace LuckParser.Models.HtmlModels
         [DataMember(Order = 0)]
         public readonly List<PlayerDto> players = new List<PlayerDto>();
         [DataMember(Order = 1)]
-        public readonly List<GraphDto> graphs = new List<GraphDto>();
+        public readonly List<EnemyDto> enemies = new List<EnemyDto>();
         [DataMember(Order = 2)]
+        public readonly List<GraphDto> graphs = new List<GraphDto>();
+        [DataMember(Order = 3)]
         public readonly List<PhaseDto> phases = new List<PhaseDto>();
-        [DataMember]
+        [DataMember(Order = 4)]
         public List<BoonDto> boons;
-        [DataMember]
+        [DataMember(Order = 5)]
         public List<BoonDto> offBuffs;
-        [DataMember]
+        [DataMember(Order = 6)]
         public List<BoonDto> defBuffs;
-        [DataMember]
+        [DataMember(Order = 7)]
         public List<MechanicDto> mechanics;
-        [DataMember]
+        [DataMember(Order = 8)]
         public List<SkillDto> skills;
-        [DataMember]
+        [DataMember(Order = 9)]
         public LogFlags flags = new LogFlags();
     }
 
