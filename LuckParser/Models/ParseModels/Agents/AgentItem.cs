@@ -28,7 +28,15 @@ namespace LuckParser.Models.ParseModels
             Prof = prof;
             if (prof.Contains(":"))
             {
-                ID = UInt16.Parse(Prof.Split(':')[1]);
+                var splitted = Prof.Split(':');
+                try
+                {
+                    ID = UInt16.Parse(splitted[splitted.Length - 1]);
+                }
+                catch(FormatException)
+                {
+                    ID = 0;
+                }
             }
             Toughness = toughness;
             Healing = healing;

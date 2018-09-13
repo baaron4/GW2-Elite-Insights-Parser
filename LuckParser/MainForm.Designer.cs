@@ -37,13 +37,16 @@
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
-            this.gridRowBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.ButtonState = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.logFileWatcher = new System.IO.FileSystemWatcher();
+            this.VersionLabel = new System.Windows.Forms.Label();
+            this.labWatchingDir = new System.Windows.Forms.Label();
             this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ButtonState = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.gridRowBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.logFileWatcher)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridRowBindingSource)).BeginInit();
-            this.VersionLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -131,9 +134,40 @@
             this.dgvFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.DgvFilesDragDrop);
             this.dgvFiles.DragEnter += new System.Windows.Forms.DragEventHandler(this.DgvFilesDragEnter);
             // 
-            // gridRowBindingSource
+            // ButtonState
             // 
-            this.gridRowBindingSource.DataSource = typeof(LuckParser.GridRow);
+            this.ButtonState.DataPropertyName = "ButtonText";
+            this.ButtonState.HeaderText = "";
+            this.ButtonState.Name = "ButtonState";
+            this.ButtonState.ReadOnly = true;
+            // 
+            // logFileWatcher
+            // 
+            this.logFileWatcher.EnableRaisingEvents = true;
+            this.logFileWatcher.IncludeSubdirectories = true;
+            this.logFileWatcher.SynchronizingObject = this;
+            this.logFileWatcher.Created += new System.IO.FileSystemEventHandler(this.LogFileWatcher_Created);
+            // 
+            // VersionLabel
+            // 
+            this.VersionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.VersionLabel.AutoSize = true;
+            this.VersionLabel.Location = new System.Drawing.Point(16, 357);
+            this.VersionLabel.Name = "VersionLabel";
+            this.VersionLabel.Size = new System.Drawing.Size(29, 13);
+            this.VersionLabel.TabIndex = 17;
+            this.VersionLabel.Text = "V1.3";
+            // 
+            // labWatchingDir
+            // 
+            this.labWatchingDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labWatchingDir.AutoEllipsis = true;
+            this.labWatchingDir.Location = new System.Drawing.Point(16, 312);
+            this.labWatchingDir.Name = "labWatchingDir";
+            this.labWatchingDir.Size = new System.Drawing.Size(504, 13);
+            this.labWatchingDir.TabIndex = 18;
+            this.labWatchingDir.Text = "Watching log dir";
             // 
             // locationDataGridViewTextBoxColumn
             // 
@@ -151,21 +185,9 @@
             this.statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
             this.statusDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // ButtonState
+            // gridRowBindingSource
             // 
-            this.ButtonState.DataPropertyName = "ButtonText";
-            this.ButtonState.HeaderText = "";
-            this.ButtonState.Name = "ButtonState";
-            this.ButtonState.ReadOnly = true;
-            // Version_Label
-            // 
-            this.VersionLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.VersionLabel.AutoSize = true;
-            this.VersionLabel.Location = new System.Drawing.Point(28, 357);
-            this.VersionLabel.Name = "Version_Label";
-            this.VersionLabel.Size = new System.Drawing.Size(29, 13);
-            this.VersionLabel.TabIndex = 17;
-            this.VersionLabel.Text = "V1.3";
+            this.gridRowBindingSource.DataSource = typeof(LuckParser.GridRow);
             // 
             // MainForm
             // 
@@ -173,6 +195,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Menu;
             this.ClientSize = new System.Drawing.Size(696, 375);
+            this.Controls.Add(this.labWatchingDir);
             this.Controls.Add(this.dgvFiles);
             this.Controls.Add(this.VersionLabel);
             this.Controls.Add(this.btnClear);
@@ -185,6 +208,7 @@
             this.Text = "GW2 Elite Insights Parser";
             this.TransparencyKey = System.Drawing.Color.OrangeRed;
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.logFileWatcher)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridRowBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -204,6 +228,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn statusDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn ButtonState;
         private System.Windows.Forms.Label VersionLabel;
+        private System.IO.FileSystemWatcher logFileWatcher;
+        private System.Windows.Forms.Label labWatchingDir;
     }
 }
 

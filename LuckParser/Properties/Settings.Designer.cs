@@ -394,5 +394,41 @@ namespace LuckParser.Properties {
                 this["SkipFailedTrys"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoAdd {
+            get {
+                return ((bool)(this["AutoAdd"]));
+            }
+            set {
+                this["AutoAdd"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoParse {
+            get {
+                return ((bool)(this["AutoParse"]));
+            }
+            set {
+                this["AutoParse"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AutoAddPath {
+            get {
+                return ((string)(this["AutoAddPath"]));
+            }
+            set {
+                this["AutoAddPath"] = value;
+            }
+        }
     }
 }

@@ -68,6 +68,8 @@
             this.chkHtmlExternalScripts = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.chkAutoAdd = new System.Windows.Forms.CheckBox();
+            this.chkAutoParse = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -532,6 +534,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.chkAutoAdd);
+            this.tabPage1.Controls.Add(this.chkAutoParse);
             this.tabPage1.Controls.Add(this.chkB_SkipFailedTrys);
             this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.groupBox2);
@@ -544,6 +548,28 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // chkAutoAdd
+            // 
+            this.chkAutoAdd.AutoSize = true;
+            this.chkAutoAdd.Location = new System.Drawing.Point(24, 300);
+            this.chkAutoAdd.Name = "chkAutoAdd";
+            this.chkAutoAdd.Size = new System.Drawing.Size(154, 17);
+            this.chkAutoAdd.TabIndex = 40;
+            this.chkAutoAdd.Text = "Automatically add new logs";
+            this.chkAutoAdd.UseVisualStyleBackColor = true;
+            this.chkAutoAdd.CheckedChanged += new System.EventHandler(this.ChkAutoAdd_CheckedChanged);
+            // 
+            // chkAutoParse
+            // 
+            this.chkAutoParse.AutoSize = true;
+            this.chkAutoParse.Location = new System.Drawing.Point(24, 324);
+            this.chkAutoParse.Name = "chkAutoParse";
+            this.chkAutoParse.Size = new System.Drawing.Size(171, 17);
+            this.chkAutoParse.TabIndex = 39;
+            this.chkAutoParse.Text = "Automatically parse added files";
+            this.chkAutoParse.UseVisualStyleBackColor = true;
+            this.chkAutoParse.CheckedChanged += new System.EventHandler(this.ChkAutoParse_CheckedChanged);
             // 
             // groupBox3
             // 
@@ -908,5 +934,7 @@
         private System.Windows.Forms.Panel panelJson;
         private System.Windows.Forms.PictureBox imgTheme;
         private System.Windows.Forms.CheckBox chkB_SkipFailedTrys;
+        private System.Windows.Forms.CheckBox chkAutoAdd;
+        private System.Windows.Forms.CheckBox chkAutoParse;
     }
 }
