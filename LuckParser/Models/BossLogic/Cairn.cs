@@ -57,7 +57,7 @@ namespace LuckParser.Models
             {
                 int agonyStart = (int)(c.Time - log.FightData.FightStart);
                 int agonyEnd = agonyStart + 62000;
-                replay.AddCircleActor(new CircleActor(false, 0, 220, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)"));
+                replay.CircleActors.Add(new CircleActor(false, 0, 220, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)"));
             }
         }
 

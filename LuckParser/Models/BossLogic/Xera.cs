@@ -85,7 +85,7 @@ namespace LuckParser.Models
             List<CastLog> summon = cls.Where(x => x.SkillId == 34887).ToList();
             foreach (CastLog c in summon)
             {
-                replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                replay.CircleActors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
             }
             return ids;
         }

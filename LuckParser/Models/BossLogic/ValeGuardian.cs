@@ -112,7 +112,7 @@ namespace LuckParser.Models
             List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
             foreach (CastLog c in magicStorms)
             {
-                replay.AddCircleActor(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                replay.CircleActors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
             }
             return ids;
         }

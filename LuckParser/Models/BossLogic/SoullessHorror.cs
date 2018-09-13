@@ -54,20 +54,20 @@ namespace LuckParser.Models
             {
                 int start = (int)c.Time;
                 int end = start + c.ActualDuration;
-                replay.AddCircleActor(new CircleActor(true, (int)c.Time + c.ExpectedDuration, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
-                replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
+                replay.CircleActors.Add(new CircleActor(true, (int)c.Time + c.ExpectedDuration, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
+                replay.CircleActors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
             }
             List<CastLog> vortex = cls.Where(x => x.SkillId == 47327).ToList();
             foreach (CastLog c in vortex)
             {
                 int start = (int)c.Time;
                 int end = start + 4000;
-                Point3D pos = replay.GetPositions().FirstOrDefault(x => x.Time > start);
+                Point3D pos = replay.Positions.FirstOrDefault(x => x.Time > start);
                 if (pos != null)
                 {
-                    replay.AddCircleActor(new CircleActor(false, 0, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                    replay.AddCircleActor(new CircleActor(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                    replay.AddDoughnutActor(new DoughnutActor(0, 380,760, new Tuple<int, int>(end, end+1000), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.CircleActors.Add(new CircleActor(false, 0, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.CircleActors.Add(new CircleActor(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.DoughnutActors.Add(new DoughnutActor(0, 380,760, new Tuple<int, int>(end, end+1000), "rgba(255, 150, 0, 0.5)", pos));
                 }
             }
             return ids;
