@@ -4,30 +4,19 @@ namespace LuckParser.Models.ParseModels
 {
     public class RectangleActor : Actor
     {
-        private readonly int _height;
-        private readonly int _width;
+        public int Height { get; }
+        public int Width { get; }
 
         public RectangleActor(bool fill, int growing, int width, int height, Tuple<int, int> lifespan, string color) : base(true, growing, lifespan, color, new MobileActor())
         {
-            _height = height;
-            _width = width;
+            Height = height;
+            Width = width;
         }
 
         public RectangleActor(bool fill, int growing, int width, int height, Tuple<int, int> lifespan, string color, Point3D position) : base(true, growing, lifespan, color, new ImmobileActor(position))
         {
-            _height = height;
-            _width = width;
+            Height = height;
+            Width = width;
         }
-
-        public int GetHeight()
-        {
-            return _height;
-        }
-
-        public int GetWidth()
-        {
-            return _width;
-        }
-
     }
 }

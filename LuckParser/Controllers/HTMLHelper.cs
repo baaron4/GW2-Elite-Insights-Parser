@@ -1287,10 +1287,10 @@ namespace LuckParser.Controllers
             foreach (Mob mob in log.Boss.TrashMobs)
             {
                 CombatReplay replay = mob.CombatReplay;
-                foreach (RectangleActor a in replay.GetRectangleActors())
+                foreach (RectangleActor a in replay.RectangleActors)
                 {
                     sw.Write("{");
-                    sw.Write("var a = new rectangleActor(" + a.GetWidth() + "," + a.GetHeight() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
+                    sw.Write("var a = new rectangleActor(" + a.Width + "," + a.Height + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
                     sw.Write("a.pos =" + a.GetPosition(mob.InstID + "_" + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "_" + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate, map) + ";");
                     sw.Write("}");
@@ -1299,19 +1299,19 @@ namespace LuckParser.Controllers
             foreach (Player player in log.PlayerList)
             {
                 CombatReplay replay = player.CombatReplay;
-                foreach (RectangleActor a in replay.GetRectangleActors())
+                foreach (RectangleActor a in replay.RectangleActors)
                 {
                     sw.Write("{");
-                    sw.Write("var a = new rectangleActor(" + a.GetWidth() + "," + a.GetHeight() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
+                    sw.Write("var a = new rectangleActor(" + a.Width + "," + a.Height + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
                     sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
                     sw.Write("}");
                 }
             }
-            foreach (RectangleActor a in log.Boss.CombatReplay.GetRectangleActors())
+            foreach (RectangleActor a in log.Boss.CombatReplay.RectangleActors)
             {
                 sw.Write("{");
-                sw.Write("var a = new rectangleActor(" + a.GetWidth() + "," + a.GetHeight() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
+                sw.Write("var a = new rectangleActor(" + a.Width + "," + a.Height + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                 sw.Write("mechanicData.add(a);");
                 sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
                 sw.Write("}");
