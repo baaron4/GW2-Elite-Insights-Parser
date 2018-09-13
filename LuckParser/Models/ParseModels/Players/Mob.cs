@@ -25,58 +25,58 @@ namespace LuckParser.Models.ParseModels
             Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
             switch (ParseEnum.GetTrashIDS(Agent.ID))
             {
-                case ParseEnum.ThrashIDS.BlueGuardian:
+                case ParseEnum.TrashIDS.BlueGuardian:
                     CombatReplay.CircleActors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)"));
                     break;
-                case ParseEnum.ThrashIDS.GreenGuardian:
+                case ParseEnum.TrashIDS.GreenGuardian:
                     CombatReplay.CircleActors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 255, 0, 0.5)"));
                     break;
-                case ParseEnum.ThrashIDS.RedGuardian:
+                case ParseEnum.TrashIDS.RedGuardian:
                     CombatReplay.CircleActors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
-                case ParseEnum.ThrashIDS.Seekers:
+                case ParseEnum.TrashIDS.Seekers:
                     CombatReplay.CircleActors.Add(new CircleActor(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
-                case ParseEnum.ThrashIDS.ChargedSoul:
+                case ParseEnum.TrashIDS.ChargedSoul:
                     CombatReplay.CircleActors.Add(new CircleActor(false, 0, 220, lifespan, "rgba(255, 150, 0, 0.5)"));
                     break;
-                case ParseEnum.ThrashIDS.Spirit:
-                case ParseEnum.ThrashIDS.Spirit2:
+                case ParseEnum.TrashIDS.Spirit:
+                case ParseEnum.TrashIDS.Spirit2:
                     CombatReplay.CircleActors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
-                case ParseEnum.ThrashIDS.Olson:
-                case ParseEnum.ThrashIDS.Engul:
-                case ParseEnum.ThrashIDS.Faerla:
-                case ParseEnum.ThrashIDS.Caulle:
-                case ParseEnum.ThrashIDS.Henley:
-                case ParseEnum.ThrashIDS.Jessica:
-                case ParseEnum.ThrashIDS.Galletta:
-                case ParseEnum.ThrashIDS.Ianim:
+                case ParseEnum.TrashIDS.Olson:
+                case ParseEnum.TrashIDS.Engul:
+                case ParseEnum.TrashIDS.Faerla:
+                case ParseEnum.TrashIDS.Caulle:
+                case ParseEnum.TrashIDS.Henley:
+                case ParseEnum.TrashIDS.Jessica:
+                case ParseEnum.TrashIDS.Galletta:
+                case ParseEnum.TrashIDS.Ianim:
                     CombatReplay.CircleActors.Add(new CircleActor(false, 0, 600, lifespan, "rgba(255, 0, 0, 0.5)"));
                     CombatReplay.CircleActors.Add(new CircleActor(true, 0, 400, lifespan, "rgba(0, 125, 255, 0.5)"));
                     break;
-                case ParseEnum.ThrashIDS.Messenger:
+                case ParseEnum.TrashIDS.Messenger:
                     CombatReplay.CircleActors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 125, 0, 0.5)"));
                     break;
-                case ParseEnum.ThrashIDS.Scythe:
+                case ParseEnum.TrashIDS.Scythe:
                     CombatReplay.CircleActors.Add(new CircleActor(true, 0, 80, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
-                case ParseEnum.ThrashIDS.Tornado:
+                case ParseEnum.TrashIDS.Tornado:
                     CombatReplay.CircleActors.Add(new CircleActor(true, 0, 90, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
-                case ParseEnum.ThrashIDS.IcePatch:
+                case ParseEnum.TrashIDS.IcePatch:
                     CombatReplay.CircleActors.Add(new CircleActor(true, 0, 200, lifespan, "rgba(0, 0, 255, 0.5)"));
                     break;
-                case ParseEnum.ThrashIDS.Storm:
+                case ParseEnum.TrashIDS.Storm:
                     CombatReplay.CircleActors.Add(new CircleActor(false, 0, 260, lifespan, "rgba(0, 80, 255, 0.5)"));
                     break;
-                case ParseEnum.ThrashIDS.Oil:
+                case ParseEnum.TrashIDS.Oil:
                     CombatReplay.CircleActors.Add(new CircleActor(true, 0, 240, lifespan, "rgba(0, 0, 0, 0.5)"));
                     break;
-                case ParseEnum.ThrashIDS.Echo:
+                case ParseEnum.TrashIDS.Echo:
                     CombatReplay.CircleActors.Add(new CircleActor(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
-                case ParseEnum.ThrashIDS.TormentedDead:
+                case ParseEnum.TrashIDS.TormentedDead:
                     if (CombatReplay.Positions.Count == 0)
                     {
                         break;
@@ -84,19 +84,19 @@ namespace LuckParser.Models.ParseModels
                     CombatReplay.CircleActors.Add(new CircleActor(true,0,400,new Tuple<int, int>(end,end+60000), "rgba(255, 0, 0, 0.5)",CombatReplay.Positions.Last()));
                     break;
                 case ParseEnum.TrashIDS.SurgingSoul:
-                    List<Point3D> positions = CombatReplay.GetPositions();
+                    List<Point3D> positions = CombatReplay.Positions;
                     if (positions.Count < 2)
                     {
                         break;
                     }
                     if (positions[1].X < -12000 || positions[1].X > -9250)
                     {
-                        CombatReplay.AddRectangleActor(new RectangleActor(true, 0, 240, 660, lifespan, "rgba(255,100,0,0.5)"));
+                        CombatReplay.RectangleActors.Add(new RectangleActor(true, 0, 240, 660, lifespan, "rgba(255,100,0,0.5)"));
                         break;
                     }
                     else if (positions[1].Y < -525 || positions[1].Y > 2275)
                     {
-                        CombatReplay.AddRectangleActor(new RectangleActor(true, 0, 645, 238, lifespan, "rgba(255,100,0,0.5)"));
+                        CombatReplay.RectangleActors.Add(new RectangleActor(true, 0, 645, 238, lifespan, "rgba(255,100,0,0.5)"));
                         break;
                     }
                     break;
@@ -107,96 +107,96 @@ namespace LuckParser.Models.ParseModels
         {
             switch (ParseEnum.GetTrashIDS(Agent.ID))
             {
-                case ParseEnum.ThrashIDS.Seekers:
+                case ParseEnum.TrashIDS.Seekers:
                     CombatReplay.Icon = "https://i.imgur.com/FrPoluz.png";
                     break;
-                case ParseEnum.ThrashIDS.RedGuardian:
+                case ParseEnum.TrashIDS.RedGuardian:
                     CombatReplay.Icon = "https://i.imgur.com/73Uj4lG.png";
                     break;
-                case ParseEnum.ThrashIDS.BlueGuardian:
+                case ParseEnum.TrashIDS.BlueGuardian:
                     CombatReplay.Icon = "https://i.imgur.com/6CefnkP.png";
                     break;
-                case ParseEnum.ThrashIDS.GreenGuardian:
+                case ParseEnum.TrashIDS.GreenGuardian:
                     CombatReplay.Icon = "https://i.imgur.com/nauDVYP.png";
                     break;
-                case ParseEnum.ThrashIDS.Spirit:
-                case ParseEnum.ThrashIDS.Spirit2:
-                case ParseEnum.ThrashIDS.ChargedSoul:
+                case ParseEnum.TrashIDS.Spirit:
+                case ParseEnum.TrashIDS.Spirit2:
+                case ParseEnum.TrashIDS.ChargedSoul:
                     CombatReplay.Icon = "https://i.imgur.com/sHmksvO.png";
                     break;
-                case ParseEnum.ThrashIDS.Kernan:
+                case ParseEnum.TrashIDS.Kernan:
                     CombatReplay.Icon = "https://i.imgur.com/WABRQya.png";
                     break;
-                case ParseEnum.ThrashIDS.Knuckles:
+                case ParseEnum.TrashIDS.Knuckles:
                     CombatReplay.Icon = "https://i.imgur.com/m1y8nJE.png";
                     break;
-                case ParseEnum.ThrashIDS.Karde:
+                case ParseEnum.TrashIDS.Karde:
                     CombatReplay.Icon = "https://i.imgur.com/3UGyosm.png";
                     break;
-                case ParseEnum.ThrashIDS.Olson:
-                case ParseEnum.ThrashIDS.Engul:
-                case ParseEnum.ThrashIDS.Faerla:
-                case ParseEnum.ThrashIDS.Caulle:
-                case ParseEnum.ThrashIDS.Henley:
-                case ParseEnum.ThrashIDS.Jessica:
-                case ParseEnum.ThrashIDS.Galletta:
-                case ParseEnum.ThrashIDS.Ianim:
+                case ParseEnum.TrashIDS.Olson:
+                case ParseEnum.TrashIDS.Engul:
+                case ParseEnum.TrashIDS.Faerla:
+                case ParseEnum.TrashIDS.Caulle:
+                case ParseEnum.TrashIDS.Henley:
+                case ParseEnum.TrashIDS.Jessica:
+                case ParseEnum.TrashIDS.Galletta:
+                case ParseEnum.TrashIDS.Ianim:
                     CombatReplay.Icon = "https://i.imgur.com/qeYT1Bf.png";
                     break;
-                case ParseEnum.ThrashIDS.Core:
+                case ParseEnum.TrashIDS.Core:
                     CombatReplay.Icon = "https://i.imgur.com/yI34iqw.png";
                     break;
-                case ParseEnum.ThrashIDS.Jade:
+                case ParseEnum.TrashIDS.Jade:
                     CombatReplay.Icon = "https://i.imgur.com/ivtzbSP.png";
                     break;
-                case ParseEnum.ThrashIDS.Guldhem:
+                case ParseEnum.TrashIDS.Guldhem:
                     CombatReplay.Icon = "https://i.imgur.com/xa7Fefn.png";
                     break;
-                case ParseEnum.ThrashIDS.Rigom:
+                case ParseEnum.TrashIDS.Rigom:
                     CombatReplay.Icon = "https://i.imgur.com/REcGMBe.png";
                     break;
-                case ParseEnum.ThrashIDS.Saul:
+                case ParseEnum.TrashIDS.Saul:
                     CombatReplay.Icon = "https://i.imgur.com/ck2IsoS.png";
                     break;
-                case ParseEnum.ThrashIDS.Messenger:
-                case ParseEnum.ThrashIDS.TormentedDead:
+                case ParseEnum.TrashIDS.Messenger:
+                case ParseEnum.TrashIDS.TormentedDead:
                     CombatReplay.Icon = "https://i.imgur.com/1J2BTFg.png";
                     break;
-                case ParseEnum.ThrashIDS.Scythe:
+                case ParseEnum.TrashIDS.Scythe:
                     CombatReplay.Icon = "https://i.imgur.com/INCGLIK.png";
                     break;
-                case ParseEnum.ThrashIDS.Enforcer:
+                case ParseEnum.TrashIDS.Enforcer:
                     CombatReplay.Icon = "https://i.imgur.com/elHjamF.png";
                     break;
-                case ParseEnum.ThrashIDS.Tornado:
+                case ParseEnum.TrashIDS.Tornado:
                     CombatReplay.Icon = "https://i.imgur.com/e10lZMa.png";
                     break;
-                case ParseEnum.ThrashIDS.IcePatch:
+                case ParseEnum.TrashIDS.IcePatch:
                     CombatReplay.Icon = "https://i.imgur.com/yxKJ5Yc.png";
                     break;
-                case ParseEnum.ThrashIDS.Storm:
+                case ParseEnum.TrashIDS.Storm:
                     CombatReplay.Icon = "https://i.imgur.com/9XtNPdw.png";
                     break;
-                case ParseEnum.ThrashIDS.UnstableLeyRift:
+                case ParseEnum.TrashIDS.UnstableLeyRift:
                     CombatReplay.Icon = "https://i.imgur.com/YXM3igs.png";
                     break;
-                case ParseEnum.ThrashIDS.Tear:
+                case ParseEnum.TrashIDS.Tear:
                     CombatReplay.Icon = "https://i.imgur.com/N9seps0.png";
                     break;
-                case ParseEnum.ThrashIDS.Oil:
+                case ParseEnum.TrashIDS.Oil:
                     CombatReplay.Icon = "https://i.imgur.com/DZIl49i.png";
                     break;
-                case ParseEnum.ThrashIDS.InsidiousProjection:
+                case ParseEnum.TrashIDS.InsidiousProjection:
                     CombatReplay.Icon = "https://i.imgur.com/9EdItBS.png";
                     break;
-                case ParseEnum.ThrashIDS.Pride:
+                case ParseEnum.TrashIDS.Pride:
                     CombatReplay.Icon = "https://i.imgur.com/ePTXx23.png";
                     break;
                 case ParseEnum.TrashIDS.SurgingSoul:
                     //List<Point3D> positions = CombatReplay.GetPositions();
                     //if (positions.Count < 2)
                     //{
-                        CombatReplay.SetIcon("https://i.imgur.com/k79t7ZA.png");
+                        CombatReplay.Icon = "https://i.imgur.com/k79t7ZA.png";
                         break;
                     //}
                     //if (positions[1].X < -12000 || positions[1].X > -9250)
@@ -211,24 +211,24 @@ namespace LuckParser.Models.ParseModels
                     //}
                     //CombatReplay.SetIcon("https://i.imgur.com/kcN9ECn.png");
                     //break;
-                case ParseEnum.ThrashIDS.Echo:
+                case ParseEnum.TrashIDS.Echo:
                     CombatReplay.Icon = "https://i.imgur.com/kcN9ECn.png";
                     break;
-                case ParseEnum.ThrashIDS.CrimsonPhantasm:
+                case ParseEnum.TrashIDS.CrimsonPhantasm:
                     CombatReplay.Icon = "https://i.imgur.com/zP7Bvb4.png";
                     break;
-                case ParseEnum.ThrashIDS.RadiantPhantasm:
+                case ParseEnum.TrashIDS.RadiantPhantasm:
                     CombatReplay.Icon = "https://i.imgur.com/O5VWLyY.png";
                     break;
-                case ParseEnum.ThrashIDS.Gambler:
-                case ParseEnum.ThrashIDS.Thief:
-                case ParseEnum.ThrashIDS.Drunkard:
+                case ParseEnum.TrashIDS.Gambler:
+                case ParseEnum.TrashIDS.Thief:
+                case ParseEnum.TrashIDS.Drunkard:
                     CombatReplay.Icon = "https://i.imgur.com/vINeVU6.png";
                     break;
-                case ParseEnum.ThrashIDS.GamblerClones:
+                case ParseEnum.TrashIDS.GamblerClones:
                     CombatReplay.Icon = "https://i.imgur.com/zMsBWEx.png";
                     break;
-                case ParseEnum.ThrashIDS.GamblerReal:
+                case ParseEnum.TrashIDS.GamblerReal:
                     CombatReplay.Icon = "https://i.imgur.com/J6oMITN.png";
                     break;
                 default:
