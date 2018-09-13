@@ -71,7 +71,7 @@ namespace LuckParser
                     ParsedLog log = control.GetParsedLog();
                     Console.Write("Log Parsed\n");
                     bool uploadAuthorized = !Properties.Settings.Default.SkipFailedTrys || (Properties.Settings.Default.SkipFailedTrys && log.LogData.Success);
-                    if (Properties.Settings.Default.UploadToDPSReports)
+                    if (Properties.Settings.Default.UploadToDPSReports && uploadAuthorized)
                     {
                         Console.Write("Uploading to DPSReports using EI\n");
                         if (up_controller == null)
@@ -92,7 +92,7 @@ namespace LuckParser
                             uploadresult[0] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.UploadToDPSReportsRH)
+                    if (Properties.Settings.Default.UploadToDPSReportsRH && uploadAuthorized)
                     {
                         Console.Write("Uploading to DPSReports using RH\n");
                         if (up_controller == null)
@@ -113,7 +113,7 @@ namespace LuckParser
                             uploadresult[1] = "Failed to Define Upload Task";
                         }
                     }
-                    if (Properties.Settings.Default.UploadToRaidar)
+                    if (Properties.Settings.Default.UploadToRaidar && uploadAuthorized)
                     {
                         Console.Write("Uploading to Raidar\n");
                         if (up_controller == null)
