@@ -416,8 +416,10 @@ namespace LuckParser.Controllers
             }
         }
         
-        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, FightData fightData, string yAxis = "")
+        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, PhaseData phase, double[] bossHealth, string yAxis = "")
         {
+            int duration = (int)phase.GetDuration("s");
+            double[] chart = bossHealth.Skip((int)phase.Start / 1000).Take(duration+1).ToArray();
             //Boss Health
             //Adding dps axis
             sw.Write("y: [");
@@ -425,57 +427,48 @@ namespace LuckParser.Controllers
             {
                 maxDPS = 1000;
             }
-            int hotCount = 0;
-            List<Point> BossHOT = fightData.HealthOverTime.Where(x => x.X >= start && x.X <= end).ToList();
-            foreach (Point dp in BossHOT)
+            for (int i = 0; i < chart.Length; i++)
             {
-                if (hotCount == BossHOT.Count - 1)
+                double health = chart[i];
+                if (i == chart.Length - 1)
                 {
-                    sw.Write("'" + ((dp.Y / 10000f) * maxDPS).ToString().Replace(',', '.') + "'");
+                    sw.Write("'" + ((health / 100.0) * maxDPS).ToString().Replace(',', '.') + "'");
                 }
                 else
                 {
-                    sw.Write("'" + ((dp.Y / 10000f) * maxDPS).ToString().Replace(',', '.') + "',");
+                    sw.Write("'" + ((health / 100.0) * maxDPS).ToString().Replace(',', '.') + "',");
                 }
-                hotCount++;
-
             }
-
             sw.Write("],");
             //text axis is boss hp in %
             sw.Write("text: [");
-            
-            hotCount = 0;
-            foreach (Point dp in BossHOT)
+            for (int i = 0; i < chart.Length; i++)
             {
-                if (hotCount == BossHOT.Count - 1)
+                double health = chart[i];
+                if (i == chart.Length - 1)
                 {
-                    sw.Write("'" + dp.Y / 100f + "% HP'");
+                    sw.Write("'" + (health + "%").Replace(',', '.') + "'");
                 }
                 else
                 {
-                    sw.Write("'" + dp.Y / 100f + "% HP',");
+                    sw.Write("'" + (health + "%").Replace(',', '.') + "',");
                 }
-                hotCount++;
-
             }
 
             sw.Write("],");
             //add time axis
             sw.Write("x: [");
-            hotCount = 0;
-            foreach (Point dp in BossHOT)
+            for (int i = 0; i < chart.Length; i++)
             {
-                if (hotCount == BossHOT.Count - 1)
+                double health = chart[i];
+                if (i == chart.Length - 1)
                 {
-                    sw.Write("'" + ((dp.X - start) / 1000).ToString().Replace(',', '.') + "'");
+                    sw.Write("'" + i + "'");
                 }
                 else
                 {
-                    sw.Write("'" + ((dp.X - start) / 1000).ToString().Replace(',', '.') + "',");
+                    sw.Write("'" + i + "',");
                 }
-
-                hotCount++;
             }
 
             sw.Write("],");
@@ -753,6 +746,12 @@ namespace LuckParser.Controllers
                         sw.Write("<label onclick=\"fourSpeed()\" class=\"btn btn-dark\">" +
                                  "<input  type=\"radio\" autocomplete=\"off\">4x" +
                              "</label>");
+                        sw.Write("<label onclick=\"eightSpeed()\" class=\"btn btn-dark\">" +
+                                 "<input  type=\"radio\" autocomplete=\"off\">8x" +
+                             "</label>");
+                        sw.Write("<label onclick=\"sixteenSpeed()\" class=\"btn btn-dark\">" +
+                                 "<input  type=\"radio\" autocomplete=\"off\">16x" +
+                             "</label>");
                     }
                     sw.Write("</div>");
                 }
@@ -823,21 +822,23 @@ namespace LuckParser.Controllers
         {
             // animation control
             sw.Write("function startAnimate() {if (animation === null) { " +
-                "if (time ===" + (log.Boss.CombatReplay.Positions.Count - 1) + ") {" +
+                "if (time >=" + (log.Boss.CombatReplay.Positions.Count - 1) + ") {" +
                     "time = 0;" +
                 "}" +
-                "animation = setInterval(function(){myanimate(time++)},speed);" +
+                "animation = setInterval(function(){myanimate(time)},"+ pollingRate +");" +
                 "}};");
-            sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null; time--;}};");
-            sw.Write("function restartAnimate() { time = 0; myanimate(time++);};");
+            sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null;}};");
+            sw.Write("function restartAnimate() { time = 0; myanimate(time);};");
             // speed control
-            sw.Write("function normalSpeed(){ speed = " + pollingRate + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
-            sw.Write("function twoSpeed(){ speed = " + pollingRate/2 + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
-            sw.Write("function fourSpeed(){ speed = " + pollingRate/4 + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
+            sw.Write("function normalSpeed(){ speed = 1;};");
+            sw.Write("function twoSpeed(){ speed = 2;};");
+            sw.Write("function fourSpeed(){ speed = 4;};");
+            sw.Write("function eightSpeed(){ speed = 8;};");
+            sw.Write("function sixteenSpeed(){ speed = 16;};");
             // slider
             sw.Write("var timeSlider = document.getElementById('timeRange');");
             sw.Write("var timeSliderDisplay = document.getElementById('timeRangeDisplay');");
-            sw.Write("function updateTime(value) { time = value; myanimate(time); updateTextInput(time)};");
+            sw.Write("function updateTime(value) { time = parseInt(value); myanimate(time); updateTextInput(time)};");
             sw.Write("function updateTextInput(val) {" +
                 "timeSliderDisplay.value = Math.round("+pollingRate+"*val/100.0)/10.0 + ' secs';" +
             "}");
@@ -1398,7 +1399,7 @@ namespace LuckParser.Controllers
                 sw.Write("var animation = null;");
                 sw.Write("var time = 0;");
                 sw.Write("var inch = " + map.GetInch()+";");
-                sw.Write("var speed = "+ pollingRate+";");
+                sw.Write("var speed = 1;");
                 sw.Write("var selectedGroup = -1;");
                 sw.Write("var selectedPlayer = null;");
                 sw.Write("var data = new Map();");
@@ -1445,9 +1446,10 @@ namespace LuckParser.Controllers
                     sw.Write("if (selectedPlayer) {" +
                                 "selectedPlayer.draw(ctx,timeToUse,20);"+                              
                             "}");
-                    sw.Write("if (timeToUse === " + (log.Boss.CombatReplay.Positions.Count - 1) + ") {stopAnimate();}");
-                    sw.Write("timeSlider.value = time;");
-                    sw.Write("updateTextInput(time);");
+                    sw.Write("if (timeToUse >= " + (log.Boss.CombatReplay.Positions.Count - 1) + ") {stopAnimate();}");
+                    sw.Write("timeSlider.value = timeToUse;");
+                    sw.Write("updateTextInput(timeToUse);");
+                    sw.Write("time = Math.min(time + speed, "+ (log.Boss.CombatReplay.Positions.Count - 1)+"); ");
                 }
                 sw.Write("}");
                 // when background loaded

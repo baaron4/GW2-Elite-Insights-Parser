@@ -257,27 +257,8 @@ namespace LuckParser.Controllers
         private double[] CreateBossHealthData(int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            long seconds = phase.GetDuration("s");
-            double[] chart = new double[seconds+1];
-            int i = 0;
-            double curHealth = 100.0;
-            foreach(Point p in _log.FightData.HealthOverTime)
-            {
-                double hp = p.Y / 100.0;
-                long timeInPhase = 1+(p.X - phase.Start) / 1000;
-                if (timeInPhase >= seconds)
-                {
-                    break;
-                }
-                while (i < timeInPhase) chart[i++] = curHealth;
-                curHealth = hp;
-                if (timeInPhase >= 0)
-                {
-                    chart[timeInPhase] = curHealth;
-                }
-            }
-            for (;i<=seconds;i++) chart[i] = curHealth;
-
+            int duration = (int)phase.GetDuration("s");
+            double[] chart = _statistics.BossHealth.Skip((int)phase.Start / 1000).Take(duration+1).ToArray();
             return chart;
         }
 
