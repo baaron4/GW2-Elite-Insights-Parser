@@ -8,6 +8,23 @@ namespace LuckParser.Models.ParseModels
         public int OpeningAngle { get; } //in degrees
 
         // constructors
+
+
+        //using arcs rotation argument as Input (cone in facing direction). Y direction is reversed due to different axis definitions for arc and javascript
+        public CircleSegmentActor(bool fill, int growing, int radius, Point3D rotation, int openingAngle, Tuple<int, int> lifespan, string color) : base(fill, growing, radius, lifespan, color)
+        {
+            Direction = (int)Math.Round(Math.Atan2(-rotation.Y, rotation.X) * 180 / Math.PI);
+            OpeningAngle = openingAngle;
+        }
+
+        public CircleSegmentActor(bool fill, int growing, int radius, Point3D rotation, int openingAngle, Tuple<int, int> lifespan, string color, Point3D position) : base(fill, growing, radius, lifespan, color, position)
+        {
+            Direction = (int)Math.Round(Math.Atan2(-rotation.Y, rotation.X) * 180 / Math.PI);
+            OpeningAngle = openingAngle;
+        }
+
+
+        //using simple direction/opening angle definition 
         public CircleSegmentActor(bool fill, int growing, int radius, int direction, int openingAngle, Tuple<int, int> lifespan, string color) : base(fill, growing, radius, lifespan, color)
         {
             Direction = direction;
@@ -23,13 +40,13 @@ namespace LuckParser.Models.ParseModels
         //using starting point and end point (center of the circle and middle of the curved circle segment line)
         public CircleSegmentActor(bool fill, int growing, Point3D startPoint, Point3D endPoint, int openingAngle, Tuple<int, int> lifespan, string color) : base(fill, growing, (int)startPoint.DistanceToPoint(endPoint), lifespan, color)
         {
-            Direction = (int)Math.Round(Math.Atan2(endPoint.X - startPoint.X, endPoint.Y - startPoint.Y) * 180 / Math.PI);
+            Direction = (int)Math.Round(Math.Atan2(endPoint.Y - startPoint.Y, endPoint.X - startPoint.X) * 180 / Math.PI);
             OpeningAngle = openingAngle;
         }
 
         public CircleSegmentActor(bool fill, int growing, Point3D startPoint, Point3D endPoint, int openingAngle, Tuple<int, int> lifespan, string color, Point3D position) : base(fill, growing, (int)startPoint.DistanceToPoint(endPoint), lifespan, color, position)
         {
-            Direction = (int)Math.Round(Math.Atan2(endPoint.X - startPoint.X, endPoint.Y - startPoint.Y) * 180 / Math.PI);
+            Direction = (int)Math.Round(Math.Atan2(endPoint.Y - startPoint.Y, endPoint.X - startPoint.X) * 180 / Math.PI);
             OpeningAngle = openingAngle;
         }
     }

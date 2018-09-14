@@ -8,6 +8,7 @@ namespace LuckParser.Models.ParseModels
     {
         private List<Point3D> _positions = new List<Point3D>();
         private List<Point3D> _velocities = new List<Point3D>();
+        public List<Point3D> Rotations { get; } = new List<Point3D>();
         private long _start;
         private long _end;
         // icon
@@ -41,6 +42,11 @@ namespace LuckParser.Models.ParseModels
         public void AddVelocity(Point3D vel)
         {
             _velocities.Add(vel);
+        }
+
+        public void AddRotation(Point3D rot)
+        {
+            Rotations.Add(rot);
         }
 
         public Tuple<long, long> GetTimeOffsets()
