@@ -875,6 +875,7 @@ namespace LuckParser.Controllers
 
         private static void WriteCombatReplayMainClass(StreamWriter sw, ParsedLog log,CombatReplayMap map, int pollingRate)
         {
+            /*
             // Players and boss
             sw.Write("var mainActor = function(group, imgSrc) {" +
                     "this.group = group;" +
@@ -950,6 +951,7 @@ namespace LuckParser.Controllers
                         "y-halfSize,pixelSize,pixelSize);" +
                     "}" +
                 "};");
+            */
             // create players
             foreach (Player p in log.PlayerList)
             {
@@ -994,6 +996,7 @@ namespace LuckParser.Controllers
 
         private static void WriteCombatReplaySecondaryClass(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
+            /*
             // trash mobs
             sw.Write("var secondaryActor = function(imgSrc, start, end) {" +
                     "this.pos = [];" +
@@ -1011,6 +1014,7 @@ namespace LuckParser.Controllers
                         "pixelSize,pixelSize);" +
                     "}" +
                 "};");
+                */
             // create trash mobs
             foreach (Mob mob in log.Boss.TrashMobs)
             {
@@ -1031,6 +1035,7 @@ namespace LuckParser.Controllers
 
         private static void WriteCombatReplayCircleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
+            /*
             // Circle actors
             sw.Write("var circleActor = function(radius,fill,growing, color, start, end) {" +
                     "this.pos = null;" +
@@ -1083,6 +1088,7 @@ namespace LuckParser.Controllers
                         "}" +
                     "}" +
                 "};");
+            */
             foreach (Mob mob in log.Boss.TrashMobs)
             {
                 CombatReplay replay = mob.CombatReplay;
@@ -1393,6 +1399,10 @@ namespace LuckParser.Controllers
 
         public static void WriteCombatReplayScript(StreamWriter sw, ParsedLog log, Tuple<int,int> canvasSize, CombatReplayMap map, int pollingRate)
         {
+            //TODO add this either here or in the page header, or use a real js file and a <script src=...> tag :)
+            sw.WriteLine("<script>");
+            sw.Write(Properties.Resources.combatreplay_js);
+            sw.WriteLine("</script>");
             sw.Write("<script>");
             {
                 // globals

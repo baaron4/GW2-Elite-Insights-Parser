@@ -260,6 +260,7 @@
     <Content Include="LI.ico" />
     <None Include="Resources\theme-cosmo.png" />
     <None Include="Resources\theme-slate.png" />
+    <None Include="Resources\combatreplay.js" />
     <Content Include="Resources\TODO.txt" />
     <None Include="Resources\tmplCompTable.html" />
     <None Include="Resources\tmplMechanicTable.html" />

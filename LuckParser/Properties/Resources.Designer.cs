@@ -60,6 +60,12 @@ namespace LuckParser.Properties {
             }
         }
         
+        internal static string combatreplay_js {
+            get {
+                return ResourceManager.GetString("combatreplay_js", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die .table th { border-top: 0; }
         ///
