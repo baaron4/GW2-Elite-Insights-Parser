@@ -416,8 +416,28 @@ namespace LuckParser.Controllers
             }
         }
         
-        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, FightData fightData, string yAxis = "")
+        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, PhaseData phase, FightData fightData, string yAxis = "")
         {
+            long seconds = phase.GetDuration("s");
+            double[] chart = new double[seconds + 1];
+            int i = 0;
+            double curHealth = 100.0;
+            foreach (Point p in fightData.HealthOverTime)
+            {
+                double hp = p.Y / 100.0;
+                long timeInPhase = 1 + (p.X - phase.Start) / 1000;
+                if (timeInPhase >= seconds)
+                {
+                    break;
+                }
+                while (i < timeInPhase) chart[i++] = curHealth;
+                curHealth = hp;
+                if (timeInPhase >= 0)
+                {
+                    chart[timeInPhase] = curHealth;
+                }
+            }
+            for (; i <= seconds; i++) chart[i] = curHealth;
             //Boss Health
             //Adding dps axis
             sw.Write("y: [");
@@ -425,57 +445,48 @@ namespace LuckParser.Controllers
             {
                 maxDPS = 1000;
             }
-            int hotCount = 0;
-            List<Point> BossHOT = fightData.HealthOverTime.Where(x => x.X >= start && x.X <= end).ToList();
-            foreach (Point dp in BossHOT)
+            for (i = 0; i < seconds + 1; i++)
             {
-                if (hotCount == BossHOT.Count - 1)
+                double health = chart[i];
+                if (i == seconds)
                 {
-                    sw.Write("'" + ((dp.Y / 10000f) * maxDPS).ToString().Replace(',', '.') + "'");
+                    sw.Write("'" + ((health / 100.0) * maxDPS).ToString().Replace(',', '.') + "'");
                 }
                 else
                 {
-                    sw.Write("'" + ((dp.Y / 10000f) * maxDPS).ToString().Replace(',', '.') + "',");
+                    sw.Write("'" + ((health / 100.0) * maxDPS).ToString().Replace(',', '.') + "',");
                 }
-                hotCount++;
-
             }
-
             sw.Write("],");
             //text axis is boss hp in %
             sw.Write("text: [");
-            
-            hotCount = 0;
-            foreach (Point dp in BossHOT)
+            for (i = 0; i < seconds + 1; i++)
             {
-                if (hotCount == BossHOT.Count - 1)
+                double health = chart[i];
+                if (i == seconds)
                 {
-                    sw.Write("'" + dp.Y / 100f + "% HP'");
+                    sw.Write("'" + (health + "%").Replace(',', '.') + "'");
                 }
                 else
                 {
-                    sw.Write("'" + dp.Y / 100f + "% HP',");
+                    sw.Write("'" + (health + "%").Replace(',', '.') + "',");
                 }
-                hotCount++;
-
             }
 
             sw.Write("],");
             //add time axis
             sw.Write("x: [");
-            hotCount = 0;
-            foreach (Point dp in BossHOT)
+            for (i = 0; i < seconds + 1; i++)
             {
-                if (hotCount == BossHOT.Count - 1)
+                double health = chart[i];
+                if (i == seconds)
                 {
-                    sw.Write("'" + ((dp.X - start) / 1000).ToString().Replace(',', '.') + "'");
+                    sw.Write("'" + i + "'");
                 }
                 else
                 {
-                    sw.Write("'" + ((dp.X - start) / 1000).ToString().Replace(',', '.') + "',");
+                    sw.Write("'" + i + "',");
                 }
-
-                hotCount++;
             }
 
             sw.Write("],");
