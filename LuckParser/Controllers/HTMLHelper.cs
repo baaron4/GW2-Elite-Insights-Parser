@@ -775,6 +775,12 @@ namespace LuckParser.Controllers
                         sw.Write("<label onclick=\"fourSpeed()\" class=\"btn btn-dark\">" +
                                  "<input  type=\"radio\" autocomplete=\"off\">4x" +
                              "</label>");
+                        sw.Write("<label onclick=\"eightSpeed()\" class=\"btn btn-dark\">" +
+                                 "<input  type=\"radio\" autocomplete=\"off\">8x" +
+                             "</label>");
+                        sw.Write("<label onclick=\"sixteenSpeed()\" class=\"btn btn-dark\">" +
+                                 "<input  type=\"radio\" autocomplete=\"off\">16x" +
+                             "</label>");
                     }
                     sw.Write("</div>");
                 }
@@ -845,21 +851,23 @@ namespace LuckParser.Controllers
         {
             // animation control
             sw.Write("function startAnimate() {if (animation === null) { " +
-                "if (time ===" + (log.Boss.CombatReplay.Positions.Count - 1) + ") {" +
+                "if (time >=" + (log.Boss.CombatReplay.Positions.Count - 1) + ") {" +
                     "time = 0;" +
                 "}" +
-                "animation = setInterval(function(){myanimate(time++)},speed);" +
+                "animation = setInterval(function(){myanimate(time)},"+ pollingRate +");" +
                 "}};");
-            sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null; time--;}};");
-            sw.Write("function restartAnimate() { time = 0; myanimate(time++);};");
+            sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null;}};");
+            sw.Write("function restartAnimate() { time = 0; myanimate(time);};");
             // speed control
-            sw.Write("function normalSpeed(){ speed = " + pollingRate + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
-            sw.Write("function twoSpeed(){ speed = " + pollingRate/2 + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
-            sw.Write("function fourSpeed(){ speed = " + pollingRate/4 + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
+            sw.Write("function normalSpeed(){ speed = 1;};");
+            sw.Write("function twoSpeed(){ speed = 2;};");
+            sw.Write("function fourSpeed(){ speed = 4;};");
+            sw.Write("function eightSpeed(){ speed = 8;};");
+            sw.Write("function sixteenSpeed(){ speed = 16;};");
             // slider
             sw.Write("var timeSlider = document.getElementById('timeRange');");
             sw.Write("var timeSliderDisplay = document.getElementById('timeRangeDisplay');");
-            sw.Write("function updateTime(value) { time = value; myanimate(time); updateTextInput(time)};");
+            sw.Write("function updateTime(value) { time = parseInt(value); myanimate(time); updateTextInput(time)};");
             sw.Write("function updateTextInput(val) {" +
                 "timeSliderDisplay.value = Math.round("+pollingRate+"*val/100.0)/10.0 + ' secs';" +
             "}");
@@ -1321,7 +1329,7 @@ namespace LuckParser.Controllers
                 sw.Write("var animation = null;");
                 sw.Write("var time = 0;");
                 sw.Write("var inch = " + map.GetInch()+";");
-                sw.Write("var speed = "+ pollingRate+";");
+                sw.Write("var speed = 1;");
                 sw.Write("var selectedGroup = -1;");
                 sw.Write("var selectedPlayer = null;");
                 sw.Write("var data = new Map();");
@@ -1367,9 +1375,10 @@ namespace LuckParser.Controllers
                     sw.Write("if (selectedPlayer) {" +
                                 "selectedPlayer.draw(ctx,timeToUse,20);"+                              
                             "}");
-                    sw.Write("if (timeToUse === " + (log.Boss.CombatReplay.Positions.Count - 1) + ") {stopAnimate();}");
-                    sw.Write("timeSlider.value = time;");
-                    sw.Write("updateTextInput(time);");
+                    sw.Write("if (timeToUse >= " + (log.Boss.CombatReplay.Positions.Count - 1) + ") {stopAnimate();}");
+                    sw.Write("timeSlider.value = timeToUse;");
+                    sw.Write("updateTextInput(timeToUse);");
+                    sw.Write("time = Math.min(time + speed, "+ (log.Boss.CombatReplay.Positions.Count - 1)+"); ");
                 }
                 sw.Write("}");
                 // when background loaded
