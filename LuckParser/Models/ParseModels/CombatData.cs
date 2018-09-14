@@ -66,7 +66,8 @@ namespace LuckParser.Models.ParseModels
             MovementData = fightData.Logic.CanCombatReplay
                 ? this.Where(x =>
                         x.IsStateChange == ParseEnum.StateChange.Position ||
-                        x.IsStateChange == ParseEnum.StateChange.Velocity).GroupBy(x => x.SrcInstid)
+                        x.IsStateChange == ParseEnum.StateChange.Velocity ||
+                        x.IsStateChange == ParseEnum.StateChange.Rotation).GroupBy(x => x.SrcInstid)
                     .ToDictionary(x => x.Key, x => x.ToList())
                 : new Dictionary<ushort, List<CombatItem>>();
 

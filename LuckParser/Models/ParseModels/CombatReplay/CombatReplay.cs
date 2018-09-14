@@ -9,6 +9,7 @@ namespace LuckParser.Models.ParseModels
         public List<Point3D> Positions { get; private set; } = new List<Point3D>();
         public List<Point3D> Velocities { get; private set; } = new List<Point3D>();
         public List<int> Times => Positions.Select(x => (int)x.Time).ToList();
+        public List<Point3D> Rotations { get; } = new List<Point3D>();
         private long _start;
         private long _end;
         public Tuple<long, long> TimeOffsets => new Tuple<long, long>(_start, _end);
@@ -22,7 +23,8 @@ namespace LuckParser.Models.ParseModels
         public List<CircleActor> CircleActors { get; } = new List<CircleActor>();
         public List<DoughnutActor> DoughnutActors { get; } = new List<DoughnutActor>();
         public List<RectangleActor> RectangleActors{ get; } = new List<RectangleActor>();
-
+        public List<PieActor> PieActors { get; } = new List<PieActor>();
+  
         public void Trim(long start, long end)
         {
             _start = start;

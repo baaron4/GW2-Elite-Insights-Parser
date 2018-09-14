@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
     class HTMLBuilderNew
     {
         private const string scriptVersion = "0.5";
-        private const int scriptVersionRev = 4;
+        private const int scriptVersionRev = 5;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -257,27 +257,8 @@ namespace LuckParser.Controllers
         private double[] CreateBossHealthData(int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            long seconds = phase.GetDuration("s");
-            double[] chart = new double[seconds+1];
-            int i = 0;
-            double curHealth = 100.0;
-            foreach(Point p in _log.FightData.HealthOverTime)
-            {
-                double hp = p.Y / 100.0;
-                long timeInPhase = 1+(p.X - phase.Start) / 1000;
-                if (timeInPhase >= seconds)
-                {
-                    break;
-                }
-                while (i < timeInPhase) chart[i++] = curHealth;
-                curHealth = hp;
-                if (timeInPhase >= 0)
-                {
-                    chart[timeInPhase] = curHealth;
-                }
-            }
-            for (;i<=seconds;i++) chart[i] = curHealth;
-
+            int duration = (int)phase.GetDuration("s");
+            double[] chart = _statistics.BossHealth.Skip((int)phase.Start / 1000).Take(duration+1).ToArray();
             return chart;
         }
 
@@ -793,7 +774,7 @@ namespace LuckParser.Controllers
                 if (!usedSkills.ContainsKey(cl.SkillId)) usedSkills.Add(cl.SkillId, skillList.GetOrDummy(cl.SkillId));
                 double[] rotEntry = new double[5];
                 list.Add(rotEntry);
-                rotEntry[0] = cl.Time/1000.0;
+                rotEntry[0] = (cl.Time - phase.Start) / 1000.0;
                 rotEntry[1] = cl.SkillId;
                 rotEntry[2] = cl.ActualDuration;
                 rotEntry[3] = EncodeEndActivation(cl.EndActivation);
@@ -2823,6 +2804,9 @@ namespace LuckParser.Controllers
                 playerDto.heal = player.Healing;
                 playerDto.tough = player.Toughness;
                 playerDto.weapons = player.GetWeaponsArray(_log);
+                playerDto.colBoss = HTMLHelper.GetLink("Color-" + player.Prof);
+                playerDto.colCleave = HTMLHelper.GetLink("Color-" + player.Prof + "-NonBoss");
+                playerDto.colTotal = HTMLHelper.GetLink("Color-" + player.Prof + "-Total");
                 data.players.Add(playerDto);
             }
 
