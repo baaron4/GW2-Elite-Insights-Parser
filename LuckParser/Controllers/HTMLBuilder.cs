@@ -166,7 +166,7 @@ namespace LuckParser.Controllers
                         else
                         {
                             int timeInS = (int)(ml.Time / 1000);
-                            if (timeInS > _statistics.BossHealth.Length)
+                            if (timeInS >= _statistics.BossHealth.Length)
                             {
                                 yValue = 0;
                             } else
