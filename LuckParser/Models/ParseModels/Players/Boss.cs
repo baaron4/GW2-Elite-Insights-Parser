@@ -78,7 +78,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetCombatReplayIcon(ParsedLog log)
         {
-            CombatReplay.SetIcon(log.FightData.Logic.GetReplayIcon());
+            CombatReplay.Icon = log.FightData.Logic.GetReplayIcon();
         }
 
         public void AddMechanics(ParsedLog log)

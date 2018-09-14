@@ -445,8 +445,8 @@ namespace LuckParser.Controllers
                                 _statistics.StackCenterPositions.Add(new Point3D(x, y, z, _settings.PollingRate * time));
                             }
                         }
-                        List<Point3D> positions = player.CombatReplay.GetPositions().Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
-                        int offset = player.CombatReplay.GetPositions().Count(x => x.Time < phase.Start);
+                        List<Point3D> positions = player.CombatReplay.Positions.Where(x => x.Time >= phase.Start && x.Time <= phase.End).ToList();
+                        int offset = player.CombatReplay.Positions.Count(x => x.Time < phase.Start);
                         if (positions.Count > 1)
                         {
                             List<float> distances = new List<float>();

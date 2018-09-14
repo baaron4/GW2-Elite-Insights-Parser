@@ -238,9 +238,9 @@ namespace LuckParser.Models.ParseModels
             status.AddRange(log.CombatData.GetStates(InstID, ParseEnum.StateChange.Spawn, log.FightData.FightStart, log.FightData.FightEnd));
             status.AddRange(log.CombatData.GetStates(InstID, ParseEnum.StateChange.Despawn, log.FightData.FightStart, log.FightData.FightEnd));
             status = status.OrderBy(x => x.Time).ToList();
-            List<Tuple<long, long>> dead = new List<Tuple<long, long>>();
-            List<Tuple<long, long>> down = new List<Tuple<long, long>>();
-            List<Tuple<long, long>> dc = new List<Tuple<long, long>>();
+            List<Tuple<long, long>> dead = CombatReplay.Deads;
+            List<Tuple<long, long>> down = CombatReplay.Downs;
+            List<Tuple<long, long>> dc = CombatReplay.DCs;
             for (var i = 0; i < status.Count -1;i++)
             {
                 CombatItem cur = status[i];
@@ -273,14 +273,13 @@ namespace LuckParser.Models.ParseModels
                     dc.Add(new Tuple<long, long>(cur.Time - log.FightData.FightStart, log.FightData.FightDuration));
                 }
             }
-            CombatReplay.SetStatus(down, dead, dc);
             // Boss related stuff
             log.FightData.Logic.GetAdditionalPlayerData(CombatReplay, this, log);
         }
 
         protected override void SetCombatReplayIcon(ParsedLog log)
         {
-            CombatReplay.SetIcon(HTMLHelper.GetLink(Prof));
+            CombatReplay.Icon = HTMLHelper.GetLink(Prof);
         }
 
         public void AddMechanics(ParsedLog log)

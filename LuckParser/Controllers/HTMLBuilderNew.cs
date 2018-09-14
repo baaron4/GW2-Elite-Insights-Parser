@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
     class HTMLBuilderNew
     {
         private const string scriptVersion = "0.5";
-        private const int scriptVersionRev = 2;
+        private const int scriptVersionRev = 5;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -775,336 +775,6 @@ namespace LuckParser.Controllers
         }
 
         /// <summary>
-        /// Creates the player tab
-        /// </summary>
-        /// <param name="sw"></param>
-        /// <param name="phaseIndex"></param>
-        private void CreatePlayerTab(StreamWriter sw, int phaseIndex)
-        {
-            List<PhaseData> phases = _statistics.Phases;
-            PhaseData phase = phases[phaseIndex];
-            //generate Player list Graphs
-            foreach (Player p in _log.PlayerList)
-            {
-                List<CastLog> casting = p.GetCastLogsActDur(_log, phase.Start, phase.End);
-
-                bool died = p.GetDeath(_log, phase.Start, phase.End) > 0;
-                string charname = p.Character;
-                string pid = p.InstID + "_" + phaseIndex;
-                sw.Write("<div class=\"tab-pane fade\" id=\"" + pid + "\">");
-                {
-                    sw.Write("<h1 align=\"center\"> " + charname + "<img src=\"" + HTMLHelper.GetLink(p.Prof) + "\" alt=\"" + p.Prof + "\" height=\"18\" width=\"18\" >" + "</h1>");
-                    sw.Write("<ul class=\"nav nav-tabs\">");
-                    {
-                        sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#home" + pid + "\">" + p.Character + "</a></li>");
-                        if (_settings.SimpleRotation)
-                        {
-                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#SimpleRot" + pid + "\">Simple Rotation</a></li>");
-
-                        }
-                        if (died)
-                        {
-                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#DeathRecap" + pid + "\">Death Recap</a></li>");
-
-                        }
-                        //foreach pet loop here                        
-                        foreach (KeyValuePair<string, Minions> pair in p.GetMinions(_log))
-                        {
-                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.InstID + "\">" + pair.Key + "</a></li>");
-                        }
-                        //inc dmg
-                        sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#incDmg" + pid + "\">Damage Taken</a></li>");
-                    }
-                    sw.Write("</ul>");
-                    sw.Write("<div id=\"myTabContent\" class=\"tab-content\">");
-                    {
-                        sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
-                        {
-                            List<Tuple<Boon,long>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
-                            List<Tuple<Boon, long>> initial = consume.Where(x => x.Item2 == 0).ToList();
-                            List<Tuple<Boon, long>> refreshed = consume.Where(x => x.Item2 > 0).ToList();
-                            if (initial.Count > 0)
-                            {
-                                Boon food = null;
-                                Boon utility = null;
-                                foreach (Tuple<Boon, long> buff in initial)
-                                {
-                                    if (buff.Item1.Nature == Boon.BoonEnum.Food)
-                                    {
-                                        food = buff.Item1;
-                                    } else
-                                    {
-                                        utility = buff.Item1;
-                                    }
-                                }
-                                sw.Write("<p>Started with ");
-                                if (food != null)
-                                {
-                                    sw.Write(food.Name + "<img src=\"" + food.Link + "\" alt=\"" + food.Name + "\" height=\"18\" width=\"18\" >");
-                                }
-                                if (utility != null)
-                                {
-                                    sw.Write((food != null ?" and " : "") + utility.Name + "<img src=\"" + utility.Link + "\" alt=\"" + utility.Name + "\" height=\"18\" width=\"18\" >");
-                                }
-                                sw.Write("</p>");
-                            }
-                            if (refreshed.Count > 0)
-                            {
-                                sw.Write("<p>Refreshed: ");
-                                sw.Write("<ul>");
-                                foreach (Tuple<Boon, long> buff in refreshed)
-                                {
-                                    sw.Write("<li>" + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at "+ Math.Round(buff.Item2 / 1000.0,3)+"s</li>");
-                                }
-                                sw.Write("</ul>");
-                                sw.Write("</p>");
-                            }
-                            sw.Write("<div id=\"Graph" + pid + "\" style=\"height: 1000px;width:1000px; display:inline-block \"></div>");
-                            sw.Write("<script>");
-                            {
-                                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
-                                {
-                                    sw.Write("var data = [");
-                                    {
-                                        if (_settings.PlayerRot)//Display rotation
-                                        {
-                                            foreach (CastLog cl in casting)
-                                            {
-                                                HTMLHelper.WriteCastingItem(sw, cl, _log.SkillData, phase.Start, phase.End);
-                                            }
-                                        }
-                                        if (_statistics.PresentBoons.Count > 0)
-                                        {
-                                            Dictionary<long, BoonsGraphModel> boonGraphData = p.GetBoonGraphs(_log);
-                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName != "Number of Conditions"))
-                                            {
-                                                sw.Write("{");
-                                                {
-                                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.Start, phase.End);
-                                                }
-                                                sw.Write(" },");
-
-                                            }
-                                            boonGraphData = _log.Boss.GetBoonGraphs(_log);
-                                            foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet"))
-                                            {
-                                                sw.Write("{");
-                                                {
-                                                    HTMLHelper.WritePlayerTabBoonGraph(sw, bgm, phase.Start, phase.End);
-                                                }
-                                                sw.Write(" },");
-
-                                            }
-                                        }
-                                        if (_settings.DPSGraphTotals)
-                                        {//show total dps plot
-                                            sw.Write("{");
-                                            { //Adding dps axis
-                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Total DPS", GraphHelper.GetTotalDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.Full), p);
-                                            }
-                                            sw.Write("},");
-                                            if (_settings.Show10s)
-                                            {
-                                                sw.Write("{");
-                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Total DPS - 10s", GraphHelper.GetTotalDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S10), p);
-                                                sw.Write("},");
-                                            }
-                                            if (_settings.Show30s)
-                                            {
-                                                sw.Write("{");
-                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Total DPS - 30s", GraphHelper.GetTotalDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S30), p);
-                                                sw.Write("},");
-                                            }
-                                        }
-                                         //Adding dps axis
-                                            sw.Write("{");
-                                            {
-                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS", GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.Full), p);
-                                            }
-                                            sw.Write("},");
-                                            if (_settings.Show10s)
-                                            {
-                                                sw.Write("{");
-                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS - 10s", GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S10), p);
-                                                sw.Write("},");
-                                            }
-                                            if (_settings.Show30s)
-                                            {
-                                                sw.Write("{");
-                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Boss DPS - 30s", GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S30), p);
-                                                sw.Write("},");
-                                            }
-
-                                        //Adding dps axis
-                                        if (_settings.ClDPSGraphTotals)
-                                        {//show total dps plot
-                                            sw.Write("{");
-                                            { //Adding dps axis
-                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Cleave DPS", GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.Full), p);
-                                            }
-                                            sw.Write("},");
-                                            if (_settings.Show10s)
-                                            {
-                                                sw.Write("{");
-                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Cleave DPS - 10s", GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S10), p);
-                                                sw.Write("},");
-                                            }
-                                            if (_settings.Show30s)
-                                            {
-                                                sw.Write("{");
-                                                HTMLHelper.WritePlayerTabDPSGraph(sw, "Cleave DPS - 30s", GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S30), p);
-                                                sw.Write("},");
-                                            }
-                                        }
-
-                                    }
-                                    sw.Write("];");
-                                    sw.Write("var layout = {");
-                                    {
-                                        sw.Write("barmode:'stack',");
-                                        sw.Write("yaxis: {" +
-                                                     "title: 'Rotation', domain: [0, 0.09], fixedrange: true, showgrid: false," +
-                                                     "range: [0, 2]" +
-                                                 "}," +
-                                                 "legend: { traceorder: 'reversed' }," +
-                                                 "hovermode: 'compare'," +
-                                                 "yaxis2: { title: 'Boons', domain: [0.11, 0.50], fixedrange: true }," +
-                                                 "yaxis3: { title: 'DPS', domain: [0.51, 1] },"
-                                         );
-                                        sw.Write("images: [");
-                                        {
-                                            if (_settings.PlayerRot && _settings.PlayerRotIcons)//Display rotation
-                                            {
-                                                int castCount = 0;
-                                                foreach (CastLog cl in casting)
-                                                {
-                                                    HTMLHelper.WriteCastingItemIcon(sw, cl, _log.SkillData, phase.Start, castCount == casting.Count - 1);
-                                                    castCount++;
-                                                }
-                                            }
-                                        }
-                                        sw.Write("],");
-                                        if (_settings.LightTheme)
-                                        {
-                                            sw.Write("font: { color: '#000000' }," +
-                                                     "paper_bgcolor: 'rgba(255, 255, 255, 0)'," +
-                                                     "plot_bgcolor: 'rgba(255, 255, 255, 0)'");
-                                        }
-                                        else
-                                        {
-                                            sw.Write("font: { color: '#ffffff' }," +
-                                                     "paper_bgcolor: 'rgba(0,0,0,0)'," +
-                                                     "plot_bgcolor: 'rgba(0,0,0,0)'");
-                                        }
-                                    }
-                                    sw.Write("};");
-                                    sw.Write(
-                                            "var lazyplot = document.querySelector('#Graph" + pid + "');" +
-
-                                            "if ('IntersectionObserver' in window) {" +
-                                                "let lazyPlotObserver = new IntersectionObserver(function(entries, observer) {" +
-                                                    "entries.forEach(function(entry) {" +
-                                                        "if (entry.isIntersecting)" +
-                                                        "{" +
-                                                            "Plotly.newPlot('Graph" + pid + "', data, layout);" +
-                                                            "lazyPlotObserver.unobserve(entry.target);" +
-                                                        "}" +
-                                                    "});" +
-                                                "});" +
-                                                "lazyPlotObserver.observe(lazyplot);" +
-                                            "} else {"+
-                                                "Plotly.newPlot('Graph" + pid + "', data, layout);" +
-                                            "}");
-                                }
-                                sw.Write("});");
-                            }
-                            sw.Write("</script> ");
-                            sw.Write("<ul class=\"nav nav-tabs\">");
-                            {
-                                string bossText = phase.Redirection.Count > 0 ? "Adds" : "Boss";
-                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabBoss" + pid + "\">" + bossText + "</a></li>");
-                                sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabAll" + pid + "\">" + "All" + "</a></li>");
-                            }
-                            sw.Write("</ul>");
-                            sw.Write("<div class=\"tab-content\">");
-                            {
-                                sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabBoss" + pid + "\">");
-                                {
-                                    //CreatePlayerDMGDistTable(sw, p, true, phaseIndex);
-                                }
-                                sw.Write("</div>");
-                                sw.Write("<div class=\"tab-pane fade \" id=\"distTabAll" + pid + "\">");
-                                {
-                                    //CreatePlayerDMGDistTable(sw, p, false, phaseIndex);
-                                }
-                                sw.Write("</div>");
-                            }
-                            sw.Write("</div>");
-                        }
-                        sw.Write("</div>");
-                        foreach (KeyValuePair<string, Minions> pair in p.GetMinions(_log))
-                        {
-                            string id = pid + "_" + pair.Value.InstID;
-                            sw.Write("<div class=\"tab-pane fade \" id=\"minion" + id + "\">");
-                            {
-                                string bossText = phase.Redirection.Count > 0 ? "Adds" : "Boss";
-                                sw.Write("<ul class=\"nav nav-tabs\">");
-                                {
-                                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabBoss" + id + "\">" + bossText + "</a></li>");
-                                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabAll" + id + "\">" + "All" + "</a></li>");
-                                }
-                                sw.Write("</ul>");
-                                sw.Write("<div class=\"tab-content\">");
-                                {
-                                    sw.Write("<div class=\"tab-pane fade show active\" id=\"distTabBoss" + id + "\">");
-                                    {
-                                        CreatePlayerMinionDMGDistTable(sw, p, pair.Value, true, phaseIndex);
-                                    }
-                                    sw.Write("</div>");
-                                    sw.Write("<div class=\"tab-pane fade\" id=\"distTabAll" + id + "\">");
-                                    {
-                                        CreatePlayerMinionDMGDistTable(sw, p, pair.Value, false, phaseIndex);
-                                    }
-                                    sw.Write("</div>");
-                                }
-                                sw.Write("</div>");
-                            }
-                            sw.Write("</div>");
-                        }
-                        if (_settings.SimpleRotation)
-                        {
-                            sw.Write("<div class=\"tab-pane fade \" id=\"SimpleRot" + pid + "\">");
-                            {
-                                int simpleRotSize = 20;
-                                if (_settings.LargeRotIcons)
-                                {
-                                    simpleRotSize = 30;
-                                }
-                                //CreateSimpleRotationTab(sw, p, simpleRotSize, phaseIndex);
-                            }
-                            sw.Write("</div>");
-                        }
-                        if (died && phaseIndex == 0)
-                        {
-                            sw.Write("<div class=\"tab-pane fade \" id=\"DeathRecap" + pid + "\">");
-                            {
-                                CreateDeathRecap(sw, p);
-                            }
-                            sw.Write("</div>");
-                        }
-                        sw.Write("<div class=\"tab-pane fade \" id=\"incDmg" + pid + "\">");
-                        {
-                            CreatePlayerDMGTakenDistTable(sw, p, phaseIndex);
-                        }
-                        sw.Write("</div>");
-                    }
-                    sw.Write("</div>");
-                }
-                sw.Write("</div>");
-            }
-
-        }
-        /// <summary>
         /// Creates the rotation tab for a given player
         /// </summary>
         /// <param name="sw"></param>
@@ -1123,16 +793,16 @@ namespace LuckParser.Controllers
                 if (!usedSkills.ContainsKey(cl.SkillId)) usedSkills.Add(cl.SkillId, skillList.GetOrDummy(cl.SkillId));
                 double[] rotEntry = new double[5];
                 list.Add(rotEntry);
-                rotEntry[0] = cl.Time/1000.0;
+                rotEntry[0] = (cl.Time - phase.Start) / 1000.0;
                 rotEntry[1] = cl.SkillId;
                 rotEntry[2] = cl.ActualDuration;
-                rotEntry[3] = encodeEndActivation(cl.EndActivation);
+                rotEntry[3] = EncodeEndActivation(cl.EndActivation);
                 rotEntry[4] = cl.StartActivation == ParseEnum.Activation.Quickness ? 1 : 0;
             }
             return list;
         }
 
-        private int encodeEndActivation(ParseEnum.Activation endActivation)
+        private int EncodeEndActivation(ParseEnum.Activation endActivation)
         {
             switch (endActivation)
             {
@@ -1700,6 +1370,58 @@ namespace LuckParser.Controllers
             }
             sw.Write("</table>");
         }
+
+        private List<BoonChartDataDto> CreatePlayerBoonGraphData(Player p, int phaseIndex)
+        {
+            List<BoonChartDataDto> list = new List<BoonChartDataDto>();
+            PhaseData phase = _statistics.Phases[phaseIndex];
+            if (_statistics.PresentBoons.Count > 0)
+            {
+                Dictionary<long, BoonsGraphModel> boonGraphData = p.GetBoonGraphs(_log);
+                foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName != "Number of Conditions"))
+                {
+                    BoonChartDataDto graph = CreatePlayerTabBoonGraph(bgm, phase.Start, phase.End);
+                    if (graph != null) list.Add(graph);
+                }
+                boonGraphData = _log.Boss.GetBoonGraphs(_log);
+                //TODO add to used boon list?
+                foreach (BoonsGraphModel bgm in boonGraphData.Values.Reverse().Where(x => x.BoonName == "Compromised" || x.BoonName == "Unnatural Signet"))
+                {
+                    BoonChartDataDto graph = CreatePlayerTabBoonGraph(bgm, phase.Start, phase.End);
+                    if (graph != null) list.Add(graph);
+                }
+            }
+            return list;
+        }
+
+        private BoonChartDataDto CreatePlayerTabBoonGraph(BoonsGraphModel bgm, long start, long end)
+        {
+            //TODO line: {shape: 'hv'}
+            long roundedStart = 1000 * (start / 1000);
+            long roundedEnd = 1000 * (end / 1000);
+            List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= roundedStart && x.Start <= roundedEnd).ToList();
+            if (bChart.Count == 1 && bChart.First().Value == 0)
+            {
+                return null;
+            }
+            BoonChartDataDto dto = new BoonChartDataDto();
+            dto.name = bgm.BoonName;
+            dto.visible = bgm.BoonName == "Might" || bgm.BoonName == "Quickness";
+            dto.color = HTMLHelper.GetLink("Color-" + bgm.BoonName);
+            dto.data = new List<double[]>(bChart.Count + 1);
+
+            foreach (BoonsGraphModel.Segment seg in bChart)
+            {
+                double segStart = Math.Round(Math.Max(seg.Start - roundedStart, 0) / 1000.0, 3);
+                dto.data.Add(new double[] { segStart, seg.Value });
+            }
+            BoonsGraphModel.Segment lastSeg = bChart.Last();
+            double segEnd = Math.Round(Math.Min(lastSeg.End - roundedStart, roundedEnd - roundedStart) / 1000.0, 3);
+            dto.data.Add(new double[] { segEnd, lastSeg.Value });
+
+            return dto;
+        }
+
         /// <summary>
         /// Creates the mechanics table of the fight
         /// </summary>
@@ -1737,6 +1459,24 @@ namespace LuckParser.Controllers
             return list;
         }
 
+        private List<List<int[]>> CreateBossMechanicData(int phaseIndex)
+        {
+            List<List<int[]>> list = new List<List<int[]>>();
+            HashSet<Mechanic> presMech = _log.MechanicData.GetPresentMechanics(0);
+            PhaseData phase = _statistics.Phases[phaseIndex];
+            foreach (AbstractMasterPlayer p in _log.MechanicData.GetEnemyList(0))
+            {
+                List<int[]> enemyData = new List<int[]>(presMech.Count);
+                foreach (Mechanic mech in presMech)
+                {
+                    int count = _log.MechanicData[mech].Count(x => x.Player.InstID == p.InstID && phase.InInterval(x.Time));
+                    enemyData.Add(new int[] { count, count });
+                }
+                list.Add(enemyData);
+            }
+            return list;
+        }
+
         private string findPattern(string source, string regex)
         {
             if (String.IsNullOrEmpty(source)) return null;
@@ -1749,6 +1489,7 @@ namespace LuckParser.Controllers
         {
             List<MechanicDto> mechanicDtos = new List<MechanicDto>();
             HashSet<Mechanic> playerMechs = _log.MechanicData.GetPresentPlayerMechs(0);
+            HashSet<Mechanic> enemyMechs = _log.MechanicData.GetPresentEnemyMechs(0);
             foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(0))
             {
                 List<MechanicLog> mechanicLogs = _log.MechanicData[mech];
@@ -1760,6 +1501,7 @@ namespace LuckParser.Controllers
                 dto.visible = (mech.SkillId == -2 || mech.SkillId == -3);
                 dto.data = BuildMechanicData(mechanicLogs);
                 dto.playerMech = playerMechs.Contains(mech);
+                dto.enemyMech = enemyMechs.Contains(mech);
                 mechanicDtos.Add(dto);
             }
             //TODO add DOWN and DEAD data
@@ -3081,14 +2823,22 @@ namespace LuckParser.Controllers
                 playerDto.heal = player.Healing;
                 playerDto.tough = player.Toughness;
                 playerDto.weapons = player.GetWeaponsArray(_log);
+                playerDto.colBoss = HTMLHelper.GetLink("Color-" + player.Prof);
+                playerDto.colCleave = HTMLHelper.GetLink("Color-" + player.Prof + "-NonBoss");
+                playerDto.colTotal = HTMLHelper.GetLink("Color-" + player.Prof + "-Total");
                 data.players.Add(playerDto);
+            }
+
+            foreach(AbstractMasterPlayer enemy in _log.MechanicData.GetEnemyList(0))
+            {
+                data.enemies.Add(new EnemyDto(enemy.Character));
             }
 
             data.flags.simpleRotation = _settings.SimpleRotation;
             data.flags.dark = !_settings.LightTheme;
             data.flags.combatReplay = _settings.ParseCombatReplay && _log.FightData.Logic.CanCombatReplay;
 
-                data.graphs.Add(new GraphDto("full", "Full"));
+            data.graphs.Add(new GraphDto("full", "Full"));
             data.graphs.Add(new GraphDto("s10", "10s"));
             data.graphs.Add(new GraphDto("s30", "30s"));
 
@@ -3122,6 +2872,7 @@ namespace LuckParser.Controllers
                 phaseDto.defBuffGenSquadStats = CreateGenData(_statistics.PresentDefbuffs, i, "squad");
 
                 phaseDto.mechanicStats = CreateMechanicData(i);
+                phaseDto.enemyMechanicStats = CreateBossMechanicData(i);
 
                 phaseDto.deaths = new List<long>();
 
@@ -3182,12 +2933,14 @@ namespace LuckParser.Controllers
             PlayerDetailsDto dto = new PlayerDetailsDto();
             dto.dmgDistributions = new List<DmgDistributionDto>();
             dto.dmgDistributionsBoss = new List<DmgDistributionDto>();
+            dto.boonGraph = new List<List<BoonChartDataDto>>();
             dto.rotation = new List<List<double[]>>();
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 dto.rotation.Add(CreateSimpleRotationTabData(player, i, usedSkills));
                 dto.dmgDistributions.Add(CreatePlayerDMGDistTable(player, false, i, usedSkills, usedBoons));
                 dto.dmgDistributionsBoss.Add(CreatePlayerDMGDistTable(player, true, i, usedSkills, usedBoons));
+                dto.boonGraph.Add(CreatePlayerBoonGraphData(player, i));
             }
 
             return dto;
