@@ -416,28 +416,10 @@ namespace LuckParser.Controllers
             }
         }
         
-        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, PhaseData phase, FightData fightData, string yAxis = "")
+        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, PhaseData phase, double[] bossHealth, string yAxis = "")
         {
-            long seconds = phase.GetDuration("s");
-            double[] chart = new double[seconds + 1];
-            int i = 0;
-            double curHealth = 100.0;
-            foreach (Point p in fightData.HealthOverTime)
-            {
-                double hp = p.Y / 100.0;
-                long timeInPhase = 1 + (p.X - phase.Start) / 1000;
-                if (timeInPhase >= seconds)
-                {
-                    break;
-                }
-                while (i < timeInPhase) chart[i++] = curHealth;
-                curHealth = hp;
-                if (timeInPhase >= 0)
-                {
-                    chart[timeInPhase] = curHealth;
-                }
-            }
-            for (; i <= seconds; i++) chart[i] = curHealth;
+            int duration = (int)phase.GetDuration("s");
+            double[] chart = bossHealth.Skip((int)phase.Start / 1000).Take(duration+1).ToArray();
             //Boss Health
             //Adding dps axis
             sw.Write("y: [");
@@ -445,10 +427,10 @@ namespace LuckParser.Controllers
             {
                 maxDPS = 1000;
             }
-            for (i = 0; i < seconds + 1; i++)
+            for (int i = 0; i < chart.Length; i++)
             {
                 double health = chart[i];
-                if (i == seconds)
+                if (i == chart.Length - 1)
                 {
                     sw.Write("'" + ((health / 100.0) * maxDPS).ToString().Replace(',', '.') + "'");
                 }
@@ -460,10 +442,10 @@ namespace LuckParser.Controllers
             sw.Write("],");
             //text axis is boss hp in %
             sw.Write("text: [");
-            for (i = 0; i < seconds + 1; i++)
+            for (int i = 0; i < chart.Length; i++)
             {
                 double health = chart[i];
-                if (i == seconds)
+                if (i == chart.Length - 1)
                 {
                     sw.Write("'" + (health + "%").Replace(',', '.') + "'");
                 }
@@ -476,10 +458,10 @@ namespace LuckParser.Controllers
             sw.Write("],");
             //add time axis
             sw.Write("x: [");
-            for (i = 0; i < seconds + 1; i++)
+            for (int i = 0; i < chart.Length; i++)
             {
                 double health = chart[i];
-                if (i == seconds)
+                if (i == chart.Length - 1)
                 {
                     sw.Write("'" + i + "'");
                 }

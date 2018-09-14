@@ -134,12 +134,12 @@ namespace LuckParser.Controllers
 
                     int mechcount = 0;
                     foreach (MechanicLog ml in filterdList)
-                    {                     
-                        Point check;
+                    {
+                        double yValue;
                         if (playersIds.Contains(ml.Player.InstID))
                         {
                             double time = (ml.Time - phase.Start) / 1000.0;
-                            check = GraphHelper.GetBossDPSGraph(_log, ml.Player, phaseIndex, phase, mode).LastOrDefault(x => x.X <= time);
+                            Point check = GraphHelper.GetBossDPSGraph(_log, ml.Player, phaseIndex, phase, mode).LastOrDefault(x => x.X <= time);
                             if (check == Point.Empty)
                             {
                                 check = new Point(0, GraphHelper.GetBossDPSGraph(_log, ml.Player, phaseIndex, phase, mode).Last().Y);
@@ -161,24 +161,32 @@ namespace LuckParser.Controllers
                                     }
                                 }
                             }
+                            yValue = check.Y;
                         }
                         else
                         {
-                            check = _log.FightData.HealthOverTime.FirstOrDefault(x => x.X > ml.Time);
-                            if (check == Point.Empty)
+                            int timeInS = (int)(ml.Time / 1000);
+                            if (timeInS > _statistics.BossHealth.Length)
                             {
-                                check = _log.FightData.HealthOverTime.Count == 0 ? new Point(0, 10000) : new Point(0, _log.FightData.HealthOverTime.Last().Y);
+                                yValue = 0;
+                            } else
+                            {
+                                yValue = (_statistics.BossHealth[timeInS] / 100.0) * maxDPS;
+                                if (timeInS < _statistics.BossHealth.Length - 1)
+                                {
+                                    double nextY = (_statistics.BossHealth[timeInS + 1] / 100.0) * maxDPS;
+                                    yValue = ((ml.Time / 1000.0) - timeInS) * (nextY - yValue) + yValue;
+                                }
                             }
-                            check.Y = (int)((check.Y / 10000f) * maxDPS);
                         }
 
                         if (mechcount == filterdList.Count - 1)
                         {
-                            sw.Write("'" + check.Y + "'");
+                            sw.Write("'" + Math.Round(yValue, 2) + "'");
                         }
                         else
                         {
-                            sw.Write("'" + check.Y + "',");
+                            sw.Write("'" + Math.Round(yValue, 2) + "',");
 
                         }
 
@@ -226,13 +234,14 @@ namespace LuckParser.Controllers
                     }
 
                     sw.Write("]," +
-                            " name: '" + mech.PlotlyName.Replace("'", " ") + "'");
+                            " name: '" + mech.PlotlyName.Replace("'", " ") + "'," +
+                            "hoverinfo: 'text'");
                     sw.Write("},");
                 }
                 if (maxDPS > 0)
                 {
                     sw.Write("{");
-                    HTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase, _log.FightData);
+                    HTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase, _statistics.BossHealth);
                     sw.Write("}");
                 }
                 else
@@ -3230,7 +3239,7 @@ namespace LuckParser.Controllers
                                 sw.Write("},");
                             }
                             sw.Write("{");
-                            HTMLHelper.WriteBossHealthGraph(sw, GraphHelper.GetTotalDPSGraph(_log, _log.Boss, phaseIndex, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase, _log.FightData, "y3");
+                            HTMLHelper.WriteBossHealthGraph(sw, GraphHelper.GetTotalDPSGraph(_log, _log.Boss, phaseIndex, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase, _statistics.BossHealth, "y3");
                             sw.Write("}");
                         }
                         sw.Write("];");
