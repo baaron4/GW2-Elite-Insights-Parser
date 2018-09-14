@@ -724,7 +724,7 @@ namespace LuckParser.Controllers
                     sw.Write("</canvas>");
                     sw.Write("<div class=\"d-flex justify-content-center slidecontainer\">");
                     {
-                        sw.Write("<input oninput=\"updateTime(this.value);\"type=\"range\" min=\"0\" max=\"" + (log.Boss.CombatReplay.Positions.Count - 1) + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
+                        sw.Write("<input oninput=\"updateTime(this.value);\"type=\"range\" min=\"0\" max=\"" + log.PlayerList.First().CombatReplay.Times.Last() + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
                         sw.Write("<input class=\"ml-5\" type=\"text\" id=\"timeRangeDisplay\" disabled value=\"0 secs\">");
                     }
                     sw.Write("</div>");
@@ -817,141 +817,9 @@ namespace LuckParser.Controllers
             }
             sw.Write("</div>");
         }
-
-        private static void WriteCombatReplayControls(StreamWriter sw, ParsedLog log, int pollingRate)
-        {
-            // animation control
-            sw.Write("function startAnimate() {if (animation === null) { " +
-                "if (time >=" + (log.Boss.CombatReplay.Positions.Count - 1) + ") {" +
-                    "time = 0;" +
-                "}" +
-                "animation = setInterval(function(){myanimate(time)},"+ pollingRate +");" +
-                "}};");
-            sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null;}};");
-            sw.Write("function restartAnimate() { time = 0; myanimate(time);};");
-            // speed control
-            sw.Write("function normalSpeed(){ speed = 1;};");
-            sw.Write("function twoSpeed(){ speed = 2;};");
-            sw.Write("function fourSpeed(){ speed = 4;};");
-            sw.Write("function eightSpeed(){ speed = 8;};");
-            sw.Write("function sixteenSpeed(){ speed = 16;};");
-            // slider
-            sw.Write("var timeSlider = document.getElementById('timeRange');");
-            sw.Write("var timeSliderDisplay = document.getElementById('timeRangeDisplay');");
-            sw.Write("function updateTime(value) { time = parseInt(value); myanimate(time); updateTextInput(time)};");
-            sw.Write("function updateTextInput(val) {" +
-                "timeSliderDisplay.value = Math.round("+pollingRate+"*val/100.0)/10.0 + ' secs';" +
-            "}");
-            // Range marker control
-            sw.Write("var rangeControl = new Map();" +
-                "rangeControl.set(180,false);" +
-                "rangeControl.set(240,false);" +
-                "rangeControl.set(300,false);" +
-                "rangeControl.set(600,false);" +
-                "rangeControl.set(900,false);" +
-                "rangeControl.set(1200,false);");
-            sw.Write("function toggleRange(radius) {rangeControl.set(radius, !rangeControl.get(radius)); myanimate(time);};");
-            // Selection
-            sw.Write("function selectActor(pId) { " +
-                    "var actor = data.get(pId);" +
-                    "selectedPlayer = null;" +
-                    "var oldSelect = actor.selected;" +
-                    "data.forEach(function(value,key,map) {" +
-                        "value.selected = false;" +
-                    "});" +
-                    "actor.selected = !oldSelect;" +
-                    "selectedGroup = actor.selected ? actor.group : -1;" +
-                    "if (!actor.selected){" +
-                        "var hasActive = document.getElementById('id'+pId).classList.contains('active');" +
-                        "if (hasActive) {" +
-                            "setTimeout(function() {document.getElementById('id'+pId).classList.remove('active')},50);" +
-                        "}" +
-                    "} else {" +
-                        "selectedPlayer = actor;" +
-                    "}" +
-                    "myanimate(time);" +
-                "}");
-        }
-
+       
         private static void WriteCombatReplayMainClass(StreamWriter sw, ParsedLog log,CombatReplayMap map, int pollingRate)
-        {
-            /*
-            // Players and boss
-            sw.Write("var mainActor = function(group, imgSrc) {" +
-                    "this.group = group;" +
-                    "this.pos = [];" +
-                    "this.start = 0;" +
-                    "this.dead = [];" +
-                    "this.down = [];" +
-                    "this.selected = false;" +
-                    "this.img = new Image();" +
-                    "this.img.src = imgSrc;" +
-                "};");
-            sw.Write("mainActor.prototype.died = function(timeToUse) {" +
-                    "for (var i = 0; i < this.dead.length; i++) {" +
-                        "if (!this.dead[i]) continue;" +
-                        "if (this.dead[i][0] <= timeToUse && this.dead[i][1] >= timeToUse) {" +
-                            "return true;" +
-                        "}" +
-                    "}" +
-                    "return false;" +
-                "};");
-            sw.Write("mainActor.prototype.downed = function(timeToUse) {" +
-                    "for (var i = 0; i < this.down.length; i++) {" +
-                        "if (!this.down[i]) continue;"+
-                        "if (this.down[i][0] <= timeToUse && this.down[i][1] >= timeToUse) {" +
-                            "return true;" +
-                        "}" +
-                    "}" +
-                    "return false;" +
-                "};");
-            sw.Write("mainActor.prototype.draw = function(ctx,timeToUse, pixelSize) {" +
-                    "if (!this.pos.length) {" +
-                    "   return;" +
-                    "}" +
-                    "var halfSize = pixelSize / 2;" +
-                    "var x = this.pos.length > 2 ? this.pos[2*timeToUse] : this.pos[0];" +
-                    "var y = this.pos.length > 2 ? this.pos[2*timeToUse + 1] : this.pos[1];" +
-                    // the player is in the selected's player group
-                    "if (!this.selected && this.group === selectedGroup) {" +
-                        "ctx.beginPath();" +
-                        "ctx.lineWidth='2';" +
-                        "ctx.strokeStyle='blue';" +
-                        "ctx.rect(x-halfSize,y-halfSize,pixelSize,pixelSize);" +
-                        "ctx.stroke();" +
-                    "} else if (this.selected){" +
-                        // this player is selected
-                        "ctx.beginPath();" +
-                        "ctx.lineWidth='4';" +
-                        "ctx.strokeStyle='green';" +
-                        "ctx.rect(x-halfSize,y-halfSize,pixelSize,pixelSize);" +
-                        "ctx.stroke();" +
-                        "var _this = this;" +
-                        // draw range markers
-                        "rangeControl.forEach(function(enabled,radius,map) {" +
-                            "if (!enabled) return;" +
-                            "ctx.beginPath();" +
-                            "ctx.lineWidth='2';" +
-                            "ctx.strokeStyle='green';" +
-                            "ctx.arc(x,y,inch * radius,0,2*Math.PI);" +
-                            "ctx.stroke();" +
-                        "});" +
-                    "}" +
-                    "if (this.died(timeToUse)) {" +
-                        "ctx.drawImage(deadIcon," +
-                        "x-1.5*halfSize," +
-                        "y-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
-                    "} else if (this.downed(timeToUse)) {" +
-                        "ctx.drawImage(downIcon," +
-                        "x-1.5*halfSize," +
-                        "y-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
-                    "} else {" +
-                        "ctx.drawImage(this.img," +
-                        "x-halfSize," +
-                        "y-halfSize,pixelSize,pixelSize);" +
-                    "}" +
-                "};");
-            */
+        {  
             // create players
             foreach (Player p in log.PlayerList)
             {
@@ -995,26 +863,7 @@ namespace LuckParser.Controllers
         }
 
         private static void WriteCombatReplaySecondaryClass(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
-        {
-            /*
-            // trash mobs
-            sw.Write("var secondaryActor = function(imgSrc, start, end) {" +
-                    "this.pos = [];" +
-                    "this.start = start;" +
-                    "this.end = end;" +
-                    "this.img = new Image();" +
-                    "this.img.src = imgSrc;" +
-                "};");
-            sw.Write("secondaryActor.prototype.draw = function(ctx,timeToUse,pixelSize){" +
-                    "if (!(this.start > timeToUse || this.end < timeToUse) && this.pos.length) {" +
-                        "var x = this.pos.length > 2 ? this.pos[2*(timeToUse - this.start)] : this.pos[0];" +
-                        "var y = this.pos.length > 2 ? this.pos[2*(timeToUse - this.start) + 1] : this.pos[1];" +
-                        "ctx.drawImage(this.img," +
-                        "x-pixelSize/2,y-pixelSize/2," +
-                        "pixelSize,pixelSize);" +
-                    "}" +
-                "};");
-                */
+        {              
             // create trash mobs
             foreach (Mob mob in log.Boss.TrashMobs)
             {
@@ -1035,7 +884,7 @@ namespace LuckParser.Controllers
 
         private static void WriteCombatReplayCircleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
-            /*
+            
             // Circle actors
             sw.Write("var circleActor = function(radius,fill,growing, color, start, end) {" +
                     "this.pos = null;" +
@@ -1088,7 +937,7 @@ namespace LuckParser.Controllers
                         "}" +
                     "}" +
                 "};");
-            */
+            
             foreach (Mob mob in log.Boss.TrashMobs)
             {
                 CombatReplay replay = mob.CombatReplay;
@@ -1402,70 +1251,18 @@ namespace LuckParser.Controllers
             //TODO add this either here or in the page header, or use a real js file and a <script src=...> tag :)
             sw.WriteLine("<script>");
             sw.Write(Properties.Resources.combatreplay_js);
+            sw.Write("inch = " + map.GetInch() + ";");
+            sw.Write("bgImage.src = '" + map.Link + "';");
             sw.WriteLine("</script>");
             sw.Write("<script>");
             {
                 // globals
-                sw.Write("var animation = null;");
-                sw.Write("var time = 0;");
-                sw.Write("var inch = " + map.GetInch()+";");
-                sw.Write("var speed = 1;");
-                sw.Write("var selectedGroup = -1;");
-                sw.Write("var selectedPlayer = null;");
-                sw.Write("var data = new Map();");
-                sw.Write("var secondaryData = new Map();");
-                sw.Write("var mechanicData = new Set();");
-                sw.Write("var deadIcon = new Image();" +
-                            "deadIcon.src = '"+GetLink("Dead")+"';");
-                sw.Write("var downIcon = new Image();" +
-                            "downIcon.src = '" + GetLink("Downs") + "';");
-                sw.Write("var boss = null;");
-                WriteCombatReplayControls(sw, log, pollingRate);
                 WriteCombatReplayMainClass(sw, log, map, pollingRate);
                 WriteCombatReplaySecondaryClass(sw, log, map, pollingRate);
                 WriteCombatReplayCircleActors(sw, log, map, pollingRate);
                 WriteCombatReplayDoughnutActors(sw, log, map, pollingRate);
                 WriteCombatReplayRectangleActors(sw, log, map, pollingRate);
                 WriteCombatReplayPieActors(sw, log, map, pollingRate);
-                // Main loop
-                sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
-                sw.Write("ctx.imageSmoothingEnabled = true;");
-                sw.Write("ctx.imageSmoothingQuality = 'high';");
-                sw.Write("function myanimate(timeToUse) {");
-                {
-                    sw.Write("ctx.clearRect(0,0," + canvasSize.Item1 + "," + canvasSize.Item2 + ");");
-                    // draw arena
-                    sw.Write("ctx.drawImage(bgImage,0,0," + canvasSize.Item1 + "," + canvasSize.Item2 + ");");
-                    // draw mechanics
-                    sw.Write("mechanicData.forEach(function(value,key,map) {" +
-                            "value.draw(ctx,timeToUse);" +
-                        "});");
-                    // draw unselected players
-                    sw.Write("data.forEach(function(value,key,map) {" +
-                            "if (!value.selected) {" +
-                                "value.draw(ctx,timeToUse,20);"+
-                            "}" +
-                        "});");
-                    // draw trash mobs
-                    sw.Write("secondaryData.forEach(function(value,key,map) {" +
-                            "value.draw(ctx,timeToUse,28);"+
-                        "});");
-                    // draw boss
-                    sw.Write("boss.draw(ctx,timeToUse,36);");
-                    // draw selected player
-                    sw.Write("if (selectedPlayer) {" +
-                                "selectedPlayer.draw(ctx,timeToUse,20);"+                              
-                            "}");
-                    sw.Write("if (timeToUse >= " + (log.Boss.CombatReplay.Positions.Count - 1) + ") {stopAnimate();}");
-                    sw.Write("timeSlider.value = timeToUse;");
-                    sw.Write("updateTextInput(timeToUse);");
-                    sw.Write("time = Math.min(time + speed, "+ (log.Boss.CombatReplay.Positions.Count - 1)+"); ");
-                }
-                sw.Write("}");
-                // when background loaded
-                sw.Write("var bgImage = new Image();");
-                sw.Write("bgImage.onload = function() { myanimate(0);};");
-                sw.Write("bgImage.src = '" + map.Link + "';");
             }
             sw.Write("</script>");
         }

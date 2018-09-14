@@ -1,153 +1,287 @@
+let deadIcon = new Image();
+deadIcon.src = "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
+let downIcon = new Image();
+downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
+let time = 0;
+let inch = 0;
+let speed = 1;
+let times = [];
+let boss = null;
+let playerData = new Map();
+let trashMobData = new Map();
+let mechanicActorData = new Set();
+let rangeControl = new Map();
+let selectedGroup = -1;
+let selectedPlayer = null;
+let timeSlider = document.getElementById('timeRange');
+let timeSliderDisplay = document.getElementById('timeRangeDisplay');
+let canvas = document.getElementById('replayCanvas');
+let ctx = canvas.getContext('2d');
+let bgImage = new Image();
+let bgLoaded = false;
+let animation = null;
+// 60 fps by default
+const timeOffset = 16;
+
+// canvas
+ctx.imageSmoothingEnabled = true;
+ctx.imageSmoothingQuality = 'high';
+
+// Animation methods
+function animateCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+    mechanicActorData.forEach(function (value, key, map) {
+        value.draw(ctx, time);
+    });
+    playerData.forEach(function (value, key, map) {
+        if (!value.selected) {
+            value.draw(ctx, time);
+        }
+    });
+    trashMobData.forEach(function (value, key, map) {
+        value.draw(ctx, time);
+    });
+    boss.draw(ctx, time);
+    if (selectedPlayer !== null) {
+        selectedPlayer.draw(ctx, time);
+    }
+    let lastTime = times[times.length - 1];
+    if (time === lastTime) {
+        stopAnimate();
+    }
+    timeSlider.value = time.toString();
+    updateTextInput(time);
+    time = Math.min(time + speed * timeOffset, lastTime);
+    if (animation !== null && bgLoaded) {
+        animation = requestAnimationFrame(animateCanvas);
+    }
+}
+bgImage.onload = function () {
+    animateCanvas();
+    bgLoaded = true;
+}
+function startAnimate() {
+    if (animation === null && times.length > 0) {
+        if (time >= times[times.length - 1]) {
+            time = 0;
+        }
+        animation = requestAnimationFrame(animateCanvas);
+    }
+}
+function stopAnimate() {
+    if (animation !== null) {
+        window.cancelAnimationFrame(animation);
+        animation = null;
+    }
+}
+function restartAnimate() {
+    time = 0;
+}
+function normalSpeed() {
+    speed = 1;
+}
+function twoSpeed() {
+    speed = 2;
+}
+function fourSpeed() {
+    speed = 4;
+}
+function eightSpeed() {
+    speed = 8;
+}
+function sixteenSpeed() {
+    speed = 16;
+}
+
+// range markers
+rangeControl.set(180, false);
+rangeControl.set(240, false);
+rangeControl.set(300, false);
+rangeControl.set(600, false); 
+rangeControl.set(900, false);
+rangeControl.set(1200, false);
+function toggleRange(radius) {
+    rangeControl.set(radius, !rangeControl.get(radius));
+}
+
+// slider
+function updateTime(value) {
+    time = parseInt(value);
+    updateTextInput(time)
+}
+function updateTextInput(val) {
+    timeSliderDisplay.value =  val/ 1000.0 + ' secs';
+}
+
+// selection
+function selectActor(pId) {
+    let actor = playerData.get(pId);
+    selectedPlayer = null;
+    let oldSelect = actor.selected;
+    playerData.forEach(function (value, key, map) {
+        value.selected = false;
+    });
+    actor.selected = !oldSelect;
+    selectedGroup = actor.selected ? actor.group : -1;
+    if (!actor.selected) {
+        let hasActive = document.getElementById('id' + pId).classList.contains('active');
+        if (hasActive) {
+            setTimeout(function () {
+                document.getElementById('id' + pId).classList.remove('active')
+            }, 50);
+        }
+    } else {
+        selectedPlayer = actor;
+    }
+}
+
 // Players and boss
-var mainActor = function(group, imgSrc) {
-	this.group = group;
-	this.pos = [];
-	this.start = 0;
-	this.dead = [];
-	this.down = [];
-	this.selected = false;
-	this.img = new Image();
-	this.img.src = imgSrc;
-};
+class Drawable {
+    constructor(start, end) {
+        this.pos = null;
+        this.start = start;
+        this.end = end;
+    }
 
-mainActor.prototype.died = function(timeToUse) {
-	for (var i = 0; i < this.dead.length; i++) {
-		if (!this.dead[i]) continue;
-		if (this.dead[i][0] <= timeToUse && this.dead[i][1] >= timeToUse) {
-			return true;
-		}
-	}
-	return false;
-};
+    getInterpolatedPosition(startIndex, currentIndex, currentTime) {
+        let offsetedIndex = currentIndex - startIndex;
+        let positionX = this.pos[2 * offsetedIndex];
+        let positionY = this.pos[2 * offsetedIndex + 1];
+        let timeValue = times[currentIndex];
+        if (offsetedIndex < this.pos.length - 2) {
+            let nextTimeValue = times[currentIndex + 1];
+            let nextPositionX = this.pos[2 * offsetedIndex + 2];
+            let nextPositionY = this.pos[2 * offsetedIndex + 3];
+            return {
+                x: positionX + (currentTime - timeValue) / (nextTimeValue - timeValue) * (nextPositionX - positionX),
+                y: positionY + (currentTime - timeValue) / (nextTimeValue - timeValue) * (nextPositionY - positionY)
+            };
+        } else {
+            return {
+                x: positionX,
+                y: positionY
+            };
+        }
+    }
 
-mainActor.prototype.downed = function(timeToUse) {
-	for (var i = 0; i < this.down.length; i++) {
-		if (!this.down[i]) continue;
-		if (this.down[i][0] <= timeToUse && this.down[i][1] >= timeToUse) {
-			return true;
-		}
-	}
-	return false;
-};
+    getPosition(currentTime) {
+        if (this.pos === null || this.pos.length === 0) {
+            return null;
+        }
+        if (this.start !== -1 && (this.start >= currentTime || this.end <= currentTime)) {
+            return null;
+        }
+        if (this.pos.length === 2) {
+            return {
+                x: this.pos[0],
+                y: this.pos[1]
+            };
+        }
+        let lastTime = times[times.length - 1];
+        let startIndex = Math.round((times.length - 1) * Math.max(this.start,0) / lastTime);
+        let currentIndex = Math.round((times.length - 1) * currentTime / lastTime);
+        return this.getInterpolatedPosition(startIndex, currentIndex, currentTime);
+    }
+}
 
-mainActor.prototype.draw = function(ctx,timeToUse, pixelSize) {
-	if (!this.pos.length) {
-		return;
-	}
-	var halfSize = pixelSize / 2;
-	var x = this.pos.length > 2 ? this.pos[2*timeToUse] : this.pos[0];
-	var y = this.pos.length > 2 ? this.pos[2*timeToUse + 1] : this.pos[1];
-	// the player is in the selected's player group
-	if (!this.selected && this.group === selectedGroup) {
-		ctx.beginPath();
-		ctx.lineWidth='2';
-		ctx.strokeStyle='blue';
-		ctx.rect(x-halfSize,y-halfSize,pixelSize,pixelSize);
-		ctx.stroke();
-	} else if (this.selected){
-		// this player is selected
-		ctx.beginPath();
-		ctx.lineWidth='4';
-		ctx.strokeStyle='green';
-		ctx.rect(x-halfSize,y-halfSize,pixelSize,pixelSize);
-		ctx.stroke();
-		var _this = this;
-		// draw range markers
-		rangeControl.forEach(function(enabled,radius,map) {
-			if (!enabled) return;
-			ctx.beginPath();
-			ctx.lineWidth='2';
-			ctx.strokeStyle='green';
-			ctx.arc(x,y,inch * radius,0,2*Math.PI);
-			ctx.stroke();
-		});
-	}
-	if (this.died(timeToUse)) {
-		ctx.drawImage(deadIcon,
-			x-1.5*halfSize,
-			y-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);
-	} else if (this.downed(timeToUse)) {
-		ctx.drawImage(downIcon,
-			x-1.5*halfSize,
-			y-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);
-	} else {
-		ctx.drawImage(this.img,
-			x-halfSize,
-			y-halfSize,pixelSize,pixelSize);
-	}
-};
+class IconDrawable extends Drawable {
+    constructor(start, end, imgSrc, pixelSize) {
+        super(start, end);
+        this.img = new Image();
+        this.img.src = ImgSrc;
+        this.pixelSize = pixelSize;
+    }
 
-// trash mobs
-var secondaryActor = function(imgSrc, start, end) {
-	this.pos = [];
-	this.start = start;
-	this.end = end;
-	this.img = new Image();
-	this.img.src = imgSrc;
-};
+    draw(ctx, currentTime) {
+        let pos = this.getPosition(currentTime);
+        if (pos === null) {
+            return;
+        }
+        let halfSize = this.pixelSize / 2;
+        ctx.drawImage(this.img,
+            pos.x - halfSize, pos.y - halfSize, this.pixelSize, this.pixelSize);
+    }
 
-secondaryActor.prototype.draw = function(ctx,timeToUse,pixelSize) {
-	if (!(this.start > timeToUse || this.end < timeToUse) && this.pos.length) {
-		var x = this.pos.length > 2 ? this.pos[2*(timeToUse - this.start)] : this.pos[0];
-		var y = this.pos.length > 2 ? this.pos[2*(timeToUse - this.start) + 1] : this.pos[1];
-		ctx.drawImage(this.img,
-			x-pixelSize/2,y-pixelSize/2,
-			pixelSize,pixelSize);
-	}
-};
+}
 
-// Circle actors
-            var circleActor = function(radius,fill,growing, color, start, end) {
-                    this.pos = null;
-                    this.master = null;
-                    this.start = start;
-                    this.radius = radius;
-                    this.end = end;
-                    this.growing = growing;
-                    this.fill = fill;
-                    this.color = color;
-                };
-            circleActor.prototype.draw = function(ctx,timeToUse){
-                    if (!(this.start > timeToUse || this.end < timeToUse)) {
-                        var x,y;
-                        if (this.pos instanceof Array) {
-                            x = this.pos[0];
-                            y = this.pos[1];
-                        } else {
-                            if (!this.master) {
-                                var playerID = parseInt(this.pos);
-                                this.master = data.has(playerID) ? data.get(playerID) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);
-                            }
-                            var start = this.master.start ? this.master.start : 0;
-                            x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];
-                            y = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start) + 1] : this.master.pos[1];
-                        }
-                        if (this.growing) {
-                            var percent = Math.min((timeToUse - this.start)/(this.growing - this.start),1.0);
-                            ctx.beginPath();
-                            ctx.arc(x,y,percent*inch * this.radius,0,2*Math.PI);
-                            if (this.fill) {
-                                ctx.fillStyle=this.color;
-                                ctx.fill();
-                            } else {
-                                ctx.lineWidth='2';
-                                ctx.strokeStyle=this.color;
-                                ctx.stroke();
-                            }
-                        } else {
-                            ctx.beginPath();
-                            ctx.arc(x,y,inch * this.radius,0,2*Math.PI);
-                            if (this.fill) {
-                                ctx.fillStyle=this.color;
-                                ctx.fill();
-                            } else {
-                                ctx.lineWidth='2';
-                                ctx.strokeStyle=this.color;
-                                ctx.stroke();
-                            }
-                        }
-                    }
-};
+class PlayerIconDrawable extends IconDrawable {
+    constructor(start,end,imgSrc, pixelSize, group) {
+        super(start, end, imgSrc, pixelSize);
+        this.dead = null;
+        this.down = null;
+        this.selected = false;
+        this.group = group;
+    }
+
+    draw(ctx, currentTime) {
+        let pos = this.getPosition(currentTime);
+        if (pos === null) {
+            return;
+        }
+        let halfSize = this.pixelSize / 2;
+        if (!this.selected && this.group === selectedGroup) {
+            ctx.beginPath();
+            ctx.lineWidth = '2';
+            ctx.strokeStyle = 'blue';
+            ctx.rect(pos.x - halfSize, pos.y - halfSize, this.pixelSize, this.pixelSize);
+            ctx.stroke();
+        } else if (this.selected) {
+            ctx.beginPath();
+            ctx.lineWidth = '4';
+            ctx.strokeStyle = 'green';
+            ctx.rect(pos.x - halfSize, pos.y - halfSize, this.pixelSize, this.pixelSize);
+            ctx.stroke();
+            rangeControl.forEach(function (enabled, radius, map) {
+                if (!enabled) return;
+                ctx.beginPath();
+                ctx.lineWidth = '2';
+                ctx.strokeStyle = 'green';
+                ctx.arc(pos.x, pos.y, inch * radius, 0, 2 * Math.PI);
+                ctx.stroke();
+            });
+        }
+        ctx.drawImage(this.getIcon(currentTime),
+            pos.x - halfSize, pos.y - halfSize, this.pixelSize, this.pixelSize);
+    }
+
+    died(currentTime) {
+        if (this.dead === null) {
+            return false;
+        }
+        for (var i = 0; i < this.dead.length; i++) {
+            let deadItem = this.dead[i];
+            if (deadItem[0] <= currentTime && deadItem[1] >= currentTime) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    downed(currentTime) {
+        if (this.down === null) {
+            return false;
+        }
+        for (var i = 0; i < this.down.length; i++) {
+            let downItem = this.down[i];
+            if (downItem[0] <= currentTime && downItem[1] >= currentTime) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    getIcon(currentTime) {
+        if (this.died(currentTime)) {
+            return deadIcon;
+        }
+        if (this.downed(currentTime)) {
+            return downIcon;
+        }
+        return img;
+    }
+
+}
 
 // .... etc, move all other static methods here
 
