@@ -139,6 +139,25 @@ namespace LuckParser.Models
                     replay.AddCircleActor(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 0, 255, 0.3)", new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216)));
                 }
             }
+            List<CastLog> annihilate = cls.Where(x => (x.SkillId == 38208) || (x.SkillId == 37929)).ToList();
+            foreach (CastLog c in annihilate)
+            {
+                int start = (int)c.Time;
+                int delay = 1000;
+                int end = start + 2400;
+                int duration = 120;
+                Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                for (int i = 0; i < 6; i++)
+                {
+                    replay.AddPieActor(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * 120, end + i * 120), "rgba(255, 200, 0, 0.5)"));
+                    replay.AddPieActor(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * 120, end + i * 120), "rgba(255, 150, 0, 0.5)"));
+                    if (i % 5 != 0)
+                    {
+                        replay.AddPieActor(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * 120, end + i * 120), "rgba(255, 200, 0, 0.5)"));
+                        replay.AddPieActor(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * 120, end + i * 120), "rgba(255, 150, 0, 0.5)"));
+                    }
+                }
+            }
             return ids;
         }
 
