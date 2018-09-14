@@ -27,14 +27,15 @@ namespace LuckParser.Models.ParseModels
   
         public void Trim(long start, long end)
         {
-            _start = start;
-            _end = end;
             Positions.RemoveAll(x => x.Time < start || x.Time > end);
-            if (Positions.Count == 0)
+            if (Positions.Count <= 1)
             {
                 _start = -1;
                 _end = -1;
+                return;
             }
+            _start = Positions.First().Time;
+            _end = Positions.Last().Time;
         }
            
         public void PollingRate(int rate, long fightDuration, bool forceInterpolate)
