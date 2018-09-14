@@ -145,8 +145,8 @@ namespace LuckParser.Models
                     CastLog fire = magicExplode[i];
                     int start = (int)charge.Time;
                     int end = (int)fire.Time + fire.ActualDuration;
-                    replay.AddCircleActor(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
-                    replay.AddCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                    replay.CircleActors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                    replay.CircleActors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                 }
             }
             List<CastLog> towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
@@ -154,11 +154,11 @@ namespace LuckParser.Models
             {
                 int start = (int)c.Time;
                 int end = start + c.ActualDuration;
-                Point3D pos = replay.GetPositions().FirstOrDefault(x => x.Time > end);
+                Point3D pos = replay.Positions.FirstOrDefault(x => x.Time > end);
                 if (pos != null)
                 {
-                    replay.AddCircleActor(new CircleActor(false, 0, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                    replay.AddCircleActor(new CircleActor(true, end, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.CircleActors.Add(new CircleActor(false, 0, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.CircleActors.Add(new CircleActor(true, end, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
                 }
             }
             return ids;
@@ -178,8 +178,8 @@ namespace LuckParser.Models
                 else
                 {
                     int xeraFuryEnd = (int)(c.Time - log.FightData.FightStart);
-                    replay.AddCircleActor(new CircleActor(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)"));
-                    replay.AddCircleActor(new CircleActor(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)"));
+                    replay.CircleActors.Add(new CircleActor(true, 0, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.2)"));
+                    replay.CircleActors.Add(new CircleActor(true, xeraFuryEnd, 550, new Tuple<int, int>(xeraFuryStart, xeraFuryEnd), "rgba(200, 150, 0, 0.4)"));
                 }
 
             }

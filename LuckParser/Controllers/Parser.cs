@@ -192,11 +192,11 @@ namespace LuckParser.Controllers
                     {
                         case "NPC":
                             // NPC
-                            profession = a.GetName() + ":" + prof.ToString().PadLeft(5, '0');
+                            profession = a.Name + ":" + prof.ToString().PadLeft(5, '0');
                             break;
                         case "GDG":
                             // Gadget
-                            profession = a.GetName() + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0');
+                            profession = a.Name + ":" + (prof & 0x0000ffff).ToString().PadLeft(5, '0');
                             break;
                         default:
                             // Player

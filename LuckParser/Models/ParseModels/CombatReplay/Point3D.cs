@@ -1,4 +1,6 @@
-﻿namespace LuckParser.Models.ParseModels
+﻿using System;
+
+namespace LuckParser.Models.ParseModels
 {
     public class Point3D
     {
@@ -15,6 +17,12 @@
         private static long Mix(long a, long b, float c)
         {
             return (long)((1.0f - c) * a + c * b);
+        }
+
+        public float DistanceToPoint(Point3D endPoint)
+        {
+            float distance = (float)Math.Sqrt((endPoint.X - this.X)*(endPoint.X-this.X) + (endPoint.Y - this.Y) * (endPoint.Y - this.Y) + (endPoint.Z - this.Z) * (endPoint.Z - this.Z));
+            return distance;
         }
 
         public Point3D(float x, float y, float z, long time)

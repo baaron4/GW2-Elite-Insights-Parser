@@ -154,6 +154,8 @@ namespace LuckParser.Models.DataModels
 
         public Dictionary<long, FinalBossBoon>[] BossConditions;
 
+        public double[] BossHealth { get; set; }
+
         // present buff
         public readonly List<Boon> PresentBoons = new List<Boon>();//Used only for Boon tables
         public readonly List<Boon> PresentConditions = new List<Boon>();//Used only for Condition tables

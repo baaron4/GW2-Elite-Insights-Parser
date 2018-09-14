@@ -249,11 +249,15 @@ namespace LuckParser.Models.ParseModels
                 float y = BitConverter.ToSingle(xy, 4);
                 if (c.IsStateChange == ParseEnum.StateChange.Position)
                 {
-                    CombatReplay.AddPosition(new Point3D(x, y, c.Value, time));
+                    CombatReplay.Positions.Add(new Point3D(x, y, c.Value, time));
                 }
-                else
+                else if (c.IsStateChange == ParseEnum.StateChange.Velocity)
                 {
-                    CombatReplay.AddVelocity(new Point3D(x, y, c.Value, time));
+                    CombatReplay.Velocities.Add(new Point3D(x, y, c.Value, time));
+                }
+                else if (c.IsStateChange == ParseEnum.StateChange.Rotation)
+                {
+                    CombatReplay.Rotations.Add(new Point3D(x, y, c.Value, time));
                 }
             }
         }
