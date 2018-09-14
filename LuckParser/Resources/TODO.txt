@@ -2,7 +2,8 @@
 OK (Boss Panel)
 OK (DPS Graph Boss HP)
 OK (Combat Replay)
-Mechanics: Boss Mechanics
+OK (Mechanics: Boss Mechanics)
+All graphs: line colors
 Boss Tab
 	Boss itself
 		Condi Uptime
@@ -18,7 +19,8 @@ Player Tab
 		Buff Foods
 		Graph
 OK			(DPS)
-			Boons
+OK			(Boons)
+			coupling of dps graphs of same type
 OK			(Rota)
 	Minions
 		Boss

@@ -9,7 +9,7 @@
 			<th class="text-left">Enemy</th>
 			{{/if}}
 			{{for mechanics}}
-			{{if playerMech == ~playerMech}}
+			{{if playerMech && ~playerMech || enemyMech && !~playerMech}}
 				<th title="{{:description}}">{{:name}}</th>
 			{{/if}}
 			{{/for}}
@@ -26,7 +26,7 @@
 			<td class="text-left">{{:player.name}}</td>
 			{{/if}}
 			{{for ~mechanics ~data=data}}
-			{{if playerMech == ~playerMech}}
+			{{if playerMech && ~playerMech || enemyMech && !~playerMech}}
 			{{if ~data[#getIndex()][0]}}
 			<td{{if ~data[#getIndex()][0] != ~data[#getIndex()][1]}} title="{{:~data[#getIndex()][1]}} times (multi hits)"{{/if}}>{{:~data[#getIndex()][0]}}</td>
 			{{else}}

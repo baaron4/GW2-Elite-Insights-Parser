@@ -239,7 +239,7 @@ function createMechanicsTable($target, mechanics, data, boss) {
 	var rows = [];
 	var sums = [];
 	$.each(data, function(i, values) {
-		var player = window.data.players[i];
+		var player = boss ? window.data.enemies[i] : window.data.players[i];
 		rows.push({player:player,data:values});
 	});
 
@@ -365,6 +365,24 @@ function createPlayerGraph($element, player, phaseIndex, playerIndex) {
 				},
 				showlegend: false
 			});
+		});
+	}
+
+	var boonData = player.details.boonGraph[phaseIndex];
+	if (boonData) {
+		$.each(boonData, function(i, boonItem) {
+			var line = {
+				x:[], y:[], yaxis: 'y2', type: 'scatter',
+				visible: boonItem.visible?null:'legendonly',
+				line: {color: boonItem.color, shape: 'hv'},
+				fill: 'tozeroy',
+				name: boonItem.name
+			}
+			for (var p = 0; p < boonItem.data.length; p++) {
+				line.x[p] = boonItem.data[p][0];
+				line.y[p] = boonItem.data[p][1];
+			}
+			plotData.push(line);
 		});
 	}
 
@@ -546,7 +564,7 @@ function generateWindow(layout) {
 		createSupStatsTable($('#healStats'+i), phaseData.healStats);
 
 		createMechanicsTable($('#mechanicStats'+i), data.mechanics, phaseData.mechanicStats, false);
-		createMechanicsTable($('#mechanicBossStats'+i), data.mechanics, phaseData.mechanicStats, true);
+		createMechanicsTable($('#mechanicBossStats'+i), data.mechanics, phaseData.enemyMechanicStats, true);
 		
 		createBoonTable($('#boonsUptime'+i), data.boons, phaseData.boonStats);
 
