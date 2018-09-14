@@ -4,44 +4,26 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class Actor
     {
-        private readonly bool _fill;
-        private readonly Tuple<int, int> _lifespan;
+        public bool Filled { get; }
+        public Tuple<int, int> LifeSpan { get; }
         private readonly string _color;
-        private readonly int _growing;
+        public string Color => "'" + _color + "'";
+        public int Growing { get; }
         private readonly Mobility _mobility;
 
         protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Mobility mobility)
         {
-            _lifespan = lifespan;
+            LifeSpan = lifespan;
             _color = color;
-            _fill = fill;
+            Filled = fill;
             _mobility = mobility;
-            _growing = growing;
+            Growing = growing;
         }
-
-        public int GetGrowing()
-        {
-            return _growing;
-        }
-
-        public bool IsFilled()
-        {
-            return _fill;
-        }
-
+       
         public string GetPosition(string id, CombatReplayMap map)
         {
             return _mobility.GetPosition(id, map);
         }
-
-        public Tuple<int, int> GetLifespan()
-        {
-            return _lifespan;
-        }
-
-        public string GetColor()
-        {
-            return "'" + _color + "'";
-        }
+       
     }
 }

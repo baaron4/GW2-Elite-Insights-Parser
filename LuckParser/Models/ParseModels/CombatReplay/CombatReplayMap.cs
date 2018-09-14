@@ -4,7 +4,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class CombatReplayMap
     {
-        private readonly string _link;
+        public string Link { get; }
         private readonly Tuple<int, int> _size;
         private readonly Tuple<int, int, int, int> _rect;
         private readonly Tuple<int, int, int, int> _fullRect;
@@ -12,16 +12,11 @@ namespace LuckParser.Models.ParseModels
 
         public CombatReplayMap(string link, Tuple<int, int> size, Tuple<int, int, int, int> rect, Tuple<int, int, int, int> fullRect, Tuple<int, int, int, int> worldRect)
         {
-            _link = link;
+            Link = link;
             _size = size;
             _rect = rect;
             _fullRect = fullRect;
             _worldRect = worldRect;
-        }
-
-        public string GetLink()
-        {
-            return _link;
         }
 
         public Tuple<int, int> GetPixelMapSize()
