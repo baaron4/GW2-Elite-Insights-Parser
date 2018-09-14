@@ -793,7 +793,7 @@ namespace LuckParser.Controllers
                 if (!usedSkills.ContainsKey(cl.SkillId)) usedSkills.Add(cl.SkillId, skillList.GetOrDummy(cl.SkillId));
                 double[] rotEntry = new double[5];
                 list.Add(rotEntry);
-                rotEntry[0] = cl.Time/1000.0;
+                rotEntry[0] = (cl.Time - phase.Start) / 1000.0;
                 rotEntry[1] = cl.SkillId;
                 rotEntry[2] = cl.ActualDuration;
                 rotEntry[3] = EncodeEndActivation(cl.EndActivation);
