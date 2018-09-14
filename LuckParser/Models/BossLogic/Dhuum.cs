@@ -140,6 +140,15 @@ namespace LuckParser.Models
                 replay.AddCircleActor(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
                 replay.AddCircleActor(new CircleActor(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
             }
+            List<CastLog> slash = cls.Where(x => x.SkillId == 47561).ToList();
+            foreach (CastLog c in slash)
+            {
+                int start = (int)c.Time;
+                int end = start + c.ActualDuration;
+                Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                replay.AddCircleSegmentActor(new CircleSegmentActor(false, 0, 850, facing, 60, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+            }
+   
             if (majorSplit != null)
             {
                 int start = (int)majorSplit.Time;
