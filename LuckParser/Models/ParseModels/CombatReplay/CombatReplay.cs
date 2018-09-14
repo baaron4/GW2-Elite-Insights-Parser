@@ -25,11 +25,6 @@ namespace LuckParser.Models.ParseModels
         public List<RectangleActor> RectangleActors{ get; } = new List<RectangleActor>();
         public List<PieActor> PieActors { get; } = new List<PieActor>();
   
-        public void AddPieActor(PieActor pieActor)
-        {
-            PieActors.Add(pieActor);
-        }
-      
         public void Trim(long start, long end)
         {
             _start = start;

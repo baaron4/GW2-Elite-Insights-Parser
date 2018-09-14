@@ -147,14 +147,18 @@ namespace LuckParser.Models
                 int end = start + 2400;
                 int duration = 120;
                 Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                if (facing == null)
+                {
+                    continue;
+                }
                 for (int i = 0; i < 6; i++)
                 {
-                    replay.AddPieActor(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * 120, end + i * 120), "rgba(255, 200, 0, 0.5)"));
-                    replay.AddPieActor(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * 120, end + i * 120), "rgba(255, 150, 0, 0.5)"));
+                    replay.PieActors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)"));
+                    replay.PieActors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)"));
                     if (i % 5 != 0)
                     {
-                        replay.AddPieActor(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * 120, end + i * 120), "rgba(255, 200, 0, 0.5)"));
-                        replay.AddPieActor(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * 120, end + i * 120), "rgba(255, 150, 0, 0.5)"));
+                        replay.PieActors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)"));
+                        replay.PieActors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)"));
                     }
                 }
             }

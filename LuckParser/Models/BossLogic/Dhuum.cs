@@ -146,7 +146,11 @@ namespace LuckParser.Models
                 int start = (int)c.Time;
                 int end = start + c.ActualDuration;
                 Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
-                replay.AddPieActor(new PieActor(false, 0, 850, facing, 60, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                if (facing == null)
+                {
+                    continue;
+                }
+                replay.PieActors.Add(new PieActor(false, 0, 850, facing, 60, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
             }
    
             if (majorSplit != null)

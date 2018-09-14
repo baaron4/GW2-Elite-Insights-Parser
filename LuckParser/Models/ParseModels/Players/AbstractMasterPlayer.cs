@@ -257,7 +257,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 else if (c.IsStateChange == ParseEnum.StateChange.Rotation)
                 {
-                    CombatReplay.AddRotation(new Point3D(x, y, c.Value, time));
+                    CombatReplay.Rotations.Add(new Point3D(x, y, c.Value, time));
                 }
             }
         }

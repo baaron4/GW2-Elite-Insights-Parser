@@ -5,7 +5,7 @@ namespace LuckParser.Models.ParseModels
     public abstract class Actor
     {
         public bool Filled { get; }
-        public Tuple<int, int> LifeSpan { get; }
+        public Tuple<int, int> Lifespan { get; }
         private readonly string _color;
         public string Color => "'" + _color + "'";
         public int Growing { get; }
@@ -13,7 +13,7 @@ namespace LuckParser.Models.ParseModels
 
         protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Mobility mobility)
         {
-            LifeSpan = lifespan;
+            Lifespan = lifespan;
             _color = color;
             Filled = fill;
             _mobility = mobility;
