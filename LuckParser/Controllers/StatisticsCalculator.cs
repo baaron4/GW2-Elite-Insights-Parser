@@ -75,6 +75,31 @@ namespace LuckParser.Controllers
                 }
                 log.MechanicData.ComputePresentMechanics(log);
             }
+            // boss health
+            int seconds = (int)_statistics.Phases[0].GetDuration("s");
+            _statistics.BossHealth = new double[seconds + 1];
+            int i = 0;
+            double curHealth = 100.0;
+            foreach (Point p in log.FightData.HealthOverTime)
+            {
+                double hp = p.Y / 100.0;
+                int timeInPhase = 1 + (p.X - (int)_statistics.Phases[0].Start) / 1000;
+                if (timeInPhase >= seconds)
+                {
+                    break;
+                }
+                while (i < timeInPhase)
+                {
+                    _statistics.BossHealth[i++] = curHealth;
+                }
+                curHealth = hp;
+                if (timeInPhase >= 0)
+                {
+                    _statistics.BossHealth[timeInPhase] = curHealth;
+                }
+            }
+            for (; i <= seconds; i++) _statistics.BossHealth[i] = curHealth;
+            //
 
             return _statistics;
         }
