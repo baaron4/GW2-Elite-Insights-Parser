@@ -16,8 +16,8 @@ namespace LuckParser.Models
             new Mechanic(47327, "Vortex Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'circle',color:'rgb(255,140,0)',", "D.In","Vortex Slash (Inner Donut hit)", "Inner Donut",0),
             new Mechanic(48432, "Vortex Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'circle-open',color:'rgb(255,140,0)',", "D.Out","Vortex Slash (Outer Donut hit)", "Outer Donut", 0),
             new Mechanic(47430, "Soul Rift", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'circle-open',color:'rgb(255,0,0)',", "Golem","Soul Rift (stood in Golem Aoe)", "Golem Aoe",0),
-            new Mechanic(48363, "Quad Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'star-square-open',color:'rgb(255,140,0)',", "Slcs","Quad Slash (4 Slices)", "4 Slices",0),
-            new Mechanic(47915, "Quad Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'star-diamond-open',color:'rgb(255,140,0)',", "Slcs","Quad Slash (4 Slices)", "4 Slices",0),
+            new Mechanic(48363, "Quad Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'star-diamond-open',color:'rgb(255,140,0)',", "Slcs1","Quad Slash (4 Slices, First hit)", "4 Slices 1",0),
+            new Mechanic(47915, "Quad Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'star-square-open',color:'rgb(255,140,0)',", "Slcs2","Quad Slash (4 Slices, Second hit)", "4 Slices 2",0),
             new Mechanic(47363, "Spinning Slash", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'star-triangle-up-open',color:'rgb(128,0,0)',", "Scth","Spinning Slash (hit by Scythe)", "Scythe",0),
             new Mechanic(48500, "Death Bloom", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.SoullessHorror, "symbol:'octagon',color:'rgb(255,140,0)',", "8Slcs","Death Bloom (8 Slices)", "8 Slices",0),
             new Mechanic(47434, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.SoullessHorror, "symbol:'star',color:'rgb(255,0,255)',", "Fix","Fixated (Special Action Key)", "Fixated",0),
@@ -69,6 +69,42 @@ namespace LuckParser.Models
                     replay.CircleActors.Add(new CircleActor(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
                     replay.DoughnutActors.Add(new DoughnutActor(0, 380,760, new Tuple<int, int>(end, end+1000), "rgba(255, 150, 0, 0.5)", pos));
                 }
+            }
+            List<CastLog> deathBloom = cls.Where(x => x.SkillId == 48500).ToList();
+            foreach (CastLog c in deathBloom)
+            {
+                int start = (int)c.Time;
+                int end = start + c.ActualDuration;
+                Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                for (int i = 0; i < 8; i++)
+                {
+                    replay.AddPieActor(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
+                }
+
+            }
+            List<CastLog> quad1 = cls.Where(x => x.SkillId == 48363).ToList();
+            List<CastLog> quad2 = cls.Where(x => x.SkillId == 47915).ToList();
+            foreach (CastLog c in quad1)
+            {
+                int start = (int)c.Time;
+                int end = start + c.ActualDuration;
+                Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                for (int i = 0; i < 4; i++)
+                {
+                    replay.AddPieActor(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 4), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
+                }
+
+            }
+            foreach (CastLog c in quad2)
+            {
+                int start = (int)c.Time;
+                int end = start + c.ActualDuration;
+                Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                for (int i = 0; i < 4; i++)
+                {
+                    replay.AddPieActor(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + 45 + i * 360 / 4), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
+                }
+
             }
             return ids;
         }
