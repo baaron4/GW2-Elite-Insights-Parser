@@ -1148,7 +1148,7 @@ namespace LuckParser.Controllers
 
         private static void WriteCombatReplayDoughnutActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
-            // Circle actors
+            // Doughnut actors
             sw.Write("var doughnutActor = function(innerRadius,outerRadius,growing, color, start, end) {" +
                     "this.pos = null;" +
                     "this.master = null;" +
@@ -1229,7 +1229,7 @@ namespace LuckParser.Controllers
 
         private static void WriteCombatReplayRectangleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
-            // Circle actors
+            // Rectangle actors
             sw.Write("var rectangleActor = function(width, height, fill, growing, color, start, end) {" +
                     "this.pos = null;" +
                     "this.master = null;" +
@@ -1318,6 +1318,105 @@ namespace LuckParser.Controllers
 
             }
         }
+        private static void WriteCombatReplayCircleSegmentActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
+        {
+            // CircleSegment actors
+            sw.Write("var circleSegmentActor = function(direction,openingAngle,radius,fill,growing, color, start, end) {" +
+                    "this.pos = null;" +
+                    "this.master = null;" +
+                    "this.start = start;" +
+                    "this.radius = radius;" +
+                    "this.direction = direction;" +
+                    "this.openingAngle = openingAngle;" +
+                    "this.end = end;" +
+                    "this.growing = growing;" +
+                    "this.fill = fill;" +
+                    "this.color = color;" +
+                "};");
+            sw.Write("circleSegmentActor.prototype.draw = function(ctx,timeToUse){" +
+                    "if (!(this.start > timeToUse || this.end < timeToUse)) {" +
+                        "var x,y;" +
+                        "var x1,y1;" + 
+                        "if (this.pos instanceof Array) {" +
+                            "x = this.pos[0];" +
+                            "y = this.pos[1];" +
+                        "} else {" +
+                            "if (!this.master) {" +
+                                "var playerID = parseInt(this.pos);" +
+                                "this.master = data.has(playerID) ? data.get(playerID) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);" +
+                            "}" +
+                            "var start = this.master.start ? this.master.start : 0;" +
+                            "x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];" +
+                            "y = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start) + 1] : this.master.pos[1];" +
+                        "}" +
+                        "dx = Math.cos(this.direction*Math.PI/180 - this.openingAngle/2*Math.PI/180)*this.radius*inch;" +
+                        "dy = Math.sin(this.direction*Math.PI/180 - this.openingAngle/2*Math.PI/180)*this.radius*inch;" +
+                        "if (this.growing) {" +
+                            "var percent = Math.min((timeToUse - this.start)/(this.growing - this.start),1.0);" +
+                            "ctx.beginPath();" +
+                            "ctx.moveTo(x,y);" +
+                            "ctx.lineTo(x+dx*percent,y+dy*percent);" +
+                            "ctx.arc(x,y,percent*inch * this.radius,this.direction*Math.PI/180 - this.openingAngle/2*Math.PI/180,this.direction*Math.PI/180 + this.openingAngle/2*Math.PI/180);" +
+                            "ctx.closePath();" +
+                            "if (this.fill) {" +
+                                "ctx.fillStyle=this.color;" +
+                                "ctx.fill();" +
+                            "} else {" +
+                                "ctx.lineWidth='2';" +
+                                "ctx.strokeStyle=this.color;" +
+                                "ctx.stroke();" +
+                            "}" +
+                        "} else {" +
+                            "ctx.beginPath();" +
+                            "ctx.moveTo(x,y);" +
+                            "ctx.lineTo(x+dx,y+dy);" +
+                            "ctx.arc(x,y,inch * this.radius,this.direction*Math.PI/180 - this.openingAngle/2*Math.PI/180,this.direction*Math.PI/180 + this.openingAngle/2*Math.PI/180);" +
+                            "ctx.closePath();" +
+                            "if (this.fill) {" +
+                                "ctx.fillStyle=this.color;" +
+                                "ctx.fill();" +
+                            "} else {" +
+                                "ctx.lineWidth='2';" +
+                                "ctx.strokeStyle=this.color;" +
+                                "ctx.stroke();" +
+                            "}" +
+                        "}" +
+                    "}" +
+                "};");
+            foreach (Mob mob in log.Boss.TrashMobs)
+            {
+                CombatReplay replay = mob.CombatReplay;
+                foreach (CircleSegmentActor a in replay.CircleSegmentActors)
+                {
+                    sw.Write("{");
+                    sw.Write("var a = new circleSegmentActor(" + a.Direction + "," + a.OpeningAngle + "," + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
+                    sw.Write("mechanicData.add(a);");
+                    sw.Write("a.pos =" + a.GetPosition(mob.InstID + "_" + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "_" + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate, map) + ";");
+                    sw.Write("}");
+                }
+            }
+            foreach (Player player in log.PlayerList)
+            {
+                CombatReplay replay = player.CombatReplay;
+                foreach (CircleSegmentActor a in replay.CircleSegmentActors)
+                {
+                    sw.Write("{");
+                    sw.Write("var a = new circleSegmentActor(" + a.Direction + "," + a.OpeningAngle + "," + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
+                    sw.Write("mechanicData.add(a);");
+                    sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
+                    sw.Write("}");
+                }
+            }
+            foreach (CircleSegmentActor a in log.Boss.CombatReplay.CircleSegmentActors)
+            {
+                sw.Write("{");
+                sw.Write("var a = new circleSegmentActor(" + a.Direction + "," + a.OpeningAngle + "," + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
+                sw.Write("mechanicData.add(a);");
+                sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
+                sw.Write("}");
+
+            }
+        }
 
         public static void WriteCombatReplayScript(StreamWriter sw, ParsedLog log, Tuple<int,int> canvasSize, CombatReplayMap map, int pollingRate)
         {
@@ -1344,6 +1443,7 @@ namespace LuckParser.Controllers
                 WriteCombatReplayCircleActors(sw, log, map, pollingRate);
                 WriteCombatReplayDoughnutActors(sw, log, map, pollingRate);
                 WriteCombatReplayRectangleActors(sw, log, map, pollingRate);
+                WriteCombatReplayCircleSegmentActors(sw, log, map, pollingRate);
                 // Main loop
                 sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
                 sw.Write("ctx.imageSmoothingEnabled = true;");
