@@ -150,3 +150,53 @@ secondaryActor.prototype.draw = function(ctx,timeToUse,pixelSize) {
 };
 
 // .... etc, move all other static methods here
+
+/*
+
+
+Another thing... right now your code looks like this:
+
+{var a = new circleActor(100,true,2493,'rgba(0, 50, 200, 0.5)',2024,2410);mechanicData.add(a);a.pos ='358';}
+{var p = new secondaryActor('https://i.imgur.com/elHjamF.png',4145,4441);secondaryData.set('733_4145_4441',p);p.pos = [697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,];}
+
+I would change that actual data to json-compatible objects, something like this:
+
+var actors = [
+	{
+		"type": "circle",
+		"radius": 100,
+		"fill": true,
+		"growing": 2493,
+		"color":"rgba(0, 50, 200, 0.5)",
+		"start": 2024,
+		"end": 2410",
+		"pos": 358
+	},
+	{
+		"type": "secondary",
+		"id": "733_4145_4441",
+		"imgSrc": "https://i.imgur.com/elHjamF.png",
+		"start": 4145,
+		"end": 4441,
+		"pos": [697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101]
+	}
+];
+
+addActors(actors);
+
+The addActors() method can then iterate over them and call the different constructors, but all JS code would
+be completely static and separated from the data, and can be put in a real JS file without a problem.
+
+
+
+That's not much of a change in the code, but suddently the whole data block is json compatible and we can:
+	1.) generate the data using C# JSON library, so we don't have to think about escaping and formatting
+	2.) leave the js in place or export the JSON as external file and load by ajax asynchronously,
+	    would be very valuable for hosters like dps.report. When the data is real JSON anyway that
+		would just be a minimal change in the code
+
+
+Cheers, Flomix ;-)
+
+
+*/
