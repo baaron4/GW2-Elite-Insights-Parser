@@ -1318,10 +1318,10 @@ namespace LuckParser.Controllers
 
             }
         }
-        private static void WriteCombatReplayCircleSegmentActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
+        private static void WriteCombatReplayPieActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
-            // CircleSegment actors
-            sw.Write("var circleSegmentActor = function(direction,openingAngle,radius,fill,growing, color, start, end) {" +
+            // Pie actors
+            sw.Write("var pieActor = function(direction,openingAngle,radius,fill,growing, color, start, end) {" +
                     "this.pos = null;" +
                     "this.master = null;" +
                     "this.start = start;" +
@@ -1333,7 +1333,7 @@ namespace LuckParser.Controllers
                     "this.fill = fill;" +
                     "this.color = color;" +
                 "};");
-            sw.Write("circleSegmentActor.prototype.draw = function(ctx,timeToUse){" +
+            sw.Write("pieActor.prototype.draw = function(ctx,timeToUse){" +
                     "if (!(this.start > timeToUse || this.end < timeToUse)) {" +
                         "var x,y;" +
                         "var x1,y1;" + 
@@ -1386,10 +1386,10 @@ namespace LuckParser.Controllers
             foreach (Mob mob in log.Boss.TrashMobs)
             {
                 CombatReplay replay = mob.CombatReplay;
-                foreach (CircleSegmentActor a in replay.CircleSegmentActors)
+                foreach (PieActor a in replay.PieActors)
                 {
                     sw.Write("{");
-                    sw.Write("var a = new circleSegmentActor(" + a.Direction + "," + a.OpeningAngle + "," + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
+                    sw.Write("var a = new pieActor(" + a.Direction + "," + a.OpeningAngle + "," + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
                     sw.Write("a.pos =" + a.GetPosition(mob.InstID + "_" + mob.CombatReplay.GetTimeOffsets().Item1 / pollingRate + "_" + mob.CombatReplay.GetTimeOffsets().Item2 / pollingRate, map) + ";");
                     sw.Write("}");
@@ -1398,19 +1398,19 @@ namespace LuckParser.Controllers
             foreach (Player player in log.PlayerList)
             {
                 CombatReplay replay = player.CombatReplay;
-                foreach (CircleSegmentActor a in replay.CircleSegmentActors)
+                foreach (PieActor a in replay.PieActors)
                 {
                     sw.Write("{");
-                    sw.Write("var a = new circleSegmentActor(" + a.Direction + "," + a.OpeningAngle + "," + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
+                    sw.Write("var a = new pieActor(" + a.Direction + "," + a.OpeningAngle + "," + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
                     sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
                     sw.Write("}");
                 }
             }
-            foreach (CircleSegmentActor a in log.Boss.CombatReplay.CircleSegmentActors)
+            foreach (PieActor a in log.Boss.CombatReplay.PieActors)
             {
                 sw.Write("{");
-                sw.Write("var a = new circleSegmentActor(" + a.Direction + "," + a.OpeningAngle + "," + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
+                sw.Write("var a = new pieActor(" + a.Direction + "," + a.OpeningAngle + "," + a.GetRadius() + "," + (a.IsFilled() ? "true" : "false") + "," + a.GetGrowing() / pollingRate + "," + a.GetColor() + "," + a.GetLifespan().Item1 / pollingRate + "," + a.GetLifespan().Item2 / pollingRate + ");");
                 sw.Write("mechanicData.add(a);");
                 sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
                 sw.Write("}");
@@ -1443,7 +1443,7 @@ namespace LuckParser.Controllers
                 WriteCombatReplayCircleActors(sw, log, map, pollingRate);
                 WriteCombatReplayDoughnutActors(sw, log, map, pollingRate);
                 WriteCombatReplayRectangleActors(sw, log, map, pollingRate);
-                WriteCombatReplayCircleSegmentActors(sw, log, map, pollingRate);
+                WriteCombatReplayPieActors(sw, log, map, pollingRate);
                 // Main loop
                 sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
                 sw.Write("ctx.imageSmoothingEnabled = true;");
