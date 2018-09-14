@@ -30,16 +30,16 @@ namespace LuckParser.Models.ParseModels
         //HERALD(18, "Herald");
 
         // Fields
-        private readonly String _name;
-        private readonly ulong _iD;
+        public string Name { get; }
+        public ulong ID { get; }
         private readonly uint _isElite;
         private readonly uint _prof;
 
         // Constructor
         public Agent(ulong ID, String name, uint prof, uint elite)
         {
-            _name = name;
-            _iD = ID;
+            Name = name;
+            this.ID = ID;
             _prof = prof;
             _isElite = elite;
         }
@@ -182,21 +182,6 @@ namespace LuckParser.Models.ParseModels
             }
 
             return null;
-        }
-     
-           
-        
-
-        // Getters
-        public String GetName()
-        {
-            return _name;
-        }
-
-        public ulong GetID()
-        {
-            return _iD;
-        }
-
+        }    
     }
 }
