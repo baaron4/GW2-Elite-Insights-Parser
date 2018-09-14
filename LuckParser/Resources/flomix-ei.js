@@ -368,6 +368,24 @@ function createPlayerGraph($element, player, phaseIndex, playerIndex) {
 		});
 	}
 
+	var boonData = player.details.boonGraph[phaseIndex];
+	if (boonData) {
+		$.each(boonData, function(i, boonItem) {
+			var line = {
+				x:[], y:[], yaxis: 'y2', type: 'scatter',
+				visible: boonItem.visible?null:'legendonly',
+				line: {color: boonItem.color, shape: 'hv'},
+				fill: 'tozeroy',
+				name: boonItem.name
+			}
+			for (var p = 0; p < boonItem.data.length; p++) {
+				line.x[p] = boonItem.data[p][0];
+				line.y[p] = boonItem.data[p][1];
+			}
+			plotData.push(line);
+		});
+	}
+
 	var lines = [{id:'boss',name:'DPS'},{id:'cleave',name:'Cleave DPS'},{id:'total',name:'TDPS'}];
 
 	var dpsData = data.graphData[phaseIndex].players[playerIndex];
