@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
     class HTMLBuilderNew
     {
         private const string scriptVersion = "0.5";
-        private const int scriptVersionRev = 4;
+        private const int scriptVersionRev = 5;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -2823,6 +2823,9 @@ namespace LuckParser.Controllers
                 playerDto.heal = player.Healing;
                 playerDto.tough = player.Toughness;
                 playerDto.weapons = player.GetWeaponsArray(_log);
+                playerDto.colBoss = HTMLHelper.GetLink("Color-" + player.Prof);
+                playerDto.colCleave = HTMLHelper.GetLink("Color-" + player.Prof + "-NonBoss");
+                playerDto.colTotal = HTMLHelper.GetLink("Color-" + player.Prof + "-Total");
                 data.players.Add(playerDto);
             }
 

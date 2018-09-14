@@ -386,7 +386,7 @@ function createPlayerGraph($element, player, phaseIndex, playerIndex) {
 		});
 	}
 
-	var lines = [{id:'boss',name:'DPS'},{id:'cleave',name:'Cleave DPS'},{id:'total',name:'TDPS'}];
+	var lines = [{id:'boss',name:'DPS', color:'colBoss'},{id:'cleave',name:'Cleave DPS', color:'colCleave'},{id:'total',name:'TDPS', color:'colTotal'}];
 
 	var dpsData = data.graphData[phaseIndex].players[playerIndex];
 	var seconds = dpsData.boss.full.length;
@@ -412,8 +412,9 @@ function createPlayerGraph($element, player, phaseIndex, playerIndex) {
 				yaxis: 'y3',
 				mode: 'lines',
 				visible: visible,
-				line: {shape:'spline', color:null},
+				line: {shape:'spline', color:player[lines[l].color]},
 				name: name,
+				legendgroup: data.graphs[t].id
 			});
 		}
 	}
@@ -781,7 +782,7 @@ function createGraph($target, phaseData, phase, type) {
 		var player = window.data.players[p];
 		lines.push({y: phaseData.players[p].boss[type],x: xAxis,mode: 'lines',line: {shape: 'spline',color:player.colBoss},name: player.name + ' DPS'});
 		lines.push({y: phaseData.players[p].total[type],x: xAxis,mode: 'lines',line: {shape: 'spline',color:player.colTotal},visible:'legendonly',name: player.name + ' TDPS'});
-		lines.push({y: phaseData.players[p].cleave[type],x: xAxis,mode: 'lines',line: {shape: 'spline',color:player.colTotal},visible:'legendonly',name: player.name + ' Cleave DPS'});
+		lines.push({y: phaseData.players[p].cleave[type],x: xAxis,mode: 'lines',line: {shape: 'spline',color:player.colCleave},visible:'legendonly',name: player.name + ' Cleave DPS'});
 	}
 
 	var layout = {
