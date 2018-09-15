@@ -257,7 +257,7 @@ namespace LuckParser.Models.ParseModels
                 Positions = new int[2 * CombatReplay.Positions.Count],
                 Start = CombatReplay.TimeOffsets.Item1,
                 End = CombatReplay.TimeOffsets.Item2,
-                ID = (InstID +"_"+ CombatReplay.TimeOffsets.Item1+"_"+ CombatReplay.TimeOffsets.Item2).GetHashCode()
+                ID = GetCombatReplayID()
             };
             int i = 0;
             foreach (Point3D pos in CombatReplay.Positions)
@@ -268,6 +268,12 @@ namespace LuckParser.Models.ParseModels
             }
 
             return JsonConvert.SerializeObject(aux);
+        }
+
+
+        public override int GetCombatReplayID()
+        {
+            return (InstID + "_" + CombatReplay.TimeOffsets.Item1 + "_" + CombatReplay.TimeOffsets.Item2).GetHashCode();
         }
 
         public void AddMechanics(ParsedLog log)

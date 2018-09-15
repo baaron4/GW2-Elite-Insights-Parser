@@ -617,5 +617,6 @@ namespace LuckParser.Models.ParseModels
         // abstracts
         protected abstract void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate);
         protected abstract void SetCombatReplayIcon(ParsedLog log);
+        public abstract int GetCombatReplayID();
     }
 }

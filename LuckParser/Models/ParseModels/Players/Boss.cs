@@ -214,6 +214,11 @@ namespace LuckParser.Models.ParseModels
             return JsonConvert.SerializeObject(aux);
         }
 
+        public override int GetCombatReplayID()
+        {
+            return 0;
+        }
+
         /*protected override void setHealingLogs(ParsedLog log)
         {
             // nothing to do
