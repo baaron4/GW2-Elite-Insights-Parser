@@ -335,9 +335,10 @@ class MechanicDrawable extends Drawable {
 }
 
 class CircleMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growing, color, radius) {
+    constructor(start, end, fill, growing, color, radius, pos) {
         super(start, end, fill, growing, color);
         this.radius = inch * radius;
+        this.pos = pos;
     }
 
     draw(ctx, currentTime) {
@@ -359,10 +360,11 @@ class CircleMechanicDrawable extends MechanicDrawable {
 }
 
 class DoughnutMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growing, color, innerRadius, outerRadius) {
+    constructor(start, end, fill, growing, color, innerRadius, outerRadius, pos) {
         super(start, end, fill, growing, color);
         this.radius = inch * 0.5 * (innerRadius + outerRadius);
         this.width = inch * (outerRadius - innerRadius);
+        this.pos = pos;
     }
 
     draw(ctx, currentTime) {
@@ -380,10 +382,11 @@ class DoughnutMechanicDrawable extends MechanicDrawable {
 }
 
 class RectangleMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growing, color, width, height) {
+    constructor(start, end, fill, growing, color, width, height, pos) {
         super(start, end, fill, growing, color);
         this.height = height * inch;
         this.width = width * inch;
+        this.pos = pos;
     }
 
     draw(ctx, currentTime) {
@@ -406,13 +409,14 @@ class RectangleMechanicDrawable extends MechanicDrawable {
 }
 
 class PieMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growing, color, direction, openingAngle, radius) {
+    constructor(start, end, fill, growing, color, direction, openingAngle, radius, pos) {
         super(start, end, fill, growing, color);
         this.direction = direction * Math.PI / 180;
         this.openingAngle = 0.5 * openingAngle * Math.PI / 180;
         this.radius = inch * radius;
         this.dx = Math.cos(this.direction - this.openingAngle) * this.radius;
         this.dy = Math.sin(this.direction - this.openingAngle) * this.radius;
+        this.pos = pos;
     }
 
     draw(ctx, currentTime) {
@@ -452,6 +456,14 @@ function createAllActors() {
                 break;
             case "Mob":
                 trashMobData.set(actor.ID, new MobIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
+                break;
+            case "Circle":
+                break;
+            case "Rectangle":
+                break;
+            case "Doughnut":
+                break;
+            case "Pie":
                 break;
         }
     }
