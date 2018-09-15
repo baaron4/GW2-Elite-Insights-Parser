@@ -283,6 +283,37 @@ class PlayerIconDrawable extends IconDrawable {
 
 }
 
+class MechanicDrawable extends Drawable {
+    constructor(start,end,fill,growing,color) {
+        super(start, end);
+        this.fill = fill;
+        this.growing = growing;
+        this.color = color;
+        this.master = null;
+    }
+
+    getPosition(currentTime) {
+        if (this.pos === null) {
+            return null;
+        }
+        if (this.pos instanceof Array) {
+            let masterId = this.pos[0];
+            let masterTime = this.pos[1];
+            if (this.master === null) {
+                this.master = playerData.has(masterId) ? playerData.get(masterId) : (trashMobData.has(masterId) ? trashMobData.get(masterId) : boss);
+            }
+            return master.getPosition(currentTime);
+        }
+    }
+
+    getPercent(currentTime) {
+        if (this.growing === 0) {
+            return 1.0;
+        }
+        return Math.min((currentTime - this.start) / (this.growing - this.start), 1.0);
+    }
+}
+
 // .... etc, move all other static methods here
 
 /*

@@ -798,7 +798,7 @@ namespace LuckParser.Controllers
                                 sw.Write("<h3>Group " + group + "</h3>");
                                 foreach (Player p in log.PlayerList.Where(x => x.Group == group))
                                 {
-                                    sw.Write("<label id=\"id" + p.InstID + "\" style=\"width: 150px;\" onclick=\"selectActor(" + p.InstID + ")\"  class=\"btn btn-dark\">" +
+                                    sw.Write("<label id=\"id" + p.InstID + "\" style=\"width: 150px;\" onclick=\"selectActor('" + p.InstID + "')\"  class=\"btn btn-dark\">" +
                                         "<input class=\"invisible\" type=\"radio\" autocomplete=\"off\">" +
                                         p.Character.Substring(0, Math.Min(10, p.Character.Length))
                                         + " <img src=\"" + GetLink(p.Prof)
