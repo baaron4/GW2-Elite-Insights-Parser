@@ -49,5 +49,11 @@ namespace LuckParser.Models.ParseModels
             Direction = (int)Math.Round(Math.Atan2(endPoint.Y - startPoint.Y, endPoint.X - startPoint.X) * 180 / Math.PI);
             OpeningAngle = openingAngle;
         }
+
+        //
+        public override string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

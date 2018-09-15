@@ -828,7 +828,7 @@ namespace LuckParser.Controllers
                     sw.Write("{");
                     sw.Write("var a = new circleActor("+a.Radius+","+(a.Filled ? "true" : "false") + ","+a.Growing / pollingRate + ","+a.Color+","+a.Lifespan.Item1/pollingRate+","+ a.Lifespan.Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos ="+a.GetPosition(mob.InstID + "_" + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "_" + mob.CombatReplay.TimeOffsets.Item2 / pollingRate, map)+";");
+                    //sw.Write("a.pos ="+a.GetPosition(mob.InstID + "_" + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "_" + mob.CombatReplay.TimeOffsets.Item2 / pollingRate, map)+";");
                     sw.Write("}");
                 }
             }
@@ -840,7 +840,7 @@ namespace LuckParser.Controllers
                     sw.Write("{");
                     sw.Write("var a = new circleActor(" + a.Radius + "," + (a.Filled ? "true" : "false") + "," + a.Growing / pollingRate + "," + a.Color + "," + a.Lifespan.Item1 / pollingRate + "," + a.Lifespan.Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
+                    //sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
                     sw.Write("}");
                 }
             }
@@ -849,7 +849,7 @@ namespace LuckParser.Controllers
                 sw.Write("{");
                 sw.Write("var a = new circleActor(" + a.Radius + "," + (a.Filled ? "true" : "false") + "," + a.Growing / pollingRate + "," + a.Color + "," + a.Lifespan.Item1 / pollingRate + "," + a.Lifespan.Item2 / pollingRate + ");");
                 sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
+                //sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
                 sw.Write("}");
 
             }
@@ -865,7 +865,7 @@ namespace LuckParser.Controllers
                     sw.Write("{");
                     sw.Write("var a = new doughnutActor(" + a.InnerRadius + "," + a.OuterRadius + "," + a.Growing / pollingRate + "," + a.Color + "," + a.Lifespan.Item1 / pollingRate + "," + a.Lifespan.Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(mob.InstID + "_" + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "_" + mob.CombatReplay.TimeOffsets.Item2 / pollingRate, map) + ";");
+                    //sw.Write("a.pos =" + a.GetPosition(mob.InstID + "_" + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "_" + mob.CombatReplay.TimeOffsets.Item2 / pollingRate, map) + ";");
                     sw.Write("}");
                 }
             }
@@ -877,7 +877,7 @@ namespace LuckParser.Controllers
                     sw.Write("{");
                     sw.Write("var a = new doughnutActor(" + a.InnerRadius + "," + a.OuterRadius + "," + a.Growing / pollingRate + "," + a.Color + "," + a.Lifespan.Item1 / pollingRate + "," + a.Lifespan.Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
+                    //sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
                     sw.Write("}");
                 }
             }
@@ -886,7 +886,7 @@ namespace LuckParser.Controllers
                 sw.Write("{");
                 sw.Write("var a = new doughnutActor(" + a.InnerRadius + "," + a.OuterRadius + "," + a.Growing / pollingRate + "," + a.Color + "," + a.Lifespan.Item1 / pollingRate + "," + a.Lifespan.Item2 / pollingRate + ");");
                 sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
+                //sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
                 sw.Write("}");
 
             }
@@ -903,7 +903,7 @@ namespace LuckParser.Controllers
                     sw.Write("var a = new rectangleActor(" + a.Width + "," + a.Height + "," + (a.Filled ? "true" : "false") + "," + a.Growing / pollingRate + "," + a.Color + "," + a.Lifespan
                         .Item1 / pollingRate + "," + a.Lifespan.Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(mob.InstID + "_" + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "_" + mob.CombatReplay.TimeOffsets.Item2 / pollingRate, map) + ";");
+                    //sw.Write("a.pos =" + a.GetPosition(mob.InstID + "_" + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "_" + mob.CombatReplay.TimeOffsets.Item2 / pollingRate, map) + ";");
                     sw.Write("}");
                 }
             }
@@ -915,7 +915,7 @@ namespace LuckParser.Controllers
                     sw.Write("{");
                     sw.Write("var a = new rectangleActor(" + a.Width + "," + a.Height + "," + (a.Filled ? "true" : "false") + "," + a.Growing / pollingRate + "," + a.Color + "," + a.Lifespan.Item1 / pollingRate + "," + a.Lifespan.Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
+                    //sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
                     sw.Write("}");
                 }
             }
@@ -924,7 +924,7 @@ namespace LuckParser.Controllers
                 sw.Write("{");
                 sw.Write("var a = new rectangleActor(" + a.Width + "," + a.Height + "," + (a.Filled ? "true" : "false") + "," + a.Growing / pollingRate + "," + a.Color + "," + a.Lifespan.Item1 / pollingRate + "," + a.Lifespan.Item2 / pollingRate + ");");
                 sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
+                //sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
                 sw.Write("}");
 
             }
@@ -939,7 +939,7 @@ namespace LuckParser.Controllers
                     sw.Write("{");
                     sw.Write("var a = new pieActor(" + a.Direction + "," + a.OpeningAngle + "," + a.Radius + "," + (a.Filled ? "true" : "false") + "," + a.Growing / pollingRate + "," + a.Color + "," + a.Lifespan.Item1 / pollingRate + "," + a.Lifespan.Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(mob.InstID + "_" + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "_" + mob.CombatReplay.TimeOffsets.Item2 / pollingRate, map) + ";");
+                    //sw.Write("a.pos =" + a.GetPosition(mob.InstID + "_" + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "_" + mob.CombatReplay.TimeOffsets.Item2 / pollingRate, map) + ";");
                     sw.Write("}");
                 }
             }
@@ -951,7 +951,7 @@ namespace LuckParser.Controllers
                     sw.Write("{");
                     sw.Write("var a = new pieActor(" + a.Direction + "," + a.OpeningAngle + "," + a.Radius + "," + (a.Filled ? "true" : "false") + "," + a.Growing / pollingRate + "," + a.Color + "," + a.Lifespan.Item1 / pollingRate + "," + a.Lifespan.Item2 / pollingRate + ");");
                     sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
+                    //sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
                     sw.Write("}");
                 }
             }
@@ -960,7 +960,7 @@ namespace LuckParser.Controllers
                 sw.Write("{");
                 sw.Write("var a = new pieActor(" + a.Direction + "," + a.OpeningAngle + "," + a.Radius + "," + (a.Filled ? "true" : "false") + "," + a.Growing / pollingRate + "," + a.Color + "," + a.Lifespan.Item1 / pollingRate + "," + a.Lifespan.Item2 / pollingRate + ");");
                 sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
+                //sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
                 sw.Write("}");
 
             }
