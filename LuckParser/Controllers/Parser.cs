@@ -635,8 +635,7 @@ namespace LuckParser.Controllers
             _combatData.Validate(_fightData);
             _fightData.Logic.CanCombatReplay = _fightData.Logic.CanCombatReplay && _combatData.MovementData.Count > 0;
             _fightData.HealthOverTime = bossHealthOverTime;//after xera in case of change
-            _fightData.SetSuccess(_combatData, _logData);
-            _fightData.SetCM(_combatData);
+            
 
             //players
             if (_playerList.Count == 0)
@@ -711,6 +710,8 @@ namespace LuckParser.Controllers
                 }
 
             }
+            _fightData.SetSuccess(_combatData, _logData, _playerList);
+            _fightData.SetCM(_combatData);
             if (_fightData.FightStart == 0)
             {
                 _fightData.FightStart = bossAgent.FirstAware;

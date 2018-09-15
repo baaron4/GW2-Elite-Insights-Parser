@@ -18,7 +18,7 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
         {
             CombatItem pov = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
             if (pov != null)

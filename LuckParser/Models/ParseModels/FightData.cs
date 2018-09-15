@@ -133,9 +133,9 @@ namespace LuckParser.Models.ParseModels
                 }
             }
         }
-        public void SetSuccess(CombatData combatData, LogData logData)
+        public void SetSuccess(CombatData combatData, LogData logData, List<Player> pList)
         {
-            Logic.SetSuccess(combatData, logData, this);
+            Logic.SetSuccess(combatData, logData, this, pList);
         }
     }
 }

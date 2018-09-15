@@ -54,7 +54,7 @@ namespace LuckParser.Models
             return "https://i.imgur.com/IOPAHRE.png";
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
         {
             // check reward
             CombatItem reward = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
@@ -64,11 +64,11 @@ namespace LuckParser.Models
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)
                 {
                     logData.Success = true;
-                    fightData.FightStart = Math.Min(lastDamageTaken.Time, reward.Time);
+                    fightData.FightEnd = Math.Min(lastDamageTaken.Time, reward.Time);
                 }
                 else
                 {
-                    SetSuccessByDeath(combatData, logData, fightData);
+                    SetSuccessByDeath(combatData,logData,fightData,pList);
                     if (logData.Success)
                     {
                         fightData.FightEnd = Math.Min(fightData.FightEnd, lastDamageTaken.Time);

@@ -60,9 +60,9 @@ namespace LuckParser.Models
             return "https://i.imgur.com/u6vv8cW.png";
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
         {
-            SetSuccessOnCombatExit(combatData, logData, fightData, 3);
+            SetSuccessOnCombatExit(combatData,logData,fightData,pList, 3, 3000);
         }
     }
 }
