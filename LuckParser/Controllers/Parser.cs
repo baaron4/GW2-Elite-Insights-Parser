@@ -33,14 +33,6 @@ namespace LuckParser.Controllers
         }
 
         // Public Methods
-        public LogData GetLogData()
-        {
-            return _logData;
-        }
-        public FightData GetFightData()
-        {
-            return _fightData;
-        }
 
         public ParsedLog GetParsedLog()
         {

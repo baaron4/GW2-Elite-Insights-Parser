@@ -235,8 +235,7 @@ namespace LuckParser
                     {
                         throw new CancellationException(rowData, new Exception("Invalid save directory"));
                     }
-                    string bossid = parser.GetFightData().ID.ToString();
-                    string result = parser.GetLogData().Success ? "kill" : "fail";
+                    string result = log.LogData.Success ? "kill" : "fail";
                     
                     StatisticsCalculator statisticsCalculator = new StatisticsCalculator(settings);
                     StatisticsCalculator.Switches switches = new StatisticsCalculator.Switches();
@@ -260,7 +259,7 @@ namespace LuckParser
                     {
                         string outputFile = Path.Combine(
                         saveDirectory.FullName,
-                        $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.html"
+                        $"{fName}_{log.FightData.Logic.Extension}_{result}.html"
                         );
                         rowData.LogLocation = outputFile;
                         using (var fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
@@ -282,7 +281,7 @@ namespace LuckParser
                     {
                         string outputFile = Path.Combine(
                         saveDirectory.FullName,
-                        $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.csv"
+                        $"{fName}_{log.FightData.Logic.Extension}_{result}.csv"
                         );
                         string splitString = "";
                         if (rowData.LogLocation != null) { splitString = ","; }
@@ -298,7 +297,7 @@ namespace LuckParser
                     {
                         string outputFile = Path.Combine(
                             saveDirectory.FullName,
-                            $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.json"
+                            $"{fName}_{log.FightData.Logic.Extension}_{result}.json"
                         );
                         string splitString = "";
                         if (rowData.LogLocation != null) { splitString = ","; }
@@ -311,7 +310,7 @@ namespace LuckParser
                         }
                     }
 
-                    bg.UpdateProgress(rowData, $"100% - Complete_{HTMLHelper.GetLink(bossid + "-ext")}_{result}", 100);
+                    bg.UpdateProgress(rowData, $"100% - Complete_{log.FightData.Logic.Extension}_{result}", 100);
                 }
                 else
                 {
