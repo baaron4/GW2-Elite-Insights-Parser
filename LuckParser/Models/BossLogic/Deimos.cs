@@ -125,7 +125,9 @@ namespace LuckParser.Models
                         ParseEnum.TrashIDS.GamblerClones,
                         ParseEnum.TrashIDS.GamblerReal,
                         ParseEnum.TrashIDS.Greed,
-                        ParseEnum.TrashIDS.Pride
+                        ParseEnum.TrashIDS.Pride,
+                        ParseEnum.TrashIDS.Oil,
+                        ParseEnum.TrashIDS.Tear
                     };
             List<CastLog> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
             foreach (CastLog c in mindCrush)
