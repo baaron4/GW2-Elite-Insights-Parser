@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -51,9 +52,53 @@ namespace LuckParser.Models.ParseModels
         }
 
         //
+
+        protected class PieSerializable<T> : CircleSerializable<T>
+        {
+            public int Direction { get; set; }
+            public int OpeningAngle { get; set; }
+        }
+
         public override string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master)
         {
-            throw new NotImplementedException();
+            if (Type == PositionType.Array)
+            {
+                PieSerializable<int[]> aux = new PieSerializable<int[]>
+                {
+                    Type = "Pie",
+                    Radius = Radius,
+                    Direction = Direction,
+                    OpeningAngle = OpeningAngle,
+                    Fill = Filled,
+                    Color = Color,
+                    Growing = Growing,
+                    Start = Lifespan.Item1,
+                    End = Lifespan.Item2,
+                    Position = new int[2]
+                };
+                Tuple<int, int> mapPos = map.GetMapCoord(Position.X, Position.Y);
+                aux.Position[0] = mapPos.Item1;
+                aux.Position[1] = mapPos.Item2;
+                return JsonConvert.SerializeObject(aux);
+            }
+            else
+            {
+
+                PieSerializable<int> aux = new PieSerializable<int>()
+                {
+                    Type = "Pie",
+                    Radius = Radius,
+                    Direction = Direction,
+                    OpeningAngle = OpeningAngle,
+                    Fill = Filled,
+                    Color = Color,
+                    Growing = Growing,
+                    Start = Lifespan.Item1,
+                    End = Lifespan.Item2,
+                    Position = master.GetCombatReplayID()
+                };
+                return JsonConvert.SerializeObject(aux);
+            }
         }
     }
 }

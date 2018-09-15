@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace LuckParser.Models.ParseModels
 {
@@ -23,10 +24,50 @@ namespace LuckParser.Models.ParseModels
         }
         //
 
+        private class DoughnutSerializable<T> : Serializable<T>
+        {
+            public int InnerRadius { get; set; }
+            public int OuterRadius { get; set; }
+        }
 
         public override string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master)
         {
-            throw new NotImplementedException();
+            if (Type == PositionType.Array)
+            {
+                DoughnutSerializable<int[]> aux = new DoughnutSerializable<int[]>
+                {
+                    Type = "Doughnut",
+                    OuterRadius = OuterRadius,
+                    InnerRadius = InnerRadius,
+                    Fill = Filled,
+                    Color = Color,
+                    Growing = Growing,
+                    Start = Lifespan.Item1,
+                    End = Lifespan.Item2,
+                    Position = new int[2]
+                };
+                Tuple<int, int> mapPos = map.GetMapCoord(Position.X, Position.Y);
+                aux.Position[0] = mapPos.Item1;
+                aux.Position[1] = mapPos.Item2;
+                return JsonConvert.SerializeObject(aux);
+            }
+            else
+            {
+
+                DoughnutSerializable<int> aux = new DoughnutSerializable<int>()
+                {
+                    Type = "Doughnut",
+                    OuterRadius = OuterRadius,
+                    InnerRadius = InnerRadius,
+                    Fill = Filled,
+                    Color = Color,
+                    Growing = Growing,
+                    Start = Lifespan.Item1,
+                    End = Lifespan.Item2,
+                    Position = master.GetCombatReplayID()
+                };
+                return JsonConvert.SerializeObject(aux);
+            }
         }
 
     }
