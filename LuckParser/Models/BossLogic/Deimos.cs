@@ -109,6 +109,7 @@ namespace LuckParser.Models
                         phase.Redirection.Add(a);
                     }
                 }
+                phase.OverrideStart(log.FightData.FightStart);
 
             }
             phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
