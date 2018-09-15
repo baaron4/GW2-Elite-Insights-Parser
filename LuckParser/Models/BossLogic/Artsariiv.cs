@@ -22,6 +22,8 @@ namespace LuckParser.Models
             new Mechanic(791, "Fear", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Artsariiv, "symbol:'square-open',color:'rgb(255,0,0)',", "Eye","Hit by the Overhead Eye Fear", "Eye (Fear)" ,0,(condition => condition.CombatItem.Value == 3000)), //not triggered under stab, still get blinded/damaged, seperate tracking desired?
             new Mechanic(17630, "Spark", Mechanic.MechType.Spawn, ParseEnum.BossIDS.Artsariiv, "symbol: 'star', color: 'rgb(0,255,255)',","Sprk","Spawned a Spark (missed marble)", "Spark",0),
             });
+            Extension = "arts";
+            IconUrl = "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
         }
 
         public override CombatReplayMap GetCombatMap()

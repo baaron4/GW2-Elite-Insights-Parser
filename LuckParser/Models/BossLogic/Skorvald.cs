@@ -33,6 +33,8 @@ namespace LuckParser.Models
             new Mechanic(39911, "Spiral Strike", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Skorvald, "symbol:'circle-open',color:'rgb(0,200,0)',", "SprlStr","Hit after Warp (Jump to Player with overhead bomb)", "Spiral Strike",0),
             new Mechanic(39133, "Wave of Mutilation", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Skorvald, "symbol:'triangle-sw',color:'rgb(0,200,0)',", "KBJmp","Hit by KB Jump (player targeted)", "Knockback jump",0),
             });
+            Extension = "skorv";
+            IconUrl = "https://wiki.guildwars2.com/images/c/c1/Skorvald_the_Shattered.jpg";
         }
 
         public override CombatReplayMap GetCombatMap()

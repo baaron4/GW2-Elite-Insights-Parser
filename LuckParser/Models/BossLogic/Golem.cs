@@ -7,9 +7,32 @@ namespace LuckParser.Models
 {
     public class Golem : BossLogic
     {
-        public Golem()
+        public Golem(ushort id)
         {
-            Mode = ParseMode.Golem;          
+            Mode = ParseMode.Golem;  
+            switch (id)
+            {
+                case 16202:
+                    Extension = "MassiveGolem";
+                    IconUrl = "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
+                    break;
+                case 16177:
+                    Extension = "AvgGolem";
+                    IconUrl = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+                    break;
+                case 19676:
+                    Extension = "LGolem";
+                    IconUrl = "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
+                    break;
+                case 19645:
+                    Extension = "MedGolem";
+                    IconUrl = "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
+                    break;
+                case 16199:
+                    Extension = "StdGolem";
+                    IconUrl = "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
+                    break;
+            }
         }
 
         public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)

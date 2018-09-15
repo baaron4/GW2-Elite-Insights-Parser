@@ -95,12 +95,12 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.BossIDS.Arkk:
                     Logic = new Arkk();
                     break;
-                case ParseEnum.BossIDS.Golem1:
-                case ParseEnum.BossIDS.Golem2:
-                case ParseEnum.BossIDS.Golem3:
-                case ParseEnum.BossIDS.Golem4:
-                case ParseEnum.BossIDS.Golem5:
-                    Logic = new Golem();
+                case ParseEnum.BossIDS.MassiveGolem:
+                case ParseEnum.BossIDS.AvgGolem:
+                case ParseEnum.BossIDS.LGolem:
+                case ParseEnum.BossIDS.MedGolem:
+                case ParseEnum.BossIDS.StdGolem:
+                    Logic = new Golem(id);
                     break;
                 default:
                     // Unknown

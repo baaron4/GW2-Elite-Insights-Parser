@@ -28,7 +28,9 @@ namespace LuckParser.Models
             new Mechanic(37434, "Rampage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'asterisk-open',color:'rgb(255,0,0)',", "Rmpg","Rampage (asterisk shaped Arrow attack)", "Rampage",150),
             new Mechanic(37045, "Caustic Grasp", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'star-diamond',color:'rgb(255,140,0)',", "Pull","Caustic Grasp (Arena Wide Pull)", "Pull",0), 
             new Mechanic(36926, "Tormenting Blast", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Ensolyss, "symbol:'diamond',color:'rgb(255,255,0)',", "Qrtr","Tormenting Blast (Two Quatrer Circle attacks)", "Quarter circle",0), 
-            }); 
+            });
+            Extension = "ensol";
+            IconUrl = "https://wiki.guildwars2.com/images/5/57/Champion_Toxic_Hybrid.jpg";
         }
 
         public override CombatReplayMap GetCombatMap()
