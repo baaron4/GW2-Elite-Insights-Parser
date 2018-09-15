@@ -599,7 +599,7 @@ namespace LuckParser.Controllers
                 if (deimosGadgets.Count > 0)
                 {
                     AgentItem NPC = deimosGadgets.Last();
-                    int deimos2Instid = NPC.InstID;
+                    HashSet<ulong> deimos2Agents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
                     long oldAware = bossAgent.LastAware;
                     _boss.PhaseData.Add(NPC.FirstAware >= oldAware ? NPC.FirstAware : oldAware);
                     //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos2Instid ).ToList().Sum(x);
@@ -608,13 +608,13 @@ namespace LuckParser.Controllers
                     {
                         if (c.Time > oldAware)
                         {
-                            if (c.SrcInstid == deimos2Instid)
+                            if (deimos2Agents.Contains(c.SrcAgent))
                             {
                                 c.SrcInstid = _fightData.InstID;
                                 c.SrcAgent = _fightData.Agent;
 
                             }
-                            if (c.DstInstid == deimos2Instid)
+                            if (deimos2Agents.Contains(c.DstAgent))
                             {
                                 c.DstInstid = _fightData.InstID;
                                 c.DstAgent = _fightData.Agent;
