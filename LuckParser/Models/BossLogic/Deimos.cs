@@ -76,7 +76,7 @@ namespace LuckParser.Models
                 CombatItem teleportBack = log.GetBoonData(38169).FirstOrDefault(x => x.Time - log.FightData.FightStart > start + 10000);
                 if (teleportBack != null)
                 {
-                    end = teleportBack.Time - log.FightData.FightStart;
+                    end = Math.Min(teleportBack.Time - log.FightData.FightStart, fightDuration);
                 }
                 else
                 {
