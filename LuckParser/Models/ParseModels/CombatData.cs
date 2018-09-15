@@ -6,7 +6,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class CombatData : List<CombatItem>
     {
-        private Dictionary<ParseEnum.StateChange, List<CombatItem>> _statesData;
+        public Dictionary<ParseEnum.StateChange, List<CombatItem>> StatesData { get; private set; }
         //private List<CombatItem> _healingData;
         //private List<CombatItem> _healingReceivedData;
 
@@ -20,7 +20,7 @@ namespace LuckParser.Models.ParseModels
 
         public List<CombatItem> GetStates(int srcInstid, ParseEnum.StateChange change, long start, long end)
         {
-            if (_statesData.TryGetValue(change, out List<CombatItem> data))
+            if (StatesData.TryGetValue(change, out List<CombatItem> data))
             {
                 return data.Where(x => x.SrcInstid == srcInstid && x.Time >= start && x.Time <= end).ToList();
             }
@@ -61,7 +61,7 @@ namespace LuckParser.Models.ParseModels
             CastData = castData.GroupBy(x => x.SrcInstid).ToDictionary(x => x.Key, x => x.ToList());
             CastDataById = castData.GroupBy(x => x.SkillID).ToDictionary(x => x.Key, x => x.ToList());
 
-            _statesData = this.GroupBy(x => x.IsStateChange).ToDictionary(x => x.Key, x => x.ToList());
+            StatesData = this.GroupBy(x => x.IsStateChange).ToDictionary(x => x.Key, x => x.ToList());
 
             MovementData = fightData.Logic.CanCombatReplay
                 ? this.Where(x =>
@@ -134,7 +134,7 @@ namespace LuckParser.Models.ParseModels
             {
                 return res;
             }
-            return new List<CombatItem>(); ;
+            return new List<CombatItem>();
         }
 
         /*public List<CombatItem> getHealingData()
@@ -154,7 +154,16 @@ namespace LuckParser.Models.ParseModels
             {
                 return res;
             }
-            return new List<CombatItem>(); ;
+            return new List<CombatItem>();
+        }
+
+        public List<CombatItem> GetStatesData(ParseEnum.StateChange key)
+        {
+            if (StatesData.TryGetValue(key, out List<CombatItem> res))
+            {
+                return res;
+            }
+            return new List<CombatItem>();
         }
     }
 }
