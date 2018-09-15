@@ -458,12 +458,16 @@ function createAllActors() {
                 trashMobData.set(actor.ID, new MobIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
                 break;
             case "Circle":
+                mechanicActorData.add(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.Position));
                 break;
             case "Rectangle":
+                mechanicActorData.add(new RectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.Position));
                 break;
             case "Doughnut":
+                mechanicActorData.add(new DoughnutMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.InnerRadius, actor.OuterRadius, actor.Position));
                 break;
             case "Pie":
+                mechanicActorData.add(new PieMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Direction, actor.OpeningAngle, actor.Radius, actor.Position));
                 break;
         }
     }
