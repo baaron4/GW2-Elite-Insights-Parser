@@ -60,7 +60,7 @@ function animateCanvas() {
 bgImage.onload = function () {
     animateCanvas();
     bgLoaded = true;
-}
+};
 function startAnimate() {
     if (animation === null && times.length > 0) {
         if (time >= times[times.length - 1]) {
@@ -108,7 +108,7 @@ function toggleRange(radius) {
 // slider
 function updateTime(value) {
     time = parseInt(value);
-    updateTextInput(time)
+    updateTextInput(time);
 }
 function updateTextInput(val) {
     timeSliderDisplay.value = val / 1000.0 + ' secs';
@@ -128,7 +128,7 @@ function selectActor(pId) {
         let hasActive = document.getElementById('id' + pId).classList.contains('active');
         if (hasActive) {
             setTimeout(function () {
-                document.getElementById('id' + pId).classList.remove('active')
+                document.getElementById('id' + pId).classList.remove('active');
             }, 50);
         }
     } else {
@@ -206,10 +206,11 @@ class IconDrawable extends Drawable {
 }
 
 class PlayerIconDrawable extends IconDrawable {
-    constructor(start, end, imgSrc, pixelSize, group) {
-        super(start, end, imgSrc, pixelSize);
-        this.dead = null;
-        this.down = null;
+    constructor(imgSrc, pixelSize, group, pos, dead,down) {
+        super(-1, -1, imgSrc, pixelSize);
+        this.pos = pos;
+        this.dead = dead;
+        this.down = down;
         this.selected = false;
         this.group = group;
     }
@@ -246,12 +247,11 @@ class PlayerIconDrawable extends IconDrawable {
     }
 
     died(currentTime) {
-        if (this.dead === null) {
+        if (this.dead === null || this.dead.length === 0) {
             return false;
         }
-        for (var i = 0; i < this.dead.length; i++) {
-            let deadItem = this.dead[i];
-            if (deadItem[0] <= currentTime && deadItem[1] >= currentTime) {
+        for (let i = 0; i < this.dead.length; i += 2) {
+            if (this.dead[i] <= currentTime && this.dead[i + 1] >= currentTime) {
                 return true;
             }
         }
@@ -259,12 +259,11 @@ class PlayerIconDrawable extends IconDrawable {
     }
 
     downed(currentTime) {
-        if (this.down === null) {
+        if (this.down === null || this.down.length === 0) {
             return false;
         }
-        for (var i = 0; i < this.down.length; i++) {
-            let downItem = this.down[i];
-            if (downItem[0] <= currentTime && downItem[1] >= currentTime) {
+        for (let i = 0; i < this.down.length; i += 2) {
+            if (this.down[i] <= currentTime && this.down[i + 1] >= currentTime) {
                 return true;
             }
         }
@@ -281,6 +280,20 @@ class PlayerIconDrawable extends IconDrawable {
         return img;
     }
 
+}
+
+class BossIconDrawable extends IconDrawable {
+    constructor(imgSrc, pixelSize, pos) {
+        super(-1, -1, imgSrc, pixelSize);
+        this.pos = pos;
+    }
+}
+
+class MobIconDrawable extends IconDrawable {
+    constructor(start, end, imgSrc, pixelSize, pos) {
+        super(start, end, imgSrc, pixelSize);
+        this.pos = pos;
+    }
 }
 
 class MechanicDrawable extends Drawable {
@@ -303,11 +316,11 @@ class MechanicDrawable extends Drawable {
             return {
                 x: this.pos[0],
                 y: this.pos[1]
-            }
+            };
         } else {
             if (this.master === null) {
                 let masterId = this.pos;
-                this.master = playerData.has(masterId) ? playerData.get(masterId) : (trashMobData.has(masterId) ? trashMobData.get(masterId) : boss);
+                this.master = playerData.has(masterId) ? playerData.get(masterId) : trashMobData.has(masterId) ? trashMobData.get(masterId) : boss;
             }
             return master.getPosition(currentTime);
         }
@@ -329,7 +342,7 @@ class CircleMechanicDrawable extends MechanicDrawable {
 
     draw(ctx, currentTime) {
         let pos = this.getPosition(currentTime);
-        if (pos == null) {
+        if (pos === null) {
             return;
         }
         ctx.beginPath();
@@ -346,15 +359,15 @@ class CircleMechanicDrawable extends MechanicDrawable {
 }
 
 class DoughnutMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growing, color, innerRadius,outerRadius) {
+    constructor(start, end, fill, growing, color, innerRadius, outerRadius) {
         super(start, end, fill, growing, color);
-        this.radius = inch *  0.5 * (innerRadius + outerRadius);
+        this.radius = inch * 0.5 * (innerRadius + outerRadius);
         this.width = inch * (outerRadius - innerRadius);
     }
 
     draw(ctx, currentTime) {
         let pos = this.getPosition(currentTime);
-        if (pos == null) {
+        if (pos === null) {
             return;
         }
         let percent = this.getPercent(currentTime);
@@ -375,12 +388,12 @@ class RectangleMechanicDrawable extends MechanicDrawable {
 
     draw(ctx, currentTime) {
         let pos = this.getPosition(currentTime);
-        if (pos == null) {
+        if (pos === null) {
             return;
         }
         let percent = this.getPercent(currentTime);
         ctx.beginPath();
-        ctx.rect(pos.x - 0.5*this.width , pos.y - 0.5*this.height , percent * this.width , percent * this.height );
+        ctx.rect(pos.x - 0.5 * this.width, pos.y - 0.5 * this.height, percent * this.width, percent * this.height);
         if (this.fill) {
             ctx.fillStyle = this.color;
             ctx.fill();
@@ -396,22 +409,22 @@ class PieMechanicDrawable extends MechanicDrawable {
     constructor(start, end, fill, growing, color, direction, openingAngle, radius) {
         super(start, end, fill, growing, color);
         this.direction = direction * Math.PI / 180;
-        this.openingAngle = 0.5* openingAngle * Math.PI / 180;
-        this.radius = inch *radius;
+        this.openingAngle = 0.5 * openingAngle * Math.PI / 180;
+        this.radius = inch * radius;
         this.dx = Math.cos(this.direction - this.openingAngle) * this.radius;
         this.dy = Math.sin(this.direction - this.openingAngle) * this.radius;
     }
 
     draw(ctx, currentTime) {
         let pos = this.getPosition(currentTime);
-        if (pos == null) {
+        if (pos === null) {
             return;
         }
         let percent = this.getPercent(currentTime);
         ctx.beginPath();
         ctx.moveTo(pos.x, pos.y);
         ctx.lineTo(pos.x + this.dx * percent, pos.y + this.dy * percent);
-        ctx.arc(pos.x, pos.y, percent *  this.radius, this.direction - this.openingAngle, this.direction  + this.openingAngle);
+        ctx.arc(pos.x, pos.y, percent * this.radius, this.direction - this.openingAngle, this.direction + this.openingAngle);
         ctx.closePath();
         if (this.fill) {
             ctx.fillStyle = this.color;
@@ -424,6 +437,25 @@ class PieMechanicDrawable extends MechanicDrawable {
     }
 }
 
+let actors = [];
+
+
+function createAllActors() {
+    for (let i = 0; i < actors.length; i++) {
+        const actor = actors[i];
+        switch (actor.Type) {
+            case "Player":
+                playerData.set(actor.ID, new PlayerIconDrawable(actor.Img, 20, actor.Group, actor.Positions, actor.Dead, actor.Down));
+                break;
+            case "Boss":
+                boss = new BossIconDrawable(actor.Img, 40, actor.Positions);
+                break;
+            case "Mob":
+                trashMobData.set(actor.ID, new MobIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
+                break;
+        }
+    }
+}
 // .... etc, move all other static methods here
 
 /*
@@ -431,12 +463,12 @@ class PieMechanicDrawable extends MechanicDrawable {
 
 Another thing... right now your code looks like this:
 
-{var a = new circleActor(100,true,2493,'rgba(0, 50, 200, 0.5)',2024,2410);mechanicData.add(a);a.pos ='358';}
-{var p = new secondaryActor('https://i.imgur.com/elHjamF.png',4145,4441);secondaryData.set('733_4145_4441',p);p.pos = [697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,];}
+{let a = new circleActor(100,true,2493,'rgba(0, 50, 200, 0.5)',2024,2410);mechanicData.add(a);a.pos ='358';}
+{let p = new secondaryActor('https://i.imgur.com/elHjamF.png',4145,4441);secondaryData.set('733_4145_4441',p);p.pos = [697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,697,101,];}
 
 I would change that actual data to json-compatible objects, something like this:
 
-var actors = [
+let actors = [
 	{
 		"type": "circle",
 		"radius": 100,

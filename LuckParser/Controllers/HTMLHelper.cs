@@ -817,70 +817,6 @@ namespace LuckParser.Controllers
             }
             sw.Write("</div>");
         }
-       
-        private static void WriteCombatReplayMainClass(StreamWriter sw, ParsedLog log,CombatReplayMap map, int pollingRate)
-        {  
-            // create players
-            foreach (Player p in log.PlayerList)
-            {
-                sw.Write("{");
-                sw.Write("var p = new mainActor(" + p.Group + ",'" + p.CombatReplay.Icon + "');");
-                sw.Write("data.set(" + p.InstID + ",p);");
-                sw.Write("p.pos = [");
-                foreach (Point3D pos in p.CombatReplay.Positions)
-                {
-                    Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
-                    sw.Write(coord.Item1 + ",");
-                    sw.Write(coord.Item2 + ",");
-                }
-                sw.Write("];");
-                sw.Write("p.dead = [");
-                foreach (Tuple<long, long> status in p.CombatReplay.Deads)
-                {
-                    sw.Write("[" + status.Item1/pollingRate + ",");
-                    sw.Write(status.Item2 / pollingRate + "],");
-                }
-                sw.Write("];");
-                sw.Write("p.down = [");
-                foreach (Tuple<long,long> status in p.CombatReplay.Downs)
-                {
-                    sw.Write("[" + status.Item1 / pollingRate + ",");
-                    sw.Write(status.Item2 / pollingRate + "],");
-                }
-                sw.Write("];");
-                sw.Write("}");
-            }
-            // create boss
-            sw.Write("boss = new mainActor(-2,'" + log.Boss.CombatReplay.Icon + "');");
-            sw.Write("boss.pos = [");
-            foreach (Point3D pos in log.Boss.CombatReplay.Positions)
-            {
-                Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
-                sw.Write(coord.Item1 + ",");
-                sw.Write(coord.Item2 + ",");
-            }
-            sw.Write("];");
-        }
-
-        private static void WriteCombatReplaySecondaryClass(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
-        {              
-            // create trash mobs
-            foreach (Mob mob in log.Boss.TrashMobs)
-            {
-                sw.Write("{");
-                sw.Write("var p = new secondaryActor('" + mob.CombatReplay.Icon + "'," + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "," + mob.CombatReplay.TimeOffsets.Item2 / pollingRate + ");");
-                sw.Write("secondaryData.set('" + mob.InstID + "_" + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "_" + mob.CombatReplay.TimeOffsets.Item2 / pollingRate + "',p);");
-                sw.Write("p.pos = [");
-                foreach (Point3D pos in mob.CombatReplay.Positions)
-                {
-                    Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
-                    sw.Write(coord.Item1 + ",");
-                    sw.Write(coord.Item2 + ",");
-                }
-                sw.Write("];");
-                sw.Write("}");
-            }
-        }
 
         private static void WriteCombatReplayCircleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {           
@@ -1040,9 +976,6 @@ namespace LuckParser.Controllers
             sw.WriteLine("</script>");
             sw.Write("<script>");
             {
-                // globals
-                WriteCombatReplayMainClass(sw, log, map, pollingRate);
-                WriteCombatReplaySecondaryClass(sw, log, map, pollingRate);
                 WriteCombatReplayCircleActors(sw, log, map, pollingRate);
                 WriteCombatReplayDoughnutActors(sw, log, map, pollingRate);
                 WriteCombatReplayRectangleActors(sw, log, map, pollingRate);
