@@ -798,7 +798,7 @@ namespace LuckParser.Controllers
                                 sw.Write("<h3>Group " + group + "</h3>");
                                 foreach (Player p in log.PlayerList.Where(x => x.Group == group))
                                 {
-                                    sw.Write("<label id=\"id" + p.InstID + "\" style=\"width: 150px;\" onclick=\"selectActor('" + p.InstID + "')\"  class=\"btn btn-dark\">" +
+                                    sw.Write("<label id=\"id" + p.InstID + "\" style=\"width: 150px;\" onclick=\"selectActor(" + p.InstID + ")\"  class=\"btn btn-dark\">" +
                                         "<input class=\"invisible\" type=\"radio\" autocomplete=\"off\">" +
                                         p.Character.Substring(0, Math.Min(10, p.Character.Length))
                                         + " <img src=\"" + GetLink(p.Prof)
@@ -883,61 +883,7 @@ namespace LuckParser.Controllers
         }
 
         private static void WriteCombatReplayCircleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
-        {
-            
-            // Circle actors
-            sw.Write("var circleActor = function(radius,fill,growing, color, start, end) {" +
-                    "this.pos = null;" +
-                    "this.master = null;" +
-                    "this.start = start;" +
-                    "this.radius = radius;" +
-                    "this.end = end;" +
-                    "this.growing = growing;" +
-                    "this.fill = fill;" +
-                    "this.color = color;" +
-                "};");
-            sw.Write("circleActor.prototype.draw = function(ctx,timeToUse){" +
-                    "if (!(this.start > timeToUse || this.end < timeToUse)) {" +
-                        "var x,y;" +
-                        "if (this.pos instanceof Array) {" +
-                            "x = this.pos[0];" +
-                            "y = this.pos[1];" +
-                        "} else {" +
-                            "if (!this.master) {" +
-                                "var playerID = parseInt(this.pos);" +
-                                "this.master = data.has(playerID) ? data.get(playerID) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);" +
-                            "}" +
-                            "var start = this.master.start ? this.master.start : 0;" +
-                            "x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];" +
-                            "y = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start) + 1] : this.master.pos[1];" +
-                        "}" +
-                        "if (this.growing) {" +
-                            "var percent = Math.min((timeToUse - this.start)/(this.growing - this.start),1.0);" +
-                            "ctx.beginPath();" +
-                            "ctx.arc(x,y,percent*inch * this.radius,0,2*Math.PI);" +
-                            "if (this.fill) {" +
-                                "ctx.fillStyle=this.color;" +
-                                "ctx.fill();" +
-                            "} else {" +
-                                "ctx.lineWidth='2';" +
-                                "ctx.strokeStyle=this.color;" +
-                                "ctx.stroke();" +
-                            "}" +
-                        "} else {" +
-                            "ctx.beginPath();" +
-                            "ctx.arc(x,y,inch * this.radius,0,2*Math.PI);" +
-                            "if (this.fill) {" +
-                                "ctx.fillStyle=this.color;" +
-                                "ctx.fill();" +
-                            "} else {" +
-                                "ctx.lineWidth='2';" +
-                                "ctx.strokeStyle=this.color;" +
-                                "ctx.stroke();" +
-                            "}" +
-                        "}" +
-                    "}" +
-                "};");
-            
+        {           
             foreach (Mob mob in log.Boss.TrashMobs)
             {
                 CombatReplay replay = mob.CombatReplay;
@@ -975,50 +921,6 @@ namespace LuckParser.Controllers
 
         private static void WriteCombatReplayDoughnutActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
-            // Doughnut actors
-            sw.Write("var doughnutActor = function(innerRadius,outerRadius,growing, color, start, end) {" +
-                    "this.pos = null;" +
-                    "this.master = null;" +
-                    "this.start = start;" +
-                    "this.innerRadius = innerRadius;" +
-                    "this.outerRadius = outerRadius;" +
-                    "this.end = end;" +
-                    "this.growing = growing;" +
-                    "this.color = color;" +
-                "};");
-            sw.Write("doughnutActor.prototype.draw = function(ctx,timeToUse){" +
-                    "if (!(this.start > timeToUse || this.end < timeToUse)) {" +
-                        "var x,y;" +
-                        "if (this.pos instanceof Array) {" +
-                            "x = this.pos[0];" +
-                            "y = this.pos[1];" +
-                        "} else {" +
-                            "if (!this.master) {" +
-                                "var playerID = parseInt(this.pos);" +
-                                "this.master = data.has(playerID) ? data.get(playerID) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);" +
-                            "}" +
-                            "var start = this.master.start ? this.master.start : 0;" +
-                            "x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];" +
-                            "y = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start) + 1] : this.master.pos[1];" +
-                        "}" +
-                        "var radius = 0.5*(this.innerRadius + this.outerRadius);" +
-                        "var width = (this.outerRadius - this.innerRadius);" +
-                        "if (this.growing) {" +
-                            "var percent = Math.min((timeToUse - this.start)/(this.growing - this.start),1.0);" +
-                            "ctx.beginPath();" +
-                            "ctx.arc(x,y,inch * radius,0,2*Math.PI);" +
-                            "ctx.lineWidth=(inch * percent * width).toString();" +
-                            "ctx.strokeStyle=this.color;" +
-                            "ctx.stroke();" +
-                        "} else {" +
-                            "ctx.beginPath();" +
-                            "ctx.arc(x,y,inch * radius,0,2*Math.PI);" +
-                            "ctx.lineWidth=(inch * width).toString();" +
-                            "ctx.strokeStyle=this.color;" +
-                            "ctx.stroke();" +
-                        "}" +
-                    "}" +
-                "};");
             foreach (Mob mob in log.Boss.TrashMobs)
             {
                 CombatReplay replay = mob.CombatReplay;
@@ -1056,61 +958,6 @@ namespace LuckParser.Controllers
 
         private static void WriteCombatReplayRectangleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
-            // Rectangle actors
-            sw.Write("var rectangleActor = function(width, height, fill, growing, color, start, end) {" +
-                    "this.pos = null;" +
-                    "this.master = null;" +
-                    "this.start = start;" +
-                    "this.width = width;" +
-                    "this.height = height;" +
-                    "this.end = end;" +
-                    "this.fill = fill;" +
-                    "this.growing = growing;" +
-                    "this.color = color;" +
-                "};");
-            sw.Write("rectangleActor.prototype.draw = function(ctx,timeToUse){" +
-                    "if (!(this.start > timeToUse || this.end < timeToUse)) {" +
-                        "var x,y;" +
-                        "if (this.pos instanceof Array) {" +
-                            "x = this.pos[0];" +
-                            "y = this.pos[1];" +
-                        "} else {" +
-                            "if (!this.master) {" +
-                                "var playerID = parseInt(this.pos);" +
-                                "this.master = data.has(playerID) ? data.get(playerID) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);" +
-                            "}" +
-                            "var start = this.master.start ? this.master.start : 0;" +
-                            "x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];" +
-                            "y = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start) + 1] : this.master.pos[1];" +
-                        "}" +
-                        "if (this.growing) {" +
-                            "var percent = Math.min((timeToUse - this.start)/(this.growing - this.start),1.0);" +
-                            "ctx.beginPath();" +
-                            "ctx.rect(x-this.width*inch/2,y-this.height*inch/2,percent*this.width*inch,percent*this.height*inch);" +
-                            "if (this.fill) {" +
-                                "ctx.fillStyle=this.color;" +
-                                "ctx.fill();" +
-                            "} else {" +
-                                "ctx.lineWidth='2';" +
-                                "ctx.strokeStyle=this.color;" +
-                                "ctx.stroke();" +
-                            "}" +
-                        "} else {" +
-                            "ctx.beginPath();" +
-                            "ctx.rect(x-this.width*inch/2,y-this.height*inch/2,this.width*inch,this.height*inch);" +
-                            "if (this.fill) {" +
-                                "ctx.fillStyle=this.color;" +
-                                "ctx.fill();" +
-                                "ctx.lineWidth='2';" +
-                                "ctx.stroke();" +
-                            "} else {" +
-                                "ctx.lineWidth='2';" +
-                                "ctx.strokeStyle=this.color;" +
-                                "ctx.stroke();" +
-                            "}" +
-                        "}" +
-                    "}" +
-                "};");
             foreach (Mob mob in log.Boss.TrashMobs)
             {
                 CombatReplay replay = mob.CombatReplay;
@@ -1148,69 +995,6 @@ namespace LuckParser.Controllers
         }
         private static void WriteCombatReplayPieActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
         {
-            // Pie actors
-            sw.Write("var pieActor = function(direction,openingAngle,radius,fill,growing, color, start, end) {" +
-                    "this.pos = null;" +
-                    "this.master = null;" +
-                    "this.start = start;" +
-                    "this.radius = radius;" +
-                    "this.direction = direction;" +
-                    "this.openingAngle = openingAngle;" +
-                    "this.end = end;" +
-                    "this.growing = growing;" +
-                    "this.fill = fill;" +
-                    "this.color = color;" +
-                "};");
-            sw.Write("pieActor.prototype.draw = function(ctx,timeToUse){" +
-                    "if (!(this.start > timeToUse || this.end < timeToUse)) {" +
-                        "var x,y;" +
-                        "var x1,y1;" + 
-                        "if (this.pos instanceof Array) {" +
-                            "x = this.pos[0];" +
-                            "y = this.pos[1];" +
-                        "} else {" +
-                            "if (!this.master) {" +
-                                "var playerID = parseInt(this.pos);" +
-                                "this.master = data.has(playerID) ? data.get(playerID) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);" +
-                            "}" +
-                            "var start = this.master.start ? this.master.start : 0;" +
-                            "x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];" +
-                            "y = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start) + 1] : this.master.pos[1];" +
-                        "}" +
-                        "dx = Math.cos(this.direction*Math.PI/180 - this.openingAngle/2*Math.PI/180)*this.radius*inch;" +
-                        "dy = Math.sin(this.direction*Math.PI/180 - this.openingAngle/2*Math.PI/180)*this.radius*inch;" +
-                        "if (this.growing) {" +
-                            "var percent = Math.min((timeToUse - this.start)/(this.growing - this.start),1.0);" +
-                            "ctx.beginPath();" +
-                            "ctx.moveTo(x,y);" +
-                            "ctx.lineTo(x+dx*percent,y+dy*percent);" +
-                            "ctx.arc(x,y,percent*inch * this.radius,this.direction*Math.PI/180 - this.openingAngle/2*Math.PI/180,this.direction*Math.PI/180 + this.openingAngle/2*Math.PI/180);" +
-                            "ctx.closePath();" +
-                            "if (this.fill) {" +
-                                "ctx.fillStyle=this.color;" +
-                                "ctx.fill();" +
-                            "} else {" +
-                                "ctx.lineWidth='2';" +
-                                "ctx.strokeStyle=this.color;" +
-                                "ctx.stroke();" +
-                            "}" +
-                        "} else {" +
-                            "ctx.beginPath();" +
-                            "ctx.moveTo(x,y);" +
-                            "ctx.lineTo(x+dx,y+dy);" +
-                            "ctx.arc(x,y,inch * this.radius,this.direction*Math.PI/180 - this.openingAngle/2*Math.PI/180,this.direction*Math.PI/180 + this.openingAngle/2*Math.PI/180);" +
-                            "ctx.closePath();" +
-                            "if (this.fill) {" +
-                                "ctx.fillStyle=this.color;" +
-                                "ctx.fill();" +
-                            "} else {" +
-                                "ctx.lineWidth='2';" +
-                                "ctx.strokeStyle=this.color;" +
-                                "ctx.stroke();" +
-                            "}" +
-                        "}" +
-                    "}" +
-                "};");
             foreach (Mob mob in log.Boss.TrashMobs)
             {
                 CombatReplay replay = mob.CombatReplay;

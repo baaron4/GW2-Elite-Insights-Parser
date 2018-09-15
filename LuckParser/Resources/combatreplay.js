@@ -98,7 +98,7 @@ function sixteenSpeed() {
 rangeControl.set(180, false);
 rangeControl.set(240, false);
 rangeControl.set(300, false);
-rangeControl.set(600, false); 
+rangeControl.set(600, false);
 rangeControl.set(900, false);
 rangeControl.set(1200, false);
 function toggleRange(radius) {
@@ -111,7 +111,7 @@ function updateTime(value) {
     updateTextInput(time)
 }
 function updateTextInput(val) {
-    timeSliderDisplay.value =  val/ 1000.0 + ' secs';
+    timeSliderDisplay.value = val / 1000.0 + ' secs';
 }
 
 // selection
@@ -136,7 +136,7 @@ function selectActor(pId) {
     }
 }
 
-// Players and boss
+// Drawables
 class Drawable {
     constructor(start, end) {
         this.pos = null;
@@ -179,7 +179,7 @@ class Drawable {
             };
         }
         let lastTime = times[times.length - 1];
-        let startIndex = Math.round((times.length - 1) * Math.max(this.start,0) / lastTime);
+        let startIndex = Math.round((times.length - 1) * Math.max(this.start, 0) / lastTime);
         let currentIndex = Math.round((times.length - 1) * currentTime / lastTime);
         return this.getInterpolatedPosition(startIndex, currentIndex, currentTime);
     }
@@ -206,7 +206,7 @@ class IconDrawable extends Drawable {
 }
 
 class PlayerIconDrawable extends IconDrawable {
-    constructor(start,end,imgSrc, pixelSize, group) {
+    constructor(start, end, imgSrc, pixelSize, group) {
         super(start, end, imgSrc, pixelSize);
         this.dead = null;
         this.down = null;
@@ -284,7 +284,7 @@ class PlayerIconDrawable extends IconDrawable {
 }
 
 class MechanicDrawable extends Drawable {
-    constructor(start,end,fill,growing,color) {
+    constructor(start, end, fill, growing, color) {
         super(start, end);
         this.fill = fill;
         this.growing = growing;
@@ -296,10 +296,17 @@ class MechanicDrawable extends Drawable {
         if (this.pos === null) {
             return null;
         }
+        if (this.start !== -1 && (this.start >= currentTime || this.end <= currentTime)) {
+            return null;
+        }
         if (this.pos instanceof Array) {
-            let masterId = this.pos[0];
-            let masterTime = this.pos[1];
+            return {
+                x: this.pos[0],
+                y: this.pos[1]
+            }
+        } else {
             if (this.master === null) {
+                let masterId = this.pos;
                 this.master = playerData.has(masterId) ? playerData.get(masterId) : (trashMobData.has(masterId) ? trashMobData.get(masterId) : boss);
             }
             return master.getPosition(currentTime);
@@ -311,6 +318,109 @@ class MechanicDrawable extends Drawable {
             return 1.0;
         }
         return Math.min((currentTime - this.start) / (this.growing - this.start), 1.0);
+    }
+}
+
+class CircleMechanicDrawable extends MechanicDrawable {
+    constructor(start, end, fill, growing, color, radius) {
+        super(start, end, fill, growing, color);
+        this.radius = inch * radius;
+    }
+
+    draw(ctx, currentTime) {
+        let pos = this.getPosition(currentTime);
+        if (pos == null) {
+            return;
+        }
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, this.getPercent(currentTime) * this.radius, 0, 2 * Math.PI);
+        if (this.fill) {
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        } else {
+            ctx.lineWidth = '2';
+            ctx.strokeStyle = this.color;
+            ctx.stroke();
+        }
+    }
+}
+
+class DoughnutMechanicDrawable extends MechanicDrawable {
+    constructor(start, end, fill, growing, color, innerRadius,outerRadius) {
+        super(start, end, fill, growing, color);
+        this.radius = inch *  0.5 * (innerRadius + outerRadius);
+        this.width = inch * (outerRadius - innerRadius);
+    }
+
+    draw(ctx, currentTime) {
+        let pos = this.getPosition(currentTime);
+        if (pos == null) {
+            return;
+        }
+        let percent = this.getPercent(currentTime);
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, this.radius, 0, 2 * Math.PI);
+        ctx.lineWidth = (percent * this.width).toString();
+        ctx.strokeStyle = this.color;
+        ctx.stroke();
+    }
+}
+
+class RectangleMechanicDrawable extends MechanicDrawable {
+    constructor(start, end, fill, growing, color, width, height) {
+        super(start, end, fill, growing, color);
+        this.height = height * inch;
+        this.width = width * inch;
+    }
+
+    draw(ctx, currentTime) {
+        let pos = this.getPosition(currentTime);
+        if (pos == null) {
+            return;
+        }
+        let percent = this.getPercent(currentTime);
+        ctx.beginPath();
+        ctx.rect(pos.x - 0.5*this.width , pos.y - 0.5*this.height , percent * this.width , percent * this.height );
+        if (this.fill) {
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        } else {
+            ctx.lineWidth = '2';
+            ctx.strokeStyle = this.color;
+            ctx.stroke();
+        }
+    }
+}
+
+class PieMechanicDrawable extends MechanicDrawable {
+    constructor(start, end, fill, growing, color, direction, openingAngle, radius) {
+        super(start, end, fill, growing, color);
+        this.direction = direction * Math.PI / 180;
+        this.openingAngle = 0.5* openingAngle * Math.PI / 180;
+        this.radius = inch *radius;
+        this.dx = Math.cos(this.direction - this.openingAngle) * this.radius;
+        this.dy = Math.sin(this.direction - this.openingAngle) * this.radius;
+    }
+
+    draw(ctx, currentTime) {
+        let pos = this.getPosition(currentTime);
+        if (pos == null) {
+            return;
+        }
+        let percent = this.getPercent(currentTime);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+        ctx.lineTo(pos.x + this.dx * percent, pos.y + this.dy * percent);
+        ctx.arc(pos.x, pos.y, percent *  this.radius, this.direction - this.openingAngle, this.direction  + this.openingAngle);
+        ctx.closePath();
+        if (this.fill) {
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        } else {
+            ctx.lineWidth = '2';
+            ctx.strokeStyle = this.color;
+            ctx.stroke();
+        }
     }
 }
 
