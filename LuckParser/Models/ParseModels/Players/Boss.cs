@@ -195,7 +195,7 @@ namespace LuckParser.Models.ParseModels
             public int[] Positions { get; set; }
         }
 
-        public string GetCombatReplayJSON(CombatReplayMap map)
+        public override string GetCombatReplayJSON(CombatReplayMap map)
         {
             Serializable aux = new Serializable
             {

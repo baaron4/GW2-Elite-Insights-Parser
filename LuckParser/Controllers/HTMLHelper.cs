@@ -841,19 +841,7 @@ namespace LuckParser.Controllers
                     sw.Write(p.GetCombatReplayJSON(map));
                     sw.Write(",");
                     replay = p.CombatReplay;
-                    foreach (CircleActor c in replay.CircleActors)
-                    {
-
-                    }
-                    foreach (CircleActor c in replay.CircleActors)
-                    {
-
-                    }
-                    foreach (CircleActor c in replay.CircleActors)
-                    {
-
-                    }
-                    foreach (CircleActor c in replay.CircleActors)
+                    foreach (Actor c in replay.Actors)
                     {
 
                     }
@@ -863,19 +851,7 @@ namespace LuckParser.Controllers
                     sw.Write(m.GetCombatReplayJSON(map));
                     sw.Write(",");
                     replay = m.CombatReplay;
-                    foreach (CircleActor c in replay.CircleActors)
-                    {
-
-                    }
-                    foreach (CircleActor c in replay.CircleActors)
-                    {
-
-                    }
-                    foreach (CircleActor c in replay.CircleActors)
-                    {
-
-                    }
-                    foreach (CircleActor c in replay.CircleActors)
+                    foreach (Actor c in replay.Actors)
                     {
 
                     }
@@ -883,19 +859,7 @@ namespace LuckParser.Controllers
                 sw.Write(log.Boss.GetCombatReplayJSON(map));
                 sw.Write(",");
                 replay = log.Boss.CombatReplay;
-                foreach (CircleActor c in replay.CircleActors)
-                {
-
-                }
-                foreach (CircleActor c in replay.CircleActors)
-                {
-
-                }
-                foreach (CircleActor c in replay.CircleActors)
-                {
-
-                }
-                foreach (CircleActor c in replay.CircleActors)
+                foreach (Actor c in replay.Actors)
                 {
 
                 }

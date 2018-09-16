@@ -127,7 +127,7 @@ namespace LuckParser.Models
                 else
                 {
                     int brutEnd = (int)(c.Time - log.FightData.FightStart);
-                    replay.CircleActors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(brutStart, brutEnd), "rgba(0, 180, 255, 0.3)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(brutStart, brutEnd), "rgba(0, 180, 255, 0.3)"));
                 }
             }
             return ids;
@@ -141,8 +141,8 @@ namespace LuckParser.Models
             {
                 int bigStart = (int)(c.Time - log.FightData.FightStart);
                 int bigEnd = bigStart + 6000;
-                replay.CircleActors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
-                replay.CircleActors.Add(new CircleActor(true, bigEnd, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
+                replay.Actors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
+                replay.Actors.Add(new CircleActor(true, bigEnd, 300, new Tuple<int, int>(bigStart, bigEnd), "rgba(150, 80, 0, 0.2)"));
             }
             // small bomb
             List<CombatItem> smallbomb = log.GetBoonData(38247).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
@@ -150,7 +150,7 @@ namespace LuckParser.Models
             {
                 int smallStart = (int)(c.Time - log.FightData.FightStart);
                 int smallEnd = smallStart + 6000;
-                replay.CircleActors.Add(new CircleActor(true, 0, 80, new Tuple<int, int>(smallStart, smallEnd), "rgba(80, 150, 0, 0.3)"));
+                replay.Actors.Add(new CircleActor(true, 0, 80, new Tuple<int, int>(smallStart, smallEnd), "rgba(80, 150, 0, 0.3)"));
             }
             // fixated
             List<CombatItem> fixatedSam = GetFilteredList(log, 37868, p.InstID);
@@ -164,7 +164,7 @@ namespace LuckParser.Models
                 else
                 {
                     int fixatedSamEnd = (int)(c.Time - log.FightData.FightStart);
-                    replay.CircleActors.Add(new CircleActor(true, 0, 80, new Tuple<int, int>(fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 80, new Tuple<int, int>(fixatedSamStart, fixatedSamEnd), "rgba(255, 80, 255, 0.3)"));
                 }
             }
         }

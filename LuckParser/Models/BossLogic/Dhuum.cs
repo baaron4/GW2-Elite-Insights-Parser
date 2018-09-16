@@ -127,9 +127,9 @@ namespace LuckParser.Models
                 Point3D pos = replay.Positions.FirstOrDefault(x => x.Time > castEnd);
                 if (pos != null)
                 {
-                    replay.CircleActors.Add(new CircleActor(true, castEnd, 450, new Tuple<int, int>(start, castEnd), "rgba(200, 255, 100, 0.5)", pos));
-                    replay.CircleActors.Add(new CircleActor(false, 0, 450, new Tuple<int, int>(start, castEnd), "rgba(200, 255, 100, 0.5)", pos));
-                    replay.CircleActors.Add(new CircleActor(true, 0, 450, new Tuple<int, int>(castEnd, zoneEnd), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.Actors.Add(new CircleActor(true, castEnd, 450, new Tuple<int, int>(start, castEnd), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.Actors.Add(new CircleActor(false, 0, 450, new Tuple<int, int>(start, castEnd), "rgba(200, 255, 100, 0.5)", pos));
+                    replay.Actors.Add(new CircleActor(true, 0, 450, new Tuple<int, int>(castEnd, zoneEnd), "rgba(200, 255, 100, 0.5)", pos));
                 }
             }
             List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
@@ -137,8 +137,8 @@ namespace LuckParser.Models
             {
                 int start = (int)c.Time;
                 int end = start + c.ActualDuration;
-                replay.CircleActors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
-                replay.CircleActors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
+                replay.Actors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
             }
             List<CastLog> slash = cls.Where(x => x.SkillId == 47561).ToList();
             foreach (CastLog c in slash)
@@ -150,14 +150,14 @@ namespace LuckParser.Models
                 {
                     continue;
                 }
-                replay.PieActors.Add(new PieActor(false, 0, 850, facing, 60, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                replay.Actors.Add(new PieActor(false, 0, 850, facing, 60, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
             }
    
             if (majorSplit != null)
             {
                 int start = (int)majorSplit.Time;
                 int end = (int)log.FightData.FightDuration;
-                replay.CircleActors.Add(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
+                replay.Actors.Add(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
             }
             return ids;
         }
@@ -180,8 +180,8 @@ namespace LuckParser.Models
                 {
                     end = (int)(removedBuff.Time - log.FightData.FightStart);
                 }
-                replay.CircleActors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)"));
-                replay.CircleActors.Add(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)"));
+                replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.3)"));
+                replay.Actors.Add(new CircleActor(true, start + duration, 100, new Tuple<int, int>(start, end), "rgba(0, 50, 200, 0.5)"));
             }
             // bomb
             List<CombatItem> bombDhuum = GetFilteredList(log, 47646, p.InstID);
@@ -195,8 +195,8 @@ namespace LuckParser.Models
                 else
                 {
                     int bombDhuumEnd = (int)(c.Time - log.FightData.FightStart);
-                    replay.CircleActors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)"));
-                    replay.CircleActors.Add(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.3)"));
+                    replay.Actors.Add(new CircleActor(true, bombDhuumStart + 13000, 100, new Tuple<int, int>(bombDhuumStart, bombDhuumEnd), "rgba(80, 180, 0, 0.5)"));
                 }
             }
         }

@@ -54,8 +54,8 @@ namespace LuckParser.Models
             {
                 int start = (int)c.Time;
                 int end = start + c.ActualDuration;
-                replay.CircleActors.Add(new CircleActor(true, (int)c.Time + c.ExpectedDuration, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
-                replay.CircleActors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
+                replay.Actors.Add(new CircleActor(true, (int)c.Time + c.ExpectedDuration, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
+                replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.3)"));
             }
             List<CastLog> vortex = cls.Where(x => x.SkillId == 47327).ToList();
             foreach (CastLog c in vortex)
@@ -65,9 +65,9 @@ namespace LuckParser.Models
                 Point3D pos = replay.Positions.FirstOrDefault(x => x.Time > start);
                 if (pos != null)
                 {
-                    replay.CircleActors.Add(new CircleActor(false, 0, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                    replay.CircleActors.Add(new CircleActor(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                    replay.DoughnutActors.Add(new DoughnutActor(0, 380,760, new Tuple<int, int>(end, end+1000), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.Actors.Add(new CircleActor(false, 0, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.Actors.Add(new CircleActor(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.Actors.Add(new DoughnutActor(0, 380,760, new Tuple<int, int>(end, end+1000), "rgba(255, 150, 0, 0.5)", pos));
                 }
             }
             List<CastLog> deathBloom = cls.Where(x => x.SkillId == 48500).ToList();
@@ -82,7 +82,7 @@ namespace LuckParser.Models
                 }
                 for (int i = 0; i < 8; i++)
                 {
-                    replay.PieActors.Add(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
+                    replay.Actors.Add(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 8), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
                 }
 
             }
@@ -99,7 +99,7 @@ namespace LuckParser.Models
                 }
                 for (int i = 0; i < 4; i++)
                 {
-                    replay.PieActors.Add(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 4), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
+                    replay.Actors.Add(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 4), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
                 }
 
             }
@@ -114,7 +114,7 @@ namespace LuckParser.Models
                 }
                 for (int i = 0; i < 4; i++)
                 {
-                    replay.PieActors.Add(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + 45 + i * 360 / 4), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
+                    replay.Actors.Add(new PieActor(true, 0, 3500, (int)(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + 45 + i * 360 / 4), 360 / 12, new Tuple<int, int>(start, end), "rgba(255,200,0,0.5)"));
                 }
 
             }
