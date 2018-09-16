@@ -1737,14 +1737,14 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
                         {
-                            List<Tuple<Boon,long>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
-                            List<Tuple<Boon, long>> initial = consume.Where(x => x.Item2 == 0).ToList();
-                            List<Tuple<Boon, long>> refreshed = consume.Where(x => x.Item2 > 0).ToList();
+                            List<Tuple<Boon,long,int>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
+                            List<Tuple<Boon, long,int>> initial = consume.Where(x => x.Item2 == 0).ToList();
+                            List<Tuple<Boon, long,int>> refreshed = consume.Where(x => x.Item2 > 0).ToList();
                             if (initial.Count > 0)
                             {
                                 Boon food = null;
                                 Boon utility = null;
-                                foreach (Tuple<Boon, long> buff in initial)
+                                foreach (Tuple<Boon, long,int> buff in initial)
                                 {
                                     if (buff.Item1.Nature == Boon.BoonEnum.Food)
                                     {
@@ -1769,9 +1769,9 @@ namespace LuckParser.Controllers
                             {
                                 sw.Write("<p>Refreshed: ");
                                 sw.Write("<ul>");
-                                foreach (Tuple<Boon, long> buff in refreshed)
+                                foreach (Tuple<Boon, long,int> buff in refreshed)
                                 {
-                                    sw.Write("<li>" + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at "+ Math.Round(buff.Item2 / 1000.0,3)+"s</li>");
+                                    sw.Write("<li>" + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at "+ Math.Round(buff.Item2 / 1000.0,3)+"s, ("+ (int)(buff.Item3/60000) +" min duration)</li>");
                                 }
                                 sw.Write("</ul>");
                                 sw.Write("</p>");
