@@ -8,8 +8,7 @@ namespace LuckParser.Models.ParseModels
 
         public bool Filled { get; }
         public Tuple<int, int> Lifespan { get; }
-        private readonly string _color;
-        public string Color => "'" + _color + "'";
+        public string Color { get; }
         public int Growing { get; }
         protected PositionType Type;
         protected Point3D Position;
@@ -17,7 +16,7 @@ namespace LuckParser.Models.ParseModels
         protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color)
         {
             Lifespan = lifespan;
-            _color = color;
+            Color = color;
             Filled = fill;
             Growing = growing;
         }

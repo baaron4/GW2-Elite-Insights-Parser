@@ -834,34 +834,43 @@ namespace LuckParser.Controllers
             {
                 sw.Write(Properties.Resources.combatreplay_js);
                 sw.Write("inch = " + map.GetInch() + ";");
+                sw.Write("pollingRate = " + pollingRate + ";");
                 sw.Write("actors = [");
                 CombatReplay replay;
+                int count = 0;
                 foreach (Player p in log.PlayerList)
                 {
-                    sw.Write(p.GetCombatReplayJSON(map));
-                    sw.Write(",");
-                    replay = p.CombatReplay;
-                    foreach (Actor c in replay.Actors)
+                    if (count > 0)
                     {
-
+                        sw.Write(",");
+                    }
+                    count++;
+                    sw.Write(p.GetCombatReplayJSON(map));
+                    replay = p.CombatReplay;
+                    foreach (Actor a in replay.Actors)
+                    {
+                        sw.Write(",");
+                        sw.Write(a.GetCombatReplayJSON(map,p));
                     }
                 }
                 foreach (Mob m in log.Boss.TrashMobs)
                 {
-                    sw.Write(m.GetCombatReplayJSON(map));
                     sw.Write(",");
+                    sw.Write(m.GetCombatReplayJSON(map));
                     replay = m.CombatReplay;
-                    foreach (Actor c in replay.Actors)
+                    foreach (Actor a in replay.Actors)
                     {
-
+                        sw.Write(",");
+                        sw.Write(a.GetCombatReplayJSON(map,m));
                     }
                 }
-                sw.Write(log.Boss.GetCombatReplayJSON(map));
                 sw.Write(",");
+                sw.Write(log.Boss.GetCombatReplayJSON(map));
                 replay = log.Boss.CombatReplay;
-                foreach (Actor c in replay.Actors)
+                foreach (Actor a in replay.Actors)
                 {
-
+                    sw.Write(",");
+                    sw.Write(a.GetCombatReplayJSON(map,log.Boss));
                 }
                 sw.Write("];");
                 sw.Write("createAllActors();");

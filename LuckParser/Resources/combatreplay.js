@@ -333,7 +333,7 @@ class MechanicDrawable extends Drawable {
                 let masterId = this.pos;
                 this.master = playerData.has(masterId) ? playerData.get(masterId) : trashMobData.has(masterId) ? trashMobData.get(masterId) : boss;
             }
-            return master.getPosition(currentTime);
+            return this.master.getPosition(currentTime);
         }
     }
 
@@ -463,7 +463,7 @@ function createAllActors() {
                 playerData.set(actor.ID, new PlayerIconDrawable(actor.Img, 20, actor.Group, actor.Positions, actor.Dead, actor.Down));
                 if (times.length === 0) {
                     for (let i = 0; i < actor.Positions.length / 2; i++) {
-                        times.push(i * 100);
+                        times.push(i * pollingRate);
                     }
                 }
                 break;

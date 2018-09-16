@@ -25,7 +25,7 @@ namespace LuckParser.Models.ParseModels
         public void Trim(long start, long end)
         {
             Positions.RemoveAll(x => x.Time < start || x.Time > end);
-            if (Positions.Count <= 1)
+            if (Positions.Count == 0)
             {
                 _start = -1;
                 _end = -1;
@@ -51,7 +51,7 @@ namespace LuckParser.Models.ParseModels
             List<Point3D> interpolatedPositions = new List<Point3D>();
             int tablePos = 0;
             Point3D currentVelocity = null;
-            for (int i = -1000; i < fightDuration; i += rate)
+            for (int i = -rate; i < fightDuration; i += rate)
             {
                 Point3D pt = Positions[tablePos];
                 if (i <= pt.Time)
@@ -76,7 +76,7 @@ namespace LuckParser.Models.ParseModels
                         }
                         else
                         {
-                            Point3D last = interpolatedPositions.Last();
+                            Point3D last = interpolatedPositions.Last().Time > pt.Time ? interpolatedPositions.Last() : pt;
                             Point3D velocity = Velocities.Find(x => x.Time <= i && x.Time > last.Time);
                             currentVelocity = velocity ?? currentVelocity;
                             if (ptn.Time - pt.Time < 400)
