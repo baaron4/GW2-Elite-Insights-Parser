@@ -1,4 +1,6 @@
 ﻿using LuckParser.Models.DataModels;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -184,6 +186,37 @@ namespace LuckParser.Models.ParseModels
                     mechData[m].Add(new MechanicLog(a.FirstAware - fightData.FightStart, m, amp));
                 }
             }
+        }
+        //
+        private class Serializable
+        {
+            public string Img { get; set; }
+            public string Type { get; set; }
+            public int[] Positions { get; set; }
+        }
+
+        public override string GetCombatReplayJSON(CombatReplayMap map)
+        {
+            Serializable aux = new Serializable
+            {
+                Img = CombatReplay.Icon,
+                Type = "Boss",
+                Positions = new int[2 * CombatReplay.Positions.Count]
+            };
+            int i = 0;
+            foreach (Point3D pos in CombatReplay.Positions)
+            {
+                Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
+                aux.Positions[i++] = coord.Item1;
+                aux.Positions[i++] = coord.Item2;
+            }
+
+            return JsonConvert.SerializeObject(aux);
+        }
+
+        public override int GetCombatReplayID()
+        {
+            return 0;
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

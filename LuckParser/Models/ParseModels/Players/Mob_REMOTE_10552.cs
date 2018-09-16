@@ -72,9 +72,7 @@ namespace LuckParser.Models.ParseModels
                     CombatReplay.Actors.Add(new CircleActor(false, 0, 260, lifespan, "rgba(0, 80, 255, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.Oil:
-                    int delay = 3000;
-                    CombatReplay.Actors.Add(new CircleActor(true, start+150, 200, new Tuple<int, int>(start,start+delay+1000), "rgba(255,100, 0, 0.5)"));
-                    CombatReplay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start+delay,end), "rgba(0, 0, 0, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(true, 0, 240, lifespan, "rgba(0, 0, 0, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.Echo:
                     CombatReplay.Actors.Add(new CircleActor(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)"));
@@ -187,7 +185,7 @@ namespace LuckParser.Models.ParseModels
                     CombatReplay.Icon = "https://i.imgur.com/N9seps0.png";
                     break;
                 case ParseEnum.TrashIDS.Oil:
-                    CombatReplay.Icon = "https://i.imgur.com/R26VgEr.png";
+                    CombatReplay.Icon = "https://i.imgur.com/DZIl49i.png";
                     break;
                 case ParseEnum.TrashIDS.InsidiousProjection:
                     CombatReplay.Icon = "https://i.imgur.com/9EdItBS.png";

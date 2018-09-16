@@ -72,9 +72,13 @@ namespace LuckParser.Models.ParseModels
                     CombatReplay.Actors.Add(new CircleActor(false, 0, 260, lifespan, "rgba(0, 80, 255, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.Oil:
+<<<<<<< HEAD
                     int delay = 3000;
-                    CombatReplay.Actors.Add(new CircleActor(true, start+150, 200, new Tuple<int, int>(start,start+delay+1000), "rgba(255,100, 0, 0.5)"));
-                    CombatReplay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start+delay,end), "rgba(0, 0, 0, 0.5)"));
+                    CombatReplay.CircleActors.Add(new CircleActor(true, start+150, 200, new Tuple<int, int>(start,start+delay+1000), "rgba(255,100, 0, 0.5)"));
+                    CombatReplay.CircleActors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start+delay,end), "rgba(0, 0, 0, 0.5)"));
+=======
+                    CombatReplay.Actors.Add(new CircleActor(true, 0, 240, lifespan, "rgba(0, 0, 0, 0.5)"));
+>>>>>>> 557984c84e3b19946a3310dd98dbaad379ece291
                     break;
                 case ParseEnum.TrashIDS.Echo:
                     CombatReplay.Actors.Add(new CircleActor(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)"));
