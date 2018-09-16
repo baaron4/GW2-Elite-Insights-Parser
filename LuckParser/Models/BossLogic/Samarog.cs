@@ -39,6 +39,8 @@ namespace LuckParser.Models
             
             //  new Mechanic(37816, "Brutalize", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Samarog, "symbol:'star-square',color:'rgb(255,0,0)',", "CC Target", casted without dmg odd
             });
+            Extension = "sam";
+            IconUrl = "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
         }
 
         public override CombatReplayMap GetCombatMap()

@@ -22,6 +22,8 @@ namespace LuckParser.Models
             new Mechanic(36929, "Caustic Explosion", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Siax, "symbol:'diamond-wide',color:'rgb(255,0,0)',", "CC.Fail","Failed to CC in time", "CC Fail", 0, (condition => condition.CombatItem.Value >=15232)), 
             new Mechanic(36998, "Fixated", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Siax, "symbol:'star-open',color:'rgb(200,0,200)',", "Fix", "Fixated by Volatile Hallucination", "Fixated",0),
             });
+            Extension = "siax";
+            IconUrl = "https://wiki.guildwars2.com/images/d/dc/Siax_the_Corrupted.jpg";
         }
 
         public override CombatReplayMap GetCombatMap()

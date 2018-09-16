@@ -39,6 +39,8 @@ namespace LuckParser.Models
             new Mechanic(26766, "Icy Patch", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,255)',", "Icy KD","Knockdown by Icy Patch", "Icy Patch KD",0,(condition => condition.CombatItem.Value == 10000)),
             new Mechanic(34413, "Surrender", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Matthias, "symbol:'circle-open',color:'rgb(0,0,0)',", "Sprt","Surrender (hit by walking Spirit)", "Spirit hit",0)
             });
+            Extension = "matt";
+            IconUrl = "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
         }
 
         public override CombatReplayMap GetCombatMap()

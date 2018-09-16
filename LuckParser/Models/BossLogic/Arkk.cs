@@ -44,6 +44,8 @@ namespace LuckParser.Models
             new Mechanic(35761, "Pull Charge", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Arkk, "symbol:'bowtie',color:'rgb(0,160,0)',", "Pll.CCed","Pull Charge CCed", "CCed (Gladiator)",0,(condition => condition.CombatItem.Value <= 3200)), //
             new Mechanic(35452, "Spinning Cut", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Arkk, "symbol:'star-square-open',color:'rgb(200,140,255)',", "Daze","Spinning Cut (3rd Gladiator Auto->Daze)", "Gladiator Daze",0), //
             });
+            Extension = "arkk";
+            IconUrl = "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
         }
 
         public override CombatReplayMap GetCombatMap()
@@ -60,9 +62,9 @@ namespace LuckParser.Models
             return "https://i.imgur.com/u6vv8cW.png";
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
         {
-            SetSuccessOnCombatExit(combatData, logData, fightData, 3);
+            SetSuccessOnCombatExit(combatData,logData,fightData,pList, 3, 3000);
         }
     }
 }
