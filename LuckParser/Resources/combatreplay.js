@@ -160,7 +160,7 @@ class Drawable {
         const positionX = this.pos[2 * offsetedIndex];
         const positionY = this.pos[2 * offsetedIndex + 1];
         const timeValue = times[currentIndex];
-        if (offsetedIndex < 0.5*this.pos.length - 1) {
+        if (currentTime - timeValue > 0 && offsetedIndex < 0.5*this.pos.length - 1) {
             const nextTimeValue = times[currentIndex + 1];
             const nextPositionX = this.pos[2 * offsetedIndex + 2];
             const nextPositionY = this.pos[2 * offsetedIndex + 3];
@@ -192,7 +192,7 @@ class Drawable {
         const lastTime = times[times.length - 1];
         const startIndex = Math.ceil((times.length - 1) * Math.max(this.start, 0) / lastTime);
         const currentIndex = Math.floor((times.length - 1) * currentTime / lastTime);
-        return this.getInterpolatedPosition(startIndex, currentIndex, currentTime);
+        return this.getInterpolatedPosition(startIndex, Math.max(currentIndex, startIndex), currentTime);
     }
 }
 
