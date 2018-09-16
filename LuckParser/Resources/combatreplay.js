@@ -190,7 +190,7 @@ class Drawable {
             };
         }
         const lastTime = times[times.length - 1];
-        const startIndex = Math.floor((times.length - 1) * Math.max(this.start, 0) / lastTime);
+        const startIndex = Math.ceil((times.length - 1) * Math.max(this.start, 0) / lastTime);
         const currentIndex = Math.floor((times.length - 1) * currentTime / lastTime);
         return this.getInterpolatedPosition(startIndex, currentIndex, currentTime);
     }
