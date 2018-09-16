@@ -16,14 +16,14 @@ namespace LuckParser.Models
             CanCombatReplay = true;
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
         {
             // Put non reward stuff in this as we find them
             HashSet<int> notRaidRewardsIds = new HashSet<int>
                 {
                     13
                 };
-            CombatItem reward = combatData.Find(x => x.IsStateChange == ParseEnum.StateChange.Reward && !notRaidRewardsIds.Contains(x.Value));
+            CombatItem reward = combatData.GetStatesData(ParseEnum.StateChange.Reward).LastOrDefault(x =>!notRaidRewardsIds.Contains(x.Value));
             if (reward != null)
             {
                 logData.Success = true;

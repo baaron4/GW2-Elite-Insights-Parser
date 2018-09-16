@@ -28,6 +28,8 @@ namespace LuckParser.Models
             new Mechanic(37315, "Knight's Daze", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MAMA, "symbol:'square-open',color:'rgb(200,140,255)',", "K.Daze","Knight's Daze", "Daze", 0), 
             
             });
+            Extension = "mama";
+            IconUrl = "http://dulfy.net/wp-content/uploads/2016/11/gw2-nightmare-fractal-teaser.jpg";
         }
 
         public override CombatReplayMap GetCombatMap()

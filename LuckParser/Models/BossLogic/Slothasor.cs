@@ -27,6 +27,8 @@ namespace LuckParser.Models
             new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Narcolepsy (Failed CC)", "CC Fail",0,(condition => condition.CombatItem.Value > 120000)),
             new Mechanic(34467, "Narcolepsy", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.Slothasor, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Narcolepsy (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 120000))
             });
+            Extension = "sloth";
+            IconUrl = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
         }
 
         public override CombatReplayMap GetCombatMap()
