@@ -16,6 +16,11 @@ namespace LuckParser.Models.ParseModels
         {
             Radius = radius;
         }
+
+        public CircleActor(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time) : base(fill, growing, lifespan, color, prev, next, time)
+        {
+            Radius = radius;
+        }
         //
         protected class CircleSerializable<T> : Serializable<T>
         {

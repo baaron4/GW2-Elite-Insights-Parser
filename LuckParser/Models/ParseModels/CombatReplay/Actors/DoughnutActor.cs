@@ -19,6 +19,12 @@ namespace LuckParser.Models.ParseModels
             InnerRadius = innerRadius;
             OuterRadius = outerRadius;
         }
+
+        public DoughnutActor(int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time) : base(true, growing, lifespan, color, prev, next, time)
+        {
+            InnerRadius = innerRadius;
+            OuterRadius = outerRadius;
+        }
         //
 
         private class DoughnutSerializable<T> : Serializable<T>

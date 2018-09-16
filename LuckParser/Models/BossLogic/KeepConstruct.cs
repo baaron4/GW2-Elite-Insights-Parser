@@ -154,11 +154,13 @@ namespace LuckParser.Models
             {
                 int start = (int)c.Time;
                 int end = start + c.ActualDuration;
-                Point3D pos = replay.Positions.FirstOrDefault(x => x.Time > end);
-                if (pos != null)
+                int skillCast = end - 1000;
+                Point3D next = replay.Positions.FirstOrDefault(x => x.Time >= end);
+                Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= end);
+                if (prev != null || next != null)
                 {
-                    replay.Actors.Add(new CircleActor(false, 0, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                    replay.Actors.Add(new CircleActor(true, end, 400, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.Actors.Add(new CircleActor(false, 0, 400, new Tuple<int, int>(start, skillCast), "rgba(255, 150, 0, 0.5)", prev, next, end));
+                    replay.Actors.Add(new CircleActor(true, skillCast, 400, new Tuple<int, int>(start, skillCast), "rgba(255, 150, 0, 0.5)", prev, next, end));
                 }
             }
             return ids;

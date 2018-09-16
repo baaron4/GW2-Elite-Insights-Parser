@@ -24,6 +24,12 @@ namespace LuckParser.Models.ParseModels
             OpeningAngle = openingAngle;
         }
 
+        public PieActor(bool fill, int growing, int radius, Point3D rotation, int openingAngle, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time) : base(fill, growing, radius, lifespan, color, prev, next, time)
+        {
+            Direction = (int)Math.Round(Math.Atan2(-rotation.Y, rotation.X) * 180 / Math.PI);
+            OpeningAngle = openingAngle;
+        }
+
 
         //using simple direction/opening angle definition 
         public PieActor(bool fill, int growing, int radius, int direction, int openingAngle, Tuple<int, int> lifespan, string color) : base(fill, growing, radius, lifespan, color)
@@ -38,6 +44,12 @@ namespace LuckParser.Models.ParseModels
             OpeningAngle = openingAngle;
         }
 
+        public PieActor(bool fill, int growing, int radius, int direction, int openingAngle, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time) : base(fill, growing, radius, lifespan, color, prev, next, time)
+        {
+            Direction = direction;
+            OpeningAngle = openingAngle;
+        }
+
         //using starting point and end point (center of the circle and middle of the curved circle segment line)
         public PieActor(bool fill, int growing, Point3D startPoint, Point3D endPoint, int openingAngle, Tuple<int, int> lifespan, string color) : base(fill, growing, (int)startPoint.DistanceToPoint(endPoint), lifespan, color)
         {
@@ -46,6 +58,12 @@ namespace LuckParser.Models.ParseModels
         }
 
         public PieActor(bool fill, int growing, Point3D startPoint, Point3D endPoint, int openingAngle, Tuple<int, int> lifespan, string color, Point3D position) : base(fill, growing, (int)startPoint.DistanceToPoint(endPoint), lifespan, color, position)
+        {
+            Direction = (int)Math.Round(Math.Atan2(endPoint.Y - startPoint.Y, endPoint.X - startPoint.X) * 180 / Math.PI);
+            OpeningAngle = openingAngle;
+        }
+
+        public PieActor(bool fill, int growing, Point3D startPoint, Point3D endPoint, int openingAngle, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time) : base(fill, growing, (int)startPoint.DistanceToPoint(endPoint), lifespan, color, prev, next, time)
         {
             Direction = (int)Math.Round(Math.Atan2(endPoint.Y - startPoint.Y, endPoint.X - startPoint.X) * 180 / Math.PI);
             OpeningAngle = openingAngle;

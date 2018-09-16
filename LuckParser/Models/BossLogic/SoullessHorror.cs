@@ -62,12 +62,13 @@ namespace LuckParser.Models
             {
                 int start = (int)c.Time;
                 int end = start + 4000;
-                Point3D pos = replay.Positions.FirstOrDefault(x => x.Time > start);
-                if (pos != null)
+                Point3D next = replay.Positions.FirstOrDefault(x => x.Time >= start);
+                Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= start);
+                if (next != null || prev != null)
                 {
-                    replay.Actors.Add(new CircleActor(false, 0, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                    replay.Actors.Add(new CircleActor(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", pos));
-                    replay.Actors.Add(new DoughnutActor(0, 380,760, new Tuple<int, int>(end, end+1000), "rgba(255, 150, 0, 0.5)", pos));
+                    replay.Actors.Add(new CircleActor(false, 0, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", prev,next,start));
+                    replay.Actors.Add(new CircleActor(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", prev, next, start));
+                    replay.Actors.Add(new DoughnutActor(0, 380,760, new Tuple<int, int>(end, end+1000), "rgba(255, 150, 0, 0.5)", prev, next, start));
                 }
             }
             List<CastLog> deathBloom = cls.Where(x => x.SkillId == 48500).ToList();
