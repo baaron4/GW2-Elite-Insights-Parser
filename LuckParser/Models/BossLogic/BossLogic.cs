@@ -23,6 +23,8 @@ namespace LuckParser.Models
         {
             Mode = ParseMode.Unknown;
             CanCombatReplay = false;
+            IconUrl = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
+            Extension = "boss";
         }
 
         public virtual CombatReplayMap GetCombatMap()
