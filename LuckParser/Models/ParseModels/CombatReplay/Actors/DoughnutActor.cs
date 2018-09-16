@@ -12,15 +12,12 @@ namespace LuckParser.Models.ParseModels
         {
             InnerRadius = innerRadius;
             OuterRadius = outerRadius;
-            Type = PositionType.ID;
         }
 
-        public DoughnutActor(int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color, Point3D position) : base(true, growing, lifespan, color)
+        public DoughnutActor(int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color, Point3D position) : base(true, growing, lifespan, color, position)
         {
             InnerRadius = innerRadius;
             OuterRadius = outerRadius;
-            Position = position;
-            Type = PositionType.Array;
         }
         //
 

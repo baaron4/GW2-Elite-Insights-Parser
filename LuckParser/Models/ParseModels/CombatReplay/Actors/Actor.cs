@@ -19,6 +19,16 @@ namespace LuckParser.Models.ParseModels
             Color = color;
             Filled = fill;
             Growing = growing;
+            Type = PositionType.ID;
+        }
+        protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Point3D position)
+        {
+            Lifespan = lifespan;
+            Color = color;
+            Filled = fill;
+            Growing = growing;
+            Position = position;
+            Type = PositionType.Array;
         }
         //
         protected class Serializable<T>

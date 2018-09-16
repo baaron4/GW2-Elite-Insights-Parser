@@ -12,15 +12,12 @@ namespace LuckParser.Models.ParseModels
         {
             Height = height;
             Width = width;
-            Type = PositionType.ID;
         }
 
-        public RectangleActor(bool fill, int growing, int width, int height, Tuple<int, int> lifespan, string color, Point3D position) : base(true, growing, lifespan, color)
+        public RectangleActor(bool fill, int growing, int width, int height, Tuple<int, int> lifespan, string color, Point3D position) : base(true, growing, lifespan, color, position)
         {
             Height = height;
             Width = width;
-            Position = position;
-            Type = PositionType.Array;
         }
         //
 
