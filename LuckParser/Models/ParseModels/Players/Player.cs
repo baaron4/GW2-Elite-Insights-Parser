@@ -225,7 +225,8 @@ namespace LuckParser.Models.ParseModels
                     }
                 }
             }
-            
+            _consumeList.Sort((x, y) => x.Item2.CompareTo(y.Item2));
+
         }
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)

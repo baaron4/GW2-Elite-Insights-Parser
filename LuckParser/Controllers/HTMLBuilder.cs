@@ -1740,7 +1740,6 @@ namespace LuckParser.Controllers
                             List<Tuple<Boon, long, int>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
                             List<Tuple<Boon, long, int>> initial = consume.Where(x => x.Item2 == 0).ToList();
                             List<Tuple<Boon, long, int>> refreshed = consume.Where(x => x.Item2 > 0).ToList();
-                            refreshed.Sort((x, y) => x.Item2.CompareTo(y.Item2));
                             if (initial.Count > 0)
                             {
                                 sw.Write("<p>Started with ");
