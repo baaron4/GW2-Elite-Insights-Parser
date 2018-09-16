@@ -1,27 +1,28 @@
-let deadIcon = new Image();
+const deadIcon = new Image();
 deadIcon.src = "https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png";
-let downIcon = new Image();
+const downIcon = new Image();
 downIcon.src = "https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png";
 let time = 0;
 let inch = 0;
 let speed = 1;
-let times = [];
+const times = [];
 let boss = null;
-let playerData = new Map();
-let trashMobData = new Map();
-let mechanicActorData = new Set();
-let rangeControl = new Map();
+const playerData = new Map();
+const trashMobData = new Map();
+const mechanicActorData = new Set();
+const rangeControl = new Map();
 let selectedGroup = -1;
 let selectedPlayer = null;
-let timeSlider = document.getElementById('timeRange');
-let timeSliderDisplay = document.getElementById('timeRangeDisplay');
-let canvas = document.getElementById('replayCanvas');
-let ctx = canvas.getContext('2d');
-let bgImage = new Image();
+const timeSlider = document.getElementById('timeRange');
+const timeSliderDisplay = document.getElementById('timeRangeDisplay');
+const canvas = document.getElementById('replayCanvas');
+const ctx = canvas.getContext('2d');
+const bgImage = new Image();
 let bgLoaded = false;
 let animation = null;
 // 60 fps by default
 const timeOffset = 16;
+let pollingRate = 100;
 
 // canvas
 ctx.imageSmoothingEnabled = true;
@@ -155,14 +156,14 @@ class Drawable {
     }
 
     getInterpolatedPosition(startIndex, currentIndex, currentTime) {
-        let offsetedIndex = currentIndex - startIndex;
-        let positionX = this.pos[2 * offsetedIndex];
-        let positionY = this.pos[2 * offsetedIndex + 1];
-        let timeValue = times[currentIndex];
+        const offsetedIndex = currentIndex - startIndex;
+        const positionX = this.pos[2 * offsetedIndex];
+        const positionY = this.pos[2 * offsetedIndex + 1];
+        const timeValue = times[currentIndex];
         if (offsetedIndex < 0.5*this.pos.length - 1) {
-            let nextTimeValue = times[currentIndex + 1];
-            let nextPositionX = this.pos[2 * offsetedIndex + 2];
-            let nextPositionY = this.pos[2 * offsetedIndex + 3];
+            const nextTimeValue = times[currentIndex + 1];
+            const nextPositionX = this.pos[2 * offsetedIndex + 2];
+            const nextPositionY = this.pos[2 * offsetedIndex + 3];
             return {
                 x: Math.round(positionX + (currentTime - timeValue) / (nextTimeValue - timeValue) * (nextPositionX - positionX)),
                     y: Math.round(positionY + (currentTime - timeValue) / (nextTimeValue - timeValue) * (nextPositionY - positionY))
@@ -188,9 +189,9 @@ class Drawable {
                 y: this.pos[1]
             };
         }
-        let lastTime = times[times.length - 1];
-        let startIndex = Math.floor((times.length - 1) * Math.max(this.start, 0) / lastTime);
-        let currentIndex = Math.floor((times.length - 1) * currentTime / lastTime);
+        const lastTime = times[times.length - 1];
+        const startIndex = Math.floor((times.length - 1) * Math.max(this.start, 0) / lastTime);
+        const currentIndex = Math.floor((times.length - 1) * currentTime / lastTime);
         return this.getInterpolatedPosition(startIndex, currentIndex, currentTime);
     }
 }
@@ -204,11 +205,11 @@ class IconDrawable extends Drawable {
     }
 
     draw(ctx, currentTime) {
-        let pos = this.getPosition(currentTime);
+        const pos = this.getPosition(currentTime);
         if (pos === null) {
             return;
         }
-        let halfSize = this.pixelSize / 2;
+        const halfSize = this.pixelSize / 2;
         ctx.drawImage(this.img,
             pos.x - halfSize, pos.y - halfSize, this.pixelSize, this.pixelSize);
     }
@@ -226,11 +227,11 @@ class PlayerIconDrawable extends IconDrawable {
     }
 
     draw(ctx, currentTime) {
-        let pos = this.getPosition(currentTime);
+        const pos = this.getPosition(currentTime);
         if (pos === null) {
             return;
         }
-        let halfSize = this.pixelSize / 2;
+        const halfSize = this.pixelSize / 2;
         if (!this.selected && this.group === selectedGroup) {
             ctx.beginPath();
             ctx.lineWidth = '2';
@@ -352,7 +353,7 @@ class CircleMechanicDrawable extends MechanicDrawable {
     }
 
     draw(ctx, currentTime) {
-        let pos = this.getPosition(currentTime);
+        const pos = this.getPosition(currentTime);
         if (pos === null) {
             return;
         }
@@ -378,11 +379,11 @@ class DoughnutMechanicDrawable extends MechanicDrawable {
     }
 
     draw(ctx, currentTime) {
-        let pos = this.getPosition(currentTime);
+        const pos = this.getPosition(currentTime);
         if (pos === null) {
             return;
         }
-        let percent = this.getPercent(currentTime);
+        const percent = this.getPercent(currentTime);
         ctx.beginPath();
         ctx.arc(pos.x, pos.y, this.radius, 0, 2 * Math.PI);
         ctx.lineWidth = (percent * this.width).toString();
@@ -400,11 +401,11 @@ class RectangleMechanicDrawable extends MechanicDrawable {
     }
 
     draw(ctx, currentTime) {
-        let pos = this.getPosition(currentTime);
+        const pos = this.getPosition(currentTime);
         if (pos === null) {
             return;
         }
-        let percent = this.getPercent(currentTime);
+        const percent = this.getPercent(currentTime);
         ctx.beginPath();
         ctx.rect(pos.x - 0.5 * this.width, pos.y - 0.5 * this.height, percent * this.width, percent * this.height);
         if (this.fill) {
@@ -430,11 +431,11 @@ class PieMechanicDrawable extends MechanicDrawable {
     }
 
     draw(ctx, currentTime) {
-        let pos = this.getPosition(currentTime);
+        const pos = this.getPosition(currentTime);
         if (pos === null) {
             return;
         }
-        let percent = this.getPercent(currentTime);
+        const percent = this.getPercent(currentTime);
         ctx.beginPath();
         ctx.moveTo(pos.x, pos.y);
         ctx.lineTo(pos.x + this.dx * percent, pos.y + this.dy * percent);
