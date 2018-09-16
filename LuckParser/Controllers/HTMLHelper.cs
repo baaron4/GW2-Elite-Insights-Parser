@@ -737,6 +737,15 @@ namespace LuckParser.Controllers
                     sw.Write("</div>");
                     sw.Write("<div class=\"d-flex justify-content-center btn-group btn-group-toggle\" data-toggle=\"buttons\">");
                     {
+                        sw.Write("<label onclick=\"eighthSpeed()\" class=\"btn btn-dark\">" +
+                                "<input type=\"radio\" autocomplete=\"off\">0.125x" +
+                            "</label>");
+                        sw.Write("<label onclick=\"fourthSpeed()\" class=\"btn btn-dark\">" +
+                                "<input type=\"radio\" autocomplete=\"off\">0.25x" +
+                            "</label>");
+                        sw.Write("<label onclick=\"halfSpeed()\" class=\"btn btn-dark\">" +
+                                "<input type=\"radio\" autocomplete=\"off\">0.5x" +
+                            "</label>");
                         sw.Write("<label onclick=\"normalSpeed()\" class=\"btn btn-dark active\">" +
                                 "<input type=\"radio\" autocomplete=\"off\" checked>1x" +
                             "</label>");
@@ -822,9 +831,78 @@ namespace LuckParser.Controllers
         {
             //TODO add this either here or in the page header, or use a real js file and a <script src=...> tag :)
             sw.WriteLine("<script>");
-            sw.Write(Properties.Resources.combatreplay_js);
-            sw.Write("inch = " + map.GetInch() + ";");
-            sw.Write("bgImage.src = '" + map.Link + "';");
+            {
+                sw.Write(Properties.Resources.combatreplay_js);
+                sw.Write("inch = " + map.GetInch() + ";");
+                sw.Write("actors = [");
+                CombatReplay replay;
+                foreach (Player p in log.PlayerList)
+                {
+                    sw.Write(p.GetCombatReplayJSON(map));
+                    sw.Write(",");
+                    replay = p.CombatReplay;
+                    foreach (CircleActor c in replay.CircleActors)
+                    {
+
+                    }
+                    foreach (CircleActor c in replay.CircleActors)
+                    {
+
+                    }
+                    foreach (CircleActor c in replay.CircleActors)
+                    {
+
+                    }
+                    foreach (CircleActor c in replay.CircleActors)
+                    {
+
+                    }
+                }
+                foreach (Mob m in log.Boss.TrashMobs)
+                {
+                    sw.Write(m.GetCombatReplayJSON(map));
+                    sw.Write(",");
+                    replay = m.CombatReplay;
+                    foreach (CircleActor c in replay.CircleActors)
+                    {
+
+                    }
+                    foreach (CircleActor c in replay.CircleActors)
+                    {
+
+                    }
+                    foreach (CircleActor c in replay.CircleActors)
+                    {
+
+                    }
+                    foreach (CircleActor c in replay.CircleActors)
+                    {
+
+                    }
+                }
+                sw.Write(log.Boss.GetCombatReplayJSON(map));
+                sw.Write(",");
+                replay = log.Boss.CombatReplay;
+                foreach (CircleActor c in replay.CircleActors)
+                {
+
+                }
+                foreach (CircleActor c in replay.CircleActors)
+                {
+
+                }
+                foreach (CircleActor c in replay.CircleActors)
+                {
+
+                }
+                foreach (CircleActor c in replay.CircleActors)
+                {
+
+                }
+                sw.Write("];");
+                sw.Write("createAllActors();");
+                sw.Write("bgImage.src = '" + map.Link + "';");
+            }
             sw.WriteLine("</script>");
         }
 

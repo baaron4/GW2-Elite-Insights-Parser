@@ -75,7 +75,7 @@ namespace LuckParser.Models.ParseModels
                         {
                             tablePos++;
                             currentVelocity = null;
-                            interpolatedPositions.Add(new Point3D(ptn.X, ptn.Y, ptn.Z, i));
+                            i -= rate;
                         }
                         else
                         {

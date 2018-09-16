@@ -22,7 +22,7 @@ namespace LuckParser.Models.DataModels
         public readonly bool Show10s;
         public readonly bool LightTheme;
         public readonly bool ParseCombatReplay;
-        public readonly int PollingRate = 32;
+        public readonly int PollingRate = 100;
         public readonly bool UploadToDPSReports;
         public readonly bool UploadToDPSReportsRH;
         public readonly bool UploadToRaidar;

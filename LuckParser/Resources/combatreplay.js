@@ -28,7 +28,7 @@ ctx.imageSmoothingEnabled = true;
 ctx.imageSmoothingQuality = 'high';
 
 // Animation methods
-function animateCanvas() {
+function animateCanvas(noRequest) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
     mechanicActorData.forEach(function (value, key, map) {
@@ -52,8 +52,8 @@ function animateCanvas() {
     }
     timeSlider.value = time.toString();
     updateTextInput(time);
-    time = Math.min(time + speed * timeOffset, lastTime);
-    if (animation !== null && bgLoaded) {
+    if (noRequest > -1 && animation !== null && bgLoaded) {
+        time = Math.min(time + speed * timeOffset, lastTime);
         animation = requestAnimationFrame(animateCanvas);
     }
 }
@@ -77,6 +77,15 @@ function stopAnimate() {
 }
 function restartAnimate() {
     time = 0;
+}
+function eighthSpeed() {
+    speed = 0.125;
+}
+function fourthSpeed() {
+    speed = 0.25;
+}
+function halfSpeed() {
+    speed = 0.5;
 }
 function normalSpeed() {
     speed = 1;
@@ -109,6 +118,7 @@ function toggleRange(radius) {
 function updateTime(value) {
     time = parseInt(value);
     updateTextInput(time);
+    animateCanvas(-1);
 }
 function updateTextInput(val) {
     timeSliderDisplay.value = val / 1000.0 + ' secs';
@@ -149,13 +159,13 @@ class Drawable {
         let positionX = this.pos[2 * offsetedIndex];
         let positionY = this.pos[2 * offsetedIndex + 1];
         let timeValue = times[currentIndex];
-        if (offsetedIndex < this.pos.length - 2) {
+        if (offsetedIndex < 0.5*this.pos.length - 1) {
             let nextTimeValue = times[currentIndex + 1];
             let nextPositionX = this.pos[2 * offsetedIndex + 2];
             let nextPositionY = this.pos[2 * offsetedIndex + 3];
             return {
-                x: positionX + (currentTime - timeValue) / (nextTimeValue - timeValue) * (nextPositionX - positionX),
-                y: positionY + (currentTime - timeValue) / (nextTimeValue - timeValue) * (nextPositionY - positionY)
+                x: Math.round(positionX + (currentTime - timeValue) / (nextTimeValue - timeValue) * (nextPositionX - positionX)),
+                    y: Math.round(positionY + (currentTime - timeValue) / (nextTimeValue - timeValue) * (nextPositionY - positionY))
             };
         } else {
             return {
@@ -179,8 +189,8 @@ class Drawable {
             };
         }
         let lastTime = times[times.length - 1];
-        let startIndex = Math.round((times.length - 1) * Math.max(this.start, 0) / lastTime);
-        let currentIndex = Math.round((times.length - 1) * currentTime / lastTime);
+        let startIndex = Math.floor((times.length - 1) * Math.max(this.start, 0) / lastTime);
+        let currentIndex = Math.floor((times.length - 1) * currentTime / lastTime);
         return this.getInterpolatedPosition(startIndex, currentIndex, currentTime);
     }
 }
@@ -189,7 +199,7 @@ class IconDrawable extends Drawable {
     constructor(start, end, imgSrc, pixelSize) {
         super(start, end);
         this.img = new Image();
-        this.img.src = ImgSrc;
+        this.img.src = imgSrc;
         this.pixelSize = pixelSize;
     }
 
@@ -277,7 +287,7 @@ class PlayerIconDrawable extends IconDrawable {
         if (this.downed(currentTime)) {
             return downIcon;
         }
-        return img;
+        return this.img;
     }
 
 }
@@ -450,6 +460,11 @@ function createAllActors() {
         switch (actor.Type) {
             case "Player":
                 playerData.set(actor.ID, new PlayerIconDrawable(actor.Img, 20, actor.Group, actor.Positions, actor.Dead, actor.Down));
+                if (times.length === 0) {
+                    for (let i = 0; i < actor.Positions.length / 2; i++) {
+                        times.push(i * 100);
+                    }
+                }
                 break;
             case "Boss":
                 boss = new BossIconDrawable(actor.Img, 40, actor.Positions);

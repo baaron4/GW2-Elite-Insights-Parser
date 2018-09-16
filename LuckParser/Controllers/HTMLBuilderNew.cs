@@ -1381,7 +1381,7 @@ namespace LuckParser.Controllers
             long roundedStart = 1000 * (start / 1000);
             long roundedEnd = 1000 * (end / 1000);
             List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= roundedStart && x.Start <= roundedEnd).ToList();
-            if (bChart.Count == 1 && bChart.First().Value == 0)
+            if (bChart.Count == 0 || (bChart.Count == 1 && bChart.First().Value == 0))
             {
                 return null;
             }
