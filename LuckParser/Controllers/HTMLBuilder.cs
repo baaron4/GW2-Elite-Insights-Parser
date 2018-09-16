@@ -1737,42 +1737,37 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
                         {
-                            List<Tuple<Boon,long,int>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
-                            List<Tuple<Boon, long,int>> initial = consume.Where(x => x.Item2 == 0).ToList();
-                            List<Tuple<Boon, long,int>> refreshed = consume.Where(x => x.Item2 > 0).ToList();
+                            List<Tuple<Boon, long, int>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
+                            List<Tuple<Boon, long, int>> initial = consume.Where(x => x.Item2 == 0).ToList();
+                            List<Tuple<Boon, long, int>> refreshed = consume.Where(x => x.Item2 > 0).ToList();
+                            refreshed.Sort((x, y) => x.Item2.CompareTo(y.Item2));
                             if (initial.Count > 0)
                             {
-                                Boon food = null;
-                                Boon utility = null;
-                                foreach (Tuple<Boon, long,int> buff in initial)
-                                {
-                                    if (buff.Item1.Nature == Boon.BoonEnum.Food)
-                                    {
-                                        food = buff.Item1;
-                                    } else
-                                    {
-                                        utility = buff.Item1;
-                                    }
-                                }
                                 sw.Write("<p>Started with ");
-                                if (food != null)
+                                for (int i = 0; i < initial.Count;i++)
+                                if (i == 0)
                                 {
-                                    sw.Write(food.Name + "<img src=\"" + food.Link + "\" alt=\"" + food.Name + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write(initial[i].Item1.Name + "<img src=\"" + initial[i].Item1.Link + "\" alt=\"" + initial[i].Item1.Name + "\" height=\"18\" width=\"18\" >");
                                 }
-                                if (utility != null)
+                                else
                                 {
-                                    sw.Write((food != null ?" and " : "") + utility.Name + "<img src=\"" + utility.Link + "\" alt=\"" + utility.Name + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write(", " + initial[i].Item1.Name + "<img src=\"" + initial[i].Item1.Link + "\" alt=\"" + initial[i].Item1.Name + "\" height=\"18\" width=\"18\" >");
                                 }
                                 sw.Write("</p>");
                             }
                             if (refreshed.Count > 0)
                             {
-                                sw.Write("<p>Refreshed: ");
+                                sw.Write("<p>In-fight food updates: ");
                                 sw.Write("<ul>");
-                                foreach (Tuple<Boon, long,int> buff in refreshed)
-                                {
-                                    sw.Write("<li>" + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at "+ Math.Round(buff.Item2 / 1000.0,3)+"s, ("+ (int)(buff.Item3/60000) +" min duration)</li>");
-                                }
+                                foreach (Tuple<Boon, long, int> buff in refreshed)
+                                    if (buff.Item1.ID == 46587 || buff.Item1.ID == 46668) // Malnourished and Diminshed
+                                    {
+                                        sw.Write("<li> suffered " + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at " + Math.Round(buff.Item2 / 1000.0, 3) + "s</li>");
+                                    }
+                                    else
+                                    {
+                                        sw.Write("<li> consumed " + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at " + Math.Round(buff.Item2 / 1000.0, 3) + "s, (" + (int)(buff.Item3 / 60000) + " min duration)</li>");
+                                    }
                                 sw.Write("</ul>");
                                 sw.Write("</p>");
                             }

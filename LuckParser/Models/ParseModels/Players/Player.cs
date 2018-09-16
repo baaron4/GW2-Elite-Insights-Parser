@@ -203,8 +203,7 @@ namespace LuckParser.Models.ParseModels
         }  
         private void SetConsumablesList(ParsedLog log)
         {
-            List<Boon> consumableList = Boon.GetFoodList();
-            consumableList.AddRange(Boon.GetUtilityList());
+            List<Boon> consumableList = Boon.GetConsumableList();
             long timeStart = log.FightData.FightStart;
             long fightDuration = log.FightData.FightEnd - timeStart;
             foreach (Boon consumable in consumableList)
