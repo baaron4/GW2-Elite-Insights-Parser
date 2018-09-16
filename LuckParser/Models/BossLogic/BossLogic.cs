@@ -16,6 +16,8 @@ namespace LuckParser.Models
             new Mechanic(SkillItem.ResurrectId, "Resurrect", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross-open',color:'rgb(0,255,255)',", "Res",0)}; //Resurrects (start), Resurrect
         protected ParseMode Mode;
         public bool CanCombatReplay { get; set; }
+        public string Extension { get; protected set; }
+        public string IconUrl { get; protected set; }
 
         public BossLogic()
         {
@@ -58,9 +60,9 @@ namespace LuckParser.Models
         {
         }
 
-        protected void SetSuccessByDeath(CombatData combatData, LogData logData, FightData fightData)
+        protected void SetSuccessByDeath(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
         {
-            CombatItem killed = combatData.Find(x => x.SrcInstid == fightData.InstID && x.IsStateChange.IsDead());
+            CombatItem killed = combatData.GetStatesData(ParseEnum.StateChange.ChangeDead).LastOrDefault(x => x.SrcInstid == fightData.InstID);
             if (killed != null)
             {
                 logData.Success = true;
@@ -68,9 +70,9 @@ namespace LuckParser.Models
             }
         }
 
-        public virtual void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
+        public virtual void SetSuccess(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
         {
-            SetSuccessByDeath(combatData, logData, fightData);
+            SetSuccessByDeath(combatData,logData, fightData,pList);
         }
 
         public virtual string GetReplayIcon()

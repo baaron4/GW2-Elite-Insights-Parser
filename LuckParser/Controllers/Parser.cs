@@ -33,14 +33,6 @@ namespace LuckParser.Controllers
         }
 
         // Public Methods
-        public LogData GetLogData()
-        {
-            return _logData;
-        }
-        public FightData GetFightData()
-        {
-            return _fightData;
-        }
 
         public ParsedLog GetParsedLog()
         {
@@ -607,7 +599,7 @@ namespace LuckParser.Controllers
                 if (deimosGadgets.Count > 0)
                 {
                     AgentItem NPC = deimosGadgets.Last();
-                    int deimos2Instid = NPC.InstID;
+                    HashSet<ulong> deimos2Agents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
                     long oldAware = bossAgent.LastAware;
                     _boss.PhaseData.Add(NPC.FirstAware >= oldAware ? NPC.FirstAware : oldAware);
                     //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos2Instid ).ToList().Sum(x);
@@ -616,13 +608,13 @@ namespace LuckParser.Controllers
                     {
                         if (c.Time > oldAware)
                         {
-                            if (c.SrcInstid == deimos2Instid)
+                            if (deimos2Agents.Contains(c.SrcAgent))
                             {
                                 c.SrcInstid = _fightData.InstID;
                                 c.SrcAgent = _fightData.Agent;
 
                             }
-                            if (c.DstInstid == deimos2Instid)
+                            if (deimos2Agents.Contains(c.DstAgent))
                             {
                                 c.DstInstid = _fightData.InstID;
                                 c.DstAgent = _fightData.Agent;
@@ -635,8 +627,7 @@ namespace LuckParser.Controllers
             _combatData.Validate(_fightData);
             _fightData.Logic.CanCombatReplay = _fightData.Logic.CanCombatReplay && _combatData.MovementData.Count > 0;
             _fightData.HealthOverTime = bossHealthOverTime;//after xera in case of change
-            _fightData.SetSuccess(_combatData, _logData);
-            _fightData.SetCM(_combatData);
+            
 
             //players
             if (_playerList.Count == 0)
@@ -711,6 +702,8 @@ namespace LuckParser.Controllers
                 }
 
             }
+            _fightData.SetSuccess(_combatData, _logData, _playerList);
+            _fightData.SetCM(_combatData);
             if (_fightData.FightStart == 0)
             {
                 _fightData.FightStart = bossAgent.FirstAware;

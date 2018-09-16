@@ -29,6 +29,8 @@ namespace LuckParser.Models
             new Mechanic(48662, "Howling Death", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.SoullessHorror, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Howling Death (Breakbar failed) ", "CC Fail",0,(condition => condition.CombatItem.Value >6800)),
 
             });
+            Extension = "sh";
+            IconUrl = "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
         }
 
         public override CombatReplayMap GetCombatMap()

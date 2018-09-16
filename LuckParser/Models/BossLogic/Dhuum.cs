@@ -28,6 +28,8 @@ namespace LuckParser.Models
             new Mechanic(46950, "Fractured Spirit", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(0,255,0)',", "Orb CD","Applied when taking green", "Green port",0), 
             new Mechanic(47076 , "Echo's Damage", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Dhuum, "symbol:'square',color:'rgb(255,0,0)',", "Echo","Damaged by Ender's Echo (pick up)", "Ender's Echo",5000),
             });
+            Extension = "dhuum";
+            IconUrl = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
         }
 
         public override CombatReplayMap GetCombatMap()

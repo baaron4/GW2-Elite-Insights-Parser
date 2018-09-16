@@ -21,7 +21,9 @@ namespace LuckParser.Models
             new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Gorseval, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "CC","Ghastly Rampage (Breakbar)", "Breakbar",0),
             new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Gorseval, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.End","Ghastly Rampage (Full duration)", "CC ran out",0,(condition => condition.CombatItem.Value > 21985)),
             new Mechanic(31834, "Ghastly Rampage", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Gorseval, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Ghastly Rampage (Breakbar broken)", "CCed",0,(condition => condition.CombatItem.Value <= 21985)),
-}); 
+            });
+            Extension = "gors";
+            IconUrl = "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
         }
 
         public override CombatReplayMap GetCombatMap()

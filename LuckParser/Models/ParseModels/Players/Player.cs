@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
         public readonly int Group;
         public long Disconnected { get; set; }//time in ms the player dcd
        
-        private readonly List<Tuple<Boon,long>> _consumeList = new List<Tuple<Boon, long>>();
+        private readonly List<Tuple<Boon,long,int>> _consumeList = new List<Tuple<Boon, long,int>>();
         //weaponslist
         private string[] _weaponsArray;
 
@@ -74,7 +74,7 @@ namespace LuckParser.Models.ParseModels
             return _weaponsArray;
         }
 
-        public List<Tuple<Boon, long>> GetConsumablesList(ParsedLog log, long start, long end)
+        public List<Tuple<Boon, long, int>> GetConsumablesList(ParsedLog log, long start, long end)
         {
             if (_consumeList.Count == 0)
             {
@@ -203,8 +203,7 @@ namespace LuckParser.Models.ParseModels
         }  
         private void SetConsumablesList(ParsedLog log)
         {
-            List<Boon> consumableList = Boon.GetFoodList();
-            consumableList.AddRange(Boon.GetUtilityList());
+            List<Boon> consumableList = Boon.GetConsumableList();
             long timeStart = log.FightData.FightStart;
             long fightDuration = log.FightData.FightEnd - timeStart;
             foreach (Boon consumable in consumableList)
@@ -222,11 +221,12 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (time <= fightDuration)
                     {
-                        _consumeList.Add(new Tuple<Boon, long>(consumable, time));
+                        _consumeList.Add(new Tuple<Boon, long, int>(consumable, time, c.Value));
                     }
                 }
             }
-            
+            _consumeList.Sort((x, y) => x.Item2.CompareTo(y.Item2));
+
         }
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
