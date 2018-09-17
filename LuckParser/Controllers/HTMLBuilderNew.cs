@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
     class HTMLBuilderNew
     {
         private const string scriptVersion = "0.5";
-        private const int scriptVersionRev = 5;
+        private const int scriptVersionRev = 6;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -1401,6 +1401,26 @@ namespace LuckParser.Controllers
             dto.data.Add(new double[] { segEnd, lastSeg.Value });
 
             return dto;
+        }
+
+        private List<FoodDto> CreatePlayerFoodData(Player p, int phaseIndex)
+        {
+            PhaseData phase = _statistics.Phases[phaseIndex];
+            List<FoodDto> list = new List<FoodDto>();
+            List<Tuple<Boon, long, int>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
+
+            foreach(Tuple<Boon, long, int> entry in consume)
+            {
+                FoodDto dto = new FoodDto();
+                dto.time = entry.Item2 / 1000.0;
+                dto.duration = entry.Item3 / 1000.0;
+                dto.name = entry.Item1.Name;
+                dto.icon = entry.Item1.Link;
+                dto.dimished = entry.Item1.ID == 46587 || entry.Item1.ID == 46668;
+                list.Add(dto);
+            }
+
+            return list;
         }
 
         /// <summary>
@@ -2916,12 +2936,14 @@ namespace LuckParser.Controllers
             dto.dmgDistributionsBoss = new List<DmgDistributionDto>();
             dto.boonGraph = new List<List<BoonChartDataDto>>();
             dto.rotation = new List<List<double[]>>();
+            dto.food = new List<List<FoodDto>>();
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 dto.rotation.Add(CreateSimpleRotationTabData(player, i, usedSkills));
                 dto.dmgDistributions.Add(CreatePlayerDMGDistTable(player, false, i, usedSkills, usedBoons));
                 dto.dmgDistributionsBoss.Add(CreatePlayerDMGDistTable(player, true, i, usedSkills, usedBoons));
                 dto.boonGraph.Add(CreatePlayerBoonGraphData(player, i));
+                dto.food.Add(CreatePlayerFoodData(player, i));
             }
 
             return dto;
