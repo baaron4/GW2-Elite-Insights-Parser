@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
     public class Boon
     {
         // Boon
-        public enum BoonEnum { Condition, Boon, OffensiveBuffTable, DefensiveBuffTable, GraphOnlyBuff, Food, Utility };
+        public enum BoonEnum { Condition, Boon, OffensiveBuffTable, DefensiveBuffTable, GraphOnlyBuff, Food, Utility, Consumable };
         public enum BoonSource { Mixed, Necromancer, Elementalist, Mesmer, Warrior, Revenant, Guardian, Thief, Ranger, Engineer, Item, Boss };
         private enum RemoveType { CleanseFoe, CleanseFriend, ManualNonFoe };
         public enum BoonType { Duration, Intensity };
@@ -472,70 +472,72 @@ namespace LuckParser.Models.ParseModels
                 new Boon("Weaver's Prowess",42061, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Weaver%27s_Prowess.png"),
                 new Boon("Elements of Rage",42416, BoonSource.Elementalist, BoonType.Duration, 1, BoonEnum.GraphOnlyBuff,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/a/a2/Elements_of_Rage.png"),
                 // FOODS
-                new Boon("Plate of Truffle Steak",9769, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/4/4c/Plate_of_Truffle_Steak.png"),
-                new Boon("Bowl of Sweet and Spicy Butternut Squash Soup",17825, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/d/df/Bowl_of_Sweet_and_Spicy_Butternut_Squash_Soup.png"),
-                new Boon("Bowl Curry Butternut Squash Soup",9829, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/1/16/Bowl_of_Curry_Butternut_Squash_Soup.png"),
-                new Boon("Red-Lentil Saobosa",46273, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/a/a8/Red-Lentil_Saobosa.png"),
-                new Boon("Super Veggie Pizza",10008, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/6/66/Super_Veggie_Pizza.png"),
-                new Boon("Rare Veggie Pizza",10009, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/a/a0/Rare_Veggie_Pizza.png"),
-                new Boon("Bowl of Garlic Kale Sautee",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/0/04/Bowl_of_Garlic_Kale_Sautee.png"),
-                new Boon("Koi Cake",10009, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/1/14/Koi_Cake.png"),
-                new Boon("Prickly Pear Pie",24800, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/0/0a/Prickly_Pear_Pie.png"),
-                new Boon("Bowl of Nopalitos Sauté",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/f/f1/Bowl_of_Nopalitos_Saut%C3%A9.png"),
-                new Boon("Loaf of Candy Cactus Cornbread",24797, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/b/b2/Loaf_of_Candy_Cactus_Cornbread.png"),
-                new Boon("Delicious Rice Ball",26529, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/5/5d/Delicious_Rice_Ball.png"),
-                new Boon("Slice of Allspice Cake",33792, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/1/13/Slice_of_Allspice_Cake.png"),
-                new Boon("Fried Golden Dumpling",26530, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/1/14/Fried_Golden_Dumpling.png"),
-                new Boon("Bowl of Seaweed Salad",10080, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png"),
-                new Boon("Bowl of Orrian Truffle and Meat Stew",10096, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/b/b8/Bowl_of_Orrian_Truffle_and_Meat_Stew.png"),
-                new Boon("Plate of Mussels Gnashblade",33476, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/7/7b/Plate_of_Mussels_Gnashblade.png"),
-                new Boon("Spring Roll",26534, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/d/da/Spring_Roll.png"),
-                new Boon("Plate of Beef Rendang",49686, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/d/d0/Plate_of_Beef_Rendang.png"),
-                new Boon("Dragon's Revelry Starcake",19451, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/2/2b/Dragon%27s_Revelry_Starcake.png"),
-                new Boon("Avocado Smoothie",50091, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/8/83/Avocado_Smoothie.png"),
-                new Boon("Carrot Souffle",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/7/71/Carrot_Souffl%C3%A9.png"), //same as Dragon's_Breath_Bun
-                new Boon("Plate of Truffle Steak Dinner",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/9/92/Plate_of_Truffle_Steak_Dinner.png"), //same as Dragon's Breath Bun
-                new Boon("Dragon's Breath Bun",9750, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/5/53/Dragon%27s_Breath_Bun.png"),
-                new Boon("Karka Egg Omelet",9756, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/9/9e/Karka_Egg_Omelet.png"),
-                new Boon("Steamed Red Dumpling",26536, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/8/8c/Steamed_Red_Dumpling.png"),
-                new Boon("Saffron Stuffed Mushroom",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Food,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Saffron_Stuffed_Mushroom.png"), //same as Karka Egg Omelet
+                new Boon("Malnourished",46587, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/6/67/Malnourished.png"),
+                new Boon("Plate of Truffle Steak",9769, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/4/4c/Plate_of_Truffle_Steak.png"),
+                new Boon("Bowl of Sweet and Spicy Butternut Squash Soup",17825, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/d/df/Bowl_of_Sweet_and_Spicy_Butternut_Squash_Soup.png"),
+                new Boon("Bowl Curry Butternut Squash Soup",9829, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/1/16/Bowl_of_Curry_Butternut_Squash_Soup.png"),
+                new Boon("Red-Lentil Saobosa",46273, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/a/a8/Red-Lentil_Saobosa.png"),
+                new Boon("Super Veggie Pizza",10008, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/6/66/Super_Veggie_Pizza.png"),
+                new Boon("Rare Veggie Pizza",10009, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/a/a0/Rare_Veggie_Pizza.png"),
+                new Boon("Bowl of Garlic Kale Sautee",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/0/04/Bowl_of_Garlic_Kale_Sautee.png"),
+                new Boon("Koi Cake",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/1/14/Koi_Cake.png"),
+                new Boon("Prickly Pear Pie",24800, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/0/0a/Prickly_Pear_Pie.png"),
+                new Boon("Bowl of Nopalitos Sauté",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/f/f1/Bowl_of_Nopalitos_Saut%C3%A9.png"),
+                new Boon("Loaf of Candy Cactus Cornbread",24797, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/b/b2/Loaf_of_Candy_Cactus_Cornbread.png"),
+                new Boon("Delicious Rice Ball",26529, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/5d/Delicious_Rice_Ball.png"),
+                new Boon("Slice of Allspice Cake",33792, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/1/13/Slice_of_Allspice_Cake.png"),
+                new Boon("Fried Golden Dumpling",26530, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/1/14/Fried_Golden_Dumpling.png"),
+                new Boon("Bowl of Seaweed Salad",10080, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/1/1c/Bowl_of_Seaweed_Salad.png"),
+                new Boon("Bowl of Orrian Truffle and Meat Stew",10096, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/b/b8/Bowl_of_Orrian_Truffle_and_Meat_Stew.png"),
+                new Boon("Plate of Mussels Gnashblade",33476, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/7b/Plate_of_Mussels_Gnashblade.png"),
+                new Boon("Spring Roll",26534, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/d/da/Spring_Roll.png"),
+                new Boon("Plate of Beef Rendang",49686, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/d/d0/Plate_of_Beef_Rendang.png"),
+                new Boon("Dragon's Revelry Starcake",19451, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/2/2b/Dragon%27s_Revelry_Starcake.png"),
+                new Boon("Avocado Smoothie",50091, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/8/83/Avocado_Smoothie.png"),
+                new Boon("Carrot Souffle",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/71/Carrot_Souffl%C3%A9.png"), //same as Dragon's_Breath_Bun
+                new Boon("Plate of Truffle Steak Dinner",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/9/92/Plate_of_Truffle_Steak_Dinner.png"), //same as Dragon's Breath Bun
+                new Boon("Dragon's Breath Bun",9750, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/53/Dragon%27s_Breath_Bun.png"),
+                new Boon("Karka Egg Omelet",9756, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/9/9e/Karka_Egg_Omelet.png"),
+                new Boon("Steamed Red Dumpling",26536, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/8/8c/Steamed_Red_Dumpling.png"),
+                new Boon("Saffron Stuffed Mushroom",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Saffron_Stuffed_Mushroom.png"), //same as Karka Egg Omelet
                 // UTILITIES 
                 // 1h versions have the same ID as 30 min versions 
-                new Boon("Superior Sharpening Stone",9963, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"),
-                new Boon("Potent Superior Sharpening Stone",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"), 
-                new Boon("Master Maintenance Oil",9968, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
-                new Boon("Potent Master Maintenance Oil",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"), 
-                new Boon("Tuning Icicle",34206, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Tuning_Icicle.png"),
-                new Boon("Master Tuning Crystal",9967, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/5/58/Master_Tuning_Crystal.png"),
-                new Boon("Potent Master Tuning Crystal",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/5/58/Master_Tuning_Crystal.png"), 
-                new Boon("Toxic Sharpening Stone",21826, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Toxic_Sharpening_Stone.png"),
-                new Boon("Toxic Maintenance Oil",21827, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Toxic_Maintenance_Oil.png"),
-                new Boon("Toxic Focusing Crystal",21828, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/d/de/Toxic_Focusing_Crystal.png"),
-                new Boon("Magnanimous Maintenance Oil",38605, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/5/53/Magnanimous_Maintenance_Oil.png"),
-                new Boon("Peppermint Oil",34187, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/b/bc/Peppermint_Oil.png"),
-                new Boon("Furious Maintenance Oil",25881, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
-                new Boon("Furious Sharpening Stone",25882, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"),
-                new Boon("Bountiful Maintenance Oil",25879, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
-                new Boon("Tin of Fruitcake",34211, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Tin_of_Fruitcake.png"),
-                new Boon("Writ of Masterful Malice",33836, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Writ_of_Masterful_Malice.png"),
-                new Boon("Writ of Masterful Strength",33297, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/2/2b/Writ_of_Masterful_Strength.png"),
-                new Boon("Powerful Potion of Flame Legion Slaying",9925, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Powerful_Potion_of_Flame_Legion_Slaying.png"),
-                new Boon("Powerful Potion of Halloween Slaying",15279, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/f/fe/Powerful_Potion_of_Halloween_Slaying.png"),
-                new Boon("Powerful Potion of Centaur Slaying",9845, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/3/3b/Powerful_Potion_of_Centaur_Slaying.png"),
-                new Boon("Powerful Potion of Krait Slaying",9885, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/b/b4/Powerful_Potion_of_Krait_Slaying.png"),
-                new Boon("Powerful Potion of Ogre Slaying",9877, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/b/b5/Powerful_Potion_of_Ogre_Slaying.png"),
-                new Boon("Powerful Potion of Elemental Slaying",9893, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/5/5f/Powerful_Potion_of_Elemental_Slaying.png"),
-                new Boon("Powerful Potion of Destroyer Slaying",9869, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/b/bd/Powerful_Potion_of_Destroyer_Slaying.png"),
-                new Boon("Powerful Potion of Nightmare Court Slaying",9941, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/7/74/Powerful_Potion_of_Nightmare_Court_Slaying.png"),
-                new Boon("Powerful Potion of Slaying Scarlet's Armies",23228, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/e/ee/Powerful_Potion_of_Demon_Slaying.png"),
-                new Boon("Powerful Potion of Undead Slaying",9837, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/b/bd/Powerful_Potion_of_Undead_Slaying.png"),
-                new Boon("Powerful Potion of Dredge Slaying",9949, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/9/9a/Powerful_Potion_of_Dredge_Slaying.png"),
-                new Boon("Powerful Potion of Inquest Slaying",9917, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/f/fb/Powerful_Potion_of_Inquest_Slaying.png"),
-                new Boon("Powerful Potion of Demon Slaying",9901, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/e/ee/Powerful_Potion_of_Demon_Slaying.png"),
-                new Boon("Powerful Potion of Grawl Slaying",9853, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/1/15/Powerful_Potion_of_Grawl_Slaying.png"),
-                new Boon("Powerful Potion of Sons of Svanir Slaying",9909, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/3/33/Powerful_Potion_of_Sons_of_Svanir_Slaying.png"),
-                new Boon("Powerful Potion of Outlaw Slaying",9933, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/e/ec/Powerful_Potion_of_Outlaw_Slaying.png"),
-                new Boon("Powerful Potion of Ice Brood Slaying",9861, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility,RemoveType.ManualNonFoe, Logic.Override, "https://wiki.guildwars2.com/images/0/0d/Powerful_Potion_of_Ice_Brood_Slaying.png"),
+                new Boon("Diminished",46668, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/71/Diminished.png"),
+                new Boon("Superior Sharpening Stone",9963, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"),
+                new Boon("Potent Superior Sharpening Stone",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"), 
+                new Boon("Master Maintenance Oil",9968, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
+                new Boon("Potent Master Maintenance Oil",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"), 
+                new Boon("Tuning Icicle",34206, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/75/Tuning_Icicle.png"),
+                new Boon("Master Tuning Crystal",9967, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/58/Master_Tuning_Crystal.png"),
+                new Boon("Potent Master Tuning Crystal",-1, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/58/Master_Tuning_Crystal.png"), 
+                new Boon("Toxic Sharpening Stone",21826, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/d/db/Toxic_Sharpening_Stone.png"),
+                new Boon("Toxic Maintenance Oil",21827, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/a/a6/Toxic_Maintenance_Oil.png"),
+                new Boon("Toxic Focusing Crystal",21828, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/d/de/Toxic_Focusing_Crystal.png"),
+                new Boon("Magnanimous Maintenance Oil",38605, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/53/Magnanimous_Maintenance_Oil.png"),
+                new Boon("Peppermint Oil",34187, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/b/bc/Peppermint_Oil.png"),
+                new Boon("Furious Maintenance Oil",25881, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
+                new Boon("Furious Sharpening Stone",25882, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/78/Superior_Sharpening_Stone.png"),
+                new Boon("Bountiful Maintenance Oil",25879, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"),
+                new Boon("Tin of Fruitcake",34211, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/a/af/Tin_of_Fruitcake.png"),
+                new Boon("Writ of Masterful Malice",33836, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/2/20/Writ_of_Masterful_Malice.png"),
+                new Boon("Writ of Masterful Strength",33297, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/2/2b/Writ_of_Masterful_Strength.png"),
+                new Boon("Powerful Potion of Flame Legion Slaying",9925, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/e/e2/Powerful_Potion_of_Flame_Legion_Slaying.png"),
+                new Boon("Powerful Potion of Halloween Slaying",15279, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/f/fe/Powerful_Potion_of_Halloween_Slaying.png"),
+                new Boon("Powerful Potion of Centaur Slaying",9845, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/3/3b/Powerful_Potion_of_Centaur_Slaying.png"),
+                new Boon("Powerful Potion of Krait Slaying",9885, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/b/b4/Powerful_Potion_of_Krait_Slaying.png"),
+                new Boon("Powerful Potion of Ogre Slaying",9877, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/b/b5/Powerful_Potion_of_Ogre_Slaying.png"),
+                new Boon("Powerful Potion of Elemental Slaying",9893, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/5/5f/Powerful_Potion_of_Elemental_Slaying.png"),
+                new Boon("Powerful Potion of Destroyer Slaying",9869, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/b/bd/Powerful_Potion_of_Destroyer_Slaying.png"),
+                new Boon("Powerful Potion of Nightmare Court Slaying",9941, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/7/74/Powerful_Potion_of_Nightmare_Court_Slaying.png"),
+                new Boon("Powerful Potion of Slaying Scarlet's Armies",23228, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/e/ee/Powerful_Potion_of_Demon_Slaying.png"),
+                new Boon("Powerful Potion of Undead Slaying",9837, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/b/bd/Powerful_Potion_of_Undead_Slaying.png"),
+                new Boon("Powerful Potion of Dredge Slaying",9949, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/9/9a/Powerful_Potion_of_Dredge_Slaying.png"),
+                new Boon("Powerful Potion of Inquest Slaying",9917, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/f/fb/Powerful_Potion_of_Inquest_Slaying.png"),
+                new Boon("Powerful Potion of Demon Slaying",9901, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/e/ee/Powerful_Potion_of_Demon_Slaying.png"),
+                new Boon("Powerful Potion of Grawl Slaying",9853, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/1/15/Powerful_Potion_of_Grawl_Slaying.png"),
+                new Boon("Powerful Potion of Sons of Svanir Slaying",9909, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/3/33/Powerful_Potion_of_Sons_of_Svanir_Slaying.png"),
+                new Boon("Powerful Potion of Outlaw Slaying",9933, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/e/ec/Powerful_Potion_of_Outlaw_Slaying.png"),
+                new Boon("Powerful Potion of Ice Brood Slaying",9861, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Consumable,RemoveType.None, Logic.Override, "https://wiki.guildwars2.com/images/0/0d/Powerful_Potion_of_Ice_Brood_Slaying.png"),
                 // new Boon("Hylek Maintenance Oil",9968, BoonSource.Item, BoonType.Duration, 1, BoonEnum.Utility, "https://wiki.guildwars2.com/images/5/5b/Master_Maintenance_Oil.png"), when wiki says "same stats" its literally the same buff
         };
 
@@ -602,15 +604,10 @@ namespace LuckParser.Models.ParseModels
         {
             return BoonsByNature[BoonEnum.DefensiveBuffTable];
         }
-        // Foods
-        public static List<Boon> GetFoodList()
+        // Consumables (Food and Utility)
+        public static List<Boon> GetConsumableList()
         {
-            return BoonsByNature[BoonEnum.Food];
-        }
-        // Utilities
-        public static List<Boon> GetUtilityList()
-        {
-            return BoonsByNature[BoonEnum.Utility];
+            return BoonsByNature[BoonEnum.Consumable];
         }
         // Boss
         public static List<Boon> GetBossBoonList()
