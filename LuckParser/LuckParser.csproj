@@ -160,6 +160,8 @@
     <Compile Include="Models\ParseModels\EffectStackingLogic\QueueLogic.cs" />
     <Compile Include="Models\ParseModels\EffectStackingLogic\StackingLogic.cs" />
     <Compile Include="Models\ParseModels\GW2API\GW2APICategory.cs" />
+    <Compile Include="Models\ParseModels\Logs\BoonRemovalLog.cs" />
+    <Compile Include="Models\ParseModels\Logs\BoonApplicationLog.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicData.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractMasterPlayer.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractPlayer.cs" />

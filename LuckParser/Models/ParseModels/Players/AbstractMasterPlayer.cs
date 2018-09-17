@@ -130,14 +130,11 @@ namespace LuckParser.Models.ParseModels
         {
             BoonMap boonMap = new BoonMap
             {
-                Boon.GetBoonByName("Might")
+                BoonToTrack
             };
             // Fill in Boon Map
             long timeStart = log.FightData.FightStart;
             HashSet<long> tableIds = new HashSet<long> (boonIds);
-            tableIds.UnionWith(condiIds);
-            tableIds.UnionWith(offIds);
-            tableIds.UnionWith(defIds);
             foreach(CombatItem c in log.GetBoonDataByDst(Agent.InstID))
             {
                 long boonId = c.SkillID;
@@ -146,93 +143,21 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 long time = c.Time - timeStart;
-                // don't add buff initial table boons and buffs in non golem mode, for others overstack is irrelevant
-                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (log.IsBenchmarkMode() || !tableIds.Contains(boonId)))
+                List<BoonLog> loglist = boonMap[boonId];
+                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial)
                 {
-                    List<BoonLog> loglist = boonMap[boonId];
-                    loglist.Add(new BoonLog(0, 0, long.MaxValue, 0));
+                    loglist.Add(new BoonApplicationLog(0, 0, int.MaxValue, c.IFF));
                 }
                 else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= 0 && time < log.FightData.FightDuration)
                 {
                     if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
                         ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                        List<BoonLog> loglist = boonMap[boonId];
-
-                        if (loglist.Count == 0 && c.OverstackValue > 0)
-                        {
-                            loglist.Add(new BoonLog(0, 0, time, 0));
-                        }
-                        loglist.Add(new BoonLog(time, src, c.Value, 0));
+                        loglist.Add(new BoonApplicationLog(time, src, c.Value,c.IFF));
                     }
-                    else if (time < log.FightData.FightDuration - 50 && Boon.RemovePermission(boonId, c.IsBuffRemove, c.IFF, c.DstInstid, c.SrcInstid))
+                    else if (time < log.FightData.FightDuration - 50)
                     {
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.All)//All
-                        {
-                            List<BoonLog> loglist = boonMap[boonId];
-                            if (loglist.Count == 0)
-                            {
-                                loglist.Add(new BoonLog(0, 0, time, 0));
-                            }
-                            else
-                            {
-                                for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
-                                {
-                                    BoonLog curBL = loglist[cnt];
-                                    if (curBL.Overstack == 0 && curBL.Time + curBL.Value > time)
-                                    {
-                                        long subtract = (curBL.Time + curBL.Value) - time;
-                                        curBL.AddValue(-subtract);
-                                        // add removed as overstack
-                                        curBL.AddOverstack((uint)subtract);
-                                    }
-                                }
-                            }
-                        }
-                        else if (c.IsBuffRemove == ParseEnum.BuffRemove.Single)//Single
-                        {
-                            List<BoonLog> loglist = boonMap[boonId];
-                            if (loglist.Count == 0)
-                            {
-                                loglist.Add(new BoonLog(0, 0, time, 0));
-                            }
-                            else
-                            {
-                                int cnt = loglist.Count - 1;
-                                BoonLog curBL = loglist[cnt];
-                                if (curBL.Overstack == 0 && curBL.Time + curBL.Value > time)
-                                {
-                                    long subtract = (curBL.Time + curBL.Value) - time;
-                                    curBL.AddValue(-subtract);
-                                    // add removed as overstack
-                                    curBL.AddOverstack((uint)subtract);
-                                }
-                            }
-                        }
-                        else if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual)//Manuel
-                        {
-                            List<BoonLog> loglist = boonMap[boonId];
-                            if (loglist.Count == 0)
-                            {
-                                loglist.Add(new BoonLog(0, 0, time, 0));
-                            }
-                            else
-                            {
-                                for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
-                                {
-                                    BoonLog curBL = loglist[cnt];
-                                    long ctime = curBL.Time + curBL.Value;
-                                    if (curBL.Overstack == 0 && ctime > time)
-                                    {
-                                        long subtract = (curBL.Time + curBL.Value) - time;
-                                        curBL.AddValue(-subtract);
-                                        // add removed as overstack
-                                        curBL.AddOverstack((uint)subtract);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
+                        loglist.Add(new BoonRemovalLog(time, c.DstInstid, c.Value, c.IsBuffRemove, c.IFF));
                     }
                 }
             }   

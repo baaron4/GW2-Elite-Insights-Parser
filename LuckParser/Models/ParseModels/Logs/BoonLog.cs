@@ -1,18 +1,20 @@
-﻿namespace LuckParser.Models.ParseModels
+﻿using LuckParser.Models.DataModels;
+
+namespace LuckParser.Models.ParseModels
 {
-    public class BoonLog
+    public abstract class BoonLog
     {
         public long Time { get; private set; }
         public long Value { get; private set; }
-        public uint Overstack { get; private set; }
+        public ParseEnum.IFF Iff { get; private set; }
         public ushort SrcInstid { get; }
 
-        public BoonLog(long time, ushort srcInstid, long value, uint overstack)
+        protected BoonLog(long time, ushort srcInstid, long value, ParseEnum.IFF iff)
         {
             Time = time;
             Value = value;
             SrcInstid = srcInstid;
-            Overstack = overstack;
+            Iff = iff;
         }
 
         public void AddTime(long time)
@@ -25,9 +27,6 @@
             Value += value;
         }
 
-        public void AddOverstack(uint overstack)
-        {
-            Overstack += overstack;
-        }
+        public abstract ParseEnum.BuffRemove GetRemoveType();
     }
 }
