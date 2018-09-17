@@ -113,10 +113,10 @@ namespace LuckParser.Models
                 if (i < humanShieldRemoval.Count)
                 {
                     int removal = humanShieldRemoval[i];
-                    replay.CircleActors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)"));
                 } else
                 {
-                    replay.CircleActors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)"));
                 }
             }
             List<CastLog> aboShield = cls.Where(x => x.SkillId == 34510).ToList();
@@ -127,11 +127,11 @@ namespace LuckParser.Models
                 if (i < aboShieldRemoval.Count)
                 {
                     int removal = aboShieldRemoval[i];
-                    replay.CircleActors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, removal), "rgba(255, 0, 255, 0.5)"));
                 }
                 else
                 {
-                    replay.CircleActors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 250, new Tuple<int, int>((int)shield.Time, (int)log.FightData.FightDuration), "rgba(255, 0, 255, 0.5)"));
                 }
             }
             List<CastLog> rageShards = cls.Where(x => x.SkillId == 34404 || x.SkillId == 34411).ToList();
@@ -139,8 +139,8 @@ namespace LuckParser.Models
             {
                 int start = (int)c.Time;
                 int end = start + c.ActualDuration;
-                replay.CircleActors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
-                replay.CircleActors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
             }
             return ids;
         }
@@ -160,12 +160,13 @@ namespace LuckParser.Models
                 else
                 {
                     int corruptedMatthiasEnd = (int)(c.Time - log.FightData.FightStart);
-                    replay.CircleActors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(corruptedMatthiasStart, corruptedMatthiasEnd), "rgba(255, 150, 0, 0.5)"));
-                    Point3D wellPosition = replay.Positions.FirstOrDefault(x => x.Time > corruptedMatthiasEnd);
-                    if (wellPosition != null)
+                    replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(corruptedMatthiasStart, corruptedMatthiasEnd), "rgba(255, 150, 0, 0.5)"));
+                    Point3D wellNextPosition = replay.Positions.FirstOrDefault(x => x.Time >= corruptedMatthiasEnd);
+                    Point3D wellPrevPosition = replay.Positions.LastOrDefault(x => x.Time <= corruptedMatthiasEnd);
+                    if (wellNextPosition != null || wellPrevPosition != null)
                     {
-                        replay.CircleActors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", wellPosition));
-                        replay.CircleActors.Add(new CircleActor(true, corruptedMatthiasEnd + 100000, 180, new Tuple<int, int>(corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", wellPosition));
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", wellPrevPosition, wellNextPosition, corruptedMatthiasEnd));
+                        replay.Actors.Add(new CircleActor(true, corruptedMatthiasEnd + 100000, 180, new Tuple<int, int>(corruptedMatthiasEnd, corruptedMatthiasEnd + 100000), "rgba(0, 0, 0, 0.3)", wellPrevPosition, wellNextPosition, corruptedMatthiasEnd));
                     }
                 }
             }
@@ -181,12 +182,13 @@ namespace LuckParser.Models
                 else
                 {
                     int wellMatthiasEnd = (int)(c.Time - log.FightData.FightStart);
-                    replay.CircleActors.Add(new CircleActor(false, 0, 120, new Tuple<int, int>(wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)"));
-                    replay.CircleActors.Add(new CircleActor(true, wellMatthiasStart + 9000, 120, new Tuple<int, int>(wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)"));
-                    Point3D wellPosition = replay.Positions.FirstOrDefault(x => x.Time > wellMatthiasEnd);
-                    if (wellPosition != null)
+                    replay.Actors.Add(new CircleActor(false, 0, 120, new Tuple<int, int>(wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)"));
+                    replay.Actors.Add(new CircleActor(true, wellMatthiasStart + 9000, 120, new Tuple<int, int>(wellMatthiasStart, wellMatthiasEnd), "rgba(150, 255, 80, 0.5)"));
+                    Point3D wellNextPosition = replay.Positions.FirstOrDefault(x => x.Time >= wellMatthiasEnd);
+                    Point3D wellPrevPosition = replay.Positions.LastOrDefault(x => x.Time <= wellMatthiasEnd);
+                    if (wellNextPosition != null || wellPrevPosition != null)
                     {
-                        replay.CircleActors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", wellPosition));
+                        replay.Actors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(wellMatthiasEnd, wellMatthiasEnd + 90000), "rgba(255, 0, 50, 0.5)", wellPrevPosition, wellNextPosition, wellMatthiasEnd));
                     }
                 }
             }
@@ -202,8 +204,8 @@ namespace LuckParser.Models
                 else
                 {
                     int sacrificeMatthiasEnd = (int)(c.Time - log.FightData.FightStart);
-                    replay.CircleActors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.2)"));
-                    replay.CircleActors.Add(new CircleActor(true, sacrificeMatthiasStart + 10000, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.35)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.2)"));
+                    replay.Actors.Add(new CircleActor(true, sacrificeMatthiasStart + 10000, 120, new Tuple<int, int>(sacrificeMatthiasStart, sacrificeMatthiasEnd), "rgba(0, 150, 250, 0.35)"));
                 }
             }
             // Bombs
@@ -212,8 +214,8 @@ namespace LuckParser.Models
             {
                 int zealousStart = (int)(c.Time - log.FightData.FightStart) ;
                 int zealousEnd = zealousStart + 5000;
-                replay.CircleActors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)"));
-                replay.CircleActors.Add(new CircleActor(true, zealousEnd, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)"));
+                replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.2)"));
+                replay.Actors.Add(new CircleActor(true, zealousEnd, 180, new Tuple<int, int>(zealousStart, zealousEnd), "rgba(200, 150, 0, 0.4)"));
             }
         }
 

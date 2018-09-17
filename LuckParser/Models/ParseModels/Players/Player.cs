@@ -1,5 +1,6 @@
 ﻿using LuckParser.Controllers;
 using LuckParser.Models.DataModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -403,7 +404,59 @@ namespace LuckParser.Models.ParseModels
 
             }
         }
-        
+
+        //
+        private class Serializable
+        {
+            public int Group { get; set; }
+            public string Img { get; set; }
+            public string Type { get; set; }
+            public int ID { get; set; }
+            public int[] Positions { get; set; }
+            public long[] Dead { get; set; }
+            public long[] Down { get; set; }
+        }
+
+        public override string GetCombatReplayJSON(CombatReplayMap map)
+        {
+            Serializable aux = new Serializable
+            {
+                Group = Group,
+                Img = CombatReplay.Icon,
+                Type = "Player",
+                ID = InstID,
+                Positions = new int[2 * CombatReplay.Positions.Count],
+                Dead = new long[2 * CombatReplay.Deads.Count],
+                Down = new long[2 * CombatReplay.Downs.Count]
+            };
+            int i = 0;
+            foreach (Point3D pos in CombatReplay.Positions)
+            {
+                Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
+                aux.Positions[i++] = coord.Item1;
+                aux.Positions[i++] = coord.Item2;
+            }
+            i = 0;
+            foreach (Tuple<long,long> status in CombatReplay.Deads)
+            {
+                aux.Dead[i++] = status.Item1;
+                aux.Dead[i++] = status.Item2;
+            }
+            i = 0;
+            foreach (Tuple<long, long> status in CombatReplay.Downs)
+            {
+                aux.Down[i++] = status.Item1;
+                aux.Down[i++] = status.Item2;
+            }
+
+            return JsonConvert.SerializeObject(aux);
+        }
+
+        public override int GetCombatReplayID()
+        {
+            return InstID;
+        }
+
 
         /*protected override void setHealingLogs(ParsedLog log)
         {
