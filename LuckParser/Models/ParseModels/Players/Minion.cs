@@ -33,14 +33,14 @@ namespace LuckParser.Models.ParseModels
             long maxTime = Math.Min(log.FightData.FightEnd, Agent.LastAware);
             foreach (CombatItem c in log.GetCastData(Agent.InstID))
             {
-                if (!(c.Time > minTime && c.Time < maxTime))
+                if (!(c.Time > minTime))
                 {
                     continue;
                 }
                 ParseEnum.StateChange state = c.IsStateChange;
                 if (state == ParseEnum.StateChange.Normal)
                 {
-                    if (c.IsActivation.IsCasting())
+                    if (c.IsActivation.IsCasting() && c.Time < maxTime)
                     {
                         long time = c.Time - timeStart;
                         curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);
