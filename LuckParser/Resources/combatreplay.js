@@ -113,6 +113,7 @@ rangeControl.set(900, false);
 rangeControl.set(1200, false);
 function toggleRange(radius) {
     rangeControl.set(radius, !rangeControl.get(radius));
+    animateCanvas(-1);
 }
 
 // slider
@@ -145,6 +146,7 @@ function selectActor(pId) {
     } else {
         selectedPlayer = actor;
     }
+    animateCanvas(-1);
 }
 
 // Drawables

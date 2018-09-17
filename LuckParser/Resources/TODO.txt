@@ -4,6 +4,8 @@ OK (DPS Graph Boss HP)
 OK (Combat Replay)
 OK (Mechanics: Boss Mechanics)
 OK (All graphs: line colors)
+Boons Tab
+	Personal Buff Uptimes
 Boss Tab
 	Boss itself
 		Condi Uptime
