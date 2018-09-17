@@ -16,7 +16,7 @@ Boss Tab
 		Skills
 Player Tab
 	Player
-		Buff Foods
+OK		(Buff Foods)
 OK		(Graph)
 OK			(DPS)
 OK			(Boons)
