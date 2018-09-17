@@ -724,8 +724,8 @@ namespace LuckParser.Controllers
                     sw.Write("</canvas>");
                     sw.Write("<div class=\"d-flex justify-content-center slidecontainer\">");
                     {
-                        sw.Write("<input oninput=\"updateTime(this.value);\"type=\"range\" min=\"0\" max=\"" + log.PlayerList.First().CombatReplay.Times.Last() + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
-                        sw.Write("<input class=\"ml-5\" type=\"text\" id=\"timeRangeDisplay\" disabled value=\"0 secs\">");
+                        sw.Write("<input style=\"min-width: 400px;\" oninput=\"updateTime(this.value);\" type=\"range\" min=\"0\" max=\"" + log.PlayerList.First().CombatReplay.Times.Last() + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
+                        sw.Write("<input style =\"width: 70px; text-align: right; \"class=\"ml-3 mr-1\" type=\"text\" id=\"timeRangeDisplay\" value=\"0\" oninput=\"updateInputTime(this.value);\">");
                     }
                     sw.Write("</div>");
                     sw.Write("<div class=\"d-flex justify-content-center\">");
