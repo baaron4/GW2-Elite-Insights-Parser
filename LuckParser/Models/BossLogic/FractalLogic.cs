@@ -58,21 +58,24 @@ namespace LuckParser.Models
             return phases;
         }
 
-        protected void SetSuccessOnCombatExit(CombatData combatData, LogData logData, FightData fightData, int combatExitCount)
+        protected void SetSuccessOnCombatExit(CombatData combatData, LogData logData, FightData fightData, List<Player> pList, int combatExitCount, int delay)
         {
-            int combatExits = combatData.Count(x => x.SrcInstid == fightData.InstID && x.IsStateChange == ParseEnum.StateChange.ExitCombat);
+            int combatExits = combatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Count(x => x.SrcInstid == fightData.InstID);
             CombatItem lastDamageTaken = combatData.GetDamageTakenData(fightData.InstID).LastOrDefault(x => x.Value > 0);
             if (combatExits == combatExitCount && lastDamageTaken != null)
             {
-                logData.Success = true;
+                HashSet<ushort> pIds = new HashSet<ushort>(pList.Select(x => x.InstID));
+                CombatItem lastPlayerExit = combatData.GetStatesData(ParseEnum.StateChange.ExitCombat).Where(x => pIds.Contains(x.SrcInstid)).LastOrDefault();
+                CombatItem lastBossExit = combatData.GetStatesData(ParseEnum.StateChange.ExitCombat).LastOrDefault(x => x.SrcInstid == fightData.InstID);
+                logData.Success = lastPlayerExit != null && lastBossExit != null && lastPlayerExit.Time - lastBossExit.Time > delay ? true : false;
                 fightData.FightEnd = lastDamageTaken.Time;
             }
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
         {
             // check reward
-            CombatItem reward = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
+            CombatItem reward = combatData.GetStatesData(ParseEnum.StateChange.Reward).LastOrDefault();
             CombatItem lastDamageTaken = combatData.GetDamageTakenData(fightData.InstID).LastOrDefault(x => x.Value > 0);
             if (lastDamageTaken != null)
             {
@@ -83,7 +86,7 @@ namespace LuckParser.Models
                 }
                 else
                 {
-                    SetSuccessByDeath(combatData, logData, fightData);
+                    SetSuccessByDeath(combatData,logData,fightData,pList);
                 }
             }
         }

@@ -33,6 +33,8 @@ namespace LuckParser.Models
             new Mechanic(39911, "Spiral Strike", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Skorvald, "symbol:'circle-open',color:'rgb(0,200,0)',", "SprlStr","Hit after Warp (Jump to Player with overhead bomb)", "Spiral Strike",0),
             new Mechanic(39133, "Wave of Mutilation", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Skorvald, "symbol:'triangle-sw',color:'rgb(0,200,0)',", "KBJmp","Hit by KB Jump (player targeted)", "Knockback jump",0),
             });
+            Extension = "skorv";
+            IconUrl = "https://wiki.guildwars2.com/images/c/c1/Skorvald_the_Shattered.jpg";
         }
 
         public override CombatReplayMap GetCombatMap()
@@ -54,7 +56,7 @@ namespace LuckParser.Models
             return "https://i.imgur.com/IOPAHRE.png";
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData)
+        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
         {
             // check reward
             CombatItem reward = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
@@ -64,11 +66,11 @@ namespace LuckParser.Models
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)
                 {
                     logData.Success = true;
-                    fightData.FightStart = Math.Min(lastDamageTaken.Time, reward.Time);
+                    fightData.FightEnd = Math.Min(lastDamageTaken.Time, reward.Time);
                 }
                 else
                 {
-                    SetSuccessByDeath(combatData, logData, fightData);
+                    SetSuccessByDeath(combatData,logData,fightData,pList);
                     if (logData.Success)
                     {
                         fightData.FightEnd = Math.Min(fightData.FightEnd, lastDamageTaken.Time);

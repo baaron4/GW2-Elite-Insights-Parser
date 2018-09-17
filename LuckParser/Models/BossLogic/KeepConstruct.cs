@@ -22,8 +22,9 @@ namespace LuckParser.Models
             new Mechanic(35086, "Tower Drop", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(255,140,0)',", "Jump","Tower Drop (KC Jump)", "Tower Drop",0),
             new Mechanic(35103, "Xera's Fury", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.KeepConstruct, "symbol:'circle',color:'rgb(200,140,0)',", "Bmb","Xera's Fury (Large Bombs) application", "Bombs",0),
             new Mechanic(16261, "Core Hit", Mechanic.MechType.HitOnEnemy, ParseEnum.BossIDS.KeepConstruct, "symbol:'star-open',color:'rgb(255,140,0)',", "C.Hit","Core was Hit by Player", "Core Hit",1000) 
-            //hit orb: May need different format since the Skill ID is irrelevant but any combat event with dst_agent of the species ID 16261 (Construct Core) should be shown. Tracking either via the different Construct Core adresses or their instance_id? (every phase it's a new one)
             });
+            Extension = "kc";
+            IconUrl = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
         }
 
         public override CombatReplayMap GetCombatMap()

@@ -159,8 +159,7 @@ namespace LuckParser
                     {
                         throw new CancellationException(row, new InvalidDataException("Save Directory not found"));
                     }
-
-                    string bossid = control.GetFightData().ID.ToString();
+                    
                     string result = "fail";
 
                     if (log.LogData.Success)
@@ -190,7 +189,7 @@ namespace LuckParser
                     {
                         string outputFile = Path.Combine(
                         saveDirectory.FullName,
-                        $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.html"
+                        $"{fName}_{log.FightData.Logic.Extension}_{result}.html"
                         );
                         using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         {
@@ -212,7 +211,7 @@ namespace LuckParser
                     {
                         string outputFile = Path.Combine(
                         saveDirectory.FullName,
-                        $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.csv"
+                        $"{fName}_{log.FightData.Logic.Extension}_{result}.csv"
                         );
                         using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         {
@@ -228,7 +227,7 @@ namespace LuckParser
                     {
                         string outputFile = Path.Combine(
                             saveDirectory.FullName,
-                            $"{fName}_{HTMLHelper.GetLink(bossid + "-ext")}_{result}.json"
+                            $"{fName}_{log.FightData.Logic.Extension}_{result}.json"
                         );
                         using (FileStream fs = new FileStream(outputFile, FileMode.Create, FileAccess.Write))
                         {

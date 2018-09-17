@@ -85,7 +85,7 @@ namespace LuckParser.Controllers
             {
                 double hp = p.Y / 100.0;
                 int timeInPhase = 1 + (p.X - (int)_statistics.Phases[0].Start) / 1000;
-                if (timeInPhase >= seconds)
+                if (timeInPhase > seconds)
                 {
                     break;
                 }

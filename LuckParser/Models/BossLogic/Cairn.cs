@@ -32,6 +32,8 @@ namespace LuckParser.Models
             new Mechanic(37910, "Gravity Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, "symbol:'octagon',color:'rgb(255,0,255)',", "Donut","Expanding Crystal Donut Wave (Knockback)", "Crystal Donut",0)
 
             });
+            Extension = "cairn";
+            IconUrl = "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
         }
 
         public override CombatReplayMap GetCombatMap()

@@ -2149,7 +2149,7 @@ namespace LuckParser.Controllers
             html = html.Replace("${bossName}", FilterStringChars(_log.FightData.Name));
             html = html.Replace("${bossHealth}", _log.FightData.Health.ToString());
             html = html.Replace("${bossHealthLeft}", healthLeft.ToString());
-            html = html.Replace("${bossIcon}", HTMLHelper.GetLink(_log.FightData.ID + "-icon"));
+            html = html.Replace("${bossIcon}", _log.FightData.Logic.IconUrl);
             html = html.Replace("${eiVersion}", Application.ProductVersion);
             html = html.Replace("${recordedBy}", _log.LogData.PoV.Split(':')[0]);
 
