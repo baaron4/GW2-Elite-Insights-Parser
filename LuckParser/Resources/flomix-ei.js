@@ -840,6 +840,7 @@ function createGraph($target, phaseData, phase, type) {
 		plot_bgcolor: 'rgba(0,0,0,0)',
 		staticPlot: true,
 		displayModeBar: false,
+		shapes: []
 	};
 	
 	lines.push({x: xAxis, y: allPlayerDps, mode: 'lines',line: {shape: 'spline'},visible:'legendonly',name: 'All Player Dps'});
@@ -873,8 +874,37 @@ function createGraph($target, phaseData, phase, type) {
 		hoverinfo: 'text+x+name',
 		name: 'Boss health',
 		_yaxis: 'y2'});
-	
-	
+
+
+	$.each(data.phases[phase].markupAreas, function(i, area) {
+		layout.shapes.push({
+			type: 'rect',
+			xref: 'x',
+			yref: 'paper',
+			x0: area[0],
+			y0: 0,
+			x1: area[1],
+			y1: 1,
+			fillcolor: '#808080',
+			opacity: 0.125,
+			line: { width: 0 }
+		});
+	});
+
+	$.each(data.phases[phase].markupLines, function(i, x) {
+		layout.shapes.push({
+			type: 'line',
+				xref: 'x',
+				yref: 'paper',
+				x0: x,
+				y0: 0,
+				x1: x,
+				y1: 1,
+				opacity: 0.35,
+				line: { color: '#00c0ff', width: 2, dash: 'dash'}
+		});
+	});
+
 	var callback = function() {
 		Plotly.newPlot($target.attr('id'), lines, layout);
 	};
