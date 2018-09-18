@@ -6,7 +6,7 @@ namespace LuckParser.Models.ParseModels
     {
         private ParseEnum.BuffRemove _removeType;
 
-        public BoonRemovalLog(long time, ushort srcInstid, long value, ParseEnum.BuffRemove removeType, ParseEnum.IFF iff) : base(time, srcInstid, value, iff)
+        public BoonRemovalLog(long time, ushort srcInstid, long value, ParseEnum.BuffRemove removeType) : base(time, srcInstid, value)
         {
             _removeType = removeType;
         }

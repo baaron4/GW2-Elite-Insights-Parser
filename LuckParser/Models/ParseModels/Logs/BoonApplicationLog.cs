@@ -5,7 +5,7 @@ namespace LuckParser.Models.ParseModels
     public class BoonApplicationLog : BoonLog
     {
 
-        public BoonApplicationLog(long time, ushort srcInstid, long value, ParseEnum.IFF iff) : base(time,srcInstid,value, iff)
+        public BoonApplicationLog(long time, ushort srcInstid, long value) : base(time,srcInstid,value)
         {
         }
 

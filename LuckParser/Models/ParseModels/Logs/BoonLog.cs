@@ -6,15 +6,13 @@ namespace LuckParser.Models.ParseModels
     {
         public long Time { get; private set; }
         public long Value { get; private set; }
-        public ParseEnum.IFF Iff { get; private set; }
         public ushort SrcInstid { get; }
 
-        protected BoonLog(long time, ushort srcInstid, long value, ParseEnum.IFF iff)
+        protected BoonLog(long time, ushort srcInstid, long value)
         {
             Time = time;
             Value = value;
             SrcInstid = srcInstid;
-            Iff = iff;
         }
 
         public void AddTime(long time)

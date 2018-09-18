@@ -126,7 +126,7 @@ namespace LuckParser.Models.ParseModels
             return 0;
         }
         // private getters
-        private BoonMap GetBoonMap(ParsedLog log, HashSet<long> boonIds, HashSet<long> condiIds, HashSet<long> offIds, HashSet<long> defIds)
+        private BoonMap GetBoonMap(ParsedLog log)
         {
             BoonMap boonMap = new BoonMap
             {
@@ -134,8 +134,8 @@ namespace LuckParser.Models.ParseModels
             };
             // Fill in Boon Map
             long timeStart = log.FightData.FightStart;
-            HashSet<long> tableIds = new HashSet<long> (boonIds);
-            foreach(CombatItem c in log.GetBoonDataByDst(Agent.InstID))
+            HashSet<long> IntensityIds = new HashSet<long> (Boon.BoonsByType[Boon.BoonType.Intensity].Select(x => x.ID));
+            foreach (CombatItem c in log.GetBoonDataByDst(Agent.InstID))
             {
                 long boonId = c.SkillID;
                 if (!boonMap.ContainsKey(boonId))
@@ -144,20 +144,24 @@ namespace LuckParser.Models.ParseModels
                 }
                 long time = c.Time - timeStart;
                 List<BoonLog> loglist = boonMap[boonId];
-                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial)
+                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (log.IsBenchmarkMode() || !IntensityIds.Contains(boonId)))
                 {
-                    loglist.Add(new BoonApplicationLog(0, 0, int.MaxValue, c.IFF));
+                    loglist.Add(new BoonApplicationLog(0, 0, int.MaxValue));
                 }
                 else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= 0 && time < log.FightData.FightDuration)
                 {
                     if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
                         ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                        loglist.Add(new BoonApplicationLog(time, src, c.Value,c.IFF));
+                        if (c.OverstackValue > 0)
+                        {
+                            loglist.Add(new BoonRemovalLog(time, src, c.OverstackValue, ParseEnum.BuffRemove.Custom));
+                        }
+                        loglist.Add(new BoonApplicationLog(time, src, c.Value));
                     }
                     else if (time < log.FightData.FightDuration - 50)
                     {
-                        loglist.Add(new BoonRemovalLog(time, c.DstInstid, c.Value, c.IsBuffRemove, c.IFF));
+                        loglist.Add(new BoonRemovalLog(time, c.DstInstid, c.Value, c.IsBuffRemove));
                     }
                 }
             }   
@@ -258,12 +262,8 @@ namespace LuckParser.Models.ParseModels
         }
         private void SetBoonDistribution(ParsedLog log)
         {
-            HashSet<long> boonIds = new HashSet<long>(Boon.GetBoonList().Select(x => x.ID));
-            HashSet<long> condiIds = new HashSet<long>(Boon.GetCondiBoonList().Select(x => x.ID));
-            HashSet<long> defIds = new HashSet<long>(Boon.GetDefensiveTableList().Select(x => x.ID));
-            HashSet<long> offIds = new HashSet<long>(Boon.GetOffensiveTableList().Select(x => x.ID));
             List<PhaseData> phases = log.Boss.GetPhases(log);
-            BoonMap toUse = GetBoonMap(log, boonIds, condiIds, defIds, offIds);
+            BoonMap toUse = GetBoonMap(log);
             long dur = log.FightData.FightDuration;
             int fightDuration = (int)(dur) / 1000;
             HashSet<long> extraDataID = new HashSet<long>
@@ -274,6 +274,8 @@ namespace LuckParser.Models.ParseModels
             };
             BoonsGraphModel boonPresenceGraph = new BoonsGraphModel("Number of Boons");
             BoonsGraphModel condiPresenceGraph = new BoonsGraphModel("Number of Conditions");
+            HashSet<long> boonIds = new HashSet<long>(Boon.GetBoonList().Select(x => x.ID));
+            HashSet<long> condiIds = new HashSet<long>(Boon.GetCondiBoonList().Select(x => x.ID));
             for (int i = 0; i < phases.Count; i++)
             {
                 _boonDistribution.Add(new BoonDistribution());

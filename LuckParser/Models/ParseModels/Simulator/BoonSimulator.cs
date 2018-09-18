@@ -40,6 +40,7 @@ namespace LuckParser.Models.ParseModels
         private readonly int _capacity;
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;
+        private bool _simulationHasBuffInitial = false;
 
         // Constructor
         protected BoonSimulator(int capacity, ParsedLog log, StackingLogic logic)
@@ -101,6 +102,7 @@ namespace LuckParser.Models.ParseModels
             {
                 BoonStack.Add(toAdd);
                 _logic.Sort(_log, BoonStack);
+                _simulationHasBuffInitial = _simulationHasBuffInitial || toAdd.BuffInitial;
             }
             // Replace lowest value
             else
@@ -111,6 +113,9 @@ namespace LuckParser.Models.ParseModels
                     long overstackValue = boonDuration;
                     ushort srcValue = srcinstid;
                     OverstackSimulationResult.Add(new BoonSimulationOverstackItem(srcinstid, boonDuration,start));                 
+                } else
+                {
+                    _simulationHasBuffInitial = _simulationHasBuffInitial || toAdd.BuffInitial;
                 }
             }
         }
@@ -133,6 +138,23 @@ namespace LuckParser.Models.ParseModels
                         OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BoonDuration, start));
                     }
                     BoonStack.Clear();
+                    break;
+                case ParseEnum.BuffRemove.Custom:
+                    if (!_simulationHasBuffInitial)
+                    {
+                        break;
+                    }
+                    for (int i = 0; i < BoonStack.Count; i++)
+                    {
+                        BoonStackItem stackItem = BoonStack[i];
+                        if (stackItem.BuffInitial)
+                        {
+                            OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BoonDuration, start));
+                            BoonStack.RemoveAt(i);
+                            break;
+                        }
+                    }
+                    _simulationHasBuffInitial = BoonStack.Exists(x => x.BuffInitial == true);
                     break;
                 case ParseEnum.BuffRemove.Single:
                 case ParseEnum.BuffRemove.Manual:
