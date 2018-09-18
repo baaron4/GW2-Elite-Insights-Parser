@@ -52,7 +52,9 @@ function animateCanvas(noRequest) {
         stopAnimate();
     }
     timeSlider.value = time.toString();
-    updateTextInput(time);
+	if (noRequest != -2) {	
+		updateTextInput(time);
+	}
     if (noRequest > -1 && animation !== null && bgLoaded) {
         time = Math.min(time + speed * timeOffset, lastTime);
         animation = requestAnimationFrame(animateCanvas);
@@ -122,8 +124,23 @@ function updateTime(value) {
     updateTextInput(time);
     animateCanvas(-1);
 }
+
 function updateTextInput(val) {
-    timeSliderDisplay.value = val / 1000.0 + ' secs';
+    timeSliderDisplay.value = (val / 1000.0).toString() ;
+}
+function updateInputTime(value) {
+	try {
+		const cleanedString = value.replace(",",".");
+		const parsedTime = parseFloat(cleanedString);
+		if (isNaN(parsedTime)) {
+			return;
+		}
+		const ms = Math.round(parsedTime * 1000.0);
+		time = Math.min(Math.max(ms ,0), times[times.length - 1]);
+		animateCanvas(-2);
+	} catch (error) {
+		console.error(error);
+	}
 }
 
 // selection

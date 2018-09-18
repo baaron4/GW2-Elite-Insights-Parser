@@ -18,5 +18,7 @@ namespace LuckParser.Models.HtmlModels
         public List<List<double[]>> rotation;
         [DataMember]
         public List<List<BoonChartDataDto>> boonGraph;
+
+        [DataMember] public List<List<FoodDto>> food;
     }
 }

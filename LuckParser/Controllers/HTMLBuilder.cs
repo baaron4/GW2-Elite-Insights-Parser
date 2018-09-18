@@ -1933,12 +1933,13 @@ namespace LuckParser.Controllers
                             //Explanation of rotation graph
                             sw.Write("<div class=\"alert alert-dismissible alert-light\"><button type = \"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>");
                             sw.Write("<p><u>Fill</u></p>");
-                            sw.Write("<span class=\"badge badge-info\">Hit without aftercast</span>");
-                            sw.Write("<span class=\"badge badge-success\">Hit with full aftercast</span>");
-                            sw.Write("<span class=\"badge badge-danger\">Attack canceled before completing</span>");
+                            sw.Write("<span style=\"padding: 2px; background-color:#0000FF; border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF\">Hit without aftercast</span> ");
+                            sw.Write("<span style=\"padding: 2px; background-color:#00FF00; border-style:solid; border-width: 1px; border-color:#000000; color:#000000\">Hit with full aftercast</span> ");
+                            sw.Write("<span style=\"padding: 2px; background-color:#FF0000; border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF\">Attack canceled before completing</span>" );
+                            sw.Write("<span style=\"padding: 2px; background-color:#FFFF00; border-style:solid; border-width: 1px; border-color:#000000; color:#000000\">Weapon swap</span>");
                             sw.Write("<p><u>Outline</u></p>");
-                            sw.Write("<span class=\"badge badge-primary\">Normal animation length</span>");
-                            sw.Write("<span class=\"badge\" style=\"background-color:#800080\">Animation with quickness</span>");
+                            sw.Write("<span style=\"padding: 2px; background-color:#999999; border-style:solid; border-width: 2px; border-color:#000000; color:#000000\">Normal animation length</span> ");
+                            sw.Write("<span style=\"padding: 2px; background-color:#999999; border-style:solid; border-width: 2px; border-color:#FF00FF; color:#000000\">Animation with quickness</span>");
                             sw.Write("</div>");
 
 
