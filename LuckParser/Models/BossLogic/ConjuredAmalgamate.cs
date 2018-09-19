@@ -14,6 +14,7 @@ namespace LuckParser.Models
             {
 
             });
+            CanCombatReplay = false;
             Extension = "ca";
             IconUrl = "";
         }

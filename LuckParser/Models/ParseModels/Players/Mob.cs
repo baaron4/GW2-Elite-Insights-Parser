@@ -196,24 +196,8 @@ namespace LuckParser.Models.ParseModels
                     CombatReplay.Icon = "https://i.imgur.com/ePTXx23.png";
                     break;
                 case ParseEnum.TrashIDS.SurgingSoul:
-                    //List<Point3D> positions = CombatReplay.GetPositions();
-                    //if (positions.Count < 2)
-                    //{
-                        CombatReplay.Icon = "https://i.imgur.com/k79t7ZA.png";
-                        break;
-                    //}
-                    //if (positions[1].X < -12000 || positions[1].X > -9250)
-                    //{
-                    //    CombatReplay.SetIcon("https://i.imgur.com/9qpuf8c.png");
-                    //    break;
-                    //}
-                    //else if (positions[1].Y < -525 || positions[1].Y > 2275)
-                    //{
-                    //    CombatReplay.SetIcon("https://i.imgur.com/zNHctbS.png");
-                    //    break;
-                    //}
-                    //CombatReplay.SetIcon("https://i.imgur.com/kcN9ECn.png");
-                    //break;
+                    CombatReplay.Icon = "https://i.imgur.com/k79t7ZA.png";
+                    break;
                 case ParseEnum.TrashIDS.Echo:
                     CombatReplay.Icon = "https://i.imgur.com/kcN9ECn.png";
                     break;
