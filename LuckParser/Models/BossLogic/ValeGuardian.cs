@@ -75,10 +75,16 @@ namespace LuckParser.Models
                 phases.Add(new PhaseData(start, fightDuration));
             }
             string[] namesVG = new [] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
+            bool[] drawStartVG = { false, false, true, false, true };
+            bool[] drawEndVG = { true, false, true, false, false };
+            bool[] drawAreaVG = { true, false, true, false, true };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
                 phase.Name = namesVG[i - 1];
+                phase.DrawStart = drawStartVG[i - 1];
+                phase.DrawEnd = drawEndVG[i - 1];
+                phase.DrawArea = drawAreaVG[i - 1];
                 if (i == 2 || i == 4)
                 {
                     List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
@@ -114,7 +120,7 @@ namespace LuckParser.Models
             List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
             foreach (CastLog c in magicStorms)
             {
-                replay.CircleActors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
             }
             return ids;
         }

@@ -4,6 +4,8 @@ OK (DPS Graph Boss HP)
 OK (Combat Replay)
 OK (Mechanics: Boss Mechanics)
 OK (All graphs: line colors)
+Boons Tab
+	Personal Buff Uptimes
 Boss Tab
 	Boss itself
 		Condi Uptime
@@ -15,8 +17,8 @@ Boss Tab
 		% of total DPS
 		Skills
 Player Tab
-	Player
-		Buff Foods
+OK	(Player)
+OK		(Buff Foods)
 OK		(Graph)
 OK			(DPS)
 OK			(Boons)

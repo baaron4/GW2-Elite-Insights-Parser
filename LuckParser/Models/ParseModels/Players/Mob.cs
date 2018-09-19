@@ -1,4 +1,5 @@
 ﻿using LuckParser.Models.DataModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,23 +27,23 @@ namespace LuckParser.Models.ParseModels
             switch (ParseEnum.GetTrashIDS(Agent.ID))
             {
                 case ParseEnum.TrashIDS.BlueGuardian:
-                    CombatReplay.CircleActors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.GreenGuardian:
-                    CombatReplay.CircleActors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 255, 0, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 255, 0, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.RedGuardian:
-                    CombatReplay.CircleActors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.Seekers:
-                    CombatReplay.CircleActors.Add(new CircleActor(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.ChargedSoul:
-                    CombatReplay.CircleActors.Add(new CircleActor(false, 0, 220, lifespan, "rgba(255, 150, 0, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(false, 0, 220, lifespan, "rgba(255, 150, 0, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.Spirit:
                 case ParseEnum.TrashIDS.Spirit2:
-                    CombatReplay.CircleActors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.Olson:
                 case ParseEnum.TrashIDS.Engul:
@@ -52,36 +53,36 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.TrashIDS.Jessica:
                 case ParseEnum.TrashIDS.Galletta:
                 case ParseEnum.TrashIDS.Ianim:
-                    CombatReplay.CircleActors.Add(new CircleActor(false, 0, 600, lifespan, "rgba(255, 0, 0, 0.5)"));
-                    CombatReplay.CircleActors.Add(new CircleActor(true, 0, 400, lifespan, "rgba(0, 125, 255, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(false, 0, 600, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(true, 0, 400, lifespan, "rgba(0, 125, 255, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.Messenger:
-                    CombatReplay.CircleActors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 125, 0, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 125, 0, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.Scythe:
-                    CombatReplay.CircleActors.Add(new CircleActor(true, 0, 80, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(true, 0, 80, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.Tornado:
-                    CombatReplay.CircleActors.Add(new CircleActor(true, 0, 90, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(true, 0, 90, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.IcePatch:
-                    CombatReplay.CircleActors.Add(new CircleActor(true, 0, 200, lifespan, "rgba(0, 0, 255, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(true, 0, 200, lifespan, "rgba(0, 0, 255, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.Storm:
-                    CombatReplay.CircleActors.Add(new CircleActor(false, 0, 260, lifespan, "rgba(0, 80, 255, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(false, 0, 260, lifespan, "rgba(0, 80, 255, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.Oil:
-                    CombatReplay.CircleActors.Add(new CircleActor(true, 0, 240, lifespan, "rgba(0, 0, 0, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(true, 0, 240, lifespan, "rgba(0, 0, 0, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.Echo:
-                    CombatReplay.CircleActors.Add(new CircleActor(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    CombatReplay.Actors.Add(new CircleActor(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)"));
                     break;
                 case ParseEnum.TrashIDS.TormentedDead:
                     if (CombatReplay.Positions.Count == 0)
                     {
                         break;
                     }
-                    CombatReplay.CircleActors.Add(new CircleActor(true,0,400,new Tuple<int, int>(end,end+60000), "rgba(255, 0, 0, 0.5)",CombatReplay.Positions.Last()));
+                    CombatReplay.Actors.Add(new CircleActor(true,0,400,new Tuple<int, int>(end,end+60000), "rgba(255, 0, 0, 0.5)",CombatReplay.Positions.Last()));
                     break;
                 case ParseEnum.TrashIDS.SurgingSoul:
                     List<Point3D> positions = CombatReplay.Positions;
@@ -91,12 +92,12 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (positions[1].X < -12000 || positions[1].X > -9250)
                     {
-                        CombatReplay.RectangleActors.Add(new RectangleActor(true, 0, 240, 660, lifespan, "rgba(255,100,0,0.5)"));
+                        CombatReplay.Actors.Add(new RectangleActor(true, 0, 240, 660, lifespan, "rgba(255,100,0,0.5)"));
                         break;
                     }
                     else if (positions[1].Y < -525 || positions[1].Y > 2275)
                     {
-                        CombatReplay.RectangleActors.Add(new RectangleActor(true, 0, 645, 238, lifespan, "rgba(255,100,0,0.5)"));
+                        CombatReplay.Actors.Add(new RectangleActor(true, 0, 645, 238, lifespan, "rgba(255,100,0,0.5)"));
                         break;
                     }
                     break;
@@ -235,6 +236,44 @@ namespace LuckParser.Models.ParseModels
                     CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
                     break;
             }
+        }
+        //
+        private class Serializable
+        {
+            public string Img { get; set; }
+            public string Type { get; set; }
+            public int ID { get; set; }
+            public int[] Positions { get; set; }
+            public long Start { get; set; }
+            public long End { get; set; }
+        }
+
+        public override string GetCombatReplayJSON(CombatReplayMap map)
+        {
+            Serializable aux = new Serializable
+            {
+                Img = CombatReplay.Icon,
+                Type = "Mob",
+                Positions = new int[2 * CombatReplay.Positions.Count],
+                Start = CombatReplay.TimeOffsets.Item1,
+                End = CombatReplay.TimeOffsets.Item2,
+                ID = GetCombatReplayID()
+            };
+            int i = 0;
+            foreach (Point3D pos in CombatReplay.Positions)
+            {
+                Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
+                aux.Positions[i++] = coord.Item1;
+                aux.Positions[i++] = coord.Item2;
+            }
+
+            return JsonConvert.SerializeObject(aux);
+        }
+
+
+        public override int GetCombatReplayID()
+        {
+            return (InstID + "_" + CombatReplay.TimeOffsets.Item1 + "_" + CombatReplay.TimeOffsets.Item2).GetHashCode();
         }
 
         public void AddMechanics(ParsedLog log)

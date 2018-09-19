@@ -17,6 +17,16 @@ namespace LuckParser.Models.ParseModels
             throw new InvalidOperationException();
         }
 
+        public override int GetCombatReplayID()
+        {
+            throw new InvalidOperationException();
+        }
+
+        public override string GetCombatReplayJSON(CombatReplayMap map)
+        {
+            throw new InvalidOperationException();
+        }
+
         protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
             throw new InvalidOperationException();

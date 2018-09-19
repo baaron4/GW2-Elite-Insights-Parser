@@ -479,6 +479,39 @@ function createPlayerGraph($element, player, phaseIndex, playerIndex) {
 	lazy($element, callback);
 }
 
+function createPlayerFood($element, player, phaseIndex, playerIndex) {
+	var foodData = player.details.food[phaseIndex];
+	var updates = [];
+	var first = true;
+	var initHtml = '';
+	$.each(foodData, function(i, item) {
+		if (item.time == 0) {
+			if (first) {
+				initHtml += 'Started with ';
+				first = false;
+			} else {
+				initHtml += ' and ';
+			}
+			initHtml += item.name + ' <img src="' + item.icon + '" class="icon">';
+		} else {
+			var $li = $('<li></li>');
+			var text = item.dimished?'suffered ':'consumed ';
+			text += item.name + ' <img src="' + item.icon + '" class="icon"> at ' + item.time + 's (' + item.duration + ' seconds)';
+			$li.html(text);
+			updates.push($li);
+		}
+	});
+
+	if (initHtml) {
+		$element.append($('<p></p>').html(initHtml));
+	}
+
+	if (updates.length) {
+		$element.append('<p>In-fight food updates:</p>');
+		$element.append($('<ul></ul>').append(updates));
+	}
+}
+
 function lazy($owner, callback) {
 	if ('IntersectionObserver' in window) {
 		let lazyTableObserver = new IntersectionObserver(function(entries, observer) {
@@ -604,7 +637,10 @@ function buildWindowLayout(data) {
 		var playerSubtabs = [];
 		$.each(data.players, function(p, player) {
 			var playerTabs = [{name:player.name,content:{tabs: [
-				{name:'Graph', content:'<div id="pgraph_'+p+'_'+i+'" style="height: 1000px; width:1200px;"></div>',noTitle:true},
+				{name:'Graph', content:[
+						{table:'pfood_'+p+'_'+i},
+						'<div id="pgraph_'+p+'_'+i+'" style="height: 1000px; width:1100px;"></div>'
+					],noTitle:true},
 				{name:'Boss', content:{table:'dist_table_'+p+'_'+i+'_boss'},noTitle:true},
 				{name:'All', content:{table:'dist_table_'+p+'_'+i},noTitle:true}
 			]},noTitle:true}];
@@ -761,6 +797,7 @@ function createGraphs(graphData) {
 
 		$.each(data.players, function(p, player) {
 			createPlayerGraph($('#pgraph_'+p+'_'+i), player, i, p);
+			createPlayerFood($('#pfood_'+p+'_'+i), player, i, p);
 		});
 	}
 }
@@ -803,6 +840,7 @@ function createGraph($target, phaseData, phase, type) {
 		plot_bgcolor: 'rgba(0,0,0,0)',
 		staticPlot: true,
 		displayModeBar: false,
+		shapes: []
 	};
 	
 	lines.push({x: xAxis, y: allPlayerDps, mode: 'lines',line: {shape: 'spline'},visible:'legendonly',name: 'All Player Dps'});
@@ -836,8 +874,37 @@ function createGraph($target, phaseData, phase, type) {
 		hoverinfo: 'text+x+name',
 		name: 'Boss health',
 		_yaxis: 'y2'});
-	
-	
+
+
+	$.each(data.phases[phase].markupAreas, function(i, area) {
+		layout.shapes.push({
+			type: 'rect',
+			xref: 'x',
+			yref: 'paper',
+			x0: area[0],
+			y0: 0,
+			x1: area[1],
+			y1: 1,
+			fillcolor: '#808080',
+			opacity: 0.125,
+			line: { width: 0 }
+		});
+	});
+
+	$.each(data.phases[phase].markupLines, function(i, x) {
+		layout.shapes.push({
+			type: 'line',
+				xref: 'x',
+				yref: 'paper',
+				x0: x,
+				y0: 0,
+				x1: x,
+				y1: 1,
+				opacity: 0.35,
+				line: { color: '#00c0ff', width: 2, dash: 'dash'}
+		});
+	});
+
 	var callback = function() {
 		Plotly.newPlot($target.attr('id'), lines, layout);
 	};
