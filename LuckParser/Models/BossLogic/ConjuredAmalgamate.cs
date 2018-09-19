@@ -12,7 +12,8 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-
+            new Mechanic(52173, "Pulverize", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.ConjuredAmalgamate, "symbol:'square',color:'rgb(255,140,0)',", "Plvrz","Pulverize", "Pulverize",0),
+                
             });
             CanCombatReplay = false;
             Extension = "ca";
