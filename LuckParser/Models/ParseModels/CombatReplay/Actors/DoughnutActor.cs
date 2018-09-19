@@ -8,19 +8,19 @@ namespace LuckParser.Models.ParseModels
         public int OuterRadius { get; }
         public int InnerRadius { get; }
 
-        public DoughnutActor(int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color) : base(true, growing, lifespan, color)
+        public DoughnutActor(bool fill, int growing,  int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color) : base(fill, growing, lifespan, color)
         {
             InnerRadius = innerRadius;
             OuterRadius = outerRadius;
         }
 
-        public DoughnutActor(int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color, Point3D position) : base(true, growing, lifespan, color, position)
+        public DoughnutActor(bool fill, int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color, Point3D position) : base(fill, growing, lifespan, color, position)
         {
             InnerRadius = innerRadius;
             OuterRadius = outerRadius;
         }
 
-        public DoughnutActor(int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time) : base(true, growing, lifespan, color, prev, next, time)
+        public DoughnutActor(bool fill, int growing, int innerRadius, int outerRadius, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time) : base(fill, growing, lifespan, color, prev, next, time)
         {
             InnerRadius = innerRadius;
             OuterRadius = outerRadius;

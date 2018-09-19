@@ -769,32 +769,40 @@ namespace LuckParser.Controllers
                 sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center\">");
                 {
                     sw.Write("<h3>Range Selectors</h3>");
-                    sw.Write("<div style=\"width:200px;\" class=\"d-flex flex-row flex-wrap justify-content-center align-items-center btn-group btn-group-toggle mb-5\" data-toggle=\"buttons\">");
+                    sw.Write("<div class=\"d-flex flex-column flex-wrap justify-content-center align-items-center mb-5\" data-toggle=\"buttons\">");
                     {
-                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(180);\" class=\"btn btn-dark\">" +
-                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
-                            "180" +
-                            "</label >");
-                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(240);\" class=\"btn btn-dark\">" +
-                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
-                            "240" +
-                            "</label >");
-                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(300);\" class=\"btn btn-dark\">" +
-                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
-                            "300" +
-                            "</label >");
-                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(600);\" class=\"btn btn-dark\">" +
-                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
+                        sw.Write("<div style=\"width:200px;\" class=\"d-flex flex-row flex-wrap justify-content-center align-items-center btn-group btn-group-toggle\" data-toggle=\"buttons\">");
+                        {
+                            sw.Write("<label style=\"width:60px;\"  onclick=\"toggleRange(180);\" class=\"btn btn-dark\">" +
+                                "<input style=\"display: none;\" type=\"checkbox\" autocomplete=\"off\">" +
+                                "180" +
+                                "</label >");
+                            sw.Write("<label style=\"width:60px;\" onclick=\"toggleRange(240);\" class=\"btn btn-dark\">" +
+                                "<input style=\"display: none;\" type=\"checkbox\" autocomplete=\"off\">" +
+                                "240" +
+                                "</label >");
+                            sw.Write("<label style=\"width:60px;\" onclick=\"toggleRange(300);\" class=\"btn btn-dark\">" +
+                                "<input style=\"display: none;\" type=\"checkbox\" autocomplete=\"off\">" +
+                                "300" +
+                                "</label >");
+                        }
+                        sw.Write("</div>");
+                        sw.Write("<div style=\"width:200px;\" class=\"d-flex flex-row flex-wrap justify-content-center align-items-center btn-group btn-group-toggle\" data-toggle=\"buttons\">");
+                        {
+                            sw.Write("<label style=\"width:60px;\" onclick=\"toggleRange(600);\" class=\"btn btn-dark\">" +
+                            "<input style=\"display: none;\" type=\"checkbox\" autocomplete=\"off\">" +
                             "600" +
                             "</label >");
-                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(900);\" class=\"btn btn-dark\">" +
-                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
-                            "900" +
-                            "</label >");
-                        sw.Write("<label style=\"width: 60px;\" onclick=\"toggleRange(1200);\" class=\"btn btn-dark\">" +
-                            "<input class=\"invisible\" type=\"checkbox\" autocomplete=\"off\">" +
-                            "1200" +
-                            "</label >");
+                            sw.Write("<label style=\"width:60px;\" onclick=\"toggleRange(900);\" class=\"btn btn-dark\">" +
+                                "<input style=\"display: none;\" type=\"checkbox\" autocomplete=\"off\">" +
+                                "900" +
+                                "</label >");
+                            sw.Write("<label style=\"width:60px;\" onclick=\"toggleRange(1200);\" class=\"btn btn-dark\">" +
+                                "<input style=\"display: none;\" type=\"checkbox\" autocomplete=\"off\">" +
+                                "1200" +
+                                "</label >");
+                        }
+                        sw.Write("</div>");
                     }
                     sw.Write("</div>");
                     sw.Write("<div class=\"d-flex flex-column justify-content-center align-items-center btn-group btn-group-toggle mb-5\" data-toggle=\"buttons\">");
