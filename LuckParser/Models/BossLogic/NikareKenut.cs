@@ -19,6 +19,8 @@ namespace LuckParser.Models
             new Mechanic(51977, "Aquatic Barrage End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.NikareKenut, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Breakbar broken", "CCed",0),
             new Mechanic(53018, "Sea Swell", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.NikareKenut, "symbol:'circle',color:'rgb(255,100,255)',", "SSw","Sea Swell", "Sea Swell",0),
             new Mechanic(53130, "Geyser", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.NikareKenut, "symbol:'hexagon',color:'rgb(0,255,255)',", "Gysr","Geyser (Lifted up)", "Geyser (float)",0),
+            new Mechanic(53097, "Water Bomb Debuff", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.NikareKenut, "symbol:'diamond',color:'rgb(0,255,255)',", "Psn","Expanding Water Field", "Water Poison",0),
+
             });
             Extension = "nk";
             IconUrl = "";
