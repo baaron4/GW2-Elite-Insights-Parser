@@ -12,7 +12,13 @@ namespace LuckParser.Models
         {
             MechanicList.AddRange(new List<Mechanic>
             {
-
+            new Mechanic(51935, "Waterlogged", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.NikareKenut, "symbol:'circle-open',color:'rgb(0,140,255)',", "Wtlg","Waterlogged (stacking water debuff)", "Waterlogged",0),
+            new Mechanic(52876, "Vapor Rush", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.NikareKenut, "symbol:'triangle-left-open',color:'rgb(0,140,255)',", "Chrg","Vapor Rush (Triple Charge)", "Vapor Rush Charge",0),
+            new Mechanic(52812, "Tidal Pool", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.NikareKenut, "symbol:'circle',color:'rgb(0,140,255)',", "Pool","Tidal Pool", "Tidal Pool",0),
+            new Mechanic(51977, "Aquatic Barrage Start", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.NikareKenut, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "CC","Breakbar", "Breakbar",0),
+            new Mechanic(51977, "Aquatic Barrage End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.NikareKenut, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Breakbar broken", "CCed",0),
+            new Mechanic(53018, "Sea Swell", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.NikareKenut, "symbol:'circle',color:'rgb(255,100,255)',", "SSw","Sea Swell", "Sea Swell",0),
+            new Mechanic(53130, "Geyser", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.NikareKenut, "symbol:'hexagon',color:'rgb(0,255,255)',", "Gysr","Geyser (Lifted up)", "Geyser (float)",0),
             });
             Extension = "nk";
             IconUrl = "";
