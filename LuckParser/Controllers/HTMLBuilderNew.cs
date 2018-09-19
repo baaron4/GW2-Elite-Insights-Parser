@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
     class HTMLBuilderNew
     {
         private const string scriptVersion = "0.5";
-        private const int scriptVersionRev = 6;
+        private const int scriptVersionRev = 7;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -2880,6 +2880,20 @@ namespace LuckParser.Controllers
                 foreach (Player player in _log.PlayerList)
                 {
                     phaseDto.deaths.Add(player.GetDeath(_log, phaseData.Start, phaseData.End));
+                }
+
+                // add phase markup to full fight graph
+                if (i == 0)
+                {
+                    phaseDto.markupLines = new List<double>();
+                    phaseDto.markupAreas = new List<double[]>();
+                    for(int j = 1; j < _statistics.Phases.Count; j++)
+                    {
+                        PhaseData curPhase = _statistics.Phases[j];
+                        if (curPhase.DrawStart) phaseDto.markupLines.Add(curPhase.Start/1000.0);
+                        if (curPhase.DrawEnd) phaseDto.markupLines.Add(curPhase.End / 1000.0);
+                        if (curPhase.DrawArea) phaseDto.markupAreas.Add(new double[] { curPhase.Start / 1000.0, curPhase.End / 1000.0 });
+                    }
                 }
             }
 
