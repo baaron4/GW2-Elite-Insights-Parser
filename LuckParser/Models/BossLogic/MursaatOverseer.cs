@@ -21,6 +21,8 @@ namespace LuckParser.Models
             new Mechanic(38155, "Mursaat Overseer's Shield", Mechanic.MechType.EnemyBoonStrip, ParseEnum.BossIDS.MursaatOverseer, "symbol:'square-open',color:'rgb(255,200,0)',", "Dspl","Dispelled Jade Soldier Shield", "Dispel",0),
             //new Mechanic(38184, "Enemy Tile", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.MursaatOverseer, "symbol:'square-open',color:'rgb(255,200,0)',", "Floor","Enemy Tile damage", "Tile dmg",0) //Fixed damage (3500), not trackable
             });
+            Extension = "mo";
+            IconUrl = "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
         }
 
         public override CombatReplayMap GetCombatMap()

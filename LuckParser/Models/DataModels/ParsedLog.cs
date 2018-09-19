@@ -116,5 +116,10 @@ namespace LuckParser.Models.DataModels
         {
             return CombatData.GetMovementData(key);
         }
+
+        public List<CombatItem> GetStatesData(ParseEnum.StateChange key)
+        {
+            return CombatData.GetStatesData(key);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using LuckParser.Controllers;
 using LuckParser.Models.DataModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -15,7 +16,7 @@ namespace LuckParser.Models.ParseModels
         public readonly int Group;
         public long Disconnected { get; set; }//time in ms the player dcd
        
-        private readonly List<Tuple<Boon,long>> _consumeList = new List<Tuple<Boon, long>>();
+        private readonly List<Tuple<Boon,long,int>> _consumeList = new List<Tuple<Boon, long,int>>();
         //weaponslist
         private string[] _weaponsArray;
 
@@ -74,7 +75,7 @@ namespace LuckParser.Models.ParseModels
             return _weaponsArray;
         }
 
-        public List<Tuple<Boon, long>> GetConsumablesList(ParsedLog log, long start, long end)
+        public List<Tuple<Boon, long, int>> GetConsumablesList(ParsedLog log, long start, long end)
         {
             if (_consumeList.Count == 0)
             {
@@ -203,8 +204,7 @@ namespace LuckParser.Models.ParseModels
         }  
         private void SetConsumablesList(ParsedLog log)
         {
-            List<Boon> consumableList = Boon.GetFoodList();
-            consumableList.AddRange(Boon.GetUtilityList());
+            List<Boon> consumableList = Boon.GetConsumableList();
             long timeStart = log.FightData.FightStart;
             long fightDuration = log.FightData.FightEnd - timeStart;
             foreach (Boon consumable in consumableList)
@@ -222,11 +222,12 @@ namespace LuckParser.Models.ParseModels
                     }
                     if (time <= fightDuration)
                     {
-                        _consumeList.Add(new Tuple<Boon, long>(consumable, time));
+                        _consumeList.Add(new Tuple<Boon, long, int>(consumable, time, c.Value));
                     }
                 }
             }
-            
+            _consumeList.Sort((x, y) => x.Item2.CompareTo(y.Item2));
+
         }
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
@@ -403,7 +404,59 @@ namespace LuckParser.Models.ParseModels
 
             }
         }
-        
+
+        //
+        private class Serializable
+        {
+            public int Group { get; set; }
+            public string Img { get; set; }
+            public string Type { get; set; }
+            public int ID { get; set; }
+            public int[] Positions { get; set; }
+            public long[] Dead { get; set; }
+            public long[] Down { get; set; }
+        }
+
+        public override string GetCombatReplayJSON(CombatReplayMap map)
+        {
+            Serializable aux = new Serializable
+            {
+                Group = Group,
+                Img = CombatReplay.Icon,
+                Type = "Player",
+                ID = InstID,
+                Positions = new int[2 * CombatReplay.Positions.Count],
+                Dead = new long[2 * CombatReplay.Deads.Count],
+                Down = new long[2 * CombatReplay.Downs.Count]
+            };
+            int i = 0;
+            foreach (Point3D pos in CombatReplay.Positions)
+            {
+                Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
+                aux.Positions[i++] = coord.Item1;
+                aux.Positions[i++] = coord.Item2;
+            }
+            i = 0;
+            foreach (Tuple<long,long> status in CombatReplay.Deads)
+            {
+                aux.Dead[i++] = status.Item1;
+                aux.Dead[i++] = status.Item2;
+            }
+            i = 0;
+            foreach (Tuple<long, long> status in CombatReplay.Downs)
+            {
+                aux.Down[i++] = status.Item1;
+                aux.Down[i++] = status.Item2;
+            }
+
+            return JsonConvert.SerializeObject(aux);
+        }
+
+        public override int GetCombatReplayID()
+        {
+            return InstID;
+        }
+
 
         /*protected override void setHealingLogs(ParsedLog log)
         {

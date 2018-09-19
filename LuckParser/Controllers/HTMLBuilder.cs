@@ -134,12 +134,12 @@ namespace LuckParser.Controllers
 
                     int mechcount = 0;
                     foreach (MechanicLog ml in filterdList)
-                    {                     
-                        Point check;
+                    {
+                        double yValue;
                         if (playersIds.Contains(ml.Player.InstID))
                         {
                             double time = (ml.Time - phase.Start) / 1000.0;
-                            check = GraphHelper.GetBossDPSGraph(_log, ml.Player, phaseIndex, phase, mode).LastOrDefault(x => x.X <= time);
+                            Point check = GraphHelper.GetBossDPSGraph(_log, ml.Player, phaseIndex, phase, mode).LastOrDefault(x => x.X <= time);
                             if (check == Point.Empty)
                             {
                                 check = new Point(0, GraphHelper.GetBossDPSGraph(_log, ml.Player, phaseIndex, phase, mode).Last().Y);
@@ -161,24 +161,32 @@ namespace LuckParser.Controllers
                                     }
                                 }
                             }
+                            yValue = check.Y;
                         }
                         else
                         {
-                            check = _log.FightData.HealthOverTime.FirstOrDefault(x => x.X > ml.Time);
-                            if (check == Point.Empty)
+                            int timeInS = (int)(ml.Time / 1000);
+                            if (timeInS >= _statistics.BossHealth.Length)
                             {
-                                check = _log.FightData.HealthOverTime.Count == 0 ? new Point(0, 10000) : new Point(0, _log.FightData.HealthOverTime.Last().Y);
+                                yValue = 0;
+                            } else
+                            {
+                                yValue = (_statistics.BossHealth[timeInS] / 100.0) * maxDPS;
+                                if (timeInS < _statistics.BossHealth.Length - 1)
+                                {
+                                    double nextY = (_statistics.BossHealth[timeInS + 1] / 100.0) * maxDPS;
+                                    yValue = ((ml.Time / 1000.0) - timeInS) * (nextY - yValue) + yValue;
+                                }
                             }
-                            check.Y = (int)((check.Y / 10000f) * maxDPS);
                         }
 
                         if (mechcount == filterdList.Count - 1)
                         {
-                            sw.Write("'" + check.Y + "'");
+                            sw.Write("'" + Math.Round(yValue, 2) + "'");
                         }
                         else
                         {
-                            sw.Write("'" + check.Y + "',");
+                            sw.Write("'" + Math.Round(yValue, 2) + "',");
 
                         }
 
@@ -226,13 +234,14 @@ namespace LuckParser.Controllers
                     }
 
                     sw.Write("]," +
-                            " name: '" + mech.PlotlyName.Replace("'", " ") + "'");
+                            " name: '" + mech.PlotlyName.Replace("'", " ") + "'," +
+                            "hoverinfo: 'text'");
                     sw.Write("},");
                 }
                 if (maxDPS > 0)
                 {
                     sw.Write("{");
-                    HTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase.Start, phase.End, _log.FightData);
+                    HTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase, _statistics.BossHealth);
                     sw.Write("}");
                 }
                 else
@@ -1728,42 +1737,36 @@ namespace LuckParser.Controllers
                     {
                         sw.Write("<div class=\"tab-pane fade show active\" id=\"home" + pid + "\">");
                         {
-                            List<Tuple<Boon,long>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
-                            List<Tuple<Boon, long>> initial = consume.Where(x => x.Item2 == 0).ToList();
-                            List<Tuple<Boon, long>> refreshed = consume.Where(x => x.Item2 > 0).ToList();
+                            List<Tuple<Boon, long, int>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
+                            List<Tuple<Boon, long, int>> initial = consume.Where(x => x.Item2 == 0).ToList();
+                            List<Tuple<Boon, long, int>> refreshed = consume.Where(x => x.Item2 > 0).ToList();
                             if (initial.Count > 0)
                             {
-                                Boon food = null;
-                                Boon utility = null;
-                                foreach (Tuple<Boon, long> buff in initial)
-                                {
-                                    if (buff.Item1.Nature == Boon.BoonEnum.Food)
-                                    {
-                                        food = buff.Item1;
-                                    } else
-                                    {
-                                        utility = buff.Item1;
-                                    }
-                                }
                                 sw.Write("<p>Started with ");
-                                if (food != null)
+                                for (int i = 0; i < initial.Count;i++)
+                                if (i == 0)
                                 {
-                                    sw.Write(food.Name + "<img src=\"" + food.Link + "\" alt=\"" + food.Name + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write(initial[i].Item1.Name + "<img src=\"" + initial[i].Item1.Link + "\" alt=\"" + initial[i].Item1.Name + "\" height=\"18\" width=\"18\" >");
                                 }
-                                if (utility != null)
+                                else
                                 {
-                                    sw.Write((food != null ?" and " : "") + utility.Name + "<img src=\"" + utility.Link + "\" alt=\"" + utility.Name + "\" height=\"18\" width=\"18\" >");
+                                    sw.Write(", " + initial[i].Item1.Name + "<img src=\"" + initial[i].Item1.Link + "\" alt=\"" + initial[i].Item1.Name + "\" height=\"18\" width=\"18\" >");
                                 }
                                 sw.Write("</p>");
                             }
                             if (refreshed.Count > 0)
                             {
-                                sw.Write("<p>Refreshed: ");
+                                sw.Write("<p>In-fight food updates: ");
                                 sw.Write("<ul>");
-                                foreach (Tuple<Boon, long> buff in refreshed)
-                                {
-                                    sw.Write("<li>" + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at "+ Math.Round(buff.Item2 / 1000.0,3)+"s</li>");
-                                }
+                                foreach (Tuple<Boon, long, int> buff in refreshed)
+                                    if (buff.Item1.ID == 46587 || buff.Item1.ID == 46668) // Malnourished and Diminshed
+                                    {
+                                        sw.Write("<li> suffered " + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at " + Math.Round(buff.Item2 / 1000.0, 3) + "s</li>");
+                                    }
+                                    else
+                                    {
+                                        sw.Write("<li> consumed " + buff.Item1.Name + "<img src=\"" + buff.Item1.Link + "\" alt=\"" + buff.Item1.Name + "\" height=\"18\" width=\"18\" > at " + Math.Round(buff.Item2 / 1000.0, 3) + "s, (" + (int)(buff.Item3 / 60000) + " min duration)</li>");
+                                    }
                                 sw.Write("</ul>");
                                 sw.Write("</p>");
                             }
@@ -1930,12 +1933,13 @@ namespace LuckParser.Controllers
                             //Explanation of rotation graph
                             sw.Write("<div class=\"alert alert-dismissible alert-light\"><button type = \"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>");
                             sw.Write("<p><u>Fill</u></p>");
-                            sw.Write("<span class=\"badge badge-info\">Hit without aftercast</span>");
-                            sw.Write("<span class=\"badge badge-success\">Hit with full aftercast</span>");
-                            sw.Write("<span class=\"badge badge-danger\">Attack canceled before completing</span>");
+                            sw.Write("<span style=\"padding: 2px; background-color:#0000FF; border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF\">Hit without aftercast</span> ");
+                            sw.Write("<span style=\"padding: 2px; background-color:#00FF00; border-style:solid; border-width: 1px; border-color:#000000; color:#000000\">Hit with full aftercast</span> ");
+                            sw.Write("<span style=\"padding: 2px; background-color:#FF0000; border-style:solid; border-width: 1px; border-color:#000000; color:#FFFFFF\">Attack canceled before completing</span>" );
+                            sw.Write("<span style=\"padding: 2px; background-color:#FFFF00; border-style:solid; border-width: 1px; border-color:#000000; color:#000000\">Weapon swap</span>");
                             sw.Write("<p><u>Outline</u></p>");
-                            sw.Write("<span class=\"badge badge-primary\">Normal animation length</span>");
-                            sw.Write("<span class=\"badge\" style=\"background-color:#800080\">Animation with quickness</span>");
+                            sw.Write("<span style=\"padding: 2px; background-color:#999999; border-style:solid; border-width: 2px; border-color:#000000; color:#000000\">Normal animation length</span> ");
+                            sw.Write("<span style=\"padding: 2px; background-color:#999999; border-style:solid; border-width: 2px; border-color:#FF00FF; color:#000000\">Animation with quickness</span>");
                             sw.Write("</div>");
 
 
@@ -3230,7 +3234,7 @@ namespace LuckParser.Controllers
                                 sw.Write("},");
                             }
                             sw.Write("{");
-                            HTMLHelper.WriteBossHealthGraph(sw, GraphHelper.GetTotalDPSGraph(_log, _log.Boss, phaseIndex, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase.Start, phase.End, _log.FightData, "y3");
+                            HTMLHelper.WriteBossHealthGraph(sw, GraphHelper.GetTotalDPSGraph(_log, _log.Boss, phaseIndex, phase, GraphHelper.GraphMode.Full).Max(x => x.Y), phase, _statistics.BossHealth, "y3");
                             sw.Write("}");
                         }
                         sw.Write("];");
@@ -3491,7 +3495,7 @@ namespace LuckParser.Controllers
                                             {
                                                 sw.Write("<div>");
                                                 {
-                                                    sw.Write("<img src=\"" + HTMLHelper.GetLink(_log.FightData.ID + "-icon") + "\"alt=\"" + bossname + "-icon" + "\" style=\"height: 120px; width: 120px;\" >");
+                                                    sw.Write("<img src=\"" + _log.FightData.Logic.IconUrl + "\"alt=\"" + bossname + "-icon" + "\" style=\"height: 120px; width: 120px;\" >");
                                                 }
                                                 sw.Write("</div>");
                                                 sw.Write("<div>");

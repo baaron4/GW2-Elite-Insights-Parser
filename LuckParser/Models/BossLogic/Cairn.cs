@@ -32,6 +32,8 @@ namespace LuckParser.Models
             new Mechanic(37910, "Gravity Wave", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Cairn, "symbol:'octagon',color:'rgb(255,0,255)',", "Donut","Expanding Crystal Donut Wave (Knockback)", "Crystal Donut",0)
 
             });
+            Extension = "cairn";
+            IconUrl = "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
         }
 
         public override CombatReplayMap GetCombatMap()
@@ -58,7 +60,7 @@ namespace LuckParser.Models
             {
                 int agonyStart = (int)(c.Time - log.FightData.FightStart);
                 int agonyEnd = agonyStart + 62000;
-                replay.CircleActors.Add(new CircleActor(false, 0, 220, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)"));
+                replay.Actors.Add(new CircleActor(false, 0, 220, new Tuple<int, int>(agonyStart, agonyEnd), "rgba(255, 0, 0, 0.5)"));
             }
         }
 

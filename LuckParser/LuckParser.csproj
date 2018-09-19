@@ -130,6 +130,7 @@
     <Compile Include="Models\DataModels\ParsedLog.cs" />
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
     <Compile Include="Models\DataModels\Statistics.cs" />
+    <Compile Include="Models\HtmlModels\FoodDto.cs" />
     <Compile Include="Models\HtmlModels\DmgDistributionDto.cs" />
     <Compile Include="Models\HtmlModels\PhaseChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\BoonChartDataDto.cs" />
@@ -145,11 +146,9 @@
     <Compile Include="Models\HtmlModels\PlayerDetailsDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerDto.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\Actor.cs" />
+    <Compile Include="Models\ParseModels\CombatReplay\Actors\PieActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\CircleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\DoughnutActor.cs" />
-    <Compile Include="Models\ParseModels\CombatReplay\Actors\ImmobileActor.cs" />
-    <Compile Include="Models\ParseModels\CombatReplay\Actors\MobileActor.cs" />
-    <Compile Include="Models\ParseModels\CombatReplay\Actors\Mobility.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\Actors\RectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplay.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplayMap.cs" />
@@ -259,6 +258,7 @@
     <Content Include="LI.ico" />
     <None Include="Resources\theme-cosmo.png" />
     <None Include="Resources\theme-slate.png" />
+    <None Include="Resources\combatreplay.js" />
     <Content Include="Resources\TODO.txt" />
     <None Include="Resources\tmplCompTable.html" />
     <None Include="Resources\tmplMechanicTable.html" />

@@ -31,6 +31,8 @@ namespace LuckParser.Models
             new Mechanic(38169, "Teleported", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Deimos, "symbol:'circle-open',color:'rgb(0,255,0)',", "TP","Teleport to/from Demonic Realm", "Teleport",0),
             new Mechanic(38224, "Unnatural Signet", Mechanic.MechType.EnemyBoon, ParseEnum.BossIDS.Deimos, "symbol:'square-open',color:'rgb(0,255,255)',", "DMGDbf","Double Damage Debuff on Deimos", "+100% Dmg Buff",0)
             });
+            Extension = "dei";
+            IconUrl = "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
         }
 
         public override CombatReplayMap GetCombatMap()
@@ -74,7 +76,7 @@ namespace LuckParser.Models
                 CombatItem teleportBack = log.GetBoonData(38169).FirstOrDefault(x => x.Time - log.FightData.FightStart > start + 10000);
                 if (teleportBack != null)
                 {
-                    end = teleportBack.Time - log.FightData.FightStart;
+                    end = Math.Min(teleportBack.Time - log.FightData.FightStart, fightDuration);
                 }
                 else
                 {
@@ -107,6 +109,7 @@ namespace LuckParser.Models
                         phase.Redirection.Add(a);
                     }
                 }
+                phase.OverrideStart(log.FightData.FightStart);
 
             }
             phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
@@ -132,11 +135,34 @@ namespace LuckParser.Models
             {
                 int start = (int)c.Time;
                 int end = start + 5000;
-                replay.CircleActors.Add(new CircleActor(true, end, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
-                replay.CircleActors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                replay.Actors.Add(new CircleActor(true, end, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                replay.Actors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                 if (!log.FightData.IsCM)
                 {
-                    replay.CircleActors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 0, 255, 0.3)", new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216)));
+                    replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 0, 255, 0.3)", new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216)));
+                }
+            }
+            List<CastLog> annihilate = cls.Where(x => (x.SkillId == 38208) || (x.SkillId == 37929)).ToList();
+            foreach (CastLog c in annihilate)
+            {
+                int start = (int)c.Time;
+                int delay = 1000;
+                int end = start + 2400;
+                int duration = 120;
+                Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                if (facing == null)
+                {
+                    continue;
+                }
+                for (int i = 0; i < 6; i++)
+                {
+                    replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)"));
+                    replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)"));
+                    if (i % 5 != 0)
+                    {
+                        replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)"));
+                        replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)"));
+                    }
                 }
             }
             return ids;
@@ -156,8 +182,8 @@ namespace LuckParser.Models
                 else
                 {
                     int tpEnd = (int)(c.Time - log.FightData.FightStart);
-                    replay.CircleActors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
-                    replay.CircleActors.Add(new CircleActor(true, tpEnd, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
+                    replay.Actors.Add(new CircleActor(true, tpEnd, 180, new Tuple<int, int>(tpStart, tpEnd), "rgba(0, 150, 0, 0.3)"));
                 }
             }
         }

@@ -251,9 +251,13 @@ namespace LuckParser.Models.ParseModels
                 {
                     CombatReplay.Positions.Add(new Point3D(x, y, c.Value, time));
                 }
-                else
+                else if (c.IsStateChange == ParseEnum.StateChange.Velocity)
                 {
                     CombatReplay.Velocities.Add(new Point3D(x, y, c.Value, time));
+                }
+                else if (c.IsStateChange == ParseEnum.StateChange.Rotation)
+                {
+                    CombatReplay.Rotations.Add(new Point3D(x, y, c.Value, time));
                 }
             }
         }
@@ -613,5 +617,7 @@ namespace LuckParser.Models.ParseModels
         // abstracts
         protected abstract void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate);
         protected abstract void SetCombatReplayIcon(ParsedLog log);
+        public abstract int GetCombatReplayID();
+        public abstract string GetCombatReplayJSON(CombatReplayMap map);
     }
 }

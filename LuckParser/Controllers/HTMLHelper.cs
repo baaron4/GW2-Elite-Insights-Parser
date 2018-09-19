@@ -416,8 +416,10 @@ namespace LuckParser.Controllers
             }
         }
         
-        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, long start, long end, FightData fightData, string yAxis = "")
+        public static void WriteBossHealthGraph(StreamWriter sw, int maxDPS, PhaseData phase, double[] bossHealth, string yAxis = "")
         {
+            int duration = (int)phase.GetDuration("s");
+            double[] chart = bossHealth.Skip((int)phase.Start / 1000).Take(duration+1).ToArray();
             //Boss Health
             //Adding dps axis
             sw.Write("y: [");
@@ -425,57 +427,48 @@ namespace LuckParser.Controllers
             {
                 maxDPS = 1000;
             }
-            int hotCount = 0;
-            List<Point> BossHOT = fightData.HealthOverTime.Where(x => x.X >= start && x.X <= end).ToList();
-            foreach (Point dp in BossHOT)
+            for (int i = 0; i < chart.Length; i++)
             {
-                if (hotCount == BossHOT.Count - 1)
+                double health = chart[i];
+                if (i == chart.Length - 1)
                 {
-                    sw.Write("'" + ((dp.Y / 10000f) * maxDPS).ToString().Replace(',', '.') + "'");
+                    sw.Write("'" + ((health / 100.0) * maxDPS).ToString().Replace(',', '.') + "'");
                 }
                 else
                 {
-                    sw.Write("'" + ((dp.Y / 10000f) * maxDPS).ToString().Replace(',', '.') + "',");
+                    sw.Write("'" + ((health / 100.0) * maxDPS).ToString().Replace(',', '.') + "',");
                 }
-                hotCount++;
-
             }
-
             sw.Write("],");
             //text axis is boss hp in %
             sw.Write("text: [");
-            
-            hotCount = 0;
-            foreach (Point dp in BossHOT)
+            for (int i = 0; i < chart.Length; i++)
             {
-                if (hotCount == BossHOT.Count - 1)
+                double health = chart[i];
+                if (i == chart.Length - 1)
                 {
-                    sw.Write("'" + dp.Y / 100f + "% HP'");
+                    sw.Write("'" + (health + "%").Replace(',', '.') + "'");
                 }
                 else
                 {
-                    sw.Write("'" + dp.Y / 100f + "% HP',");
+                    sw.Write("'" + (health + "%").Replace(',', '.') + "',");
                 }
-                hotCount++;
-
             }
 
             sw.Write("],");
             //add time axis
             sw.Write("x: [");
-            hotCount = 0;
-            foreach (Point dp in BossHOT)
+            for (int i = 0; i < chart.Length; i++)
             {
-                if (hotCount == BossHOT.Count - 1)
+                double health = chart[i];
+                if (i == chart.Length - 1)
                 {
-                    sw.Write("'" + ((dp.X - start) / 1000).ToString().Replace(',', '.') + "'");
+                    sw.Write("'" + i + "'");
                 }
                 else
                 {
-                    sw.Write("'" + ((dp.X - start) / 1000).ToString().Replace(',', '.') + "',");
+                    sw.Write("'" + i + "',");
                 }
-
-                hotCount++;
             }
 
             sw.Write("],");
@@ -492,56 +485,27 @@ namespace LuckParser.Controllers
             long roundedStart = 1000 * (start / 1000);
             long roundedEnd = 1000 * (end / 1000);
             List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= roundedStart && x.Start <= roundedEnd).ToList();
-            if (bChart.Count == 1 && bChart.First().Value == 0)
+            if (bChart.Count == 0 || (bChart.Count == 1 && bChart.First().Value == 0))
             {
                 return;
             }
-            int bChartCount = 0;
             sw.Write("y: [");
             {
                 foreach (BoonsGraphModel.Segment seg in bChart)
                 {
-                    if (bChartCount == bChart.Count - 1)
-                    {
-                        sw.Write("'" + seg.Value + "',");
-                        sw.Write("'" + seg.Value + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + seg.Value + "',");
-                        sw.Write("'" + seg.Value + "',");
-                    }
-                    bChartCount++;
+                    sw.Write("'" + seg.Value + "',");
                 }
-                if (bgm.BoonChart.Count == 0)
-                {
-                    sw.Write("'0'");
-                }
+                sw.Write("'" + bChart.Last().Value + "'");
             }
             sw.Write("],");
             sw.Write("x: [");
             {
-                bChartCount = 0;
                 foreach (BoonsGraphModel.Segment seg in bChart)
                 {
                     double segStart = Math.Round(Math.Max(seg.Start - roundedStart, 0) / 1000.0,3);
-                    double segEnd = Math.Round(Math.Min(seg.End - roundedStart, roundedEnd - roundedStart) / 1000.0,3);
-                    if (bChartCount == bChart.Count - 1)
-                    {
-                        sw.Write("'" + segStart + "',");
-                        sw.Write("'" + segEnd + "'");
-                    }
-                    else
-                    {
-                        sw.Write("'" + segStart + "',");
-                        sw.Write("'" + segEnd + "',");
-                    }
-                    bChartCount++;
+                    sw.Write("'" + segStart + "',");
                 }
-                if (bgm.BoonChart.Count == 0)
-                {
-                    sw.Write("'0'");
-                }
+                sw.Write("'" + Math.Round(Math.Min(bChart.Last().End - roundedStart, roundedEnd - roundedStart) / 1000.0, 3) + "'");
             }
             sw.Write("],");
             sw.Write(" yaxis: 'y2'," +
@@ -551,7 +515,7 @@ namespace LuckParser.Controllers
             {
                 sw.Write(" visible: 'legendonly',");
             }
-            sw.Write(" line: {color:'" + GetLink("Color-" + bgm.BoonName) + "'},");
+            sw.Write(" line: {color:'" + GetLink("Color-" + bgm.BoonName) + "', shape: 'hv'},");
             sw.Write(" fill: 'tozeroy'," +
                  " name: \"" + bgm.BoonName + "\"");
         }
@@ -760,8 +724,8 @@ namespace LuckParser.Controllers
                     sw.Write("</canvas>");
                     sw.Write("<div class=\"d-flex justify-content-center slidecontainer\">");
                     {
-                        sw.Write("<input oninput=\"updateTime(this.value);\"type=\"range\" min=\"0\" max=\"" + (log.Boss.CombatReplay.Positions.Count - 1) + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
-                        sw.Write("<input class=\"ml-5\" type=\"text\" id=\"timeRangeDisplay\" disabled value=\"0 secs\">");
+                        sw.Write("<input style=\"min-width: 400px;\" oninput=\"updateTime(this.value);\" type=\"range\" min=\"0\" max=\"" + log.PlayerList.First().CombatReplay.Times.Last() + "\" value=\"0\" class=\"slider\" id=\"timeRange\">");
+                        sw.Write("<input style =\"width: 70px; text-align: right; \"class=\"ml-3 mr-1\" type=\"text\" id=\"timeRangeDisplay\" value=\"0\" oninput=\"updateInputTime(this.value);\">");
                     }
                     sw.Write("</div>");
                     sw.Write("<div class=\"d-flex justify-content-center\">");
@@ -773,6 +737,15 @@ namespace LuckParser.Controllers
                     sw.Write("</div>");
                     sw.Write("<div class=\"d-flex justify-content-center btn-group btn-group-toggle\" data-toggle=\"buttons\">");
                     {
+                        sw.Write("<label onclick=\"eighthSpeed()\" class=\"btn btn-dark\">" +
+                                "<input type=\"radio\" autocomplete=\"off\">0.125x" +
+                            "</label>");
+                        sw.Write("<label onclick=\"fourthSpeed()\" class=\"btn btn-dark\">" +
+                                "<input type=\"radio\" autocomplete=\"off\">0.25x" +
+                            "</label>");
+                        sw.Write("<label onclick=\"halfSpeed()\" class=\"btn btn-dark\">" +
+                                "<input type=\"radio\" autocomplete=\"off\">0.5x" +
+                            "</label>");
                         sw.Write("<label onclick=\"normalSpeed()\" class=\"btn btn-dark active\">" +
                                 "<input type=\"radio\" autocomplete=\"off\" checked>1x" +
                             "</label>");
@@ -781,6 +754,12 @@ namespace LuckParser.Controllers
                              "</label>");
                         sw.Write("<label onclick=\"fourSpeed()\" class=\"btn btn-dark\">" +
                                  "<input  type=\"radio\" autocomplete=\"off\">4x" +
+                             "</label>");
+                        sw.Write("<label onclick=\"eightSpeed()\" class=\"btn btn-dark\">" +
+                                 "<input  type=\"radio\" autocomplete=\"off\">8x" +
+                             "</label>");
+                        sw.Write("<label onclick=\"sixteenSpeed()\" class=\"btn btn-dark\">" +
+                                 "<input  type=\"radio\" autocomplete=\"off\">16x" +
                              "</label>");
                     }
                     sw.Write("</div>");
@@ -848,543 +827,56 @@ namespace LuckParser.Controllers
             sw.Write("</div>");
         }
 
-        private static void WriteCombatReplayControls(StreamWriter sw, ParsedLog log, int pollingRate)
-        {
-            // animation control
-            sw.Write("function startAnimate() {if (animation === null) { " +
-                "if (time ===" + (log.Boss.CombatReplay.Positions.Count - 1) + ") {" +
-                    "time = 0;" +
-                "}" +
-                "animation = setInterval(function(){myanimate(time++)},speed);" +
-                "}};");
-            sw.Write("function stopAnimate(){ if (animation !== null) {window.clearInterval(animation); animation = null; time--;}};");
-            sw.Write("function restartAnimate() { time = 0; myanimate(time++);};");
-            // speed control
-            sw.Write("function normalSpeed(){ speed = " + pollingRate + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
-            sw.Write("function twoSpeed(){ speed = " + pollingRate/2 + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
-            sw.Write("function fourSpeed(){ speed = " + pollingRate/4 + "; if (animation !== null) {window.clearInterval(animation); time--; animation = setInterval(function(){myanimate(time++)},speed);}};");
-            // slider
-            sw.Write("var timeSlider = document.getElementById('timeRange');");
-            sw.Write("var timeSliderDisplay = document.getElementById('timeRangeDisplay');");
-            sw.Write("function updateTime(value) { time = value; myanimate(time); updateTextInput(time)};");
-            sw.Write("function updateTextInput(val) {" +
-                "timeSliderDisplay.value = Math.round("+pollingRate+"*val/100.0)/10.0 + ' secs';" +
-            "}");
-            // Range marker control
-            sw.Write("var rangeControl = new Map();" +
-                "rangeControl.set(180,false);" +
-                "rangeControl.set(240,false);" +
-                "rangeControl.set(300,false);" +
-                "rangeControl.set(600,false);" +
-                "rangeControl.set(900,false);" +
-                "rangeControl.set(1200,false);");
-            sw.Write("function toggleRange(radius) {rangeControl.set(radius, !rangeControl.get(radius)); myanimate(time);};");
-            // Selection
-            sw.Write("function selectActor(pId) { " +
-                    "var actor = data.get(pId);" +
-                    "selectedPlayer = null;" +
-                    "var oldSelect = actor.selected;" +
-                    "data.forEach(function(value,key,map) {" +
-                        "value.selected = false;" +
-                    "});" +
-                    "actor.selected = !oldSelect;" +
-                    "selectedGroup = actor.selected ? actor.group : -1;" +
-                    "if (!actor.selected){" +
-                        "var hasActive = document.getElementById('id'+pId).classList.contains('active');" +
-                        "if (hasActive) {" +
-                            "setTimeout(function() {document.getElementById('id'+pId).classList.remove('active')},50);" +
-                        "}" +
-                    "} else {" +
-                        "selectedPlayer = actor;" +
-                    "}" +
-                    "myanimate(time);" +
-                "}");
-        }
-
-        private static void WriteCombatReplayMainClass(StreamWriter sw, ParsedLog log,CombatReplayMap map, int pollingRate)
-        {
-            // Players and boss
-            sw.Write("var mainActor = function(group, imgSrc) {" +
-                    "this.group = group;" +
-                    "this.pos = [];" +
-                    "this.start = 0;" +
-                    "this.dead = [];" +
-                    "this.down = [];" +
-                    "this.selected = false;" +
-                    "this.img = new Image();" +
-                    "this.img.src = imgSrc;" +
-                "};");
-            sw.Write("mainActor.prototype.died = function(timeToUse) {" +
-                    "for (var i = 0; i < this.dead.length; i++) {" +
-                        "if (!this.dead[i]) continue;" +
-                        "if (this.dead[i][0] <= timeToUse && this.dead[i][1] >= timeToUse) {" +
-                            "return true;" +
-                        "}" +
-                    "}" +
-                    "return false;" +
-                "};");
-            sw.Write("mainActor.prototype.downed = function(timeToUse) {" +
-                    "for (var i = 0; i < this.down.length; i++) {" +
-                        "if (!this.down[i]) continue;"+
-                        "if (this.down[i][0] <= timeToUse && this.down[i][1] >= timeToUse) {" +
-                            "return true;" +
-                        "}" +
-                    "}" +
-                    "return false;" +
-                "};");
-            sw.Write("mainActor.prototype.draw = function(ctx,timeToUse, pixelSize) {" +
-                    "if (!this.pos.length) {" +
-                    "   return;" +
-                    "}" +
-                    "var halfSize = pixelSize / 2;" +
-                    "var x = this.pos.length > 2 ? this.pos[2*timeToUse] : this.pos[0];" +
-                    "var y = this.pos.length > 2 ? this.pos[2*timeToUse + 1] : this.pos[1];" +
-                    // the player is in the selected's player group
-                    "if (!this.selected && this.group === selectedGroup) {" +
-                        "ctx.beginPath();" +
-                        "ctx.lineWidth='2';" +
-                        "ctx.strokeStyle='blue';" +
-                        "ctx.rect(x-halfSize,y-halfSize,pixelSize,pixelSize);" +
-                        "ctx.stroke();" +
-                    "} else if (this.selected){" +
-                        // this player is selected
-                        "ctx.beginPath();" +
-                        "ctx.lineWidth='4';" +
-                        "ctx.strokeStyle='green';" +
-                        "ctx.rect(x-halfSize,y-halfSize,pixelSize,pixelSize);" +
-                        "ctx.stroke();" +
-                        "var _this = this;" +
-                        // draw range markers
-                        "rangeControl.forEach(function(enabled,radius,map) {" +
-                            "if (!enabled) return;" +
-                            "ctx.beginPath();" +
-                            "ctx.lineWidth='2';" +
-                            "ctx.strokeStyle='green';" +
-                            "ctx.arc(x,y,inch * radius,0,2*Math.PI);" +
-                            "ctx.stroke();" +
-                        "});" +
-                    "}" +
-                    "if (this.died(timeToUse)) {" +
-                        "ctx.drawImage(deadIcon," +
-                        "x-1.5*halfSize," +
-                        "y-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
-                    "} else if (this.downed(timeToUse)) {" +
-                        "ctx.drawImage(downIcon," +
-                        "x-1.5*halfSize," +
-                        "y-1.5*halfSize,1.5*pixelSize,1.5*pixelSize);" +
-                    "} else {" +
-                        "ctx.drawImage(this.img," +
-                        "x-halfSize," +
-                        "y-halfSize,pixelSize,pixelSize);" +
-                    "}" +
-                "};");
-            // create players
-            foreach (Player p in log.PlayerList)
-            {
-                sw.Write("{");
-                sw.Write("var p = new mainActor(" + p.Group + ",'" + p.CombatReplay.Icon + "');");
-                sw.Write("data.set(" + p.InstID + ",p);");
-                sw.Write("p.pos = [");
-                foreach (Point3D pos in p.CombatReplay.Positions)
-                {
-                    Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
-                    sw.Write(coord.Item1 + ",");
-                    sw.Write(coord.Item2 + ",");
-                }
-                sw.Write("];");
-                sw.Write("p.dead = [");
-                foreach (Tuple<long, long> status in p.CombatReplay.Deads)
-                {
-                    sw.Write("[" + status.Item1/pollingRate + ",");
-                    sw.Write(status.Item2 / pollingRate + "],");
-                }
-                sw.Write("];");
-                sw.Write("p.down = [");
-                foreach (Tuple<long,long> status in p.CombatReplay.Downs)
-                {
-                    sw.Write("[" + status.Item1 / pollingRate + ",");
-                    sw.Write(status.Item2 / pollingRate + "],");
-                }
-                sw.Write("];");
-                sw.Write("}");
-            }
-            // create boss
-            sw.Write("boss = new mainActor(-2,'" + log.Boss.CombatReplay.Icon + "');");
-            sw.Write("boss.pos = [");
-            foreach (Point3D pos in log.Boss.CombatReplay.Positions)
-            {
-                Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
-                sw.Write(coord.Item1 + ",");
-                sw.Write(coord.Item2 + ",");
-            }
-            sw.Write("];");
-        }
-
-        private static void WriteCombatReplaySecondaryClass(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
-        {
-            // trash mobs
-            sw.Write("var secondaryActor = function(imgSrc, start, end) {" +
-                    "this.pos = [];" +
-                    "this.start = start;" +
-                    "this.end = end;" +
-                    "this.img = new Image();" +
-                    "this.img.src = imgSrc;" +
-                "};");
-            sw.Write("secondaryActor.prototype.draw = function(ctx,timeToUse,pixelSize){" +
-                    "if (!(this.start > timeToUse || this.end < timeToUse) && this.pos.length) {" +
-                        "var x = this.pos.length > 2 ? this.pos[2*(timeToUse - this.start)] : this.pos[0];" +
-                        "var y = this.pos.length > 2 ? this.pos[2*(timeToUse - this.start) + 1] : this.pos[1];" +
-                        "ctx.drawImage(this.img," +
-                        "x-pixelSize/2,y-pixelSize/2," +
-                        "pixelSize,pixelSize);" +
-                    "}" +
-                "};");
-            // create trash mobs
-            foreach (Mob mob in log.Boss.TrashMobs)
-            {
-                sw.Write("{");
-                sw.Write("var p = new secondaryActor('" + mob.CombatReplay.Icon + "'," + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "," + mob.CombatReplay.TimeOffsets.Item2 / pollingRate + ");");
-                sw.Write("secondaryData.set('" + mob.InstID + "_" + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "_" + mob.CombatReplay.TimeOffsets.Item2 / pollingRate + "',p);");
-                sw.Write("p.pos = [");
-                foreach (Point3D pos in mob.CombatReplay.Positions)
-                {
-                    Tuple<int, int> coord = map.GetMapCoord(pos.X, pos.Y);
-                    sw.Write(coord.Item1 + ",");
-                    sw.Write(coord.Item2 + ",");
-                }
-                sw.Write("];");
-                sw.Write("}");
-            }
-        }
-
-        private static void WriteCombatReplayCircleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
-        {
-            // Circle actors
-            sw.Write("var circleActor = function(radius,fill,growing, color, start, end) {" +
-                    "this.pos = null;" +
-                    "this.master = null;" +
-                    "this.start = start;" +
-                    "this.radius = radius;" +
-                    "this.end = end;" +
-                    "this.growing = growing;" +
-                    "this.fill = fill;" +
-                    "this.color = color;" +
-                "};");
-            sw.Write("circleActor.prototype.draw = function(ctx,timeToUse){" +
-                    "if (!(this.start > timeToUse || this.end < timeToUse)) {" +
-                        "var x,y;" +
-                        "if (this.pos instanceof Array) {" +
-                            "x = this.pos[0];" +
-                            "y = this.pos[1];" +
-                        "} else {" +
-                            "if (!this.master) {" +
-                                "var playerID = parseInt(this.pos);" +
-                                "this.master = data.has(playerID) ? data.get(playerID) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);" +
-                            "}" +
-                            "var start = this.master.start ? this.master.start : 0;" +
-                            "x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];" +
-                            "y = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start) + 1] : this.master.pos[1];" +
-                        "}" +
-                        "if (this.growing) {" +
-                            "var percent = Math.min((timeToUse - this.start)/(this.growing - this.start),1.0);" +
-                            "ctx.beginPath();" +
-                            "ctx.arc(x,y,percent*inch * this.radius,0,2*Math.PI);" +
-                            "if (this.fill) {" +
-                                "ctx.fillStyle=this.color;" +
-                                "ctx.fill();" +
-                            "} else {" +
-                                "ctx.lineWidth='2';" +
-                                "ctx.strokeStyle=this.color;" +
-                                "ctx.stroke();" +
-                            "}" +
-                        "} else {" +
-                            "ctx.beginPath();" +
-                            "ctx.arc(x,y,inch * this.radius,0,2*Math.PI);" +
-                            "if (this.fill) {" +
-                                "ctx.fillStyle=this.color;" +
-                                "ctx.fill();" +
-                            "} else {" +
-                                "ctx.lineWidth='2';" +
-                                "ctx.strokeStyle=this.color;" +
-                                "ctx.stroke();" +
-                            "}" +
-                        "}" +
-                    "}" +
-                "};");
-            foreach (Mob mob in log.Boss.TrashMobs)
-            {
-                CombatReplay replay = mob.CombatReplay;
-                foreach(CircleActor a in replay.CircleActors)
-                {
-                    sw.Write("{");
-                    sw.Write("var a = new circleActor("+a.Radius+","+(a.Filled ? "true" : "false") + ","+a.Growing / pollingRate + ","+a.Color+","+a.LifeSpan.Item1/pollingRate+","+ a.LifeSpan.Item2 / pollingRate + ");");
-                    sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos ="+a.GetPosition(mob.InstID + "_" + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "_" + mob.CombatReplay.TimeOffsets.Item2 / pollingRate, map)+";");
-                    sw.Write("}");
-                }
-            }
-            foreach (Player player in log.PlayerList)
-            {
-                CombatReplay replay = player.CombatReplay;
-                foreach (CircleActor a in replay.CircleActors)
-                {
-                    sw.Write("{");
-                    sw.Write("var a = new circleActor(" + a.Radius + "," + (a.Filled ? "true" : "false") + "," + a.Growing / pollingRate + "," + a.Color + "," + a.LifeSpan.Item1 / pollingRate + "," + a.LifeSpan.Item2 / pollingRate + ");");
-                    sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
-                    sw.Write("}");
-                }
-            }
-            foreach (CircleActor a in log.Boss.CombatReplay.CircleActors)
-            {
-                sw.Write("{");
-                sw.Write("var a = new circleActor(" + a.Radius + "," + (a.Filled ? "true" : "false") + "," + a.Growing / pollingRate + "," + a.Color + "," + a.LifeSpan.Item1 / pollingRate + "," + a.LifeSpan.Item2 / pollingRate + ");");
-                sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
-                sw.Write("}");
-
-            }
-        }
-
-        private static void WriteCombatReplayDoughnutActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
-        {
-            // Circle actors
-            sw.Write("var doughnutActor = function(innerRadius,outerRadius,growing, color, start, end) {" +
-                    "this.pos = null;" +
-                    "this.master = null;" +
-                    "this.start = start;" +
-                    "this.innerRadius = innerRadius;" +
-                    "this.outerRadius = outerRadius;" +
-                    "this.end = end;" +
-                    "this.growing = growing;" +
-                    "this.color = color;" +
-                "};");
-            sw.Write("doughnutActor.prototype.draw = function(ctx,timeToUse){" +
-                    "if (!(this.start > timeToUse || this.end < timeToUse)) {" +
-                        "var x,y;" +
-                        "if (this.pos instanceof Array) {" +
-                            "x = this.pos[0];" +
-                            "y = this.pos[1];" +
-                        "} else {" +
-                            "if (!this.master) {" +
-                                "var playerID = parseInt(this.pos);" +
-                                "this.master = data.has(playerID) ? data.get(playerID) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);" +
-                            "}" +
-                            "var start = this.master.start ? this.master.start : 0;" +
-                            "x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];" +
-                            "y = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start) + 1] : this.master.pos[1];" +
-                        "}" +
-                        "var radius = 0.5*(this.innerRadius + this.outerRadius);" +
-                        "var width = (this.outerRadius - this.innerRadius);" +
-                        "if (this.growing) {" +
-                            "var percent = Math.min((timeToUse - this.start)/(this.growing - this.start),1.0);" +
-                            "ctx.beginPath();" +
-                            "ctx.arc(x,y,inch * radius,0,2*Math.PI);" +
-                            "ctx.lineWidth=(inch * percent * width).toString();" +
-                            "ctx.strokeStyle=this.color;" +
-                            "ctx.stroke();" +
-                        "} else {" +
-                            "ctx.beginPath();" +
-                            "ctx.arc(x,y,inch * radius,0,2*Math.PI);" +
-                            "ctx.lineWidth=(inch * width).toString();" +
-                            "ctx.strokeStyle=this.color;" +
-                            "ctx.stroke();" +
-                        "}" +
-                    "}" +
-                "};");
-            foreach (Mob mob in log.Boss.TrashMobs)
-            {
-                CombatReplay replay = mob.CombatReplay;
-                foreach (DoughnutActor a in replay.DoughnutActors)
-                {
-                    sw.Write("{");
-                    sw.Write("var a = new doughnutActor(" + a.InnerRadius + "," + a.OuterRadius + "," + a.Growing / pollingRate + "," + a.Color + "," + a.LifeSpan.Item1 / pollingRate + "," + a.LifeSpan.Item2 / pollingRate + ");");
-                    sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(mob.InstID + "_" + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "_" + mob.CombatReplay.TimeOffsets.Item2 / pollingRate, map) + ";");
-                    sw.Write("}");
-                }
-            }
-            foreach (Player player in log.PlayerList)
-            {
-                CombatReplay replay = player.CombatReplay;
-                foreach (DoughnutActor a in replay.DoughnutActors)
-                {
-                    sw.Write("{");
-                    sw.Write("var a = new doughnutActor(" + a.InnerRadius + "," + a.OuterRadius + "," + a.Growing / pollingRate + "," + a.Color + "," + a.LifeSpan.Item1 / pollingRate + "," + a.LifeSpan.Item2 / pollingRate + ");");
-                    sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
-                    sw.Write("}");
-                }
-            }
-            foreach (DoughnutActor a in log.Boss.CombatReplay.DoughnutActors)
-            {
-                sw.Write("{");
-                sw.Write("var a = new doughnutActor(" + a.InnerRadius + "," + a.OuterRadius + "," + a.Growing / pollingRate + "," + a.Color + "," + a.LifeSpan.Item1 / pollingRate + "," + a.LifeSpan.Item2 / pollingRate + ");");
-                sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
-                sw.Write("}");
-
-            }
-        }
-
-        private static void WriteCombatReplayRectangleActors(StreamWriter sw, ParsedLog log, CombatReplayMap map, int pollingRate)
-        {
-            // Circle actors
-            sw.Write("var rectangleActor = function(width, height, fill, growing, color, start, end) {" +
-                    "this.pos = null;" +
-                    "this.master = null;" +
-                    "this.start = start;" +
-                    "this.width = width;" +
-                    "this.height = height;" +
-                    "this.end = end;" +
-                    "this.fill = fill;" +
-                    "this.growing = growing;" +
-                    "this.color = color;" +
-                "};");
-            sw.Write("rectangleActor.prototype.draw = function(ctx,timeToUse){" +
-                    "if (!(this.start > timeToUse || this.end < timeToUse)) {" +
-                        "var x,y;" +
-                        "if (this.pos instanceof Array) {" +
-                            "x = this.pos[0];" +
-                            "y = this.pos[1];" +
-                        "} else {" +
-                            "if (!this.master) {" +
-                                "var playerID = parseInt(this.pos);" +
-                                "this.master = data.has(playerID) ? data.get(playerID) : (secondaryData.has(this.pos) ? secondaryData.get(this.pos): boss);" +
-                            "}" +
-                            "var start = this.master.start ? this.master.start : 0;" +
-                            "x = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start)] : this.master.pos[0];" +
-                            "y = this.master.pos.length > 2 ? this.master.pos[2*(timeToUse - start) + 1] : this.master.pos[1];" +
-                        "}" +
-                        "if (this.growing) {" +
-                            "var percent = Math.min((timeToUse - this.start)/(this.growing - this.start),1.0);" +
-                            "ctx.beginPath();" +
-                            "ctx.rect(x-this.width*inch/2,y-this.height*inch/2,percent*this.width*inch,percent*this.height*inch);" +
-                            "if (this.fill) {" +
-                                "ctx.fillStyle=this.color;" +
-                                "ctx.fill();" +
-                            "} else {" +
-                                "ctx.lineWidth='2';" +
-                                "ctx.strokeStyle=this.color;" +
-                                "ctx.stroke();" +
-                            "}" +
-                        "} else {" +
-                            "ctx.beginPath();" +
-                            "ctx.rect(x-this.width*inch/2,y-this.height*inch/2,this.width*inch,this.height*inch);" +
-                            "if (this.fill) {" +
-                                "ctx.fillStyle=this.color;" +
-                                "ctx.fill();" +
-                                "ctx.lineWidth='2';" +
-                                "ctx.stroke();" +
-                            "} else {" +
-                                "ctx.lineWidth='2';" +
-                                "ctx.strokeStyle=this.color;" +
-                                "ctx.stroke();" +
-                            "}" +
-                        "}" +
-                    "}" +
-                "};");
-            foreach (Mob mob in log.Boss.TrashMobs)
-            {
-                CombatReplay replay = mob.CombatReplay;
-                foreach (RectangleActor a in replay.RectangleActors)
-                {
-                    sw.Write("{");
-                    sw.Write("var a = new rectangleActor(" + a.Width + "," + a.Height + "," + (a.Filled ? "true" : "false") + "," + a.Growing / pollingRate + "," + a.Color + "," + a.LifeSpan
-                        .Item1 / pollingRate + "," + a.LifeSpan.Item2 / pollingRate + ");");
-                    sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(mob.InstID + "_" + mob.CombatReplay.TimeOffsets.Item1 / pollingRate + "_" + mob.CombatReplay.TimeOffsets.Item2 / pollingRate, map) + ";");
-                    sw.Write("}");
-                }
-            }
-            foreach (Player player in log.PlayerList)
-            {
-                CombatReplay replay = player.CombatReplay;
-                foreach (RectangleActor a in replay.RectangleActors)
-                {
-                    sw.Write("{");
-                    sw.Write("var a = new rectangleActor(" + a.Width + "," + a.Height + "," + (a.Filled ? "true" : "false") + "," + a.Growing / pollingRate + "," + a.Color + "," + a.LifeSpan.Item1 / pollingRate + "," + a.LifeSpan.Item2 / pollingRate + ");");
-                    sw.Write("mechanicData.add(a);");
-                    sw.Write("a.pos =" + a.GetPosition(player.InstID.ToString(), map) + ";");
-                    sw.Write("}");
-                }
-            }
-            foreach (RectangleActor a in log.Boss.CombatReplay.RectangleActors)
-            {
-                sw.Write("{");
-                sw.Write("var a = new rectangleActor(" + a.Width + "," + a.Height + "," + (a.Filled ? "true" : "false") + "," + a.Growing / pollingRate + "," + a.Color + "," + a.LifeSpan.Item1 / pollingRate + "," + a.LifeSpan.Item2 / pollingRate + ");");
-                sw.Write("mechanicData.add(a);");
-                sw.Write("a.pos =" + a.GetPosition(log.FightData.InstID.ToString(), map) + ";");
-                sw.Write("}");
-
-            }
-        }
-
         public static void WriteCombatReplayScript(StreamWriter sw, ParsedLog log, Tuple<int,int> canvasSize, CombatReplayMap map, int pollingRate)
         {
-            sw.Write("<script>");
+            //TODO add this either here or in the page header, or use a real js file and a <script src=...> tag :)
+            sw.WriteLine("<script>");
             {
-                // globals
-                sw.Write("var animation = null;");
-                sw.Write("var time = 0;");
-                sw.Write("var inch = " + map.GetInch()+";");
-                sw.Write("var speed = "+ pollingRate+";");
-                sw.Write("var selectedGroup = -1;");
-                sw.Write("var selectedPlayer = null;");
-                sw.Write("var data = new Map();");
-                sw.Write("var secondaryData = new Map();");
-                sw.Write("var mechanicData = new Set();");
-                sw.Write("var deadIcon = new Image();" +
-                            "deadIcon.src = '"+GetLink("Dead")+"';");
-                sw.Write("var downIcon = new Image();" +
-                            "downIcon.src = '" + GetLink("Downs") + "';");
-                sw.Write("var boss = null;");
-                WriteCombatReplayControls(sw, log, pollingRate);
-                WriteCombatReplayMainClass(sw, log, map, pollingRate);
-                WriteCombatReplaySecondaryClass(sw, log, map, pollingRate);
-                WriteCombatReplayCircleActors(sw, log, map, pollingRate);
-                WriteCombatReplayDoughnutActors(sw, log, map, pollingRate);
-                WriteCombatReplayRectangleActors(sw, log, map, pollingRate);
-                // Main loop
-                sw.Write("var ctx = document.getElementById('replayCanvas').getContext('2d');");
-                sw.Write("ctx.imageSmoothingEnabled = true;");
-                sw.Write("ctx.imageSmoothingQuality = 'high';");
-                sw.Write("function myanimate(timeToUse) {");
+                sw.Write(Properties.Resources.combatreplay_js);
+                sw.Write("inch = " + map.GetInch() + ";");
+                sw.Write("pollingRate = " + pollingRate + ";");
+                sw.Write("actors = [");
+                CombatReplay replay;
+                int count = 0;
+                foreach (Player p in log.PlayerList)
                 {
-                    sw.Write("ctx.clearRect(0,0," + canvasSize.Item1 + "," + canvasSize.Item2 + ");");
-                    // draw arena
-                    sw.Write("ctx.drawImage(bgImage,0,0," + canvasSize.Item1 + "," + canvasSize.Item2 + ");");
-                    // draw mechanics
-                    sw.Write("mechanicData.forEach(function(value,key,map) {" +
-                            "value.draw(ctx,timeToUse);" +
-                        "});");
-                    // draw unselected players
-                    sw.Write("data.forEach(function(value,key,map) {" +
-                            "if (!value.selected) {" +
-                                "value.draw(ctx,timeToUse,20);"+
-                            "}" +
-                        "});");
-                    // draw trash mobs
-                    sw.Write("secondaryData.forEach(function(value,key,map) {" +
-                            "value.draw(ctx,timeToUse,28);"+
-                        "});");
-                    // draw boss
-                    sw.Write("boss.draw(ctx,timeToUse,36);");
-                    // draw selected player
-                    sw.Write("if (selectedPlayer) {" +
-                                "selectedPlayer.draw(ctx,timeToUse,20);"+                              
-                            "}");
-                    sw.Write("if (timeToUse === " + (log.Boss.CombatReplay.Positions.Count - 1) + ") {stopAnimate();}");
-                    sw.Write("timeSlider.value = time;");
-                    sw.Write("updateTextInput(time);");
+                    if (count > 0)
+                    {
+                        sw.Write(",");
+                    }
+                    count++;
+                    sw.Write(p.GetCombatReplayJSON(map));
+                    replay = p.CombatReplay;
+                    foreach (Actor a in replay.Actors)
+                    {
+                        sw.Write(",");
+                        sw.Write(a.GetCombatReplayJSON(map,p));
+                    }
                 }
-                sw.Write("}");
-                // when background loaded
-                sw.Write("var bgImage = new Image();");
-                sw.Write("bgImage.onload = function() { myanimate(0);};");
+                foreach (Mob m in log.Boss.TrashMobs)
+                {
+                    sw.Write(",");
+                    sw.Write(m.GetCombatReplayJSON(map));
+                    replay = m.CombatReplay;
+                    foreach (Actor a in replay.Actors)
+                    {
+                        sw.Write(",");
+                        sw.Write(a.GetCombatReplayJSON(map,m));
+                    }
+                }
+                sw.Write(",");
+                sw.Write(log.Boss.GetCombatReplayJSON(map));
+                replay = log.Boss.CombatReplay;
+                foreach (Actor a in replay.Actors)
+                {
+                    sw.Write(",");
+                    sw.Write(a.GetCombatReplayJSON(map,log.Boss));
+                }
+                sw.Write("];");
+                sw.Write("createAllActors();");
                 sw.Write("bgImage.src = '" + map.Link + "';");
             }
-            sw.Write("</script>");
+            sw.WriteLine("</script>");
         }
 
         public static string GetLink(string name)
@@ -1425,158 +917,6 @@ namespace LuckParser.Controllers
                     return "https://wiki.guildwars2.com/images/1/19/Crimson_Antique_Musket.png";
                 case "Staff":
                     return "https://wiki.guildwars2.com/images/5/5f/Crimson_Antique_Spire.png";
-                case "Vale Guardian-icon":
-                    return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
-                case "Gorseval the Multifarious-icon":
-                    return "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
-                case "Sabetha the Saboteur-icon":
-                    return "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
-                case "Slothasor-icon":
-                    return "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
-                case "Matthias Gabrel-icon":
-                    return "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
-                case "Keep Construct-icon":
-                    return "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
-                case "Xera-icon":
-                    return "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
-                case "Cairn the Indomitable-icon":
-                    return "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
-                case "Mursaat Overseer-icon":
-                    return "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
-                case "Samarog-icon":
-                    return "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
-                case "Deimos-icon":
-                    return "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
-                case "Soulless Horror-icon":
-                    return "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
-                case "Dhuum-icon":
-                    return "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
-                case "Vale Guardian-ext":
-                    return "vg";
-                case "Gorseval the Multifarious-ext":
-                    return "gors";
-                case "Sabetha the Saboteur-ext":
-                    return "sab";
-                case "Slothasor-ext":
-                    return "sloth";
-                case "Matthias Gabrel-ext":
-                    return "matt";
-                case "Keep Construct-ext":
-                    return "kc";
-                case "Xera-ext":
-                    return "xera";
-                case "Cairn the Indomitable-ext":
-                    return "cairn";
-                case "Mursaat Overseer-ext":
-                    return "mo";
-                case "Samarog-ext":
-                    return "sam";
-                case "Deimos-ext":
-                    return "dei";
-                case "Soulless Horror-ext":
-                    return "sh";
-                case "Dhuum-ext":
-                    return "dhuum";
-
-                //ID version for multilingual
-                case "16202-icon"://Massive Kitty Golem
-                    return "https://wiki.guildwars2.com/images/3/33/Mini_Snuggles.png";
-                case "16177-icon"://Avg Kitty Golem
-                    return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
-                case "19676-icon"://Large Kitty Golem
-                    return "https://wiki.guildwars2.com/images/4/47/Mini_Baron_von_Scrufflebutt.png";
-                case "19645-icon"://Med Kitty Golem
-                    return "https://wiki.guildwars2.com/images/c/cb/Mini_Mister_Mittens.png";
-                case "16199-icon"://Std Kitty Golem
-                    return "https://wiki.guildwars2.com/images/8/8f/Mini_Professor_Mew.png";
-
-                case "15438-icon":
-                    return "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
-                case "15429-icon":
-                    return "https://wiki.guildwars2.com/images/d/d1/Mini_Gorseval_the_Multifarious.png";
-                case "15375-icon":
-                    return "https://wiki.guildwars2.com/images/5/54/Mini_Sabetha.png";
-                case "16123-icon":
-                    return "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
-                case "16115-icon":
-                    return "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
-                case "16235-icon":
-                    return "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
-                case "16246-icon":
-                    return "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
-                case "17194-icon":
-                    return "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
-                case "17172-icon":
-                    return "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
-                case "17188-icon":
-                    return "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
-                case "17154-icon":
-                    return "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
-                case "19767-icon":
-                    return "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
-                case "19450-icon":
-                    return "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
-                case "17021-icon":
-                    return "http://dulfy.net/wp-content/uploads/2016/11/gw2-nightmare-fractal-teaser.jpg";
-                case "17028-icon":
-                    return "https://wiki.guildwars2.com/images/d/dc/Siax_the_Corrupted.jpg";
-                case "16948-icon":
-                    return "https://wiki.guildwars2.com/images/5/57/Champion_Toxic_Hybrid.jpg";
-                case "17632-icon":
-                    return "https://wiki.guildwars2.com/images/c/c1/Skorvald_the_Shattered.jpg";
-                case "17949-icon":
-                    return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
-                case "17759-icon":
-                    return "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
-
-                case "16202-ext"://Massive Kitty Golem
-                    return "MassiveGolem";
-                case "16177-ext"://Avg Kitty Golem
-                    return "AvgGolem";
-                case "19676-ext"://Large Kitty Golem
-                    return "LGolem";
-                case "19645-ext"://Med Kitty Golem
-                    return "MedGolem";
-                case "16199-ext"://Std Kitty Golem
-                    return "StdGolem";
-                case "15438-ext":
-                    return "vg";
-                case "15429-ext":
-                    return "gors";
-                case "15375-ext":
-                    return "sab";
-                case "16123-ext":
-                    return "sloth";
-                case "16115-ext":
-                    return "matt";
-                case "16235-ext":
-                    return "kc";
-                case "16246-ext":
-                    return "xera";
-                case "17194-ext":
-                    return "cairn";
-                case "17172-ext":
-                    return "mo";
-                case "17188-ext":
-                    return "sam";
-                case "17154-ext":
-                    return "dei";
-                case "19767-ext":
-                    return "sh";
-                case "19450-ext":
-                    return "dhuum";
-                case "17021-ext":
-                    return "mama";
-                case "17028-ext":
-                    return "siax";
-                case "16948-ext":
-                    return "ensol";
-                case "17632-ext":
-                    return "skorv";
-                case "17949-ext":
-                    return "arts";
-                case "17759-ext":
-                    return "arkk";
 
                 case "Warrior":
                     return "https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png";

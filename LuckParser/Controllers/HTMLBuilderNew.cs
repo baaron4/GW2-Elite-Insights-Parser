@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
     class HTMLBuilderNew
     {
         private const string scriptVersion = "0.5";
-        private const int scriptVersionRev = 4;
+        private const int scriptVersionRev = 7;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -257,27 +257,8 @@ namespace LuckParser.Controllers
         private double[] CreateBossHealthData(int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            long seconds = phase.GetDuration("s");
-            double[] chart = new double[seconds+1];
-            int i = 0;
-            double curHealth = 100.0;
-            foreach(Point p in _log.FightData.HealthOverTime)
-            {
-                double hp = p.Y / 100.0;
-                long timeInPhase = 1+(p.X - phase.Start) / 1000;
-                if (timeInPhase >= seconds)
-                {
-                    break;
-                }
-                while (i < timeInPhase) chart[i++] = curHealth;
-                curHealth = hp;
-                if (timeInPhase >= 0)
-                {
-                    chart[timeInPhase] = curHealth;
-                }
-            }
-            for (;i<=seconds;i++) chart[i] = curHealth;
-
+            int duration = (int)phase.GetDuration("s");
+            double[] chart = _statistics.BossHealth.Skip((int)phase.Start / 1000).Take(duration+1).ToArray();
             return chart;
         }
 
@@ -793,7 +774,7 @@ namespace LuckParser.Controllers
                 if (!usedSkills.ContainsKey(cl.SkillId)) usedSkills.Add(cl.SkillId, skillList.GetOrDummy(cl.SkillId));
                 double[] rotEntry = new double[5];
                 list.Add(rotEntry);
-                rotEntry[0] = cl.Time/1000.0;
+                rotEntry[0] = (cl.Time - phase.Start) / 1000.0;
                 rotEntry[1] = cl.SkillId;
                 rotEntry[2] = cl.ActualDuration;
                 rotEntry[3] = EncodeEndActivation(cl.EndActivation);
@@ -1400,7 +1381,7 @@ namespace LuckParser.Controllers
             long roundedStart = 1000 * (start / 1000);
             long roundedEnd = 1000 * (end / 1000);
             List<BoonsGraphModel.Segment> bChart = bgm.BoonChart.Where(x => x.End >= roundedStart && x.Start <= roundedEnd).ToList();
-            if (bChart.Count == 1 && bChart.First().Value == 0)
+            if (bChart.Count == 0 || (bChart.Count == 1 && bChart.First().Value == 0))
             {
                 return null;
             }
@@ -1420,6 +1401,26 @@ namespace LuckParser.Controllers
             dto.data.Add(new double[] { segEnd, lastSeg.Value });
 
             return dto;
+        }
+
+        private List<FoodDto> CreatePlayerFoodData(Player p, int phaseIndex)
+        {
+            PhaseData phase = _statistics.Phases[phaseIndex];
+            List<FoodDto> list = new List<FoodDto>();
+            List<Tuple<Boon, long, int>> consume = p.GetConsumablesList(_log, phase.Start, phase.End);
+
+            foreach(Tuple<Boon, long, int> entry in consume)
+            {
+                FoodDto dto = new FoodDto();
+                dto.time = entry.Item2 / 1000.0;
+                dto.duration = entry.Item3 / 1000.0;
+                dto.name = entry.Item1.Name;
+                dto.icon = entry.Item1.Link;
+                dto.dimished = entry.Item1.ID == 46587 || entry.Item1.ID == 46668;
+                list.Add(dto);
+            }
+
+            return list;
         }
 
         /// <summary>
@@ -2168,7 +2169,7 @@ namespace LuckParser.Controllers
             html = html.Replace("${bossName}", FilterStringChars(_log.FightData.Name));
             html = html.Replace("${bossHealth}", _log.FightData.Health.ToString());
             html = html.Replace("${bossHealthLeft}", healthLeft.ToString());
-            html = html.Replace("${bossIcon}", HTMLHelper.GetLink(_log.FightData.ID + "-icon"));
+            html = html.Replace("${bossIcon}", _log.FightData.Logic.IconUrl);
             html = html.Replace("${eiVersion}", Application.ProductVersion);
             html = html.Replace("${recordedBy}", _log.LogData.PoV.Split(':')[0]);
 
@@ -2823,6 +2824,9 @@ namespace LuckParser.Controllers
                 playerDto.heal = player.Healing;
                 playerDto.tough = player.Toughness;
                 playerDto.weapons = player.GetWeaponsArray(_log);
+                playerDto.colBoss = HTMLHelper.GetLink("Color-" + player.Prof);
+                playerDto.colCleave = HTMLHelper.GetLink("Color-" + player.Prof + "-NonBoss");
+                playerDto.colTotal = HTMLHelper.GetLink("Color-" + player.Prof + "-Total");
                 data.players.Add(playerDto);
             }
 
@@ -2876,6 +2880,20 @@ namespace LuckParser.Controllers
                 foreach (Player player in _log.PlayerList)
                 {
                     phaseDto.deaths.Add(player.GetDeath(_log, phaseData.Start, phaseData.End));
+                }
+
+                // add phase markup to full fight graph
+                if (i == 0)
+                {
+                    phaseDto.markupLines = new List<double>();
+                    phaseDto.markupAreas = new List<double[]>();
+                    for(int j = 1; j < _statistics.Phases.Count; j++)
+                    {
+                        PhaseData curPhase = _statistics.Phases[j];
+                        if (curPhase.DrawStart) phaseDto.markupLines.Add(curPhase.Start/1000.0);
+                        if (curPhase.DrawEnd) phaseDto.markupLines.Add(curPhase.End / 1000.0);
+                        if (curPhase.DrawArea) phaseDto.markupAreas.Add(new double[] { curPhase.Start / 1000.0, curPhase.End / 1000.0 });
+                    }
                 }
             }
 
@@ -2932,12 +2950,14 @@ namespace LuckParser.Controllers
             dto.dmgDistributionsBoss = new List<DmgDistributionDto>();
             dto.boonGraph = new List<List<BoonChartDataDto>>();
             dto.rotation = new List<List<double[]>>();
+            dto.food = new List<List<FoodDto>>();
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 dto.rotation.Add(CreateSimpleRotationTabData(player, i, usedSkills));
                 dto.dmgDistributions.Add(CreatePlayerDMGDistTable(player, false, i, usedSkills, usedBoons));
                 dto.dmgDistributionsBoss.Add(CreatePlayerDMGDistTable(player, true, i, usedSkills, usedBoons));
                 dto.boonGraph.Add(CreatePlayerBoonGraphData(player, i));
+                dto.food.Add(CreatePlayerFoodData(player, i));
             }
 
             return dto;

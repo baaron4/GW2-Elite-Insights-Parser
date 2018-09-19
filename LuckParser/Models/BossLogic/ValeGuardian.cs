@@ -30,6 +30,8 @@ namespace LuckParser.Models
             new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Magic Storm (Breakbar broken) ", "CCed",0,(condition => condition.CombatItem.Value <=8544)),
             new Mechanic(31419, "Magic Storm", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.ValeGuardian, "symbol:'diamond-tall',color:'rgb(255,0,0)',", "CC.Fail","Magic Storm (Breakbar failed) ", "CC Fail",0,(condition => condition.CombatItem.Value >8544)),
             });
+            Extension = "vg";
+            IconUrl = "https://wiki.guildwars2.com/images/f/fb/Mini_Vale_Guardian.png";
         }
 
         public override CombatReplayMap GetCombatMap()
@@ -73,10 +75,16 @@ namespace LuckParser.Models
                 phases.Add(new PhaseData(start, fightDuration));
             }
             string[] namesVG = new [] { "Phase 1", "Split 1", "Phase 2", "Split 2", "Phase 3" };
+            bool[] drawStartVG = { false, false, true, false, true };
+            bool[] drawEndVG = { true, false, true, false, false };
+            bool[] drawAreaVG = { true, false, true, false, true };
             for (int i = 1; i < phases.Count; i++)
             {
                 PhaseData phase = phases[i];
                 phase.Name = namesVG[i - 1];
+                phase.DrawStart = drawStartVG[i - 1];
+                phase.DrawEnd = drawEndVG[i - 1];
+                phase.DrawArea = drawAreaVG[i - 1];
                 if (i == 2 || i == 4)
                 {
                     List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
@@ -112,7 +120,7 @@ namespace LuckParser.Models
             List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
             foreach (CastLog c in magicStorms)
             {
-                replay.CircleActors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
             }
             return ids;
         }

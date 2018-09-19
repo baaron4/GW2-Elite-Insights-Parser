@@ -9,6 +9,7 @@ namespace LuckParser.Models.ParseModels
         public List<Point3D> Positions { get; private set; } = new List<Point3D>();
         public List<Point3D> Velocities { get; private set; } = new List<Point3D>();
         public List<int> Times => Positions.Select(x => (int)x.Time).ToList();
+        public List<Point3D> Rotations { get; } = new List<Point3D>();
         private long _start;
         private long _end;
         public Tuple<long, long> TimeOffsets => new Tuple<long, long>(_start, _end);
@@ -19,19 +20,18 @@ namespace LuckParser.Models.ParseModels
         public List<Tuple<long, long>> Downs { get; } = new List<Tuple<long, long>>();
         public List<Tuple<long, long>> DCs { get; } = new List<Tuple<long, long>>();
         // actors
-        public List<CircleActor> CircleActors { get; } = new List<CircleActor>();
-        public List<DoughnutActor> DoughnutActors { get; } = new List<DoughnutActor>();
-        public List<RectangleActor> RectangleActors{ get; } = new List<RectangleActor>();
-
+        public List<Actor> Actors { get; } = new List<Actor>();
+  
         public void Trim(long start, long end)
         {
+            Positions.RemoveAll(x => x.Time < start || x.Time > end);
             _start = start;
             _end = end;
-            Positions.RemoveAll(x => x.Time < start || x.Time > end);
             if (Positions.Count == 0)
             {
                 _start = -1;
                 _end = -1;
+                return;
             }
         }
            
@@ -51,7 +51,7 @@ namespace LuckParser.Models.ParseModels
             List<Point3D> interpolatedPositions = new List<Point3D>();
             int tablePos = 0;
             Point3D currentVelocity = null;
-            for (int i = -1000; i < fightDuration; i += rate)
+            for (int i = -rate; i < fightDuration; i += rate)
             {
                 Point3D pt = Positions[tablePos];
                 if (i <= pt.Time)
@@ -72,11 +72,11 @@ namespace LuckParser.Models.ParseModels
                         {
                             tablePos++;
                             currentVelocity = null;
-                            interpolatedPositions.Add(new Point3D(ptn.X, ptn.Y, ptn.Z, i));
+                            i -= rate;
                         }
                         else
                         {
-                            Point3D last = interpolatedPositions.Last();
+                            Point3D last = interpolatedPositions.Last().Time > pt.Time ? interpolatedPositions.Last() : pt;
                             Point3D velocity = Velocities.Find(x => x.Time <= i && x.Time > last.Time);
                             currentVelocity = velocity ?? currentVelocity;
                             if (ptn.Time - pt.Time < 400)

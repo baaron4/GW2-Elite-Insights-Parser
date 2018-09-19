@@ -4,26 +4,69 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class Actor
     {
-        public bool Filled { get; }
-        public Tuple<int, int> LifeSpan { get; }
-        private readonly string _color;
-        public string Color => "'" + _color + "'";
-        public int Growing { get; }
-        private readonly Mobility _mobility;
+        protected enum PositionType { ID, Array };
 
-        protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Mobility mobility)
+        public bool Filled { get; }
+        public Tuple<int, int> Lifespan { get; }
+        public string Color { get; }
+        public int Growing { get; }
+        protected PositionType Type;
+        protected Point3D Position;
+
+        protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color)
         {
-            LifeSpan = lifespan;
-            _color = color;
+            Lifespan = lifespan;
+            Color = color;
             Filled = fill;
-            _mobility = mobility;
             Growing = growing;
+            Type = PositionType.ID;
         }
-       
-        public string GetPosition(string id, CombatReplayMap map)
+        protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Point3D position)
         {
-            return _mobility.GetPosition(id, map);
+            Lifespan = lifespan;
+            Color = color;
+            Filled = fill;
+            Growing = growing;
+            Position = position;
+            Type = PositionType.Array;
         }
-       
+        protected Actor(bool fill, int growing, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time)
+        {
+            Lifespan = lifespan;
+            Color = color;
+            Filled = fill;
+            Growing = growing;
+            Type = PositionType.Array;
+            if (prev != null && next != null)
+            {
+                long denom = next.Time - prev.Time;
+                if (denom == 0)
+                {
+                    Position = prev;
+                } else
+                {
+                    float ratio = (float)(time - prev.Time) / denom;
+                    Position = new Point3D(prev, next, ratio, time);
+                }
+            } else
+            {
+                Position = prev ?? next;
+            }
+        }
+        //
+        protected class Serializable<T>
+        {
+
+            public bool Fill { get; set; }
+            public int Growing { get; set; }
+            public string Color { get; set; }
+            public string Type { get; set; }
+            public long Start { get; set; }
+            public long End { get; set; }
+            public T Position { get; set; }
+        }
+
+        public abstract string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master);
+
     }
 }
