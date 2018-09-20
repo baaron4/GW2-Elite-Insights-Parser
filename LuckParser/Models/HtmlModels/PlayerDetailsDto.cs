@@ -15,6 +15,8 @@ namespace LuckParser.Models.HtmlModels
         [DataMember]
         public List<DmgDistributionDto> dmgDistributionsBoss;
         [DataMember]
+        public List<DmgDistributionDto> dmgDistributionsTaken;
+        [DataMember]
         public List<List<double[]>> rotation;
         [DataMember]
         public List<List<BoonChartDataDto>> boonGraph;
