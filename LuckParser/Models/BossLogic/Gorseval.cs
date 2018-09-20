@@ -71,6 +71,9 @@ namespace LuckParser.Models
             {
                 PhaseData phase = phases[i];
                 phase.Name = namesGorse[i - 1];
+                phase.DrawArea = i == 1 || i == 3 || i == 5;
+                phase.DrawStart = i == 3 || i == 5;
+                phase.DrawEnd = i == 1 || i == 3;
                 if (i == 2 || i == 4)
                 {
                     List<AgentItem> spirits = log.AgentData.NPCAgentList.Where(x => ParseEnum.GetTrashIDS(x.ID) == ParseEnum.TrashIDS.ChargedSoul).ToList();
