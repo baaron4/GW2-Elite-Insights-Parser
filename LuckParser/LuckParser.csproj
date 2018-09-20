@@ -103,6 +103,9 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\BossLogic\BossLogic.cs" />
+    <Compile Include="Models\BossLogic\Qadim.cs" />
+    <Compile Include="Models\BossLogic\NikareKenut.cs" />
+    <Compile Include="Models\BossLogic\ConjuredAmalgamate.cs" />
     <Compile Include="Models\BossLogic\Dhuum.cs" />
     <Compile Include="Models\BossLogic\Ensolyss.cs" />
     <Compile Include="Models\BossLogic\Artsariiv.cs" />

@@ -244,7 +244,7 @@ function createMechanicsTable($target, mechanics, data, boss) {
 	});
 
 	var html = tmplMechanicTable.render({rows:rows,mechanics:mechanics}, {playerMech:!boss});
-	lazyTable2($target, html, { 'order': [[2, 'asc']]});
+	lazyTable2($target, html, { 'order': [[boss ? 0 : 2, 'asc']]});
 }
 
 function createDistTable($target, data) {
