@@ -55,6 +55,7 @@ namespace LuckParser.Models
         public override string GetReplayIcon()
         {
             return "https://i.imgur.com/6yq45Cc.png";
+            // For Kenut: https://i.imgur.com/TLykcrJ.png
         }
     }
 }
