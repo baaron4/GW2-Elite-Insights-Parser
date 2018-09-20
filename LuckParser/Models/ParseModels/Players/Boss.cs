@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace LuckParser.Models.ParseModels
@@ -9,42 +10,21 @@ namespace LuckParser.Models.ParseModels
     public class Boss : AbstractMasterPlayer
     {
         // Constructors
-        public Boss(AgentItem agent, bool requirePhases) : base(agent)
+        public Boss(AgentItem agent) : base(agent)
         {
-            _requirePhases = requirePhases;
         }
 
-        private List<PhaseData> _phases = new List<PhaseData>();
-        public readonly List<long> PhaseData = new List<long>();
-        private CombatReplayMap _map;
+        public int Health { get; set; } = -1;
+        public List<Point> HealthOverTime { get; set; } = new List<Point>();
         public readonly List<Mob> TrashMobs = new List<Mob>();
-        private readonly bool _requirePhases;
 
-        public List<PhaseData> GetPhases(ParsedLog log)
+        public void AddCustomCastLog(CastLog cl, ParsedLog log)
         {
-
-            if (_phases.Count == 0)
+            if (CastLogs.Count == 0)
             {
-                long fightDuration = log.FightData.FightDuration;
-                if (!_requirePhases)
-                {
-                    _phases.Add(new PhaseData(0, fightDuration));
-                    _phases[0].Name = "Full Fight";
-                    return _phases;
-                }
-                GetCastLogs(log, 0, fightDuration);
-                _phases = log.FightData.Logic.GetPhases(this, log, CastLogs);
+                GetCastLogs(log, 0, log.FightData.FightEnd);
             }
-            return _phases;
-        }
-
-        public CombatReplayMap GetCombatMap(ParsedLog log)
-        {
-            if (_map == null)
-            {
-                _map = log.FightData.Logic.GetCombatMap();
-            }
-            return _map;
+            CastLogs.Add(cl);
         }
 
         // Private Methods
@@ -87,7 +67,7 @@ namespace LuckParser.Models.ParseModels
         {
             MechanicData mechData = log.MechanicData;
             FightData fightData = log.FightData;
-            List<Mechanic> bossMechanics = fightData.Logic.GetMechanics();
+            List<Mechanic> bossMechanics = fightData.Logic.MechanicList;
             Dictionary<ushort, AbstractMasterPlayer> regroupedMobs = new Dictionary<ushort, AbstractMasterPlayer>();
             // Boons
             foreach (Mechanic m in bossMechanics.Where(x => x.MechanicType == Mechanic.MechType.EnemyBoon || x.MechanicType == Mechanic.MechType.EnemyBoonStrip))
@@ -102,7 +82,7 @@ namespace LuckParser.Models.ParseModels
                     AbstractMasterPlayer amp = null;
                     if (m.MechanicType == Mechanic.MechType.EnemyBoon && c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
-                        if (c.DstInstid == fightData.InstID)
+                        if (c.DstInstid == InstID)
                         {
                             amp = this;
                         }
@@ -118,7 +98,7 @@ namespace LuckParser.Models.ParseModels
                     }
                     else if (m.MechanicType == Mechanic.MechType.EnemyBoonStrip && c.IsBuffRemove == ParseEnum.BuffRemove.Manual)
                     {
-                        if (c.SrcInstid == fightData.InstID)
+                        if (c.SrcInstid == InstID)
                         {
                             amp = this;
                         }
@@ -152,7 +132,7 @@ namespace LuckParser.Models.ParseModels
                     AbstractMasterPlayer amp = null;
                     if ((m.MechanicType == Mechanic.MechType.EnemyCastStart && c.IsActivation.IsCasting()) || (m.MechanicType == Mechanic.MechType.EnemyCastEnd && !c.IsActivation.IsCasting()))
                     {
-                        if (c.SrcInstid == fightData.InstID)
+                        if (c.SrcInstid == InstID)
                         {
                             amp = this;
                         }

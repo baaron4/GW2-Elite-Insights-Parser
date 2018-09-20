@@ -37,7 +37,7 @@ namespace LuckParser.Models.ParseModels
             {
                 if (c.IsActivation == ParseEnum.Activation.None)
                 {
-                    if ((Agent.InstID == c.DstInstid || Agent.InstID == c.DstMasterInstid) && c.IFF == ParseEnum.IFF.Friend && (c.IsBuffRemove != ParseEnum.BuffRemove.None))
+                    if ((AgentItem.InstID == c.DstInstid || AgentItem.InstID == c.DstMasterInstid) && c.IFF == ParseEnum.IFF.Friend && (c.IsBuffRemove != ParseEnum.BuffRemove.None))
                     {
                         long time = c.Time - timeStart;
                         if (time > 0)
@@ -195,7 +195,7 @@ namespace LuckParser.Models.ParseModels
         protected override void SetDamageTakenLogs(ParsedLog log)
         {
             long timeStart = log.FightData.FightStart;               
-            foreach (CombatItem c in log.GetDamageTakenData(Agent.InstID)) {
+            foreach (CombatItem c in log.GetDamageTakenData(AgentItem.InstID)) {
                 if (c.Time > log.FightData.FightStart && c.Time < log.FightData.FightEnd) {//selecting player as target
                     long time = c.Time - timeStart;
                     AddDamageTakenLog(time, c);
@@ -211,7 +211,7 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (CombatItem c in log.GetBoonData(consumable.ID))
                 {
-                    if (c.IsBuffRemove != ParseEnum.BuffRemove.None || (c.IsBuff != 18 && c.IsBuff != 1) || Agent.InstID != c.DstInstid)
+                    if (c.IsBuffRemove != ParseEnum.BuffRemove.None || (c.IsBuff != 18 && c.IsBuff != 1) || AgentItem.InstID != c.DstInstid)
                     {
                         continue;
                     }
@@ -288,7 +288,7 @@ namespace LuckParser.Models.ParseModels
             MechanicData mechData = log.MechanicData;
             FightData fightData = log.FightData;
             CombatData combatData = log.CombatData;
-            List<Mechanic> bossMechanics = fightData.Logic.GetMechanics();
+            List<Mechanic> bossMechanics = fightData.Logic.MechanicList;
             long start = fightData.FightStart;
             long end = fightData.FightEnd;
             // Player status

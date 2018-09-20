@@ -7,7 +7,7 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractPlayer
     {
-        protected readonly AgentItem Agent;
+        protected readonly AgentItem AgentItem;
         public readonly String Character;
         protected readonly List<DamageLog> DamageLogs = new List<DamageLog>();
         private List<DamageLog> _damageLogsFiltered = new List<DamageLog>();
@@ -16,18 +16,21 @@ namespace LuckParser.Models.ParseModels
         private readonly List<DamageLog> _damageTakenlogs = new List<DamageLog>();
         protected readonly List<CastLog> CastLogs = new List<CastLog>();
 
-        public int Toughness => Agent.Toughness;
-        public int Condition => Agent.Condition;
-        public int Concentration => Agent.Concentration;
-        public int Healing => Agent.Healing;
-        public ushort InstID => Agent.InstID;
-        public string Prof => Agent.Prof;
+        public int Toughness => AgentItem.Toughness;
+        public int Condition => AgentItem.Condition;
+        public int Concentration => AgentItem.Concentration;
+        public int Healing => AgentItem.Healing;
+        public ushort InstID => AgentItem.InstID;
+        public string Prof => AgentItem.Prof;
+        public ulong Agent => AgentItem.Agent;
+        public long LastAware => AgentItem.LastAware;
+        public long FirstAware => AgentItem.FirstAware;
 
         protected AbstractPlayer(AgentItem agent)
         {
             String[] name = agent.Name.Split('\0');
             Character = name[0];
-            Agent = agent;
+            AgentItem = agent;
         }
         // Getters
         public List<DamageLog> GetDamageLogs(int instidFilter, ParsedLog log, long start, long end)//isntid = 0 gets all logs if specified sets and returns filtered logs
@@ -52,7 +55,7 @@ namespace LuckParser.Models.ParseModels
         {
             if (redirection.Count == 0)
             {
-                return GetDamageLogs(log.FightData.InstID, log, start, end);
+                return GetDamageLogs(log.Boss.InstID, log, start, end);
             }
             List<DamageLog> dls = GetDamageLogs(0, log, start, end);
             List<DamageLog> res = new List<DamageLog>();
@@ -108,14 +111,14 @@ namespace LuckParser.Models.ParseModels
         }
         public List<DamageLog> GetJustPlayerDamageLogs(int instidFilter, ParsedLog log, long start, long end)
         {
-            return GetDamageLogs(instidFilter, log, start, end).Where(x => x.SrcInstId == Agent.InstID).ToList();
+            return GetDamageLogs(instidFilter, log, start, end).Where(x => x.SrcInstId == AgentItem.InstID).ToList();
         }
 
         public List<DamageLog> GetJustPlayerDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
         {
             if (redirection.Count == 0)
             {
-                return GetJustPlayerDamageLogs(log.FightData.InstID, log, start, end);
+                return GetJustPlayerDamageLogs(log.Boss.InstID, log, start, end);
             }
             List<DamageLog> dls = GetJustPlayerDamageLogs(0, log, start, end);
             List<DamageLog> res = new List<DamageLog>();

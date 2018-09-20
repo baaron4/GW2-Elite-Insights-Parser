@@ -35,7 +35,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/4/4b/Mini_Xera.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/BoHwwY6.png",
                             Tuple.Create(7112, 6377),
@@ -44,23 +44,27 @@ namespace LuckParser.Models
                             Tuple.Create(1920, 12160, 2944, 14464));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
-            // split happened
-            if (boss.PhaseData.Count == 1)
+            if (!requirePhases)
             {
-                CombatItem invulXera = log.GetBoonData(762).Find(x => x.DstInstid == boss.InstID);
+                return phases;
+            }
+            // split happened
+            if (log.FightData.PhaseData.Count == 1)
+            {
+                CombatItem invulXera = log.GetBoonData(762).Find(x => x.DstInstid == log.Boss.InstID);
                 if (invulXera == null)
                 {
-                    invulXera = log.GetBoonData(34113).Find(x => x.DstInstid == boss.InstID);
+                    invulXera = log.GetBoonData(34113).Find(x => x.DstInstid == log.Boss.InstID);
                 }
                 long end = invulXera.Time - log.FightData.FightStart;
                 phases.Add(new PhaseData(start, end));
-                start = boss.PhaseData[0] - log.FightData.FightStart;
-                castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
+                start = log.FightData.PhaseData[0] - log.FightData.FightStart;
+                log.Boss.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
             {

@@ -93,7 +93,7 @@ namespace LuckParser.Models.DataModels
 
         public bool IsBenchmarkMode()
         {
-            return FightData.Logic.GetMode() == BossLogic.ParseMode.Golem;
+            return FightData.Logic.Mode == BossLogic.ParseMode.Golem;
         }
 
 

@@ -26,7 +26,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/d/dc/Siax_the_Corrupted.jpg";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/UzaQHW9.png",
                             Tuple.Create(476, 548),

@@ -43,7 +43,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/f/f0/Mini_Samarog.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/o2DHN29.png",
                             Tuple.Create(1221, 1171),
@@ -52,14 +52,18 @@ namespace LuckParser.Models
                             Tuple.Create(11774, 4480, 14078, 5376));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            if (!requirePhases)
+            {
+                return phases;
+            }
             // Determined check
-            List<CombatItem> invulsSam = GetFilteredList(log, 762, boss.InstID);         
+            List<CombatItem> invulsSam = GetFilteredList(log, 762, log.Boss.InstID);         
             for (int i = 0; i < invulsSam.Count; i++)
             {
                 CombatItem c = invulsSam[i];
@@ -69,14 +73,14 @@ namespace LuckParser.Models
                     phases.Add(new PhaseData(start, end));
                     if (i == invulsSam.Count - 1)
                     {
-                        castLogs.Add(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None));
+                        log.Boss.AddCustomCastLog(new CastLog(end, -5, (int)(fightDuration - end), ParseEnum.Activation.None, (int)(fightDuration - end), ParseEnum.Activation.None), log);
                     }
                 }
                 else
                 {
                     start = c.Time - log.FightData.FightStart;
                     phases.Add(new PhaseData(end, start));
-                    castLogs.Add(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
+                    log.Boss.AddCustomCastLog(new CastLog(end, -5, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
                 }
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
@@ -174,9 +178,9 @@ namespace LuckParser.Models
             }
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        public override int IsCM(ParsedLog log)
         {
-            return (health > 30e6) ? 1 : 0;
+            return (log.Boss.Health > 30e6) ? 1 : 0;
         }
 
         public override string GetReplayIcon()

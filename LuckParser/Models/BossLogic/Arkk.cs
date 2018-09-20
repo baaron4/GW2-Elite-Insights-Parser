@@ -48,7 +48,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/5/5f/Arkk.jpg";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/BIybWJe.png",
                             Tuple.Create(914, 914),
@@ -62,9 +62,9 @@ namespace LuckParser.Models
             return "https://i.imgur.com/u6vv8cW.png";
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
+        public override void SetSuccess(ParsedLog log)
         {
-            SetSuccessOnCombatExit(combatData,logData,fightData,pList, 3, 3000);
+            SetSuccessOnCombatExit(log, 3, 3000);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/5/57/Champion_Toxic_Hybrid.jpg";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/kjelZ4t.png",
                             Tuple.Create(366, 366),

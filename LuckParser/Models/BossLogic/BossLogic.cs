@@ -10,26 +10,29 @@ namespace LuckParser.Models
 
         public enum ParseMode { Raid, Fractal, Golem, Unknown };
 
-        protected readonly List<Mechanic> MechanicList = new List<Mechanic> {
+        private CombatReplayMap _map;
+        public readonly List<Mechanic> MechanicList = new List<Mechanic> {
             new Mechanic(-2, "Dead", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'x',color:'rgb(0,0,0)',", "Dead",0),
             new Mechanic(-3, "Downed", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross',color:'rgb(255,0,0)',", "Downed",0),
             new Mechanic(SkillItem.ResurrectId, "Resurrect", Mechanic.MechType.PlayerStatus, ParseEnum.BossIDS.Unknown, "symbol:'cross-open',color:'rgb(0,255,255)',", "Res",0)}; //Resurrects (start), Resurrect
-        protected ParseMode Mode;
-        public bool CanCombatReplay { get; set; }
-        public string Extension { get; protected set; }
-        public string IconUrl { get; protected set; }
+        public ParseMode Mode { get; protected set; } = ParseMode.Unknown;
+        public bool CanCombatReplay { get; set; } = false;
+        public string Extension { get; protected set; } = "boss";
+        public string IconUrl { get; protected set; } = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
 
-        public BossLogic()
-        {
-            Mode = ParseMode.Unknown;
-            CanCombatReplay = false;
-            IconUrl = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
-            Extension = "boss";
-        }
-
-        public virtual CombatReplayMap GetCombatMap()
+        protected virtual CombatReplayMap GetCombatMapInternal()
         {
             return null;
+        }
+
+
+        public CombatReplayMap GetCombatMap()
+        {
+            if (_map == null)
+            {
+                _map = GetCombatMapInternal();
+            }
+            return _map;
         }
 
         protected List<PhaseData> GetInitialPhase(ParsedLog log)
@@ -41,7 +44,7 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public virtual List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
+        public virtual List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
             return phases;
@@ -53,7 +56,7 @@ namespace LuckParser.Models
             return ids;
         }
 
-        public virtual int IsCM(List<CombatItem> clist, int health)
+        public virtual int IsCM(ParsedLog log)
         {
             return -1;
         }
@@ -62,34 +65,24 @@ namespace LuckParser.Models
         {
         }
 
-        protected void SetSuccessByDeath(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
+        protected void SetSuccessByDeath(ParsedLog log)
         {
-            CombatItem killed = combatData.GetStatesData(ParseEnum.StateChange.ChangeDead).LastOrDefault(x => x.SrcInstid == fightData.InstID);
+            CombatItem killed = log.CombatData.GetStatesData(ParseEnum.StateChange.ChangeDead).LastOrDefault(x => x.SrcInstid == log.Boss.InstID);
             if (killed != null)
             {
-                logData.Success = true;
-                fightData.FightEnd = killed.Time;
+                log.LogData.Success = true;
+                log.FightData.FightEnd = killed.Time;
             }
         }
 
-        public virtual void SetSuccess(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
+        public virtual void SetSuccess(ParsedLog log)
         {
-            SetSuccessByDeath(combatData,logData, fightData,pList);
+            SetSuccessByDeath(log);
         }
 
         public virtual string GetReplayIcon()
         {
             return "";
-        }
-
-        public List<Mechanic> GetMechanics()
-        {
-            return MechanicList;
-        }
-       
-        public ParseMode GetMode()
-        {
-            return Mode;
         }
         //
         protected static List<CombatItem> GetFilteredList(ParsedLog log, long skillID, ushort instid)

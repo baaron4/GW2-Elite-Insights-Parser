@@ -35,32 +35,32 @@ namespace LuckParser.Models
             }
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);          
             return phases;
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
+        public override void SetSuccess(ParsedLog log)
         {
-            CombatItem pov = combatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
+            CombatItem pov = log.CombatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
             if (pov != null)
             {
                 // to make sure that the logging starts when the PoV starts attacking (in case there is a slave with them)
-                CombatItem enterCombat = combatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
+                CombatItem enterCombat = log.CombatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
                 if (enterCombat != null)
                 {
-                    fightData.FightStart = enterCombat.Time;
+                    log.FightData.FightStart = enterCombat.Time;
                 }
             }
-            CombatItem lastDamageTaken = combatData.GetDamageTakenData(fightData.InstID).LastOrDefault(x => x.Value > 0 || x.BuffDmg > 0);
+            CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(log.Boss.InstID).LastOrDefault(x => x.Value > 0 || x.BuffDmg > 0);
             if (lastDamageTaken != null)
             {
-                fightData.FightEnd = lastDamageTaken.Time;
+                log.FightData.FightEnd = lastDamageTaken.Time;
             }
-            if (fightData.HealthOverTime.Count > 0)
+            if (log.Boss.HealthOverTime.Count > 0)
             {
-                logData.Success = fightData.HealthOverTime.Last().Y < 200;
+                log.LogData.Success = log.Boss.HealthOverTime.Last().Y < 200;
             }
         }
     }

@@ -25,7 +25,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/lT1FW2r.png",
                             Tuple.Create(889, 889),
@@ -43,9 +43,9 @@ namespace LuckParser.Models
             return ids;
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        public override int IsCM(ParsedLog log)
         {
-            return (health > 25e6) ? 1 : 0;
+            return (log.Boss.Health > 25e6) ? 1 : 0;
         }
 
         public override string GetReplayIcon()

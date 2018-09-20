@@ -8,8 +8,10 @@ namespace LuckParser.Models.ParseModels
     public class FightData
     {
         // Fields
-        public ulong Agent { get; set; }
-        public ushort InstID { get; set; }
+        private List<PhaseData> _phases = new List<PhaseData>();
+        public readonly List<long> PhaseData = new List<long>();
+        public ushort ID { get; }
+        private readonly bool _requirePhases;
         public readonly BossLogic Logic;
         public long FightStart { get; set; }
         public long FightEnd { get; set; } = long.MaxValue;
@@ -20,10 +22,7 @@ namespace LuckParser.Models.ParseModels
                 return FightEnd - FightStart;
             }
         }
-        public readonly ushort ID;
         public string Name { get; set; } = "UNKNOWN";
-        public int Health { get; set; } = -1;
-        public List<Point> HealthOverTime { get; set; } = new List<Point>();
         private int _isCM = -1;
         public bool IsCM
         {
@@ -33,9 +32,10 @@ namespace LuckParser.Models.ParseModels
             }
         }
         // Constructors
-        public FightData(ushort id)
+        public FightData(ushort id, bool requirePhases)
         {
             ID = id;
+            _requirePhases = requirePhases;
             switch (ParseEnum.GetBossIDS(id))
             {
                 case ParseEnum.BossIDS.ValeGuardian:
@@ -109,33 +109,31 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public String[] ToStringArray()
+        public List<PhaseData> GetPhases(ParsedLog log)
         {
-            String[] array = new String[7];
-            array[0] = Agent.ToString();
-            array[1] = InstID.ToString();
-            array[2] = FightStart.ToString();
-            array[3] = FightEnd.ToString();
-            array[4] = ID.ToString();
-            array[5] = Name;
-            array[6] = Health.ToString();
-            return array;
+
+            if (_phases.Count == 0)
+            {
+                long fightDuration = log.FightData.FightDuration;
+                _phases = log.FightData.Logic.GetPhases(log, _requirePhases);
+            }
+            return _phases;
         }
         // Setters
-        public void SetCM(List<CombatItem> clist)
+        public void SetCM(ParsedLog log)
         {
             if (_isCM == -1)
             {
-                _isCM = Logic.IsCM(clist, Health);
+                _isCM = Logic.IsCM(log);
                 if (_isCM == 1)
                 {
                     Name += " CM";
                 }
             }
         }
-        public void SetSuccess(CombatData combatData, LogData logData, List<Player> pList)
+        public void SetSuccess(ParsedLog log)
         {
-            Logic.SetSuccess(combatData, logData, this, pList);
+            Logic.SetSuccess(log);
         }
     }
 }

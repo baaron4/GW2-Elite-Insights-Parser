@@ -32,7 +32,7 @@ namespace LuckParser.Models
             IconUrl = "http://dulfy.net/wp-content/uploads/2016/11/gw2-nightmare-fractal-teaser.jpg";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/lFGNKuf.png",
                             Tuple.Create(664, 407),

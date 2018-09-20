@@ -36,7 +36,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/b/b8/Mini_Cairn_the_Indomitable.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/NlpsLZa.png",
                             Tuple.Create(607, 607),
@@ -64,9 +64,9 @@ namespace LuckParser.Models
             }
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        public override int IsCM(ParsedLog log)
         {
-            return clist.Exists(x => x.SkillID == 38098) ? 1 : 0;
+            return log.CombatData.Exists(x => x.SkillID == 38098) ? 1 : 0;
         }
 
         public override string GetReplayIcon()

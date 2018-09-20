@@ -32,7 +32,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/e/e4/Mini_Dhuum.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/CLTwWBJ.png",
                             Tuple.Create(3763, 3383),
@@ -41,14 +41,19 @@ namespace LuckParser.Models
                             Tuple.Create(19072, 15484, 20992, 16508));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            if (!requirePhases)
+            {
+                return phases;
+            }
             // Sometimes the preevent is not in the evtc
-            List<CastLog> dhuumCast = boss.GetCastLogs(log, 0, 20000);
+            List<CastLog> castLogs = log.Boss.GetCastLogs(log, 0, log.FightData.FightEnd);
+            List<CastLog> dhuumCast = log.Boss.GetCastLogs(log, 0, 20000);
             if (dhuumCast.Count > 0)
             {
                 CastLog shield = castLogs.Find(x => x.SkillId == 47396);
@@ -77,7 +82,7 @@ namespace LuckParser.Models
             }
             else
             {
-                CombatItem invulDhuum = log.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == boss.InstID && x.Time > 115000 + log.FightData.FightStart);
+                CombatItem invulDhuum = log.GetBoonData(762).FirstOrDefault(x => x.IsBuffRemove != ParseEnum.BuffRemove.None && x.SrcInstid == log.Boss.InstID && x.Time > 115000 + log.FightData.FightStart);
                 if (invulDhuum != null)
                 {
                     end = invulDhuum.Time - log.FightData.FightStart;
@@ -180,7 +185,7 @@ namespace LuckParser.Models
             {
                 int duration = 15000;
                 int start = (int)(c.Time - log.FightData.FightStart);
-                if (log.FightData.HealthOverTime.FirstOrDefault(x => x.X > start).Y < 1050)
+                if (log.Boss.HealthOverTime.FirstOrDefault(x => x.X > start).Y < 1050)
                 {
                     duration = 30000;
                 }
@@ -211,9 +216,9 @@ namespace LuckParser.Models
             }
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        public override int IsCM(ParsedLog log)
         {
-            return (health > 35e6) ? 1 : 0;
+            return (log.Boss.Health > 35e6) ? 1 : 0;
         }
 
         public override string GetReplayIcon()

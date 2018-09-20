@@ -28,7 +28,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/Fj1HyM0.png",
                             Tuple.Create(1099, 1114),
@@ -37,13 +37,18 @@ namespace LuckParser.Models
                             Tuple.Create(1920, 12160, 2944, 14464));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            if (!requirePhases)
+            {
+                return phases;
+            }
             // Main phases
+            List<CastLog> castLogs = log.Boss.GetCastLogs(log, 0, log.FightData.FightEnd);
             List<CastLog> clsKC = castLogs.Where(x => x.SkillId == 35048).ToList();
             foreach (CastLog cl in clsKC)
             {
@@ -62,7 +67,7 @@ namespace LuckParser.Models
             }
             // add burn phases
             int offset = phases.Count;
-            List<CombatItem> orbItems = log.GetBoonData(35096).Where(x => x.DstInstid == boss.InstID).ToList();
+            List<CombatItem> orbItems = log.GetBoonData(35096).Where(x => x.DstInstid == log.Boss.InstID).ToList();
             // Get number of orbs and filter the list
             List<CombatItem> orbItemsFiltered = new List<CombatItem>();
             Dictionary<long, int> orbs = new Dictionary<long, int>();

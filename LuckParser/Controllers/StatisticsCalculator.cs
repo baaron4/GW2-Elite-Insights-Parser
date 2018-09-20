@@ -47,7 +47,7 @@ namespace LuckParser.Controllers
 
             _log = log;
 
-            _statistics.Phases = log.Boss.GetPhases(log);
+            _statistics.Phases = log.FightData.GetPhases(log);
             if (switches.CalculateCombatReplay && _settings.ParseCombatReplay)
             {
                 foreach (Player p in log.PlayerList)
@@ -81,7 +81,7 @@ namespace LuckParser.Controllers
             _statistics.BossHealth = new double[seconds + 1];
             int i = 0;
             double curHealth = 100.0;
-            foreach (Point p in log.FightData.HealthOverTime)
+            foreach (Point p in log.Boss.HealthOverTime)
             {
                 double hp = p.Y / 100.0;
                 int timeInPhase = 1 + (p.X - (int)_statistics.Phases[0].Start) / 1000;
@@ -155,7 +155,7 @@ namespace LuckParser.Controllers
                     phase.Start, phase.End).Sum(x => x.Damage);
             } else
             {
-                damage = player.GetDamageLogs(_log.FightData.InstID, _log,
+                damage = player.GetDamageLogs(_log.Boss.InstID, _log,
                     phase.Start, phase.End).Sum(x => x.Damage);
             }
             if (phaseDuration > 0)
@@ -172,7 +172,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damage = player.GetDamageLogs(_log.FightData.InstID, _log,
+                damage = player.GetDamageLogs(_log.Boss.InstID, _log,
                     phase.Start, phase.End).Where(x => x.IsCondi > 0).Sum(x => x.Damage);
             }
             if (phaseDuration > 0)
@@ -196,7 +196,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(_log.FightData.InstID, _log,
+                final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(_log.Boss.InstID, _log,
                     phase.Start, phase.End).Where(x => x.IsCondi == 0).Sum(x => x.Damage);
             }
 
@@ -290,7 +290,7 @@ namespace LuckParser.Controllers
                         }
                     } else
                     {
-                        idsToCheck.Add(_log.FightData.InstID);
+                        idsToCheck.Add(_log.Boss.InstID);
                     }
                     foreach (DamageLog dl in damageLogs)
                     {

@@ -34,7 +34,7 @@ namespace LuckParser.Models.ParseModels
             }
             if (_filteredDamageLogs.Count == 0)
             {
-                _filteredDamageLogs = _damageLogs.Where(x => x.DstInstId == log.FightData.InstID).ToList();
+                _filteredDamageLogs = _damageLogs.Where(x => x.DstInstId == log.Boss.InstID).ToList();
             }
             if (instidFilter > 0)
             {

@@ -43,7 +43,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/3X0YveK.png",
                             Tuple.Create(880, 880),
@@ -52,12 +52,16 @@ namespace LuckParser.Models
                             Tuple.Create(2688, 11906, 3712, 14210));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            if (!requirePhases)
+            {
+                return phases;
+            }
             // Special buff cast check
             CombatItem heatWave = log.GetBoonData(34526).FirstOrDefault();
             List<long> phaseStarts = new List<long>();
@@ -68,6 +72,7 @@ namespace LuckParser.Models
                 if (downPour != null)
                 {
                     phaseStarts.Add(downPour.Time - log.FightData.FightStart);
+                    List<CastLog> castLogs = log.Boss.GetCastLogs(log, 0, log.FightData.FightEnd);
                     CastLog abo = castLogs.Find(x => x.SkillId == 34427);
                     if (abo != null)
                     {

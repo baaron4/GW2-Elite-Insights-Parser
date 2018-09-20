@@ -20,7 +20,7 @@ namespace LuckParser.Models
             IconUrl = "";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/Dp3SFq6.png",
                             Tuple.Create(2557, 4706),
@@ -40,7 +40,7 @@ namespace LuckParser.Models
 
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        public override int IsCM(ParsedLog log)
         {
             return 0;
         }

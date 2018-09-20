@@ -31,7 +31,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/e/ed/Mini_Slubling.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/PaKMZ8Z.png",
                             Tuple.Create(1688, 2581),
