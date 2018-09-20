@@ -45,7 +45,7 @@ namespace LuckParser.Models
                             Tuple.Create(11774, 4480, 14078, 5376));
         }
         
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.TrashIDS> GetAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: needs doughnuts (wave) and facing information (sword)
             List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>();

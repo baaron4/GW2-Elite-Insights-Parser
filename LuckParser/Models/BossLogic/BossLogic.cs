@@ -47,7 +47,7 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public virtual List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public virtual List<ParseEnum.TrashIDS> GetAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>();
             return ids;

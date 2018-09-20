@@ -40,7 +40,7 @@ namespace LuckParser.Models
                             Tuple.Create(2688, 11906, 3712, 14210));
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.TrashIDS> GetAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO:facing information (breath)
             List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>

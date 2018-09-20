@@ -68,7 +68,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
-            List<ParseEnum.TrashIDS> ids = log.FightData.Logic.GetAdditionalData(CombatReplay, GetCastLogs(log, 0, log.FightData.FightDuration), log);
+            List<ParseEnum.TrashIDS> ids = log.FightData.Logic.GetAdditionalBossData(CombatReplay, GetCastLogs(log, 0, log.FightData.FightDuration), log);
             List<AgentItem> aList = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
             foreach (AgentItem a in aList)
             {

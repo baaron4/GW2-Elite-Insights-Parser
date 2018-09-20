@@ -111,7 +111,7 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override List<ParseEnum.TrashIDS> GetAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: facing information (pull thingy)
             List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
