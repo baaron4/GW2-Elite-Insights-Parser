@@ -236,12 +236,25 @@ function createBoonTable($target, boons, data, generation) {
 }
 
 function createMechanicsTable($target, mechanics, data, boss) {
+	if (boss && (!mechanics || !data)) {
+		return;
+	}
 	var rows = [];
 	var sums = [];
+	var empty = true;
 	$.each(data, function(i, values) {
 		var player = boss ? window.data.enemies[i] : window.data.players[i];
 		rows.push({player:player,data:values});
+		$.each(values, function(v,value) {
+			if (value[0]) {
+				empty = false;
+			}
+		});
 	});
+	
+	if (boss && empty) {
+		return;
+	}
 
 	var html = tmplMechanicTable.render({rows:rows,mechanics:mechanics}, {playerMech:!boss});
 	lazyTable2($target, html, { 'order': [[boss ? 0 : 2, 'asc']]});
