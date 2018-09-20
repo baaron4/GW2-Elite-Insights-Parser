@@ -95,15 +95,18 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            // TODO: doughnuts (rampage)
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
-                    {
-                        ParseEnum.TrashIDS.ChargedSoul,
-                        ParseEnum.TrashIDS.EnragedSpirit,
-                        ParseEnum.TrashIDS.AngeredSpirit
-                    };
+            return new List<ParseEnum.TrashIDS>
+            {
+                ParseEnum.TrashIDS.ChargedSoul,
+                ParseEnum.TrashIDS.EnragedSpirit,
+                ParseEnum.TrashIDS.AngeredSpirit
+            };
+        }
+
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        {
             List<CastLog> blooms = cls.Where(x => x.SkillId == 31616).ToList();
             foreach (CastLog c in blooms)
             {
@@ -218,8 +221,6 @@ namespace LuckParser.Models
                     }
                 }
             }
-
-            return ids;
         }
 
         public override string GetReplayIcon()

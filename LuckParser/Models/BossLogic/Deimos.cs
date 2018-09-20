@@ -127,22 +127,25 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            // TODO: facing information (slam)
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
-                    {
-                        ParseEnum.TrashIDS.Saul,
-                        ParseEnum.TrashIDS.Thief,
-                        ParseEnum.TrashIDS.Drunkard,
-                        ParseEnum.TrashIDS.Gambler,
-                        ParseEnum.TrashIDS.GamblerClones,
-                        ParseEnum.TrashIDS.GamblerReal,
-                        ParseEnum.TrashIDS.Greed,
-                        ParseEnum.TrashIDS.Pride,
-                        ParseEnum.TrashIDS.Oil,
-                        ParseEnum.TrashIDS.Tear
-                    };
+            return new List<ParseEnum.TrashIDS>
+            {
+                ParseEnum.TrashIDS.Saul,
+                ParseEnum.TrashIDS.Thief,
+                ParseEnum.TrashIDS.Drunkard,
+                ParseEnum.TrashIDS.Gambler,
+                ParseEnum.TrashIDS.GamblerClones,
+                ParseEnum.TrashIDS.GamblerReal,
+                ParseEnum.TrashIDS.Greed,
+                ParseEnum.TrashIDS.Pride,
+                ParseEnum.TrashIDS.Oil,
+                ParseEnum.TrashIDS.Tear
+            };
+        }
+
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        {
             List<CastLog> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
             foreach (CastLog c in mindCrush)
             {
@@ -178,10 +181,9 @@ namespace LuckParser.Models
                     }
                 }
             }
-            return ids;
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // teleport zone
             List<CombatItem> tpDeimos = GetFilteredList(log, 37730, p.InstID);

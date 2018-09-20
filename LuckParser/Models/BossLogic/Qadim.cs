@@ -27,14 +27,18 @@ namespace LuckParser.Models
                             Tuple.Create(-21504,-21504,24576,24576),
                             Tuple.Create(13440,14336,15360,16256));
         }
-        
-        public override List<ParseEnum.TrashIDS> GetAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>();
-            return ids;
+            return new List<ParseEnum.TrashIDS>();
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        {
+            
+        }
+
+        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
 
         }

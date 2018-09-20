@@ -16,7 +16,6 @@ namespace LuckParser.Models.ParseModels
 
         public int Health { get; set; } = -1;
         public List<Point> HealthOverTime { get; set; } = new List<Point>();
-        public readonly List<Mob> TrashMobs = new List<Mob>();
 
         public void AddCustomCastLog(CastLog cl, ParsedLog log)
         {
@@ -48,14 +47,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
-            List<ParseEnum.TrashIDS> ids = log.FightData.Logic.GetAdditionalBossData(CombatReplay, GetCastLogs(log, 0, log.FightData.FightDuration), log);
-            List<AgentItem> aList = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
-            foreach (AgentItem a in aList)
-            {
-                Mob mob = new Mob(a);
-                mob.InitCombatReplay(log, pollingRate, true, false);
-                TrashMobs.Add(mob);
-            }
+            log.FightData.Logic.ComputeAdditionalBossData(CombatReplay, GetCastLogs(log, 0, log.FightData.FightDuration), log);
         }
 
         protected override void SetCombatReplayIcon(ParsedLog log)

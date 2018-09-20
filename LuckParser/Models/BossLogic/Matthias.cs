@@ -100,17 +100,21 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        {
+            return new List<ParseEnum.TrashIDS>
+            {
+                ParseEnum.TrashIDS.Storm,
+                ParseEnum.TrashIDS.Spirit,
+                ParseEnum.TrashIDS.Spirit2,
+                ParseEnum.TrashIDS.IcePatch,
+                ParseEnum.TrashIDS.Tornado
+            };
+        }
+
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: needs facing information for hadouken
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
-                    {
-                        ParseEnum.TrashIDS.Spirit,
-                        ParseEnum.TrashIDS.Spirit2,
-                        ParseEnum.TrashIDS.IcePatch,
-                        ParseEnum.TrashIDS.Tornado,
-                        ParseEnum.TrashIDS.Storm
-                    };
             List<CastLog> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
             List<int> humanShieldRemoval = log.GetBoonData(34518).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(x.Time - log.FightData.FightStart)).Distinct().ToList();
             for (var i = 0; i < humanShield.Count; i++)
@@ -148,10 +152,9 @@ namespace LuckParser.Models
                 replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                 replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
             }
-            return ids;
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // Corruption
             List<CombatItem> corruptedMatthias = GetFilteredList(log, 34416, p.InstID);

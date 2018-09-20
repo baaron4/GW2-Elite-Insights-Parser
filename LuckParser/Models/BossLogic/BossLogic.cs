@@ -19,6 +19,7 @@ namespace LuckParser.Models
         public bool CanCombatReplay { get; set; } = false;
         public string Extension { get; protected set; } = "boss";
         public string IconUrl { get; protected set; } = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
+        public List<Mob> TrashMobs { get; } = new List<Mob>();
 
         protected virtual CombatReplayMap GetCombatMapInternal()
         {
@@ -50,10 +51,13 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public virtual List<ParseEnum.TrashIDS> GetAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public virtual void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>();
-            return ids;
+        }
+
+        protected virtual List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        {
+            return new List<ParseEnum.TrashIDS>();
         }
 
         public virtual int IsCM(ParsedLog log)
@@ -61,8 +65,20 @@ namespace LuckParser.Models
             return -1;
         }
 
-        public virtual void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public virtual void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
+        }
+
+        public void ComputeTrashMobsData(ParsedLog log, int pollingRate)
+        {
+            List<ParseEnum.TrashIDS> ids = GetTrashMobsIDS();
+            List<AgentItem> aList = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
+            foreach (AgentItem a in aList)
+            {
+                Mob mob = new Mob(a);
+                mob.InitCombatReplay(log, pollingRate, true, false);
+                TrashMobs.Add(mob);
+            }
         }
 
         protected void SetSuccessByDeath(ParsedLog log)

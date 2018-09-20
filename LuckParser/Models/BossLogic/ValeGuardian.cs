@@ -112,21 +112,24 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashIDS>
             {
                ParseEnum.TrashIDS.Seekers,
                ParseEnum.TrashIDS.BlueGuardian,
                ParseEnum.TrashIDS.GreenGuardian,
                ParseEnum.TrashIDS.RedGuardian
             };
+        }
+
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        {
             List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
             foreach (CastLog c in magicStorms)
             {
                 replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
             }
-            return ids;
         }
 
         public override string GetReplayIcon()

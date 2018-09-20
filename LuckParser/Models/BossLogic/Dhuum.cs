@@ -116,15 +116,19 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            // TODO: facing information (pull thingy)
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
-                    {
-                        ParseEnum.TrashIDS.Echo,
-                        ParseEnum.TrashIDS.Enforcer,
-                        ParseEnum.TrashIDS.Messenger
-                    };
+            return new List<ParseEnum.TrashIDS>
+            {
+                ParseEnum.TrashIDS.Echo,
+                ParseEnum.TrashIDS.Enforcer,
+                ParseEnum.TrashIDS.Messenger
+            };
+        }
+
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        {
+            // TODO: correct position
             List<CastLog> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
             CastLog majorSplit = cls.Find(x => x.SkillId == 47396);
             foreach (CastLog c in deathmark)
@@ -174,10 +178,9 @@ namespace LuckParser.Models
                 int end = (int)log.FightData.FightDuration;
                 replay.Actors.Add(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
             }
-            return ids;
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // spirit transform
             List<CombatItem> spiritTransform = log.GetBoonData(46950).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();

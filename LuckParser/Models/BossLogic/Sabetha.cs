@@ -101,22 +101,20 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            // TODO:facing information (flame wall)
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
-                    {
-                        ParseEnum.TrashIDS.Kernan,
-                        ParseEnum.TrashIDS.Knuckles,
-                        ParseEnum.TrashIDS.Karde,
-                        ParseEnum.TrashIDS.BanditSapper,
-                        ParseEnum.TrashIDS.BanditThug,
-                        ParseEnum.TrashIDS.BanditArsonist
-                    };
-            return ids;
+            return new List<ParseEnum.TrashIDS>
+            {
+                ParseEnum.TrashIDS.Kernan,
+                ParseEnum.TrashIDS.Knuckles,
+                ParseEnum.TrashIDS.Karde,
+                ParseEnum.TrashIDS.BanditSapper,
+                ParseEnum.TrashIDS.BanditThug,
+                ParseEnum.TrashIDS.BanditArsonist
+            };
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // timed bombs
             List<CombatItem> timedBombs = log.GetBoonData(31485).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();

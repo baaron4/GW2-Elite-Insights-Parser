@@ -40,16 +40,20 @@ namespace LuckParser.Models
                             Tuple.Create(2688, 11906, 3712, 14210));
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            // TODO:facing information (breath)
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashIDS>
             {
                 ParseEnum.TrashIDS.Slubling1,
                 ParseEnum.TrashIDS.Slubling2,
                 ParseEnum.TrashIDS.Slubling3,
                 ParseEnum.TrashIDS.Slubling4
             };
+        }
+
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        {
+            // TODO:facing information (breath)
             List<CastLog> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
             foreach (CastLog c in sleepy)
             {
@@ -72,10 +76,9 @@ namespace LuckParser.Models
                 replay.Actors.Add(new CircleActor(false, 0, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
                 replay.Actors.Add(new CircleActor(true, end, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
             }
-            return ids;
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // Poison
             List<CombatItem> poisonToDrop = GetFilteredList(log, 34387, p.InstID);

@@ -81,10 +81,9 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            // TODO: needs facing information for hadouken
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
+            return new List<ParseEnum.TrashIDS>
             {
                 ParseEnum.TrashIDS.WhiteMantleSeeker1,
                 ParseEnum.TrashIDS.WhiteMantleSeeker2,
@@ -92,12 +91,16 @@ namespace LuckParser.Models
                 ParseEnum.TrashIDS.WhiteMantleBattleMage,
                 ParseEnum.TrashIDS.ExquisiteConjunction
             };
+        }
+
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        {
+            // TODO: needs facing information for hadouken
             List<CastLog> summon = cls.Where(x => x.SkillId == 34887).ToList();
             foreach (CastLog c in summon)
             {
                 replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
             }
-            return ids;
         }
 
         public override string GetReplayIcon()
