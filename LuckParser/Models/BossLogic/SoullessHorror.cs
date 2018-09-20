@@ -70,7 +70,7 @@ namespace LuckParser.Models
                 {
                     replay.Actors.Add(new CircleActor(false, 0, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", prev,next,start));
                     replay.Actors.Add(new CircleActor(true, end, 380, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)", prev, next, start));
-                    replay.Actors.Add(new DoughnutActor(0, 380,760, new Tuple<int, int>(end, end+1000), "rgba(255, 150, 0, 0.5)", prev, next, start));
+                    replay.Actors.Add(new DoughnutActor(true, 0, 380,760, new Tuple<int, int>(end, end+1000), "rgba(255, 150, 0, 0.5)", prev, next, start));
                 }
             }
             List<CastLog> deathBloom = cls.Where(x => x.SkillId == 48500).ToList();

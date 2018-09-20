@@ -392,8 +392,8 @@ class CircleMechanicDrawable extends MechanicDrawable {
 class DoughnutMechanicDrawable extends MechanicDrawable {
     constructor(start, end, fill, growing, color, innerRadius, outerRadius, pos) {
         super(start, end, fill, growing, color);
-        this.radius = inch * 0.5 * (innerRadius + outerRadius);
-        this.width = inch * (outerRadius - innerRadius);
+        this.outerRadius = inch * outerRadius;
+        this.innerRadius = inch * innerRadius;
         this.pos = pos;
     }
 
@@ -404,10 +404,17 @@ class DoughnutMechanicDrawable extends MechanicDrawable {
         }
         const percent = this.getPercent(currentTime);
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, this.radius, 0, 2 * Math.PI);
-        ctx.lineWidth = (percent * this.width).toString();
-        ctx.strokeStyle = this.color;
-        ctx.stroke();
+        ctx.arc(pos.x, pos.y, this.innerRadius + percent * (this.outerRadius - this.innerRadius), 2 * Math.PI, 0, false);
+        ctx.arc(pos.x, pos.y, this.innerRadius, 0, 2 * Math.PI, true);
+        ctx.closePath();
+		if (this.fill) {
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        } else {
+            ctx.lineWidth = '2';
+            ctx.strokeStyle = this.color;
+            ctx.stroke();
+        }
     }
 }
 

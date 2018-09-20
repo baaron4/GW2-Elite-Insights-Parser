@@ -491,14 +491,14 @@ namespace LuckParser.Models.ParseModels
             CastLog curCastLog = null;
             foreach (CombatItem c in log.GetCastData(Agent.InstID))
             {
-                if (!(c.Time > log.FightData.FightStart && c.Time < log.FightData.FightEnd))
+                if (!(c.Time > log.FightData.FightStart))
                 {
                     continue;
                 }
                 ParseEnum.StateChange state = c.IsStateChange;
                 if (state == ParseEnum.StateChange.Normal)
                 {
-                    if (c.IsActivation.IsCasting())
+                    if (c.IsActivation.IsCasting() && c.Time < log.FightData.FightEnd)
                     {
                         long time = c.Time - timeStart;
                         curCastLog = new CastLog(time, c.SkillID, c.Value, c.IsActivation);

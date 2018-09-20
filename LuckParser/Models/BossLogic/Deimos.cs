@@ -66,6 +66,7 @@ namespace LuckParser.Models
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = "Phase " + i;
+                if (i == 2) phases[i].DrawArea = true;
             }
             int offsetDei = phases.Count;
             CombatItem teleport = log.GetBoonData(38169).FirstOrDefault();
@@ -92,6 +93,7 @@ namespace LuckParser.Models
             {
                 PhaseData phase = phases[i];
                 phase.Name = namesDeiSplit[i - offsetDei];
+                phase.DrawArea = true;
                 List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
                     {
                         ParseEnum.TrashIDS.Thief,
@@ -113,6 +115,11 @@ namespace LuckParser.Models
 
             }
             phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
+            foreach (PhaseData phase in phases)
+            {
+                phase.DrawStart = true;
+                phase.DrawEnd = true;
+            }
             return phases;
         }
 
@@ -128,7 +135,9 @@ namespace LuckParser.Models
                         ParseEnum.TrashIDS.GamblerClones,
                         ParseEnum.TrashIDS.GamblerReal,
                         ParseEnum.TrashIDS.Greed,
-                        ParseEnum.TrashIDS.Pride
+                        ParseEnum.TrashIDS.Pride,
+                        ParseEnum.TrashIDS.Oil,
+                        ParseEnum.TrashIDS.Tear
                     };
             List<CastLog> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
             foreach (CastLog c in mindCrush)

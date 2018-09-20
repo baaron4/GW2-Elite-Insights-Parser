@@ -24,7 +24,7 @@ namespace LuckParser.Models
             new Mechanic(35162, "Shifting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-ne-open',color:'rgb(255,200,0)',", "Btn2","Bending Chaos (Stood on 2nd Button)", "Button 2",0),
             new Mechanic(35032, "Twisting Chaos", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'triangle-nw-open',color:'rgb(255,200,0)',", "Btn3","Bending Chaos (Stood on 3rd Button)", "Button 3",0),
             new Mechanic(34956, "Intervention", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'square',color:'rgb(0,0,255)',", "Shld","Intervention (got Special Action Key)", "Shield",0),
-            new Mechanic(34921, "Gravity Well", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Xera, "symbol:'circle-x-open',color:'rgb(255,0,255)',", "GrWell","Half-platform Gravity Well", "Gravity Well",4000),
+            new Mechanic(34921, "Gravity Well", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'circle-x-open',color:'rgb(255,0,255)',", "GrWell","Half-platform Gravity Well", "Gravity Well",4000),
             new Mechanic(34997, "Teleport Out", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(0,128,0)',", "TP.Out","Teleport Out (Teleport to Platform)","TP",0),
             new Mechanic(35076, "Hero's Return", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'circle',color:'rgb(0,200,0)',", "TP.Back","Hero's Return (Teleport back)", "TP back",0),
             /*new Mechanic(35000, "Intervention", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Xera, "symbol:'hourglass',color:'rgb(128,0,128)',", "Bubble",0),*/
@@ -69,6 +69,10 @@ namespace LuckParser.Models
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = "Phase " + i;
+                phases[i].DrawArea = true;
+                phases[i].DrawStart = i > 1;
+                phases[i].DrawEnd = i < phases.Count - 1;
+
             }
             return phases;
         }

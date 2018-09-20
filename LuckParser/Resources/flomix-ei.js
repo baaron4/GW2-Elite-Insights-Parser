@@ -840,7 +840,8 @@ function createGraph($target, phaseData, phase, type) {
 		plot_bgcolor: 'rgba(0,0,0,0)',
 		staticPlot: true,
 		displayModeBar: false,
-		shapes: []
+		shapes: [],
+		annotations: []
 	};
 	
 	lines.push({x: xAxis, y: allPlayerDps, mode: 'lines',line: {shape: 'spline'},visible:'legendonly',name: 'All Player Dps'});
@@ -877,18 +878,32 @@ function createGraph($target, phaseData, phase, type) {
 
 
 	$.each(data.phases[phase].markupAreas, function(i, area) {
-		layout.shapes.push({
-			type: 'rect',
-			xref: 'x',
-			yref: 'paper',
-			x0: area[0],
-			y0: 0,
-			x1: area[1],
-			y1: 1,
-			fillcolor: '#808080',
-			opacity: 0.125,
-			line: { width: 0 }
-		});
+		if (area.label) {
+			layout.annotations.push({
+				x: (area.end+area.start)/2,
+				y: 1,
+				xref: 'x',
+				yref: 'paper',
+				xanchor: 'center',
+				yanchor: 'bottom',
+				text: area.label+'<br>'+'('+Math.round(area.end-area.start)+' s)',
+				showarrow: false
+			});
+		}
+		if (area.highlight) {
+			layout.shapes.push({
+				type: 'rect',
+				xref: 'x',
+				yref: 'paper',
+				x0: area.start,
+				y0: 0,
+				x1: area.end,
+				y1: 1,
+				fillcolor: '#808080',
+				opacity: 0.125,
+				line: { width: 0 }
+			});
+		}
 	});
 
 	$.each(data.phases[phase].markupLines, function(i, x) {

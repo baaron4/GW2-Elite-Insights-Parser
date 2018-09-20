@@ -90,6 +90,7 @@ namespace LuckParser.Models
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = namesMat[i - 1];
+                phases[i].DrawStart = i > 1;
             }
             return phases;
         }

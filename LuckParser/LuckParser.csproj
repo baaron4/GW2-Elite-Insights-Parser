@@ -103,6 +103,9 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\BossLogic\BossLogic.cs" />
+    <Compile Include="Models\BossLogic\Qadim.cs" />
+    <Compile Include="Models\BossLogic\NikareKenut.cs" />
+    <Compile Include="Models\BossLogic\ConjuredAmalgamate.cs" />
     <Compile Include="Models\BossLogic\Dhuum.cs" />
     <Compile Include="Models\BossLogic\Ensolyss.cs" />
     <Compile Include="Models\BossLogic\Artsariiv.cs" />
@@ -130,6 +133,7 @@
     <Compile Include="Models\DataModels\ParsedLog.cs" />
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
     <Compile Include="Models\DataModels\Statistics.cs" />
+    <Compile Include="Models\HtmlModels\AreaLabelDto.cs" />
     <Compile Include="Models\HtmlModels\FoodDto.cs" />
     <Compile Include="Models\HtmlModels\DmgDistributionDto.cs" />
     <Compile Include="Models\HtmlModels\PhaseChartDataDto.cs" />
