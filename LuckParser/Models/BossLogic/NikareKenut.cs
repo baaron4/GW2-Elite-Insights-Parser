@@ -24,7 +24,7 @@ namespace LuckParser.Models
             });
             CanCombatReplay = false;
             Extension = "nk";
-            IconUrl = "";
+            IconUrl = "https://i.imgur.com/6O5MT7v.png";
         }
 
         public override CombatReplayMap GetCombatMap()
@@ -54,7 +54,7 @@ namespace LuckParser.Models
 
         public override string GetReplayIcon()
         {
-            return "";
+            return "https://i.imgur.com/6yq45Cc.png";
         }
     }
 }

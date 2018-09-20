@@ -22,7 +22,7 @@ namespace LuckParser.Models
             });
             CanCombatReplay = false;
             Extension = "qadim";
-            IconUrl = "";
+            IconUrl = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
         }
 
         public override CombatReplayMap GetCombatMap()
@@ -52,7 +52,9 @@ namespace LuckParser.Models
 
         public override string GetReplayIcon()
         {
-            return "https://i.imgur.com/vZdX57N";
+            return "https://i.imgur.com/IfoHTHT.png";
+            // For legendary adds: https://imgur.com/YABLiBz https://imgur.com/0LGKCn2 https://imgur.com/kLKLSfv https://imgur.com/vjjNSpI
+            // Zommoros: https://imgur.com/BxbsRCI
         }
     }
 }
