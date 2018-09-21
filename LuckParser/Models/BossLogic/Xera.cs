@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Xera : RaidLogic
     {
-        public Xera()
+        public Xera(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

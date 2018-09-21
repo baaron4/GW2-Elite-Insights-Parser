@@ -7,7 +7,7 @@ namespace LuckParser.Models
 {
     public class Golem : BossLogic
     {
-        public Golem(ushort id)
+        public Golem(ushort id) : base(id)
         {
             Mode = ParseMode.Golem;  
             switch (id)

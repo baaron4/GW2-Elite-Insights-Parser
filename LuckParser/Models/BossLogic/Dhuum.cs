@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Dhuum : RaidLogic
     {
-        public Dhuum()
+        public Dhuum(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

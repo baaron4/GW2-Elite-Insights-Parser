@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Sabetha : RaidLogic
     {
-        public Sabetha()
+        public Sabetha(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

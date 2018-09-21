@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Cairn : RaidLogic
     {
-        public Cairn()
+        public Cairn(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

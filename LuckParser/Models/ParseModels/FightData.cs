@@ -39,61 +39,61 @@ namespace LuckParser.Models.ParseModels
             switch (ParseEnum.GetBossIDS(id))
             {
                 case ParseEnum.BossIDS.ValeGuardian:
-                    Logic = new ValeGuardian();
+                    Logic = new ValeGuardian(id);
                     break;
                 case ParseEnum.BossIDS.Gorseval:
-                    Logic = new Gorseval();
+                    Logic = new Gorseval(id);
                     break;
                 case ParseEnum.BossIDS.Sabetha:
-                    Logic = new Sabetha();
+                    Logic = new Sabetha(id);
                     break;
                 case ParseEnum.BossIDS.Slothasor:
-                    Logic = new Slothasor();
+                    Logic = new Slothasor(id);
                     break;
                 case ParseEnum.BossIDS.Matthias:
-                    Logic = new Matthias();
+                    Logic = new Matthias(id);
                     break;
                 case ParseEnum.BossIDS.KeepConstruct:
-                    Logic = new KeepConstruct();
+                    Logic = new KeepConstruct(id);
                     break;
                 case ParseEnum.BossIDS.Xera:
-                    Logic = new Xera();
+                    Logic = new Xera(id);
                     break;
                 case ParseEnum.BossIDS.Cairn:
-                    Logic = new Cairn();
+                    Logic = new Cairn(id);
                     break;
                 case ParseEnum.BossIDS.MursaatOverseer:
-                    Logic = new MursaatOverseer();
+                    Logic = new MursaatOverseer(id);
                     break;
                 case ParseEnum.BossIDS.Samarog:
-                    Logic = new Samarog();
+                    Logic = new Samarog(id);
                     break;
                 case ParseEnum.BossIDS.Deimos:
-                    Logic = new Deimos();
+                    Logic = new Deimos(id);
                     break;
                 case ParseEnum.BossIDS.SoullessHorror:
-                    Logic = new SoullessHorror();
+                    Logic = new SoullessHorror(id);
                     break;
                 case ParseEnum.BossIDS.Dhuum:
-                    Logic = new Dhuum();
+                    Logic = new Dhuum(id);
                     break;
                 case ParseEnum.BossIDS.MAMA:
-                    Logic = new MAMA();
+                    Logic = new MAMA(id);
                     break;
                 case ParseEnum.BossIDS.Siax:
-                    Logic = new Siax();
+                    Logic = new Siax(id);
                     break;
                 case ParseEnum.BossIDS.Ensolyss:
-                    Logic = new Ensolyss();
+                    Logic = new Ensolyss(id);
                     break;
                 case ParseEnum.BossIDS.Skorvald:
-                    Logic = new Skorvald();
+                    Logic = new Skorvald(id);
                     break;
                 case ParseEnum.BossIDS.Artsariiv:
-                    Logic = new Artsariiv();
+                    Logic = new Artsariiv(id);
                     break;
                 case ParseEnum.BossIDS.Arkk:
-                    Logic = new Arkk();
+                    Logic = new Arkk(id);
                     break;
                 case ParseEnum.BossIDS.MassiveGolem:
                 case ParseEnum.BossIDS.AvgGolem:
@@ -104,7 +104,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 default:
                     // Unknown
-                    Logic = new BossLogic();
+                    Logic = new BossLogic(id);
                     break;
             }
         }

@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class NikareKenut : RaidLogic
     {
-        public NikareKenut()
+        public NikareKenut(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Deimos : RaidLogic
     {
-        public Deimos()
+        public Deimos(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

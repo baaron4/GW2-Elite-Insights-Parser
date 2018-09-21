@@ -7,7 +7,7 @@ namespace LuckParser.Models
 {
     public class Ensolyss : FractalLogic
     {
-        public Ensolyss()
+        public Ensolyss(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

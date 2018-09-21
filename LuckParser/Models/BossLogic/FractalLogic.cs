@@ -9,7 +9,7 @@ namespace LuckParser.Models
 {
     public abstract class FractalLogic : BossLogic
     {
-        protected FractalLogic()
+        protected FractalLogic(ushort triggerID) : base (triggerID)
         { 
             Mode = ParseMode.Fractal;
             CanCombatReplay = true;

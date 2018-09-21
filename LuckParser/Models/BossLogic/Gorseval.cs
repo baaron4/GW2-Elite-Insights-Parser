@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Gorseval : RaidLogic
     {
-        public Gorseval()
+        public Gorseval(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

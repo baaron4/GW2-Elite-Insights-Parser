@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Samarog : RaidLogic
     {
-        public Samarog()
+        public Samarog(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

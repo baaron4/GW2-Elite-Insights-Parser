@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Qadim : RaidLogic
     {
-        public Qadim()
+        public Qadim(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {

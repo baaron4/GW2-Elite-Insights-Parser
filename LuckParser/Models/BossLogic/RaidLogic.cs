@@ -10,7 +10,7 @@ namespace LuckParser.Models
 {
     public abstract class RaidLogic : BossLogic
     {
-        protected RaidLogic()
+        protected RaidLogic(ushort triggerID) : base(triggerID)
         {
             Mode = ParseMode.Raid;
             CanCombatReplay = true;
