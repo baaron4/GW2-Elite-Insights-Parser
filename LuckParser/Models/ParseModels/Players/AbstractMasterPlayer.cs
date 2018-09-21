@@ -134,7 +134,7 @@ namespace LuckParser.Models.ParseModels
             };
             // Fill in Boon Map
             long timeStart = log.FightData.FightStart;
-            HashSet<long> IntensityIds = new HashSet<long> (Boon.BoonsByType[Boon.BoonType.Intensity].Select(x => x.ID));
+            HashSet<long> OneCapacityIds = new HashSet<long> (Boon.BoonsByCapacity[1].Select(x => x.ID));
             foreach (CombatItem c in log.GetBoonDataByDst(Agent.InstID))
             {
                 long boonId = c.SkillID;
@@ -144,7 +144,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 long time = c.Time - timeStart;
                 List<BoonLog> loglist = boonMap[boonId];
-                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (log.IsBenchmarkMode() || !IntensityIds.Contains(boonId)))
+                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && !OneCapacityIds.Contains(boonId))
                 {
                     ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
                     loglist.Add(new BoonApplicationLog(0, src, int.MaxValue));

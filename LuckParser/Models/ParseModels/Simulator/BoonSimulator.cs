@@ -135,7 +135,7 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.BuffRemove.All:
                     foreach (BoonStackItem stackItem in BoonStack)
                     {
-                        OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BoonDuration, start));
+                        OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BuffInitial? start : stackItem.BoonDuration, start));
                     }
                     BoonStack.Clear();
                     break;
@@ -173,7 +173,7 @@ namespace LuckParser.Models.ParseModels
             for (int i = 0; i < BoonStack.Count; i++)
             {
                 BoonStackItem stackItem = BoonStack[i];
-                if (boonDuration == stackItem.BoonDuration)
+                if (!stackItem.BuffInitial && boonDuration == stackItem.BoonDuration)
                 {
                     OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BoonDuration, start));
                     BoonStack.RemoveAt(i);

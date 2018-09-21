@@ -546,6 +546,7 @@ namespace LuckParser.Models.ParseModels
         public static Dictionary<BoonEnum, List<Boon>> BoonsByNature= _allBoons.GroupBy(x => x.Nature).ToDictionary(x => x.Key, x => x.ToList());
         public static Dictionary<BoonSource, List<Boon>> BoonsBySource = _allBoons.GroupBy(x => x.Source).ToDictionary(x => x.Key, x => x.ToList());
         public static Dictionary<BoonType, List<Boon>> BoonsByType = _allBoons.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
+        public static Dictionary<int, List<Boon>> BoonsByCapacity = _allBoons.GroupBy(x => x.Capacity).ToDictionary(x => x.Key, x => x.ToList());
 
         public static bool RemovePermission(long boonid, ParseEnum.BuffRemove buffremove, ParseEnum.IFF iff, ushort removedBy, ushort removedFrom)
         {
