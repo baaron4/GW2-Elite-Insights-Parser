@@ -70,12 +70,7 @@ namespace LuckParser.Controllers
             if (switches.CalculateConditions) CalculateConditions();
             if (switches.CalculateMechanics)
             {
-                log.Boss.AddMechanics(log);
-                foreach (Player p in log.PlayerList)
-                {
-                    p.AddMechanics(log);
-                }
-                log.MechanicData.ComputePresentMechanics(log);
+                log.FightData.Logic.ComputeMechanics(log);
             }
             // boss health
             int seconds = (int)_statistics.Phases[0].GetDuration("s");

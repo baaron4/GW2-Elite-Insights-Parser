@@ -261,10 +261,5 @@ namespace LuckParser.Models.ParseModels
         {
             return (InstID + "_" + CombatReplay.TimeOffsets.Item1 + "_" + CombatReplay.TimeOffsets.Item2).GetHashCode();
         }
-
-        public void AddMechanics(ParsedLog log)
-        {
-            // nothing to do, trash mob mechanics should be managed by the boss
-        }
     }
 }
