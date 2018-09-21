@@ -181,7 +181,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 }
             }
-            if (!found)
+            if (!found && _simulationHasBuffInitial)
             {
                 for (int i = 0; i < BoonStack.Count; i++)
                 {
@@ -190,6 +190,7 @@ namespace LuckParser.Models.ParseModels
                     {
                         OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, start, start));
                         BoonStack.RemoveAt(i);
+                        _simulationHasBuffInitial = BoonStack.Exists(x => x.BuffInitial == true);
                         break;
                     }
                 }
