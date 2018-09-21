@@ -66,6 +66,10 @@ namespace LuckParser.Models.ParseModels
                 {
                     data.SetEnd(fightDuration);
                 }
+                else
+                {
+                    break;
+                }
             }
             GenerationSimulation.RemoveAll(x => x.GetTotalDuration() <= 0);
         }
