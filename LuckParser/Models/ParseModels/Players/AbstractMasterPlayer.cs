@@ -135,6 +135,7 @@ namespace LuckParser.Models.ParseModels
             // Fill in Boon Map
             long timeStart = log.FightData.FightStart;
             HashSet<long> OneCapacityIds = new HashSet<long> (Boon.BoonsByCapacity[1].Select(x => x.ID));
+            bool needCustomRemove = true;
             foreach (CombatItem c in log.GetBoonDataByDst(Agent.InstID))
             {
                 long boonId = c.SkillID;
@@ -144,17 +145,18 @@ namespace LuckParser.Models.ParseModels
                 }
                 long time = c.Time - timeStart;
                 List<BoonLog> loglist = boonMap[boonId];
-                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && !OneCapacityIds.Contains(boonId))
+                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (!OneCapacityIds.Contains(boonId) || c.Value > 0))
                 {
                     ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                    loglist.Add(new BoonApplicationLog(0, src, int.MaxValue));
+                    needCustomRemove = needCustomRemove && c.Value == 0;
+                    loglist.Add(new BoonApplicationLog(0, src, c.Value > 0 ? Math.Min(c.Value, int.MaxValue - 1) : int.MaxValue));
                 }
                 else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= 0 && time < log.FightData.FightDuration)
                 {
                     if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
                         ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                        if (c.OverstackValue > 0)
+                        if (c.OverstackValue > 0 && needCustomRemove)
                         {
                             loglist.Add(new BoonRemovalLog(time, src, c.OverstackValue, ParseEnum.BuffRemove.Custom));
                         }
@@ -162,6 +164,10 @@ namespace LuckParser.Models.ParseModels
                     }
                     else if (time < log.FightData.FightDuration - 50)
                     {
+                        if (!needCustomRemove && c.Value == 0)
+                        {
+                            continue;
+                        }
                         loglist.Add(new BoonRemovalLog(time, c.DstInstid, c.Value, c.IsBuffRemove));
                     }
                 }
