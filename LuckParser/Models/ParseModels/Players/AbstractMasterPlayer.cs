@@ -145,7 +145,7 @@ namespace LuckParser.Models.ParseModels
                 }
                 long time = c.Time - timeStart;
                 List<BoonLog> loglist = boonMap[boonId];
-                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (!OneCapacityIds.Contains(boonId) || c.Value > 0))
+                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (OneCapacityIds.Contains(boonId) || c.Value > 0))
                 {
                     ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
                     needCustomRemove = needCustomRemove && c.Value == 0;
