@@ -1070,7 +1070,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.Boss.InstID : 0, _log, phase.Start, phase.End);
+                damageLogs = p.GetJustPlayerDamageLogs((ushort)(toBoss ? _log.Boss.InstID : 0), _log, phase.Start, phase.End);
             }
             int totalDamage = toBoss ? dps.BossDamage : dps.AllDamage;
             dto.totalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
@@ -1123,7 +1123,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damageLogs = minions.GetDamageLogs(toBoss ? _log.Boss.InstID : 0, _log, phase.Start, phase.End);
+                damageLogs = minions.GetDamageLogs((ushort)(toBoss ? _log.Boss.InstID : 0), _log, phase.Start, phase.End);
             }
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             if (totalDamage > 0)
