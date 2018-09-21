@@ -135,7 +135,7 @@ namespace LuckParser.Models.ParseModels
             // Fill in Boon Map
             long timeStart = log.FightData.FightStart;
             long agentStart = Math.Max(FirstAware - log.FightData.FightStart,0);
-            long agentEnd = Math.Min(FirstAware - log.FightData.FightStart, log.FightData.FightDuration);
+            long agentEnd = Math.Min(LastAware - log.FightData.FightStart, log.FightData.FightDuration);
             HashSet<long> tableIds = new HashSet<long> (boonIds);
             tableIds.UnionWith(condiIds);
             tableIds.UnionWith(offIds);
@@ -244,7 +244,7 @@ namespace LuckParser.Models.ParseModels
         private void SetMovements(ParsedLog log)
         {
             long agentStart = Math.Max(FirstAware - log.FightData.FightStart, 0);
-            long agentEnd = Math.Min(FirstAware - log.FightData.FightStart, log.FightData.FightDuration);
+            long agentEnd = Math.Min(LastAware - log.FightData.FightStart, log.FightData.FightDuration);
             foreach (CombatItem c in log.GetMovementData(AgentItem.InstID))
             {
                 long time = c.Time - log.FightData.FightStart;
@@ -279,7 +279,7 @@ namespace LuckParser.Models.ParseModels
                     _boonExtra[boonid] = new Dictionary<int, string[]>();
                     for (int i = 0; i < phases.Count; i++)
                     {
-                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].Start, phases[i].End);
+                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs((AbstractPlayer)null, log, phases[i].Start, phases[i].End);
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.Damage), 1);
                         int totalBossDamage = Math.Max(dmLogs.Where(x => x.DstInstId == log.Boss.InstID).Sum(x => x.Damage), 1);
                         List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && x.IsCondi == 0).ToList();
@@ -300,7 +300,7 @@ namespace LuckParser.Models.ParseModels
                     _boonExtra[boonid] = new Dictionary<int, string[]>();
                     for (int i = 0; i < phases.Count; i++)
                     {
-                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].Start, phases[i].End);
+                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs((AbstractPlayer)null, log, phases[i].Start, phases[i].End);
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.Damage), 1);
                         int totalBossDamage = Math.Max(dmLogs.Where(x => x.DstInstId == log.Boss.InstID).Sum(x => x.Damage), 1);
                         int effectCount = dmLogs.Count(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && x.IsCondi == 0);
@@ -321,7 +321,7 @@ namespace LuckParser.Models.ParseModels
                     _boonExtra[boonid] = new Dictionary<int, string[]>();
                     for (int i = 0; i < phases.Count; i++)
                     {
-                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs(0, log, phases[i].Start, phases[i].End);
+                        List<DamageLog> dmLogs = GetJustPlayerDamageLogs((AbstractPlayer)null, log, phases[i].Start, phases[i].End);
                         int totalDamage = Math.Max(dmLogs.Sum(x => x.Damage), 1);
                         int totalBossDamage = Math.Max(dmLogs.Where(x => x.DstInstId == log.Boss.InstID).Sum(x => x.Damage), 1);
                         List<DamageLog> effect = dmLogs.Where(x => buffSimulationGeneration.GetStackCount((int)x.Time) > 0 && x.IsCondi == 0).ToList();
@@ -542,7 +542,7 @@ namespace LuckParser.Models.ParseModels
             }
             foreach (KeyValuePair<string, Minions> pair in auxMinions)
             {
-                if (pair.Value.GetDamageLogs(0, log, 0, log.FightData.FightDuration).Count > 0)
+                if (pair.Value.GetDamageLogs((AbstractPlayer)null, log, 0, log.FightData.FightDuration).Count > 0)
                 {
                     _minions[pair.Key] = pair.Value;
                 }
@@ -564,7 +564,7 @@ namespace LuckParser.Models.ParseModels
             Dictionary<string, Minions> minionsList = GetMinions(log);
             foreach (Minions mins in minionsList.Values)
             {
-                DamageLogs.AddRange(mins.GetDamageLogs(0, log, 0, log.FightData.FightDuration));
+                DamageLogs.AddRange(mins.GetDamageLogs((AbstractPlayer)null, log, 0, log.FightData.FightDuration));
             }
             DamageLogs.Sort((x, y) => x.Time < y.Time ? -1 : 1);
         }

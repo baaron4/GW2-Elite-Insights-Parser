@@ -33,16 +33,18 @@ namespace LuckParser.Models.ParseModels
             AgentItem = agent;
         }
         // Getters
-        public List<DamageLog> GetDamageLogs(ushort dstFilter, ParsedLog log, long start, long end)
+        public List<DamageLog> GetDamageLogs(AbstractPlayer target, ParsedLog log, long start, long end)
         {
             if (DamageLogs.Count == 0)
             {
                 SetDamageLogs(log);
                 DamageLogsByDst = DamageLogs.GroupBy(x => x.DstInstId).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (DamageLogsByDst.TryGetValue(dstFilter, out var list))
+            if (target != null && DamageLogsByDst.TryGetValue(target.InstID, out var list))
             {
-                return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                long targetStart = target.FirstAware - log.FightData.FightStart;
+                long targetEnd = target.LastAware - log.FightData.FightStart;
+                return list.Where(x => x.Time >= start && x.Time > targetStart && x.Time <= end && x.Time < targetEnd).ToList();
             }
             return DamageLogs.Where( x => x.Time >= start && x.Time <= end).ToList();
         }
@@ -50,9 +52,9 @@ namespace LuckParser.Models.ParseModels
         {
             if (redirection.Count == 0)
             {
-                return GetDamageLogs(log.Boss.InstID, log, start, end);
+                return GetDamageLogs(log.Boss, log, start, end);
             }
-            List<DamageLog> dls = GetDamageLogs(0, log, start, end);
+            List<DamageLog> dls = GetDamageLogs((AbstractPlayer)null, log, start, end);
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
             {
@@ -104,18 +106,18 @@ namespace LuckParser.Models.ParseModels
             return CastLogs.Where(x => x.Time + x.ActualDuration >= start && x.Time <= end).ToList();
 
         }
-        public List<DamageLog> GetJustPlayerDamageLogs(ushort instidFilter, ParsedLog log, long start, long end)
+        public List<DamageLog> GetJustPlayerDamageLogs(AbstractPlayer target, ParsedLog log, long start, long end)
         {
-            return GetDamageLogs(instidFilter, log, start, end).Where(x => x.SrcInstId == AgentItem.InstID).ToList();
+            return GetDamageLogs(target, log, start, end).Where(x => x.SrcInstId == AgentItem.InstID).ToList();
         }
 
         public List<DamageLog> GetJustPlayerDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
         {
             if (redirection.Count == 0)
             {
-                return GetJustPlayerDamageLogs(log.Boss.InstID, log, start, end);
+                return GetJustPlayerDamageLogs(log.Boss, log, start, end);
             }
-            List<DamageLog> dls = GetJustPlayerDamageLogs(0, log, start, end);
+            List<DamageLog> dls = GetJustPlayerDamageLogs((AbstractPlayer)null, log, start, end);
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
             {

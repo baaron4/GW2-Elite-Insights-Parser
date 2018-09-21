@@ -119,7 +119,7 @@ namespace LuckParser.Controllers
 
             ////////// ALL
             //DPS
-            damage = player.GetDamageLogs(0, _log, phase.Start,
+            damage = player.GetDamageLogs((AbstractPlayer)null, _log, phase.Start,
                     phase.End)
                 .Sum(x => x.Damage);
             if (phaseDuration > 0)
@@ -129,7 +129,7 @@ namespace LuckParser.Controllers
             final.AllDps = (int)dps;
             final.AllDamage = (int)damage;
             //Condi DPS
-            damage = player.GetDamageLogs(0, _log, phase.Start,
+            damage = player.GetDamageLogs((AbstractPlayer)null, _log, phase.Start,
                     phase.End)
                 .Where(x => x.IsCondi > 0).Sum(x => x.Damage);
             if (phaseDuration > 0)
@@ -146,7 +146,7 @@ namespace LuckParser.Controllers
             }
             final.AllPowerDps = (int)dps;
             final.AllPowerDamage = (int)damage;
-            final.PlayerPowerDamage = player.GetJustPlayerDamageLogs(0, _log,
+            final.PlayerPowerDamage = player.GetJustPlayerDamageLogs((AbstractPlayer)null, _log,
                 phase.Start, phase.End).Where(x => x.IsCondi == 0).Sum(x => x.Damage);
             /////////// BOSS
             //DPS
@@ -156,7 +156,7 @@ namespace LuckParser.Controllers
                     phase.Start, phase.End).Sum(x => x.Damage);
             } else
             {
-                damage = player.GetDamageLogs(_log.Boss.InstID, _log,
+                damage = player.GetDamageLogs(_log.Boss, _log,
                     phase.Start, phase.End).Sum(x => x.Damage);
             }
             if (phaseDuration > 0)
@@ -173,7 +173,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damage = player.GetDamageLogs(_log.Boss.InstID, _log,
+                damage = player.GetDamageLogs(_log.Boss, _log,
                     phase.Start, phase.End).Where(x => x.IsCondi > 0).Sum(x => x.Damage);
             }
             if (phaseDuration > 0)
@@ -197,7 +197,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(_log.Boss.InstID, _log,
+                final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(_log.Boss, _log,
                     phase.Start, phase.End).Where(x => x.IsCondi == 0).Sum(x => x.Damage);
             }
 
@@ -239,7 +239,7 @@ namespace LuckParser.Controllers
                     long start = phase.Start + _log.FightData.FightStart;
                     long end = phase.End + _log.FightData.FightStart;
 
-                    List<DamageLog> damageLogs  = player.GetJustPlayerDamageLogs(0, _log, phase.Start, phase.End);
+                    List<DamageLog> damageLogs  = player.GetJustPlayerDamageLogs((AbstractPlayer)null, _log, phase.Start, phase.End);
                     List<CastLog> castLogs = player.GetCastLogs(_log, phase.Start, phase.End);
 
                     int instid = player.InstID;

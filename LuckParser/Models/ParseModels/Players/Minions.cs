@@ -23,26 +23,28 @@ namespace LuckParser.Models.ParseModels
             InstID = instid;
         }
 
-        public List<DamageLog> GetDamageLogs(ushort dstFilter, ParsedLog log, long start, long end)
+        public List<DamageLog> GetDamageLogs(AbstractPlayer target, ParsedLog log, long start, long end)
         {
             if (_damageLogs.Count == 0)
             {
                 foreach (Minion minion in this)
                 {
-                    _damageLogs.AddRange(minion.GetDamageLogs(0, log, 0, log.FightData.FightDuration));
+                    _damageLogs.AddRange(minion.GetDamageLogs((AbstractPlayer)null, log, 0, log.FightData.FightDuration));
                 }
                 _damageLogsByDst = _damageLogs.GroupBy(x => x.DstInstId).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (_damageLogsByDst.TryGetValue(dstFilter, out var list))
+            if (target != null && _damageLogsByDst.TryGetValue(target.InstID, out var list))
             {
-                return list.Where(x => x.Time >= start && x.Time <= end).ToList();
+                long targetStart = target.FirstAware - log.FightData.FightStart;
+                long targetEnd = target.LastAware - log.FightData.FightStart;
+                return list.Where(x => x.Time >= start && x.Time > targetStart && x.Time <= end && x.Time < targetEnd).ToList();
             }
             return _damageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
         public List<DamageLog> GetDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
         {
-            List<DamageLog> dls = GetDamageLogs(0, log, start, end);
+            List<DamageLog> dls = GetDamageLogs((AbstractPlayer)null, log, start, end);
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
             {
