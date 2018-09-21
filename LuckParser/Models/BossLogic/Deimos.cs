@@ -44,6 +44,36 @@ namespace LuckParser.Models
                             Tuple.Create(11774, 4480, 14078, 5376));
         }
 
+        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
+        {
+            List<AgentItem> deimosGadgets = agentData.GadgetAgentList.Where(x => x.FirstAware > boss.LastAware && x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
+            if (deimosGadgets.Count > 0)
+            {
+                AgentItem NPC = deimosGadgets.Last();
+                HashSet<ulong> deimos2Agents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
+                long oldAware = boss.LastAware;
+                fightData.PhaseData.Add(NPC.FirstAware >= oldAware ? NPC.FirstAware : oldAware);
+                foreach (CombatItem c in combatData)
+                {
+                    if (c.Time > oldAware)
+                    {
+                        if (deimos2Agents.Contains(c.SrcAgent))
+                        {
+                            c.SrcInstid = boss.InstID;
+                            c.SrcAgent = boss.Agent;
+
+                        }
+                        if (deimos2Agents.Contains(c.DstAgent))
+                        {
+                            c.DstInstid = boss.InstID;
+                            c.DstAgent = boss.Agent;
+                        }
+                    }
+
+                }
+            }
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;

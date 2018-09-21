@@ -2,6 +2,7 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace LuckParser.Models
@@ -79,6 +80,40 @@ namespace LuckParser.Models
 
             }
             return phases;
+        }
+
+        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
+        {
+            foreach (AgentItem NPC in agentData.NPCAgentList)
+            {
+                if (NPC.ID == 16286)
+                {
+                    List<Point> bossHealthOverTime = new List<Point>();//reset boss health over time
+                    int xera2Instid = NPC.InstID;
+                    boss.Health = 24085950;
+                    fightData.PhaseData.Add(NPC.FirstAware);
+                    foreach (CombatItem c in combatData)
+                    {
+                        if (c.SrcInstid == xera2Instid)
+                        {
+                            c.SrcInstid = boss.InstID;
+                            c.SrcAgent = boss.Agent;
+                        }
+                        if (c.DstInstid == xera2Instid)
+                        {
+                            c.DstInstid = boss.InstID;
+                            c.DstAgent = boss.Agent;
+                        }
+                        //set health update
+                        if (c.SrcInstid == boss.InstID && c.IsStateChange == ParseEnum.StateChange.HealthUpdate)
+                        {
+                            bossHealthOverTime.Add(new Point((int)(c.Time - fightData.FightStart), (int)c.DstAgent));
+                        }
+                    }
+                    boss.HealthOverTime = bossHealthOverTime;
+                    break;
+                }
+            }
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()

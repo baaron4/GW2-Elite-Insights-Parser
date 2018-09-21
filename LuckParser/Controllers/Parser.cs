@@ -511,20 +511,6 @@ namespace LuckParser.Controllers
             AgentItem bossAgent = _agentData.GetAgent(agent);
             _boss = new Boss(bossAgent);
             List<Point> bossHealthOverTime = new List<Point>();
-            // a hack for buggy golem logs
-            if (_fightData.Logic.Mode == BossLogic.ParseMode.Golem)
-            {
-                foreach (CombatItem c in _combatData)
-                {
-                    // redirect all attacks to the main golem
-                    if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.Normal && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None)
-                    {
-                        c.DstAgent = bossAgent.Agent;
-                        c.DstInstid = bossAgent.InstID;
-                    }
-                }
-
-            }
             // Grab values threw combat data
             foreach (CombatItem c in _combatData)
             {
@@ -562,76 +548,11 @@ namespace LuckParser.Controllers
                         break;
                 }
             }
-
-            // Dealing with second half of Xera | ((22611300 * 0.5) + (25560600 * 0.5)
-            if (_fightData.ID == 16246)
-            {
-                foreach (AgentItem NPC in npcList)
-                {
-                    if (NPC.ID == 16286)
-                    {
-                        bossHealthOverTime = new List<Point>();//reset boss health over time
-                        int xera2Instid = NPC.InstID;
-                        _boss.Health = 24085950;
-                        _fightData.PhaseData.Add(NPC.FirstAware);
-                        _fightData.FightEnd = NPC.LastAware;
-                        foreach (CombatItem c in _combatData)
-                        {
-                            if (c.SrcInstid == xera2Instid)
-                            {
-                                c.SrcInstid = _boss.InstID;
-                                c.SrcAgent = _boss.Agent;
-                            }
-                            if (c.DstInstid == xera2Instid)
-                            {
-                                c.DstInstid = _boss.InstID;
-                                c.DstAgent = _boss.Agent;
-                            }
-                            //set health update
-                            if (c.SrcInstid == _boss.InstID && c.IsStateChange == ParseEnum.StateChange.HealthUpdate)
-                            {
-                                bossHealthOverTime.Add(new Point ( (int)(c.Time - _fightData.FightStart), (int)c.DstAgent ));
-                            }
-                        }
-                        break;
-                    }
-                }
-            }
-            //Dealing with Deimos split
-            if (_fightData.ID == 17154)
-            {
-                List<AgentItem> deimosGadgets = _agentData.GadgetAgentList.Where(x => x.FirstAware > bossAgent.LastAware && x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
-                if (deimosGadgets.Count > 0)
-                {
-                    AgentItem NPC = deimosGadgets.Last();
-                    HashSet<ulong> deimos2Agents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
-                    long oldAware = bossAgent.LastAware;
-                    _fightData.PhaseData.Add(NPC.FirstAware >= oldAware ? NPC.FirstAware : oldAware);
-                    //List<CombatItem> fuckyou = combat_list.Where(x => x.getDstInstid() == deimos2Instid ).ToList().Sum(x);
-                    //int stop = 0;
-                    foreach (CombatItem c in _combatData)
-                    {
-                        if (c.Time > oldAware)
-                        {
-                            if (deimos2Agents.Contains(c.SrcAgent))
-                            {
-                                c.SrcInstid = _boss.InstID;
-                                c.SrcAgent = _boss.Agent;
-
-                            }
-                            if (deimos2Agents.Contains(c.DstAgent))
-                            {
-                                c.DstInstid = _boss.InstID;
-                                c.DstAgent = _boss.Agent;
-                            }
-                        }
-
-                    }
-                }
-            }
+            _boss.HealthOverTime = bossHealthOverTime;//after xera in case of change
+            // Dealing with special case
+            _fightData.Logic.SpecialParse(_fightData, _agentData ,_combatData, _boss);           
             _combatData.Validate(_fightData);
             _fightData.Logic.CanCombatReplay = _fightData.Logic.CanCombatReplay && _combatData.MovementData.Count > 0;
-            _boss.HealthOverTime = bossHealthOverTime;//after xera in case of change
             
 
             //players

@@ -41,6 +41,19 @@ namespace LuckParser.Models
             return phases;
         }
 
+        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
+        {
+            foreach (CombatItem c in combatData)
+            {
+                // redirect all attacks to the main golem
+                if (c.DstAgent == 0 && c.DstInstid == 0 && c.IsStateChange == ParseEnum.StateChange.Normal && c.IFF == ParseEnum.IFF.Foe && c.IsActivation == ParseEnum.Activation.None)
+                {
+                    c.DstAgent = boss.Agent;
+                    c.DstInstid = boss.InstID;
+                }
+            }
+        }
+
         public override void SetSuccess(ParsedLog log)
         {
             CombatItem pov = log.CombatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
