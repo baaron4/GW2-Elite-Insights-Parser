@@ -149,7 +149,7 @@ namespace LuckParser.Models.ParseModels
                         BoonStackItem stackItem = BoonStack[i];
                         if (stackItem.BuffInitial)
                         {
-                            OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BoonDuration, start));
+                            OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, start, start));
                             BoonStack.RemoveAt(i);
                             break;
                         }
@@ -188,7 +188,7 @@ namespace LuckParser.Models.ParseModels
                     BoonStackItem stackItem = BoonStack[i];
                     if (stackItem.BuffInitial)
                     {
-                        OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BoonDuration, start));
+                        OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, start, start));
                         BoonStack.RemoveAt(i);
                         break;
                     }

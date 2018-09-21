@@ -146,7 +146,8 @@ namespace LuckParser.Models.ParseModels
                 List<BoonLog> loglist = boonMap[boonId];
                 if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (log.IsBenchmarkMode() || !IntensityIds.Contains(boonId)))
                 {
-                    loglist.Add(new BoonApplicationLog(0, 0, int.MaxValue));
+                    ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
+                    loglist.Add(new BoonApplicationLog(0, src, int.MaxValue));
                 }
                 else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= 0 && time < log.FightData.FightDuration)
                 {
