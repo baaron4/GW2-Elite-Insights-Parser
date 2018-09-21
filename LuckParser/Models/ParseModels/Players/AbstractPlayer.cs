@@ -10,7 +10,7 @@ namespace LuckParser.Models.ParseModels
         protected readonly AgentItem AgentItem;
         public readonly String Character;
         protected readonly List<DamageLog> DamageLogs = new List<DamageLog>();
-        private List<DamageLog> _damageLogsFiltered = new List<DamageLog>();
+        protected Dictionary<ushort,List<DamageLog>> DamageLogsByDst = new Dictionary<ushort, List<DamageLog>>();
         //protected List<DamageLog> HealingLogs = new List<DamageLog>();
         //protected List<DamageLog> HealingReceivedLogs = new List<DamageLog>();
         private readonly List<DamageLog> _damageTakenlogs = new List<DamageLog>();
@@ -33,23 +33,18 @@ namespace LuckParser.Models.ParseModels
             AgentItem = agent;
         }
         // Getters
-        public List<DamageLog> GetDamageLogs(int instidFilter, ParsedLog log, long start, long end)//isntid = 0 gets all logs if specified sets and returns filtered logs
+        public List<DamageLog> GetDamageLogs(ushort dstFilter, ParsedLog log, long start, long end)
         {
             if (DamageLogs.Count == 0)
             {
                 SetDamageLogs(log);
+                DamageLogsByDst = DamageLogs.GroupBy(x => x.DstInstId).ToDictionary(x => x.Key, x => x.ToList());
             }
-
-
-            if (_damageLogsFiltered.Count == 0)
+            if (DamageLogsByDst.TryGetValue(dstFilter, out var list))
             {
-                _damageLogsFiltered = DamageLogs.Where(x => x.DstInstId == instidFilter).ToList();
+                return list.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
-            if (instidFilter == 0)
-            {
-                return DamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
-            }
-            return _damageLogsFiltered.Where( x => x.Time >= start && x.Time <= end).ToList();
+            return DamageLogs.Where( x => x.Time >= start && x.Time <= end).ToList();
         }
         public List<DamageLog> GetDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
         {
@@ -109,7 +104,7 @@ namespace LuckParser.Models.ParseModels
             return CastLogs.Where(x => x.Time + x.ActualDuration >= start && x.Time <= end).ToList();
 
         }
-        public List<DamageLog> GetJustPlayerDamageLogs(int instidFilter, ParsedLog log, long start, long end)
+        public List<DamageLog> GetJustPlayerDamageLogs(ushort instidFilter, ParsedLog log, long start, long end)
         {
             return GetDamageLogs(instidFilter, log, start, end).Where(x => x.SrcInstId == AgentItem.InstID).ToList();
         }

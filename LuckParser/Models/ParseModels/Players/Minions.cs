@@ -8,7 +8,7 @@ namespace LuckParser.Models.ParseModels
     {
         public readonly int InstID;
         private readonly List<DamageLog> _damageLogs = new List<DamageLog>();
-        private List<DamageLog> _filteredDamageLogs = new List<DamageLog>();
+        private Dictionary<ushort, List<DamageLog>> _damageLogsByDst = new Dictionary<ushort, List<DamageLog>>();
         private readonly List<CastLog> _castLogs = new List<CastLog>();
         public string Character
         {
@@ -23,7 +23,7 @@ namespace LuckParser.Models.ParseModels
             InstID = instid;
         }
 
-        public List<DamageLog> GetDamageLogs(int instidFilter, ParsedLog log, long start, long end)
+        public List<DamageLog> GetDamageLogs(ushort dstFilter, ParsedLog log, long start, long end)
         {
             if (_damageLogs.Count == 0)
             {
@@ -31,14 +31,11 @@ namespace LuckParser.Models.ParseModels
                 {
                     _damageLogs.AddRange(minion.GetDamageLogs(0, log, 0, log.FightData.FightDuration));
                 }
+                _damageLogsByDst = _damageLogs.GroupBy(x => x.DstInstId).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (_filteredDamageLogs.Count == 0)
+            if (_damageLogsByDst.TryGetValue(dstFilter, out var list))
             {
-                _filteredDamageLogs = _damageLogs.Where(x => x.DstInstId == log.Boss.InstID).ToList();
-            }
-            if (instidFilter > 0)
-            {
-                return _filteredDamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
+                return list.Where(x => x.Time >= start && x.Time <= end).ToList();
             }
             return _damageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
