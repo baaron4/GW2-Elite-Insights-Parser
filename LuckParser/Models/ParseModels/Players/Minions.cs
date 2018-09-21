@@ -6,7 +6,7 @@ namespace LuckParser.Models.ParseModels
 {
     public class Minions : List<Minion>
     {
-        public readonly int InstID;
+        public readonly int MinionID;
         private readonly List<DamageLog> _damageLogs = new List<DamageLog>();
         private Dictionary<ushort, List<DamageLog>> _damageLogsByDst = new Dictionary<ushort, List<DamageLog>>();
         private readonly List<CastLog> _castLogs = new List<CastLog>();
@@ -18,9 +18,9 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public Minions(int instid)
+        public Minions(int id)
         {
-            InstID = instid;
+            MinionID = id;
         }
 
         public List<DamageLog> GetDamageLogs(AbstractPlayer target, ParsedLog log, long start, long end)
