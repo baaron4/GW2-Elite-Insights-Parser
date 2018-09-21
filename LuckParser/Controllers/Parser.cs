@@ -73,7 +73,8 @@ namespace LuckParser.Controllers
 
         private void ParseLog(GridRow row, Stream stream)
         {
-            
+            try
+            {
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "15% - Parsing boss data...", 15);
                 ParseFightData(stream);
@@ -85,12 +86,16 @@ namespace LuckParser.Controllers
                 ParseSkillData(stream);
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "30% - Parsing combat list...", 30);
-                ParseCombatList(stream);                
+                ParseCombatList(stream);
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
                 FillMissingData();
                 row.BgWorker.ThrowIfCanceled(row);
-            
+            }
+            catch (Exception ex) when (!(ex is CancellationException))
+            {
+                throw new CancellationException(row, ex);
+            }                      
         }
 
         private static BinaryReader CreateReader(Stream stream)
