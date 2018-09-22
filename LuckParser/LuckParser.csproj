@@ -82,6 +82,7 @@
     <Compile Include="CancellationException.cs" />
     <Compile Include="ConsoleProgram.cs" />
     <Compile Include="Controllers\CSVHelper.cs" />
+    <Compile Include="Controllers\GeneralHelper.cs" />
     <Compile Include="Controllers\JSONBuilder.cs" />
     <Compile Include="Controllers\HTMLBuilderNew.cs" />
     <Compile Include="Controllers\Parser.cs" />
