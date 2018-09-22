@@ -625,7 +625,7 @@ namespace LuckParser.Controllers
                 }
             }
             _combatData.Validate(_fightData);
-            _fightData.Logic.CanCombatReplay = _fightData.Logic.CanCombatReplay && _combatData.MovementData.Count > 0;
+            _fightData.Logic.CanCombatReplay = _fightData.Logic.CanCombatReplay && _combatData.MovementData.Count > 1;
             _fightData.HealthOverTime = bossHealthOverTime;//after xera in case of change
             
 
