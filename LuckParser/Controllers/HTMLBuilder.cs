@@ -521,11 +521,18 @@ namespace LuckParser.Controllers
                         sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.AllPowerDamage + " dmg \">" + dps.AllPowerDps + "</td>");
                         sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + dps.AllCondiDamage + " dmg \">" + dps.AllCondiDps + "</td>");
                         sw.Write("<td>" + stats.DownCount + "</td>");
-                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
-                        long fightDuration = phase.GetDuration();
-                        if (timedead > TimeSpan.Zero)
+                        if (stats.Died != 0.0)
                         {
-                            sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100,1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</td>");
+                            if (stats.Died < 0)
+                            {
+                                sw.Write("<td>" + -stats.Died + " time(s)</td>");
+                            }
+                            else
+                            {
+                                TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
+                                long fightDuration = phase.GetDuration();
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100, 1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</td>");
+                            }
                         }
                         else
                         {
@@ -630,8 +637,6 @@ namespace LuckParser.Controllers
                         Statistics.FinalStats stats = _statistics.Stats[player][phaseIndex];
                         Statistics.FinalDPS dps = _statistics.Dps[player][phaseIndex];
 
-                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);//dead 
-
                         //gather data for footer
                         footerList.Add(new [] {
                             player.Group.ToString(),
@@ -686,17 +691,22 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + stats.SwapCount + "</td>");//w swaps
                             sw.Write("<td>" + Math.Round(stats.StackDist, 2) + "</td>");//stack dist
                             sw.Write("<td>" + stats.DownCount + "</td>");//downs
-                            long fightDuration = phase.GetDuration();
-                            if (timedead > TimeSpan.Zero)
+                            if (stats.Died != 0.0)
                             {
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                    + timedead + "(" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100,1) + "% Alive) \">" 
-                                    + timedead.Minutes + " m " + timedead.Seconds + " s</span>" + " </td>");
+                                if (stats.Died < 0)
+                                {
+                                    sw.Write("<td>" + -stats.Died + " time(s)</td>");
+                                }
+                                else
+                                {
+                                    TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
+                                    long fightDuration = phase.GetDuration();
+                                    sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100, 1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</td>");
+                                }
                             }
                             else
                             {
-                                sw.Write("<td>" + "<span data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\"" +
-                                    " title=\"Never died\"> </span>" + " </td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died\"> 0</td>");
                             }
                         }
                         sw.Write("</tr>");
@@ -763,8 +773,6 @@ namespace LuckParser.Controllers
                         Statistics.FinalStats stats = _statistics.Stats[player][phaseIndex];
                         Statistics.FinalDPS dps = _statistics.Dps[player][phaseIndex];
 
-                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);//dead 
-
                         //gather data for footer
                         footerList.Add(new [] {
                             player.Group.ToString(),
@@ -819,17 +827,22 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + stats.SwapCount + "</td>");//w swaps
                             sw.Write("<td>" + Math.Round(stats.StackDist,2) + "</td>");//stack dist
                             sw.Write("<td>" + stats.DownCount + "</td>");//downs
-                            long fightDuration = phase.GetDuration();
-                            if (timedead > TimeSpan.Zero)
+                            if (stats.Died != 0.0)
                             {
-                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" 
-                                    + timedead + "(" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100,1) + "% Alive) \">" 
-                                    + timedead.Minutes + " m " + timedead.Seconds + " s</td>");
+                                if (stats.Died < 0)
+                                {
+                                    sw.Write("<td>" + -stats.Died + " time(s)</td>");
+                                }
+                                else
+                                {
+                                    TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
+                                    long fightDuration = phase.GetDuration();
+                                    sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"" + timedead + " (" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100, 1) + "% Alive) \">" + timedead.Minutes + " m " + timedead.Seconds + " s</td>");
+                                }
                             }
                             else
                             {
-                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\"" +
-                                    " title=\"Never died\"> </td>");
+                                sw.Write("<td data-toggle=\"tooltip\" data-html=\"true\" data-placement=\"top\" title=\"Never died\"> 0</td>");
                             }
                         }
                         sw.Write("</tr>");

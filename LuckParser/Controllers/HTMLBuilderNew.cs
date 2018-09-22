@@ -423,12 +423,19 @@ namespace LuckParser.Controllers
                 playerData.Add(dps.AllCondiDps);
                 playerData.Add(stats.DownCount);
 
-                TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
-                long fightDuration = phase.GetDuration();
-                if (timedead > TimeSpan.Zero)
+                if (stats.Died != 0.0)
                 {
-                    playerData.Add(timedead + " (" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100, 1) + "% Alive)");
-                    playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s");
+                    if (stats.Died < 0)
+                    {
+                        playerData.Add("");
+                        playerData.Add(-stats.Died + " time(s)");
+                    }
+                    else
+                    {
+                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
+                        playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)"); //28
+                        playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s");
+                    }
                 }
                 else
                 {
@@ -492,11 +499,19 @@ namespace LuckParser.Controllers
                 playerData.Add(Math.Round(stats.StackDist, 2)); //25
                 playerData.Add(stats.DownCount); //26
 
-                TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);//dead 
-                if (timedead > TimeSpan.Zero)
+                if (stats.Died != 0.0)
                 {
-                    playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s"); //27
-                    playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)"); //28
+                    if (stats.Died < 0)
+                    {
+                        playerData.Add(-stats.Died + " time(s)"); //27
+                        playerData.Add(""); //28
+                    }
+                    else
+                    {
+                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
+                        playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s"); //27
+                        playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)"); //28
+                    }
                 }
                 else
                 {
@@ -561,12 +576,19 @@ namespace LuckParser.Controllers
                 playerData.Add(Math.Round(stats.StackDist, 2)); //25
                 playerData.Add(stats.DownCount); //26
 
-                long fightDuration = phase.GetDuration();
-                TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);//dead 
-                if (timedead > TimeSpan.Zero)
+                if (stats.Died != 0.0)
                 {
-                    playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s"); //27
-                    playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100, 1) + "% Alive)"); //28
+                    if (stats.Died < 0)
+                    {
+                        playerData.Add(-stats.Died + " time(s)"); //27
+                        playerData.Add(""); //28
+                    }
+                    else
+                    {
+                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
+                        playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s"); //27
+                        playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)"); //28
+                    }
                 }
                 else
                 {
@@ -603,12 +625,19 @@ namespace LuckParser.Controllers
                 playerData.Add(stats.DodgeCount);
                 playerData.Add(stats.DownCount);
 
-                TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);//dead
-                long fightDuration = phase.GetDuration("s");
-                if (timedead > TimeSpan.Zero)
+                if (stats.Died != 0.0)
                 {
-                    playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s");
-                    playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100, 1) + "% Alive)");
+                    if (stats.Died < 0)
+                    {
+                        playerData.Add(-stats.Died + " time(s)");
+                        playerData.Add("");
+                    }
+                    else
+                    {
+                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
+                        playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s");
+                        playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)");
+                    }
                 }
                 else
                 {

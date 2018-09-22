@@ -209,8 +209,25 @@ namespace LuckParser.Controllers
             {
                 Statistics.FinalDPS dps = _statistics.Dps[player][phaseIndex];
                 Statistics.FinalStats stats = _statistics.Stats[player][phaseIndex];
-                TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
-                long fightDuration = phase.GetDuration("s");
+                string deathString = "";
+                string deadthTooltip = "";
+                if (stats.Died != 0.0)
+                {
+                    if (stats.Died < 0)
+                    {
+                        deathString = -stats.Died + " time(s)";
+                    }
+                    else
+                    {
+                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
+                        deathString = timedead.Minutes + " m " + timedead.Seconds + " s";
+                        deadthTooltip = Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "%";
+                    }
+                }
+                else
+                {
+                    deadthTooltip = "Never died";
+                }
                 string[] wep = player.GetWeaponsArray(_log);
                 string build = "";
                 if (player.Condition > 0)
@@ -232,7 +249,7 @@ namespace LuckParser.Controllers
                 WriteLine(new [] { player.Group.ToString(), player.Prof,build,player.Character, player.Account.TrimStart(':') ,wep[0],wep[1],wep[2],wep[3],
                 dps.BossDps.ToString(),dps.BossDamage.ToString(),dps.BossPowerDps.ToString(),dps.BossPowerDamage.ToString(),dps.BossCondiDps.ToString(),dps.BossCondiDamage.ToString(),
                 dps.AllDps.ToString(),dps.AllDamage.ToString(),dps.AllPowerDps.ToString(),dps.AllPowerDamage.ToString(),dps.AllCondiDps.ToString(),dps.AllCondiDamage.ToString(),
-                stats.DownCount.ToString(), timedead.Minutes + " m " + timedead.Seconds + " s",Math.Round((timedead.TotalSeconds / fightDuration) * 100,1) +"%"});
+                stats.DownCount.ToString(), deathString, deadthTooltip});
                 count++;
             }
             while (count < 15)//so each graph has equal spacing
