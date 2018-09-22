@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class NikareKenut : RaidLogic
+    public class TwinLargos : RaidLogic
     {
-        public NikareKenut()
+        public TwinLargos()
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -18,12 +18,13 @@ namespace LuckParser.Models
             new Mechanic(51977, "Aquatic Barrage Start", Mechanic.MechType.EnemyCastStart, ParseEnum.BossIDS.Nikare, "symbol:'diamond-tall',color:'rgb(0,160,150)',", "CC","Breakbar", "Breakbar",0),
             new Mechanic(51977, "Aquatic Barrage End", Mechanic.MechType.EnemyCastEnd, ParseEnum.BossIDS.Nikare, "symbol:'diamond-tall',color:'rgb(0,160,0)',", "CCed","Breakbar broken", "CCed",0),
             new Mechanic(53018, "Sea Swell", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'circle-open',color:'rgb(30,30,80)',", "Shkwv","Sea Swell (Shockwave)", "Shockwave",0),
-            new Mechanic(53130, "Geyser", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'hexagon',color:'rgb(0,255,255)',", "Gysr","Geyser (Lifted up)", "Geyser (float)",0),
+            new Mechanic(53130, "Geyser", Mechanic.MechType.SkillOnPlayer, ParseEnum.BossIDS.Nikare, "symbol:'hexagon',color:'rgb(0,255,255)',", "Gysr","Geyser", "Geyser",0),
             new Mechanic(53097, "Water Bomb Debuff", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'diamond',color:'rgb(0,255,255)',", "Psn","Expanding Water Field", "Water Poison",0),
+            new Mechanic(52931, "Aquatic Detainment", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'circle',color:'rgb(0,0,255)',", "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",0),
             });
             CanCombatReplay = false;
-            Extension = "nk";
-            IconUrl = "";
+            Extension = "twinlargos";
+            IconUrl = "https://i.imgur.com/6O5MT7v.png";
         }
 
         public override CombatReplayMap GetCombatMap()
@@ -48,12 +49,13 @@ namespace LuckParser.Models
 
         public override int IsCM(List<CombatItem> clist, int health)
         {
-            return 0;
+            return (health > 18e6) ? 1 : 0; //Health of Nikare
         }
 
         public override string GetReplayIcon()
         {
-            return "";
+            return "https://i.imgur.com/6yq45Cc.png";
+            // For Kenut: https://i.imgur.com/TLykcrJ.png
         }
     }
 }

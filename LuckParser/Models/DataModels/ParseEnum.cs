@@ -199,9 +199,21 @@ namespace LuckParser.Models.DataModels
             Enforcer = 19681,
             Deathling = 19759,
             UnderworldReaper = 19831,
+            // CA
+            ConjuredGreatsword = 21255,
+            ConjuredShield =  21170,
             // Qadim
-            LavaElemental = 21236,
-            IcebornHydre = 21163,
+            LavaElemental1 = 21236,
+            LavaElemental2 = 21078,
+            IcebornHydra = 21163,
+            GreaterMagmaElemental1 = 21150,
+            GreaterMagmaElemental2 = 21223,
+            FireElemental = 21221,
+            FireImp = 21100,
+            PyreGuardian = 21050,
+            ReaperofFlesh = 21218,
+            IceElemental = 21049,
+            Zommoros = 20961, //21118 is probably the start and end NPC, not the one during the battle
             // Fractals
             FractalVindicator = 19684, 
             FractalAvenger = 15960,
@@ -268,6 +280,9 @@ namespace LuckParser.Models.DataModels
             Kenut                   = 21089,
             Qadim                   = 20934,
             AncientInvokedHydra     = 21285,
+            ApocalypseBringer       = 21073,
+            WyvernMatriarch         = 20997,
+            WyvernPatriarch         = 21183,
             MAMA                    = 17021,
             Siax                    = 17028,
             Ensolyss                = 16948,
