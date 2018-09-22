@@ -118,7 +118,7 @@ namespace LuckParser.Models.ParseModels
         public long GetDeath(ParsedLog log, long start, long end)
         {
             long offset = log.FightData.FightStart;
-            CombatItem dead = log.CombatData.LastOrDefault(x => x.SrcInstid == Agent.InstID && x.IsStateChange.IsDead() && x.Time >= start + offset && x.Time <= end + offset);
+            CombatItem dead = log.CombatData.GetStatesData(ParseEnum.StateChange.ChangeDead).LastOrDefault(x => x.SrcInstid == Agent.InstID && x.Time >= start + offset && x.Time <= end + offset);
             if (dead != null && dead.Time > 0)
             {
                 return dead.Time;
@@ -303,7 +303,7 @@ namespace LuckParser.Models.ParseModels
                     bool requireExtraData = extraDataID.Contains(boonid);
                     var simulator = boon.CreateSimulator(log);
                     simulator.Simulate(logs, dur);
-                    if (death > 0 && GetCastLogs(log, death + 5000, fightDuration).Count == 0)
+                    if (death > 0 && GetCastLogs(log, death + 5000, dur).Count == 0)
                     {
                         simulator.Trim(death);
                     }
