@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
     class HTMLBuilderNew
     {
         private const string scriptVersion = "0.5";
-        private const int scriptVersionRev = 8;
+        private const int scriptVersionRev = 9;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -1200,167 +1200,95 @@ namespace LuckParser.Controllers
         /// <summary>
         /// Create the damage taken distribution table for a given player
         /// </summary>
-        /// <param name="sw"></param>
         /// <param name="p"></param>
         /// <param name="phaseIndex"></param>
-        private void CreatePlayerDMGTakenDistTable(StreamWriter sw, Player p, int phaseIndex)
+        private DmgDistributionDto CreateDMGTakenDistData(Player p, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
+            DmgDistributionDto dto = new DmgDistributionDto();
+            dto.data = new List<double[]>();
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<DamageLog> damageLogs = p.GetDamageTakenLogs(_log, phase.Start, phase.End);
             SkillData skillList = _log.SkillData;
-            long finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
-            string pid = p.InstID + "_" + phaseIndex;
-            sw.Write("<script>");
+            dto.totalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
+
+            HashSet<long> usedIDs = new HashSet<long>();
+            List<Boon> condiList = _statistics.PresentConditions;
+            foreach (Boon condi in condiList)
             {
-                sw.Write("document.addEventListener(\"DOMContentLoaded\", function() {");
+                long condiID = condi.ID;
+                int totaldamage = 0;
+                int mindamage = 0;
+                int hits = 0;
+                int maxdamage = 0;
+                usedIDs.Add(condiID);
+                foreach (DamageLog dl in damageLogs.Where(x => x.SkillId == condiID))
                 {
-                    sw.Write("var lazyTable = document.querySelector('#distTaken_table_" + pid + "');" +
+                    int curdmg = dl.Damage;
+                    totaldamage += curdmg;
+                    if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                    if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                    hits++;
 
-                    "if ('IntersectionObserver' in window) {" +
-                        "let lazyTableObserver = new IntersectionObserver(function(entries, observer) {" +
-                            "entries.forEach(function(entry) {" +
-                                "if (entry.isIntersecting)" +
-                                "{" +
-                                    "$(function () { $('#distTaken_table_" + pid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});" +
-                                    "lazyTableObserver.unobserve(entry.target);" +
-                                "}" +
-                            "});" +
-                        "});" +
-                    "lazyTableObserver.observe(lazyTable);" +
-                    "} else {" +
-                        "$(function () { $('#distTaken_table_" + pid + "').DataTable({\"columnDefs\": [ { \"title\": \"Skill\", className: \"dt-left\", \"targets\": [ 0 ]}], \"order\": [[2, \"desc\"]]});});" +
-                    "}");
                 }
-                sw.Write("});");
+                int avgdamage = (int)(totaldamage / (double)hits);
+                if (totaldamage > 0)
+                {
+                    double[] row = new double[13] {
+                        1, // isCondi
+                        condi.ID,
+                        Math.Round(100 * (double)totaldamage / dto.totalDamage, 2),
+                        totaldamage,
+                        mindamage, maxdamage,
+                        hits, hits,
+                        0, 0, 0, 0, 0 //crit, flank, glance, timeswasted, timessaved
+                    };
+                    dto.data.Add(row);
+                    if (!usedBoons.ContainsKey(condi.ID)) usedBoons.Add(condi.ID, condi);
+                }
             }
-            sw.Write("</script>");
-            sw.Write("<table class=\"display table table-striped table-hover compact\"  cellspacing=\"0\" width=\"100%\" id=\"distTaken_table_" + pid + "\">");
-            {
-                sw.Write("<thead>");
+
+            foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.SkillId)).Select(x => (int)x.SkillId).Distinct())
+            {//foreach casted skill
+                SkillItem skill = skillList.Get(id);
+
+                if (skill != null)
                 {
-                    sw.Write("<tr>");
+                    if (!usedSkills.ContainsKey(id)) usedSkills.Add(id, skill);
+
+                    int totaldamage = 0;
+                    int mindamage = 0;
+                    int hits = 0;
+                    int maxdamage = 0;
+                    int crit = 0;
+                    int flank = 0;
+                    int glance = 0;
+                    foreach (DamageLog dl in damageLogs.Where(x => x.SkillId == id))
                     {
-                        sw.Write("<th>Skill</th>");
-                        sw.Write("<th>Damage</th>");
-                        sw.Write("<th>Percent</th>");
-                        sw.Write("<th>Hits</th>");
-                        sw.Write("<th>Min</th>");
-                        sw.Write("<th>Avg</th>");
-                        sw.Write("<th>Max</th>");
-                        sw.Write("<th>Crit</th>");
-                        sw.Write("<th>Flank</th>");
-                        sw.Write("<th>Glance</th>");
+                        int curdmg = dl.Damage;
+                        totaldamage += curdmg;
+                        if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
+                        if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
+                        if (curdmg >= 0) { hits++; };
+                        ParseEnum.Result result = dl.Result;
+                        if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
+                        if (dl.IsFlanking == 1) { flank++; }
                     }
-                    sw.Write("</tr>");
+
+                    double[] row = new double[13] {
+                        0, // isCondi
+                        skill.ID,
+                        Math.Round(100 * (double)totaldamage / dto.totalDamage, 2),
+                        totaldamage,
+                        mindamage, maxdamage,
+                        hits, hits,
+                        crit, flank, glance,
+                        0, 0
+                    };
+                    dto.data.Add(row);
                 }
-                sw.Write("</thead>");
-                sw.Write("<tbody>");
-                {
-                    HashSet<long> usedIDs = new HashSet<long>();
-                    List<Boon> condiList = _statistics.PresentConditions;
-                    foreach (Boon condi in condiList)
-                    {
-                        long condiID = condi.ID;
-                        int totaldamage = 0;
-                        int mindamage = 0;
-                        int hits = 0;
-                        int maxdamage = 0;
-                        usedIDs.Add(condiID);
-                        foreach (DamageLog dl in damageLogs.Where(x => x.SkillId == condiID))
-                        {
-                            int curdmg = dl.Damage;
-                            totaldamage += curdmg;
-                            if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                            if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                            hits++;
-
-                        }
-                        int avgdamage = (int)(totaldamage / (double)hits);
-                        if (totaldamage > 0)
-                        {
-                            string condiName = condi.Name;// Boon.getCondiName(condiID);
-                            sw.Write("<tr>");
-                            {
-                                sw.Write("<td align=\"left\"><img src=\"" + condi.Link + "\" alt=\"" + condiName + "\" title=\"" + condiID + "\" height=\"18\" width=\"18\">" + condiName + "</td>");
-                                sw.Write("<td>" + totaldamage + "</td>");
-                                sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
-                                sw.Write("<td>" + hits + "</td>");
-                                sw.Write("<td>" + mindamage + "</td>");
-                                sw.Write("<td>" + avgdamage + "</td>");
-                                sw.Write("<td>" + maxdamage + "</td>");
-                                sw.Write("<td></td>");
-                                sw.Write("<td></td>");
-                                sw.Write("<td></td>");
-                            }
-                            sw.Write("</tr>");
-                        }
-                    }
-                    foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.SkillId)).Select(x => (int)x.SkillId).Distinct())
-                    {//foreach casted skill
-                        SkillItem skill = skillList.Get(id);
-
-                        if (skill != null)
-                        {
-                            int totaldamage = 0;
-                            int mindamage = 0;
-                            int hits = 0;
-                            int maxdamage = 0;
-                            int crit = 0;
-                            int flank = 0;
-                            int glance = 0;
-                            foreach (DamageLog dl in damageLogs.Where(x => x.SkillId == id))
-                            {
-                                int curdmg = dl.Damage;
-                                totaldamage += curdmg;
-                                if (0 == mindamage || curdmg < mindamage) { mindamage = curdmg; }
-                                if (0 == maxdamage || curdmg > maxdamage) { maxdamage = curdmg; }
-                                if (curdmg >= 0) { hits++; };
-                                ParseEnum.Result result = dl.Result;
-                                if (result == ParseEnum.Result.Crit) { crit++; } else if (result == ParseEnum.Result.Glance) { glance++; }
-                                if (dl.IsFlanking == 1) { flank++; }
-                            }
-                            int avgdamage = (int)(totaldamage / (double)hits);
-
-                            if (skill.ApiSkill != null)
-                            {
-                                sw.Write("<tr>");
-                                {
-                                    sw.Write("<td align=\"left\"><img src=\"" + skill.ApiSkill.icon + "\" alt=\"" + skill.Name + "\" title=\"" + skill.ID + "\" height=\"18\" width=\"18\">" + skill.Name + "</td>");
-                                    sw.Write("<td>" + totaldamage + "</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
-                                    sw.Write("<td>" + hits + "</td>");
-                                    sw.Write("<td>" + mindamage + "</td>");
-                                    sw.Write("<td>" + avgdamage + "</td>");
-                                    sw.Write("<td>" + maxdamage + "</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)crit / hits,2) + "%</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)flank / hits,2) + "%</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)glance / hits,2) + "%</td>");
-                                }
-                                sw.Write("</tr>");
-                            }
-                            else
-                            {
-                                sw.Write("<tr>");
-                                {
-                                    sw.Write("<td align=\"left\">" + skill.Name + "</td>");
-                                    sw.Write("<td>" + totaldamage + "</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)totaldamage / finalTotalDamage,2) + "%</td>");
-                                    sw.Write("<td>" + hits + "</td>");
-                                    sw.Write("<td>" + mindamage + "</td>");
-                                    sw.Write("<td>" + avgdamage + "</td>");
-                                    sw.Write("<td>" + maxdamage + "</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)crit / hits,2) + "%</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)flank / hits,2) + "%</td>");
-                                    sw.Write("<td>" + Math.Round(100 * (double)glance / hits,2) + "%</td>");
-                                }
-                                sw.Write("</tr>");
-                            }
-                        }
-                    }
-                }
-                sw.Write("</tbody>");
             }
-            sw.Write("</table>");
+
+            return dto;
         }
 
         private List<BoonChartDataDto> CreatePlayerBoonGraphData(Player p, int phaseIndex)
@@ -1509,17 +1437,16 @@ namespace LuckParser.Controllers
             foreach (Mechanic mech in _log.MechanicData.GetPresentMechanics(0))
             {
                 List<MechanicLog> mechanicLogs = _log.MechanicData[mech];
-                MechanicDto dto = new MechanicDto
-                {
-                    name = mech.ShortName,
-                    description = mech.Description,
-                    color = FindPattern(mech.PlotlyShape, "color\\s*:\\s*'([^']*)'"),
-                    symbol = FindPattern(mech.PlotlyShape, "symbol\\s*:\\s*'([^']*)'"),
-                    visible = (mech.SkillId == -2 || mech.SkillId == -3),
-                    data = BuildMechanicData(mechanicLogs),
-                    playerMech = playerMechs.Contains(mech),
-                    enemyMech = enemyMechs.Contains(mech)
-                };
+                MechanicDto dto = new MechanicDto();
+                dto.name = mech.PlotlyName;
+                dto.shortName = mech.ShortName;
+                dto.description = mech.Description;
+                dto.color = FindPattern(mech.PlotlyShape,   "color\\s*:\\s*'([^']*)'");
+                dto.symbol = FindPattern(mech.PlotlyShape, "symbol\\s*:\\s*'([^']*)'");
+                dto.visible = (mech.SkillId == -2 || mech.SkillId == -3);
+                dto.data = BuildMechanicData(mechanicLogs);
+                dto.playerMech = playerMechs.Contains(mech);
+                dto.enemyMech = enemyMechs.Contains(mech);
                 mechanicDtos.Add(dto);
             }
             //TODO add DOWN and DEAD data
@@ -2977,19 +2904,19 @@ namespace LuckParser.Controllers
 
         private PlayerDetailsDto BuildPlayerData(Player player, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
-            PlayerDetailsDto dto = new PlayerDetailsDto
-            {
-                dmgDistributions = new List<DmgDistributionDto>(),
-                dmgDistributionsBoss = new List<DmgDistributionDto>(),
-                boonGraph = new List<List<BoonChartDataDto>>(),
-                rotation = new List<List<double[]>>(),
-                food = new List<List<FoodDto>>()
-            };
+            PlayerDetailsDto dto = new PlayerDetailsDto();
+            dto.dmgDistributions = new List<DmgDistributionDto>();
+            dto.dmgDistributionsBoss = new List<DmgDistributionDto>();
+            dto.dmgDistributionsTaken = new List<DmgDistributionDto>();
+            dto.boonGraph = new List<List<BoonChartDataDto>>();
+            dto.rotation = new List<List<double[]>>();
+            dto.food = new List<List<FoodDto>>();
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 dto.rotation.Add(CreateSimpleRotationTabData(player, i, usedSkills));
                 dto.dmgDistributions.Add(CreatePlayerDMGDistTable(player, false, i, usedSkills, usedBoons));
                 dto.dmgDistributionsBoss.Add(CreatePlayerDMGDistTable(player, true, i, usedSkills, usedBoons));
+                dto.dmgDistributionsTaken.Add(CreateDMGTakenDistData(player, i, usedSkills, usedBoons));
                 dto.boonGraph.Add(CreatePlayerBoonGraphData(player, i));
                 dto.food.Add(CreatePlayerFoodData(player, i));
             }
@@ -3067,6 +2994,7 @@ namespace LuckParser.Controllers
 
             javascript += BuildTemplateJS("tmplDmgTable", Properties.Resources.tmplDmgTable);
             javascript += BuildTemplateJS("tmplDmgDistTable", Properties.Resources.tmplDmgDistTable);
+            javascript += BuildTemplateJS("tmplDmgTakenTable", Properties.Resources.tmplDmgTakenTable);
             javascript += BuildTemplateJS("tmplMechanicTable", Properties.Resources.tmplMechanicTable);
             javascript += BuildTemplateJS("tmplCompTable", Properties.Resources.tmplCompTable);
 

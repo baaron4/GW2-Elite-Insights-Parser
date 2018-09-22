@@ -434,12 +434,8 @@ namespace LuckParser.Controllers
                             List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
                             foreach (Player p in _log.PlayerList)
                             {
-                                List<Point3D> list = p.CombatReplay.GetActivePositions();  
-                                if (list.Count > 1)
-                                {
-                                    GroupsPosList.Add(list);
-                                }
-                            }                       
+                                GroupsPosList.Add(p.CombatReplay.GetActivePositions());
+                            }
                             for (int time = 0; time < GroupsPosList[0].Count; time++)
                             {
                                 float x = 0;

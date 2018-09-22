@@ -552,7 +552,7 @@ namespace LuckParser.Controllers
             // Dealing with special case
             _fightData.Logic.SpecialParse(_fightData, _agentData ,_combatData, _boss);           
             _combatData.Validate(_fightData);
-            _fightData.Logic.CanCombatReplay = _fightData.Logic.CanCombatReplay && _combatData.MovementData.Count > 0;
+            _fightData.Logic.CanCombatReplay = _fightData.Logic.CanCombatReplay && _combatData.MovementData.Count > 1;
             
 
             //players

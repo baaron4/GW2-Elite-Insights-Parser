@@ -88,7 +88,7 @@ namespace LuckParser.Controllers
             //header
             WriteLine(new [] { "Elite Insights Version", Application.ProductVersion });
             WriteLine(new [] { "ARC Version", _log.LogData.BuildVersion});
-            WriteLine(new [] { "Boss ID", _log.Boss.InstID.ToString() });
+            WriteLine(new [] { "Boss ID", _log.FightData.ID.ToString() });
             WriteLine(new [] { "Recorded By", _log.LogData.PoV.Split(':')[0] });
             WriteLine(new [] { "Time Start", _log.LogData.LogStart });
             WriteLine(new [] { "Time End", _log.LogData.LogEnd });
