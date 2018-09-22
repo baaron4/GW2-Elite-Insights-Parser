@@ -94,7 +94,7 @@ namespace LuckParser.Models
                     Point3D poisonPrevPos = replay.Positions.LastOrDefault(x => x.Time <= toDropEnd);
                     if (poisonNextPos != null || poisonPrevPos != null)
                     {
-                        replay.Actors.Add(new CircleActor(true, toDropStart + 90000, 900, new Tuple<int, int>(toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", poisonPrevPos, poisonNextPos, toDropEnd));
+                        replay.Actors.Add(new CircleActor(true, toDropStart + 90000, 900, new Tuple<int, int>(toDropEnd, toDropEnd + 90000), "rgba(255, 0, 0, 0.3)", poisonPrevPos, poisonNextPos, toDropEnd, 180));
                     }
                 }
             }
