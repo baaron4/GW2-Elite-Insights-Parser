@@ -104,7 +104,7 @@
     </Compile>
     <Compile Include="Models\BossLogic\BossLogic.cs" />
     <Compile Include="Models\BossLogic\Qadim.cs" />
-    <Compile Include="Models\BossLogic\NikareKenut.cs" />
+    <Compile Include="Models\BossLogic\TwinLargos.cs" />
     <Compile Include="Models\BossLogic\ConjuredAmalgamate.cs" />
     <Compile Include="Models\BossLogic\Dhuum.cs" />
     <Compile Include="Models\BossLogic\Ensolyss.cs" />
@@ -265,6 +265,7 @@
     <None Include="Resources\theme-cosmo.png" />
     <None Include="Resources\theme-slate.png" />
     <None Include="Resources\combatreplay.js" />
+    <None Include="Resources\tmplDmgTakenTable.html" />
     <Content Include="Resources\TODO.txt" />
     <None Include="Resources\tmplCompTable.html" />
     <None Include="Resources\tmplMechanicTable.html" />

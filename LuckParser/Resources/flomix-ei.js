@@ -236,31 +236,59 @@ function createBoonTable($target, boons, data, generation) {
 }
 
 function createMechanicsTable($target, mechanics, data, boss) {
+	if (boss && (!mechanics || !data)) {
+		return;
+	}
 	var rows = [];
 	var sums = [];
+	var empty = true;
 	$.each(data, function(i, values) {
 		var player = boss ? window.data.enemies[i] : window.data.players[i];
 		rows.push({player:player,data:values});
+		$.each(values, function(v,value) {
+			if (value[0]) {
+				empty = false;
+			}
+		});
 	});
+	
+	if (boss && empty) {
+		return;
+	}
 
 	var html = tmplMechanicTable.render({rows:rows,mechanics:mechanics}, {playerMech:!boss});
-	lazyTable2($target, html, { 'order': [[2, 'asc']]});
+	lazyTable2($target, html, { 'order': [[boss ? 0 : 2, 'asc']]});
 }
 
 function createDistTable($target, data) {
 	var rows = [];
 	$.each(data.data, function(i, values) {
-		var skill={};
-		if (values[0]) {
-			skill = window.data.boonMap['b'+values[1]] || {};
-		} else {
-			skill = window.data.skillMap['s'+values[1]] || {};
-		}
-		skill.condi = values[0];
+		var skill = findSkill(values[0], values[1]);
 		rows.push({skill:skill,data:values});
 	});
 	var html = tmplDmgDistTable.render({rows:rows,contribution:data.contribution,totalDamage:data.totalDamage});
 	lazyTable2($target, html, { 'order': [[2, 'desc']]});
+}
+
+function createDmgTakenTable($target, data) {
+	var rows = [];
+	$.each(data.data, function(i, values) {
+		var skill = findSkill(values[0], values[1]);
+		rows.push({skill:skill,data:values});
+	});
+	var html = tmplDmgTakenTable.render({rows:rows,contribution:data.contribution,totalDamage:data.totalDamage});
+	lazyTable2($target, html, { 'order': [[2, 'desc']]});
+}
+
+function findSkill(isBoon, id) {
+	var skill;
+	if (isBoon) {
+		skill = window.data.boonMap['b'+id] || {};
+	} else {
+		skill = window.data.skillMap['s'+id] || {};
+	}
+	skill.condi = isBoon;
+	return skill;
 }
 
 function createRotaTab($target, data) {
@@ -624,6 +652,8 @@ function generateWindow(layout) {
 			createDistTable($('#dist_table_'+p+'_'+i), player.details.dmgDistributions[i]);
 
 			createRotaTab($('#rota_'+p+'_'+i), player.details.rotation[i]);
+
+			createDmgTakenTable($('#dist_table_'+p+'_'+i+'_taken'), player.details.dmgDistributionsTaken[i]);
 		});
 	});
 
@@ -655,7 +685,7 @@ function buildWindowLayout(data) {
 			$.each(player.minions, function(m,minion){
 				playerTabs.push({name:minion.name,content:minion.name,noTitle:true});
 			});
-			playerTabs.push({name:'Damage Taken',content:'Damage Taken',noTitle:true});
+			playerTabs.push({name:'Damage Taken',content:{table:'dist_table_'+p+'_'+i+'_taken'},noTitle:true});
 			var playerContent = {tabs: playerTabs};
 			playerSubtabs.push({name: player.name, icon: urls[player.profession], iconName: player.profession, content: playerContent});
 		});
