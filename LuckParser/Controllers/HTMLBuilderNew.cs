@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
     class HTMLBuilderNew
     {
         private const string scriptVersion = "0.5";
-        private const int scriptVersionRev = 8;
+        private const int scriptVersionRev = 9;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -1423,7 +1423,8 @@ namespace LuckParser.Controllers
             {
                 List<MechanicLog> mechanicLogs = _log.MechanicData[mech];
                 MechanicDto dto = new MechanicDto();
-                dto.name = mech.ShortName;
+                dto.name = mech.PlotlyName;
+                dto.shortName = mech.ShortName;
                 dto.description = mech.Description;
                 dto.color = findPattern(mech.PlotlyShape,   "color\\s*:\\s*'([^']*)'");
                 dto.symbol = findPattern(mech.PlotlyShape, "symbol\\s*:\\s*'([^']*)'");
