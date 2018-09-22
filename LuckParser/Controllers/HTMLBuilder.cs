@@ -2291,7 +2291,9 @@ namespace LuckParser.Controllers
         {
             HashSet<long> usedIDs = new HashSet<long>();
             SkillData skillList = _log.SkillData;
-            HTMLHelper.WriteDamageDistTableCondi(sw, usedIDs, damageLogs, finalTotalDamage, _statistics.PresentConditions);
+            List<Boon> condiRetal = new List<Boon>(_statistics.PresentConditions);
+            condiRetal.Add(Boon.BoonsByIds[873]);
+            HTMLHelper.WriteDamageDistTableCondi(sw, usedIDs, damageLogs, finalTotalDamage, condiRetal);
             foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.SkillId)).Select(x => x.SkillId).Distinct().ToList())
             {
                 SkillItem skill = skillList.Get(id);
@@ -2578,8 +2580,9 @@ namespace LuckParser.Controllers
                 sw.Write("<tbody>");
                 {
                     HashSet<long> usedIDs = new HashSet<long>();
-                    List<Boon> condiList = _statistics.PresentConditions;
-                    foreach (Boon condi in condiList)
+                    List<Boon> condiRetal = new List<Boon>(_statistics.PresentConditions);
+                    condiRetal.Add(Boon.BoonsByIds[873]);
+                    foreach (Boon condi in condiRetal)
                     {
                         long condiID = condi.ID;
                         int totaldamage = 0;

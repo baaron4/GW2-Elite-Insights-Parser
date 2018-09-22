@@ -1009,10 +1009,10 @@ namespace LuckParser.Controllers
                     if (dl.IsFlanking == 1) flank++;
                 }
 
-                bool isCondi = conditionsById.ContainsKey(entry.Key);
+                bool isCondi = conditionsById.ContainsKey(entry.Key) || entry.Key == 873;
                 if (isCondi)
                 {
-                    Boon condi = conditionsById[entry.Key];
+                    Boon condi = entry.Key == 873 ? Boon.BoonsByIds[873] : conditionsById[entry.Key];
                     if (!usedBoons.ContainsKey(condi.ID)) usedBoons.Add(condi.ID, condi);
                 } else
                 {
@@ -1201,8 +1201,9 @@ namespace LuckParser.Controllers
             dto.totalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
 
             HashSet<long> usedIDs = new HashSet<long>();
-            List<Boon> condiList = _statistics.PresentConditions;
-            foreach (Boon condi in condiList)
+            List<Boon> condiRetal = new List<Boon>(_statistics.PresentConditions);
+            condiRetal.Add(Boon.BoonsByIds[873]);
+            foreach (Boon condi in condiRetal)
             {
                 long condiID = condi.ID;
                 int totaldamage = 0;
@@ -1618,10 +1619,6 @@ namespace LuckParser.Controllers
             bool hasBoons = false;
             foreach (Boon boon in _statistics.PresentBoons)
             {
-                if (boon.Name == "Retaliation")
-                {
-                    continue;
-                }
                 if (conditions[boon.ID].Uptime > 0.0)
                 {
                     hasBoons = true;
@@ -1647,10 +1644,6 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (hasBoons && boon.Name == "Retaliation")
-                            {
-                                continue;
-                            }
                             sw.Write("<th>" + "<img src=\"" + boon.Link + " \" alt=\"" + boon.Name + "\" title =\" " + boon.Name + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
@@ -1665,10 +1658,6 @@ namespace LuckParser.Controllers
                         sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avgCondis, 1) + "\">" + boss.Character + " </td>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (hasBoons && boon.Name == "Retaliation")
-                            {
-                                continue;
-                            }
                             if (boon.Type == Boon.BoonType.Duration)
                             {
                                 sw.Write("<td>" + conditions[boon.ID].Uptime + "%</td>");
@@ -1758,10 +1747,6 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (boon.Name == "Retaliation")
-                            {
-                                continue;
-                            }
                             sw.Write("<th>" + "<img src=\"" + boon.Link + " \" alt=\"" + boon.Name + "\" title =\" " + boon.Name + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
@@ -1779,10 +1764,6 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.Character + " </td>");
                             foreach (Boon boon in _statistics.PresentConditions)
                             {
-                                if (boon.Name == "Retaliation")
-                                {
-                                    continue;
-                                }
                                 Statistics.FinalBossBoon toUse = conditions[boon.ID];
                                 if (boon.Type == Boon.BoonType.Duration)
                                 {
