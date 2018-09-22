@@ -47,7 +47,7 @@ namespace LuckParser.Models
 
         public override int IsCM(List<CombatItem> clist, int health)
         {
-            return 0;
+            return 0; //Check via Hydra HP or (>27e6)
         }
 
         public override string GetReplayIcon()

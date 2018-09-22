@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace LuckParser.Models
 {
-    public class NikareKenut : RaidLogic
+    public class TwinLargos : RaidLogic
     {
-        public NikareKenut()
+        public TwinLargos()
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -23,7 +23,7 @@ namespace LuckParser.Models
             new Mechanic(52931, "Aquatic Detainment", Mechanic.MechType.PlayerBoon, ParseEnum.BossIDS.Nikare, "symbol:'circle',color:'rgb(0,0,255)',", "Float","Aquatic Detainment (Float Bubble)", "Float Bubble",0),
             });
             CanCombatReplay = false;
-            Extension = "nk";
+            Extension = "twinlargos";
             IconUrl = "https://i.imgur.com/6O5MT7v.png";
         }
 
@@ -49,7 +49,7 @@ namespace LuckParser.Models
 
         public override int IsCM(List<CombatItem> clist, int health)
         {
-            return 0;
+            return (health > 18e6) ? 1 : 0; //Health of Nikare
         }
 
         public override string GetReplayIcon()
