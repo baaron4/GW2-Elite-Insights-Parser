@@ -60,6 +60,24 @@ namespace LuckParser.Properties {
             }
         }
         
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die const deadIcon = new Image();
+        ///deadIcon.src = &quot;https://wiki.guildwars2.com/images/4/4a/Ally_death_%28interface%29.png&quot;;
+        ///const downIcon = new Image();
+        ///downIcon.src = &quot;https://wiki.guildwars2.com/images/c/c6/Downed_enemy.png&quot;;
+        ///let time = 0;
+        ///let inch = 0;
+        ///let speed = 1;
+        ///const times = [];
+        ///let boss = null;
+        ///const playerData = new Map();
+        ///const trashMobData = new Map();
+        ///const mechanicActorData = new Set();
+        ///const rangeControl = new Map();
+        ///let selectedGroup = -1;
+        ///let selectedPlayer = null;
+        ///const timeSli [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
         internal static string combatreplay_js {
             get {
                 return ResourceManager.GetString("combatreplay_js", resourceCulture);
@@ -129,7 +147,7 @@ namespace LuckParser.Properties {
                 return ResourceManager.GetString("flomix_ei_js", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;!DOCTYPE html&gt;
         ///&lt;html lang=&quot;en&quot;&gt;
@@ -138,8 +156,9 @@ namespace LuckParser.Properties {
         ///&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.1/${bootstrapTheme}/bootstrap.min.css&quot;  crossorigin=&quot;anonymous&quot;&gt;
         ///&lt;link href=&quot;https://fonts.googleapis.com/css?family=Open+Sans&quot; rel=&quot;stylesheet&quot;&gt;
         ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css&quot;&gt;
-        ///&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;./flomix-ei.css?version=3&quot;&gt;
-        ///&lt;script src=&quot;https://co [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///&lt;!--${flomixCss}--&gt;
+        ///&lt;script src=&quot;https://code.jquery.com/jquery-3.3.1.js&quot;&gt;&lt;/script&gt;
+        ///&lt;script src [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string template_html {
             get {
@@ -232,7 +251,7 @@ namespace LuckParser.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot;  cellspacing=&quot;0&quot; width=&quot;100%&quot; id=&quot;dist_table_725_0&quot;&gt;
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot;  cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
         ///	&lt;thead&gt;
         ///		&lt;tr&gt;
         ///			&lt;th&gt;Skill&lt;/th&gt;
@@ -254,7 +273,7 @@ namespace LuckParser.Properties {
         ///	&lt;tbody&gt;
         ///		{{for rows}}
         ///		&lt;tr class=&quot;{{if skill.condi}}condi{{else}}power{{/if}}&quot;&gt;
-        ///			&lt;td class=&quot; [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///			&lt;td class=&quot;text-left&quot; title=&quot;{{:s [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string tmplDmgDistTable {
             get {
@@ -275,6 +294,37 @@ namespace LuckParser.Properties {
         internal static string tmplDmgTable {
             get {
                 return ResourceManager.GetString("tmplDmgTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
+        ///	&lt;thead&gt;
+        ///		&lt;tr&gt;
+        ///			&lt;th&gt;Skill&lt;/th&gt;
+        ///			&lt;th&gt;&lt;/th&gt;
+        ///			&lt;th&gt;Damage&lt;/th&gt;
+        ///			&lt;th&gt;Min&lt;/th&gt;
+        ///			&lt;th&gt;Avg&lt;/th&gt;
+        ///			&lt;th&gt;Max&lt;/th&gt;
+        ///&lt;!--			&lt;th&gt;Casts&lt;/th&gt; --&gt;
+        ///			&lt;th&gt;Hits&lt;/th&gt;
+        ///&lt;!--			&lt;th&gt;Hits per Cast&lt;/th&gt; --&gt;
+        ///			&lt;th&gt;Crit&lt;/th&gt;
+        ///			&lt;th&gt;Flank&lt;/th&gt;
+        ///			&lt;th&gt;Glance&lt;/th&gt;
+        ///&lt;!--			&lt;th&gt;Wasted&lt;/th&gt; --&gt;
+        ///&lt;!--			&lt;th&gt;Saved&lt;/th&gt; --&gt;
+        ///		&lt;/tr&gt;
+        ///	&lt;/thead&gt;
+        ///	&lt;tbody&gt;
+        ///		{{for rows}}
+        ///		&lt;tr class=&quot;{{if skill.condi}}condi{{else}}power{{/if}}&quot;&gt;
+        ///			&lt;t [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string tmplDmgTakenTable {
+            get {
+                return ResourceManager.GetString("tmplDmgTakenTable", resourceCulture);
             }
         }
         
@@ -300,16 +350,20 @@ namespace LuckParser.Properties {
                 return ResourceManager.GetString("tmplDpsTable", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die &lt;table class=&quot;table table-sm table-striped table-hover&quot; cellspacing=&quot;0&quot;&gt;
         ///	&lt;thead&gt;
         ///		&lt;tr&gt;
+        ///			{{if ~playerMech}}
         ///			&lt;th width=&quot;30px&quot;&gt;Sub&lt;/th&gt;
         ///			&lt;th width=&quot;30px&quot;&gt;&lt;/th&gt;
         ///			&lt;th class=&quot;text-left&quot;&gt;Player&lt;/th&gt;
+        ///			{{else}}
+        ///			&lt;th class=&quot;text-left&quot;&gt;Enemy&lt;/th&gt;
+        ///			{{/if}}
         ///			{{for mechanics}}
-        ///			{{if playerMech}}
+        ///			{{if playerMech &amp;&amp; ~playerMech || enemyMech &amp;&amp; !~playerMech}}
         ///				&lt;th title=&quot;{{:description}}&quot;&gt;{{:name}}&lt;/th&gt;
         ///			{{/if}}
         ///			{{/for}}
@@ -318,8 +372,7 @@ namespace LuckParser.Properties {
         ///	&lt;tbody&gt;
         ///		{{for rows ~mechanics=mechanics}}
         ///		&lt;tr&gt;
-        ///			&lt;td&gt;{{:player.group}}&lt;/td&gt;
-        ///			&lt;td title=&quot;{{:player.profession}}&quot;&gt;&lt;img src=&quot;{{:player.icon}}&quot; alt=&quot;{{:player.profession}}&quot; class= [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///			 [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string tmplMechanicTable {
             get {
