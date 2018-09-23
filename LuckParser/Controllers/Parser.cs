@@ -86,16 +86,16 @@ namespace LuckParser.Controllers
                 ParseSkillData(stream);
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "30% - Parsing combat list...", 30);
-                ParseCombatList(stream);                
+                ParseCombatList(stream);
                 row.BgWorker.ThrowIfCanceled(row);
                 row.BgWorker.UpdateProgress(row, "35% - Pairing data...", 35);
                 FillMissingData();
                 row.BgWorker.ThrowIfCanceled(row);
             }
-            catch(Exception ex) when (!(ex is CancellationException))
+            catch (Exception ex) when (!(ex is CancellationException))
             {
                 throw new CancellationException(row, ex);
-            }
+            }                      
         }
 
         private static BinaryReader CreateReader(Stream stream)
@@ -625,7 +625,7 @@ namespace LuckParser.Controllers
                 }
             }
             _combatData.Validate(_fightData);
-            _fightData.Logic.CanCombatReplay = _fightData.Logic.CanCombatReplay && _combatData.MovementData.Count > 0;
+            _fightData.Logic.CanCombatReplay = _fightData.Logic.CanCombatReplay && _combatData.MovementData.Count > 1;
             _fightData.HealthOverTime = bossHealthOverTime;//after xera in case of change
             
 

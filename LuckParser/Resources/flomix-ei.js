@@ -236,31 +236,65 @@ function createBoonTable($target, boons, data, generation) {
 }
 
 function createMechanicsTable($target, mechanics, data, boss) {
+	if (boss && (!mechanics || !data)) {
+		return;
+	}
 	var rows = [];
 	var sums = [];
+	var empty = true;
 	$.each(data, function(i, values) {
 		var player = boss ? window.data.enemies[i] : window.data.players[i];
 		rows.push({player:player,data:values});
+		$.each(values, function(v,value) {
+			if (value[0]) {
+				empty = false;
+			}
+		});
 	});
+	
+	if (boss && empty) {
+		return;
+	}
 
 	var html = tmplMechanicTable.render({rows:rows,mechanics:mechanics}, {playerMech:!boss});
 	lazyTable2($target, html, { 'order': [[boss ? 0 : 2, 'asc']]});
 }
 
-function createDistTable($target, data) {
+function createDistTable($target, data,toBoss,player,minion) {
 	var rows = [];
 	$.each(data.data, function(i, values) {
-		var skill={};
-		if (values[0]) {
-			skill = window.data.boonMap['b'+values[1]] || {};
-		} else {
-			skill = window.data.skillMap['s'+values[1]] || {};
-		}
-		skill.condi = values[0];
+		var skill = findSkill(values[0], values[1]);
 		rows.push({skill:skill,data:values});
 	});
-	var html = tmplDmgDistTable.render({rows:rows,contribution:data.contribution,totalDamage:data.totalDamage});
+	var html = tmplDmgDistTable.render({
+		rows:rows,
+		contribution:data.contribution,
+		totalDamage:data.totalDamage,
+		player:player,
+		minion:minion,
+		toBoss:toBoss});
 	lazyTable2($target, html, { 'order': [[2, 'desc']]});
+}
+
+function createDmgTakenTable($target, data) {
+	var rows = [];
+	$.each(data.data, function(i, values) {
+		var skill = findSkill(values[0], values[1]);
+		rows.push({skill:skill,data:values});
+	});
+	var html = tmplDmgTakenTable.render({rows:rows,contribution:data.contribution,totalDamage:data.totalDamage});
+	lazyTable2($target, html, { 'order': [[2, 'desc']]});
+}
+
+function findSkill(isBoon, id) {
+	var skill;
+	if (isBoon) {
+		skill = window.data.boonMap['b'+id] || {};
+	} else {
+		skill = window.data.skillMap['s'+id] || {};
+	}
+	skill.condi = isBoon;
+	return skill;
 }
 
 function createRotaTab($target, data) {
@@ -537,7 +571,7 @@ function lazyTable($table, options) {
 function createTable($target, tableHtml, options) {
 	var $table = $(tableHtml);
 	$target.append($table);
-	$table.DataTable(options);
+	$table.filter('table').DataTable(options);
 	
 	$target.find('[title]').tooltip({html:true});
 }
@@ -620,10 +654,17 @@ function generateWindow(layout) {
 		createBoonTable($('#defensiveGenSquad'+i), data.defBuffs, phaseData.defBuffGenSquadStats, true);
 
 		$.each(data.players, function(p, player) {
-			createDistTable($('#dist_table_'+p+'_'+i+'_boss'), player.details.dmgDistributionsBoss[i]);
-			createDistTable($('#dist_table_'+p+'_'+i), player.details.dmgDistributions[i]);
+			createDistTable($('#dist_table_'+p+'_'+i+'_boss'), player.details.dmgDistributionsBoss[i],true,player);
+			createDistTable($('#dist_table_'+p+'_'+i), player.details.dmgDistributions[i],false,player);
 
 			createRotaTab($('#rota_'+p+'_'+i), player.details.rotation[i]);
+
+			createDmgTakenTable($('#dist_table_'+p+'_'+i+'_taken'), player.details.dmgDistributionsTaken[i]);
+
+			$.each(player.minions, function(m,minion){
+				createDistTable($('#dist_table_'+p+'_'+m+'_'+i+'_boss'), player.details.minions[m].dmgDistributionsBoss[i],true,player,minion);
+				createDistTable($('#dist_table_'+p+'_'+m+'_'+i), player.details.minions[m].dmgDistributions[i],false,player,minion);
+			});
 		});
 	});
 
@@ -653,9 +694,12 @@ function buildWindowLayout(data) {
 			}
 
 			$.each(player.minions, function(m,minion){
-				playerTabs.push({name:minion.name,content:minion.name,noTitle:true});
+				playerTabs.push({name:minion.name,content:{tabs: [
+					{name:'Boss', content:{table:'dist_table_'+p+'_'+m+'_'+i+'_boss'},noTitle:true},
+					{name:'All', content:{table:'dist_table_'+p+'_'+m+'_'+i},noTitle:true}
+				]},noTitle:true});
 			});
-			playerTabs.push({name:'Damage Taken',content:'Damage Taken',noTitle:true});
+			playerTabs.push({name:'Damage Taken',content:{table:'dist_table_'+p+'_'+i+'_taken'},noTitle:true});
 			var playerContent = {tabs: playerTabs};
 			playerSubtabs.push({name: player.name, icon: urls[player.profession], iconName: player.profession, content: playerContent});
 		});
@@ -840,7 +884,8 @@ function createGraph($target, phaseData, phase, type) {
 		plot_bgcolor: 'rgba(0,0,0,0)',
 		staticPlot: true,
 		displayModeBar: false,
-		shapes: []
+		shapes: [],
+		annotations: []
 	};
 	
 	lines.push({x: xAxis, y: allPlayerDps, mode: 'lines',line: {shape: 'spline'},visible:'legendonly',name: 'All Player Dps'});
@@ -877,18 +922,32 @@ function createGraph($target, phaseData, phase, type) {
 
 
 	$.each(data.phases[phase].markupAreas, function(i, area) {
-		layout.shapes.push({
-			type: 'rect',
-			xref: 'x',
-			yref: 'paper',
-			x0: area[0],
-			y0: 0,
-			x1: area[1],
-			y1: 1,
-			fillcolor: '#808080',
-			opacity: 0.125,
-			line: { width: 0 }
-		});
+		if (area.label) {
+			layout.annotations.push({
+				x: (area.end+area.start)/2,
+				y: 1,
+				xref: 'x',
+				yref: 'paper',
+				xanchor: 'center',
+				yanchor: 'bottom',
+				text: area.label+'<br>'+'('+Math.round(area.end-area.start)+' s)',
+				showarrow: false
+			});
+		}
+		if (area.highlight) {
+			layout.shapes.push({
+				type: 'rect',
+				xref: 'x',
+				yref: 'paper',
+				x0: area.start,
+				y0: 0,
+				x1: area.end,
+				y1: 1,
+				fillcolor: '#808080',
+				opacity: 0.125,
+				line: { width: 0 }
+			});
+		}
 	});
 
 	$.each(data.phases[phase].markupLines, function(i, x) {

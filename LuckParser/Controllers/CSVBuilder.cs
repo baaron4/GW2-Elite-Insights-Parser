@@ -88,7 +88,7 @@ namespace LuckParser.Controllers
             //header
             WriteLine(new [] { "Elite Insights Version", Application.ProductVersion });
             WriteLine(new [] { "ARC Version", _log.LogData.BuildVersion});
-            WriteLine(new [] { "Boss ID", _log.Boss.InstID.ToString() });
+            WriteLine(new [] { "Boss ID", _log.FightData.ID.ToString() });
             WriteLine(new [] { "Recorded By", _log.LogData.PoV.Split(':')[0] });
             WriteLine(new [] { "Time Start", _log.LogData.LogStart });
             WriteLine(new [] { "Time End", _log.LogData.LogEnd });
@@ -209,8 +209,25 @@ namespace LuckParser.Controllers
             {
                 Statistics.FinalDPS dps = _statistics.Dps[player][phaseIndex];
                 Statistics.FinalStats stats = _statistics.Stats[player][phaseIndex];
-                TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
-                long fightDuration = phase.GetDuration("s");
+                string deathString = "";
+                string deadthTooltip = "";
+                if (stats.Died != 0.0)
+                {
+                    if (stats.Died < 0)
+                    {
+                        deathString = -stats.Died + " time(s)";
+                    }
+                    else
+                    {
+                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
+                        deathString = timedead.Minutes + " m " + timedead.Seconds + " s";
+                        deadthTooltip = Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "%";
+                    }
+                }
+                else
+                {
+                    deadthTooltip = "Never died";
+                }
                 string[] wep = player.GetWeaponsArray(_log);
                 string build = "";
                 if (player.Condition > 0)
@@ -232,7 +249,7 @@ namespace LuckParser.Controllers
                 WriteLine(new [] { player.Group.ToString(), player.Prof,build,player.Character, player.Account.TrimStart(':') ,wep[0],wep[1],wep[2],wep[3],
                 dps.BossDps.ToString(),dps.BossDamage.ToString(),dps.BossPowerDps.ToString(),dps.BossPowerDamage.ToString(),dps.BossCondiDps.ToString(),dps.BossCondiDamage.ToString(),
                 dps.AllDps.ToString(),dps.AllDamage.ToString(),dps.AllPowerDps.ToString(),dps.AllPowerDamage.ToString(),dps.AllCondiDps.ToString(),dps.AllCondiDamage.ToString(),
-                stats.DownCount.ToString(), timedead.Minutes + " m " + timedead.Seconds + " s",Math.Round((timedead.TotalSeconds / fightDuration) * 100,1) +"%"});
+                stats.DownCount.ToString(), deathString, deadthTooltip});
                 count++;
             }
             while (count < 15)//so each graph has equal spacing
@@ -696,10 +713,6 @@ namespace LuckParser.Controllers
             WriteCell("Avg");
             foreach (Boon boon in _statistics.PresentConditions)
             {
-                if (boon.Name == "Retaliation")
-                {
-                    continue;
-                }
                 WriteCell(boon.Name);
             }
 
@@ -709,10 +722,6 @@ namespace LuckParser.Controllers
             WriteCell(Math.Round(avgCondis, 1).ToString());
             foreach (Boon boon in _statistics.PresentConditions)
             {
-                if (boon.Name == "Retaliation")
-                {
-                    continue;
-                }
                 if (boon.Type == Boon.BoonType.Duration)
                 {
                     WriteCell(conditions[boon.ID].Uptime.ToString() + "%");
@@ -773,10 +782,6 @@ namespace LuckParser.Controllers
             WriteCell("Name");
             foreach (Boon boon in _statistics.PresentConditions)
             {
-                if (boon.Name == "Retaliation")
-                {
-                    continue;
-                }
                 WriteCell(boon.Name);
                 WriteCell(boon.Name + " Overstack");
             }
@@ -786,10 +791,6 @@ namespace LuckParser.Controllers
                 WriteCell(player.Character);
                 foreach (Boon boon in _statistics.PresentConditions)
                 {
-                    if (boon.Name == "Retaliation")
-                    {
-                        continue;
-                    }
                     if (boon.Type == Boon.BoonType.Duration)
                     {
                         WriteCell(conditions[boon.ID].Generated[player].ToString() + "%");

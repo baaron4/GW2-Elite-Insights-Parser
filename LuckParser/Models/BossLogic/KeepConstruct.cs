@@ -111,8 +111,12 @@ namespace LuckParser.Models
             for (int i = offset; i < phases.Count; i++)
             {
                 phases[i].Name = "Burn " + (i - offset + 1) + " (" + orbs[phases[i].Start] + " orbs)";
+                phases[i].DrawArea = true;
+                phases[i].DrawStart = true;
+                phases[i].DrawEnd = true;
             }
             phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
+            phases.Last().DrawEnd = false;
             return phases;
         }
 

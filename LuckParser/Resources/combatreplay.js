@@ -365,9 +365,10 @@ class MechanicDrawable extends Drawable {
 }
 
 class CircleMechanicDrawable extends MechanicDrawable {
-    constructor(start, end, fill, growing, color, radius, pos) {
+    constructor(start, end, fill, growing, color, radius, pos, minRadius) {
         super(start, end, fill, growing, color);
         this.radius = inch * radius;
+        this.minRadius = inch * minRadius;
         this.pos = pos;
     }
 
@@ -377,7 +378,7 @@ class CircleMechanicDrawable extends MechanicDrawable {
             return;
         }
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, this.getPercent(currentTime) * this.radius, 0, 2 * Math.PI);
+        ctx.arc(pos.x, pos.y, this.getPercent(currentTime) * (this.radius - this.minRadius) + this.minRadius, 0, 2 * Math.PI);
         if (this.fill) {
             ctx.fillStyle = this.color;
             ctx.fill();
@@ -500,7 +501,7 @@ function createAllActors() {
                 trashMobData.set(actor.ID, new MobIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
                 break;
             case "Circle":
-                mechanicActorData.add(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.Position));
+                mechanicActorData.add(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.Position, actor.MinRadius));
                 break;
             case "Rectangle":
                 mechanicActorData.add(new RectangleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Width, actor.Height, actor.Position));

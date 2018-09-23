@@ -438,12 +438,8 @@ namespace LuckParser.Controllers
                             List<List<Point3D>> GroupsPosList = new List<List<Point3D>>();
                             foreach (Player p in _log.PlayerList)
                             {
-                                List<Point3D> list = p.CombatReplay.GetActivePositions();  
-                                if (list.Count > 1)
-                                {
-                                    GroupsPosList.Add(list);
-                                }
-                            }                       
+                                GroupsPosList.Add(p.CombatReplay.GetActivePositions());
+                            }
                             for (int time = 0; time < GroupsPosList[0].Count; time++)
                             {
                                 float x = 0;
@@ -495,10 +491,11 @@ namespace LuckParser.Controllers
                     }
                     // R.I.P
                     List<CombatItem> dead = combatData.GetStates(instid, ParseEnum.StateChange.ChangeDead, start, end);
+                    List<CombatItem> up = combatData.GetStates(instid, ParseEnum.StateChange.ChangeUp, start, end);
                     final.Died = 0.0;
                     if (dead.Count > 0)
                     {
-                        final.Died = dead.Last().Time - start;
+                        final.Died = up.Count > 0 && up.Last().Time > dead.Last().Time ? -dead.Count : dead.Last().Time - start;
                     }
 
                     List<CombatItem> disconnect = combatData.GetStates(instid, ParseEnum.StateChange.Despawn, start, end);

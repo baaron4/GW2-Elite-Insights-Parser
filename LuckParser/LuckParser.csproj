@@ -104,7 +104,7 @@
     </Compile>
     <Compile Include="Models\BossLogic\BossLogic.cs" />
     <Compile Include="Models\BossLogic\Qadim.cs" />
-    <Compile Include="Models\BossLogic\NikareKenut.cs" />
+    <Compile Include="Models\BossLogic\TwinLargos.cs" />
     <Compile Include="Models\BossLogic\ConjuredAmalgamate.cs" />
     <Compile Include="Models\BossLogic\Dhuum.cs" />
     <Compile Include="Models\BossLogic\Ensolyss.cs" />
@@ -133,12 +133,14 @@
     <Compile Include="Models\DataModels\ParsedLog.cs" />
     <Compile Include="Models\DataModels\SettingsContainer.cs" />
     <Compile Include="Models\DataModels\Statistics.cs" />
+    <Compile Include="Models\HtmlModels\AreaLabelDto.cs" />
     <Compile Include="Models\HtmlModels\FoodDto.cs" />
     <Compile Include="Models\HtmlModels\DmgDistributionDto.cs" />
     <Compile Include="Models\HtmlModels\PhaseChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\BoonChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\EnemyDto.cs" />
+    <Compile Include="Models\HtmlModels\MinionDto.cs" />
     <Compile Include="Models\HtmlModels\SkillDto.cs" />
     <Compile Include="Models\HtmlModels\MechanicDto.cs" />
     <Compile Include="Models\HtmlModels\BoonDto.cs" />
@@ -155,12 +157,14 @@
     <Compile Include="Models\ParseModels\CombatReplay\Actors\RectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplay.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplayMap.cs" />
-    <Compile Include="Models\ParseModels\EffectStackingLogic\HealingLogic.cs" />
-    <Compile Include="Models\ParseModels\EffectStackingLogic\ForceOverrideLogic.cs" />
-    <Compile Include="Models\ParseModels\EffectStackingLogic\OverrideLogic.cs" />
-    <Compile Include="Models\ParseModels\EffectStackingLogic\QueueLogic.cs" />
-    <Compile Include="Models\ParseModels\EffectStackingLogic\StackingLogic.cs" />
+    <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\HealingLogic.cs" />
+    <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\ForceOverrideLogic.cs" />
+    <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\OverrideLogic.cs" />
+    <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\QueueLogic.cs" />
+    <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\StackingLogic.cs" />
     <Compile Include="Models\ParseModels\GW2API\GW2APICategory.cs" />
+    <Compile Include="Models\ParseModels\Logs\BoonRemovalLog.cs" />
+    <Compile Include="Models\ParseModels\Logs\BoonApplicationLog.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicData.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractMasterPlayer.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractPlayer.cs" />
@@ -262,6 +266,7 @@
     <None Include="Resources\theme-cosmo.png" />
     <None Include="Resources\theme-slate.png" />
     <None Include="Resources\combatreplay.js" />
+    <None Include="Resources\tmplDmgTakenTable.html" />
     <Content Include="Resources\TODO.txt" />
     <None Include="Resources\tmplCompTable.html" />
     <None Include="Resources\tmplMechanicTable.html" />

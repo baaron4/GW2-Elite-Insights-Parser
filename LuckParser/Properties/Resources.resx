@@ -151,6 +151,9 @@
   <data name="tmplDmgTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplDmgTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="tmplDmgTakenTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tmplDmgTakenTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="tmplDpsTable" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tmplDpsTable.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

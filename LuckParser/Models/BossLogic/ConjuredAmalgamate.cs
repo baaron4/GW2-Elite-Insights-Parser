@@ -42,7 +42,7 @@ namespace LuckParser.Models
 
         public override int IsCM(List<CombatItem> clist, int health)
         {
-            return 0;
+            return 0; //Possibly check if Conjured Scepters show up in the log?
         }
 
         public override string GetReplayIcon()

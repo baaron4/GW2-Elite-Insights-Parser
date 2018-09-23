@@ -14,6 +14,9 @@ namespace LuckParser.Models.HtmlModels
         public String name;
 
         [DataMember]
+        public String shortName;
+
+        [DataMember]
         public String description;
 
         [DataMember]

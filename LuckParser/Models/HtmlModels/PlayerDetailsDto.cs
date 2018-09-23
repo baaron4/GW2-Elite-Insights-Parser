@@ -10,15 +10,12 @@ namespace LuckParser.Models.HtmlModels
     [DataContract]
     public class PlayerDetailsDto
     {
-        [DataMember]
-        public List<DmgDistributionDto> dmgDistributions;
-        [DataMember]
-        public List<DmgDistributionDto> dmgDistributionsBoss;
-        [DataMember]
-        public List<List<double[]>> rotation;
-        [DataMember]
-        public List<List<BoonChartDataDto>> boonGraph;
-
-        [DataMember] public List<List<FoodDto>> food;
+        [DataMember(EmitDefaultValue = false)] public List<DmgDistributionDto> dmgDistributions;
+        [DataMember(EmitDefaultValue = false)] public List<DmgDistributionDto> dmgDistributionsBoss;
+        [DataMember(EmitDefaultValue = false)] public List<DmgDistributionDto> dmgDistributionsTaken;
+        [DataMember(EmitDefaultValue = false)] public List<List<double[]>> rotation;
+        [DataMember(EmitDefaultValue = false)] public List<List<BoonChartDataDto>> boonGraph;
+        [DataMember(EmitDefaultValue = false)] public List<List<FoodDto>> food;
+        [DataMember(EmitDefaultValue = false)] public List<PlayerDetailsDto> minions;
     }
 }
