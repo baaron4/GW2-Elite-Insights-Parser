@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class KeepConstruct : RaidLogic
     {
-        public KeepConstruct()
+        public KeepConstruct(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -28,7 +28,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/e/ea/Mini_Keep_Construct.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/Fj1HyM0.png",
                             Tuple.Create(1099, 1114),
@@ -37,13 +37,18 @@ namespace LuckParser.Models
                             Tuple.Create(1920, 12160, 2944, 14464));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            if (!requirePhases)
+            {
+                return phases;
+            }
             // Main phases
+            List<CastLog> castLogs = log.Boss.GetCastLogs(log, 0, log.FightData.FightEnd);
             List<CastLog> clsKC = castLogs.Where(x => x.SkillId == 35048).ToList();
             foreach (CastLog cl in clsKC)
             {
@@ -62,7 +67,7 @@ namespace LuckParser.Models
             }
             // add burn phases
             int offset = phases.Count;
-            List<CombatItem> orbItems = log.GetBoonData(35096).Where(x => x.DstInstid == boss.InstID).ToList();
+            List<CombatItem> orbItems = log.GetBoonData(35096).Where(x => x.DstInstid == log.Boss.InstID).ToList();
             // Get number of orbs and filter the list
             List<CombatItem> orbItemsFiltered = new List<CombatItem>();
             Dictionary<long, int> orbs = new Dictionary<long, int>();
@@ -120,27 +125,30 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            // TODO: needs arc circles for blades
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
-                    {
-                        ParseEnum.TrashIDS.Core,
-                        ParseEnum.TrashIDS.Jessica,
-                        ParseEnum.TrashIDS.Olson,
-                        ParseEnum.TrashIDS.Engul,
-                        ParseEnum.TrashIDS.Faerla,
-                        ParseEnum.TrashIDS.Caulle,
-                        ParseEnum.TrashIDS.Henley,
-                        ParseEnum.TrashIDS.Galletta,
-                        ParseEnum.TrashIDS.Ianim,
-                        ParseEnum.TrashIDS.GreenPhantasm,
-                        ParseEnum.TrashIDS.InsidiousProjection,
-                        ParseEnum.TrashIDS.UnstableLeyRift,
-                        ParseEnum.TrashIDS.RadiantPhantasm,
-                        ParseEnum.TrashIDS.CrimsonPhantasm,
-                        ParseEnum.TrashIDS.RetrieverProjection
-                    };
+            return new List<ParseEnum.TrashIDS>
+            {
+                ParseEnum.TrashIDS.Core,
+                ParseEnum.TrashIDS.Jessica,
+                ParseEnum.TrashIDS.Olson,
+                ParseEnum.TrashIDS.Engul,
+                ParseEnum.TrashIDS.Faerla,
+                ParseEnum.TrashIDS.Caulle,
+                ParseEnum.TrashIDS.Henley,
+                ParseEnum.TrashIDS.Galletta,
+                ParseEnum.TrashIDS.Ianim,
+                ParseEnum.TrashIDS.GreenPhantasm,
+                ParseEnum.TrashIDS.InsidiousProjection,
+                ParseEnum.TrashIDS.UnstableLeyRift,
+                ParseEnum.TrashIDS.RadiantPhantasm,
+                ParseEnum.TrashIDS.CrimsonPhantasm,
+                ParseEnum.TrashIDS.RetrieverProjection
+            };
+        }
+
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        {
             List<CastLog> magicCharge = cls.Where(x => x.SkillId == 35048).ToList();
             List<CastLog> magicExplode = cls.Where(x => x.SkillId == 34894).ToList();
             for (var i = 0; i < magicCharge.Count; i++)
@@ -217,11 +225,9 @@ namespace LuckParser.Models
                     replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI - i * 360 / 8 - 120), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)")); // First blade lasts longer
                 }
             }
-
-            return ids;
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // Bombs
             List<CombatItem> xeraFury = GetFilteredList(log, 35103, p.InstID);

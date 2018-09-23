@@ -24,7 +24,7 @@ namespace LuckParser.Models.ParseModels
             int start = (int)CombatReplay.TimeOffsets.Item1;
             int end = (int)CombatReplay.TimeOffsets.Item2;
             Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
-            switch (ParseEnum.GetTrashIDS(Agent.ID))
+            switch (ParseEnum.GetTrashIDS(AgentItem.ID))
             {
                 case ParseEnum.TrashIDS.BlueGuardian:
                     CombatReplay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)"));
@@ -108,7 +108,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetCombatReplayIcon(ParsedLog log)
         {
-            switch (ParseEnum.GetTrashIDS(Agent.ID))
+            switch (ParseEnum.GetTrashIDS(AgentItem.ID))
             {
                 case ParseEnum.TrashIDS.Seekers:
                     CombatReplay.Icon = "https://i.imgur.com/FrPoluz.png";
@@ -260,11 +260,6 @@ namespace LuckParser.Models.ParseModels
         public override int GetCombatReplayID()
         {
             return (InstID + "_" + CombatReplay.TimeOffsets.Item1 + "_" + CombatReplay.TimeOffsets.Item2).GetHashCode();
-        }
-
-        public void AddMechanics(ParsedLog log)
-        {
-            // nothing to do, trash mob mechanics should be managed by the boss
         }
     }
 }

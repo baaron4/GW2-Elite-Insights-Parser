@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Skorvald : FractalLogic
     {
-        public Skorvald()
+        public Skorvald(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -37,7 +37,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/c/c1/Skorvald_the_Shattered.jpg";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/PO3aoJD.png",
                             Tuple.Create(1759, 1783),
@@ -46,9 +46,9 @@ namespace LuckParser.Models
                             Tuple.Create(11204, 4414, 13252, 6462));
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        public override int IsCM(ParsedLog log)
         {
-            return (health == 5551340) ? 1 : 0;
+            return (log.Boss.Health == 5551340) ? 1 : 0;
         }
 
         public override string GetReplayIcon()
@@ -56,24 +56,24 @@ namespace LuckParser.Models
             return "https://i.imgur.com/IOPAHRE.png";
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
+        public override void SetSuccess(ParsedLog log)
         {
             // check reward
-            CombatItem reward = combatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
-            CombatItem lastDamageTaken = combatData.GetDamageTakenData(fightData.InstID).LastOrDefault(x => x.Value > 0);
+            CombatItem reward = log.CombatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
+            CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(log.Boss.InstID).LastOrDefault(x => x.Value > 0);
             if (lastDamageTaken != null)
             {
                 if (reward != null && lastDamageTaken.Time - reward.Time < 100)
                 {
-                    logData.Success = true;
-                    fightData.FightEnd = Math.Min(lastDamageTaken.Time, reward.Time);
+                    log.LogData.Success = true;
+                    log.FightData.FightEnd = Math.Min(lastDamageTaken.Time, reward.Time);
                 }
                 else
                 {
-                    SetSuccessByDeath(combatData,logData,fightData,pList);
-                    if (logData.Success)
+                    SetSuccessByDeath(log);
+                    if (log.LogData.Success)
                     {
-                        fightData.FightEnd = Math.Min(fightData.FightEnd, lastDamageTaken.Time);
+                        log.FightData.FightEnd = Math.Min(log.FightData.FightEnd, lastDamageTaken.Time);
                     }
                 }
             }

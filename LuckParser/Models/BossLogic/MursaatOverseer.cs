@@ -7,7 +7,7 @@ namespace LuckParser.Models
 {
     public class MursaatOverseer : RaidLogic
     {
-        public MursaatOverseer()
+        public MursaatOverseer(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>()
             {
@@ -25,27 +25,26 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/c/c8/Mini_Mursaat_Overseer.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/lT1FW2r.png",
                             Tuple.Create(889, 889),
                             Tuple.Create(1360, 2701, 3911, 5258),
                             Tuple.Create(-27648, -9216, 27648, 12288),
                             Tuple.Create(11774, 4480, 14078, 5376));
-        }      
-
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
-        {
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
-                    {
-                        ParseEnum.TrashIDS.Jade
-                    };     
-            return ids;
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            return (health > 25e6) ? 1 : 0;
+            return new List<ParseEnum.TrashIDS>
+            {
+                ParseEnum.TrashIDS.Jade
+            };
+        }
+
+        public override int IsCM(ParsedLog log)
+        {
+            return (log.Boss.Health > 25e6) ? 1 : 0;
         }
 
         public override string GetReplayIcon()

@@ -59,10 +59,14 @@ namespace LuckParser.Controllers
             SetPhases(log);
             SetMechanics(log);
 
-            var serializer = new JsonSerializer();
-            serializer.NullValueHandling = NullValueHandling.Ignore;
-            var writer = new JsonTextWriter(_sw);
-            writer.Formatting = _settings.IndentJSON ? Formatting.Indented : Formatting.None;
+            var serializer = new JsonSerializer
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
+            var writer = new JsonTextWriter(_sw)
+            {
+                Formatting = _settings.IndentJSON ? Formatting.Indented : Formatting.None
+            };
             serializer.Serialize(writer, log);
         }
 
@@ -115,11 +119,11 @@ namespace LuckParser.Controllers
         {
             log.Boss.Id = _log.FightData.ID;
             log.Boss.Name = _log.FightData.Name;
-            log.Boss.TotalHealth = _log.FightData.Health;
-            int finalBossHealth = _log.FightData.HealthOverTime.Count > 0
-                ? _log.FightData.HealthOverTime.Last().Y
+            log.Boss.TotalHealth = _log.Boss.Health;
+            int finalBossHealth = _log.Boss.HealthOverTime.Count > 0
+                ? _log.Boss.HealthOverTime.Last().Y
                 : 10000;
-            log.Boss.FinalHealth = _log.FightData.Health * (100.0 - finalBossHealth * 0.01);
+            log.Boss.FinalHealth = _log.Boss.Health * (100.0 - finalBossHealth * 0.01);
             log.Boss.HealthPercentBurned = 100.0 - finalBossHealth * 0.01;
 
             log.Boss.Dps = BuildDPS(_statistics.BossDps);

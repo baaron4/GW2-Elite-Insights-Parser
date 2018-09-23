@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class ConjuredAmalgamate : RaidLogic
     {
-        public ConjuredAmalgamate()
+        public ConjuredAmalgamate(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -20,7 +20,7 @@ namespace LuckParser.Models
             IconUrl = "";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/Dp3SFq6.png",
                             Tuple.Create(2557, 4706),
@@ -28,19 +28,22 @@ namespace LuckParser.Models
                             Tuple.Create(-21504, -21504, 24576, 24576),
                             Tuple.Create(13440, 14336, 15360, 16256));
         }
-        
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>();
-            return ids;
+            return new List<ParseEnum.TrashIDS>();
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        {
+        }
+
+        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
 
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        public override int IsCM(ParsedLog log)
         {
             return 0; //Possibly check if Conjured Scepters show up in the log?
         }

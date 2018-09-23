@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Matthias : RaidLogic
     {
-        public Matthias()
+        public Matthias(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -43,7 +43,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/5/5d/Mini_Matthias_Abomination.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/3X0YveK.png",
                             Tuple.Create(880, 880),
@@ -52,12 +52,16 @@ namespace LuckParser.Models
                             Tuple.Create(2688, 11906, 3712, 14210));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            if (!requirePhases)
+            {
+                return phases;
+            }
             // Special buff cast check
             CombatItem heatWave = log.GetBoonData(34526).FirstOrDefault();
             List<long> phaseStarts = new List<long>();
@@ -68,6 +72,7 @@ namespace LuckParser.Models
                 if (downPour != null)
                 {
                     phaseStarts.Add(downPour.Time - log.FightData.FightStart);
+                    List<CastLog> castLogs = log.Boss.GetCastLogs(log, 0, log.FightData.FightEnd);
                     CastLog abo = castLogs.Find(x => x.SkillId == 34427);
                     if (abo != null)
                     {
@@ -95,17 +100,21 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        {
+            return new List<ParseEnum.TrashIDS>
+            {
+                ParseEnum.TrashIDS.Storm,
+                ParseEnum.TrashIDS.Spirit,
+                ParseEnum.TrashIDS.Spirit2,
+                ParseEnum.TrashIDS.IcePatch,
+                ParseEnum.TrashIDS.Tornado
+            };
+        }
+
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
         {
             // TODO: needs facing information for hadouken
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
-                    {
-                        ParseEnum.TrashIDS.Spirit,
-                        ParseEnum.TrashIDS.Spirit2,
-                        ParseEnum.TrashIDS.IcePatch,
-                        ParseEnum.TrashIDS.Tornado,
-                        ParseEnum.TrashIDS.Storm
-                    };
             List<CastLog> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
             List<int> humanShieldRemoval = log.GetBoonData(34518).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(x.Time - log.FightData.FightStart)).Distinct().ToList();
             for (var i = 0; i < humanShield.Count; i++)
@@ -143,10 +152,9 @@ namespace LuckParser.Models
                 replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                 replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
             }
-            return ids;
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // Corruption
             List<CombatItem> corruptedMatthias = GetFilteredList(log, 34416, p.InstID);

@@ -861,7 +861,7 @@ namespace LuckParser.Controllers
                         sw.Write(a.GetCombatReplayJSON(map,p));
                     }
                 }
-                foreach (Mob m in log.Boss.TrashMobs)
+                foreach (Mob m in log.FightData.Logic.TrashMobs)
                 {
                     sw.Write(",");
                     sw.Write(m.GetCombatReplayJSON(map));

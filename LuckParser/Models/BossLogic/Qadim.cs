@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Qadim : RaidLogic
     {
-        public Qadim()
+        public Qadim(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -25,7 +25,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/f/f2/Mini_Qadim.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/vtVubK8.png",
                             Tuple.Create(3241, 2814),
@@ -33,19 +33,23 @@ namespace LuckParser.Models
                             Tuple.Create(-21504,-21504,24576,24576),
                             Tuple.Create(13440,14336,15360,16256));
         }
-        
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>();
-            return ids;
+            return new List<ParseEnum.TrashIDS>();
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        {
+            
+        }
+
+        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
 
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        public override int IsCM(ParsedLog log)
         {
             return 0; //Check via Hydra HP or (>27e6)
         }
