@@ -1,3 +1,8 @@
+{{if minion}}
+<div>{{>minion.name}} did {{:contribution}}% of {{>player.name}}'s total{{if toBoss}} Boss{{/if}} dps</div>
+{{else player}}
+<div>{{>player.name}} did {{:contribution}}% of his own total{{if toBoss}} Boss{{/if}} dps</div>
+{{/if}}
 <table class="table table-sm table-striped table-hover"  cellspacing="0" width="100%">
 	<thead>
 		<tr>
@@ -20,7 +25,7 @@
 	<tbody>
 		{{for rows}}
 		<tr class="{{if skill.condi}}condi{{else}}power{{/if}}">
-			<td class="text-left" title="{{:skill.id}}">{{if skill.icon}}<img src="{{:skill.icon}}" class="icon icon-hover"> {{/if}}{{:skill.name}}</td>
+			<td class="text-left" title="{{:skill.id}}">{{if skill.icon}}<img src="{{attr:skill.icon}}" class="icon icon-hover"> {{/if}}{{>skill.name}}</td>
 			<td>{{dec:data[2]}}%</td>
 			<td>{{:data[3]}}</td>
 			<td>{{:data[4]}}</td>
