@@ -1,15 +1,15 @@
 <ul class="nav nav-tabs">
 	{{for tabs}}
 	{{if subtabs}}
-	<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">{{:name}}</a>
+	<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">{{>name}}</a>
 		<div class="dropdown-menu" x-placement="bottom-start">
 			{{for subtabs ~idPrefix=~idPrefix+#getIndex()+"-" tabindex=#getIndex()}}
-				<a class="dropdown-item" data-toggle="tab" href="#{{:~idPrefix+#index}}">{{if icon}}<img src="{{:icon}}" alt="{{:iconName}}" title="{{:iconName}}" class="icon" > {{/if}}{{:name}}</a>
+				<a class="dropdown-item" data-toggle="tab" href="#{{:~idPrefix+#index}}">{{if icon}}<img src="{{attr:icon}}" alt="{{attr:iconName}}" title="{{attr:iconName}}" class="icon" > {{/if}}{{>name}}</a>
 			{{/for}}
 		</div>
 	</li>
 	{{else}}
-	<li class="nav-item"><a class="nav-link{{if #getIndex()==0}} active{{/if}}" data-toggle="tab" href="#{{attr:id?id:~idPrefix+#getIndex()}}"><span {{if title}}title="{{attr:title}}"{{/if}}>{{:name}}</span></a></li>
+	<li class="nav-item"><a class="nav-link{{if #getIndex()==0}} active{{/if}}" data-toggle="tab" href="#{{attr:id?id:~idPrefix+#getIndex()}}"><span {{if title}}title="{{attr:title}}"{{/if}}>{{>name}}</span></a></li>
 	{{/if}}
 	{{/for}}
 </ul>
@@ -19,7 +19,7 @@
 {{for subtabs ~idPrefix=~idPrefix+#getIndex()+"-" tabindex=#getIndex()}}
 <div class="tab-pane fade{{if #index==0 && ~tabindex==0}} show active{{/if}}" id="{{attr:id?id:~idPrefix+#index}}">
 	{{if !noTitle}}
-	<h2 align="center" class="phase-title">{{if icon}}<img src="{{:icon}}" alt="{{:iconName}}" title="{{:iconName}}" class="icon"> {{/if}}{{>name}}</h2>
+	<h2 align="center" class="phase-title">{{if icon}}<img src="{{attr:icon}}" alt="{{attr:iconName}}" title="{{attr:iconName}}" class="icon"> {{/if}}{{>name}}</h2>
 	{{/if}}
 	{{:~buildContent(content,~idPrefix+#index,~level+1)}}
 </div>

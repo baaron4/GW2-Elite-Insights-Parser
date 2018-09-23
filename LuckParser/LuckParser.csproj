@@ -141,6 +141,7 @@
     <Compile Include="Models\HtmlModels\BoonChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\EnemyDto.cs" />
+    <Compile Include="Models\HtmlModels\MinionDto.cs" />
     <Compile Include="Models\HtmlModels\SkillDto.cs" />
     <Compile Include="Models\HtmlModels\MechanicDto.cs" />
     <Compile Include="Models\HtmlModels\BoonDto.cs" />
@@ -157,12 +158,14 @@
     <Compile Include="Models\ParseModels\CombatReplay\Actors\RectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplay.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplayMap.cs" />
-    <Compile Include="Models\ParseModels\EffectStackingLogic\HealingLogic.cs" />
-    <Compile Include="Models\ParseModels\EffectStackingLogic\ForceOverrideLogic.cs" />
-    <Compile Include="Models\ParseModels\EffectStackingLogic\OverrideLogic.cs" />
-    <Compile Include="Models\ParseModels\EffectStackingLogic\QueueLogic.cs" />
-    <Compile Include="Models\ParseModels\EffectStackingLogic\StackingLogic.cs" />
+    <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\HealingLogic.cs" />
+    <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\ForceOverrideLogic.cs" />
+    <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\OverrideLogic.cs" />
+    <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\QueueLogic.cs" />
+    <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\StackingLogic.cs" />
     <Compile Include="Models\ParseModels\GW2API\GW2APICategory.cs" />
+    <Compile Include="Models\ParseModels\Logs\BoonRemovalLog.cs" />
+    <Compile Include="Models\ParseModels\Logs\BoonApplicationLog.cs" />
     <Compile Include="Models\ParseModels\Mechanics\MechanicData.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractMasterPlayer.cs" />
     <Compile Include="Models\ParseModels\Players\AbstractPlayer.cs" />

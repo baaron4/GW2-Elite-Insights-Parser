@@ -118,7 +118,7 @@ namespace LuckParser.Models.ParseModels
         public long GetDeath(ParsedLog log, long start, long end)
         {
             long offset = log.FightData.FightStart;
-            CombatItem dead = log.CombatData.LastOrDefault(x => x.SrcInstid == AgentItem.InstID && x.IsStateChange.IsDead() && x.Time >= start + offset && x.Time <= end + offset);
+            CombatItem dead = log.CombatData.GetStatesData(ParseEnum.StateChange.ChangeDead).LastOrDefault(x => x.SrcInstid == InstID && x.Time >= start + offset && x.Time <= end + offset);
             if (dead != null && dead.Time > 0)
             {
                 return dead.Time;
@@ -126,7 +126,7 @@ namespace LuckParser.Models.ParseModels
             return 0;
         }
         // private getters
-        private BoonMap GetBoonMap(ParsedLog log, HashSet<long> boonIds, HashSet<long> condiIds, HashSet<long> offIds, HashSet<long> defIds)
+        private BoonMap GetBoonMap(ParsedLog log)
         {
             BoonMap boonMap = new BoonMap
             {
@@ -136,11 +136,9 @@ namespace LuckParser.Models.ParseModels
             long timeStart = log.FightData.FightStart;
             long agentStart = Math.Max(FirstAware - log.FightData.FightStart,0);
             long agentEnd = Math.Min(LastAware - log.FightData.FightStart, log.FightData.FightDuration);
-            HashSet<long> tableIds = new HashSet<long> (boonIds);
-            tableIds.UnionWith(condiIds);
-            tableIds.UnionWith(offIds);
-            tableIds.UnionWith(defIds);
-            foreach(CombatItem c in log.GetBoonDataByDst(AgentItem.InstID))
+            HashSet<long> OneCapacityIds = new HashSet<long> (Boon.BoonsByCapacity[1].Select(x => x.ID));
+            bool needCustomRemove = true;
+            foreach (CombatItem c in log.GetBoonDataByDst(InstID))
             {
                 long boonId = c.SkillID;
                 if (!boonMap.ContainsKey(boonId))
@@ -148,93 +146,31 @@ namespace LuckParser.Models.ParseModels
                     continue;
                 }
                 long time = c.Time - timeStart;
-                // don't add buff initial table boons and buffs in non golem mode, for others overstack is irrelevant
-                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (log.IsBenchmarkMode() || !tableIds.Contains(boonId)))
+                List<BoonLog> loglist = boonMap[boonId];
+                if (c.IsStateChange == ParseEnum.StateChange.BuffInitial && (OneCapacityIds.Contains(boonId) || c.Value > 0))
                 {
-                    List<BoonLog> loglist = boonMap[boonId];
-                    loglist.Add(new BoonLog(0, 0, long.MaxValue, 0));
+                    ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
+                    needCustomRemove = needCustomRemove && c.Value == 0;
+                    loglist.Add(new BoonApplicationLog(0, src, c.Value > 0 ? Math.Min(c.Value, int.MaxValue - 1) : int.MaxValue));
                 }
                 else if (c.IsStateChange != ParseEnum.StateChange.BuffInitial && time >= agentStart && time < agentEnd)
                 {
                     if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                     {
                         ushort src = c.SrcMasterInstid > 0 ? c.SrcMasterInstid : c.SrcInstid;
-                        List<BoonLog> loglist = boonMap[boonId];
-
-                        if (loglist.Count == 0 && c.OverstackValue > 0)
+                        if (c.OverstackValue > 0 && needCustomRemove)
                         {
-                            loglist.Add(new BoonLog(0, 0, time, 0));
+                            loglist.Add(new BoonRemovalLog(time, src, c.OverstackValue, ParseEnum.BuffRemove.Custom));
                         }
-                        loglist.Add(new BoonLog(time, src, c.Value, 0));
+                        loglist.Add(new BoonApplicationLog(time, src, c.Value));
                     }
-                    else if (Boon.RemovePermission(boonId, c.IsBuffRemove, c.IFF) && time < agentEnd - 50)
+                    else if (time < log.FightData.FightDuration - 50)
                     {
-                        if (c.IsBuffRemove == ParseEnum.BuffRemove.All)//All
+                        if (!needCustomRemove && c.Value == 0)
                         {
-                            List<BoonLog> loglist = boonMap[boonId];
-                            if (loglist.Count == 0)
-                            {
-                                loglist.Add(new BoonLog(0, 0, time, 0));
-                            }
-                            else
-                            {
-                                for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
-                                {
-                                    BoonLog curBL = loglist[cnt];
-                                    if (curBL.Overstack == 0 && curBL.Time + curBL.Value > time)
-                                    {
-                                        long subtract = (curBL.Time + curBL.Value) - time;
-                                        curBL.AddValue(-subtract);
-                                        // add removed as overstack
-                                        curBL.AddOverstack((uint)subtract);
-                                    }
-                                }
-                            }
+                            continue;
                         }
-                        else if (c.IsBuffRemove == ParseEnum.BuffRemove.Single)//Single
-                        {
-                            List<BoonLog> loglist = boonMap[boonId];
-                            if (loglist.Count == 0)
-                            {
-                                loglist.Add(new BoonLog(0, 0, time, 0));
-                            }
-                            else
-                            {
-                                int cnt = loglist.Count - 1;
-                                BoonLog curBL = loglist[cnt];
-                                if (curBL.Overstack == 0 && curBL.Time + curBL.Value > time)
-                                {
-                                    long subtract = (curBL.Time + curBL.Value) - time;
-                                    curBL.AddValue(-subtract);
-                                    // add removed as overstack
-                                    curBL.AddOverstack((uint)subtract);
-                                }
-                            }
-                        }
-                        else if (c.IsBuffRemove == ParseEnum.BuffRemove.Manual)//Manuel
-                        {
-                            List<BoonLog> loglist = boonMap[boonId];
-                            if (loglist.Count == 0)
-                            {
-                                loglist.Add(new BoonLog(0, 0, time, 0));
-                            }
-                            else
-                            {
-                                for (int cnt = loglist.Count - 1; cnt >= 0; cnt--)
-                                {
-                                    BoonLog curBL = loglist[cnt];
-                                    long ctime = curBL.Time + curBL.Value;
-                                    if (curBL.Overstack == 0 && ctime > time)
-                                    {
-                                        long subtract = (curBL.Time + curBL.Value) - time;
-                                        curBL.AddValue(-subtract);
-                                        // add removed as overstack
-                                        curBL.AddOverstack((uint)subtract);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
+                        loglist.Add(new BoonRemovalLog(time, c.DstInstid, c.Value, c.IsBuffRemove));
                     }
                 }
             }   
@@ -341,12 +277,8 @@ namespace LuckParser.Models.ParseModels
         }
         private void SetBoonDistribution(ParsedLog log)
         {
-            HashSet<long> boonIds = new HashSet<long>(Boon.GetBoonList().Select(x => x.ID));
-            HashSet<long> condiIds = new HashSet<long>(Boon.GetCondiBoonList().Select(x => x.ID));
-            HashSet<long> defIds = new HashSet<long>(Boon.GetDefensiveTableList().Select(x => x.ID));
-            HashSet<long> offIds = new HashSet<long>(Boon.GetOffensiveTableList().Select(x => x.ID));
             List<PhaseData> phases = log.FightData.GetPhases(log);
-            BoonMap toUse = GetBoonMap(log, boonIds, condiIds, defIds, offIds);
+            BoonMap toUse = GetBoonMap(log);
             long dur = log.FightData.FightDuration;
             int fightDuration = (int)(dur) / 1000;
             HashSet<long> extraDataID = new HashSet<long>
@@ -357,6 +289,8 @@ namespace LuckParser.Models.ParseModels
             };
             BoonsGraphModel boonPresenceGraph = new BoonsGraphModel("Number of Boons");
             BoonsGraphModel condiPresenceGraph = new BoonsGraphModel("Number of Conditions");
+            HashSet<long> boonIds = new HashSet<long>(Boon.GetBoonList().Select(x => x.ID));
+            HashSet<long> condiIds = new HashSet<long>(Boon.GetCondiBoonList().Select(x => x.ID));
             for (int i = 0; i < phases.Count; i++)
             {
                 _boonDistribution.Add(new BoonDistribution());
@@ -377,7 +311,7 @@ namespace LuckParser.Models.ParseModels
                     bool requireExtraData = extraDataID.Contains(boonid);
                     var simulator = boon.CreateSimulator(log);
                     simulator.Simulate(logs, dur);
-                    if (death > 0 && GetCastLogs(log, death + 5000, fightDuration).Count == 0)
+                    if (death > 0 && GetCastLogs(log, death + 5000, dur).Count == 0)
                     {
                         simulator.Trim(death);
                     }
