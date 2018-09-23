@@ -42,7 +42,7 @@
 			<td></td>
 			<td class="text-left">{{:name}}</td>
 			{{for ~boons ~data=data}}
-			<td>{{:~data[#getIndex()]}}{{if !stacking}}%{{/if}}</td>
+			<td>{{dec:~data[#getIndex()]}}{{if !stacking}}%{{/if}}</td>
 			{{/for}}
 			</tr>
 		{{/for}}

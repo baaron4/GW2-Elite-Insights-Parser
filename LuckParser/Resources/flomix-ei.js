@@ -83,6 +83,7 @@ function createProfessionCell($cell,profession) {
 }
 
 function createDpsTable($target, data) {
+	if (!$target.length) return;
 	var rows = [];
 	var sums = [];
 	var total = [];
@@ -107,6 +108,7 @@ function createDpsTable($target, data) {
 }
 
 function createDamageStatsTable($target, data) {
+	if (!$target.length) return;
 	var rows = [];
 	var sums = [];
 	var total = [];
@@ -146,6 +148,7 @@ function calcAverages(data, avgCols, count) {
 }
 
 function createDefStatsTable($target, data) {
+	if (!$target.length) return;
 	var rows = [];
 	var sums = [];
 	var total = [0,0,0,0,0,0,0,0];
@@ -171,6 +174,7 @@ function createDefStatsTable($target, data) {
 
 
 function createSupStatsTable($target, data) {
+	if (!$target.length) return;
 	var rows = [];
 	var sums = [];
 	var total = [0,0,0,0];
@@ -195,6 +199,7 @@ function createSupStatsTable($target, data) {
 }
 
 function createBoonTable($target, boons, data, generation) {
+	if (!$target.length) return;
 	var rows = [];
 	var sums = [];
 
@@ -235,7 +240,40 @@ function createBoonTable($target, boons, data, generation) {
 	lazyTable2($target, html, { 'order': [[3, 'desc']]});
 }
 
+function createBossCondiTable($target, boons, data) {
+	if (!$target.length) return;
+	var rows = [];
+	var sums = [];
+
+	var total = [];
+	var avgCols = [];
+	
+	$.each(data, function(i, values) {
+		var player = window.data.players[i];
+		var g = player.group;
+		rows.push({player:player,data:values});
+		for (var j = 0; j < boons.length; j++) {
+			var v = values.val[j][0];
+			total[j]=(total[j]||0)+v;
+		}
+	});
+
+	sums.push({name:'Boss Total', data:total});
+
+	var html = tmplBoonTable.render({rows:rows,sums:sums,boons:boons}, {generation:true});
+	lazyTable2($target, html, { 'order': [[3, 'desc']]});
+}
+
+function createBossBoonTable($target, boons, data) {
+	if (!$target.length) return;
+	var row = {player:window.data.boss, data:data};
+
+	var html = tmplBoonTable.render({rows:[row],sums:[],boons:boons}, {generation:false});
+	lazyTable2($target, html, { 'order': [[3, 'desc']]});
+}
+
 function createMechanicsTable($target, mechanics, data, boss) {
+	if (!$target.length) return;
 	if (boss && (!mechanics || !data)) {
 		return;
 	}
@@ -261,6 +299,7 @@ function createMechanicsTable($target, mechanics, data, boss) {
 }
 
 function createDistTable($target, data,toBoss,player,minion) {
+	if (!$target.length) return;
 	var rows = [];
 	$.each(data.data, function(i, values) {
 		var skill = findSkill(values[0], values[1]);
@@ -277,6 +316,7 @@ function createDistTable($target, data,toBoss,player,minion) {
 }
 
 function createDmgTakenTable($target, data) {
+	if (!$target.length) return;
 	var rows = [];
 	$.each(data.data, function(i, values) {
 		var skill = findSkill(values[0], values[1]);
@@ -598,7 +638,11 @@ function buildTabs(tabLayout, parentId, level) {
 }
 
 function buildTable(layout,parentId,level) {
-	return '<div id="'+layout.table+'"></div>';
+	html = '<div id="'+layout.table+'"></div>';
+	if (layout.caption) {
+		html = '<h3>' + layout.caption + '</h3>' + html;
+	}
+	return html;
 }
 
 function buildContent(layout, parentId, level) {
@@ -652,6 +696,9 @@ function generateWindow(layout) {
 		createBoonTable($('#defensiveGenGroup'+i), data.defBuffs, phaseData.defBuffGenGroupStats, true);
 		createBoonTable($('#defensiveGenOGroup'+i), data.defBuffs, phaseData.defBuffGenOGroupStats, true);
 		createBoonTable($('#defensiveGenSquad'+i), data.defBuffs, phaseData.defBuffGenSquadStats, true);
+
+		createBossCondiTable($('#bossCondis'+i), data.bossCondis, phaseData.bossCondiStats, phaseData.bossCondiTotals);
+		createBossBoonTable($('#bossBoons'+i), data.bossBoons, phaseData.bossBoonTotals);
 
 		$.each(data.players, function(p, player) {
 			createDistTable($('#dist_table_'+p+'_'+i+'_boss'), player.details.dmgDistributionsBoss[i],true,player);
@@ -710,9 +757,19 @@ function buildWindowLayout(data) {
 					noTitle:true,
 					content: '<div id="DPSGraph'+i+'_'+graph.id+'" style="height: 1000px; width:1200px;"></div>'});
 			});
-			var bossTabs = [{name:'(Boss name)',content:'(TODO Boss tab content)'}];
-			//TODO add boss minions
-			bossTabs.push({name:'(Boss minions)',content:'(TODO Boss minions)'});
+			var bossTab = {name:data.boss.name,content:[
+				{table:'bossCondis'+i, caption:'Condition Generation'}
+			],noTitle:true};
+
+			if (phase.bossHasBoons) {
+				bossTab.content.push({table:'bossBoons'+i, caption: 'Boon Uptime'});
+			}
+
+			var bossTabs = [bossTab];
+
+			$.each(data.boss.minions, function(m, minion) {
+				bossTabs.push({name:minion.name,content:minion.name}); //TODO content
+			});
 
 			var mechanicsContent = [{table:'mechanicStats'+i},{table:'mechanicBossStats'+i}];
 			var phaseTabs = [
@@ -753,7 +810,7 @@ function buildWindowLayout(data) {
 				]}},
 				{name:'Mechanics',content:mechanicsContent},
 				{name:'Player',content:'Player',subtabs: playerSubtabs},
-				{name:'Boss',content:{tabs: bossTabs}},
+				{name:'Boss',caption:data.boss.name,content:{tabs: bossTabs}},
 				{name:'Estimates',content:'Estimates'}
 			];
 			if (data.flags.combatReplay && data.phases.length == 1) {
