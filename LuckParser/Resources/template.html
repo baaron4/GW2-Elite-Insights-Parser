@@ -19,34 +19,36 @@ var data = ${logDataJson};
 </script>
 <!--${playerData}-->
 </head>
-<body class="d-flex flex-column align-items-center theme-${bootstrapTheme}">
+<body class="theme-${bootstrapTheme}">
 	<div class="header">
 		<div>Time Start: ${encounterStart} | Time End: ${encounterEnd}</div>
 	</div>
-	<div style="width: 1100px;"class="d-flex flex-column">
-		<div class="d-flex flex-row justify-content-center align-items-center flex-wrap mb-3">
-			<div class="mr-3">
-				<div style="width: 400px;" class="card boss-summary d-flex flex-column">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-5">
+				<div class="card boss-summary mb-3">
 					<h3 class="card-header text-center">${bossName}</h3>
-					<div class="card-body d-flex flex-column align-items-center">
-						<blockquote class="card-blockquote mb-0">
-							<div style="width: 300px;" class="d-flex flex-row justify-content-between align-items-center">
-								<div><img src="${bossIcon}" alt="${bossName}" style="height: 120px; width: 120px;"></div>
-								<div>
+					<div class="card-body container">
+						<div class="row">
+							<div class="col-5">
+								<img src="${bossIcon}" alt="${bossName}" class="icon-xl">
+							</div>
+							<div class="col-7">
+									<div class="mb-2">
 									<div class="progress" style="width: 100%; height: 20px;" title="${bossHealthLeft}% left">
 										<div class="progress-bar bg-success" role="progressbar" style="width:${encounterPercent}%;" aria-valuenow="${encounterPercent}" aria-valuemin="0" aria-valuemax="100">
 										</div>
 									</div>
-									<p class="small" style="text-align:center;">${bossHealth} Health</p>
-									<p class='text ${encounterResultCss}'>Result: ${encounterResult}</p>
-									<p>Duration: ${encounterDuration}</p>
+									<div class="small" style="text-align:center;">${bossHealth} Health</div>
+									</div>
+									<div class='mb-2 text ${encounterResultCss}'>Result: ${encounterResult}</div>
+									<div class="mb-2">Duration: ${encounterDuration}</div>
 							</div>
 						</div>
-						</blockquote>
 					</div>
 				</div>
 			</div>
-			<div class="ml-3 mt-3" id="groupComp">
+			<div class="col-lg-7" id="groupComp">
 			</div>
 		</div>
 		<div id="content">
