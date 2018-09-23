@@ -11,11 +11,4 @@ Boss Tab
 		% of total DPS
 		Skills
 Player Tab
-	Minions
-		Boss
-			% of total DPS
-			Skills
-		All
-			% of total DPS
-			Skills
 	Death Recap

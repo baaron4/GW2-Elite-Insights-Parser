@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
     class HTMLBuilderNew
     {
         private const string scriptVersion = "0.5";
-        private const int scriptVersionRev = 9;
+        private const int scriptVersionRev = 10;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -2713,7 +2713,8 @@ namespace LuckParser.Controllers
 
                 foreach (KeyValuePair<string, Minions> pair in player.GetMinions(_log))
                 {
-                    playerDto.minions.Add(new MinionDto(pair.Value.InstID, pair.Key));
+                    string name = pair.Key.TrimEnd(" \0".ToArray());
+                    playerDto.minions.Add(new MinionDto(pair.Value.InstID, name));
                 }
 
                 data.players.Add(playerDto);

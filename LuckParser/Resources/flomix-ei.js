@@ -260,13 +260,19 @@ function createMechanicsTable($target, mechanics, data, boss) {
 	lazyTable2($target, html, { 'order': [[boss ? 0 : 2, 'asc']]});
 }
 
-function createDistTable($target, data) {
+function createDistTable($target, data,toBoss,player,minion) {
 	var rows = [];
 	$.each(data.data, function(i, values) {
 		var skill = findSkill(values[0], values[1]);
 		rows.push({skill:skill,data:values});
 	});
-	var html = tmplDmgDistTable.render({rows:rows,contribution:data.contribution,totalDamage:data.totalDamage});
+	var html = tmplDmgDistTable.render({
+		rows:rows,
+		contribution:data.contribution,
+		totalDamage:data.totalDamage,
+		player:player,
+		minion:minion,
+		toBoss:toBoss});
 	lazyTable2($target, html, { 'order': [[2, 'desc']]});
 }
 
@@ -565,7 +571,7 @@ function lazyTable($table, options) {
 function createTable($target, tableHtml, options) {
 	var $table = $(tableHtml);
 	$target.append($table);
-	$table.DataTable(options);
+	$table.filter('table').DataTable(options);
 	
 	$target.find('[title]').tooltip({html:true});
 }
@@ -648,16 +654,16 @@ function generateWindow(layout) {
 		createBoonTable($('#defensiveGenSquad'+i), data.defBuffs, phaseData.defBuffGenSquadStats, true);
 
 		$.each(data.players, function(p, player) {
-			createDistTable($('#dist_table_'+p+'_'+i+'_boss'), player.details.dmgDistributionsBoss[i]);
-			createDistTable($('#dist_table_'+p+'_'+i), player.details.dmgDistributions[i]);
+			createDistTable($('#dist_table_'+p+'_'+i+'_boss'), player.details.dmgDistributionsBoss[i],true,player);
+			createDistTable($('#dist_table_'+p+'_'+i), player.details.dmgDistributions[i],false,player);
 
 			createRotaTab($('#rota_'+p+'_'+i), player.details.rotation[i]);
 
 			createDmgTakenTable($('#dist_table_'+p+'_'+i+'_taken'), player.details.dmgDistributionsTaken[i]);
 
 			$.each(player.minions, function(m,minion){
-				createDistTable($('#dist_table_'+p+'_'+m+'_'+i+'_boss'), player.details.minions[m].dmgDistributionsBoss[i]);
-				createDistTable($('#dist_table_'+p+'_'+m+'_'+i), player.details.minions[m].dmgDistributions[i]);
+				createDistTable($('#dist_table_'+p+'_'+m+'_'+i+'_boss'), player.details.minions[m].dmgDistributionsBoss[i],true,player,minion);
+				createDistTable($('#dist_table_'+p+'_'+m+'_'+i), player.details.minions[m].dmgDistributions[i],false,player,minion);
 			});
 		});
 	});
