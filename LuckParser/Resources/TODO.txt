@@ -2,9 +2,6 @@
 	Personal Buff Uptimes
 Boss Tab
 	Boss itself
-		Condi Uptime
-		Boon Uptime
-		Condi Generation
 		DPS Graph
 		Skills
 	Minions
