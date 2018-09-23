@@ -365,9 +365,9 @@ function createRotaTab($target, data) {
 	var buildRota = function() {
 		var $btns = $('<div style="margin-bottom: 8px; margin-top: 8px;"></div>').append(
 			$('<button class="btn btn-primary btn-sm">').text('Switch size').click(function() {
-			$target.toggleClass('rot-small');
+			$('body').toggleClass('rot-small');
 		})).append(' ').append($('<button class="btn btn-primary btn-sm">').text('Toggle AutoAttack').click(function() {
-			$target.toggleClass('rot-noaa');
+			$('body').toggleClass('rot-noaa');
 		}));
 		$target.append($btns);
 		$target.append(html);
