@@ -6,6 +6,7 @@ namespace LuckParser.Models.ParseModels
     public class CircleActor : Actor
     {
         public int Radius { get; }
+        public int MinRadius { get; }
 
         public CircleActor(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color) : base(fill, growing, lifespan, color)
         {
@@ -21,10 +22,30 @@ namespace LuckParser.Models.ParseModels
         {
             Radius = radius;
         }
+
+        public CircleActor(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color, int minRadius) : base(fill, growing, lifespan, color)
+        {
+            Radius = radius;
+            MinRadius = minRadius;
+        }
+
+        public CircleActor(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color, Point3D position, int minRadius) : base(fill, growing, lifespan, color, position)
+        {
+            Radius = radius;
+            MinRadius = minRadius;
+        }
+
+        public CircleActor(bool fill, int growing, int radius, Tuple<int, int> lifespan, string color, Point3D prev, Point3D next, int time, int minRadius) : base(fill, growing, lifespan, color, prev, next, time)
+        {
+            Radius = radius;
+            MinRadius = minRadius;
+        }
+
         //
         protected class CircleSerializable<T> : Serializable<T>
         {
             public int Radius { get; set; }
+            public int MinRadius { get; set; }
         }
 
         public override string GetCombatReplayJSON(CombatReplayMap map, AbstractMasterPlayer master)
@@ -35,6 +56,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     Type = "Circle",
                     Radius = Radius,
+                    MinRadius = MinRadius,
                     Fill = Filled,
                     Color = Color,
                     Growing = Growing,
@@ -53,6 +75,7 @@ namespace LuckParser.Models.ParseModels
                 {
                     Type = "Circle",
                     Radius = Radius,
+                    MinRadius = MinRadius,
                     Fill = Filled,
                     Color = Color,
                     Growing = Growing,
