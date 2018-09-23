@@ -654,6 +654,11 @@ function generateWindow(layout) {
 			createRotaTab($('#rota_'+p+'_'+i), player.details.rotation[i]);
 
 			createDmgTakenTable($('#dist_table_'+p+'_'+i+'_taken'), player.details.dmgDistributionsTaken[i]);
+
+			$.each(player.minions, function(m,minion){
+				createDistTable($('#dist_table_'+p+'_'+m+'_'+i+'_boss'), player.details.minions[m].dmgDistributionsBoss[i]);
+				createDistTable($('#dist_table_'+p+'_'+m+'_'+i), player.details.minions[m].dmgDistributions[i]);
+			});
 		});
 	});
 
@@ -683,7 +688,10 @@ function buildWindowLayout(data) {
 			}
 
 			$.each(player.minions, function(m,minion){
-				playerTabs.push({name:minion.name,content:minion.name,noTitle:true});
+				playerTabs.push({name:minion.name,content:{tabs: [
+					{name:'Boss', content:{table:'dist_table_'+p+'_'+m+'_'+i+'_boss'},noTitle:true},
+					{name:'All', content:{table:'dist_table_'+p+'_'+m+'_'+i},noTitle:true}
+				]},noTitle:true});
 			});
 			playerTabs.push({name:'Damage Taken',content:{table:'dist_table_'+p+'_'+i+'_taken'},noTitle:true});
 			var playerContent = {tabs: playerTabs};

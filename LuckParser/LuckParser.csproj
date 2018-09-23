@@ -140,6 +140,7 @@
     <Compile Include="Models\HtmlModels\BoonChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\PlayerChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\EnemyDto.cs" />
+    <Compile Include="Models\HtmlModels\MinionDto.cs" />
     <Compile Include="Models\HtmlModels\SkillDto.cs" />
     <Compile Include="Models\HtmlModels\MechanicDto.cs" />
     <Compile Include="Models\HtmlModels\BoonDto.cs" />
