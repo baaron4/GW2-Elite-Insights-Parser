@@ -423,12 +423,19 @@ namespace LuckParser.Controllers
                 playerData.Add(dps.AllCondiDps);
                 playerData.Add(stats.DownCount);
 
-                TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
-                long fightDuration = phase.GetDuration();
-                if (timedead > TimeSpan.Zero)
+                if (stats.Died != 0.0)
                 {
-                    playerData.Add(timedead + " (" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100, 1) + "% Alive)");
-                    playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s");
+                    if (stats.Died < 0)
+                    {
+                        playerData.Add("");
+                        playerData.Add(-stats.Died + " time(s)");
+                    }
+                    else
+                    {
+                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
+                        playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)"); //28
+                        playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s");
+                    }
                 }
                 else
                 {
@@ -492,11 +499,19 @@ namespace LuckParser.Controllers
                 playerData.Add(Math.Round(stats.StackDist, 2)); //25
                 playerData.Add(stats.DownCount); //26
 
-                TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);//dead 
-                if (timedead > TimeSpan.Zero)
+                if (stats.Died != 0.0)
                 {
-                    playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s"); //27
-                    playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)"); //28
+                    if (stats.Died < 0)
+                    {
+                        playerData.Add(-stats.Died + " time(s)"); //27
+                        playerData.Add(""); //28
+                    }
+                    else
+                    {
+                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
+                        playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s"); //27
+                        playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)"); //28
+                    }
                 }
                 else
                 {
@@ -561,12 +576,19 @@ namespace LuckParser.Controllers
                 playerData.Add(Math.Round(stats.StackDist, 2)); //25
                 playerData.Add(stats.DownCount); //26
 
-                long fightDuration = phase.GetDuration();
-                TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);//dead 
-                if (timedead > TimeSpan.Zero)
+                if (stats.Died != 0.0)
                 {
-                    playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s"); //27
-                    playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100, 1) + "% Alive)"); //28
+                    if (stats.Died < 0)
+                    {
+                        playerData.Add(-stats.Died + " time(s)"); //27
+                        playerData.Add(""); //28
+                    }
+                    else
+                    {
+                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
+                        playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s"); //27
+                        playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)"); //28
+                    }
                 }
                 else
                 {
@@ -603,12 +625,19 @@ namespace LuckParser.Controllers
                 playerData.Add(stats.DodgeCount);
                 playerData.Add(stats.DownCount);
 
-                TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);//dead
-                long fightDuration = phase.GetDuration("s");
-                if (timedead > TimeSpan.Zero)
+                if (stats.Died != 0.0)
                 {
-                    playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s");
-                    playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / fightDuration) * 100, 1) + "% Alive)");
+                    if (stats.Died < 0)
+                    {
+                        playerData.Add(-stats.Died + " time(s)");
+                        playerData.Add("");
+                    }
+                    else
+                    {
+                        TimeSpan timedead = TimeSpan.FromMilliseconds(stats.Died);
+                        playerData.Add(timedead.Minutes + " m " + timedead.Seconds + " s");
+                        playerData.Add(timedead + "(" + Math.Round((timedead.TotalMilliseconds / phase.GetDuration()) * 100, 1) + "% Alive)");
+                    }
                 }
                 else
                 {
@@ -1009,10 +1038,10 @@ namespace LuckParser.Controllers
                     if (dl.IsFlanking == 1) flank++;
                 }
 
-                bool isCondi = conditionsById.ContainsKey(entry.Key);
+                bool isCondi = conditionsById.ContainsKey(entry.Key) || entry.Key == 873;
                 if (isCondi)
                 {
-                    Boon condi = conditionsById[entry.Key];
+                    Boon condi = entry.Key == 873 ? Boon.BoonsByIds[873] : conditionsById[entry.Key];
                     if (!usedBoons.ContainsKey(condi.ID)) usedBoons.Add(condi.ID, condi);
                 } else
                 {
@@ -1201,8 +1230,9 @@ namespace LuckParser.Controllers
             dto.totalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
 
             HashSet<long> usedIDs = new HashSet<long>();
-            List<Boon> condiList = _statistics.PresentConditions;
-            foreach (Boon condi in condiList)
+            List<Boon> condiRetal = new List<Boon>(_statistics.PresentConditions);
+            condiRetal.Add(Boon.BoonsByIds[873]);
+            foreach (Boon condi in condiRetal)
             {
                 long condiID = condi.ID;
                 int totaldamage = 0;
@@ -1618,10 +1648,6 @@ namespace LuckParser.Controllers
             bool hasBoons = false;
             foreach (Boon boon in _statistics.PresentBoons)
             {
-                if (boon.Name == "Retaliation")
-                {
-                    continue;
-                }
                 if (conditions[boon.ID].Uptime > 0.0)
                 {
                     hasBoons = true;
@@ -1647,10 +1673,6 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (hasBoons && boon.Name == "Retaliation")
-                            {
-                                continue;
-                            }
                             sw.Write("<th>" + "<img src=\"" + boon.Link + " \" alt=\"" + boon.Name + "\" title =\" " + boon.Name + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
@@ -1665,10 +1687,6 @@ namespace LuckParser.Controllers
                         sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avgCondis, 1) + "\">" + boss.Character + " </td>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (hasBoons && boon.Name == "Retaliation")
-                            {
-                                continue;
-                            }
                             if (boon.Type == Boon.BoonType.Duration)
                             {
                                 sw.Write("<td>" + conditions[boon.ID].Uptime + "%</td>");
@@ -1758,10 +1776,6 @@ namespace LuckParser.Controllers
                         sw.Write("<th>Name</th>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
-                            if (boon.Name == "Retaliation")
-                            {
-                                continue;
-                            }
                             sw.Write("<th>" + "<img src=\"" + boon.Link + " \" alt=\"" + boon.Name + "\" title =\" " + boon.Name + "\" height=\"18\" width=\"18\" >" + "</th>");
                         }
                     }
@@ -1779,10 +1793,6 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + player.Character + " </td>");
                             foreach (Boon boon in _statistics.PresentConditions)
                             {
-                                if (boon.Name == "Retaliation")
-                                {
-                                    continue;
-                                }
                                 Statistics.FinalBossBoon toUse = conditions[boon.ID];
                                 if (boon.Type == Boon.BoonType.Duration)
                                 {
