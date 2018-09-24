@@ -44,6 +44,11 @@ namespace LuckParser.Models
                             Tuple.Create(11774, 4480, 14078, 5376));
         }
 
+        protected override void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)
+        {
+            RegroupTargetsByID((ushort)ParseEnum.BossIDS.Deimos, agentData, combatItems);
+        }
+
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
         {
             List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.FirstAware > boss.LastAware && x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();

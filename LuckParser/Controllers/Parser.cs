@@ -555,29 +555,10 @@ namespace LuckParser.Controllers
         private void FillMissingData()
         {
             CompleteAgents();
-            // Set Boss data agent, instid, firstAware, lastAware and name
-            ulong agent = 0;
-            ushort instID = 0;
-            HashSet<ulong> multipleBoss = new HashSet<ulong>();
-            foreach (AgentItem NPC in _agentData.GetAgentByType(AgentItem.AgentType.NPC))
-            {
-                if (NPC.ID == _fightData.ID)
-                {
-                    if (agent == 0)
-                    {
-                        agent = NPC.Agent;
-                        instID = NPC.InstID;
-                        _fightData.Name = NPC.Name.Replace("\0","");
-                    }
-                    multipleBoss.Add(NPC.Agent);
-                }
-            }
-            if (multipleBoss.Count > 1)
-            {
-                //_agentData.CleanInstid(instID);
-            }
-            AgentItem bossAgent = _agentData.GetAgent(agent);
-            _boss = new Boss(bossAgent);
+            _fightData.Logic.ComputeFightTargets(_agentData, _fightData, _combatItems);
+            _boss = _fightData.Logic.Targets.First();
+            // Dealing with special case
+            _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems, _boss);
             List<Point> bossHealthOverTime = new List<Point>();
             // Grab values threw combat data
             foreach (CombatItem c in _combatItems)
@@ -614,9 +595,7 @@ namespace LuckParser.Controllers
                 }
             }
             _boss.HealthOverTime = bossHealthOverTime;//after xera in case of change
-            // Dealing with special case
-            _fightData.Logic.SpecialParse(_fightData, _agentData , _combatItems, _boss);
-            
+
             //players
             if (_playerList.Count == 0)
             {
@@ -624,11 +603,11 @@ namespace LuckParser.Controllers
             }
             if (_fightData.FightStart == 0)
             {
-                _fightData.FightStart = bossAgent.FirstAware;
+                _fightData.FightStart = _boss.FirstAware;
             }
             if (_fightData.FightEnd== long.MaxValue)
             {
-                _fightData.FightEnd = bossAgent.LastAware;
+                _fightData.FightEnd = _boss.LastAware;
             }
             _playerList = _playerList.OrderBy(a => a.Group).ToList();
             

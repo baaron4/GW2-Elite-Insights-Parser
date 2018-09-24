@@ -20,7 +20,8 @@ namespace LuckParser.Models
         public string Extension { get; protected set; } = "boss";
         public string IconUrl { get; protected set; } = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
         public List<Mob> TrashMobs { get; } = new List<Mob>();
-        private ushort _triggerID;
+        public List<Boss> Targets { get; } = new List<Boss>();
+        private readonly ushort _triggerID;
 
         public BossLogic(ushort triggerID)
         {
@@ -48,6 +49,42 @@ namespace LuckParser.Models
             {
                 _triggerID
             };
+        }
+
+        protected void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
+        {
+            List<AgentItem> agents = agentData.GetAgentsByID(id);
+            List<Boss> toRegroup = Targets.Where(x => x.ID == id).ToList();
+            if (agents.Count > 0 && toRegroup.Count > 0)
+            {
+                Targets.RemoveAll(x => x.ID == id);
+                AgentItem firstItem = agents.First();
+                AgentItem newTargetAgent = new AgentItem(firstItem)
+                {
+                    FirstAware = agents.Min(x => x.FirstAware),
+                    LastAware = agents.Max(x => x.LastAware)
+                };
+                agentData.OverrideID(id, newTargetAgent);
+                Targets.Add(new Boss(newTargetAgent));
+            }
+        }
+
+        protected virtual void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)
+        {
+        }
+
+        public void ComputeFightTargets(AgentData agentData, FightData fightData, List<CombatItem> combatItems)
+        {
+            List<ushort> ids = GetFightTargetsIDs();
+            foreach (ushort id in ids)
+            {
+                List<AgentItem> agents = agentData.GetAgentsByID(id);
+                foreach (AgentItem agentItem in agents)
+                {
+                    Targets.Add(new Boss(agentItem));
+                }
+            }
+            RegroupTargets(agentData, combatItems);
         }
 
         protected List<PhaseData> GetInitialPhase(ParsedLog log)

@@ -43,6 +43,17 @@ namespace LuckParser.Models
                             Tuple.Create(3456, 11012, 4736, 14212));
         }
 
+        protected override List<ushort> GetFightTargetsIDs()
+        {
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.ValeGuardian,
+                (ushort)ParseEnum.TrashIDS.RedGuardian,
+                (ushort)ParseEnum.TrashIDS.BlueGuardian,
+                (ushort)ParseEnum.TrashIDS.GreenGuardian
+            };
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;

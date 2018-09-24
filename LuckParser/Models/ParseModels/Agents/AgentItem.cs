@@ -51,6 +51,34 @@ namespace LuckParser.Models.ParseModels
             HitboxHeight = hbHeight;
         }
 
+        public AgentItem(AgentItem other)
+        {
+            Agent = other.Agent;
+            Name = other.Name;
+            Prof = other.Prof;
+            if (Prof.Contains(":"))
+            {
+                var splitted = Prof.Split(':');
+                try
+                {
+                    ID = UInt16.Parse(splitted[splitted.Length - 1]);
+                }
+                catch (FormatException)
+                {
+                    ID = 0;
+                }
+            }
+            Type = other.Type;
+            Toughness = other.Toughness;
+            Healing = other.Healing;
+            Condition = other.Condition;
+            Concentration = other.Concentration;
+            HitboxWidth = other.HitboxWidth;
+            HitboxHeight = other.HitboxHeight;
+            InstID = other.InstID;
+            MasterAgent = other.MasterAgent;
+        }
+
         public AgentItem(ulong agent, string name)
         {
             Agent = agent;

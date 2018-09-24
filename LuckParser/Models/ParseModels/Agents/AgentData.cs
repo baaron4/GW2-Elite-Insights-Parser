@@ -6,14 +6,15 @@ namespace LuckParser.Models.ParseModels
 {
     public class AgentData
     {
-
-        private readonly Dictionary<ulong, AgentItem> _allAgentsByAgent;
-        private readonly Dictionary<ushort, List<AgentItem>> _allAgentsByInstID;
-        private readonly Dictionary<ushort, List<AgentItem>> _allAgentsByID;
-        private readonly Dictionary<AgentItem.AgentType, List<AgentItem>> _allAgentsByType;
+        private readonly List<AgentItem> _allAgentsList;
+        private Dictionary<ulong, AgentItem> _allAgentsByAgent;
+        private Dictionary<ushort, List<AgentItem>> _allAgentsByInstID;
+        private Dictionary<ushort, List<AgentItem>> _allAgentsByID;
+        private Dictionary<AgentItem.AgentType, List<AgentItem>> _allAgentsByType;
 
         public AgentData(List<AgentItem> allAgentsList)
         {
+            _allAgentsList = allAgentsList;
             _allAgentsByAgent = allAgentsList.ToDictionary(a => a.Agent);
             _allAgentsByID = allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
             _allAgentsByInstID = allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
@@ -69,6 +70,16 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             return new AgentItem(0, "UNKNOWN");
+        }
+        
+        public void OverrideID(ushort ID, AgentItem agentItem)
+        {
+            _allAgentsList.RemoveAll(x => x.ID == ID);
+            _allAgentsList.Add(agentItem);
+            _allAgentsByAgent = _allAgentsList.ToDictionary(a => a.Agent);
+            _allAgentsByID = _allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());
+            _allAgentsByInstID = _allAgentsList.GroupBy(x => x.InstID).ToDictionary(x => x.Key, x => x.ToList());
+            _allAgentsByType = _allAgentsList.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList());
         }
 
         public List<AgentItem> GetAgentByType(AgentItem.AgentType type)
