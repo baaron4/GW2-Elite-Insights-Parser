@@ -281,7 +281,7 @@ namespace LuckParser.Controllers
             ParseEnum.IFF iff = ParseEnum.GetIFF(reader.ReadByte());
 
             // 1 byte: buff
-            ushort buff = reader.ReadByte();
+            byte buff = reader.ReadByte();
 
             // 1 byte: result
             ParseEnum.Result result = ParseEnum.GetResult(reader.ReadByte());
@@ -293,22 +293,22 @@ namespace LuckParser.Controllers
             ParseEnum.BuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
 
             // 1 byte: is_ninety
-            ushort isNinety = reader.ReadByte();
+            byte isNinety = reader.ReadByte();
 
             // 1 byte: is_fifty
-            ushort isFifty = reader.ReadByte();
+            byte isFifty = reader.ReadByte();
 
             // 1 byte: is_moving
-            ushort isMoving = reader.ReadByte();
+            byte isMoving = reader.ReadByte();
 
             // 1 byte: is_statechange
             ParseEnum.StateChange isStateChange = ParseEnum.GetStateChange(reader.ReadByte());
 
             // 1 byte: is_flanking
-            ushort isFlanking = reader.ReadByte();
+            byte isFlanking = reader.ReadByte();
 
             // 1 byte: is_flanking
-            ushort isShields = reader.ReadByte();
+            byte isShields = reader.ReadByte();
             // 2 bytes: garbage
             ParseHelper.SafeSkip(reader.BaseStream, 2);
 
@@ -357,7 +357,7 @@ namespace LuckParser.Controllers
             ParseEnum.IFF iff = ParseEnum.GetIFF(reader.ReadByte());
 
             // 1 byte: buff
-            ushort buff = reader.ReadByte();
+            byte buff = reader.ReadByte();
 
             // 1 byte: result
             ParseEnum.Result result = ParseEnum.GetResult(reader.ReadByte());
@@ -369,22 +369,22 @@ namespace LuckParser.Controllers
             ParseEnum.BuffRemove isBuffRemove = ParseEnum.GetBuffRemove(reader.ReadByte());
 
             // 1 byte: is_ninety
-            ushort isNinety = reader.ReadByte();
+            byte isNinety = reader.ReadByte();
 
             // 1 byte: is_fifty
-            ushort isFifty = reader.ReadByte();
+            byte isFifty = reader.ReadByte();
 
             // 1 byte: is_moving
-            ushort isMoving = reader.ReadByte();
+            byte isMoving = reader.ReadByte();
 
             // 1 byte: is_statechange
             ParseEnum.StateChange isStateChange = ParseEnum.GetStateChange(reader.ReadByte());
 
             // 1 byte: is_flanking
-            ushort isFlanking = reader.ReadByte();
+            byte isFlanking = reader.ReadByte();
 
             // 1 byte: is_flanking
-            ushort IsShields = reader.ReadByte();
+            byte IsShields = reader.ReadByte();
             // 5 bytes: offcycle (?) + garbage
             ParseHelper.SafeSkip(reader.BaseStream, 5);
 
