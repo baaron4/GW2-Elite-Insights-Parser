@@ -2801,7 +2801,7 @@ namespace LuckParser.Controllers
                 data.enemies.Add(new EnemyDto(enemy.Character));
             }
 
-            data.boss = new BossDto(_log.FightData.ID, _log.FightData.Name, _log.FightData.Logic.IconUrl);
+            data.boss = new BossDto(_log.FightData.ID, _log.Boss.Character, _log.FightData.Logic.IconUrl);
             data.boss.health = _log.Boss.Health;
             foreach (KeyValuePair<string, Minions> pair in _log.Boss.GetMinions(_log))
             {
