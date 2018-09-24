@@ -80,7 +80,7 @@ namespace LuckParser.Models
                 phase.DrawEnd = i == 1 || i == 3;
                 if (i == 2 || i == 4)
                 {
-                    List<AgentItem> spirits = log.AgentData.NPCAgentList.Where(x => ParseEnum.GetTrashIDS(x.ID) == ParseEnum.TrashIDS.ChargedSoul).ToList();
+                    List<AgentItem> spirits = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ParseEnum.GetTrashIDS(x.ID) == ParseEnum.TrashIDS.ChargedSoul).ToList();
                     foreach (AgentItem a in spirits)
                     {
                         long agentStart = a.FirstAware - log.FightData.FightStart;

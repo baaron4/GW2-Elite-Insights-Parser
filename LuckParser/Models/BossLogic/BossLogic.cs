@@ -42,7 +42,7 @@ namespace LuckParser.Models
             return _map;
         }
 
-        public virtual List<ushort> GetFightTargetsIDs()
+        protected virtual List<ushort> GetFightTargetsIDs()
         {
             return new List<ushort>
             {
@@ -86,7 +86,7 @@ namespace LuckParser.Models
         public void ComputeTrashMobsData(ParsedLog log, int pollingRate)
         {
             List<ParseEnum.TrashIDS> ids = GetTrashMobsIDS();
-            List<AgentItem> aList = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
+            List<AgentItem> aList = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
             foreach (AgentItem a in aList)
             {
                 Mob mob = new Mob(a);
@@ -208,7 +208,7 @@ namespace LuckParser.Models
                         foreach (Player p in log.PlayerList)
                         {
                             condition = mech.SpecialCondition;
-                            IEnumerable<AgentItem> agents = log.AgentData.GetAgents((ushort)mech.SkillId);
+                            IEnumerable<AgentItem> agents = log.AgentData.GetAgentsByID((ushort)mech.SkillId);
                             foreach (AgentItem a in agents)
                             {
                                 foreach (DamageLog dl in p.GetDamageLogs((AbstractPlayer)null, log, 0, log.FightData.FightDuration))
@@ -322,7 +322,7 @@ namespace LuckParser.Models
                         }
                         break;
                     case Mechanic.MechType.Spawn:
-                        foreach (AgentItem a in log.AgentData.NPCAgentList.Where(x => x.ID == mech.SkillId))
+                        foreach (AgentItem a in log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.ID == mech.SkillId))
                         {
                             if (!regroupedMobs.TryGetValue(a.ID, out AbstractMasterPlayer amp))
                             {

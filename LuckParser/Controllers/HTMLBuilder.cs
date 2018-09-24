@@ -2248,7 +2248,7 @@ namespace LuckParser.Controllers
                 {
                     foreach (DamageLog dl in damageToDown)
                     {
-                        AgentItem ag = _log.AgentData.GetAgentWInst(dl.SrcInstId);
+                        AgentItem ag = _log.AgentData.GetAgentByInstID(dl.SrcInstId, dl.Time + start);
                         string name = "UNKNOWN";
                         if (ag != null)
                         {
@@ -2260,7 +2260,7 @@ namespace LuckParser.Controllers
                 }
                 for (int d = 0; d < damageToKill.Count; d++)
                 {
-                    AgentItem ag = _log.AgentData.GetAgentWInst(damageToKill[d].SrcInstId);
+                    AgentItem ag = _log.AgentData.GetAgentByInstID(damageToKill[d].SrcInstId, damageToKill[d].Time + start);
                     string name = "UNKNOWN";
                     if (ag != null )
                     {

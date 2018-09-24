@@ -84,7 +84,7 @@ namespace LuckParser.Models
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
         {
-            foreach (AgentItem NPC in agentData.NPCAgentList)
+            foreach (AgentItem NPC in agentData.GetAgentByType(AgentItem.AgentType.NPC))
             {
                 if (NPC.ID == 16286)
                 {

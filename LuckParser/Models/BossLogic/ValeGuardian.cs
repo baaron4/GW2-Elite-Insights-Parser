@@ -97,7 +97,7 @@ namespace LuckParser.Models
                        ParseEnum.TrashIDS.GreenGuardian,
                        ParseEnum.TrashIDS.RedGuardian
                     };
-                    List<AgentItem> guardians = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
+                    List<AgentItem> guardians = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
                     foreach (AgentItem a in guardians)
                     {
                         long agentStart = a.FirstAware - log.FightData.FightStart;

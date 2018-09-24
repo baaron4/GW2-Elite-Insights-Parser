@@ -46,7 +46,7 @@ namespace LuckParser.Models
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
         {
-            List<AgentItem> deimosGadgets = agentData.GadgetAgentList.Where(x => x.FirstAware > boss.LastAware && x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
+            List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.FirstAware > boss.LastAware && x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
             if (deimosGadgets.Count > 0)
             {
                 AgentItem NPC = deimosGadgets.Last();
@@ -136,7 +136,7 @@ namespace LuckParser.Models
                         ParseEnum.TrashIDS.GamblerClones,
                         ParseEnum.TrashIDS.GamblerReal,
                     };
-                List<AgentItem> clones = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
+                List<AgentItem> clones = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
                 foreach (AgentItem a in clones)
                 {
                     long agentStart = a.FirstAware - log.FightData.FightStart;

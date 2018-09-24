@@ -4,11 +4,15 @@ namespace LuckParser.Models.ParseModels
 {
     public class AgentItem
     {
+
+        public enum AgentType { NPC, Gadget, Player }
+
         // Fields
         public readonly ulong Agent;
         public readonly ushort ID;
         public ulong MasterAgent { get; set; }
         public ushort InstID { get; set; }
+        public AgentType Type { get; }
         public long FirstAware { get; set; }
         public long LastAware { get; set; } = long.MaxValue;
         public readonly string Name;
@@ -21,7 +25,7 @@ namespace LuckParser.Models.ParseModels
         public readonly int HitboxHeight;
 
         // Constructors
-        public AgentItem(ulong agent, string name, string prof, int toughness, int healing, int condition, int concentration, int hbWidth, int hbHeight)
+        public AgentItem(ulong agent, string name, string prof, AgentType type, int toughness, int healing, int condition, int concentration, int hbWidth, int hbHeight)
         {
             Agent = agent;
             Name = name;
@@ -38,12 +42,19 @@ namespace LuckParser.Models.ParseModels
                     ID = 0;
                 }
             }
+            Type = type;
             Toughness = toughness;
             Healing = healing;
             Condition = condition;
             Concentration = concentration;
             HitboxWidth = hbWidth;
             HitboxHeight = hbHeight;
+        }
+
+        public AgentItem(ulong agent, string name)
+        {
+            Agent = agent;
+            Name = name;
         }
     }
 }
