@@ -1,6 +1,7 @@
 ﻿using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace LuckParser.Models
@@ -103,6 +104,30 @@ namespace LuckParser.Models
                 }
             }
             RegroupTargets(agentData, combatItems);
+        }
+
+        public void SetMaxHealth(ushort instid, long time, int health)
+        {
+            foreach (Boss boss in Targets)
+            {
+                if (boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
+                {
+                    boss.Health = health;
+                    break;
+                }
+            }
+        }
+
+        public void AddHealthUpdate(ushort instid, long time, int healthTime, int health)
+        {
+            foreach (Boss boss in Targets)
+            {
+                if (boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
+                {
+                    boss.HealthOverTime.Add(new Point(healthTime, health));
+                    break;
+                }
+            }
         }
 
         protected List<PhaseData> GetInitialPhase(ParsedLog log)

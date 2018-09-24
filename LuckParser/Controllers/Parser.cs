@@ -558,17 +558,11 @@ namespace LuckParser.Controllers
             _fightData.Logic.ComputeFightTargets(_agentData, _fightData, _combatItems);
             _boss = _fightData.Logic.Targets.First();
             _fightData.Name = _boss.Character;
-            // Dealing with special case
+            // Dealing with special cases
             _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems, _boss);
-            List<Point> bossHealthOverTime = new List<Point>();
             // Grab values threw combat data
             foreach (CombatItem c in _combatItems)
             {
-                if (c.SrcInstid == _boss.InstID && c.IsStateChange == ParseEnum.StateChange.MaxHealthUpdate)//max health update
-                {
-                    _boss.Health = (int)c.DstAgent;
-
-                }
                 switch(c.IsStateChange)
                 {
                     case ParseEnum.StateChange.PointOfView:
@@ -586,16 +580,15 @@ namespace LuckParser.Controllers
                         _logData.SetLogEnd(c.Value);
                         _fightData.FightEnd = c.Time;
                         break;
+                    case ParseEnum.StateChange.MaxHealthUpdate:
+                        _fightData.Logic.SetMaxHealth(c.SrcInstid, c.Time, (int)c.DstAgent);
+                        break;
                     case ParseEnum.StateChange.HealthUpdate:
                         //set health update
-                        if (c.SrcInstid == _boss.InstID)
-                        {
-                            bossHealthOverTime.Add(new Point ( (int)(c.Time - _fightData.FightStart), (int)c.DstAgent ));
-                        }
+                        _fightData.Logic.AddHealthUpdate(c.SrcInstid,c.Time, (int)(c.Time - _fightData.FightStart), (int)c.DstAgent);
                         break;
                 }
             }
-            _boss.HealthOverTime = bossHealthOverTime;//after xera in case of change
 
             //players
             if (_playerList.Count == 0)
