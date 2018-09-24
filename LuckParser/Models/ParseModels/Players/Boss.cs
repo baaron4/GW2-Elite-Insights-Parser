@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         public int Health { get; set; } = -1;
-        public List<Point> HealthOverTime { get; set; } = new List<Point>();
+        public List<Point> HealthOverTime { get; } = new List<Point>();
 
         public void AddCustomCastLog(CastLog cl, ParsedLog log)
         {
