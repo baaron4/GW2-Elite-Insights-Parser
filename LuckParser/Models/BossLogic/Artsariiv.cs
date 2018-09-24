@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Artsariiv : FractalLogic
     {
-        public Artsariiv()
+        public Artsariiv(ushort triggerID) : base(triggerID)
         {           
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -26,7 +26,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/4wmuc8B.png",
                             Tuple.Create(914, 914),
@@ -40,9 +40,9 @@ namespace LuckParser.Models
             return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
         }
 
-        public override void SetSuccess(CombatData combatData, LogData logData, FightData fightData, List<Player> pList)
+        public override void SetSuccess(ParsedLog log)
         {
-            SetSuccessOnCombatExit(combatData, logData,fightData,pList, 3, 5000);
+            SetSuccessOnCombatExit(log, 3, 5000);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace LuckParser.Models.ParseModels
 
         public MechanicData(FightData fightData)
         {
-            List<Mechanic> bossMechanics = fightData.Logic.GetMechanics();
+            List<Mechanic> bossMechanics = fightData.Logic.MechanicList;
             foreach(Mechanic m in bossMechanics)
             {
                 Add(m, new List<MechanicLog>());
@@ -46,7 +46,7 @@ namespace LuckParser.Models.ParseModels
                 Remove(mech);
             }
             // ready present mechanics
-            foreach (PhaseData phase in log.Boss.GetPhases(log))
+            foreach (PhaseData phase in log.FightData.GetPhases(log))
             {
                 HashSet<Mechanic> toAddPlayer = new HashSet<Mechanic>();
                 HashSet<Mechanic> toAddEnemy = new HashSet<Mechanic>();

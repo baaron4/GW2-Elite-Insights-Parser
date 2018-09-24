@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace LuckParser.Models.HtmlModels
@@ -10,6 +6,8 @@ namespace LuckParser.Models.HtmlModels
     [DataContract]
     public class LogDataDto
     {
+        [DataMember]
+        public BossDto boss;
         [DataMember(Order = 0)]
         public readonly List<PlayerDto> players = new List<PlayerDto>();
         [DataMember(Order = 1)]
@@ -24,6 +22,10 @@ namespace LuckParser.Models.HtmlModels
         public List<BoonDto> offBuffs;
         [DataMember(Order = 6)]
         public List<BoonDto> defBuffs;
+        [DataMember]
+        public List<BoonDto> bossCondis;
+        [DataMember]
+        public List<BoonDto> bossBoons;
         [DataMember(Order = 7)]
         public List<MechanicDto> mechanics;
         [DataMember(Order = 8)]

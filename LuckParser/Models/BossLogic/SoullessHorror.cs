@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class SoullessHorror : RaidLogic
     {
-        public SoullessHorror()
+        public SoullessHorror(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -33,7 +33,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/d/d4/Mini_Desmina.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/A45pVJy.png",
                             Tuple.Create(3657, 3657),
@@ -42,15 +42,18 @@ namespace LuckParser.Models
                             Tuple.Create(19072, 15484, 20992, 16508));
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            // TODO: facing information (slashes) and doughnuts for outer circle attack
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
-                    {
-                        ParseEnum.TrashIDS.Scythe,
-                        ParseEnum.TrashIDS.TormentedDead,
-                        ParseEnum.TrashIDS.SurgingSoul
-                    };
+            return new List<ParseEnum.TrashIDS>
+            {
+                ParseEnum.TrashIDS.Scythe,
+                ParseEnum.TrashIDS.TormentedDead,
+                ParseEnum.TrashIDS.SurgingSoul
+            };
+        }
+
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        {
             List<CastLog> howling = cls.Where(x => x.SkillId == 48662).ToList();
             foreach (CastLog c in howling)
             {
@@ -121,12 +124,11 @@ namespace LuckParser.Models
                 }
 
             }
-            return ids;
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        public override int IsCM(ParsedLog log)
         {
-            List<CombatItem> necrosis = clist.Where(x => x.SkillID == 47414 && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
+            List<CombatItem> necrosis = log.CombatData.GetBoonData(47414).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             if (necrosis.Count == 0)
             {
                 return 0;

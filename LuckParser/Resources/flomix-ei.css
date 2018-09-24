@@ -34,6 +34,16 @@ img.icon {
 	height: 18px;
 }
 
+img.icon-xl {
+	width: 128px;
+	height: 128px;
+}
+
+img.icon-lg {
+	width: 64px;
+	height: 64px;
+}
+
 .boss-summary {
 	border:1px solid #EE5F5B;
 }

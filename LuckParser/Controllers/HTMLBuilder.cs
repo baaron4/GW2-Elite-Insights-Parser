@@ -1740,7 +1740,7 @@ namespace LuckParser.Controllers
                         //foreach pet loop here                        
                         foreach (KeyValuePair<string, Minions> pair in p.GetMinions(_log))
                         {
-                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.InstID + "\">" + pair.Key + "</a></li>");
+                            sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.MinionID + "\">" + pair.Key + "</a></li>");
                         }
                         //inc dmg
                         sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#incDmg" + pid + "\">Damage Taken</a></li>");
@@ -1981,7 +1981,7 @@ namespace LuckParser.Controllers
                         sw.Write("</div>");
                         foreach (KeyValuePair<string, Minions> pair in p.GetMinions(_log))
                         {
-                            string id = pid + "_" + pair.Value.InstID;
+                            string id = pid + "_" + pair.Value.MinionID;
                             sw.Write("<div class=\"tab-pane fade \" id=\"minion" + id + "\">");
                             {
                                 string bossText = phase.Redirection.Count > 0 ? "Adds" : "Boss";
@@ -2375,7 +2375,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.FightData.InstID : 0, _log, phase.Start, phase.End);
+                damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.Boss : (AbstractPlayer)null, _log, phase.Start, phase.End);
             }
             int totalDamage = toBoss ? dps.BossDamage : dps.AllDamage;
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
@@ -2450,7 +2450,7 @@ namespace LuckParser.Controllers
         private void _CreateDMGDistTable(Statistics.FinalDPS dps, StreamWriter sw, AbstractMasterPlayer p, Minions minions, bool toBoss, int phaseIndex)
         {
             int totalDamage = toBoss ? dps.BossDamage : dps.AllDamage;
-            string tabid = p.InstID + "_" + phaseIndex + "_" + minions.InstID + (toBoss ? "_boss" : "");
+            string tabid = p.InstID + "_" + phaseIndex + "_" + minions.MinionID + (toBoss ? "_boss" : "");
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = minions.GetCastLogs(_log, phase.Start, phase.End);
             List<DamageLog> damageLogs;
@@ -2460,7 +2460,7 @@ namespace LuckParser.Controllers
             }
             else
             {
-                damageLogs = minions.GetDamageLogs(toBoss ? _log.FightData.InstID : 0, _log, phase.Start, phase.End);
+                damageLogs = minions.GetDamageLogs(toBoss ? _log.Boss : (AbstractPlayer)null, _log, phase.Start, phase.End);
             }
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             if (totalDamage > 0)
@@ -3184,7 +3184,7 @@ namespace LuckParser.Controllers
                 //foreach pet loop here
                 foreach (KeyValuePair<string, Minions> pair in _log.Boss.GetMinions(_log))
                 {
-                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.InstID + "\">" + pair.Key + "</a></li>");
+                    sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#minion" + pid + "_" + pair.Value.MinionID + "\">" + pair.Key + "</a></li>");
                 }
             }
             sw.Write("</ul>");
@@ -3298,7 +3298,7 @@ namespace LuckParser.Controllers
                 sw.Write("</div>");
                 foreach (KeyValuePair<string, Minions> pair in _log.Boss.GetMinions(_log))
                 {
-                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + pid + "_" + pair.Value.InstID + "\">");
+                    sw.Write("<div class=\"tab-pane fade \" id=\"minion" + pid + "_" + pair.Value.MinionID + "\">");
                     {
                         CreateDMGBossDistTable(sw, _log.Boss, pair.Value, phaseIndex);
                     }
@@ -3352,7 +3352,7 @@ namespace LuckParser.Controllers
         /// <param name="sw">Stream writer</param>
         private void CreateReplayTable(StreamWriter sw)
         {
-            CombatReplayMap map = _log.Boss.GetCombatMap(_log);
+            CombatReplayMap map = _log.FightData.Logic.GetCombatMap();
             Tuple<int, int> canvasSize = map.GetPixelMapSize();
             HTMLHelper.WriteCombatReplayInterface(sw, canvasSize, _log);
             HTMLHelper.WriteCombatReplayScript(sw, _log, canvasSize, map, _settings.PollingRate);
@@ -3500,25 +3500,25 @@ namespace LuckParser.Controllers
                                                     {
                                                         if (_log.LogData.Success)
                                                         {
-                                                            string tp = _log.FightData.Health.ToString() + " Health";
+                                                            string tp = _log.Boss.Health.ToString() + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:100%; ;\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
                                                         }
                                                         else
                                                         {
                                                             double finalPercent = 0;
-                                                            if (_log.FightData.HealthOverTime.Count > 0)
+                                                            if (_log.Boss.HealthOverTime.Count > 0)
                                                             {
-                                                                finalPercent = 100.0 - _log.FightData.HealthOverTime[_log.FightData.HealthOverTime.Count - 1].Y * 0.01;
+                                                                finalPercent = 100.0 - _log.Boss.HealthOverTime[_log.Boss.HealthOverTime.Count - 1].Y * 0.01;
                                                             }
-                                                            string tp = Math.Round(_log.FightData.Health * finalPercent / 100.0) + " Health";
+                                                            string tp = Math.Round(_log.Boss.Health * finalPercent / 100.0) + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-success\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + finalPercent + "%;\" aria-valuenow=\"" + finalPercent + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
-                                                            tp = Math.Round(_log.FightData.Health * (100.0 - finalPercent) / 100.0) + " Health";
+                                                            tp = Math.Round(_log.Boss.Health * (100.0 - finalPercent) / 100.0) + " Health";
                                                             sw.Write("<div class=\"progress-bar bg-danger\" data-toggle=\"tooltip\" title=\"" + tp + "\" role=\"progressbar\" style=\"width:" + (100.0 - finalPercent) + "%;\" aria-valuenow=\"" + (100.0 - finalPercent) + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
 
                                                         }
                                                     }
                                                     sw.Write("</div>");
-                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: "+ (_settings.LightTheme ? "#000" : "#FFF") +";\">" + _log.FightData.Health.ToString() + " Health</p>");
+                                                    sw.Write("<p class=\"small\" style=\"text-align:center; color: "+ (_settings.LightTheme ? "#000" : "#FFF") +";\">" + _log.Boss.Health.ToString() + " Health</p>");
                                                     sw.Write(_log.LogData.Success ? "<p class='text text-success'> Result: Success</p>" : "<p class='text text-warning'> Result: Fail</p>");
                                                     sw.Write("<p>Duration: " + durationString + " </p> ");
                                                 }

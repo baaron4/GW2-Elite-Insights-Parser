@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class TwinLargos : RaidLogic
     {
-        public TwinLargos()
+        public TwinLargos(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -27,7 +27,7 @@ namespace LuckParser.Models
             IconUrl = "https://i.imgur.com/6O5MT7v.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/RMBeXhd.png",
                             Tuple.Create(5760, 7538),
@@ -35,21 +35,24 @@ namespace LuckParser.Models
                             Tuple.Create(-21504, -21504, 24576, 24576),
                             Tuple.Create(13440, 14336, 15360, 16256));
         }
-        
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>();
-            return ids;
+            return new List<ParseEnum.TrashIDS>();
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        {
+        }
+
+        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
 
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        public override int IsCM(ParsedLog log)
         {
-            return (health > 18e6) ? 1 : 0; //Health of Nikare
+            return (log.Boss.Health > 18e6) ? 1 : 0; //Health of Nikare
         }
 
         public override string GetReplayIcon()

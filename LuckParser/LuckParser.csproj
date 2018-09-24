@@ -82,6 +82,7 @@
     <Compile Include="CancellationException.cs" />
     <Compile Include="ConsoleProgram.cs" />
     <Compile Include="Controllers\CSVHelper.cs" />
+    <Compile Include="Controllers\GeneralHelper.cs" />
     <Compile Include="Controllers\JSONBuilder.cs" />
     <Compile Include="Controllers\HTMLBuilderNew.cs" />
     <Compile Include="Controllers\Parser.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Models\HtmlModels\PlayerChartDataDto.cs" />
     <Compile Include="Models\HtmlModels\EnemyDto.cs" />
     <Compile Include="Models\HtmlModels\MinionDto.cs" />
+    <Compile Include="Models\HtmlModels\BossDto.cs" />
     <Compile Include="Models\HtmlModels\SkillDto.cs" />
     <Compile Include="Models\HtmlModels\MechanicDto.cs" />
     <Compile Include="Models\HtmlModels\BoonDto.cs" />

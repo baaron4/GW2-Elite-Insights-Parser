@@ -6,9 +6,9 @@ namespace LuckParser.Models.ParseModels
 {
     public class Minions : List<Minion>
     {
-        public readonly int InstID;
+        public readonly int MinionID;
         private readonly List<DamageLog> _damageLogs = new List<DamageLog>();
-        private List<DamageLog> _filteredDamageLogs = new List<DamageLog>();
+        private Dictionary<ushort, List<DamageLog>> _damageLogsByDst = new Dictionary<ushort, List<DamageLog>>();
         private readonly List<CastLog> _castLogs = new List<CastLog>();
         public string Character
         {
@@ -18,34 +18,33 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        public Minions(int instid)
+        public Minions(int id)
         {
-            InstID = instid;
+            MinionID = id;
         }
 
-        public List<DamageLog> GetDamageLogs(int instidFilter, ParsedLog log, long start, long end)
+        public List<DamageLog> GetDamageLogs(AbstractPlayer target, ParsedLog log, long start, long end)
         {
             if (_damageLogs.Count == 0)
             {
                 foreach (Minion minion in this)
                 {
-                    _damageLogs.AddRange(minion.GetDamageLogs(0, log, 0, log.FightData.FightDuration));
+                    _damageLogs.AddRange(minion.GetDamageLogs((AbstractPlayer)null, log, 0, log.FightData.FightDuration));
                 }
+                _damageLogsByDst = _damageLogs.GroupBy(x => x.DstInstId).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (_filteredDamageLogs.Count == 0)
+            if (target != null && _damageLogsByDst.TryGetValue(target.InstID, out var list))
             {
-                _filteredDamageLogs = _damageLogs.Where(x => x.DstInstId == log.FightData.InstID).ToList();
-            }
-            if (instidFilter > 0)
-            {
-                return _filteredDamageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
+                long targetStart = target.FirstAware - log.FightData.FightStart;
+                long targetEnd = target.LastAware - log.FightData.FightStart;
+                return list.Where(x => x.Time >= start && x.Time > targetStart && x.Time <= end && x.Time < targetEnd).ToList();
             }
             return _damageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
         public List<DamageLog> GetDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
         {
-            List<DamageLog> dls = GetDamageLogs(0, log, start, end);
+            List<DamageLog> dls = GetDamageLogs((AbstractPlayer)null, log, start, end);
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
             {

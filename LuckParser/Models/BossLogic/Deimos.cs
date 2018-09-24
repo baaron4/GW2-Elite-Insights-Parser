@@ -8,7 +8,7 @@ namespace LuckParser.Models
 {
     public class Deimos : RaidLogic
     {
-        public Deimos()
+        public Deimos(ushort triggerID) : base(triggerID)
         {
             MechanicList.AddRange(new List<Mechanic>
             {
@@ -35,7 +35,7 @@ namespace LuckParser.Models
             IconUrl = "https://wiki.guildwars2.com/images/e/e0/Mini_Ragged_White_Mantle_Figurehead.png";
         }
 
-        public override CombatReplayMap GetCombatMap()
+        protected override CombatReplayMap GetCombatMapInternal()
         {
             return new CombatReplayMap("https://i.imgur.com/GCwOVVE.png",
                             Tuple.Create(4400, 5753),
@@ -44,20 +44,54 @@ namespace LuckParser.Models
                             Tuple.Create(11774, 4480, 14078, 5376));
         }
 
-        public override List<PhaseData> GetPhases(Boss boss, ParsedLog log, List<CastLog> castLogs)
+        public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
+        {
+            List<AgentItem> deimosGadgets = agentData.GadgetAgentList.Where(x => x.FirstAware > boss.LastAware && x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
+            if (deimosGadgets.Count > 0)
+            {
+                AgentItem NPC = deimosGadgets.Last();
+                HashSet<ulong> deimos2Agents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
+                long oldAware = boss.LastAware;
+                fightData.PhaseData.Add(NPC.FirstAware >= oldAware ? NPC.FirstAware : oldAware);
+                foreach (CombatItem c in combatData)
+                {
+                    if (c.Time > oldAware)
+                    {
+                        if (deimos2Agents.Contains(c.SrcAgent))
+                        {
+                            c.SrcInstid = boss.InstID;
+                            c.SrcAgent = boss.Agent;
+
+                        }
+                        if (deimos2Agents.Contains(c.DstAgent))
+                        {
+                            c.DstInstid = boss.InstID;
+                            c.DstAgent = boss.Agent;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            if (!requirePhases)
+            {
+                return phases;
+            }
             // Determined + additional data on inst change
-            CombatItem invulDei = log.GetBoonData(762).Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == boss.InstID);
+            CombatItem invulDei = log.GetBoonData(762).Find(x => x.IsBuffRemove == ParseEnum.BuffRemove.None && x.DstInstid == log.Boss.InstID);
             if (invulDei != null)
             {
                 end = invulDei.Time - log.FightData.FightStart;
                 phases.Add(new PhaseData(start, end));
-                start = (boss.PhaseData.Count == 1 ? boss.PhaseData[0] - log.FightData.FightStart : fightDuration);
-                castLogs.Add(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None));
+                start = (log.FightData.PhaseData.Count == 1 ? log.FightData.PhaseData[0] - log.FightData.FightStart : fightDuration);
+                log.Boss.AddCustomCastLog(new CastLog(end, -6, (int)(start - end), ParseEnum.Activation.None, (int)(start - end), ParseEnum.Activation.None), log);
             }
             if (fightDuration - start > 5000 && start >= phases.Last().End)
             {
@@ -123,22 +157,25 @@ namespace LuckParser.Models
             return phases;
         }
 
-        public override List<ParseEnum.TrashIDS> GetAdditionalData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            // TODO: facing information (slam)
-            List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
-                    {
-                        ParseEnum.TrashIDS.Saul,
-                        ParseEnum.TrashIDS.Thief,
-                        ParseEnum.TrashIDS.Drunkard,
-                        ParseEnum.TrashIDS.Gambler,
-                        ParseEnum.TrashIDS.GamblerClones,
-                        ParseEnum.TrashIDS.GamblerReal,
-                        ParseEnum.TrashIDS.Greed,
-                        ParseEnum.TrashIDS.Pride,
-                        ParseEnum.TrashIDS.Oil,
-                        ParseEnum.TrashIDS.Tear
-                    };
+            return new List<ParseEnum.TrashIDS>
+            {
+                ParseEnum.TrashIDS.Saul,
+                ParseEnum.TrashIDS.Thief,
+                ParseEnum.TrashIDS.Drunkard,
+                ParseEnum.TrashIDS.Gambler,
+                ParseEnum.TrashIDS.GamblerClones,
+                ParseEnum.TrashIDS.GamblerReal,
+                ParseEnum.TrashIDS.Greed,
+                ParseEnum.TrashIDS.Pride,
+                ParseEnum.TrashIDS.Oil,
+                ParseEnum.TrashIDS.Tear
+            };
+        }
+
+        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        {
             List<CastLog> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
             foreach (CastLog c in mindCrush)
             {
@@ -174,10 +211,9 @@ namespace LuckParser.Models
                     }
                 }
             }
-            return ids;
         }
 
-        public override void GetAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
         {
             // teleport zone
             List<CombatItem> tpDeimos = GetFilteredList(log, 37730, p.InstID);
@@ -197,9 +233,9 @@ namespace LuckParser.Models
             }
         }
 
-        public override int IsCM(List<CombatItem> clist, int health)
+        public override int IsCM(ParsedLog log)
         {
-            return (health > 40e6) ? 1 : 0;
+            return (log.Boss.Health > 40e6) ? 1 : 0;
         }
 
         public override string GetReplayIcon()
