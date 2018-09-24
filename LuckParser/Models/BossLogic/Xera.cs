@@ -88,7 +88,6 @@ namespace LuckParser.Models
             {
                 if (NPC.ID == 16286)
                 {
-                    List<Point> bossHealthOverTime = new List<Point>();//reset boss health over time
                     int xera2Instid = NPC.InstID;
                     boss.Health = 24085950;
                     fightData.PhaseData.Add(NPC.FirstAware);
@@ -105,13 +104,7 @@ namespace LuckParser.Models
                             c.DstInstid = boss.InstID;
                             c.DstAgent = boss.Agent;
                         }
-                        //set health update
-                        if (c.SrcInstid == boss.InstID && c.IsStateChange == ParseEnum.StateChange.HealthUpdate)
-                        {
-                            bossHealthOverTime.Add(new Point((int)(c.Time - fightData.FightStart), (int)c.DstAgent));
-                        }
                     }
-                    boss.HealthOverTime = bossHealthOverTime;
                     break;
                 }
             }
