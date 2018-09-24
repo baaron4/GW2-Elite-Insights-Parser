@@ -72,9 +72,9 @@ namespace LuckParser.Models.ParseModels
             return new AgentItem(0, "UNKNOWN");
         }
         
-        public void OverrideID(ushort ID, AgentItem agentItem)
+        public void OverrideID(ushort ID, ushort instid, AgentItem agentItem)
         {
-            _allAgentsList.RemoveAll(x => x.ID == ID);
+            _allAgentsList.RemoveAll(x => x.ID == ID && x.InstID == instid);
             _allAgentsList.Add(agentItem);
             _allAgentsByAgent = _allAgentsList.ToDictionary(a => a.Agent);
             _allAgentsByID = _allAgentsList.GroupBy(x => x.ID).ToDictionary(x => x.Key, x => x.ToList());

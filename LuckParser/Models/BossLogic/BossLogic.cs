@@ -59,13 +59,31 @@ namespace LuckParser.Models
             {
                 Targets.RemoveAll(x => x.ID == id);
                 AgentItem firstItem = agents.First();
+                agents = agents.Where(x => x.InstID == firstItem.InstID).ToList();
+                HashSet<ulong> agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
+                agentValues.Remove(firstItem.Agent);
                 AgentItem newTargetAgent = new AgentItem(firstItem)
                 {
                     FirstAware = agents.Min(x => x.FirstAware),
                     LastAware = agents.Max(x => x.LastAware)
                 };
-                agentData.OverrideID(id, newTargetAgent);
+                agentData.OverrideID(id, firstItem.InstID, newTargetAgent);
                 Targets.Add(new Boss(newTargetAgent));
+                if (agentValues.Count == 0)
+                {
+                    return;
+                }
+                foreach (CombatItem c in combatItems)
+                {
+                    if (agentValues.Contains(c.SrcAgent))
+                    {
+                        c.SrcAgent = newTargetAgent.Agent;
+                    }
+                    if (agentValues.Contains(c.DstAgent))
+                    {
+                        c.DstAgent = newTargetAgent.Agent;
+                    }
+                }
             }
         }
 
