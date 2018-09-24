@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
     class HTMLBuilderNew
     {
         private const string scriptVersion = "0.5";
-        private const int scriptVersionRev = 10;
+        private const int scriptVersionRev = 11;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
