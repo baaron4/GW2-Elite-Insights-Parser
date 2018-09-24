@@ -11,8 +11,8 @@ namespace LuckParser.Models.ParseModels
         public ushort InstID { get; set; }
         public long FirstAware { get; set; }
         public long LastAware { get; set; } = long.MaxValue;
-        public readonly String Name;
-        public readonly String Prof;
+        public readonly string Name;
+        public readonly string Prof;
         public readonly int Toughness;
         public readonly int Healing;
         public readonly int Condition;
@@ -21,7 +21,7 @@ namespace LuckParser.Models.ParseModels
         public readonly int HitboxHeight;
 
         // Constructors
-        public AgentItem(ulong agent, String name, String prof, int toughness, int healing, int condition, int concentration, int hbWidth, int hbHeight)
+        public AgentItem(ulong agent, string name, string prof, int toughness, int healing, int condition, int concentration, int hbWidth, int hbHeight)
         {
             Agent = agent;
             Name = name;
@@ -44,22 +44,6 @@ namespace LuckParser.Models.ParseModels
             Concentration = concentration;
             HitboxWidth = hbWidth;
             HitboxHeight = hbHeight;
-        }
-
-        // Public Methods
-        public String[] ToStringArray()
-        {
-            String[] array = new String[9];
-            array[0] = Agent.ToString(); 
-            array[1] = InstID.ToString();
-            array[2] = FirstAware.ToString();
-            array[3] = LastAware.ToString();
-            array[4] = Name;
-            array[5] = Prof;
-            array[6] = Toughness.ToString();
-            array[7] = Healing.ToString();
-            array[8] = Condition.ToString();
-            return array;
         }
     }
 }
