@@ -34,7 +34,12 @@ namespace LuckParser.Models
                             Tuple.Create(-24576, -24576, 24576, 24576),
                             Tuple.Create(11204, 4414, 13252, 6462));
         }
-    
+
+        protected override void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)
+        {
+            RegroupTargetsByID((ushort)ParseEnum.BossIDS.Artsariiv, agentData, combatItems);
+        }
+
         public override string GetReplayIcon()
         {
             return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
