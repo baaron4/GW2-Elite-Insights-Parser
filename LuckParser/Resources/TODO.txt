@@ -1,11 +1,4 @@
 ﻿Boons Tab
 	Personal Buff Uptimes
-Boss Tab
-	Boss itself
-		DPS Graph
-		Skills
-	Minions
-		% of total DPS
-		Skills
 Player Tab
 	Death Recap

@@ -9,6 +9,8 @@ namespace LuckParser.Models.HtmlModels
         [DataMember]
         public List<PlayerChartDataDto> players;
         [DataMember]
+        public PlayerChartDataDto boss;
+        [DataMember]
         public double[] bossHealth;
     }
 }

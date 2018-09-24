@@ -33,11 +33,10 @@
 			<td>{{:data[5]}}</td>
 			<td>{{if !skill.condi}}{{:data[6]}}{{/if}}</td>
 			<td>{{:data[7]}}</td>
-			<td>{{if !skill.condi && data[6]}}{{dec:data[7]/data[6]}}{{/if}}</td>
-
-			<td>{{if !skill.condi}}{{round:data[8]*100/data[7]}}%{{/if}}</td>
-			<td>{{if !skill.condi}}{{round:data[9]*100/data[7]}}%{{/if}}</td>
-			<td>{{if !skill.condi}}{{round:data[10]*100/data[7]}}%{{/if}}</td>
+			<td>{{if !skill.condi && data[6] && data[7]}}{{dec:data[7]/data[6]}}{{/if}}</td>
+			<td>{{if !skill.condi && data[7]}}{{round:data[8]*100/data[7]}}%{{/if}}</td>
+			<td>{{if !skill.condi && data[7]}}{{round:data[9]*100/data[7]}}%{{/if}}</td>
+			<td>{{if !skill.condi && data[7]}}{{round:data[10]*100/data[7]}}%{{/if}}</td>
 			<td>{{if data[11]}}{{:data[11]}}s{{/if}}</td>
 			<td>{{if data[12]}}{{:data[12]}}s{{/if}}</td>
 		</tr>
