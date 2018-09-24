@@ -92,6 +92,7 @@ namespace LuckParser.Models
                     int xera2Instid = NPC.InstID;
                     boss.Health = 24085950;
                     fightData.PhaseData.Add(NPC.FirstAware);
+                    boss.AgentItem.LastAware = NPC.LastAware;
                     foreach (CombatItem c in combatData)
                     {
                         if (c.SrcInstid == xera2Instid)

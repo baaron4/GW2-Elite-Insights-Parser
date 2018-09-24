@@ -58,6 +58,7 @@ namespace LuckParser.Models
                 HashSet<ulong> deimos2Agents = new HashSet<ulong>(deimosGadgets.Select(x => x.Agent));
                 long oldAware = boss.LastAware;
                 fightData.PhaseData.Add(NPC.FirstAware >= oldAware ? NPC.FirstAware : oldAware);
+                boss.AgentItem.LastAware = deimosGadgets.Max(x => x.LastAware);
                 foreach (CombatItem c in combatData)
                 {
                     if (c.Time > oldAware)
