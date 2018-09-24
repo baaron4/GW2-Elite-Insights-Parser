@@ -7,7 +7,7 @@ namespace LuckParser.Models.ParseModels
 {
     public abstract class AbstractPlayer
     {
-        protected readonly AgentItem AgentItem;
+        public readonly AgentItem AgentItem;
         public readonly String Character;
         protected readonly List<DamageLog> DamageLogs = new List<DamageLog>();
         protected Dictionary<ushort,List<DamageLog>> DamageLogsByDst = new Dictionary<ushort, List<DamageLog>>();

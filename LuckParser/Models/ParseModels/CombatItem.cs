@@ -16,22 +16,22 @@ namespace LuckParser.Models.ParseModels
         public ushort SrcMasterInstid { get; }
         public ushort DstMasterInstid { get; }
         public ParseEnum.IFF IFF { get; }
-        public ushort IsBuff { get; }
+        public byte IsBuff { get; }
         public ParseEnum.Result Result { get; }
         public ParseEnum.Activation IsActivation { get; }
         public ParseEnum.BuffRemove IsBuffRemove { get; }
-        public ushort IsNinety { get; }
-        public ushort IsFifty { get; }
-        public ushort IsMoving { get; }
+        public byte IsNinety { get; }
+        public byte IsFifty { get; }
+        public byte IsMoving { get; }
         public ParseEnum.StateChange IsStateChange { get; }
-        public ushort IsFlanking { get; }
-        public ushort IsShields { get; }
+        public byte IsFlanking { get; }
+        public byte IsShields { get; }
 
         // Constructor
         public CombatItem(long time, ulong srcAgent, ulong dstAgent, int value, int buffDmg, uint overstackValue,
-               long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid, ushort dstMasterInstid, ParseEnum.IFF iff, ushort isBuff, ParseEnum.Result result,
-               ParseEnum.Activation isActivation, ParseEnum.BuffRemove isBuffRemove, ushort isNinety, ushort isFifty, ushort isMoving,
-               ParseEnum.StateChange isStateChange, ushort isFlanking, ushort isShields)
+               long skillId, ushort srcInstid, ushort dstInstid, ushort srcMasterInstid, ushort dstMasterInstid, ParseEnum.IFF iff, byte isBuff, ParseEnum.Result result,
+               ParseEnum.Activation isActivation, ParseEnum.BuffRemove isBuffRemove, byte isNinety, byte isFifty, byte isMoving,
+               ParseEnum.StateChange isStateChange, byte isFlanking, byte isShields)
         {
             Time = time;
             SrcAgent = srcAgent;
