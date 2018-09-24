@@ -41,11 +41,17 @@ namespace LuckParser.Models.ParseModels
                 SetDamageLogs(log);
                 DamageLogsByDst = DamageLogs.GroupBy(x => x.DstInstId).ToDictionary(x => x.Key, x => x.ToList());
             }
-            if (target != null && DamageLogsByDst.TryGetValue(target.InstID, out var list))
+            if (target != null)
             {
-                long targetStart = target.FirstAware - log.FightData.FightStart;
-                long targetEnd = target.LastAware - log.FightData.FightStart;
-                return list.Where(x => x.Time >= start && x.Time > targetStart && x.Time <= end && x.Time < targetEnd).ToList();
+                if (DamageLogsByDst.TryGetValue(target.InstID, out var list))
+                {
+                    long targetStart = target.FirstAware - log.FightData.FightStart;
+                    long targetEnd = target.LastAware - log.FightData.FightStart;
+                    return list.Where(x => x.Time >= start && x.Time > targetStart && x.Time <= end && x.Time < targetEnd).ToList();
+                } else
+                {
+                    return new List<DamageLog>();
+                }
             }
             return DamageLogs.Where( x => x.Time >= start && x.Time <= end).ToList();
         }

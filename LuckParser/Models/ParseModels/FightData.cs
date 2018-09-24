@@ -77,6 +77,16 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.BossIDS.Dhuum:
                     Logic = new Dhuum(id);
                     break;
+                case ParseEnum.BossIDS.ConjuredAmalgamate:
+                    Logic = new ConjuredAmalgamate(id);
+                    break;
+                case ParseEnum.BossIDS.Kenut:
+                case ParseEnum.BossIDS.Nikare:
+                    Logic = new TwinLargos(id);
+                    break;
+                case ParseEnum.BossIDS.Qadim:
+                    Logic = new Qadim(id);
+                    break;
                 case ParseEnum.BossIDS.MAMA:
                     Logic = new MAMA(id);
                     break;
