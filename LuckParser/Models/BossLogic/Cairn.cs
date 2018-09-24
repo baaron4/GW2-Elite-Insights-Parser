@@ -64,7 +64,7 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            return log.CombatData.Exists(x => x.SkillID == 38098) ? 1 : 0;
+            return log.CombatData.AllCombatItems.Exists(x => x.SkillID == 38098) ? 1 : 0;
         }
 
         public override string GetReplayIcon()

@@ -33,7 +33,7 @@ namespace LuckParser.Models.ParseModels
             long timeStart = log.FightData.FightStart;
             int[] cleanse = { 0, 0 };
             List<Boon> condiList = Boon.GetCondiBoonList();
-            foreach (CombatItem c in log.CombatData.Where(x=>x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuff == 1 && x.Time >= (start + timeStart) && x.Time <= (end + timeStart)))
+            foreach (CombatItem c in log.CombatData.AllCombatItems.Where(x=>x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuff == 1 && x.Time >= (start + timeStart) && x.Time <= (end + timeStart)))
             {
                 if (c.IsActivation == ParseEnum.Activation.None)
                 {

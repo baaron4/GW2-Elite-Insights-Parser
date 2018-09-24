@@ -734,7 +734,7 @@ namespace LuckParser.Controllers
         /// </summary>
         private void SetPresentBoons()
         {
-            List<CombatItem> combatList = _log.CombatData;
+            List<CombatItem> combatList = _log.CombatData.AllCombatItems;
             var skillIDs = new HashSet<long>(combatList.Select(x => x.SkillID));
             if (_settings.PlayerBoonsUniversal)
             {

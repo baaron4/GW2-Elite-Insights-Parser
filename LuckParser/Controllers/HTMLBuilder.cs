@@ -2867,7 +2867,7 @@ namespace LuckParser.Controllers
         {
             sw.Write("<ul class=\"list-group\">");
             {
-                foreach (CombatItem c in _log.CombatData)
+                foreach (CombatItem c in _log.CombatData.AllCombatItems)
                 {
                     if (c.IsStateChange != ParseEnum.StateChange.Normal)
                     {

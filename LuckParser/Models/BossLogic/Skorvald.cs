@@ -59,7 +59,7 @@ namespace LuckParser.Models
         public override void SetSuccess(ParsedLog log)
         {
             // check reward
-            CombatItem reward = log.CombatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
+            CombatItem reward = log.CombatData.GetStatesData(ParseEnum.StateChange.Reward).LastOrDefault();
             CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(log.Boss.InstID).LastOrDefault(x => x.Value > 0);
             if (lastDamageTaken != null)
             {

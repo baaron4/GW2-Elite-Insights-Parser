@@ -101,7 +101,7 @@ namespace LuckParser.Models.ParseModels
                 SetCombatReplayIcon(log);
                 if (trim)
                 {
-                    CombatItem despawnCheck = log.CombatData.FirstOrDefault(x => x.SrcAgent == AgentItem.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
+                    CombatItem despawnCheck = log.CombatData.AllCombatItems.FirstOrDefault(x => x.SrcAgent == AgentItem.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
                     if (despawnCheck != null)
                     {
                         CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, despawnCheck.Time - log.FightData.FightStart);

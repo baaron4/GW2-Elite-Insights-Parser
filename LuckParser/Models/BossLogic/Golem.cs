@@ -56,11 +56,11 @@ namespace LuckParser.Models
 
         public override void SetSuccess(ParsedLog log)
         {
-            CombatItem pov = log.CombatData.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
+            CombatItem pov = log.CombatData.AllCombatItems.FirstOrDefault(x => x.IsStateChange == ParseEnum.StateChange.PointOfView);
             if (pov != null)
             {
                 // to make sure that the logging starts when the PoV starts attacking (in case there is a slave with them)
-                CombatItem enterCombat = log.CombatData.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
+                CombatItem enterCombat = log.CombatData.AllCombatItems.FirstOrDefault(x => x.SrcAgent == pov.SrcAgent && x.IsStateChange == ParseEnum.StateChange.EnterCombat);
                 if (enterCombat != null)
                 {
                     log.FightData.FightStart = enterCombat.Time;
