@@ -30,7 +30,7 @@ namespace LuckParser.Controllers
                 damageLogs = p.GetDamageLogs(phase.Redirection, log, phase.Start, phase.End);
             } else
             {
-                damageLogs = p.GetDamageLogs(log.Boss, log, phase.Start, phase.End);
+                damageLogs = p.GetDamageLogs(dstid != 0 ? log.Boss : (AbstractMasterPlayer) null, log, phase.Start, phase.End);
             }
             // fill the graph, full precision
             List<double> dmgListFull = new List<double>();
