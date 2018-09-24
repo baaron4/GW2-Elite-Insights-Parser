@@ -36,6 +36,15 @@ namespace LuckParser.Models
                             Tuple.Create(13440, 14336, 15360, 16256));
         }
 
+        protected override List<ushort> GetFightTargetsIDs()
+        {
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.Kenut,
+                (ushort)ParseEnum.BossIDS.Nikare
+            };
+        }
+
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
             return new List<ParseEnum.TrashIDS>();

@@ -62,6 +62,16 @@ namespace LuckParser.Models
             return "https://i.imgur.com/u6vv8cW.png";
         }
 
+        protected override List<ushort> GetFightTargetsIDs()
+        {
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.Arkk,
+                (ushort)ParseEnum.TrashIDS.Archdiviner,
+                (ushort)ParseEnum.TrashIDS.BrazenGladiator
+            };
+        }
+
         public override void SetSuccess(ParsedLog log)
         {
             SetSuccessOnCombatExit(log, 3, 3000);

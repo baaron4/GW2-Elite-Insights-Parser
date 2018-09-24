@@ -117,6 +117,16 @@ namespace LuckParser.Models
             return phases;
         }
 
+        protected override List<ushort> GetFightTargetsIDs()
+        {
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.Samarog,
+                (ushort)ParseEnum.TrashIDS.Rigom,
+                (ushort)ParseEnum.TrashIDS.Guldhem,
+            };
+        }
+
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
             return new List<ParseEnum.TrashIDS>

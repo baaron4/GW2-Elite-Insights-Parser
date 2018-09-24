@@ -556,7 +556,7 @@ namespace LuckParser.Controllers
         {
             CompleteAgents();
             _fightData.Logic.ComputeFightTargets(_agentData, _fightData, _combatItems);
-            _boss = _fightData.Logic.Targets.First();
+            _boss = _fightData.Logic.Targets.Find(x => x.ID == _fightData.ID);
             _fightData.Name = _boss.Character;
             // Dealing with special cases
             _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems, _boss);

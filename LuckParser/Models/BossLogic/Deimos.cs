@@ -47,6 +47,9 @@ namespace LuckParser.Models
         protected override void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)
         {
             RegroupTargetsByID((ushort)ParseEnum.BossIDS.Deimos, agentData, combatItems);
+            RegroupTargetsByID((ushort)ParseEnum.TrashIDS.Thief, agentData, combatItems);
+            RegroupTargetsByID((ushort)ParseEnum.TrashIDS.Drunkard, agentData, combatItems);
+            RegroupTargetsByID((ushort)ParseEnum.TrashIDS.Gambler, agentData, combatItems);
         }
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
@@ -161,6 +164,18 @@ namespace LuckParser.Models
                 phase.DrawEnd = true;
             }
             return phases;
+        }
+
+        protected override List<ushort> GetFightTargetsIDs()
+        {
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.Deimos,
+                (ushort)ParseEnum.TrashIDS.Thief,
+                (ushort)ParseEnum.TrashIDS.Drunkard,
+                (ushort)ParseEnum.TrashIDS.Gambler,
+                (ushort)ParseEnum.TrashIDS.GamblerReal,
+            };
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
