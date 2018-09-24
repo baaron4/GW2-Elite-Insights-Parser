@@ -1034,9 +1034,9 @@ namespace LuckParser.Controllers
             Dictionary<long, List<DamageLog>> damageLogsBySkill = damageLogs.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
             SkillData skillList = _log.SkillData;
-            foreach (KeyValuePair<long,List<DamageLog>> entry in damageLogsBySkill)
+            foreach (KeyValuePair<long, List<DamageLog>> entry in damageLogsBySkill)
             {
-                int totaldamage = 0,mindamage = 0,maxdamage = 0,casts = 0,hits = 0,crit = 0,flank = 0,glance = 0,timeswasted = 0,timessaved = 0;
+                int totaldamage = 0, mindamage = 0, maxdamage = 0, casts = 0, hits = 0, crit = 0, flank = 0, glance = 0, timeswasted = 0, timessaved = 0;
                 foreach (DamageLog dl in entry.Value)
                 {
                     int curdmg = dl.Damage;
@@ -1054,7 +1054,8 @@ namespace LuckParser.Controllers
                 {
                     Boon condi = entry.Key == 873 ? Boon.BoonsByIds[873] : conditionsById[entry.Key];
                     if (!usedBoons.ContainsKey(condi.ID)) usedBoons.Add(condi.ID, condi);
-                } else
+                }
+                else
                 {
                     if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillList.GetOrDummy(entry.Key));
                 }
@@ -1081,6 +1082,28 @@ namespace LuckParser.Controllers
                     casts, hits, crit, flank, glance,
                     timeswasted / 1000.0,
                     -timessaved / 1000.0};
+                list.Add(skillData);
+            }
+
+            foreach (KeyValuePair<long, List<CastLog>> entry in castLogsBySkill)
+            {
+                if (damageLogsBySkill.ContainsKey(entry.Key)) continue;
+
+                if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillList.GetOrDummy(entry.Key));
+
+                int casts = entry.Value.Count;
+                int timeswasted = 0, timessaved = 0;
+                foreach (CastLog cl in entry.Value)
+                {
+                    if (cl.EndActivation == ParseEnum.Activation.CancelCancel) timeswasted += cl.ActualDuration;
+                    if (cl.EndActivation == ParseEnum.Activation.CancelFire && cl.ActualDuration < cl.ExpectedDuration)
+                    {
+                        timessaved += cl.ExpectedDuration - cl.ActualDuration;
+                    }
+                }
+
+                double[] skillData = { 0, entry.Key, 0, 0, 0, 0, casts,
+                    0, 0, 0, 0, timeswasted / 1000.0, -timessaved / 1000.0 };
                 list.Add(skillData);
             }
             return list;
@@ -2937,6 +2960,10 @@ namespace LuckParser.Controllers
                 String playerScript = "data.players[" + i + "].details = " + ToJson(BuildPlayerData(player, usedSkills, usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
                 scripts += playerScript;
             }
+            {
+                String bossScript = "data.boss.details = " + ToJson(BuildBossData(_log.Boss, usedSkills, usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
+                scripts += bossScript;
+            }
             string skillsScript = "var usedSkills = " + ToJson(AssembleSkills(usedSkills.Values), typeof(ICollection<SkillDto>)) + ";" +
                 "data.skillMap = {};" +
                 "$.each(usedSkills, function(i, skill) {" +
@@ -2986,6 +3013,34 @@ namespace LuckParser.Controllers
             {
                 dto.dmgDistributionsBoss.Add(CreatePlayerMinionDMGDistTable(player, minion, true, i, usedSkills, usedBoons));
                 dto.dmgDistributions.Add(CreatePlayerMinionDMGDistTable(player, minion, false, i, usedSkills, usedBoons));
+            }
+            return dto;
+        }
+
+        private PlayerDetailsDto BuildBossData(Boss boss, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
+        {
+            PlayerDetailsDto dto = new PlayerDetailsDto();
+            dto.dmgDistributions = new List<DmgDistributionDto>();
+            for (int i = 0; i < _statistics.Phases.Count; i++)
+            {
+                dto.dmgDistributions.Add(CreateBossDMGDistTable(boss, i, usedSkills, usedBoons));
+            }
+
+            dto.minions = new List<PlayerDetailsDto>();
+            foreach (KeyValuePair<string, Minions> pair in boss.GetMinions(_log))
+            {
+                dto.minions.Add(BuildBossMinionsData(boss, pair.Value, usedSkills, usedBoons));
+            }
+            return dto;
+        }
+
+        private PlayerDetailsDto BuildBossMinionsData(Boss boss, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
+        {
+            PlayerDetailsDto dto = new PlayerDetailsDto();
+            dto.dmgDistributions = new List<DmgDistributionDto>();
+            for (int i = 0; i < _statistics.Phases.Count; i++)
+            {
+                dto.dmgDistributions.Add(CreateBossMinionDMGDistTable(boss, minion, i, usedSkills, usedBoons));
             }
             return dto;
         }

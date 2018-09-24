@@ -713,6 +713,11 @@ function generateWindow(layout) {
 				createDistTable($('#dist_table_'+p+'_'+m+'_'+i), player.details.minions[m].dmgDistributions[i],false,player,minion);
 			});
 		});
+
+		createDistTable($('#boss_dist_table'+i), data.boss.details.dmgDistributions[i],false,data.boss);
+		$.each(data.boss.minions, function(m,minion){
+			createDistTable($('#boss_dist_table'+m+'_'+i), data.boss.details.minions[m].dmgDistributions[i],false,data.boss,minion);
+		});
 	});
 
 	$('[title]').tooltip({html:true});
@@ -757,18 +762,31 @@ function buildWindowLayout(data) {
 					noTitle:true,
 					content: '<div id="DPSGraph'+i+'_'+graph.id+'" style="height: 1000px; width:1200px;"></div>'});
 			});
-			var bossTab = {name:data.boss.name,content:[
+			
+			var condiTab = {name:'Boon Stats', content:[
 				{table:'bossCondis'+i, caption:'Condition Generation'}
 			],noTitle:true};
-
 			if (phase.bossHasBoons) {
-				bossTab.content.push({table:'bossBoons'+i, caption: 'Boon Uptime'});
-			}
+				condiTab.content.push({table:'bossBoons'+i, caption: 'Boon Uptime'});
+			}			
 
-			var bossTabs = [bossTab];
+			var bossTabs = [
+				{
+					name:data.boss.name,
+					content:{
+						tabs:[
+							condiTab,
+							{name:'DPS graph', content:{table:'boss_graph'+i}},
+							{name:'Damage Stats', content: {table:'boss_dist_table'+i},noTitle:true}
+						],
+						noTitle:true
+					},
+					noTitle:true
+				}
+			];
 
 			$.each(data.boss.minions, function(m, minion) {
-				bossTabs.push({name:minion.name,content:minion.name}); //TODO content
+				bossTabs.push({name:minion.name,content:{table:'boss_dist_table'+m+'_'+i}, noTitle:true});
 			});
 
 			var mechanicsContent = [{table:'mechanicStats'+i},{table:'mechanicBossStats'+i}];
