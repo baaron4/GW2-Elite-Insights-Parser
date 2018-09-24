@@ -380,7 +380,7 @@ function createPlayerGraph($element, player, phaseIndex, playerIndex) {
 	var images = [];
 	var dark = data.flags.dark;
 
-	var rotationData = player.details.rotation[phaseIndex];
+	var rotationData = (player.details.rotation||{})[phaseIndex];
 	if (rotationData) {
 		$.each(rotationData, function(i, item) {
 			var x = item[0];
@@ -442,7 +442,7 @@ function createPlayerGraph($element, player, phaseIndex, playerIndex) {
 		});
 	}
 
-	var boonData = player.details.boonGraph[phaseIndex];
+	var boonData = (player.details.boonGraph||{})[phaseIndex];
 	if (boonData) {
 		$.each(boonData, function(i, boonItem) {
 			var line = {
@@ -462,15 +462,23 @@ function createPlayerGraph($element, player, phaseIndex, playerIndex) {
 
 	var lines = [{id:'boss',name:'DPS', color:'colBoss'},{id:'cleave',name:'Cleave DPS', color:'colCleave'},{id:'total',name:'TDPS', color:'colTotal'}];
 
-	var dpsData = data.graphData[phaseIndex].players[playerIndex];
+	var dpsData;
+	if (playerIndex == -1) {
+		dpsData = data.graphData[phaseIndex].boss;
+	} else {
+		dpsData = data.graphData[phaseIndex].players[playerIndex];
+	}
 	var seconds = dpsData.boss.full.length;
 	var allX = [];
 	for (var i = 0; i < seconds; i++) {
 		allX[i] = i;
 	}
+	
+	var maxDps = 100;
 
 	for (var l = 0; l < lines.length; l++) {
 		for (var t = 0; t < data.graphs.length; t++) {
+			if (!dpsData[lines[l].id]) continue;
 			var name = lines[l].name + ' ' + data.graphs[t].name;
 			var points = dpsData[lines[l].id][data.graphs[t].id];
 			
@@ -479,6 +487,10 @@ function createPlayerGraph($element, player, phaseIndex, playerIndex) {
 	
 			if (data.graphs[t].id != 'full') {
 				visible = 'legendonly';
+			} else {
+				for (var h = 0; h < points.length; h++) {
+					if (points[h] > maxDps) maxDps = points[h];
+				}
 			}
 			plotData.push({
 				x: allX,
@@ -512,6 +524,26 @@ function createPlayerGraph($element, player, phaseIndex, playerIndex) {
 			name: item.name,
 		});
 	});
+	
+	// Boss HP line
+	var hpPoints = [];
+	var hpTexts = [];
+	for (var i = 0; i < data.graphData[phaseIndex].bossHealth.length; i++) {
+		hpPoints[i] = data.graphData[phaseIndex].bossHealth[i] * maxDps / 100.0;
+		hpTexts[i] = data.graphData[phaseIndex].bossHealth[i] + "%";
+	}
+	
+	plotData.push({
+		y: hpPoints,
+		x: allX,
+		yaxis: 'y3',
+		text: hpTexts,
+		mode: 'lines',
+		line: {shape: 'spline', dash: 'dashdot', color: '#808080'},
+		hoverinfo: 'text+x+name',
+		name: 'Boss health'
+	});
+	
 
 	$.each(data.boonData, function(i, item) {
 		var visible = item.name == "Might" || item.name == "Quickness" ? null : 'legendonly';
@@ -776,7 +808,7 @@ function buildWindowLayout(data) {
 					content:{
 						tabs:[
 							condiTab,
-							{name:'DPS graph', content:{table:'boss_graph'+i}},
+							{name:'DPS graph', content:'<div id="boss_graph'+i+'" style="height: 1000px; width:1100px;"></div>'},
 							{name:'Damage Stats', content: {table:'boss_dist_table'+i},noTitle:true}
 						],
 						noTitle:true
@@ -902,6 +934,8 @@ function extractGraphData(graphData) {
 		
 			data.graphData[i].players[p] = {boss:bossDps,cleave:cleaveDps,total:totDps};
 		}
+		var bossDps = extractDpsData(graphData[i].boss.boss);
+		data.graphData[i].boss = {boss:bossDps};
 	}
 }
 
@@ -918,6 +952,7 @@ function createGraphs(graphData) {
 			createPlayerGraph($('#pgraph_'+p+'_'+i), player, i, p);
 			createPlayerFood($('#pfood_'+p+'_'+i), player, i, p);
 		});
+		createPlayerGraph($('#boss_graph'+i), data.boss, i, -1);
 	}
 }
 

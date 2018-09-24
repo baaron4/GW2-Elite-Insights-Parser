@@ -48,14 +48,30 @@ namespace LuckParser.Controllers
             return filtered;
         }
 
+        private List<int> ConvertGraph(List<Point> points)
+        {
+            List<int> graph = new List<int>();
+            foreach (Point point in points)
+            {
+                graph.Add(point.Y);
+            }
+            return graph;
+        }
+
+        private PlayerChartDataDto CreateBossGraphData(int phaseIndex)
+        {
+            PhaseData phase = _statistics.Phases[phaseIndex];
+            return new PlayerChartDataDto
+            {
+                boss = ConvertGraph(GraphHelper.GetTotalDPSGraph(_log, _log.Boss, phaseIndex, phase, GraphHelper.GraphMode.S1))
+            };
+        }
+
         //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
         //Methods that make it easier to create Javascript graphs      
         /// <summary>
         /// Creates the dps graph
         /// </summary>
-        /// <param name="sw"></param>
-        /// <param name="phaseIndex"></param>
-        /// <param name="mode"></param>
         private List<PlayerChartDataDto> CreateDPSGraphData(int phaseIndex)
         {
             List<PlayerChartDataDto> list = new List<PlayerChartDataDto>();
@@ -63,194 +79,12 @@ namespace LuckParser.Controllers
 
             foreach (Player p in _log.PlayerList)
             {
-                PlayerChartDataDto playerData = new PlayerChartDataDto();
-                list.Add(playerData);
-                playerData.boss = new List<int>();
-                playerData.cleave = new List<int>();
-                List<Point> bossPoints = GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S1);
-                List<Point> cleavePoints = GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S1);
-                foreach (Point point in bossPoints)
+                list.Add(new PlayerChartDataDto
                 {
-                    playerData.boss.Add(point.Y);
-                }
-                foreach (Point point in cleavePoints)
-                {
-                    playerData.cleave.Add(point.Y);
-                }
+                    boss = ConvertGraph(GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S1)),
+                    cleave = ConvertGraph(GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S1))
+                });
             }
-                /*
-                sw.Write("{");
-                HTMLHelper.WriteDPSPlots(sw, totalDpsAllPlayers);
-                sw.Write(" mode: 'lines'," +
-                        "line: {shape: 'spline'}," +
-                        "visible:'legendonly'," +
-                        "name: 'All Player Dps'");
-                sw.Write("},");
-                HashSet<Mechanic> presMech = _log.MechanicData.GetPresentMechanics(phaseIndex);
-                List<ushort> playersIds = _log.PlayerList.Select(x => x.InstID).ToList();
-                foreach (Mechanic mech in presMech)
-                {
-                    List<MechanicLog> filterdList = _log.MechanicData[mech].Where(x => phase.InInterval(x.GetTime())).ToList();
-                    sw.Write("{");
-                    sw.Write("y: [");
-
-                    int mechcount = 0;
-                    foreach (MechanicLog ml in filterdList)
-                    {                     
-                        Point check;
-                        if (playersIds.Contains(ml.GetPlayer().InstID))
-                        {
-                            double time = (ml.GetTime() - phase.Start) / 1000.0;
-                            check = GraphHelper.GetBossDPSGraph(_log, ml.GetPlayer(), phaseIndex, phase, mode).LastOrDefault(x => x.X <= time);
-                            if (check == Point.Empty)
-                            {
-                                check = new Point(0, GraphHelper.GetBossDPSGraph(_log, ml.GetPlayer(), phaseIndex, phase, mode).Last().Y);
-                            } else
-                            {
-                                int time1 = check.X;
-                                int y1 = check.Y;
-                                check = GraphHelper.GetBossDPSGraph(_log, ml.GetPlayer(), phaseIndex, phase, mode).FirstOrDefault(x => x.X >= time);
-                                if (check == Point.Empty)
-                                {
-                                    check.Y = y1;
-                                } else
-                                {
-                                    int time2 = check.X;
-                                    int y2 = check.Y;
-                                    if (time2 - time1 > 0)
-                                    {
-                                        check.Y = (int)Math.Round((time - time1) * (y2 - y1) / (time2 - time1) + y1);
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            check = _log.Boss.GetHealthOverTime().FirstOrDefault(x => x.X > ml.GetTime());
-                            if (check == Point.Empty)
-                            {
-                                check = _log.Boss.GetHealthOverTime().Count == 0 ? new Point(0, 10000) : new Point(0, _log.Boss.GetHealthOverTime().Last().Y);
-                            }
-                            check.Y = (int)((check.Y / 10000f) * maxDPS);
-                        }
-
-                        if (mechcount == filterdList.Count - 1)
-                        {
-                            sw.Write("'" + check.Y + "'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + check.Y + "',");
-
-                        }
-
-                        mechcount++;
-                    }
-                    sw.Write("],");
-                    //add time axis
-                    sw.Write("x: [");
-                    mechcount = 0;
-                    foreach (MechanicLog ml in filterdList)
-                    {
-                        if (mechcount == filterdList.Count - 1)
-                        {
-                            sw.Write("'" + Math.Round((ml.GetTime() - phase.Start) / 1000.0,4) + "'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + Math.Round((ml.GetTime() - phase.Start) / 1000.0,4) + "',");
-                        }
-
-                        mechcount++;
-                    }
-
-                    sw.Write("],");
-                    sw.Write(" mode: 'markers',");
-                    if (!(mech.GetSkill() == -2 || mech.GetSkill() == -3))
-                    {
-                        sw.Write("visible:'legendonly',");
-                    }
-                    sw.Write("type:'scatter'," +
-                            "marker:{" + "size: 15," + mech.GetPlotly() +  "}," +
-                            "text:[");
-                    foreach (MechanicLog ml in filterdList)
-                    {
-                        if (mechcount == filterdList.Count - 1)
-                        {
-                            sw.Write("'" + ml.GetPlayer().Character.Replace("'"," ") + "'");
-                        }
-                        else
-                        {
-                            sw.Write("'" + ml.GetPlayer().Character.Replace("'", " ") + "',");
-                        }
-
-                        mechcount++;
-                    }
-
-                    sw.Write("]," +
-                            " name: '" + mech.GetPlotlyName().Replace("'", " ") + "'");
-                    sw.Write("},");
-                }
-                if (maxDPS > 0)
-                {
-                    sw.Write("{");
-                    HTMLHelper.WriteBossHealthGraph(sw, maxDPS, phase.Start, phase.End, _log.Boss);
-                    sw.Write("}");
-                }
-                else
-                {
-                    sw.Write("{}");
-                }
-                if (_settings.LightTheme)
-                {
-                    sw.Write("];" +
-                             "var layout = {" +
-                             "yaxis:{title:'DPS'}," +
-                             "xaxis:{title:'Time(sec)'}," +
-                             //"legend: { traceorder: 'reversed' }," +
-                             "hovermode: 'compare'," +
-                             "legend: {orientation: 'h', font:{size: 15}}," +
-                             // "yaxis: { title: 'DPS', domain: [0.51, 1] }," +
-                             "font: { color: '#000000' }," +
-                             "paper_bgcolor: 'rgba(255,255,255,0)'," +
-                             "plot_bgcolor: 'rgba(255,255,255,0)'" +
-                             "};");
-                }
-                else
-                {
-                    sw.Write("];" +
-                             "var layout = {" +
-                             "yaxis:{title:'DPS'}," +
-                             "xaxis:{title:'Time(sec)'}," +
-                             //"legend: { traceorder: 'reversed' }," +
-                             "hovermode: 'compare'," +
-                             "legend: {orientation: 'h', font:{size: 15}}," +
-                             // "yaxis: { title: 'DPS', domain: [0.51, 1] }," +
-                             "font: { color: '#ffffff' }," +
-                             "paper_bgcolor: 'rgba(0,0,0,0)'," +
-                             "plot_bgcolor: 'rgba(0,0,0,0)'" +
-                             "};");
-                }
-                sw.Write(
-                        "var lazyplot = document.querySelector(\"#" + plotID + "\");" +
-                        "if ('IntersectionObserver' in window) {" +
-                            "let lazyPlotObserver = new IntersectionObserver(function(entries, observer) {" +
-                                "entries.forEach(function(entry) {" +
-                                    "if (entry.isIntersecting)" +
-                                    "{" +
-                                        "Plotly.newPlot('" + plotID + "', data, layout);" +
-                                        "lazyPlotObserver.unobserve(entry.target);" +
-                                    "}" +
-                                "});" +
-                             "});" +
-                            "lazyPlotObserver.observe(lazyplot);" +
-                        "} else {"+
-                            "Plotly.newPlot('" + plotID + "', data, layout);" +
-                        "}");
-            }
-            sw.Write("});");
-            sw.Write("</script> ");
-            */
             return list;
         }
 
@@ -802,7 +636,7 @@ namespace LuckParser.Controllers
         /// <param name="p"></param>
         /// <param name="simpleRotSize"></param>
         /// <param name="phaseIndex"></param>
-        private List<double[]> CreateSimpleRotationTabData(Player p, int phaseIndex, Dictionary<long, SkillItem> usedSkills)
+        private List<double[]> CreateSimpleRotationTabData(AbstractPlayer p, int phaseIndex, Dictionary<long, SkillItem> usedSkills)
         {
             List<double[]> list = new List<double[]>();
 
@@ -1298,7 +1132,7 @@ namespace LuckParser.Controllers
             return dto;
         }
 
-        private List<BoonChartDataDto> CreatePlayerBoonGraphData(Player p, int phaseIndex)
+        private List<BoonChartDataDto> CreatePlayerBoonGraphData(AbstractMasterPlayer p, int phaseIndex)
         {
             List<BoonChartDataDto> list = new List<BoonChartDataDto>();
             PhaseData phase = _statistics.Phases[phaseIndex];
@@ -2785,7 +2619,8 @@ namespace LuckParser.Controllers
                 PhaseChartDataDto phaseData = new PhaseChartDataDto
                 {
                     bossHealth = CreateBossHealthData(i),
-                    players = CreateDPSGraphData(i)
+                    players = CreateDPSGraphData(i),
+                    boss = CreateBossGraphData(i)
                 };
                 chartData.Add(phaseData);
              }
@@ -3021,9 +2856,13 @@ namespace LuckParser.Controllers
         {
             PlayerDetailsDto dto = new PlayerDetailsDto();
             dto.dmgDistributions = new List<DmgDistributionDto>();
+            dto.boonGraph = new List<List<BoonChartDataDto>>();
+            dto.rotation = new List<List<double[]>>();
             for (int i = 0; i < _statistics.Phases.Count; i++)
             {
                 dto.dmgDistributions.Add(CreateBossDMGDistTable(boss, i, usedSkills, usedBoons));
+                dto.rotation.Add(CreateSimpleRotationTabData(boss, i, usedSkills));
+                dto.boonGraph.Add(CreatePlayerBoonGraphData(boss, i));
             }
 
             dto.minions = new List<PlayerDetailsDto>();
