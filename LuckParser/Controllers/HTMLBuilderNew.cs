@@ -1219,7 +1219,7 @@ namespace LuckParser.Controllers
             return list;
         }
 
-        private List<BoonData> CreateBossCondiData(List<Boon> listToUse, int phaseIndex)
+        private List<BoonData> CreateBossCondiData(int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[phaseIndex];
@@ -1243,7 +1243,36 @@ namespace LuckParser.Controllers
             return list;
         }
 
-        private BoonData CreateBossBoonData(List<Boon> listToUse, int phaseIndex)
+        private BoonData CreateBossCondiUptimeData(int phaseIndex)
+        {
+            PhaseData phase = _statistics.Phases[phaseIndex];
+            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[phaseIndex];
+            Dictionary<long, long> condiPresence = _log.Boss.GetCondiPresence(_log, phaseIndex);
+            long fightDuration = phase.GetDuration();
+            BoonData bossData = new BoonData();
+            bossData.val = new List<List<object>>();
+            double avgCondis = 0.0;
+            foreach (long duration in condiPresence.Values)
+            {
+                avgCondis += duration;
+            }
+            bossData.avg = Math.Round(avgCondis / fightDuration, 1);
+            foreach (Boon boon in _statistics.PresentConditions)
+            {
+                List<object> boonData = new List<object>();
+                boonData.Add(conditions[boon.ID].Uptime);
+
+                if (boon.Type != Boon.BoonType.Duration && condiPresence.TryGetValue(boon.ID, out long presenceTime))
+                {
+                    boonData.Add(Math.Round(100.0 * presenceTime / fightDuration, 1));
+                }
+
+                bossData.val.Add(boonData);
+            }
+            return bossData;
+        }
+
+        private BoonData CreateBossBoonData(int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[phaseIndex];
@@ -2078,8 +2107,9 @@ namespace LuckParser.Controllers
                 phaseDto.defBuffGenOGroupStats = CreateGenData(_statistics.PresentDefbuffs, i, "off");
                 phaseDto.defBuffGenSquadStats = CreateGenData(_statistics.PresentDefbuffs, i, "squad");
 
-                phaseDto.bossCondiStats = CreateBossCondiData(_statistics.PresentConditions, i);
-                phaseDto.bossBoonTotals = CreateBossBoonData(_statistics.PresentBoons, i);
+                phaseDto.bossCondiStats = CreateBossCondiData(i);
+                phaseDto.bossCondiTotals = CreateBossCondiUptimeData(i);
+                phaseDto.bossBoonTotals = CreateBossBoonData(i);
                 phaseDto.bossHasBoons = HasBoons(i);
 
                 phaseDto.mechanicStats = CreateMechanicData(i);

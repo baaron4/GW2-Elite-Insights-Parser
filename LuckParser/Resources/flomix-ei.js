@@ -240,7 +240,7 @@ function createBoonTable($target, boons, data, generation) {
     lazyTable2($target, html, { 'order': [[3, 'desc']] });
 }
 
-function createBossCondiTable($target, boons, data) {
+function createBossCondiTable($target, boons, data, totalData) {
     if (!$target.length) return;
     var rows = [];
     var sums = [];
@@ -252,15 +252,11 @@ function createBossCondiTable($target, boons, data) {
         var player = window.data.players[i];
         var g = player.group;
         rows.push({ player: player, data: values });
-        for (var j = 0; j < boons.length; j++) {
-            var v = values.val[j][0];
-            total[j] = (total[j] || 0) + v;
-        }
     });
 
-    sums.push({ name: 'Boss Total', data: total });
+    sums.push({ name: window.data.boss.name, data: totalData });
 
-    var html = tmplBoonTable.render({ rows: rows, sums: sums, boons: boons }, { generation: true });
+    var html = tmplBoonTable.render({ rows: rows, sums: sums, boons: boons }, { generation: true, condition: true });
     lazyTable2($target, html, { 'order': [[3, 'desc']] });
 }
 
