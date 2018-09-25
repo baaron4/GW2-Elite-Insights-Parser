@@ -595,13 +595,13 @@ namespace LuckParser.Controllers
             {
                 CompletePlayers();               
             }
-            if (_fightData.FightStart == 0)
+            if (_fightData.FightStart == 0 && _combatItems.Count > 0)
             {
-                _fightData.FightStart = _boss.FirstAware;
+                _fightData.FightStart = _combatItems.First().Time;
             }
-            if (_fightData.FightEnd== long.MaxValue)
+            if (_fightData.FightEnd== long.MaxValue && _combatItems.Count > 0)
             {
-                _fightData.FightEnd = _boss.LastAware;
+                _fightData.FightEnd = _combatItems.Last().Time;
             }
             _playerList = _playerList.OrderBy(a => a.Group).ToList();
             
