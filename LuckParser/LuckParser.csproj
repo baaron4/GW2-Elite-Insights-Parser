@@ -159,6 +159,7 @@
     <Compile Include="Models\ParseModels\CombatReplay\Actors\RectangleActor.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplay.cs" />
     <Compile Include="Models\ParseModels\CombatReplay\CombatReplayMap.cs" />
+    <Compile Include="Models\ParseModels\Simulator\BoonSimulatorCleanseItem.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\HealingLogic.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\ForceOverrideLogic.cs" />
     <Compile Include="Models\ParseModels\Simulator\EffectStackingLogic\OverrideLogic.cs" />
