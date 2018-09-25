@@ -949,15 +949,7 @@ namespace LuckParser.Controllers
             DmgDistributionDto dto = new DmgDistributionDto();
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = p.GetCastLogs(_log, phase.Start, phase.End);
-            List<DamageLog> damageLogs;
-            if (toBoss && phase.Redirection.Count > 0)
-            {
-                damageLogs = p.GetJustPlayerDamageLogs(phase.Redirection, _log, phase.Start, phase.End);
-            }
-            else
-            {
-                damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.Boss : (AbstractPlayer)null, _log, phase.Start, phase.End);
-            }
+            List<DamageLog> damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.Boss : (AbstractPlayer)null, _log, phase.Start, phase.End);
             int totalDamage = toBoss ? dps.BossDamage : dps.AllDamage;
             dto.totalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             if (totalDamage > 0){
@@ -999,15 +991,7 @@ namespace LuckParser.Controllers
             string tabid = p.InstID + "_" + phaseIndex + "_" + minions.MinionID + (toBoss ? "_boss" : "");
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = minions.GetCastLogs(_log, phase.Start, phase.End);
-            List<DamageLog> damageLogs;
-            if (toBoss && phase.Redirection.Count > 0)
-            {
-                damageLogs = minions.GetDamageLogs(phase.Redirection, _log, phase.Start, phase.End);
-            }
-            else
-            {
-                damageLogs = minions.GetDamageLogs(toBoss ? _log.Boss : (AbstractPlayer)null, _log, phase.Start, phase.End);
-            }
+            List<DamageLog> damageLogs = minions.GetDamageLogs(toBoss ? _log.Boss : (AbstractPlayer)null, _log, phase.Start, phase.End);
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
 
             if (totalDamage > 0)
@@ -1052,8 +1036,10 @@ namespace LuckParser.Controllers
             dto.totalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => (long)x.Damage) : 0;
 
             HashSet<long> usedIDs = new HashSet<long>();
-            List<Boon> condiRetal = new List<Boon>(_statistics.PresentConditions);
-            condiRetal.Add(Boon.BoonsByIds[873]);
+            List<Boon> condiRetal = new List<Boon>(_statistics.PresentConditions)
+            {
+                Boon.BoonsByIds[873]
+            };
             foreach (Boon condi in condiRetal)
             {
                 long condiID = condi.ID;
@@ -1497,8 +1483,10 @@ namespace LuckParser.Controllers
             bossData.val = new List<List<object>>();
             foreach (Boon boon in _statistics.PresentBoons)
             {
-                List<object> boonData = new List<object>();
-                boonData.Add(conditions[boon.ID].Uptime);
+                List<object> boonData = new List<object>
+                {
+                    conditions[boon.ID].Uptime
+                };
 
                 if (boon.Type != Boon.BoonType.Duration && boonPresence.TryGetValue(boon.ID, out long presenceTime))
                 {
@@ -2679,7 +2667,6 @@ namespace LuckParser.Controllers
                 PhaseData phaseData = _statistics.Phases[i];
                 PhaseDto phaseDto = new PhaseDto(phaseData.Name, phaseData.GetDuration("s"));
                 data.phases.Add(phaseDto);
-                phaseDto.redirect = phaseData.Redirection.Count > 0;
                 phaseDto.dpsStats = CreateDPSData(i);
                 phaseDto.dmgStatsBoss = CreateDMGStatsBossData(i);
                 phaseDto.dmgStats = CreateDMGStatsData(i);

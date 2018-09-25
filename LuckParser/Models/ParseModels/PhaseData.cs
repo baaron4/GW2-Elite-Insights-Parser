@@ -13,7 +13,6 @@ namespace LuckParser.Models.ParseModels
         public bool DrawEnd { get; set; }
         public bool DrawArea { get; set; }
         public List<Boss> Targets { get; } = new List<Boss>();
-        public readonly List<AgentItem> Redirection = new List<AgentItem>();
 
         public PhaseData(long start, long end)
         {

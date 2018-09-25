@@ -470,13 +470,7 @@ namespace LuckParser.Controllers
                         sw.Write("<th></th>");
                         sw.Write("<th>Name</th>");
                         sw.Write("<th>Account</th>");
-                        if (phase.Redirection.Count > 0)
-                        {
-                            sw.Write("<th>Adds DPS</th>");
-                        } else
-                        {
-                            sw.Write("<th>Boss DPS</th>");
-                        }
+                        sw.Write("<th>Boss DPS</th>");                      
                         sw.Write("<th>Power</th>");
                         sw.Write("<th>Condi</th>");
                         sw.Write("<th>All DPS</th>");
@@ -1958,7 +1952,7 @@ namespace LuckParser.Controllers
 
                            sw.Write("<ul class=\"nav nav-tabs\">");
                             {
-                                string bossText = phase.Redirection.Count > 0 ? "Adds" : "Boss";
+                                string bossText = "Boss";
                                 sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabBoss" + pid + "\">" + bossText + "</a></li>");
                                 sw.Write("<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#distTabAll" + pid + "\">" + "All" + "</a></li>");
                             }
@@ -1984,7 +1978,7 @@ namespace LuckParser.Controllers
                             string id = pid + "_" + pair.Value.MinionID;
                             sw.Write("<div class=\"tab-pane fade \" id=\"minion" + id + "\">");
                             {
-                                string bossText = phase.Redirection.Count > 0 ? "Adds" : "Boss";
+                                string bossText = "Boss";
                                 sw.Write("<ul class=\"nav nav-tabs\">");
                                 {
                                     sw.Write("<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#distTabBoss" + id + "\">" + bossText + "</a></li>");
@@ -2304,8 +2298,10 @@ namespace LuckParser.Controllers
         {
             HashSet<long> usedIDs = new HashSet<long>();
             SkillData skillList = _log.SkillData;
-            List<Boon> condiRetal = new List<Boon>(_statistics.PresentConditions);
-            condiRetal.Add(Boon.BoonsByIds[873]);
+            List<Boon> condiRetal = new List<Boon>(_statistics.PresentConditions)
+            {
+                Boon.BoonsByIds[873]
+            };
             HTMLHelper.WriteDamageDistTableCondi(sw, usedIDs, damageLogs, finalTotalDamage, condiRetal);
             foreach (int id in damageLogs.Where(x => !usedIDs.Contains(x.SkillId)).Select(x => x.SkillId).Distinct().ToList())
             {
@@ -2368,21 +2364,13 @@ namespace LuckParser.Controllers
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = p.GetCastLogs(_log, phase.Start, phase.End);
-            List<DamageLog> damageLogs;
-            if (toBoss && phase.Redirection.Count > 0)
-            {
-                damageLogs = p.GetJustPlayerDamageLogs(phase.Redirection, _log, phase.Start, phase.End);
-            }
-            else
-            {
-                damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.Boss : (AbstractPlayer)null, _log, phase.Start, phase.End);
-            }
+            List<DamageLog> damageLogs = p.GetJustPlayerDamageLogs(toBoss ? _log.Boss : (AbstractPlayer)null, _log, phase.Start, phase.End);       
             int totalDamage = toBoss ? dps.BossDamage : dps.AllDamage;
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             if (totalDamage > 0)
             {
                 string contribution = Math.Round(100.0 * finalTotalDamage / totalDamage,2).ToString();
-                sw.Write("<div>" + p.Character + " did " + contribution + "% of its own total " + (toBoss ? (phase.Redirection.Count > 0 ? "adds " : "boss ") : "") + "dps</div>");
+                sw.Write("<div>" + p.Character + " did " + contribution + "% of its own total " + (toBoss ? "boss " : "") + "dps</div>");
             }
             string tabid = p.InstID + "_" + phaseIndex + (toBoss ? "_boss" : "");
             sw.Write("<script>");
@@ -2453,20 +2441,12 @@ namespace LuckParser.Controllers
             string tabid = p.InstID + "_" + phaseIndex + "_" + minions.MinionID + (toBoss ? "_boss" : "");
             PhaseData phase = _statistics.Phases[phaseIndex];
             List<CastLog> casting = minions.GetCastLogs(_log, phase.Start, phase.End);
-            List<DamageLog> damageLogs;
-            if (toBoss && phase.Redirection.Count > 0)
-            {
-                damageLogs = minions.GetDamageLogs(phase.Redirection, _log, phase.Start, phase.End);
-            }
-            else
-            {
-                damageLogs = minions.GetDamageLogs(toBoss ? _log.Boss : (AbstractPlayer)null, _log, phase.Start, phase.End);
-            }
+            List<DamageLog> damageLogs = minions.GetDamageLogs(toBoss ? _log.Boss : (AbstractPlayer)null, _log, phase.Start, phase.End);
             int finalTotalDamage = damageLogs.Count > 0 ? damageLogs.Sum(x => x.Damage) : 0;
             if (totalDamage > 0)
             {
                 string contribution = Math.Round(100.0 * finalTotalDamage / totalDamage,2).ToString();
-                sw.Write("<div>" + minions.Character + " did " + contribution + "% of " + p.Character + "'s total " + (toBoss ? (phase.Redirection.Count > 0 ? "adds " : "boss " ) : "") + "dps</div>");
+                sw.Write("<div>" + minions.Character + " did " + contribution + "% of " + p.Character + "'s total " + (toBoss ? "boss " : "") + "dps</div>");
             }
             sw.Write("<script>");
             {
@@ -2593,8 +2573,10 @@ namespace LuckParser.Controllers
                 sw.Write("<tbody>");
                 {
                     HashSet<long> usedIDs = new HashSet<long>();
-                    List<Boon> condiRetal = new List<Boon>(_statistics.PresentConditions);
-                    condiRetal.Add(Boon.BoonsByIds[873]);
+                    List<Boon> condiRetal = new List<Boon>(_statistics.PresentConditions)
+                    {
+                        Boon.BoonsByIds[873]
+                    };
                     foreach (Boon condi in condiRetal)
                     {
                         long condiID = condi.ID;
@@ -3655,7 +3637,7 @@ namespace LuckParser.Controllers
                                                 sw.Write("</div>");
                                                 sw.Write("<div class=\"tab-pane fade \" id=\"offStats" + i + "\">");
                                                 {
-                                                    string bossText = phases[i].Redirection.Count > 0 ? "Adds" : "Boss";
+                                                    string bossText = "Boss";
                                                     sw.Write("<ul class=\"nav nav-tabs\">" +
                                                        "<li class=\"nav-item\"><a class=\"nav-link active\" data-toggle=\"tab\" href=\"#dpsStatsBoss" + i + "\">"+ bossText + "</a></li>" +
                                                        "<li class=\"nav-item\"><a class=\"nav-link \" data-toggle=\"tab\" href=\"#dpsStatsAll" + i + "\">All</a></li>" +

@@ -98,7 +98,7 @@ namespace LuckParser.Controllers
             return _statistics;
         }
 
-        private Statistics.FinalDPS GetFinalDPS(AbstractPlayer player, int phaseIndex, bool checkRedirection)
+        private Statistics.FinalDPS GetFinalDPS(AbstractPlayer player, int phaseIndex)
         {
             Statistics.FinalDPS final = new Statistics.FinalDPS();
 
@@ -142,15 +142,9 @@ namespace LuckParser.Controllers
                 phase.Start, phase.End).Where(x => x.IsCondi == 0).Sum(x => x.Damage);
             /////////// BOSS
             //DPS
-            if (checkRedirection && phase.Redirection.Count > 0)
-            {
-                damage = player.GetDamageLogs(phase.Redirection, _log,
+            damage = player.GetDamageLogs(_log.Boss, _log,
                     phase.Start, phase.End).Sum(x => x.Damage);
-            } else
-            {
-                damage = player.GetDamageLogs(_log.Boss, _log,
-                    phase.Start, phase.End).Sum(x => x.Damage);
-            }
+            
             if (phaseDuration > 0)
             {
                 dps = damage / phaseDuration;
@@ -158,16 +152,9 @@ namespace LuckParser.Controllers
             final.BossDps = (int)dps;
             final.BossDamage = (int)damage;
             //Condi DPS
-            if (checkRedirection && phase.Redirection.Count > 0)
-            {
-                damage = player.GetDamageLogs(phase.Redirection, _log,
+            damage = player.GetDamageLogs(_log.Boss, _log,
                     phase.Start, phase.End).Where(x => x.IsCondi > 0).Sum(x => x.Damage);
-            }
-            else
-            {
-                damage = player.GetDamageLogs(_log.Boss, _log,
-                    phase.Start, phase.End).Where(x => x.IsCondi > 0).Sum(x => x.Damage);
-            }
+            
             if (phaseDuration > 0)
             {
                 dps = damage / phaseDuration;
@@ -182,17 +169,9 @@ namespace LuckParser.Controllers
             }
             final.BossPowerDps = (int)dps;
             final.BossPowerDamage = (int)damage;
-            if (checkRedirection && phase.Redirection.Count > 0)
-            {
-                final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(phase.Redirection, _log,
+            final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(_log.Boss, _log,
                     phase.Start, phase.End).Where(x => x.IsCondi == 0).Sum(x => x.Damage);
-            }
-            else
-            {
-                final.PlayerBossPowerDamage = player.GetJustPlayerDamageLogs(_log.Boss, _log,
-                    phase.Start, phase.End).Where(x => x.IsCondi == 0).Sum(x => x.Damage);
-            }
-
+            
             return final;
         }
 
@@ -203,7 +182,7 @@ namespace LuckParser.Controllers
                 Statistics.FinalDPS[] phaseDps = new Statistics.FinalDPS[_statistics.Phases.Count];
                 for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
                 {
-                    phaseDps[phaseIndex] = GetFinalDPS(player,phaseIndex, true);
+                    phaseDps[phaseIndex] = GetFinalDPS(player,phaseIndex);
                 }
 
                 _statistics.Dps[player] = phaseDps;
@@ -212,7 +191,7 @@ namespace LuckParser.Controllers
             Statistics.FinalDPS[] phaseBossDps = new Statistics.FinalDPS[_statistics.Phases.Count];
             for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
             {
-                phaseBossDps[phaseIndex] = GetFinalDPS(_log.Boss, phaseIndex, false);
+                phaseBossDps[phaseIndex] = GetFinalDPS(_log.Boss, phaseIndex);
             }
 
             _statistics.BossDps = phaseBossDps;
@@ -274,17 +253,10 @@ namespace LuckParser.Controllers
                     {
                         9292
                     };
-                    HashSet<long> idsToCheck = new HashSet<long>();
-                    if (phase.Redirection.Count > 0)
+                    HashSet<long> idsToCheck = new HashSet<long>
                     {
-                        foreach (AgentItem a in phase.Redirection)
-                        {
-                            idsToCheck.Add(a.InstID);
-                        }
-                    } else
-                    {
-                        idsToCheck.Add(_log.Boss.InstID);
-                    }
+                        _log.Boss.InstID
+                    };
                     foreach (DamageLog dl in damageLogs)
                     {
                         if (dl.IsCondi == 0)
@@ -292,14 +264,6 @@ namespace LuckParser.Controllers
 
                             if (idsToCheck.Contains(dl.DstInstId))
                             {
-                                if (idsToCheck.Count > 1)
-                                {
-                                    AgentItem target = phase.Redirection.Find(x => x.InstID == dl.DstInstId);
-                                    if (dl.Time < target.FirstAware - _log.FightData.FightStart || dl.Time > target.LastAware - _log.FightData.FightStart)
-                                    {
-                                        continue;
-                                    }
-                                }
                                 if (dl.Result == ParseEnum.Result.Crit)
                                 {
                                     final.CriticalRateBoss++;

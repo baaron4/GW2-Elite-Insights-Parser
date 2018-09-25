@@ -190,20 +190,11 @@ namespace LuckParser.Controllers
         private void CreateDPSTable(int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            if (phase.Redirection.Count > 0)
-            {
-                WriteLine(new [] { "Sub Group", "Profession","Role","Name","Account","WepSet1_1","WepSet1_2","WepSet2_1","WepSet2_2",
-                "Adds DPS","Adds DMG","Adds Power DPS","Adds Power DMG","Adds Condi DPS","Adds Condi DMG",
-                "All DPS","All DMG","All Power DPS","All Power DMG","All Condi DPS","All Condi DMG",
-                "Times Downed", "Time Died","Percent Alive"});
-            }
-            else
-            {
-                WriteLine(new [] { "Sub Group", "Profession","Role","Name","Account","WepSet1_1","WepSet1_2","WepSet2_1","WepSet2_2",
+            WriteLine(new[] { "Sub Group", "Profession","Role","Name","Account","WepSet1_1","WepSet1_2","WepSet2_1","WepSet2_2",
                 "Boss DPS","Boss DMG","Boss Power DPS","Boss Power DMG","Boss Condi DPS","Boss Condi DMG",
                 "All DPS","All DMG","All Power DPS","All Power DMG","All Condi DPS","All Condi DMG",
                 "Times Downed", "Time Died","Percent Alive"});
-            }
+
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
