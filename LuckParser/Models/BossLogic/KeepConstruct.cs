@@ -69,56 +69,37 @@ namespace LuckParser.Models
             int offset = phases.Count;
             List<CombatItem> orbItems = log.GetBoonData(35096).Where(x => x.DstInstid == log.Boss.InstID).ToList();
             // Get number of orbs and filter the list
-            List<CombatItem> orbItemsFiltered = new List<CombatItem>();
-            Dictionary<long, int> orbs = new Dictionary<long, int>();
+            start = 0;
+            int orbCount = 0;
+            List<BoonsGraphModel.Segment> segments = new List<BoonsGraphModel.Segment>();
             foreach (CombatItem c in orbItems)
             {
-                long time = c.Time - log.FightData.FightStart;
-                if (!orbs.ContainsKey(time))
-                {
-                    orbs[time] = 0;
-                }
                 if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
                 {
-                    orbs[time] = orbs[time] + 1;
-                }
-                if (orbItemsFiltered.Count > 0)
-                {
-                    CombatItem last = orbItemsFiltered.Last();
-                    if (last.Time != c.Time)
+                    if (start == 0)
                     {
-                        orbItemsFiltered.Add(c);
+                        start = c.Time - log.FightData.FightStart;
                     }
+                    orbCount++;
                 }
-                else
+                else if (start != 0)
                 {
-                    orbItemsFiltered.Add(c);
-                }
-
-            }
-            foreach (CombatItem c in orbItemsFiltered)
-            {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
-                {
-                    start = c.Time - log.FightData.FightStart;
-                }
-                else
-                {
-                    end = c.Time - log.FightData.FightStart;
-                    phases.Add(new PhaseData(start, end));
+                    segments.Add(new BoonsGraphModel.Segment(start, Math.Min(c.Time - log.FightData.FightStart, fightDuration), orbCount));
+                    orbCount = 0;
+                    start = 0;
                 }
             }
-            if (fightDuration - start > 5000 && start >= phases.Last().End)
+            int burnCount = 1;
+            foreach (var seg in segments)
             {
-                phases.Add(new PhaseData(start, fightDuration));
-                start = fightDuration;
-            }
-            for (int i = offset; i < phases.Count; i++)
-            {
-                phases[i].Name = "Burn " + (i - offset + 1) + " (" + orbs[phases[i].Start] + " orbs)";
-                phases[i].DrawArea = true;
-                phases[i].DrawStart = true;
-                phases[i].DrawEnd = true;
+                var phase = new PhaseData(seg.Start, seg.End)
+                {
+                    Name = "Burn " + burnCount++ + " (" + seg.Value + " orbs)",
+                    DrawArea = true,
+                    DrawStart = true,
+                    DrawEnd = true
+                };
+                phases.Add(phase);
             }
             phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
             phases.Last().DrawEnd = false;
@@ -187,6 +168,10 @@ namespace LuckParser.Models
                 int ticks = (int)Math.Max(0,Math.Min(Math.Ceiling((c.ActualDuration-1150) / 1000.0), 9));
                 int start = (int)c.Time + bladeDelay;
                 Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
+                if (facing == null)
+                {
+                    continue;
+                }
                 replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start, start + (ticks+1) * 1000), "rgba(255,0,0,0.4)"));
                 replay.Actors.Add(new PieActor(true, 0, 1600, facing, 360 * 3 / 32, new Tuple<int,int>(start,start+2*duration),"rgba(255,200,0,0.5)")); // First blade lasts twice as long
                 for (int i = 1; i < ticks; i++)
@@ -199,6 +184,10 @@ namespace LuckParser.Models
                 int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
                 int start = (int)c.Time + bladeDelay;
                 Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start+1000);
+                if (facing == null)
+                {
+                    continue;
+                }
                 replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)"));
                 replay.Actors.Add(new PieActor(true, 0, 1600, facing, 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
                 replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
@@ -214,6 +203,10 @@ namespace LuckParser.Models
                 Console.WriteLine("Ticks: {0} Dura: {1}" ,ticks,c.ActualDuration);
                 int start = (int)c.Time + bladeDelay;
                 Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
+                if (facing == null)
+                {
+                    continue;
+                }
                 replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)"));
                 replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
                 replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI + 120), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
