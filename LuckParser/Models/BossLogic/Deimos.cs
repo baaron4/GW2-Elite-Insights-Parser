@@ -89,6 +89,8 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Deimos);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -109,6 +111,7 @@ namespace LuckParser.Models
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = "Phase " + i;
+                phases[i].Targets.Add(mainTarget);
                 if (i == 2) phases[i].DrawArea = true;
             }
             int offsetDei = phases.Count;
@@ -137,25 +140,13 @@ namespace LuckParser.Models
                 PhaseData phase = phases[i];
                 phase.Name = namesDeiSplit[i - offsetDei];
                 phase.DrawArea = true;
-                List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
+                List<ushort> ids = new List<ushort>
                     {
-                        ParseEnum.TrashIDS.Thief,
-                        ParseEnum.TrashIDS.Drunkard,
-                        ParseEnum.TrashIDS.Gambler,
-                        ParseEnum.TrashIDS.GamblerClones,
-                        ParseEnum.TrashIDS.GamblerReal,
+                        (ushort) ParseEnum.TrashIDS.Thief,
+                        (ushort) ParseEnum.TrashIDS.Drunkard,
+                        (ushort) ParseEnum.TrashIDS.Gambler,
                     };
-                List<AgentItem> clones = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
-                foreach (AgentItem a in clones)
-                {
-                    long agentStart = a.FirstAware - log.FightData.FightStart;
-                    if (phase.InInterval(agentStart))
-                    {
-                        phase.Redirection.Add(a);
-                    }
-                }
-                phase.OverrideTimes(log.FightData.FightStart);
-
+                AddTargetsToPhase(phase, ids, log);
             }
             phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
             foreach (PhaseData phase in phases)
@@ -163,6 +154,7 @@ namespace LuckParser.Models
                 phase.DrawStart = true;
                 phase.DrawEnd = true;
             }
+            phases.RemoveAll(x => x.Targets.Count == 0);
             return phases;
         }
 
@@ -173,8 +165,7 @@ namespace LuckParser.Models
                 (ushort)ParseEnum.BossIDS.Deimos,
                 (ushort)ParseEnum.TrashIDS.Thief,
                 (ushort)ParseEnum.TrashIDS.Drunkard,
-                (ushort)ParseEnum.TrashIDS.Gambler,
-                (ushort)ParseEnum.TrashIDS.GamblerReal,
+                (ushort)ParseEnum.TrashIDS.Gambler
             };
         }
 

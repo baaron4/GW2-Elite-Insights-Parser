@@ -151,7 +151,7 @@ namespace LuckParser.Models
         {
             foreach (Boss target in Targets)
             {
-                if (ids.Contains(target.ID) && phase.InInterval(target.FirstAware - log.FightData.FightStart))
+                if (ids.Contains(target.ID) && phase.InInterval(target.FirstAware, log.FightData.FightStart))
                 {
                     phase.Targets.Add(target);
                 }

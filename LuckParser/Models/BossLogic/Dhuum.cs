@@ -47,6 +47,8 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Dhuum);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -78,6 +80,7 @@ namespace LuckParser.Models
                     phases[i].DrawArea = true;
                     phases[i].DrawStart = i > 1;
                     phases[i].DrawEnd = i < phases.Count - 1;
+                    phases[i].Targets.Add(mainTarget);
                 }
             }
             else
@@ -111,6 +114,7 @@ namespace LuckParser.Models
                     phases[i].DrawArea = i > 1;
                     phases[i].DrawStart = i > 1;
                     phases[i].DrawEnd = i == 2;
+                    phases[i].Targets.Add(mainTarget);
                 }
             }
             return phases;

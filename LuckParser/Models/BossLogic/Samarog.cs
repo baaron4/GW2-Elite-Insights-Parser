@@ -99,21 +99,12 @@ namespace LuckParser.Models
                 phase.DrawEnd = i == 1 || i == 3;
                 if (i == 2 || i == 4)
                 {
-                    List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
+                    List<ushort> ids = new List<ushort>
                     {
-                       ParseEnum.TrashIDS.Rigom,
-                       ParseEnum.TrashIDS.Guldhem
+                       (ushort) ParseEnum.TrashIDS.Rigom,
+                       (ushort) ParseEnum.TrashIDS.Guldhem
                     };
-                    List<AgentItem> slaves = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
-                    foreach (AgentItem a in slaves)
-                    {
-                        long agentStart = a.FirstAware - log.FightData.FightStart;
-                        if (phase.InInterval(agentStart))
-                        {
-                            phase.Redirection.Add(a);
-                        }
-                    }
-                    phase.OverrideTimes(log.FightData.FightStart);
+                    AddTargetsToPhase(phase, ids, log);
                 } else
                 {
                     phases[i].Targets.Add(mainTarget);
