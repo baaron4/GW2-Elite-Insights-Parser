@@ -35,15 +35,6 @@ namespace LuckParser.Models
                             Tuple.Create(3456, 11012, 4736, 14212));
         }
 
-        protected override List<ushort> GetFightTargetsIDs()
-        {
-            return new List<ushort>
-            {
-                (ushort)ParseEnum.BossIDS.Gorseval,
-                (ushort)ParseEnum.TrashIDS.ChargedSoul
-            };
-        }
-
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;
@@ -89,17 +80,7 @@ namespace LuckParser.Models
                 phase.DrawArea = i == 1 || i == 3 || i == 5;
                 phase.DrawStart = i == 3 || i == 5;
                 phase.DrawEnd = i == 1 || i == 3;
-                if (i == 2 || i == 4)
-                {
-                    List<ushort> ids = new List<ushort>
-                    {
-                       (ushort)ParseEnum.TrashIDS.ChargedSoul
-                    };
-                    AddTargetsToPhase(phase, ids, log);
-                } else
-                {
-                    phase.Targets.Add(mainTarget);
-                }
+                phase.Targets.Add(mainTarget);
             }
             return phases;
         }
@@ -108,6 +89,7 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
+                ParseEnum.TrashIDS.ChargedSoul,
                 ParseEnum.TrashIDS.EnragedSpirit,
                 ParseEnum.TrashIDS.AngeredSpirit
             };
