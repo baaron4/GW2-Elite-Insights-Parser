@@ -52,8 +52,10 @@ namespace LuckParser.Models
             };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             List<CastLog> howling = cls.Where(x => x.SkillId == 48662).ToList();
             foreach (CastLog c in howling)
             {

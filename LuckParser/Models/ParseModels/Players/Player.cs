@@ -263,7 +263,7 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             // Boss related stuff
-            log.FightData.Logic.ComputeAdditionalPlayerData(CombatReplay, this, log);
+            log.FightData.Logic.ComputeAdditionalPlayerData(this, log);
         }
 
         protected override void SetCombatReplayIcon(ParsedLog log)

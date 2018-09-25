@@ -50,6 +50,8 @@ namespace LuckParser.Models
             long start = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Xera);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -77,6 +79,7 @@ namespace LuckParser.Models
                 phases[i].DrawArea = true;
                 phases[i].DrawStart = i > 1;
                 phases[i].DrawEnd = i < phases.Count - 1;
+                phases[i].Targets.Add(mainTarget);
 
             }
             return phases;
@@ -122,9 +125,11 @@ namespace LuckParser.Models
             };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             // TODO: needs facing information for hadouken
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             List<CastLog> summon = cls.Where(x => x.SkillId == 34887).ToList();
             foreach (CastLog c in summon)
             {

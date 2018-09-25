@@ -58,6 +58,8 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Samarog);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -111,7 +113,10 @@ namespace LuckParser.Models
                             phase.Redirection.Add(a);
                         }
                     }
-                    phase.OverrideStart(log.FightData.FightStart);
+                    phase.OverrideTimes(log.FightData.FightStart);
+                } else
+                {
+                    phases[i].Targets.Add(mainTarget);
                 }
             }
             return phases;
@@ -136,9 +141,10 @@ namespace LuckParser.Models
             };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             // TODO: facing information (shock wave)
+            CombatReplay replay = boss.CombatReplay;
             List<CombatItem> brutalize = log.GetBoonData(38226).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
             int brutStart = 0;
             foreach (CombatItem c in brutalize)
@@ -155,9 +161,10 @@ namespace LuckParser.Models
             }
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // big bomb
+            CombatReplay replay = p.CombatReplay;
             List<CombatItem> bigbomb = log.GetBoonData(37966).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             foreach (CombatItem c in bigbomb)
             {

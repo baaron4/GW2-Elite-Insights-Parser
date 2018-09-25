@@ -47,7 +47,7 @@ namespace LuckParser.Models.ParseModels
 
         protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
-            log.FightData.Logic.ComputeAdditionalBossData(CombatReplay, GetCastLogs(log, 0, log.FightData.FightDuration), log);
+            log.FightData.Logic.ComputeAdditionalBossData(this, log);
         }
 
         protected override void SetCombatReplayIcon(ParsedLog log)

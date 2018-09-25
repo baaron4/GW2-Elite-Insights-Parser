@@ -51,12 +51,12 @@ namespace LuckParser.Models
             return new List<ParseEnum.TrashIDS>();
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
 
         }

@@ -142,10 +142,24 @@ namespace LuckParser.Models
         public virtual List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == _triggerID);
+            phases[0].Targets.Add(mainTarget);
             return phases;
         }
 
-        public virtual void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected void AddTargetsToPhase(PhaseData phase, List<ushort> ids, ParsedLog log)
+        {
+            foreach (Boss target in Targets)
+            {
+                if (ids.Contains(target.ID) && phase.InInterval(target.FirstAware - log.FightData.FightStart))
+                {
+                    phase.Targets.Add(target);
+                }
+            }
+            phase.OverrideTimes(log.FightData.FightStart);
+        }
+
+        public virtual void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
         }
 
@@ -159,7 +173,7 @@ namespace LuckParser.Models
             return -1;
         }
 
-        public virtual void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public virtual void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
         }
 

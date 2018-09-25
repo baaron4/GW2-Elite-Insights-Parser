@@ -51,9 +51,11 @@ namespace LuckParser.Models
             };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             // TODO:facing information (breath)
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             List<CastLog> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
             foreach (CastLog c in sleepy)
             {
@@ -78,9 +80,10 @@ namespace LuckParser.Models
             }
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // Poison
+            CombatReplay replay = p.CombatReplay;
             List<CombatItem> poisonToDrop = GetFilteredList(log, 34387, p.InstID);
             int toDropStart = 0;
             foreach (CombatItem c in poisonToDrop)

@@ -45,15 +45,16 @@ namespace LuckParser.Models
                             Tuple.Create(11774, 4480, 14078, 5376));
         }
         
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             // TODO: needs doughnuts (wave) and facing information (sword)
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // shared agony
             List<CombatItem> agony = log.GetBoonData(38049).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
+            CombatReplay replay = p.CombatReplay;
             foreach (CombatItem c in agony)
             {
                 int agonyStart = (int)(c.Time - log.FightData.FightStart);

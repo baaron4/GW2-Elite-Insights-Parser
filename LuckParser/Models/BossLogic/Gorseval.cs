@@ -35,12 +35,23 @@ namespace LuckParser.Models
                             Tuple.Create(3456, 11012, 4736, 14212));
         }
 
+        protected override List<ushort> GetFightTargetsIDs()
+        {
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.Gorseval,
+                (ushort)ParseEnum.TrashIDS.ChargedSoul
+            };
+        }
+
         public override List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             long start = 0;
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Gorseval);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -80,16 +91,14 @@ namespace LuckParser.Models
                 phase.DrawEnd = i == 1 || i == 3;
                 if (i == 2 || i == 4)
                 {
-                    List<AgentItem> spirits = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ParseEnum.GetTrashIDS(x.ID) == ParseEnum.TrashIDS.ChargedSoul).ToList();
-                    foreach (AgentItem a in spirits)
+                    List<ushort> ids = new List<ushort>
                     {
-                        long agentStart = a.FirstAware - log.FightData.FightStart;
-                        if (phase.InInterval(agentStart))
-                        {
-                            phase.Redirection.Add(a);
-                        }
-                    }
-                    phase.OverrideStart(log.FightData.FightStart);
+                       (ushort)ParseEnum.TrashIDS.ChargedSoul
+                    };
+                    AddTargetsToPhase(phase, ids, log);
+                } else
+                {
+                    phase.Targets.Add(mainTarget);
                 }
             }
             return phases;
@@ -99,14 +108,15 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.ChargedSoul,
                 ParseEnum.TrashIDS.EnragedSpirit,
                 ParseEnum.TrashIDS.AngeredSpirit
             };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             List<CastLog> blooms = cls.Where(x => x.SkillId == 31616).ToList();
             foreach (CastLog c in blooms)
             {

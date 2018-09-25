@@ -43,6 +43,8 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.KeepConstruct);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -64,6 +66,7 @@ namespace LuckParser.Models
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = "Phase " + i;
+                phases[i].Targets.Add(mainTarget);
             }
             // add burn phases
             int offset = phases.Count;
@@ -99,6 +102,7 @@ namespace LuckParser.Models
                     DrawStart = true,
                     DrawEnd = true
                 };
+                phase.Targets.Add(mainTarget);
                 phases.Add(phase);
             }
             phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
@@ -128,8 +132,10 @@ namespace LuckParser.Models
             };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             List<CastLog> magicCharge = cls.Where(x => x.SkillId == 35048).ToList();
             List<CastLog> magicExplode = cls.Where(x => x.SkillId == 34894).ToList();
             for (var i = 0; i < magicCharge.Count; i++)
@@ -220,9 +226,10 @@ namespace LuckParser.Models
             }
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // Bombs
+            CombatReplay replay = p.CombatReplay;
             List<CombatItem> xeraFury = GetFilteredList(log, 35103, p.InstID);
             int xeraFuryStart = 0;
             foreach (CombatItem c in xeraFury)

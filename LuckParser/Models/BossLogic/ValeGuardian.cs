@@ -60,6 +60,8 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.ValeGuardian);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -102,22 +104,16 @@ namespace LuckParser.Models
                 phase.DrawArea = drawAreaVG[i - 1];
                 if (i == 2 || i == 4)
                 {
-                    List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
+                    List<ushort> ids = new List<ushort>
                     {
-                       ParseEnum.TrashIDS.BlueGuardian,
-                       ParseEnum.TrashIDS.GreenGuardian,
-                       ParseEnum.TrashIDS.RedGuardian
+                       (ushort) ParseEnum.TrashIDS.BlueGuardian,
+                       (ushort) ParseEnum.TrashIDS.GreenGuardian,
+                       (ushort) ParseEnum.TrashIDS.RedGuardian
                     };
-                    List<AgentItem> guardians = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
-                    foreach (AgentItem a in guardians)
-                    {
-                        long agentStart = a.FirstAware - log.FightData.FightStart;
-                        if (phase.InInterval(agentStart))
-                        {
-                            phase.Redirection.Add(a);
-                        }
-                    }
-                    phase.OverrideStart(log.FightData.FightStart);
+                    AddTargetsToPhase(phase, ids, log);
+                } else
+                {
+                    phase.Targets.Add(mainTarget);
                 }
             }
             return phases;
@@ -134,8 +130,10 @@ namespace LuckParser.Models
             };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
             foreach (CastLog c in magicStorms)
             {

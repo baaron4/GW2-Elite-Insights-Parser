@@ -154,7 +154,7 @@ namespace LuckParser.Models
                         phase.Redirection.Add(a);
                     }
                 }
-                phase.OverrideStart(log.FightData.FightStart);
+                phase.OverrideTimes(log.FightData.FightStart);
 
             }
             phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
@@ -195,8 +195,10 @@ namespace LuckParser.Models
             };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             List<CastLog> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
             foreach (CastLog c in mindCrush)
             {
@@ -234,9 +236,10 @@ namespace LuckParser.Models
             }
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // teleport zone
+            CombatReplay replay = p.CombatReplay;
             List<CombatItem> tpDeimos = GetFilteredList(log, 37730, p.InstID);
             int tpStart = 0;
             foreach (CombatItem c in tpDeimos)

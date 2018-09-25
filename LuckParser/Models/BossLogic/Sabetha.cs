@@ -41,6 +41,8 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Sabetha);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -80,22 +82,28 @@ namespace LuckParser.Models
                 phase.DrawEnd = i % 2 == 1 && i < 7;
                 if (i == 2 || i == 4 || i == 6)
                 {
-                    List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
+                    List<ushort> ids = new List<ushort>
                     {
-                       ParseEnum.TrashIDS.Kernan,
-                       ParseEnum.TrashIDS.Knuckles,
-                       ParseEnum.TrashIDS.Karde,
+                       (ushort) ParseEnum.TrashIDS.Kernan,
+                       (ushort) ParseEnum.TrashIDS.Knuckles,
+                       (ushort) ParseEnum.TrashIDS.Karde,
                     };
-                    List<AgentItem> champs = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
-                    foreach (AgentItem a in champs)
+                    AddTargetsToPhase(phase, ids, log);
+                } else
+                {
+                    phase.Targets.Add(mainTarget);
+                    switch (i)
                     {
-                        long agentStart = a.FirstAware - log.FightData.FightStart;
-                        if (phase.InInterval(agentStart))
-                        {
-                            phase.Redirection.Add(a);
-                        }
+                        case 3:
+                            phase.Targets.Add(Targets.Find(x => x.ID == (ushort) ParseEnum.TrashIDS.Kernan));
+                            break;
+                        case 5:
+                            phase.Targets.Add(Targets.Find(x => x.ID == (ushort)ParseEnum.TrashIDS.Knuckles));
+                            break;
+                        case 7:
+                            phase.Targets.Add(Targets.Find(x => x.ID == (ushort)ParseEnum.TrashIDS.Karde));
+                            break;
                     }
-                    phase.OverrideStart(log.FightData.FightStart);
                 }
             }
             return phases;
@@ -116,18 +124,16 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.Kernan,
-                ParseEnum.TrashIDS.Knuckles,
-                ParseEnum.TrashIDS.Karde,
                 ParseEnum.TrashIDS.BanditSapper,
                 ParseEnum.TrashIDS.BanditThug,
                 ParseEnum.TrashIDS.BanditArsonist
             };
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // timed bombs
+            CombatReplay replay = p.CombatReplay;
             List<CombatItem> timedBombs = log.GetBoonData(31485).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in timedBombs)
             {

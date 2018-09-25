@@ -58,6 +58,8 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Matthias);
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -96,6 +98,7 @@ namespace LuckParser.Models
             {
                 phases[i].Name = namesMat[i - 1];
                 phases[i].DrawStart = i > 1;
+                phases[i].Targets.Add(mainTarget);
             }
             return phases;
         }
@@ -112,9 +115,11 @@ namespace LuckParser.Models
             };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             // TODO: needs facing information for hadouken
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
             List<CastLog> humanShield = cls.Where(x => x.SkillId == 34468).ToList();
             List<int> humanShieldRemoval = log.GetBoonData(34518).Where(x => x.IsBuffRemove == ParseEnum.BuffRemove.All).Select(x => (int)(x.Time - log.FightData.FightStart)).Distinct().ToList();
             for (var i = 0; i < humanShield.Count; i++)
@@ -154,9 +159,10 @@ namespace LuckParser.Models
             }
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // Corruption
+            CombatReplay replay = p.CombatReplay;
             List<CombatItem> corruptedMatthias = GetFilteredList(log, 34416, p.InstID);
             corruptedMatthias.AddRange(GetFilteredList(log, 34473, p.InstID));
             int corruptedMatthiasStart = 0;
