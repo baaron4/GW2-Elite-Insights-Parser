@@ -16,7 +16,7 @@ namespace LuckParser.Controllers
     class HTMLBuilderNew
     {
         private const string scriptVersion = "0.5";
-        private const int scriptVersionRev = 10;
+        private const int scriptVersionRev = 11;
         private readonly SettingsContainer _settings;
 
         private readonly ParsedLog _log;
@@ -48,14 +48,30 @@ namespace LuckParser.Controllers
             return filtered;
         }
 
+        private List<int> ConvertGraph(List<Point> points)
+        {
+            List<int> graph = new List<int>();
+            foreach (Point point in points)
+            {
+                graph.Add(point.Y);
+            }
+            return graph;
+        }
+
+        private PlayerChartDataDto CreateBossGraphData(int phaseIndex)
+        {
+            PhaseData phase = _statistics.Phases[phaseIndex];
+            return new PlayerChartDataDto
+            {
+                boss = ConvertGraph(GraphHelper.GetTotalDPSGraph(_log, _log.Boss, phaseIndex, phase, GraphHelper.GraphMode.S1))
+            };
+        }
+
         //Generate HTML---------------------------------------------------------------------------------------------------------------------------------------------------------
         //Methods that make it easier to create Javascript graphs      
         /// <summary>
         /// Creates the dps graph
         /// </summary>
-        /// <param name="sw"></param>
-        /// <param name="phaseIndex"></param>
-        /// <param name="mode"></param>
         private List<PlayerChartDataDto> CreateDPSGraphData(int phaseIndex)
         {
             List<PlayerChartDataDto> list = new List<PlayerChartDataDto>();
@@ -63,20 +79,11 @@ namespace LuckParser.Controllers
 
             foreach (Player p in _log.PlayerList)
             {
-                PlayerChartDataDto playerData = new PlayerChartDataDto();
-                list.Add(playerData);
-                playerData.boss = new List<int>();
-                playerData.cleave = new List<int>();
-                List<Point> bossPoints = GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S1);
-                List<Point> cleavePoints = GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S1);
-                foreach (Point point in bossPoints)
+                list.Add(new PlayerChartDataDto
                 {
-                    playerData.boss.Add(point.Y);
-                }
-                foreach (Point point in cleavePoints)
-                {
-                    playerData.cleave.Add(point.Y);
-                }
+                    boss = ConvertGraph(GraphHelper.GetBossDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S1)),
+                    cleave = ConvertGraph(GraphHelper.GetCleaveDPSGraph(_log, p, phaseIndex, phase, GraphHelper.GraphMode.S1))
+                });
             }
             return list;
         }
@@ -505,7 +512,7 @@ namespace LuckParser.Controllers
         /// <param name="p"></param>
         /// <param name="simpleRotSize"></param>
         /// <param name="phaseIndex"></param>
-        private List<double[]> CreateSimpleRotationTabData(Player p, int phaseIndex, Dictionary<long, SkillItem> usedSkills)
+        private List<double[]> CreateSimpleRotationTabData(AbstractPlayer p, int phaseIndex, Dictionary<long, SkillItem> usedSkills)
         {
             List<double[]> list = new List<double[]>();
 
@@ -737,9 +744,9 @@ namespace LuckParser.Controllers
             Dictionary<long, List<DamageLog>> damageLogsBySkill = damageLogs.GroupBy(x => x.SkillId).ToDictionary(x => x.Key, x => x.ToList());
             Dictionary<long, Boon> conditionsById = _statistics.PresentConditions.ToDictionary(x => x.ID);
             SkillData skillList = _log.SkillData;
-            foreach (KeyValuePair<long,List<DamageLog>> entry in damageLogsBySkill)
+            foreach (KeyValuePair<long, List<DamageLog>> entry in damageLogsBySkill)
             {
-                int totaldamage = 0,mindamage = 0,maxdamage = 0,casts = 0,hits = 0,crit = 0,flank = 0,glance = 0,timeswasted = 0,timessaved = 0;
+                int totaldamage = 0, mindamage = 0, maxdamage = 0, casts = 0, hits = 0, crit = 0, flank = 0, glance = 0, timeswasted = 0, timessaved = 0;
                 foreach (DamageLog dl in entry.Value)
                 {
                     int curdmg = dl.Damage;
@@ -757,7 +764,8 @@ namespace LuckParser.Controllers
                 {
                     Boon condi = entry.Key == 873 ? Boon.BoonsByIds[873] : conditionsById[entry.Key];
                     if (!usedBoons.ContainsKey(condi.ID)) usedBoons.Add(condi.ID, condi);
-                } else
+                }
+                else
                 {
                     if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillList.GetOrDummy(entry.Key));
                 }
@@ -784,6 +792,28 @@ namespace LuckParser.Controllers
                     casts, hits, crit, flank, glance,
                     timeswasted / 1000.0,
                     -timessaved / 1000.0};
+                list.Add(skillData);
+            }
+
+            foreach (KeyValuePair<long, List<CastLog>> entry in castLogsBySkill)
+            {
+                if (damageLogsBySkill.ContainsKey(entry.Key)) continue;
+
+                if (!usedSkills.ContainsKey(entry.Key)) usedSkills.Add(entry.Key, skillList.GetOrDummy(entry.Key));
+
+                int casts = entry.Value.Count;
+                int timeswasted = 0, timessaved = 0;
+                foreach (CastLog cl in entry.Value)
+                {
+                    if (cl.EndActivation == ParseEnum.Activation.CancelCancel) timeswasted += cl.ActualDuration;
+                    if (cl.EndActivation == ParseEnum.Activation.CancelFire && cl.ActualDuration < cl.ExpectedDuration)
+                    {
+                        timessaved += cl.ExpectedDuration - cl.ActualDuration;
+                    }
+                }
+
+                double[] skillData = { 0, entry.Key, 0, 0, 0, 0, casts,
+                    0, 0, 0, 0, timeswasted / 1000.0, -timessaved / 1000.0 };
                 list.Add(skillData);
             }
             return list;
@@ -978,7 +1008,7 @@ namespace LuckParser.Controllers
             return dto;
         }
 
-        private List<BoonChartDataDto> CreatePlayerBoonGraphData(Player p, int phaseIndex)
+        private List<BoonChartDataDto> CreatePlayerBoonGraphData(AbstractMasterPlayer p, int phaseIndex)
         {
             List<BoonChartDataDto> list = new List<BoonChartDataDto>();
             PhaseData phase = _statistics.Phases[phaseIndex];
@@ -1963,7 +1993,8 @@ namespace LuckParser.Controllers
                 PhaseChartDataDto phaseData = new PhaseChartDataDto
                 {
                     bossHealth = CreateBossHealthData(i),
-                    players = CreateDPSGraphData(i)
+                    players = CreateDPSGraphData(i),
+                    boss = CreateBossGraphData(i)
                 };
                 chartData.Add(phaseData);
              }
@@ -2138,6 +2169,10 @@ namespace LuckParser.Controllers
                 String playerScript = "data.players[" + i + "].details = " + ToJson(BuildPlayerData(player, usedSkills, usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
                 scripts += playerScript;
             }
+            {
+                String bossScript = "data.boss.details = " + ToJson(BuildBossData(_log.Boss, usedSkills, usedBoons), typeof(PlayerDetailsDto)) + ";\r\n";
+                scripts += bossScript;
+            }
             string skillsScript = "var usedSkills = " + ToJson(AssembleSkills(usedSkills.Values), typeof(ICollection<SkillDto>)) + ";" +
                 "data.skillMap = {};" +
                 "$.each(usedSkills, function(i, skill) {" +
@@ -2187,6 +2222,38 @@ namespace LuckParser.Controllers
             {
                 dto.dmgDistributionsBoss.Add(CreatePlayerMinionDMGDistTable(player, minion, true, i, usedSkills, usedBoons));
                 dto.dmgDistributions.Add(CreatePlayerMinionDMGDistTable(player, minion, false, i, usedSkills, usedBoons));
+            }
+            return dto;
+        }
+
+        private PlayerDetailsDto BuildBossData(Boss boss, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
+        {
+            PlayerDetailsDto dto = new PlayerDetailsDto();
+            dto.dmgDistributions = new List<DmgDistributionDto>();
+            dto.boonGraph = new List<List<BoonChartDataDto>>();
+            dto.rotation = new List<List<double[]>>();
+            for (int i = 0; i < _statistics.Phases.Count; i++)
+            {
+                dto.dmgDistributions.Add(CreateBossDMGDistTable(boss, i, usedSkills, usedBoons));
+                dto.rotation.Add(CreateSimpleRotationTabData(boss, i, usedSkills));
+                dto.boonGraph.Add(CreatePlayerBoonGraphData(boss, i));
+            }
+
+            dto.minions = new List<PlayerDetailsDto>();
+            foreach (KeyValuePair<string, Minions> pair in boss.GetMinions(_log))
+            {
+                dto.minions.Add(BuildBossMinionsData(boss, pair.Value, usedSkills, usedBoons));
+            }
+            return dto;
+        }
+
+        private PlayerDetailsDto BuildBossMinionsData(Boss boss, Minions minion, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
+        {
+            PlayerDetailsDto dto = new PlayerDetailsDto();
+            dto.dmgDistributions = new List<DmgDistributionDto>();
+            for (int i = 0; i < _statistics.Phases.Count; i++)
+            {
+                dto.dmgDistributions.Add(CreateBossMinionDMGDistTable(boss, minion, i, usedSkills, usedBoons));
             }
             return dto;
         }
