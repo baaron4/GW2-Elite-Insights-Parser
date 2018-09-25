@@ -214,7 +214,7 @@ namespace LuckParser
                     {
                         if (!log.LogData.Success)
                         {
-                            rowData.Cancel();
+                            throw new CancellationException(rowData, new Exception("Failed logs are skipped"));
                         }
                     }
                     //Creating File

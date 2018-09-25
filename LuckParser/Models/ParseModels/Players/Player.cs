@@ -29,26 +29,14 @@ namespace LuckParser.Models.ParseModels
         }
         
         // Public methods
-        public int[] GetCleanses(ParsedLog log, long start, long end) {
-            long timeStart = log.FightData.FightStart;
+        public int[] GetCleanses(ParsedLog log, int phaseIndex) {
             int[] cleanse = { 0, 0 };
-            List<Boon> condiList = Boon.GetCondiBoonList();
-            foreach (CombatItem c in log.CombatData.AllCombatItems.Where(x=>x.IsStateChange == ParseEnum.StateChange.Normal && x.IsBuff == 1 && x.Time >= (start + timeStart) && x.Time <= (end + timeStart)))
+            foreach (Player p in log.PlayerList)
             {
-                if (c.IsActivation == ParseEnum.Activation.None)
+                foreach(List<long> list in p.GetCondiCleanse(log,phaseIndex, InstID).Values)
                 {
-                    if ((AgentItem.InstID == c.DstInstid || AgentItem.InstID == c.DstMasterInstid) && c.IFF == ParseEnum.IFF.Friend && (c.IsBuffRemove != ParseEnum.BuffRemove.None))
-                    {
-                        long time = c.Time - timeStart;
-                        if (time > 0)
-                        {
-                            if (condiList.Exists(x=>x.ID == c.SkillID))
-                            {
-                                cleanse[0]++;
-                                cleanse[1] += c.BuffDmg;
-                            }
-                        }
-                    }
+                    cleanse[0] += list.Count;
+                    cleanse[1] += (int)list.Sum();
                 }
             }
             return cleanse;
