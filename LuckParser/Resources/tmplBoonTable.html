@@ -26,7 +26,7 @@
 			{{if  ~data.val[#getIndex()][2]}}
 			<td title="{{:~data.val[#getIndex()][2]}}">{{:~data.val[#getIndex()][0]}}{{if !stacking}}%{{/if}}</td>
 			{{else stacking}}
-			<td title="Uptime: {{:~data.val[#getIndex()][1]}}%">{{:~data.val[#getIndex()][0]}}</td>
+			<td title="Uptime: {{if !~data.val[#getIndex()][1]}}0{{else}}{{:~data.val[#getIndex()][1]}}{{/if}}%">{{:~data.val[#getIndex()][0]}}</td>
 			{{else}}
 			<td>{{:~data.val[#getIndex()][0]}}%</td>
 			{{/if}}
