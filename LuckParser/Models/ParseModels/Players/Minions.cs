@@ -42,18 +42,6 @@ namespace LuckParser.Models.ParseModels
             return _damageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
         }
 
-        public List<DamageLog> GetDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
-        {
-            List<DamageLog> dls = GetDamageLogs(null, log, start, end);
-            List<DamageLog> res = new List<DamageLog>();
-            foreach (AgentItem a in redirection)
-            {
-                res.AddRange(dls.Where(x => x.DstInstId == a.InstID && x.Time >= a.FirstAware - log.FightData.FightStart && x.Time <= a.LastAware - log.FightData.FightStart));
-            }
-            res.Sort((x, y) => x.Time < y.Time ? -1 : 1);
-            return res;
-        }
-
         /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)
         {
             List<DamageLog> res = new List<DamageLog>();
