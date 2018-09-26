@@ -126,7 +126,7 @@ namespace LuckParser.Controllers
             log.Boss.FinalHealth = _log.Boss.Health * (100.0 - finalBossHealth * 0.01);
             log.Boss.HealthPercentBurned = 100.0 - finalBossHealth * 0.01;
 
-            log.Boss.Dps = BuildDPS(_statistics.BossDps);
+            log.Boss.Dps = BuildDPSBoss(_statistics.BossDps);
             log.Boss.Conditions = BuildBossBoons(_statistics.BossConditions);
         }
 
@@ -147,8 +147,10 @@ namespace LuckParser.Controllers
                     Weapons = player.GetWeaponsArray(_log).Where(w => w != null).ToArray(),
                     Group = player.Group,
                     Profession = player.Prof,
-                    Dps = BuildDPS(_statistics.Dps[player]),
-                    Stats = BuildStats(_statistics.Stats[player]),
+                    DpsAll = BuildDPSAll(_statistics.DpsAll[player]),
+                    DpsBoss = BuildDPSBoss(_statistics.DpsBoss[player]),
+                    StatsAll = BuildStatsAll(_statistics.StatsAll[player]),
+                    StatsBoss = BuildStatsBoss(_statistics.StatsBoss[player]),
                     Defenses = BuildDefenses(_statistics.Defenses[player]),
                     Support = BuildSupport(_statistics.Support[player]),
                     SelfBoons = BuildBoonUptime(_statistics.SelfBoons[player]),
@@ -204,8 +206,14 @@ namespace LuckParser.Controllers
             }
         }
 
-        private Dictionary<string, JsonLog.JsonBossBoon> BuildBossBoons(Dictionary<long, Statistics.FinalBossBoon>[] statBoons)
+        private Dictionary<string, JsonLog.JsonBossBoon> BuildBossBoons(Dictionary<Boss,Dictionary<long, Statistics.FinalBossBoon>>[] statBoons)
         {
+            Dictionary<long, Statistics.FinalBossBoon>[] auxstats = new Dictionary<long, Statistics.FinalBossBoon>[_statistics.Phases.Count];
+            int i = 0;
+            foreach (Dictionary<Boss, Dictionary<long, Statistics.FinalBossBoon>> val in statBoons)
+            {
+                auxstats[i++] = val[_log.Boss];
+            }
             int phases = _statistics.Phases.Count;
             var boons = new Dictionary<long, JsonLog.JsonBossBoon>();
 
@@ -214,7 +222,7 @@ namespace LuckParser.Controllers
 
             for (int phaseIndex = 0; phaseIndex < phases; phaseIndex++)
             {
-                foreach (var boon in statBoons[phaseIndex])
+                foreach (var boon in auxstats[phaseIndex])
                 {
                     if (boonsFound.Contains(boon.Key))
                     {
@@ -222,7 +230,7 @@ namespace LuckParser.Controllers
                     }
                     else if (!boonsNotFound.Contains(boon.Key))
                     {
-                        if (ContainsBossBoon(boon.Key, statBoons))
+                        if (ContainsBossBoon(boon.Key, auxstats))
                         {
                             boonsFound.Add(boon.Key);
 
@@ -252,11 +260,27 @@ namespace LuckParser.Controllers
             return namedBoons;
         }
 
-        private JsonLog.JsonDps BuildDPS(Statistics.FinalDPS[] statDps)
+        private JsonLog.JsonDps BuildDPSAll(Statistics.FinalDPS[] statDps)
         {
             var dps = new JsonLog.JsonDps(_statistics.Phases.Count);
 
             MoveArrayLevel(dps, _statistics.Phases.Count, statDps);
+            RemoveZeroArrays(dps);
+
+            return dps;
+        }
+
+        private JsonLog.JsonDps BuildDPSBoss(Dictionary<Boss,Statistics.FinalDPS>[] statDps)
+        {
+            Statistics.FinalDPS[] auxstats = new Statistics.FinalDPS[_statistics.Phases.Count];
+            int i = 0;
+            foreach (Dictionary<Boss, Statistics.FinalDPS> val in statDps)
+            {
+                auxstats[i++] = val[_log.Boss];
+            }
+            var dps = new JsonLog.JsonDps(_statistics.Phases.Count);
+
+            MoveArrayLevel(dps, _statistics.Phases.Count, auxstats);
             RemoveZeroArrays(dps);
 
             return dps;
@@ -357,11 +381,27 @@ namespace LuckParser.Controllers
             return defense;
         }
 
-        private JsonLog.JsonStats BuildStats(Statistics.FinalStats[] statStat)
+        private JsonLog.JsonStatsAll BuildStatsAll(Statistics.FinalStats[] statStat)
         {
-            var stats = new JsonLog.JsonStats(_statistics.Phases.Count);
+            var stats = new JsonLog.JsonStatsAll(_statistics.Phases.Count);
 
             MoveArrayLevel(stats, _statistics.Phases.Count, statStat);
+            RemoveZeroArrays(stats);
+
+            return stats;
+        }
+
+        private JsonLog.JsonStatsBoss BuildStatsBoss(Dictionary<Boss,Statistics.FinalBossStats>[] statStat)
+        {
+            Statistics.FinalBossStats[] auxstats = new Statistics.FinalBossStats[_statistics.Phases.Count];
+            int i = 0;
+            foreach (Dictionary<Boss, Statistics.FinalBossStats> val in statStat)
+            {
+                auxstats[i++] = val[_log.Boss];
+            }
+            var stats = new JsonLog.JsonStatsBoss(_statistics.Phases.Count);
+
+            MoveArrayLevel(stats, _statistics.Phases.Count, auxstats);
             RemoveZeroArrays(stats);
 
             return stats;

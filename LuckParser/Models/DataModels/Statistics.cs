@@ -10,9 +10,11 @@ namespace LuckParser.Models.DataModels
     {
         public Statistics()
         {
-            Dps = new Dictionary<Player, FinalDPS[]>();
+            DpsBoss = new Dictionary<Player, Dictionary<Boss, FinalDPS>[]>();
+            DpsAll = new Dictionary<Player, FinalDPS[]>();
             Defenses = new Dictionary<Player, FinalDefenses[]>();
-            Stats = new Dictionary<Player, FinalStats[]>();
+            StatsBoss = new Dictionary<Player, Dictionary<Boss, FinalBossStats>[]>();
+            StatsAll = new Dictionary<Player, FinalStats[]>();
             Support = new Dictionary<Player, FinalSupport[]>();
             SelfBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
             GroupBoons = new Dictionary<Player, Dictionary<long, FinalBoonUptime>[]>();
@@ -26,26 +28,36 @@ namespace LuckParser.Models.DataModels
         public class FinalDPS
         {
             // Total
-            public int AllDps;
-            public int AllDamage;
-            public int AllCondiDps;
-            public int AllCondiDamage;
-            public int AllPowerDps;
-            public int AllPowerDamage;
-            // Boss
-            public int BossDps;
-            public int BossDamage;
-            public int BossCondiDps;
-            public int BossCondiDamage;
-            public int BossPowerDps;
-            public int BossPowerDamage;
+            public int Dps;
+            public int Damage;
+            public int CondiDps;
+            public int CondiDamage;
+            public int PowerDps;
+            public int PowerDamage;
             // Player only
             public int PlayerPowerDamage;
-            public int PlayerBossPowerDamage;
         }
 
-        public readonly Dictionary<Player, FinalDPS[]> Dps;
-        public FinalDPS[] BossDps;
+        public readonly Dictionary<Player, Dictionary<Boss, FinalDPS>[]> DpsBoss;
+        public readonly Dictionary<Player, FinalDPS[]> DpsAll;
+        public Dictionary<Boss, FinalDPS>[] BossDps;
+
+        public class FinalBossStats
+        {
+            public int PowerLoopCount;
+            public int CritablePowerLoopCount;
+            public int CriticalRate;
+            public int CriticalDmg;
+            public int ScholarRate;
+            public int ScholarDmg;
+            public int MovingRate;
+            public int MovingDamage;
+            public int FlankingRate;
+            public int GlanceRate;
+            public int Missed;
+            public int Interrupts;
+            public int Invulned;
+        }
 
         public class FinalStats
         {
@@ -67,23 +79,7 @@ namespace LuckParser.Models.DataModels
             public double TimeWasted;
             public int Saved;
             public double TimeSaved;
-            public double AvgBoons;
             public double StackDist;
-
-            //Boss only Rates
-            public int PowerLoopCountBoss;
-            public int CritablePowerLoopCountBoss;
-            public int CriticalRateBoss;
-            public int CriticalDmgBoss;
-            public int ScholarRateBoss;
-            public int ScholarDmgBoss;
-            public int MovingRateBoss;
-            public int MovingDamageBoss;
-            public int FlankingRateBoss;
-            public int GlanceRateBoss;
-            public int MissedBoss;
-            public int InterruptsBoss;
-            public int InvulnedBoss;
 
             // Counts
             public int SwapCount;
@@ -95,7 +91,8 @@ namespace LuckParser.Models.DataModels
             public double Dcd;
         }
 
-        public readonly Dictionary<Player, FinalStats[]> Stats;
+        public readonly Dictionary<Player, Dictionary<Boss, FinalBossStats>[]> StatsBoss;
+        public readonly Dictionary<Player, FinalStats[]> StatsAll;
 
         public class FinalDefenses
         {
@@ -152,9 +149,9 @@ namespace LuckParser.Models.DataModels
             public readonly Dictionary<Player, double> Overstacked;
         }
 
-        public Dictionary<long, FinalBossBoon>[] BossConditions;
+        public Dictionary<Boss,Dictionary<long, FinalBossBoon>>[] BossConditions;
 
-        public double[] BossHealth { get; set; }
+        public Dictionary<Boss, double[]> BossHealth { get; set; }
 
         // present buff
         public readonly List<Boon> PresentBoons = new List<Boon>();//Used only for Boon tables

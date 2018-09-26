@@ -10,40 +10,24 @@ namespace LuckParser.Models.DataModels
         {
             public JsonDps(int phaseCount)
             {
-                AllCondiDamage = new int[phaseCount];
-                AllCondiDps = new int[phaseCount];
-                AllDamage = new int[phaseCount];
-                AllDps = new int[phaseCount];
-                AllPowerDamage = new int[phaseCount];
-                AllPowerDps = new int[phaseCount];
-                BossCondiDamage = new int[phaseCount];
-                BossCondiDps = new int[phaseCount];
-                BossDamage = new int[phaseCount];
-                BossDps = new int[phaseCount];
-                BossPowerDamage = new int[phaseCount];
-                BossPowerDps = new int[phaseCount];
-                PlayerBossPowerDamage = new int[phaseCount];
+                CondiDamage = new int[phaseCount];
+                CondiDps = new int[phaseCount];
+                Damage = new int[phaseCount];
+                Dps = new int[phaseCount];
+                PowerDamage = new int[phaseCount];
+                PowerDps = new int[phaseCount];
                 PlayerPowerDamage = new int[phaseCount];
             }
 
-            public int[] AllDps;
-            public int[] AllDamage;
-            public int[] AllCondiDps;
-            public int[] AllCondiDamage;
-            public int[] AllPowerDps;
-            public int[] AllPowerDamage;
-
-            // Boss
-            public int[] BossDps;
-            public int[] BossDamage;
-            public int[] BossCondiDps;
-            public int[] BossCondiDamage;
-            public int[] BossPowerDps;
-            public int[] BossPowerDamage;
+            public int[] Dps;
+            public int[] Damage;
+            public int[] CondiDps;
+            public int[] CondiDamage;
+            public int[] PowerDps;
+            public int[] PowerDamage;
 
             // Player only
             public int[] PlayerPowerDamage;
-            public int[] PlayerBossPowerDamage;
         }
 
         public class JsonDefenses
@@ -107,42 +91,29 @@ namespace LuckParser.Models.DataModels
             public Dictionary<string, JsonBossBoon> Conditions;
         }
 
-        public class JsonStats
+        public class JsonStatsAll
         {
-            public JsonStats(int phaseCount)
+            public JsonStatsAll(int phaseCount)
             {
                 AvgBoons = new double[phaseCount];
                 CritablePowerLoopCount = new int[phaseCount];
-                CritablePowerLoopCountBoss = new int[phaseCount];
                 CriticalDmg = new int[phaseCount];
-                CriticalDmgBoss = new int[phaseCount];
                 CriticalRate = new int[phaseCount];
-                CriticalRateBoss = new int[phaseCount];
                 Dcd = new double[phaseCount];
                 Died = new double[phaseCount];
                 DodgeCount = new int[phaseCount];
                 DownCount = new int[phaseCount];
                 FlankingRate = new int[phaseCount];
-                FlankingRateBoss = new int[phaseCount];
                 GlanceRate = new int[phaseCount];
-                GlanceRateBoss = new int[phaseCount];
                 Interrupts = new int[phaseCount];
-                InterruptsBoss = new int[phaseCount];
                 Invulned = new int[phaseCount];
-                InvulnedBoss = new int[phaseCount];
                 Missed = new int[phaseCount];
-                MissedBoss = new int[phaseCount];
                 MovingDamage = new int[phaseCount];
-                MovingDamageBoss = new int[phaseCount];
                 MovingRate = new int[phaseCount];
-                MovingRateBoss = new int[phaseCount];
                 PowerLoopCount = new int[phaseCount];
-                PowerLoopCountBoss = new int[phaseCount];
                 Saved = new int[phaseCount];
                 ScholarDmg = new int[phaseCount];
-                ScholarDmgBoss = new int[phaseCount];
                 ScholarRate = new int[phaseCount];
-                ScholarRateBoss = new int[phaseCount];
                 StackDist = new double[phaseCount];
                 SwapCount = new int[phaseCount];
                 TimeSaved = new double[phaseCount];
@@ -171,21 +142,6 @@ namespace LuckParser.Models.DataModels
             public double[] AvgBoons;
             public double[] StackDist;
 
-            //Boss only Rates
-            public int[] PowerLoopCountBoss;
-            public int[] CritablePowerLoopCountBoss;
-            public int[] CriticalRateBoss;
-            public int[] CriticalDmgBoss;
-            public int[] ScholarRateBoss;
-            public int[] ScholarDmgBoss;
-            public int[] MovingRateBoss;
-            public int[] MovingDamageBoss;
-            public int[] FlankingRateBoss;
-            public int[] GlanceRateBoss;
-            public int[] MissedBoss;
-            public int[] InterruptsBoss;
-            public int[] InvulnedBoss;
-
             // Counts
             public int[] SwapCount;
             public int[] DownCount;
@@ -194,6 +150,41 @@ namespace LuckParser.Models.DataModels
             // Misc
             public double[] Died;
             public double[] Dcd;
+        }
+
+        public class JsonStatsBoss
+        {
+            public JsonStatsBoss(int phaseCount)
+            {
+                CritablePowerLoopCount = new int[phaseCount];
+                CriticalDmg = new int[phaseCount];
+                CriticalRate = new int[phaseCount];
+                FlankingRate = new int[phaseCount];
+                GlanceRate = new int[phaseCount];
+                Interrupts = new int[phaseCount];
+                Invulned = new int[phaseCount];
+                Missed = new int[phaseCount];
+                MovingDamage = new int[phaseCount];
+                MovingRate = new int[phaseCount];
+                PowerLoopCount = new int[phaseCount];
+                ScholarDmg = new int[phaseCount];
+                ScholarRate = new int[phaseCount];;
+            }
+
+            // Rates
+            public int[] PowerLoopCount;
+            public int[] CritablePowerLoopCount;
+            public int[] CriticalRate;
+            public int[] CriticalDmg;
+            public int[] ScholarRate;
+            public int[] ScholarDmg;
+            public int[] MovingRate;
+            public int[] MovingDamage;
+            public int[] FlankingRate;
+            public int[] GlanceRate;
+            public int[] Missed;
+            public int[] Interrupts;
+            public int[] Invulned;
         }
 
         public struct JsonPlayer
@@ -207,8 +198,10 @@ namespace LuckParser.Models.DataModels
             public int Group;
             public string Profession;
             public string[] Weapons;
-            public JsonDps Dps;
-            public JsonStats Stats;
+            public JsonDps DpsAll;
+            public JsonDps DpsBoss;
+            public JsonStatsAll StatsAll;
+            public JsonStatsBoss StatsBoss;
             public JsonDefenses Defenses;
             public JsonSupport Support;
             public Dictionary<string, JsonBoonUptime> SelfBoons;

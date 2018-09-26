@@ -23,11 +23,11 @@ namespace LuckParser.Models
         public string IconUrl { get; protected set; } = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
         public List<Mob> TrashMobs { get; } = new List<Mob>();
         public List<Boss> Targets { get; } = new List<Boss>();
-        private readonly ushort _triggerID;
+        protected readonly ushort TriggerID;
 
         public BossLogic(ushort triggerID)
         {
-            _triggerID = triggerID;
+            TriggerID = triggerID;
         }
 
         protected virtual CombatReplayMap GetCombatMapInternal()
@@ -49,13 +49,13 @@ namespace LuckParser.Models
         {
             return new List<ushort>
             {
-                _triggerID
+                TriggerID
             };
         }
 
         public virtual string GetFightName()
         {
-            Boss target = Targets.Find(x => x.ID == _triggerID);
+            Boss target = Targets.Find(x => x.ID == TriggerID);
             if (target == null)
             {
                 return "UNKNOWN";
@@ -153,7 +153,7 @@ namespace LuckParser.Models
         public virtual List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
-            Boss mainTarget = Targets.Find(x => x.ID == _triggerID);
+            Boss mainTarget = Targets.Find(x => x.ID == TriggerID);
             if (mainTarget == null)
             {
                 throw new InvalidOperationException("Main target of the fight not found");
