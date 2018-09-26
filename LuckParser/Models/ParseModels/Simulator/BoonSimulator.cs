@@ -37,6 +37,7 @@ namespace LuckParser.Models.ParseModels
         protected readonly List<BoonSimulationItem> GenerationSimulation = new List<BoonSimulationItem>();
         public GenerationSimulationResult GenerationSimulationResult => new GenerationSimulationResult(GenerationSimulation); 
         public readonly List<BoonSimulationOverstackItem> OverstackSimulationResult = new List<BoonSimulationOverstackItem>();
+        public readonly List<BoonSimulationCleanseItem> CleanseSimulationResult = new List<BoonSimulationCleanseItem>();
         private readonly int _capacity;
         private readonly ParsedLog _log;
         private readonly StackingLogic _logic;
@@ -87,7 +88,7 @@ namespace LuckParser.Models.ParseModels
                     Add(log.Value, log.SrcInstid, timeCur);
                 } else
                 {
-                    Remove(log.Value, timeCur, log.GetRemoveType());
+                    Remove(log.SrcInstid, log.Value, timeCur, log.GetRemoveType());
                 }
                 timePrev = timeCur;
             }
@@ -124,7 +125,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        private void Remove(long boonDuration, long start, ParseEnum.BuffRemove removeType)
+        private void Remove(ushort provokedBy, long boonDuration, long start, ParseEnum.BuffRemove removeType)
         {
             if (GenerationSimulation.Count > 0)
             {
@@ -140,6 +141,7 @@ namespace LuckParser.Models.ParseModels
                     foreach (BoonStackItem stackItem in BoonStack)
                     {
                         OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BuffInitial? start : stackItem.BoonDuration, start));
+                        CleanseSimulationResult.Add(new BoonSimulationCleanseItem(provokedBy, stackItem.BuffInitial ? start : stackItem.BoonDuration, start));
                     }
                     BoonStack.Clear();
                     break;
@@ -154,6 +156,7 @@ namespace LuckParser.Models.ParseModels
                         if (stackItem.BuffInitial)
                         {
                             OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, start, start));
+                            CleanseSimulationResult.Add(new BoonSimulationCleanseItem(provokedBy, start, start));
                             BoonStack.RemoveAt(i);
                             break;
                         }
@@ -162,7 +165,7 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case ParseEnum.BuffRemove.Single:
                 case ParseEnum.BuffRemove.Manual:
-                    RemoveSingleStack(boonDuration, start);
+                    RemoveSingleStack(provokedBy, boonDuration, start);
                     break;
                 default:
                     break;
@@ -171,7 +174,7 @@ namespace LuckParser.Models.ParseModels
             Update(0);
         }
 
-        private void RemoveSingleStack(long boonDuration, long start)
+        private void RemoveSingleStack(ushort provokedBy, long boonDuration, long start)
         {
             bool found = false;
             for (int i = 0; i < BoonStack.Count; i++)
@@ -180,6 +183,7 @@ namespace LuckParser.Models.ParseModels
                 if (!stackItem.BuffInitial && boonDuration == stackItem.BoonDuration)
                 {
                     OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, stackItem.BoonDuration, start));
+                    CleanseSimulationResult.Add(new BoonSimulationCleanseItem(provokedBy, stackItem.BoonDuration, start));
                     BoonStack.RemoveAt(i);
                     found = true;
                     break;
@@ -193,6 +197,7 @@ namespace LuckParser.Models.ParseModels
                     if (stackItem.BuffInitial)
                     {
                         OverstackSimulationResult.Add(new BoonSimulationOverstackItem(stackItem.Src, start, start));
+                        CleanseSimulationResult.Add(new BoonSimulationCleanseItem(provokedBy, start, start));
                         BoonStack.RemoveAt(i);
                         _simulationHasBuffInitial = BoonStack.Exists(x => x.BuffInitial == true);
                         break;

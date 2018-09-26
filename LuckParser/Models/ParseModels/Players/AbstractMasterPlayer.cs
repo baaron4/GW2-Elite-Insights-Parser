@@ -13,6 +13,7 @@ namespace LuckParser.Models.ParseModels
         private readonly List<BoonDistribution> _boonDistribution = new List<BoonDistribution>();
         private readonly List<Dictionary<long, long>> _boonPresence = new List<Dictionary<long, long>>();
         private readonly List<Dictionary<long, long>> _condiPresence = new List<Dictionary<long, long>>();
+        private readonly List<Dictionary<ushort, Dictionary<long,List<long>>>> _condiCleanse = new List<Dictionary<ushort, Dictionary<long, List<long>>>>();
         private readonly Dictionary<long, BoonsGraphModel> _boonPoints = new Dictionary<long, BoonsGraphModel>();
         private readonly Dictionary<long, Dictionary<int, string[]>> _boonExtra = new Dictionary<long, Dictionary<int, string[]>>();
         // dps graphs
@@ -67,6 +68,19 @@ namespace LuckParser.Models.ParseModels
                 SetBoonDistribution(log);
             }
             return _boonPresence[phaseIndex];
+        }
+
+        protected Dictionary<long, List<long>> GetCondiCleanse(ParsedLog log, int phaseIndex, ushort src)
+        {
+            if (_condiCleanse.Count == 0)
+            {
+                SetBoonDistribution(log);
+            }
+            if (_condiCleanse[phaseIndex].TryGetValue(src,out Dictionary<long,List<long>> dict))
+            {
+                return dict;
+            }
+            return new Dictionary<long, List<long>>();
         }
 
         public Dictionary<long, Dictionary<int, string[]>> GetExtraBoonData(ParsedLog log)
@@ -164,7 +178,7 @@ namespace LuckParser.Models.ParseModels
                         }
                         loglist.Add(new BoonApplicationLog(time, src, c.Value));
                     }
-                    else if (time < log.FightData.FightDuration - 50)
+                    else if (c.IsBuffRemove != ParseEnum.BuffRemove.Manual && time < log.FightData.FightDuration - 50)
                     {
                         if (!needCustomRemove && c.Value == 0)
                         {
@@ -296,6 +310,7 @@ namespace LuckParser.Models.ParseModels
                 _boonDistribution.Add(new BoonDistribution());
                 _boonPresence.Add(new Dictionary<long, long>());
                 _condiPresence.Add(new Dictionary<long, long>());
+                _condiCleanse.Add(new Dictionary<ushort, Dictionary<long, List<long>>>());
             }
 
             long death = GetDeath(log, 0, dur) - log.FightData.FightStart;
@@ -385,6 +400,32 @@ namespace LuckParser.Models.ParseModels
                                 distrib.Add(simul.Src, new OverAndValue(
                                     0,
                                     simul.GetOverstack(phase.Start, phase.End)));
+                            }
+                        }
+                    }
+
+                    if (updateCondiPresence)
+                    {
+                        foreach (var simul in simulator.CleanseSimulationResult)
+                        {
+                            for (int i = 0; i < phases.Count; i++)
+                            {
+                                var phase = phases[i];
+                                long cleanse = simul.GetCleanseDuration(phase.Start, phase.End);
+                                if (cleanse > 0)
+                                {
+                                    if (!_condiCleanse[i].TryGetValue(simul.ProvokedBy, out var dict))
+                                    {
+                                        dict = new Dictionary<long, List<long>>();
+                                        _condiCleanse[i].Add(simul.ProvokedBy, dict);
+                                    }
+                                    if (!dict.TryGetValue(boonid, out var list))
+                                    {
+                                        list = new List<long>();
+                                        dict.Add(boonid, list);
+                                    }
+                                    list.Add(cleanse);
+                                }
                             }
                         }
                     }

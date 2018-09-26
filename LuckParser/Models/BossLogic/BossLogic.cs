@@ -20,7 +20,7 @@ namespace LuckParser.Models
         public string Extension { get; protected set; } = "boss";
         public string IconUrl { get; protected set; } = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
         public List<Mob> TrashMobs { get; } = new List<Mob>();
-        private ushort _triggerID;
+        private readonly ushort _triggerID;
 
         public BossLogic(ushort triggerID)
         {

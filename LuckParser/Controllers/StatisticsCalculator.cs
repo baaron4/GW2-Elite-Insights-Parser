@@ -47,6 +47,7 @@ namespace LuckParser.Controllers
 
             _log = log;
 
+            SetPresentBoons();
             _statistics.Phases = log.FightData.GetPhases(log);
             if (switches.CalculateCombatReplay && _settings.ParseCombatReplay)
             {
@@ -61,11 +62,7 @@ namespace LuckParser.Controllers
             if (switches.CalculateStats) CalculateStats();
             if (switches.CalculateDefense) CalculateDefenses();
             if (switches.CalculateSupport) CalculateSupport();
-            if (switches.CalculateBoons)
-            {
-                SetPresentBoons();
-                CalculateBoons();
-            } 
+            if (switches.CalculateBoons) CalculateBoons();
                       
             if (switches.CalculateConditions) CalculateConditions();
             if (switches.CalculateMechanics)
@@ -553,7 +550,7 @@ namespace LuckParser.Controllers
                     PhaseData phase =_statistics.Phases[phaseIndex];
 
                     int[] resArray = player.GetReses(_log, phase.Start, phase.End);
-                    int[] cleanseArray = player.GetCleanses(_log, phase.Start, phase.End);
+                    int[] cleanseArray = player.GetCleanses(_log, phaseIndex);
                     //List<DamageLog> healingLogs = player.getHealingLogs(log, phase.getStart(), phase.getEnd());
                     //final.allHeal = healingLogs.Sum(x => x.getDamage());
                     final.Resurrects = resArray[0];
@@ -810,6 +807,7 @@ namespace LuckParser.Controllers
             foreach (Player player in players)
             {
                 player.BoonToTrack.AddRange(_statistics.PresentBoons);
+                player.BoonToTrack.AddRange(_statistics.PresentConditions);
                 player.BoonToTrack.AddRange(_statistics.PresentOffbuffs);
                 player.BoonToTrack.AddRange(_statistics.PresentDefbuffs);
                 if(_settings.PlayerBoonsAllProf)
