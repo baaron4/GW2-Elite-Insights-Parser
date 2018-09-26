@@ -175,6 +175,7 @@ namespace LuckParser.Controllers
                 {
                     phaseDps[phaseIndex] = GetFinalDPS(player, phaseIndex, null);
                 }
+                _statistics.DpsAll[player] = phaseDps;
             }
 
             Dictionary<Boss, Statistics.FinalDPS>[] phaseBossDps = new Dictionary<Boss, Statistics.FinalDPS>[_statistics.Phases.Count];
@@ -212,7 +213,7 @@ namespace LuckParser.Controllers
                         9292
                     };
 
-            foreach (DamageLog dl in p.GetJustPlayerDamageLogs(target,_log,start,end))
+            foreach (DamageLog dl in p.GetJustPlayerDamageLogs(target,_log, phase.Start, phase.End))
             {
                 if (dl.IsCondi == 0)
                 {
@@ -295,7 +296,7 @@ namespace LuckParser.Controllers
                         9292
                     };
 
-            foreach (DamageLog dl in p.GetJustPlayerDamageLogs(null, _log, start, end))
+            foreach (DamageLog dl in p.GetJustPlayerDamageLogs(null, _log, phase.Start, phase.End))
             {
                 if (dl.IsCondi == 0)
                 {
@@ -345,7 +346,7 @@ namespace LuckParser.Controllers
                     }
                 }
             }
-            foreach (CastLog cl in p.GetCastLogs(_log,start,end))
+            foreach (CastLog cl in p.GetCastLogs(_log, phase.Start, phase.End))
             {
                 if (cl.EndActivation == ParseEnum.Activation.CancelCancel)
                 {
