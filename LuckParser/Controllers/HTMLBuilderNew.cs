@@ -1173,12 +1173,17 @@ namespace LuckParser.Controllers
                     playerIndexByInstId.Add(_log.PlayerList[p].InstID, p);
                     phaseData.Add(new List<double>());
                 }
+                playerIndexByInstId.Add(_log.Boss.InstID, _log.PlayerList.Count);
+                phaseData.Add(new List<double>());
                 foreach (MechanicLog ml in mechanicLogs.Where(x => phase.InInterval(x.Time)))
                 {
+                    double time = (ml.Time - phase.Start) / 1000.0;
                     if (playerIndexByInstId.TryGetValue(ml.Player.InstID, out int p))
                     {
-                        double time = (ml.Time - phase.Start) / 1000.0;
                         phaseData[p].Add(time);
+                    } else
+                    {
+                        phaseData[phaseData.Count - 1].Add(time);
                     }
                 }
             }

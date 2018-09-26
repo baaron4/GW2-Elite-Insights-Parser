@@ -1032,27 +1032,38 @@ function createGraph($target, phaseData, phase, type) {
 		annotations: []
 	};
 
-	lines.push({ x: xAxis, y: allPlayerDps, mode: 'lines', line: { shape: 'spline' }, visible: 'legendonly', name: 'All Player Dps' });
-	$.each(window.data.mechanics, function (i, mechanic) {
-		var chart = { x: [], y: [], mode: 'markers', visible: mechanic.visible ? null : 'legendonly', type: 'scatter', marker: { symbol: mechanic.symbol, color: mechanic.color, size: 15 }, text: [], name: mechanic.name, hoverinfo: 'text' };
-		$.each(mechanic.data[phase], function (p, pdata) {
-			$.each(pdata, function (pd, time) {
-				chart.x.push(time);
-				var y = phaseData.players[p].boss[type][Math.floor(time)];
-				if (!y) y = 0;
-				chart.y.push(y);
-				chart.text.push(time + 's: ' + window.data.players[p].name);
-			});
-		});
-		lines.push(chart);
-	});
-
 	var hpPoints = [];
 	var hpTexts = [];
 	for (var i = 0; i < phaseData.bossHealth.length; i++) {
 		hpPoints[i] = phaseData.bossHealth[i] * maxDps / 100.0;
 		hpTexts[i] = phaseData.bossHealth[i] + "%";
 	}
+
+	lines.push({ x: xAxis, y: allPlayerDps, mode: 'lines', line: { shape: 'spline' }, visible: 'legendonly', name: 'All Player Dps' });
+	$.each(window.data.mechanics, function (i, mechanic) {
+		var chart = { x: [], y: [], mode: 'markers', visible: mechanic.visible ? null : 'legendonly', type: 'scatter', marker: { symbol: mechanic.symbol, color: mechanic.color, size: 15 }, text: [], name: mechanic.name, hoverinfo: 'text' };
+		if (mechanic.enemyMech) {
+			var l = mechanic.data[phase].length;
+			$.each(mechanic.data[phase][l - 1], function (pd, time) {
+				chart.x.push(time);
+				var y = hpPoints[Math.floor(time)];
+				if (!y) y = 0;
+				chart.y.push(y);
+				chart.text.push(time + 's: ' + window.data.boss.name);
+			});
+		} else {
+			$.each(mechanic.data[phase], function (p, pdata) {
+				$.each(pdata, function (pd, time) {
+					chart.x.push(time);
+					var y = phaseData.players[p].boss[type][Math.floor(time)];
+					if (!y) y = 0;
+					chart.y.push(y);
+					chart.text.push(time + 's: ' + window.data.players[p].name);
+				});
+			});
+		}
+		lines.push(chart);
+	});
 
 	lines.push({
 		y: hpPoints,
