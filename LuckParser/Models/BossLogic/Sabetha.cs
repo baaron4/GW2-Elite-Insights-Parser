@@ -84,6 +84,7 @@ namespace LuckParser.Models
                 phase.DrawArea = i % 2 == 1;
                 phase.DrawStart = i % 2 == 1 && i > 1;
                 phase.DrawEnd = i % 2 == 1 && i < 7;
+                phase.Targets.Add(mainTarget);
                 if (i == 2 || i == 4 || i == 6)
                 {
                     List<ushort> ids = new List<ushort>
@@ -95,7 +96,6 @@ namespace LuckParser.Models
                     AddTargetsToPhase(phase, ids, log);
                 } else
                 {
-                    phase.Targets.Add(mainTarget);
                     Boss addTarget;
                     switch (i)
                     {

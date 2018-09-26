@@ -106,6 +106,7 @@ namespace LuckParser.Models
                 phase.DrawStart = drawStartVG[i - 1];
                 phase.DrawEnd = drawEndVG[i - 1];
                 phase.DrawArea = drawAreaVG[i - 1];
+                phase.Targets.Add(mainTarget);
                 if (i == 2 || i == 4)
                 {
                     List<ushort> ids = new List<ushort>
@@ -115,10 +116,7 @@ namespace LuckParser.Models
                        (ushort) ParseEnum.TrashIDS.RedGuardian
                     };
                     AddTargetsToPhase(phase, ids, log);
-                } else
-                {
-                    phase.Targets.Add(mainTarget);
-                }
+                } 
             }
             return phases;
         }
