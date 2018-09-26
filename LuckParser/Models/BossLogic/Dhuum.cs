@@ -228,7 +228,7 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            return (log.Boss.Health > 35e6) ? 1 : 0;
+            return (Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Dhuum).Health > 35e6) ? 1 : 0;
         }
 
         public override string GetReplayIcon()
