@@ -59,6 +59,11 @@ namespace LuckParser.Models
 
         }
 
+        public override string GetFightName()
+        {
+            return "Twin Largos";
+        }
+
         public override int IsCM(ParsedLog log)
         {
             return (log.Boss.Health > 18e6) ? 1 : 0; //Health of Nikare

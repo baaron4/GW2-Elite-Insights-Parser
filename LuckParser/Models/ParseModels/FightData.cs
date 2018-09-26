@@ -22,7 +22,7 @@ namespace LuckParser.Models.ParseModels
                 return FightEnd - FightStart;
             }
         }
-        public string Name { get; set; } = "UNKNOWN";
+        public string Name => Logic.GetFightName() + (_isCM == 1 ? " CM" : "") ;
         private int _isCM = -1;
         public bool IsCM
         {
@@ -135,10 +135,6 @@ namespace LuckParser.Models.ParseModels
             if (_isCM == -1)
             {
                 _isCM = Logic.IsCM(log);
-                if (_isCM == 1)
-                {
-                    Name += " CM";
-                }
             }
         }
         public void SetSuccess(ParsedLog log)

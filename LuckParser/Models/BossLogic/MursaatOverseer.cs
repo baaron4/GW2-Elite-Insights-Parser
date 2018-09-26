@@ -44,7 +44,12 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            return (Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.MursaatOverseer).Health > 25e6) ? 1 : 0;
+            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.MursaatOverseer);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.Health > 25e6) ? 1 : 0;
         }
 
         public override string GetReplayIcon()

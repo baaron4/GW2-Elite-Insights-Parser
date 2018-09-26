@@ -59,6 +59,10 @@ namespace LuckParser.Models
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Samarog);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
@@ -191,7 +195,12 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            return (Targets.Find(x => x.ID == (ushort) ParseEnum.BossIDS.Samarog).Health > 30e6) ? 1 : 0;
+            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Samarog);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.Health > 30e6) ? 1 : 0;
         }
 
         public override string GetReplayIcon()

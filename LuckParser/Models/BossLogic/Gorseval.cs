@@ -42,6 +42,10 @@ namespace LuckParser.Models
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Gorseval);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {

@@ -1,5 +1,6 @@
 ﻿using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -50,6 +51,16 @@ namespace LuckParser.Models
             {
                 _triggerID
             };
+        }
+
+        public virtual string GetFightName()
+        {
+            Boss target = Targets.Find(x => x.ID == _triggerID);
+            if (target == null)
+            {
+                return "UNKNOWN";
+            }
+            return target.Character;
         }
 
         protected void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
@@ -143,6 +154,10 @@ namespace LuckParser.Models
         {
             List<PhaseData> phases = GetInitialPhase(log);
             Boss mainTarget = Targets.Find(x => x.ID == _triggerID);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
             phases[0].Targets.Add(mainTarget);
             return phases;
         }

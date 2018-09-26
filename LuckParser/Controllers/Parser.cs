@@ -557,7 +557,10 @@ namespace LuckParser.Controllers
             CompleteAgents();
             _fightData.Logic.ComputeFightTargets(_agentData, _fightData, _combatItems);
             _boss = _fightData.Logic.Targets.Find(x => x.ID == _fightData.ID);
-            _fightData.Name = _boss.Character;
+            if (_boss == null)
+            {
+                _boss = new Boss(new AgentItem(0, "UNKNOWN"));
+            }
             // Dealing with special cases
             _fightData.Logic.SpecialParse(_fightData, _agentData, _combatItems, _boss);
             // Grab values threw combat data

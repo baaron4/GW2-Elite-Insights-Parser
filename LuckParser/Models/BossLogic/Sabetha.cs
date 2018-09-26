@@ -42,6 +42,10 @@ namespace LuckParser.Models
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
             Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Sabetha);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
             phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
@@ -92,16 +96,32 @@ namespace LuckParser.Models
                 } else
                 {
                     phase.Targets.Add(mainTarget);
+                    Boss addTarget;
                     switch (i)
                     {
                         case 3:
-                            phase.Targets.Add(Targets.Find(x => x.ID == (ushort) ParseEnum.TrashIDS.Kernan));
+                            addTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TrashIDS.Kernan);
+                            if (addTarget == null)
+                            {
+                                throw new InvalidOperationException("Kernan not found when we should have been able to");
+                            }
+                            phase.Targets.Add(addTarget);
                             break;
                         case 5:
-                            phase.Targets.Add(Targets.Find(x => x.ID == (ushort)ParseEnum.TrashIDS.Knuckles));
+                            addTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TrashIDS.Knuckles);
+                            if (addTarget == null)
+                            {
+                                throw new InvalidOperationException("Knuckles not found when we should have been able to");
+                            }
+                            phase.Targets.Add(addTarget);
                             break;
                         case 7:
-                            phase.Targets.Add(Targets.Find(x => x.ID == (ushort)ParseEnum.TrashIDS.Karde));
+                            addTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.TrashIDS.Karde);
+                            if (addTarget == null)
+                            {
+                                throw new InvalidOperationException("Karde not found when we should have been able to");
+                            }
+                            phase.Targets.Add(addTarget);
                             break;
                     }
                 }
