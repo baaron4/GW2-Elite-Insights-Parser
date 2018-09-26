@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (Minion minion in this)
                 {
-                    _damageLogs.AddRange(minion.GetDamageLogs((AbstractPlayer)null, log, 0, log.FightData.FightDuration));
+                    _damageLogs.AddRange(minion.GetDamageLogs(null, log, 0, log.FightData.FightDuration));
                 }
                 _damageLogsByDst = _damageLogs.GroupBy(x => x.DstInstId).ToDictionary(x => x.Key, x => x.ToList());
             }
@@ -44,7 +44,7 @@ namespace LuckParser.Models.ParseModels
 
         public List<DamageLog> GetDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
         {
-            List<DamageLog> dls = GetDamageLogs((AbstractPlayer)null, log, start, end);
+            List<DamageLog> dls = GetDamageLogs(null, log, start, end);
             List<DamageLog> res = new List<DamageLog>();
             foreach (AgentItem a in redirection)
             {

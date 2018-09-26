@@ -24,7 +24,7 @@ namespace LuckParser.Controllers
             List<Point> dmgList1s = new List<Point>();
             List<Point> dmgList10s = new List<Point>();
             List<Point> dmgList30s = new List<Point>();
-            List<DamageLog> damageLogs = p.GetDamageLogs(dstid != 0 ? log.Boss : (AbstractMasterPlayer)null, log, phase.Start, phase.End);            
+            List<DamageLog> damageLogs = p.GetDamageLogs(dstid != 0 ? log.Boss : null, log, phase.Start, phase.End);            
             // fill the graph, full precision
             List<double> dmgListFull = new List<double>();
             for (int i = 0; i <= phase.GetDuration(); i++)

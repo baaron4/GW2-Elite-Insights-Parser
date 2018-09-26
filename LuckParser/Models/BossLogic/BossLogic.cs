@@ -320,7 +320,7 @@ namespace LuckParser.Models
                             IEnumerable<AgentItem> agents = log.AgentData.GetAgentsByID((ushort)mech.SkillId);
                             foreach (AgentItem a in agents)
                             {
-                                foreach (DamageLog dl in p.GetDamageLogs((AbstractPlayer)null, log, 0, log.FightData.FightDuration))
+                                foreach (DamageLog dl in p.GetDamageLogs(null, log, 0, log.FightData.FightDuration))
                                 {
                                     if (dl.DstInstId != a.InstID || dl.IsCondi > 0 || dl.Time < a.FirstAware - start || dl.Time > a.LastAware - start || (condition != null && !condition(new SpecialConditionItem(dl))))
                                     {

@@ -55,21 +55,6 @@ namespace LuckParser.Models.ParseModels
             }
             return DamageLogs.Where( x => x.Time >= start && x.Time <= end).ToList();
         }
-        public List<DamageLog> GetDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
-        {
-            if (redirection.Count == 0)
-            {
-                return GetDamageLogs(log.Boss, log, start, end);
-            }
-            List<DamageLog> dls = GetDamageLogs((AbstractPlayer)null, log, start, end);
-            List<DamageLog> res = new List<DamageLog>();
-            foreach (AgentItem a in redirection)
-            {
-                res.AddRange(dls.Where(x => x.DstInstId == a.InstID && x.Time >= a.FirstAware - log.FightData.FightStart && x.Time <= a.LastAware - log.FightData.FightStart));
-            }
-            res.Sort((x, y) => x.Time < y.Time ? -1 : 1);
-            return res;
-        }
         public List<DamageLog> GetDamageTakenLogs(ParsedLog log, long start, long end)
         {
             if (_damageTakenlogs.Count == 0)
@@ -116,22 +101,6 @@ namespace LuckParser.Models.ParseModels
         public List<DamageLog> GetJustPlayerDamageLogs(AbstractPlayer target, ParsedLog log, long start, long end)
         {
             return GetDamageLogs(target, log, start, end).Where(x => x.SrcInstId == AgentItem.InstID).ToList();
-        }
-
-        public List<DamageLog> GetJustPlayerDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
-        {
-            if (redirection.Count == 0)
-            {
-                return GetJustPlayerDamageLogs(log.Boss, log, start, end);
-            }
-            List<DamageLog> dls = GetJustPlayerDamageLogs((AbstractPlayer)null, log, start, end);
-            List<DamageLog> res = new List<DamageLog>();
-            foreach (AgentItem a in redirection)
-            {
-                res.AddRange(dls.Where(x => x.DstInstId == a.InstID && x.Time >= a.FirstAware - log.FightData.FightStart && x.Time <= a.LastAware - log.FightData.FightStart));
-            }
-            res.Sort((x, y) => x.Time < y.Time ? -1 : 1);
-            return res;
         }
         // privates
         protected void AddDamageLog(long time, CombatItem c)

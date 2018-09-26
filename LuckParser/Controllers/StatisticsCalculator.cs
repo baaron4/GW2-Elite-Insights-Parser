@@ -111,7 +111,7 @@ namespace LuckParser.Controllers
 
             ////////// ALL
             //DPS
-            damage = player.GetDamageLogs((AbstractPlayer)null, _log, phase.Start,
+            damage = player.GetDamageLogs(null, _log, phase.Start,
                     phase.End)
                 .Sum(x => x.Damage);
             if (phaseDuration > 0)
@@ -121,7 +121,7 @@ namespace LuckParser.Controllers
             final.AllDps = (int)dps;
             final.AllDamage = (int)damage;
             //Condi DPS
-            damage = player.GetDamageLogs((AbstractPlayer)null, _log, phase.Start,
+            damage = player.GetDamageLogs(null, _log, phase.Start,
                     phase.End)
                 .Where(x => x.IsCondi > 0).Sum(x => x.Damage);
             if (phaseDuration > 0)
@@ -138,7 +138,7 @@ namespace LuckParser.Controllers
             }
             final.AllPowerDps = (int)dps;
             final.AllPowerDamage = (int)damage;
-            final.PlayerPowerDamage = player.GetJustPlayerDamageLogs((AbstractPlayer)null, _log,
+            final.PlayerPowerDamage = player.GetJustPlayerDamageLogs(null, _log,
                 phase.Start, phase.End).Where(x => x.IsCondi == 0).Sum(x => x.Damage);
             /////////// BOSS
             //DPS
@@ -210,7 +210,7 @@ namespace LuckParser.Controllers
                     long start = phase.Start + _log.FightData.FightStart;
                     long end = phase.End + _log.FightData.FightStart;
 
-                    List<DamageLog> damageLogs  = player.GetJustPlayerDamageLogs((AbstractPlayer)null, _log, phase.Start, phase.End);
+                    List<DamageLog> damageLogs  = player.GetJustPlayerDamageLogs(null, _log, phase.Start, phase.End);
                     List<CastLog> castLogs = player.GetCastLogs(_log, phase.Start, phase.End);
 
                     int instid = player.InstID;
