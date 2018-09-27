@@ -52,6 +52,17 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Nikare:
+                    replay.Icon = "https://i.imgur.com/6yq45Cc.png";
+                    break;
+                case (ushort)ParseEnum.BossIDS.Kenut:
+                    replay.Icon = "https://i.imgur.com/TLykcrJ.png";
+                    break;
+            }
         }
 
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
@@ -67,12 +78,6 @@ namespace LuckParser.Models
         public override int IsCM(ParsedLog log)
         {
             return (log.Boss.Health > 18e6) ? 1 : 0; //Health of Nikare
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/6yq45Cc.png";
-            // For Kenut: https://i.imgur.com/TLykcrJ.png
         }
     }
 }

@@ -6,7 +6,7 @@ let time = 0;
 let inch = 0;
 let speed = 1;
 const times = [];
-let boss = null;
+const bossData = new Map();
 const playerData = new Map();
 const trashMobData = new Map();
 const mechanicActorData = new Set();
@@ -42,8 +42,10 @@ function animateCanvas(noRequest) {
     });
     trashMobData.forEach(function (value, key, map) {
         value.draw(ctx, time);
+    });	
+    bossData.forEach(function (value, key, map) {
+        value.draw(ctx, time);
     });
-    boss.draw(ctx, time);
     if (selectedPlayer !== null) {
         selectedPlayer.draw(ctx, time);
     }
@@ -350,7 +352,7 @@ class MechanicDrawable extends Drawable {
         } else {
             if (this.master === null) {
                 let masterId = this.pos;
-                this.master = playerData.has(masterId) ? playerData.get(masterId) : trashMobData.has(masterId) ? trashMobData.get(masterId) : boss;
+                this.master = playerData.has(masterId) ? playerData.get(masterId) : trashMobData.has(masterId) ? trashMobData.get(masterId) : bossData.get(masterId);
             }
             return this.master.getPosition(currentTime);
         }
@@ -495,7 +497,7 @@ function createAllActors() {
                 }
                 break;
             case "Boss":
-                boss = new BossIconDrawable(actor.Img, 40, actor.Positions);
+				bossData.set(actor.ID, new BossIconDrawable(actor.Img, 40, actor.Positions));
                 break;
             case "Mob":
                 trashMobData.set(actor.ID, new MobIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));

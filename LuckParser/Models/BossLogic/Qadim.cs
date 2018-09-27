@@ -53,7 +53,27 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
-            
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                // Zommoros: https://imgur.com/BxbsRCI
+                case (ushort)ParseEnum.BossIDS.Qadim:
+                    replay.Icon = "https://i.imgur.com/IfoHTHT.png";
+                    break;
+                case (ushort)ParseEnum.TrashIDS.AncientInvokedHydra:
+                    replay.Icon = "https://imgur.com/YABLiBz";
+                    break;
+                case (ushort)ParseEnum.TrashIDS.WyvernMatriarch:
+                    replay.Icon = "https://imgur.com/vjjNSpI";
+                    break;
+                case (ushort)ParseEnum.TrashIDS.WyvernPatriarch:
+                    replay.Icon = "https://imgur.com/kLKLSfv";
+                    break;
+                case (ushort)ParseEnum.TrashIDS.ApocalypseBringer:
+                    replay.Icon = "https://imgur.com/0LGKCn2";
+                    break;
+            }
         }
 
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
@@ -65,12 +85,6 @@ namespace LuckParser.Models
         {
             return 0; //Check via Hydra HP or (>27e6)
         }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/IfoHTHT.png";
-            // For legendary adds: https://imgur.com/YABLiBz https://imgur.com/0LGKCn2 https://imgur.com/kLKLSfv https://imgur.com/vjjNSpI
-            // Zommoros: https://imgur.com/BxbsRCI
-        }
+        
     }
 }

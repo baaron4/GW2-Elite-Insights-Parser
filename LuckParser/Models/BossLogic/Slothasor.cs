@@ -56,28 +56,35 @@ namespace LuckParser.Models
             // TODO:facing information (breath)
             CombatReplay replay = boss.CombatReplay;
             List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<CastLog> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
-            foreach (CastLog c in sleepy)
+            switch (boss.ID)
             {
-                replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
-            }
+                case (ushort)ParseEnum.BossIDS.Slothasor:
+                    replay.Icon = "https://i.imgur.com/h1xH3ER.png";
+                    List<CastLog> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
+                    foreach (CastLog c in sleepy)
+                    {
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                    }
 
-            List<CastLog> tantrum = cls.Where(x => x.SkillId == 34547).ToList();
-            foreach (CastLog c in tantrum)
-            {
-                int start = (int)c.Time;
-                int end = start + c.ActualDuration;
-                replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)"));
-                replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)"));
+                    List<CastLog> tantrum = cls.Where(x => x.SkillId == 34547).ToList();
+                    foreach (CastLog c in tantrum)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + c.ActualDuration;
+                        replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)"));
+                        replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)"));
+                    }
+                    List<CastLog> shakes = cls.Where(x => x.SkillId == 34482).ToList();
+                    foreach (CastLog c in shakes)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + c.ActualDuration;
+                        replay.Actors.Add(new CircleActor(false, 0, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
+                        replay.Actors.Add(new CircleActor(true, end, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
+                    }
+                    break;
             }
-            List<CastLog> shakes = cls.Where(x => x.SkillId == 34482).ToList();
-            foreach (CastLog c in shakes)
-            {
-                int start = (int)c.Time;
-                int end = start + c.ActualDuration;
-                replay.Actors.Add(new CircleActor(false, 0, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
-                replay.Actors.Add(new CircleActor(true, end, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
-            }
+           
         }
 
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
@@ -134,11 +141,6 @@ namespace LuckParser.Models
                     replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)"));
                 }
             }
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/h1xH3ER.png";
         }
     }
 }

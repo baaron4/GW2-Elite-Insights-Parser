@@ -126,33 +126,38 @@ namespace LuckParser.Models
                 (ushort)ParseEnum.TrashIDS.Guldhem,
             };
         }
-
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
-        {
-            return new List<ParseEnum.TrashIDS>
-            {
-                ParseEnum.TrashIDS.Rigom,
-                ParseEnum.TrashIDS.Guldhem
-            };
-        }
+        
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             // TODO: facing information (shock wave)
             CombatReplay replay = boss.CombatReplay;
-            List<CombatItem> brutalize = log.GetBoonData(38226).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
-            int brutStart = 0;
-            foreach (CombatItem c in brutalize)
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
-                {
-                    brutStart = (int)(c.Time - log.FightData.FightStart);
-                }
-                else
-                {
-                    int brutEnd = (int)(c.Time - log.FightData.FightStart);
-                    replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(brutStart, brutEnd), "rgba(0, 180, 255, 0.3)"));
-                }
+                case (ushort)ParseEnum.BossIDS.Cairn:
+                    replay.Icon = "https://i.imgur.com/MPQhKfM.png";
+                    List<CombatItem> brutalize = log.GetBoonData(38226).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
+                    int brutStart = 0;
+                    foreach (CombatItem c in brutalize)
+                    {
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        {
+                            brutStart = (int)(c.Time - log.FightData.FightStart);
+                        }
+                        else
+                        {
+                            int brutEnd = (int)(c.Time - log.FightData.FightStart);
+                            replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(brutStart, brutEnd), "rgba(0, 180, 255, 0.3)"));
+                        }
+                    }
+                    break;
+                case (ushort)ParseEnum.TrashIDS.Rigom:
+                    replay.Icon = "https://i.imgur.com/REcGMBe.png";
+                    break;
+                case (ushort)ParseEnum.TrashIDS.Guldhem:
+                    replay.Icon = "https://i.imgur.com/xa7Fefn.png";
+                    break;
             }
         }
 
@@ -201,11 +206,6 @@ namespace LuckParser.Models
                 throw new InvalidOperationException("Target for CM detection not found");
             }
             return (target.Health > 30e6) ? 1 : 0;
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/MPQhKfM.png";
         }
     }
 }

@@ -49,17 +49,14 @@ namespace LuckParser.Models.ParseModels
         {
             log.FightData.Logic.ComputeAdditionalBossData(this, log);
         }
-
-        protected override void SetCombatReplayIcon(ParsedLog log)
-        {
-            CombatReplay.Icon = log.FightData.Logic.GetReplayIcon();
-        }
+        
 
         //
         private class Serializable
         {
             public string Img { get; set; }
             public string Type { get; set; }
+            public int ID { get; set; }
             public int[] Positions { get; set; }
         }
 
@@ -69,6 +66,7 @@ namespace LuckParser.Models.ParseModels
             {
                 Img = CombatReplay.Icon,
                 Type = "Boss",
+                ID = GetCombatReplayID(),
                 Positions = new int[2 * CombatReplay.Positions.Count]
             };
             int i = 0;
@@ -84,7 +82,7 @@ namespace LuckParser.Models.ParseModels
 
         public override int GetCombatReplayID()
         {
-            return 0;
+            return (InstID + "_" + CombatReplay.TimeOffsets.Item1 + "_" + CombatReplay.TimeOffsets.Item2).GetHashCode();
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

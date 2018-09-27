@@ -56,7 +56,10 @@ namespace LuckParser.Controllers
                 {
                     p.InitCombatReplay(log, _settings.PollingRate, false, true);
                 }
-                log.Boss.InitCombatReplay(log, _settings.PollingRate, false, false);
+                foreach (Boss target in log.FightData.Logic.Targets)
+                {
+                    target.InitCombatReplay(log, _settings.PollingRate, true, false);
+                }
                 log.FightData.Logic.ComputeTrashMobsData(log, _settings.PollingRate);
             }
             if (switches.CalculateDPS) CalculateDPS();

@@ -40,9 +40,28 @@ namespace LuckParser.Models
             RegroupTargetsByID((ushort)ParseEnum.BossIDS.Artsariiv, agentData, combatItems);
         }
 
-        public override string GetReplayIcon()
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+            return new List<ParseEnum.TrashIDS>
+            {
+                ParseEnum.TrashIDS.TemporalAnomaly,
+                ParseEnum.TrashIDS.Spark,
+                ParseEnum.TrashIDS.Artsariiv1,
+                ParseEnum.TrashIDS.Artsariiv2,
+                ParseEnum.TrashIDS.Artsariiv3
+            };
+        }
+
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Artsariiv:
+                    replay.Icon = "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+                    break;
+            }
         }
 
         public override void SetSuccess(ParsedLog log)

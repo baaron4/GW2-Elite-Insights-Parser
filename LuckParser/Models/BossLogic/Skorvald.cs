@@ -51,9 +51,28 @@ namespace LuckParser.Models
             return (log.Boss.Health == 5551340) ? 1 : 0;
         }
 
-        public override string GetReplayIcon()
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
-            return "https://i.imgur.com/IOPAHRE.png";
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Skorvald:
+                    replay.Icon = "https://i.imgur.com/IOPAHRE.png";
+                    break;
+            }
+        }
+
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        {
+            return new List<ParseEnum.TrashIDS>
+            {
+                ParseEnum.TrashIDS.FluxAnomaly4,
+                ParseEnum.TrashIDS.FluxAnomaly3,
+                ParseEnum.TrashIDS.FluxAnomaly2,
+                ParseEnum.TrashIDS.FluxAnomaly1,
+                ParseEnum.TrashIDS.SolarBloom
+            };
         }
 
         public override void SetSuccess(ParsedLog log)

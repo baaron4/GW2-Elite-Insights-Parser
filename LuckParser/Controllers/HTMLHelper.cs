@@ -872,13 +872,16 @@ namespace LuckParser.Controllers
                         sw.Write(a.GetCombatReplayJSON(map,m));
                     }
                 }
-                sw.Write(",");
-                sw.Write(log.Boss.GetCombatReplayJSON(map));
-                replay = log.Boss.CombatReplay;
-                foreach (Actor a in replay.Actors)
+                foreach (Boss target in log.FightData.Logic.Targets)
                 {
                     sw.Write(",");
-                    sw.Write(a.GetCombatReplayJSON(map,log.Boss));
+                    sw.Write(target.GetCombatReplayJSON(map));
+                    replay = target.CombatReplay;
+                    foreach (Actor a in replay.Actors)
+                    {
+                        sw.Write(",");
+                        sw.Write(a.GetCombatReplayJSON(map, target));
+                    }
                 }
                 sw.Write("];");
                 sw.Write("createAllActors();");

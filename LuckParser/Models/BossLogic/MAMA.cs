@@ -41,9 +41,28 @@ namespace LuckParser.Models
                             Tuple.Create(11804, 4414, 12444, 5054));
         }
 
-        public override string GetReplayIcon()
+
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
-            return "https://i.imgur.com/1h7HOII.png";
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.MAMA:
+                    replay.Icon = "https://i.imgur.com/1h7HOII.png";
+                    break;
+            }
+        }
+
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        {
+            return new List<ParseEnum.TrashIDS>
+            {
+                ParseEnum.TrashIDS.GreenKnight,
+                ParseEnum.TrashIDS.RedKnight,
+                ParseEnum.TrashIDS.BlueKnight,
+                ParseEnum.TrashIDS.TwistedHorror
+            };
         }
     }
 }

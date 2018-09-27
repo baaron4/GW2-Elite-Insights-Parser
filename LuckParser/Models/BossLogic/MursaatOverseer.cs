@@ -42,6 +42,20 @@ namespace LuckParser.Models
             };
         }
 
+
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            // TODO: needs doughnuts (wave) and facing information (sword)
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.MursaatOverseer:
+                    replay.Icon = "https://i.imgur.com/5LNiw4Y.png";
+                    break;
+            }
+        }
+
         public override int IsCM(ParsedLog log)
         {
             Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.MursaatOverseer);
@@ -50,11 +64,6 @@ namespace LuckParser.Models
                 throw new InvalidOperationException("Target for CM detection not found");
             }
             return (target.Health > 25e6) ? 1 : 0;
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/5LNiw4Y.png";
         }
     }
 }

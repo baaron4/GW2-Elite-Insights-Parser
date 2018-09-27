@@ -138,16 +138,26 @@ namespace LuckParser.Models
         {
             CombatReplay replay = boss.CombatReplay;
             List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
-            foreach (CastLog c in magicStorms)
+            switch (boss.ID)
             {
-                replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                case (ushort)ParseEnum.BossIDS.ValeGuardian:
+                    replay.Icon = "https://i.imgur.com/MIpP5pK.png";
+                    List<CastLog> magicStorms = cls.Where(x => x.SkillId == 31419).ToList();
+                    foreach (CastLog c in magicStorms)
+                    {
+                        replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                    }
+                    break;
+                case (ushort)ParseEnum.TrashIDS.BlueGuardian:
+                    replay.Icon = "https://i.imgur.com/6CefnkP.png";
+                    break;
+                case (ushort)ParseEnum.TrashIDS.GreenGuardian:
+                    replay.Icon = "https://i.imgur.com/nauDVYP.png";
+                    break;
+                case (ushort)ParseEnum.TrashIDS.RedGuardian:
+                    replay.Icon = "https://i.imgur.com/73Uj4lG.png";
+                    break;
             }
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/MIpP5pK.png";
         }
     }
 }

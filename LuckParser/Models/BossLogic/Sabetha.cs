@@ -141,6 +141,27 @@ namespace LuckParser.Models
             };
         }
 
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Sabetha:
+                    replay.Icon = "https://i.imgur.com/UqbFp9S.png";
+                    break;
+                case (ushort)ParseEnum.TrashIDS.Kernan:
+                    replay.Icon = "https://i.imgur.com/WABRQya.png";
+                    break;
+                case (ushort)ParseEnum.TrashIDS.Knuckles:
+                    replay.Icon = "https://i.imgur.com/m1y8nJE.png";
+                    break;
+                case (ushort)ParseEnum.TrashIDS.Karde:
+                    replay.Icon = "https://i.imgur.com/3UGyosm.png";
+                    break;
+            }
+        }
+
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
             return new List<ParseEnum.TrashIDS>
@@ -178,11 +199,6 @@ namespace LuckParser.Models
                     replay.Actors.Add(new CircleActor(true, sapperStart + 5000, 180, new Tuple<int, int>(sapperStart, sapperEnd), "rgba(200, 255, 100, 0.5)"));
                 }
             }
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/UqbFp9S.png";
         }
     }
 }

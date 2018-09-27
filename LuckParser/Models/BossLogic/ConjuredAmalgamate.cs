@@ -46,6 +46,20 @@ namespace LuckParser.Models
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.ConjuredAmalgamate:
+                    replay.Icon = "";
+                    break;
+                case (ushort)ParseEnum.BossIDS.CALeftArm:
+                    replay.Icon = "";
+                    break;
+                case (ushort)ParseEnum.BossIDS.CARightArm:
+                    replay.Icon = "";
+                    break;
+            }
         }
 
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
@@ -56,11 +70,6 @@ namespace LuckParser.Models
         public override int IsCM(ParsedLog log)
         {
             return 0; //Possibly check if Conjured Scepters show up in the log?
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "";
         }
     }
 }

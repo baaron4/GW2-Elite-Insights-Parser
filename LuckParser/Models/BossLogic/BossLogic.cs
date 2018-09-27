@@ -176,6 +176,12 @@ namespace LuckParser.Models
 
         public virtual void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
+
+        }
+
+        public virtual void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+
         }
 
         protected virtual List<ParseEnum.TrashIDS> GetTrashMobsIDS()
@@ -217,11 +223,6 @@ namespace LuckParser.Models
         public virtual void SetSuccess(ParsedLog log)
         {
             SetSuccessByDeath(log);
-        }
-
-        public virtual string GetReplayIcon()
-        {
-            return "";
         }
 
 

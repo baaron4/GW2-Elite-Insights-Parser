@@ -48,6 +48,14 @@ namespace LuckParser.Models
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             // TODO: needs doughnuts (wave) and facing information (sword)
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Cairn:
+                    replay.Icon = "https://i.imgur.com/gQY37Tf.png";
+                    break;
+            }
         }
 
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
@@ -66,11 +74,6 @@ namespace LuckParser.Models
         public override int IsCM(ParsedLog log)
         {
             return log.CombatData.AllCombatItems.Exists(x => x.SkillID == 38098) ? 1 : 0;
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/gQY37Tf.png";
         }
     }
 }

@@ -112,7 +112,6 @@ namespace LuckParser.Models.ParseModels
                 CombatReplay = new CombatReplay();
                 SetMovements(log);
                 CombatReplay.PollingRate(pollingRate, log.FightData.FightDuration, forceInterpolate);
-                SetCombatReplayIcon(log);
                 if (trim)
                 {
                     CombatItem despawnCheck = log.CombatData.AllCombatItems.FirstOrDefault(x => x.SrcAgent == AgentItem.Agent && (x.IsStateChange.IsDead() || x.IsStateChange.IsDespawn()));
@@ -603,7 +602,6 @@ namespace LuckParser.Models.ParseModels
         }
         // abstracts
         protected abstract void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate);
-        protected abstract void SetCombatReplayIcon(ParsedLog log);
         public abstract int GetCombatReplayID();
         public abstract string GetCombatReplayJSON(CombatReplayMap map);
     }

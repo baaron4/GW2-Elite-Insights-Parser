@@ -37,11 +37,6 @@ namespace LuckParser.Models.ParseModels
             throw new InvalidOperationException();
         }
 
-        protected override void SetCombatReplayIcon(ParsedLog log)
-        {
-            throw new InvalidOperationException();
-        }
-
         protected override void SetDamageLogs(ParsedLog log)
         {
             throw new InvalidOperationException();

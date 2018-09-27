@@ -121,43 +121,47 @@ namespace LuckParser.Models
         {
             CombatReplay replay = boss.CombatReplay;
             List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<CastLog> blooms = cls.Where(x => x.SkillId == 31616).ToList();
-            foreach (CastLog c in blooms)
+            switch (boss.ID)
             {
-                int start = (int)c.Time;
-                int end = start + c.ActualDuration;
-                replay.Actors.Add(new CircleActor(true, c.ExpectedDuration + (int)c.Time, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
-                replay.Actors.Add(new CircleActor(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
-            }
-            List<PhaseData> phases = log.FightData.GetPhases(log);
-            if (phases.Count > 1)
-            {
-                List<CastLog> rampage = cls.Where(x => x.SkillId == 31834).ToList();
-                Point3D pos = log.Boss.CombatReplay.Positions.First();
-                foreach (CastLog c in rampage)
-                {
-                    int start = (int)c.Time;
-                    int end = start + c.ActualDuration;
-                    replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 125, 255, 0.3)"));
-                    // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
-                    int ticks = (int)Math.Min(Math.Ceiling(c.ActualDuration / 4000.0),6);
-                    int phaseIndex;
-                    for (phaseIndex = 1; phaseIndex < phases.Count; phaseIndex++)
+                case (ushort)ParseEnum.BossIDS.Gorseval:
+                    replay.Icon = "https://i.imgur.com/5hmMq12.png";
+                    List<CastLog> blooms = cls.Where(x => x.SkillId == 31616).ToList();
+                    foreach (CastLog c in blooms)
                     {
-                        if (phases[phaseIndex].InInterval(start))
+                        int start = (int)c.Time;
+                        int end = start + c.ActualDuration;
+                        replay.Actors.Add(new CircleActor(true, c.ExpectedDuration + (int)c.Time, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
+                        replay.Actors.Add(new CircleActor(false, 0, 600, new Tuple<int, int>(start, end), "rgba(255, 125, 0, 0.5)"));
+                    }
+                    List<PhaseData> phases = log.FightData.GetPhases(log);
+                    if (phases.Count > 1)
+                    {
+                        List<CastLog> rampage = cls.Where(x => x.SkillId == 31834).ToList();
+                        Point3D pos = log.Boss.CombatReplay.Positions.First();
+                        foreach (CastLog c in rampage)
                         {
-                            break;
-                        }
-                    }
-                    if (pos == null)
-                    {
-                        break;
-                    }
-                    List<string> patterns;
-                    switch (phaseIndex)
-                    {
-                        case 1:
-                            patterns = new List<string>
+                            int start = (int)c.Time;
+                            int end = start + c.ActualDuration;
+                            replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 125, 255, 0.3)"));
+                            // or spawn -> 3 secs -> explosion -> 0.5 secs -> fade -> 0.5  secs-> next
+                            int ticks = (int)Math.Min(Math.Ceiling(c.ActualDuration / 4000.0), 6);
+                            int phaseIndex;
+                            for (phaseIndex = 1; phaseIndex < phases.Count; phaseIndex++)
+                            {
+                                if (phases[phaseIndex].InInterval(start))
+                                {
+                                    break;
+                                }
+                            }
+                            if (pos == null)
+                            {
+                                break;
+                            }
+                            List<string> patterns;
+                            switch (phaseIndex)
+                            {
+                                case 1:
+                                    patterns = new List<string>
                             {
                                 "2+3+5",
                                 "2+3+4",
@@ -166,9 +170,9 @@ namespace LuckParser.Models
                                 "1+3+5",
                                 "Full"
                             };
-                            break;
-                        case 3:
-                            patterns = new List<string>
+                                    break;
+                                case 3:
+                                    patterns = new List<string>
                             {
                                 "2+3+4",
                                 "1+4+5",
@@ -177,9 +181,9 @@ namespace LuckParser.Models
                                 "1+2+3",
                                 "Full"
                             };
-                            break;
-                        case 5:
-                            patterns = new List<string>
+                                    break;
+                                case 5:
+                                    patterns = new List<string>
                             {
                                 "1+4+5",
                                 "1+2+5",
@@ -188,58 +192,58 @@ namespace LuckParser.Models
                                 "3+4+5",
                                 "Full"
                             };
-                            break;
-                        default:
-                            throw new Exception("how the fuck");
+                                    break;
+                                default:
+                                    throw new Exception("how the fuck");
+                            }
+                            start += 2200;
+                            for (int i = 0; i < ticks; i++)
+                            {
+                                int tickStart = start + 4000 * i;
+                                int explosion = tickStart + 3000;
+                                int tickEnd = tickStart + 3500;
+                                string pattern = patterns[i];
+                                if (pattern.Contains("1"))
+                                {
+                                    replay.Actors.Add(new CircleActor(true, explosion, 360, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                                    replay.Actors.Add(new CircleActor(true, 0, 360, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                                }
+                                if (pattern.Contains("2"))
+                                {
+                                    replay.Actors.Add(new DoughnutActor(true, explosion, 360, 720, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                                    replay.Actors.Add(new DoughnutActor(true, 0, 360, 720, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                                }
+                                if (pattern.Contains("3"))
+                                {
+                                    replay.Actors.Add(new DoughnutActor(true, explosion, 720, 1080, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                                    replay.Actors.Add(new DoughnutActor(true, 0, 720, 1080, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                                }
+                                if (pattern.Contains("4"))
+                                {
+                                    replay.Actors.Add(new DoughnutActor(true, explosion, 1080, 1440, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                                    replay.Actors.Add(new DoughnutActor(true, 0, 1080, 1440, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                                }
+                                if (pattern.Contains("5"))
+                                {
+                                    replay.Actors.Add(new DoughnutActor(true, explosion, 1440, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                                    replay.Actors.Add(new DoughnutActor(true, 0, 1440, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                                }
+                                if (pattern.Contains("Full"))
+                                {
+                                    tickStart -= 1000;
+                                    explosion -= 1000;
+                                    tickEnd -= 1000;
+                                    replay.Actors.Add(new CircleActor(true, explosion, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
+                                    replay.Actors.Add(new CircleActor(true, 0, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
+                                }
+                            }
+                        }
                     }
-                    start += 2200;
-                    for (int i = 0; i < ticks; i++)
-                    {
-                        int tickStart = start + 4000 * i;
-                        int explosion = tickStart + 3000;
-                        int tickEnd = tickStart + 3500;
-                        string pattern = patterns[i];
-                        if (pattern.Contains("1"))
-                        {
-                            replay.Actors.Add(new CircleActor(true, explosion, 360, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.Actors.Add(new CircleActor(true ,0 , 360, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
-                        }
-                        if (pattern.Contains("2"))
-                        {
-                            replay.Actors.Add(new DoughnutActor(true, explosion, 360, 720, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.Actors.Add(new DoughnutActor(true, 0, 360, 720, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
-                        }
-                        if (pattern.Contains("3"))
-                        {
-                            replay.Actors.Add(new DoughnutActor(true, explosion, 720, 1080, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.Actors.Add(new DoughnutActor(true, 0, 720, 1080, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
-                        }
-                        if (pattern.Contains("4"))
-                        {
-                            replay.Actors.Add(new DoughnutActor(true, explosion, 1080, 1440, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.Actors.Add(new DoughnutActor(true, 0, 1080, 1440, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
-                        }
-                        if (pattern.Contains("5"))
-                        {
-                            replay.Actors.Add(new DoughnutActor(true, explosion, 1440, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.Actors.Add(new DoughnutActor(true, 0, 1440, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
-                        }
-                        if (pattern.Contains("Full"))
-                        {
-                            tickStart -= 1000;
-                            explosion -= 1000;
-                            tickEnd -= 1000;
-                            replay.Actors.Add(new CircleActor(true, explosion, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.2)", pos));
-                            replay.Actors.Add(new CircleActor(true, 0, 1800, new Tuple<int, int>(tickStart, tickEnd), "rgba(25,25,112, 0.4)", pos));
-                        }
-                    }
-                }
+                    break;
+                case (ushort)ParseEnum.TrashIDS.ChargedSoul:
+                    replay.Icon = "https://i.imgur.com/sHmksvO.png";
+                    break;
             }
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/5hmMq12.png";
         }
     }
 }

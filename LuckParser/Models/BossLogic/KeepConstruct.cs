@@ -140,94 +140,101 @@ namespace LuckParser.Models
         {
             CombatReplay replay = boss.CombatReplay;
             List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
-            List<CastLog> magicCharge = cls.Where(x => x.SkillId == 35048).ToList();
-            List<CastLog> magicExplode = cls.Where(x => x.SkillId == 34894).ToList();
-            for (var i = 0; i < magicCharge.Count; i++)
+            switch (boss.ID)
             {
-                CastLog charge = magicCharge[i];
-                if (i < magicExplode.Count)
-                {
-                    CastLog fire = magicExplode[i];
-                    int start = (int)charge.Time;
-                    int end = (int)fire.Time + fire.ActualDuration;
-                    replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
-                    replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
-                }
+                case (ushort)ParseEnum.BossIDS.KeepConstruct:
+                    replay.Icon = "https://i.imgur.com/Kq0kL07.png";
+                    List<CastLog> magicCharge = cls.Where(x => x.SkillId == 35048).ToList();
+                    List<CastLog> magicExplode = cls.Where(x => x.SkillId == 34894).ToList();
+                    for (var i = 0; i < magicCharge.Count; i++)
+                    {
+                        CastLog charge = magicCharge[i];
+                        if (i < magicExplode.Count)
+                        {
+                            CastLog fire = magicExplode[i];
+                            int start = (int)charge.Time;
+                            int end = (int)fire.Time + fire.ActualDuration;
+                            replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                            replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                        }
+                    }
+                    List<CastLog> towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
+                    foreach (CastLog c in towerDrop)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + c.ActualDuration;
+                        int skillCast = end - 1000;
+                        Point3D next = replay.Positions.FirstOrDefault(x => x.Time >= end);
+                        Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= end);
+                        if (prev != null || next != null)
+                        {
+                            replay.Actors.Add(new CircleActor(false, 0, 400, new Tuple<int, int>(start, skillCast), "rgba(255, 150, 0, 0.5)", prev, next, end));
+                            replay.Actors.Add(new CircleActor(true, skillCast, 400, new Tuple<int, int>(start, skillCast), "rgba(255, 150, 0, 0.5)", prev, next, end));
+                        }
+                    }
+                    List<CastLog> blades1 = cls.Where(x => x.SkillId == 35064).ToList();
+                    List<CastLog> blades2 = cls.Where(x => x.SkillId == 35137).ToList();
+                    List<CastLog> blades3 = cls.Where(x => x.SkillId == 34971).ToList();
+                    int bladeDelay = 150;
+                    int duration = 1000;
+                    foreach (CastLog c in blades1)
+                    {
+                        int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
+                        int start = (int)c.Time + bladeDelay;
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
+                        if (facing == null)
+                        {
+                            continue;
+                        }
+                        replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)"));
+                        replay.Actors.Add(new PieActor(true, 0, 1600, facing, 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
+                        for (int i = 1; i < ticks; i++)
+                        {
+                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 8), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)")); // First blade lasts longer
+                        }
+                    }
+                    foreach (CastLog c in blades2)
+                    {
+                        int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
+                        int start = (int)c.Time + bladeDelay;
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
+                        if (facing == null)
+                        {
+                            continue;
+                        }
+                        replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)"));
+                        replay.Actors.Add(new PieActor(true, 0, 1600, facing, 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
+                        replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
+                        for (int i = 1; i < ticks; i++)
+                        {
+                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 8), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)")); // First blade lasts longer
+                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI - i * 360 / 8), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)")); // First blade lasts longer
+                        }
+                    }
+                    foreach (CastLog c in blades3)
+                    {
+                        int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
+                        Console.WriteLine("Ticks: {0} Dura: {1}", ticks, c.ActualDuration);
+                        int start = (int)c.Time + bladeDelay;
+                        Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
+                        if (facing == null)
+                        {
+                            continue;
+                        }
+                        replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)"));
+                        replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
+                        replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI + 120), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
+                        replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI - 120), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
+                        for (int i = 1; i < ticks; i++)
+                        {
+                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI - i * 360 / 8), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)")); // First blade lasts longer
+                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI - i * 360 / 8 + 120), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)")); // First blade lasts longer
+                            replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI - i * 360 / 8 - 120), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)")); // First blade lasts longer
+                        }
+                    }
+                    break;
             }
-            List<CastLog> towerDrop = cls.Where(x => x.SkillId == 35086).ToList();
-            foreach (CastLog c in towerDrop)
-            {
-                int start = (int)c.Time;
-                int end = start + c.ActualDuration;
-                int skillCast = end - 1000;
-                Point3D next = replay.Positions.FirstOrDefault(x => x.Time >= end);
-                Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= end);
-                if (prev != null || next != null)
-                {
-                    replay.Actors.Add(new CircleActor(false, 0, 400, new Tuple<int, int>(start, skillCast), "rgba(255, 150, 0, 0.5)", prev, next, end));
-                    replay.Actors.Add(new CircleActor(true, skillCast, 400, new Tuple<int, int>(start, skillCast), "rgba(255, 150, 0, 0.5)", prev, next, end));
-                }
-            }
-            List<CastLog> blades1 = cls.Where(x => x.SkillId == 35064).ToList();
-            List<CastLog> blades2 = cls.Where(x => x.SkillId == 35137).ToList();
-            List<CastLog> blades3 = cls.Where(x => x.SkillId == 34971).ToList();
-            int bladeDelay = 150;
-            int duration = 1000;
-            foreach (CastLog c in blades1)
-            {
-                int ticks = (int)Math.Max(0,Math.Min(Math.Ceiling((c.ActualDuration-1150) / 1000.0), 9));
-                int start = (int)c.Time + bladeDelay;
-                Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
-                if (facing == null)
-                {
-                    continue;
-                }
-                replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start, start + (ticks+1) * 1000), "rgba(255,0,0,0.4)"));
-                replay.Actors.Add(new PieActor(true, 0, 1600, facing, 360 * 3 / 32, new Tuple<int,int>(start,start+2*duration),"rgba(255,200,0,0.5)")); // First blade lasts twice as long
-                for (int i = 1; i < ticks; i++)
-                {
-                    replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 8), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)")); // First blade lasts longer
-                }
-            }
-            foreach (CastLog c in blades2)
-            {
-                int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
-                int start = (int)c.Time + bladeDelay;
-                Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start+1000);
-                if (facing == null)
-                {
-                    continue;
-                }
-                replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)"));
-                replay.Actors.Add(new PieActor(true, 0, 1600, facing, 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
-                replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
-                for (int i = 1; i < ticks; i++)
-                {
-                    replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 8), 360 * 3 / 32, new Tuple<int, int>(start+ 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)")); // First blade lasts longer
-                    replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI - i * 360 / 8), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)")); // First blade lasts longer
-                }
-            }
-            foreach (CastLog c in blades3)
-            {
-                int ticks = (int)Math.Max(0, Math.Min(Math.Ceiling((c.ActualDuration - 1150) / 1000.0), 9));
-                Console.WriteLine("Ticks: {0} Dura: {1}" ,ticks,c.ActualDuration);
-                int start = (int)c.Time + bladeDelay;
-                Point3D facing = replay.Rotations.LastOrDefault(x => x.Time < start + 1000);
-                if (facing == null)
-                {
-                    continue;
-                }
-                replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start, start + (ticks + 1) * 1000), "rgba(255,0,0,0.4)"));
-                replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
-                replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI + 120), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
-                replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI - 120), 360 * 3 / 32, new Tuple<int, int>(start, start + 2 * duration), "rgba(255,200,0,0.5)")); // First blade lasts twice as long
-                for (int i = 1; i < ticks; i++)
-                {
-                    replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI - i * 360 / 8), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)")); // First blade lasts longer
-                    replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI - i * 360 / 8 + 120), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)")); // First blade lasts longer
-                    replay.Actors.Add(new PieActor(true, 0, 1600, (int)Math.Round(Math.Atan2(facing.Y, -facing.X) * 180 / Math.PI - i * 360 / 8 - 120), 360 * 3 / 32, new Tuple<int, int>(start + 1000 + i * duration, start + 1000 + (i + 1) * duration), "rgba(255,200,0,0.5)")); // First blade lasts longer
-                }
-            }
+            
         }
 
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
@@ -250,11 +257,6 @@ namespace LuckParser.Models
                 }
 
             }
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/Kq0kL07.png";
         }
     }
 }

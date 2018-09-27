@@ -106,35 +106,16 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected override void SetCombatReplayIcon(ParsedLog log)
+        protected void SetCombatReplayIcon(ParsedLog log)
         {
             switch (ParseEnum.GetTrashIDS(AgentItem.ID))
             {
                 case ParseEnum.TrashIDS.Seekers:
                     CombatReplay.Icon = "https://i.imgur.com/FrPoluz.png";
                     break;
-                case ParseEnum.TrashIDS.RedGuardian:
-                    CombatReplay.Icon = "https://i.imgur.com/73Uj4lG.png";
-                    break;
-                case ParseEnum.TrashIDS.BlueGuardian:
-                    CombatReplay.Icon = "https://i.imgur.com/6CefnkP.png";
-                    break;
-                case ParseEnum.TrashIDS.GreenGuardian:
-                    CombatReplay.Icon = "https://i.imgur.com/nauDVYP.png";
-                    break;
                 case ParseEnum.TrashIDS.Spirit:
                 case ParseEnum.TrashIDS.Spirit2:
-                case ParseEnum.TrashIDS.ChargedSoul:
                     CombatReplay.Icon = "https://i.imgur.com/sHmksvO.png";
-                    break;
-                case ParseEnum.TrashIDS.Kernan:
-                    CombatReplay.Icon = "https://i.imgur.com/WABRQya.png";
-                    break;
-                case ParseEnum.TrashIDS.Knuckles:
-                    CombatReplay.Icon = "https://i.imgur.com/m1y8nJE.png";
-                    break;
-                case ParseEnum.TrashIDS.Karde:
-                    CombatReplay.Icon = "https://i.imgur.com/3UGyosm.png";
                     break;
                 case ParseEnum.TrashIDS.Olson:
                 case ParseEnum.TrashIDS.Engul:
@@ -151,12 +132,6 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case ParseEnum.TrashIDS.Jade:
                     CombatReplay.Icon = "https://i.imgur.com/ivtzbSP.png";
-                    break;
-                case ParseEnum.TrashIDS.Guldhem:
-                    CombatReplay.Icon = "https://i.imgur.com/xa7Fefn.png";
-                    break;
-                case ParseEnum.TrashIDS.Rigom:
-                    CombatReplay.Icon = "https://i.imgur.com/REcGMBe.png";
                     break;
                 case ParseEnum.TrashIDS.Saul:
                     CombatReplay.Icon = "https://i.imgur.com/ck2IsoS.png";
@@ -206,11 +181,6 @@ namespace LuckParser.Models.ParseModels
                     break;
                 case ParseEnum.TrashIDS.RadiantPhantasm:
                     CombatReplay.Icon = "https://i.imgur.com/O5VWLyY.png";
-                    break;
-                case ParseEnum.TrashIDS.Gambler:
-                case ParseEnum.TrashIDS.Thief:
-                case ParseEnum.TrashIDS.Drunkard:
-                    CombatReplay.Icon = "https://i.imgur.com/vINeVU6.png";
                     break;
                 case ParseEnum.TrashIDS.GamblerClones:
                     CombatReplay.Icon = "https://i.imgur.com/zMsBWEx.png";
