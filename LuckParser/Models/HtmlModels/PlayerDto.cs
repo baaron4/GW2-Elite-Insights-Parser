@@ -14,10 +14,10 @@ namespace LuckParser.Models.HtmlModels
         [DataMember] public string name;
         [DataMember] public string acc;
         [DataMember] public string profession;
-        [DataMember] public int condi;
-        [DataMember] public int conc;
-        [DataMember] public int heal;
-        [DataMember] public int tough;
+        [DataMember] public uint condi;
+        [DataMember] public uint conc;
+        [DataMember] public uint heal;
+        [DataMember] public uint tough;
         [DataMember] public readonly List<MinionDto> minions = new List<MinionDto>();
         [DataMember] public string[] weapons;
         [DataMember] public string colBoss;

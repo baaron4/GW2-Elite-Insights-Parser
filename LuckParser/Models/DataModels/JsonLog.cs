@@ -90,8 +90,8 @@ namespace LuckParser.Models.DataModels
             public JsonDps Dps;
             public double[] AvgBoons;
             public double[] AvgConditions;
-            public int HitboxHeight;
-            public int HitboxWidth;
+            public uint HitboxHeight;
+            public uint HitboxWidth;
             public Dictionary<string, JsonBossBoon> Conditions;
         }
 
@@ -199,10 +199,10 @@ namespace LuckParser.Models.DataModels
         {
             public string Character;
             public string Account;
-            public int Condition;
-            public int Concentration;
-            public int Healing;
-            public int Toughness;
+            public uint Condition;
+            public uint Concentration;
+            public uint Healing;
+            public uint Toughness;
             public int Group;
             public string Profession;
             public string[] Weapons;

@@ -163,17 +163,17 @@ namespace LuckParser.Controllers
                     uint isElite = reader.ReadUInt32();
 
                     // 2 bytes: toughness
-                    int toughness = reader.ReadInt16();
+                    uint toughness = reader.ReadUInt16();
                     // 2 bytes: healing
-                    int concentration = reader.ReadInt16();
+                    uint concentration = reader.ReadUInt16();
                     // 2 bytes: healing
-                    int healing = reader.ReadInt16();
+                    uint healing = reader.ReadUInt16();
                     // 2 bytes: hitbox width
-                    int hbWidth = reader.ReadInt16();
+                    uint hbWidth = reader.ReadUInt16();
                     // 2 bytes: condition
-                    int condition = reader.ReadInt16();
+                    uint condition = reader.ReadUInt16();
                     // 2 bytes: hitbox height
-                    int hbHeight = reader.ReadInt16();
+                    uint hbHeight = reader.ReadUInt16();
                     // 68 bytes: name
                     String name = ParseHelper.GetString(stream, 68, false);
                     //Save
