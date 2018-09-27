@@ -135,6 +135,8 @@ namespace LuckParser.Controllers
                 boss.AvgConditions = _statistics.AvgBossConditions[target];
                 boss.Dps = BuildDPS(_statistics.BossDps[target]);
                 boss.Conditions = BuildBossBoons(_statistics.BossConditions[target]);
+                boss.HitboxHeight = target.HitboxHeight;
+                boss.HitboxWidth = target.HitboxWidth;
                 log.Boss.Add(boss);
             }
         }

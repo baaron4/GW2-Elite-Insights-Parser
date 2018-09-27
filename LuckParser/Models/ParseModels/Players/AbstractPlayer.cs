@@ -26,6 +26,8 @@ namespace LuckParser.Models.ParseModels
         public long LastAware => AgentItem.LastAware;
         public long FirstAware => AgentItem.FirstAware;
         public ushort ID => AgentItem.ID;
+        public int HitboxHeight => AgentItem.HitboxHeight;
+        public int HitboxWidth => AgentItem.HitboxWidth;
 
         protected AbstractPlayer(AgentItem agent)
         {
