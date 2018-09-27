@@ -115,7 +115,7 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
-                Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[player][phaseIndex][_log.Boss];
+                Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
                 Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
 
                 List<Object> playerData = new List<Object>
@@ -251,8 +251,8 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
-                Statistics.FinalBossStats statsBoss = _statistics.StatsBoss[player][phaseIndex][_log.Boss];
-                Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[player][phaseIndex][_log.Boss];
+                Statistics.FinalBossStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
+                Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
 
                 List<Object> playerData = new List<object>
                 {
@@ -422,16 +422,10 @@ namespace LuckParser.Controllers
                 long fightDuration = phases[phaseIndex].GetDuration();
                 Dictionary<long, long> boonPresence = player.GetBoonPresence(_log, phaseIndex);
                 int count = 0;
-
-                        
+                       
                 if (boonTable)
                 {
-                    double avgBoons = 0.0;
-                    foreach (long duration in boonPresence.Values)
-                    {
-                        avgBoons += duration;
-                    }
-                    boonData.avg = Math.Round(avgBoons/fightDuration, 1);
+                    boonData.avg = Math.Round(_statistics.StatsAll[player][phaseIndex].AvgBoons, 1);
                 }
                 foreach (Boon boon in listToUse)
                 {
@@ -849,7 +843,7 @@ namespace LuckParser.Controllers
         private DmgDistributionDto CreatePlayerDMGDistTable(Player p, bool toBoss, int phaseIndex,
             Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
-            Statistics.FinalDPS dps = toBoss ? _statistics.DpsBoss[p][phaseIndex][_log.Boss] : _statistics.DpsAll[p][phaseIndex];
+            Statistics.FinalDPS dps = toBoss ? _statistics.DpsBoss[_log.Boss][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
             return _CreateDMGDistTable(dps, p, toBoss, phaseIndex, usedSkills, usedBoons);
         }
 
@@ -858,7 +852,7 @@ namespace LuckParser.Controllers
         /// </summary>
         private DmgDistributionDto CreateBossDMGDistTable(Boss p, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
-            Statistics.FinalDPS dps = _statistics.BossDps[phaseIndex][_log.Boss];
+            Statistics.FinalDPS dps = _statistics.BossDps[_log.Boss][phaseIndex];
             return _CreateDMGDistTable(dps, p, false, phaseIndex, usedSkills, usedBoons);
         }
 
@@ -885,7 +879,7 @@ namespace LuckParser.Controllers
         /// </summary>
         private DmgDistributionDto CreatePlayerMinionDMGDistTable(Player p, Minions minions, bool toBoss, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
-            Statistics.FinalDPS dps = toBoss ? _statistics.DpsBoss[p][phaseIndex][_log.Boss] : _statistics.DpsAll[p][phaseIndex];
+            Statistics.FinalDPS dps = toBoss ? _statistics.DpsBoss[_log.Boss][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
 
             return _CreateDMGDistTable(dps, p, minions, toBoss, phaseIndex, usedSkills, usedBoons);
         }
@@ -895,7 +889,7 @@ namespace LuckParser.Controllers
         /// </summary>
         private DmgDistributionDto CreateBossMinionDMGDistTable(Boss p, Minions minions, int phaseIndex, Dictionary<long, SkillItem> usedSkills, Dictionary<long, Boon> usedBoons)
         {
-            Statistics.FinalDPS dps = _statistics.BossDps[phaseIndex][_log.Boss];
+            Statistics.FinalDPS dps = _statistics.BossDps[_log.Boss][phaseIndex];
             return _CreateDMGDistTable(dps, p, minions, false, phaseIndex, usedSkills, usedBoons);
         }
 
@@ -1219,7 +1213,7 @@ namespace LuckParser.Controllers
         private List<BoonData> CreateBossCondiData(int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[phaseIndex][_log.Boss];
+            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
             List<BoonData> list = new List<BoonData>();
 
             foreach (Player player in _log.PlayerList)
@@ -1245,19 +1239,14 @@ namespace LuckParser.Controllers
         private BoonData CreateBossCondiUptimeData(int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[phaseIndex][_log.Boss];
+            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
             Dictionary<long, long> condiPresence = _log.Boss.GetCondiPresence(_log, phaseIndex);
             long fightDuration = phase.GetDuration();
             BoonData bossData = new BoonData
             {
                 val = new List<List<object>>()
             };
-            double avgCondis = 0.0;
-            foreach (long duration in condiPresence.Values)
-            {
-                avgCondis += duration;
-            }
-            bossData.avg = Math.Round(avgCondis / fightDuration, 1);
+            bossData.avg = Math.Round(_statistics.AvgBossConditions[_log.Boss][phaseIndex], 1);
             foreach (Boon boon in _statistics.PresentConditions)
             {
                 List<object> boonData = new List<object>
@@ -1278,19 +1267,14 @@ namespace LuckParser.Controllers
         private BoonData CreateBossBoonData(int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
-            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[phaseIndex][_log.Boss];
+            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
             Dictionary<long, long> boonPresence = _log.Boss.GetBoonPresence(_log, phaseIndex);
             long fightDuration = phase.GetDuration();
             BoonData bossData = new BoonData
             {
                 val = new List<List<object>>()
             };
-            double avgBoons = 0.0;
-            foreach (long duration in boonPresence.Values)
-            {
-                avgBoons += duration;
-            }
-            bossData.avg = Math.Round(avgBoons / fightDuration, 1);
+            bossData.avg = Math.Round(_statistics.AvgBossBoons[_log.Boss][phaseIndex], 1);
             foreach (Boon boon in _statistics.PresentBoons)
             {
                 List<object> boonData = new List<object>
@@ -1630,7 +1614,7 @@ namespace LuckParser.Controllers
 
         private bool HasBoons(int phaseIndex)
         {
-            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[phaseIndex][_log.Boss];
+            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
             foreach (Boon boon in _statistics.PresentBoons)
             {
                 if (boon.Name == "Retaliation")

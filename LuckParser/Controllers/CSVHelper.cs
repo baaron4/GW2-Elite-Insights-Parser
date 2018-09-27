@@ -36,7 +36,7 @@ namespace LuckParser.Controllers
             foreach (Player p in log.PlayerList)
             {
                 Statistics.FinalDPS dps = statistics.DpsAll[p][0];
-                Statistics.FinalDPS dpsBoss = statistics.DpsBoss[p][0][log.Boss];
+                Statistics.FinalDPS dpsBoss = statistics.DpsBoss[log.Boss][p][0];
                 teamStats[0] += dps.Dps;
                 teamStats[1] += dpsBoss.Dps;
                 teamStats[2] += dps.Dps - dpsBoss.Dps;
@@ -44,7 +44,7 @@ namespace LuckParser.Controllers
 
             foreach (Player p in log.PlayerList)
             {
-                Statistics.FinalDPS dpsBoss = statistics.DpsBoss[p][0][log.Boss];
+                Statistics.FinalDPS dpsBoss = statistics.DpsBoss[log.Boss][p][0];
                 Statistics.FinalDPS dpsAll = statistics.DpsAll[p][0];
                 sw.Write(p.Group + delimiter + // group
                         p.Prof + delimiter +  // class

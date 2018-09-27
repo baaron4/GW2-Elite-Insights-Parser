@@ -88,6 +88,8 @@ namespace LuckParser.Models.DataModels
             public double FinalHealth;
             public double HealthPercentBurned;
             public JsonDps Dps;
+            public double[] AvgBoons;
+            public double[] AvgConditions;
             public Dictionary<string, JsonBossBoon> Conditions;
         }
 
@@ -95,7 +97,6 @@ namespace LuckParser.Models.DataModels
         {
             public JsonStatsAll(int phaseCount)
             {
-                AvgBoons = new double[phaseCount];
                 CritablePowerLoopCount = new int[phaseCount];
                 CriticalDmg = new int[phaseCount];
                 CriticalRate = new int[phaseCount];
@@ -115,6 +116,8 @@ namespace LuckParser.Models.DataModels
                 ScholarDmg = new int[phaseCount];
                 ScholarRate = new int[phaseCount];
                 StackDist = new double[phaseCount];
+                AvgBoons = new double[phaseCount];
+                AvgConditions = new double[phaseCount];
                 SwapCount = new int[phaseCount];
                 TimeSaved = new double[phaseCount];
                 TimeWasted = new double[phaseCount];
@@ -139,8 +142,11 @@ namespace LuckParser.Models.DataModels
             public double[] TimeWasted;
             public int[] Saved;
             public double[] TimeSaved;
-            public double[] AvgBoons;
             public double[] StackDist;
+
+            // Boons
+            public double[] AvgBoons;
+            public double[] AvgConditions;
 
             // Counts
             public int[] SwapCount;
@@ -199,9 +205,9 @@ namespace LuckParser.Models.DataModels
             public string Profession;
             public string[] Weapons;
             public JsonDps DpsAll;
-            public JsonDps DpsBoss;
+            public JsonDps[] DpsBoss;
             public JsonStatsAll StatsAll;
-            public JsonStatsBoss StatsBoss;
+            public JsonStatsBoss[] StatsBoss;
             public JsonDefenses Defenses;
             public JsonSupport Support;
             public Dictionary<string, JsonBoonUptime> SelfBoons;
@@ -212,8 +218,10 @@ namespace LuckParser.Models.DataModels
 
         public struct JsonPhase
         {
-            public long Duration;
+            public long Start;
+            public long End;
             public string Name;
+            public int[] TargetIds;
         }
 
         public class JsonBossBoon
@@ -239,13 +247,15 @@ namespace LuckParser.Models.DataModels
         }
 
         public string EliteInsightsVersion;
+        public int TriggerID;
+        public string FightName;
         public string ArcVersion;
         public string RecordedBy;
         public string TimeStart;
         public string TimeEnd;
         public string Duration;
         public bool Success;
-        public JsonBoss Boss;
+        public List<JsonBoss> Boss;
         public List<JsonPlayer> Players;
         public List<JsonPhase> Phases;
         public JsonMechanic[] Mechanics;

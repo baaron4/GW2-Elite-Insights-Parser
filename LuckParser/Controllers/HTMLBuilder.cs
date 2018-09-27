@@ -487,7 +487,7 @@ namespace LuckParser.Controllers
                 sw.Write("<tbody>");
                 foreach (Player player in _log.PlayerList)
                 {
-                    Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[player][phaseIndex][_log.Boss];
+                    Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
                     Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
                     Statistics.FinalStats statsAll = _statistics.StatsAll[player][phaseIndex];
                     //gather data for footer
@@ -765,8 +765,8 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in _log.PlayerList)
                     {
-                        Statistics.FinalBossStats statsBoss = _statistics.StatsBoss[player][phaseIndex][_log.Boss];
-                        Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[player][phaseIndex][_log.Boss];
+                        Statistics.FinalBossStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
+                        Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
                         Statistics.FinalStats statsAll = _statistics.StatsAll[player][phaseIndex];
 
                         //gather data for footer
@@ -1277,13 +1277,7 @@ namespace LuckParser.Controllers
                             sw.Write("<td>" + "<img src=\"" + HTMLHelper.GetLink(player.Prof) + "\" alt=\"" + player.Prof + "\" height=\"18\" width=\"18\" >" + "<span style=\"display:none\">" + player.Prof + "</span>" + "</td>");
                             if (boonTable)
                             {                        
-                                double avgBoons = 0.0;
-                                foreach (long duration in boonPresence.Values)
-                                {
-                                    avgBoons += duration;
-                                }
-                                avgBoons /= fightDuration;
-                                sw.Write("<td data-toggle=\"tooltip\" title=\"Average number of boons: " + Math.Round(avgBoons, 1) + "\">" + player.Character + " </td>");
+                                sw.Write("<td data-toggle=\"tooltip\" title=\"Average number of boons: " + Math.Round(_statistics.StatsAll[player][phaseIndex].AvgBoons, 1) + "\">" + player.Character + " </td>");
                             }
                             else
                             {
@@ -2421,7 +2415,7 @@ namespace LuckParser.Controllers
         /// <param name="phaseIndex"></param>
         private void CreateDMGDistTable(StreamWriter sw, Player p, bool toBoss, int phaseIndex)
         {
-            Statistics.FinalDPS dps = toBoss ? _statistics.DpsBoss[p][phaseIndex][_log.Boss] : _statistics.DpsAll[p][phaseIndex];
+            Statistics.FinalDPS dps = toBoss ? _statistics.DpsBoss[_log.Boss][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
             _CreateDMGDistTable(dps, sw, p, toBoss, phaseIndex);
         }
 
@@ -2433,7 +2427,7 @@ namespace LuckParser.Controllers
         /// <param name="phaseIndex"></param>
         private void CreateDMGBossDistTable(StreamWriter sw, Boss p, int phaseIndex)
         {
-            Statistics.FinalDPS dps = _statistics.BossDps[phaseIndex][_log.Boss];
+            Statistics.FinalDPS dps = _statistics.BossDps[_log.Boss][phaseIndex];
             _CreateDMGDistTable(dps, sw, p, false, phaseIndex);
         }
 
@@ -2497,7 +2491,7 @@ namespace LuckParser.Controllers
         /// <param name="phaseIndex"></param>
         private void CreateDMGDistTable(StreamWriter sw, Player p, Minions minions, bool toBoss, int phaseIndex)
         {
-            Statistics.FinalDPS dps = toBoss ? _statistics.DpsBoss[p][phaseIndex][_log.Boss] : _statistics.DpsAll[p][phaseIndex];
+            Statistics.FinalDPS dps = toBoss ? _statistics.DpsBoss[_log.Boss][p][phaseIndex] : _statistics.DpsAll[p][phaseIndex];
 
             _CreateDMGDistTable(dps, sw, p, minions, toBoss, phaseIndex);
         }
@@ -2511,7 +2505,7 @@ namespace LuckParser.Controllers
         /// <param name="phaseIndex"></param>
         private void CreateDMGBossDistTable(StreamWriter sw, Boss p, Minions minions, int phaseIndex)
         {
-            Statistics.FinalDPS dps = _statistics.BossDps[phaseIndex][_log.Boss];
+            Statistics.FinalDPS dps = _statistics.BossDps[_log.Boss][phaseIndex];
             _CreateDMGDistTable(dps, sw, p, minions, false, phaseIndex);
         }
 
@@ -2972,7 +2966,7 @@ namespace LuckParser.Controllers
         {
             List<PhaseData> phases = _statistics.Phases;
             long fightDuration = phases[phaseIndex].GetDuration();
-            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[phaseIndex][_log.Boss];
+            Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
             bool hasBoons = false;
             foreach (Boon boon in _statistics.PresentBoons)
             {
@@ -2983,12 +2977,6 @@ namespace LuckParser.Controllers
                 }
             }
             Dictionary<long, long> condiPresence = boss.GetCondiPresence(_log, phaseIndex);
-            double avgCondis = 0.0;
-            foreach (long duration in condiPresence.Values)
-            {
-                avgCondis += duration;
-            }
-            avgCondis /= fightDuration;
             //Generate Boon table------------------------------------------------------------------------------------------------
             sw.Write("<h3 align=\"center\"> Condition Uptime </h3>");
             sw.Write("<script> $(function () { $('#condi_table" + phaseIndex + "').DataTable({ \"order\": [[3, \"desc\"]]});});</script>");
@@ -3012,7 +3000,7 @@ namespace LuckParser.Controllers
                     sw.Write("<tr>");
                     {
                         
-                        sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(avgCondis, 1) + "\">" + boss.Character + " </td>");
+                        sw.Write("<td style=\"width: 275px;\" data-toggle=\"tooltip\" title=\"Average number of conditions: " + Math.Round(_statistics.AvgBossConditions[_log.Boss][phaseIndex], 1) + "\">" + boss.Character + " </td>");
                         foreach (Boon boon in _statistics.PresentConditions)
                         {
                             if (boon.Type == Boon.BoonType.Duration)
