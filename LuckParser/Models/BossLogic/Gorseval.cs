@@ -84,7 +84,10 @@ namespace LuckParser.Models
                 phase.DrawArea = i == 1 || i == 3 || i == 5;
                 phase.DrawStart = i == 3 || i == 5;
                 phase.DrawEnd = i == 1 || i == 3;
-                phase.Targets.Add(mainTarget);
+                if (i == 1 || i == 3 || i == 5)
+                {
+                    phase.Targets.Add(mainTarget);
+                }
             }
             return phases;
         }
