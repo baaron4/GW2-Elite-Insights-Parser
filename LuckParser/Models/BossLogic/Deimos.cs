@@ -143,7 +143,6 @@ namespace LuckParser.Models
             {
                 PhaseData phase = phases[i];
                 phase.Name = namesDeiSplit[i - offsetDei];
-                phase.Targets.Add(mainTarget);
                 phase.DrawArea = true;
                 List<ushort> ids = new List<ushort>
                     {

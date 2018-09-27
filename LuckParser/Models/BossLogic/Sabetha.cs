@@ -96,6 +96,7 @@ namespace LuckParser.Models
                     AddTargetsToPhase(phase, ids, log);
                 } else
                 {
+                    phase.Targets.Add(mainTarget);
                     Boss addTarget;
                     switch (i)
                     {
