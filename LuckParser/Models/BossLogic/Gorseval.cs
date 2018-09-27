@@ -87,16 +87,31 @@ namespace LuckParser.Models
                 if (i == 1 || i == 3 || i == 5)
                 {
                     phase.Targets.Add(mainTarget);
+                } else
+                {
+                    List<ushort> ids = new List<ushort>
+                    {
+                       (ushort) ParseEnum.TrashIDS.ChargedSoul
+                    };
+                    AddTargetsToPhase(phase, ids, log);
                 }
             }
             return phases;
+        }
+
+        protected override List<ushort> GetFightTargetsIDs()
+        {
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.Gorseval,
+                (ushort)ParseEnum.TrashIDS.ChargedSoul
+            };
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.ChargedSoul,
                 ParseEnum.TrashIDS.EnragedSpirit,
                 ParseEnum.TrashIDS.AngeredSpirit
             };
