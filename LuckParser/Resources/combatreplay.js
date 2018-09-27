@@ -314,14 +314,7 @@ class PlayerIconDrawable extends IconDrawable {
 
 }
 
-class BossIconDrawable extends IconDrawable {
-    constructor(imgSrc, pixelSize, pos) {
-        super(-1, -1, imgSrc, pixelSize);
-        this.pos = pos;
-    }
-}
-
-class MobIconDrawable extends IconDrawable {
+class EnemyIconDrawable extends IconDrawable {
     constructor(start, end, imgSrc, pixelSize, pos) {
         super(start, end, imgSrc, pixelSize);
         this.pos = pos;
@@ -497,10 +490,10 @@ function createAllActors() {
                 }
                 break;
             case "Boss":
-				bossData.set(actor.ID, new BossIconDrawable(actor.Img, 40, actor.Positions));
+				bossData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End,actor.Img, 40, actor.Positions));
                 break;
             case "Mob":
-                trashMobData.set(actor.ID, new MobIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
+                trashMobData.set(actor.ID, new EnemyIconDrawable(actor.Start, actor.End, actor.Img, 30, actor.Positions));
                 break;
             case "Circle":
                 mechanicActorData.add(new CircleMechanicDrawable(actor.Start, actor.End, actor.Fill, actor.Growing, actor.Color, actor.Radius, actor.Position, actor.MinRadius));

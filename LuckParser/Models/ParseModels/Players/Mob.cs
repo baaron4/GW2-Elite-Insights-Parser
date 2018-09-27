@@ -21,6 +21,7 @@ namespace LuckParser.Models.ParseModels
         protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
         {
             // todo
+            SetCombatReplayIcon(log);
             int start = (int)CombatReplay.TimeOffsets.Item1;
             int end = (int)CombatReplay.TimeOffsets.Item2;
             Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
@@ -106,7 +107,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
 
-        protected void SetCombatReplayIcon(ParsedLog log)
+        private void SetCombatReplayIcon(ParsedLog log)
         {
             switch (ParseEnum.GetTrashIDS(AgentItem.ID))
             {

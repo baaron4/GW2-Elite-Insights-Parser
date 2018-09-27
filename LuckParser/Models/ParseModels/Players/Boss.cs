@@ -58,6 +58,8 @@ namespace LuckParser.Models.ParseModels
             public string Type { get; set; }
             public int ID { get; set; }
             public int[] Positions { get; set; }
+            public long Start { get; set; }
+            public long End { get; set; }
         }
 
         public override string GetCombatReplayJSON(CombatReplayMap map)
@@ -67,6 +69,8 @@ namespace LuckParser.Models.ParseModels
                 Img = CombatReplay.Icon,
                 Type = "Boss",
                 ID = GetCombatReplayID(),
+                Start = CombatReplay.TimeOffsets.Item1,
+                End = CombatReplay.TimeOffsets.Item2,
                 Positions = new int[2 * CombatReplay.Positions.Count]
             };
             int i = 0;

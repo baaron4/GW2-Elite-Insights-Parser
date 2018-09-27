@@ -848,6 +848,10 @@ namespace LuckParser.Controllers
                 int count = 0;
                 foreach (Player p in log.PlayerList)
                 {
+                    if (p.CombatReplay.Positions.Count == 0)
+                    {
+                        continue;
+                    }
                     if (count > 0)
                     {
                         sw.Write(",");
@@ -863,6 +867,10 @@ namespace LuckParser.Controllers
                 }
                 foreach (Mob m in log.FightData.Logic.TrashMobs)
                 {
+                    if (m.CombatReplay.Positions.Count == 0)
+                    {
+                        continue;
+                    }
                     sw.Write(",");
                     sw.Write(m.GetCombatReplayJSON(map));
                     replay = m.CombatReplay;
@@ -874,6 +882,10 @@ namespace LuckParser.Controllers
                 }
                 foreach (Boss target in log.FightData.Logic.Targets)
                 {
+                    if (target.CombatReplay.Positions.Count == 0)
+                    {
+                        continue;
+                    }
                     sw.Write(",");
                     sw.Write(target.GetCombatReplayJSON(map));
                     replay = target.CombatReplay;
