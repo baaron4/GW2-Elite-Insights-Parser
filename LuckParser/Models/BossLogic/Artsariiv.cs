@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -34,10 +35,52 @@ namespace LuckParser.Models
                             Tuple.Create(-24576, -24576, 24576, 24576),
                             Tuple.Create(11204, 4414, 13252, 6462));
         }
-    
-        public override string GetReplayIcon()
+
+        protected override void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)
         {
-            return "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+            RegroupTargetsByID((ushort)ParseEnum.BossIDS.Artsariiv, agentData, combatItems);
+        }
+
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        {
+            return new List<ParseEnum.TrashIDS>
+            {
+                TemporalAnomaly,
+                Spark,
+                Artsariiv1,
+                Artsariiv2,
+                Artsariiv3
+            };
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            switch (mob.ID)
+            {
+                case (ushort)TemporalAnomaly:
+                case (ushort)Spark:
+                case (ushort)Artsariiv1:
+                case (ushort)Artsariiv2:
+                case (ushort)Artsariiv3:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Artsariiv:
+                    replay.Icon = "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
         public override void SetSuccess(ParsedLog log)

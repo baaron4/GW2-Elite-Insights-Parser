@@ -29,7 +29,7 @@ namespace LuckParser.Models.ParseModels
             {
                 foreach (Minion minion in this)
                 {
-                    _damageLogs.AddRange(minion.GetDamageLogs((AbstractPlayer)null, log, 0, log.FightData.FightDuration));
+                    _damageLogs.AddRange(minion.GetDamageLogs(null, log, 0, log.FightData.FightDuration));
                 }
                 _damageLogsByDst = _damageLogs.GroupBy(x => x.DstInstId).ToDictionary(x => x.Key, x => x.ToList());
             }
@@ -40,18 +40,6 @@ namespace LuckParser.Models.ParseModels
                 return list.Where(x => x.Time >= start && x.Time > targetStart && x.Time <= end && x.Time < targetEnd).ToList();
             }
             return _damageLogs.Where(x => x.Time >= start && x.Time <= end).ToList();
-        }
-
-        public List<DamageLog> GetDamageLogs(List<AgentItem> redirection, ParsedLog log, long start, long end)
-        {
-            List<DamageLog> dls = GetDamageLogs((AbstractPlayer)null, log, start, end);
-            List<DamageLog> res = new List<DamageLog>();
-            foreach (AgentItem a in redirection)
-            {
-                res.AddRange(dls.Where(x => x.DstInstId == a.InstID && x.Time >= a.FirstAware - log.FightData.FightStart && x.Time <= a.LastAware - log.FightData.FightStart));
-            }
-            res.Sort((x, y) => x.Time < y.Time ? -1 : 1);
-            return res;
         }
 
         /*public List<DamageLog> getHealingLogs(ParsedLog log, long start, long end)

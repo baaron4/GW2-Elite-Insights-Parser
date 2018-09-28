@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -48,18 +49,60 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            return (log.Boss.Health == 5551340) ? 1 : 0;
+            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Skorvald);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.Health == 5551340) ? 1 : 0;
         }
 
-        public override string GetReplayIcon()
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
-            return "https://i.imgur.com/IOPAHRE.png";
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Skorvald:
+                    replay.Icon = "https://i.imgur.com/IOPAHRE.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        {
+            return new List<ParseEnum.TrashIDS>
+            {
+                FluxAnomaly4,
+                FluxAnomaly3,
+                FluxAnomaly2,
+                FluxAnomaly1,
+                SolarBloom
+            };
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            switch (mob.ID)
+            {
+                case (ushort)FluxAnomaly4:
+                case (ushort)FluxAnomaly3:
+                case (ushort)FluxAnomaly2:
+                case (ushort)FluxAnomaly1:
+                case (ushort)SolarBloom:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
         public override void SetSuccess(ParsedLog log)
         {
             // check reward
-            CombatItem reward = log.CombatData.LastOrDefault(x => x.IsStateChange == ParseEnum.StateChange.Reward);
+            CombatItem reward = log.CombatData.GetStatesData(ParseEnum.StateChange.Reward).LastOrDefault();
             CombatItem lastDamageTaken = log.CombatData.GetDamageTakenData(log.Boss.InstID).LastOrDefault(x => x.Value > 0);
             if (lastDamageTaken != null)
             {

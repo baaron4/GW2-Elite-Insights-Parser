@@ -30,6 +30,9 @@ namespace LuckParser.Models.DataModels
             Boss = boss;
             MechanicData = new MechanicData(fightData);
             PlayerListBySpec = playerList.GroupBy(x => x.Prof).ToDictionary(x => x.Key, x => x.ToList());
+
+            FightData.SetSuccess(this);
+            FightData.SetCM(this);
         }
 
         public Dictionary<long, List<CombatItem>> GetBoonData()

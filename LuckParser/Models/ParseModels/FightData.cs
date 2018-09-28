@@ -22,7 +22,7 @@ namespace LuckParser.Models.ParseModels
                 return FightEnd - FightStart;
             }
         }
-        public string Name { get; set; } = "UNKNOWN";
+        public string Name => Logic.GetFightName() + (_isCM == 1 ? " CM" : "") ;
         private int _isCM = -1;
         public bool IsCM
         {
@@ -77,6 +77,16 @@ namespace LuckParser.Models.ParseModels
                 case ParseEnum.BossIDS.Dhuum:
                     Logic = new Dhuum(id);
                     break;
+                case ParseEnum.BossIDS.ConjuredAmalgamate:
+                    Logic = new ConjuredAmalgamate(id);
+                    break;
+                case ParseEnum.BossIDS.Kenut:
+                case ParseEnum.BossIDS.Nikare:
+                    Logic = new TwinLargos(id);
+                    break;
+                case ParseEnum.BossIDS.Qadim:
+                    Logic = new Qadim(id);
+                    break;
                 case ParseEnum.BossIDS.MAMA:
                     Logic = new MAMA(id);
                     break;
@@ -125,10 +135,6 @@ namespace LuckParser.Models.ParseModels
             if (_isCM == -1)
             {
                 _isCM = Logic.IsCM(log);
-                if (_isCM == 1)
-                {
-                    Name += " CM";
-                }
             }
         }
         public void SetSuccess(ParsedLog log)

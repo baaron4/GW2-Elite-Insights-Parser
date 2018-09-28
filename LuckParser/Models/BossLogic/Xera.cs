@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -50,6 +51,12 @@ namespace LuckParser.Models
             long start = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Xera);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -77,6 +84,7 @@ namespace LuckParser.Models
                 phases[i].DrawArea = true;
                 phases[i].DrawStart = i > 1;
                 phases[i].DrawEnd = i < phases.Count - 1;
+                phases[i].Targets.Add(mainTarget);
 
             }
             return phases;
@@ -84,11 +92,10 @@ namespace LuckParser.Models
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
         {
-            foreach (AgentItem NPC in agentData.NPCAgentList)
+            foreach (AgentItem NPC in agentData.GetAgentByType(AgentItem.AgentType.NPC))
             {
                 if (NPC.ID == 16286)
                 {
-                    List<Point> bossHealthOverTime = new List<Point>();//reset boss health over time
                     int xera2Instid = NPC.InstID;
                     boss.Health = 24085950;
                     fightData.PhaseData.Add(NPC.FirstAware);
@@ -105,13 +112,7 @@ namespace LuckParser.Models
                             c.DstInstid = boss.InstID;
                             c.DstAgent = boss.Agent;
                         }
-                        //set health update
-                        if (c.SrcInstid == boss.InstID && c.IsStateChange == ParseEnum.StateChange.HealthUpdate)
-                        {
-                            bossHealthOverTime.Add(new Point((int)(c.Time - fightData.FightStart), (int)c.DstAgent));
-                        }
                     }
-                    boss.HealthOverTime = bossHealthOverTime;
                     break;
                 }
             }
@@ -121,27 +122,48 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.WhiteMantleSeeker1,
-                ParseEnum.TrashIDS.WhiteMantleSeeker2,
-                ParseEnum.TrashIDS.WhiteMantleKnight,
-                ParseEnum.TrashIDS.WhiteMantleBattleMage,
-                ParseEnum.TrashIDS.ExquisiteConjunction
+                WhiteMantleSeeker1,
+                WhiteMantleSeeker2,
+                WhiteMantleKnight,
+                WhiteMantleBattleMage,
+                ExquisiteConjunction
             };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
-            // TODO: needs facing information for hadouken
-            List<CastLog> summon = cls.Where(x => x.SkillId == 34887).ToList();
-            foreach (CastLog c in summon)
+            switch (mob.ID)
             {
-                replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                case (ushort)WhiteMantleSeeker1:
+                case (ushort)WhiteMantleSeeker2:
+                case (ushort)WhiteMantleKnight:
+                case (ushort)WhiteMantleBattleMage:
+                case (ushort)ExquisiteConjunction:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
 
-        public override string GetReplayIcon()
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
-            return "https://i.imgur.com/lYwJEyV.png";
+            // TODO: needs facing information for hadouken
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Xera:
+                    replay.Icon = "https://i.imgur.com/lYwJEyV.png";
+                    List<CastLog> summon = cls.Where(x => x.SkillId == 34887).ToList();
+                    foreach (CastLog c in summon)
+                    {
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                    }
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
     }
 }

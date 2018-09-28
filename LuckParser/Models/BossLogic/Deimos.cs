@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -44,9 +45,17 @@ namespace LuckParser.Models
                             Tuple.Create(11774, 4480, 14078, 5376));
         }
 
+        protected override void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)
+        {
+            RegroupTargetsByID((ushort)ParseEnum.BossIDS.Deimos, agentData, combatItems);
+            RegroupTargetsByID((ushort)Thief, agentData, combatItems);
+            RegroupTargetsByID((ushort)Drunkard, agentData, combatItems);
+            RegroupTargetsByID((ushort)Gambler, agentData, combatItems);
+        }
+
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
         {
-            List<AgentItem> deimosGadgets = agentData.GadgetAgentList.Where(x => x.FirstAware > boss.LastAware && x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
+            List<AgentItem> deimosGadgets = agentData.GetAgentByType(AgentItem.AgentType.Gadget).Where(x => x.FirstAware > boss.LastAware && x.Name.Contains("Deimos")).OrderBy(x => x.LastAware).ToList();
             if (deimosGadgets.Count > 0)
             {
                 AgentItem NPC = deimosGadgets.Last();
@@ -81,6 +90,12 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Deimos);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -101,6 +116,7 @@ namespace LuckParser.Models
             for (int i = 1; i < phases.Count; i++)
             {
                 phases[i].Name = "Phase " + i;
+                phases[i].Targets.Add(mainTarget);
                 if (i == 2) phases[i].DrawArea = true;
             }
             int offsetDei = phases.Count;
@@ -129,25 +145,13 @@ namespace LuckParser.Models
                 PhaseData phase = phases[i];
                 phase.Name = namesDeiSplit[i - offsetDei];
                 phase.DrawArea = true;
-                List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
+                List<ushort> ids = new List<ushort>
                     {
-                        ParseEnum.TrashIDS.Thief,
-                        ParseEnum.TrashIDS.Drunkard,
-                        ParseEnum.TrashIDS.Gambler,
-                        ParseEnum.TrashIDS.GamblerClones,
-                        ParseEnum.TrashIDS.GamblerReal,
+                        (ushort) Thief,
+                        (ushort) Drunkard,
+                        (ushort) Gambler,
                     };
-                List<AgentItem> clones = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
-                foreach (AgentItem a in clones)
-                {
-                    long agentStart = a.FirstAware - log.FightData.FightStart;
-                    if (phase.InInterval(agentStart))
-                    {
-                        phase.Redirection.Add(a);
-                    }
-                }
-                phase.OverrideStart(log.FightData.FightStart);
-
+                AddTargetsToPhase(phase, ids, log);
             }
             phases.Sort((x, y) => (x.Start < y.Start) ? -1 : 1);
             foreach (PhaseData phase in phases)
@@ -155,68 +159,135 @@ namespace LuckParser.Models
                 phase.DrawStart = true;
                 phase.DrawEnd = true;
             }
+            phases.RemoveAll(x => x.Targets.Count == 0);
             return phases;
+        }
+
+        protected override List<ushort> GetFightTargetsIDs()
+        {
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.Deimos,
+                (ushort)Thief,
+                (ushort)Drunkard,
+                (ushort)Gambler
+            };
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.Saul,
-                ParseEnum.TrashIDS.Thief,
-                ParseEnum.TrashIDS.Drunkard,
-                ParseEnum.TrashIDS.Gambler,
-                ParseEnum.TrashIDS.GamblerClones,
-                ParseEnum.TrashIDS.GamblerReal,
-                ParseEnum.TrashIDS.Greed,
-                ParseEnum.TrashIDS.Pride,
-                ParseEnum.TrashIDS.Oil,
-                ParseEnum.TrashIDS.Tear
+                Saul,
+                GamblerClones,
+                GamblerReal,
+                Greed,
+                Pride,
+                Oil,
+                Tear
             };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
-            List<CastLog> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
-            foreach (CastLog c in mindCrush)
+            CombatReplay replay = mob.CombatReplay;
+            int start = (int)replay.TimeOffsets.Item1;
+            int end = (int)replay.TimeOffsets.Item2;
+            Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
+            switch (mob.ID)
             {
-                int start = (int)c.Time;
-                int end = start + 5000;
-                replay.Actors.Add(new CircleActor(true, end, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
-                replay.Actors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
-                if (!log.FightData.IsCM)
-                {
-                    replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 0, 255, 0.3)", new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216)));
-                }
-            }
-            List<CastLog> annihilate = cls.Where(x => (x.SkillId == 38208) || (x.SkillId == 37929)).ToList();
-            foreach (CastLog c in annihilate)
-            {
-                int start = (int)c.Time;
-                int delay = 1000;
-                int end = start + 2400;
-                int duration = 120;
-                Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
-                if (facing == null)
-                {
-                    continue;
-                }
-                for (int i = 0; i < 6; i++)
-                {
-                    replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)"));
-                    replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)"));
-                    if (i % 5 != 0)
-                    {
-                        replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)"));
-                        replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)"));
-                    }
-                }
+                case (ushort)Saul:
+                    replay.Icon = "https://i.imgur.com/ck2IsoS.png";
+                    break;
+                case (ushort)GamblerClones:
+                    replay.Icon = "https://i.imgur.com/zMsBWEx.png";
+                    break;
+                case (ushort)GamblerReal:
+                    replay.Icon = "https://i.imgur.com/J6oMITN.png";
+                    break;
+                case (ushort)Greed:
+                    replay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                case (ushort)Pride:
+                    replay.Icon = "https://i.imgur.com/ePTXx23.png";
+                    break;
+                case (ushort)Oil:
+                    int delay = 3000;
+                    replay.Actors.Add(new CircleActor(true, start + 150, 200, new Tuple<int, int>(start, start + delay + 1000), "rgba(255,100, 0, 0.5)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start + delay, end), "rgba(0, 0, 0, 0.5)"));
+                    replay.Icon = "https://i.imgur.com/R26VgEr.png";
+                    break;
+                case (ushort)Tear:
+                    replay.Icon = "https://i.imgur.com/N9seps0.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Deimos:
+                    replay.Icon = "https://i.imgur.com/mWfxBaO.png";
+                    List<CastLog> mindCrush = cls.Where(x => x.SkillId == 37613).ToList();
+                    foreach (CastLog c in mindCrush)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + 5000;
+                        replay.Actors.Add(new CircleActor(true, end, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                        replay.Actors.Add(new CircleActor(false, 0, 180, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
+                        if (!log.FightData.IsCM)
+                        {
+                            replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>(start, end), "rgba(0, 0, 255, 0.3)", new Point3D(-8421.818f, 3091.72949f, -9.818082e8f, 216)));
+                        }
+                    }
+                    List<CastLog> annihilate = cls.Where(x => (x.SkillId == 38208) || (x.SkillId == 37929)).ToList();
+                    foreach (CastLog c in annihilate)
+                    {
+                        int start = (int)c.Time;
+                        int delay = 1000;
+                        int end = start + 2400;
+                        int duration = 120;
+                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        if (facing == null)
+                        {
+                            continue;
+                        }
+                        for (int i = 0; i < 6; i++)
+                        {
+                            replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * duration), "rgba(255, 200, 0, 0.5)"));
+                            replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI + i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)"));
+                            if (i % 5 != 0)
+                            {
+                                replay.Actors.Add(new PieActor(true, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 200, 0, 0.5)"));
+                                replay.Actors.Add(new PieActor(false, 0, 900, (int)Math.Round(Math.Atan2(-facing.Y, facing.X) * 180 / Math.PI - i * 360 / 10), 360 / 10, new Tuple<int, int>(start + delay + i * duration, end + i * 120), "rgba(255, 150, 0, 0.5)"));
+                            }
+                        }
+                    }
+                    break;
+                case (ushort)Gambler:
+                    replay.Icon = "https://i.imgur.com/vINeVU6.png";
+                    break;
+                case (ushort)Thief:
+                    replay.Icon = "https://i.imgur.com/vINeVU6.png";
+                    break;
+                case (ushort)Drunkard:
+                    replay.Icon = "https://i.imgur.com/vINeVU6.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+            
+        }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // teleport zone
+            CombatReplay replay = p.CombatReplay;
             List<CombatItem> tpDeimos = GetFilteredList(log, 37730, p.InstID);
             int tpStart = 0;
             foreach (CombatItem c in tpDeimos)
@@ -236,12 +307,12 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            return (log.Boss.Health > 40e6) ? 1 : 0;
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/mWfxBaO.png";
+            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Deimos);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.Health > 40e6) ? 1 : 0;
         }
     }
 }

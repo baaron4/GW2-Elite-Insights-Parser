@@ -15,7 +15,7 @@ namespace LuckParser.Models.ParseModels
         }
 
         public int Health { get; set; } = -1;
-        public List<Point> HealthOverTime { get; set; } = new List<Point>();
+        public List<Point> HealthOverTime { get; } = new List<Point>();
 
         public void AddCustomCastLog(CastLog cl, ParsedLog log)
         {
@@ -45,22 +45,21 @@ namespace LuckParser.Models.ParseModels
             }*/
         }
 
-        protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
+        protected override void SetAdditionalCombatReplayData(ParsedLog log)
         {
-            log.FightData.Logic.ComputeAdditionalBossData(CombatReplay, GetCastLogs(log, 0, log.FightData.FightDuration), log);
+            log.FightData.Logic.ComputeAdditionalBossData(this, log);
         }
-
-        protected override void SetCombatReplayIcon(ParsedLog log)
-        {
-            CombatReplay.Icon = log.FightData.Logic.GetReplayIcon();
-        }
+        
 
         //
         private class Serializable
         {
             public string Img { get; set; }
             public string Type { get; set; }
+            public int ID { get; set; }
             public int[] Positions { get; set; }
+            public long Start { get; set; }
+            public long End { get; set; }
         }
 
         public override string GetCombatReplayJSON(CombatReplayMap map)
@@ -69,6 +68,9 @@ namespace LuckParser.Models.ParseModels
             {
                 Img = CombatReplay.Icon,
                 Type = "Boss",
+                ID = GetCombatReplayID(),
+                Start = CombatReplay.TimeOffsets.Item1,
+                End = CombatReplay.TimeOffsets.Item2,
                 Positions = new int[2 * CombatReplay.Positions.Count]
             };
             int i = 0;
@@ -84,7 +86,7 @@ namespace LuckParser.Models.ParseModels
 
         public override int GetCombatReplayID()
         {
-            return 0;
+            return (InstID + "_" + CombatReplay.TimeOffsets.Item1 + "_" + CombatReplay.TimeOffsets.Item2).GetHashCode();
         }
 
         /*protected override void setHealingLogs(ParsedLog log)

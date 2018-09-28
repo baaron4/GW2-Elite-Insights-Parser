@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LuckParser.Models.ParseModels
@@ -11,7 +12,7 @@ namespace LuckParser.Models.ParseModels
         public bool DrawStart { get; set; }
         public bool DrawEnd { get; set; }
         public bool DrawArea { get; set; }
-        public readonly List<AgentItem> Redirection = new List<AgentItem>();
+        public List<Boss> Targets { get; } = new List<Boss>();
 
         public PhaseData(long start, long end)
         {
@@ -38,11 +39,12 @@ namespace LuckParser.Models.ParseModels
             return Start <= time - offset && time - offset <= End;
         }
 
-        public void OverrideStart(long offset)
+        public void OverrideTimes(long offset)
         {
-            if (Redirection.Count > 0)
+            if (Targets.Count > 0)
             {
-                Start = Redirection.Min(x => x.FirstAware)- offset;
+                Start = Math.Max(Start, Targets.Min(x => x.FirstAware)- offset);
+                Start = Math.Min(End, Targets.Min(x => x.FirstAware) - offset);
             }
         }
     }

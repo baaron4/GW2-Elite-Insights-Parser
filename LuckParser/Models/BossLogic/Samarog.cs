@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -58,6 +59,12 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Samarog);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -97,57 +104,70 @@ namespace LuckParser.Models
                 phase.DrawEnd = i == 1 || i == 3;
                 if (i == 2 || i == 4)
                 {
-                    List<ParseEnum.TrashIDS> ids = new List<ParseEnum.TrashIDS>
+                    List<ushort> ids = new List<ushort>
                     {
-                       ParseEnum.TrashIDS.Rigom,
-                       ParseEnum.TrashIDS.Guldhem
+                       (ushort) Rigom,
+                       (ushort) Guldhem
                     };
-                    List<AgentItem> slaves = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
-                    foreach (AgentItem a in slaves)
-                    {
-                        long agentStart = a.FirstAware - log.FightData.FightStart;
-                        if (phase.InInterval(agentStart))
-                        {
-                            phase.Redirection.Add(a);
-                        }
-                    }
-                    phase.OverrideStart(log.FightData.FightStart);
+                    AddTargetsToPhase(phase, ids, log);
+                } else
+                {
+                    phase.Targets.Add(mainTarget);
                 }
             }
             return phases;
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ushort> GetFightTargetsIDs()
         {
-            return new List<ParseEnum.TrashIDS>
+            return new List<ushort>
             {
-                ParseEnum.TrashIDS.Rigom,
-                ParseEnum.TrashIDS.Guldhem
+                (ushort)ParseEnum.BossIDS.Samarog,
+                (ushort)Rigom,
+                (ushort)Guldhem,
             };
         }
+        
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             // TODO: facing information (shock wave)
-            List<CombatItem> brutalize = log.GetBoonData(38226).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
-            int brutStart = 0;
-            foreach (CombatItem c in brutalize)
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
             {
-                if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
-                {
-                    brutStart = (int)(c.Time - log.FightData.FightStart);
-                }
-                else
-                {
-                    int brutEnd = (int)(c.Time - log.FightData.FightStart);
-                    replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(brutStart, brutEnd), "rgba(0, 180, 255, 0.3)"));
-                }
+                case (ushort)ParseEnum.BossIDS.Cairn:
+                    replay.Icon = "https://i.imgur.com/MPQhKfM.png";
+                    List<CombatItem> brutalize = log.GetBoonData(38226).Where(x => x.IsBuffRemove != ParseEnum.BuffRemove.Manual).ToList();
+                    int brutStart = 0;
+                    foreach (CombatItem c in brutalize)
+                    {
+                        if (c.IsBuffRemove == ParseEnum.BuffRemove.None)
+                        {
+                            brutStart = (int)(c.Time - log.FightData.FightStart);
+                        }
+                        else
+                        {
+                            int brutEnd = (int)(c.Time - log.FightData.FightStart);
+                            replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(brutStart, brutEnd), "rgba(0, 180, 255, 0.3)"));
+                        }
+                    }
+                    break;
+                case (ushort)Rigom:
+                    replay.Icon = "https://i.imgur.com/REcGMBe.png";
+                    break;
+                case (ushort)Guldhem:
+                    replay.Icon = "https://i.imgur.com/xa7Fefn.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // big bomb
+            CombatReplay replay = p.CombatReplay;
             List<CombatItem> bigbomb = log.GetBoonData(37966).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
             foreach (CombatItem c in bigbomb)
             {
@@ -183,12 +203,12 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            return (log.Boss.Health > 30e6) ? 1 : 0;
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/MPQhKfM.png";
+            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Samarog);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.Health > 30e6) ? 1 : 0;
         }
     }
 }

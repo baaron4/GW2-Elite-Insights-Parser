@@ -4,24 +4,28 @@ namespace LuckParser.Models.ParseModels
 {
     public class AgentItem
     {
+
+        public enum AgentType { NPC, Gadget, Player }
+
         // Fields
         public readonly ulong Agent;
         public readonly ushort ID;
         public ulong MasterAgent { get; set; }
         public ushort InstID { get; set; }
+        public AgentType Type { get; }
         public long FirstAware { get; set; }
         public long LastAware { get; set; } = long.MaxValue;
-        public readonly String Name;
-        public readonly String Prof;
-        public readonly int Toughness;
-        public readonly int Healing;
-        public readonly int Condition;
-        public readonly int Concentration;
-        public readonly int HitboxWidth;
-        public readonly int HitboxHeight;
+        public readonly string Name;
+        public readonly string Prof;
+        public readonly uint Toughness;
+        public readonly uint Healing;
+        public readonly uint Condition;
+        public readonly uint Concentration;
+        public readonly uint HitboxWidth;
+        public readonly uint HitboxHeight;
 
         // Constructors
-        public AgentItem(ulong agent, String name, String prof, int toughness, int healing, int condition, int concentration, int hbWidth, int hbHeight)
+        public AgentItem(ulong agent, string name, string prof, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
         {
             Agent = agent;
             Name = name;
@@ -38,6 +42,7 @@ namespace LuckParser.Models.ParseModels
                     ID = 0;
                 }
             }
+            Type = type;
             Toughness = toughness;
             Healing = healing;
             Condition = condition;
@@ -46,20 +51,38 @@ namespace LuckParser.Models.ParseModels
             HitboxHeight = hbHeight;
         }
 
-        // Public Methods
-        public String[] ToStringArray()
+        public AgentItem(AgentItem other)
         {
-            String[] array = new String[9];
-            array[0] = Agent.ToString(); 
-            array[1] = InstID.ToString();
-            array[2] = FirstAware.ToString();
-            array[3] = LastAware.ToString();
-            array[4] = Name;
-            array[5] = Prof;
-            array[6] = Toughness.ToString();
-            array[7] = Healing.ToString();
-            array[8] = Condition.ToString();
-            return array;
+            Agent = other.Agent;
+            Name = other.Name;
+            Prof = other.Prof;
+            if (Prof.Contains(":"))
+            {
+                var splitted = Prof.Split(':');
+                try
+                {
+                    ID = UInt16.Parse(splitted[splitted.Length - 1]);
+                }
+                catch (FormatException)
+                {
+                    ID = 0;
+                }
+            }
+            Type = other.Type;
+            Toughness = other.Toughness;
+            Healing = other.Healing;
+            Condition = other.Condition;
+            Concentration = other.Concentration;
+            HitboxWidth = other.HitboxWidth;
+            HitboxHeight = other.HitboxHeight;
+            InstID = other.InstID;
+            MasterAgent = other.MasterAgent;
+        }
+
+        public AgentItem(ulong agent, string name)
+        {
+            Agent = agent;
+            Name = name;
         }
     }
 }

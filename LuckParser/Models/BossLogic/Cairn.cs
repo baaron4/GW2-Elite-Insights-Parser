@@ -45,15 +45,26 @@ namespace LuckParser.Models
                             Tuple.Create(11774, 4480, 14078, 5376));
         }
         
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             // TODO: needs doughnuts (wave) and facing information (sword)
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Cairn:
+                    replay.Icon = "https://i.imgur.com/gQY37Tf.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // shared agony
             List<CombatItem> agony = log.GetBoonData(38049).Where(x => (x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None)).ToList();
+            CombatReplay replay = p.CombatReplay;
             foreach (CombatItem c in agony)
             {
                 int agonyStart = (int)(c.Time - log.FightData.FightStart);
@@ -64,12 +75,7 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            return log.CombatData.Exists(x => x.SkillID == 38098) ? 1 : 0;
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/gQY37Tf.png";
+            return log.CombatData.AllCombatItems.Exists(x => x.SkillID == 38098) ? 1 : 0;
         }
     }
 }

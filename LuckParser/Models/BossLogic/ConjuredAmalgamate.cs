@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -29,16 +30,59 @@ namespace LuckParser.Models
                             Tuple.Create(13440, 14336, 15360, 16256));
         }
 
+        protected override List<ushort> GetFightTargetsIDs()
+        {
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.ConjuredAmalgamate,
+                (ushort)ParseEnum.BossIDS.CARightArm,
+                (ushort)ParseEnum.BossIDS.CALeftArm
+            };
+        }
+
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>();
+            return new List<ParseEnum.TrashIDS>()
+            {
+                ConjuredGreatsword,
+                ConjuredShield
+            };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
+            switch (mob.ID)
+            {
+                case (ushort)ConjuredGreatsword:
+                case (ushort)ConjuredShield:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.ConjuredAmalgamate:
+                    replay.Icon = "";
+                    break;
+                case (ushort)ParseEnum.BossIDS.CALeftArm:
+                    replay.Icon = "";
+                    break;
+                case (ushort)ParseEnum.BossIDS.CARightArm:
+                    replay.Icon = "";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
 
         }
@@ -46,11 +90,6 @@ namespace LuckParser.Models
         public override int IsCM(ParsedLog log)
         {
             return 0; //Possibly check if Conjured Scepters show up in the log?
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "";
         }
     }
 }

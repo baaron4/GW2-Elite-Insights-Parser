@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -34,17 +35,88 @@ namespace LuckParser.Models
                             Tuple.Create(13440,14336,15360,16256));
         }
 
+        protected override List<ushort> GetFightTargetsIDs()
+        {
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.Qadim,
+                (ushort)AncientInvokedHydra,
+                (ushort)WyvernMatriarch,
+                (ushort)WyvernPatriarch,
+                (ushort)ApocalypseBringer,
+            };
+        }
+
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>();
+            return new List<ParseEnum.TrashIDS>()
+            {
+                LavaElemental1,
+                LavaElemental2,
+                IcebornHydra,
+                GreaterMagmaElemental1,
+                GreaterMagmaElemental2,
+                FireElemental,
+                FireImp,
+                PyreGuardian,
+                ReaperofFlesh,
+                IceElemental,
+                Zommoros
+            };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
         {
-            
+            switch (mob.ID)
+            {
+                case (ushort)LavaElemental1:
+                case (ushort)LavaElemental2:
+                case (ushort)IcebornHydra:
+                case (ushort)GreaterMagmaElemental1:
+                case (ushort)GreaterMagmaElemental2:
+                case (ushort)FireElemental:
+                case (ushort)FireImp:
+                case (ushort)PyreGuardian:
+                case (ushort)ReaperofFlesh:
+                case (ushort)IceElemental:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                case (ushort)Zommoros:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/BxbsRCI.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                // Zommoros: https://imgur.com/BxbsRCI
+                case (ushort)ParseEnum.BossIDS.Qadim:
+                    replay.Icon = "https://i.imgur.com/IfoHTHT.png";
+                    break;
+                case (ushort)AncientInvokedHydra:
+                    replay.Icon = "https://imgur.com/YABLiBz";
+                    break;
+                case (ushort)WyvernMatriarch:
+                    replay.Icon = "https://imgur.com/vjjNSpI";
+                    break;
+                case (ushort)WyvernPatriarch:
+                    replay.Icon = "https://imgur.com/kLKLSfv";
+                    break;
+                case (ushort)ApocalypseBringer:
+                    replay.Icon = "https://imgur.com/0LGKCn2";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
 
         }
@@ -53,12 +125,6 @@ namespace LuckParser.Models
         {
             return 0; //Check via Hydra HP or (>27e6)
         }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/IfoHTHT.png";
-            // For legendary adds: https://imgur.com/YABLiBz https://imgur.com/0LGKCn2 https://imgur.com/kLKLSfv https://imgur.com/vjjNSpI
-            // Zommoros: https://imgur.com/BxbsRCI
-        }
+        
     }
 }

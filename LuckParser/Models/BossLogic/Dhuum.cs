@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -47,6 +48,12 @@ namespace LuckParser.Models
             long end = 0;
             long fightDuration = log.FightData.FightDuration;
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Dhuum);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            phases[0].Targets.Add(mainTarget);
             if (!requirePhases)
             {
                 return phases;
@@ -78,6 +85,7 @@ namespace LuckParser.Models
                     phases[i].DrawArea = true;
                     phases[i].DrawStart = i > 1;
                     phases[i].DrawEnd = i < phases.Count - 1;
+                    phases[i].Targets.Add(mainTarget);
                 }
             }
             else
@@ -111,6 +119,7 @@ namespace LuckParser.Models
                     phases[i].DrawArea = i > 1;
                     phases[i].DrawStart = i > 1;
                     phases[i].DrawEnd = i == 2;
+                    phases[i].Targets.Add(mainTarget);
                 }
             }
             return phases;
@@ -120,69 +129,106 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.Echo,
-                ParseEnum.TrashIDS.Enforcer,
-                ParseEnum.TrashIDS.Messenger
+                Echo,
+                Enforcer,
+                Messenger
             };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             // TODO: correct position
-            List<CastLog> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
-            CastLog majorSplit = cls.Find(x => x.SkillId == 47396);
-            foreach (CastLog c in deathmark)
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
             {
-                int start = (int)c.Time;
-                int castEnd = start + c.ActualDuration;
-                int zoneActive = castEnd - 1000;
-                int zoneEnd = zoneActive + 120000;
-                if (majorSplit != null)
-                {
-                    castEnd = Math.Min(castEnd, (int)majorSplit.Time);
-                    zoneEnd = Math.Min(zoneEnd, (int)majorSplit.Time);
-                }
-                Point3D next = replay.Positions.FirstOrDefault(x => x.Time >= castEnd);
-                Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= castEnd);
-                if (next != null || prev != null)
-                {
-                    replay.Actors.Add(new CircleActor(true, zoneActive, 450, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", prev,next, castEnd));
-                    replay.Actors.Add(new CircleActor(false, 0, 450, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", prev, next, castEnd));
-                    replay.Actors.Add(new CircleActor(true, 0, 450, new Tuple<int, int>(zoneActive, zoneEnd), "rgba(200, 255, 100, 0.5)", prev, next, castEnd));
-                }
+                case (ushort)ParseEnum.BossIDS.Dhuum:
+                    replay.Icon = "https://i.imgur.com/RKaDon5.png";
+                    List<CastLog> deathmark = cls.Where(x => x.SkillId == 48176).ToList();
+                    CastLog majorSplit = cls.Find(x => x.SkillId == 47396);
+                    foreach (CastLog c in deathmark)
+                    {
+                        int start = (int)c.Time;
+                        int castEnd = start + c.ActualDuration;
+                        int zoneActive = castEnd - 1000;
+                        int zoneEnd = zoneActive + 120000;
+                        if (majorSplit != null)
+                        {
+                            castEnd = Math.Min(castEnd, (int)majorSplit.Time);
+                            zoneEnd = Math.Min(zoneEnd, (int)majorSplit.Time);
+                        }
+                        Point3D next = replay.Positions.FirstOrDefault(x => x.Time >= castEnd);
+                        Point3D prev = replay.Positions.LastOrDefault(x => x.Time <= castEnd);
+                        if (next != null || prev != null)
+                        {
+                            replay.Actors.Add(new CircleActor(true, zoneActive, 450, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", prev, next, castEnd));
+                            replay.Actors.Add(new CircleActor(false, 0, 450, new Tuple<int, int>(start, zoneActive), "rgba(200, 255, 100, 0.5)", prev, next, castEnd));
+                            replay.Actors.Add(new CircleActor(true, 0, 450, new Tuple<int, int>(zoneActive, zoneEnd), "rgba(200, 255, 100, 0.5)", prev, next, castEnd));
+                        }
+                    }
+                    List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
+                    foreach (CastLog c in cataCycle)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + c.ActualDuration;
+                        replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
+                        replay.Actors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                    }
+                    List<CastLog> slash = cls.Where(x => x.SkillId == 47561).ToList();
+                    foreach (CastLog c in slash)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + c.ActualDuration;
+                        Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
+                        if (facing == null)
+                        {
+                            continue;
+                        }
+                        replay.Actors.Add(new PieActor(false, 0, 850, facing, 60, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
+                    }
+
+                    if (majorSplit != null)
+                    {
+                        int start = (int)majorSplit.Time;
+                        int end = (int)log.FightData.FightDuration;
+                        replay.Actors.Add(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
+                    }
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
-            List<CastLog> cataCycle = cls.Where(x => x.SkillId == 48398).ToList();
-            foreach (CastLog c in cataCycle)
+           
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            CombatReplay replay = mob.CombatReplay;
+            int start = (int)replay.TimeOffsets.Item1;
+            int end = (int)replay.TimeOffsets.Item2;
+            Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
+            switch (mob.ID)
             {
-                int start = (int)c.Time;
-                int end = start + c.ActualDuration;
-                replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.7)"));
-                replay.Actors.Add(new CircleActor(true, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
-            }
-            List<CastLog> slash = cls.Where(x => x.SkillId == 47561).ToList();
-            foreach (CastLog c in slash)
-            {
-                int start = (int)c.Time;
-                int end = start + c.ActualDuration;
-                Point3D facing = replay.Rotations.FirstOrDefault(x => x.Time >= start);
-                if (facing == null)
-                {
-                    continue;
-                }
-                replay.Actors.Add(new PieActor(false, 0, 850, facing, 60, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.5)"));
-            }
-   
-            if (majorSplit != null)
-            {
-                int start = (int)majorSplit.Time;
-                int end = (int)log.FightData.FightDuration;
-                replay.Actors.Add(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
+                case (ushort)Echo:
+                    replay.Icon = "https://i.imgur.com/kcN9ECn.png";
+                    replay.Actors.Add(new CircleActor(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    break;
+                case (ushort)Enforcer:
+                    replay.Icon = "https://i.imgur.com/elHjamF.png";
+                    break;
+                case (ushort)Messenger:
+                    replay.Icon = "https://i.imgur.com/1J2BTFg.png";
+                    replay.Actors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 125, 0, 0.5)"));
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+
             }
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // spirit transform
+            CombatReplay replay = p.CombatReplay;
             List<CombatItem> spiritTransform = log.GetBoonData(46950).Where(x => x.DstInstid == p.InstID && x.IsBuffRemove == ParseEnum.BuffRemove.None).ToList();
             foreach (CombatItem c in spiritTransform)
             {
@@ -221,12 +267,12 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            return (log.Boss.Health > 35e6) ? 1 : 0;
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/RKaDon5.png";
+            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Dhuum);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.Health > 35e6) ? 1 : 0;
         }
     }
 }

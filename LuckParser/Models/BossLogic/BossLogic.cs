@@ -1,6 +1,8 @@
 ﻿using LuckParser.Models.DataModels;
 using LuckParser.Models.ParseModels;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace LuckParser.Models
@@ -20,11 +22,12 @@ namespace LuckParser.Models
         public string Extension { get; protected set; } = "boss";
         public string IconUrl { get; protected set; } = "https://wiki.guildwars2.com/images/d/d2/Guild_emblem_004.png";
         public List<Mob> TrashMobs { get; } = new List<Mob>();
-        private readonly ushort _triggerID;
+        public List<Boss> Targets { get; } = new List<Boss>();
+        protected readonly ushort TriggerID;
 
         public BossLogic(ushort triggerID)
         {
-            _triggerID = triggerID;
+            TriggerID = triggerID;
         }
 
         protected virtual CombatReplayMap GetCombatMapInternal()
@@ -42,12 +45,100 @@ namespace LuckParser.Models
             return _map;
         }
 
-        public virtual List<ushort> GetFightTargetsIDs()
+        protected virtual List<ushort> GetFightTargetsIDs()
         {
             return new List<ushort>
             {
-                _triggerID
+                TriggerID
             };
+        }
+
+        public virtual string GetFightName()
+        {
+            Boss target = Targets.Find(x => x.ID == TriggerID);
+            if (target == null)
+            {
+                return "UNKNOWN";
+            }
+            return target.Character;
+        }
+
+        protected void RegroupTargetsByID(ushort id, AgentData agentData, List<CombatItem> combatItems)
+        {
+            List<AgentItem> agents = agentData.GetAgentsByID(id);
+            List<Boss> toRegroup = Targets.Where(x => x.ID == id).ToList();
+            if (agents.Count > 0 && toRegroup.Count > 0)
+            {
+                Targets.RemoveAll(x => x.ID == id);
+                AgentItem firstItem = agents.First();
+                agents = agents.Where(x => x.InstID == firstItem.InstID).ToList();
+                HashSet<ulong> agentValues = new HashSet<ulong>(agents.Select(x => x.Agent));
+                agentValues.Remove(firstItem.Agent);
+                AgentItem newTargetAgent = new AgentItem(firstItem)
+                {
+                    FirstAware = agents.Min(x => x.FirstAware),
+                    LastAware = agents.Max(x => x.LastAware)
+                };
+                agentData.OverrideID(id, firstItem.InstID, newTargetAgent);
+                Targets.Add(new Boss(newTargetAgent));
+                if (agentValues.Count == 0)
+                {
+                    return;
+                }
+                foreach (CombatItem c in combatItems)
+                {
+                    if (agentValues.Contains(c.SrcAgent))
+                    {
+                        c.SrcAgent = newTargetAgent.Agent;
+                    }
+                    if (agentValues.Contains(c.DstAgent))
+                    {
+                        c.DstAgent = newTargetAgent.Agent;
+                    }
+                }
+            }
+        }
+
+        protected virtual void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)
+        {
+        }
+
+        public void ComputeFightTargets(AgentData agentData, FightData fightData, List<CombatItem> combatItems)
+        {
+            List<ushort> ids = GetFightTargetsIDs();
+            foreach (ushort id in ids)
+            {
+                List<AgentItem> agents = agentData.GetAgentsByID(id);
+                foreach (AgentItem agentItem in agents)
+                {
+                    Targets.Add(new Boss(agentItem));
+                }
+            }
+            RegroupTargets(agentData, combatItems);
+        }
+
+        public void SetMaxHealth(ushort instid, long time, int health)
+        {
+            foreach (Boss boss in Targets)
+            {
+                if (boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
+                {
+                    boss.Health = health;
+                    break;
+                }
+            }
+        }
+
+        public void AddHealthUpdate(ushort instid, long time, int healthTime, int health)
+        {
+            foreach (Boss boss in Targets)
+            {
+                if (boss.InstID == instid && boss.FirstAware <= time && boss.LastAware >= time)
+                {
+                    boss.HealthOverTime.Add(new Point(healthTime, health));
+                    break;
+                }
+            }
         }
 
         protected List<PhaseData> GetInitialPhase(ParsedLog log)
@@ -62,11 +153,35 @@ namespace LuckParser.Models
         public virtual List<PhaseData> GetPhases(ParsedLog log, bool requirePhases)
         {
             List<PhaseData> phases = GetInitialPhase(log);
+            Boss mainTarget = Targets.Find(x => x.ID == TriggerID);
+            if (mainTarget == null)
+            {
+                throw new InvalidOperationException("Main target of the fight not found");
+            }
+            phases[0].Targets.Add(mainTarget);
             return phases;
         }
 
-        public virtual void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        protected void AddTargetsToPhase(PhaseData phase, List<ushort> ids, ParsedLog log)
         {
+            foreach (Boss target in Targets)
+            {
+                if (ids.Contains(target.ID) && phase.InInterval(target.FirstAware, log.FightData.FightStart))
+                {
+                    phase.Targets.Add(target);
+                }
+            }
+            phase.OverrideTimes(log.FightData.FightStart);
+        }
+
+        public virtual void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+
+        }
+
+        public virtual void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+
         }
 
         protected virtual List<ParseEnum.TrashIDS> GetTrashMobsIDS()
@@ -79,14 +194,14 @@ namespace LuckParser.Models
             return -1;
         }
 
-        public virtual void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public virtual void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
         }
 
         public void ComputeTrashMobsData(ParsedLog log, int pollingRate)
         {
             List<ParseEnum.TrashIDS> ids = GetTrashMobsIDS();
-            List<AgentItem> aList = log.AgentData.NPCAgentList.Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
+            List<AgentItem> aList = log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => ids.Contains(ParseEnum.GetTrashIDS(x.ID))).ToList();
             foreach (AgentItem a in aList)
             {
                 Mob mob = new Mob(a);
@@ -108,11 +223,6 @@ namespace LuckParser.Models
         public virtual void SetSuccess(ParsedLog log)
         {
             SetSuccessByDeath(log);
-        }
-
-        public virtual string GetReplayIcon()
-        {
-            return "";
         }
 
 
@@ -208,10 +318,10 @@ namespace LuckParser.Models
                         foreach (Player p in log.PlayerList)
                         {
                             condition = mech.SpecialCondition;
-                            IEnumerable<AgentItem> agents = log.AgentData.GetAgents((ushort)mech.SkillId);
+                            IEnumerable<AgentItem> agents = log.AgentData.GetAgentsByID((ushort)mech.SkillId);
                             foreach (AgentItem a in agents)
                             {
-                                foreach (DamageLog dl in p.GetDamageLogs((AbstractPlayer)null, log, 0, log.FightData.FightDuration))
+                                foreach (DamageLog dl in p.GetDamageLogs(null, log, 0, log.FightData.FightDuration))
                                 {
                                     if (dl.DstInstId != a.InstID || dl.IsCondi > 0 || dl.Time < a.FirstAware - start || dl.Time > a.LastAware - start || (condition != null && !condition(new SpecialConditionItem(dl))))
                                     {
@@ -322,7 +432,7 @@ namespace LuckParser.Models
                         }
                         break;
                     case Mechanic.MechType.Spawn:
-                        foreach (AgentItem a in log.AgentData.NPCAgentList.Where(x => x.ID == mech.SkillId))
+                        foreach (AgentItem a in log.AgentData.GetAgentByType(AgentItem.AgentType.NPC).Where(x => x.ID == mech.SkillId))
                         {
                             if (!regroupedMobs.TryGetValue(a.ID, out AbstractMasterPlayer amp))
                             {

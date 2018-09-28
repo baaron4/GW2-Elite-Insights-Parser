@@ -27,17 +27,12 @@ namespace LuckParser.Models.ParseModels
             throw new InvalidOperationException();
         }
 
-        protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
+        protected override void SetAdditionalCombatReplayData(ParsedLog log)
         {
             throw new InvalidOperationException();
         }
 
         protected override void SetCastLogs(ParsedLog log)
-        {
-            throw new InvalidOperationException();
-        }
-
-        protected override void SetCombatReplayIcon(ParsedLog log)
         {
             throw new InvalidOperationException();
         }

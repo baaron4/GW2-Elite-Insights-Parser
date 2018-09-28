@@ -218,8 +218,9 @@ namespace LuckParser.Models.ParseModels
 
         }
 
-        protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
+        protected override void SetAdditionalCombatReplayData(ParsedLog log)
         {
+            SetCombatReplayIcon(log);
             // Down and deads
             List<CombatItem> status = log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeDown, log.FightData.FightStart, log.FightData.FightEnd);
             status.AddRange(log.CombatData.GetStates(InstID, ParseEnum.StateChange.ChangeUp, log.FightData.FightStart, log.FightData.FightEnd));
@@ -263,10 +264,10 @@ namespace LuckParser.Models.ParseModels
                 }
             }
             // Boss related stuff
-            log.FightData.Logic.ComputeAdditionalPlayerData(CombatReplay, this, log);
+            log.FightData.Logic.ComputeAdditionalPlayerData(this, log);
         }
 
-        protected override void SetCombatReplayIcon(ParsedLog log)
+        private void SetCombatReplayIcon(ParsedLog log)
         {
             CombatReplay.Icon = HTMLHelper.GetLink(Prof);
         }

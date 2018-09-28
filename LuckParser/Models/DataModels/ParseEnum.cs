@@ -216,6 +216,10 @@ namespace LuckParser.Models.DataModels
             PyreGuardian = 21050,
             ReaperofFlesh = 21218,
             IceElemental = 21049,
+            AncientInvokedHydra = 21285,
+            ApocalypseBringer = 21073,
+            WyvernMatriarch = 20997,
+            WyvernPatriarch = 21183,
             Zommoros = 20961, //21118 is probably the start and end NPC, not the one during the battle
             // Fractals
             FractalVindicator = 19684, 
@@ -282,10 +286,6 @@ namespace LuckParser.Models.DataModels
             Nikare                  = 21105,
             Kenut                   = 21089,
             Qadim                   = 20934,
-            AncientInvokedHydra     = 21285,
-            ApocalypseBringer       = 21073,
-            WyvernMatriarch         = 20997,
-            WyvernPatriarch         = 21183,
             MAMA                    = 17021,
             Siax                    = 17028,
             Ensolyss                = 16948,

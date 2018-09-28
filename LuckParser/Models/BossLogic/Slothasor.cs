@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -44,43 +45,71 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.Slubling1,
-                ParseEnum.TrashIDS.Slubling2,
-                ParseEnum.TrashIDS.Slubling3,
-                ParseEnum.TrashIDS.Slubling4
+                Slubling1,
+                Slubling2,
+                Slubling3,
+                Slubling4
             };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
-        {
-            // TODO:facing information (breath)
-            List<CastLog> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
-            foreach (CastLog c in sleepy)
-            {
-                replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
-            }
 
-            List<CastLog> tantrum = cls.Where(x => x.SkillId == 34547).ToList();
-            foreach (CastLog c in tantrum)
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            switch (mob.ID)
             {
-                int start = (int)c.Time;
-                int end = start + c.ActualDuration;
-                replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)"));
-                replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)"));
-            }
-            List<CastLog> shakes = cls.Where(x => x.SkillId == 34482).ToList();
-            foreach (CastLog c in shakes)
-            {
-                int start = (int)c.Time;
-                int end = start + c.ActualDuration;
-                replay.Actors.Add(new CircleActor(false, 0, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
-                replay.Actors.Add(new CircleActor(true, end, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
+                case (ushort)Slubling1:
+                case (ushort)Slubling2:
+                case (ushort)Slubling3:
+                case (ushort)Slubling4:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
+        {
+            // TODO:facing information (breath)
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Slothasor:
+                    replay.Icon = "https://i.imgur.com/h1xH3ER.png";
+                    List<CastLog> sleepy = cls.Where(x => x.SkillId == 34515).ToList();
+                    foreach (CastLog c in sleepy)
+                    {
+                        replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
+                    }
+
+                    List<CastLog> tantrum = cls.Where(x => x.SkillId == 34547).ToList();
+                    foreach (CastLog c in tantrum)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + c.ActualDuration;
+                        replay.Actors.Add(new CircleActor(false, 0, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)"));
+                        replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 150, 0, 0.4)"));
+                    }
+                    List<CastLog> shakes = cls.Where(x => x.SkillId == 34482).ToList();
+                    foreach (CastLog c in shakes)
+                    {
+                        int start = (int)c.Time;
+                        int end = start + c.ActualDuration;
+                        replay.Actors.Add(new CircleActor(false, 0, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
+                        replay.Actors.Add(new CircleActor(true, end, 700, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.4)"));
+                    }
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+           
+        }
+
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
             // Poison
+            CombatReplay replay = p.CombatReplay;
             List<CombatItem> poisonToDrop = GetFilteredList(log, 34387, p.InstID);
             int toDropStart = 0;
             foreach (CombatItem c in poisonToDrop)
@@ -131,11 +160,6 @@ namespace LuckParser.Models
                     replay.Actors.Add(new CircleActor(true, 0, 120, new Tuple<int, int>(fixatedSlothStart, fixatedSlothEnd), "rgba(255, 80, 255, 0.3)"));
                 }
             }
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/h1xH3ER.png";
         }
     }
 }

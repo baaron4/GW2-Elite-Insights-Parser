@@ -36,29 +36,50 @@ namespace LuckParser.Models
                             Tuple.Create(13440, 14336, 15360, 16256));
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
+        protected override List<ushort> GetFightTargetsIDs()
         {
-            return new List<ParseEnum.TrashIDS>();
+            return new List<ushort>
+            {
+                (ushort)ParseEnum.BossIDS.Kenut,
+                (ushort)ParseEnum.BossIDS.Nikare
+            };
         }
 
-        public override void ComputeAdditionalBossData(CombatReplay replay, List<CastLog> cls, ParsedLog log)
+        public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
+            CombatReplay replay = boss.CombatReplay;
+            List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            switch (boss.ID)
+            {
+                case (ushort)ParseEnum.BossIDS.Nikare:
+                    replay.Icon = "https://i.imgur.com/6yq45Cc.png";
+                    break;
+                case (ushort)ParseEnum.BossIDS.Kenut:
+                    replay.Icon = "https://i.imgur.com/TLykcrJ.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
-        public override void ComputeAdditionalPlayerData(CombatReplay replay, Player p, ParsedLog log)
+        public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)
         {
 
+        }
+
+        public override string GetFightName()
+        {
+            return "Twin Largos";
         }
 
         public override int IsCM(ParsedLog log)
         {
-            return (log.Boss.Health > 18e6) ? 1 : 0; //Health of Nikare
-        }
-
-        public override string GetReplayIcon()
-        {
-            return "https://i.imgur.com/6yq45Cc.png";
-            // For Kenut: https://i.imgur.com/TLykcrJ.png
+            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Nikare);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.Health > 18e6) ? 1 : 0; //Health of Nikare
         }
     }
 }
