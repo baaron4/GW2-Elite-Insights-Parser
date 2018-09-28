@@ -218,7 +218,7 @@ namespace LuckParser.Models.ParseModels
 
         }
 
-        protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
+        protected override void SetAdditionalCombatReplayData(ParsedLog log)
         {
             SetCombatReplayIcon(log);
             // Down and deads

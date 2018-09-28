@@ -18,7 +18,7 @@ namespace LuckParser.Models.ParseModels
         {
         }
 
-        protected override void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate)
+        protected override void SetAdditionalCombatReplayData(ParsedLog log)
         {
             log.FightData.Logic.ComputeAdditionalThrashMobData(this, log);
         }

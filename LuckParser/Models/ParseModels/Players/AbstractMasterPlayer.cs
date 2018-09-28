@@ -124,7 +124,7 @@ namespace LuckParser.Models.ParseModels
                         CombatReplay.Trim(AgentItem.FirstAware - log.FightData.FightStart, AgentItem.LastAware - log.FightData.FightStart);
                     }
                 }
-                SetAdditionalCombatReplayData(log, pollingRate);
+                SetAdditionalCombatReplayData(log);
             }
         }
 
@@ -601,7 +601,7 @@ namespace LuckParser.Models.ParseModels
             }
         }
         // abstracts
-        protected abstract void SetAdditionalCombatReplayData(ParsedLog log, int pollingRate);
+        protected abstract void SetAdditionalCombatReplayData(ParsedLog log);
         public abstract int GetCombatReplayID();
         public abstract string GetCombatReplayJSON(CombatReplayMap map);
     }
