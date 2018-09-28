@@ -279,6 +279,9 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Version.cs</LastGenOutput>
     </Content>
+    <None Include="Resources\template-combatreplay.html" />
+    <Content Include="Resources\tmplGroupCombatReplay.html" />
+    <Content Include="Resources\tmplPlayerSelectCombatReplay.html" />
     <Content Include="Resources\TODO.txt" />
     <None Include="Resources\tmplCompTable.html" />
     <None Include="Resources\tmplMechanicTable.html" />

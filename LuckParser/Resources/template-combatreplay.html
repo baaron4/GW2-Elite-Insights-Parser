@@ -1,0 +1,43 @@
+<div class="d-flex justify-content-around align-items-center justify-content-center">
+    <div class="d-flex flex-column flex-wrap">
+            <canvas width="${canvasX}px" height="${canvasY}px"  id="replayCanvas" class="replay">
+            </canvas>
+            <div class="d-flex justify-content-center slidecontainer">
+                <input style="min-width: 400px;" oninput="updateTime(this.value)" type="range" min ="0" max="${maxTime}" value="0" class="slider" id="timeRange">
+                <input style ="width: 70px; text-align: right;" class="ml-3 mr-1" type="text" id="timeRangeDisplay" value="0" oninput="updateInputTime(this.value);">
+            </div>
+            <div class="d-flex justify-content-center">
+                <div onclick="startAnimate();" type="button" class="btn btn-dark">Animate</div>
+                <div onclick="stopAnimate();" type="button" class="btn btn-dark">Pause</div>
+                <div onclick="restartAnimate();" type="button" class="btn btn-dark">Restart</div>
+            </div>
+            <div class="d-flex justify-content-center btn-group btn-group-toggle" data-toggle="buttons">
+                <label onclick="eighthSpeed()" class="btn btn-dark"><input type="radio" autocomplete="off">0.125x</label>
+                <label onclick="fourthSpeed()" class="btn btn-dark"><input type="radio" autocomplete="off">0.25x</label>
+                <label onclick="halfSpeed()" class="btn btn-dark"><input type="radio" autocomplete="off">0.5x</label>
+                <label onclick="normalSpeed()" class="btn btn-dark active"><input type="radio" autocomplete="off" checked>1x</label>
+                <label onclick="twoSpeed()" class="btn btn-dark"><input type="radio" autocomplete="off">2x</label>
+                <label onclick="fourSpeed()" class="btn btn-dark"><input type="radio" autocomplete="off">4x</label>
+                <label onclick="eightSpeed()" class="btn btn-dark"><input type="radio" autocomplete="off">8x</label>
+                <label onclick="sixteenSpeed()" class="btn btn-dark"><input type="radio" autocomplete="off">16x</label>
+            </div>
+    </div>
+    <div class="d-flex flex-column justify-content-center align-items-center">
+            <h3>Range Selectors</h3>
+            <div class="d-flex flex-column flex-wrap justify-content-center align-items-center mb-5" data-toggle="buttons">
+                    <div style="width:200px;" class="d-flex flex-row flex-wrap justify-content-center align-items-center btn-group btn-group-toggle" data-toggle="buttons">
+                            <label style="width:60px;"  onclick="toggleRange(180);" class="btn btn-dark"><input style="display: none;" type="checkbox" autocomplete="off">180</label>
+                            <label style="width:60px;"  onclick="toggleRange(240);" class="btn btn-dark"><input style="display: none;" type="checkbox" autocomplete="off">240</label>
+                            <label style="width:60px;"  onclick="toggleRange(300);" class="btn btn-dark"><input style="display: none;" type="checkbox" autocomplete="off">300</label>                       
+                    </div>
+                    <div style="width:200px;" class="d-flex flex-row flex-wrap justify-content-center align-items-center btn-group btn-group-toggle" data-toggle="buttons">
+                            <label style="width:60px;"  onclick="toggleRange(600);" class="btn btn-dark"><input style="display: none;" type="checkbox" autocomplete="off">600</label>
+                            <label style="width:60px;"  onclick="toggleRange(900);" class="btn btn-dark"><input style="display: none;" type="checkbox" autocomplete="off">900</label>
+                            <label style="width:60px;"  onclick="toggleRange(1200);" class="btn btn-dark"><input style="display: none;" type="checkbox" autocomplete="off">1200</label>
+                        </div>
+            </div>
+            <div class="d-flex flex-column justify-content-center align-items-center btn-group btn-group-toggle mb-5" data-toggle="buttons">
+                <!--${groups}-->
+            </div>
+    </div>
+</div>
