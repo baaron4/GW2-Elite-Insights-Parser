@@ -139,6 +139,7 @@ namespace LuckParser.Controllers
                 boss.Conditions = BuildBossBuffs(_statistics.BossConditions[target]);
                 boss.HitboxHeight = target.HitboxHeight;
                 boss.HitboxWidth = target.HitboxWidth;
+                boss.Dps1s = Build1SDPS(target, null);
                 boss.Rotation = BuildRotation(target);
                 boss.FirstAware = (int)(target.FirstAware - _log.FightData.FightStart);
                 boss.LastAware = (int)(target.LastAware - _log.FightData.FightStart);
@@ -166,6 +167,8 @@ namespace LuckParser.Controllers
                     Profession = player.Prof,
                     TotalPersonalDamage = BuildPersonalDamage(player, null),
                     TargetPersonalDamage = BuildTargetPersonalDamage(player),
+                    Dps1s = Build1SDPS(player, null),
+                    TargetDps1s = Build1SDPS(player),
                     DpsAll = BuildDPS(_statistics.DpsAll[player]),
                     DpsBoss = BuildDPSBoss(_statistics.DpsBoss, player),
                     StatsAll = BuildStatsAll(_statistics.StatsAll[player]),
@@ -179,6 +182,27 @@ namespace LuckParser.Controllers
                     SquadBoons = BuildBuffUptime(_statistics.SquadBoons[player])
                 });
             }
+        }
+
+
+        private List<int> Build1SDPS(AbstractMasterPlayer player, Boss target)
+        {
+            List<int> res = new List<int>();
+            foreach (var pt in GraphHelper.GetBossDPSGraph(_log, player, 0, _statistics.Phases[0], GraphHelper.GraphMode.S1, target))
+            {
+                res.Add(pt.Y);
+            }
+            return res;
+        }
+
+        private List<int>[] Build1SDPS(AbstractMasterPlayer player)
+        {
+            List<int>[] res = new List<int>[_log.FightData.Logic.Targets.Count];
+            for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
+            {
+                res[i] = Build1SDPS(player, _log.FightData.Logic.Targets[i]);
+            }
+            return res;
         }
 
         private int[] BuildPersonalDamage(AbstractMasterPlayer player, Boss target)

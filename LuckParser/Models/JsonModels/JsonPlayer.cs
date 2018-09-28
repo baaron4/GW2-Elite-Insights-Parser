@@ -19,6 +19,8 @@ namespace LuckParser.Models
         public string[] Weapons;
         public JsonDps DpsAll;
         public JsonDps[] DpsBoss;
+        public List<int> Dps1s;
+        public List<int>[] TargetDps1s;
         public int[] TotalPersonalDamage;
         public int[][] TargetPersonalDamage;
         public JsonStatsAll StatsAll;

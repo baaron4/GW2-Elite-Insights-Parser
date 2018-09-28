@@ -18,6 +18,7 @@ namespace LuckParser.Models
         public JsonDps Dps;
         public double[] AvgBoons;
         public double[] AvgConditions;
+        public List<int> Dps1s;
         public uint HitboxHeight;
         public uint HitboxWidth;
         public List<JsonSkill> Rotation;
