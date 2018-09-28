@@ -75,6 +75,7 @@ namespace LuckParser.Models
                     replay.Icon = "https://i.imgur.com/1J2BTFg.png";
                     break;
                 case (ushort)SurgingSoul:
+                    replay.Icon = "https://i.imgur.com/k79t7ZA.png";
                     List<Point3D> positions = replay.Positions;
                     if (positions.Count < 2)
                     {
@@ -90,7 +91,6 @@ namespace LuckParser.Models
                         replay.Actors.Add(new RectangleActor(true, 0, 645, 238, lifespan, "rgba(255,100,0,0.5)"));
                         break;
                     }
-                    replay.Icon = "https://i.imgur.com/k79t7ZA.png";
                     break;
                 default:
                     throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
