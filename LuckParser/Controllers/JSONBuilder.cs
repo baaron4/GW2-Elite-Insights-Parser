@@ -43,6 +43,7 @@ namespace LuckParser.Controllers
             _log = log;
             _sw = sw;
             _settings = settings;
+            GraphHelper.Settings = settings;
 
             _statistics = statistics;
 
@@ -136,7 +137,7 @@ namespace LuckParser.Controllers
                 boss.AvgBoons = _statistics.AvgBossBoons[target];
                 boss.AvgConditions = _statistics.AvgBossConditions[target];
                 boss.Dps = BuildDPS(_statistics.BossDps[target]);
-                boss.Conditions = BuildBossBuffs(_statistics.BossConditions[target]);
+                boss.Conditions = BuildBossBuffs(_statistics.BossConditions[target], target);
                 boss.HitboxHeight = target.HitboxHeight;
                 boss.HitboxWidth = target.HitboxWidth;
                 boss.Dps1s = Build1SDPS(target, null);
@@ -176,10 +177,10 @@ namespace LuckParser.Controllers
                     Defenses = BuildDefenses(_statistics.Defenses[player]),
                     Rotation = BuildRotation(player),
                     Support = BuildSupport(_statistics.Support[player]),
-                    SelfBoons = BuildBuffUptime(_statistics.SelfBoons[player]),
-                    GroupBoons = BuildBuffUptime(_statistics.GroupBoons[player]),
-                    OffGroupBoons = BuildBuffUptime(_statistics.OffGroupBoons[player]),
-                    SquadBoons = BuildBuffUptime(_statistics.SquadBoons[player])
+                    SelfBoons = BuildBuffUptime(_statistics.SelfBoons[player], player),
+                    GroupBoons = BuildBuffUptime(_statistics.GroupBoons[player], player),
+                    OffGroupBoons = BuildBuffUptime(_statistics.OffGroupBoons[player], player),
+                    SquadBoons = BuildBuffUptime(_statistics.SquadBoons[player], player)
                 });
             }
         }
@@ -307,7 +308,7 @@ namespace LuckParser.Controllers
             }
         }
 
-        private Dictionary<string, JsonBossBuffs> BuildBossBuffs(Dictionary<long, Statistics.FinalBossBoon>[] statBoons)
+        private Dictionary<string, JsonBossBuffs> BuildBossBuffs(Dictionary<long, Statistics.FinalBossBoon>[] statBoons, Boss boss)
         {
             int phases = _statistics.Phases.Count;
             var boons = new Dictionary<long, JsonBossBuffs>();
@@ -331,6 +332,17 @@ namespace LuckParser.Controllers
 
                             boons[boon.Key] = new JsonBossBuffs(phases);
                             MakePhaseBossBoon(boons[boon.Key], phaseIndex, boon.Value);
+                            if (boss.GetBoonGraphs(_log).TryGetValue(boon.Key, out var bgm))
+                            {
+                                foreach (BoonsGraphModel.Segment seg in bgm.BoonChart)
+                                {
+                                    boons[boon.Key].States.Add(new JsonBuffs.SimplifiedSegment
+                                    {
+                                        Time = (int)seg.Start,
+                                        Value = seg.Value
+                                    });
+                                }
+                            }
                         }
                         else
                         {
@@ -397,7 +409,7 @@ namespace LuckParser.Controllers
             boon.Presence[phase] = value.Presence;
         }
 
-        private Dictionary<string, JsonBuffs> BuildBuffUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes)
+        private Dictionary<string, JsonBuffs> BuildBuffUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes, Player player)
         {
             var uptimes = new Dictionary<long, JsonBuffs>();
             int phases = _statistics.Phases.Count;
@@ -421,6 +433,17 @@ namespace LuckParser.Controllers
 
                             uptimes[boon.Key] = new JsonBuffs(phases);
                             MakePhaseBoon(uptimes[boon.Key], phaseIndex, boon.Value);
+                            if (player.GetBoonGraphs(_log).TryGetValue(boon.Key, out var bgm))
+                            {
+                                foreach (BoonsGraphModel.Segment seg in bgm.BoonChart)
+                                {
+                                    uptimes[boon.Key].States.Add(new JsonBuffs.SimplifiedSegment
+                                    {
+                                        Time = (int)seg.Start,
+                                        Value = seg.Value
+                                    });
+                                }
+                            }
                         }
                         else
                         {
