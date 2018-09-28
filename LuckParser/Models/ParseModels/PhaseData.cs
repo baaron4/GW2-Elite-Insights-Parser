@@ -44,7 +44,7 @@ namespace LuckParser.Models.ParseModels
             if (Targets.Count > 0)
             {
                 Start = Math.Max(Start, Targets.Min(x => x.FirstAware)- offset);
-                End = Math.Min(End, Targets.Min(x => x.LastAware) - offset);
+                End = Math.Min(End, Targets.Max(x => x.LastAware) - offset);
             }
         }
     }
