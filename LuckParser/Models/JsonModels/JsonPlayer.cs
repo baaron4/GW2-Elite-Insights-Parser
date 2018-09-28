@@ -19,10 +19,13 @@ namespace LuckParser.Models
         public string[] Weapons;
         public JsonDps DpsAll;
         public JsonDps[] DpsBoss;
+        public int[] TotalPersonalDamage;
+        public int[][] TargetPersonalDamage;
         public JsonStatsAll StatsAll;
         public JsonStats[] StatsBoss;
         public JsonDefenses Defenses;
         public JsonSupport Support;
+        public List<JsonSkill> Rotation;
         public Dictionary<string, JsonBuffs> SelfBoons;
         public Dictionary<string, JsonBuffs> GroupBoons;
         public Dictionary<string, JsonBuffs> OffGroupBoons;

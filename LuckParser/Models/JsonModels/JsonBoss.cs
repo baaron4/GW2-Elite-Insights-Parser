@@ -18,6 +18,8 @@ namespace LuckParser.Models
         public double[] AvgConditions;
         public uint HitboxHeight;
         public uint HitboxWidth;
+        public List<JsonSkill> Rotation;
+        public int[] TotalPersonalDamage;
         public Dictionary<string, JsonBossBuffs> Conditions;
     }
 }

@@ -139,6 +139,8 @@ namespace LuckParser.Controllers
                 boss.Conditions = BuildBossBuffs(_statistics.BossConditions[target]);
                 boss.HitboxHeight = target.HitboxHeight;
                 boss.HitboxWidth = target.HitboxWidth;
+                boss.Rotation = BuildRotation(target);
+                boss.TotalPersonalDamage = BuildPersonalDamage(target, null);
                 log.Boss.Add(boss);
             }
         }
@@ -160,11 +162,14 @@ namespace LuckParser.Controllers
                     Weapons = player.GetWeaponsArray(_log).Where(w => w != null).ToArray(),
                     Group = player.Group,
                     Profession = player.Prof,
+                    TotalPersonalDamage = BuildPersonalDamage(player, null),
+                    TargetPersonalDamage = BuildTargetPersonalDamage(player),
                     DpsAll = BuildDPS(_statistics.DpsAll[player]),
                     DpsBoss = BuildDPSBoss(_statistics.DpsBoss, player),
                     StatsAll = BuildStatsAll(_statistics.StatsAll[player]),
                     StatsBoss = BuildStatsBoss(_statistics.StatsBoss, player),
                     Defenses = BuildDefenses(_statistics.Defenses[player]),
+                    Rotation = BuildRotation(player),
                     Support = BuildSupport(_statistics.Support[player]),
                     SelfBoons = BuildBuffUptime(_statistics.SelfBoons[player]),
                     GroupBoons = BuildBuffUptime(_statistics.GroupBoons[player]),
@@ -172,6 +177,54 @@ namespace LuckParser.Controllers
                     SquadBoons = BuildBuffUptime(_statistics.SquadBoons[player])
                 });
             }
+        }
+
+        private int[] BuildPersonalDamage(AbstractMasterPlayer player, Boss target)
+        {
+            int[] res = new int[_statistics.Phases.Count];
+            for(int i = 0; i < _statistics.Phases.Count; i++)
+            {
+                PhaseData phase = _statistics.Phases[i];
+                res[i] = player.GetJustPlayerDamageLogs(target, _log, phase.Start, phase.End).Sum(x => x.Damage);
+            }
+            return res;
+        }
+
+        private int[][] BuildTargetPersonalDamage(AbstractMasterPlayer player)
+        {
+            int[][] res = new int[_log.FightData.Logic.Targets.Count][];
+            for (int i = 0; i < _log.FightData.Logic.Targets.Count; i++)
+            {
+                res[i] = BuildPersonalDamage(player, _log.FightData.Logic.Targets[i]);
+            }
+            return res;
+        }
+
+        private List<JsonSkill> BuildRotation(AbstractMasterPlayer player)
+        {
+            List<JsonSkill> res = new List<JsonSkill>();
+            List<CastLog> cls = player.GetCastLogs(_log, 0, _log.FightData.FightDuration);
+            SkillData skillList = _log.SkillData;
+            foreach (CastLog cl in cls)
+            {
+                GW2APISkill skill = skillList.Get(cl.SkillId)?.ApiSkill;
+                string skillName = skill == null ? skillList.GetName(cl.SkillId) : skill.name;
+                if (cl.SkillId == SkillItem.WeaponSwapId)
+                {
+                    skillName = "Weapon Swap";
+                }
+                res.Add(new JsonSkill
+                {
+                    Name = skillName,
+                    Time = (int)cl.Time,
+                    UnderQuickness = cl.StartActivation == ParseEnum.Activation.Quickness,
+                    TimeSaved = cl.EndActivation == ParseEnum.Activation.CancelFire ? (cl.ActualDuration < cl.ExpectedDuration ? cl.ExpectedDuration - cl.ActualDuration : 0) : 0,
+                    TimeWasted = cl.EndActivation == ParseEnum.Activation.CancelCancel ? cl.ActualDuration : 0,
+                    Auto = skill != null && skill.slot == "Weapon_1"
+                });
+            }
+
+            return res;
         }
 
         private void SetPhases(JsonLog log)

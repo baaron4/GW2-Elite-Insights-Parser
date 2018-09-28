@@ -240,8 +240,6 @@ namespace LuckParser.Controllers
                     }
                 }
             }
-
-            final.PowerLoopCount = final.PowerLoopCount == 0 ? 1 : final.PowerLoopCount;
             return final;
         }
 
@@ -324,8 +322,6 @@ namespace LuckParser.Controllers
             }
             final.TimeSaved = final.TimeSaved / 1000f;
             final.TimeWasted = final.TimeWasted / 1000f;
-
-            final.PowerLoopCount = final.PowerLoopCount == 0 ? 1 : final.PowerLoopCount;
 
             double avgBoons = 0;
             foreach (long duration in p.GetBoonPresence(_log, phaseIndex).Values)
