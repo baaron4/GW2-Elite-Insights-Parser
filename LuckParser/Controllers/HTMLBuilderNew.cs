@@ -420,7 +420,6 @@ namespace LuckParser.Controllers
                     player.Group.ToString()
                 };
                 long fightDuration = phases[phaseIndex].GetDuration();
-                Dictionary<long, long> boonPresence = player.GetBoonPresence(_log, phaseIndex);
                 int count = 0;
                        
                 if (boonTable)
@@ -448,9 +447,9 @@ namespace LuckParser.Controllers
                     }
                     else
                     {
-                        if (boonTable && boon.Type == Boon.BoonType.Intensity && boonPresence.TryGetValue(boon.ID, out long presenceValue))
+                        if (boonTable && boon.Type == Boon.BoonType.Intensity && boons[boon.ID].Presence > 0)
                         {
-                            boonVals.Add(Math.Round(100.0 * presenceValue / fightDuration, 1));
+                            boonVals.Add(boons[boon.ID].Presence);
                         }
                     }                                
                     boonArrayToList.Add(boons[boon.ID].Uptime.ToString());                        
@@ -1268,7 +1267,6 @@ namespace LuckParser.Controllers
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             Dictionary<long, Statistics.FinalBossBoon> conditions = _statistics.BossConditions[_log.Boss][phaseIndex];
-            Dictionary<long, long> boonPresence = _log.Boss.GetBoonPresence(_log, phaseIndex);
             long fightDuration = phase.GetDuration();
             BoonData bossData = new BoonData
             {
@@ -1282,9 +1280,9 @@ namespace LuckParser.Controllers
                     conditions[boon.ID].Uptime
                 };
 
-                if (boon.Type != Boon.BoonType.Duration && boonPresence.TryGetValue(boon.ID, out long presenceTime))
+                if (boon.Type != Boon.BoonType.Duration && conditions[boon.ID].Presence > 0)
                 {
-                    boonData.Add(Math.Round(100.0 * presenceTime / fightDuration, 1));
+                    boonData.Add(conditions[boon.ID].Presence);
                 }
 
                 bossData.val.Add(boonData);
