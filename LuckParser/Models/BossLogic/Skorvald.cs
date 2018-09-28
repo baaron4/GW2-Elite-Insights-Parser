@@ -48,7 +48,12 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            return (log.Boss.Health == 5551340) ? 1 : 0;
+            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Skorvald);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.Health == 5551340) ? 1 : 0;
         }
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)

@@ -77,7 +77,12 @@ namespace LuckParser.Models
 
         public override int IsCM(ParsedLog log)
         {
-            return (log.Boss.Health > 18e6) ? 1 : 0; //Health of Nikare
+            Boss target = Targets.Find(x => x.ID == (ushort)ParseEnum.BossIDS.Nikare);
+            if (target == null)
+            {
+                throw new InvalidOperationException("Target for CM detection not found");
+            }
+            return (target.Health > 18e6) ? 1 : 0; //Health of Nikare
         }
     }
 }
