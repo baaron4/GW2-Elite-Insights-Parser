@@ -13,6 +13,8 @@ namespace LuckParser.Models
         public int TotalHealth;
         public double FinalHealth;
         public double HealthPercentBurned;
+        public int FirstAware;
+        public int LastAware;
         public JsonDps Dps;
         public double[] AvgBoons;
         public double[] AvgConditions;

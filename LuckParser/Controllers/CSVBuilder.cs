@@ -200,8 +200,8 @@ namespace LuckParser.Controllers
             {
                 Statistics.FinalDPS dps = _statistics.DpsAll[player][phaseIndex];
                 Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
-                Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
-                Statistics.FinalBossStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
+                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
+                Statistics.FinalStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
                 string deathString = "";
                 string deadthTooltip = "";
                 if (stats.Died != 0.0)
@@ -267,8 +267,8 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
-                Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
-                Statistics.FinalBossStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
+                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
+                Statistics.FinalStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 Math.Round((Double)(statsBoss.CriticalRate) / statsBoss.CritablePowerLoopCount * 100,1).ToString(), statsBoss.CriticalRate.ToString(),statsBoss.CriticalDmg.ToString(),
@@ -302,7 +302,7 @@ namespace LuckParser.Controllers
             int count = 0;
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
+                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
                 Statistics.FinalDPS dps = _statistics.DpsAll[player][phaseIndex];
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
@@ -331,7 +331,7 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
-                Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
+                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
                 WriteLine(new [] { player.Group.ToString(), player.Prof, player.Character,
                 defenses.DamageTaken.ToString(),defenses.DamageBarrier.ToString(),defenses.BlockedCount.ToString(),defenses.InvulnedCount.ToString(),defenses.EvadedCount.ToString(),stats.DodgeCount.ToString() });

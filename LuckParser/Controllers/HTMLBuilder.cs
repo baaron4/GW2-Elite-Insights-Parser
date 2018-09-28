@@ -489,7 +489,7 @@ namespace LuckParser.Controllers
                 {
                     Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
                     Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
-                    Statistics.FinalStats statsAll = _statistics.StatsAll[player][phaseIndex];
+                    Statistics.FinalStatsAll statsAll = _statistics.StatsAll[player][phaseIndex];
                     //gather data for footer
                     footerList.Add(new []
                     {
@@ -629,7 +629,7 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in _log.PlayerList)
                     {
-                        Statistics.FinalStats statsAll = _statistics.StatsAll[player][phaseIndex];
+                        Statistics.FinalStatsAll statsAll = _statistics.StatsAll[player][phaseIndex];
                         Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
 
                         //gather data for footer
@@ -765,9 +765,9 @@ namespace LuckParser.Controllers
                 {
                     foreach (Player player in _log.PlayerList)
                     {
-                        Statistics.FinalBossStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
+                        Statistics.FinalStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
                         Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
-                        Statistics.FinalStats statsAll = _statistics.StatsAll[player][phaseIndex];
+                        Statistics.FinalStatsAll statsAll = _statistics.StatsAll[player][phaseIndex];
 
                         //gather data for footer
                         footerList.Add(new [] {
@@ -919,7 +919,7 @@ namespace LuckParser.Controllers
                     foreach (Player player in _log.PlayerList)
                     {
                         Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
-                        Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
+                        Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
                         
 

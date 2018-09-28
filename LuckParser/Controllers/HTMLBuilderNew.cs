@@ -116,7 +116,7 @@ namespace LuckParser.Controllers
             {
                 Statistics.FinalDPS dpsAll = _statistics.DpsAll[player][phaseIndex];
                 Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
-                Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
+                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
                 List<Object> playerData = new List<Object>
                 {
@@ -172,7 +172,7 @@ namespace LuckParser.Controllers
 
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
+                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
                 Statistics.FinalDPS dps = _statistics.DpsAll[player][phaseIndex];
 
                 List<Object> playerData = new List<Object>
@@ -250,8 +250,8 @@ namespace LuckParser.Controllers
 
             foreach (Player player in _log.PlayerList)
             {
-                Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
-                Statistics.FinalBossStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
+                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
+                Statistics.FinalStats statsBoss = _statistics.StatsBoss[_log.Boss][player][phaseIndex];
                 Statistics.FinalDPS dpsBoss = _statistics.DpsBoss[_log.Boss][player][phaseIndex];
 
                 List<Object> playerData = new List<object>
@@ -330,7 +330,7 @@ namespace LuckParser.Controllers
             foreach (Player player in _log.PlayerList)
             {
                 Statistics.FinalDefenses defenses = _statistics.Defenses[player][phaseIndex];
-                Statistics.FinalStats stats = _statistics.StatsAll[player][phaseIndex];
+                Statistics.FinalStatsAll stats = _statistics.StatsAll[player][phaseIndex];
 
                 List<Object> playerData = new List<object>
                 {

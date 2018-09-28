@@ -140,6 +140,8 @@ namespace LuckParser.Controllers
                 boss.HitboxHeight = target.HitboxHeight;
                 boss.HitboxWidth = target.HitboxWidth;
                 boss.Rotation = BuildRotation(target);
+                boss.FirstAware = (int)(target.FirstAware - _log.FightData.FightStart);
+                boss.LastAware = (int)(target.LastAware - _log.FightData.FightStart);
                 boss.TotalPersonalDamage = BuildPersonalDamage(target, null);
                 log.Boss.Add(boss);
             }
@@ -446,7 +448,7 @@ namespace LuckParser.Controllers
             return defense;
         }
 
-        private JsonStatsAll BuildStatsAll(Statistics.FinalStats[] statStat)
+        private JsonStatsAll BuildStatsAll(Statistics.FinalStatsAll[] statStat)
         {
             var stats = new JsonStatsAll(_statistics.Phases.Count);
 
@@ -456,7 +458,7 @@ namespace LuckParser.Controllers
             return stats;
         }
 
-        private JsonStats BuildStatsBoss(Statistics.FinalBossStats[] statStat)
+        private JsonStats BuildStatsBoss(Statistics.FinalStats[] statStat)
         {
             var stats = new JsonStats(_statistics.Phases.Count);
 
@@ -466,7 +468,7 @@ namespace LuckParser.Controllers
             return stats;
         }
 
-        private JsonStats[] BuildStatsBoss(Dictionary<Boss, Dictionary<Player,Statistics.FinalBossStats[]>> statStat, Player player)
+        private JsonStats[] BuildStatsBoss(Dictionary<Boss, Dictionary<Player,Statistics.FinalStats[]>> statStat, Player player)
         {
             var finalStats = new JsonStats[_log.FightData.Logic.Targets.Count];
             int i = 0;

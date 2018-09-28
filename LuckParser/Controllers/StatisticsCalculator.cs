@@ -180,12 +180,12 @@ namespace LuckParser.Controllers
             }
         }
 
-        private FinalBossStats GetFinalBossStats(Player p, int phaseIndex, Boss target)
+        private FinalStats GetFinalBossStats(Player p, int phaseIndex, Boss target)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             long start = phase.Start + _log.FightData.FightStart;
             long end = phase.End + _log.FightData.FightStart;
-            FinalBossStats final = new FinalBossStats();
+            FinalStats final = new FinalStats();
             HashSet<long> nonCritable = new HashSet<long>
                     {
                         9292
@@ -243,12 +243,12 @@ namespace LuckParser.Controllers
             return final;
         }
 
-        private FinalStats GetFinalStats(Player p, int phaseIndex)
+        private FinalStatsAll GetFinalStats(Player p, int phaseIndex)
         {
             PhaseData phase = _statistics.Phases[phaseIndex];
             long start = phase.Start + _log.FightData.FightStart;
             long end = phase.End + _log.FightData.FightStart;
-            FinalStats final = new FinalStats();
+            FinalStatsAll final = new FinalStatsAll();
             HashSet<long> nonCritable = new HashSet<long>
                     {
                         9292
@@ -425,10 +425,10 @@ namespace LuckParser.Controllers
         {
             foreach (Boss target in _log.FightData.Logic.Targets)
             {
-                Dictionary<Player, FinalBossStats[]> phaseBossStats = new Dictionary<Player, FinalBossStats[]>();
+                Dictionary<Player, FinalStats[]> phaseBossStats = new Dictionary<Player, FinalStats[]>();
                 foreach (Player player in _log.PlayerList)
                 {
-                    FinalBossStats[] stats = new FinalBossStats[_statistics.Phases.Count];
+                    FinalStats[] stats = new FinalStats[_statistics.Phases.Count];
                     for (int phaseIndex = 0; phaseIndex < _statistics.Phases.Count; phaseIndex++)
                     {
                         stats[phaseIndex] = GetFinalBossStats(player, phaseIndex, target);
@@ -463,7 +463,7 @@ namespace LuckParser.Controllers
             }
             foreach (Player player in _log.PlayerList)
             {
-                FinalStats[] phaseStats = new FinalStats[_statistics.Phases.Count];
+                FinalStatsAll[] phaseStats = new FinalStatsAll[_statistics.Phases.Count];
                 for (int phaseIndex = 0; phaseIndex <_statistics.Phases.Count; phaseIndex++)
                 {
                     phaseStats[phaseIndex] = GetFinalStats(player, phaseIndex);
