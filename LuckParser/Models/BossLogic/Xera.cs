@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -121,12 +122,28 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.WhiteMantleSeeker1,
-                ParseEnum.TrashIDS.WhiteMantleSeeker2,
-                ParseEnum.TrashIDS.WhiteMantleKnight,
-                ParseEnum.TrashIDS.WhiteMantleBattleMage,
-                ParseEnum.TrashIDS.ExquisiteConjunction
+                WhiteMantleSeeker1,
+                WhiteMantleSeeker2,
+                WhiteMantleKnight,
+                WhiteMantleBattleMage,
+                ExquisiteConjunction
             };
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            switch (mob.ID)
+            {
+                case (ushort)WhiteMantleSeeker1:
+                case (ushort)WhiteMantleSeeker2:
+                case (ushort)WhiteMantleKnight:
+                case (ushort)WhiteMantleBattleMage:
+                case (ushort)ExquisiteConjunction:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
@@ -144,6 +161,8 @@ namespace LuckParser.Models
                         replay.Actors.Add(new CircleActor(true, 0, 180, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
                     }
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
     }

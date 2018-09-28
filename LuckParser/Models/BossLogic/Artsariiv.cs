@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -44,12 +45,28 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.TemporalAnomaly,
-                ParseEnum.TrashIDS.Spark,
-                ParseEnum.TrashIDS.Artsariiv1,
-                ParseEnum.TrashIDS.Artsariiv2,
-                ParseEnum.TrashIDS.Artsariiv3
+                TemporalAnomaly,
+                Spark,
+                Artsariiv1,
+                Artsariiv2,
+                Artsariiv3
             };
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            switch (mob.ID)
+            {
+                case (ushort)TemporalAnomaly:
+                case (ushort)Spark:
+                case (ushort)Artsariiv1:
+                case (ushort)Artsariiv2:
+                case (ushort)Artsariiv3:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
@@ -61,6 +78,8 @@ namespace LuckParser.Models
                 case (ushort)ParseEnum.BossIDS.Artsariiv:
                     replay.Icon = "https://wiki.guildwars2.com/images/b/b4/Artsariiv.jpg";
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
 

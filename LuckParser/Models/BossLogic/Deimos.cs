@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -47,9 +48,9 @@ namespace LuckParser.Models
         protected override void RegroupTargets(AgentData agentData, List<CombatItem> combatItems)
         {
             RegroupTargetsByID((ushort)ParseEnum.BossIDS.Deimos, agentData, combatItems);
-            RegroupTargetsByID((ushort)ParseEnum.TrashIDS.Thief, agentData, combatItems);
-            RegroupTargetsByID((ushort)ParseEnum.TrashIDS.Drunkard, agentData, combatItems);
-            RegroupTargetsByID((ushort)ParseEnum.TrashIDS.Gambler, agentData, combatItems);
+            RegroupTargetsByID((ushort)Thief, agentData, combatItems);
+            RegroupTargetsByID((ushort)Drunkard, agentData, combatItems);
+            RegroupTargetsByID((ushort)Gambler, agentData, combatItems);
         }
 
         public override void SpecialParse(FightData fightData, AgentData agentData, List<CombatItem> combatData, Boss boss)
@@ -146,9 +147,9 @@ namespace LuckParser.Models
                 phase.DrawArea = true;
                 List<ushort> ids = new List<ushort>
                     {
-                        (ushort) ParseEnum.TrashIDS.Thief,
-                        (ushort) ParseEnum.TrashIDS.Drunkard,
-                        (ushort) ParseEnum.TrashIDS.Gambler,
+                        (ushort) Thief,
+                        (ushort) Drunkard,
+                        (ushort) Gambler,
                     };
                 AddTargetsToPhase(phase, ids, log);
             }
@@ -167,9 +168,9 @@ namespace LuckParser.Models
             return new List<ushort>
             {
                 (ushort)ParseEnum.BossIDS.Deimos,
-                (ushort)ParseEnum.TrashIDS.Thief,
-                (ushort)ParseEnum.TrashIDS.Drunkard,
-                (ushort)ParseEnum.TrashIDS.Gambler
+                (ushort)Thief,
+                (ushort)Drunkard,
+                (ushort)Gambler
             };
         }
 
@@ -177,14 +178,51 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.Saul,
-                ParseEnum.TrashIDS.GamblerClones,
-                ParseEnum.TrashIDS.GamblerReal,
-                ParseEnum.TrashIDS.Greed,
-                ParseEnum.TrashIDS.Pride,
-                ParseEnum.TrashIDS.Oil,
-                ParseEnum.TrashIDS.Tear
+                Saul,
+                GamblerClones,
+                GamblerReal,
+                Greed,
+                Pride,
+                Oil,
+                Tear
             };
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            CombatReplay replay = mob.CombatReplay;
+            int start = (int)replay.TimeOffsets.Item1;
+            int end = (int)replay.TimeOffsets.Item2;
+            Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
+            switch (mob.ID)
+            {
+                case (ushort)Saul:
+                    replay.Icon = "https://i.imgur.com/ck2IsoS.png";
+                    break;
+                case (ushort)GamblerClones:
+                    replay.Icon = "https://i.imgur.com/zMsBWEx.png";
+                    break;
+                case (ushort)GamblerReal:
+                    replay.Icon = "https://i.imgur.com/J6oMITN.png";
+                    break;
+                case (ushort)Greed:
+                    replay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                case (ushort)Pride:
+                    replay.Icon = "https://i.imgur.com/ePTXx23.png";
+                    break;
+                case (ushort)Oil:
+                    int delay = 3000;
+                    replay.Actors.Add(new CircleActor(true, start + 150, 200, new Tuple<int, int>(start, start + delay + 1000), "rgba(255,100, 0, 0.5)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 200, new Tuple<int, int>(start + delay, end), "rgba(0, 0, 0, 0.5)"));
+                    replay.Icon = "https://i.imgur.com/R26VgEr.png";
+                    break;
+                case (ushort)Tear:
+                    replay.Icon = "https://i.imgur.com/N9seps0.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
@@ -231,15 +269,17 @@ namespace LuckParser.Models
                         }
                     }
                     break;
-                case (ushort)ParseEnum.TrashIDS.Gambler:
+                case (ushort)Gambler:
                     replay.Icon = "https://i.imgur.com/vINeVU6.png";
                     break;
-                case (ushort)ParseEnum.TrashIDS.Thief:
+                case (ushort)Thief:
                     replay.Icon = "https://i.imgur.com/vINeVU6.png";
                     break;
-                case (ushort)ParseEnum.TrashIDS.Drunkard:
+                case (ushort)Drunkard:
                     replay.Icon = "https://i.imgur.com/vINeVU6.png";
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
             
         }

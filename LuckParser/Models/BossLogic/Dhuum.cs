@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -128,9 +129,9 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.Echo,
-                ParseEnum.TrashIDS.Enforcer,
-                ParseEnum.TrashIDS.Messenger
+                Echo,
+                Enforcer,
+                Messenger
             };
         }
 
@@ -193,8 +194,35 @@ namespace LuckParser.Models
                         replay.Actors.Add(new CircleActor(true, 0, 320, new Tuple<int, int>(start, end), "rgba(0, 180, 255, 0.2)"));
                     }
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
            
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            CombatReplay replay = mob.CombatReplay;
+            int start = (int)replay.TimeOffsets.Item1;
+            int end = (int)replay.TimeOffsets.Item2;
+            Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
+            switch (mob.ID)
+            {
+                case (ushort)Echo:
+                    replay.Icon = "https://i.imgur.com/kcN9ECn.png";
+                    replay.Actors.Add(new CircleActor(true, 0, 120, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    break;
+                case (ushort)Enforcer:
+                    replay.Icon = "https://i.imgur.com/elHjamF.png";
+                    break;
+                case (ushort)Messenger:
+                    replay.Icon = "https://i.imgur.com/1J2BTFg.png";
+                    replay.Actors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 125, 0, 0.5)"));
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+
+            }
         }
 
         public override void ComputeAdditionalPlayerData(Player p, ParsedLog log)

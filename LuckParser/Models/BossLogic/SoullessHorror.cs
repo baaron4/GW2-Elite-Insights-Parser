@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -46,10 +47,54 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.Scythe,
-                ParseEnum.TrashIDS.TormentedDead,
-                ParseEnum.TrashIDS.SurgingSoul
+                Scythe,
+                TormentedDead,
+                SurgingSoul
             };
+        }
+
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            CombatReplay replay = mob.CombatReplay;
+            int start = (int)replay.TimeOffsets.Item1;
+            int end = (int)replay.TimeOffsets.Item2;
+            Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
+            switch (mob.ID)
+            {
+                case (ushort)Scythe:
+                    replay.Actors.Add(new CircleActor(true, 0, 80, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    replay.Icon = "https://i.imgur.com/INCGLIK.png";
+                    break;
+                case (ushort)TormentedDead:
+                    if (replay.Positions.Count == 0)
+                    {
+                        break;
+                    }
+                    replay.Actors.Add(new CircleActor(true, 0, 400, new Tuple<int, int>(end, end + 60000), "rgba(255, 0, 0, 0.5)", replay.Positions.Last()));
+                    replay.Icon = "https://i.imgur.com/1J2BTFg.png";
+                    break;
+                case (ushort)SurgingSoul:
+                    List<Point3D> positions = replay.Positions;
+                    if (positions.Count < 2)
+                    {
+                        break;
+                    }
+                    if (positions[1].X < -12000 || positions[1].X > -9250)
+                    {
+                        replay.Actors.Add(new RectangleActor(true, 0, 240, 660, lifespan, "rgba(255,100,0,0.5)"));
+                        break;
+                    }
+                    else if (positions[1].Y < -525 || positions[1].Y > 2275)
+                    {
+                        replay.Actors.Add(new RectangleActor(true, 0, 645, 238, lifespan, "rgba(255,100,0,0.5)"));
+                        break;
+                    }
+                    replay.Icon = "https://i.imgur.com/k79t7ZA.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
@@ -131,6 +176,8 @@ namespace LuckParser.Models
 
                     }
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
             
         }

@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -91,7 +92,7 @@ namespace LuckParser.Models
                 {
                     List<ushort> ids = new List<ushort>
                     {
-                       (ushort) ParseEnum.TrashIDS.ChargedSoul
+                       (ushort) ChargedSoul
                     };
                     AddTargetsToPhase(phase, ids, log);
                 }
@@ -104,7 +105,7 @@ namespace LuckParser.Models
             return new List<ushort>
             {
                 (ushort)ParseEnum.BossIDS.Gorseval,
-                (ushort)ParseEnum.TrashIDS.ChargedSoul
+                (ushort)ChargedSoul
             };
         }
 
@@ -112,9 +113,22 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.EnragedSpirit,
-                ParseEnum.TrashIDS.AngeredSpirit
+                EnragedSpirit,
+                AngeredSpirit
             };
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            switch (mob.ID)
+            {
+                case (ushort)EnragedSpirit:
+                case (ushort)AngeredSpirit:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
@@ -240,9 +254,13 @@ namespace LuckParser.Models
                         }
                     }
                     break;
-                case (ushort)ParseEnum.TrashIDS.ChargedSoul:
+                case (ushort)ChargedSoul:
+                    Tuple<int, int> lifespan = new Tuple<int, int>((int)replay.TimeOffsets.Item1, (int)replay.TimeOffsets.Item2);
+                    replay.Actors.Add(new CircleActor(false, 0, 220, lifespan, "rgba(255, 150, 0, 0.5)"));
                     replay.Icon = "https://i.imgur.com/sHmksvO.png";
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
     }
