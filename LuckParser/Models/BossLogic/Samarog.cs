@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -105,8 +106,8 @@ namespace LuckParser.Models
                 {
                     List<ushort> ids = new List<ushort>
                     {
-                       (ushort) ParseEnum.TrashIDS.Rigom,
-                       (ushort) ParseEnum.TrashIDS.Guldhem
+                       (ushort) Rigom,
+                       (ushort) Guldhem
                     };
                     AddTargetsToPhase(phase, ids, log);
                 } else
@@ -122,8 +123,8 @@ namespace LuckParser.Models
             return new List<ushort>
             {
                 (ushort)ParseEnum.BossIDS.Samarog,
-                (ushort)ParseEnum.TrashIDS.Rigom,
-                (ushort)ParseEnum.TrashIDS.Guldhem,
+                (ushort)Rigom,
+                (ushort)Guldhem,
             };
         }
         
@@ -152,12 +153,14 @@ namespace LuckParser.Models
                         }
                     }
                     break;
-                case (ushort)ParseEnum.TrashIDS.Rigom:
+                case (ushort)Rigom:
                     replay.Icon = "https://i.imgur.com/REcGMBe.png";
                     break;
-                case (ushort)ParseEnum.TrashIDS.Guldhem:
+                case (ushort)Guldhem:
                     replay.Icon = "https://i.imgur.com/xa7Fefn.png";
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
 

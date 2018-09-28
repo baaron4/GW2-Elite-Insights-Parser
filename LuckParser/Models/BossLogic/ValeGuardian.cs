@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -48,9 +49,9 @@ namespace LuckParser.Models
             return new List<ushort>
             {
                 (ushort)ParseEnum.BossIDS.ValeGuardian,
-                (ushort)ParseEnum.TrashIDS.RedGuardian,
-                (ushort)ParseEnum.TrashIDS.BlueGuardian,
-                (ushort)ParseEnum.TrashIDS.GreenGuardian
+                (ushort)RedGuardian,
+                (ushort)BlueGuardian,
+                (ushort)GreenGuardian
             };
         }
 
@@ -110,9 +111,9 @@ namespace LuckParser.Models
                 {
                     List<ushort> ids = new List<ushort>
                     {
-                       (ushort) ParseEnum.TrashIDS.BlueGuardian,
-                       (ushort) ParseEnum.TrashIDS.GreenGuardian,
-                       (ushort) ParseEnum.TrashIDS.RedGuardian
+                       (ushort) BlueGuardian,
+                       (ushort) GreenGuardian,
+                       (ushort) RedGuardian
                     };
                     AddTargetsToPhase(phase, ids, log);
                 } else
@@ -127,17 +128,29 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-               ParseEnum.TrashIDS.Seekers,
-               ParseEnum.TrashIDS.BlueGuardian,
-               ParseEnum.TrashIDS.GreenGuardian,
-               ParseEnum.TrashIDS.RedGuardian
+               Seekers
             };
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            switch (mob.ID)
+            {
+                case (ushort)Seekers:
+                    Tuple<int, int> lifespan = new Tuple<int, int>((int)mob.CombatReplay.TimeOffsets.Item1, (int)mob.CombatReplay.TimeOffsets.Item2);
+                    mob.CombatReplay.Icon = "https://i.imgur.com/FrPoluz.png";
+                    mob.CombatReplay.Actors.Add(new CircleActor(false, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }       
         }
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             CombatReplay replay = boss.CombatReplay;
             List<CastLog> cls = boss.GetCastLogs(log, 0, log.FightData.FightDuration);
+            Tuple<int, int> lifespan = new Tuple<int, int>((int)boss.CombatReplay.TimeOffsets.Item1, (int)boss.CombatReplay.TimeOffsets.Item2);
             switch (boss.ID)
             {
                 case (ushort)ParseEnum.BossIDS.ValeGuardian:
@@ -148,15 +161,20 @@ namespace LuckParser.Models
                         replay.Actors.Add(new CircleActor(true, 0, 100, new Tuple<int, int>((int)c.Time, (int)c.Time + c.ActualDuration), "rgba(0, 180, 255, 0.3)"));
                     }
                     break;
-                case (ushort)ParseEnum.TrashIDS.BlueGuardian:
+                case (ushort)BlueGuardian:
+                    replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 0, 255, 0.5)"));
                     replay.Icon = "https://i.imgur.com/6CefnkP.png";
                     break;
-                case (ushort)ParseEnum.TrashIDS.GreenGuardian:
+                case (ushort)GreenGuardian:
+                    replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(0, 255, 0, 0.5)"));
                     replay.Icon = "https://i.imgur.com/nauDVYP.png";
                     break;
-                case (ushort)ParseEnum.TrashIDS.RedGuardian:
+                case (ushort)RedGuardian:
+                    replay.Actors.Add(new CircleActor(false, 0, 1500, lifespan, "rgba(255, 0, 0, 0.5)"));
                     replay.Icon = "https://i.imgur.com/73Uj4lG.png";
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
     }

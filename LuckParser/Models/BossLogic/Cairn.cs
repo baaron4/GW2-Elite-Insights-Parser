@@ -55,6 +55,8 @@ namespace LuckParser.Models
                 case (ushort)ParseEnum.BossIDS.Cairn:
                     replay.Icon = "https://i.imgur.com/gQY37Tf.png";
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
 

@@ -17,15 +17,15 @@ namespace LuckParser.Models.ParseModels
         public long LastAware { get; set; } = long.MaxValue;
         public readonly string Name;
         public readonly string Prof;
-        public readonly int Toughness;
-        public readonly int Healing;
-        public readonly int Condition;
-        public readonly int Concentration;
-        public readonly int HitboxWidth;
-        public readonly int HitboxHeight;
+        public readonly uint Toughness;
+        public readonly uint Healing;
+        public readonly uint Condition;
+        public readonly uint Concentration;
+        public readonly uint HitboxWidth;
+        public readonly uint HitboxHeight;
 
         // Constructors
-        public AgentItem(ulong agent, string name, string prof, AgentType type, int toughness, int healing, int condition, int concentration, int hbWidth, int hbHeight)
+        public AgentItem(ulong agent, string name, string prof, AgentType type, uint toughness, uint healing, uint condition, uint concentration, uint hbWidth, uint hbHeight)
         {
             Agent = agent;
             Name = name;

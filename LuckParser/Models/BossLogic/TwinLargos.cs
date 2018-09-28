@@ -45,11 +45,6 @@ namespace LuckParser.Models
             };
         }
 
-        protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
-        {
-            return new List<ParseEnum.TrashIDS>();
-        }
-
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
         {
             CombatReplay replay = boss.CombatReplay;
@@ -62,6 +57,8 @@ namespace LuckParser.Models
                 case (ushort)ParseEnum.BossIDS.Kenut:
                     replay.Icon = "https://i.imgur.com/TLykcrJ.png";
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
 

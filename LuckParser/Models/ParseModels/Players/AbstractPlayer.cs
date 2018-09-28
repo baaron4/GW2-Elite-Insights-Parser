@@ -16,18 +16,18 @@ namespace LuckParser.Models.ParseModels
         private readonly List<DamageLog> _damageTakenlogs = new List<DamageLog>();
         protected readonly List<CastLog> CastLogs = new List<CastLog>();
 
-        public int Toughness => AgentItem.Toughness;
-        public int Condition => AgentItem.Condition;
-        public int Concentration => AgentItem.Concentration;
-        public int Healing => AgentItem.Healing;
+        public uint Toughness => AgentItem.Toughness;
+        public uint Condition => AgentItem.Condition;
+        public uint Concentration => AgentItem.Concentration;
+        public uint Healing => AgentItem.Healing;
         public ushort InstID => AgentItem.InstID;
         public string Prof => AgentItem.Prof;
         public ulong Agent => AgentItem.Agent;
         public long LastAware => AgentItem.LastAware;
         public long FirstAware => AgentItem.FirstAware;
         public ushort ID => AgentItem.ID;
-        public int HitboxHeight => AgentItem.HitboxHeight;
-        public int HitboxWidth => AgentItem.HitboxWidth;
+        public uint HitboxHeight => AgentItem.HitboxHeight;
+        public uint HitboxWidth => AgentItem.HitboxWidth;
 
         protected AbstractPlayer(AgentItem agent)
         {

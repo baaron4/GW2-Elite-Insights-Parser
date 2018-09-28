@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -111,12 +112,42 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.Storm,
-                ParseEnum.TrashIDS.Spirit,
-                ParseEnum.TrashIDS.Spirit2,
-                ParseEnum.TrashIDS.IcePatch,
-                ParseEnum.TrashIDS.Tornado
+                Storm,
+                Spirit,
+                Spirit2,
+                IcePatch,
+                Tornado
             };
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            CombatReplay replay = mob.CombatReplay;
+            int start = (int)replay.TimeOffsets.Item1;
+            int end = (int)replay.TimeOffsets.Item2;
+            Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
+            switch(mob.ID)
+            {
+                case (ushort)Storm:
+                    replay.Actors.Add(new CircleActor(false, 0, 260, lifespan, "rgba(0, 80, 255, 0.5)"));
+                    replay.Icon = "https://i.imgur.com/9XtNPdw.png";
+                    break;
+                case (ushort)Spirit:
+                case (ushort)Spirit2:
+                    replay.Actors.Add(new CircleActor(true, 0, 180, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    replay.Icon = "https://i.imgur.com/sHmksvO.png";
+                    break;
+                case (ushort)IcePatch:
+                    replay.Actors.Add(new CircleActor(true, 0, 200, lifespan, "rgba(0, 0, 255, 0.5)"));
+                    replay.Icon = "https://i.imgur.com/yxKJ5Yc.png";
+                    break;
+                case (ushort)Tornado:
+                    replay.Actors.Add(new CircleActor(true, 0, 90, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    replay.Icon = "https://i.imgur.com/e10lZMa.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
@@ -167,6 +198,8 @@ namespace LuckParser.Models
                         replay.Actors.Add(new CircleActor(true, end, 300, new Tuple<int, int>(start, end), "rgba(255, 0, 0, 0.5)"));
                     }
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
             
         }

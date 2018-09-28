@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -118,22 +119,66 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.Core,
-                ParseEnum.TrashIDS.Jessica,
-                ParseEnum.TrashIDS.Olson,
-                ParseEnum.TrashIDS.Engul,
-                ParseEnum.TrashIDS.Faerla,
-                ParseEnum.TrashIDS.Caulle,
-                ParseEnum.TrashIDS.Henley,
-                ParseEnum.TrashIDS.Galletta,
-                ParseEnum.TrashIDS.Ianim,
-                ParseEnum.TrashIDS.GreenPhantasm,
-                ParseEnum.TrashIDS.InsidiousProjection,
-                ParseEnum.TrashIDS.UnstableLeyRift,
-                ParseEnum.TrashIDS.RadiantPhantasm,
-                ParseEnum.TrashIDS.CrimsonPhantasm,
-                ParseEnum.TrashIDS.RetrieverProjection
+                Core,
+                Jessica,
+                Olson,
+                Engul,
+                Faerla,
+                Caulle,
+                Henley,
+                Galletta,
+                Ianim,
+                GreenPhantasm,
+                InsidiousProjection,
+                UnstableLeyRift,
+                RadiantPhantasm,
+                CrimsonPhantasm,
+                RetrieverProjection
             };
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            CombatReplay replay = mob.CombatReplay;
+            int start = (int)replay.TimeOffsets.Item1;
+            int end = (int)replay.TimeOffsets.Item2;
+            Tuple<int, int> lifespan = new Tuple<int, int>(start, end);
+            switch (mob.ID)
+            {
+                case (ushort)Core:
+                    replay.Icon = "https://i.imgur.com/yI34iqw.png";
+                    break;
+                case (ushort)Jessica:
+                case (ushort)Olson:
+                case (ushort)Engul:
+                case (ushort)Faerla:
+                case (ushort)Caulle:
+                case (ushort)Henley:
+                case (ushort)Galletta:
+                case (ushort)Ianim:
+                    replay.Actors.Add(new CircleActor(false, 0, 600, lifespan, "rgba(255, 0, 0, 0.5)"));
+                    replay.Actors.Add(new CircleActor(true, 0, 400, lifespan, "rgba(0, 125, 255, 0.5)"));
+                    replay.Icon = "https://i.imgur.com/qeYT1Bf.png";
+                    break;
+                case (ushort)RetrieverProjection:
+                case (ushort)GreenPhantasm:
+                    replay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                case (ushort)InsidiousProjection:
+                    replay.Icon = "https://i.imgur.com/9EdItBS.png";
+                    break;
+                case (ushort)UnstableLeyRift:
+                    replay.Icon = "https://i.imgur.com/YXM3igs.png";
+                    break;
+                case (ushort)RadiantPhantasm:
+                    replay.Icon = "https://i.imgur.com/O5VWLyY.png";
+                    break;
+                case (ushort)CrimsonPhantasm:
+                    replay.Icon = "https://i.imgur.com/zP7Bvb4.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
@@ -233,6 +278,8 @@ namespace LuckParser.Models
                         }
                     }
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
             
         }

@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -39,16 +40,53 @@ namespace LuckParser.Models
             return new List<ushort>
             {
                 (ushort)ParseEnum.BossIDS.Qadim,
-                (ushort)ParseEnum.TrashIDS.AncientInvokedHydra,
-                (ushort)ParseEnum.TrashIDS.WyvernMatriarch,
-                (ushort)ParseEnum.TrashIDS.WyvernPatriarch,
-                (ushort)ParseEnum.TrashIDS.ApocalypseBringer,
+                (ushort)AncientInvokedHydra,
+                (ushort)WyvernMatriarch,
+                (ushort)WyvernPatriarch,
+                (ushort)ApocalypseBringer,
             };
         }
 
         protected override List<ParseEnum.TrashIDS> GetTrashMobsIDS()
         {
-            return new List<ParseEnum.TrashIDS>();
+            return new List<ParseEnum.TrashIDS>()
+            {
+                LavaElemental1,
+                LavaElemental2,
+                IcebornHydra,
+                GreaterMagmaElemental1,
+                GreaterMagmaElemental2,
+                FireElemental,
+                FireImp,
+                PyreGuardian,
+                ReaperofFlesh,
+                IceElemental,
+                Zommoros
+            };
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            switch (mob.ID)
+            {
+                case (ushort)LavaElemental1:
+                case (ushort)LavaElemental2:
+                case (ushort)IcebornHydra:
+                case (ushort)GreaterMagmaElemental1:
+                case (ushort)GreaterMagmaElemental2:
+                case (ushort)FireElemental:
+                case (ushort)FireImp:
+                case (ushort)PyreGuardian:
+                case (ushort)ReaperofFlesh:
+                case (ushort)IceElemental:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                case (ushort)Zommoros:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/BxbsRCI.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
 
         public override void ComputeAdditionalBossData(Boss boss, ParsedLog log)
@@ -61,18 +99,20 @@ namespace LuckParser.Models
                 case (ushort)ParseEnum.BossIDS.Qadim:
                     replay.Icon = "https://i.imgur.com/IfoHTHT.png";
                     break;
-                case (ushort)ParseEnum.TrashIDS.AncientInvokedHydra:
+                case (ushort)AncientInvokedHydra:
                     replay.Icon = "https://imgur.com/YABLiBz";
                     break;
-                case (ushort)ParseEnum.TrashIDS.WyvernMatriarch:
+                case (ushort)WyvernMatriarch:
                     replay.Icon = "https://imgur.com/vjjNSpI";
                     break;
-                case (ushort)ParseEnum.TrashIDS.WyvernPatriarch:
+                case (ushort)WyvernPatriarch:
                     replay.Icon = "https://imgur.com/kLKLSfv";
                     break;
-                case (ushort)ParseEnum.TrashIDS.ApocalypseBringer:
+                case (ushort)ApocalypseBringer:
                     replay.Icon = "https://imgur.com/0LGKCn2";
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
 

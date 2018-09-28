@@ -2,6 +2,7 @@
 using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -52,6 +53,8 @@ namespace LuckParser.Models
                 case (ushort)ParseEnum.BossIDS.Ensolyss:
                     replay.Icon = "https://i.imgur.com/GUTNuyP.png";
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
 
@@ -59,9 +62,22 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.NightmareHallucination1,
-                ParseEnum.TrashIDS.NightmareHallucination2
+                NightmareHallucination1,
+                NightmareHallucination2
             };
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            switch (mob.ID)
+            {
+                case (ushort)NightmareHallucination1:
+                case (ushort)NightmareHallucination2:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
         }
     }
 }

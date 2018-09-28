@@ -3,6 +3,7 @@ using LuckParser.Models.ParseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static LuckParser.Models.DataModels.ParseEnum.TrashIDS;
 
 namespace LuckParser.Models
 {
@@ -66,12 +67,32 @@ namespace LuckParser.Models
                 case (ushort)ParseEnum.BossIDS.Arkk:
                     replay.Icon = "https://i.imgur.com/u6vv8cW.png";
                     break;
-                case (ushort)ParseEnum.TrashIDS.Archdiviner:
+                case (ushort)Archdiviner:
                     replay.Icon = "https://i.imgur.com/xCoypjS.png";
                     break;
-                case (ushort)ParseEnum.TrashIDS.BrazenGladiator:
+                case (ushort)BrazenGladiator:
                     replay.Icon = "https://i.imgur.com/xCoypjS.png";
                     break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
+            }
+        }
+
+        public override void ComputeAdditionalThrashMobData(Mob mob, ParsedLog log)
+        {
+            switch (mob.ID)
+            {
+                case (ushort)TemporalAnomaly2:
+                case (ushort)BLIGHT:
+                case (ushort)Fanatic:
+                case (ushort)SolarBloom2:
+                case (ushort)PLINK:
+                case (ushort)DOC:
+                case (ushort)CHOP:
+                    mob.CombatReplay.Icon = "https://i.imgur.com/xCoypjS.png";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown ID in ComputeAdditionalData");
             }
         }
 
@@ -79,13 +100,13 @@ namespace LuckParser.Models
         {
             return new List<ParseEnum.TrashIDS>
             {
-                ParseEnum.TrashIDS.TemporalAnomaly2,
-                ParseEnum.TrashIDS.BLIGHT,
-                ParseEnum.TrashIDS.Fanatic,
-                ParseEnum.TrashIDS.SolarBloom2,
-                ParseEnum.TrashIDS.PLINK,
-                ParseEnum.TrashIDS.DOC,
-                ParseEnum.TrashIDS.CHOP
+                TemporalAnomaly2,
+                BLIGHT,
+                Fanatic,
+                SolarBloom2,
+                PLINK,
+                DOC,
+                CHOP
             };
         }
 
@@ -94,8 +115,8 @@ namespace LuckParser.Models
             return new List<ushort>
             {
                 (ushort)ParseEnum.BossIDS.Arkk,
-                (ushort)ParseEnum.TrashIDS.Archdiviner,
-                (ushort)ParseEnum.TrashIDS.BrazenGladiator
+                (ushort)Archdiviner,
+                (ushort)BrazenGladiator
             };
         }
 
