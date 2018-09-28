@@ -7,7 +7,7 @@ namespace LuckParser.Models.ParseModels
     public class PhaseData
     {
         public long Start { get; private set; }
-        public readonly long End;
+        public long End { get; private set; }
         public string Name { get; set; }
         public bool DrawStart { get; set; }
         public bool DrawEnd { get; set; }
@@ -44,7 +44,7 @@ namespace LuckParser.Models.ParseModels
             if (Targets.Count > 0)
             {
                 Start = Math.Max(Start, Targets.Min(x => x.FirstAware)- offset);
-                Start = Math.Min(End, Targets.Min(x => x.FirstAware) - offset);
+                End = Math.Min(End, Targets.Max(x => x.LastAware) - offset);
             }
         }
     }
