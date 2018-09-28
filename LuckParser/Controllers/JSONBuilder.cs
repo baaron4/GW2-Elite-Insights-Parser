@@ -107,14 +107,14 @@ namespace LuckParser.Controllers
                 log.Mechanics = new List<JsonMechanic>(capacity: mechanicLogs.Count);
                 for (int i = 0; i < mechanicLogs.Count; i++)
                 {
-                    log.Mechanics[i] = new JsonMechanic
+                    log.Mechanics.Add(new JsonMechanic
                     {
                         Time = mechanicLogs[i].Time,
                         Name = mechanicLogs[i].Name,
                         Player = mechanicLogs[i].Player.Character,
                         Description = mechanicLogs[i].Description,
                         Skill = mechanicLogs[i].Skill
-                    };
+                    });
                 }
             }
         }
@@ -213,6 +213,7 @@ namespace LuckParser.Controllers
         private void MakePhaseBossBoon(JsonBossBuffs boon, int phase, Statistics.FinalBossBoon value)
         {
             boon.Uptime[phase] = value.Uptime;
+            boon.Presence[phase] = value.Presence;
             boon.Generated[phase] = boon.Generated[phase] ?? new Dictionary<string, double>();
             boon.Overstacked[phase] = boon.Overstacked[phase] ?? new Dictionary<string, double>();
 
@@ -314,6 +315,7 @@ namespace LuckParser.Controllers
             boon.Overstack[phase] = value.Overstack;
             boon.Generation[phase] = value.Generation;
             boon.Uptime[phase] = value.Uptime;
+            boon.Presence[phase] = value.Presence;
         }
 
         private Dictionary<string, JsonBuffs> BuildBuffUptime(Dictionary<long, Statistics.FinalBoonUptime>[] statUptimes)
